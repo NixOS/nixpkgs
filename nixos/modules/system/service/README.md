@@ -51,8 +51,12 @@ Many services implement automatic reloading or reloading on e.g. `SIGUSR1`, but 
   Fun fact: for the module system it is a completely normal module, despite its recursive definition.
   If we parameterize `/etc/system-services`, it will have to become an `importApply` style module nonetheless (function returning module).
 
-- **Simple attribute structure**: Unlike `environment.etc`, `configData` uses a simpler structure with just `enable`, `name`, `text`, `source`, and `path` attributes. Complex ownership options were omitted for simplicity and portability.
+- **Simple attribute structure**: Unlike `environment.etc`, `configData` uses a simpler structure with just `enable`, `name`, `text`, `source`, `path` and `applyChanges` attributes. Complex ownership options were omitted for simplicity and portability.
   Per-service user creation is still TBD.
+
+- **Apply-on-activation opt-out in the portable layer**: `applyConfigDataChanges` is declared next to `configData` rather than in the systemd implementation, because "this service applies configuration changes by itself" is a property of the program, not of the service manager.
+  It is a `bool` rather than a reload/restart enum: it says only *whether* changes should be applied, leaving *how* (systemd's reload versus restart) to the service manager.
+  Per-entry `configData.<name>.applyChanges` defaults to `null`, meaning it inherits the service-level setting, so a single noisy file can be excluded or re-included on its own.
 
 ## No `pkgs` module argument
 

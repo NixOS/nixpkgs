@@ -47,15 +47,60 @@ let
     in
     serviceConfigData // subServiceConfigData;
 
+  configDataSources =
+    service:
+    let
+      applyDefault = service.applyConfigDataChanges or true;
+    in
+    lib.mapAttrsToList (_: cfg: cfg.source) (
+      lib.filterAttrs (
+        _: cfg: cfg.enable && (if cfg.applyChanges == null then applyDefault else cfg.applyChanges)
+      ) (service.configData or { })
+    );
+
+  # Whether a unit declares a command to reload with. `serviceConfig.ExecReload` is always
+  # defined by ./service.nix, as `systemd.mainExecReload`, which is the empty string when the
+  # service has no `process.reloadCommand`. An empty entry resets systemd's command list
+  # rather than adding to it, so it does not make the unit reloadable.
+  hasExecReload =
+    unitConfig:
+    let
+      execReload = unitConfig.serviceConfig.ExecReload or null;
+    in
+    if execReload == null then
+      false
+    else if lib.isList execReload then
+      lib.any (cmd: cmd != "") execReload
+    else
+      execReload != "";
+
   makeUnits =
     unitType: prefix: service:
-    concatMapAttrs (unitName: unitModule: {
-      "${dash prefix unitName}" =
-        { ... }:
-        {
-          imports = [ unitModule ];
-        };
-    }) service.systemd.${unitType}
+    let
+      sources = configDataSources service;
+    in
+    concatMapAttrs (
+      unitName: unitModule:
+      let
+        extra = lib.optional (unitType == "services" && unitName == "" && sources != [ ]) (
+          { config, ... }:
+          {
+            # switch-to-configuration-ng does not fall back from reload to restart:
+            # X-Reload-Triggers on a unit without ExecReload= causes activation to
+            # exit with code 4. Use reloadTriggers only when ExecReload is declared.
+            reloadTriggers = lib.mkIf (hasExecReload config) sources;
+            restartTriggers = lib.mkIf (!hasExecReload config) sources;
+          }
+        );
+      in
+      {
+        "${dash prefix unitName}" =
+          { ... }:
+          {
+            imports = [ unitModule ] ++ extra;
+          };
+      }
+    ) service.systemd.${unitType}
     // concatMapAttrs (
       subServiceName: subService: makeUnits unitType (dash prefix subServiceName) subService
     ) service.services;

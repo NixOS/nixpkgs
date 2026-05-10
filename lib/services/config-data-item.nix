@@ -51,6 +51,16 @@ in
       type = types.path;
       description = "Path of the source file.";
     };
+
+    applyChanges = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+      description = ''
+        Whether a change in this file should be applied to the running service during activation.
+
+        `null` means to use the service's {option}`applyConfigDataChanges` setting.
+      '';
+    };
   };
 
   config = {

@@ -43,5 +43,17 @@ in
 
       type = types.lazyAttrsOf (types.submodule (importApply ./config-data-item.nix pkgs));
     };
+
+    applyConfigDataChanges = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether the service manager should apply changes to this service's {option}`configData` when the configuration is activated, by reloading the service if it can be reloaded, or restarting it otherwise.
+
+        Set this to `false` for services that watch their own configuration files, or where interrupting the service is unacceptable.
+
+        Individual entries may override this with {option}`configData.<name>.applyChanges`.
+      '';
+    };
   };
 }

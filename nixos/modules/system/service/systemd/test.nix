@@ -91,6 +91,52 @@ let
             config.systemd.lib.escapeSystemdExecArgs config.process.argv + " --systemd-unit %n";
         };
 
+      # Test that configData sources are wired into restartTriggers on
+      # the primary unit (no ExecReload), including for sub-services,
+      # while disabled entries are excluded.
+      system.services.cfgtest = {
+        process.argv = [ hello' ];
+        configData."app.conf".text = "hello = world\n";
+        configData."disabled.conf" = {
+          text = "should not appear\n";
+          enable = false;
+        };
+        configData."noapply.conf" = {
+          text = "not applied on activation\n";
+          applyChanges = false;
+        };
+        services.sub = {
+          process.argv = [ hello' ];
+          configData."sub.conf".text = "sub = yes\n";
+        };
+      };
+
+      # Test that configData sources are wired into reloadTriggers when
+      # ExecReload is declared.
+      system.services.cfgtest-reload = {
+        process.argv = [ hello' ];
+        process.reloadCommand = "${hello}/bin/hello";
+        configData."reload.conf".text = "reload = me\n";
+      };
+
+      # Test that applyConfigDataChanges = false opts the whole service out.
+      system.services.cfgtest-noapply = {
+        process.argv = [ hello' ];
+        applyConfigDataChanges = false;
+        configData."skip.conf".text = "skip = yes\n";
+      };
+
+      # Test that a per-entry applyChanges overrides the service-level setting.
+      system.services.cfgtest-noapply-override = {
+        process.argv = [ hello' ];
+        applyConfigDataChanges = false;
+        configData."skip.conf".text = "skip = yes\n";
+        configData."forced.conf" = {
+          text = "forced = yes\n";
+          applyChanges = true;
+        };
+      };
+
       # irrelevant stuff
       system.stateVersion = "25.05";
       fileSystems."/" = {
@@ -140,6 +186,47 @@ runCommand "test-modular-service-systemd-units"
       [[ ! -e ${toplevel}/etc/systemd/system/foo.socket ]]
       [[ ! -e ${toplevel}/etc/systemd/system/bar.socket ]]
       [[ ! -e ${toplevel}/etc/systemd/system/bar-db.socket ]]
+
+      # cfgtest has no ExecReload, so configData sources go into restartTriggers
+      # (X-Restart-Triggers), not reloadTriggers.
+      grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/cfgtest.service >/dev/null
+      cfgtest_trigger=$(grep -oP '^X-Restart-Triggers=\K\S+' ${toplevel}/etc/systemd/system/cfgtest.service)
+      grep -F "service-configdata-app.conf" "$cfgtest_trigger" >/dev/null
+      ! grep -F "service-configdata-disabled.conf" "$cfgtest_trigger" >/dev/null
+      # Entries with applyChanges = false are excluded.
+      ! grep -F "service-configdata-noapply.conf" "$cfgtest_trigger" >/dev/null
+      ! grep -E '^X-Reload-Triggers=' ${toplevel}/etc/systemd/system/cfgtest.service >/dev/null
+
+      # Sub-service primary unit gets its own configData via restartTriggers, not the parent's.
+      grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/cfgtest-sub.service >/dev/null
+      cfgtest_sub_trigger=$(grep -oP '^X-Restart-Triggers=\K\S+' ${toplevel}/etc/systemd/system/cfgtest-sub.service)
+      grep -F "service-configdata-sub.conf" "$cfgtest_sub_trigger" >/dev/null
+      ! grep -F "service-configdata-app.conf" "$cfgtest_sub_trigger" >/dev/null
+      ! grep -E '^X-Reload-Triggers=' ${toplevel}/etc/systemd/system/cfgtest-sub.service >/dev/null
+
+      # cfgtest-reload declares ExecReload, so configData sources go into reloadTriggers.
+      grep -E '^X-Reload-Triggers=' ${toplevel}/etc/systemd/system/cfgtest-reload.service >/dev/null
+      cfgtest_reload_trigger=$(grep -oP '^X-Reload-Triggers=\K\S+' ${toplevel}/etc/systemd/system/cfgtest-reload.service)
+      grep -F "service-configdata-reload.conf" "$cfgtest_reload_trigger" >/dev/null
+      ! grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/cfgtest-reload.service >/dev/null
+
+      # applyConfigDataChanges = false opts the service out entirely.
+      ! grep -E '^X-Reload-Triggers=' ${toplevel}/etc/systemd/system/cfgtest-noapply.service >/dev/null
+      ! grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/cfgtest-noapply.service >/dev/null
+
+      # A per-entry applyChanges = true overrides applyConfigDataChanges = false.
+      grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/cfgtest-noapply-override.service >/dev/null
+      cfgtest_override_trigger=$(grep -oP '^X-Restart-Triggers=\K\S+' ${toplevel}/etc/systemd/system/cfgtest-noapply-override.service)
+      grep -F "service-configdata-forced.conf" "$cfgtest_override_trigger" >/dev/null
+      ! grep -F "service-configdata-skip.conf" "$cfgtest_override_trigger" >/dev/null
+
+      # Services without configData should have neither X-Reload-Triggers nor X-Restart-Triggers.
+      ! grep -E '^X-Reload-Triggers=' ${toplevel}/etc/systemd/system/bar.service >/dev/null
+      ! grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/bar.service >/dev/null
+      ! grep -E '^X-Reload-Triggers=' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
+      ! grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
+      ! grep -E '^X-Reload-Triggers=' ${toplevel}/etc/systemd/system/foo.service >/dev/null
+      ! grep -E '^X-Restart-Triggers=' ${toplevel}/etc/systemd/system/foo.service >/dev/null
     )
     echo 🐬👍
     touch $out
