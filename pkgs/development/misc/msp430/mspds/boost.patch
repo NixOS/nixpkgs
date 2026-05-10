@@ -1,0 +1,131 @@
+diff --git a/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.cpp b/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.cpp
+index 78be8cd..03111fb 100644
+--- a/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.cpp
++++ b/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.cpp
+@@ -42,7 +42,7 @@
+ 
+ #include <boost/asio/read.hpp>
+ #include <boost/asio/write.hpp>
+-#include <boost/asio/io_service.hpp>
++#include <boost/asio/io_context.hpp>
+ 
+ #if defined(_WIN32) || defined(_WIN64)
+ 
+@@ -89,7 +89,7 @@ using namespace boost::asio;
+ UsbCdcIoChannel::UsbCdcIoChannel(const PortInfo& portInfo)
+  : UsbIoChannel(portInfo)
+  , inputBuffer(260)
+- , ioService(0)
++ , ioContext(0)
+  , port(0)
+  , comState(ComStateRcv)
+  , bytesReceived(0)
+@@ -376,9 +376,9 @@ std::string UsbCdcIoChannel::retrieveSerialFromId(const std::string& id)
+ 
+ bool UsbCdcIoChannel::openPort()
+ {
+-	ioService = new boost::asio::io_service;
+-	port = new boost::asio::serial_port(*ioService);
+-	timer = new boost::asio::deadline_timer(*ioService);
++	ioContext = new boost::asio::io_context;
++	port = new boost::asio::serial_port(*ioContext);
++	timer = new boost::asio::deadline_timer(*ioContext);
+ 
+ 	boost::system::error_code ec;
+ 	ec = port->open(portInfo.path, ec);
+@@ -466,8 +466,8 @@ void UsbCdcIoChannel::cleanup()
+ 	timer = 0;
+ 	delete port;
+ 	port = 0;
+-	delete ioService;
+-	ioService = 0;
++	delete ioContext;
++	ioContext = 0;
+ }
+ 
+ bool UsbCdcIoChannel::close()
+@@ -542,7 +542,7 @@ size_t UsbCdcIoChannel::read(HalResponse& resp)
+ 
+ 	boost::system::error_code ec;
+ 
+-	while (ioService->run_one(ec))
++	while (ioContext->run_one())
+ 	{
+ 		if (readEvent)
+ 		{
+@@ -575,15 +575,15 @@ size_t UsbCdcIoChannel::read(HalResponse& resp)
+ 			setTimer(1000);
+ 		}
+ 
+-		if (ioService->stopped())
++		if (ioContext->stopped())
+ 		{
+-			ioService->reset();
++			ioContext->restart();
+ 		}
+ 	}
+ 
+ 	//Let cancelled tasks finish
+-	ioService->run(ec);
+-	ioService->reset();
++	ioContext->run();
++	ioContext->restart();
+ 
+ 
+ 	if (actSize == expSize)
+@@ -599,7 +599,7 @@ bool UsbCdcIoChannel::wasUnplugged()
+ {
+ #if defined(_WIN32) || defined(_WIN64)
+ 	boost::system::error_code ec;
+-	ec = serial_port(*ioService).open(portInfo.path, ec);
++	ec = serial_port(*ioContext).open(portInfo.path, ec);
+ 
+ 	if (ec == boost::system::error_condition(boost::system::errc::no_such_file_or_directory))
+ 	{
+diff --git a/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.h b/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.h
+index 8c47365..ec1399e 100644
+--- a/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.h
++++ b/DLL430_v3/src/TI/DLL430/UsbCdcIoChannel.h
+@@ -45,7 +45,7 @@
+ 
+ #include <boost/asio/serial_port.hpp>
+ #include <boost/asio/deadline_timer.hpp>
+-#include <boost/asio/io_service.hpp>
++#include <boost/asio/io_context.hpp>
+ 
+ namespace TI
+ {
+@@ -74,7 +74,7 @@ namespace TI
+ 
+ 		private:
+ 			std::vector<uint8_t> inputBuffer;
+-			boost::asio::io_service* ioService;
++			boost::asio::io_context* ioContext;
+ 			boost::asio::serial_port* port;
+ 			boost::asio::deadline_timer* timer;
+ 			ComState comState;
+diff --git a/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.cpp b/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.cpp
+index 6a67530..df42f43 100644
+--- a/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.cpp
++++ b/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.cpp
+@@ -129,7 +129,7 @@ MSPBSL_PhysicalInterfaceSerialUART::MSPBSL_PhysicalInterfaceSerialUART(string in
+ 
+ 
+ 	//TODO: Catch exception forunknown ports
+-	io_service io;
++	io_context io;
+     port = new serial_port( io, PORT );
+ 	port->set_option( serial_port_base::character_size( 8 ) );
+ 	port->set_option( serial_port_base::flow_control( serial_port_base::flow_control::none ) );
+diff --git a/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.h b/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.h
+index b01bdd7..7c2bd36 100644
+--- a/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.h
++++ b/ThirdParty/BSL430_DLL/BSL430_DLL/Physical_Interfaces/MSPBSL_PhysicalInterfaceSerialUART.h
+@@ -72,6 +72,6 @@ public:
+ 	virtual std::string getErrorInformation( uint16_t err );
+ 
+ private:
+-    boost::asio::io_service io;
++    boost::asio::io_context io;
+     boost::asio::serial_port* port;
+ };
