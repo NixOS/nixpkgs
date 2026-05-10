@@ -111,14 +111,36 @@ rec {
         text,
         executable ? false,
         destination ? "",
-        checkPhase ? "",
         meta ? { },
         passthru ? { },
         allowSubstitutes ? false,
         preferLocalBuild ? true,
         derivationArgs ? { },
         pos ? builtins.unsafeGetAttrPos "name" args,
+
+        # Deprecated arguments
+        checkPhase ? "",
       }@args:
+      let
+        getDeprecatedPhase =
+          n: alt:
+          let
+            handle =
+              if lib.oldestSupportedReleaseIsAtLeast 2611 then
+                throw
+              else if lib.oldestSupportedReleaseIsAtLeast 2605 then
+                lib.warn
+              else
+                message: val: val;
+            pos = lib.unsafeGetAttrPos n finalAttrs;
+          in
+          lib.optionalString (finalAttrs ? ${n} && finalAttrs.${n} != "" && finalAttrs.${n} != null) (
+            handle ''
+              writeTextFile: ${name}: Deprecated ${n} found at ${pos.file}:${toString pos.line}
+                Use ${alt} instead.
+            '' finalAttrs.${n}
+          );
+      in
       {
         inherit
           pos
@@ -158,9 +180,20 @@ rec {
           runHook postInstall
         '';
 
+        doInstallCheck = derivationArgs.doInstallCheck or true;
+        installCheckPhase = ''
+          runHook preInstallCheck
+          ${lib.replaceStrings [ "runHook preCheck" "runHook postCheck" ] [ "" "" ] (
+            getDeprecatedPhase "checkPhase" "installCheckPhase"
+          )}
+          runHook postInstallCheck
+        '';
+        preInstallCheck = getDeprecatedPhase "preCheck" "preInstallCheck";
+        postInstallCheck = getDeprecatedPhase "postCheck" "postInstallCheck";
+
         buildCommand = ''
           runPhase installPhase
-          runPhase checkPhase
+          runPhase installCheckPhase
         '';
 
         meta =
