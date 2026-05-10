@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "VirusTotal";
     repo = "yara";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G1f0o7wsds4Mz4Whz35JdSKIkPIqea5Fe5rB8vMdkZU=";
+    hash = "sha256-vzYH56BC0Stb2I4U5VzxA0xG46xZkWmbTIC6BtzeNQ8=";
   };
 
   nativeBuildInputs = [
