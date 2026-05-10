@@ -9,7 +9,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "steam-devices-udev-rules";
-  version = "1.0.0.61-unstable-2026-04-16";
+  version = "0-unstable-2026-04-16";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
