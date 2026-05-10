@@ -1946,7 +1946,6 @@
     githubId = 59761933;
     name = "Ansh Sonkusare";
   };
-
   anstylian = {
     email = "agathangelos.stylianidis@gmail.com";
     github = "anstylian";
