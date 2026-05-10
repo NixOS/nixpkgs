@@ -54,10 +54,12 @@ let
       BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
       ANSI_COLOR = optionalString isNixos "0;38;2;126;186;228";
       IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
-      IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
       DEFAULT_HOSTNAME = config.system.nixos.distroId;
+    }
+    // lib.attrsets.optionalAttrs (config.system.image.version != null) {
+      IMAGE_VERSION = config.system.image.version;
     }
     // cfg.extraOSReleaseArgs;
 
