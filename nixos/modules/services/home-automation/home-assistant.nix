@@ -71,7 +71,7 @@ let
   # Filter null values from the configuration, so that we can still advertise
   # optional options in the config attribute.
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) (
-    recursiveUpdate customLovelaceModulesResources (cfg.config or { })
+    recursiveUpdate (customLovelaceModulesResources // themesConfig) (cfg.config or { })
   );
   configFile = renderYAMLFile "configuration.yaml" filteredConfig;
 
@@ -143,13 +143,28 @@ let
     paths = cfg.customLovelaceModules;
   };
 
-  # Create parts of the lovelace config that reference lovelave modules as resources
+  # Create parts of the lovelace config that reference lovelace modules as resources
   customLovelaceModulesResources = {
     lovelace.resources = map (card: {
       url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
       type = "module";
     }) cfg.customLovelaceModules;
   };
+
+  # Create a directory that holds all lovelace themes
+  themesDir = pkgs.buildEnv {
+    name = "home-assistant-themes";
+    paths = cfg.themes;
+  };
+
+  # Auto-inject frontend.themes include directive when themes are used.
+  themesConfig =
+    if cfg.themes != [ ] then
+      {
+        frontend.themes = "!include_dir_merge_named ${themesDir}/themes";
+      }
+    else
+      { };
 
   componentsUsingBluetooth = [
     # Components that require the AF_BLUETOOTH address family
@@ -440,6 +455,33 @@ in
         ::: {.note}
         When non-empty, `lovelace.resource_mode` is automatically set to `"yaml"`
         so that resources are loaded from the YAML configuration.
+        :::
+      '';
+    };
+
+    themes = mkOption {
+      type = types.listOf (
+        types.addCheck types.package (p: p.isHomeAssistantTheme or false)
+        // {
+          name = "home-assistant-theme";
+          description = "package that is a Home Assistant theme";
+        }
+      );
+      default = [ ];
+      example = literalExpression ''
+        with pkgs.home-assistant-themes; [
+          material-you-theme
+        ];
+      '';
+      description = ''
+        List of themes to load.
+
+        Available themes can be found below `pkgs.home-assistant-themes`.
+
+        ::: {.note}
+        When `themes` is set, the module takes authoritative control
+        over the `frontend.themes` setting in
+        {option}`services.home-assistant.config`.
         :::
       '';
     };
@@ -797,6 +839,10 @@ in
         assertion = !(cfg.lovelaceConfig != null && cfg.lovelaceConfigFile != null);
         message = "Only one of `lovelaceConfig` or `lovelaceConfigFile` can be configured at the same time.";
       }
+      {
+        assertion = cfg.themes != [ ] -> !(hasAttrByPath [ "frontend" "themes" ] (cfg.config or { }));
+        message = "`services.home-assistant.themes` and `services.home-assistant.config.frontend.themes` cannot both be set. When `themes` is non-empty the module sets `frontend.themes` authoritatively.";
+      }
     ];
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
@@ -880,6 +926,7 @@ in
               ln -fns "''${paths[@]}" "${cfg.configDir}/custom_components/"
             done
           '';
+
           removeBlueprints = ''
             # remove blueprints symlinked in from below the /nix/store
             readarray -d "" blueprints < <(find "${cfg.configDir}/blueprints" -maxdepth 2 -type l -print0)

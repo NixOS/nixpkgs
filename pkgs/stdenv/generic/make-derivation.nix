@@ -13,6 +13,7 @@ stdenv:
 let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
+    all
     assertMsg
     attrNames
     concatLists
@@ -31,6 +32,7 @@ let
     isDerivation
     isInt
     isList
+    isPath
     isString
     mapAttrs
     mapNullable
@@ -44,7 +46,6 @@ let
     toFunction
     unique
     zipAttrsWith
-    isPath
     seq
     ;
 
@@ -226,10 +227,12 @@ let
   # TODO(@Ericson2314): Make always true and remove / resolve #178468
   defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
 
+  isSingularDependency = dep: dep == null || isDerivation dep || isString dep || isPath dep;
+
   canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
-  defaultHardeningFlags =
-    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or knownHardeningFlags;
-  stdenvHostSuffix = optionalString (hostPlatform != buildPlatform) "-${hostPlatform.config}";
+  defaultHardeningFlags = stdenv.cc.defaultHardeningFlags or knownHardeningFlags;
+  hostSuffixNecessary = hostPlatform != buildPlatform && stdenvHasCC;
+  stdenvHostSuffix = "-${hostPlatform.config}";
   stdenvStaticMarker = optionalString isStatic "-static";
   userHook = config.stdenv.userHook or null;
 
@@ -246,6 +249,14 @@ let
       )
     );
   gccArchFeature = [ "gccarch-${buildPlatform.gcc.arch}" ];
+
+  cachedOutputChecks = {
+    out = { };
+  };
+  debugCachedOutputChecks = {
+    out = { };
+    debug = { };
+  };
 
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
@@ -396,20 +407,7 @@ let
           } requires __structuredAttrs if {dis,}allowedRequisites or {dis,}allowedReferences is set"
         else
           actualValue;
-      outputs' = outputs ++ optional separateDebugInfo' "debug";
-
-      noNonNativeDeps =
-        (
-          depsBuildTarget
-          ++ depsBuildTargetPropagated
-          ++ depsHostHost
-          ++ depsHostHostPropagated
-          ++ buildInputs
-          ++ propagatedBuildInputs
-          ++ depsTargetTarget
-          ++ depsTargetTargetPropagated
-        ) == [ ];
-      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
+      outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
 
       concretizeFlagImplications =
         flag: impliesFlags: list:
@@ -438,17 +436,24 @@ let
       checkDependencyList = checkDependencyList' [ ];
       checkDependencyList' =
         positions: name: deps:
-        seq (foldl' (
-          index: dep:
-          if dep == null || isDerivation dep || isString dep || isPath dep then
-            index + 1
-          else if isList dep then
-            seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1)
-          else
-            throw "Dependency is not of a valid type: ${
-              concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
-            }${name} for ${attrs.name or attrs.pname}"
-        ) 1 deps) deps;
+        if all isSingularDependency deps then
+          deps
+        else
+          # iterate again with the index if an invalid type was passed, or we
+          # need to recurse into a sublist. making sublists take longer is
+          # worth it, since nobody uses them and handling them makes normal
+          # dependencies slower
+          seq (foldl' (
+            index: dep:
+            if isSingularDependency dep then
+              index + 1
+            else if isList dep then
+              seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1)
+            else
+              throw "Dependency is not of a valid type: ${
+                concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
+              }${name} for ${attrs.name or attrs.pname}"
+          ) 1 deps) deps;
     in
     if erroneousHardeningFlags != [ ] then
       abort (
@@ -477,24 +482,44 @@ let
 
         outputs = outputs';
 
-        buildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
-          checkDependencyList "depsBuildBuild" depsBuildBuild
-        );
-        buildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
-          checkDependencyList "nativeBuildInputs" nativeBuildInputs'
-        );
-        buildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
-          checkDependencyList "depsBuildTarget" depsBuildTarget
-        );
-        hostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
-          checkDependencyList "depsHostHost" depsHostHost
-        );
-        hostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
-          checkDependencyList "buildInputs" buildInputs'
-        );
-        targetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
-          checkDependencyList "depsTargetTarget" depsTargetTarget
-        );
+        buildBuildOutputs =
+          if depsBuildBuild == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildBuild or drv) (
+              checkDependencyList "depsBuildBuild" depsBuildBuild
+            );
+        buildHostOutputs =
+          if nativeBuildInputs' == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildHost or drv) (
+              checkDependencyList "nativeBuildInputs" nativeBuildInputs'
+            );
+        buildTargetOutputs =
+          if depsBuildTarget == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildTarget or drv) (
+              checkDependencyList "depsBuildTarget" depsBuildTarget
+            );
+        hostHostOutputs =
+          if depsHostHost == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost);
+        hostTargetOutputs =
+          if buildInputs' == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs');
+        targetTargetOutputs =
+          if depsTargetTarget == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.targetTarget or drv) (
+              checkDependencyList "depsTargetTarget" depsTargetTarget
+            );
         allDependencies = concatLists [
           buildBuildOutputs
           buildHostOutputs
@@ -504,24 +529,48 @@ let
           targetTargetOutputs
         ];
 
-        propagatedBuildBuildOutputs = map (drv: getDev drv.__spliced.buildBuild or drv) (
-          checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
-        );
-        propagatedBuildHostOutputs = map (drv: getDev drv.__spliced.buildHost or drv) (
-          checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
-        );
-        propagatedBuildTargetOutputs = map (drv: getDev drv.__spliced.buildTarget or drv) (
-          checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
-        );
-        propagatedHostHostOutputs = map (drv: getDev drv.__spliced.hostHost or drv) (
-          checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
-        );
-        propagatedHostTargetOutputs = map (drv: getDev drv.__spliced.hostTarget or drv) (
-          checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
-        );
-        propagatedTargetTargetOutputs = map (drv: getDev drv.__spliced.targetTarget or drv) (
-          checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
-        );
+        propagatedBuildBuildOutputs =
+          if depsBuildBuildPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildBuild or drv) (
+              checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated
+            );
+        propagatedBuildHostOutputs =
+          if propagatedNativeBuildInputs == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildHost or drv) (
+              checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs
+            );
+        propagatedBuildTargetOutputs =
+          if depsBuildTargetPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.buildTarget or drv) (
+              checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated
+            );
+        propagatedHostHostOutputs =
+          if depsHostHostPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostHost or drv) (
+              checkDependencyList "depsHostHostPropagated" depsHostHostPropagated
+            );
+        propagatedHostTargetOutputs =
+          if propagatedBuildInputs == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.hostTarget or drv) (
+              checkDependencyList "propagatedBuildInputs" propagatedBuildInputs
+            );
+        propagatedTargetTargetOutputs =
+          if depsTargetTargetPropagated == [ ] then
+            [ ]
+          else
+            map (drv: getDev drv.__spliced.targetTarget or drv) (
+              checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated
+            );
         allPropagatedDependencies = concatLists [
           propagatedBuildBuildOutputs
           propagatedBuildHostOutputs
@@ -539,7 +588,22 @@ let
               # suffix. But we have some weird ones with run-time deps that are
               # just used for their side-affects. Those might as well since the
               # hash can't be the same. See #32986.
-              hostSuffix = optionalString (!dontAddHostSuffix) stdenvHostSuffix;
+              hostSuffix = optionalString (
+                hostSuffixNecessary
+                && (
+                  !(attrs ? outputHash)
+                  ||
+                    depsBuildTarget == [ ]
+                    && depsBuildTargetPropagated == [ ]
+                    && depsHostHost == [ ]
+                    && depsHostHostPropagated == [ ]
+                    && buildInputs == [ ]
+                    && propagatedBuildInputs == [ ]
+                    && depsTargetTarget == [ ]
+                    && depsTargetTargetPropagated == [ ]
+
+                )
+              ) stdenvHostSuffix;
 
               # Disambiguate statically built packages. This was originally
               # introduce as a means to prevent nix-env to get confused between
@@ -719,31 +783,42 @@ let
               attrsOutputChecks = makeOutputChecks attrs;
               attrsOutputChecksFiltered = filterAttrs (_: v: v != null) attrsOutputChecks;
             in
-            builtins.listToAttrs (
-              map (name: {
-                inherit name;
-                value =
-                  let
-                    raw = zipAttrsWith (_: concatLists) [
-                      attrsOutputChecksFiltered
-                      (makeOutputChecks attrs.outputChecks.${name} or { })
-                    ];
-                  in
-                  # separateDebugInfo = true will put all sorts of files in
-                  # the debug output which could carry references, but
-                  # that's "normal". Notably it symlinks to the source.
-                  # So disable reference checking for the debug output
-                  if separateDebugInfo' && name == "debug" then
-                    removeAttrs raw [
-                      "allowedReferences"
-                      "allowedRequisites"
-                      "disallowedReferences"
-                      "disallowedRequisites"
-                    ]
-                  else
-                    raw;
-              }) outputs
-            );
+            # to avoid the listToAttrs in most common situations, we replicate
+            # what it would produce for most derivations. this can be improved
+            # in the future at the cost of a mass rebuild - empty attrsets for
+            # each output is a noop
+            if
+              !attrs ? outputs
+              && !attrs ? outputChecks
+              && (attrsOutputChecks == { } || attrsOutputChecksFiltered == { })
+            then
+              if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
+            else
+              builtins.listToAttrs (
+                map (name: {
+                  inherit name;
+                  value =
+                    let
+                      raw = zipAttrsWith (_: concatLists) [
+                        attrsOutputChecksFiltered
+                        (makeOutputChecks (attrs.outputChecks.${name} or { }))
+                      ];
+                    in
+                    # separateDebugInfo = true will put all sorts of files in
+                    # the debug output which could carry references, but
+                    # that's "normal". Notably it symlinks to the source.
+                    # So disable reference checking for the debug output
+                    if separateDebugInfo' && name == "debug" then
+                      removeAttrs raw [
+                        "allowedReferences"
+                        "allowedRequisites"
+                        "disallowedReferences"
+                        "disallowedRequisites"
+                      ]
+                    else
+                      raw;
+                }) outputs
+              );
         };
       in
       derivationArg;
@@ -806,9 +881,8 @@ let
       );
 
     let
-      env' = env // {
-        ${if meta ? mainProgram then "NIX_MAIN_PROGRAM" else null} = meta.mainProgram;
-      };
+      env' =
+        if attrs ? meta.mainProgram then env // { NIX_MAIN_PROGRAM = attrs.meta.mainProgram; } else env;
 
       derivationArg = makeDerivationArgument (
         removeAttrs attrs [
