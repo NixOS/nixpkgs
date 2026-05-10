@@ -110,13 +110,6 @@ stdenv.mkDerivation rec {
   # https://gitlab.com/gnutls/gnutls/-/issues/1721
   + ''
     sed '2iexit 77' -i tests/system-override-compress-cert.sh
-  ''
-  # Upstream packaging bug: stamp_error_codes is missing from EXTRA_DIST in
-  # the release tarball, causing the build to try regenerating it by compiling
-  # and running `errcodes` — which fails when cross-compiling since the binary
-  # is for the target architecture. https://gitlab.com/gnutls/gnutls/-/issues/1797
-  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    touch doc/stamp_error_codes
   '';
 
   preConfigure = "patchShebangs .";
@@ -134,6 +127,10 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-ktls"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # https://lists.gnu.org/archive/html/bug-gnulib/2026-05/msg00061.html
+      "gl_cv_func_free_preserves_errno=yes"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
       "--disable-doc"
