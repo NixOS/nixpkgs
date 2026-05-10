@@ -102,18 +102,17 @@ let
     ];
   };
 
-  version = "0.102.1";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nwjs";
-  inherit version;
+  version = "0.102.1";
 
   src =
     let
       flavor = if sdk then "sdk-" else "";
     in
     fetchurl {
-      url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
+      url = "https://dl.nwjs.io/v${finalAttrs.version}/nwjs-${flavor}v${finalAttrs.version}-linux-${bits}.tar.gz";
       # TODO: Write an update script to update all 4 hashes.
       # nixpkgs-update: no auto update
       hash =
@@ -176,4 +175,4 @@ stdenv.mkDerivation {
     mainProgram = "nw";
     license = lib.licenses.mit;
   };
-}
+})
