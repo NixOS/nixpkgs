@@ -3,7 +3,6 @@
   "chat_bottom_container": "sha256-+R1MiDMO4onCMXiJ7MJtJVAwyEJcikTyONwp+HibqA0=",
   "desktop_webview_window": "sha256-KWON5aTPlVVrLidmnfpV+syWPYEngChOvkN7miIFjvE=",
   "extended_nested_scroll_view": "sha256-ocjIy7gpCikoqRMqY4oGw/p9YaQ2v2clhon2pIzTXk4=",
-  "file_picker": "sha256-4zwyrsyXb6KnCzSRGBLgypH79ifKVji8Y8lIb5AIc58=",
   "floating": "sha256-0Xd9dsXJCQ/r/8Nb16oM+M8Jdw+r4QzGmU++HpqF/v0=",
   "flutter_smart_dialog": "sha256-sehrQraEWmYvUd9pdG4l3edbtR4yTcJOqPbuhzIrih4=",
   "flutter_sortable_wrap": "sha256-Qj9Lzh+pJy+vHznGt5M3xwoJtaVtt00fxm4JJXL4bFI=",
@@ -16,7 +15,9 @@
   "media_kit_libs_windows_video": "sha256-tly3av5ojuasf+bXkOzLImcEm9oP25Y2flQDMV21T1s=",
   "media_kit_native_event_loop": "sha256-tly3av5ojuasf+bXkOzLImcEm9oP25Y2flQDMV21T1s=",
   "media_kit_video": "sha256-tly3av5ojuasf+bXkOzLImcEm9oP25Y2flQDMV21T1s=",
-  "native_device_orientation": "sha256-MCgN6HXCeONLrDAOt27Ve8kUvIrOfFRbfJtX8p92Txk=",
+  "native_device_orientation": "sha256-8abnUV7ZTAo0DAjekf353ey6xFvxfilTfbQOUWIahtk=",
+  "screen_brightness_android": "sha256-jxf+KDQAPzCi9+SVK0fUpHG/sR77pk0c76GUZEw04MI=",
+  "screen_brightness_platform_interface": "sha256-jxf+KDQAPzCi9+SVK0fUpHG/sR77pk0c76GUZEw04MI=",
   "super_sliver_list": "sha256-G24uRql1aIc1TDJwKqwQ72Pi4YbJybMn6lxOUySSDwk=",
   "webdav_client": "sha256-euNF7HdDtZ68BqSEq9BvO10BK09MxX2wWGoElFS0yeE=",
   "window_manager": "sha256-UAN3uOXKMfWk+G9GTHyhD2dGDojKA76mGbUR+EFc2Qo="
