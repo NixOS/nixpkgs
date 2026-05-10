@@ -160,7 +160,7 @@ rec {
 
         buildCommand = ''
           runPhase installPhase
-          eval "$checkPhase"
+          runPhase checkPhase
         '';
 
         meta =
