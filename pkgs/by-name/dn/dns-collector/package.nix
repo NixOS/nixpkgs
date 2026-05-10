@@ -5,29 +5,30 @@
   nix-update-script,
   versionCheckHook,
 }:
+
 buildGoModule (finalAttrs: {
   pname = "dns-collector";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "dmachard";
     repo = "dns-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vqru5JK3QCz1ij08ezuJgozhJaEplp92c2jBOiijB+M=";
+    hash = "sha256-hqSfL3R0fp7uYBGoD1Wu0ZNLq1VnOvcN0n8zzfRXTfA=";
   };
+
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/prometheus/common/version.BuildDate=1970-01-01T00:00:00Z"
-    "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
-    "-X github.com/prometheus/common/version.Branch=master"
-    "-X github.com/prometheus/common/version.Revision=${finalAttrs.src.rev}"
-    "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
+    "-X=github.com/prometheus/common/version.BuildDate=1970-01-01T00:00:00Z"
+    "-X=github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
+    "-X=github.com/prometheus/common/version.Branch=master"
+    "-X=github.com/prometheus/common/version.Revision=${finalAttrs.src.rev}"
+    "-X=github.com/prometheus/common/version.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-wyfbxdmF3OeWgZ9IeiCyo9PZFnSfnCmlZXM5/1Jq38w=";
+  vendorHash = "sha256-i1Ogo5zRYaEgiYMMTUjI2WiL2gABw2r31/WslXLzowI=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -39,7 +40,7 @@ buildGoModule (finalAttrs: {
   meta = {
     changelog = "https://github.com/dmachart/dns-collector/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/dmachart/dns-collector";
-    description = "Ingesting, pipelining, and enhancing your DNS logs with usage indicators, security analysis, and additional metadata. ";
+    description = "Ingesting, pipelining, and enhancing your DNS logs with usage indicators, security analysis, and additional metadata";
     license = lib.licenses.mit;
     mainProgram = "go-dnscollector";
     maintainers = with lib.maintainers; [ paepcke ];

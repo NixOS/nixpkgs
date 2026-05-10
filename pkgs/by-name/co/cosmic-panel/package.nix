@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-panel";
-  version = "1.0.10";
+  version = "1.0.12";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-panel";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-QbdLYJMe1jxBb5c2LsQXwfURNldkR+WAYq+7fpoXJJU=";
+    hash = "sha256-1yry1cA/friBzyE6LH3G6rd8ZzBPt5aTGWVzATO839Y=";
   };
 
-  cargoHash = "sha256-vXmLoyHtHvzy47CZvtCEeyyZrYCc+RciE54OKwqJiBw=";
+  cargoHash = "sha256-vU++jreNHCRjxyyoj53LB2Sa7cdVUWGAvECcqoDofF8=";
 
   nativeBuildInputs = [
     just
