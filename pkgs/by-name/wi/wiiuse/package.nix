@@ -46,6 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
 
+  # On Darwin move the libs into the libs output
+  postFixup = lib.optional stdenv.hostPlatform.isDarwin ''
+    mkdir -p $lib
+    mv $out/lib $lib
+  '';
+
   meta = {
     description = "Feature complete cross-platform Wii Remote access library";
     mainProgram = "wiiuseexample";
