@@ -139,10 +139,6 @@ let
       # intent fixture mismatch
       "test_error_no_device_on_floor"
     ];
-    ecovacs = [
-      # Translation not found for vacuum
-      "test_raise_segment_changed_issue"
-    ];
     homeassistant_sky_connect = [
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"
@@ -151,29 +147,9 @@ let
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"
     ];
-    roborock = [
-      # Translation not found for vacuum
-      "test_clean_segments_mixed_maps"
-      "test_segments_changed_issue"
-    ];
-    sensor = [
-      # Failed: Translation not found for sensor
-      "test_validate_unit_change_convertible"
-      "test_validate_statistics_unit_change_no_device_class"
-      "test_validate_statistics_state_class_removed"
-      "test_validate_statistics_state_class_removed_issue_cleaned_up"
-      "test_validate_statistics_unit_change_no_conversion"
-      "test_validate_statistics_unit_change_equivalent_units_2"
-      "test_update_statistics_issues"
-      "test_validate_statistics_mean_type_changed"
-    ];
     shell_command = [
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
-    ];
-    vacuum = [
-      # Translation not found for vacuum
-      "test_segments_changed_issue"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
