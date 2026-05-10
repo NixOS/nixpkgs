@@ -69,7 +69,7 @@ let
 
       patches =
         lib.optionals
-          (stdenv.isDarwin && lib.versionAtLeast version "7.7" && lib.versionOlder version "8.0")
+          (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "7.7" && lib.versionOlder version "8.0")
           [
             # Fix VMOD section attribute on macOS
             # Unreleased commit on master
@@ -81,7 +81,7 @@ let
             # PR: https://github.com/varnishcache/varnish-cache/pull/4339
             ./patches/0001-fix-endian-h-compatibility-on-macos.patch
           ]
-        ++ lib.optionals (stdenv.isDarwin && lib.versionOlder version "7.6") [
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder version "7.6") [
           # Fix duplicate OS_CODE definitions on macOS
           # PR: https://github.com/varnishcache/varnish-cache/pull/4347
           ./patches/0002-fix-duplicate-os-code-definitions-on-macos.patch
@@ -147,7 +147,7 @@ let
           lib.maintainers.osnyx
         ];
         platforms = lib.platforms.unix;
-        broken = stdenv.isDarwin && version == "8.0.1"; # https://github.com/NixOS/nixpkgs/issues/495368
+        broken = stdenv.hostPlatform.isDarwin && version == "8.0.1"; # https://github.com/NixOS/nixpkgs/issues/495368
       };
     };
 in

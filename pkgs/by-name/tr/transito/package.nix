@@ -74,6 +74,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "transito";
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -28,8 +28,8 @@ buildPythonPackage rec {
       version
       src
       ;
-    fetcherVersion = 2;
-    hash = "sha256-3hhwKUzfdlKmth4uRlfBSdxEOIfhAVaq2PZIOHWGWiM=";
+    fetcherVersion = 3;
+    hash = "sha256-4qMOAl9Dbe1oYSRIeP7oPcV/+P8NLdIYvSNxaz0h+Z0=";
   };
 
   build-system = [

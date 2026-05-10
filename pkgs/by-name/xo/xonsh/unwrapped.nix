@@ -73,7 +73,7 @@ buildPythonPackage rec {
     # required by test_xonsh_activator
     virtualenv
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # required by test_man_completion
     man
     util-linux
@@ -110,7 +110,7 @@ buildPythonPackage rec {
     "test_vc_get_branch"
     "test_dirty_working_directory"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on Darwin
     "test_bash_and_is_alias_is_only_functional_alias"
     "test_complete_command"

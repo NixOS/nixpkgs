@@ -22,7 +22,7 @@
 }:
 
 let
-  turingstdenv = if stdenv.isDarwin then llvmPackages_20.stdenv else stdenv;
+  turingstdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_20.stdenv else stdenv;
 in
 turingstdenv.mkDerivation (finalAttrs: {
   pname = "turingdb";
@@ -71,7 +71,7 @@ turingstdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals turingstdenv.isDarwin [ llvmPackages_20.openmp ]
-  ++ lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
 
   cmakeFlags = [
     (lib.cmakeBool "NIX_BUILD" true)
@@ -80,7 +80,7 @@ turingstdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-lgomp")
     (lib.cmakeFeature "FLEX_INCLUDE_DIR" "${lib.getDev flex}/include")
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "OpenMP_CXX_FLAGS" "-fopenmp")
     (lib.cmakeFeature "OpenMP_CXX_LIB_NAMES" "omp")
     (lib.cmakeFeature "OpenMP_omp_LIBRARY" "${lib.getLib llvmPackages_20.openmp}/lib/libomp.dylib")
