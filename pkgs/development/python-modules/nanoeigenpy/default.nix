@@ -8,6 +8,8 @@
   # nativeBuildInputs
   cmake,
   doxygen,
+
+  # buildInputs
   nanobind,
 
   # propagatedBuildInputs
@@ -65,6 +67,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     doxygen
+  ];
+
+  buildInputs = [
     nanobind
   ];
 
