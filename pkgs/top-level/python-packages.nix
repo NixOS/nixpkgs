@@ -8855,6 +8855,8 @@ self: super: with self; {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
 
+  libpulse = callPackage ../development/python-modules/libpulse { };
+
   libpurecool = callPackage ../development/python-modules/libpurecool { };
 
   libpwquality = lib.pipe pkgs.libpwquality [
