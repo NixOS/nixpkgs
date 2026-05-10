@@ -1,10 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
+  fetchPypi,
 
   # dependencies
   aiohttp,
@@ -34,70 +31,48 @@
   pandas,
   protobuf,
   pyarrow,
+  pydantic,
   python-dotenv,
   pyyaml,
   requests,
   scikit-learn,
   scipy,
+  shap,
   skops,
   sqlalchemy,
   sqlparse,
   uvicorn,
-
-  # tests
-  azure-core,
-  azure-storage-blob,
-  azure-storage-file,
-  boto3,
-  botocore,
-  catboost,
-  datasets,
-  google-cloud-storage,
-  httpx,
-  jwt,
-  keras,
-  langchain,
-  librosa,
-  moto,
-  opentelemetry-exporter-otlp,
-  optuna,
-  pydantic,
-  pyspark,
-  pytestCheckHook,
-  pytorch-lightning,
-  sentence-transformers,
-  shap,
-  starlette,
-  statsmodels,
-  tensorflow,
-  torch,
-  transformers,
-  xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
   version = "3.11.1";
-  pyproject = true;
+  format = "wheel";
 
-  src = fetchFromGitHub {
-    owner = "mlflow";
-    repo = "mlflow";
-    tag = "v${version}";
-    hash = "sha256-Oe6nBnnOz7MvGUNCcCGhHl6ZbyDfAhQ0LlfMBF4p6Hc=";
+  src = fetchPypi {
+    pname = "mlflow";
+    inherit version;
+    format = "wheel";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-j2vxI4rAT5dmTCKd1IA4DFwlSni9s8DkM+OgOXUIsa8=";
   };
 
-  pythonRelaxDeps = [
-    "cryptography"
-    "gunicorn"
-    "importlib_metadata"
-    "packaging"
-    "protobuf"
-    "pytz"
-    "pyarrow"
-  ];
+  # Nix-wrapped python populates sys.path via NIX_PYTHONPATH/site hooks,
+  # but PYTHONPATH stays unset in os.environ. mlflow spawns the server
+  # in a subprocess with a curated env, so without this patch the child
+  # interpreter cannot import uvicorn / mlflow itself.
+  postInstall = ''
+    patch -p1 -d "$out/lib/python"*/site-packages < ${./subprocess-pythonpath.patch}
+  '';
 
-  build-system = [ setuptools ];
+  # mlflow on PyPI is three overlapping wheels (mlflow-skinny, mlflow-tracing,
+  # mlflow). The full wheel declares the other two as runtime deps, so we strip
+  # those declarations and inline their requirements into dependencies below.
+  pythonRemoveDeps = [
+    "mlflow-skinny"
+    "mlflow-tracing"
+  ];
 
   dependencies = [
     aiohttp
@@ -140,75 +115,19 @@ buildPythonPackage rec {
     uvicorn
   ];
 
+  pythonRelaxDeps = [
+    "importlib_metadata"
+  ];
+
   pythonImportsCheck = [ "mlflow" ];
 
-  nativeCheckInputs = [
-    aiohttp
-    azure-core
-    azure-storage-blob
-    azure-storage-file
-    boto3
-    botocore
-    catboost
-    datasets
-    google-cloud-storage
-    httpx
-    jwt
-    keras
-    langchain
-    librosa
-    moto
-    opentelemetry-exporter-otlp
-    optuna
-    pydantic
-    pyspark
-    pytestCheckHook
-    pytorch-lightning
-    sentence-transformers
-    starlette
-    statsmodels
-    tensorflow
-    torch
-    transformers
-    uvicorn
-    xgboost
-  ];
-
-  disabledTestPaths = [
-    # Requires unpackaged `autogen`
-    "tests/autogen/test_autogen_autolog.py"
-
-    # Requires unpackaged `diviner`
-    "tests/diviner/test_diviner_model_export.py"
-
-    # Requires unpackaged `sktime`
-    "examples/sktime/test_sktime_model_export.py"
-
-    # Requires `fastai` which would cause a circular dependency
-    "tests/fastai/test_fastai_autolog.py"
-    "tests/fastai/test_fastai_model_export.py"
-
-    # Requires `spacy` which would cause a circular dependency
-    "tests/spacy/test_spacy_model_export.py"
-
-    # Requires `tensorflow.keras` which is not included in our outdated version of `tensorflow` (2.13.0)
-    "tests/gateway/providers/test_ai21labs.py"
-    "tests/tensorflow/test_keras_model_export.py"
-    "tests/tensorflow/test_keras_pyfunc_model_works_with_all_input_types.py"
-    "tests/tensorflow/test_mlflow_callback.py"
-  ];
-
-  # I (@GaetanLepage) gave up at enabling tests:
-  # - They require a lot of dependencies (some unpackaged);
-  # - Many errors occur at collection time;
-  # - Most (all ?) tests require internet access anyway.
   doCheck = false;
 
   meta = {
     description = "Open source platform for the machine learning lifecycle";
     mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
-    changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
