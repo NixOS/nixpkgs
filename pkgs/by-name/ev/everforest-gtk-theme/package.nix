@@ -4,21 +4,28 @@
   fetchFromGitHub,
   gnome-themes-extra,
   gtk-engine-murrine,
+  jdupes,
+  sassc,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "everforest-gtk-theme";
-  version = "0-unstable-2025-10-15";
+  version = "0-unstable-2025-10-23";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Everforest-GTK-Theme";
-    rev = "930a5dc57f7a06e8c6538d531544e41c56dbb27a";
-    hash = "sha256-mlJE7gVElWUjJIZnAL5ztchphmaU82llol+YdKqnSxg=";
+    rev = "9b8be4d6648ae9eaae3dd550105081f8c9054825";
+    hash = "sha256-XHO6NoXJwwZ8gBzZV/hJnVq5BvkEKYWvqLBQT00dGdE=";
   };
 
   propagatedUserEnvPkgs = [
     gtk-engine-murrine
+  ];
+
+  nativeBuildInputs = [
+    jdupes
+    sassc
   ];
 
   buildInputs = [
@@ -29,9 +36,27 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+
+    pushd themes/release
+    patchShebangs make-release.sh
+    # don't run last line of make-release.sh
+    # that packs all the theme variants into tarballs
+    sed -i '$d' make-release.sh
+    ./make-release.sh
+    # fix theme names to start with Everforest-
+    # rather than pname and version
+    for f in "${pname}-${version}-"*; do
+      mv "$f" "Everforest-''${f#${pname}-${version}-}"
+    done
+    popd
+
     mkdir -p "$out/share/"{themes,icons}
     cp -a icons/* "$out/share/icons/"
-    cp -a themes/* "$out/share/themes/"
+    mv themes/release/Everforest* "$out/share/themes/"
+
+    # hard link when possible
+    jdupes -L -r $out/share
+
     runHook postInstall
   '';
 
@@ -39,7 +64,10 @@ stdenvNoCC.mkDerivation {
     description = "Everforest colour palette for GTK";
     homepage = "https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ jn-sena ];
+    maintainers = with lib.maintainers; [
+      jn-sena
+      elnudev
+    ];
     platforms = lib.platforms.unix;
   };
 }
