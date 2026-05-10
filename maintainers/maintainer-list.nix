@@ -27803,12 +27803,6 @@
     githubId = 3159881;
     name = "Tobias Markus";
   };
-  tmountain = {
-    email = "tinymountain@gmail.com";
-    github = "tmountain";
-    githubId = 135297;
-    name = "Travis Whitton";
-  };
   tmplt = {
     email = "v@tmplt.dev";
     github = "tmplt";

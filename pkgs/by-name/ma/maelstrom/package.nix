@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "maelstrom";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ tmountain ];
+    maintainers = [ ];
   };
 })

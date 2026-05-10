@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     description = "Play chess against UCI engines in your terminal";
     mainProgram = "uchess";
     homepage = "https://tmountain.github.io/uchess/";
-    maintainers = with lib.maintainers; [ tmountain ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 })
