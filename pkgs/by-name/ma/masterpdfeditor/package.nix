@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "masterpdfeditor";
-  version = "5.9.94";
+  version = "5.9.98";
 
   src =
     let
@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-WKMk0uzcjI4/dwjas4Ws3S6VBcUZYO9/WDXgKY22EeE=";
-        aarch64-linux = "sha256-DKNOvEAjCzOHRAn8PRiT/1tv6/NggoWCHgHf5OWOHSA=";
+        x86_64-linux = "sha256-KNAssyWLeMqtMyZQIF6Qr1K/9tioC4cD84lL9c1iMgM=";
+        aarch64-linux = "sha256-+jNXO4fbbkh9Uea0N+0fJbHRMu9zS/d7o8W4D2+7kMI=";
       };
     };
 
