@@ -153,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
       nim65s
       yzx9
     ];
+    teams = [ lib.teams.geospatial ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })
