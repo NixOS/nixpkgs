@@ -7,6 +7,7 @@
   testers,
   tests,
   callPackage,
+  pkgs,
 }:
 
 buildGoModule (finalAttrs: {
@@ -49,7 +50,7 @@ buildGoModule (finalAttrs: {
 
       tests = {
         validation = tests.cue-validation.override {
-          callPackage = (path: attrs: callPackage path (attrs // { inherit writeCueValidator; }));
+          pkgs = pkgs.extend (_: _: { inherit writeCueValidator; });
         };
 
         test-001-all-good = callPackage ./tests/001-all-good.nix { inherit cue; };
