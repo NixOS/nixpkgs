@@ -65,20 +65,20 @@
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)
   withDavs2 ? withFullDeps && withGPL, # AVS2 decoder
   withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin, # IIDC-1394 grabbing (ieee 1394)
-  withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # libdrm support
+  withDrm ? withHeadlessDeps && (with stdenv.hostPlatform; isLinux || isFreeBSD), # libdrm support
   withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
   withDvdread ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
   withFdkAac ? withFullDeps && (!withGPL || withUnfree), # Fraunhofer FDK AAC de/encoder
   withNvcodec ?
     withHeadlessDeps
     && (
-      with stdenv;
+      with stdenv.hostPlatform;
       !isDarwin
       && !isAarch32
-      && !hostPlatform.isLoongArch64
-      && !hostPlatform.isRiscV
-      && !(hostPlatform.isPower && hostPlatform.isBigEndian)
-      && hostPlatform == buildPlatform
+      && !isLoongArch64
+      && !isRiscV
+      && !(isPower && isBigEndian)
+      && stdenv.hostPlatform == stdenv.buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
   withFontconfig ? withHeadlessDeps, # Needed for drawtext filter
@@ -143,8 +143,8 @@
   withUavs3d ? withFullDeps, # AVS3 decoder
   withV4l2 ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Video 4 Linux support
   withV4l2M2m ? withV4l2,
-  withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # Vaapi hardware acceleration
-  withVdpau ? withSmallDeps && (with stdenv; isLinux || isFreeBSD), # Vdpau hardware acceleration
+  withVaapi ? withHeadlessDeps && (with stdenv.hostPlatform; isLinux || isFreeBSD), # Vaapi hardware acceleration
+  withVdpau ? withSmallDeps && (with stdenv.hostPlatform; isLinux || isFreeBSD), # Vdpau hardware acceleration
   withVidStab ? withHeadlessDeps && withGPL, # Video stabilization
   withVmaf ? withFullDeps && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
   withVoAmrwbenc ? withFullDeps && withVersion3, # AMR-WB encoder

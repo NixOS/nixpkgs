@@ -122,7 +122,7 @@ buildPythonPackage (finalAttrs: {
     # this R Markdown test, causing a partial credit output mismatch
     "test_rmd"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # socket.bind() fails under macOS sandbox
     "test_otter_example"
     "test_jupyterlite"

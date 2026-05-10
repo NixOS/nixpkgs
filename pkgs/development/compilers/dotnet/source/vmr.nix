@@ -43,11 +43,10 @@ let
   stdenv = llvmPackages.stdenv;
 
   inherit (stdenv)
-    isLinux
-    isDarwin
     buildPlatform
     targetPlatform
     ;
+  inherit (stdenv.hostPlatform) isLinux isDarwin;
   inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;

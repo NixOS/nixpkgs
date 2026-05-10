@@ -69,7 +69,7 @@ buildPythonPackage rec {
     "test_check_status__nonexistent_hostname"
     "test_check_status__no_answer"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # sensors_temperatures is not available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.sensors_temperatures
     "TestTemperature"
     # some metrics aren't available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.virtual_memory
