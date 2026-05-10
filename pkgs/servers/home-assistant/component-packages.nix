@@ -4650,7 +4650,8 @@
       ];
     "opnsense" =
       ps: with ps; [
-      ]; # missing inputs: aiopnsense
+        aiopnsense
+      ];
     "opower" =
       ps: with ps; [
         fnv-hash-fast
@@ -8125,6 +8126,7 @@
     "opentherm_gw"
     "openuv"
     "openweathermap"
+    "opnsense"
     "opower"
     "oralb"
     "orvibo"
