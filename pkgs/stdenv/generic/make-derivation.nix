@@ -24,9 +24,9 @@ let
     extendDerivation
     filter
     filterAttrs
+    foldl'
     getDev
     head
-    foldl'
     intersectAttrs
     isAttrs
     isBool
@@ -35,6 +35,7 @@ let
     isList
     isPath
     isString
+    listToAttrs
     mapAttrs
     mapNullable
     optional
@@ -47,7 +48,10 @@ let
     subtractLists
     toExtension
     toFunction
+    typeOf
     unique
+    unsafeDiscardStringContext
+    unsafeGetAttrPos
     warnIf
     zipAttrsWith
     ;
@@ -108,7 +112,7 @@ let
           let
             prev = rattrs final;
             thisOverlay = toExtension f0 final prev;
-            pos = builtins.unsafeGetAttrPos "version" thisOverlay;
+            pos = unsafeGetAttrPos "version" thisOverlay;
           in
           warnIf
             (
@@ -312,7 +316,7 @@ let
   unsafeDerivationToUntrackedOutpath =
     drv:
     if isDerivation drv && (!drv.__contentAddressed or false) then
-      builtins.unsafeDiscardStringContext drv.outPath
+      unsafeDiscardStringContext drv.outPath
     else
       drv;
 
@@ -844,7 +848,7 @@ let
             then
               if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
             else
-              builtins.listToAttrs (
+              listToAttrs (
                 map (name: {
                   inherit name;
                   value =
@@ -899,11 +903,11 @@ let
       pos ? # position used in error messages and for meta.position
         (
           if attrs.meta.description or null != null then
-            builtins.unsafeGetAttrPos "description" attrs.meta
+            unsafeGetAttrPos "description" attrs.meta
           else if attrs.version or null != null then
-            builtins.unsafeGetAttrPos "version" attrs
+            unsafeGetAttrPos "version" attrs
           else
-            builtins.unsafeGetAttrPos "name" attrs
+            unsafeGetAttrPos "name" attrs
         ),
 
       # Experimental.  For simple packages mostly just works,
@@ -973,7 +977,7 @@ let
           n: v:
           assert
             (isString v || isBool v || isInt v || isDerivation v)
-            || throw "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
+            || throw "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${typeOf v}.";
           v
         ) env';
     in
