@@ -3534,8 +3534,8 @@ let
         mktplcRef = {
           publisher = "mvllow";
           name = "rose-pine";
-          version = "2.15.1";
-          hash = "sha256-GCN201yqr4lf2rc0ZV+iWkZi69qGOXFKhLPMhJ08U2w=";
+          version = "2.15.2";
+          hash = "sha256-5jXlCFk/86BL1yojTRuhRzS3XqcwcCpl/gmApcTdlBw=";
         };
         meta = {
           license = lib.licenses.mit;
