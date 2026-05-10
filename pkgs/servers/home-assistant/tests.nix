@@ -94,10 +94,6 @@ let
   };
 
   extraDisabledTestPaths = {
-    hypontech = [
-      # outdated snapshot
-      "tests/components/hypontech/test_sensor.py::test_sensors"
-    ];
     influxdb = [
       # These tests fail because they check for the number of warnings in the
       # logs and there is an extra warning in the logs:
