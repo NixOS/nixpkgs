@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus-klipper-exporter";
-  version = "0.14.0";
+  version = ".0.10.3";
 
   src = fetchFromGitHub {
     owner = "scross01";
     repo = "prometheus-klipper-exporter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2BJkSKchUkLbUJke+4nB49MFp8OPPcytYAhtxCEdXO4=";
+    sha256 = "sha256-z99Sl8GwT1C7VA2a6YvSaqYwjKab5QjQv9nF2nxrCrA=";
   };
 
-  vendorHash = "sha256-8Y5o6Vh1Kn9CBG91qr1TQzyBHA0d31Femj9j1uW+4uk=";
+  vendorHash = "sha256-0nbLHZ2WMLMK0zKZuUYz355K01Xspn9svmlFCtQjed0=";
 
   doCheck = true;
 
