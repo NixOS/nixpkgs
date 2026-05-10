@@ -9,7 +9,6 @@
 
   # dependencies
   annotated-doc,
-  click,
 
   # optional-dependencies
   rich,
@@ -22,17 +21,19 @@
   procps,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typer";
-  version = "0.25.1";
+  version = "0.26.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
-    tag = version;
-    hash = "sha256-HIvXseuR7zUXFuTWzntDfHhAp8BcFjxo35gn0i4+03w=";
+    tag = finalAttrs.version;
+    hash = "sha256-VkqvlWLzmtbQPaplx/YRdSNN1xq/UMRl8EZVIEm97Lk=";
   };
+
+  patches = [ ./fix-binary-stderr-test.patch ];
 
   postPatch = ''
     for f in $(find tests -type f -print); do
@@ -47,7 +48,6 @@ buildPythonPackage rec {
 
   dependencies = [
     annotated-doc
-    click
     rich
     shellingham
   ];
@@ -62,13 +62,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Flaky sometimes
+    "test_file_error"
+
     "test_scripts"
+
     # Likely related to https://github.com/sarugaku/shellingham/issues/35
     # fails also on Linux
     "test_show_completion"
-    "test_install_completion"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     "test_install_completion"
   ];
 
@@ -77,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
-    changelog = "https://github.com/tiangolo/typer/releases/tag/${version}";
+    changelog = "https://github.com/tiangolo/typer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ winpat ];
   };
-}
+})

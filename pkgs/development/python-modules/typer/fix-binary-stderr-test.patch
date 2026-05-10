@@ -1,0 +1,14 @@
+diff --git a/tests/test_types_file.py b/tests/test_types_file.py
+index 3fb7d82f69..1265899334 100644
+--- a/tests/test_types_file.py
++++ b/tests/test_types_file.py
+@@ -142,7 +142,8 @@
+             "-m",
+             "coverage",
+             "run",
+-            __file__,
++            "-m",
++            "tests.test_types_file",
+             "write-binary-stderr",
+         ],
+         capture_output=True,
