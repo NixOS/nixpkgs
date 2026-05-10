@@ -130,17 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
       hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
     })
-    # Fix build failure on Darwin when building Keychain integration
-    # See https://github.com/git/git/pull/2188 and https://github.com/Homebrew/homebrew-core/pull/266961
-    (fetchurl {
-      name = "osxkeychain-define-build-targets-in-toplevel-Makefile.patch";
-      url = "https://lore.kernel.org/git/pull.2046.v2.git.1770775169908.gitgitgadget@gmail.com/raw";
-      hash = "sha256-7jTiMM5XFRDj/srtVf8olW62T/mesqLcyRp3NZJcid8=";
-    })
-  ]
-  ++ lib.optionals rustSupport [
-    # The above patch doesn’t work with Rust support enabled.
-    ./osxkeychain-link-rust_lib.patch
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
