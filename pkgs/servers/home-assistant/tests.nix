@@ -117,10 +117,6 @@ let
       "tests/components/minecraft_server/test_init.py"
       "tests/components/minecraft_server/test_sensor.py"
     ];
-    modem_callerid = [
-      # aioserial mock produces wrong state
-      "tests/components/modem_callerid/test_init.py::test_setup_entry"
-    ];
     nzbget = [
       # type assertion fails due to introduction of parameterized type
       "tests/components/nzbget/test_config_flow.py::test_user_form"
