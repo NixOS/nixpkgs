@@ -1,7 +1,5 @@
 {
-  lib,
   pkgs,
-  fetchFromGitHub,
   buildPythonPackage,
 
   # build-system
@@ -22,6 +20,7 @@ buildPythonPackage (finalAttrs: {
     ;
 
   pyproject = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -43,9 +42,7 @@ buildPythonPackage (finalAttrs: {
     "test_issue_401_two_embedded_fonts_save_encrypted"
   ];
 
-  pythonImportsCheck = [
-    "pdf_oxide"
-  ];
+  pythonImportsCheck = [ "pdf_oxide" ];
 
   meta = pkgs.pdf-oxide.meta // {
     description = "Python bindings for the pdf_oxide library";
