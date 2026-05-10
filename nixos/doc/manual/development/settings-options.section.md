@@ -376,6 +376,8 @@ have a predefined type and string generator already declared under
 
     It returns a set with Property list (plist) specific attributes `type` and `generate` as specified [below](#pkgs-formats-result).
 
+    Binary `<data>` values can be produced with `lib.mkPlistData "<base64>"`.
+
 `pkgs.formats.pythonVars` { }
 
 :   A function taking an empty attribute set (for future extensibility)
