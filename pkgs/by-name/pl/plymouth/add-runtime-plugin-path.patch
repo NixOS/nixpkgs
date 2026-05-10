@@ -1,0 +1,67 @@
+diff --git a/meson.build b/meson.build
+index 650ad189..1e1ebe1d 100644
+--- a/meson.build
++++ b/meson.build
+@@ -18,6 +18,11 @@ plymouth_time_dir = get_option('prefix') / get_option('localstatedir') / 'lib' /
+ 
+ plymouth_runtime_dir = get_option('runstatedir') / 'plymouth'
+ plymouth_runtime_theme_path = plymouth_runtime_dir / 'themes/'
++if get_option('runtime-plugins')
++  plymouth_runtime_plugin_path = plymouth_runtime_dir / 'plugins/'
++else
++  plymouth_runtime_plugin_path = plymouth_plugin_path
++endif
+ 
+ # Dependencies
+ cc = meson.get_compiler('c')
+@@ -76,7 +81,7 @@ conf.set('PLY_ENABLE_TRACING', get_option('tracing'))
+ conf.set_quoted('PLYMOUTH_RUNTIME_DIR', plymouth_runtime_dir)
+ conf.set_quoted('PLYMOUTH_THEME_PATH', plymouth_theme_path)
+ conf.set_quoted('PLYMOUTH_RUNTIME_THEME_PATH', plymouth_runtime_theme_path)
+-conf.set_quoted('PLYMOUTH_PLUGIN_PATH', plymouth_plugin_path)
++conf.set_quoted('PLYMOUTH_PLUGIN_PATH', plymouth_runtime_plugin_path)
+ conf.set_quoted('PLYMOUTH_POLICY_DIR', plymouth_policy_dir)
+ conf.set_quoted('PLYMOUTH_CONF_DIR', plymouth_conf_dir)
+ conf.set_quoted('PLYMOUTH_TIME_DIRECTORY', plymouth_time_dir)
+diff --git a/meson_options.txt b/meson_options.txt
+index 4f601bb0..61fccc12 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -28,6 +28,11 @@ option('runstatedir',
+   value: '/run',
+   description: 'runstatedir',
+ )
++option('runtime-plugins',
++  type: 'boolean',
++  value: false,
++  description: 'Use runstatedir for loading theme plugins',
++)
+ option('boot-tty',
+   type: 'string',
+   value: '/dev/tty1',
+diff --git a/src/libply-splash-core/meson.build b/src/libply-splash-core/meson.build
+index 69636b13..02bd5cbd 100644
+--- a/src/libply-splash-core/meson.build
++++ b/src/libply-splash-core/meson.build
+@@ -31,7 +31,7 @@ libply_splash_core_cflags = [
+   '-DPLYMOUTH_BACKGROUND_COLOR=@0@'.format(get_option('background-color')),
+   '-DPLYMOUTH_BACKGROUND_START_COLOR=@0@'.format(get_option('background-start-color-stop')),
+   '-DPLYMOUTH_BACKGROUND_END_COLOR=@0@'.format(get_option('background-end-color-stop')),
+-  '-DPLYMOUTH_PLUGIN_PATH="@0@"'.format(plymouth_plugin_path),
++  '-DPLYMOUTH_PLUGIN_PATH="@0@"'.format(plymouth_runtime_plugin_path),
+ ]
+ 
+ libply_splash_core = library('ply-splash-core',
+diff --git a/src/libply-splash-graphics/meson.build b/src/libply-splash-graphics/meson.build
+index 32fad963..02b8440b 100644
+--- a/src/libply-splash-graphics/meson.build
++++ b/src/libply-splash-graphics/meson.build
+@@ -20,7 +20,7 @@ libply_splash_graphics_cflags = [
+   '-DPLYMOUTH_BACKGROUND_COLOR=@0@'.format(get_option('background-color')),
+   '-DPLYMOUTH_BACKGROUND_START_COLOR=@0@'.format(get_option('background-start-color-stop')),
+   '-DPLYMOUTH_BACKGROUND_END_COLOR=@0@'.format(get_option('background-end-color-stop')),
+-  '-DPLYMOUTH_PLUGIN_PATH="@0@"'.format(plymouth_plugin_path),
++  '-DPLYMOUTH_PLUGIN_PATH="@0@"'.format(plymouth_runtime_plugin_path),
+ ]
+ 
+ libply_splash_graphics = library('ply-splash-graphics',

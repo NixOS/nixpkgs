@@ -1,0 +1,37 @@
+diff --git a/onnxruntime/test/providers/cpu/math/element_wise_ops_test.cc b/onnxruntime/test/providers/cpu/math/element_wise_ops_test.cc
+index 3fb8cc3e15..ccc9bd543e 100644
+--- a/onnxruntime/test/providers/cpu/math/element_wise_ops_test.cc
++++ b/onnxruntime/test/providers/cpu/math/element_wise_ops_test.cc
+@@ -3797,13 +3797,7 @@ TEST(MathOpTest, Mean_8) {
+   test.Run(OpTester::ExpectResult::kExpectSuccess, "", {kTensorrtExecutionProvider});  // TensorRT: Input batch size is inconsistent
+ }
+ 
+-#ifdef _LIBCPP_VERSION
+-#define MATH_NO_EXCEPT
+-#else
+-#define MATH_NO_EXCEPT noexcept
+-#endif
+-
+-template <float (&op)(float value) MATH_NO_EXCEPT>
++template <float (&op)(float value)>
+ void TrigFloatTest(OpTester& test, std::initializer_list<float> input, float abs_error = -1.0f) {
+   std::vector<int64_t> dims{static_cast<int64_t>(input.size())};
+ 
+@@ -3821,7 +3815,7 @@ void TrigFloatTest(OpTester& test, std::initializer_list<float> input, float abs
+   test.Run();
+ }
+ 
+-template <double (&op)(double value) MATH_NO_EXCEPT>
++template <double (&op)(double value)>
+ void TrigDoubleTest(OpTester& test, std::initializer_list<double> input,
+                     const std::unordered_set<std::string> excluded_provider_types = {}) {
+   std::vector<int64_t> dims{static_cast<int64_t>(input.size())};
+@@ -3835,7 +3829,7 @@ void TrigDoubleTest(OpTester& test, std::initializer_list<double> input,
+   test.Run(OpTester::ExpectResult::kExpectSuccess, "", excluded_provider_types);
+ }
+ 
+-template <float (&op)(float value) MATH_NO_EXCEPT>
++template <float (&op)(float value)>
+ void TrigFloat16Test(OpTester& test, std::initializer_list<float> input) {
+   std::vector<int64_t> dims{static_cast<int64_t>(input.size())};
+ 

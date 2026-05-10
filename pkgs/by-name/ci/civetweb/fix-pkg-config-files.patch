@@ -1,0 +1,43 @@
+From 69b825ef5daebdb6e3b51ce23663003807028634 Mon Sep 17 00:00:00 2001
+From: Thomas Gerbet <thomas@gerbet.me>
+Date: Sun, 28 Sep 2025 21:45:34 +0200
+Subject: [PATCH] Use `@CMAKE_INSTALL_FULL_*DIR@` in pkg-config files
+
+This make possible to install to absolute paths and not only to relative
+paths.
+---
+ cmake/civetweb-cpp.pc.in | 4 ++--
+ cmake/civetweb.pc.in     | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/cmake/civetweb-cpp.pc.in b/cmake/civetweb-cpp.pc.in
+index ca1232c5..dc2d99e3 100644
+--- a/cmake/civetweb-cpp.pc.in
++++ b/cmake/civetweb-cpp.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @PROJECT_NAME@-cpp
+ Description: generic graph library
+diff --git a/cmake/civetweb.pc.in b/cmake/civetweb.pc.in
+index 27cea8f1..dd669c5f 100644
+--- a/cmake/civetweb.pc.in
++++ b/cmake/civetweb.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: generic graph library
+-- 
+2.51.0
+

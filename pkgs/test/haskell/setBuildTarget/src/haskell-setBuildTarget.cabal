@@ -1,0 +1,16 @@
+cabal-version:       >=1.10
+name:                haskell-setBuildTarget
+version:             0.1.0.0
+author:              Isaac Shapira
+maintainer:          fresheyeball@protonmail.com
+build-type:          Simple
+
+executable foo
+  main-is:             Foo.hs
+  build-depends:       base
+  default-language:    Haskell2010
+
+executable bar
+  main-is:             Bar.hs
+  build-depends:       base
+  default-language:    Haskell2010

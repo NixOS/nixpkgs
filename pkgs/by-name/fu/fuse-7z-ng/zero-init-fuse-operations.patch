@@ -1,0 +1,13 @@
+Zero-initialize unset fields of `struct fuse_operations`.
+<https://github.com/kedazo/fuse-7z-ng/pull/8>
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -195,7 +195,7 @@ main (int argc, char **argv)
+         mkdir(param.mountpoint, 0750);
+     }
+ 
+-    struct fuse_operations fuse7z_oper;
++    struct fuse_operations fuse7z_oper = {0};
+     fuse7z_oper.init = fuse7z_init;
+     fuse7z_oper.destroy = fuse7z_destroy;
+     fuse7z_oper.readdir = fuse7z_readdir;
