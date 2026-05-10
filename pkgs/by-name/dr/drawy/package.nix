@@ -32,22 +32,24 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  buildInputs = [
-    qt6.qtbase
-    qt6.qttools
-
-    kdePackages.extra-cmake-modules
-    kdePackages.kconfig
-    kdePackages.kconfigwidgets
-    kdePackages.kcoreaddons
-    kdePackages.kcrash
-    kdePackages.kdoctools
-    kdePackages.ki18n
-    kdePackages.kiconthemes
-    kdePackages.kwidgetsaddons
-    kdePackages.kxmlgui
-    kdePackages.syntax-highlighting
-  ];
+  buildInputs =
+    (with qt6; [
+      qtbase
+      qttools
+    ])
+    ++ (with kdePackages; [
+      extra-cmake-modules
+      kconfig
+      kconfigwidgets
+      kcoreaddons
+      kcrash
+      kdoctools
+      ki18n
+      kiconthemes
+      kwidgetsaddons
+      kxmlgui
+      syntax-highlighting
+    ]);
 
   passthru.updateScript = nix-update-script { };
 
