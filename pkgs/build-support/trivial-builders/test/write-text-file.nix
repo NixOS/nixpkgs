@@ -11,6 +11,8 @@
 */
 {
   lib,
+  stdenvNoCC,
+  testers,
   runCommand,
   runtimeShell,
   writeTextFile,
@@ -19,6 +21,40 @@ lib.makeExtensible (
   final:
   let
     veryWeirdName = ''here's a name with some "bad" characters, like spaces and quotes'';
+
+    test-checkPhase-expectedBuildLogEntries = [ "writeTextFile is executing checkPhase." ];
+
+    test-checkPhase-sample = writeTextFile {
+      name = "test-writeTextFile-deprecated-checkPhase-compatibility-sample.txt";
+      text = ''
+        This test expects `writeTextFile` to handle the deprecated `checkPhase` argument compatibly.
+      '';
+      checkPhase = ''
+        echo "${lib.concatLines test-checkPhase-expectedBuildLogEntries}"
+        false
+      '';
+    };
+
+    test-checkPhase-samples = {
+      checkPhase = test-checkPhase-sample;
+    }
+    // lib.genAttrs [ "preCheck" "postCheck" ] (
+      phaseName:
+      test-checkPhase-sample.overrideAttrs (previousAttrs: {
+        name = lib.replaceString "checkPhase" phaseName previousAttrs.name;
+        checkPhase = "";
+        ${phaseName} = previousAttrs.checkPhase;
+      })
+    );
+
+    testNoRepeatScriptText = ''
+      REPEATER="repeat-''${REPEATER-}";
+      echo "\$REPEATER is now $REPEATER"
+      if [[ "$REPEATER" != "repeat-" ]]; then
+        echo "ERROR: ''${name-testNoRepeat}: REPEATER is appended more than once."
+        exit 1
+      fi
+    '';
   in
   lib.recurseIntoAttrs {
 
@@ -76,4 +112,68 @@ lib.makeExtensible (
       '';
     };
   }
+
+  // lib.mergeAttrsList (
+    map
+      (
+        phaseName:
+        {
+          "deprecated-${phaseName}-compatibility" = testers.testBuildFailure' {
+            name = "test-writeTextFile-deprecated-${phaseName}-compatibility";
+            drv = test-checkPhase-samples.${phaseName};
+            expectedBuilderLogEntries = test-checkPhase-expectedBuildLogEntries;
+            script = ''
+              set -x
+              diff -u "$failed/result" <(printf "%s" ${lib.escapeShellArg test-checkPhase-sample.text})
+              set +x
+            '';
+          };
+
+          "deprecated-${phaseName}-no-repeat" = writeTextFile (finalAttrs: {
+            name = "test-writeTextFile-deprecated-${phaseName}-no-repeat";
+            text = ''
+              ${finalAttrs.name}
+            '';
+            checkPhase = testNoRepeatScriptText;
+          });
+
+        }
+        //
+          lib.mapAttrs'
+            (n: v: {
+              name = "deprecated-${phaseName}-mitigated-by-${n}";
+              value = test-checkPhase-samples.${phaseName}.overrideAttrs (previousAttrs: {
+                name = "test-writeTextFile-deprecated-${phaseName}-mitigated-by-${n}";
+                ${phaseName} = v;
+                passthru = previousAttrs.passthru or { } // {
+                  __getDeprecatedCheckPhase-forceThrow = true;
+                };
+              });
+            })
+            {
+              null = null;
+              empty-string = "";
+            }
+      )
+      [
+        "checkPhase"
+        "preCheck"
+        "postCheck"
+      ]
+  )
+  // lib.genAttrs' [ "preCheck" "postCheck" ] (
+    phaseName:
+    let
+      previousName = "deprecated-${phaseName}-no-repeat";
+    in
+    {
+      name = previousName + "-with-checkPhase";
+      value = final.${previousName}.overrideAttrs {
+        checkPhase = ''
+          runHook preCheck
+          runHook postCheck
+        '';
+      };
+    }
+  )
 )
