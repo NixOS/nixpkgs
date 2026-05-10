@@ -14578,6 +14578,8 @@ self: super: with self; {
 
   pyombi = callPackage ../development/python-modules/pyombi { };
 
+  pyomie = callPackage ../development/python-modules/pyomie { };
+
   pyomo = callPackage ../development/python-modules/pyomo { };
 
   pyopen-wakeword = callPackage ../development/python-modules/pyopen-wakeword/default.nix { };
