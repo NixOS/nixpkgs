@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawy";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "drawy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K070SiIf2bj1r44tixUZbsLYDxT65lEW0g68ENg3ZiE=";
+    hash = "sha256-Y6CAdHgcCK9lIae+CwqSGml+FAvVzLzyIAKdw85dKmQ=";
   };
 
   strictDeps = true;
@@ -55,8 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.kde.org/drawy/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      yiyu
       quarterstar
+      sigmasquadron
+      yiyu
     ];
     mainProgram = "drawy";
     platforms = lib.platforms.all;
