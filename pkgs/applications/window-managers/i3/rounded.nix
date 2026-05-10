@@ -7,7 +7,7 @@
 
 i3.overrideAttrs (oldAttrs: {
   pname = "i3-rounded";
-  version = "4.21.1";
+  version = "4.20.1";
 
   src = fetchFromGitHub {
     owner = "LinoBigatti";
