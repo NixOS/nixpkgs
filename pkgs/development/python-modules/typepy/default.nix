@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "typepy";
-  version = "1.3.4";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "typepy";
     tag = "v${version}";
-    hash = "sha256-lgwXoEtv2nBRKiWQH5bDrAIfikKN3cOqcHLEdnSAMpc=";
+    hash = "sha256-QzfzAWQjKQBIVkgH+dPVVhlk717R71DiOhXZyfooJus=";
   };
 
   build-system = [ setuptools-scm ];
