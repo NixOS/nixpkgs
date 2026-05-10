@@ -61,7 +61,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.53.0";
+  version = "2.54.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-WBi9fYCwYbu9/sikM9YJ3IgYoFmR9zH/xKVh4soYxlM=";
+    hash = "sha256-9okWI2TBDeee+Jqo2/SHMesFfjTtu9IKylEM4BVGgaM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
