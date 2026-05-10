@@ -70,6 +70,9 @@ buildPythonPackage (finalAttrs: {
     "test_compat_tools_module"
     # connects to 192.0.2.1
     "test_async_socket_connect_timeout"
+    # racy
+    "test_sync_readexactly_total_timeout"
+    "test_sync_read_until_total_timeout"
   ];
 
   meta = {
