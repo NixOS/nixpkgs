@@ -118,13 +118,6 @@ let
       "tests/components/minecraft_server/test_init.py"
       "tests/components/minecraft_server/test_sensor.py"
     ];
-    nzbget = [
-      # type assertion fails due to introduction of parameterized type
-      "tests/components/nzbget/test_config_flow.py::test_user_form"
-      "tests/components/nzbget/test_config_flow.py::test_user_form_show_advanced_options"
-      "tests/components/nzbget/test_config_flow.py::test_user_form_cannot_connect"
-      "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
-    ];
     overseerr = [
       # imports broken future module
       "tests/components/overseerr/test_event.py"
