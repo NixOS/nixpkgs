@@ -3359,6 +3359,14 @@ with haskellLib;
     revision = null;
     editedCabalFile = null;
   } (warnAfterVersion "0.2.0.1" super.botan-low);
+
+  # 2026-05-10: Remove again, when hackage bump is recent enough
+  botan-bindings = overrideCabal {
+    version = "0.3.0.0";
+    sha256 = "sha256-tsarIc3LcUKPgSWZ+xcGPWGO2f9OF6SWHB6nmX/vJYw=";
+    revision = null;
+    editedCabalFile = null;
+  } (warnAfterVersion "0.3.0.0" super.botan-bindings);
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
