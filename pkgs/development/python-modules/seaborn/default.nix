@@ -84,7 +84,7 @@ buildPythonPackage rec {
   meta = {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
+    changelog = "https://github.com/mwaskom/seaborn/blob/v${version}/doc/whatsnew/v${version}.rst";
     license = with lib.licenses; [ bsd3 ];
   };
 }
