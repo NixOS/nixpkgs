@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkg20001
       melkor333
     ];
-    changelog = "https://www.oils.pub/release/${finalAttrs.version}/changelog.html";
+    changelog = "https://oils.pub/release/${finalAttrs.version}/changelog.html";
   };
 
   passthru =
