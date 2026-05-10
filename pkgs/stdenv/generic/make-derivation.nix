@@ -18,6 +18,7 @@ let
     concatLists
     concatMap
     concatMapStrings
+    concatMapStringsSep
     concatStringsSep
     elem
     extendDerivation
@@ -41,13 +42,18 @@ let
     optionals
     pipe
     remove
+    seq
     splitString
     subtractLists
+    toExtension
     toFunction
     unique
+    warnIf
     zipAttrsWith
-    seq
     ;
+
+  inherit (lib.generators) toPretty;
+  inherit (lib.strings) sanitizeDerivationName;
 
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
@@ -101,10 +107,10 @@ let
           final:
           let
             prev = rattrs final;
-            thisOverlay = lib.toExtension f0 final prev;
+            thisOverlay = toExtension f0 final prev;
             pos = builtins.unsafeGetAttrPos "version" thisOverlay;
           in
-          lib.warnIf
+          warnIf
             (
               prev ? src
               && thisOverlay ? version
@@ -482,7 +488,7 @@ let
     if erroneousHardeningFlags != [ ] then
       abort (
         "mkDerivation was called with unsupported hardening flags: "
-        + lib.generators.toPretty { } {
+        + toPretty { } {
           inherit
             erroneousHardeningFlags
             hardeningDisable
@@ -636,7 +642,7 @@ let
               # it again.
               staticMarker = stdenvStaticMarker;
             in
-            lib.strings.sanitizeDerivationName (
+            sanitizeDerivationName (
               if attrs ? name then
                 attrs.name + hostSuffix
               else
@@ -953,10 +959,10 @@ let
           (overlappingArgs == { })
           || throw (
             let
-              errors = lib.concatMapStringsSep "\n" (
+              errors = concatMapStringsSep "\n" (
                 name:
-                "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
-                    lib.generators.toPretty { } derivationArg.${name}
+                "  - ${name}: in `env`: ${toPretty { } env'.${name}}; in derivation arguments: ${
+                    toPretty { } derivationArg.${name}
                   }"
               ) (attrNames overlappingArgs);
 
