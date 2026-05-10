@@ -5,7 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  withBubblewrap ? stdenv.isLinux,
+  withBubblewrap ? stdenv.hostPlatform.isLinux,
   makeBinaryWrapper,
   xz,
   zstd,
