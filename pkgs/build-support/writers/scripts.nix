@@ -1,6 +1,5 @@
 {
   buildPackages,
-  gixy,
   lib,
   libiconv,
   makeBinaryWrapper,
@@ -1094,26 +1093,60 @@ rec {
   */
   writeJSBin = name: writeJS "/bin/${name}";
 
-  awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
-    awk -f
-    {sub(/^[ \t]+/,"");idx=0}
-    /\{/{ctx++;idx=1}
-    /\}/{ctx--}
-    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-  '';
-
   writeNginxConfig =
     name: text:
-    pkgs.runCommandLocal name
+    pkgs.runCommand name
       {
         inherit text;
         passAsFile = [ "text" ];
-        nativeBuildInputs = [ gixy ];
+        nativeBuildInputs = with pkgs; [
+          gixy
+          gnused
+          nginx-config-formatter
+        ];
       } # sh
       ''
-        # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
-        awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
+        nginxfmt - < "$textPath" | sed '/^$/d' > $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
+      '';
+
+  /**
+    writeProcessComposeConfig takes a process-compose config expressed as a Nix
+    attribute set, pretty prints it to a JSON file, and statically checks it
+    with `process-compose --dry-run`.
+
+    # Example
+
+    ```
+    writeProcessComposeConfig "pc-config.json" {
+      processes = {
+        sshd = {
+          command = "${pkgs.openssh}/bin/sshd -D -e -f ${sshdConfig}";
+          availability.restart = "always";
+        };
+      };
+    }
+    ```
+
+    # Note
+
+    process-compose uses YAML for its config format but JSON will be parsed
+    as YAML just fine, and is more convenient to work with in a Nix context.
+  */
+  writeProcessComposeConfig =
+    name: value:
+    pkgs.runCommand name
+      {
+        passAsFile = [ "text" ];
+        text = builtins.toJSON value;
+        nativeBuildInputs = with pkgs; [
+          jq
+          process-compose
+        ];
+      } # sh
+      ''
+        jq . < "$textPath" > "$out"
+        process-compose --config "$out" --dry-run
       '';
 
   /**
