@@ -1043,6 +1043,15 @@ rec {
     merge = mergeEqualOption;
   };
 
+  # A value produced by `lib.generators.mkPlistData`
+  plistData = mkOptionType {
+    name = "plistData";
+    description = "plist <data> value";
+    descriptionClass = "noun";
+    check = x: x._type or null == "plistData" && isString (x.base64 or null);
+    merge = mergeEqualOption;
+  };
+
   uniq = unique { message = ""; };
 
   unique =

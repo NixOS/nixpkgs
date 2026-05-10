@@ -270,6 +270,12 @@ Users must still be careful about how they reference these paths.
 :   A string wrapped using `lib.mkLuaInline`. Allows embedding lua expressions
     inline within generated lua. Multiple definitions cannot be merged.
 
+`types.plistData`
+
+:   A base64-encoded string wrapped using `lib.mkPlistData`. Allows embedding
+    binary data as a `<data>` element within generated plists. Multiple
+    definitions cannot be merged.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
