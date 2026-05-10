@@ -12903,6 +12903,8 @@ self: super: with self; {
 
   precisely = callPackage ../development/python-modules/precisely { };
 
+  prefab-ui = callPackage ../development/python-modules/prefab-ui { };
+
   prefect = toPythonModule pkgs.prefect;
 
   prefixed = callPackage ../development/python-modules/prefixed { };
