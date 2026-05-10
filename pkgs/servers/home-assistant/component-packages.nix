@@ -6346,8 +6346,9 @@
     "teleinfo" =
       ps: with ps; [
         aiousbwatcher
+        pyteleinfo
         serialx
-      ]; # missing inputs: pyteleinfo
+      ];
     "tellduslive" =
       ps: with ps; [
         tellduslive
@@ -8376,6 +8377,7 @@
     "tedee"
     "telegram"
     "telegram_bot"
+    "teleinfo"
     "tellduslive"
     "teltonika"
     "temper"
