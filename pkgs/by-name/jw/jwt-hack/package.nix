@@ -2,17 +2,19 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jwt-hack";
-  version = "2.0.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "jwt-hack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uJur/ABoAaQT3BBO2yprK/0/bQPT138Yg9IbztZ6w2w=";
+    hash = "sha256-kutt5VhMY/YIXBpVZTg/xAwa9d+J5ypfLi5aLakjfaY=";
   };
 
   cargoLock = {
@@ -22,6 +24,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  OPENSSL_NO_VENDOR = 1;
 
   meta = {
     description = "JSON Web Token Hack Toolkit";
