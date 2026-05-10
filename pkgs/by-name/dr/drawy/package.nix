@@ -56,7 +56,18 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Handy and infinite brainstorming tool";
     homepage = "https://apps.kde.org/drawy/";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://invent.kde.org/graphics/drawy/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      cc-by-sa-40
+      cc0
+      gpl2Plus
+      gpl3Plus
+      lgpl2Plus
+      mit
+      ofl
+    ];
     maintainers = with lib.maintainers; [
       quarterstar
       sigmasquadron
