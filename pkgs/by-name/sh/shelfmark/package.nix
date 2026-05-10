@@ -1,15 +1,19 @@
 {
   lib,
   stdenv,
+  buildNpmPackage,
   fetchFromGitHub,
-  python3Packages,
+  python314Packages,
+  nix-update-script,
   makeWrapper,
   nixosTests,
-  shelfmark-frontend,
   unrar-free,
+  _experimental-update-script-combinators,
 }:
 
 let
+  python3Packages = python314Packages;
+
   pythonDeps = with python3Packages; [
     flask
     flask-cors
@@ -32,17 +36,34 @@ let
     authlib
     apprise
   ];
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "shelfmark";
-  version = "1.2.1";
+
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Fe7zu51gFG2QgcBWcGkFi64CdZW4ohZg+7jdmeMFVLI=";
+    tag = "v${version}";
+    hash = "sha256-abRM2ZWfA5nyD0YF7BVmZ6AU37+qd7osjQVGqhjdEV0=";
   };
+
+  frontend = buildNpmPackage (finalAttrs: {
+    pname = "shelfmark-frontend";
+    inherit version src;
+
+    sourceRoot = "${finalAttrs.src.name}/src/frontend";
+
+    npmDepsHash = "sha256-c/KDGUe+X4dfzbDXpkzYsEzvBxJjq46PTzqbgoCdGgw=";
+
+    installPhase = ''
+      runHook preInstall
+      cp -r dist $out
+      runHook postInstall
+    '';
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "shelfmark";
+  inherit version src;
 
   nativeBuildInputs = [
     python3Packages.wrapPython
@@ -60,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r shelfmark $out/libexec/shelfmark
     cp -r data $out/libexec/data
-    ln -s ${finalAttrs.passthru.frontend} $out/libexec/frontend-dist
+    ln -s ${frontend} $out/libexec/frontend-dist
 
     makeWrapper ${python3Packages.python.interpreter} $out/bin/shelfmark \
       --prefix PATH : ${
@@ -77,12 +98,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    frontend = shelfmark-frontend.override {
-      shelfmark = finalAttrs.finalPackage;
-    };
+    inherit frontend;
+
     tests = {
       inherit (nixosTests) shelfmark;
     };
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (nix-update-script {
+        extraArgs = [
+          "--subpackage=frontend"
+          "--version=skip"
+        ];
+      })
+    ];
   };
 
   meta = {
