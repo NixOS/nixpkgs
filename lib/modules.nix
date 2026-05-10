@@ -589,7 +589,8 @@ let
     in
     modulesPath: initialModules: args: {
       modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
-      # Intentionally not shared with `modules` above: this allows `collected`
+      # Intentionally not shared with `modules` above: this allows
+      # the return value of `collectStructuredModules`
       # to be garbage collected after `filterModules` returns.
       graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
     };
