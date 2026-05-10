@@ -106,7 +106,7 @@ buildGoModule (finalAttrs: {
         "Test_dpkgUseCPEsForEOLEnvVar"
         "Test_rpmUseCPEsForEOLEnvVar"
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # fails to generate x509 certificate
         # cat: /etc/ssl/openssl.cnf: Operation not permitted
         "Test_defaultHTTPClientHasCert"

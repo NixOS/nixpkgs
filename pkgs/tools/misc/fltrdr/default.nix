@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/stdc++fs/d' CMakeLists.txt
   '';
 

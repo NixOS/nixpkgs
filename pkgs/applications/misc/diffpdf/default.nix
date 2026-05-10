@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p "$out"
         mv diffpdf.app "$out"/

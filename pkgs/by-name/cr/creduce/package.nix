@@ -4,13 +4,15 @@
   fetchFromGitHub,
   cmake,
   makeWrapper,
-  llvm,
-  libclang,
+  llvmPackages_18,
   flex,
   zlib,
   perlPackages,
   util-linux,
 }:
+let
+  llvmPackages = llvmPackages_18;
+in
 
 stdenv.mkDerivation {
   pname = "creduce";
@@ -22,6 +24,11 @@ stdenv.mkDerivation {
     rev = "31e855e290970cba0286e5032971509c0e7c0a80";
     hash = "sha256-RbxFqZegsCxnUaIIA5OfTzx1wflCPeF+enQt90VwMgA=";
   };
+
+  patches = [
+    # https://github.com/csmith-project/creduce/pull/290
+    ./fix-gcc15.patch
+  ];
 
   postPatch = ''
     substituteInPlace {clex,clang_delta,delta,unifdef,creduce,.}/CMakeLists.txt --replace-fail \
@@ -39,14 +46,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     makeWrapper
-    llvm.dev
+    llvmPackages.llvm.dev
   ];
   buildInputs = [
     # Ensure stdenv's CC is on PATH before clang-unwrapped
     stdenv.cc
     # Actual deps:
-    llvm
-    libclang
+    llvmPackages.llvm
+    llvmPackages.libclang
     flex
     zlib
   ]
