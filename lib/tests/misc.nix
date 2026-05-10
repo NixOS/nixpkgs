@@ -2946,6 +2946,7 @@ runTests {
           int = 42;
           float = 0.1337;
           bool = true;
+          data = generators.mkPlistData "SGVsbG8gV29ybGQ=";
           emptystring = "";
           string = "fn\${o}\"r\\d";
           newlinestring = "\n";
@@ -2978,6 +2979,7 @@ runTests {
           int = 42;
           float = 0.1337;
           bool = true;
+          data = generators.mkPlistData "SGVsbG8gV29ybGQ=";
           emptystring = "";
           string = "fn\${o}\"r\\d";
           newlinestring = "\n";
