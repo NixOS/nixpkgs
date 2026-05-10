@@ -14,19 +14,20 @@ let
   # Lib attributes are inherited to the lexical scope for performance reasons.
   inherit (lib)
     all
-    assertMsg
     attrNames
     concatLists
     concatMap
     concatMapStrings
+    concatMapStringsSep
     concatStringsSep
     elem
     extendDerivation
     filter
     filterAttrs
+    foldl'
     getDev
     head
-    foldl'
+    intersectAttrs
     isAttrs
     isBool
     isDerivation
@@ -34,6 +35,7 @@ let
     isList
     isPath
     isString
+    listToAttrs
     mapAttrs
     mapNullable
     optional
@@ -41,13 +43,21 @@ let
     optionals
     pipe
     remove
+    seq
     splitString
     subtractLists
+    toExtension
     toFunction
+    typeOf
     unique
+    unsafeDiscardStringContext
+    unsafeGetAttrPos
+    warnIf
     zipAttrsWith
-    seq
     ;
+
+  inherit (lib.generators) toPretty;
+  inherit (lib.strings) sanitizeDerivationName;
 
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
@@ -101,10 +111,10 @@ let
           final:
           let
             prev = rattrs final;
-            thisOverlay = lib.toExtension f0 final prev;
-            pos = builtins.unsafeGetAttrPos "version" thisOverlay;
+            thisOverlay = toExtension f0 final prev;
+            pos = unsafeGetAttrPos "version" thisOverlay;
           in
-          lib.warnIf
+          warnIf
             (
               prev ? src
               && thisOverlay ? version
@@ -165,6 +175,10 @@ let
     "zerocallusedregs"
   ];
 
+  concretizeFlagImplications =
+    flag: impliesFlags: list:
+    if elem flag list then (list ++ impliesFlags) else list;
+
   removedOrReplacedAttrNames = [
     "checkInputs"
     "installCheckInputs"
@@ -181,6 +195,45 @@ let
     "allowedReferences"
     "allowedRequisites"
     "allowedImpureDLLs"
+  ];
+
+  referenceCheckingAttrsToRemove = [
+    "allowedReferences"
+    "allowedRequisites"
+    "disallowedReferences"
+    "disallowedRequisites"
+  ];
+
+  argumentAttrsToRemove = [
+    "meta"
+    "passthru"
+    "pos"
+    "env"
+  ];
+
+  attrsToRemoveLast = [
+    # Fixed-output derivations may not reference other paths, which means that
+    # for a fixed-output derivation, the corresponding inputDerivation should
+    # *not* be fixed-output. To achieve this we simply delete the attributes that
+    # would make it fixed-output.
+    "outputHashAlgo"
+    "outputHash"
+    "outputHashMode"
+
+    # inputDerivation produces the inputs; not the outputs, so any
+    # restrictions on what used to be the outputs don't serve a purpose
+    # anymore.
+    "allowedReferences"
+    "allowedRequisites"
+    "disallowedReferences"
+    "disallowedRequisites"
+    "outputChecks"
+  ];
+
+  defaultBuilderArgs = [
+    "-e"
+    ./source-stdenv.sh
+    ./default-builder.sh
   ];
 
   inherit (stdenv)
@@ -263,7 +316,7 @@ let
   unsafeDerivationToUntrackedOutpath =
     drv:
     if isDerivation drv && (!drv.__contentAddressed or false) then
-      builtins.unsafeDiscardStringContext drv.outPath
+      unsafeDiscardStringContext drv.outPath
     else
       drv;
 
@@ -409,25 +462,6 @@ let
           actualValue;
       outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
 
-      concretizeFlagImplications =
-        flag: impliesFlags: list:
-        if elem flag list then (list ++ impliesFlags) else list;
-
-      hardeningDisable' = unique (
-        pipe hardeningDisable [
-          # disabling fortify implies fortify3 should also be disabled
-          (concretizeFlagImplications "fortify" [ "fortify3" ])
-          # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
-          (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
-          # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
-          (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
-        ]
-      );
-      enabledHardeningOptions =
-        if elem "all" hardeningDisable' then
-          [ ]
-        else
-          subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = subtractLists knownHardeningFlags (
         hardeningEnable ++ remove "all" hardeningDisable
@@ -458,7 +492,7 @@ let
     if erroneousHardeningFlags != [ ] then
       abort (
         "mkDerivation was called with unsupported hardening flags: "
-        + lib.generators.toPretty { } {
+        + toPretty { } {
           inherit
             erroneousHardeningFlags
             hardeningDisable
@@ -612,24 +646,28 @@ let
               # it again.
               staticMarker = stdenvStaticMarker;
             in
-            lib.strings.sanitizeDerivationName (
+            sanitizeDerivationName (
               if attrs ? name then
                 attrs.name + hostSuffix
               else
                 # we cannot coerce null to a string below
-                assert assertMsg (
-                  attrs ? version && attrs.version != null
-                ) "The `version` attribute cannot be null.";
+                assert
+                  (attrs ? version && attrs.version != null) || throw "The `version` attribute cannot be null.";
                 "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
             );
 
           builder = attrs.realBuilder or stdenvShell;
           args =
-            attrs.args or [
-              "-e"
-              ./source-stdenv.sh
-              (attrs.builder or ./default-builder.sh)
-            ];
+            attrs.args or (
+              if attrs ? builder then
+                [
+                  "-e"
+                  ./source-stdenv.sh
+                  attrs.builder
+                ]
+              else
+                defaultBuilderArgs
+            );
           inherit stdenv;
 
           # The `system` attribute of a derivation has special meaning to Nix.
@@ -695,6 +733,22 @@ let
             else
               null
           } =
+            let
+              enabledHardeningOptions =
+                if elem "all" hardeningDisable then
+                  [ ]
+                else
+                  subtractLists (unique (
+                    pipe hardeningDisable [
+                      # disabling fortify implies fortify3 should also be disabled
+                      (concretizeFlagImplications "fortify" [ "fortify3" ])
+                      # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+                      (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+                      # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+                      (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
+                    ]
+                  )) (defaultHardeningFlags ++ hardeningEnable);
+            in
             concatStringsSep " " enabledHardeningOptions;
 
           # TODO: remove platform condition
@@ -794,7 +848,7 @@ let
             then
               if separateDebugInfo' then debugCachedOutputChecks else cachedOutputChecks
             else
-              builtins.listToAttrs (
+              listToAttrs (
                 map (name: {
                   inherit name;
                   value =
@@ -809,12 +863,7 @@ let
                     # that's "normal". Notably it symlinks to the source.
                     # So disable reference checking for the debug output
                     if separateDebugInfo' && name == "debug" then
-                      removeAttrs raw [
-                        "allowedReferences"
-                        "allowedRequisites"
-                        "disallowedReferences"
-                        "disallowedRequisites"
-                      ]
+                      removeAttrs raw referenceCheckingAttrsToRemove
                     else
                       raw;
                 }) outputs
@@ -854,11 +903,11 @@ let
       pos ? # position used in error messages and for meta.position
         (
           if attrs.meta.description or null != null then
-            builtins.unsafeGetAttrPos "description" attrs.meta
+            unsafeGetAttrPos "description" attrs.meta
           else if attrs.version or null != null then
-            builtins.unsafeGetAttrPos "version" attrs
+            unsafeGetAttrPos "version" attrs
           else
-            builtins.unsafeGetAttrPos "name" attrs
+            unsafeGetAttrPos "name" attrs
         ),
 
       # Experimental.  For simple packages mostly just works,
@@ -885,12 +934,7 @@ let
         if attrs ? meta.mainProgram then env // { NIX_MAIN_PROGRAM = attrs.meta.mainProgram; } else env;
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs [
-          "meta"
-          "passthru"
-          "pos"
-          "env"
-        ]
+        removeAttrs attrs argumentAttrsToRemove
         // {
           ${if __structuredAttrs then "env" else null} = checkedEnv;
           cmakeFlags = makeCMakeFlags attrs;
@@ -910,44 +954,32 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
-          errors = lib.concatMapStringsSep "\n" (
-            name:
-            "  - ${name}: in `env`: ${lib.generators.toPretty { } env'.${name}}; in derivation arguments: ${
-                lib.generators.toPretty { } derivationArg.${name}
-              }"
-          ) overlappingNames;
+          overlappingArgs = intersectAttrs env' derivationArg;
         in
-        assert assertMsg (isAttrs env && !isDerivation env)
-          "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
-        assert assertMsg (overlappingNames == [ ])
-          "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
+        assert
+          (isAttrs env && !isDerivation env)
+          || throw "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
+        assert
+          (overlappingArgs == { })
+          || throw (
+            let
+              errors = concatMapStringsSep "\n" (
+                name:
+                "  - ${name}: in `env`: ${toPretty { } env'.${name}}; in derivation arguments: ${
+                    toPretty { } derivationArg.${name}
+                  }"
+              ) (attrNames overlappingArgs);
+
+            in
+            "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}"
+          );
         mapAttrs (
           n: v:
-          assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
-            "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
+          assert
+            (isString v || isBool v || isInt v || isDerivation v)
+            || throw "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${typeOf v}.";
           v
         ) env';
-
-      attrsToRemove = [
-        # Fixed-output derivations may not reference other paths, which means that
-        # for a fixed-output derivation, the corresponding inputDerivation should
-        # *not* be fixed-output. To achieve this we simply delete the attributes that
-        # would make it fixed-output.
-        "outputHashAlgo"
-        "outputHash"
-        "outputHashMode"
-
-        # inputDerivation produces the inputs; not the outputs, so any
-        # restrictions on what used to be the outputs don't serve a purpose
-        # anymore.
-        "allowedReferences"
-        "allowedRequisites"
-        "disallowedReferences"
-        "disallowedRequisites"
-        "outputChecks"
-      ];
-
     in
 
     extendDerivation validity.handled (
@@ -958,7 +990,7 @@ let
         # needed to enter a nix-shell with
         #   nix-build shell.nix -A inputDerivation
         inputDerivation = derivation (
-          removeAttrs derivationArg attrsToRemove
+          removeAttrs derivationArg attrsToRemoveLast
           // {
             # Add a name in case the original drv didn't have one
             name = "inputDerivation" + optionalString (derivationArg ? name) "-${derivationArg.name}";
