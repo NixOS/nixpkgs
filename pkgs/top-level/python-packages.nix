@@ -5182,6 +5182,8 @@ self: super: with self; {
 
   euporie = callPackage ../development/python-modules/euporie { };
 
+  eurotronic-cometblue-ha = callPackage ../development/python-modules/eurotronic-cometblue-ha { };
+
   eval-type-backport = callPackage ../development/python-modules/eval-type-backport { };
 
   evaluate = callPackage ../development/python-modules/evaluate { };
