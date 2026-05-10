@@ -839,6 +839,7 @@
   ./services/misc/cfdyndns.nix
   ./services/misc/cgminer.nix
   ./services/misc/clipcat.nix
+  ./services/misc/cliphist.nix
   ./services/misc/clipmenu.nix
   ./services/misc/confd.nix
   ./services/misc/conman.nix
