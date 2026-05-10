@@ -6,14 +6,14 @@
 {
   name = "firefox-syncserver";
   nodes.machine = {
-    services.mysql = {
+    services.postgresql = {
       enable = true;
-      package = pkgs.mariadb;
     };
 
     services.firefox-syncserver = {
       enable = true;
       secrets = pkgs.writeText "secret" "this-is-a-test";
+      database.type = "pgsql";
       singleNode = {
         enable = true;
         hostname = "firefox-syncserver.local";
