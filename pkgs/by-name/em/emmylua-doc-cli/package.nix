@@ -6,11 +6,9 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emmylua_doc_cli";
-  inherit (emmylua-ls) version src;
+  inherit (emmylua-ls) version src cargoHash;
 
   buildAndTestSubdir = "crates/emmylua_doc_cli";
-
-  cargoHash = "sha256-JNirHIKXFsiLme5oByerHjB/3lumuAr2u3pNfxh4qa0=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
