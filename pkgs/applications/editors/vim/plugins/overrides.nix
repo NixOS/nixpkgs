@@ -4950,10 +4950,13 @@ assertNoAdditions {
     };
   });
 
-  vim-flog = super.vim-flog.overrideAttrs {
+  vim-flog = super.vim-flog.overrideAttrs (old: {
     # Not intended to be required, used by vim plugin
     nvimSkipModules = "flog.graph_bin";
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-fugitive = super.vim-fugitive.overrideAttrs (old: {
     meta = old.meta // {
