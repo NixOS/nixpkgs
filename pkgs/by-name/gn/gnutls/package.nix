@@ -137,6 +137,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-ktls"
     ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # https://lists.gnu.org/archive/html/bug-gnulib/2026-05/msg00061.html
+      "gl_cv_func_free_preserves_errno=yes"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
       "--disable-doc"
     ]
