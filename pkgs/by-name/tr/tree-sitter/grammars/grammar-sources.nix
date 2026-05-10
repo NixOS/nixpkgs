@@ -1760,9 +1760,9 @@
   };
 
   ocaml = {
-    version = "0.24.2";
+    version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-ocaml";
-    hash = "sha256-e08lrKCyQRpb8pnLV6KK4ye53YBjxQ52nnDIzH+7ONc=";
+    hash = "sha256-fRC7sd/INCESwYCiRsuOJkOnqWnNUpjwrNoEzlaOscA=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -1772,7 +1772,7 @@
     language = "ocaml_interface";
     version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-ocaml";
-    hash = "sha256-e08lrKCyQRpb8pnLV6KK4ye53YBjxQ52nnDIzH+7ONc=";
+    hash = "sha256-fRC7sd/INCESwYCiRsuOJkOnqWnNUpjwrNoEzlaOscA=";
     meta = {
       license = lib.licenses.mit;
     };
