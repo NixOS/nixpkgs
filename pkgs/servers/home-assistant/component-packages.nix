@@ -1236,8 +1236,9 @@
     "denon_rs232" =
       ps: with ps; [
         aiousbwatcher
+        denon-rs232
         serialx
-      ]; # missing inputs: denon-rs232
+      ];
     "denonavr" =
       ps: with ps; [
         denonavr
@@ -7611,6 +7612,7 @@
     "default_config"
     "deluge"
     "demo"
+    "denon_rs232"
     "denonavr"
     "derivative"
     "devialet"
