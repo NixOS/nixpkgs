@@ -92,6 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
+    # Rollup for ARM64 is broken with Node modules
+    broken = stdenv.hostPlatform.isAarch64;
     description = "A mod manager for the game Balatro";
     homepage = "https://balatro-mod-manager.dasguney.com/";
     license = lib.licenses.gpl3Plus;
