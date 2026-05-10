@@ -7931,6 +7931,13 @@ with pkgs;
     )
   );
 
+  home-assistant-themes = lib.recurseIntoAttrs (
+    lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ../servers/home-assistant/themes;
+    }
+  );
+
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
   _surrealdbPackage = ../by-name/su/surrealdb/package.nix;

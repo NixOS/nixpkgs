@@ -50,6 +50,8 @@ buildPythonPackage rec {
     dnspython
   ];
 
+  pythonRelaxDeps = [ "av" ];
+
   nativeCheckInputs = [
     numpy
     pytestCheckHook
