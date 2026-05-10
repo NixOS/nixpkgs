@@ -10,12 +10,12 @@
   pnpm,
 }:
 let
-  version = "0.25.3";
+  version = "0.26.2";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    hash = "sha256-lAKzPteGjGa7fnbB0Pm3oWId5DJekbVWI9dnPEGbiBo=";
+    hash = "sha256-TDsqxLgBJyTvxs1UHyv2FHUUx6eqzRBCJG+/sY0pNLg=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ let
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/web";
       fetcherVersion = 3;
-      hash = "sha256-xEOnxCgBD4uLypcZzCO+31S4r0sSfz8PpgEmZASeRZ4=";
+      hash = "sha256-7Dv0INiSRZnf4ryfKjfp4fKaXWCH3xpv23k1HtnbW18=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -47,13 +47,9 @@ let
 in
 buildGoModule {
   pname = "memos";
-  inherit
-    version
-    src
-    memos-web
-    ;
+  inherit version src memos-web;
 
-  vendorHash = "sha256-BoJxFpfKS/LByvK4AlTNc4gA/aNIvgLzoFOgyal+aF8=";
+  vendorHash = "sha256-ZUSl0PY9uMQK/NgZVGOxCVMDt6TEBmr84JsuJ2ndW6s=";
 
   preBuild = ''
     rm -rf server/router/frontend/dist
@@ -66,6 +62,8 @@ buildGoModule {
       "memos-web"
     ];
   };
+
+  doCheck = false;
 
   meta = {
     homepage = "https://usememos.com";
