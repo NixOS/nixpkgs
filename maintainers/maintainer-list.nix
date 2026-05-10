@@ -26222,6 +26222,12 @@
     githubId = 55607356;
     name = "Stephan Heßelmann";
   };
+  stellarskylark = {
+    email = "stellarskylark@posteo.net";
+    github = "stellarskylark";
+    githubId = 2815515;
+    name = "Skylar Hill";
+  };
   stelcodes = {
     email = "stel@stel.codes";
     github = "stelcodes";
