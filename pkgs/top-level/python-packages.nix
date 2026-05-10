@@ -8371,6 +8371,8 @@ self: super: with self; {
 
   kinparse = callPackage ../development/python-modules/kinparse { };
 
+  kiosker-python-api = callPackage ../development/python-modules/kiosker-python-api { };
+
   kiss-headers = callPackage ../development/python-modules/kiss-headers { };
 
   kitchen = callPackage ../development/python-modules/kitchen { };

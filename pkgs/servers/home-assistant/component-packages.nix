@@ -3252,7 +3252,8 @@
       ];
     "kiosker" =
       ps: with ps; [
-      ]; # missing inputs: kiosker-python-api
+        kiosker-python-api
+      ];
     "kira" =
       ps: with ps; [
         pykira
@@ -7919,6 +7920,7 @@
     "keenetic_ndms2"
     "kegtron"
     "keymitt_ble"
+    "kiosker"
     "kira"
     "kitchen_sink"
     "kmtronic"
