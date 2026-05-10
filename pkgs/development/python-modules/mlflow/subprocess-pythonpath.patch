@@ -1,0 +1,14 @@
+--- a/mlflow/server/__init__.py
++++ b/mlflow/server/__init__.py
+@@ -471,6 +471,11 @@
+             else tempfile.mkdtemp()
+         )
++    # In Nix-packaged environments sys.path is populated by wrappers but
++    # PYTHONPATH is never set in os.environ, so subprocesses (uvicorn,
++    # gunicorn) cannot find packages. Propagate it when not already set.
++    if "PYTHONPATH" not in os.environ:
++        env_map.setdefault("PYTHONPATH", os.pathsep.join(p for p in sys.path if p))
+
+     server_proc = _exec_cmd(
+         full_command,
+         extra_env=env_map,
