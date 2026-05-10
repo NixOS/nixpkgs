@@ -3,6 +3,7 @@
   aiomqtt,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   lib,
   poetry-core,
   pytest-asyncio,
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "letpot";
-  version = "0.6.4";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpelgrom";
     repo = "python-letpot";
     tag = "v${version}";
-    hash = "sha256-ayNgRJb+/hfxxfLQv+RyKiOaYHK50ZrROeeDAsAGCVE=";
+    hash = "sha256-w4WS0AyNd4dNtA/fBKieDW2YXwBFltRkJvaGemRjsv4=";
   };
 
   build-system = [ poetry-core ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "letpot" ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];
