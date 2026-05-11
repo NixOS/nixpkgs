@@ -90,10 +90,13 @@ let
     escapeShellArgs
     getBin
     getDev
+    getExe
+    getExe'
     getLib
     getName
     getVersion
     hasPrefix
+    mapAttrs
     mapAttrsToList
     optional
     optionalAttrs
@@ -143,7 +146,7 @@ let
   # unstable implementation detail, however.
   suffixSalt =
     replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config
-    + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
+    + optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
 
   useGccForLibs =
     useCcForLibs
@@ -490,7 +493,7 @@ stdenvNoCC.mkDerivation {
 
     include() {
       printf -- '%s %s\n' "$1" "$2"
-      ${lib.optionalString useMacroPrefixMap ''
+      ${optionalString useMacroPrefixMap ''
         local scrubbed="$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-''${2#"$NIX_STORE"/*-}"
         printf -- '-fmacro-prefix-map=%s=%s\n' "$2" "$scrubbed"
       ''}
@@ -724,7 +727,7 @@ stdenvNoCC.mkDerivation {
         done
       ''
       + optionalString (libc.w32api or null != null) ''
-        echo '-idirafter ${lib.getDev libc.w32api}${
+        echo '-idirafter ${getDev libc.w32api}${
           libc.incdir or "/include/w32api"
         }' >> $out/nix-support/libc-cflags
       ''
@@ -877,7 +880,7 @@ stdenvNoCC.mkDerivation {
 
     # For clang, this is handled in add-clang-cc-cflags-before.sh
     + optionalString (!isClang && machineFlags != [ ]) ''
-      printf "%s\n" ${lib.escapeShellArgs machineFlags} >> $out/nix-support/cc-cflags-before
+      printf "%s\n" ${escapeShellArgs machineFlags} >> $out/nix-support/cc-cflags-before
     ''
 
     # TODO: categorize these and figure out a better place for them
@@ -978,14 +981,14 @@ stdenvNoCC.mkDerivation {
 
     # for substitution in utils.bash
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
-    expandResponseParams = lib.optionalString (expand-response-params != "") (
-      lib.getExe expand-response-params
+    expandResponseParams = optionalString (expand-response-params != "") (
+      getExe expand-response-params
     );
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
-    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
-    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
+    rm = if nativeTools then "rm" else getExe' coreutils "rm";
+    mktemp = if nativeTools then "mktemp" else getExe' coreutils "mktemp";
     # stdenv.cc.cc should not be null and we have nothing better for now.
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
     cc = optionalString (!nativeTools) cc;
@@ -996,11 +999,11 @@ stdenvNoCC.mkDerivation {
     default_hardening_flags_str = toString defaultHardeningFlags;
     inherit useMacroPrefixMap;
   }
-  // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
+  // mapAttrs (_: optionalString targetPlatform.isDarwin) {
     # These will become empty strings when not targeting Darwin.
     inherit (targetPlatform) darwinMinVersion darwinMinVersionVariable;
   }
-  // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
+  // optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
     # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
     fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
   };
