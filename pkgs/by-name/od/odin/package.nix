@@ -6,7 +6,7 @@
   which,
   nix-update-script,
   wgpu-native,
-  enableWgpu ? true, #currently only available for x86_64-linux
+  enableWgpu ? true, # currently only available for x86_64-linux
 }:
 
 let
@@ -56,9 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build_odin.sh
   ''
   + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux" && enableWgpu) ''
-        ${lib.optionalString (!stdenv.hostPlatform.isStatic)
-          "substituteInPlace vendor/wgpu/wgpu.odin --replace-fail \"#config(WGPU_SHARED, false)\" \"#config(WGPU_SHARED, true)\""
-        }
+    ${lib.optionalString (!stdenv.hostPlatform.isStatic)
+      "substituteInPlace vendor/wgpu/wgpu.odin --replace-fail \"#config(WGPU_SHARED, false)\" \"#config(WGPU_SHARED, true)\""
+    }
   '';
 
   env.LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
     changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.zlib;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
