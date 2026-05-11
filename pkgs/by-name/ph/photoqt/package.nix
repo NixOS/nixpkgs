@@ -76,5 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "photoqt";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+    # cplusplus/singletons/scripts/pqc_scriptsimages.cpp:1740:19: error: no matching function for call to 'setxattr'
+    badPlatforms = lib.platforms.darwin;
   };
 })
