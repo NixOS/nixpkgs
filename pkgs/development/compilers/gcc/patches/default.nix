@@ -123,11 +123,11 @@ optionals noSysDirs (
 ++ optionals stdenv.targetPlatform.isDarwin (
   {
     "15" = [
-      # Patches from https://github.com/iains/gcc-15-branch/compare/releases/gcc-15..gcc-15.1-darwin-rc1
+      # Patches from https://github.com/iains/gcc-15-branch
       (fetchpatch {
         name = "gcc-15-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a25079204c1cb3d78ba9dd7dd22b8aecce7ce264/gcc/gcc-15.1.0.diff";
-        sha256 = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/03d3e17099f5193226e459122b94ef8ff38a86bd/Patches/gcc/gcc-15.1.0.diff";
+        hash = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
       })
     ];
     "14" = [
@@ -141,11 +141,11 @@ optionals noSysDirs (
         hash = "sha256-BSTSYnkBJBEm++mGerVVyaCUC4dUyXq0N1tqbk25bO4=";
       })
     ];
-    # Patches from https://github.com/iains/gcc-13-branch/compare/b71f1de6e9cf7181a288c0f39f9b1ef6580cf5c8..gcc-13-3-darwin
     "13" = [
+      # Patches from https://github.com/iains/gcc-13-branch
       (fetchpatch {
         name = "gcc-13-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/698885df7f624d0ce15bceb79a4d9760a473b502/gcc/gcc-13.4.0.diff";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/03d3e17099f5193226e459122b94ef8ff38a86bd/Patches/gcc/gcc-13.4.0.diff";
         hash = "sha256-xqkBDFYZ6fdowtqR3kV7bR8a4Cu11RDokSzGn1k3a1w=";
       })
     ];
