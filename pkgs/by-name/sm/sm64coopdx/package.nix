@@ -6,6 +6,7 @@
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
+  pkg-config,
 
   curl,
   hexdump,
@@ -14,6 +15,7 @@
   stdenv,
   zlib,
   libGL,
+  coopnet ? null,
 
   sm64baserom,
   enableCoopNet ? true,
@@ -49,12 +51,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BIdKKIp6q9Vp2DByXzT9CJzOszFhjriiWBEqFwUT28M=";
   };
 
-  patches = [ ./no-update-check.patch ];
+  postPatch = ''
+    # make sure coopnet is properly unvendored
+    rm -r lib/coopnet
+  '';
+
+  patches = [
+    ./no-update-check.patch
+    ./unvendor-coopnet.patch
+  ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
     imagemagick
+    pkg-config
   ];
 
   buildInputs = [
@@ -65,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     zlib
     libGL
-  ];
+  ]
+  ++ lib.optional enableCoopNet coopnet;
 
   icon = "${finalAttrs.src}/res/icon.ico";
   desktopItems = [
@@ -116,10 +128,15 @@ stdenv.mkDerivation (finalAttrs: {
       magick icon-0.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/${finalAttrs.pname}.png
     done
 
-    # coopdx always tries to load resources from the binary's directory, with no obvious way to change. Thus this small wrapper script to always run from the /share directory that has all the resources
     mkdir -p $out/bin
-    makeWrapper $share/sm64coopdx $out/bin/sm64coopdx \
+    declare -a makeWrapperArgs=(
+      makeWrapper "$share/sm64coopdx" "$out/bin/sm64coopdx"
+      # coopdx always tries to load resources from the binary's directory, with no obvious way to change. So always run from the /share directory that has all the resources
       --chdir $share
+      # coopnet will not work without it
+      --set-default COOPNET_OVERRIDE_HASH 4878409451714253510
+    )
+    "''${makeWrapperArgs[@]}"
 
     runHook postInstall
   '';
@@ -145,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/coop-deluxe/sm64coopdx/releases/tag/${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      # The lua engine, discord sdk, and coopnet library are vendored pre-built. See https://github.com/coop-deluxe/sm64coopdx/tree/v1.0.3/lib
+      # The lua engine and discord sdk are vendored pre-built. See https://github.com/coop-deluxe/sm64coopdx/tree/v1.0.3/lib
       binaryNativeCode
     ];
   };
