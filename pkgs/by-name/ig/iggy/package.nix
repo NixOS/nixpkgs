@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hwloc,
   installShellFiles,
+  nixosTests,
   pkg-config,
   rustPlatform,
   versionCheckHook,
@@ -51,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
+    tests = { inherit (nixosTests) iggy; };
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
