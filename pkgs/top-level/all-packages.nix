@@ -5527,8 +5527,6 @@ with pkgs;
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
-  gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
-
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };
 
