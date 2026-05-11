@@ -14477,6 +14477,11 @@
     githubId = 361496;
     name = "Nikola Knežević";
   };
+  koalalorenzo = {
+    name = "Lorenzo Setale";
+    github = "koalalorenzo";
+    githubId = 33528;
+  };
   koffydrop = {
     github = "koffydrop";
     githubId = 67888720;
