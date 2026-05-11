@@ -2554,7 +2554,18 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${package}/bin/unix_chkpwd";
+        source =
+          if (config.system.nssModules.path != [ ]) then
+            pkgs.runCommand "unix_chkpwd-with-nssModules"
+              {
+                nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+              }
+              ''
+                makeWrapper ${package}/bin/unix_chkpwd $out \
+                  --prefix LD_LIBRARY_PATH : ${config.system.nssModules.path}
+              ''
+          else
+            "${package}/bin/unix_chkpwd";
       };
     };
 
