@@ -9839,8 +9839,6 @@ with pkgs;
 
   inherit (pidginPackages) pidgin;
 
-  plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
-
   # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules
   profanity = callPackage ../applications/networking/instant-messengers/profanity (
