@@ -1,19 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   bibtool,
-  pybtex,
-  pymupdf,
-  pynvim,
-  pyperclip,
-  roman,
-  pdfrw,
-  pagelabels,
-  setuptools,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "termpdf.py";
   version = "2022-03-28";
   format = "setuptools";
@@ -27,14 +19,14 @@ buildPythonApplication {
 
   propagatedBuildInputs = [
     bibtool
-    pybtex
-    pymupdf
-    pyperclip
-    roman
-    pagelabels
-    pdfrw
-    pynvim
-    setuptools
+    python3Packages.pybtex
+    python3Packages.pymupdf
+    python3Packages.pyperclip
+    python3Packages.roman
+    python3Packages.pagelabels
+    python3Packages.pdfrw
+    python3Packages.pynvim
+    python3Packages.setuptools
   ];
 
   # upstream doesn't contain tests
