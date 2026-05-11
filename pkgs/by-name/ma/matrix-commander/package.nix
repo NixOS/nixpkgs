@@ -1,22 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
+  python3Packages,
   cacert,
-  setuptools,
-  matrix-nio,
-  python-magic,
-  markdown,
-  pillow,
-  aiofiles,
-  notify2,
-  dbus-python,
-  pyxdg,
-  python-olm,
-  emoji,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "matrix-commander";
   version = "8.0.5";
 
@@ -41,17 +30,17 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     cacert
-    setuptools
-    (matrix-nio.override { withOlm = true; })
-    python-magic
-    markdown
-    pillow
-    aiofiles
-    notify2
-    dbus-python
-    pyxdg
-    python-olm
-    emoji
+    python3Packages.setuptools
+    (python3Packages.matrix-nio.override { withOlm = true; })
+    python3Packages.python-magic
+    python3Packages.markdown
+    python3Packages.pillow
+    python3Packages.aiofiles
+    python3Packages.notify2
+    python3Packages.dbus-python
+    python3Packages.pyxdg
+    python3Packages.python-olm
+    python3Packages.emoji
   ];
 
   meta = {

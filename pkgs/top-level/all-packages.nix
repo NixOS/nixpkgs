@@ -9598,10 +9598,6 @@ with pkgs;
     shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand { };
   };
 
-  matrix-commander =
-    python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander
-      { };
-
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
 
