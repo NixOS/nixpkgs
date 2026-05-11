@@ -12,13 +12,17 @@
 
 let
   defaultNativeBuildInputs = [ curl ];
+
   inherit (lib)
     concatMap
+    concatMapStringsSep
+    extendMkDerivation
     elemAt
     fakeHash
     fakeSha256
     fakeSha512
     filter
+    genAttrs
     hasPrefix
     head
     isList
@@ -27,6 +31,8 @@ let
     match
     warn
     ;
+  inherit (lib.fetchers) proxyImpureEnvVars;
+  inherit (lib.strings) escapeNixString;
   nixpkgsVersion = lib.trivial.release;
 
   mirrors = import ./mirrors.nix // {
@@ -55,7 +61,7 @@ let
   # partially applied set of functions for each hash type
   # this is indexed into with a prefix to avoid re-calling hasPrefix, since it
   # takes advantage of partial application for performance reasons
-  hasAlgoPrefix = lib.genAttrs [ "sha256" "sha1" "sha512" ] hasPrefix;
+  hasAlgoPrefix = genAttrs [ "sha256" "sha1" "sha512" ] hasPrefix;
 
   /**
     Resolve a URL against the available mirrors.
@@ -108,7 +114,7 @@ let
       if u == [ ] then throw "urls is empty after rewriteURL (was ${toString urls})" else u;
 
   impureEnvVars =
-    lib.fetchers.proxyImpureEnvVars
+    proxyImpureEnvVars
     ++ [
       # This variable allows the user to pass additional options to curl
       "NIX_CURL_FLAGS"
@@ -125,7 +131,7 @@ let
 
 in
 
-lib.extendMkDerivation {
+extendMkDerivation {
   constructDrv = stdenvNoCC.mkDerivation;
 
   excludeDrvArgNames = [
@@ -353,10 +359,8 @@ lib.extendMkDerivation {
             let
               url = toString (builtins.head urls_);
               curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
-              curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
-              curlOptsListElementsRepresentation =
-                lib.concatMapStringsSep " " lib.strings.escapeNixString
-                  curlOpts;
+              curlOptsAsStringRepresentation = escapeNixString (toString curlOpts);
+              curlOptsListElementsRepresentation = concatMapStringsSep " " escapeNixString curlOpts;
             in
             ''
               fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
