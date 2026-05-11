@@ -76,7 +76,11 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "sqlalchemy" ];
 
   meta = {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/${finalAttrs.src.tag})";
+    changelog =
+      let
+        shortVersion = lib.replaceString "." "" (lib.versions.majorMinor finalAttrs.version);
+      in
+      "https://github.com/sqlalchemy/sqlalchemy/blob/${finalAttrs.src.rev}/doc/build/changelog/changelog_${shortVersion}.rst";
     description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
     license = lib.licenses.mit;

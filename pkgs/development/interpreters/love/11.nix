@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix rpath so love binary can find libliblove.dylib
     install_name_tool -change "@rpath/libliblove.dylib" "$out/lib/libliblove.dylib" "$out/bin/love"
   '';

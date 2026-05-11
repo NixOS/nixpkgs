@@ -157,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cloudcompare.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nh2 ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "CloudCompare";
     platforms = with lib.platforms; linux; # only tested here; might work on others
   };

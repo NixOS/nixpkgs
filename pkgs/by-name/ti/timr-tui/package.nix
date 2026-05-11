@@ -28,10 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Enable upstream "sound" feature when requested
   buildFeatures = lib.optionals enableSound [ "sound" ];
 
-  nativeBuildInputs = lib.optionals (enableSound && stdenv.isLinux) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [ pkg-config ];
 
   # Runtime/FFI deps for the sound feature (Linux)
-  buildInputs = lib.optionals (enableSound && stdenv.isLinux) [
+  buildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [
     (alsa-lib-with-plugins.override {
       plugins = [
         alsa-plugins

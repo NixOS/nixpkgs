@@ -693,6 +693,11 @@ in
     env = old.env // {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
     };
+
+    meta = (old.meta or { }) // {
+      # https://github.com/wahern/luaossl/pull/221
+      broken = luaAtLeast "5.5";
+    };
   });
 
   luaposix = prev.luaposix.overrideAttrs (old: {

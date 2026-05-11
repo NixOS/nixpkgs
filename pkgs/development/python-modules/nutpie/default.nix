@@ -14,6 +14,7 @@
   arviz,
   obstore,
   pandas,
+  platformdirs,
   pyarrow,
   xarray,
   zarr,
@@ -34,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nutpie";
-  version = "0.16.8";
+  version = "0.16.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -42,12 +43,12 @@ buildPythonPackage (finalAttrs: {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OW638p0mUlzv9SSVwhixozFguh31fvc1FxIYsOJD1SI=";
+    hash = "sha256-2SQrdjQil5fNDzlM+2LgBKaOL5wPP5mB89ofBu4XawI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-4ENBTEBRpSDC6G0vDHx0BO8Kc4KOwnPBXAggSNBQ4tY=";
+    hash = "sha256-sUq86CxrCgLAeBspWvTIfHYW6MDOtVoTLdBbCu/Ulj8=";
   };
 
   build-system = [
@@ -77,6 +78,7 @@ buildPythonPackage (finalAttrs: {
     numba
     jax
     jaxlib
+    platformdirs
     pymc
     pytest-timeout
     pytestCheckHook
@@ -84,11 +86,7 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests = [
-    # ValueError: Variable name 'a/b' cannot contain '/'.
-    "test_non_identifier_names"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # flaky (assert np.float64(0.0017554642626285276) > 0.01)
     "test_normalizing_flow"
   ];

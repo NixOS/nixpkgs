@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals (!inBootstrap) [ texinfo ]
-  ++ lib.optional stdenv.isCygwin gettext;
+  ++ lib.optional stdenv.hostPlatform.isCygwin gettext;
 
   buildInputs = lib.optionals guileEnabled [ guile ];
 
