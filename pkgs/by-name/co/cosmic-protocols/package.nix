@@ -18,6 +18,9 @@ stdenv.mkDerivation {
     hash = "sha256-KO7VTxomhrnwzFlkkXSoP0eh3NRShBD4srW5W6temxo=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   nativeBuildInputs = [ wayland-scanner ];
 

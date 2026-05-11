@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/rust-secure-code/cargo-auditable/issues/225
   auditable = false;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     libcosmicAppHook
     just

@@ -34,6 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
   '';
 
+  __structuredAttrs = true;
+
   buildInputs = [ bash ];
   nativeBuildInputs = [ just ];
 

@@ -1,35 +1,22 @@
 {
   bun,
-  cargo,
-  cargo-tauri,
-  dbus,
-  glib,
-  glib-networking,
-  gst_all_1,
-  gtk4,
-  jq,
+  copyDesktopItems,
+  electron_41,
   lib,
-  libappindicator,
-  librsvg,
-  libsoup_3,
   makeBinaryWrapper,
+  models-dev,
   nodejs,
   opencode,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  rustc,
   stdenvNoCC,
-  webkitgtk_4_1,
-  wrapGAppsHook4,
+  writableTmpDirAsHomeHook,
+
+  commandLineArgs ? "",
 }:
 
 let
-  gtk = gtk4;
-  libsoup = libsoup_3;
-  webkitgtk = webkitgtk_4_1;
+  electron = electron_41;
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode-desktop";
   inherit (opencode)
     version
@@ -38,55 +25,100 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patches
     ;
 
-  cargoRoot = "packages/desktop/src-tauri";
-  cargoHash = "sha256-WI48iYdxmizF1YgOQtk05dvrBEMqFjHP9s3+zBFAat0=";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
-
   nativeBuildInputs = [
-    pkg-config
-    cargo-tauri.hook
     bun
     nodejs # for patchShebangs node_modules
-    cargo
-    rustc
-    jq
     makeBinaryWrapper
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ wrapGAppsHook4 ];
-
-  buildInputs = (
-    lib.optionals stdenvNoCC.isLinux [
-      dbus
-      glib
-      glib-networking
-      gtk
-      libappindicator
-      librsvg
-      libsoup
-      openssl
-      webkitgtk
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad # fakevideosink
-      gst-plugins-base # appsink and autoaudiosink
-      gst-plugins-good # autoaudiosink
-    ])
-  );
-
-  tauriBuildFlags = [
-    "--config"
-    "tauri.conf.json"
-    "--config"
-    "tauri.prod.conf.json"
-    "--no-sign"
+    writableTmpDirAsHomeHook
+    copyDesktopItems
   ];
 
-  preBuild = ''
-    cp -a ${finalAttrs.node_modules}/{node_modules,packages} .
-    chmod -R u+w node_modules packages
-    patchShebangs node_modules packages/desktop/node_modules
-    install -D ${lib.getExe opencode} \
-      packages/desktop/src-tauri/sidecars/opencode-cli-${stdenvNoCC.hostPlatform.rust.rustcTarget}
+  strictDeps = true;
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    OPENCODE_CHANNEL = "prod";
+    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+    OPENCODE_DISABLE_MODELS_FETCH = true;
+  };
+
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${finalAttrs.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    # Build the opencode node bundle (needed by the desktop sidecar)
+    cd packages/opencode
+    bun --bun ./script/build-node.ts --skip-install
+    cd ../..
+
+    # Prepare desktop app
+    cd packages/desktop
+
+    # Copy prod icons
+    cp -R icons/prod resources/icons
+
+    # Build with electron-vite
+    node_modules/.bin/electron-vite build
+
+    # Copy opencode CLI as sidecar
+    sidecar_name="opencode-cli"
+    install -D ${lib.getExe opencode} "resources/$sidecar_name"
+
+    # Package with electron-builder (unpacked directory mode)
+    cp -r "${electron.dist}" $HOME/.electron-dist
+    chmod -R u+w $HOME/.electron-dist
+
+    node_modules/.bin/electron-builder --dir \
+      --config=electron-builder.config.ts \
+      --config.electronDist="$HOME/.electron-dist" \
+      --config.electronVersion=${electron.version}
+
+    cd ../..
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv packages/desktop/dist/mac-*/OpenCode.app "$out/Applications/OpenCode.app"
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    mkdir -p $out/opt/opencode-desktop
+    ${
+      if stdenvNoCC.hostPlatform.isAarch64 then
+        ''
+          appDir="packages/desktop/dist/linux-arm64-unpacked"
+        ''
+      else
+        ''
+          appDir="packages/desktop/dist/linux-unpacked"
+        ''
+    }
+    [ -d "$appDir" ] || { echo "no electron-builder output dir found: $appDir"; exit 1; }
+    cp -r "$appDir/resources" $out/opt/opencode-desktop/
+
+    install -Dm644 packages/desktop/resources/icons/icon.png $out/share/icons/opencode-desktop.png
+
+    makeWrapper ${lib.getExe electron} $out/bin/opencode-desktop \
+      --inherit-argv0 \
+      --add-flags $out/opt/opencode-desktop/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+  ''
+  + ''
+    runHook postInstall
   '';
 
   meta = {

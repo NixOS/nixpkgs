@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   separateDebugInfo = true;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     pkg-config
     libcosmicAppHook
