@@ -2072,7 +2072,8 @@
       ];
     "fumis" =
       ps: with ps; [
-      ]; # missing inputs: fumis
+        fumis
+      ];
     "futurenow" =
       ps: with ps; [
         pyfnip
@@ -7755,6 +7756,7 @@
     "frontier_silicon"
     "fujitsu_fglair"
     "fully_kiosk"
+    "fumis"
     "fyta"
     "garage_door"
     "garages_amsterdam"
