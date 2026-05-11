@@ -1313,8 +1313,11 @@ rec {
     :::
   */
   toShellVar =
-    name: value:
-    lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
+    name:
+    if (!isValidPosixName name) then
+      throw "toShellVar: ${name} is not a valid shell variable name"
+    else
+      value:
       if isAttrs value && !isStringLike value then
         "declare -A ${name}=(${
           concatStringsSep " " (lib.mapAttrsToList (n: v: "[${escapeShellArg n}]=${escapeShellArg v}") value)
@@ -1322,8 +1325,7 @@ rec {
       else if isList value then
         "declare -a ${name}=(${escapeShellArgs value})"
       else
-        "${name}=${escapeShellArg value}"
-    );
+        "${name}=${escapeShellArg value}";
 
   /**
     Translate an attribute set `vars` into corresponding shell variable declarations
