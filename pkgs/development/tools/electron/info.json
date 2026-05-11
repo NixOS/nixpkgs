@@ -1342,7 +1342,9 @@
                 "fetcher": "fetchFromGitiles"
             }
         },
-        "electron_yarn_hash": "sha256-ZaVee6smW2Gf4tkC1xTTl4a4fBDXaeT7Mtt7del6l8o=",
+        "electron_yarn_data": {
+          "hash": "sha256-ouqZAfaDG1wnKpwyCTF0H25HYd3Klftq7dQrOvSQiQA="
+        },
         "modules": "140",
         "node": "22.22.1",
         "version": "39.8.10"
