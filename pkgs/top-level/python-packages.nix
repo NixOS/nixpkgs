@@ -3555,6 +3555,16 @@ self: super: with self; {
 
   daff = callPackage ../development/python-modules/daff { };
 
+  dagster = callPackage ../development/python-modules/dagster { };
+
+  dagster-graphql = callPackage ../development/python-modules/dagster-graphql { };
+
+  dagster-pipes = callPackage ../development/python-modules/dagster-pipes { };
+
+  dagster-shared = callPackage ../development/python-modules/dagster-shared { };
+
+  dagster-webserver = callPackage ../development/python-modules/dagster-webserver { };
+
   dahlia = callPackage ../development/python-modules/dahlia { };
 
   daiquiri = callPackage ../development/python-modules/daiquiri { };
