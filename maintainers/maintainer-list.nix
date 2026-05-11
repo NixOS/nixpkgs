@@ -4530,6 +4530,12 @@
     githubId = 1945;
     name = "Casey Rodarmor";
   };
+  caseyavila = {
+    email = "casey@theavilas.org";
+    github = "caseyavila";
+    githubId = 53847249;
+    name = "Casey Avila";
+  };
   catap = {
     email = "kirill@korins.ky";
     github = "catap";
@@ -19898,6 +19904,12 @@
     githubId = 78752;
     name = "Alessio Caiazza";
     matrix = "@alessio:caiazza.info";
+  };
+  nomadium = {
+    email = "miguel@miguel.cc";
+    github = "nomadium";
+    githubId = 79817;
+    name = "Miguel Landaeta";
   };
   nomaterials = {
     email = "nomaterials@gmail.com";
