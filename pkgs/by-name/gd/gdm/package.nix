@@ -139,10 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     # installed (mostly just because .passthru.tests can make use of it).
     substituteInPlace meson.build \
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
-
-    # Disable userdb dynamic users for now
-    substituteInPlace meson.build \
-      --replace-fail 'have_userdb = libsystemd_dep' 'have_userdb = false #'
   '';
 
   doInstallCheck = true;
