@@ -75,6 +75,7 @@ in
         RemoveIPC = true;
         PrivateMounts = true;
       };
+      unitConfig.RequiresMountsFor = [ cfg.configDir ];
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
