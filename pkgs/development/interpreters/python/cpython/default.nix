@@ -31,6 +31,7 @@
   sqlite,
   xz,
   zlib,
+  withZstd ? !withMinimalDeps,
   zstd,
 
   # platform-specific dependencies
@@ -289,7 +290,7 @@ let
     ++ optionals withExpat [
       expat
     ]
-    ++ optionals (passthru.pythonAtLeast "3.14") [
+    ++ optionals (withZstd && passthru.pythonAtLeast "3.14") [
       zstd
     ]
     ++ optionals bluezSupport [
