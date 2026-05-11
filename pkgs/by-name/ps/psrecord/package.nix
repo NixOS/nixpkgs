@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  psutil,
-  matplotlib,
-  pytest,
 }:
-buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "psrecord";
   version = "1.2";
   format = "setuptools";
@@ -17,12 +15,12 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    psutil
-    matplotlib
+    python3Packages.psutil
+    python3Packages.matplotlib
   ];
 
   nativeCheckInputs = [
-    pytest
+    python3Packages.pytest
   ];
 
   checkPhase = ''
