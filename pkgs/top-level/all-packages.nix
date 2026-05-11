@@ -9937,15 +9937,6 @@ with pkgs;
     waylandSupport = true;
   };
 
-  inherit
-    (callPackages ../applications/networking/syncthing {
-      inherit (darwin) autoSignDarwinBinariesHook;
-    })
-    syncthing
-    syncthing-discovery
-    syncthing-relay
-    ;
-
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
