@@ -1,14 +1,14 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonPackage,
+  python3Packages,
   openvpn,
   iproute2,
   iptables,
   util-linux,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "namespaced-openvpn";
   version = "0.6.0";
   pyproject = false;
