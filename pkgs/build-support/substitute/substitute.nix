@@ -29,17 +29,30 @@
 args:
 
 let
+  inherit (lib)
+    assertMsg
+    concatLists
+    concatMapStringsSep
+    escapeShellArgs
+    isList
+    oldestSupportedReleaseIsAtLeast
+    optionalAttrs
+    pipe
+    splitString
+    toList
+    warnIf
+    ;
   name = if args ? name then args.name else baseNameOf (toString args.src);
-  deprecationReplacement = lib.pipe args.replacements [
-    lib.toList
-    (map (lib.splitString " "))
-    lib.concatLists
-    (lib.concatMapStringsSep " " lib.strings.escapeNixString)
+  deprecationReplacement = pipe args.replacements [
+    toList
+    (map (splitString " "))
+    concatLists
+    (concatMapStringsSep " " lib.strings.escapeNixString)
   ];
   optionalDeprecationWarning =
     # substitutions is only available starting 24.05.
     # TODO: Remove support for replacements sometime after the next release
-    lib.warnIf (args ? replacements && lib.oldestSupportedReleaseIsAtLeast 2405) ''
+    warnIf (args ? replacements && oldestSupportedReleaseIsAtLeast 2405) ''
       pkgs.substitute: For "${name}", `replacements` is used, which is deprecated since it doesn't support arguments with spaces. Use `substitutions` instead:
         substitutions = [ ${deprecationReplacement} ];'';
 in
@@ -52,10 +65,10 @@ optionalDeprecationWarning stdenvNoCC.mkDerivation (
     allowSubstitutes = false;
   }
   // args
-  // lib.optionalAttrs (args ? substitutions) {
+  // optionalAttrs (args ? substitutions) {
     substitutions =
-      assert lib.assertMsg (lib.isList args.substitutions)
+      assert assertMsg (isList args.substitutions)
         ''pkgs.substitute: For "${name}", `substitutions` is passed, which is expected to be a list, but it's a ${builtins.typeOf args.substitutions} instead.'';
-      lib.escapeShellArgs args.substitutions;
+      escapeShellArgs args.substitutions;
   }
 )
