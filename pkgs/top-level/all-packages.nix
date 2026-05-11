@@ -9671,8 +9671,6 @@ with pkgs;
 
   mpvScripts = callPackage ../by-name/mp/mpv/scripts.nix { };
 
-  mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
-
   murmur =
     (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
