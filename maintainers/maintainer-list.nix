@@ -28309,6 +28309,12 @@
     githubId = 303489;
     name = "Manuel Bärenz";
   };
+  TurnrDev = {
+    email = "jaynicholasturner@gmail.com";
+    github = "TurnrDev";
+    githubId = 11667059;
+    name = "Jay Turner";
+  };
   tuxinaut = {
     email = "trash4you@tuxinaut.de";
     github = "tuxinaut";
@@ -29104,6 +29110,13 @@
     github = "volhovm";
     githubId = 5604643;
     name = "Mikhail Volkhov";
+  };
+  vollate = {
+    name = "Vollate";
+    email = "uint44t@gmail.com";
+    github = "vollate";
+    githubId = 90166078;
+    keys = [ { fingerprint = "A5B9 B2C5 8C04 DCB6 A157  566A 9CDF DE55 0783 E7BB"; } ];
   };
   vonfry = {
     email = "nixos@vonfry.name";
