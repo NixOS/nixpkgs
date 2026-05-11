@@ -2899,8 +2899,6 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
-  pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
-
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
