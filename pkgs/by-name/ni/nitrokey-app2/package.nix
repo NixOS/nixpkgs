@@ -1,13 +1,8 @@
 {
   lib,
   stdenv,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  poetry-core,
-  fido2,
-  nitrokey,
-  pyside6,
-  usb-monitor,
   qt6,
 }:
 
@@ -20,7 +15,7 @@ let
     ;
 in
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nitrokey-app2";
   version = "2.5.2";
   pyproject = true;
@@ -45,14 +40,14 @@ buildPythonApplication rec {
   ];
 
   build-system = [
-    poetry-core
+    python3Packages.poetry-core
   ];
 
   dependencies = [
-    fido2
-    nitrokey
-    pyside6
-    usb-monitor
+    python3Packages.fido2
+    python3Packages.nitrokey
+    python3Packages.pyside6
+    python3Packages.usb-monitor
   ];
 
   pythonRelaxDeps = [ "nitrokey" ];

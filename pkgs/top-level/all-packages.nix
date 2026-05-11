@@ -11845,8 +11845,6 @@ with pkgs;
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
 
-  nitrokey-app2 = python3Packages.callPackage ../tools/security/nitrokey-app2 { };
-
   hy = with python3Packages; toPythonApplication hy;
 
   ghc-standalone-archive =
