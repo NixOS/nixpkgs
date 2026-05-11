@@ -16,12 +16,10 @@ let
     filter
     findFirst
     getName
-    isDerivation
     length
     concatMap
     mutuallyExclusive
     optional
-    optionalString
     isAttrs
     isString
     warn
@@ -308,15 +306,17 @@ let
         union
         int
         attrs
-        attrsOf
         any
         listOf
         bool
         record
+        intersection
+        not
+        derivation
         ;
       platforms = listOf (union [
         str
-        (attrsOf any)
+        attrs
       ]); # see lib.meta.platformMatch
     in
     record {
@@ -338,7 +338,10 @@ let
         let
           # TODO disallow `str` licenses, use a module
           licenseType = union [
-            (attrsOf any)
+            (intersection [
+              attrs
+              (not derivation)
+            ])
             str
           ];
         in
@@ -347,9 +350,9 @@ let
           licenseType
         ];
       sourceProvenance = listOf attrs;
-      maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
-      nonTeamMaintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
-      teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
+      maintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      nonTeamMaintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      teams = listOf attrs; # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
       inherit platforms;
