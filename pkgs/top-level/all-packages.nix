@@ -9466,10 +9466,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/helm/plugins { }
   );
 
-  ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
-    fftw = fftwSinglePrec;
-  };
-
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
 
   libreoffice = hiPrio libreoffice-still;
