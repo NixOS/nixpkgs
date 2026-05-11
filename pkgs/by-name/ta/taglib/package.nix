@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taglib";
-  version = "2.2.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "taglib";
     repo = "taglib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xup/c1giZadq8jYQgsZW+NJkjw9ofpdivnBVKTVkRjU=";
+    hash = "sha256-fIVUhtfPuXJjdnvop2U9rpL2+L9KhsKENxwMusU3cks=";
   };
 
   strictDeps = true;
