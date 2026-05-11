@@ -1870,8 +1870,6 @@ with pkgs;
 
   pixcat = with python3Packages; toPythonApplication pixcat;
 
-  remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
-
   ropgadget = with python3Packages; toPythonApplication ropgadget;
 
   scour = with python3Packages; toPythonApplication scour;
