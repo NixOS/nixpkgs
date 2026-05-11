@@ -149,7 +149,10 @@ in
     systemd.services.miniflux = {
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
-      requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
+      requires = lib.optionals cfg.createDatabaseLocally [
+        "miniflux-dbsetup.service"
+        "postgresql.target"
+      ];
       after = [
         "network.target"
       ]
