@@ -81,6 +81,7 @@ stdenv.mkDerivation {
     # necessary.
     pushd $out
     patch -p1 < ${./main.patch}
+    patch -p1 < ${./fibers-glibc.patch}
     popd
     substituteInPlace $out/tools/cli/main.js \
       --replace-fail "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
