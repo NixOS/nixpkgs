@@ -1786,8 +1786,6 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };
   };
 
-  hyprshade = python3Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
-
   hyprlandPlugins = recurseIntoAttrs (
     callPackage ../applications/window-managers/hyprwm/hyprland-plugins { }
   );
