@@ -12,6 +12,7 @@
   bash,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -93,6 +94,7 @@ buildGoModule (finalAttrs: {
       "gocron-web"
     ];
   };
+  passthru.tests = nixosTests.gocron;
 
   meta = {
     description = "Task scheduler built with Go and Vue.js.";
