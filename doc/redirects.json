@@ -209,6 +209,24 @@
   "modules-generic-meta-maintainers": [
     "index.html#modules-generic-meta-maintainers"
   ],
+  "modular-services": [
+    "index.html#modular-services"
+  ],
+  "modular-service-portability": [
+    "index.html#modular-service-portability"
+  ],
+  "modular-service-composition": [
+    "index.html#modular-service-composition"
+  ],
+  "modular-service-migration": [
+    "index.html#modular-service-migration"
+  ],
+  "modular-service-review": [
+    "index.html#modular-service-review"
+  ],
+  "modular-service-options-portable": [
+    "index.html#modular-service-options-portable"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -345,6 +363,16 @@
   ],
   "pkgs.treefmt.withConfig": [
     "index.html#pkgs.treefmt.withConfig"
+  ],
+  "package-modules": [
+    "index.html#package-modules"
+  ],
+  "package-module-bundled": [
+    "package-module-options.html#package-module-bundled",
+    "modular-services-options.html#modular-service-bundled"
+  ],
+  "package-module-bundled-services": [
+    "package-module-options.html#package-module-bundled-services"
   ],
   "preface": [
     "index.html#preface"

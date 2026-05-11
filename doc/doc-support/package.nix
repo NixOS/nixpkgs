@@ -11,11 +11,13 @@
   nixos-render-docs,
   nixos-render-docs-redirects,
   writeShellScriptBin,
+  writeText,
   nixpkgs ? { },
   markdown-code-runner,
   roboto,
   treefmt,
   nixosOptionsDoc,
+  bundledModularServiceModules ? { },
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs:
@@ -52,6 +54,89 @@ stdenvNoCC.mkDerivation (
       inherit (lib.evalModules { modules = [ ../../modules/generic/meta-maintainers.nix ]; }) options;
       transformOptions = opt: hide-lib (mapURLs opt);
     };
+
+    portableServiceOptions = nixosOptionsDoc {
+      inherit
+        (lib.evalModules {
+          modules = [
+            (lib.modules.importApply ../../lib/services/service.nix {
+              pkgs = throw "nixpkgs-manual / portableServiceOptions: Do not reference pkgs in docs";
+            })
+          ];
+        })
+        options
+        ;
+      transformOptions = mapURLs;
+    };
+
+    bundledModularServiceNames = builtins.attrNames bundledModularServiceModules;
+
+    bundledModularServiceOptions = lib.mapAttrs (
+      pkgName: services:
+      lib.mapAttrs (
+        serviceName: serviceModule:
+        nixosOptionsDoc {
+          inherit
+            (lib.evalModules {
+              modules = [
+                (lib.modules.importApply ../../lib/services/service.nix {
+                  pkgs = throw "nixpkgs-manual / bundledModularServiceOptions: Do not reference pkgs in docs";
+                })
+                serviceModule
+              ];
+            })
+            options
+            ;
+          transformOptions =
+            opt:
+            let
+              strippedDecls = map toURL opt.declarations;
+              hasAppDeclaration = builtins.any (
+                d: builtins.isAttrs d && lib.hasPrefix "nixpkgs/pkgs/" d.name
+              ) strippedDecls;
+            in
+            opt
+            // {
+              declarations = strippedDecls;
+              visible = if !hasAppDeclaration then false else opt.visible or true;
+            };
+        }
+      ) services
+    ) bundledModularServiceModules;
+
+    bundledModularServicesMarkdown = lib.concatStringsSep "\n" (
+      lib.flatten (
+        map (
+          pkgName:
+          lib.mapAttrsToList (serviceName: doc: ''
+            ## `pkgs.${pkgName}.services.${serviceName}` {#modular-service-bundled-${pkgName}-${serviceName}}
+
+            ```{=include=} options
+            id-prefix: service-opt-${pkgName}-${serviceName}-
+            list-id: service-options-${pkgName}-${serviceName}
+            source: ${doc.optionsJSON}/share/doc/nixos/options.json
+            ```
+          '') bundledModularServiceOptions.${pkgName}
+        ) bundledModularServiceNames
+      )
+    );
+
+    mergedRedirects = writeText "redirects.json" (
+      builtins.toJSON (
+        lib.listToAttrs (
+          lib.flatten (
+            map (
+              pkgName:
+              lib.mapAttrsToList (serviceName: _: {
+                name = "modular-service-bundled-${pkgName}-${serviceName}";
+                value = [ "package-module-options.html#modular-service-bundled-${pkgName}-${serviceName}" ];
+              }) bundledModularServiceModules.${pkgName}
+            ) bundledModularServiceNames
+          )
+        )
+        // builtins.fromJSON (builtins.readFile ../redirects.json)
+      )
+    );
   in
   {
     version = lib.trivial.release;
@@ -72,7 +157,6 @@ stdenvNoCC.mkDerivation (
             ../anchor-use.js
             ../anchor.min.js
             ../manpage-urls.json
-            ../redirects.json
           ]
         );
     };
@@ -82,6 +166,8 @@ stdenvNoCC.mkDerivation (
       ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.section.md
       ln -s ${treefmt.optionsDoc.optionsJSON}/share/doc/nixos/options.json ./treefmt-options.json
       ln -s ${docs.generic.meta-maintainers.optionsJSON}/share/doc/nixos/options.json ./options-modules-generic-meta-maintainers.json
+      ln -s ${portableServiceOptions.optionsJSON}/share/doc/nixos/options.json ./modular-services-portable-options.json
+      ln -s ${mergedRedirects} ./redirects.json
     '';
 
     buildPhase = ''
@@ -94,6 +180,9 @@ stdenvNoCC.mkDerivation (
 
       substitute ./manual.md.in ./manual.md \
         --replace-fail '@MANUAL_VERSION@' '${lib.version}'
+
+      substituteInPlace ./modules/package-module-options.md \
+        --replace-fail '@BUNDLED_MODULAR_SERVICES@' ${lib.escapeShellArg bundledModularServicesMarkdown}
 
       mkdir -p out/media
 
@@ -151,6 +240,8 @@ stdenvNoCC.mkDerivation (
       optionsDoc = callPackage ./options-doc.nix { };
 
       pythonInterpreterTable = callPackage ./python-interpreter-table.nix { };
+
+      inherit bundledModularServiceOptions;
 
       shell =
         let

@@ -20,10 +20,14 @@ let
     removePrefix
     flip
     foldr
+    flatten
+    mapAttrsToList
     types
     mkOption
     escapeShellArg
     concatMapStringsSep
+    concatStringsSep
+    listToAttrs
     sourceFilesBySuffices
     modules
     ;
@@ -122,34 +126,9 @@ let
       -i ./development/writing-nixos-tests.section.md
     substituteInPlace ./development/modular-services.md \
       --replace-fail \
-        '@PORTABLE_SERVICE_OPTIONS@' \
-        ${portableServiceOptions.optionsJSON}/${common.outputPath}/options.json
-    substituteInPlace ./development/modular-services.md \
-      --replace-fail \
         '@SYSTEMD_SERVICE_OPTIONS@' \
         ${systemdServiceOptions.optionsJSON}/${common.outputPath}/options.json
   '';
-
-  portableServiceOptions = buildPackages.nixosOptionsDoc {
-    inherit
-      (evalModules {
-        modules = [
-          (modules.importApply ../../../lib/services/service.nix {
-            pkgs = throw "nixos docs / portableServiceOptions: Do not reference pkgs in docs";
-          })
-        ];
-      })
-      options
-      ;
-    inherit revision warningsAreErrors;
-    transformOptions =
-      opt:
-      opt
-      // {
-        # Clean up declaration sites to not refer to the NixOS source tree.
-        declarations = map stripAnyPrefixes opt.declarations;
-      };
-  };
 
   systemdServiceOptions = buildPackages.nixosOptionsDoc {
     inherit (evalModules { modules = [ ../../modules/system/service/systemd/service.nix ]; }) options;
@@ -163,6 +142,68 @@ let
         declarations = map stripAnyPrefixes opt.declarations;
       };
   };
+
+  bundledModularServiceNames = config.documentation.nixos.bundledModularServiceNames;
+
+  # Per-service options docs used for the manpage merge.
+  # The HTML rendering lives in the nixpkgs manual; this is kept only for `configuration.nix(5)`.
+  bundledModularServiceOptions = pkgs.lib.genAttrs bundledModularServiceNames (
+    pkgName:
+    pkgs.lib.mapAttrs (
+      serviceName: serviceModule:
+      buildPackages.nixosOptionsDoc {
+        inherit
+          (evalModules {
+            modules = [
+              (modules.importApply ../../../lib/services/service.nix {
+                pkgs = throw "nixos docs / bundledModularServiceOptions: Do not reference pkgs in docs";
+              })
+              serviceModule
+            ];
+          })
+          options
+          ;
+        inherit revision warningsAreErrors;
+        transformOptions =
+          opt:
+          let
+            strippedDecls = map stripAnyPrefixes opt.declarations;
+            hasAppDeclaration = builtins.any (d: builtins.isString d && hasPrefix "pkgs/" d) strippedDecls;
+          in
+          opt
+          // {
+            declarations = strippedDecls;
+            visible = if !hasAppDeclaration then false else opt.visible or true;
+          };
+      }
+    ) pkgs.${pkgName}.services
+  );
+
+  # Manpage options: main NixOS options merged with per-service bundled options.
+  # Uses the same filtered per-service JSON as the nixpkgs manual appendix.
+  manpageOptionsJSON =
+    pkgs.runCommand "manpage-options.json"
+      {
+        nativeBuildInputs = [ pkgs.jq ];
+      }
+      ''
+        mkdir -p $out/${common.outputPath}
+        jq -s 'add' \
+          ${optionsDoc.optionsJSON}/${common.outputPath}/options.json \
+          ${
+            concatStringsSep " \\\n      " (
+              flatten (
+                map (
+                  pkgName:
+                  mapAttrsToList (
+                    serviceName: doc: "${doc.optionsJSON}/${common.outputPath}/options.json"
+                  ) bundledModularServiceOptions.${pkgName}
+                ) bundledModularServiceNames
+              )
+            )
+          } \
+          > $out/${common.outputPath}/options.json
+      '';
 
 in
 rec {
@@ -288,7 +329,7 @@ rec {
         mkdir -p $out/share/man/man5
         nixos-render-docs -j $NIX_BUILD_CORES options manpage \
           --revision ${escapeShellArg revision} \
-          ${optionsJSON}/${common.outputPath}/options.json \
+          ${manpageOptionsJSON}/${common.outputPath}/options.json \
           $out/share/man/man5/configuration.nix.5
         compressManPages $out
       '';
