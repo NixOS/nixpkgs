@@ -1,15 +1,11 @@
 {
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   lib,
-  natsort,
-  panflute,
-  lxml,
-  setuptools,
   nix-update-script,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pandoc-include";
   version = "1.4.3";
   pyproject = true;
@@ -22,15 +18,15 @@ buildPythonApplication rec {
   };
 
   build-system = [
-    setuptools
+    python3Packages.setuptools
   ];
 
   passthru.updateScript = nix-update-script { };
 
   propagatedBuildInputs = [
-    natsort
-    panflute
-    lxml
+    python3Packages.natsort
+    python3Packages.panflute
+    python3Packages.lxml
   ];
 
   pythonImportsCheck = [ "pandoc_include.main" ];
