@@ -90,6 +90,8 @@ in
       startAt = lib.optionals cfg.automatic cfg.dates;
       # do not start and delay when switching
       restartIfChanged = false;
+      # run garbage collection through nix-daemon to prevent deletion race conditions
+      environment.NIX_REMOTE = "daemon";
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {
