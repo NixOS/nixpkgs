@@ -9259,6 +9259,12 @@
     githubId = 119691;
     name = "Michael Gough";
   };
+  fraggerfox = {
+    email = "santhosh.raju@gmail.com";
+    github = "fraggerfox";
+    githubId = 189939;
+    name = "Santhosh Raju";
+  };
   fraioveio = {
     email = "francesco@vecchia.lol";
     github = "FraioVeio";
