@@ -11,6 +11,24 @@
 }:
 
 let
+  inherit (lib)
+    concatMapStringsSep
+    elemAt
+    extendMkDerivation
+    fakeHash
+    fakeSha256
+    fakeSha512
+    filter
+    hasInfix
+    hasPrefix
+    head
+    isList
+    isString
+    length
+    match
+    warnIf
+    ;
+  inherit (lib.generators) toPretty;
 
   mirrors = import ./mirrors.nix // {
     inherit hashedMirrors;
@@ -60,14 +78,14 @@ let
   resolveUrl =
     url:
     let
-      mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
-      mirrorName = lib.head mirrorSplit;
+      mirrorSplit = match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorName = head mirrorSplit;
       mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
     in
     if mirrorSplit == null || mirrorName == null then
       [ url ]
     else
-      map (mirror: mirror + lib.elemAt mirrorSplit 1) mirrorList;
+      map (mirror: mirror + elemAt mirrorSplit 1) mirrorList;
 
   impureEnvVars =
     lib.fetchers.proxyImpureEnvVars
@@ -87,7 +105,7 @@ let
 
 in
 
-lib.extendMkDerivation {
+extendMkDerivation {
   constructDrv = stdenvNoCC.mkDerivation;
 
   excludeDrvArgNames = [
@@ -186,28 +204,20 @@ lib.extendMkDerivation {
     let
       preRewriteUrls =
         if urls != [ ] && url == "" then
-          (
-            if lib.isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}"
-          )
+          (if isList urls then urls else throw "`urls` is not a list: ${toPretty { } urls}")
         else if urls == [ ] && url != "" then
-          (
-            if lib.isString url then
-              [ url ]
-            else
-              throw "`url` is not a string: ${lib.generators.toPretty { } urls}"
-          )
+          (if isString url then [ url ] else throw "`url` is not a string: ${toPretty { } urls}")
         else
-          throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
+          throw "fetchurl requires either `url` or `urls` to be set: ${toPretty { } args}";
 
       urls_ =
         let
-          u = lib.lists.filter (url: lib.isString url) (map rewriteURL preRewriteUrls);
+          u = filter (url: isString url) (map rewriteURL preRewriteUrls);
         in
         if u == [ ] then throw "urls is empty after rewriteURL (was ${toString preRewriteUrls})" else u;
 
       hash_ =
         if
-          with lib.lists;
           length (
             filter (s: s != "") [
               hash
@@ -218,7 +228,7 @@ lib.extendMkDerivation {
             ]
           ) > 1
         then
-          throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
+          throw "multiple hashes passed to fetchurl: ${toPretty { } urls_}"
         else
 
         if hash != "" then
@@ -230,7 +240,7 @@ lib.extendMkDerivation {
           if outputHashAlgo != "" then
             { inherit outputHashAlgo outputHash; }
           else
-            throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
+            throw "fetchurl was passed outputHash without outputHashAlgo: ${toPretty { } urls_}"
         else if sha512 != "" then
           {
             outputHashAlgo = "sha512";
@@ -249,15 +259,15 @@ lib.extendMkDerivation {
         else if cacert != null then
           {
             outputHashAlgo = null;
-            outputHash = lib.fakeHash;
+            outputHash = fakeHash;
           }
         else
-          throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
+          throw "fetchurl requires a hash for fixed-output derivation: ${toPretty { } urls_}";
 
-      finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
-      finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
+      finalHashHasColon = hasInfix ":" finalAttrs.hash;
+      finalHashColonMatch = match "([^:]+)[:](.*)" finalAttrs.hash;
 
-      resolvedUrl = lib.head (resolveUrl url);
+      resolvedUrl = head (resolveUrl url);
     in
 
     derivationArgs
@@ -272,7 +282,7 @@ lib.extendMkDerivation {
         else if name != null then
           name
         else
-          baseNameOf (toString (lib.head urls_));
+          baseNameOf (toString (head urls_));
 
       builder = ./builder.sh;
 
@@ -289,17 +299,17 @@ lib.extendMkDerivation {
         if
           hash_.outputHashAlgo == null
           || hash_.outputHash == ""
-          || lib.hasPrefix hash_.outputHashAlgo hash_.outputHash
+          || hasPrefix hash_.outputHashAlgo hash_.outputHash
         then
           hash_.outputHash
         else
           "${hash_.outputHashAlgo}:${hash_.outputHash}";
-      outputHashAlgo = if finalHashHasColon then lib.head finalHashColonMatch else null;
+      outputHashAlgo = if finalHashHasColon then head finalHashColonMatch else null;
       outputHash =
         if finalAttrs.hash == "" then
-          lib.fakeHash
+          fakeHash
         else if finalHashHasColon then
-          lib.elemAt finalHashColonMatch 1
+          elemAt finalHashColonMatch 1
         else
           finalAttrs.hash;
 
@@ -309,9 +319,9 @@ lib.extendMkDerivation {
         if
           (
             hash_.outputHash == ""
-            || hash_.outputHash == lib.fakeSha256
-            || hash_.outputHash == lib.fakeSha512
-            || hash_.outputHash == lib.fakeHash
+            || hash_.outputHash == fakeSha256
+            || hash_.outputHash == fakeSha512
+            || hash_.outputHash == fakeHash
             || netrcPhase != null
           )
         then
@@ -321,14 +331,12 @@ lib.extendMkDerivation {
 
       outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-      curlOpts = lib.warnIf (lib.isList curlOpts) (
+      curlOpts = warnIf (isList curlOpts) (
         let
           url = toString (builtins.head urls_);
-          curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
+          curlOptsRepresentation = toPretty { multiline = false; } curlOpts;
           curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
-          curlOptsListElementsRepresentation =
-            lib.concatMapStringsSep " " lib.strings.escapeNixString
-              curlOpts;
+          curlOptsListElementsRepresentation = concatMapStringsSep " " lib.strings.escapeNixString curlOpts;
         in
         ''
           fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
