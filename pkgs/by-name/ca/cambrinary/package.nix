@@ -1,13 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  flit,
-  aiohttp,
-  beautifulsoup4,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "cambrinary";
   version = "unstable-2023-07-16";
   pyproject = true;
@@ -20,12 +17,12 @@ buildPythonApplication {
   };
 
   nativeBuildInputs = [
-    flit
+    python3Packages.flit
   ];
 
   propagatedBuildInputs = [
-    aiohttp
-    beautifulsoup4
+    python3Packages.aiohttp
+    python3Packages.beautifulsoup4
   ];
 
   pythonImportsCheck = [ "cambrinary" ];

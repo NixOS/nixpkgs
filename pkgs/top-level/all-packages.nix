@@ -1648,8 +1648,6 @@ with pkgs;
 
   intelLlvmStdenv = intel-llvm.stdenv;
 
-  cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
-
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
 
   cot = with python3Packages; toPythonApplication cot;
