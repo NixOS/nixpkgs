@@ -12606,6 +12606,8 @@ self: super: with self; {
 
   pip-tools = callPackage ../development/python-modules/pip-tools { };
 
+  pipcl = callPackage ../development/python-modules/pipcl { };
+
   pipdate = callPackage ../development/python-modules/pipdate { };
 
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
