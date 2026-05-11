@@ -18,6 +18,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-2HC2BeT4x4QGjj2tKB0yM9Bh7zsQ/S0xX/KaJvlgq2o=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
   ];

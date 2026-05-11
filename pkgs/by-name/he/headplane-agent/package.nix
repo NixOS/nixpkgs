@@ -7,13 +7,13 @@ buildGoModule (finalAttrs: {
   pname = "headplane-agent";
   __structuredAttrs = true;
   # Note, if you are upgrading this, you should upgrade headplane at the same time
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hsrnmEwKXJlPjV4aIfmS6GAE414ArVRGoPPpZGmV0x4=";
+    hash = "sha256-2C/Pn2M2aHADtoljSFg9hz6xOaZp6IRI77jjy+LDAgw=";
   };
 
   vendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
