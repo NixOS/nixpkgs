@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
       ];
       text = ''
         version="$(curl -s https://updater.osmium.chat/alpha-linux.yml | yq .version)"
-        update-source-version osmium "${version}"
+        update-source-version osmium "$version"
       '';
     });
   };

@@ -16,7 +16,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lychee";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
           '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
       rm -rf $out/.git
     '';
-    hash = "sha256-Rfdys16a4N6B3NsmPsB3OpKjLGElFYvd4UtiRipy8iQ=";
+    hash = "sha256-lknj0uTIWYwDm3PA/Q8paVxRn+B9qvfllYUjnp7I4jI=";
   };
 
-  cargoHash = "sha256-5KL/PmBSU8xkOE9/w7uUBkJSOBPsj3Z4o/2VmzA/f3Q=";
+  cargoHash = "sha256-ivLx48qbagjw5zGkYC+ygK83p8q110iEn2YEfUjTFHs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,6 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postFixup = lib.optionalString canRun ''
     ${lychee} --generate man > lychee.1
     installManPage lychee.1
+
+    installShellCompletion --cmd lychee \
+      --bash <(${lychee} --generate complete-bash) \
+      --fish <(${lychee} --generate complete-fish) \
+      --zsh <(${lychee} --generate complete-zsh)
   '';
 
   cargoTestFlags = [
