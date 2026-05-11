@@ -3155,10 +3155,6 @@ with pkgs;
 
   # aka., pgp-tools
 
-  snapcast = callPackage ../applications/audio/snapcast {
-    pulseaudioSupport = config.pulseaudio or stdenv.hostPlatform.isLinux;
-  };
-
   specup = haskellPackages.specup.bin;
 
   spglib = callPackage ../development/libraries/spglib {
