@@ -70,6 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "svg-backend" (if svgSupport then svgBackend else "none"))
   ];
 
+  postPatch = ''
+    substituteInPlace icon.c \
+      --replace-fail '"/usr/share/pixmaps", NULL' \
+                     '"/usr/share/pixmaps", "/run/current-system/sw/share/pixmaps", NULL'
+  '';
+
   meta = {
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${finalAttrs.version}";
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
