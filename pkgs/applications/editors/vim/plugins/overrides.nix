@@ -5729,6 +5729,12 @@ assertNoAdditions {
     ];
   };
 
+  zenburn = super.zenburn.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
   zig-vim = super.zig-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
