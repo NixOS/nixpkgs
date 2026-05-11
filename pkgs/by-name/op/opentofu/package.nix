@@ -16,13 +16,13 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.11.6";
+    version = "1.11.7";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-H+noiYY/Nv7DfUTWbvsCnKbjOc2494FVn7Fqos/3ThU=";
+      hash = "sha256-FMj4UnQPc/PhnNcFNPhKtfKJu6jER5eLoBOVXHTLkXQ=";
     };
 
     vendorHash = "sha256-WO5OtKwluks5nuSHJ4NO1+EKhtCrJE9MuMGmu5fYKM4=";

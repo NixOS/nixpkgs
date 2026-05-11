@@ -1,7 +1,9 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   openssl,
   versionCheckHook,
@@ -26,9 +28,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [ openssl ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mago \
+      --bash <("$out/bin/mago" generate-completions bash) \
+      --zsh <("$out/bin/mago" generate-completions zsh) \
+      --fish <("$out/bin/mago" generate-completions fish)
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
