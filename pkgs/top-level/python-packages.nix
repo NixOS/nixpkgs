@@ -6012,6 +6012,8 @@ self: super: with self; {
 
   fullmoon = callPackage ../development/python-modules/fullmoon { };
 
+  fumis = callPackage ../development/python-modules/fumis { };
+
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
