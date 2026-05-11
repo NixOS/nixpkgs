@@ -134,7 +134,7 @@ let
   updater = {
     update = stdenv.mkDerivation {
       name = "enpass-update-script";
-      SCRIPT = ./update_script.py;
+      SCRIPT = toString ./update_script.py;
 
       buildInputs = with python3Packages; [
         python
