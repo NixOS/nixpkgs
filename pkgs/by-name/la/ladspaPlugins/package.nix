@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   automake,
-  fftw,
+  fftwSinglePrec,
   ladspa-header,
   libxml2,
   pkg-config,
@@ -39,8 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.perl
     perlPackages.XMLParser
   ];
+
   buildInputs = [
-    fftw
+    fftwSinglePrec
     ladspa-header
     libxml2
   ];
