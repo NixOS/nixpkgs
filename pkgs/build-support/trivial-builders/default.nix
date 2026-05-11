@@ -11,14 +11,56 @@
 
 let
   inherit (lib)
+    all
+    appendContext
+    attrNames
+    concatMapAttrsStringSep
+    concatMapStringsSep
+    concatStrings
+    concatStringsSep
+    elem
+    escapeShellArg
+    escapeShellArgs
+    extendMkDerivation
+    filter
+    filterAttrs
+    filterSource
+    flatten
+    getBin
+    getContext
+    getExe
+    hasPrefix
+    head
+    isAttrs
+    isList
+    isPath
+    isString
+    length
+    listToAttrs
+    makeBinPath
+    map
+    mapAttrs'
+    mapAttrsToList
+    match
     optionalAttrs
     optionalString
-    hasPrefix
+    optionals
+    remove
+    reverseList
+    split
+    splitString
+    toShellVar
+    typeOf
+    unique
+    unsafeGetAttrPos
     warn
-    map
-    isList
-    foldl'
+    warnIf
     ;
+
+  inherit (builtins) storeDir;
+  inherit (lib.strings) escapeNixString isConvertibleWithToString;
+  inherit (lib.licenses) unfree;
+
   hasRootPrefix = hasPrefix "/";
 in
 
@@ -85,12 +127,9 @@ rec {
         passAsFile = defaultPassAsFile ++ (derivationArgs.passAsFile or [ ]);
         ${if !derivationArgs ? meta then "pos" else null} =
           let
-            args = builtins.attrNames derivationArgs;
+            args = attrNames derivationArgs;
           in
-          if builtins.length args > 0 then
-            builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
-          else
-            null;
+          if length args > 0 then unsafeGetAttrPos (head args) derivationArgs else null;
         ${if runLocal then "preferLocalBuild" else null} = true;
         ${if runLocal then "allowSubstitutes" else null} = false;
       }
@@ -99,7 +138,7 @@ rec {
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
-  writeTextFile = lib.extendMkDerivation {
+  writeTextFile = extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
@@ -127,7 +166,7 @@ rec {
         allowSubstitutes ? false,
         preferLocalBuild ? true,
         derivationArgs ? { },
-        pos ? builtins.unsafeGetAttrPos "name" args,
+        pos ? unsafeGetAttrPos "name" args,
       }@args:
       {
         inherit
@@ -170,11 +209,11 @@ rec {
 
         meta =
           let
-            matches = builtins.match "/bin/([^/]+)" finalAttrs.destination;
+            matches = match "/bin/([^/]+)" finalAttrs.destination;
             isProgram = finalAttrs.executable && matches != null;
           in
           {
-            ${if isProgram then "mainProgram" else null} = lib.head matches;
+            ${if isProgram then "mainProgram" else null} = head matches;
           }
           // meta
           // derivationArgs.meta or { };
@@ -192,10 +231,10 @@ rec {
     name: text:
     # TODO: To fully deprecate, replace the assertion with `lib.isString` and remove the warning
     assert
-      lib.strings.isConvertibleWithToString text
-      || throw "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
-    lib.warnIf (!lib.isString text)
-      "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first."
+      isConvertibleWithToString text
+      || throw "pkgs.writeText ${escapeNixString name}: The second argument should be a string, but it's a ${typeOf text} instead.";
+    warnIf (!isString text)
+      "pkgs.writeText ${escapeNixString name}: The second argument should be a string, but it's a ${typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first."
       writeTextFile
       { inherit name text; };
 
@@ -285,7 +324,7 @@ rec {
       inheritPath ? true,
     }@args:
     writeTextFile {
-      pos = builtins.unsafeGetAttrPos "name" args;
+      pos = unsafeGetAttrPos "name" args;
       inherit
         name
         meta
@@ -298,20 +337,20 @@ rec {
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
-        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+        ${concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
       ''
-      + lib.optionalString (runtimeEnv != null) (
-        lib.concatMapAttrsStringSep "" (name: value: ''
-          ${lib.toShellVar name value}
+      + optionalString (runtimeEnv != null) (
+        concatMapAttrsStringSep "" (name: value: ''
+          ${toShellVar name value}
           export ${name}
         '') runtimeEnv
       )
       + ''
 
         export PATH="${
-          lib.concatStringsSep ":" (
-            (lib.optionals (runtimeInputs != [ ]) [ (lib.makeBinPath runtimeInputs) ])
-            ++ (lib.optionals inheritPath [ "$PATH" ])
+          concatStringsSep ":" (
+            (optionals (runtimeInputs != [ ]) [ (makeBinPath runtimeInputs) ])
+            ++ (optionals inheritPath [ "$PATH" ])
           )
         }"
       ''
@@ -323,18 +362,16 @@ rec {
 
       checkPhase =
         let
-          excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
+          excludeFlags = optionals (excludeShellChecks != [ ]) [
             "--exclude"
-            (lib.concatStringsSep "," excludeShellChecks)
+            (concatStringsSep "," excludeShellChecks)
           ];
           # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
           # but we still want to use writeShellApplication on those platforms
-          shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
+          shellcheckCommand = optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${
-              lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
-            } "$target"
+            ${getExe shellcheck-minimal} ${escapeShellArgs (excludeFlags ++ extraShellCheckFlags)} "$target"
           '';
         in
         if checkPhase == null then
@@ -528,7 +565,7 @@ rec {
     other derivations.  A derivation created with linkFarm is often used in CI
     as a easy way to build multiple derivations at once.
   */
-  symlinkJoin = lib.extendMkDerivation {
+  symlinkJoin = extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
@@ -596,10 +633,7 @@ rec {
           ${postBuild}
         '';
         ${if !args ? meta then "pos" else null} =
-          if args ? pname then
-            builtins.unsafeGetAttrPos "pname" args
-          else
-            builtins.unsafeGetAttrPos "name" args;
+          if args ? pname then unsafeGetAttrPos "pname" args else unsafeGetAttrPos "name" args;
       };
   };
 
@@ -635,13 +669,13 @@ rec {
     name: entries:
     let
       entries' =
-        if (lib.isAttrs entries) then
+        if (isAttrs entries) then
           entries
-        else if (lib.isList entries) then
+        else if (isList entries) then
           # listToAttrs takes the first attribute with a given name, so we
           # reverse the list to get last-wins semantics in case of repeated entries
-          lib.listToAttrs (
-            lib.reverseList (
+          listToAttrs (
+            reverseList (
               map (entry: {
                 inherit (entry) name;
                 value = entry.path;
@@ -651,9 +685,9 @@ rec {
         else
           throw "linkFarm entries must be either attrs or a list!";
 
-      linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
-        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+      linkCommands = mapAttrsToList (name: path: ''
+        mkdir -p -- "$(dirname -- ${escapeShellArg "${name}"})"
+        ln -s -- ${escapeShellArg "${path}"} ${escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
@@ -662,8 +696,8 @@ rec {
         # This is the best we can do since the other attrs are either defined here, or curried values that
         # we cannot extract a position from
         pos =
-          if (lib.isAttrs entries) && (entries != { }) then
-            builtins.unsafeGetAttrPos (builtins.head (builtins.attrNames entries)) entries
+          if (isAttrs entries) && (entries != { }) then
+            unsafeGetAttrPos (head (attrNames entries)) entries
           else
             null;
         preferLocalBuild = true;
@@ -673,7 +707,7 @@ rec {
       ''
         mkdir -p $out
         cd $out
-        ${lib.concatStrings linkCommands}
+        ${concatStrings linkCommands}
       '';
 
   # TODO: move linkFarmFromDrvs docs to the Nixpkgs manual
@@ -719,14 +753,14 @@ rec {
     drv:
     runCommand "${drv.name}-only-bin" { } ''
       mkdir -p $out
-      ln -s ${lib.getBin drv}/bin $out/bin
+      ln -s ${getBin drv}/bin $out/bin
     '';
 
   # Docs in doc/build-helpers/special/makesetuphook.section.md
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     {
-      name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook",
+      name ? warn "calling makeSetupHook without passing a name is deprecated." "hook",
       # hooks go in nativeBuildInputs so these will be nativeBuildInputs
       propagatedBuildInputs ? [ ],
       propagatedNativeBuildInputs ? [ ],
@@ -743,7 +777,7 @@ rec {
         // {
           # Make the position of the derivation accurate.
           # Since not having `name` is deprecated, this should be fairly accurate.
-          pos = lib.unsafeGetAttrPos "name" args;
+          pos = unsafeGetAttrPos "name" args;
           pname = name;
           version = "26.05pre-git";
           inherit meta;
@@ -756,7 +790,7 @@ rec {
           passthru =
             passthru
             // optionalAttrs (substitutions ? passthru) (
-              warn "makeSetupHook (name = ${lib.strings.escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly." substitutions.passthru
+              warn "makeSetupHook (name = ${escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly." substitutions.passthru
             );
         }
       )
@@ -766,9 +800,9 @@ rec {
           cp ${script} $out/nix-support/setup-hook
           recordPropagatedDependencies
         ''
-        + lib.optionalString (substitutions != { }) ''
+        + optionalString (substitutions != { }) ''
           substitute ${script} $out/nix-support/setup-hook ${
-            lib.concatMapAttrsStringSep " " (name: _: "--subst-var ${name}") substitutions
+            concatMapAttrsStringSep " " (name: _: "--subst-var ${name}") substitutions
           }
         ''
       );
@@ -847,14 +881,14 @@ rec {
     let
       # Taken from https://github.com/NixOS/nix/blob/130284b8508dad3c70e8160b15f3d62042fc730a/src/libutil/hash.cc#L84
       nixHashChars = "0123456789abcdfghijklmnpqrsvwxyz";
-      context = builtins.getContext string;
-      derivations = lib.filterAttrs (n: v: v ? outputs) context;
+      context = getContext string;
+      derivations = filterAttrs (n: v: v ? outputs) context;
       # Objects copied from outside of the store, such as paths and
       # `builtins.fetch*`ed ones
-      sources = lib.attrNames (lib.filterAttrs (n: v: v ? path) context);
-      packages = lib.mapAttrs' (name: value: {
+      sources = attrNames (filterAttrs (n: v: v ? path) context);
+      packages = mapAttrs' (name: value: {
         inherit value;
-        name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\\.drv" name);
+        name = head (match "${storeDir}/[${nixHashChars}]+-(.*)\\.drv" name);
       }) derivations;
       # The syntax of output paths differs between outputs named `out`
       # and other, explicitly named ones. For explicitly named ones,
@@ -863,37 +897,34 @@ rec {
       # from named output paths. Therefore, we find all the named ones
       # first so we can use them to remove false matches when looking
       # for `out` outputs (see the definition of `outputPaths`).
-      namedOutputPaths = lib.flatten (
-        lib.mapAttrsToList (
+      namedOutputPaths = flatten (
+        mapAttrsToList (
           name: value:
-          (map (
-            output:
-            lib.filter lib.isList (
-              builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name}-${output})" string
-            )
-          ) (lib.remove "out" value.outputs))
+          (map (output: filter isList (split "(${storeDir}/[${nixHashChars}]+-${name}-${output})" string)) (
+            remove "out" value.outputs
+          ))
         ) packages
       );
       # Only `out` outputs
-      outputPaths = lib.flatten (
-        lib.mapAttrsToList (
+      outputPaths = flatten (
+        mapAttrsToList (
           name: value:
-          if lib.elem "out" value.outputs then
-            lib.filter (
+          if elem "out" value.outputs then
+            filter (
               x:
-              lib.isList x
+              isList x
               &&
                 # If the matched path is in `namedOutputPaths`,
                 # it's a partial match of an output path where
                 # the output name isn't `out`
-                lib.all (o: !lib.hasPrefix (lib.head x) o) namedOutputPaths
-            ) (builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name})" string)
+                all (o: !hasPrefix (head x) o) namedOutputPaths
+            ) (split "(${storeDir}/[${nixHashChars}]+-${name})" string)
           else
             [ ]
         ) packages
       );
-      allPaths = lib.concatStringsSep "\n" (lib.unique (sources ++ namedOutputPaths ++ outputPaths));
-      allPathsWithContext = builtins.appendContext allPaths context;
+      allPaths = concatStringsSep "\n" (unique (sources ++ namedOutputPaths ++ outputPaths));
+      allPathsWithContext = appendContext allPaths context;
     in
     if builtins ? getContext then
       writeText "string-references" allPathsWithContext
@@ -902,7 +933,7 @@ rec {
 
   # Docs in doc/build-helpers/fetchers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
-  requireFile = lib.extendMkDerivation {
+  requireFile = extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
@@ -944,7 +975,7 @@ rec {
             '';
         hashAlgo =
           if hash != null then
-            (builtins.head (lib.strings.splitString "-" hash))
+            (head (splitString "-" hash))
           else if sha256 != null then
             "sha256"
           else
@@ -965,24 +996,24 @@ rec {
         outputHash = hash_;
         preferLocalBuild = true;
         builder = writeScript "restrict-message" ''
-          printf '%s' ${lib.escapeShellArg msg}
+          printf '%s' ${escapeShellArg msg}
           exit 1
         '';
         meta = {
-          license = lib.licenses.unfree;
+          license = unfree;
         }
         // meta;
       }
-      // (lib.optionalAttrs (name == null) {
+      // (optionalAttrs (name == null) {
         # The case of providing `url`, but not `name`. This has
         # weird interactions with the positioning system
 
         # When we set `name` explicitly here, we override where the
         # position is read from. So we must fix it here.
-        pos = lib.unsafeGetAttrPos "url" args;
+        pos = unsafeGetAttrPos "url" args;
 
         # If a name is not provided, use the basename of the url
-        name = builtins.warn "providing a URL without a name is deprecated" baseNameOf (toString url);
+        name = warn "providing a URL without a name is deprecated" baseNameOf (toString url);
       });
 
     inheritFunctionArgs = false;
@@ -995,7 +1026,7 @@ rec {
     If you need the store path of a file, ${copyPathToStore <path>} can be
     shortened to ${<path>}.
   */
-  copyPathToStore = builtins.filterSource (p: t: true);
+  copyPathToStore = filterSource (p: t: true);
 
   # TODO: move copyPathsToStore docs to the Nixpkgs manual
   # Copy a list of paths to the Nix store.
@@ -1019,7 +1050,7 @@ rec {
       ];
     }
   */
-  applyPatches = lib.extendMkDerivation {
+  applyPatches = extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
 
     extendDrvArgs =
@@ -1032,9 +1063,9 @@ rec {
       assert
         !args ? passthru || throw "applyPatches will not merge 'passthru', change it in 'src' instead";
       let
-        keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
+        keepAttrs = names: filterAttrs (name: val: elem name names);
         # enables tools like nix-update to determine what src attributes to replace
-        extraPassthru = lib.optionalAttrs (lib.isAttrs finalAttrs.src) (
+        extraPassthru = optionalAttrs (isAttrs finalAttrs.src) (
           keepAttrs [
             "rev"
             "tag"
@@ -1047,9 +1078,9 @@ rec {
       {
         name =
           args.name or (
-            if builtins.isPath finalAttrs.src then
+            if isPath finalAttrs.src then
               baseNameOf finalAttrs.src + "-patched"
-            else if builtins.isAttrs finalAttrs.src && (finalAttrs.src ? name) then
+            else if isAttrs finalAttrs.src && (finalAttrs.src ? name) then
               finalAttrs.src.name + "-patched"
             else
               throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
@@ -1057,7 +1088,7 @@ rec {
 
         # Manually setting `name` can mess up positioning.
         # This should fix it.
-        pos = builtins.unsafeGetAttrPos "src" args;
+        pos = unsafeGetAttrPos "src" args;
 
         preferLocalBuild = true;
         allowSubstitutes = false;
@@ -1076,7 +1107,7 @@ rec {
         passthru = extraPassthru // finalAttrs.src.passthru or { };
 
         # Carry (and merge) information from the underlying `src` if present.
-        meta = lib.optionalAttrs (finalAttrs.src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
+        meta = optionalAttrs (finalAttrs.src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
       };
   };
 
