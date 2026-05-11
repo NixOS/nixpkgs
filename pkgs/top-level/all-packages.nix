@@ -9945,8 +9945,6 @@ with pkgs;
     withXineBackend = true;
   };
 
-  rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
-
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
 
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
