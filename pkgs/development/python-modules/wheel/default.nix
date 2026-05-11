@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.46.1";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "wheel";
     tag = version;
-    hash = "sha256-iyGfGr3pLVZSEIHetjsPbIIXkuXrmIPiSqqOw31l9Qw=";
+    hash = "sha256-/5OxFySesdsFsuUbhdhcgFPsry8RSy5ZshG0TWGncVY=";
   };
 
   nativeBuildInputs = [ flit-core ];
