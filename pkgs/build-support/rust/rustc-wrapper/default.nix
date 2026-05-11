@@ -7,7 +7,13 @@
   shell ? stdenvNoCC.shell,
 }:
 let
-  sysrootFlag = lib.optionalString (sysroot != null) "--sysroot ${sysroot}";
+  inherit (lib)
+    concatMapStrings
+    escapeShellArg
+    optionalString
+    remove
+    ;
+  sysrootFlag = optionalString (sysroot != null) "--sysroot ${sysroot}";
 
   # Upstream rustc still assumes that musl = static[1].  The fix for
   # this is to disable crt-static by default for non-static musl
@@ -25,7 +31,7 @@ let
   # applied to the target.  It's fine to do this for -crt-static,
   # because rustc does not support +crt-static host platforms
   # anyway.
-  defaultArgs = lib.optionalString (
+  defaultArgs = optionalString (
     with rustc-unwrapped.stdenv.targetPlatform; isMusl && !isStatic
   ) "-C target-feature=-crt-static";
 in
@@ -59,19 +65,19 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
     ln -s ${rustc-unwrapped}/bin/* $out/bin
     rm $out/bin/{rustc,rustdoc}
     substitute ${./rustc-wrapper.sh} $out/bin/rustc \
-      --replace-fail "@shell@" ${lib.escapeShellArg shell} \
-      --replace-fail "@sysrootFlag@" ${lib.escapeShellArg sysrootFlag} \
-      --replace-fail "@defaultArgs@" ${lib.escapeShellArg defaultArgs} \
-      --replace-fail "@prog@" ${lib.escapeShellArg rustc-unwrapped}/bin/rustc \
+      --replace-fail "@shell@" ${escapeShellArg shell} \
+      --replace-fail "@sysrootFlag@" ${escapeShellArg sysrootFlag} \
+      --replace-fail "@defaultArgs@" ${escapeShellArg defaultArgs} \
+      --replace-fail "@prog@" ${escapeShellArg rustc-unwrapped}/bin/rustc \
       --replace-fail "@extraFlagsVar@" "NIX_RUSTFLAGS"
     substitute ${./rustc-wrapper.sh} $out/bin/rustdoc \
-      --replace-fail "@shell@" ${lib.escapeShellArg shell} \
-      --replace-fail "@sysrootFlag@" ${lib.escapeShellArg sysrootFlag} \
-      --replace-fail "@defaultArgs@" ${lib.escapeShellArg defaultArgs} \
-      --replace-fail "@prog@" ${lib.escapeShellArg rustc-unwrapped}/bin/rustdoc \
+      --replace-fail "@shell@" ${escapeShellArg shell} \
+      --replace-fail "@sysrootFlag@" ${escapeShellArg sysrootFlag} \
+      --replace-fail "@defaultArgs@" ${escapeShellArg defaultArgs} \
+      --replace-fail "@prog@" ${escapeShellArg rustc-unwrapped}/bin/rustdoc \
       --replace-fail "@extraFlagsVar@" "NIX_RUSTDOCFLAGS"
     chmod +x $out/bin/{rustc,rustdoc}
-    ${lib.concatMapStrings (output: "ln -s ${rustc-unwrapped.${output}} \$${output}\n") (
-      lib.remove "out" rustc-unwrapped.outputs
+    ${concatMapStrings (output: "ln -s ${rustc-unwrapped.${output}} \$${output}\n") (
+      remove "out" rustc-unwrapped.outputs
     )}
   ''
