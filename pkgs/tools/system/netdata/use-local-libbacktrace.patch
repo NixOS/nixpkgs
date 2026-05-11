@@ -1,0 +1,34 @@
+--- a/CMakeLists.txt	2025-03-29 00:48:23.397111607 +0100
++++ b/CMakeLists.txt	2025-03-29 00:45:42.296199537 +0100
+@@ -501,10 +501,6 @@
+     message(STATUS "Added compiler and linker flags for better stack trace support")
+ endif()
+
+-if(ENABLE_LIBBACKTRACE)
+-    netdata_bundle_libbacktrace()
+-endif()
+-
+ #
+ # check source compilation
+ #
+@@ -2183,8 +2179,10 @@
+         "$<$<BOOL:${LINK_LIBM}>:m>"
+         "${SYSTEMD_LDFLAGS}")
+
+-if(HAVE_LIBBACKTRACE)
+-    netdata_add_libbacktrace_to_target(libnetdata)
++if(ENABLE_LIBBACKTRACE AND HAVE_LIBBACKTRACE)
++    target_link_libraries(libnetdata ${LIBBACKTRACE_LIBRARIES})
++    target_include_directories(libnetdata PUBLIC ${LIBBACKTRACE_INCLUDE_DIRS})
++    target_compile_options(libnetdata PUBLIC ${LIBBACKTRACE_CFLAGS_OTHER})
+ endif()
+
+ if(OS_WINDOWS)
+--- /dev/null
++++ b/pkgs/tools/system/netdata/use-local-libbacktrace.patch
+@@ -0,0 +1,5 @@
++FIND_PATH(LIBBACKTRACE_INCLUDE_DIR NAMES backtrace.h)
++FIND_LIBRARY(LIBBACKTRACE_LIBRARIES NAMES libbacktrace)
++
++INCLUDE(FindPackageHandleStandardArgs)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBBACKTRACE DEFAULT_MSG LIBBACKTRACE_LIBRARIES LIBBACKTRACE_INCLUDE_DIR)

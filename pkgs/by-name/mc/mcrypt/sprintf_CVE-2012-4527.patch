@@ -1,0 +1,108 @@
+Description: [CVE-2012-4527] Stack-based buffer overflow with long file names
+ .
+ A buffer overflow in mcrypt version 2.6.8 and earlier due to long filenames.
+ If a user were tricked into attempting to encrypt/decrypt specially crafted
+ long filename(s), this flaw would cause a stack-based buffer overflow that
+ could potentially lead to arbitrary code execution.
+ .
+ Note that this is caught by FORTIFY_SOURCE, which makes this a crash-only
+ bug on wheezy.
+Author: Attila Bogar, Jean-Michel Vourgère <jmv_deb@nirgal.com>
+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2012-4527
+Bug: CVE-2012-4527
+Bug-Debian: http://bugs.debian.org/690924
+Forwarded: no
+Last-Update: 2012-11-01
+Index: mcrypt-2.6.8/src/mcrypt.c
+===================================================================
+--- mcrypt-2.6.8.orig/src/mcrypt.c
++++ mcrypt-2.6.8/src/mcrypt.c
+@@ -41,4 +41,6 @@
+
++/* Temporary error message can contain one file name and 1k of text */
++#define ERRWIDTH ((PATH_MAX)+1024)
+-char tmperr[128];
++char tmperr[ERRWIDTH];
+ unsigned int stream_flag = FALSE;
+ char *keymode = NULL;
+ char *mode = NULL;
+@@ -482,7 +485,7 @@
+ #ifdef HAVE_STAT
+       if (stream_flag == FALSE) {
+ 	 if (is_normal_file(file[i]) == FALSE) {
+-	    sprintf(tmperr,
++	    snprintf(tmperr, ERRWIDTH,
+ 		    _
+ 		    ("%s: %s is not a regular file. Skipping...\n"),
+ 		    program_name, file[i]);
+@@ -501,7 +504,7 @@
+ 	    dinfile = file[i];
+ 	 if ((isatty(fileno((FILE *) (stdin))) == 1)
+ 	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
+-	    sprintf(tmperr,
++	    snprintf(tmperr, ERRWIDTH,
+ 		    _
+ 		    ("%s: Encrypted data will not be read from a terminal.\n"),
+ 		    program_name);
+@@ -520,7 +523,7 @@
+ 	    einfile = file[i];
+ 	 if ((isatty(fileno((FILE *) (stdout))) == 1)
+ 	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
+-	    sprintf(tmperr,
++	    snprintf(tmperr, ERRWIDTH,
+ 		    _
+ 		    ("%s: Encrypted data will not be written to a terminal.\n"),
+ 		    program_name);
+@@ -544,7 +547,7 @@
+ 	    strcpy(outfile, einfile);
+ 	    /* if file has already the .nc ignore it */
+ 	    if (strstr(outfile, ".nc") != NULL) {
+-	       sprintf(tmperr,
++	       snprintf(tmperr, ERRWIDTH,
+ 		       _
+ 		       ("%s: file %s has the .nc suffix... skipping...\n"),
+ 		       program_name, outfile);
+@@ -590,10 +593,10 @@
+
+ 	 if (x == 0) {
+ 	    if (stream_flag == FALSE) {
+-	       sprintf(tmperr, _("File %s was decrypted.\n"), dinfile);
++	       snprintf(tmperr, ERRWIDTH, _("File %s was decrypted.\n"), dinfile);
+ 	       err_warn(tmperr);
+ 	    } else {
+-	       sprintf(tmperr, _("Stdin was decrypted.\n"));
++	       snprintf(tmperr, ERRWIDTH, _("Stdin was decrypted.\n"));
+ 	       err_warn(tmperr);
+ 	    }
+ #ifdef HAVE_STAT
+@@ -610,7 +613,7 @@
+
+ 	 } else {
+ 	    if (stream_flag == FALSE) {
+-	       sprintf(tmperr,
++	       snprintf(tmperr, ERRWIDTH,
+ 		       _
+ 		       ("File %s was NOT decrypted successfully.\n"),
+ 		       dinfile);
+@@ -636,10 +639,10 @@
+
+ 	 if (x == 0) {
+ 	    if (stream_flag == FALSE) {
+-	       sprintf(tmperr, _("File %s was encrypted.\n"), einfile);
++	       snprintf(tmperr, ERRWIDTH, _("File %s was encrypted.\n"), einfile);
+ 	       err_warn(tmperr);
+ 	    } else {
+-	       sprintf(tmperr, _("Stdin was encrypted.\n"));
++	       snprintf(tmperr, ERRWIDTH, _("Stdin was encrypted.\n"));
+ 	       err_warn(tmperr);
+ 	    }
+ #ifdef HAVE_STAT
+@@ -655,7 +658,7 @@
+
+ 	 } else {
+ 	    if (stream_flag == FALSE) {
+-	       sprintf(tmperr,
++	       snprintf(tmperr, ERRWIDTH,
+ 		       _
+ 		       ("File %s was NOT encrypted successfully.\n"),
+ 		       einfile);

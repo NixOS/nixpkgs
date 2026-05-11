@@ -1,0 +1,12 @@
+diff -ru -x '*~' Python-2.7.1-orig/Python/import.c Python-2.7.1/Python/import.c
+--- Python-2.7.1-orig/Python/import.c	2010-05-20 20:37:55.000000000 +0200
++++ Python-2.7.1/Python/import.c	2011-01-04 15:55:11.000000000 +0100
+@@ -751,7 +751,7 @@
+         return NULL;
+     }
+     pyc_mtime = PyMarshal_ReadLongFromFile(fp);
+-    if (pyc_mtime != mtime) {
++    if (pyc_mtime != mtime && mtime != 1) {
+         if (Py_VerboseFlag)
+             PySys_WriteStderr("# %s has bad mtime\n", cpathname);
+         fclose(fp);

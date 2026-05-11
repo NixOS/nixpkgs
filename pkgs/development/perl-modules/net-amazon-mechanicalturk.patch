@@ -1,0 +1,65 @@
+From http://daveviner.blogspot.com/2009/12/amazon-mechanical-turk-perl-library.html
+http://www.vinertech.com/patches/net-amazon-mechanicalturk.patch
+
+diff -rubB Net-Amazon-MechanicalTurk-1.01/lib/Net/Amazon/MechanicalTurk/ModuleUtil.pm Net-Amazon-MechanicalTurk-1.01/lib/Net/Amazon/MechanicalTurk/ModuleUtil.pm
+--- Net-Amazon-MechanicalTurk-1.01/lib/Net/Amazon/MechanicalTurk/ModuleUtil.pm	2007-08-13 11:38:53.000000000 -0700
++++ Net-Amazon-MechanicalTurk-1.01/lib/Net/Amazon/MechanicalTurk/ModuleUtil.pm	2009-12-13 16:37:49.000000000 -0800
+@@ -29,17 +29,21 @@
+ }
+ 
+ sub packageExists {
+-    my ($class, $package) = @_;
++    my ($class, $package, $moduleFile) = @_;
++    
++    if (defined($moduleFile) && exists($INC{$moduleFile})) {
++        return 1;
++    }
+     # Symbol table black magic
+     no strict 'refs';
+-    return defined %{*{"${package}::"}};
++    return scalar(keys(%{*{"${package}::"}}));
+ }
+ 
+ sub require {
+     my ($class, $module) = @_;
+-    if (!$class->packageExists($module)) {
+         my $moduleFile = $module . ".pm";
+         $moduleFile =~ s/::/\//g;
++    if (!$class->packageExists($module, $moduleFile)) {
+         require $moduleFile;
+     }
+ }
+diff -rubB Net-Amazon-MechanicalTurk-1.01/t/73-datagenerator-dbi.t Net-Amazon-MechanicalTurk-1.01/t/73-datagenerator-dbi.t
+--- Net-Amazon-MechanicalTurk-1.01/t/73-datagenerator-dbi.t	2007-08-13 11:38:56.000000000 -0700
++++ Net-Amazon-MechanicalTurk-1.01/t/73-datagenerator-dbi.t	2009-12-13 16:55:30.000000000 -0800
+@@ -8,10 +8,10 @@
+ 
+ eval {
+     require DBI;
+-    require DBD::SQLite2; 
++    require DBD::SQLite; 
+ };
+ if ($@) {
+-    plan skip_all => "SQLite2 not installed.";
++    plan skip_all => "SQLite not installed.";
+ }
+ else {
+     plan tests => 2; 
+@@ -21,7 +21,7 @@
+ #-----------------------
+ my $dbfile = "t/data/test.db";
+ unlink($dbfile) if (-f $dbfile);
+-my $dbh = DBI->connect("dbi:SQLite2:dbname=${dbfile}","","", {
++my $dbh = DBI->connect("dbi:SQLite:dbname=${dbfile}","","", {
+     RaiseError => 1,
+     AutoCommit => 1
+ });
+@@ -42,7 +42,7 @@
+ foreach my $id (1..30) {
+     $sth->execute($id, rand(), scalar localtime());
+ }
+-
++$sth->finish();
+ 
+ # Actual test
+ #----------------------

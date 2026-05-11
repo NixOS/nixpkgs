@@ -1,0 +1,12 @@
+diff --git a/meson.build b/meson.build
+index d5c3627..2bd692a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -86,7 +86,7 @@ govirt_global_cflags = ['-std=c99',
+                         '-Woverride-init',
+                         '-Wno-unused-parameter']
+
+-foreach arg : govirt_global_cflags
++foreach arg : compiler.get_supported_arguments(govirt_global_cflags)
+   add_project_arguments(arg, language : 'c')
+ endforeach

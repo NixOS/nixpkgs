@@ -1,0 +1,50 @@
+From d11261c2ad184daf6e9edd777bc8a3372c277b4b Mon Sep 17 00:00:00 2001
+From: Johannes Frankenau <johannes@frankenau.net>
+Date: Fri, 10 Aug 2018 09:49:57 +0200
+Subject: [PATCH] Patch the clip() function to work even when using
+ single-binary coreutils
+
+---
+ src/platform/cygwin.sh | 4 ++--
+ src/platform/darwin.sh | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/platform/cygwin.sh b/src/platform/cygwin.sh
+index 5a8d5ea..423e0ce 100644
+--- a/src/platform/cygwin.sh
++++ b/src/platform/cygwin.sh
+@@ -3,11 +3,11 @@
+ 
+ clip() {
+ 	local sleep_argv0="password store sleep on display $DISPLAY"
+-	pkill -f "^$sleep_argv0" 2>/dev/null && sleep 0.5
++	pkill -P $(pgrep -f "^$sleep_argv0") 2>/dev/null && sleep 0.5
+ 	local before="$($BASE64 < /dev/clipboard)"
+ 	echo -n "$1" > /dev/clipboard
+ 	(
+-		( exec -a "$sleep_argv0" sleep "$CLIP_TIME" )
++		( exec -a "$sleep_argv0" bash <(echo sleep "$CLIP_TIME") )
+ 		local now="$($BASE64 < /dev/clipboard)"
+ 		[[ $now != $(echo -n "$1" | $BASE64) ]] && before="$now"
+ 		echo "$before" | $BASE64 -d > /dev/clipboard
+diff --git a/src/platform/darwin.sh b/src/platform/darwin.sh
+index 342ecce..9e12837 100644
+--- a/src/platform/darwin.sh
++++ b/src/platform/darwin.sh
+@@ -3,11 +3,11 @@
+ 
+ clip() {
+ 	local sleep_argv0="password store sleep for user $(id -u)"
+-	pkill -f "^$sleep_argv0" 2>/dev/null && sleep 0.5
++	pkill -P $(pgrep -f "^$sleep_argv0") 2>/dev/null && sleep 0.5
+ 	local before="$(pbpaste | $BASE64)"
+ 	echo -n "$1" | pbcopy
+ 	(
+-		( exec -a "$sleep_argv0" sleep "$CLIP_TIME" )
++		( exec -a "$sleep_argv0" bash <(echo sleep "$CLIP_TIME") )
+ 		local now="$(pbpaste | $BASE64)"
+ 		[[ $now != $(echo -n "$1" | $BASE64) ]] && before="$now"
+ 		echo "$before" | $BASE64 -d | pbcopy
+-- 
+2.16.4
+

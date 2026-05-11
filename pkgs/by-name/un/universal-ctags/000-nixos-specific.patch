@@ -1,0 +1,14 @@
+This small Nix-specific patch removes a source of impurity from source code,
+namely the date and time of compilation.
+
+diff -Naur uctags-old/main/options.c uctags-new/main/options.c
+--- uctags-old/main/options.c	1969-12-31 21:00:01.000000000 -0300
++++ uctags-new/main/options.c	2022-11-06 11:43:00.028550121 -0300
+@@ -1609,7 +1609,6 @@
+ 	printf ("Universal Ctags is derived from Exuberant Ctags.\n");
+ 	printf ("Exuberant Ctags 5.8, Copyright (C) 1996-2009 Darren Hiebert\n");
+ 
+-	printf ("  Compiled: %s, %s\n", __DATE__, __TIME__);
+ 	printf ("  URL: %s\n", PROGRAM_URL);
+ 
+ 	printFeatureList ();

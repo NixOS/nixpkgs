@@ -1,0 +1,25 @@
+From 6d43e80c0a455fea5dcb656967e73f755ecdd645 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 9 Mar 2025 19:42:33 -0300
+Subject: [PATCH] Linux: fix missing library with builtin_glslang=false
+
+---
+ platform/linuxbsd/detect.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/platform/linuxbsd/detect.py b/platform/linuxbsd/detect.py
+index b5e80f4a4d..8389096e26 100644
+--- a/platform/linuxbsd/detect.py
++++ b/platform/linuxbsd/detect.py
+@@ -472,7 +472,7 @@ def configure(env: "SConsEnvironment"):
+             env.ParseConfig("pkg-config vulkan --cflags --libs")
+         if not env["builtin_glslang"]:
+             # No pkgconfig file so far, hardcode expected lib name.
+-            env.Append(LIBS=["glslang", "SPIRV"])
++            env.Append(LIBS=["glslang", "glslang-default-resource-limits", "SPIRV"])
+ 
+     if env["opengl3"]:
+         env.Append(CPPDEFINES=["GLES3_ENABLED"])
+-- 
+2.47.1
+

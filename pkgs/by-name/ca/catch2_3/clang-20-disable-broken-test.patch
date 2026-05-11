@@ -1,0 +1,15 @@
+diff --git a/tests/SelfTest/UsageTests/Misc.tests.cpp b/tests/SelfTest/UsageTests/Misc.tests.cpp
+index 3697f0695c..8c10aace7b 100644
+--- a/tests/SelfTest/UsageTests/Misc.tests.cpp
++++ b/tests/SelfTest/UsageTests/Misc.tests.cpp
+@@ -384,10 +384,6 @@
+     REQUIRE(x.size() > 0);
+ }
+ 
+-TEMPLATE_PRODUCT_TEST_CASE("Product with differing arities", "[template][product]", std::tuple, (int, (int, double), (int, double, float))) {
+-    REQUIRE(std::tuple_size<TestType>::value >= 1);
+-}
+-
+ using MyTypes = std::tuple<int, char, float>;
+ TEMPLATE_LIST_TEST_CASE("Template test case with test types specified inside std::tuple", "[template][list]", MyTypes)
+ {

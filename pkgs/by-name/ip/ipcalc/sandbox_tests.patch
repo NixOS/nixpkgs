@@ -1,0 +1,59 @@
+diff --git a/tests/meson.build b/tests/meson.build
+index 536c169..0ce23f1 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -64,54 +64,6 @@ test('RandomIPv6Explicit',
+ 		ipcalc.full_path() + ' -6 -r 24' + '|grep Address'
+ 	]
+ )
+-test('HostnameIPv6Localhost',
+-	testrunner,
+-	args : [
+-		'--test-outfile',
+-		ipcalc.full_path() + ' -6 -o localhost',
+-		files('hostname-localhost-ipv6')
+-	]
+-)
+-test('HostnameIPv4Localhost',
+-	testrunner,
+-	args : [
+-		'--test-outfile',
+-		ipcalc.full_path() + ' -4 -o localhost',
+-		files('hostname-localhost-ipv4')
+-	]
+-)
+-test('HostnameIPv4LocalhostJson',
+-	testrunner,
+-	args : [
+-		'--test-outfile',
+-		ipcalc.full_path() + ' -j -4 -o localhost',
+-		files('hostname-localhost-ipv4-json')
+-	]
+-)
+-test('IPIPv6Localhost',
+-	testrunner,
+-	args : [
+-		'--test-outfile',
+-		ipcalc.full_path() + ' -h ::1',
+-		files('ip-localhost-ipv6')
+-	]
+-)
+-test('IPIPv4Localhost',
+-	testrunner,
+-	args : [
+-		'--test-outfile',
+-		ipcalc.full_path() + ' -h 127.0.0.1',
+-		files('ip-localhost-ipv4')
+-	]
+-)
+-test('IPIPv4LocalhostJson',
+-	testrunner,
+-	args : [
+-		'--test-outfile',
+-		ipcalc.full_path() + ' -j -h 127.0.0.1',
+-		files('ip-localhost-ipv4-json')
+-	]
+-)
+ # --class-prefix tests
+ test('AssignClassPrefix12',
+ 	testrunner,

@@ -1,0 +1,30 @@
+diff --git a/bin/UI_base.ml b/bin/UI_base.ml
+index efb1d14..ce6a2a4 100644
+--- a/bin/UI_base.ml
++++ b/bin/UI_base.ml
+@@ -787,7 +787,7 @@ let ui_loop ~quit ~term root =
+       if term_width <> prev_term_width || term_height <> prev_term_height then (
+         Lwd.set Vars.term_width_height (term_width, term_height)
+       );
+-      Nottui.Ui_loop.step
++      Nottui_unix.step
+         ~process_event:true
+         ~timeout:0.05
+         ~renderer
+diff --git a/bin/dune b/bin/dune
+index c4905a4..7c7b55d 100644
+--- a/bin/dune
++++ b/bin/dune
+@@ -44,9 +44,10 @@
+             containers.unix
+             cmdliner
+             fmt
+-            notty
+-            notty.unix
++            notty-community
++            notty-community.unix
+             nottui
++            nottui-unix
+             lwd
+             oseq
+             eio

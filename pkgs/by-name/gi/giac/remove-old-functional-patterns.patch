@@ -1,0 +1,294 @@
+From f1c5309d5b815acc2616cd9fbb5182b1e64d225f Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Wed, 17 Jul 2024 18:12:36 -0500
+Subject: [PATCH 1/4] remove old <functional> patterns
+
+pointer_to_binary_function and ptr_fun are holdovers from pre c++11,
+and can be replaced or entirely removed. This allows Giac to compile
+with Clang 16>=.
+---
+ src/all_global_var |  2 +-
+ src/gausspol.cc    |  2 +-
+ src/gausspol.h     |  2 +-
+ src/gen.cc         |  2 +-
+ src/gen.h          |  4 ++--
+ src/maple.cc       |  2 +-
+ src/monomial.h     | 16 ++++++++--------
+ src/plot.cc        |  2 +-
+ src/poly.h         | 17 +++++++++--------
+ src/solve.cc       | 18 +++++++++---------
+ src/usual.cc       |  2 +-
+ 11 files changed, 35 insertions(+), 34 deletions(-)
+
+diff --git a/src/all_global_var b/src/all_global_var
+index 7d75d73..55f4782 100644
+--- a/src/all_global_var
++++ b/src/all_global_var
+@@ -16,7 +16,7 @@ Relatif a l'evaluation du tableur
+ // File Eqw.cc
+   vector<string> completion_tab;
+ // File alg_ext.cc
+-  rootmap symbolic_rootof_list(ptr_fun(islesscomplex));
++  rootmap symbolic_rootof_list(islesscomplex);
+ // File derive.cc
+ // File desolve.cc
+   identificateur laplace_var(" s");
+diff --git a/src/gausspol.cc b/src/gausspol.cc
+index 8fbd581..2f2121f 100644
+--- a/src/gausspol.cc
++++ b/src/gausspol.cc
+@@ -855,7 +855,7 @@ namespace giac {
+ 		 std::vector< monomial<gen> >::const_iterator & itb_end,
+ 		 std::vector< monomial<gen> > & new_coord,
+ 		 bool (* is_strictly_greater)( const index_m &, const index_m &),
+-		 const std::pointer_to_binary_function < const monomial<gen> &, const monomial<gen> &, bool> m_is_strictly_greater
++		 const std::function<bool(const monomial<gen> &, const monomial<gen> &)> m_is_strictly_greater
+ 	     ) {
+     if (ita==ita_end || itb==itb_end){
+       new_coord.clear();
+diff --git a/src/gausspol.h b/src/gausspol.h
+index b5d214b..e6c7e0c 100644
+--- a/src/gausspol.h
++++ b/src/gausspol.h
+@@ -93,7 +93,7 @@ namespace giac {
+ 		 std::vector< monomial<gen> >::const_iterator & itb_end,
+ 		 std::vector< monomial<gen> > & new_coord,
+ 		 bool (* is_strictly_greater)( const index_t &, const index_t &),
+-		 const std::pointer_to_binary_function < const monomial<gen> &, const monomial<gen> &, bool> m_is_greater
++         const std::function<bool(const monomial<gen> &, const monomial<gen> &)> m_is_greater
+ 		 ) ;
+   void mulpoly(const polynome & th,const gen & fact,polynome & res);
+   polynome operator * (const polynome & th, const gen & fact) ;
+diff --git a/src/gen.cc b/src/gen.cc
+index 7d4874c..0b64afe 100644
+--- a/src/gen.cc
++++ b/src/gen.cc
+@@ -1126,7 +1126,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+       g.__MAPptr = new ref_gen_map;
+ #else
+-    g.__MAPptr = new ref_gen_map(ptr_fun(islesscomplexthanf));
++    g.__MAPptr = new ref_gen_map(islesscomplexthanf);
+ #endif
+ #endif
+     g.type=_MAP;
+diff --git a/src/gen.h b/src/gen.h
+index 04d70af..496b25d 100644
+--- a/src/gen.h
++++ b/src/gen.h
+@@ -443,7 +443,7 @@ namespace giac {
+   };
+   typedef std::map<gen,gen,comparegen> gen_map;
+ #else
+-  typedef std::map<gen,gen,const std::pointer_to_binary_function < const gen &, const gen &, bool> > gen_map;
++    typedef std::map<gen,gen,const std::function<bool(const gen &, const gen &)> > gen_map;
+ #endif
+   struct ref_gen_map;
+ 
+@@ -902,7 +902,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+     ref_gen_map(): ref_count(1),m() {}
+ #else
+-    ref_gen_map(const std::pointer_to_binary_function < const gen &, const gen &, bool> & p): ref_count(1),m(p) {}
++    ref_gen_map(const std::function<bool(const gen &, const gen &)> & p): ref_count(1),m(p) {}
+ #endif
+     ref_gen_map(const gen_map & M):ref_count(1),m(M) {}
+   };
+diff --git a/src/maple.cc b/src/maple.cc
+index 3b33da8..d57a170 100644
+--- a/src/maple.cc
++++ b/src/maple.cc
+@@ -3626,7 +3626,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+     gen_map m;
+ #else
+-    gen_map m(ptr_fun(islessthanf));
++    gen_map m(islessthanf);
+ #endif
+     int s=int(args.size());
+     vector<int> indexbegin,indexsize;
+diff --git a/src/monomial.h b/src/monomial.h
+index 6e606d0..637a76c 100644
+--- a/src/monomial.h
++++ b/src/monomial.h
+@@ -338,9 +338,9 @@ namespace giac {
+ 
+   template<class T> class sort_helper {
+   public:
+-    std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> strictly_greater ;
+-    sort_helper(const std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> is_strictly_greater):strictly_greater(is_strictly_greater) {};
+-    sort_helper():strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) {};
++    std::function<bool(const monomial<T> &, const monomial<T> &)> strictly_greater ;
++      sort_helper(const std::function<bool(const monomial<T> &, const monomial<T> &)> is_strictly_greater):strictly_greater(is_strictly_greater) {};
++    sort_helper():strictly_greater(m_lex_is_strictly_greater<T>) {};
+     bool operator () (const monomial<T> & a, const monomial<T> & b){ return strictly_greater(a,b);}
+   };
+ 
+@@ -677,7 +677,7 @@ namespace giac {
+ 	     typename std::vector< monomial<T> >::const_iterator & itb_end,
+ 	     std::vector< monomial<T> > & new_coord,
+ 	     bool (* is_strictly_greater)( const index_m &, const index_m &),
+-	     const std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> m_is_strictly_greater
++	     const std::function<bool(const monomial<T> &, const monomial<T> &)> m_is_strictly_greater
+ 	     ) {
+     if (ita==ita_end || itb==itb_end){
+       new_coord.clear();
+@@ -726,8 +726,8 @@ namespace giac {
+ #endif
+ #ifndef NSPIRE
+     /* other algorithm using a map to avoid reserving too much space */
+-    typedef std::map< index_t,T,const std::pointer_to_binary_function < const index_m &, const index_m &, bool> > application;
+-    application produit(std::ptr_fun(is_strictly_greater));
++    typedef std::map< index_t,T,const std::function<bool(const index_m &, const index_m &)> > application;
++    application produit(is_strictly_greater);
+     // typedef std::map<index_t,T> application;
+     // application produit;
+     index_t somme(ita->index.size());
+@@ -848,7 +848,7 @@ namespace giac {
+     typename std::vector< monomial<T> >::const_iterator a=v.begin(), a_end=v.end();
+     typename std::vector< monomial<T> >::const_iterator b=w.begin(), b_end=w.end();
+     std::vector< monomial<T> > res;
+-    Mul(a,a_end,b,b_end,res,i_lex_is_strictly_greater,std::ptr_fun< const monomial<T> &, const monomial<T> &, bool >((m_lex_is_strictly_greater<T>)));
++    Mul(a,a_end,b,b_end,res,i_lex_is_strictly_greater,m_lex_is_strictly_greater<T>);
+     return res ;
+   }
+ 
+@@ -856,7 +856,7 @@ namespace giac {
+   std::vector< monomial<T> > & operator *= (std::vector< monomial<T> > & v,const std::vector< monomial<T> > & w){
+     typename std::vector< monomial<T> >::const_iterator a=v.begin(), a_end=v.end();
+     typename std::vector< monomial<T> >::const_iterator b=w.begin(), b_end=w.end();
+-    Mul(a,a_end,b,b_end,v,i_lex_is_strictly_greater,std::ptr_fun< const monomial<T> &, const monomial<T> &, bool >((m_lex_is_strictly_greater<T>)));
++    Mul(a,a_end,b,b_end,v,i_lex_is_strictly_greater,m_lex_is_strictly_greater<T>);
+     return v;
+   }
+ 
+diff --git a/src/plot.cc b/src/plot.cc
+index 288a1b5..ac85c9a 100755
+--- a/src/plot.cc
++++ b/src/plot.cc
+@@ -11886,7 +11886,7 @@ static vecteur densityscale(double xmin,double xmax,double ymin,double ymax,doub
+ #if 1 // def NSPIRE
+     gen_map m;
+ #else
+-    gen_map m(ptr_fun(islesscomplexthanf));
++    gen_map m(islesscomplexthanf);
+ #endif
+     int taille;
+     is >> taille;
+diff --git a/src/poly.h b/src/poly.h
+index 7d64e2c..d9ff991 100644
+--- a/src/poly.h
++++ b/src/poly.h
+@@ -40,23 +40,24 @@ namespace giac {
+     // T zero;
+     // functional object sorting function for monomial ordering
+     bool (* is_strictly_greater)( const index_m &, const index_m &);
+-    std::pointer_to_binary_function < const monomial<T> &, const monomial<T> &, bool> m_is_strictly_greater ;
++    std::function<bool(const monomial<T> &, const monomial<T> &)> m_is_strictly_greater ;
+     // constructors
+     tensor(const tensor<T> & t) : dim(t.dim), coord(t.coord), is_strictly_greater(t.is_strictly_greater), m_is_strictly_greater(t.m_is_strictly_greater) { }
+     tensor(const tensor<T> & t, const std::vector< monomial<T> > & v) : dim(t.dim), coord(v), is_strictly_greater(t.is_strictly_greater), m_is_strictly_greater(t.m_is_strictly_greater) { }
+     // warning: this constructor prohibits construction of tensor from a value
+     // of type T if this value is an int, except by using tensor<T>(T(int))
+-    tensor() : dim(0), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { }
+-    explicit tensor(int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { }
++    // DANGER
++    tensor() : dim(0), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) { }
++    explicit tensor(int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) { }
+     explicit tensor(int d,const tensor<T> & t) : dim(d),is_strictly_greater(t.is_strictly_greater), m_is_strictly_greater(t.m_is_strictly_greater)  { }
+-    tensor(const monomial<T> & v) : dim(int(v.index.size())), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { 
++    tensor(const monomial<T> & v) : dim(int(v.index.size())), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) { 
+       coord.push_back(v);
+     }
+-    tensor(const T & v, int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) {
++    tensor(const T & v, int d) : dim(d), is_strictly_greater(i_lex_is_strictly_greater), m_is_strictly_greater(m_lex_is_strictly_greater<T>) {
+       if (!is_zero(v))
+ 	coord.push_back(monomial<T>(v,0,d));
+     }
+-    tensor(int d,const std::vector< monomial<T> > & c) : dim(d), coord(c), is_strictly_greater(i_lex_is_strictly_greater),m_is_strictly_greater(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>)) { }
++    tensor(int d,const std::vector< monomial<T> > & c) : dim(d), coord(c), is_strictly_greater(i_lex_is_strictly_greater),m_is_strictly_greater(m_lex_is_strictly_greater<T>) { }
+     ~tensor() { coord.clear(); }
+     // member functions
+     // ordering monomials in the tensor
+@@ -519,10 +520,10 @@ namespace giac {
+   template <class T>
+   void lexsort(std::vector < monomial<T> > & v){
+ #if 1 // def NSPIRE
+-    sort_helper<T> M(std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>));
++    sort_helper<T> M(m_lex_is_strictly_greater<T>);
+     sort(v.begin(),v.end(),M);
+ #else
+-    sort(v.begin(),v.end(),std::ptr_fun<const monomial<T> &, const monomial<T> &, bool>(m_lex_is_strictly_greater<T>));
++    sort(v.begin(),v.end(),m_lex_is_strictly_greater<T>);
+ #endif
+   }
+ 
+diff --git a/src/solve.cc b/src/solve.cc
+index 889f824..2a51ab8 100755
+--- a/src/solve.cc
++++ b/src/solve.cc
+@@ -8684,39 +8684,39 @@ namespace giac {
+     switch (order.val){
+     case _PLEX_ORDER: 
+       p.is_strictly_greater=i_lex_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_lex_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_lex_is_strictly_greater<gen>;
+       break;
+     case _REVLEX_ORDER: 
+       p.is_strictly_greater=i_total_revlex_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_total_revlex_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_total_revlex_is_strictly_greater<gen>;
+       break;
+     case _TDEG_ORDER:
+       p.is_strictly_greater=i_total_lex_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_total_lex_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_total_lex_is_strictly_greater<gen>;
+       break;
+     case _3VAR_ORDER:
+       p.is_strictly_greater=i_3var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_3var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_3var_is_strictly_greater<gen>;
+       break;      
+     case _7VAR_ORDER:
+       p.is_strictly_greater=i_7var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_7var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_7var_is_strictly_greater<gen>;
+       break;      
+     case _11VAR_ORDER:
+       p.is_strictly_greater=i_11var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_11var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_11var_is_strictly_greater<gen>;
+       break;      
+     case _16VAR_ORDER:
+       p.is_strictly_greater=i_16var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_16var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_16var_is_strictly_greater<gen>;
+       break;      
+     case _32VAR_ORDER:
+       p.is_strictly_greater=i_32var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_32var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_32var_is_strictly_greater<gen>;
+       break;      
+     case _64VAR_ORDER:
+       p.is_strictly_greater=i_64var_is_strictly_greater;
+-      p.m_is_strictly_greater=std::ptr_fun(m_64var_is_strictly_greater<gen>);
++      p.m_is_strictly_greater=m_64var_is_strictly_greater<gen>;
+       break;      
+     }
+     p.tsort();
+diff --git a/src/usual.cc b/src/usual.cc
+index fddede6..eb7ae5e 100755
+--- a/src/usual.cc
++++ b/src/usual.cc
+@@ -5950,7 +5950,7 @@ namespace giac {
+ #if 1 // def NSPIRE
+     gen_map m;
+ #else
+-    gen_map m(ptr_fun(islesscomplexthanf));
++    gen_map m(islesscomplexthanf);
+ #endif
+     for (;it!=itend;++it){
+       if (is_equal(*it) || it->is_symb_of_sommet(at_deuxpoints)){
+-- 
+2.44.1
+

@@ -1,0 +1,48 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  regex,
+  pytestCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "parsimonious";
+  version = "0.11.0";
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-4IA3fZiVe+7AU1gNOK5U/N98Rw+3hnC6S/i1+dXK0qk=";
+  };
+
+  propagatedBuildInputs = [ regex ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # test_benchmarks.py tests are actually benchmarks and may fail due to
+    # something being unexpectedly slow on a heavily loaded build machine
+    "test_lists_vs_dicts"
+    "test_call_vs_inline"
+    "test_startswith_vs_regex"
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "regex>=2022.3.15" "regex"
+  '';
+
+  pythonImportsCheck = [
+    "parsimonious"
+    "parsimonious.grammar"
+    "parsimonious.nodes"
+  ];
+
+  meta = {
+    description = "Arbitrary-lookahead parser";
+    homepage = "https://github.com/erikrose/parsimonious";
+    license = lib.licenses.mit;
+    maintainers = [ ];
+  };
+}

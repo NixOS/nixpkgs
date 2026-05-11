@@ -1,0 +1,23 @@
+diff --git a/build-config/build-pack.js b/build-config/build-pack.js
+index 569252c..ccaef34 100644
+--- a/build-config/build-pack.js
++++ b/build-config/build-pack.js
+@@ -1,7 +1,5 @@
+ /* eslint-disable no-template-curly-in-string */
+-
+ const builder = require('electron-builder')
+-const beforePack = require('./build-before-pack')
+ const afterPack = require('./build-after-pack')
+ 
+ /**
+@@ -11,8 +9,9 @@ const afterPack = require('./build-after-pack')
+ const options = {
+   appId: 'cn.toside.music.desktop',
+   productName: 'lx-music-desktop',
+-  beforePack,
+   afterPack,
++  electronVersion: "@electron_version@",
++  electronDist: "./electron-dist",
+   protocols: {
+     name: 'lx-music-protocol',
+     schemes: [

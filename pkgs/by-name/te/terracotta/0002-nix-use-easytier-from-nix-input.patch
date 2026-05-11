@@ -1,0 +1,100 @@
+From d16cf03e5cbaa35e74285098cfd95197415f8cfd Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sat, 8 Nov 2025 15:22:08 +0800
+Subject: [PATCH 2/2] nix: use easytier from nix input
+
+---
+ build.rs                        |  3 ++-
+ src/easytier/executable_impl.rs | 32 +++-----------------------------
+ src/main.rs                     |  1 -
+ 3 files changed, 5 insertions(+), 31 deletions(-)
+
+diff --git a/build.rs b/build.rs
+index dfbcc4b..d716f28 100644
+--- a/build.rs
++++ b/build.rs
+@@ -11,7 +11,8 @@ use std::{
+ fn main() {
+     println!("cargo::rerun-if-changed=Cargo.toml");
+ 
+-    download_easytier();
++    // Use easytier from nix
++    // download_easytier();
+ 
+     sevenz_rust2::compress_to_path(
+         "web",
+diff --git a/src/easytier/executable_impl.rs b/src/easytier/executable_impl.rs
+index 81ba374..b9894cb 100644
+--- a/src/easytier/executable_impl.rs
++++ b/src/easytier/executable_impl.rs
+@@ -1,6 +1,5 @@
+ use crate::easytier::argument::{Argument, PortForward};
+ use crate::ports::PortRequest;
+-use crate::EASYTIER_DIR;
+ use parking_lot::Mutex;
+ use std::ffi::OsString;
+ use std::fmt::Write;
+@@ -17,12 +16,6 @@ use std::{
+ };
+ use crate::easytier::{EasyTierMember, NatType};
+ 
+-static EASYTIER_ARCHIVE: (&str, &str, &[u8]) = (
+-    include_str!(env!("TERRACOTTA_ET_ENTRY_CONF")),
+-    include_str!(env!("TERRACOTTA_ET_CLI_CONF")),
+-    include_bytes!(env!("TERRACOTTA_ET_ARCHIVE")),
+-);
+-
+ lazy_static::lazy_static! {
+     static ref FACTORY: EasytierFactory = create_factory();
+ }
+@@ -42,32 +35,13 @@ pub struct EasyTier {
+ }
+ 
+ fn create_factory() -> EasytierFactory {
+-    let _ = fs::create_dir_all(&*EASYTIER_DIR);
+-
+     logging!(
+         "Easytier",
+-        "Releasing easytier to {}",
+-        &*EASYTIER_DIR.to_string_lossy()
++        "Using path @TERRACOTTA_ET_PATH@ (Nix)."
+     );
+ 
+-    sevenz_rust2::decompress(Cursor::new(EASYTIER_ARCHIVE.2.to_vec()), &*EASYTIER_DIR)
+-        .map_err(|e| Error::other(e.to_string()))
+-        .unwrap();
+-
+-    let exe: PathBuf = Path::join(&EASYTIER_DIR, EASYTIER_ARCHIVE.0);
+-    let cli: PathBuf = Path::join(&EASYTIER_DIR, EASYTIER_ARCHIVE.1);
+-    #[cfg(target_family = "unix")]
+-    {
+-        use std::os::unix::fs::PermissionsExt;
+-
+-        let mut permissions = fs::metadata(exe.clone()).unwrap().permissions();
+-        permissions.set_mode(permissions.mode() | 0o100);
+-        fs::set_permissions(exe.clone(), permissions).unwrap();
+-
+-        let mut permissions = fs::metadata(cli.clone()).unwrap().permissions();
+-        permissions.set_mode(permissions.mode() | 0o100);
+-        fs::set_permissions(cli.clone(), permissions).unwrap();
+-    }
++    let exe: PathBuf = PathBuf::from("@TERRACOTTA_ET_EXE@");
++    let cli: PathBuf = PathBuf::from("@TERRACOTTA_ET_CLI@");
+     EasytierFactory { exe, cli }
+ }
+ 
+diff --git a/src/main.rs b/src/main.rs
+index c40b991..a3aecaf 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -132,7 +132,6 @@ lazy_static! {
+         ))
+     };
+     static ref LOGGING_FILE: std::path::PathBuf = WORKING_DIR.join("application.log");
+-    static ref EASYTIER_DIR: std::path::PathBuf = WORKING_DIR.join("embedded-easytier");
+ }
+ 
+ #[derive(Debug, PartialEq)]
+-- 
+2.51.2
+

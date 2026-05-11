@@ -1,0 +1,12 @@
+diff -ru a/scripts/gcc-plugins/gen-random-seed.sh b/scripts/gcc-plugins/gen-random-seed.sh
+--- a/scripts/gcc-plugins/gen-random-seed.sh	2019-01-11 11:50:29.228258920 +0100
++++ b/scripts/gcc-plugins/gen-random-seed.sh	2019-01-11 12:18:33.555902720 +0100
+@@ -2,7 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ if [ ! -f "$1" ]; then
+-	SEED=`od -A n -t x8 -N 32 /dev/urandom | tr -d ' \n'`
++	SEED="NIXOS_RANDSTRUCT_SEED"
+ 	echo "const char *randstruct_seed = \"$SEED\";" > "$1"
+ 	HASH=`echo -n "$SEED" | sha256sum | cut -d" " -f1 | tr -d ' \n'`
+ 	echo "#define RANDSTRUCT_HASHED_SEED \"$HASH\"" > "$2"

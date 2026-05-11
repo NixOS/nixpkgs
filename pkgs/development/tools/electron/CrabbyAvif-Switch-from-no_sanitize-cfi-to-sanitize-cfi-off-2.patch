@@ -1,0 +1,13 @@
+diff --git a/third_party/crabbyavif/src/src/reformat/libyuv.rs b/third_party/crabbyavif/src/src/reformat/libyuv.rs
+index dd12964..4ae9dc0 100644
+--- a/third_party/crabbyavif/src/src/reformat/libyuv.rs
++++ b/third_party/crabbyavif/src/src/reformat/libyuv.rs
+@@ -823,7 +823,7 @@ fn rgb_to_yuv_conversion_function(
+     }
+ }
+ 
+-#[cfg_attr(feature = "disable_cfi", no_sanitize(cfi))]
++#[cfg_attr(feature = "disable_cfi", sanitize(cfi = "off"))]
+ pub(crate) fn rgb_to_yuv(rgb: &rgb::Image, image: &mut image::Image) -> AvifResult<()> {
+     let conversion_function = rgb_to_yuv_conversion_function(rgb, image)?;
+     let plane_u8 = image.plane_ptrs_mut();

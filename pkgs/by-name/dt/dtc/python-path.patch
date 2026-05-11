@@ -1,0 +1,12 @@
+diff --git a/meson.build b/meson.build
+index 310699f..4e2b8a4 100644
+--- a/meson.build
++++ b/meson.build
+@@ -48,7 +48,7 @@ if not valgrind.found()
+ endif
+ 
+ py = import('python')
+-py = py.find_installation(required: get_option('python'))
++py = py.find_installation('@python_bin@', required: get_option('python'))
+ swig = find_program('swig', required: get_option('python'))
+ pylibfdt_enabled = not meson.is_cross_build() and py.found() and swig.found() ? true : false

@@ -1,0 +1,29 @@
+diff --git a/build.xml b/build.xml
+index d0493d8..50d4286 100644
+--- a/build.xml
++++ b/build.xml
+@@ -221,11 +221,6 @@
+     </jar>
+   </target>
+   <target depends="init,compile-core,copyres" name="jar-core">
+-    <propertyfile file="${versionfile}">
+-	<!-- <entry  key="versionMicro" type="int" value="1" operation="+"/> -->
+-	<entry  key="versionDate" type="date" value="now" pattern="yyyyMMdd"/>
+-    </propertyfile>
+-
+     <jar jarfile="${build}/jar/${ant.project.name}-core.jar">
+ 	<!-- fileset dir="${build}/classes" excludes="ch/interlis/ili2c/tests/**/*.class" includes="ch/interlis/models/**/*.class,ch/interlis/ili2c/parser/**/*.class,ch/interlis/ili2c/generator/**/*.class,ch/interlis/ili2c/modelscan/**/*.class,ch/interlis/ili2c/metamodel/**/*.class,ch/interlis/ili2c/config/**/*.class,ch/interlis/ili2c/CompilerLogEvent.class,ch/interlis/ili2c/Ili2cException.class,ch/interlis/ili2c/Ili2cFailure.class,ch/interlis/ili2c/gui/UserSettings.class,ch/interlis/ilirepository/ReposManager.class,ch/interlis/ilirepository/impl/RepositoryAccessException.class,ch/interlis/ilirepository/Dataset.class"/--> 
+ 	<fileset dir="${build}/classes-core" excludes="ch/interlis/ili2c/tests/**/*.class" />
+diff --git a/src-core/ch/interlis/ili2c/metamodel/TransferDescription.java b/src-core/ch/interlis/ili2c/metamodel/TransferDescription.java
+index 9e165af..86d8f89 100644
+--- a/src-core/ch/interlis/ili2c/metamodel/TransferDescription.java
++++ b/src-core/ch/interlis/ili2c/metamodel/TransferDescription.java
+@@ -219,7 +219,7 @@ public static final String MIMETYPE_XTF = "application/interlis+xml;version=2.3"
+       ret.append(branch);
+       ret.append('-');
+       }
+-      ret.append(resVersion.getString("versionDate"));
++      ret.append("nixpkgs");
+       version = ret.toString();
+   }
+   return version;

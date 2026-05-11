@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index caeac56..64c1e18 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -123,7 +123,6 @@ link_directories(${HDF5_LIBRARIES})
+ # boost
+ find_package(Boost 1.46 COMPONENTS
+   thread
+-  system
+   date_time
+   serialization
+   chrono

@@ -1,0 +1,8 @@
+prefix=@out@
+includedir=${prefix}/include
+
+Name: networking_ts
+Description: Experimental implementation of the C++ Networking Technical Specification
+URL: https://github.com/chriskohlhoff/networking-ts-impl
+Version: ${networking_ts_version}
+Cflags: -isystem${includedir}

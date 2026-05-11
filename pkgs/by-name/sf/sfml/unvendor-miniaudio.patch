@@ -1,0 +1,35 @@
+diff --git a/src/SFML/Audio/CMakeLists.txt b/src/SFML/Audio/CMakeLists.txt
+index 7567205c..ecbb4ea1 100644
+--- a/src/SFML/Audio/CMakeLists.txt
++++ b/src/SFML/Audio/CMakeLists.txt
+@@ -10,7 +10,6 @@ set(SRC
+     ${INCROOT}/Export.hpp
+     ${SRCROOT}/Listener.cpp
+     ${INCROOT}/Listener.hpp
+-    ${SRCROOT}/Miniaudio.cpp
+     ${SRCROOT}/MiniaudioUtils.hpp
+     ${SRCROOT}/MiniaudioUtils.cpp
+     ${SRCROOT}/Music.cpp
+@@ -169,8 +168,10 @@ sfml_add_library(Audio
+ # avoids warnings in vorbisfile.h
+ target_compile_definitions(sfml-audio PRIVATE OV_EXCLUDE_STATIC_CALLBACKS FLAC__NO_DLL)
+ 
+-# disable miniaudio features we do not use
+-target_compile_definitions(sfml-audio PRIVATE MA_NO_MP3 MA_NO_FLAC MA_NO_ENCODING MA_NO_RESOURCE_MANAGER MA_NO_GENERATION)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(miniaudio REQUIRED IMPORTED_TARGET miniaudio)
++target_link_libraries(sfml-audio PRIVATE PkgConfig::miniaudio)
++target_include_directories(sfml-audio SYSTEM PRIVATE "${miniaudio_INCLUDE_DIRS}/miniaudio")
+ 
+ # use standard fixed-width integer types
+ target_compile_definitions(sfml-audio PRIVATE MA_USE_STDINT)
+@@ -186,9 +187,6 @@ if(SFML_OS_IOS)
+     target_link_libraries(sfml-audio PRIVATE "-framework Foundation" "-framework CoreFoundation" "-framework CoreAudio" "-framework AudioToolbox" "-framework AVFoundation")
+ endif()
+ 
+-# miniaudio sources
+-target_include_directories(sfml-audio SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/miniaudio")
+-
+ # minimp3 sources
+ target_include_directories(sfml-audio SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/minimp3")
+ 

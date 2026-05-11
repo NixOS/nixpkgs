@@ -1,0 +1,28 @@
+diff --git a/node_build/make.js b/node_build/make.js
+index 1d0b0fa..b640f31 100644
+--- a/node_build/make.js
++++ b/node_build/make.js
+@@ -254,21 +254,8 @@ Builder.configure({
+ 
+     }).nThen(function (waitFor) {
+ 
+-        const dir = `${builder.config.buildDir}/../..`;
+-        Fs.readdir(dir, waitFor((err, ret) => {
+-            if (err) { throw err; }
+-            ret.forEach((f) => {
+-                if (!/^libsodium-sys-/.test(f)) { return; }
+-                const inclPath = `${dir}/${f}/out/source/libsodium/src/libsodium/include`;
+-                Fs.readdir(inclPath, waitFor((err, ret) => {
+-                    if (foundSodium) { return; }
+-                    if (err && err.code === 'ENOENT') { return; }
+-                    if (err) { throw err; }
+-                    builder.config.includeDirs.push(inclPath);
+-                    foundSodium = true;
+-                }));
+-            });
+-        }));
++        builder.config.includeDirs.push("@libsodium_include_dir@");
++        foundSodium = true;
+ 
+     }).nThen(function (waitFor) {
+ 

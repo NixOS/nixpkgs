@@ -1,0 +1,13 @@
+{
+  "balanced_text": "sha256-U+gtC9AaUFp3gVkUzYMWAUSuUV7kYB8ZE2BsclnxwkA=",
+  "flutter_user_certificates_android": "sha256-HL1Qd0D3CLYJysWLX2jqWt1FJRGm/BE8EjVFPztOIPo=",
+  "isar": "sha256-Wg1m/HM7UnK+aC1DOyY41Bo4HuLrEaAxCtQw12ZrnN0=",
+  "isar_flutter_libs": "sha256-Z5IdfiaZ7348XwYSQb81z0YZEoIHWmsSZr6mYqqz4Oo=",
+  "isar_generator": "sha256-fM8ygT6il7TdjmeTdmk8o4exc3Z/F1tYF878eoDK37E=",
+  "just_audio": "sha256-I+HTDx3IpaQw3VBVO7KGzl0vDcFrNZhN5455i7TNxxs=",
+  "just_audio_media_kit": "sha256-dSlZETFqNQs7jxNN+8MWQzval31zA7zCs+7WiPPPZMw=",
+  "media_kit_libs_windows_audio": "sha256-XAObjn7wcN4qA7MW+hKqjNZv/L2Ec8t/cTF+d2ZoZ+k=",
+  "palette_generator": "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=",
+  "smtc_windows": "sha256-ESR6qw8ciJvo1YG3wNK7Uy/N0zzl6OX6q40Dmgsvx6A=",
+  "split_view": "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k="
+}

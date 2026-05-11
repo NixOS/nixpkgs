@@ -1,0 +1,18 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 951b2b1..006b36b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ project(OIS)
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CmakeModules)
+@@ -218,7 +218,6 @@ endif()
+ if(UNIX)
+ 
+     if (NOT APPLE)
+-        add_dependencies(OIS X11)
+         target_link_libraries(OIS X11)
+     endif()
+ 

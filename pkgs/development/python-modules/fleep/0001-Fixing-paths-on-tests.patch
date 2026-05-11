@@ -1,0 +1,48 @@
+From 716fcfa3203bc881b543916bdb9a17460951cd26 Mon Sep 17 00:00:00 2001
+From: "P. R. d. O" <d.ol.rod@protonmail.com>
+Date: Fri, 26 Nov 2021 07:13:32 -0600
+Subject: [PATCH] Fixing paths on tests
+
+---
+ tests/maintest.py  | 7 ++++++-
+ tests/speedtest.py | 7 ++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/tests/maintest.py b/tests/maintest.py
+index 0e24ca4..3484437 100644
+--- a/tests/maintest.py
++++ b/tests/maintest.py
+@@ -1,6 +1,11 @@
+ import fleep
++import os
+ 
+-with open("testfile", "rb") as file:
++current_dir = os.path.realpath(os.path.join(os.getcwd(),
++                                            os.path.dirname(__file__)))
++
++with open(os.path.join(current_dir, "./testfile"),
++          "rb") as file:
+     info = fleep.get(file.read(128))
+ 
+ assert info.type == ["raster-image"]
+diff --git a/tests/speedtest.py b/tests/speedtest.py
+index 89338ab..829d563 100644
+--- a/tests/speedtest.py
++++ b/tests/speedtest.py
+@@ -1,7 +1,12 @@
+ import time
+ import fleep
++import os
+ 
+-with open("testfile", "rb") as file:
++current_dir = os.path.realpath(os.path.join(os.getcwd(),
++                                            os.path.dirname(__file__)))
++
++with open(os.path.join(current_dir, "./testfile"),
++          "rb") as file:
+     stream = file.read(128)
+ 
+ times = []
+-- 
+2.33.1
+

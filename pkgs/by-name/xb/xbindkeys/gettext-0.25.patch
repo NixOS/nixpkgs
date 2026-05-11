@@ -1,0 +1,31 @@
+diff --git a/Makefile.am b/Makefile.am
+index 3257a0a..e39e8bc 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -35,3 +35,5 @@ endif
+ 
+ 
+ man_MANS = xbindkeys.1 $(man_MANS_TK)
++
++SUBDIRS =
+\ No newline at end of file
+diff --git a/configure.ac b/configure.ac
+index f039ca8..eb0c886 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3,10 +3,15 @@ AC_INIT(xbindkeys, 1.8.7, hocwp@free.fr)
+ AC_PREREQ(2.54)
+ AC_COPYRIGHT(Copyright (C) Philippe Brochard <hocwp@free.fr>)
+ 
++AC_CONFIG_MACRO_DIRS([m4])
++
+ # Automake
+ AM_INIT_AUTOMAKE()
+ AM_MAINTAINER_MODE
+ 
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ AC_CONFIG_SRCDIR([xbindkeys.c])
+ AM_CONFIG_HEADER(config.h)
+ 

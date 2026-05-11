@@ -1,0 +1,28 @@
+diff --git a/matrix.lua b/matrix.lua
+index b79f500..32b37a2 100644
+--- a/matrix.lua
++++ b/matrix.lua
+@@ -43,6 +43,9 @@ This script maps this as follows:
+ 
+ ]]
+ 
++package.cpath = package.cpath .. ";__NIX_LIB_PATH__"
++package.path = package.path .. ";__NIX_OLM_PATH__"
++
+ local json = require 'cjson' -- apt-get install lua-cjson
+ local olmstatus, olm = pcall(require, 'olm') -- LuaJIT olm FFI binding ln -s ~/olm/olm.lua /usr/local/share/lua/5.1
+ local w = weechat
+diff --git a/olm.lua b/olm.lua
+index 114649c..4828371 100644
+--- a/olm.lua
++++ b/olm.lua
+@@ -17,6 +17,9 @@
+  * limitations under the License.
+  */
+ --]]
++
++package.cpath = package.cpath .. ";__NIX_LIB_PATH__"
++
+ local ffi = require'ffi'
+ 
+ ffi.cdef[[

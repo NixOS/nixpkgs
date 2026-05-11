@@ -1,0 +1,9 @@
+diff --git a/config.yaml b/config.yaml
+index 2f07ea7..0f90432 100644
+--- a/config.yaml
++++ b/config.yaml
+@@ -4,3 +4,4 @@ additionalProperties:
+   packageName: api
+   enumClassPrefix: true
+   useOneOfDiscriminatorLookup: true
++  disallowAdditionalPropertiesIfNotPresent: false

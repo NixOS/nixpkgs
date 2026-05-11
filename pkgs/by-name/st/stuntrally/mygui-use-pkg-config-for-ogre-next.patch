@@ -1,0 +1,38 @@
+diff --git a/CMake/Dependencies.cmake b/CMake/Dependencies.cmake
+index fcf7cc4..7239f20 100644
+--- a/CMake/Dependencies.cmake
++++ b/CMake/Dependencies.cmake
+@@ -84,7 +84,10 @@ elseif(MYGUI_RENDERSYSTEM EQUAL 7)
+ 	endif()
+ elseif(MYGUI_RENDERSYSTEM EQUAL 8)
+     # Find OGRE
+-    find_package(OGRE_next)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(OGRE REQUIRED IMPORTED_TARGET GLOBAL OGRE)
++    pkg_check_modules(OGRE_HLMS REQUIRED IMPORTED_TARGET GLOBAL OGRE-Hlms)
++    set(OGRE_INCLUDE_DIR "${OGRE_INCLUDE_DIRS}")
+     macro_log_feature(OGRE_FOUND "ogre" "Support for the Ogre render system" "" TRUE "" "")
+ endif()
+ 
+diff --git a/Platforms/Ogre2/Ogre2Platform/CMakeLists.txt b/Platforms/Ogre2/Ogre2Platform/CMakeLists.txt
+index c40cd8f..2647ae8 100644
+--- a/Platforms/Ogre2/Ogre2Platform/CMakeLists.txt
++++ b/Platforms/Ogre2/Ogre2Platform/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ set (PROJECTNAME MyGUI.Ogre2Platform)
+ 
+-message(STATUS "Platform Ogre-next:" ${OGRE_NEXT})
++message(STATUS "Platform Ogre-next: ${OGRE_HLMS_INCLUDE_DIRS}")
+ 
+ include_directories(
+  include
+@@ -8,8 +8,7 @@ include_directories(
+  ${OGRE_CONFIG_INCLUDE_DIR}
+  ${OGRE_INCLUDE_DIR}
+  ${OGRE_SOURCE_DIR}
+- ${OGRE_NEXT}/Components/Hlms/Unlit/include
+- ${OGRE_NEXT}/Components/Hlms/Common/include
++ ${OGRE_HLMS_INCLUDE_DIRS}
+ )
+ 
+ include(${PROJECTNAME}.list)

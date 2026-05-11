@@ -1,0 +1,25 @@
+From aa31e5d8af9295488bef3a559ec3756d5021501d Mon Sep 17 00:00:00 2001
+From: Markus Theil <markus.theil@secunet.com>
+Date: Mon, 16 Mar 2026 13:14:29 +0100
+Subject: [PATCH] fix build with Botan 3.11
+
+Signed-off-by: Markus Theil <markus.theil@secunet.com>
+---
+ src/lib/crypto/mem.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/crypto/mem.cpp b/src/lib/crypto/mem.cpp
+index 94d90f54..dbd2a143 100644
+--- a/src/lib/crypto/mem.cpp
++++ b/src/lib/crypto/mem.cpp
+@@ -25,6 +25,7 @@
+  */
+ 
+ #include <cstdio>
++#include <cstring>
+ #include "mem.h"
+ #include "logging.h"
+ #include <botan/ffi.h>
+-- 
+2.53.0
+

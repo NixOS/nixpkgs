@@ -1,0 +1,51 @@
+From d68fcb793d70032e978ecf8e0577eea955a741cf Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@protonmail.ch>
+Date: Sun, 10 Apr 2022 12:02:10 +0800
+Subject: [PATCH] meson: add options for tests installation dirs
+
+---
+ meson_options.txt |  6 ++++++
+ tests/meson.build | 13 +++++++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/meson_options.txt b/meson_options.txt
+index b9a2fb5..4b8629f 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -23,3 +23,9 @@ option('tests', type: 'boolean',
+ option('installed_tests', type: 'boolean',
+        value: true,
+        description: 'Install tests')
++option('installed_test_datadir', type: 'string',
++       value: '',
++       description: 'Installation directory for data files in tests')
++option('installed_test_bindir', type: 'string',
++       value: '',
++       description: 'Installation directory for binary files in tests')
+diff --git a/tests/meson.build b/tests/meson.build
+index 2b925e7..3276849 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -21,8 +21,17 @@ unit_tests = [
+ 
+ gen_installed_test = find_program('gen-installed-test.py')
+ 
+-installed_test_datadir = join_paths(get_option('prefix'), get_option('datadir'), 'installed-tests', graphene_api_path)
+-installed_test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), 'installed-tests', graphene_api_path)
++installed_test_suffix = join_paths('installed-tests', graphene_api_path)
++
++installed_test_datadir = join_paths(get_option('installed_test_datadir'), installed_test_suffix)
++if installed_test_datadir == ''
++  installed_test_datadir = join_paths(get_option('prefix'), get_option('datadir'), installed_test_suffix)
++endif
++
++installed_test_bindir = join_paths(get_option('installed_test_bindir'), installed_test_suffix)
++if installed_test_bindir == ''
++  installed_test_bindir = join_paths(get_option('prefix'), get_option('libexecdir'), installed_test_suffix)
++endif
+ 
+ # Make tests conditional on having mutest-1 installed system-wide, or
+ # available as a subproject
+-- 
+2.35.1
+
