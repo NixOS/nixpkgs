@@ -1,16 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitLab,
   makeWrapper,
-  cmake,
-  six,
-  pyparsing,
-  asn1ate,
-  colored,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "asn2quickder";
   version = "1.7.1";
   format = "setuptools";
@@ -33,14 +28,14 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     makeWrapper
-    cmake
+    python3Packages.cmake
   ];
 
   propagatedBuildInputs = [
-    pyparsing
-    asn1ate
-    six
-    colored
+    python3Packages.pyparsing
+    python3Packages.asn1ate
+    python3Packages.six
+    python3Packages.colored
   ];
 
   doCheck = false; # Flaky tests
