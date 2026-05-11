@@ -6,6 +6,7 @@ The following sections are organized by [module class].
 
 ```{=include=} chapters
 generic.chapter.md
+package-modules.chapter.md
 ```
 
 [Module System]: https://nixos.org/manual/nixpkgs/unstable/#module-system
