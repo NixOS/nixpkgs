@@ -3164,8 +3164,6 @@ with pkgs;
 
   recoll-nox = recoll.override { withGui = false; };
 
-  remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
-
   reptor = with python3.pkgs; toPythonApplication reptor;
 
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };

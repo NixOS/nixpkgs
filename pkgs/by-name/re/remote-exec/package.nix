@@ -3,17 +3,11 @@
   stdenv,
   fetchpatch,
   fetchFromGitHub,
-  buildPythonApplication,
-  click,
-  pydantic,
-  toml,
-  watchdog,
-  pytestCheckHook,
-  pytest-cov-stub,
+  python3Packages,
   rsync,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "remote-exec";
   version = "1.13.3";
   format = "setuptools";
@@ -41,10 +35,10 @@ buildPythonApplication rec {
   '';
 
   dependencies = [
-    click
-    pydantic
-    toml
-    watchdog
+    python3Packages.click
+    python3Packages.pydantic
+    python3Packages.toml
+    python3Packages.watchdog
   ];
 
   doCheck = true;
@@ -54,8 +48,8 @@ buildPythonApplication rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
-    pytest-cov-stub
+    python3Packages.pytestCheckHook
+    python3Packages.pytest-cov-stub
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
