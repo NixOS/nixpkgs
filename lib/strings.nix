@@ -802,6 +802,9 @@ rec {
   */
   hasPrefix =
     pref:
+    let
+      lenPrefix = stringLength pref;
+    in
     if isPath pref then
       # Before 23.05, paths would be copied to the store before converting them
       # to strings and comparing. This was surprising and confusing.
@@ -809,7 +812,7 @@ rec {
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
     else
-      str: substring 0 (stringLength pref) str == pref;
+      str: substring 0 lenPrefix str == pref;
 
   /**
     Determine whether a string has given suffix.
@@ -843,6 +846,9 @@ rec {
   */
   hasSuffix =
     suffix:
+    let
+      lenSuffix = stringLength suffix;
+    in
     if isPath suffix then
       # Before 23.05, paths would be copied to the store before converting them
       # to strings and comparing. This was surprising and confusing.
@@ -854,7 +860,6 @@ rec {
       content:
       let
         lenContent = stringLength content;
-        lenSuffix = stringLength suffix;
       in
       lenContent >= lenSuffix && substring (lenContent - lenSuffix) lenContent content == suffix;
 
@@ -1854,6 +1859,9 @@ rec {
   */
   removePrefix =
     prefix:
+    let
+      preLen = stringLength prefix;
+    in
     if isPath prefix then
       # Before 23.05, paths would be copied to the store before converting them
       # to strings and comparing. This was surprising and confusing.
@@ -1863,9 +1871,6 @@ rec {
             This function also copies the path to the Nix store, which may not be what you want.''
     else
       str:
-      let
-        preLen = stringLength prefix;
-      in
       if substring 0 preLen str == prefix then
         # -1 will take the string until the end
         substring preLen (-1) str
@@ -1904,6 +1909,9 @@ rec {
   */
   removeSuffix =
     suffix:
+    let
+      sufLen = stringLength suffix;
+    in
     if isPath suffix then
       # Before 23.05, paths would be copied to the store before converting them
       # to strings and comparing. This was surprising and confusing.
@@ -1914,7 +1922,6 @@ rec {
     else
       str:
       let
-        sufLen = stringLength suffix;
         sLen = stringLength str;
       in
       if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
