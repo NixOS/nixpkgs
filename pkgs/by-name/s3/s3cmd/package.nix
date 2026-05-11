@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  python-magic,
-  python-dateutil,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "s3cmd";
   version = "2.4.0";
   format = "setuptools";
@@ -19,8 +17,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    python-magic
-    python-dateutil
+    python3Packages.python-magic
+    python3Packages.python-dateutil
   ];
 
   meta = {
