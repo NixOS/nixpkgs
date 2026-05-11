@@ -5596,8 +5596,6 @@ with pkgs;
   maven3 = maven;
   inherit (maven) buildMaven;
 
-  mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
-
   python-matter-server =
     with python3Packages;
     toPythonApplication (

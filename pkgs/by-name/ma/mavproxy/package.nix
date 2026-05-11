@@ -1,24 +1,13 @@
 {
   stdenv,
   lib,
-  billiard,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   fetchpatch,
-  gnureadline,
-  lxml,
-  matplotlib,
-  numpy,
-  opencv-python,
-  pymavlink,
-  pynmeagps,
-  pyserial,
-  setuptools,
   versionCheckHook,
-  wxpython,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "MAVProxy";
   version = "1.8.74";
   pyproject = true;
@@ -38,22 +27,22 @@ buildPythonApplication rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   dependencies = [
-    lxml
-    matplotlib
-    numpy
-    opencv-python
-    pymavlink
-    pynmeagps
-    pyserial
-    setuptools # Imports `pkg_resources` at runtime
-    wxpython
+    python3Packages.lxml
+    python3Packages.matplotlib
+    python3Packages.numpy
+    python3Packages.opencv-python
+    python3Packages.pymavlink
+    python3Packages.pynmeagps
+    python3Packages.pyserial
+    python3Packages.setuptools # Imports `pkg_resources` at runtime
+    python3Packages.wxpython
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    billiard
-    gnureadline
+    python3Packages.billiard
+    python3Packages.gnureadline
   ];
 
   pythonImportsCheck = [ "MAVProxy" ];
