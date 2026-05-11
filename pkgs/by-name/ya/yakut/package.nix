@@ -1,22 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
   stdenv,
-  click,
-  coloredlogs,
-  mido,
-  psutil,
-  pycyphal,
-  pysdl2,
-  python-rtmidi,
-  ruamel-yaml,
-  requests,
-  scipy,
-  simplejson,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "yakut";
   version = "0.14.2";
   format = "setuptools";
@@ -30,19 +19,19 @@ buildPythonApplication rec {
     (lib.getLib stdenv.cc.cc)
   ];
   dependencies = [
-    click
-    coloredlogs
-    psutil
-    pycyphal
-    ruamel-yaml
-    requests
-    scipy
-    simplejson
+    python3Packages.click
+    python3Packages.coloredlogs
+    python3Packages.psutil
+    python3Packages.pycyphal
+    python3Packages.ruamel-yaml
+    python3Packages.requests
+    python3Packages.scipy
+    python3Packages.simplejson
   ];
   optional-dependencies.joystick = [
-    pysdl2
-    mido
-    python-rtmidi
+    python3Packages.pysdl2
+    python3Packages.mido
+    python3Packages.python-rtmidi
   ];
 
   # All these require extra permissions and/or actual hardware connected
