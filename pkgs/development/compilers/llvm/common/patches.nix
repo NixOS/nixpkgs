@@ -138,4 +138,24 @@
       path = ../19;
     }
   ];
+  "flang/warn-on-fbuiltin-and-fno-builtin.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/accept-and-ignore-some-gfortran-optimization-flags.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/use-xflang-in-diagnostics.patch" = [
+    {
+      after = "20";
+      path = ../21;
+    }
+  ];
 }
