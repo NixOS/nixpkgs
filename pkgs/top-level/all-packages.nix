@@ -8205,8 +8205,6 @@ with pkgs;
   };
   busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { };
 
-  cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
-
   conky = callPackage ../os-specific/linux/conky (
     {
       lua = lua5_4;
