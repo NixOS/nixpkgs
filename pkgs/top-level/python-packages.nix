@@ -736,6 +736,8 @@ self: super: with self; {
 
   ament-package = callPackage ../development/python-modules/ament-package { };
 
+  amplitude-analytics = callPackage ../development/python-modules/amplitude-analytics { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
@@ -2406,6 +2408,8 @@ self: super: with self; {
   bundlewrap-pass = callPackage ../development/python-modules/bundlewrap-pass { };
 
   bundlewrap-teamvault = callPackage ../development/python-modules/bundlewrap-teamvault { };
+
+  burner-redis = callPackage ../development/python-modules/burner-redis { };
 
   busylight-core = callPackage ../development/python-modules/busylight-core { };
 
@@ -12925,7 +12929,7 @@ self: super: with self; {
 
   precisely = callPackage ../development/python-modules/precisely { };
 
-  prefect = toPythonModule pkgs.prefect;
+  prefect = callPackage ../development/python-modules/prefect { };
 
   prefixed = callPackage ../development/python-modules/prefixed { };
 
