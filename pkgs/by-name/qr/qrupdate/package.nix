@@ -42,10 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
       "-DBLA_VENDOR=Generic"
     ];
 
-  # https://github.com/mpimd-csc/qrupdate-ng/issues/4
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    ./disable-zch1dn-test.patch
-  ];
+  patches =
+    # https://github.com/mpimd-csc/qrupdate-ng/issues/4
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      ./disable-zch1dn-test.patch
+    ]
+    # https://github.com/mpimd-csc/qrupdate-ng/issues/7
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      ./disable-aarch64-single-precision-tests.patch
+    ];
 
   postPatch = ''
     sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i ./CMakeLists.txt
