@@ -1862,10 +1862,6 @@ with pkgs;
 
   ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
 
-  online-judge-template-generator =
-    python3Packages.callPackage ../tools/misc/online-judge-template-generator
-      { };
-
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
   inherit (ocamlPackages) patdiff;

@@ -1,21 +1,10 @@
 {
   lib,
-  buildPythonApplication,
-  appdirs,
-  beautifulsoup4,
-  colorlog,
+  python3Packages,
   fetchFromGitHub,
-  mako,
-  online-judge-api-client,
-  online-judge-tools,
-  ply,
-  pyyaml,
-  requests,
-  setuptools,
-  toml,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "online-judge-template-generator";
   version = "4.8.1";
   format = "setuptools";
@@ -28,17 +17,17 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    appdirs
-    beautifulsoup4
-    colorlog
-    mako
-    online-judge-api-client
-    online-judge-tools
-    ply
-    pyyaml
-    requests
-    setuptools
-    toml
+    python3Packages.appdirs
+    python3Packages.beautifulsoup4
+    python3Packages.colorlog
+    python3Packages.mako
+    python3Packages.online-judge-api-client
+    python3Packages.online-judge-tools
+    python3Packages.ply
+    python3Packages.pyyaml
+    python3Packages.requests
+    python3Packages.setuptools
+    python3Packages.toml
   ];
 
   # Needs internet to run tests
