@@ -2514,8 +2514,6 @@ with pkgs;
 
   infisical = callPackage ../development/tools/infisical { };
 
-  input-remapper = python3Packages.callPackage ../tools/inputmethods/input-remapper { };
-
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
   iocextract = with python3Packages; toPythonApplication iocextract;
