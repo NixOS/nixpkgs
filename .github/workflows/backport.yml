@@ -11,7 +11,7 @@ on:
 
 permissions:
   contents: read
-  issues: write # adding the 'has: port to stable' label
+  issues: write # adding the 'has: port to stable' and 'has: backport failed' label
   pull-requests: write # creating backport pull requests
 
 defaults:
@@ -81,4 +81,17 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
               labels: [ '8.has: port to stable' ]
+            })
+
+      - name: "Add 'has: failed backport' label"
+        if: steps.backport.outputs.was_successful == 'false'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [ '8.has: failed backport' ]
             })
