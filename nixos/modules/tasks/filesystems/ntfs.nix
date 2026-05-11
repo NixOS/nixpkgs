@@ -25,6 +25,17 @@
       }
     )
     (lib.mkIf
+      (config.boot.supportedFilesystems.ntfsplus or false && config.boot.kernelPackages.kernelOlder "7.1")
+      {
+        boot = {
+          blacklistedKernelModules = [ "ntfs3" ];
+          extraModulePackages = [
+            config.boot.kernelPackages.ntfs
+          ];
+        };
+      }
+    )
+    (lib.mkIf
       (
         (
           config.boot.initrd.supportFilesystems.ntfs or false
