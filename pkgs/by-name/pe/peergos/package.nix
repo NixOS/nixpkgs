@@ -72,13 +72,19 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dvm644 server/Peergos.jar $out/share/java/peergos.jar
-    install -Dvm644 ${tweetnacl}/lib/libtweetnacl.so $out/native-lib/libtweetnacl.so
+    install -dm755 $out/share/peergos
 
-    # --chdir as peergos expects to find `libtweetnacl.so` in `native-lib/`
+    install -Dvm644 server/Peergos.jar \
+      $out/share/peergos/peergos.jar
+
+    install -Dvm644 ${tweetnacl}/lib/libtweetnacl.so \
+      $out/native-lib/libtweetnacl.so
+
+    cp -R server/webroot $out/share/peergos/webroot
+
     makeWrapper ${lib.getExe jre} $out/bin/peergos \
-      --chdir $out \
-      --add-flags "-Djava.library.path=native-lib -jar $out/share/java/peergos.jar"
+      --add-flags "-Djava.library.path=$out/native-lib" \
+      --add-flags "-jar $out/share/peergos/peergos.jar"
 
     runHook postInstall
   '';
