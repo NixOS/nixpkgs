@@ -1,11 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  buildPythonApplication,
-  pybluez,
+  python3Packages,
 }:
 
-buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bluetooth_battery";
   version = "1.3.1";
 
@@ -16,7 +15,7 @@ buildPythonApplication (finalAttrs: {
     sha256 = "067qfxh228cy1x95bnjp88dx4k00ajj7ay7fz5vr1gkj2yfa203s";
   };
 
-  propagatedBuildInputs = [ pybluez ];
+  propagatedBuildInputs = [ python3Packages.pybluez ];
 
   pyproject = false;
 
