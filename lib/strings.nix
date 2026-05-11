@@ -1804,31 +1804,27 @@ rec {
     predicate: keepSplit: str:
     let
       len = stringLength str;
+      withContext = addContextFrom str;
 
       # Helper function that processes the string character by character
       go =
         pos: currentPart: result:
         # Base case: reached end of string
         if pos == len then
-          result ++ [ currentPart ]
+          result ++ [ (withContext currentPart) ]
         else
           let
             currChar = substring pos 1 str;
             prevChar = if pos > 0 then substring (pos - 1) 1 str else "";
-            isSplit = predicate prevChar currChar;
           in
-          if isSplit then
+          if predicate prevChar currChar then
             # Split here - add current part to results and start a new one
-            let
-              newResult = result ++ [ currentPart ];
-              newCurrentPart = if keepSplit then currChar else "";
-            in
-            go (pos + 1) newCurrentPart newResult
+            go (pos + 1) (if keepSplit then currChar else "") (result ++ [ (withContext currentPart) ])
           else
             # Keep building current part
             go (pos + 1) (currentPart + currChar) result;
     in
-    if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
+    if len == 0 then [ (withContext "") ] else go 0 "" [ ];
 
   /**
     Returns a string without the specified prefix, if the prefix matches.
