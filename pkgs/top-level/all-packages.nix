@@ -2565,10 +2565,6 @@ with pkgs;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
-  lsyncd = callPackage ../applications/networking/sync/lsyncd {
-    lua = lua5_2_compat;
-  };
-
   lagrange-tui = lagrange.override { enableTUI = true; };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
