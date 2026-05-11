@@ -11,12 +11,41 @@
 
 let
   inherit (lib)
+    all
+    assertMsg
+    attrNames
+    concatMapAttrsStringSep
+    concatMapStringsSep
+    concatStrings
+    concatStringsSep
+    elem
+    escapeShellArg
+    escapeShellArgs
+    extendMkDerivation
+    filter
+    filterAttrs
+    flatten
+    foldl
+    getBin
+    getExe
+    hasPrefix
+    head
+    isAttrs
+    isList
+    isString
+    makeBinPath
+    map
+    mapAttrs'
+    mapAttrsToList
     optionalAttrs
     optionalString
-    hasPrefix
+    optionals
+    remove
+    toShellVar
+    unique
+    unsafeGetAttrPos
     warn
-    map
-    isList
+    warnIf
     ;
 in
 
@@ -111,7 +140,7 @@ rec {
       derivationArgs ? { },
       pos ? builtins.unsafeGetAttrPos "name" args,
     }@args:
-    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+    assert assertMsg (destination != "" -> (hasPrefix "/" destination && destination != "/")) ''
       destination must be an absolute path, relative to the derivation's out path,
       got '${destination}' instead.
 
@@ -134,8 +163,8 @@ rec {
             ;
           passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
           meta =
-            lib.optionalAttrs (executable && matches != null) {
-              mainProgram = lib.head matches;
+            optionalAttrs (executable && matches != null) {
+              mainProgram = head matches;
             }
             // meta
             // derivationArgs.meta or { };
@@ -148,7 +177,7 @@ rec {
         ]
       )
       ''
-        target=$out${lib.escapeShellArg destination}
+        target=$out${escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
@@ -169,9 +198,9 @@ rec {
   writeText =
     name: text:
     # TODO: To fully deprecate, replace the assertion with `lib.isString` and remove the warning
-    assert lib.assertMsg (lib.strings.isConvertibleWithToString text)
+    assert assertMsg (lib.strings.isConvertibleWithToString text)
       "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead.";
-    lib.warnIf (!lib.isString text)
+    warnIf (!isString text)
       "pkgs.writeText ${lib.strings.escapeNixString name}: The second argument should be a string, but it's a ${builtins.typeOf text} instead, which is deprecated. Use `toString` to convert the value to a string first."
       writeTextFile
       { inherit name text; };
@@ -275,20 +304,20 @@ rec {
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
-        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+        ${concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
       ''
-      + lib.optionalString (runtimeEnv != null) (
-        lib.concatMapAttrsStringSep "" (name: value: ''
-          ${lib.toShellVar name value}
+      + optionalString (runtimeEnv != null) (
+        concatMapAttrsStringSep "" (name: value: ''
+          ${toShellVar name value}
           export ${name}
         '') runtimeEnv
       )
       + ''
 
         export PATH="${
-          lib.concatStringsSep ":" (
-            (lib.optionals (runtimeInputs != [ ]) [ (lib.makeBinPath runtimeInputs) ])
-            ++ (lib.optionals inheritPath [ "$PATH" ])
+          concatStringsSep ":" (
+            (optionals (runtimeInputs != [ ]) [ (makeBinPath runtimeInputs) ])
+            ++ (optionals inheritPath [ "$PATH" ])
           )
         }"
       ''
@@ -300,18 +329,16 @@ rec {
 
       checkPhase =
         let
-          excludeFlags = lib.optionals (excludeShellChecks != [ ]) [
+          excludeFlags = optionals (excludeShellChecks != [ ]) [
             "--exclude"
-            (lib.concatStringsSep "," excludeShellChecks)
+            (concatStringsSep "," excludeShellChecks)
           ];
           # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
           # but we still want to use writeShellApplication on those platforms
-          shellcheckCommand = lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
+          shellcheckCommand = optionalString shellcheck-minimal.compiler.bootstrapAvailable ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe shellcheck-minimal} ${
-              lib.escapeShellArgs (excludeFlags ++ extraShellCheckFlags)
-            } "$target"
+            ${getExe shellcheck-minimal} ${escapeShellArgs (excludeFlags ++ extraShellCheckFlags)} "$target"
           '';
         in
         if checkPhase == null then
@@ -505,7 +532,7 @@ rec {
     other derivations.  A derivation created with linkFarm is often used in CI
     as a easy way to build multiple derivations at once.
   */
-  symlinkJoin = lib.extendMkDerivation {
+  symlinkJoin = extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
@@ -519,7 +546,7 @@ rec {
       finalAttrs:
       args@{
         name ?
-          assert lib.assertMsg (
+          assert assertMsg (
             finalAttrs ? pname && finalAttrs ? version
           ) "symlinkJoin requires either a `name` OR `pname` and `version`";
           "${finalAttrs.pname}-${finalAttrs.version}",
@@ -531,7 +558,7 @@ rec {
         failOnMissing ? stripPrefix == "",
         ...
       }:
-      assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
+      assert assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
         stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
 
         Ensure that the path starts with / and specifies path to the subdirectory.
@@ -608,17 +635,17 @@ rec {
     name: entries:
     let
       entries' =
-        if (lib.isAttrs entries) then
+        if (isAttrs entries) then
           entries
         # We do this foldl to have last-wins semantics in case of repeated entries
-        else if (lib.isList entries) then
-          lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
+        else if (isList entries) then
+          foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
         else
           throw "linkFarm entries must be either attrs or a list!";
 
-      linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
-        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+      linkCommands = mapAttrsToList (name: path: ''
+        mkdir -p -- "$(dirname -- ${escapeShellArg "${name}"})"
+        ln -s -- ${escapeShellArg "${path}"} ${escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
@@ -627,7 +654,7 @@ rec {
         # This is the best we can do since the other attrs are either defined here, or curried values that
         # we cannot extract a position from
         pos =
-          if (lib.isAttrs entries) && (entries != { }) then
+          if (isAttrs entries) && (entries != { }) then
             builtins.unsafeGetAttrPos (builtins.head (builtins.attrNames entries)) entries
           else
             null;
@@ -638,7 +665,7 @@ rec {
       ''
         mkdir -p $out
         cd $out
-        ${lib.concatStrings linkCommands}
+        ${concatStrings linkCommands}
       '';
 
   # TODO: move linkFarmFromDrvs docs to the Nixpkgs manual
@@ -684,14 +711,14 @@ rec {
     drv:
     runCommand "${drv.name}-only-bin" { } ''
       mkdir -p $out
-      ln -s ${lib.getBin drv}/bin $out/bin
+      ln -s ${getBin drv}/bin $out/bin
     '';
 
   # Docs in doc/build-helpers/special/makesetuphook.section.md
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     {
-      name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook",
+      name ? warn "calling makeSetupHook without passing a name is deprecated." "hook",
       # hooks go in nativeBuildInputs so these will be nativeBuildInputs
       propagatedBuildInputs ? [ ],
       propagatedNativeBuildInputs ? [ ],
@@ -708,7 +735,7 @@ rec {
         // {
           # Make the position of the derivation accurate.
           # Since not having `name` is deprecated, this should be fairly accurate.
-          pos = lib.unsafeGetAttrPos "name" args;
+          pos = unsafeGetAttrPos "name" args;
           # TODO(@Artturin:) substitutions should be inside the env attrset
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll
@@ -734,7 +761,7 @@ rec {
           cp ${script} $out/nix-support/setup-hook
           recordPropagatedDependencies
         ''
-        + lib.optionalString (substitutions != { }) ''
+        + optionalString (substitutions != { }) ''
           substituteAll ${script} $out/nix-support/setup-hook
         ''
       );
@@ -814,13 +841,13 @@ rec {
       # Taken from https://github.com/NixOS/nix/blob/130284b8508dad3c70e8160b15f3d62042fc730a/src/libutil/hash.cc#L84
       nixHashChars = "0123456789abcdfghijklmnpqrsvwxyz";
       context = builtins.getContext string;
-      derivations = lib.filterAttrs (n: v: v ? outputs) context;
+      derivations = filterAttrs (n: v: v ? outputs) context;
       # Objects copied from outside of the store, such as paths and
       # `builtins.fetch*`ed ones
-      sources = lib.attrNames (lib.filterAttrs (n: v: v ? path) context);
-      packages = lib.mapAttrs' (name: value: {
+      sources = attrNames (filterAttrs (n: v: v ? path) context);
+      packages = mapAttrs' (name: value: {
         inherit value;
-        name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\\.drv" name);
+        name = head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\\.drv" name);
       }) derivations;
       # The syntax of output paths differs between outputs named `out`
       # and other, explicitly named ones. For explicitly named ones,
@@ -829,36 +856,34 @@ rec {
       # from named output paths. Therefore, we find all the named ones
       # first so we can use them to remove false matches when looking
       # for `out` outputs (see the definition of `outputPaths`).
-      namedOutputPaths = lib.flatten (
-        lib.mapAttrsToList (
+      namedOutputPaths = flatten (
+        mapAttrsToList (
           name: value:
           (map (
             output:
-            lib.filter lib.isList (
-              builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name}-${output})" string
-            )
-          ) (lib.remove "out" value.outputs))
+            filter isList (builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name}-${output})" string)
+          ) (remove "out" value.outputs))
         ) packages
       );
       # Only `out` outputs
-      outputPaths = lib.flatten (
-        lib.mapAttrsToList (
+      outputPaths = flatten (
+        mapAttrsToList (
           name: value:
-          if lib.elem "out" value.outputs then
-            lib.filter (
+          if elem "out" value.outputs then
+            filter (
               x:
-              lib.isList x
+              isList x
               &&
                 # If the matched path is in `namedOutputPaths`,
                 # it's a partial match of an output path where
                 # the output name isn't `out`
-                lib.all (o: !lib.hasPrefix (lib.head x) o) namedOutputPaths
+                all (o: !hasPrefix (head x) o) namedOutputPaths
             ) (builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name})" string)
           else
             [ ]
         ) packages
       );
-      allPaths = lib.concatStringsSep "\n" (lib.unique (sources ++ namedOutputPaths ++ outputPaths));
+      allPaths = concatStringsSep "\n" (unique (sources ++ namedOutputPaths ++ outputPaths));
       allPathsWithContext = builtins.appendContext allPaths context;
     in
     if builtins ? getContext then
@@ -868,7 +893,7 @@ rec {
 
   # Docs in doc/build-helpers/fetchers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
-  requireFile = lib.extendMkDerivation {
+  requireFile = extendMkDerivation {
     constructDrv = stdenv.mkDerivation;
 
     excludeDrvArgNames = [
@@ -930,17 +955,17 @@ rec {
         outputHash = hash_;
         preferLocalBuild = true;
         builder = writeScript "restrict-message" ''
-          printf '%s' ${lib.escapeShellArg msg}
+          printf '%s' ${escapeShellArg msg}
           exit 1
         '';
       }
-      // (lib.optionalAttrs (name == null) {
+      // (optionalAttrs (name == null) {
         # The case of providing `url`, but not `name`. This has
         # weird interactions with the positioning system
 
         # When we set `name` explicitly here, we override where the
         # position is read from. So we must fix it here.
-        pos = lib.unsafeGetAttrPos "url" args;
+        pos = unsafeGetAttrPos "url" args;
 
         # If a name is not provided, use the basename of the url
         name = builtins.warn "providing a URL without a name is deprecated" baseNameOf (toString url);
@@ -980,7 +1005,7 @@ rec {
       ];
     }
   */
-  applyPatches = lib.extendMkDerivation {
+  applyPatches = extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
 
     extendDrvArgs =
@@ -989,16 +1014,14 @@ rec {
         src,
         ...
       }@args:
-      assert lib.assertMsg (
-        !args ? meta
-      ) "applyPatches will not merge 'meta', change it in 'src' instead";
-      assert lib.assertMsg (
+      assert assertMsg (!args ? meta) "applyPatches will not merge 'meta', change it in 'src' instead";
+      assert assertMsg (
         !args ? passthru
       ) "applyPatches will not merge 'passthru', change it in 'src' instead";
       let
-        keepAttrs = names: lib.filterAttrs (name: val: lib.elem name names);
+        keepAttrs = names: filterAttrs (name: val: elem name names);
         # enables tools like nix-update to determine what src attributes to replace
-        extraPassthru = lib.optionalAttrs (lib.isAttrs finalAttrs.src) (
+        extraPassthru = optionalAttrs (isAttrs finalAttrs.src) (
           keepAttrs [
             "rev"
             "tag"
@@ -1040,7 +1063,7 @@ rec {
         passthru = extraPassthru // finalAttrs.src.passthru or { };
 
         # Carry (and merge) information from the underlying `src` if present.
-        meta = lib.optionalAttrs (finalAttrs.src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
+        meta = optionalAttrs (finalAttrs.src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
       };
   };
 
