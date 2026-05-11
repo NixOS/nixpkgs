@@ -1,8 +1,8 @@
 diff --git a/transformer_engine/common/__init__.py b/transformer_engine/common/__init__.py
-index 02388d2e..f2eb337c 100644
+index 40933f17..f2eb337c 100644
 --- a/transformer_engine/common/__init__.py
 +++ b/transformer_engine/common/__init__.py
-@@ -239,117 +239,7 @@ def _get_sys_extension() -> str:
+@@ -239,119 +239,7 @@ def _get_sys_extension() -> str:
  def _nvidia_cudart_include_dir() -> str:
      """Returns the include directory for cuda_runtime.h if exists in python environment."""
  
@@ -12,11 +12,13 @@ index 02388d2e..f2eb337c 100644
 -        return ""
 -
 -    # Installing some nvidia-* packages, like nvshmem, create nvidia name, so "import nvidia"
--    # above doesn't through. However, they don't set "__file__" attribute.
--    if nvidia.__file__ is None:
--        return ""
+-    # above doesn't throw. However, they don't set "__file__" attribute.
+-    if nvidia.__file__ is not None:
+-        nvidia_root = Path(nvidia.__file__).parent
+-    else:
+-        nvidia_root = Path(nvidia.__path__[0])  # namespace package
 -
--    include_dir = Path(nvidia.__file__).parent / "cuda_runtime"
+-    include_dir = nvidia_root / "cuda_runtime"
 -    return str(include_dir) if include_dir.exists() else ""
 -
 -
@@ -121,7 +123,7 @@ index 02388d2e..f2eb337c 100644
  
  
  @functools.lru_cache(maxsize=None)
-@@ -364,18 +254,9 @@ if "NVTE_PROJECT_BUILDING" not in os.environ or bool(int(os.getenv("NVTE_RELEASE
+@@ -366,18 +254,9 @@ if "NVTE_PROJECT_BUILDING" not in os.environ or bool(int(os.getenv("NVTE_RELEASE
      # `_load_cuda_library` is used for packages that must be loaded
      # during runtime. Both system and pypi packages are searched
      # and an error is thrown if not found.
