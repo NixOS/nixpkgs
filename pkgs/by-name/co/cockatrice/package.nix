@@ -5,6 +5,7 @@
   fetchFromGitHub,
   cmake,
   protobuf_21,
+  withServer ? false,
 }:
 let
   protobuf = protobuf_21;
@@ -32,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
     qt5.qtwebsockets
   ];
+
+  cmakeFlags = lib.optional withServer "-DWITH_SERVER=1";
 
   meta = {
     homepage = "https://github.com/Cockatrice/Cockatrice";
