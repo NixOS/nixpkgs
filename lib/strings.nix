@@ -16,6 +16,7 @@ rec {
 
   inherit (builtins)
     compareVersions
+    concatMap
     elem
     elemAt
     filter
@@ -564,7 +565,10 @@ rec {
     :::
   */
   makeSearchPath =
-    subDir: paths: concatStringsSep ":" (map (path: path + "/" + subDir) (filter (x: x != null) paths));
+    subDir: paths:
+    concatStringsSep ":" (
+      concatMap (path: if path != null then [ (path + "/" + subDir) ] else [ ]) paths
+    );
 
   /**
     Construct a Unix-style search path by appending the given
