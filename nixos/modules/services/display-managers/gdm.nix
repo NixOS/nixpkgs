@@ -25,22 +25,6 @@ let
         exec "$@"
       '';
 
-  # Solves problems like:
-  # https://wiki.archlinux.org/index.php/Talk:Bluetooth_headset#GDMs_pulseaudio_instance_captures_bluetooth_headset
-  # Instead of blacklisting plugins, we use Fedora's PulseAudio configuration for GDM:
-  # https://src.fedoraproject.org/rpms/gdm/blob/master/f/default.pa-for-gdm
-  pulseConfig = pkgs.writeText "default.pa" ''
-    load-module module-device-restore
-    load-module module-card-restore
-    load-module module-udev-detect
-    load-module module-native-protocol-unix
-    load-module module-default-device-restore
-    load-module module-always-sink
-    load-module module-intended-roles
-    load-module module-suspend-on-idle
-    load-module module-position-event-sounds
-  '';
-
   defaultSessionName = config.services.displayManager.defaultSession;
 
   setSessionScript = pkgs.callPackage ../x11/display-managers/account-service-util.nix { };
@@ -188,33 +172,7 @@ in
 
     services.xserver.displayManager.lightdm.enable = false;
 
-    users.users = lib.mkMerge [
-      {
-        gdm = {
-          name = "gdm";
-          uid = config.ids.uids.gdm;
-          group = "gdm";
-          description = "GDM user";
-        };
-
-        gdm-greeter = {
-          isSystemUser = true;
-          uid = 60578;
-          group = "gdm";
-          home = "/run/gdm";
-        };
-      }
-
-      (lib.genAttrs' [ 1 2 3 4 ] (
-        i:
-        lib.nameValuePair "gdm-greeter-${toString i}" {
-          isSystemUser = true;
-          uid = 60578 + i;
-          group = "gdm";
-          home = "/run/gdm-${toString i}";
-        }
-      ))
-    ];
+    services.userdbd.enable = true;
 
     users.groups.gdm.gid = config.ids.gids.gdm;
 
@@ -248,24 +206,15 @@ in
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
-        preStart = lib.optionalString (defaultSessionName != null) ''
-          # Set default session in session chooser to a specified values – basically ignore session history.
-          ${setSessionScript}/bin/set-session ${config.services.displayManager.sessionData.autologinSession}
-        '';
+        preStart =
+          # sleep to avoid a race condition where userdb allocation isn't available yet, and gdm fails to start
+          "sleep 1"
+          + lib.optionalString (defaultSessionName != null) ''
+            # Set default session in session chooser to a specified values – basically ignore session history.
+            ${setSessionScript}/bin/set-session ${config.services.displayManager.sessionData.autologinSession}
+          '';
       };
     };
-
-    systemd.tmpfiles.rules = [
-      "d /run/gdm/.config 0711 gdm gdm"
-    ]
-    ++ lib.optionals config.services.pulseaudio.enable [
-      "d /run/gdm/.config/pulse 0711 gdm gdm"
-      "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
-    ]
-    ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
-      # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
-      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
-    ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
     systemd.packages = [
@@ -286,6 +235,8 @@ in
     systemd.services.display-manager.wants = [
       # Because sd_login_monitor_new requires /run/systemd/machines
       "systemd-machined.service"
+      # to allocate dynamic gdm-greeter{-N} users
+      "systemd-userdbd.service"
       # setSessionScript wants AccountsService
       "accounts-daemon.service"
     ];
@@ -294,6 +245,7 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
+      "systemd-userdbd.service"
       "plymouth-quit.service"
       "plymouth-start.service"
     ];
@@ -398,6 +350,13 @@ in
               ];
             }
             {
+              name = "env";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+              settings.conffile = "/etc/pam/environment";
+              settings.readenv = 0;
+            }
+            {
               name = "permit";
               control = "optional";
               modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
@@ -444,13 +403,6 @@ in
                 "ingroup"
                 "gdm"
               ];
-            }
-            {
-              name = "env";
-              control = "required";
-              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
-              settings.conffile = "/etc/pam/environment";
-              settings.readenv = 0;
             }
             {
               name = "systemd";
