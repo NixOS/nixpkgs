@@ -16,19 +16,31 @@
 }:
 
 let
-  getOptionalAttrs =
-    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
+  inherit (lib)
+    assertMsg
+    attrNames
+    concatMapStringsSep
+    extendMkDerivation
+    filter
+    getAttrs
+    intersectLists
+    isList
+    optionalString
+    optionals
+    warnIf
+    ;
+  getOptionalAttrs = names: attrs: getAttrs (intersectLists names (attrNames attrs)) attrs;
 
   interpolateString =
     s:
-    if lib.isList s then
-      lib.concatMapStringsSep " " (s: "${s}") (lib.filter (s: s != null) s)
+    if isList s then
+      concatMapStringsSep " " (s: "${s}") (filter (s: s != null) s)
     else if s == null then
       ""
     else
       "${s}";
 in
-lib.extendMkDerivation {
+extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
 
   excludeDrvArgNames = [
@@ -78,10 +90,10 @@ lib.extendMkDerivation {
       ...
     }@args:
 
-    assert lib.assertMsg useFetchCargoVendor
+    assert assertMsg useFetchCargoVendor
       "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
 
-    assert lib.warnIf (args ? useFetchCargoVendor)
+    assert warnIf (args ? useFetchCargoVendor)
       "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
       true;
     {
@@ -94,7 +106,7 @@ lib.extendMkDerivation {
           RUST_LOG = logLevel;
           # Prevent shadowing *_RUSTFLAGS environment variables
           ${if args ? RUSTFLAGS || isDarwinDebug then "RUSTFLAGS" else null} =
-            lib.optionalString isDarwinDebug "-C split-debuginfo=packed "
+            optionalString isDarwinDebug "-C split-debuginfo=packed "
             # Workaround the existing RUSTFLAGS specified as a list.
             + interpolateString (args.RUSTFLAGS or "");
         }
@@ -146,7 +158,7 @@ lib.extendMkDerivation {
 
       nativeBuildInputs =
         nativeBuildInputs
-        ++ lib.optionals auditable [
+        ++ optionals auditable [
           (buildPackages.cargo-auditable-cargo-wrapper.override {
             inherit cargo cargo-auditable;
           })
@@ -160,7 +172,7 @@ lib.extendMkDerivation {
           cargo
         ];
 
-      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+      buildInputs = buildInputs ++ optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
       patches = cargoPatches ++ patches;
 
@@ -177,7 +189,7 @@ lib.extendMkDerivation {
       meta = meta // {
         badPlatforms = meta.badPlatforms or [ ] ++ rustc.badTargetPlatforms;
         # default to Rust's platforms
-        platforms = lib.intersectLists meta.platforms or lib.platforms.all rustc.targetPlatforms;
+        platforms = intersectLists meta.platforms or lib.platforms.all rustc.targetPlatforms;
       };
     };
 }

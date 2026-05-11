@@ -8,6 +8,26 @@
   cargo,
   jq,
 }:
+let
+  inherit (lib)
+    assertMsg
+    attrNames
+    deepSeq
+    elemAt
+    escapeShellArg
+    filter
+    getExe
+    hasAttr
+    hasPrefix
+    listToAttrs
+    mapAttrs'
+    match
+    optionalAttrs
+    optionalString
+    readFile
+    removePrefix
+    ;
+in
 
 {
   # Cargo lock file
@@ -41,21 +61,21 @@ let
   parseGit =
     src:
     let
-      parts = builtins.match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
-      type = builtins.elemAt parts 2; # rev, tag or branch
-      value = builtins.elemAt parts 3;
+      parts = match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
+      type = elemAt parts 2; # rev, tag or branch
+      value = elemAt parts 3;
     in
     if parts == null then
       null
     else
       {
-        url = builtins.elemAt parts 0;
-        sha = builtins.elemAt parts 4;
+        url = elemAt parts 0;
+        sha = elemAt parts 4;
       }
-      // lib.optionalAttrs (type != null) { inherit type value; };
+      // optionalAttrs (type != null) { inherit type value; };
 
   # shadows args.lockFileContents
-  lockFileContents = if lockFile != null then builtins.readFile lockFile else args.lockFileContents;
+  lockFileContents = if lockFile != null then readFile lockFile else args.lockFileContents;
 
   parsedLockFile = fromTOML lockFileContents;
 
@@ -68,19 +88,17 @@ let
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
   # safely skip it.
-  depPackages = builtins.filter (p: p ? "source") packages;
+  depPackages = filter (p: p ? "source") packages;
 
   # Create dependent crates from packages.
   #
   # Force evaluation of the git SHA -> hash mapping, so that an error is
   # thrown if there are stale hashes. We cannot rely on gitShaOutputHash
   # being evaluated otherwise, since there could be no git dependencies.
-  depCrates = builtins.deepSeq gitShaOutputHash (map mkCrate depPackages);
+  depCrates = deepSeq gitShaOutputHash (map mkCrate depPackages);
 
   # Map package name + version to git commit SHA for packages with a git source.
-  namesGitShas = builtins.listToAttrs (
-    map nameGitSha (builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages)
-  );
+  namesGitShas = listToAttrs (map nameGitSha (filter (pkg: hasPrefix "git+" pkg.source) depPackages));
 
   nameGitSha =
     pkg:
@@ -100,7 +118,7 @@ let
   # workspace). By using the git commit SHA as a universal identifier,
   # the user does not have to specify the output hash for every package
   # individually.
-  gitShaOutputHash = lib.mapAttrs' (
+  gitShaOutputHash = mapAttrs' (
     nameVer: hash:
     let
       unusedHash = throw "A hash was specified for ${nameVer}, but there is no corresponding git dependency.";
@@ -120,7 +138,7 @@ let
       checksum =
         pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
     in
-    assert lib.assertMsg (checksum != null) ''
+    assert assertMsg (checksum != null) ''
       Package ${pkg.name} does not have a checksum.
     '';
     fetchurl {
@@ -144,18 +162,18 @@ let
       "E501"
       "W503"
     ];
-  } (builtins.readFile ./replace-workspace-values.py);
+  } (readFile ./replace-workspace-values.py);
 
   # Fetch and unpack a crate.
   mkCrate =
     pkg:
     let
       gitParts = parseGit pkg.source;
-      registryIndexUrl = lib.removePrefix "registry+" pkg.source;
+      registryIndexUrl = removePrefix "registry+" pkg.source;
     in
     if
-      (lib.hasPrefix "registry+" pkg.source || lib.hasPrefix "sparse+" pkg.source)
-      && builtins.hasAttr registryIndexUrl registries
+      (hasPrefix "registry+" pkg.source || hasPrefix "sparse+" pkg.source)
+      && hasAttr registryIndexUrl registries
     then
       let
         crateTarball = fetchCrate pkg registries.${registryIndexUrl};
@@ -240,12 +258,12 @@ let
         # Cargo is happy with empty metadata.
         printf '{"files":{},"package":null}' > "$out/.cargo-checksum.json"
 
-        ${lib.optionalString (gitParts ? type) ''
-          gitPartsValue=${lib.escapeShellArg gitParts.value}
+        ${optionalString (gitParts ? type) ''
+          gitPartsValue=${escapeShellArg gitParts.value}
           # starting with lockfile version v4 the git source url contains encoded query parameters
           # our regex parser does not know how to unescape them to get the actual value, so we do it here
-          ${lib.optionalString (lockFileVersion >= 4) ''
-            gitPartsValue=$(${lib.getExe python3Packages.python} -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))" "$gitPartsValue")
+          ${optionalString (lockFileVersion >= 4) ''
+            gitPartsValue=$(${getExe python3Packages.python} -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))" "$gitPartsValue")
           ''}
         ''}
 
@@ -253,7 +271,7 @@ let
         cat > $out/.cargo-config <<EOF
         [source."${pkg.source}"]
         git = "${gitParts.url}"
-        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"$gitPartsValue\""}
+        ${optionalString (gitParts ? type) "${gitParts.type} = \"$gitPartsValue\""}
         replace-with = "vendored-sources"
         EOF
       ''
@@ -301,7 +319,7 @@ let
 
             declare -A keysSeen
 
-            for registry in ${toString (builtins.attrNames extraRegistries)}; do
+            for registry in ${toString (attrNames extraRegistries)}; do
               cat >> $out/.cargo/config.toml <<EOF
 
         [source."$registry"]
