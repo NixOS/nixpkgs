@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-xserver=${xorg-server.out}/bin/X"
+    "--with-xinit=${placeholder "out"}/bin/xinit"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-launchd=yes"
