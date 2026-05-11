@@ -1,12 +1,10 @@
 {
   lib,
   stdenv,
-  python,
+  python3,
   qt5,
   fetchFromGitHub,
-  wrapPython,
-  pyqt5,
-  pyserial,
+  python3Packages,
   dos2unix,
 }:
 
@@ -21,14 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
   pythonPath = [
-    pyqt5.dev
-    pyserial
+    python3Packages.pyqt5.dev
+    python3Packages.pyserial
   ];
 
   nativeBuildInputs = [
-    wrapPython
+    python3Packages.wrapPython
     qt5.wrapQtAppsHook
     dos2unix
   ];

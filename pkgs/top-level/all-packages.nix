@@ -3247,10 +3247,6 @@ with pkgs;
 
   subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
 
-  sumorobot-manager =
-    python3Packages.callPackage ../applications/science/robotics/sumorobot-manager
-      { };
-
   sslscan = callPackage ../tools/security/sslscan {
     openssl = openssl.override { withZlib = true; };
   };
