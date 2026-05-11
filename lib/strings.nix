@@ -801,15 +801,15 @@ rec {
     :::
   */
   hasPrefix =
-    pref: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
+    pref:
     if isPath pref then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
       throw ''
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
     else
-      substring 0 (stringLength pref) str == pref;
+      str: substring 0 (stringLength pref) str == pref;
 
   /**
     Determine whether a string has given suffix.
@@ -842,19 +842,20 @@ rec {
     :::
   */
   hasSuffix =
-    suffix: content:
-    let
-      lenContent = stringLength content;
-      lenSuffix = stringLength suffix;
-    in
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
+    suffix:
     if isPath suffix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
       throw ''
         lib.strings.hasSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
         There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
         This function also copies the path to the Nix store, which may not be what you want.''
     else
+      content:
+      let
+        lenContent = stringLength content;
+        lenSuffix = stringLength suffix;
+      in
       lenContent >= lenSuffix && substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /**
@@ -892,16 +893,16 @@ rec {
     :::
   */
   hasInfix =
-    infix: content:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
+    infix:
     if isPath infix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
       throw ''
         lib.strings.hasInfix: The first argument (${toString infix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
             This function also copies the path to the Nix store, which may not be what you want.''
     else
-      builtins.match ".*${escapeRegex infix}.*" "${content}" != null;
+      content: builtins.match ".*${escapeRegex infix}.*" "${content}" != null;
 
   /**
     Convert a string `s` to a list of characters (i.e. singleton strings).
@@ -1852,15 +1853,16 @@ rec {
     :::
   */
   removePrefix =
-    prefix: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
+    prefix:
     if isPath prefix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
       throw ''
         lib.strings.removePrefix: The first argument (${toString prefix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function never removes any prefix in such a case.
             This function also copies the path to the Nix store, which may not be what you want.''
     else
+      str:
       let
         preLen = stringLength prefix;
       in
@@ -1901,15 +1903,16 @@ rec {
     :::
   */
   removeSuffix =
-    suffix: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
+    suffix:
     if isPath suffix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
       throw ''
         lib.strings.removeSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function never removes any suffix in such a case.
             This function also copies the path to the Nix store, which may not be what you want.''
     else
+      str:
       let
         sufLen = stringLength suffix;
         sLen = stringLength str;
