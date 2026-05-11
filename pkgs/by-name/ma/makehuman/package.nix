@@ -15,27 +15,27 @@ let
   ];
   python = python3.withPackages (pkgs: pydeps);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "makehuman";
   version = "1.3.0";
 
   source = fetchFromGitHub {
     owner = "makehumancommunity";
     repo = "makehuman";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x0v/SkwtOl1lkVi2TRuIgx2Xgz4JcWD3He7NhU44Js4=";
-    name = "${pname}-source";
+    name = "makehuman-source";
   };
 
   assets = fetchFromGitHub {
     owner = "makehumancommunity";
     repo = "makehuman-assets";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jd2A0PAHVdFMnDLq4Mu5wsK/E6A4QpKjUyv66ix1Gbo=";
-    name = "${pname}-assets-source";
+    name = "makehuman-assets-source";
   };
 
-  srcs = [
+  srcs = with finalAttrs; [
     source
     assets
   ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = pydeps;
 
-  finalSource = "${pname}-final";
+  finalSource = "makehuman-final";
 
   postUnpack = ''
     mkdir -p $finalSource
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ elisesouche ];
     platforms = lib.platforms.all;
   };
-}
+})
