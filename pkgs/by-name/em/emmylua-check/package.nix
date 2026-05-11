@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emmylua_check";
   inherit (emmylua-ls) version src cargoHash;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
   ];
