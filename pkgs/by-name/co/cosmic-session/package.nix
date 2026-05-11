@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5dLG40X+yxJo566guyHqOCLNp+uNSE+HONS8GIDm58A=";
 
+  separateDebugInfo = true;
+
   postPatch = ''
     substituteInPlace data/start-cosmic \
       --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \

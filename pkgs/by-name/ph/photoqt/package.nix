@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "photoqt";
-  version = "5.2";
+  version = "5.3";
 
   src = fetchurl {
     url = "https://photoqt.org/downloads/source/photoqt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ufgDXKN7LY8Uy0uwL+QKvjH3O/F1EIAx2MPYYS1/els=";
+    hash = "sha256-NuZET8uS7sxRXvpJGKiOulUvb/y5/O6LYXyr0RBln+4=";
   };
 
   nativeBuildInputs = [
@@ -76,5 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "photoqt";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+    # cplusplus/singletons/scripts/pqc_scriptsimages.cpp:1740:19: error: no matching function for call to 'setxattr'
+    badPlatforms = lib.platforms.darwin;
   };
 })
