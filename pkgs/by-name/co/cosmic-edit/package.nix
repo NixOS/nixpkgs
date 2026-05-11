@@ -34,6 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     just
     pkg-config

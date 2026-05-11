@@ -35,7 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-Werror" "" \
+      --replace-fail 'COMPONENTS system program_options' 'COMPONENTS program_options'
+    substituteInPlace lib/common/CMakeLists.txt lib/duden/CMakeLists.txt lib/lingvo/CMakeLists.txt \
+      --replace-fail 'Boost::system' ""
   '';
 
   nativeBuildInputs = [

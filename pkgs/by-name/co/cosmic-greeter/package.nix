@@ -37,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--all" ];
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     cmake
