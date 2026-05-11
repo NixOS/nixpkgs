@@ -489,6 +489,9 @@ buildPythonPackage rec {
       lovesegfault
       pjones
     ];
+    knownVulnerabilities = [
+      "CVE-2026-42052: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "beet";
   };
