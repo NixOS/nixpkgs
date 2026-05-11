@@ -10214,6 +10214,8 @@ with pkgs;
 
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
+  ut2004Packages = recurseIntoAttrs (callPackage ../by-name/ut/ut2004/packages.nix { });
+
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;
 
