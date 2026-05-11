@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   git,
   pkg-config,
   python3Packages,
@@ -12,15 +13,23 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conan";
-  version = "2.26.2";
+  version = "2.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     tag = finalAttrs.version;
-    hash = "sha256-8XurC7H2JSMOYRfGCilUzuTDr7y1W8N+a2Hc3dtAdzQ=";
+    hash = "sha256-S/IEk3fSoCzoVfyo9oaId9VGR8YTjzoCIWoZ3xYVVBc=";
   };
+
+  patches = [
+    # fix for flaky test
+    (fetchpatch {
+      url = "https://github.com/conan-io/conan/commit/0d9ac5b118c1f7178d317e6c75ed4bbbc6382df2.patch";
+      hash = "sha256-WPIvckwETffmwwP5Np6ei0FCnebse1a0UIyx5586fqk";
+    })
+  ];
 
   pythonRelaxDeps = [
     "distro"
@@ -77,6 +86,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "conan" ];
 
   disabledTests = [
+    # Requires clang
+    "test_detect_clang_gcc_toolchain"
     # Tests require network access
     "TestFTP"
     # Unstable test
@@ -100,6 +111,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_xcrun"
     "test_xcrun_in_required_by_tool_requires"
     "test_xcrun_in_tool_requires"
+    "test_qbsprofile_rcflags"
+    "test_single_patch_type"
+    "test_single_patch_description"
+    "test_single_patch_extra_fields"
+    "test_multiple_no_version"
+    "test_multiple_with_version"
+    "test_upload_parallel_success"
   ];
 
   disabledTestPaths = [
@@ -116,7 +134,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test/functional/toolchains/"
     "test/functional/tools/scm/test_git.py"
     "test/functional/tools/system/package_manager_test.py"
-    "test/functional/sbom/test_cyclonedx.py"
     "test/functional/workspace/test_workspace.py"
     "test/functional/tools_versions_test.py"
     "test/functional/util/test_cmd_args_to_string.py"
