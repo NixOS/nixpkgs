@@ -2899,7 +2899,6 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
-  pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
