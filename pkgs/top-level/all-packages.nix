@@ -2565,7 +2565,7 @@ with pkgs;
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
 
-  kbdVlock = callPackage ../../pkgs/by-name/kb/kbd/package.nix { withVlock = true; };
+  kbdVlock = callPackage ../by-name/kb/kbd/package.nix { withVlock = true; };
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
@@ -11803,7 +11803,7 @@ with pkgs;
     discord-development
     ;
 
-  torcs-without-data = callPackage ../../pkgs/by-name/to/torcs/without-data.nix { };
+  torcs-without-data = callPackage ../by-name/to/torcs/without-data.nix { };
 
   nitrokey-app2 = python3Packages.callPackage ../tools/security/nitrokey-app2 { };
 
