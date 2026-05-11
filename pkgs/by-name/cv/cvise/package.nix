@@ -1,23 +1,23 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   clang-tools,
-  cmake,
   colordiff,
   flex,
-  libclang,
-  llvm,
+  llvmPackages_20,
   unifdef,
-  chardet,
-  pebble,
-  psutil,
-  pytestCheckHook,
   testers,
   cvise,
 }:
 
-buildPythonApplication rec {
+let
+  # cvise needs a port to latest llvm-21:
+  #   https://github.com/marxin/cvise/issues/340
+  inherit (llvmPackages_20) llvm libclang;
+
+in
+python3Packages.buildPythonApplication rec {
   pname = "cvise";
   version = "2.12.0";
   pyproject = false;
@@ -46,7 +46,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    cmake
+    python3Packages.cmake
     flex
     llvm.dev
   ];
@@ -59,13 +59,13 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    chardet
-    pebble
-    psutil
+    python3Packages.chardet
+    python3Packages.pebble
+    python3Packages.psutil
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    python3Packages.pytestCheckHook
     unifdef
   ];
 

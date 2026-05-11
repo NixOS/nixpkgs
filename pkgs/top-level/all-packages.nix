@@ -5452,12 +5452,6 @@ with pkgs;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
-  cvise = python3Packages.callPackage ../development/tools/misc/cvise {
-    # cvise needs a port to latest llvm-21:
-    #   https://github.com/marxin/cvise/issues/340
-    inherit (llvmPackages_20) llvm libclang;
-  };
-
   daggerfall-unity-unfree = daggerfall-unity.override {
     pname = "daggerfall-unity-unfree";
     includeUnfree = true;
