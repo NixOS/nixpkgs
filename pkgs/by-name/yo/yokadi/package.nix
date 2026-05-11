@@ -1,15 +1,10 @@
 {
   lib,
   fetchurl,
-  buildPythonApplication,
-  python-dateutil,
-  sqlalchemy,
-  setproctitle,
-  icalendar,
-  colorama,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "yokadi";
   version = "1.3.0";
   format = "setuptools";
@@ -20,11 +15,11 @@ buildPythonApplication rec {
   };
 
   dependencies = [
-    python-dateutil
-    sqlalchemy
-    setproctitle
-    icalendar
-    colorama
+    python3Packages.python-dateutil
+    python3Packages.sqlalchemy
+    python3Packages.setproctitle
+    python3Packages.icalendar
+    python3Packages.colorama
   ];
 
   # Yokadi doesn't have any tests
