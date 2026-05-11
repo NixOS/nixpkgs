@@ -48,6 +48,11 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.heif;
 
+  disabledTests = [
+    # Flaky: wand.exceptions.MissingDelegateError: no decode delegate for this image format
+    "test_gif"
+  ];
+
   meta = {
     description = "Python image library that sits on top of Pillow, Wand and OpenCV";
     homepage = "https://github.com/torchbox/Willow/";
