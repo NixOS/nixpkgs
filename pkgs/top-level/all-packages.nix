@@ -9426,10 +9426,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/helm/plugins { }
   );
 
-  ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
-    fftw = fftwSinglePrec;
-  };
-
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
   lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
