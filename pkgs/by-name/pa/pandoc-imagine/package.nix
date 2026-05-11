@@ -1,12 +1,10 @@
 {
   fetchFromGitHub,
-  buildPythonApplication,
+  python3Packages,
   lib,
-  pandocfilters,
-  six,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pandoc-imagine";
   version = "0.1.7";
   format = "setuptools";
@@ -19,8 +17,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    pandocfilters
-    six
+    python3Packages.pandocfilters
+    python3Packages.six
   ];
 
   # No tests in archive
