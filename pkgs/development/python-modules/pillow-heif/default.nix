@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   cmake,
@@ -36,6 +37,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-CY//orCEKBfgHF7lTTSMenDsvf9NOQo8iiQS3p9NMH8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-28231.patch";
+      url = "https://github.com/bigcat88/pillow_heif/commit/8305a15d3780c533b762578cbe987d27a2c59c7a.patch";
+      hash = "sha256-BHYmAyFV2TGFJmIgan3vyBElvsjLFR1WOEmMmewz2s4=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml

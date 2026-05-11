@@ -183,6 +183,7 @@ let
       X86_INTEL_LPSS = yes;
       X86_INTEL_PSTATE = yes;
       X86_AMD_PSTATE = whenAtLeast "5.17" yes;
+      X86_AMD_PSTATE_DYNAMIC_EPP = whenAtLeast "7.1" yes;
       # Intel DPTF (Dynamic Platform and Thermal Framework) Support
       ACPI_DPTF = yes;
 
@@ -316,7 +317,6 @@ let
       IPV6_MROUTE = yes;
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2 = yes;
-      IPV6_FOU_TUNNEL = module;
       IPV6_SEG6_LWTUNNEL = yes;
       IPV6_SEG6_HMAC = yes;
       IPV6_SEG6_BPF = yes;
@@ -401,8 +401,8 @@ let
       MAC80211_DEBUGFS = yes;
 
       # HAM radio
-      HAMRADIO = yes;
-      AX25 = module;
+      HAMRADIO = whenOlder "7.1" yes;
+      AX25 = whenOlder "7.1" module;
     }
     // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Not enabled by default, hides modules behind it
@@ -564,9 +564,8 @@ let
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
 
-        # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
-        NOVA_CORE = whenAtLeast "6.15" no;
-        DRM_NOVA = whenAtLeast "6.16" no;
+        # Enable RAS reporting via netlink
+        DRM_RAS = whenAtLeast "7.1" yes;
       }
       //
         lib.optionalAttrs
@@ -604,6 +603,10 @@ let
       DRM_PANIC_SCREEN = whenAtLeast "6.12" (freeform "kmsg");
 
       DRM_PANIC_SCREEN_QR_CODE = whenAtLeast "6.12" yes;
+
+      # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
+      NOVA_CORE = whenAtLeast "6.15" no;
+      DRM_NOVA = whenAtLeast "6.16" no;
     };
 
     sound = {
@@ -698,6 +701,7 @@ let
       EXT4_FS_SECURITY = yes;
 
       NTFS_FS = whenBetween "5.15" "6.9" no;
+      NTFS_FS_POSIX_ACL = whenAtLeast "7.1" yes;
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
@@ -1343,7 +1347,7 @@ let
         ) yes;
 
         # required for P2P DMABUF
-        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenBetween "6.6" "7.1" yes);
         # required for P2P transfers between accelerators
         HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
 
