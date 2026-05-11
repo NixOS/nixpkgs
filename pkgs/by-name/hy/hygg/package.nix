@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ## Skipping this test due to the high variability of its outcome
   ## When the package was merged the test was passing but on hydra its not
   ## Look at PR #448907
-  ++ (if pkgs.stdenv.isDarwin then [ "--skip=test_stdin_processing" ] else [ ]);
+  ++ (if pkgs.stdenv.hostPlatform.isDarwin then [ "--skip=test_stdin_processing" ] else [ ]);
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

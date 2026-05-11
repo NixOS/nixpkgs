@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pycrdt-store";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,16 +26,13 @@ buildPythonPackage (finalAttrs: {
     owner = "y-crdt";
     repo = "pycrdt-store";
     tag = finalAttrs.version;
-    hash = "sha256-KlB3BDhL/dt1IaQvWOfq1hgTKptrobgoBpus/mjZ26M=";
+    hash = "sha256-njahh5wbUGYkXh/ibZYH+2gmvqegaD8LwlhNDpYFTcM=";
   };
 
   build-system = [
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "pycrdt"
-  ];
   dependencies = [
     anyio
     pycrdt

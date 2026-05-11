@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libsForQt5,
+  qt6,
   fftw,
   itstool,
   alsaSupport ? true,
@@ -19,31 +19,34 @@ assert portaudioSupport -> portaudio != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fmit";
-  version = "1.2.14";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "gillesdegottex";
     repo = "fmit";
     rev = "v${finalAttrs.version}";
-    sha256 = "1q062pfwz2vr9hbfn29fv54ip3jqfd9r99nhpr8w7mn1csy38azx";
+    sha256 = "sha256-fi5/JCgum+TYexUuTRZNFWPPsR87P73gfYhozQYx3Rw=";
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
+    qt6.qmake
     itstool
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     fftw
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtsvg
   ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals jackSupport [ libjack2 ]
   ++ lib.optionals portaudioSupport [ portaudio ];
 
   postPatch = ''
-    substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${finalAttrs.version}'
+    substituteInPlace fmit.pro \
+      --replace-fail 'FMITVERSIONPRO = $$system(git describe --tags --always)' 'FMITVERSIONPRO = ${finalAttrs.version}' \
+      --replace-fail 'FMITBRANCHGITPRO = $$system(git rev-parse --abbrev-ref HEAD)' 'FMITBRANCHGITPRO = master'
   '';
 
   qmakeFlags = [

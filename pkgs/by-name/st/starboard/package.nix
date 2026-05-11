@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # Remove test that requires networking
     rm pkg/plugin/aqua/client/client_integration_test.go
-    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
       # Remove "[It] should make a request to fetch registries" test that fails on x86_64-darwin
       rm pkg/plugin/aqua/client/client_test.go
     ''}

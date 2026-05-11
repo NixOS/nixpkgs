@@ -2,26 +2,29 @@
   fetchurl,
   lib,
   stdenv,
+  cmake,
   extra-cmake-modules,
   kdoctools,
   wrapQtAppsHook,
   knotifyconfig,
   kidletime,
   kwindowsystem,
+  kstatusnotifieritem,
   ktextwidgets,
   kcrash,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rsibreak";
-  version = "0.12.13";
+  version = "0.13.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/rsibreak/${version}/rsibreak-${version}.tar.xz";
-    sha256 = "N0C+f788fq5yotSC54H2K4WDc6PnGi8Nh/vXL4v0fxo=";
+    url = "mirror://kde/stable/rsibreak/${lib.versions.majorMinor version}/rsibreak-${version}.tar.xz";
+    hash = "sha256-arLOCcV9D+UXgwjqlfh9675VrpjPs3QkkireJZO60SA=";
   };
 
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
     wrapQtAppsHook
@@ -30,6 +33,7 @@ stdenv.mkDerivation rec {
     knotifyconfig
     kidletime
     kwindowsystem
+    kstatusnotifieritem
     ktextwidgets
     kcrash
   ];

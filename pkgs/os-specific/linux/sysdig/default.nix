@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     zstd
     uthash
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     bpftools
     elfutils
     libbpf
@@ -153,7 +153,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall =
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       # Fix the bash completion location
       installShellCompletion --bash $out/etc/bash_completion.d/sysdig
       rm $out/etc/bash_completion.d/sysdig

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "simple-completion-language-server";
-  version = "0-unstable-2025-07-29";
+  version = "0-unstable-2026-04-21";
 
   src = fetchFromGitHub {
     owner = "estin";
     repo = "simple-completion-language-server";
-    rev = "cc57b08ebc68805266beacb512a453e16f86bf17";
-    hash = "sha256-TiVzgwsP1KZxTxW71eQyp1bkDnyTaMJdBYmkdvl1RX0=";
+    rev = "f8319589ab87b18f441627999f4a8316dd712234";
+    hash = "sha256-PKJVaj5et+afrMk7x/H/d/ygabjDALGKM3fr/16EKoQ=";
   };
 
-  cargoHash = "sha256-M+kjdT9X69kdZcBHC2ChR7WGgxtcUaU8woE2bqhu8IM=";
+  cargoHash = "sha256-RgRmbQVZK/4U37CO8AjNQOqR/SXvL1TQU03LX7LnqPY=";
 
   buildFeatures = lib.optional withCitation [ "citation" ];
 

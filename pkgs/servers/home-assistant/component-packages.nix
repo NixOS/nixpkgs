@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.5.0";
+  version = "2026.5.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -508,7 +508,8 @@
       ];
     "autoskope" =
       ps: with ps; [
-      ]; # missing inputs: autoskope_client
+        autoskope-client
+      ];
     "avea" =
       ps: with ps; [
         avea
@@ -1235,8 +1236,9 @@
     "denon_rs232" =
       ps: with ps; [
         aiousbwatcher
+        denon-rs232
         serialx
-      ]; # missing inputs: denon-rs232
+      ];
     "denonavr" =
       ps: with ps; [
         denonavr
@@ -1396,8 +1398,9 @@
       ps: with ps; [
         aiohasupervisor
         cronsim
+        python-dropbox-api
         securetar
-      ]; # missing inputs: python-dropbox-api
+      ];
     "droplet" =
       ps: with ps; [
         pydroplet
@@ -1421,7 +1424,8 @@
       ];
     "duco" =
       ps: with ps; [
-      ]; # missing inputs: python-duco-client
+        python-duco-client
+      ];
     "dunehd" =
       ps: with ps; [
         pdunehd
@@ -1449,7 +1453,8 @@
       ];
     "earn_e_p1" =
       ps: with ps; [
-      ]; # missing inputs: earn-e-p1
+        earn-e-p1
+      ];
     "eastron" =
       ps: with ps; [
       ];
@@ -1760,9 +1765,10 @@
         bluetooth-auto-recovery
         bluetooth-data-tools
         dbus-fast
+        eurotronic-cometblue-ha
         habluetooth
         serialx
-      ]; # missing inputs: eurotronic-cometblue-ha
+      ];
     "event" =
       ps: with ps; [
       ];
@@ -2066,7 +2072,8 @@
       ];
     "fumis" =
       ps: with ps; [
-      ]; # missing inputs: fumis
+        fumis
+      ];
     "futurenow" =
       ps: with ps; [
         pyfnip
@@ -3249,7 +3256,8 @@
       ];
     "kiosker" =
       ps: with ps; [
-      ]; # missing inputs: kiosker-python-api
+        kiosker-python-api
+      ];
     "kira" =
       ps: with ps; [
         pykira
@@ -4478,7 +4486,8 @@
       ];
     "omie" =
       ps: with ps; [
-      ]; # missing inputs: pyomie
+        pyomie
+      ];
     "omnilogic" =
       ps: with ps; [
         omnilogic
@@ -4649,7 +4658,8 @@
       ];
     "opnsense" =
       ps: with ps; [
-      ]; # missing inputs: aiopnsense
+        aiopnsense
+      ];
     "opower" =
       ps: with ps; [
         fnv-hash-fast
@@ -6345,8 +6355,9 @@
     "teleinfo" =
       ps: with ps; [
         aiousbwatcher
+        pyteleinfo
         serialx
-      ]; # missing inputs: pyteleinfo
+      ];
     "tellduslive" =
       ps: with ps; [
         tellduslive
@@ -7519,6 +7530,7 @@
     "autarco"
     "auth"
     "automation"
+    "autoskope"
     "awair"
     "aws"
     "aws_s3"
@@ -7609,6 +7621,7 @@
     "default_config"
     "deluge"
     "demo"
+    "denon_rs232"
     "denonavr"
     "derivative"
     "devialet"
@@ -7635,15 +7648,18 @@
     "downloader"
     "dremel_3d_printer"
     "drop_connect"
+    "dropbox"
     "droplet"
     "dsmr"
     "dsmr_reader"
     "duckdns"
+    "duco"
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
     "dynalite"
     "eafm"
+    "earn_e_p1"
     "easyenergy"
     "ecobee"
     "ecoforest"
@@ -7685,6 +7701,7 @@
     "esphome"
     "essent"
     "eufylife_ble"
+    "eurotronic_cometblue"
     "event"
     "everlights"
     "evil_genius_labs"
@@ -7739,6 +7756,7 @@
     "frontier_silicon"
     "fujitsu_fglair"
     "fully_kiosk"
+    "fumis"
     "fyta"
     "garage_door"
     "garages_amsterdam"
@@ -7910,6 +7928,7 @@
     "keenetic_ndms2"
     "kegtron"
     "keymitt_ble"
+    "kiosker"
     "kira"
     "kitchen_sink"
     "kmtronic"
@@ -8098,6 +8117,7 @@
     "octoprint"
     "ohme"
     "ollama"
+    "omie"
     "omnilogic"
     "onboarding"
     "oncue"
@@ -8123,6 +8143,7 @@
     "opentherm_gw"
     "openuv"
     "openweathermap"
+    "opnsense"
     "opower"
     "oralb"
     "orvibo"
@@ -8374,6 +8395,7 @@
     "tedee"
     "telegram"
     "telegram_bot"
+    "teleinfo"
     "tellduslive"
     "teltonika"
     "temper"

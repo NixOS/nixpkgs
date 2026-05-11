@@ -17,6 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FF5I4D9obRVJqyjucemnxZiPcNHdQdo3S0z/h96Fe6c=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/transloadit/uppy/blob/main/package.json#L39
+    ./yarn-4.14-support.patch
+  ];
+
   nativeBuildInputs = [
     nodejs
     yarn-berry_4.yarnBerryConfigHook
@@ -30,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-euKvBI3Y15SmBoVOEbS8GIJT/kIOhayLKGVSd8JztqI=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-vmya3c+ec93T8kNoooUu4risqScY0b4cwML7d2kYz88=";
   };
 
   buildPhase = ''

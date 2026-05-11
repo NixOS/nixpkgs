@@ -103,8 +103,5 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ raphaelr ];
-    knownVulnerabilities = lib.optionals (lib.versionOlder version "3.0") [
-      "Mbed TLS 2 is not maintained anymore. Please migrate to newer versions"
-    ];
   };
 }

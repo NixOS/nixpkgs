@@ -262,7 +262,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.5.0";
+  hassVersion = "2026.5.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -283,13 +283,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-RrXjrwl6BQzjilKluAM8oVihmZqLBpVLWN/OhaJY+1c=";
+    hash = "sha256-aOiJPhTaJZGbY4P9iPiIe/PrRU+IDQTNS1JFhAJyH4w=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-SXsJqYETHp92ZC/I2jS2ZlerUVVTugFdbOhLCxoLJ9I=";
+    hash = "sha256-Hp7jYLHMQbqYmuQVH/7XPmV6tgBdhCZXpNhmchxHCUg=";
   };
 
   build-system = with python.pkgs; [
@@ -332,7 +332,10 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python.pkgs; [
-    # Only packages required in pyproject.toml
+    # Mirror what gets installed for Home Assistant Container, which means
+    # installing what is in requirements.txt. The PEP517 specification gets
+    # embedded in wheel metadata but only represents a subset.
+    # Proof: https://github.com/home-assistant/core/blob/2026.5.0/Dockerfile#L40
     aiodns
     aiogithubapi
     aiohasupervisor
@@ -354,23 +357,31 @@ python.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
+    ha-ffmpeg
     hass-nabucasa
+    hassil
     home-assistant-bluetooth
+    home-assistant-intents
     httpx
     ifaddr
     infrared-protocols
     jinja2
     lru-dict
+    mutagen
     orjson
     packaging
     pillow
     propcache
     psutil-home-assistant
     pyjwt
+    pymicro-vad
     pyopenssl
+    pyspeex-noise
     python-slugify
+    pyturbojpeg
     pyyaml
     requests
+    rf-protocols
     securetar
     sqlalchemy
     standard-aifc
@@ -423,11 +434,8 @@ python.pkgs.buildPythonApplication rec {
     ])
     ++ lib.concatMap (component: getPackages component python.pkgs) [
       # some components are needed even if tests in tests/components are disabled
-      "assist_pipeline"
       "frontend"
       "hue"
-      "mobile_app"
-      "radio_frequency"
     ];
 
   pytestFlags = [

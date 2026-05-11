@@ -3,7 +3,6 @@
   lib,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
   kdePackages,
   qt6,
   nix-update-script,
@@ -23,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     qt6.wrapQtAppsHook
   ];
 

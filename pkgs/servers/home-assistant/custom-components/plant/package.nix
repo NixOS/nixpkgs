@@ -3,6 +3,7 @@
   async-timeout,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  pytest-freezer,
   pytest-homeassistant-custom-component,
   pytestCheckHook,
 }:
@@ -10,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "plant";
-  version = "2026.3.2";
+  version = "2026.5.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-plant";
     tag = "v${version}";
-    hash = "sha256-na3T60v4HRmdf8NFIqnLdSQjFfg0Jlny0tse5nx21Zs=";
+    hash = "sha256-CuDBDVotmNqvHm63FrhaZ9i8l528wSCKHjBFcHCB8aQ=";
   };
 
   dependencies = [
@@ -24,6 +25,7 @@ buildHomeAssistantComponent rec {
   ];
 
   nativeCheckInputs = [
+    pytest-freezer
     pytest-homeassistant-custom-component
     pytestCheckHook
   ];

@@ -14,19 +14,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysma";
-  version = "1.1.1";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kellerza";
     repo = "pysma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9y93BQz3x0IAcYhVNmuHN2vqgUu2tqITjoZioR8InjY=";
+    hash = "sha256-0+hnsHFTZHyhtLiYe7V2SjmS6powjgER4azcVTUV0+A=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv-build>=0.9,<0.10" uv-build
+      --replace-fail "uv-build>=0.9,<0.11" uv-build
   '';
 
   build-system = [ uv-build ];

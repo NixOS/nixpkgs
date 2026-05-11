@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kakoune-unwrapped";
-  version = "2025.06.03";
+  version = "2026.04.12";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AJvh6NVFpbPsyzfeii/5muE+i4TwfxhwhDVgMLYOJCM=";
+    hash = "sha256-m8q1+TooDREbQD848ciHxeHwMajmlmhAhCqGmdbThIU=";
   };
 
   makeFlags = [

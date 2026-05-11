@@ -28,6 +28,10 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

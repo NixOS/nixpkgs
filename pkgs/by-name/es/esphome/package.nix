@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.4.3";
+  version = "2026.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-+esSczOBIT4dJEyzqmEv6YMU4wGkN4lFGmuZKRp5/bo=";
+    hash = "sha256-uMlkrHg4cZYsdSv8D8U57mEZnjwcRkJe2zKI8VFsTRk=";
   };
 
   patches = [
@@ -186,6 +186,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # Expects a full git clone
     "test_clang_tidy_mode_full_scan"
     "test_clang_tidy_mode_targeted_scan"
+    # Patched to run platformio without the esphome wrapper
+    "test_run_platformio_cli_strips_win_long_path_prefix"
+    "test_run_platformio_cli_does_not_set_pythonexepath_without_strip"
   ];
 
   passthru = {

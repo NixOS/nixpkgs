@@ -693,6 +693,11 @@ in
     env = old.env // {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
     };
+
+    meta = (old.meta or { }) // {
+      # https://github.com/wahern/luaossl/pull/221
+      broken = luaAtLeast "5.5";
+    };
   });
 
   luaposix = prev.luaposix.overrideAttrs (old: {
@@ -1238,6 +1243,22 @@ in
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
     ];
+  });
+
+  tomlua = prev.tomlua.overrideAttrs (old: {
+    postConfigure = ''
+      chmod +w "$rockspecFilename"
+      echo "deploy = { wrap_bin_scripts = false, }" >> "$rockspecFilename"
+    '';
+    checkPhase = ''
+      runHook preCheck
+      runHook postCheck
+    '';
+    installCheckPhase = ''
+      runHook preInstallCheck
+      make test
+      runHook postInstallCheck
+    '';
   });
 
   tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {

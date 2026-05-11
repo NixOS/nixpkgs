@@ -8,6 +8,7 @@
   curl,
   catt,
   syncplay,
+  openssl,
   ffmpeg,
   fzf,
   aria2,
@@ -27,17 +28,18 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-cli";
-  version = "4.11";
+  version = "4.14";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gQprGtKXXpDm66dFWsrriL4G0NPav+nqm8T6wkdbgk8=";
+    hash = "sha256-OyCKDN89sBz59+3JncMDyNOq8UMqqjara+A0Owo3oko=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   runtimeInputs = [
+    openssl
     gnugrep
     gnused
     curl
@@ -70,5 +72,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "ani-cli";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+    ];
   };
 })

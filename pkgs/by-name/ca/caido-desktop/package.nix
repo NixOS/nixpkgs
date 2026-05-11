@@ -71,6 +71,8 @@ let
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/caido.desktop \
         -t $out/share/applications
+      substituteInPlace $out/share/applications/caido.desktop \
+        --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=caido-desktop %U"
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
       wrapProgram $out/bin/${pname} \
@@ -111,9 +113,9 @@ let
   };
 
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   linux
-else if stdenv.isDarwin then
+else if stdenv.hostPlatform.isDarwin then
   darwin
 else
   throw "caido-desktop: unsupported platform ${stdenv.hostPlatform.system}"

@@ -44,12 +44,8 @@ stdenv.mkDerivation (
       dontFixup = true;
 
       postPatch = ''
-        for packageJson in \
-          packages/{contracts,shared}/package.json
-        do
-          substituteInPlace "$packageJson" \
-            --replace-fail '"prepare": "effect-language-service patch",' '"prepare": "true",'
-        done
+        substituteInPlace package.json \
+          --replace-fail '"prepare": "effect-language-service patch",' '"prepare": "true",'
       '';
 
       buildPhase = ''
@@ -60,7 +56,16 @@ stdenv.mkDerivation (
           --ignore-scripts \
           --no-progress \
           --frozen-lockfile \
-          --os="*"
+          --os="linux" \
+          --os="darwin"
+
+        # Work around to prevent a Bun race that can omit this cyclic peer dependency bin link.
+        # See https://github.com/oven-sh/bun/pull/29014.
+        for updateBrowserslistDbBinDir in node_modules/.bun/update-browserslist-db@*/node_modules/.bin; do
+          if [ -d "$updateBrowserslistDbBinDir" ] && [ ! -e "$updateBrowserslistDbBinDir/browserslist" ]; then
+            ln -s ../browserslist/cli.js "$updateBrowserslistDbBinDir/browserslist"
+          fi
+        done
 
         runHook postBuild
       '';
@@ -75,13 +80,13 @@ stdenv.mkDerivation (
         runHook postInstall
       '';
 
-      outputHash = "sha256-MuP+L8PwV9gKbeiJXYtUpgyIAYPmq4G1FolP7uB9J3w=";
+      outputHash = "sha256-zO4LNUxU0q/+kKBtRQKNTzWHnmGT4ONMRkyJem3ei/o=";
       outputHashMode = "recursive";
     };
   in
   {
     pname = "t3code";
-    version = "0.0.21";
+    version = "0.0.22";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -89,7 +94,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-e0U9DkEh20w1xq4P9Fri3bx2ifCiDK4G/vVPHDP+lXs=";
+      hash = "sha256-ZSUmu3FT+wpCLwpUv3yrFWC4EzcVvev9cZQ/FyeLjqI=";
     };
 
     postPatch = ''
@@ -178,7 +183,11 @@ stdenv.mkDerivation (
       png2icns \
         "$out/Applications/${appName}.app/Contents/Resources/t3code.icns" \
         ${desktopIcon}
-      write-darwin-bundle "$out" "${appName}" t3code-desktop t3code
+
+      # writeDarwinBundle is a shebangless bash script; run it explicitly via
+      # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
+      ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
+        "$out" "${appName}" t3code-desktop t3code
     ''
     + ''
       mkdir --parents \

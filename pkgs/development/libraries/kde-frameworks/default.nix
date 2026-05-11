@@ -27,6 +27,7 @@
   libsForQt5,
   lib,
   fetchurl,
+  kdePackages,
 }:
 
 let
@@ -140,7 +141,7 @@ let
     in
     (
       {
-        extra-cmake-modules = callPackage ./extra-cmake-modules { };
+        inherit (kdePackages) extra-cmake-modules;
 
         # TIER 1
         attica = callPackage ./attica.nix { };
@@ -154,11 +155,8 @@ let
         kdnssd = callPackage ./kdnssd.nix { };
         kguiaddons = callPackage ./kguiaddons.nix { };
         ki18n = callPackage ./ki18n.nix { };
-        kidletime = callPackage ./kidletime.nix { };
         kirigami2 = callPackage ./kirigami2.nix { };
-        kitemmodels = callPackage ./kitemmodels.nix { };
         kitemviews = callPackage ./kitemviews.nix { };
-        kplotting = callPackage ./kplotting.nix { };
         kwayland = callPackage ./kwayland.nix { };
         kwidgetsaddons = callPackage ./kwidgetsaddons.nix { };
         kwindowsystem = callPackage ./kwindowsystem { };
@@ -175,63 +173,64 @@ let
         kjobwidgets = callPackage ./kjobwidgets.nix { };
         knotifications = callPackage ./knotifications.nix { };
         kpackage = callPackage ./kpackage { };
-        kunitconversion = callPackage ./kunitconversion.nix { };
         syndication = callPackage ./syndication.nix { };
 
         # TIER 3
         kactivities-stats = callPackage ./kactivities-stats.nix { };
         kbookmarks = callPackage ./kbookmarks.nix { };
-        kcmutils = callPackage ./kcmutils.nix { };
         kconfigwidgets = callPackage ./kconfigwidgets.nix { };
-        kdeclarative = callPackage ./kdeclarative.nix { };
         kded = callPackage ./kded.nix { };
-        kemoticons = callPackage ./kemoticons.nix { };
         kglobalaccel = callPackage ./kglobalaccel.nix { };
         kiconthemes = callPackage ./kiconthemes { };
-        kinit = callPackage ./kinit { };
         kio = callPackage ./kio { };
         knewstuff = callPackage ./knewstuff { };
-        knotifyconfig = callPackage ./knotifyconfig.nix { };
-        kparts = callPackage ./kparts.nix { };
         kservice = callPackage ./kservice { };
         ktextwidgets = callPackage ./ktextwidgets.nix { };
         kwallet = callPackage ./kwallet.nix { };
         kxmlgui = callPackage ./kxmlgui.nix { };
-        plasma-framework = callPackage ./plasma-framework.nix { };
 
         # TIER 4
         frameworkintegration = callPackage ./frameworkintegration.nix { };
-
-        # PORTING AIDS
-        kdelibs4support = callPackage ./kdelibs4support { };
-        kdesignerplugin = callPackage ./kdesignerplugin.nix { };
       }
       // lib.optionalAttrs config.allowAliases {
         baloo = mkThrow "baloo";
         bluez-qt = mkThrow "bluez-qt";
         kapidox = mkThrow "kapidox";
+        kcmutils = mkThrow "kcmutils";
         kcontacts = mkThrow "kcontacts";
         kdav = mkThrow "kdav";
+        kdeclarative = mkThrow "kdeclarative";
+        kdelibs4support = mkThrow "kdelibs4support";
+        kdesignerplugin = mkThrow "kdesignerplugin";
         kdesu = mkThrow "kdesu";
+        kemoticons = mkThrow "kemoticons";
         kfilemetadata = mkThrow "kfilemetadata";
         kholidays = mkThrow "kholidays";
         khtml = mkThrow "kthml";
         kimageformats = mkThrow "kimageformats";
+        kidletime = mkThrow "kidletime";
+        kinit = mkThrow "kinit";
+        kitemmodels = mkThrow "kitemmodels";
         kjs = mkThrow "kjs";
         kjsembed = mkThrow "kjsembed";
         kmediaplayer = mkThrow "kmediaplayer";
+        knotifyconfig = mkThrow "knotifyconfig";
+        kparts = mkThrow "kparts";
         kpeople = mkThrow "kpeople";
+        kplotting = mkThrow "kplotting";
         kpty = mkThrow "kpty";
         kpurpose = mkThrow "kpurpose";
         kquickcharts = mkThrow "kquickcharts";
         kross = mkThrow "kross";
         krunner = mkThrow "krunner";
         ktexteditor = mkThrow "ktexteditor";
+        kunitconversion = mkThrow "kunitconversion";
         kxmlrpcclient = mkThrow "kxmlrpcclient";
         modemmanager-qt = mkThrow "modemmanager-qt";
         networkmanager-qt = mkThrow "networkmanager-qt";
         oxygen-icons = mkThrow "oxygen-icons";
         oxygen-icons5 = mkThrow "oxygen-icons";
+        plasma-framework = mkThrow "plasma-framework";
         prison = mkThrow "prison";
         qqc2-desktop-style = mkThrow "qqc2-desktop-style";
         threadweaver = mkThrow "threadweaver";

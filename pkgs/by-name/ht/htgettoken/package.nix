@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postInstall = with python3.pkgs; ''
     wrapProgram $out/bin/htgettoken \
-      --set PYTHONPATH "${
+      --prefix PYTHONPATH : "${
         makePythonPath [
           gssapi
           paramiko

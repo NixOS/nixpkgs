@@ -16,14 +16,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-z2cJ6BIhNnzUo9nIFxVyrPBVWSKf35fyLXK72pE8TJw=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/rejuvenate/lovelace-horizon-card/blob/main/package.json#L4
+    ./yarn-4.14-support.patch
+  ];
+
   nativeBuildInputs = [
     yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-LYPHBnDRcGeXo2btx1A4/e7fr7MYg/2G5GkuG/xDG+I=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-KWbXvivHxoV4xQuY2m/wpajjIZcypeh6nuvRVnrtFM0=";
   };
 
   buildPhase = ''
