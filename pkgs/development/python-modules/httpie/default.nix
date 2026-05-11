@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   charset-normalizer,
   defusedxml,
@@ -112,6 +113,13 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonAtLeast "3.14") [
     # https://github.com/httpie/cli/issues/1641
     "test_lazy_choices_help"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # requires network: hit pie.dev (sandbox blocks external)
+    "remote_httpbin"
+    "chunked"
+    "test_saved_session_cookies_on_different_domain"
+    "test_saved_session_cookie_pool"
   ];
 
   meta = {
