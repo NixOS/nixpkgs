@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   home-assistant,
 }:
 
@@ -93,10 +94,6 @@ let
   };
 
   extraDisabledTestPaths = {
-    hypontech = [
-      # outdated snapshot
-      "tests/components/hypontech/test_sensor.py::test_sensors"
-    ];
     influxdb = [
       # These tests fail because they check for the number of warnings in the
       # logs and there is an extra warning in the logs:
@@ -117,21 +114,6 @@ let
       "tests/components/minecraft_server/test_init.py"
       "tests/components/minecraft_server/test_sensor.py"
     ];
-    modem_callerid = [
-      # aioserial mock produces wrong state
-      "tests/components/modem_callerid/test_init.py::test_setup_entry"
-    ];
-    nzbget = [
-      # type assertion fails due to introduction of parameterized type
-      "tests/components/nzbget/test_config_flow.py::test_user_form"
-      "tests/components/nzbget/test_config_flow.py::test_user_form_show_advanced_options"
-      "tests/components/nzbget/test_config_flow.py::test_user_form_cannot_connect"
-      "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
-    ];
-    overseerr = [
-      # imports broken future module
-      "tests/components/overseerr/test_event.py"
-    ];
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
@@ -139,8 +121,8 @@ let
   };
 
   extraDisabledTests = {
-    conversation = [
-      # intent fixture mismatch
+    conversation = lib.optionals stdenv.hostPlatform.isAarch64 [
+      # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
     ];
     ecovacs = [
@@ -154,30 +136,6 @@ let
     homeassistant_connect_zbt2 = [
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"
-    ];
-    roborock = [
-      # Translation not found for vacuum
-      "test_clean_segments_mixed_maps"
-      "test_segments_changed_issue"
-    ];
-    sensor = [
-      # Failed: Translation not found for sensor
-      "test_validate_unit_change_convertible"
-      "test_validate_statistics_unit_change_no_device_class"
-      "test_validate_statistics_state_class_removed"
-      "test_validate_statistics_state_class_removed_issue_cleaned_up"
-      "test_validate_statistics_unit_change_no_conversion"
-      "test_validate_statistics_unit_change_equivalent_units_2"
-      "test_update_statistics_issues"
-      "test_validate_statistics_mean_type_changed"
-    ];
-    shell_command = [
-      # tries to retrieve file from github
-      "test_non_text_stdout_capture"
-    ];
-    vacuum = [
-      # Translation not found for vacuum
-      "test_segments_changed_issue"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox

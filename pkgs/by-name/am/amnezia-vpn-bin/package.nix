@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set CQT_PKG_ROOT "$out/share/amnezia-vpn/service"
 
     substituteInPlace $out/share/amnezia-vpn/AmneziaVPN.service \
-      --replace-fail "ExecStart=/opt/AmneziaVPN/service/AmneziaVPN-service.sh" "AmneziaVPN-service" \
+      --replace-fail "/opt/AmneziaVPN/service/AmneziaVPN-service.sh" "AmneziaVPN-service" \
       --replace-fail "Environment=LD_LIBRARY_PATH=/opt/AmneziaVPN/client/lib" ""
     ln -s $out/share/amnezia-vpn/AmneziaVPN.service $out/lib/systemd/system/AmneziaVPN.service
 
