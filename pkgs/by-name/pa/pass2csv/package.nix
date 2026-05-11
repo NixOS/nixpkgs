@@ -1,12 +1,10 @@
 {
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
   lib,
-  python-gnupg,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pass2csv";
   version = "1.2.0";
   pyproject = true;
@@ -17,11 +15,11 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    python3Packages.setuptools
   ];
 
   propagatedBuildInputs = [
-    python-gnupg
+    python3Packages.python-gnupg
   ];
 
   # Project has no tests.
