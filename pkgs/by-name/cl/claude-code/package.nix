@@ -11,6 +11,7 @@
   autoPatchelfHook,
   procps,
   ripgrep,
+  sox,
   bubblewrap,
   socat,
   versionCheckHook,
@@ -68,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             bubblewrap
             socat
+            # required for /voice mode audio recording
+            sox
           ]
         )
       }
