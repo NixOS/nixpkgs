@@ -1,8 +1,6 @@
 {
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  pandocfilters,
-  panflute,
   lib,
   pandoc,
   pandoc-acro,
@@ -19,13 +17,13 @@ let
     hash = "sha256-JMfSQXX+BCGdFQYPFB+r08WRnhT3aXfnBNINROxCUA0=";
   };
 in
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   format = "setuptools";
   inherit pname version src;
 
   propagatedBuildInputs = [
-    pandocfilters
-    panflute
+    python3Packages.pandocfilters
+    python3Packages.panflute
   ];
 
   # Something in the tests does not typecheck, but the tool works well.

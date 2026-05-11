@@ -2899,8 +2899,6 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
-  pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
-
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
   pandoc-include = python3Packages.callPackage ../tools/misc/pandoc-include { };
