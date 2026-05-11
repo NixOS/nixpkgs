@@ -1,12 +1,10 @@
 {
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   lib,
-  pandoc-xnos,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pandoc-fignos";
   version = "2.4.0";
   pyproject = true;
@@ -19,10 +17,10 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = [ pandoc-xnos ];
+  propagatedBuildInputs = [ python3Packages.pandoc-xnos ];
 
   # Different pandoc executables are not available
   doCheck = false;
