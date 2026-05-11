@@ -71,13 +71,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.6.2";
+  version = "3.8.3";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-uMLRFBZP7/42R6nReONcb9/kVGCn3yGHLcLFajMZLmQ=";
+    hash = "sha256-7B8AnLPC2CcgdR/Jz0TvMhqYCCEf345U6xlWB7QaIqg=";
   };
 
   missingHashes = ./missing-hashes.json;
