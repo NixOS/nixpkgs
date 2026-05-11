@@ -15668,6 +15668,12 @@
     githubId = 725613;
     name = "Linus Arver";
   };
+  linusdikomey = {
+    email = "l.dikomey03@gmail.com";
+    github = "LinusDikomey";
+    githubId = 24570464;
+    name = "Linus Dikomey";
+  };
   linuxissuper = {
     email = "m+nix@linuxistcool.de";
     matrix = "@m:linuxistcool.de";
