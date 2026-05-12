@@ -129,10 +129,7 @@ let
         --set GSETTINGS_SCHEMA_DIR "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}" \
         --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share:${pkgs.gsettings-desktop-schemas}/share"
 
-      if [ -f "$out/share/obsidian/obsidian-cli" ]; then
-        install -m 755 -D "$out/share/obsidian/obsidian-cli" $out/bin/obsidian-cli
-      fi
-
+      install -m 755 -D "$out/share/obsidian/obsidian-cli" $out/bin/obsidian-cli
       install -m 444 -D "${desktopItem}/share/applications/"* -t $out/share/applications/
 
       for size in 16 24 32 48 64 128 256 512; do
@@ -169,9 +166,7 @@ let
       mkdir -p $out/{Applications/${appname}.app,bin}
       cp -R . $out/Applications/${appname}.app
       makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/obsidian
-      if [ -f "$out/Applications/${appname}.app/Contents/MacOS/obsidian-cli" ]; then
-        makeWrapper $out/Applications/${appname}.app/Contents/MacOS/obsidian-cli $out/bin/obsidian-cli
-      fi
+      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/obsidian-cli $out/bin/obsidian-cli
       runHook postInstall
     '';
   };
