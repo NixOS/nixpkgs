@@ -128,12 +128,66 @@ in
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
+        RuntimeDirectory = [
+          "anki-sync-server"
+          "anki-sync-server/rootdir"
+          "anki-sync-server/files"
+        ];
+        RuntimeDirectoryMode = "700";
         StateDirectory = name;
+        StateDirectoryMode = "0750";
         ExecStart = anki-sync-server-run;
         Restart = "always";
         LoadCredential = map (
           x: "${specEscape x.user.username}:${specEscape (toString x.user.passwordFile)}"
         ) usersWithIndexesFile;
+        AmbientCapabilities = "";
+        BindPaths = [
+          cfg.baseDirectory
+          "/run/anki-sync-server/files:/run/anki-sync-server"
+        ];
+        BindReadOnlyPaths = [
+          builtins.storeDir
+        ];
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateMounts = true;
+        PrivatePid = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.baseDirectory
+        ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RootDirectory = "/run/anki-sync-server/rootdir";
+        SocketBindAllow = [
+          "tcp:${toString cfg.port}"
+        ];
+        SocketBindDeny = "any";
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
   };
