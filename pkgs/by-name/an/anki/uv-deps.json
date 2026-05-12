@@ -412,14 +412,6 @@
     "hash": "sha256-KEx7jy9Yy3N/DPHDD9fq8Mz83hlgmdJOzt4/wgBapZ4="
   },
   {
-    "url": "https://files.pythonhosted.org/packages/17/f8/01bf35a3afd734345528f98d0353f2a978a476528ad4d7e78b70c4d149dd/flask_cors-6.0.1-py3-none-any.whl",
-    "hash": "sha256-x7LL+xoxqg0uU0HuoDpoBTSfemFkfa7hoVxGu+mBSUw="
-  },
-  {
-    "url": "https://files.pythonhosted.org/packages/76/37/bcfa6c7d5eec777c4c7cf45ce6b27631cebe5230caf88d85eadd63edd37a/flask_cors-6.0.1.tar.gz",
-    "hash": "sha256-2BvLMfB7CYW+f0hAYkfpJDrO0im3dHIZFgoFWe3WeNs="
-  },
-  {
     "url": "https://files.pythonhosted.org/packages/08/e7/ae38d7a6dfba0533684e0b2136817d667588ae3ec984c1a4e5df5eb88482/hatchling-1.27.0-py3-none-any.whl",
     "hash": "sha256-06LzVnxPkm6jmEnN+STH6Z5mhsnI4oiuEDfI+ipdk3s="
   },

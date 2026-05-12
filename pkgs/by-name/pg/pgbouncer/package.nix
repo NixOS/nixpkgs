@@ -12,13 +12,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgbouncer";
-  version = "1.25.1";
+  version = "1.25.2";
 
   src = fetchurl {
-    url = "https://www.pgbouncer.org/downloads/files/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-blZq6S/j739qG54m1gSffXyjnEDinns49tVQCuFdhGU=";
+    url = "https://www.pgbouncer.org/downloads/files/${finalAttrs.version}/pgbouncer-${finalAttrs.version}.tar.gz";
+    hash = "sha256-kkrTURP9CnHI4tvoW10DRFUy4rezep+KSJg77qI4szI=";
   };
 
   nativeBuildInputs = [
@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     mainProgram = "pgbouncer";
     description = "Lightweight connection pooler for PostgreSQL";
     changelog = "https://github.com/pgbouncer/pgbouncer/releases/tag/pgbouncer_${
-      replaceStrings [ "." ] [ "_" ] version
+      replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ _1000101 ];
     platforms = lib.platforms.all;
   };
-}
+})
