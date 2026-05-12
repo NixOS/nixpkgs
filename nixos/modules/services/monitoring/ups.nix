@@ -605,6 +605,10 @@ in
         description = "Uninterruptible Power Supplies (Monitor)";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        path = [
+          # for wall command
+          pkgs.util-linux
+        ];
         serviceConfig = {
           Type = "notify-reload";
           ExecStartPre = "${createUpsmonConf}";
