@@ -34,5 +34,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/octotep/menugen";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    license = lib.licenses.unfree;
   };
 }

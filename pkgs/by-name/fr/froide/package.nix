@@ -8,13 +8,14 @@
   geos,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
 }:
 let
+  pnpm = pnpm_10;
 
   python = python3Packages.python.override {
     packageOverrides = self: super: {
@@ -120,7 +121,12 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit pname version src;
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
     fetcherVersion = 3;
     hash = "sha256-NbfCVD+gmtoxuYUCumTKj9P72utK787VdlnuU4lMMGc=";
   };

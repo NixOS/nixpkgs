@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nodejs_22,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   electron_40,
@@ -13,7 +13,9 @@
   writableTmpDirAsHomeHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
   version = "2.5.3";
@@ -27,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) version src;
+    inherit pnpm;
     pname = "picgo";
     hash = "sha256-tILvWDoHAN5XT1F/cJYgfeMzowuO/fhiughI+0FvHzc=";
     fetcherVersion = 3; # lockfileVersion 9.0 corresponds to fetcherVersion 3

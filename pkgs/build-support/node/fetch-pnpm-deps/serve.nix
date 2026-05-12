@@ -3,6 +3,7 @@
   pnpm,
   pnpmDeps,
   zstd,
+  lib,
 }:
 
 writeShellApplication {
@@ -41,4 +42,8 @@ writeShellApplication {
     pnpm server start \
       --store-dir "$storePath"
   '';
+
+  meta = {
+    broken = lib.versionAtLeast pnpm.version "11";
+  };
 }
