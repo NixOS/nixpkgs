@@ -23,6 +23,8 @@
   fetchurl,
   withoutTargetLibc,
   threadsCross,
+  buildIsHost,
+  hostIsTarget,
 }:
 
 let
@@ -36,10 +38,7 @@ let
   # aarch64-darwin, as it breaks building a foreign one:
   # https://github.com/iains/gcc-12-branch/issues/18
   canApplyIainsDarwinPatches =
-    stdenv.hostPlatform.isDarwin
-    && stdenv.hostPlatform.isAarch64
-    && (lib.systems.equals buildPlatform hostPlatform)
-    && (lib.systems.equals hostPlatform targetPlatform);
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildIsHost && hostIsTarget;
 
   inherit (lib) optionals optional;
 in
