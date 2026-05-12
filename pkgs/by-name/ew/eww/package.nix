@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eww";
-  version = "0.6.0-unstable-2026-03-05";
+  version = "0-unstable-2026-03-05";
 
   src = fetchFromGitHub {
     owner = "elkowar";
