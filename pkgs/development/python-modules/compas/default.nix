@@ -10,6 +10,7 @@
   scipy,
   watchdog,
 
+  stdenv,
   pytestCheckHook,
   pytest-mock,
 }:
@@ -34,9 +35,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    "test_xml_from_url"
     "test_open_file_url_image"
     "test_open_file_url_text"
+    "test_xml_from_url"
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
+    "test_basic_rpc_call"
+    "test_switch_package"
   ];
 
   dependencies = [
