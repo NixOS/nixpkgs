@@ -606,14 +606,16 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          Type = "forking";
+          Type = "notify";
           ExecStartPre = "${createUpsmonConf}";
-          ExecStart = "${cfg.package}/sbin/upsmon -u ${cfg.upsmon.user}";
-          ExecReload = "${cfg.package}/sbin/upsmon -c reload";
+          ExecStart = "${cfg.package}/sbin/upsmon -F -u ${cfg.upsmon.user}";
+          ExecReload = "${cfg.package}/sbin/upsmon -c reload -P $MAINPID";
           LoadCredential = lib.mapAttrsToList (
             name: monitor: "upsmon_password_${name}:${monitor.passwordFile}"
           ) cfg.upsmon.monitor;
           Slice = "system-ups.slice";
+          NotifyAccess = "all";
+          PIDFile = "/run/upsmon.pid";
         };
         environment = envVars;
       };
@@ -632,15 +634,16 @@ in
         ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          Type = "forking";
+          Type = "notify";
           ExecStartPre = "${createUpsdUsers}";
           # TODO: replace 'root' by another username.
-          ExecStart = "${cfg.package}/sbin/upsd -u root";
+          ExecStart = "${cfg.package}/sbin/upsd -FF -u root";
           ExecReload = "${cfg.package}/sbin/upsd -c reload";
           LoadCredential = lib.mapAttrsToList (
             name: user: "upsdusers_password_${name}:${user.passwordFile}"
           ) cfg.users;
           Slice = "system-ups.slice";
+          NotifyAccess = "main";
         };
         environment = envVars;
         restartTriggers = [
