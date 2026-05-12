@@ -223,30 +223,48 @@ buildNpmPackage (finalAttrs: {
     done
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    let
+      zoteroArch =
+        platform:
+        if platform.isAarch64 then
+          "arm64"
+        else if platform.isx86_64 then
+          "x64"
+        else if platform.isx86_32 then
+          "i686"
+        else
+          platform.parsed.cpu.name;
+    in
+    ''
+      runHook preBuild
 
-    npm run build
+      npm run build
 
-    # Place firefox files at the right place.
-    # The correct firefox version can be found in zotero/app/config.sh at `GECKO_VERSION_LINUX`.
-    mkdir -p app/xulrunner/
-  ''
-  + lib.optionalString stdenv.targetPlatform.isDarwin ''
-    cp -r "${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
-  ''
-  + lib.optionalString (!stdenv.targetPlatform.isDarwin) ''
-    cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${
-      lib.replaceString "aarch64" "arm64" stdenv.targetPlatform.parsed.cpu.name
-    }"
-  ''
-  + ''
-    chmod -R u+w app/xulrunner/
+      # Place firefox files at the right place.
+      # The correct firefox version can be found in zotero/app/config.sh at `GECKO_VERSION_LINUX`.
+      mkdir -p app/xulrunner/
+    ''
+    + lib.optionalString stdenv.targetPlatform.isDarwin ''
+      cp -r "${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
+    ''
+    + lib.optionalString (!stdenv.targetPlatform.isDarwin) ''
+      cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${
+        lib.replaceString "aarch64" "arm64" stdenv.targetPlatform.parsed.cpu.name
+      }"
+    ''
+    + ''
+      chmod -R u+w app/xulrunner/
 
-    ./app/scripts/dir_build
+      build_dir=$(mktemp -d)
+      ./app/scripts/prepare_build -s ./build -o "$build_dir" -c release
+      ./app/build.sh -d "$build_dir" -c release -s \
+        ${
+          if stdenv.targetPlatform.isDarwin then "-p m" else "-p l -a ${zoteroArch stdenv.targetPlatform}"
+        }
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   inherit doCheck;
   # Build with test support if `doCheck` is enabled.
