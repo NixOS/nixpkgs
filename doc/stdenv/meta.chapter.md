@@ -151,6 +151,8 @@ The list of Nix platform types for which the [Hydra](https://github.com/nixos/hy
 }
 ```
 
+Note that this does not affect whether reverse dependencies of the package are built on Hydra.
+
 ### `broken` {#var-meta-broken}
 
 If set to `true`, the package is marked as "broken", meaning that it won’t show up in [search.nixos.org](https://search.nixos.org/packages), and cannot be built or installed unless [explicitly allowed](#sec-allow-broken).
