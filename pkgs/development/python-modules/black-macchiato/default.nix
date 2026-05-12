@@ -5,12 +5,13 @@
   pytestCheckHook,
   black,
   fetchpatch,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "black-macchiato";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wbolster";
@@ -27,11 +28,12 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ black ];
+  build-system = [ setuptools ];
+
+  dependencies = [ black ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    black
   ];
 
   pythonImportsCheck = [ "black" ];
