@@ -68,6 +68,7 @@ rec {
     fetchOpenFromNvidia = true;
     settingsSha256 = "sha256-QrnBM+sdWO4GanO62rxpHmRrjYkYpl5RD6fIiHq4C4A=";
     persistencedSha256 = "sha256-50xYdgx7EEThbaMp4QS8GADbxj0mhBXh8QQN0tWMwRg=";
+    modprobeSha256 = "sha256-aSpDzBhMWFX+S12tvowZnRqpbSwoLPpSubRMx18m+O8=";
   };
 
   new_feature = generic {
@@ -78,6 +79,7 @@ rec {
     fetchOpenFromNvidia = true;
     settingsSha256 = "sha256-0YAhufRgjDW+uR+kjaTb154fibpcDw8QowfrucoZsKE=";
     persistencedSha256 = "sha256-Whgv9X+v2fRhzliOl2LzltY9v1SxDafFfv3IUPqj/hk=";
+    modprobeSha256 = "sha256-4FzxZR85mWvqUh3FNNlzsg1b7yeMCXuVHMII4AeP8RA=";
   };
 
   beta = generic {
@@ -88,6 +90,7 @@ rec {
     fetchOpenFromNvidia = true;
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
+    modprobeSha256 = "sha256-DDeSu6R1JsUux77LfsrAVBTwW6MPu6P1v8W4o2VCN2g=";
   };
 
   # Vulkan developer beta driver
@@ -96,11 +99,13 @@ rec {
     version = "595.44.09";
     persistencedVersion = "595.45.04";
     settingsVersion = "595.45.04";
+    modprobeVersion = "595.45.04";
     sha256_64bit = "sha256-LOcwE47hUG1aZX7JvLmTb/yC5qQgXYZ0TAavSn38Xug=";
     openSha256 = "sha256-+ZLnlNhMkLG7UNMRmc4yHojs4lsBSiFC/bGf2qk0W+o=";
     fetchOpenFromNvidia = true;
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
+    modprobeSha256 = "sha256-DDeSu6R1JsUux77LfsrAVBTwW6MPu6P1v8W4o2VCN2g=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
   };
 
@@ -115,6 +120,7 @@ rec {
     fabricmanagerSha256 = "sha256-f/AQ8HrgoqBQyXNrXA/UaI4OMQ9QcjjYWIhr1/5uM74=";
     openSha256 = "sha256-uGQQkQf1oKkGhOXgJ3IzQX1NkB7cGFcnl0HWuqeN8d4=";
     fetchOpenFromNvidia = true;
+    modprobeSha256 = "sha256-Vtp5FDDmzbwtDe11O0w/S8Mptpp8Li21/gBfJzfE0/g=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -128,6 +134,7 @@ rec {
     fabricmanagerSha256 = "sha256-Jk6XVn/d6vqfxYGAACiD9UHelnjdC4+zOi4EEv8LuKE=";
     openSha256 = "sha256-8p44gFfIn5/NaYqevX3N21Jc72S1OnSNaa9XktZnPNk=";
     fetchOpenFromNvidia = true;
+    modprobeSha256 = "sha256-f4Kt5KjRfDQPeKlnW5WnYkFHSBZDjGA5q+/07fBZ+Yg=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -141,6 +148,7 @@ rec {
     fabricmanagerSha256 = "sha256-jSTKzeRVTUcYma1Cb0ajSdXKCi6KzUXCp2OByPSWSR4=";
     openSha256 = "sha256-bwJQUj7eEM7XMji1bjS8T1Uw3qJtSE+fzZCtBKyHPH0=";
     fetchOpenFromNvidia = true;
+    modprobeSha256 = "sha256-Sk5ogsasf6DBz0j54dhlqZp7p8swnNnvITkdIudc69k=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -159,6 +167,7 @@ rec {
     fetchOpenFromNvidia = true;
     settingsSha256 = "sha256-dfdu/3tnwHUfP7WoeQFNOMalMlpmUWjeMDIOnu+yi8E=";
     persistencedSha256 = "sha256-j8YM1w231X+JIP3c3TpUNurEBumEu1stVjzFGWu1JXE=";
+    modprobeSha256 = "sha256-az+H9BQFxSyZbRqy7ppgSKV4IybSIXOinkaxsyPUni8=";
   };
 
   # Last one without the bug reported here:
@@ -171,6 +180,7 @@ rec {
     fetchOpenFromNvidia = true;
     settingsSha256 = "sha256-hN4IWAD/M+th7brbzdBtgOQ2P1QUVrrWITgVGiuCxWw=";
     persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
+    modprobeSha256 = "sha256-4GYNBKQthFpV3BnFQkUTkElcemssyV0oKGzDzHbSWW0=";
   };
 
   # Last one supporting Kepler architecture
@@ -189,6 +199,7 @@ rec {
       sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
       settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
       persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
+      modprobeSha256 = "sha256-x2bMn0Hjb8axAdqhjODFvKR875DhP7R3OiwxI3FVy1M=";
 
       patches = map (patch: "${aurPatches}/${patch}") [
         "0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
@@ -218,6 +229,7 @@ rec {
     sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
     settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
     persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
+    modprobeSha256 = "sha256-RxFTC1Nc8f6Gzlvllsa4QGwNurfOocvC4QC4gPYO3lY=";
 
     patches = map (patch: "${aurPatches}/${patch}") [
       "kernel-4.16+-memory-encryption.patch"
@@ -280,6 +292,7 @@ rec {
       sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
       settingsSha256 = "0zm29jcf0mp1nykcravnzb5isypm8l8mg2gpsvwxipb7nk1ivy34";
       persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
+      modprobeSha256 = "sha256-aEVCKYliPCk8SJybZ/wcgU8bppmx7tlAUuOaAQqJgeQ=";
       useGLVND = false;
 
       broken = kernel.kernelAtLeast "6.7";

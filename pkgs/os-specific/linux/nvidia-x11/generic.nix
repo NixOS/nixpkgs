@@ -29,6 +29,8 @@
   persistencedVersion ? version,
   fabricmanagerSha256 ? null,
   fabricmanagerVersion ? version,
+  modprobeSha256 ? null,
+  modprobeVersion ? version,
   # Whether to fetch the open-source kernel module sources from NVIDIA
   fetchOpenFromNvidia ? false,
   # Feature flags
@@ -237,10 +239,19 @@ nvidiaDriver.overrideAttrs (
           ) fabricmanagerSha256
         else
           { };
+      modprobe = lib.mapNullable (
+        hash:
+        callPackage ./modprobe.nix {
+          inherit hash fetchFromGithubOrNvidia;
+          version = modprobeVersion;
+          nvidia_x11 = finalAttrs.finalPackage;
+        }
+      ) modprobeSha256;
       inherit
         settingsVersion
         persistencedVersion
         fabricmanagerVersion
+        modprobeVersion
         ;
     };
   }
