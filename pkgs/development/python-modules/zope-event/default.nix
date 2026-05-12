@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-event";
-  version = "6.1";
+  version = "6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.event";
-    tag = version;
-    hash = "sha256-ugyHPqqFcObgldThkkUQgZnl1fVEcXYFnXyAxNwUFIE=";
+    tag = finalAttrs.version;
+    hash = "sha256-FoE9bdr/JcOaB8/OQTUmxGrNgIDc1vPDlmZq0v+bjmQ=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   pythonImportsCheck = [ "zope.event" ];
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Event publishing system";
     homepage = "https://github.com/zopefoundation/zope.event";
-    changelog = "https://github.com/zopefoundation/zope.event/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.event/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})
