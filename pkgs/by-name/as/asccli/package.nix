@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "asccli";
-  version = "1.2.7";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "rorkai";
     repo = "App-Store-Connect-CLI";
     tag = "${finalAttrs.version}";
-    hash = "sha256-VGXGm7SA26O2BnidbnSJy9r7sdhHi1ekxaiKoqiW9iw=";
+    hash = "sha256-VMLLziuLV7F95mTdEmaUxwMC9vKSTejJZgw3KFHr7sg=";
   };
 
-  vendorHash = "sha256-712Q7KiFQyTDjX4Srhukv3eQ84MRjnQxrpgBfqK2xa4=";
+  vendorHash = "sha256-XBEDMUGwSh8P+dVKMebN3zD83e1odAN+Wy15yys0+2M=";
 
   ldflags = [
     "-s"

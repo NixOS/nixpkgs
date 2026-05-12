@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5dLG40X+yxJo566guyHqOCLNp+uNSE+HONS8GIDm58A=";
 
+  separateDebugInfo = true;
+
   postPatch = ''
     substituteInPlace data/start-cosmic \
       --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace data/cosmic.desktop \
       --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
   '';
+
+  __structuredAttrs = true;
 
   buildInputs = [ bash ];
   nativeBuildInputs = [ just ];

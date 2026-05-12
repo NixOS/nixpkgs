@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
-  version = "4.11.0";
+  version = "4.11.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_keyvault_certificates";
     inherit version;
-    hash = "sha256-/gNWluQ7F8QUrQjvYEbWwT5odw1lzDi9rvjtistu+Hg=";
+    hash = "sha256-c02aZfqg8r1FueFi0xesrexxBWk06/S7/gWLI9dL0HM=";
   };
 
   nativeBuildInputs = [ setuptools ];
