@@ -6328,12 +6328,6 @@
     githubId = 4347318;
     email = "davinci42.cn@gmail.com";
   };
-  davisrichard437 = {
-    email = "davisrichard437@gmail.com";
-    github = "davisrichard437";
-    githubId = 85075437;
-    name = "Richard Davis";
-  };
   davorb = {
     email = "davor@davor.se";
     github = "davorb";
