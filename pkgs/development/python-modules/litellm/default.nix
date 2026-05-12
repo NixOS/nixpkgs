@@ -140,6 +140,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/BerriAI/litellm";
     changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+    knownVulnerabilities = [
+      "CVE-2026-40217: arbitrary code execution via bytecode rewriting at /guardrails/test_custom_code in the LiteLLM proxy process."
+    ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }
