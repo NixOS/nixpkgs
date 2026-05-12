@@ -35,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
   version = "0.7.15";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "bazaar-org";
     repo = "bazaar";
