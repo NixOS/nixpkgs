@@ -5,6 +5,7 @@
   blueprint-compiler,
   desktop-file-utils,
   meson,
+  python3,
   ninja,
   pkg-config,
   wrapGAppsHook4,
@@ -49,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook4
+    (python3.withPackages (p: [
+      p.babel
+      p.pygobject3
+    ]))
   ];
 
   buildInputs = [
