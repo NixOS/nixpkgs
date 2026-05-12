@@ -11290,4 +11290,12 @@ with pkgs;
     enableWayland = false;
     enableX11 = true;
   };
+
+  rosecFull = pkgs.rosec.override {
+    provider = with pkgsCross.wasi32; [
+      rosec-bitwarden-pm
+      rosec-bitwarden-sm
+      rosec-gnome-keyring
+    ];
+  };
 }
