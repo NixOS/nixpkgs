@@ -2,105 +2,87 @@
   fetchFromGitLab,
   rustPlatform,
   lib,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  stdenvNoCC,
-  nodejs_22,
+  stdenv,
+  nodejs_24,
   ffmpeg,
   imagemagick,
+  openssl,
+  pkg-config,
   makeWrapper,
 }:
 let
-  izzy = rustPlatform.buildRustPackage rec {
-    pname = "izzy";
-    version = "2.0.1";
-
-    src = fetchFromGitLab {
-      owner = "porn-vault";
-      repo = "izzy";
-      rev = version;
-      hash = "sha256-UauA5mZi5a5QF7d17pKSzvyaWbeSuFjBrXEAxR3wNkk=";
-    };
-
-    postPatch = ''
-      ln -s ${./Cargo.lock} Cargo.lock
-    '';
-
-    cargoLock.lockFile = ./Cargo.lock;
-
-    meta = {
-      description = "Rust In-Memory K-V Store with Redis-Style File Persistence and Secondary Indices";
-      homepage = "https://gitlab.com/porn-vault/izzy";
-      license = lib.licenses.gpl3Plus;
-      maintainers = [ lib.maintainers.luNeder ];
-      mainProgram = "izzy";
-    };
-  };
-  nodejs = nodejs_22;
-  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
+  nodejs = nodejs_24;
+  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "porn-vault";
-  version = "0.30.0-rc.11";
+  version = "0.40.0-beta.30";
 
   src = fetchFromGitLab {
     owner = "porn-vault";
     repo = "porn-vault";
-    rev = "4c6182c5825d85193cf67cb7cd927da2feaaecdb";
-    hash = "sha256-wQ3dqLc0l2BmLGDYrbWxX2mPwO/Tqz0fY/fOQTEUv24=";
+    rev = "c85e5db5dc9ba9bdbc926fe1393ee2075ae1f22f";
+    hash = "sha256-n5kWMmGlFA8iYUK83uRj6zpJ6PW64Ivy2ywPNZQ8yeY=";
   };
+
+  cargoHash = "sha256-E5Oq+aLUT+jMuspIs+CFnKBtJTTgq7GlB1VU+9m9caY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    prePatch = ''
+      cd app
+    '';
     pnpm = pnpm';
     fetcherVersion = 3;
-    hash = "sha256-CAsUP+bLrTkbUd3h/FP4gBVwZECyqQg0nnmap4zsRTs=";
+    hash = "sha256-8g5JDcZ/GIeIiFEwrxS0w5oi3K7yJHtE08ljrUlFFo0=";
   };
 
   nativeBuildInputs = [
+    pkg-config
+    openssl
     nodejs
     pnpmConfigHook
     pnpm'
     makeWrapper
   ];
 
-  patches = [
-    ./allow-use-of-systemd-temp-path.patch
-  ];
+  prePnpmInstall = ''
+    cd app
+  '';
 
   postPatch = ''
-    substituteInPlace server/binaries/izzy.ts \
-      --replace-fail 'chmodSync(izzyPath, "111");' ""
+    substituteInPlace vault/src/temp.rs \
+      --replace-fail 'PV_TMP_FOLDER' "CACHE_DIRECTORY"
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     pnpm build
-
-    runHook postBuild
   '';
+
+  PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 package.json config.example.json remix.config.js -t $out/share/porn-vault
-    cp -R public dist build node_modules graphql locale -t $out/share/porn-vault
+    cd ..
+    mkdir -p $out/bin
+    cp ./target/${stdenv.hostPlatform.config}/release/pv $out/bin/porn-vault-unwrapped
 
     runHook postInstall
   '';
 
   preFixup = ''
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/porn-vault" \
-      --chdir "$out/share/porn-vault" \
-      --add-flags "dist/index.js" \
-      --set-default IZZY_PATH "${lib.getExe izzy}" \
+    makeWrapper "$out/bin/porn-vault-unwrapped" "$out/bin/porn-vault" \
       --prefix PATH : "${
         lib.makeBinPath [
           ffmpeg
           imagemagick
-          izzy
+          openssl
         ]
       }"
   '';
