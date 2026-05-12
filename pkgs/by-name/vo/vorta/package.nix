@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vorta";
-  version = "0.11.0";
+  version = "0.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/60KVJGKNz3aouv5jzubFlz+AxPEbRDSv4ZO9MEi3V0=";
+    hash = "sha256-6WY1UAB5Vr+5Az6UYq2DwXwjabcQr7A3QAEQ2/aIzfg=";
   };
 
   nativeBuildInputs = [
