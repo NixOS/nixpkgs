@@ -77,6 +77,7 @@ rec {
     openSha256 = "sha256-fUUcMNQxJSCo91jFj47ExYnQie4L82ooD7/r20BVv1c=";
     settingsSha256 = "sha256-4Kxro6tvI5aX4nu2RspgyBsW+Jq3/VYjSAS5UGdzTCU=";
     persistencedSha256 = "sha256-JsMLPqJuZwAtHngsQODMsmgO7F2tVkQ2arc7fYa2bwo=";
+    modprobeSha256 = "sha256-TSP1RySipE2cA6pFopdbBPp+6bLTkGzOZ098OOuAse8=";
   };
 
   new_feature = generic {
@@ -86,6 +87,7 @@ rec {
     openSha256 = "sha256-4HMf9lyCUU4FkpHyiUkk4cmiCSm/pu5eAccTSRz3AjY=";
     settingsSha256 = "sha256-inDRpG02sdDgHmlqgu/DsgK8OFdOt1fZIYyXdhlGC/c=";
     persistencedSha256 = "sha256-RzeR6Ldct6MUxjnXRyThdh5Y3jjMehTVg85MtwuWNX4=";
+    modprobeSha256 = "sha256-ZAcooGeOaF3JQ4fzVG3SH7UE5skd/xzt/dGWEPuR4K4=";
   };
 
   beta = generic {
@@ -95,6 +97,7 @@ rec {
     openSha256 = "sha256-zkNIsepBEgDwlw0GvSB0CoZk3Zozsv6peqprs62U3rU=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
+    modprobeSha256 = "sha256-DDeSu6R1JsUux77LfsrAVBTwW6MPu6P1v8W4o2VCN2g=";
   };
 
   # Vulkan developer beta driver
@@ -103,10 +106,12 @@ rec {
     version = "595.44.09";
     persistencedVersion = "595.45.04";
     settingsVersion = "595.45.04";
+    modprobeVersion = "595.45.04";
     sha256_64bit = "sha256-LOcwE47hUG1aZX7JvLmTb/yC5qQgXYZ0TAavSn38Xug=";
     openSha256 = "sha256-+ZLnlNhMkLG7UNMRmc4yHojs4lsBSiFC/bGf2qk0W+o=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
+    modprobeSha256 = "sha256-DDeSu6R1JsUux77LfsrAVBTwW6MPu6P1v8W4o2VCN2g=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
   };
 
@@ -120,6 +125,7 @@ rec {
     persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
     fabricmanagerSha256 = "sha256-f/AQ8HrgoqBQyXNrXA/UaI4OMQ9QcjjYWIhr1/5uM74=";
     openSha256 = "sha256-uGQQkQf1oKkGhOXgJ3IzQX1NkB7cGFcnl0HWuqeN8d4=";
+    modprobeSha256 = "sha256-Vtp5FDDmzbwtDe11O0w/S8Mptpp8Li21/gBfJzfE0/g=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -132,6 +138,7 @@ rec {
     persistencedSha256 = "sha256-3Omj160wtWdKAZDzWt/m/cbUTQ9DMJ1rSxMrnIrKXiw=";
     fabricmanagerSha256 = "sha256-xZnTQYZy/uPrTLD6mACflGGWtaYB4luzh0AFxTstNIw=";
     openSha256 = "sha256-/wWZGvDN+Rmq2j6otbBjbrnbzGR9seMYmrATNnhKBnA=";
+    modprobeSha256 = "sha256-2zdTEcAQDrmik2R2FDk6UL5oczkMTHQ9KcinD3jJCCI=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -144,6 +151,7 @@ rec {
     persistencedSha256 = "sha256-x4K0Gp89LdL5YJhAI0AydMRxl6fyBylEnj+nokoBrK8=";
     fabricmanagerSha256 = "sha256-jSTKzeRVTUcYma1Cb0ajSdXKCi6KzUXCp2OByPSWSR4=";
     openSha256 = "sha256-bwJQUj7eEM7XMji1bjS8T1Uw3qJtSE+fzZCtBKyHPH0=";
+    modprobeSha256 = "sha256-Sk5ogsasf6DBz0j54dhlqZp7p8swnNnvITkdIudc69k=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
@@ -161,6 +169,7 @@ rec {
     openSha256 = "sha256-/wWZGvDN+Rmq2j6otbBjbrnbzGR9seMYmrATNnhKBnA=";
     settingsSha256 = "sha256-KcrGHoR+ZMdsFyI4myU8/eVls2f8GkNSX/j2JnZndyM=";
     persistencedSha256 = "sha256-3Omj160wtWdKAZDzWt/m/cbUTQ9DMJ1rSxMrnIrKXiw=";
+    modprobeSha256 = "sha256-2zdTEcAQDrmik2R2FDk6UL5oczkMTHQ9KcinD3jJCCI=";
   };
 
   # Last one without the bug reported here:
@@ -172,6 +181,7 @@ rec {
     openSha256 = "sha256-cepwckGQ7L+HV5B+1vROQfGQKzVeGM0/i6exSnuy2do=";
     settingsSha256 = "sha256-hN4IWAD/M+th7brbzdBtgOQ2P1QUVrrWITgVGiuCxWw=";
     persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
+    modprobeSha256 = "sha256-4GYNBKQthFpV3BnFQkUTkElcemssyV0oKGzDzHbSWW0=";
   };
 
   # Last one supporting Kepler architecture
@@ -190,6 +200,7 @@ rec {
       sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
       settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
       persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
+      modprobeSha256 = "sha256-x2bMn0Hjb8axAdqhjODFvKR875DhP7R3OiwxI3FVy1M=";
 
       patches = map (patch: "${aurPatches}/${patch}") [
         "0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
@@ -219,6 +230,7 @@ rec {
     sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
     settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
     persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
+    modprobeSha256 = "sha256-RxFTC1Nc8f6Gzlvllsa4QGwNurfOocvC4QC4gPYO3lY=";
 
     patches = map (patch: "${aurPatches}/${patch}") [
       "kernel-4.16+-memory-encryption.patch"
@@ -281,6 +293,7 @@ rec {
       sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
       settingsSha256 = "0zm29jcf0mp1nykcravnzb5isypm8l8mg2gpsvwxipb7nk1ivy34";
       persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
+      modprobeSha256 = "sha256-aEVCKYliPCk8SJybZ/wcgU8bppmx7tlAUuOaAQqJgeQ=";
       useGLVND = false;
 
       broken = kernel.kernelAtLeast "6.7";

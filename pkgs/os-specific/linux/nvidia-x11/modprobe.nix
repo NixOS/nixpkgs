@@ -1,21 +1,29 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGithubOrNvidia,
   fetchpatch,
   gnum4,
+  nvidia_x11,
+  version,
+  hash,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-modprobe";
-  version = "595.71.05";
+  inherit version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGithubOrNvidia {
     owner = "NVIDIA";
     repo = "nvidia-modprobe";
-    rev = finalAttrs.version;
-    hash = "sha256-XVWvnUZkEqEh3UjPIU6DaZuYU9DvjfIMsWbLJ78jJWs=";
+    tag = finalAttrs.version;
+    inherit hash;
   };
 
+  # Another process can create the device node between the stat and the mknod, so
+  # accept an existing node of the right type and number instead of failing. One
+  # patch covers every branch: this code is unchanged from the oldest tag to the
+  # newest.
   patches = [
     (fetchpatch {
       url = "https://github.com/ooonea/nvidia-modprobe/commit/450f0c15ad9229fe5f4d3f80ae4d95e42d9c038e.patch";
@@ -25,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ gnum4 ];
 
+  # `nvidia-modprobe --version` prints the built source's version, catching a stale hash.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   postPatch = ''
     substituteInPlace utils.mk --replace-fail "/usr/local" "$out"
   '';
@@ -33,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Load the NVIDIA kernel module and create NVIDIA character device files";
     homepage = "https://github.com/NVIDIA/nvidia-modprobe";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = nvidia_x11.meta.platforms;
+    mainProgram = "nvidia-modprobe";
   };
 })
