@@ -19,12 +19,12 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   meta = with lib; {
-    description = "TCP relay written in Go";
+    description = "TCP traffic relay written in Go";
     homepage = "https://gitlab.com/overhead/tcp-relay";
-    changelog = "";
+    changelog = "https://gitlab.com/overhead/tcp-relay/-/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ shutdaun ];
     mainProgram = "tcprelay";
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 })
