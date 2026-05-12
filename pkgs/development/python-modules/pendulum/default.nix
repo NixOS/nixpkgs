@@ -19,7 +19,7 @@
   time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pendulum";
   version = "3.2.0";
   pyproject = true;
@@ -27,14 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdispater";
     repo = "pendulum";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zpBymeYhCy+yu6RPhOuN5xOVk6928hd3+oRsfiBPPuY=";
   };
 
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    sourceRoot = "${src.name}/rust";
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/rust";
     hash = "sha256-tC65lxI561ygOhBFujWzGk32XiQH6QB42nqboWSfQrg=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python datetimes made easy";
     homepage = "https://github.com/sdispater/pendulum";
-    changelog = "https://github.com/sdispater/pendulum/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sdispater/pendulum/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
