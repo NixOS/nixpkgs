@@ -61,6 +61,22 @@ let
 
       doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
       preCheck = ''
+        # Bail if any shared object has executable stack enabled. This can
+        # happen when an object produced from an assmbly file in libcrypto is
+        # missing a .note.GNU-stack section. An executable stack is dangerous
+        # and unintentional, but without this check the derivation will build
+        # and even run if W^X is not enforced; it would fail dangerously.
+        objdump -p **/*.so | awk '
+          BEGIN { res = 0 }
+          /file format/ { file = $1 }
+          /STACK/ { stack = 1; next }
+          stack {
+            if ($0 ~ /flags.*x/) { print file " has executable stack"; res = 1 }
+            stack = 0
+          }
+          END { exit res }
+        '
+
         export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
         export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
       '';
@@ -139,5 +155,18 @@ in
   libressl_4_3 = generic {
     version = "4.3.1";
     hash = "sha256-wttCrOFOfVQZgm+rNadC7G5NEnJaBRpR0M6jwQug+lA=";
+    patches = [
+      # Fix for https://github.com/libressl/portable/issues/1278, where LibreSSL
+      # 4.3 started requiring executable stack because some objects were missing
+      # a .note.GNU-stack section; will probably be included in the next release.
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/libressl/portable/4dae91d056c6c75ba5cf2bc5e6148b8e02239119/patches/gnu-stack.patch";
+        hash = "sha256-Q1oWL4N8w5Zmjfq5QkTJR53NgZ4GqChSDaBicli5G2I=";
+        # This patch is written to be applied with -p0, with no leading path
+        # component, but Nix applies with -p1 by default, so we add it to not
+        # break compatibility with how other patches must be applied.
+        decode = "sed 's|^--- |--- a/|; s|^+++ |+++ b/|'";
+      })
+    ];
   };
 }
