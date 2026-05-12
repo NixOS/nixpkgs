@@ -30,6 +30,8 @@ stdenv.mkDerivation {
   strictDeps = true;
   __structuredAttrs = true;
 
+  dontStrip = true;
+
   installPhase = ''
     runHook preInstall
 

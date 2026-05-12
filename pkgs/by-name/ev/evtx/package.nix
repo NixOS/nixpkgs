@@ -6,21 +6,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "evtx";
-  version = "0.10.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "omerbenamram";
     repo = "evtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v57lo1ggElGJD618ojuADspmhlZAMgmzD5DxEdtp2Ak=";
+    hash = "sha256-LVGw/u5xq+m96zSMPbQDpMnfMHq7FyQnzkmGMUMVgwM=";
   };
 
-  cargoHash = "sha256-qjlN10YS79S0JV2MPFB9SxPDUQnoVdqVf8kYpLt4w9g=";
+  cargoHash = "sha256-RnuWlfmzOZzOMfeKo8tv9I4elLQgpn9IbVa0EpYGnI0=";
 
   postPatch = ''
     # CLI tests will fail in the sandbox
     rm tests/test_cli_interactive.rs
   '';
+
+  checkFlags = [
+    "--skip=wevt_templates_research::wevt_dll_adtschema"
+    "--skip=wevt_templates_research::wevt_dll_lsasrv"
+    "--skip=wevt_templates_research::wevt_dll_services"
+    "--skip=wevt_templates_research::wevt_dll_wevtsvc"
+  ];
 
   meta = {
     description = "Parser for the Windows XML Event Log (EVTX) format";

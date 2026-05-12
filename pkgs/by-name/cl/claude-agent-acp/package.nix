@@ -23,7 +23,7 @@ buildNpmPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/claude-agent-acp \
-      --prefix CLAUDE_CODE_EXECUTABLE ${lib.getExe claude-code}
+      --set-default CLAUDE_CODE_EXECUTABLE ${lib.getExe claude-code}
   '';
 
   meta = {

@@ -77,8 +77,9 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.12";
+  version = "2.14";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -86,7 +87,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-/e11kacSYPKdjVEKAo3x/CarzKhO3tiTsMjYWLzHbls=";
+    hash = "sha256-yxcUn75blB5ssEqGXZFDUrBv2/WM8yzumJCt5olV5Po=";
   };
 
   patches =
@@ -102,8 +103,8 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
       # https://github.com/NVIDIA/TransformerEngine/pull/2832
       (fetchpatch {
         name = "fix-cuda-arch-cmake-logic";
-        url = "https://github.com/GaetanLepage/TransformerEngine/commit/a3cf63e0d03dd9af1d494854949387f1ae677bf0.patch";
-        hash = "sha256-g2aIF0fROsExEjuNiyI62/rrCOXYyOjyQIOn6rCrUyI=";
+        url = "https://github.com/NVIDIA/TransformerEngine/commit/fca261ecd09c318d22e7eeebda79632eed8cb9e4.patch";
+        hash = "sha256-nph01cIfmjN7RUFZif5ORoz29CEHWwetiHMEZVnnOyY=";
       })
     ]
     ++ optionals withNvshmem [
@@ -118,8 +119,8 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
       # https://github.com/NVIDIA/TransformerEngine/pull/2835
       (fetchpatch {
         name = "fix-jax-extension-build-with-mpi";
-        url = "https://github.com/GaetanLepage/TransformerEngine/commit/f68cd3cab34972a899ad0069e2c4ee806e8bc6fb.patch";
-        hash = "sha256-u0ljg1FwY0QjR+ETswpzWV+Sbv00JHI5CSrNQ/9zsuA=";
+        url = "https://github.com/NVIDIA/TransformerEngine/commit/2dd31bb849e83cce51c7d169db883862063d3a95.patch";
+        hash = "sha256-QSRMetseYPGGZCgGkS9rIj9nJdazCD4hv2IgPc+ClSM=";
       })
     ];
 
