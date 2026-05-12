@@ -1,28 +1,34 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
+  autoreconfHook269,
   gnat,
   # use gprbuild-boot since gprbuild proper depends
   # on this xmlada derivation.
   gprbuild-boot,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xmlada";
-  version = "25.0.0";
+  version = "26.0.0";
 
   src = fetchFromGitHub {
     name = "xmlada-${finalAttrs.version}-src";
     owner = "AdaCore";
     repo = "xmlada";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UMJiXSHMS8+X5gyV1nmC29gF71BFnz7LNPQnwUMD3Yg=";
+    hash = "sha256-+7SaLykENypvpx/C5a93DBjusltFNEsVH1pTkfsKwPU=";
   };
 
   nativeBuildInputs = [
     gnat
     gprbuild-boot
+    autoreconfHook269
+  ];
+
+  makeFlags = [
+    "PROCESSORS=$(NIX_BUILD_CORES)"
   ];
 
   meta = {

@@ -21,14 +21,14 @@ makeScopeWithSplicing' {
 
       xmlada = self.callPackage ../development/ada-modules/xmlada { };
 
-      gnatprove =
-        # They haven't released a version of gnatprove for gnat16 yet
-        if lib.versionOlder gnat.version "16" then
-          self.callPackage ../development/ada-modules/gnatprove {
-            ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
-          }
-        else
-          null;
+      sarif-ada = self.callPackage ../development/ada-modules/sarif-ada { };
+
+      vss-text = self.callPackage ../development/ada-modules/vss-text { };
+      vss-extra = self.callPackage ../development/ada-modules/vss-extra { };
+
+      gnatprove = self.callPackage ../development/ada-modules/gnatprove {
+        ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
+      };
 
       gnatcoll-core = self.callPackage ../development/ada-modules/gnatcoll/core.nix { };
 
@@ -66,11 +66,15 @@ makeScopeWithSplicing' {
       gnatcoll-postgres = self.callPackage ../development/ada-modules/gnatcoll/db.nix {
         component = "postgres";
       };
-      gnatcoll-sql = self.callPackage ../development/ada-modules/gnatcoll/db.nix { component = "sql"; };
+      gnatcoll-sql = self.callPackage ../development/ada-modules/gnatcoll/db.nix {
+        component = "sql";
+      };
       gnatcoll-sqlite = self.callPackage ../development/ada-modules/gnatcoll/db.nix {
         component = "sqlite";
       };
-      gnatcoll-xref = self.callPackage ../development/ada-modules/gnatcoll/db.nix { component = "xref"; };
+      gnatcoll-xref = self.callPackage ../development/ada-modules/gnatcoll/db.nix {
+        component = "xref";
+      };
       gnatcoll-db2ada = self.callPackage ../development/ada-modules/gnatcoll/db.nix {
         component = "gnatcoll_db2ada";
       };
