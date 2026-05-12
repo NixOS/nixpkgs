@@ -1,16 +1,3 @@
-diff --git a/app/scripts/dir_build b/app/scripts/dir_build
-index 493288ad47..ccabb3722b 100755
---- a/app/scripts/dir_build
-+++ b/app/scripts/dir_build
-@@ -86,7 +86,7 @@ fi
- 
- CHANNEL="source"
- 
--hash=$(git -C "$ROOT_DIR" rev-parse --short HEAD)
-+hash="0000000000000000000000000000000000000000"
- 
- build_dir=$(mktemp -d)
- cleanup() { rm -rf "$build_dir"; }
 diff --git a/js-build/note-editor.js b/js-build/note-editor.js
 index 1435730342..6eebb10c50 100644
 --- a/js-build/note-editor.js
