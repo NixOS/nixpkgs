@@ -74,8 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin $out/share
 
-    rm -r bin/tools
-
     mv bin/* $out/bin
     mv share/* $out/share
 
