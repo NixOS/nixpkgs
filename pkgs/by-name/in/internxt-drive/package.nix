@@ -18,7 +18,7 @@
   meta = with lib; {
     description = "Internxt Drive desktop client for encrypted cloud storage";
     homepage = "https://internxt.com";
-    license = licenses.agpl3Only; # aggiorna dopo il curl
+    license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ e1618033 ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
