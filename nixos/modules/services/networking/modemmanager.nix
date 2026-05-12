@@ -85,8 +85,8 @@ in
       ResultActive=yes
     */
     security.polkit.enable = true;
-    security.polkit.extraConfig = lib.concatStrings [
-      (lib.optionalString useNetworkManager ''
+    security.polkit.extraConfig = lib.mkMerge [
+      (lib.mkIf useNetworkManager ''
         polkit.addRule(function(action, subject) {
           if (
             subject.isInGroup("networkmanager")
@@ -95,7 +95,7 @@ in
               { return polkit.Result.YES; }
         });
       '')
-      (lib.optionalString useNetworkd ''
+      (lib.mkIf useNetworkd ''
         polkit.addRule(function(action, subject) {
           if (
             subject.isInGroup("systemd-network")
