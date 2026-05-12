@@ -14,6 +14,7 @@
   pexpect,
   psutil,
   pyserial,
+  pytest,
   pytestCheckHook,
   pytest-benchmark,
   pytest-dependency,
@@ -72,6 +73,7 @@ buildPythonPackage rec {
     pyudev
     pyusb
     pyyaml
+    pytest
     requests
     xmodem
   ];
