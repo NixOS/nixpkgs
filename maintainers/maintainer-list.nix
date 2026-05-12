@@ -1803,6 +1803,13 @@
     github = "Andy3153";
     githubId = 53472302;
   };
+  andy5995 = {
+    name = "Andy Alt";
+    github = "andy5995";
+    githubId = 16764864;
+    email = "arch_stanton5995@proton.me";
+    keys = [ { fingerprint = "9CC2 4CAA 69F6 A6DA 3EBC  F9C1 F8E7 8111 BE2B 398B"; } ];
+  };
   andys8 = {
     github = "andys8";
     githubId = 13085980;
