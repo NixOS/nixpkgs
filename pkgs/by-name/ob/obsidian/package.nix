@@ -1,14 +1,13 @@
 {
   stdenv,
-  fetchurl,
   lib,
+  fetchurl,
   makeWrapper,
-  electron_39, # as in upstream bundle, see https://github.com/NixOS/nixpkgs/pull/510075
+  autoPatchelfHook,
   makeDesktopItem,
   imagemagick,
-  autoPatchelfHook,
   writeScript,
-  _7zz,
+  pkgs,
   commandLineArgs ? "",
 }:
 let
@@ -77,22 +76,67 @@ let
       makeWrapper
       imagemagick
     ];
+
+    buildInputs = with pkgs; [
+      stdenv.cc.cc.lib
+      alsa-lib
+      atk
+      at-spi2-atk
+      at-spi2-core
+      cups
+      dbus
+      gtk3
+      gsettings-desktop-schemas
+      libdrm
+      libglvnd
+      libsecret
+      libxkbcommon
+      mesa
+      nspr
+      nss
+      systemd
+      vulkan-loader
+      libx11
+      libxcomposite
+      libxdamage
+      libxfixes
+      libxrandr
+      libxcb
+    ];
+
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/bin
-      makeWrapper ${electron_39}/bin/electron $out/bin/obsidian \
-        --add-flags $out/share/obsidian/app.asar \
+
+      mkdir -p $out/bin $out/share/obsidian
+      cp -a ./* $out/share/obsidian/
+
+      OBSIDIAN_BIN="$out/share/obsidian/obsidian"
+      chmod +x "$OBSIDIAN_BIN"
+
+      makeWrapper "$OBSIDIAN_BIN" $out/bin/obsidian \
+        --run 'if ${pkgs.procps}/bin/pgrep -f "gnome-keyring" >/dev/null 2>&1; then export _OBS_PASS="--password-store=gnome-libsecret"; elif ${pkgs.procps}/bin/pgrep -f "kwallet" >/dev/null 2>&1; then export _OBS_PASS="--password-store=kwallet6"; else export _OBS_PASS=""; fi' \
+        --add-flags "\$_OBS_PASS" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
-      install -m 755 -D obsidian-cli $out/bin/obsidian-cli
-      install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
-      install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
-      install -m 444 -D "${desktopItem}/share/applications/"* \
-        -t $out/share/applications/
+        --add-flags ${lib.escapeShellArg commandLineArgs} \
+        --set LD_LIBRARY_PATH "${
+          lib.makeLibraryPath [
+            pkgs.libglvnd
+            pkgs.mesa
+            pkgs.vulkan-loader
+            pkgs.libsecret
+          ]
+        }" \
+        --set GSETTINGS_SCHEMA_DIR "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}" \
+        --prefix XDG_DATA_DIRS : "${pkgs.gtk3}/share:${pkgs.gsettings-desktop-schemas}/share"
+
+      install -m 755 -D "$out/share/obsidian/obsidian-cli" $out/bin/obsidian-cli
+      install -m 444 -D "${desktopItem}/share/applications/"* -t $out/share/applications/
+
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
         magick -background none ${icon} -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
       done
+
       runHook postInstall
     '';
 
@@ -116,7 +160,6 @@ let
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper
-      _7zz
     ];
     installPhase = ''
       runHook preInstall
