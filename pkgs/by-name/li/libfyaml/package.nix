@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/pantoniou/libfyaml/commit/9192deaac095f9881cc1e5756dede683f36b09d6.diff";
       hash = "sha256-cNL9wQtxIRg/ShZLJP4qHYNFRrYo9kRG+/U+3FiUeaI=";
     })
+    # On Darwin, AX_PTHREAD returns empty PTHREAD_LIBS with -pthread in PTHREAD_CFLAGS;
+    # don't force -lpthread when PTHREAD_CFLAGS already provides pthread support.
+    # Pending PR: https://github.com/pantoniou/libfyaml/pull/294
+    ./pthread-darwin.patch
   ];
 
   nativeBuildInputs = [
