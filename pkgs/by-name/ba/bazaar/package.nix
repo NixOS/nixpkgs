@@ -38,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
+  outputs = [
+    "out"
+    # for libbge
+    "lib"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "bazaar-org";
     repo = "bazaar";
@@ -80,11 +87,21 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
   ];
 
-  # bazaar needs bazaar-dl-worker in path
+  postInstall = ''
+    moveToOutput bin/bge-demo $dev
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
+      # bazaar needs bazaar-dl-worker in path
       --prefix PATH : $out/bin
+      --prefix LD_LIBRARY_PATH : $lib/lib
+      # gsettings schemas are moved to $lib
+      --prefix XDG_DATA_DIRS : $lib/share
     )
+
+    # isn't automatically picked out for some reason, while $dev/bin/bge-demo is...
+    wrapGApp $out/bin/bazaar
   '';
 
   passthru = {
