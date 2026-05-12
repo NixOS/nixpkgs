@@ -1094,6 +1094,8 @@ self: super: with self; {
 
   ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
 
+  ast-serialize = callPackage ../development/python-modules/ast-serialize { };
+
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
 
   asteroid-filterbanks = callPackage ../development/python-modules/asteroid-filterbanks { };
