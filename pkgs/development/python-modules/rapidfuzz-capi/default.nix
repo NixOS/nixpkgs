@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz-capi";
-  version = "1.0.5";
+  version = ".1.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz_capi";
     rev = "v${version}";
-    hash = "sha256-0IvJl2JU/k1WbGPWRoucVGbVsEFNPHZT1ozEQAKQnPk=";
+    hash = "sha256-9PibmRPbg7G4vT9ux0l3/2lYpVJj9WUIks6K65fk9Yg=";
   };
 
   # upstream has no tests
