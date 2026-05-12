@@ -175,12 +175,6 @@ let
                 ""
               }
           done
-
-          # https://bz.mercurial-scm.org/show_bug.cgi?id=6887
-          # Adding setuptools to the python path is not enough for the distutils
-          # module to be found, so we patch usage directly:
-          substituteInPlace tests/hghave.py \
-            --replace-fail "distutils" "setuptools._distutils"
         '';
 
         # This runs Mercurial _a lot_ of times.
