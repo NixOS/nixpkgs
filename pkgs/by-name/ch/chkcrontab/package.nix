@@ -4,9 +4,7 @@
   fetchPypi,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "chkcrontab";
   version = "1.7";
   pyproject = true;
@@ -22,7 +20,7 @@ buildPythonApplication (finalAttrs: {
       --replace-fail "'doc/chkcrontab.1'" ""
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ python3.pkgs.setuptools ];
 
   meta = {
     description = "Tool to detect crontab errors";
