@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dnsmasq";
-  version = "2.92";
+  version = "2.92rel2";
 
   src = fetchurl {
-    url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-S/UMLBAY+fvCYDffUbkOzqDLc9RhYoRnY7kt8NbDpFg=";
+    url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${version}.tar.xz";
+    hash = "sha256-Q9crjBKb3zPRe6/tyYgj9j5GtQBRKAZr8NKkcqMs4Go=";
   };
 
   patches = [
