@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mahkoh/jay";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ uku3lig ];
     mainProgram = "jay";
   };
 })
