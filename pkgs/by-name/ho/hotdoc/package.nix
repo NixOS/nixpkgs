@@ -1,37 +1,20 @@
 {
   lib,
   stdenv,
-  buildPythonApplication,
+  python3Packages,
   fetchpatch,
   fetchPypi,
   replaceVars,
   clang,
-  libclang,
-  pytestCheckHook,
   pkg-config,
-  cmake,
   flex,
   glib,
   json-glib,
-  libxml2,
-  appdirs,
-  backports-entry-points-selectable,
-  dbus-deviation,
-  faust-cchardet,
-  feedgen,
-  lxml,
-  networkx,
-  pkgconfig,
-  pyyaml,
-  schema,
-  setuptools,
-  toposort,
-  wheezy-template,
   llvmPackages,
   gst_all_1,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hotdoc";
   version = "0.17.4";
   pyproject = true;
@@ -44,7 +27,7 @@ buildPythonApplication rec {
   patches = [
     (replaceVars ./clang.patch {
       clang = lib.getExe clang;
-      libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libclang = "${lib.getLib llvmPackages.libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
 
     # Fix build with gcc15
@@ -55,37 +38,37 @@ buildPythonApplication rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [
     pkg-config
-    cmake
+    python3Packages.cmake
     flex
   ];
 
   buildInputs = [
     glib
     json-glib
-    libxml2.dev
+    python3Packages.libxml2.dev
   ];
 
   dependencies = [
-    appdirs
-    backports-entry-points-selectable
-    dbus-deviation
-    faust-cchardet
-    feedgen
-    lxml
-    networkx
-    pkgconfig
-    pyyaml
-    schema
-    setuptools # for pkg_resources
-    toposort
-    wheezy-template
+    python3Packages.appdirs
+    python3Packages.backports-entry-points-selectable
+    python3Packages.dbus-deviation
+    python3Packages.faust-cchardet
+    python3Packages.feedgen
+    python3Packages.lxml
+    python3Packages.networkx
+    python3Packages.pkgconfig
+    python3Packages.pyyaml
+    python3Packages.schema
+    python3Packages.setuptools # for pkg_resources
+    python3Packages.toposort
+    python3Packages.wheezy-template
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   # CMake is used to build CMARK, but the build system is still python
   dontUseCmakeConfigure = true;
