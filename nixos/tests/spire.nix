@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   trustDomain = "example.com";
 
@@ -53,6 +53,23 @@ let
         group = "workload";
       };
       users.groups.workload = { };
+
+      services.spire.agent = {
+        enable = true;
+        settings = {
+          agent = {
+            trust_domain = trustDomain;
+            server_address = "server.${trustDomain}";
+            trust_bundle_format = "pem";
+            trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
+          };
+          plugins = {
+            KeyManager.memory.plugin_data = { };
+            WorkloadAttestor.systemd.plugin_data = { };
+            WorkloadAttestor.unix.plugin_data = { };
+          };
+        };
+      };
     };
 in
 {
@@ -77,6 +94,10 @@ in
               };
               NodeAttestor.join_token.plugin_data = { };
               NodeAttestor.tpm.plugin_data.ca_path = "/etc/spire/server/certs";
+              NodeAttestor.http_challenge.plugin_data = {
+                required_port = 8080;
+                allowed_dns_patterns = [ ''^[a-zA-Z]+\.${lib.escapeRegex trustDomain}$'' ];
+              };
             };
           };
         };
@@ -88,23 +109,9 @@ in
       virtualisation.credentials."spire.join_token".source = "./join_token";
       systemd.services.spire-agent.serviceConfig.ImportCredential = [ "spire.join_token" ];
 
-      services.spire.agent = {
-        enable = true;
-        settings = {
-          agent = {
-            trust_domain = trustDomain;
-            server_address = "server.${trustDomain}";
-            join_token_file = "$CREDENTIALS_DIRECTORY/spire.join_token";
-            trust_bundle_format = "pem";
-            trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
-          };
-          plugins = {
-            KeyManager.memory.plugin_data = { };
-            NodeAttestor.join_token.plugin_data = { };
-            WorkloadAttestor.systemd.plugin_data = { };
-            WorkloadAttestor.unix.plugin_data = { };
-          };
-        };
+      services.spire.agent.settings = {
+        agent.join_token_file = "$CREDENTIALS_DIRECTORY/spire.join_token";
+        plugins.NodeAttestor.join_token.plugin_data = { };
       };
     };
 
@@ -149,22 +156,30 @@ in
 
         environment.systemPackages = [ pkgs.spire-tpm-plugin ];
 
-        services.spire.agent = {
-          enable = true;
-          settings = {
-            agent = {
-              trust_domain = trustDomain;
-              server_address = "server.${trustDomain}";
-              trust_bundle_format = "pem";
-              trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
-            };
-            plugins = {
-              KeyManager.memory.plugin_data = { };
-              NodeAttestor.tpm.plugin_data = { };
-              WorkloadAttestor.systemd.plugin_data = { };
-              WorkloadAttestor.unix.plugin_data = { };
-            };
-          };
+        services.spire.agent.settings.plugins.NodeAttestor.tpm.plugin_data = { };
+      };
+
+    httpChallengeAllowedAgent =
+      { config, ... }:
+      {
+        imports = [ agent ];
+        networking.domain = trustDomain;
+        services.spire.agent.openFirewall = true;
+        services.spire.agent.settings.plugins.NodeAttestor.http_challenge.plugin_data = {
+          port = 8080;
+          hostname = config.networking.fqdn;
+        };
+      };
+
+    httpChallengeRejectedAgent =
+      { config, ... }:
+      {
+        imports = [ agent ];
+        networking.domain = "invalid";
+        services.spire.agent.openFirewall = true;
+        services.spire.agent.settings.plugins.NodeAttestor.http_challenge.plugin_data = {
+          port = 8080;
+          hostname = config.networking.fqdn;
         };
       };
   };
@@ -201,6 +216,12 @@ in
         server.succeed(f"spire-server entry create -socketPath ${adminSocket} -selector '{selector}' -parentID '{parent_id}' -spiffeID '{spiffe_id}'")
 
 
+      def provision_http_challenge(agent):
+        hostname = agent.succeed("hostname --fqdn").strip()
+        parent_id = f"spiffe://${trustDomain}/spire/agent/http_challenge/{hostname}"
+        server.succeed(f"spire-server entry create -socketPath ${adminSocket} -selector 'systemd:id:backdoor.service' -parentID '{parent_id}' -spiffeID {spiffe_id}")
+
+
       def test_agent(name, agent_node, provision_fn):
         with subtest(f"Setup SPIRE agent with {name} attestation"):
           provision_trust_bundle(agent_node)
@@ -228,6 +249,13 @@ in
 
       test_agent("join_token", agent, provision_join_token)
       test_agent("tpm", tpmAgent, provision_tpm)
+      test_agent("http_challenge_allowed", httpChallengeAllowedAgent, provision_http_challenge)
+
+      with subtest("http_challenge: agent with hostname not matching allowed_dns_patterns is rejected"):
+        provision_trust_bundle(httpChallengeRejectedAgent)
+        httpChallengeRejectedAgent.wait_for_unit("spire-agent.service")
+        httpChallengeRejectedAgent.wait_for_console_text("the requested hostname is not allowed to connect")
+        httpChallengeRejectedAgent.fail("spire-agent healthcheck -socketPath $SPIFFE_ENDPOINT_SOCKET")
 
     '';
 }
