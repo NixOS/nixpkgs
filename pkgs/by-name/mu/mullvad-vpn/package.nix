@@ -89,14 +89,14 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-HleajbEbw5Z1ab/E4zSR+GxDOIuvegP4N9yRFZYv7z4=";
-    aarch64-linux = "sha256-Mm2F6PB15pHgRpsw1c1PjmIAcuGaqhfAeZS5HXdoWRQ=";
+    x86_64-linux = "sha256-ewJ/XxqwVLF3/MsiN+AZ+jQodMr+JmPtpbcdXe6HNPo=";
+    aarch64-linux = "sha256-hpuLpDA3PMrlOkF172f0PZY+cGe2gBkRTWCwwwYJwQo=";
   };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mullvad-vpn";
-  version = "2026.1";
+  version = "2026.2";
 
   __structuredAttrs = true;
   strictDeps = true;

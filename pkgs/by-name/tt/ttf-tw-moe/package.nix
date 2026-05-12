@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "ttf-tw-moe";
-  version = "2020-11-14";
+  version = "2026-05-11";
 
   src = fetchzip {
     url = "https://github.com/Jiehong/TW-fonts/archive/${version}.zip";
-    hash = "sha256-9gy8xO93ViIPmpg1du0DbXVCR2FowourLH8nP9d6HK0=";
+    hash = "sha256-IlAYR0/wxL+tOI7X4t5eypTMqxMCLpTp9jCM7512SNk=";
   };
 
   installPhase = ''
