@@ -46,10 +46,12 @@
   libxcomposite,
   libx11,
   libxshmfence,
+  writeScript,
 }:
 
 let
-  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
+  bits =
+    if stdenv.hostPlatform.is64bit then "x64" else throw "NW.js no longer supports 32-bit Linux.";
 
   nwEnv = buildEnv {
     name = "nwjs-env";
@@ -102,26 +104,21 @@ let
     ];
   };
 
-  version = "0.102.1";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nwjs";
-  inherit version;
+  version = "0.111.1";
 
   src =
     let
       flavor = if sdk then "sdk-" else "";
     in
     fetchurl {
-      url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
-      # TODO: Write an update script to update all 4 hashes.
-      # nixpkgs-update: no auto update
+      url = "https://dl.nwjs.io/v${finalAttrs.version}/nwjs-${flavor}v${finalAttrs.version}-linux-${bits}.tar.gz";
       hash =
         {
-          "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
-          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
-          "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
-          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
+          "sdk-x64" = "sha256-r1QvA7/1Kf1Jo6MabE1Ia8XGQ4kJXd0nBn7EDRE8Lig=";
+          "x64" = "sha256-fH9tLe7qAM2+kfIe37zjP/wmuataMm4KSopEMRHEdf8=";
         }
         ."${flavor + bits}";
     };
@@ -164,11 +161,57 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = writeScript "update-nwjs" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq gnused nix
+
+    set -euo pipefail
+
+    # NW.js does not use GitHub releases. Fetch from their official registry.
+    VERSION_TAG=$(curl -s https://nwjs.io/versions.json | jq -r .latest)
+    VERSION="''${VERSION_TAG#v}"
+
+    if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+        echo "Failed to fetch version from nwjs.io/versions.json" >&2
+        exit 1
+    fi
+
+    FILE="pkgs/by-name/nw/nwjs/package.nix"
+    if [ ! -f "$FILE" ]; then
+        FILE=$(nix-instantiate --eval --strict -A nwjs.meta.position | sed -re 's/^"(.*):[0-9]+"$/\1/')
+    fi
+
+    CURRENT_VERSION=$(grep 'version = "' "$FILE" | sed -n 's/.*version = "\([^"]*\)".*/\1/p' | head -n1)
+
+    if [[ "$VERSION" == "$CURRENT_VERSION" ]]; then
+        echo "nwjs is already up to date ($VERSION)"
+        exit 0
+    fi
+
+    echo "Updating nwjs from $CURRENT_VERSION to $VERSION"
+
+    for flavor in "" "sdk-"; do
+        for bits in "x64"; do
+            URL="https://dl.nwjs.io/v''${VERSION}/nwjs-''${flavor}v''${VERSION}-linux-''${bits}.tar.gz"
+            echo "Prefetching ''${flavor}''${bits}..."
+
+            HASH=$(nix hash to-sri --type sha256 $(nix-prefetch-url --unpack "$URL" 2>/dev/null))
+
+            # Replace the hash inline
+            sed -i -e "s|\"''${flavor}''${bits}\" = \"[^\"]*\";|\"''${flavor}''${bits}\" = \"$HASH\";|" "$FILE"
+        done
+    done
+
+    # Update version string
+    sed -i -e "s|version = \"$CURRENT_VERSION\";|version = \"$VERSION\";|" "$FILE"
+
+    echo "Successfully updated to $VERSION"
+  '';
+
   meta = {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [
-      "i686-linux"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
@@ -176,4 +219,4 @@ stdenv.mkDerivation {
     mainProgram = "nw";
     license = lib.licenses.mit;
   };
-}
+})
