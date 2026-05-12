@@ -250,6 +250,22 @@ in
       warnings = lib.optional (wrappers != { } && !config.security.enableWrappers) ''
         security.enableWrappers is set to false, but the following wrappers are still enabled and will be silently ignored: ${lib.concatStringsSep ", " (lib.attrNames wrappers)}. This might prevent fundamental functionalities, like PAM authentication. To avoid this warning, either set security.enableWrappers = true, or explicitly disable each wrapper with `enable = false`.
       '';
+      assertions = [
+        {
+          assertion =
+            !(
+              !config.security.enableWrappers && lib.any (u: u.isNormalUser) (lib.attrValues config.users.users)
+            );
+          message = ''
+            security.enableWrappers is disabled but normal users are defined
+            (${
+              lib.concatStringsSep ", " (
+                lib.mapAttrsToList (n: _: n) (lib.filterAttrs (_: u: u.isNormalUser) config.users.users)
+              )
+            }). Without SUID wrappers, users cannot login. Either enable wrappers or remove all normal user accounts.
+          '';
+        }
+      ];
     }
     (lib.mkIf config.security.enableWrappers {
       assertions = lib.mapAttrsToList (name: opts: {
