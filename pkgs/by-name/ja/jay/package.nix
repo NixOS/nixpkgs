@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JOt3xEONGDmLovk72hX0d3De01zTd51d2/J4HziBE9I=";
+    sha256 = "sha256-tC2V1BgUGsUMpZsKXjFSS8Mp28LrNI/QNu761zpgAkc=";
   };
 
-  cargoHash = "sha256-wK9v3YwP067etFAu6Ca9Sts+QrD4uL48chbL6tZKFkk=";
+  cargoHash = "sha256-96vCkZR/8dgZH0hJPeKzP7jQZ41W7XTi9yMnxFaIhoY=";
 
   nativeBuildInputs = [
     autoPatchelfHook
