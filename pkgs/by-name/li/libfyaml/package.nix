@@ -45,6 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--disable-network" ];
 
+  # configure.ac leaks "none required" into the .pc Libs line on platforms
+  # Fixed upstream after 0.9.6: https://github.com/pantoniou/libfyaml/pull/275
+  # Not using the initial upstream patch directly because the first patch version was broken.
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace libfyaml.pc --replace-fail "none required" ""
+  '';
+
   doCheck = true;
 
   preCheck = ''
