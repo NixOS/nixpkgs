@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.12";
+  version = "1.0.13";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-q9dNpSjwvqWTGaWg9VA4zJXQo8+YiYJ4qo/Ev4Nk4IY=";
+    hash = "sha256-/5PPDs2rDEGOMShclh+ZnX28zuF3MbQ7W+Rze1xIPu4=";
   };
 
-  cargoHash = "sha256-tMSqyl75XK2rgqRtgHAPtr+KFotx61HGqzv0iqzakS8=";
+  cargoHash = "sha256-1sY/V+/hd4vzjiufdLR8BIG5FC0F2sLbe8M2VqbinEU=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
