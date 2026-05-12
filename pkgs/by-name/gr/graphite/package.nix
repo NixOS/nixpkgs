@@ -30,16 +30,16 @@
 }:
 
 let
-  version = "0-unstable-2026-03-29";
-  rev = "203910a92f20b9bc4127eac4c5bb4a5492c8c293";
+  version = "0-unstable-2026-05-02";
+  rev = "ab7f59ca61004a1b11f9ae4b1c511cefc7a0f404";
 
-  srcHash = "sha256-WBPRI5FQ17ZioSHzOZf0ChuxVtyniuez1OaSo66KqGg=";
-  shaderHash = "sha256-uc6FU0df5Xqp6YXEwODULhgUjSQvjRFGvdk+uFB7II0=";
-  cargoHash = "sha256-h6FtvgzAPCtdRaFoGZBVcXGDLOt12IFk1CSW8nwZB94=";
-  npmHash = "sha256-WF6MuiCIW/vWpTN9Jj5srClUNJTVIgxfqna6/y1N9kE=";
+  srcHash = "sha256-DV3/1dgtUiTmGkOm4z3GVJcWzvCjO/crzc/l8ovW0XA=";
+  shaderHash = "sha256-76hOCx1fpFBI5nVmIAIGd2StCRzhbCgs+GHMvxbflLc=";
+  cargoHash = "sha256-ZesLyXKjz2CSrAWUT5Hq6w97pR55I+C79qPwF0dqXXI=";
+  npmHash = "sha256-AX5Jqk2E+WyQJyHbgvvq74MRsYmWUju4bOkabhYoeig=";
 
-  brandingRev = "8ae15dc9c51a3855475d8cab1d0f29d9d9bc622c";
-  brandingHash = "sha256-mHdwHK2lEeFQWNrjbusvRULEmm03dP+0JM5bnUgHcF8=";
+  brandingRev = "1939ca82f3341427059e15bfa205f7c22aaf867a";
+  brandingHash = "sha256-SDnCpLuppHVE7cUVidevH2O/2ma0S2tuQDhFkS/JLvA=";
 
   src = fetchFromGitHub {
     owner = "GraphiteEditor";
@@ -81,14 +81,6 @@ let
       mv ./include $out/
 
       cat ./CREDITS.html | ${xz}/bin/xz -9 -e -c > $out/CREDITS.html.xz
-
-      echo '${
-        builtins.toJSON {
-          type = "minimal";
-          name = builtins.baseNameOf finalAttrs.src.url;
-          sha1 = "";
-        }
-      }' > $out/archive.json
     '';
   });
 in
@@ -129,6 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir branding
     cp -r ${branding}/* branding
     cp $src/.branding branding/.branding
+
+    substituteInPlace $cargoDepsCopy/*/cef-dll-sys-*/build.rs \
+      --replace-fail \
+        'download_cef::check_archive_json(&package_version, &path.to_string_lossy())?;' \
+        ""
   '';
 
   postConfigure = ''
@@ -165,6 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf \
       --set-rpath "${lib.makeLibraryPath libraries}:${cefPath}" \
       --add-needed libGL.so \
+      --add-needed libEGL.so \
       $out/bin/graphite
 
     remove-references-to -t ${rustc} $out/bin/graphite

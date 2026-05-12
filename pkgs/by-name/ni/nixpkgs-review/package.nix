@@ -22,14 +22,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nixpkgs-review";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     tag = finalAttrs.version;
-    hash = "sha256-AYizZ36di7DOtmaqMtWTvMVfe4DqJfCdhvxypweEArs=";
+    hash = "sha256-Z8pOct9DtuRo4LERqhVpDxX9uoLNQGgqPFUh0Fn3MrI=";
   };
 
   build-system = [

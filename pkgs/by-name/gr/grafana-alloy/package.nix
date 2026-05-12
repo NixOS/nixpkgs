@@ -104,14 +104,15 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optionals useLLD [ lld ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    mv -v $out/bin/otel_engine $out/bin/alloy
+  postInstall =
+    "mv -v $out/bin/otel_engine $out/bin/alloy"
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
 
-    installShellCompletion --cmd alloy \
-      --bash <($out/bin/alloy completion bash) \
-      --fish <($out/bin/alloy completion fish) \
-      --zsh <($out/bin/alloy completion zsh)
-  '';
+      installShellCompletion --cmd alloy \
+        --bash <($out/bin/alloy completion bash) \
+        --fish <($out/bin/alloy completion fish) \
+        --zsh <($out/bin/alloy completion zsh)
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

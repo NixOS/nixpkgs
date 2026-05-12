@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-DESnl5NjakU4++Ep6CHxDZzHn+o0Gi0eREpXk5BN5iY=";
 
+  separateDebugInfo = true;
+
   buildFeatures = [ "nixos" ];
 
   # cargo-auditable fails during the build when compiling the `crabtime::function`
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Reported this issue upstream in:
   # https://github.com/rust-secure-code/cargo-auditable/issues/225
   auditable = false;
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     libcosmicAppHook

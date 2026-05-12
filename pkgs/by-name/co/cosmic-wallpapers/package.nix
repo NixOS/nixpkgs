@@ -21,6 +21,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"

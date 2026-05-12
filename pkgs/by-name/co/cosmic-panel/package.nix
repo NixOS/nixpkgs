@@ -23,6 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vU++jreNHCRjxyyoj53LB2Sa7cdVUWGAvECcqoDofF8=";
 
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     just
     libcosmicAppHook

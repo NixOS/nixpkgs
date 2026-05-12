@@ -74,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     "LIBDIR=$(lib)/lib"
   ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     # Note that even the static libxdp would refer to BPF_OBJECT_DIR ?=$(LIBDIR)/bpf
     rm "$lib"/lib/*.a
