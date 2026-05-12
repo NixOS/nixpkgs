@@ -22702,6 +22702,12 @@
     githubId = 314564;
     name = "Ryan Lahfa";
   };
+  rajveer = {
+    email = "therajveersingh@icloud.com";
+    github = "SINGH-RAJVEER";
+    githubId = 168363474;
+    name = "Rajveer Singh";
+  };
   rake5k = {
     email = "christian@harke.ch";
     github = "rake5k";
