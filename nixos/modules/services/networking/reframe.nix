@@ -182,6 +182,12 @@ in
         source = iniFmt.generate "${name}.conf" value;
       }
     ) cfg.configs;
+    systemd.services = lib.mapAttrs' (
+      name: _:
+      lib.nameValuePair "reframe-server@${name}" {
+        wantedBy = [ "multi-user.target" ];
+      }
+    ) cfg.configs;
   };
 
   meta.maintainers = with lib.maintainers; [
