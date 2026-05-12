@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://gitlab.com/overhead/tcp-relay/-/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ shutdaun ];
-    mainProgram = "tcprelay";
+    mainProgram = "tcp-relay";
     platforms = platforms.linux;
   };
 })
