@@ -11,6 +11,8 @@
   persistencedVersion ? null,
   fabricmanagerSha256 ? null,
   fabricmanagerVersion ? null,
+  modprobeSha256 ? null,
+  modprobeVersion ? null,
   # Whether to fetch the open-source kernel module sources from NVIDIA
   fetchOpenFromNvidia ? false,
   useGLVND ? true,
@@ -321,11 +323,20 @@ stdenv.mkDerivation (finalAttrs: {
           ) fabricmanagerSha256
         else
           { };
+      modprobe = lib.mapNullable (
+        hash:
+        callPackage ./modprobe.nix {
+          inherit hash fetchFromGithubOrNvidia;
+          version = if modprobeVersion != null then modprobeVersion else finalAttrs.version;
+          nvidia_x11 = finalAttrs.finalPackage;
+        }
+      ) modprobeSha256;
       settingsVersion = if settingsVersion != null then settingsVersion else finalAttrs.version;
       persistencedVersion =
         if persistencedVersion != null then persistencedVersion else finalAttrs.version;
       fabricmanagerVersion =
         if fabricmanagerVersion != null then fabricmanagerVersion else finalAttrs.version;
+      modprobeVersion = if modprobeVersion != null then modprobeVersion else finalAttrs.version;
       compressFirmware = false;
       ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
     }
