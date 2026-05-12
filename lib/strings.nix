@@ -1986,7 +1986,7 @@ rec {
 
     :::
   */
-  versionAtLeast = v1: v2: !versionOlder v1 v2;
+  versionAtLeast = v1: v2: compareVersions v2 v1 != 1;
 
   /**
     This function takes an argument `x` that's either a derivation or a

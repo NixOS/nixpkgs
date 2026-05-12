@@ -22,22 +22,20 @@ lib.pipe drv
 
       (
         pkg:
-        pkg.overrideAttrs (
-          previousAttrs:
-          lib.optionalAttrs
-            (
-              (!lib.systems.equals targetPlatform hostPlatform)
-              && (enableShared || targetPlatform.isMinGW)
-              && withoutTargetLibc
-            )
-            {
-              makeFlags = [
-                "all-gcc"
-                "all-target-libgcc"
-              ];
-              installTargets = "install-gcc install-target-libgcc";
-            }
-        )
+        if
+          (!lib.systems.equals targetPlatform hostPlatform)
+          && (enableShared || targetPlatform.isMinGW)
+          && withoutTargetLibc
+        then
+          pkg.overrideAttrs (previousAttrs: {
+            makeFlags = [
+              "all-gcc"
+              "all-target-libgcc"
+            ];
+            installTargets = "install-gcc install-target-libgcc";
+          })
+        else
+          pkg
       )
 
     ]
@@ -70,21 +68,20 @@ lib.pipe drv
 
         (
           pkg:
-          pkg.overrideAttrs (
-            previousAttrs:
-            lib.optionalAttrs useLibgccFromTargetLibc {
+          if useLibgccFromTargetLibc then
+            pkg.overrideAttrs (previousAttrs: {
               passthru = (previousAttrs.passthru or { }) // {
                 inherit (libcCross) libgcc;
               };
-            }
-          )
+            })
+          else
+            pkg
         )
 
         (
           pkg:
-          pkg.overrideAttrs (
-            previousAttrs:
-            lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
+          if ((!langC) || langJit || enableLibGccOutput) then
+            pkg.overrideAttrs (previousAttrs: {
               outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
               # This is a separate phase because gcc assembles its phase scripts
               # in bash instead of nix (we should fix that).
@@ -172,8 +169,9 @@ lib.pipe drv
                     patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.${libgcc_s-version-major}
                   ''
                 );
-            }
-          )
+            })
+          else
+            pkg
         )
       ]
     )
