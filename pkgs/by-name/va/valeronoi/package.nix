@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valeronoi";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "ccoors";
     repo = "valeronoi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5KXVSIqWDkXnpO+qgBzFtbJb444RW8dIVXp8Y/aAOrk=";
+    hash = "sha256-3sDKMH9VSrGOpcT6RbfDhJ5cqIsUovFb4Jmtn3vGW4U=";
   };
 
   buildInputs = [
