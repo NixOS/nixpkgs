@@ -1,0 +1,23 @@
+diff --git a/boxapi.c b/boxapi.c
+index 4964273..e4b7404 100644
+--- a/boxapi.c
++++ b/boxapi.c
+@@ -29,6 +29,7 @@
+ #include <curl/curl.h>
+ 
+ #include <libxml/hash.h>
++#include <libxml/parser.h>
+ 
+ #include <libapp/app.h>
+ /* Building blocks for OpenBox api endpoints
+@@ -38,8 +39,8 @@
+ //    AUTH
+ #define API_KEY_VAL "f9ss11y2w0hg5r04jsidxlhk4pil28cf"
+ #define API_SECRET  "r3ZHAIhsOL2FoHjgERI9xf74W5skIM0w"
+-#define API_OAUTH_URL "https://app.box.com/api/oauth2/" //"https://www.box.com/api/oauth2/"
+-#define API_OAUTH_AUTHORIZE API_OAUTH_URL "authorize?response_type=code&client_id=" API_KEY_VAL /*"&redirect_uri=http%3A//localhost"*/
++#define API_OAUTH_URL "https://api.box.com/oauth2/" //"https://www.box.com/api/oauth2/"
++#define API_OAUTH_AUTHORIZE "https://app.box.com/api/oauth2/authorize?response_type=code&client_id=" API_KEY_VAL /*"&redirect_uri=http%3A//localhost"*/
+ #define API_OAUTH_TOKEN     API_OAUTH_URL "token"
+ //    CALLS
+ #define API_ENDPOINT	"https://api.box.com/2.0/"

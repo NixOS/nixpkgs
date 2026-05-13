@@ -1,0 +1,13 @@
+--- "a/install/macosx/Sweet Home 3D/Contents/app/SweetHome3D.cfg"
++++ "b/install/macosx/Sweet Home 3D/Contents/app/SweetHome3D.cfg"
+@@ -6,6 +6,10 @@
+ 
+ [JavaOptions]
+ java-options=-Xmx2000m
++java-options=--add-opens=java.desktop/java.awt=ALL-UNNAMED
++java-options=--add-opens=java.desktop/sun.awt=ALL-UNNAMED
++java-options=--add-opens=java.desktop/com.apple.eio=ALL-UNNAMED
++java-options=--add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED
+ java-options=-Djava.library.path=$APPDIR
+ java-options=-Djogamp.gluegen.UseTempJarCache=false
+ java-options=-Djava.locale.providers=COMPAT,SPI

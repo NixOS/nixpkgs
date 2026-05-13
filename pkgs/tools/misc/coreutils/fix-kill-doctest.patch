@@ -1,0 +1,61 @@
+From 088c011bfc66643a16b22db77a3c458bb7412ea2 Mon Sep 17 00:00:00 2001
+From: Collin Funk <collin.funk1@gmail.com>
+Date: Thu, 5 Feb 2026 21:18:25 -0800
+Subject: [PATCH] doc: kill: adjust documentation to produce html anchors for
+ --help
+
+* doc/coreutils.texi (kill invocation): Adjust documentation to use the
+@optItem macros.
+Fixes https://bugs.gnu.org/80339
+Fixes https://github.com/coreutils/coreutils/issues/185
+---
+ doc/coreutils.texi | 36 ++++++++++++++++++++++++------------
+ 1 file changed, 24 insertions(+), 12 deletions(-)
+
+diff --git a/doc/coreutils.texi b/doc/coreutils.texi
+index a02e8d73b0..4559307462 100644
+--- a/doc/coreutils.texi
++++ b/doc/coreutils.texi
+@@ -18354,18 +18354,30 @@ The first form of the @command{kill} command succeeds if every @var{pid}
+ argument specifies at least one process that the signal was sent to.
+ 
+ The second form of the @command{kill} command lists signal information.
+-Either the @option{-l} or @option{--list} option, or the @option{-t}
+-or @option{--table} option must be specified.  Without any
+-@var{signal} argument, all supported signals are listed.  The output
+-of @option{-l} or @option{--list} is a list of the signal names, one
+-per line; if @var{signal} is already a name, the signal number is
+-printed instead.  The output of @option{-t} or @option{--table} is a
+-table of signal numbers, names, and descriptions.  This form of the
+-@command{kill} command succeeds if all @var{signal} arguments are valid
+-and if there is no output error.
+-
+-The @command{kill} command also supports the @option{--help} and
+-@option{--version} options.  @xref{Common options}.
++This form of the @command{kill} command succeeds if all @var{signal}
++arguments are valid and if there is no output error.
++
++The program accepts the following options.  Also see @ref{Common options}.
++
++@table @samp
++
++@optAnchor{kill,-SIGNAL}
++@optItem{kill,-s,}
++@optItemx{kill,--signal,}
++Specify the name or number of the signal to be sent.
++
++@optItem{kill,-l,}
++@optItemx{kill,--list,}
++List the supported signal names one per line if the @var{signal} option
++is omitted.  If one or more @var{signal} options are provided, they are
++converted between signal names and signal numbers.
++
++@optItem{kill,-t,}
++@optItemx{kill,--table,}
++This option behaves the same way as @option{--list} except it prints a
++table of signal numbers, names, and descriptions.
++
++@end table
+ 
+ A @var{signal} may be a signal name like @samp{HUP}, or a signal
+ number like @samp{1}, or an exit status of a process terminated by the

@@ -1,0 +1,12 @@
+diff --git a/setup.cfg b/setup.cfg
+index 04bba8a..db159d2 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -28,6 +28,7 @@ package_dir =
+        = code
+ py_modules =
+     png
++    pngsuite
+ scripts =
+     code/prichunkpng
+     code/pricolpng

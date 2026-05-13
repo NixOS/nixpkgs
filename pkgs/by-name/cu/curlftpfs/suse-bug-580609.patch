@@ -1,0 +1,10 @@
+--- a/ftpfs.c	2008-04-30 01:05:47.000000000 +0200
++++ b/ftpfs.c	2010-05-21 13:01:42.569006163 +0200
+@@ -503,7 +503,6 @@ static void *ftpfs_write_thread(void *da
+   
+   curl_easy_setopt_or_die(fh->write_conn, CURLOPT_URL, fh->full_path);
+   curl_easy_setopt_or_die(fh->write_conn, CURLOPT_UPLOAD, 1);
+-  curl_easy_setopt_or_die(fh->write_conn, CURLOPT_INFILESIZE, -1);
+   curl_easy_setopt_or_die(fh->write_conn, CURLOPT_READFUNCTION, write_data_bg);
+   curl_easy_setopt_or_die(fh->write_conn, CURLOPT_READDATA, fh);
+   curl_easy_setopt_or_die(fh->write_conn, CURLOPT_LOW_SPEED_LIMIT, 1);

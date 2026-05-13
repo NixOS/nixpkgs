@@ -1,0 +1,13 @@
+diff --git a/src/plymouth.c b/src/plymouth.c
+index d1ed91f4..318f9409 100644
+--- a/src/plymouth.c
++++ b/src/plymouth.c
+@@ -24,7 +24,7 @@ static gboolean has_active_vt = FALSE;
+ static gboolean
+ plymouth_run_command (const gchar *command, gint *exit_status)
+ {
+-    g_autofree gchar *command_line = g_strdup_printf ("plymouth %s", command);
++    g_autofree gchar *command_line = g_strdup_printf ("@plymouth@ %s", command);
+     g_autoptr(GError) error = NULL;
+     gboolean result = g_spawn_command_line_sync (command_line, NULL, NULL, exit_status, &error);
+ 

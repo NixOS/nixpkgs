@@ -1,0 +1,14 @@
+diff --git a/test/test_asyncio.py b/test/test_asyncio.py
+index f14bc0b..f2034ef 100644
+--- a/test/test_asyncio.py
++++ b/test/test_asyncio.py
+@@ -34,7 +34,8 @@ class Test_asyncio(unittest.TestCase):
+     """Test asyncio related functionality"""
+ 
+     def setUp(self):
+-        self.loop = asyncio.get_event_loop()
++        self.loop = asyncio.new_event_loop()
++        asyncio.set_event_loop(self.loop)
+         # create a closed serial port
+ 
+     def tearDown(self):

@@ -1,0 +1,76 @@
+From fc4baf7cbb71ba7a47b174870dacf0e4ec93b6bf Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Sat, 19 Apr 2025 14:10:45 +0200
+Subject: [PATCH] Set CMake policy version lower bound to 3.5
+
+Also specify upper bound as 4.0.
+
+With CMake 4.0 policies before 3.5 will be dropped. CMake 4.0 also
+requires the upper bound to be specified.
+---
+ CMakeLists.txt                                         | 2 +-
+ android/app/CMakeLists.txt                             | 2 +-
+ android/app/thirdparty_libs/fribidi/CMakeLists.txt     | 2 +-
+ android/app/thirdparty_libs/libunibreak/CMakeLists.txt | 2 +-
+ crengine/Tools/blend-algo-test/CMakeLists.txt          | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 254b8cd6f..ab952eccf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ PROJECT(cr3)
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.5..4.0)
+ 
+ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
+ 
+diff --git a/android/app/CMakeLists.txt b/android/app/CMakeLists.txt
+index a0a7a42a1..66578ab59 100644
+--- a/android/app/CMakeLists.txt
++++ b/android/app/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ 
+ # Sets the minimum version of CMake required to build the native library.
+ 
+-cmake_minimum_required(VERSION 3.4.1)
++cmake_minimum_required(VERSION 3.5..4.0)
+ 
+ project(cr3engine)
+ 
+diff --git a/android/app/thirdparty_libs/fribidi/CMakeLists.txt b/android/app/thirdparty_libs/fribidi/CMakeLists.txt
+index 9ccbb7ed5..db31dcc4d 100644
+--- a/android/app/thirdparty_libs/fribidi/CMakeLists.txt
++++ b/android/app/thirdparty_libs/fribidi/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(local_fribidi C)
+ 
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5..4.0)
+ 
+ set(FRIBIDI_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../../thirdparty/${REPO_FRIBIDI_SRCDIR}")
+ set(FRIBIDI_CONFIG_DIR "${PROJECT_SOURCE_DIR}")
+diff --git a/android/app/thirdparty_libs/libunibreak/CMakeLists.txt b/android/app/thirdparty_libs/libunibreak/CMakeLists.txt
+index 728fcda7c..2265d6b9b 100644
+--- a/android/app/thirdparty_libs/libunibreak/CMakeLists.txt
++++ b/android/app/thirdparty_libs/libunibreak/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(local_unibreak C)
+ 
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5..4.0)
+ 
+ set(LIBUNIBREAK_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../../../../thirdparty/${REPO_LIBUNIBREAK_SRCDIR}/src")
+ 
+diff --git a/crengine/Tools/blend-algo-test/CMakeLists.txt b/crengine/Tools/blend-algo-test/CMakeLists.txt
+index 29157ca61..1e35279a5 100644
+--- a/crengine/Tools/blend-algo-test/CMakeLists.txt
++++ b/crengine/Tools/blend-algo-test/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(blend-algo-test C)
+ 
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.5..4.0)
+ 
+ include_directories(${CMAKE_BINARY_DIR})

@@ -1,0 +1,20 @@
+diff --git a/music_assistant/providers/airplay_receiver/helpers.py b/music_assistant/providers/airplay_receiver/helpers.py
+index 6f2b35df..d80dd112 100644
+--- a/music_assistant/providers/airplay_receiver/helpers.py
++++ b/music_assistant/providers/airplay_receiver/helpers.py
+@@ -22,15 +22,9 @@ async def check_shairport_sync(shairport_path: str) -> str | None:
+         except OSError:
+             return None
+ 
+-    # First, check if bundled binary exists
+-    base_path = os.path.join(os.path.dirname(__file__), "bin")
+     system = platform.system().lower().replace("darwin", "macos")
+     architecture = platform.machine().lower()
+ 
+-    if shairport_binary := await check_shairport_sync(
+-        os.path.join(base_path, f"shairport-sync-{system}-{architecture}")
+-    ):
+-        return shairport_binary
+ 
+     # If no bundled binary, check system PATH
+     if system_binary := shutil.which("shairport-sync"):

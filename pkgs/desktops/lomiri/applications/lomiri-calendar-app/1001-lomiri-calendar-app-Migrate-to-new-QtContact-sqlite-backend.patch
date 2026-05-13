@@ -1,0 +1,73 @@
+From 0658ff459aa200dfe3561646f5e73cd8715a1d0f Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Wed, 12 Jun 2024 09:24:05 +0200
+Subject: [PATCH] Migrate to new QtContact sqlite backend fixes:
+ https://gitlab.com/ubports/development/apps/lomiri-calendar-app/-/issues/221
+
+---
+ src/qml/ContactChoicePopup.qml | 34 ++++------------------------------
+ 1 file changed, 4 insertions(+), 30 deletions(-)
+
+diff --git a/src/qml/ContactChoicePopup.qml b/src/qml/ContactChoicePopup.qml
+index f514c23b..59fe545d 100644
+--- a/src/qml/ContactChoicePopup.qml
++++ b/src/qml/ContactChoicePopup.qml
+@@ -20,6 +20,7 @@ import Lomiri.Components 1.3
+ import Lomiri.Components.Popups 1.3
+ import Lomiri.Components.ListItems 1.3
+ import Lomiri.Components.Themes.Ambiance 1.3
++import Lomiri.Contacts 0.1
+ import QtOrganizer 5.0
+ import QtContacts 5.0
+ 
+@@ -38,36 +39,9 @@ Popover {
+         visible: contactModel.contacts.length === 0
+     }
+ 
+-    UnionFilter {
+-        id: filter
+-
+-        property string searchString: ""
+-
+-        filters: [
+-            DetailFilter{
+-                detail: ContactDetail.Name
+-                field: Name.FirstName
+-                matchFlags: Filter.MatchContains
+-                value: filter.searchString
+-            },
+-            DetailFilter{
+-                detail: ContactDetail.Name
+-                field: Name.LastName
+-                matchFlags: Filter.MatchContains
+-                value: filter.searchString
+-            },
+-            DetailFilter{
+-                detail: ContactDetail.DisplayLabel
+-                field: DisplayLabel.Label
+-                matchFlags: Filter.MatchContains
+-                value: filter.searchString
+-            }
+-        ]
+-    }
+-
+-    ContactModel {
++    ContactListModel {
+         id: contactModel
+-        manager: "galera"
++        manager: ContactManager.manager()
+         filter: filter
+         autoUpdate: true
+     }
+@@ -78,7 +52,7 @@ Popover {
+         interval: 500
+         repeat: false
+         onTriggered: {
+-            filter.searchString = searchBox.text
++            contactModel.filterTerm = searchBox.text
+         }
+     }
+ 
+-- 
+GitLab
+

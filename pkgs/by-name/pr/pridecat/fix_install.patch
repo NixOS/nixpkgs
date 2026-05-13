@@ -1,0 +1,20 @@
+diff --git a/Makefile b/Makefile
+index 815c27e..1556807 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,5 @@
+ CXX ?= clang
++out ?= /usr/local
+ 
+ all: pridecat
+ 
+@@ -6,7 +7,8 @@ pridecat: main.cpp
+ 	$(CXX) main.cpp -o pridecat -std=c++11 -lstdc++ -Wall -Wextra -O3
+ 
+ install: pridecat
+-	cp pridecat /usr/local/bin/pridecat
++	mkdir -p ${out}/bin	
++	cp pridecat ${out}/bin/pridecat
+ 
+ uninstall:
+ 	rm -f /usr/local/bin/pridecat

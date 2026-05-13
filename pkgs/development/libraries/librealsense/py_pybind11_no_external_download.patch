@@ -1,0 +1,15 @@
+diff --git a/CMake/global_config.cmake b/CMake/global_config.cmake
+index 350f7a268..2cf125c67 100644
+--- a/CMake/global_config.cmake
++++ b/CMake/global_config.cmake
+@@ -69,7 +69,8 @@ macro(global_set_flags)
+ 
+     if(BUILD_PYTHON_BINDINGS)
+         include(libusb_config)
+-        include(CMake/external_pybind11.cmake)
++        find_package(pybind11 REQUIRED)
++        set(PYTHON_INSTALL_DIR "${XXNIX_PYTHON_SITEPACKAGES}/pyrealsense2" CACHE PATH "Installation directory for Python bindings")
+     endif()
+ 
+     if(CHECK_FOR_UPDATES)
+

@@ -1,0 +1,23 @@
+diff --git a/OfficeUtils/OfficeUtils.pri b/OfficeUtils/OfficeUtils.pri
+index b4e1f497a8..6d99014ddd 100644
+--- a/OfficeUtils/OfficeUtils.pri
++++ b/OfficeUtils/OfficeUtils.pri
+@@ -1,5 +1,6 @@
+ core_linux {
+     QMAKE_CXXFLAGS += -Wall -Wno-ignored-qualifiers
++    QMAKE_CFLAGS += -DSTDC
+ }
+ core_mac {
+     QMAKE_CXXFLAGS += -Wall -Wno-ignored-qualifiers
+diff --git a/OfficeUtils/src/zlib-1.2.11/gzguts.h b/OfficeUtils/src/zlib-1.2.11/gzguts.h
+index 990a4d2514..aefbbd8879 100644
+--- a/OfficeUtils/src/zlib-1.2.11/gzguts.h
++++ b/OfficeUtils/src/zlib-1.2.11/gzguts.h
+@@ -24,6 +24,7 @@
+ #  include <string.h>
+ #  include <stdlib.h>
+ #  include <limits.h>
++#  include <unistd.h>
+ #endif
+ 
+ #ifndef _POSIX_SOURCE

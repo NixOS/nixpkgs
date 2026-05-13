@@ -1,0 +1,61 @@
+diff --git a/src/shared/parser.mly b/src/shared/parser.mly
+index bce9c3df..eefb8b85 100644
+--- a/src/shared/parser.mly
++++ b/src/shared/parser.mly
+@@ -108,9 +108,9 @@ plain_topdef:
+     { Commands.TopLetRec defs }
+   | EXTERNAL x = ident COLON t = ty EQUAL n = STRING
+     { Commands.External (x, t, n) }
+-  | EFFECT eff = effect COLON t1 = prod_ty ARROW t2 = ty
++  | EFFECT eff = effect_ COLON t1 = prod_ty ARROW t2 = ty
+     { Commands.DefEffect (eff, (t1, t2))}
+-  | EFFECT eff = effect COLON t = prod_ty
++  | EFFECT eff = effect_ COLON t = prod_ty
+     { let unit_loc = Location.make $startpos(t) $endpos(t) in
+       Commands.DefEffect (eff, ({it= TyTuple []; at= unit_loc}, t))}
+ 
+@@ -220,9 +220,9 @@ plain_simple_term:
+     { Variant (lbl, None) }
+   | cst = const_term
+     { Const cst }
+-  | PERFORM LPAREN eff = effect t = term RPAREN
++  | PERFORM LPAREN eff = effect_ t = term RPAREN
+     { Effect (eff, t)}
+-  | PERFORM eff = effect
++  | PERFORM eff = effect_
+     { let unit_loc = Location.make $startpos(eff) $endpos(eff) in
+       Effect (eff, {it= Tuple []; at= unit_loc})}
+   | LBRACK ts = separated_list(SEMI, comma_term) RBRACK
+@@ -265,9 +265,9 @@ function_case:
+ match_case:
+   | p = pattern ARROW t = term
+     { Val_match (p, t) }
+-  | EFFECT LPAREN eff = effect p = simple_pattern RPAREN k = simple_pattern ARROW t = term
++  | EFFECT LPAREN eff = effect_ p = simple_pattern RPAREN k = simple_pattern ARROW t = term
+     { Eff_match (eff, (p, k, t)) }
+-  | EFFECT eff = effect k = simple_pattern ARROW t = term
++  | EFFECT eff = effect_ k = simple_pattern ARROW t = term
+     { let unit_loc = Location.make $startpos(eff) $endpos(eff) in
+       Eff_match (eff, ({it= PTuple []; at= unit_loc}, k, t)) }
+ 
+@@ -297,9 +297,9 @@ let_rec_def:
+ 
+ handler_clause: mark_position(plain_handler_clause) { $1 }
+ plain_handler_clause:
+-  | EFFECT LPAREN eff = effect p = simple_pattern RPAREN k = simple_pattern ARROW t = term
++  | EFFECT LPAREN eff = effect_ p = simple_pattern RPAREN k = simple_pattern ARROW t = term
+     { EffectClause (eff, (p, k, t)) }
+-  | EFFECT eff = effect  k = simple_pattern ARROW t = term
++  | EFFECT eff = effect_  k = simple_pattern ARROW t = term
+     { let unit_loc = Location.make $startpos(eff) $endpos(eff) in
+       EffectClause (eff, ({it= PTuple []; at= unit_loc}, k, t)) }
+   | c = function_case
+@@ -518,7 +518,7 @@ sum_case:
+   | lbl = UNAME OF t = ty
+     { (lbl, Some t) }
+ 
+-effect:
++effect_:
+   | eff = UNAME
+     { eff }
+ 

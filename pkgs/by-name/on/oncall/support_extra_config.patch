@@ -1,0 +1,120 @@
+diff --git a/src/oncall/bin/notifier.py b/src/oncall/bin/notifier.py
+index 25142b8..cbc92aa 100644
+--- a/src/oncall/bin/notifier.py
++++ b/src/oncall/bin/notifier.py
+@@ -32,11 +32,29 @@ send_queue = queue.Queue()
+ 
+ default_timezone = None
+ 
++def merge_dict(extend_me, extend_by):
++    if isinstance(extend_by, dict):
++        for k, v in extend_by.items():
++            if isinstance(v, dict) and isinstance(extend_me.get(k), dict):
++                merge_dict(extend_me[k], v)
++            else:
++                extend_me[k] = v
++    return extend_me
+ 
+ def load_config_file(config_path):
+     with open(config_path, 'r', encoding='utf-8') as h:
+         config = yaml.safe_load(h)
+ 
++    # Check for extra config files from environment variable
++    extra_config_paths = os.getenv('ONCALL_EXTRA_CONFIG')
++    if extra_config_paths:
++        for extra_path in extra_config_paths.split(','):
++            extra_path = extra_path.strip()
++            if os.path.isfile(extra_path):
++                with open(extra_path, 'r') as f:
++                    extra_config = yaml.safe_load(f) or {}
++                config = merge_dict(config, extra_config)
++
+     if 'init_config_hook' in config:
+         try:
+             module = config['init_config_hook']
+diff --git a/src/oncall/user_sync/ldap_sync.py b/src/oncall/user_sync/ldap_sync.py
+index ef9a8ec..c5f027d 100644
+--- a/src/oncall/user_sync/ldap_sync.py
++++ b/src/oncall/user_sync/ldap_sync.py
+@@ -6,6 +6,7 @@ import time
+ import yaml
+ import logging
+ import ldap
++import os
+ 
+ from oncall import metrics
+ from ldap.controls import SimplePagedResultsControl
+@@ -447,9 +448,28 @@ def main(config):
+         logger.info('Sleeping for %s seconds' % sleep_time)
+         sleep(sleep_time)
+ 
++def merge_dict(extend_me, extend_by):
++    if isinstance(extend_by, dict):
++        for k, v in extend_by.items():
++            if isinstance(v, dict) and isinstance(extend_me.get(k), dict):
++                merge_dict(extend_me[k], v)
++            else:
++                extend_me[k] = v
++    return extend_me
+ 
+ if __name__ == '__main__':
+     config_path = sys.argv[1]
+     with open(config_path, 'r', encoding='utf-8') as config_file:
+         config = yaml.safe_load(config_file)
++
++    # Check for extra config files from environment variable
++    extra_config_paths = os.getenv('ONCALL_EXTRA_CONFIG')
++    if extra_config_paths:
++        for extra_path in extra_config_paths.split(','):
++            extra_path = extra_path.strip()
++            if os.path.isfile(extra_path):
++                with open(extra_path, 'r') as f:
++                    extra_config = yaml.safe_load(f) or {}
++                config = merge_dict(config, extra_config)
++
+     main(config)
+diff --git a/src/oncall/utils.py b/src/oncall/utils.py
+index a0b695c..278ca1d 100644
+--- a/src/oncall/utils.py
++++ b/src/oncall/utils.py
+@@ -13,6 +13,7 @@ from pytz import timezone
+ from .constants import ONCALL_REMINDER
+ from . import constants
+ import re
++import os
+ 
+ invalid_char_reg = re.compile(r'[!"#%-,\.\/;->@\[-\^`\{-~]+')
+ DAY = 86400
+@@ -27,10 +28,31 @@ def insert_notification(x, y):
+ def update_notification(x, y):
+     pass
+ 
++def merge_dict(extend_me, extend_by):
++    if isinstance(extend_by, dict):
++        for k, v in extend_by.items():
++            if isinstance(v, dict) and isinstance(extend_me.get(k), dict):
++                merge_dict(extend_me[k], v)
++            else:
++                extend_me[k] = v
++    return extend_me
+ 
+ def read_config(config_path):
++
+     with open(config_path, 'r', encoding='utf8') as config_file:
+-        return yaml.safe_load(config_file)
++        config = yaml.safe_load(config_file)
++
++    # Check for extra config files from environment variable
++    extra_config_paths = os.getenv('ONCALL_EXTRA_CONFIG')
++    if extra_config_paths:
++        for extra_path in extra_config_paths.split(','):
++            extra_path = extra_path.strip()
++            if os.path.isfile(extra_path):
++                with open(extra_path, 'r') as f:
++                    extra_config = yaml.safe_load(f) or {}
++                config = merge_dict(config, extra_config)
++
++    return config
+ 
+ 
+ def create_notification(context, team_id, role_ids, type_name, users_involved, cursor, **kwargs):

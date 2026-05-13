@@ -1,0 +1,31 @@
+diff --git a/lib/Plack/Middleware/XSendfile.pm b/lib/Plack/Middleware/XSendfile.pm
+index f2cd859..f96ccb5 100644
+--- a/lib/Plack/Middleware/XSendfile.pm
++++ b/lib/Plack/Middleware/XSendfile.pm
+@@ -10,7 +10,11 @@ use Plack::Util::Accessor qw( variation );
+ 
+ sub new {
+     my $class = shift;
+-    Carp::carp("Plack::Middleware::XSendfile is deprecated and will be removed in a future release");
++    unless (($ENV{PLACK_ENABLE_INSECURE_XSENDFILE} // '') eq '1') {
++        Carp::croak(
++          "CVE-2026-7381: Plack::Middleware::XSendfile is disabled by default. Set PLACK_ENABLE_INSECURE_XSENDFILE=1 to enable"
++        );
++    }
+     $class->SUPER::new(@_);
+ }
+ 
+diff --git a/t/Plack-Middleware/xsendfile.t b/t/Plack-Middleware/xsendfile.t
+index f1a02fa..248815e 100644
+--- a/t/Plack-Middleware/xsendfile.t
++++ b/t/Plack-Middleware/xsendfile.t
+@@ -6,6 +6,9 @@ use Plack::Builder;
+ use Plack::Test;
+ use Cwd;
+ 
++# CVE-2026-7381: Insecure feature disabled by default, but enable for tests
++$ENV{PLACK_ENABLE_INSECURE_XSENDFILE} = 1;
++
+ sub is_wo_case($$;$) {
+     is lc $_[0], lc $_[1], $_[2];
+ }

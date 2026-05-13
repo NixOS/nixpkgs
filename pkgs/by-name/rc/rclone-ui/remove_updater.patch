@@ -1,0 +1,32 @@
+diff --git a/src-tauri/src/lib.rs b/src-tauri/src/lib.rs
+index 60bc177..4693e3c 100644
+--- a/src-tauri/src/lib.rs
++++ b/src-tauri/src/lib.rs
+@@ -629,7 +629,6 @@ pub fn run() {
+         .plugin(tauri_plugin_deep_link::init())
+         .plugin(tauri_plugin_sentry::init_with_no_injection(&client))
+         .plugin(tauri_plugin_clipboard_manager::init())
+-        .plugin(tauri_plugin_updater::Builder::new().build())
+         .plugin(tauri_plugin_os::init())
+         .plugin(tauri_plugin_notification::init())
+         .plugin(tauri_plugin_process::init())
+diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
+index 68778ef..d8103c4 100644
+--- a/src-tauri/tauri.conf.json
++++ b/src-tauri/tauri.conf.json
+@@ -87,15 +87,8 @@
+                 "depends": ["(libappindicator-gtk3 or libayatana-appindicator-gtk3)"]
+             }
+         },
+-        "createUpdaterArtifacts": true
+     },
+     "plugins": {
+-        "updater": {
+-            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDIyNDFENEZGNjFDNTBGOEYKUldTUEQ4VmgvOVJCSWhVZmw0enhmcW1kWFk3TS9mMzBDRjVEZWdxKzQ5ZmRhTlYvT2gvdFNMbE8K",
+-            "endpoints": [
+-                "https://github.com/rclone-ui/rclone-ui/releases/latest/download/latest.json"
+-            ]
+-        },
+         "deep-link": {
+             "desktop": {
+                 "schemes": ["rclone"]

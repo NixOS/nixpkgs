@@ -1,0 +1,16 @@
+diff --git a/cmd/main.go b/cmd/main.go
+index ede7cd8..c553140 100644
+--- a/cmd/main.go
++++ b/cmd/main.go
+@@ -401,8 +401,11 @@ func splitWith(arg string) (module, version, replace string, err error) {
+ 	return
+ }
+
++var customVersion string
++
+ // xcaddyVersion returns a detailed version string, if available.
+ func xcaddyVersion() string {
++	return customVersion
+ 	mod := goModule()
+ 	ver := mod.Version
+ 	if mod.Sum != "" {

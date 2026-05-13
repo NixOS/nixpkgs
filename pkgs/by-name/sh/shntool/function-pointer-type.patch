@@ -1,0 +1,26 @@
+diff --git a/src/core_mode.c b/src/core_mode.c
+index d67e317..21d3b9e 100644
+--- a/src/core_mode.c
++++ b/src/core_mode.c
+@@ -564,17 +564,17 @@ static int compare_ascii(const wave_info **w1,const wave_info **w2)
+ 
+ static void ascii_sort_files(wave_info **filenames, int numfiles)
+ {
+-  int (*cmpfunc) ();
++  int (*cmpfunc) (const void *, const void *);
+ 
+-  cmpfunc = compare_ascii;
++  cmpfunc = (int (*)(const void *, const void *))compare_ascii;
+   qsort(filenames,numfiles,sizeof(wave_info *),cmpfunc);
+ }
+ 
+ static void version_sort_files(wave_info **filenames,int numfiles)
+ {
+-  int (*cmpfunc) ();
++  int (*cmpfunc) (const void *, const void *);
+ 
+-  cmpfunc = compare_version;
++  cmpfunc = (int (*)(const void *, const void *))compare_version;
+   qsort(filenames,numfiles,sizeof(wave_info *),cmpfunc);
+ }
+ 

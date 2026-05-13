@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Thu, 29 May 2025 14:47:58 -0700
+Subject: [PATCH] Don't test black or flake8
+
+Signed-off-by: Philip Taron <philip.taron@gmail.com>
+---
+ test.sh | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/test.sh b/test.sh
+index 1dd6c4be579e8a61d2d284b042c54cd2a1e0ff77..dc9ecab4a9097878a0a65c45df38a4fa25eb9fa2 100755
+--- a/test.sh
++++ b/test.sh
+@@ -210,20 +210,6 @@ function ensure_installed() {
+   fi
+ }
+ 
+-ensure_installed "black"
+-echo 'Running black formatter...'
+-if ! black icdiff --quiet --line-length 79 --check; then
+-  echo ""
+-  echo 'Consider running `black icdiff --line-length 79`'
+-  fail
+-fi
+-
+-ensure_installed "flake8"
+-echo 'Running flake8 linter...'
+-if ! flake8 icdiff; then
+-  fail
+-fi
+-
+ if ! $REGOLD; then
+   echo PASS
+ fi

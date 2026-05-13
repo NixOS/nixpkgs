@@ -1,0 +1,14 @@
+diff --git a/docs/CMakeLists.txt.orig b/docs/CMakeLists.txt
+index bb4d641..b37936e 100644
+--- a/docs/CMakeLists.txt.orig
++++ b/docs/CMakeLists.txt
+@@ -46,7 +46,7 @@ add_custom_command(
+ )
+ 
+ install(FILES ${MAN_OUT_DIR}/${MAN_OUT_FILENAME_GZ}
+-        DESTINATION ${CMAKE_INSTALL_PREFIX}/man/man1
++        DESTINATION ${MAN_INSTALL_DIR}
+ )
+ 
+ install(CODE "execute_process(COMMAND ${CMAKE_SOURCE_DIR}/cmake/scripts/update_mandb.sh ARGS ${CMAKE_BUILD_TYPE})")
+\ No newline at end of file

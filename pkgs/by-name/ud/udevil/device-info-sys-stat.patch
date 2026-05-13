@@ -1,0 +1,14 @@
+diff --git a/src/device-info.h b/src/device-info.h
+index 6cb3683..ddac24c 100644
+--- a/src/device-info.h
++++ b/src/device-info.h
+@@ -18,7 +18,8 @@
+ // intltool
+ #include <glib/gi18n.h>
+ 
+-
++// stat
++#include <sys/stat.h>
+ 
+ typedef struct device_t  {
+     struct udev_device *udevice;

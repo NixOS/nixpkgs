@@ -1,0 +1,11 @@
+--- a/sway/config.c
++++ b/sway/config.c
+@@ -276,7 +276,7 @@
+ 
+ 	if (!(config->active_bar_modifiers = create_list())) goto cleanup;
+ 
+-	if (!(config->swaybg_command = strdup("swaybg"))) goto cleanup;
++	if (!(config->swaybg_command = strdup("@swaybg@/bin/swaybg"))) goto cleanup;
+ 
+ 	if (!(config->config_chain = create_list())) goto cleanup;
+ 	config->current_config_path = NULL;

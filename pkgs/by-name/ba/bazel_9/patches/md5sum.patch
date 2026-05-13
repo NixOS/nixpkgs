@@ -1,0 +1,30 @@
+diff --git a/src/md5_darwin_freebsd.sh b/src/md5_darwin_freebsd.sh
+index cd9c7687bc..2c5e71959a 100755
+--- a/src/md5_darwin_freebsd.sh
++++ b/src/md5_darwin_freebsd.sh
+@@ -14,4 +14,4 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ #
+-/sbin/md5 "$@" | /sbin/md5 | head -c 32
++@md5sum@ "$@" | @md5sum@ | head -c 32
+diff --git a/src/md5_default.sh b/src/md5_default.sh
+index d5d4f0b8f4..2c5e71959a 100755
+--- a/src/md5_default.sh
++++ b/src/md5_default.sh
+@@ -14,4 +14,4 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ #
+-md5sum "$@" | md5sum | head -c 32
++@md5sum@ "$@" | @md5sum@ | head -c 32
+diff --git a/src/md5_openbsd.sh b/src/md5_openbsd.sh
+index 6c85df1899..67c3bd9fed 100755
+--- a/src/md5_openbsd.sh
++++ b/src/md5_openbsd.sh
+@@ -16,4 +16,4 @@
+ #
+ # We avoid using the `head` tool's `-c` option, since it does not exist
+ # on OpenBSD.
+-/bin/md5 "$@" | /bin/md5 | dd bs=32 count=1
++@md5sum@ "$@" | @md5sum@ | dd bs=32 count=1

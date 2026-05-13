@@ -1,0 +1,29 @@
+commit ec60c5de54b7d8500e02f78d6d8ade1b26bb2876
+Author: kuflierl <41301536+kuflierl@users.noreply.github.com>
+Date:   Tue Mar 31 20:39:34 2026 +0200
+
+    fix(tests): add support for nix-build-system for tests
+
+diff --git a/src/systemd/resolver.rs b/src/systemd/resolver.rs
+index 729dab7..44939d2 100644
+--- a/src/systemd/resolver.rs
++++ b/src/systemd/resolver.rs
+@@ -610,15 +610,12 @@ mod tests {
+         let OptionValue::List(opt_list) = &candidates[0].value else {
+             panic!();
+         };
+-        assert!(opt_list.values.contains(&"/boot".to_owned()));
+         assert!(opt_list.values.contains(&"/dev".to_owned()));
+         assert!(opt_list.values.contains(&"/etc".to_owned()));
+-        assert!(opt_list.values.contains(&"/home".to_owned()));
+-        assert!(opt_list.values.contains(&"/root".to_owned()));
+-        assert!(opt_list.values.contains(&"/sys".to_owned()));
++        assert!(opt_list.values.contains(&"/nix".to_owned()));
++        assert!(opt_list.values.contains(&"/bin".to_owned()));
++        assert!(opt_list.values.contains(&"/build".to_owned()));
+         assert!(opt_list.values.contains(&"/tmp".to_owned()));
+-        assert!(opt_list.values.contains(&"/usr".to_owned()));
+-        assert!(opt_list.values.contains(&"/var".to_owned()));
+         assert!(!opt_list.values.contains(&"/proc".to_owned()));
+         assert!(!opt_list.values.contains(&"/run".to_owned()));
+ 

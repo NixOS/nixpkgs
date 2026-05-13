@@ -1,0 +1,40 @@
+diff --git a/Data/GraphViz/Commands.hs b/Data/GraphViz/Commands.hs
+index 20e7dbe..514c29d 100644
+--- a/Data/GraphViz/Commands.hs
++++ b/Data/GraphViz/Commands.hs
+@@ -63,14 +63,14 @@ import           System.IO        (Handle, hPutStrLn, hSetBinaryMode, stderr)
+ -- -----------------------------------------------------------------------------
+ 
+ showCmd           :: GraphvizCommand -> String
+-showCmd Dot       = "dot"
+-showCmd Neato     = "neato"
+-showCmd TwoPi     = "twopi"
+-showCmd Circo     = "circo"
+-showCmd Fdp       = "fdp"
+-showCmd Sfdp      = "sfdp"
+-showCmd Osage     = "osage"
+-showCmd Patchwork = "patchwork"
++showCmd Dot       = "@graphviz@/bin/dot"
++showCmd Neato     = "@graphviz@/bin/neato"
++showCmd TwoPi     = "@graphviz@/bin/twopi"
++showCmd Circo     = "@graphviz@/bin/circo"
++showCmd Fdp       = "@graphviz@/bin/fdp"
++showCmd Sfdp      = "@graphviz@/bin/sfdp"
++showCmd Osage     = "@graphviz@/bin/osage"
++showCmd Patchwork = "@graphviz@/bin/patchwork"
+ 
+ -- | The default command for directed graphs.
+ dirCommand :: GraphvizCommand
+@@ -312,8 +312,11 @@ runGraphvizCanvas' d = runGraphvizCanvas (commandFor d) d
+ 
+ -- | Is the Graphviz suite of tools installed?  This is determined by
+ --   whether @dot@ is available in the @PATH@.
++--
++--   Note: With nixpkgs, this will always return 'True' as graphviz'
++--   store paths are hardcoded instead of looking at @PATH@.
+ isGraphvizInstalled :: IO Bool
+-isGraphvizInstalled = liftM isJust . findExecutable $ showCmd Dot
++isGraphvizInstalled = pure True -- :)
+ 
+ -- | If Graphviz does not seem to be available, print the provided
+ --   error message and then exit fatally.

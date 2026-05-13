@@ -1,0 +1,13 @@
+diff --git a/codec2.pc.in b/codec2.pc.in
+index ecca704..94fca12 100644
+--- a/codec2.pc.in
++++ b/codec2.pc.in
+@@ -1,6 +1,5 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@
+-includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@/codec2
++libdir=@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@/codec2
+ 
+ Name: codec2
+ Description: A speech codec for 2400 bit/s and below

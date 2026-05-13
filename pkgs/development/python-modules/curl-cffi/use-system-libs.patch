@@ -1,0 +1,21 @@
+--- a/scripts/build.py
++++ b/scripts/build.py
+@@ -141,7 +141,6 @@ def get_curl_libraries():
+ ffibuilder = FFI()
+ system = platform.system()
+ root_dir = Path(__file__).parent.parent
+-download_libcurl()
+ 
+ 
+ ffibuilder.set_source(
+@@ -150,9 +149,7 @@ ffibuilder.set_source(
+         #include "shim.h"
+     """,
+     # FIXME from `curl-impersonate`
+-    libraries=get_curl_libraries(),
+-    extra_objects=get_curl_archives(),
+-    library_dirs=[arch["libdir"]],
++    libraries=["curl-impersonate"],
+     source_extension=".c",
+     include_dirs=[
+         str(root_dir / "include"),

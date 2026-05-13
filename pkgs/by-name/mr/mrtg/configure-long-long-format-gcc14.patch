@@ -1,0 +1,10 @@
+--- mrtg-2.17.10/configure.bak	2025-10-17 20:44:24.878718603 +0100
++++ mrtg-2.17-10/configure	2025-10-17 20:44:40.343747835 +0100
+@@ -3664,6 +3664,7 @@
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ #include <stdio.h>
++#include <stdlib.h>
+             int main()
+             {
+                 long long b, a = -0x3AFAFAFAFAFAFAFALL;

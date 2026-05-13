@@ -1,0 +1,35 @@
+From 2b3fa53f0115d73d1d515f8c839fc481ba5db46d Mon Sep 17 00:00:00 2001
+From: Alan Griffiths <alan@octopull.co.uk>
+Date: Thu, 26 Dec 2024 23:21:12 +0100
+Subject: [PATCH] calloc args in right order
+
+Co-authored-by: OPNA2608 <opna2608@protonmail.com>
+---
+ examples/client/wayland_client.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/examples/client/wayland_client.c b/examples/client/wayland_client.c
+index a52b04c..e644a44 100644
+--- a/examples/client/wayland_client.c
++++ b/examples/client/wayland_client.c
+@@ -375,7 +375,7 @@ int main(int argc, char** argv)
+ 
+     struct wl_display* display = wl_display_connect(NULL);
+     struct globals* globals;
+-    globals = calloc(sizeof *globals, 1);
++    globals = calloc(1, sizeof *globals);
+ 
+     struct wl_registry* registry = wl_display_get_registry(display);
+ 
+@@ -389,7 +389,7 @@ int main(int argc, char** argv)
+     void* pool_data = NULL;
+     struct wl_shm_pool* shm_pool = make_shm_pool(globals->shm, 400 * 400 * 4, &pool_data);
+ 
+-    struct draw_context* ctx = calloc(sizeof *ctx, 1);
++    struct draw_context* ctx = calloc(1, sizeof *ctx);
+ 
+     for (int i = 0; i < 4; ++i)
+     {
+-- 
+2.47.0
+

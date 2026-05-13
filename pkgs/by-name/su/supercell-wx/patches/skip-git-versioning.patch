@@ -1,0 +1,50 @@
+diff --git a/scwx-qt/tools/generate_versions.py b/scwx-qt/tools/generate_versions.py
+index c6c94020..000f6e6e 100644
+--- a/scwx-qt/tools/generate_versions.py
++++ b/scwx-qt/tools/generate_versions.py
+@@ -1,6 +1,5 @@
+ import argparse
+ import datetime
+-import git
+ import json
+ import os
+ import pathlib
+@@ -110,27 +109,23 @@ def ParseArguments():
+                         required = True)
+     return parser.parse_args()
+ 
++def GetYearFromLicense(license_file: pathlib.Path):
++    import re
++    for line in license_file.read_text().splitlines():
++        m = re.search(r'^\s*Copyright \(c\) 2021-(\d{4,})', line)
++        if m is not None:
++            return int(m.group(1))
++    raise RuntimeError(f"Could not find copyright year in {license_file}")
++
+ def CollectVersionInfo(args):
+     print("Collecting version info")
+ 
+     versionInfo = VersionInfo()
+ 
+-    repo = git.Repo(args.gitRepo_, search_parent_directories = True)
+-
+-    commitString = str(repo.head.commit)[:10]
+-
+-    if not repo.is_dirty(submodules = False):
+-        copyrightYear = datetime.datetime.fromtimestamp(repo.head.commit.committed_date).year
+-    else:
+-        commitString  = commitString + "+dirty"
+-        copyrightYear = datetime.date.today().year
+-
+-    resourceDir = str(args.gitRepo_).replace("\\", "\\\\")
+-
+     versionInfo.buildNumber_   = args.buildNumber_
+-    versionInfo.commitString_  = commitString
+-    versionInfo.copyrightYear_ = copyrightYear
+-    versionInfo.resourceDir_   = resourceDir
++    versionInfo.commitString_  = "@rev@"
++    versionInfo.copyrightYear_ = GetYearFromLicense(args.gitRepo_ / "LICENSE.txt")
++    versionInfo.resourceDir_   = str(args.gitRepo_).replace("\\", "\\\\")
+     versionInfo.versionString_ = args.version_
+ 
+     versionInfo.Calculate()

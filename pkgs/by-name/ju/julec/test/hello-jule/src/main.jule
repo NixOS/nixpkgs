@@ -1,0 +1,7 @@
+fn main() {
+		println("Hello, Jule!");
+}
+
+fn getPi(): f64 {
+		ret 3.14;
+}

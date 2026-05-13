@@ -1,0 +1,58 @@
+diff --git a/yarn.lock b/yarn.lock
+index eb08ec21..b8cd1e79 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -7137,7 +7137,7 @@ __metadata:
+     jupyterlab-rise: ^0.43.1
+     npm-run-all: ^4.1.5
+     rimraf: ^6.0.1
+-    typescript: ~5.8.2
++    typescript: ~5.9.2
+   languageName: unknown
+   linkType: soft
+ 
+@@ -10906,7 +10906,7 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"typescript@npm:>=3 < 6, typescript@npm:~5.8.2":
++"typescript@npm:>=3 < 6":
+   version: 5.8.2
+   resolution: "typescript@npm:5.8.2"
+   bin:
+@@ -10916,7 +10916,17 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>, typescript@patch:typescript@~5.8.2#~builtin<compat/typescript>":
++"typescript@npm:~5.9.2":
++  version: 5.9.3
++  resolution: "typescript@npm:5.9.3"
++  bin:
++    tsc: bin/tsc
++    tsserver: bin/tsserver
++  checksum: 0d0ffb84f2cd072c3e164c79a2e5a1a1f4f168e84cb2882ff8967b92afe1def6c2a91f6838fb58b168428f9458c57a2ba06a6737711fdd87a256bbe83e9a217f
++  languageName: node
++  linkType: hard
++
++"typescript@patch:typescript@>=3 < 6#~builtin<compat/typescript>":
+   version: 5.8.2
+   resolution: "typescript@patch:typescript@npm%3A5.8.2#~builtin<compat/typescript>::version=5.8.2&hash=5786d5"
+   bin:
+@@ -10926,6 +10936,16 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
++"typescript@patch:typescript@~5.9.2#~builtin<compat/typescript>":
++  version: 5.9.3
++  resolution: "typescript@patch:typescript@npm%3A5.9.3#~builtin<compat/typescript>::version=5.9.3&hash=5786d5"
++  bin:
++    tsc: bin/tsc
++    tsserver: bin/tsserver
++  checksum: a5a6dc399d3761ded54192031f11d3ad5df8001c7febe3fbbc8098efcb552cdf8f2f402b3618c56dafcd04fef63dee005f4900f608e185404caedc46480539ed
++  languageName: node
++  linkType: hard
++
+ "typestyle@npm:^2.0.4":
+   version: 2.4.0
+   resolution: "typestyle@npm:2.4.0"
