@@ -27,6 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     systemdMinimal
   ];
 
+  postInstall = ''
+    install -Dm0755 extra/xsetup.sh "$out/etc/xsetup.sh"
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
