@@ -9,7 +9,6 @@
 let
   inherit (lib)
     any
-    attrValues
     concatStringsSep
     escapeShellArg
     hasInfix
@@ -20,7 +19,6 @@ let
     mkIf
     mkOption
     mkPackageOption
-    mkRenamedOptionModule
     nameValuePair
     optionalAttrs
     optionals
@@ -36,12 +34,19 @@ let
 
   settingsFormat = pkgs.formats.yaml { };
 
-  # Empty label strings result in upstream default labels, which require docker.
-  hasDockerScheme =
-    instance: instance.labels == [ ] || any (label: hasInfix ":docker:" label) instance.labels;
-  wantsContainerRuntime = any hasDockerScheme (attrValues cfg.instances);
+  instanceLabels =
+    instance:
+    instance.labels
+    ++ lib.concatMap (connection: connection.labels or [ ]) (
+      lib.attrValues (instance.settings.server.connections or { })
+    );
 
-  hasHostScheme = instance: any (label: hasSuffix ":host" label) instance.labels;
+  hasDockerScheme = labels: any (label: hasInfix ":docker:" label) labels;
+  hasHostScheme = labels: any (label: hasSuffix ":host" label) labels;
+
+  wantsContainerRuntime = any (instance: hasDockerScheme (instanceLabels instance)) (
+    lib.attrValues cfg.instances
+  );
 
   hasDocker = config.virtualisation.docker.enable;
   hasPodman = config.virtualisation.podman.enable;
@@ -110,7 +115,8 @@ in
               };
 
               labels = mkOption {
-                type = nullOr (listOf str);
+                type = listOf str;
+                default = [ ];
                 example = literalExpression ''
                   [
                     # provide a debian base with nodejs for actions
@@ -202,9 +208,10 @@ in
         mkRunnerInstance =
           _: instance:
           let
+            allLabels = instanceLabels instance;
             escapedName = escapeSystemdPath instance.name;
-            wantsContainer = hasDockerScheme instance;
-            wantsHost = hasHostScheme instance;
+            wantsContainer = hasDockerScheme allLabels;
+            wantsHost = hasHostScheme allLabels;
             wantsDocker = wantsContainer && hasDocker;
             wantsPodman = wantsContainer && hasPodman;
             configFile = settingsFormat.generate "forgejo-runner-${escapedName}.yaml" instance.settings;
