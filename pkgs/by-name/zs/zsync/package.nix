@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
   ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [ perl ];
 
   meta = {
     homepage = "https://github.com/cph6/zsync";
