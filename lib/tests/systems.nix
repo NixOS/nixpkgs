@@ -226,10 +226,22 @@ lib.runTests (
       expr = toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux");
       expected = "x86_64-linux";
     };
-    test_toLosslessStringMaybe_fail = {
-      expr = toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux" // { something = "extra"; });
-      expected = null;
-    };
+    test_toLosslessStringMaybe_fail = (
+      let
+        baseSystem = lib.systems.elaborate "x86_64-linux";
+      in
+      {
+        expr = toLosslessStringMaybe (
+          baseSystem
+          // {
+            _withoutFunctions = baseSystem._withoutFunctions // {
+              something = "extra";
+            };
+          }
+        );
+        expected = null;
+      }
+    );
     test_elaborate_config_over_system = {
       expr =
         (lib.systems.elaborate {
@@ -255,36 +267,48 @@ lib.runTests (
       expected = "i686";
     };
   }
+  // {
+    # equals.functionNames must list exactly the function-valued attrs of an
+    # elaborated system, so that _withoutFunctions stays correct without
+    # iterating.
+    test_equals_functionNames_in_sync =
+      let
+        sys = lib.systems.elaborate "x86_64-linux";
+        actual = lib.filter (n: builtins.isFunction sys.${n}) (builtins.attrNames sys);
+        expected = lib.sort lib.lessThan lib.systems.functionNames;
+      in
+      {
+        expr = lib.sort lib.lessThan actual;
+        inherit expected;
+      };
+  }
 
   # Generate test cases to assert that a change in any non-function attribute makes a platform unequal
-  //
-    lib.concatMapAttrs
-      (platformAttrName: origValue: {
+  // (
+    let
+      # arbitrary choice, just to get all the elaborated attrNames
+      baseSystem = lib.systems.elaborate "x86_64-linux";
+    in
+    lib.concatMapAttrs (platformAttrName: origValue: {
+      ${"test_equals_unequal_${platformAttrName}"} =
+        let
+          # lib.systems.equals only checks the subattrset
+          modified =
+            assert origValue != arbitraryValue;
+            baseSystem
+            // {
+              _withoutFunctions = baseSystem._withoutFunctions // {
+                ${platformAttrName} = arbitraryValue;
+              };
+            };
+          arbitraryValue = x: "<<modified>>";
+        in
+        {
+          expr = lib.systems.equals baseSystem modified;
+          expected = false;
+        };
 
-        ${"test_equals_unequal_${platformAttrName}"} =
-          let
-            modified =
-              assert origValue != arbitraryValue;
-              lib.systems.elaborate "x86_64-linux" // { ${platformAttrName} = arbitraryValue; };
-            arbitraryValue = x: "<<modified>>";
-          in
-          {
-            expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") modified;
-            expected =
-              {
-                # Changes in these attrs are not detectable because they're function.
-                # The functions should be derived from the data, so this is not a problem.
-                canExecute = null;
-                emulator = null;
-                emulatorAvailable = null;
-                staticEmulatorAvailable = null;
-                isCompatible = null;
-              } ? ${platformAttrName};
-          };
-
-      })
-      (
-        lib.systems.elaborate "x86_64-linux" # arbitrary choice, just to get all the elaborated attrNames
-      )
+    }) baseSystem
+  )
 
 )
