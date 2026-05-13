@@ -23,19 +23,16 @@ assert lib.assertOneOf "displayServer" displayServer [
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringboard" + lib.optionalString (displayServer == "wayland") "-wayland";
-
-  # release version needs nightly, so we use a custom tree, see:
-  # https://github.com/SUPERCILEX/clipboard-history/issues/22#issuecomment-3676256971
-  version = "0.14.0-unstable-2026-01-19";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "clipboard-history";
-    rev = "cb2e94add2388a68a8f015b77f9b082b1658b3b7";
-    hash = "sha256-r2632XJ/2Er1TuHCDNm6uItvdhqJ87i9p+h9M2MwKwk=";
+    tag = "${finalAttrs.version}-rust-1.95";
+    hash = "sha256-/LDxZ3bsuVwMiRzLTuLIs6y7jAS/84sXhTRhovXV8zM=";
   };
 
-  cargoHash = "sha256-c5Zdvz2xHsGh4VnOED2JiitNWwNTSkygaMFHPPLANqw=";
+  cargoHash = "sha256-ARSvWjeVWXksZ27lRJn67wXpgr8epagflOAULKmYaQ8=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -103,7 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.nixos = nixosTests.ringboard;
-    updateScript = nix-update-script { extraArgs = [ "--version=branch=stable" ]; };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=(.*)-rust-1.95" ]; };
   };
 
   meta = {

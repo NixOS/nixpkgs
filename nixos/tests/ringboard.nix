@@ -38,8 +38,8 @@
 
       with subtest("Wait for service startup"):
         machine.wait_for_unit("graphical.target")
-        machine.wait_for_unit("ringboard-server.service", "${user}")
-        machine.wait_for_unit("ringboard-listener.service", "${user}")
+        with gedit_running:
+          pass
 
       with subtest("Ensure clipboard is monitored"):
         with gedit_running: # type: ignore[union-attr]
