@@ -1,4 +1,5 @@
 import json
+import urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import Mock
@@ -6,12 +7,27 @@ from unittest.mock import Mock
 import pytest
 
 import nixpkgs_plugin_update as update
-from helpers import FakeCache, FakeRepo, plugin, plugin_desc
+from helpers import (
+    BinaryResponse,
+    BoundaryRecorder,
+    FakeCache,
+    FakeRepo,
+    GITHUB_LICENSE_URL,
+    GITHUB_REPO_URL,
+    GITHUB_TAGS_ATOM_URL,
+    JsonResponse,
+    atom_feed,
+    plugin,
+    plugin_desc,
+)
 
 
 RELEASE_DATE = datetime(2024, 1, 15, tzinfo=timezone.utc)
 HEAD_DATE = datetime(2024, 2, 1, tzinfo=timezone.utc)
 BOUNDARY_DATE = datetime(2024, 5, 6, tzinfo=timezone.utc)
+GITHUB_REPO_GIT_URL = f"{GITHUB_REPO_URL}/"
+GITHUB_SUBMODULES_URL = f"{GITHUB_REPO_URL}/blob/HEAD/.gitmodules"
+GITHUB_TAG_TREE_URL = f"{GITHUB_REPO_URL}/tree/refs%2Ftags%2Fv1.2.3"
 
 
 def tag_ref(tag: str) -> str:
@@ -240,8 +256,10 @@ def test_cache_hit_fetches_license_once_when_cache_and_current_plugin_lack_it() 
 
 
 def test_prefetch_plugin_reuses_current_license_before_fetching_license() -> None:
-    head_date = datetime(2024, 2, 1, tzinfo=timezone.utc)
-    repo = FakeRepo(latest_commit=("commit-head", head_date))
+    head_date = HEAD_DATE
+    repo = FakeRepo(
+        latest_commit=("commit-head", head_date),
+    )
     current = plugin(license="Apache-2.0")
 
     fetched, _redirect = update.prefetch_plugin(
@@ -249,12 +267,8 @@ def test_prefetch_plugin_reuses_current_license_before_fetching_license() -> Non
     )
 
     assert fetched.license == "Apache-2.0"
+    assert repo.prefetch_call_details == [("commit-head", False)]
     assert repo.license_calls == 0
-    assert repo.prefetch_calls == ["commit-head"]
-    assert repo.prefetch_call_details == [("commit-head", None)]
-    assert repo.get_latest_tag_calls == 1
-    assert repo.latest_commit_calls == 1
-    assert repo.has_submodules_calls == 1
 
 
 def test_prefetch_plugin_cache_miss_fetches_selected_tag_ref() -> None:
@@ -274,7 +288,7 @@ def test_prefetch_plugin_cache_miss_fetches_selected_tag_ref() -> None:
     assert fetched.has_submodules is True
     assert fetched.sha256 == "sha256-prefetched"
     assert fetched.license == "Apache-2.0"
-    assert repo.prefetch_call_details == [(tag_ref("v1.1.0"), None)]
+    assert repo.prefetch_call_details == [(tag_ref("v1.1.0"), True)]
     assert repo.license_calls == 1
 
 
@@ -291,10 +305,7 @@ def test_prefetch_stores_fetched_plugin_in_cache() -> None:
     assert redirect is None
     assert result.license == "MIT"
     assert cache[update.target_cache_key(repo.uri, "commit-head", None)] is result
-    assert repo.get_latest_tag_calls == 1
-    assert repo.latest_commit_calls == 1
-    assert repo.has_submodules_calls == 1
-    assert repo.prefetch_call_details == [("commit-head", None)]
+    assert repo.prefetch_call_details == [("commit-head", False)]
     assert repo.license_calls == 1
 
 
@@ -319,10 +330,8 @@ def test_prefetch_uses_current_plugin_metadata_and_real_cache(
     assert result.version == "0-unstable-2024-02-01"
     assert result.license == "Apache-2.0"
     assert cache[update.target_cache_key(repo.uri, "commit-head", None)] is result
-    assert repo.get_latest_tag_calls == 1
-    assert repo.latest_commit_calls == 1
-    assert repo.has_submodules_calls == 1
-    assert repo.prefetch_call_details == [("commit-head", None)]
+    assert repo.prefetch_call_details == [("commit-head", False)]
+    assert repo.license_calls == 0
 
 
 def test_get_update_counts_prefetches_and_stores_cache_once(
@@ -548,16 +557,98 @@ def test_cache_load_reads_realistic_tag_and_commit_entries(
     )
 
 
-def test_prefetch_plugin_uses_real_github_repo_commit_path(
+@pytest.mark.parametrize(
+    (
+        "has_submodules",
+        "license_spdx_id",
+        "expected_sha256",
+        "expected_prefetch_cmd",
+    ),
+    [
+        (
+            False,
+            "MIT",
+            "sha256-github",
+            (
+                "nix-prefetch-github",
+                "owner",
+                "repo",
+                "--rev",
+                tag_ref("v1.2.3"),
+                "--json",
+            ),
+        ),
+        (
+            True,
+            "Apache-2.0",
+            "sha256-git",
+            (
+                "nix-prefetch-git",
+                "--quiet",
+                "--fetch-submodules",
+                GITHUB_REPO_GIT_URL,
+                tag_ref("v1.2.3"),
+            ),
+        ),
+    ],
+)
+def test_prefetch_plugin_real_github_cache_miss_counts_boundary_calls(
     monkeypatch: pytest.MonkeyPatch,
+    has_submodules: bool,
+    license_spdx_id: str,
+    expected_sha256: str,
+    expected_prefetch_cmd: tuple[str, ...],
 ) -> None:
-    head_date = BOUNDARY_DATE
     repo = update.RepoGitHub("owner", "repo", "")
-    monkeypatch.setattr(repo, "get_latest_tag", Mock(return_value=None))
-    monkeypatch.setattr(repo, "latest_commit", Mock(return_value=("commit-head", head_date)))
-    monkeypatch.setattr(repo, "has_submodules", Mock(return_value=False))
-    monkeypatch.setattr(repo, "prefetch_github", Mock(return_value="sha256-github"))
-    monkeypatch.setattr(repo, "get_license_spdx_id", Mock(return_value="MIT"))
+    repo.token = ""
+    recorder = BoundaryRecorder()
+
+    def fake_urlopen(request, timeout: int):  # type: ignore[no-untyped-def]
+        recorder.record_urlopen(request, timeout)
+        assert timeout == 10
+        if request.full_url == GITHUB_TAGS_ATOM_URL:
+            return BinaryResponse(atom_feed("v1.2.3"), request.full_url)
+        if request.full_url == GITHUB_TAG_TREE_URL:
+            return BinaryResponse(url=request.full_url)
+        if request.full_url == GITHUB_SUBMODULES_URL:
+            if not has_submodules:
+                raise urllib.error.HTTPError(request.full_url, 404, "", {}, None)
+            return BinaryResponse(url=request.full_url)
+        if request.full_url == GITHUB_LICENSE_URL:
+            return JsonResponse({"license": {"spdx_id": license_spdx_id}})
+        raise AssertionError(f"unexpected request: {request.full_url}")
+
+    def fake_check_output(cmd, **kwargs):  # type: ignore[no-untyped-def]
+        recorder.record_check_output(cmd, kwargs)
+        if tuple(cmd) == (
+            "nix-prefetch-git",
+            "--quiet",
+            GITHUB_REPO_GIT_URL,
+            tag_ref("v1.2.3"),
+        ):
+            assert kwargs == {}
+            return json.dumps(
+                {
+                    "rev": "release-commit",
+                    "date": "2024-05-06T00:00:00+0000",
+                    "sha256": "sha256-resolve-only",
+                }
+            ).encode()
+        if tuple(cmd) == expected_prefetch_cmd:
+            assert kwargs == {}
+            if has_submodules:
+                return json.dumps(
+                    {
+                        "rev": "release-commit",
+                        "date": "2024-05-06T00:00:00+0000",
+                        "sha256": expected_sha256,
+                    }
+                ).encode()
+            return json.dumps({"hash": expected_sha256}).encode()
+        raise AssertionError(f"unexpected subprocess call: {cmd!r}")
+
+    monkeypatch.setattr(update.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(update.subprocess, "check_output", fake_check_output)
 
     fetched, redirect = update.prefetch_plugin(
         update.PluginDesc(repo, update.AUTO_BRANCH, None),
@@ -567,16 +658,123 @@ def test_prefetch_plugin_uses_real_github_repo_commit_path(
     assert redirect is None
     assert fetched == plugin(
         name="repo",
-        commit="commit-head",
+        commit="release-commit",
+        has_submodules=has_submodules,
+        sha256=expected_sha256,
+        version="1.2.3",
+        date=BOUNDARY_DATE,
+        last_tag="v1.2.3",
+        tag="v1.2.3",
+        license=license_spdx_id,
+    )
+    urlopen_calls = [call for call in recorder.calls if call[0] == "urlopen"]
+    check_output_calls = [call for call in recorder.calls if call[0] == "check_output"]
+    resolve_cmd = (
+        "nix-prefetch-git",
+        "--quiet",
+        GITHUB_REPO_GIT_URL,
+        tag_ref("v1.2.3"),
+    )
+
+    assert urlopen_calls.count(("urlopen", GITHUB_TAGS_ATOM_URL, {"timeout": 10})) == 1
+    assert urlopen_calls.count(("urlopen", GITHUB_TAG_TREE_URL, {"timeout": 10})) == 1
+    assert (
+        urlopen_calls.count(("urlopen", GITHUB_SUBMODULES_URL, {"timeout": 10})) == 1
+    )
+    assert urlopen_calls.count(("urlopen", GITHUB_LICENSE_URL, {"timeout": 10})) == 1
+    assert check_output_calls == [
+        ("check_output", resolve_cmd, {}),
+        ("check_output", expected_prefetch_cmd, {}),
+    ]
+
+
+@pytest.mark.parametrize(
+    (
+        "latest_tag",
+        "resolved",
+        "expected_commit",
+        "expected_version",
+        "expected_tag",
+        "expected_prefetch_ref",
+    ),
+    [
+        (
+            None,
+            None,
+            "commit-head",
+            "0-unstable-2024-05-06",
+            None,
+            "commit-head",
+        ),
+        (
+            "v1.2.3",
+            ("release-commit", BOUNDARY_DATE),
+            "release-commit",
+            "1.2.3",
+            "v1.2.3",
+            tag_ref("v1.2.3"),
+        ),
+    ],
+)
+def test_prefetch_plugin_uses_real_github_repo_path_without_duplicate_submodule_check(
+    monkeypatch: pytest.MonkeyPatch,
+    latest_tag: str | None,
+    resolved: tuple[str, datetime] | None,
+    expected_commit: str,
+    expected_version: str,
+    expected_tag: str | None,
+    expected_prefetch_ref: str,
+) -> None:
+    repo = update.RepoGitHub("owner", "repo", "")
+    get_latest_tag = Mock(
+        return_value=latest_tag
+    )
+    latest_commit = Mock(side_effect=AssertionError("unexpected latest_commit"))
+    if latest_tag is None:
+        latest_commit = Mock(return_value=("commit-head", BOUNDARY_DATE))
+    resolve_ref = Mock(
+        return_value=resolved
+    )
+    has_submodules = Mock(return_value=False)
+    prefetch_github = Mock(return_value="sha256-github")
+    base_prefetch = Mock(side_effect=AssertionError("unexpected git prefetch"))
+    get_license_spdx_id = Mock(return_value="MIT")
+    monkeypatch.setattr(repo, "get_latest_tag", get_latest_tag)
+    monkeypatch.setattr(repo, "latest_commit", latest_commit)
+    monkeypatch.setattr(repo, "resolve_ref", resolve_ref)
+    monkeypatch.setattr(repo, "has_submodules", has_submodules)
+    monkeypatch.setattr(repo, "prefetch_github", prefetch_github)
+    monkeypatch.setattr(update.Repo, "prefetch", base_prefetch)
+    monkeypatch.setattr(repo, "get_license_spdx_id", get_license_spdx_id)
+
+    fetched, redirect = update.prefetch_plugin(
+        update.PluginDesc(repo, update.AUTO_BRANCH, None),
+        cache=FakeCache(),
+    )
+
+    assert redirect is None
+    assert fetched == plugin(
+        name="repo",
+        commit=expected_commit,
         has_submodules=False,
         sha256="sha256-github",
-        version="0-unstable-2024-05-06",
-        date=head_date,
-        last_tag=None,
-        tag=None,
+        version=expected_version,
+        date=BOUNDARY_DATE,
+        last_tag=latest_tag,
+        tag=expected_tag,
         license="MIT",
     )
-    repo.prefetch_github.assert_called_once_with("commit-head")
+    get_latest_tag.assert_called_once_with()
+    if latest_tag is None:
+        latest_commit.assert_called_once_with()
+        resolve_ref.assert_not_called()
+    else:
+        latest_commit.assert_not_called()
+        resolve_ref.assert_called_once_with(tag_ref("v1.2.3"))
+    has_submodules.assert_called_once_with()
+    prefetch_github.assert_called_once_with(expected_prefetch_ref)
+    base_prefetch.assert_not_called()
+    get_license_spdx_id.assert_called_once_with()
 
 
 def test_check_results_rewrites_redirected_plugin_name() -> None:

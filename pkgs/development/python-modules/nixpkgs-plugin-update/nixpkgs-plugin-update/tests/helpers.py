@@ -1,11 +1,16 @@
 import io
 import json
+from collections.abc import Sequence
 from datetime import datetime
+
+import urllib.request
 
 import nixpkgs_plugin_update as update
 
 
 GITHUB_REPO_URL = "https://github.com/owner/repo"
+GITHUB_LICENSE_URL = "https://api.github.com/repos/owner/repo/license"
+GITHUB_TAGS_ATOM_URL = f"{GITHUB_REPO_URL}/tags.atom"
 
 
 class JsonResponse(io.BytesIO):
@@ -35,6 +40,37 @@ class BinaryResponse(io.BytesIO):
 
     def geturl(self) -> str:
         return self.url
+
+
+def atom_feed(*tags: str) -> bytes:
+    entries = "\n".join(
+        f'      <entry><link href="{GITHUB_REPO_URL}/releases/tag/{tag}" /></entry>'
+        for tag in tags
+    )
+    return f"""<?xml version="1.0" encoding="utf-8"?>
+    <feed xmlns="http://www.w3.org/2005/Atom">
+{entries}
+    </feed>
+    """.encode()
+
+
+def git_ls_remote_tags(*tags: str) -> bytes:
+    return "".join(
+        f"{index:040x}\trefs/tags/{tag}\n" for index, tag in enumerate(tags)
+    ).encode()
+
+
+def graphql_tags(*tags: str) -> dict[str, object]:
+    return {
+        "data": {
+            "repository": {
+                "refs": {
+                    "nodes": [{"name": tag} for tag in tags],
+                },
+            },
+        },
+    }
+
 
 class FakeRepo:
     def __init__(
@@ -114,6 +150,27 @@ class FakeCache:
 
     def __bool__(self) -> bool:
         return True
+
+
+class BoundaryRecorder:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, object, object]] = []
+
+    def record_urlopen(
+        self,
+        request: urllib.request.Request,
+        timeout: int,
+    ) -> None:
+        headers = dict(request.header_items())
+        self.calls.append(
+            ("urlopen", request.full_url, {"timeout": timeout, **headers})
+        )
+
+    def record_check_output(
+        self, cmd: Sequence[str], kwargs: dict[str, object]
+    ) -> None:
+        self.calls.append(("check_output", tuple(cmd), dict(kwargs)))
+
 
 def plugin_desc(repo: FakeRepo, branch: str = update.AUTO_BRANCH) -> update.PluginDesc:
     return update.PluginDesc(repo=repo, branch=branch, alias=None)
