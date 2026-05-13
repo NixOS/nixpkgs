@@ -390,6 +390,7 @@
   ./security/acme
   ./security/agnos.nix
   ./security/apparmor.nix
+  ./security/artifacts/default.nix
   ./security/audit.nix
   ./security/auditd.nix
   ./security/ca.nix
