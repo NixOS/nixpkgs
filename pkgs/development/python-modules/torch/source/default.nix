@@ -598,7 +598,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     hypothesis
     jinja2
     networkx
-    ninja
     packaging
     psutil
     pyyaml
