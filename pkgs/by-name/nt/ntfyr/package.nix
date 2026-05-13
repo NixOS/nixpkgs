@@ -40,6 +40,16 @@ stdenv.mkDerivation {
     hash = "sha256-ch4fKWH2dw1eGBvJcP6JOYu34DFLXXkbhju2KNDgHzw=";
   };
 
+  patches = [
+    # Without this patch, when ntfyr is launched at login with start-in-background=true
+    # the GtkApplication primary instance lives on D-Bus without ever creating a window,
+    # and every subsequent CLI invocation (launcher click or `ntfyr` from a shell) is
+    # absorbed as a remote command_line dispatch whose gate also refuses to create the
+    # window -- making the GUI unreachable while notifications keep working.
+    # Upstream: https://github.com/tobagin/Ntfyr
+    ./always-present-window-on-cli-reactivation.patch
+  ];
+
   nativeBuildInputs = [
     appstream
     appstream-glib

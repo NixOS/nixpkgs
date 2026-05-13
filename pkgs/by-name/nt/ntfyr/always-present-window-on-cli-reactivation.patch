@@ -1,0 +1,31 @@
+diff --git a/src/application.rs b/src/application.rs
+index 5bb0193..14a2bc3 100644
+--- a/src/application.rs
++++ b/src/application.rs
+@@ -114,7 +114,11 @@ mod imp {
+             let is_daemon = arguments.get(1).map(|x| x.to_str()) == Some(Some("--daemon"));
+             let app = self.obj();
+ 
+-            if self.hold_guard.get().is_none() {
++            // Capture whether the primary instance was already running BEFORE we
++            // touch hold_guard, so we can distinguish first launch from a CLI
++            // reactivation of an existing background instance.
++            let already_running = self.hold_guard.get().is_some();
++            if !already_running {
+                 app.ensure_rpc_running();
+             }
+ 
+@@ -130,7 +134,12 @@ mod imp {
+             let start_in_background = settings.boolean("start-in-background");
+             let has_window = app.imp().window.borrow().upgrade().is_some();
+ 
+-            if !start_in_background || has_window {
++            // start-in-background only suppresses the window on the very first
++            // launch (e.g. XDG autostart at login). Any subsequent CLI invocation
++            // -- including launcher activations against a background primary
++            // instance -- must always present a window, mirroring the semantics
++            // of the `activate` handler above.
++            if already_running || !start_in_background || has_window {
+                 app.ensure_window_present();
+             } else {
+                 debug!("Starting in background from command line as requested by preferences");
