@@ -101,5 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     changelog = "https://docs.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/RELEASE_NOTES.html";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
   };
 })
