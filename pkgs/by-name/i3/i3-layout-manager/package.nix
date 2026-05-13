@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     owner = "klaxalk";
     repo = "i3-layout-manager";
     rev = "df54826bba351d8bcd7ebeaf26c07c713af7912c";
-    sha256 = "0ccvr43yp26fnh5d82cw7jcfq2sbxzzmdx2cp15bmxr8ixr8knc3";
+    hash = "sha256-g9mJco8o97pKuEz0Vv/vSwvsmDycCdQKtM6I6wfJmzE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

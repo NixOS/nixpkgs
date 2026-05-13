@@ -10,15 +10,15 @@
   libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wmfocus";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "wmfocus";
-    rev = "v${version}";
-    sha256 = "sha256-94MgE2j8HaS8IyzHEDtoqTls2A8xD96v2iAFx9XfMcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-94MgE2j8HaS8IyzHEDtoqTls2A8xD96v2iAFx9XfMcw=";
   };
 
   cargoHash = "sha256-tYzJS/ApjGuvNnGuBEVr54AGcEmDhG9HtirZvtmNslY=";
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication {
     owner = "tmfink";
     repo = "i3-wk-switch";
     rev = "a618cb8f52120aa8d533bb7c0c8de3ff13b3dc06";
-    sha256 = "0ci0w5igjk5xa8x4rx17cpgmdkamwjmavxhp0vp6213cl93ybjhz";
+    hash = "sha256-H8rlR6JsBGHuBhf2rarkVc1W32Un9Ew6Ur1M+WLhIDI=";
   };
 
   propagatedBuildInputs = with python3Packages; [ i3ipc ];

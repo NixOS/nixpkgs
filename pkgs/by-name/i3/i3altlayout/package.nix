@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "i3altlayout";
   version = "0.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1h0phf3s6ljffxw0bs73k041wildaz01h37iv5mxhami41wrh4qf";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-DhOYeSCxKthr2fEMGMBXjUYeCJjj6AV4d05So4eDF8A=";
   };
 
   pythonRemoveDeps = [ "enum-compat" ];
@@ -33,4 +33,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -9505,58 +9505,6 @@ with pkgs;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
 
-  i3 = callPackage ../applications/window-managers/i3 { };
-
-  i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
-
-  i3-rounded = callPackage ../applications/window-managers/i3/rounded.nix { };
-
-  i3altlayout = callPackage ../applications/window-managers/i3/altlayout.nix { };
-
-  i3-balance-workspace =
-    python3Packages.callPackage ../applications/window-managers/i3/balance-workspace.nix
-      { };
-
-  i3-cycle-focus = callPackage ../applications/window-managers/i3/cycle-focus.nix { };
-
-  i3-easyfocus = callPackage ../applications/window-managers/i3/easyfocus.nix { };
-
-  i3-layout-manager = callPackage ../applications/window-managers/i3/layout-manager.nix { };
-
-  i3-ratiosplit = callPackage ../applications/window-managers/i3/i3-ratiosplit.nix { };
-
-  i3-resurrect = python3Packages.callPackage ../applications/window-managers/i3/i3-resurrect.nix { };
-
-  i3-swallow = python3Packages.callPackage ../applications/window-managers/i3/swallow.nix { };
-
-  i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
-
-  i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
-
-  i3ipc-glib = callPackage ../applications/window-managers/i3/i3ipc-glib.nix { };
-
-  i3lock = callPackage ../applications/window-managers/i3/lock.nix {
-    cairo = cairo.override { xcbSupport = true; };
-  };
-
-  i3lock-blur = callPackage ../applications/window-managers/i3/lock-blur.nix { };
-
-  i3lock-color = callPackage ../applications/window-managers/i3/lock-color.nix { };
-
-  i3lock-fancy = callPackage ../applications/window-managers/i3/lock-fancy.nix { };
-
-  i3lock-fancy-rapid = callPackage ../applications/window-managers/i3/lock-fancy-rapid.nix { };
-
-  i3status = callPackage ../applications/window-managers/i3/status.nix { };
-
-  i3wsr = callPackage ../applications/window-managers/i3/wsr.nix { };
-
-  i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
-
-  workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
-
-  wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
-
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit
       (perlPackages.override {
