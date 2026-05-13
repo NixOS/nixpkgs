@@ -28,6 +28,11 @@ buildGo125Module (finalAttrs: {
       url = "https://github.com/pocket-id/pocket-id/commit/34890235ba8c2d856e3a121fdf59fe9d627e8596.patch?full_index=1";
       hash = "sha256-Th1/J9M7kxcXyuNa0CZIIX1CuIS31Dx12+O4bzSxS0E=";
     })
+    # based on https://github.com/pocket-id/pocket-id/commit/978ac87deffec58beaccd15aead975e91b94c8a5.patch, modifications:
+    # - remove added tests due to merge conflicts
+    # - remove group restriction check as it's a v2 feature: https://github.com/pocket-id/pocket-id/pull/1164
+    # - adapt to IsUserGroupAllowedToAuthorize function signature changes
+    ./CVE-2026-43983.patch
   ];
 
   patchFlags = [ "-p2" ];
