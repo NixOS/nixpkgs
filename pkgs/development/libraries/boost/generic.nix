@@ -423,5 +423,7 @@ stdenv.mkDerivation {
   ];
   setOutputFlags = false;
 
+  strictDeps = true;
+
   __structuredAttrs = true;
 }
