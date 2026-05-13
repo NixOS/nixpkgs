@@ -93,6 +93,7 @@ flutter341.buildFlutterApplication (
           "Network"
           "InstantMessaging"
         ];
+        startupWMClass = "fluffychat";
       })
     ];
 

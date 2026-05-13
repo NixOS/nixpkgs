@@ -43,29 +43,20 @@ stdenv.mkDerivation (
       dontConfigure = true;
       dontFixup = true;
 
-      postPatch = ''
-        substituteInPlace package.json \
-          --replace-fail '"prepare": "effect-language-service patch",' '"prepare": "true",'
-      '';
-
       buildPhase = ''
         runHook preBuild
 
+        # Use hoisted linker: Bun's default/isolated layout can race and omit
+        # cyclic peer dependency bin links (e.g. update-browserslist-db →
+        # browserslist). A manual .bin/browserslist symlink under .bun did not
+        # reliably fix builds; see https://github.com/oven-sh/bun/pull/29014.
         bun install \
+          --linker=hoisted \
           --cpu="*" \
           --ignore-scripts \
           --no-progress \
           --frozen-lockfile \
-          --os="linux" \
-          --os="darwin"
-
-        # Work around to prevent a Bun race that can omit this cyclic peer dependency bin link.
-        # See https://github.com/oven-sh/bun/pull/29014.
-        for updateBrowserslistDbBinDir in node_modules/.bun/update-browserslist-db@*/node_modules/.bin; do
-          if [ -d "$updateBrowserslistDbBinDir" ] && [ ! -e "$updateBrowserslistDbBinDir/browserslist" ]; then
-            ln -s ../browserslist/cli.js "$updateBrowserslistDbBinDir/browserslist"
-          fi
-        done
+          --os="*"
 
         runHook postBuild
       '';
@@ -75,18 +66,17 @@ stdenv.mkDerivation (
 
         mkdir --parents $out
         cp --recursive node_modules $out
-        find apps packages -type d -name node_modules -exec cp --recursive --parents {} $out \;
 
         runHook postInstall
       '';
 
-      outputHash = "sha256-zO4LNUxU0q/+kKBtRQKNTzWHnmGT4ONMRkyJem3ei/o=";
+      outputHash = "sha256-63Vx05VLHiZpY1K8ZS1GyoupU4i3sEPEAnWMWyMelbg=";
       outputHashMode = "recursive";
     };
   in
   {
     pname = "t3code";
-    version = "0.0.22";
+    version = "0.0.23";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -94,7 +84,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-ZSUmu3FT+wpCLwpUv3yrFWC4EzcVvev9cZQ/FyeLjqI=";
+      hash = "sha256-gsDHogGnzKVwypGwK1PzYBXpBYBFQHIbXMpWVUGzKU8=";
     };
 
     postPatch = ''
@@ -128,9 +118,9 @@ stdenv.mkDerivation (
       chmod --recursive u+rwX node_modules
       patchShebangs node_modules
 
-      # Compile node-pty's native addon from the vendored bun store.
+      # Compile node-pty's native addon (hoisted into node_modules).
       export npm_config_nodedir=${nodejs}
-      cd node_modules/.bun/node-pty@*/node_modules/node-pty
+      cd node_modules/node-pty
       node-gyp rebuild
       node scripts/post-install.js
       cd -
@@ -162,8 +152,8 @@ stdenv.mkDerivation (
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop "$out"/libexec/t3code/apps/server
       cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
-      cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
-      cp --recursive --no-preserve=mode apps/desktop/{node_modules,dist-electron} "$out"/libexec/t3code/apps/desktop
+      cp --recursive --no-preserve=mode apps/server/dist "$out"/libexec/t3code/apps/server
+      cp --recursive --no-preserve=mode apps/desktop/dist-electron "$out"/libexec/t3code/apps/desktop
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
       install --mode=444 ${desktopIcon} \

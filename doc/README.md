@@ -217,6 +217,38 @@ Not everything has been migrated to this format yet.
 Please always use it for new content.
 When changing existing content, update formatting if possible, but avoid excessive diffs.
 
+### Examples first
+
+Readers look at examples first: an example communicates what something does faster than a description.
+Put examples before detailed explanations.
+
+Prefer this structure for each documented item:
+
+1. Title
+2. Abstract (optional, one sentence max, the example often speaks for itself)
+3. Example
+4. Explanation (details, edge cases, types, defaults)
+
+For instance:
+
+````markdown
+## `lib.toUpper`
+
+Converts all characters in a string to uppercase.
+
+:::{.example #ex-lib-toUpper}
+# Converting a string to uppercase
+```nix
+lib.toUpper "hello"
+=> "HELLO"
+```
+
+:::
+
+Only acts on ASCII characters.
+Unicode characters are passed through unchanged.
+````
+
 ### Writing Function Documentation
 
 Function documentation is *reference documentation*, for which
