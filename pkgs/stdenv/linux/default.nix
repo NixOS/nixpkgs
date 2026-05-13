@@ -458,9 +458,6 @@ in
           texinfo
           which
           ;
-        dejagnu = super.dejagnu.overrideAttrs (a: {
-          doCheck = false;
-        });
 
         # Avoids infinite recursion, as this is in the build-time dependencies of libc.
         libiconv = self.libcIconv prevStage.libc;
