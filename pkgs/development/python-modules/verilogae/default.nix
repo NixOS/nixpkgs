@@ -17,7 +17,7 @@
 
 buildPythonPackage.override { stdenv = llvmPackages.stdenv; } rec {
   pname = "verilogae";
-  version = "24.0.0mob-unstable-2025-07-21";
+  version = "0-unstable-2025-07-21";
   pyproject = true;
 
   src = fetchFromGitHub {
