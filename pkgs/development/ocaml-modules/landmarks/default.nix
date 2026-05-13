@@ -7,14 +7,14 @@
 
 buildDunePackage rec {
   pname = "landmarks";
-  version = "1.5";
+  version = "1.6";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = "landmarks";
     tag = "v${version}";
-    hash = "sha256-eIq02D19OzDOrMDHE1Ecrgk+T6s9vj2X6B2HY+z+K8Q=";
+    hash = "sha256-XAzg11Y9bT4sLGNqWb7i8N+0hV+mG6QqhJauR5HjfOY=";
   };
 
   doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder ocaml.version "5.0";
