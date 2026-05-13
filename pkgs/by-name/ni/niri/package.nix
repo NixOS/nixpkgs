@@ -101,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd $pname \
       --bash <($out/bin/niri completions bash) \
       --fish <($out/bin/niri completions fish) \
+      --nushell <($out/bin/niri completions nushell) \
       --zsh <($out/bin/niri completions zsh)
   '';
 

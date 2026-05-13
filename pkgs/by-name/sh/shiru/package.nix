@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  pnpm,
+  pnpm_10,
   nodejs,
   fetchFromGitHub,
   python3,
@@ -14,6 +14,7 @@
   nix-update-script,
 }:
 let
+  pnpm = pnpm_10;
   electron = electron_39;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     prePnpmInstall = ''
       cd electron
     '';

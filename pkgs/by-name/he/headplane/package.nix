@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     hash = pnpmDepsHash;
     fetcherVersion = 3;
   };

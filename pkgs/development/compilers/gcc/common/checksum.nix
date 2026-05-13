@@ -5,17 +5,12 @@
   langC,
   langCC,
   runtimeShell,
+  buildIsHost,
+  hostIsTarget,
 }:
 
 let
-  enableChecksum =
-    (
-      with stdenv;
-      lib.systems.equals buildPlatform hostPlatform && lib.systems.equals hostPlatform targetPlatform
-    )
-    && langC
-    && langCC
-    && !stdenv.hostPlatform.isDarwin;
+  enableChecksum = buildIsHost && hostIsTarget && langC && langCC && !stdenv.hostPlatform.isDarwin;
 in
 (
   pkg:

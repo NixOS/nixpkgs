@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Tarrasch/zsh-autoenv";
     mainProgram = "zsh-autoenv-share";
     platforms = lib.platforms.all;
+    license = lib.licenses.unfree;
   };
 }

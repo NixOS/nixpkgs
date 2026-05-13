@@ -1226,9 +1226,11 @@ self: super: with self; {
 
   attrs-strict = callPackage ../development/python-modules/attrs-strict { };
 
-  aubio = callPackage ../development/python-modules/aubio { };
+  aubio-ledfx = callPackage ../development/python-modules/aubio-ledfx { };
 
   audible = callPackage ../development/python-modules/audible { };
+
+  audio-hotplug = callPackage ../development/python-modules/audio-hotplug { };
 
   audioop-lts =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/audioop-lts { } else null;
@@ -6907,6 +6909,8 @@ self: super: with self; {
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
+  ha-garmin = callPackage ../development/python-modules/ha-garmin { };
+
   ha-iotawattpy = callPackage ../development/python-modules/ha-iotawattpy { };
 
   ha-mqtt-discoverable = callPackage ../development/python-modules/ha-mqtt-discoverable { };
@@ -9028,6 +9032,10 @@ self: super: with self; {
   life360 = callPackage ../development/python-modules/life360 { };
 
   lifelines = callPackage ../development/python-modules/lifelines { };
+
+  lifx-async = callPackage ../development/python-modules/lifx-async { };
+
+  lifx-emulator-core = callPackage ../development/python-modules/lifx-emulator-core { };
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
@@ -13902,6 +13910,8 @@ self: super: with self; {
 
   pyfakewebcam = callPackage ../development/python-modules/pyfakewebcam { };
 
+  pyfastnoiselite = callPackage ../development/python-modules/pyfastnoiselite { };
+
   pyfatfs = callPackage ../development/python-modules/pyfatfs { };
 
   pyfcm = callPackage ../development/python-modules/pyfcm { };
@@ -13917,6 +13927,8 @@ self: super: with self; {
   pyfirefly = callPackage ../development/python-modules/pyfirefly { };
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
+
+  pyflac = callPackage ../development/python-modules/pyflac { };
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
@@ -14585,6 +14597,10 @@ self: super: with self; {
   pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
 
   pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
+
+  pyobjc-framework-CoreAudio =
+    callPackage ../development/python-modules/pyobjc-framework-CoreAudio
+      { };
 
   pyobjc-framework-CoreBluetooth =
     callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth
@@ -17375,6 +17391,10 @@ self: super: with self; {
   samarium = callPackage ../development/python-modules/samarium { };
 
   samplerate = callPackage ../development/python-modules/samplerate { inherit (pkgs) libsamplerate; };
+
+  samplerate-ledfx = callPackage ../development/python-modules/samplerate-ledfx {
+    inherit (pkgs) libsamplerate;
+  };
 
   samsungctl = callPackage ../development/python-modules/samsungctl { };
 

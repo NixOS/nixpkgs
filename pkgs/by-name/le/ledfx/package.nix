@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ledfx";
-  version = "2.1.0";
+  version = "2.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedFx";
     repo = "LedFx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N9EHK0GVohFCjEKsm3g4h+4XWfzZO1tzdd2z5IN1YjI=";
+    hash = "sha256-le3SEGI9uis7wx9+SFpn0BJbpCybSecXEcxxAkC910U=";
   };
 
   postPatch = ''
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pythonRemoveDeps = [
     # not packaged
     "rpi-ws281x"
+    "xled"
   ];
 
   build-system = with python3.pkgs; [
@@ -41,7 +42,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     cffi
     aiohttp
     aiohttp-cors
-    aubio
+    aubio-ledfx
+    cython
     certifi
     multidict
     openrgb-python
@@ -54,21 +56,25 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     sacn
     sentry-sdk
     sounddevice
-    samplerate
     icmplib
     voluptuous
     zeroconf
     pillow
     flux-led
+    lifx-async
     python-osc
     pybase64
     mss
     uvloop
     stupidartnet
     python-dotenv
-    vnoise
+    pyfastnoiselite
     netifaces2
     packaging
+    samplerate-ledfx
+    audio-hotplug
+    aiosendspin
+    pyflac
   ];
 
   optional-dependencies = {
@@ -76,8 +82,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    lifx-emulator-core
     pytest-asyncio
+    pytest-order
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # requires internet
+    "TestURLDownloadWithExternalURL"
   ];
 
   meta = {

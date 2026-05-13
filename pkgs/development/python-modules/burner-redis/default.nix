@@ -11,19 +11,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "burner-redis";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prefectlabs";
     repo = "burner-redis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-soXwXxo8vVGEEM5iDNFa86zlPA+e74b+AS9diUoOdME=";
+    hash = "sha256-Ybi8F0imJKUQiF0Gfy/WGcAqfQSPoT1tAvOXDnI5Z7M=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0qdmcoRje7OkHnGhO8CaR/g38yL9K8Jc+1KjfW4xPTQ=";
+    hash = "sha256-laD/FhYxXCOZOvs0e7ad80vUgX4eoHpLQu6dx/glkEM=";
   };
 
   nativeBuildInputs = [

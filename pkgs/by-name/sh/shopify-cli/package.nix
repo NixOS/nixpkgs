@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   faketty,
   nodejs_22,
   versionCheckHook,
@@ -12,6 +12,8 @@
   nix-update-script,
 }:
 let
+  pnpm = pnpm_10;
+
   nodejs = nodejs_22;
   pnpm' = pnpm.override { inherit nodejs; };
 in
@@ -28,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-gwEVlvr8hxgyCsGjxjz1UkbDZYYq1iukKTPJ7JHdo2U=";
   };

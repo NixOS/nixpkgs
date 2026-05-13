@@ -5,11 +5,14 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   npmHooks,
   versionCheckHook,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bumpp";
   version = "11.0.1";
@@ -23,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-nIj4S5BWTaw3RVNIxbla8Q31wvK67Of6psx5wX9ID+E=";
   };

@@ -305,7 +305,7 @@ This package puts the corepack wrappers for pnpm and yarn in your PATH, and they
 
 ### pnpm {#javascript-pnpm}
 
-pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8`, `pnpm_9` and `pnpm_10`, which support different sets of lock file versions.
+pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8`, `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
 
 When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` will prepare the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the fetcher and setup hook above:
 
@@ -313,11 +313,18 @@ When packaging an application that includes a `pnpm-lock.yaml`, you need to fetc
 {
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   stdenv,
 }:
-
+let
+  # It is recommended to pin pnpm to a major version, due to regular breaking changes in the store format
+  # The latest major version is always available under `pkgs.pnpm`
+  # Optionally override pnpm to use a custom nodejs version
+  # Make sure that the same nodejs version is referenced in nativeBuildInputs
+  # pnpm = pnpm_11.override { nodejs = nodejs_24; };
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
   version = "0-unstable-1980-01-01";
@@ -334,52 +341,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "...";
   };
 })
-```
-
-It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnpm_10`), to increase future reproducibility. It might also be required to use an older version if the package needs support for a certain lock file version. To do so, you can pass the `pnpm` argument to `fetchPnpmDeps` and override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
-
-<!-- TODO: Does splicing still work when overriding in nativeBuildInputs here? -->
-
-```diff
- {
-   fetchPnpmDeps,
-   nodejs,
--  pnpm,
-+  pnpm_10,
-   pnpmConfigHook,
-   stdenv,
- }:
-+let
-+  # Optionally override pnpm to use a custom nodejs version
-+  # Make sure that the same nodejs version is referenced in nativeBuildInputs
-+  # pnpm = pnpm_10.override { nodejs = nodejs_20; };
-+in
- stdenv.mkDerivation (finalAttrs: {
-   pname = "foo";
-   version = "0-unstable-1980-01-01";
-
-   src = {
-     #...
-   };
-
-   nativeBuildInputs = [
-     nodejs # in case scripts are run outside of a pnpm call
-     pnpmConfigHook
--    pnpm # At least required by pnpmConfigHook, if not other (custom) phases
-+    pnpm_10 # At least required by pnpmConfigHook, if not other (custom) phases
-   ];
-
-   pnpmDeps = fetchPnpmDeps {
-     inherit (finalAttrs) pname version src;
-+    pnpm = pnpm_10;
-     fetcherVersion = 3;
-     hash = "...";
-   };
- })
 ```
 
 In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e., `inherit (finalAttrs) patches`.

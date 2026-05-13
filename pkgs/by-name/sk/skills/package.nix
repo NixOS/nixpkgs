@@ -3,12 +3,15 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  pnpm,
+  pnpm_10,
   nodejs,
   pnpmConfigHook,
   nix-update-script,
   testers,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "skills";
   version = "1.5.1";
@@ -23,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     fetcherVersion = 3;
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     hash = "sha256-0CS6BTjTj/TAnMNahTk4Vt/0/2eMxmCGUV9PwI8l4Ao=";
   };
 
