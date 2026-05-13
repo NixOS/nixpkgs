@@ -181,7 +181,13 @@ let
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit extraNativeBuildInputs;
+        # Every real (post-dummy) stage needs this hook so configure scripts
+        # can recognise architectures (LoongArch, RISC-V, etc.).
+        extraNativeBuildInputs =
+          extraNativeBuildInputs
+          ++ lib.optional (
+            prevStage ? updateAutotoolsGnuConfigScriptsHook
+          ) prevStage.updateAutotoolsGnuConfigScriptsHook;
         inherit (stage0) initialPath;
         preHook = ''
           # Don't patch #!/interpreter because it leads to retained
@@ -311,9 +317,6 @@ in
           };
         });
       };
-
-      # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-      extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
     }
   )
 
@@ -427,9 +430,6 @@ in
               '';
             });
       };
-
-      # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-      extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
     }
   )
 
@@ -531,10 +531,6 @@ in
         );
 
       };
-
-      # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-      # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
-      extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
     }
   )
 
@@ -605,8 +601,6 @@ in
         };
       extraNativeBuildInputs = [
         prevStage.patchelf
-        # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        prevStage.updateAutotoolsGnuConfigScriptsHook
       ];
     }
   )
@@ -671,8 +665,6 @@ in
       extraNativeBuildInputs = [
         prevStage.patchelf
         prevStage.xz
-        # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        prevStage.updateAutotoolsGnuConfigScriptsHook
       ];
     }
   )
