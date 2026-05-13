@@ -1,8 +1,7 @@
 {
   lib,
   vscode-utils,
-  jq,
-  moreutils,
+  buildPackages,
   terraform-ls,
   vscode-extension-update-script,
 }:
@@ -17,7 +16,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration[0].properties."terraform.languageServer.path".default = "${terraform-ls}/bin/terraform-ls"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ${lib.getExe buildPackages.jq} '.contributes.configuration[0].properties."terraform.languageServer.path".default = "${terraform-ls}/bin/terraform-ls"' package.json | ${lib.getExe' buildPackages.moreutils "sponge"} package.json
   '';
 
   passthru.updateScript = vscode-extension-update-script {
