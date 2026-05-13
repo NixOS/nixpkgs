@@ -29128,6 +29128,12 @@
     githubId = 90166078;
     keys = [ { fingerprint = "A5B9 B2C5 8C04 DCB6 A157  566A 9CDF DE55 0783 E7BB"; } ];
   };
+  vomba = {
+    email = "harzallahhani@gmail.com";
+    github = "vomba";
+    githubId = 26633077;
+    name = "Hani Harzallah";
+  };
   vonfry = {
     email = "nixos@vonfry.name";
     github = "Vonfry";
