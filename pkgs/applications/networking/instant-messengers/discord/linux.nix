@@ -10,6 +10,7 @@
   makeDesktopItem,
   lib,
   stdenv,
+  asar,
   wrapGAppsHook3,
   makeShellWrapper,
   alsa-lib,
@@ -151,7 +152,9 @@ let
   # where Discord's JS moduleUpdater expects them.
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
-    modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
+    config_dir="''${DISCORD_USER_DATA_DIR:-''${XDG_CONFIG_HOME:-$HOME/.config}}/${lib.toLower binaryName}"
+
+    modules_dir="$config_dir/${version}/modules"
     if [ ! -f "$modules_dir/installed.json" ]; then
       mkdir -p "$modules_dir"
       for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
@@ -201,6 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     makeShellWrapper
     brotli
+    asar
   ];
 
   dontWrapGApps = true;
@@ -248,6 +252,21 @@ stdenv.mkDerivation (finalAttrs: {
         brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
       '') moduleSrcs
     )}
+
+    asar extract $out/opt/${binaryName}/resources/app.asar app.asar.unpacked
+    substituteInPlace app.asar.unpacked/bundle.js \
+      --replace-fail \
+        'if(bootstrapConstants.USE_NEW_UPDATER&&!isStandaloneModules&&tryInitUpdater(buildInfo,bootstrapConstants.NEW_UPDATE_ENDPOINT,bootstrapConstants.USE_RUST_BSPATCH))' \
+        'if(bootstrapConstants.USE_NEW_UPDATER&&!isStandaloneModules&&(!settings?.get("SKIP_HOST_UPDATE")||bootstrapConstants.NEW_UPDATE_ENDPOINT!=="https://updates.discord.com/")&&tryInitUpdater(buildInfo,bootstrapConstants.NEW_UPDATE_ENDPOINT,bootstrapConstants.USE_RUST_BSPATCH))' \
+      --replace-fail \
+        'let paths=__webpack_require__(7215),rootPath=paths.getRootPath(),userDataPath=paths.getUserData();if(null==rootPath)return!1;' \
+        'let paths=__webpack_require__(7215),rootPath=paths.getRootPath()??(repositoryUrl!=="https://updates.discord.com/"?paths.getUserData():null),userDataPath=paths.getUserData();if(null==rootPath)return!1;' \
+      --replace-fail \
+        'await newUpdater.startCurrentVersion(queryOptions)' \
+        'await newUpdater.startCurrentVersion(queryOptions,{allowObsoleteHost:bootstrapConstants.NEW_UPDATE_ENDPOINT!=="https://updates.discord.com/"&&__webpack_require__(9122).getSettings()?.get("SKIP_HOST_UPDATE")})'
+    rm $out/opt/${binaryName}/resources/app.asar
+    asar pack app.asar.unpacked $out/opt/${binaryName}/resources/app.asar
+    rm -rf app.asar.unpacked
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
