@@ -13,13 +13,13 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mnmBwQ79sScTPM4Gh9g0x/QTmqm1TgxaOkww+bvs1b4=";
+    hash = "sha256-2tGd/gl0Pm5b5GfkTsChvZoWov4dwljwqDcitX5NKCY=";
   };
 
   patches = [
@@ -34,7 +34,7 @@ buildGo125Module (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-CmhPURPNwcpmD9shLrQPVKFGBirEMjq0Z4lmgMCpxS8=";
+  vendorHash = "sha256-ttbiuYRWbn8KRZtg499R4NF/E9+B+fOylxZcMwNg69M=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -50,6 +50,11 @@ buildGo125Module (finalAttrs: {
     mv $out/bin/cmd $out/bin/pocket-id
   '';
 
+  checkFlags = [
+    # requires networking
+    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+  ];
+
   frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
@@ -62,8 +67,8 @@ buildGo125Module (finalAttrs: {
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
-      fetcherVersion = 1;
-      hash = "sha256-/e1zBHdy3exqbMvlv0Jth7vpJd7DDnWXGfMV+Cdr56I=";
+      fetcherVersion = 3;
+      hash = "sha256-Ybief+B7M1ATqHf9GlBlPFjII+ybCN4ATU94p0GKtI4=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
