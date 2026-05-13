@@ -12,7 +12,7 @@ The `appimageTools` API is unstable and may be subject to backwards-incompatible
 
 Use `wrapType2` to wrap any AppImage.
 This will create a FHS environment with many packages [expected to exist](https://github.com/AppImage/pkg2appimage/blob/master/excludelist) for the AppImage to work.
-`wrapType2` expects a function or an attrset with the `src` attribute, and either a `name` attribute or `pname` and `version` attributes.
+`wrapType2` expects a function or an attrset with the `src` attribute (pointing to an AppImage file), and either a `name` attribute or `pname` and `version` attributes.
 
 It will eventually call into [`buildFHSEnv`](#sec-fhs-environments), and any extra attributes in the argument to `wrapType2` will be passed through to it.
 This means that you can pass the `extraInstallCommands` attribute, for example, and it will have the same effect as described in [`buildFHSEnv`](#sec-fhs-environments).
@@ -24,7 +24,7 @@ However, [those were unified early 2020](https://github.com/NixOS/nixpkgs/pull/8
 
 :::{.example #ex-wrapping-appimage-from-github}
 
-# Wrapping an AppImage from GitHub
+# Wrapping an AppImage from GitHub releases page
 
 ```nix
 { appimageTools, fetchurl }:
