@@ -2510,8 +2510,6 @@ with pkgs;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 
-  html-proofer = callPackage ../tools/misc/html-proofer { };
-
   httpie = with python3Packages; toPythonApplication httpie;
 
   hue-plus = libsForQt5.callPackage ../applications/misc/hue-plus { };
