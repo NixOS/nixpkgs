@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import Mock
@@ -17,66 +18,66 @@ def tag_ref(tag: str) -> str:
     return f"{update.GIT_TAGS_PREFIX}{tag}"
 
 
-def test_auto_branch_without_current_plugin_prefers_release() -> None:
-    repo = FakeRepo(
-        latest_tag="v1.1.0",
-        refs={tag_ref("v1.1.0"): ("commit-release", RELEASE_DATE)},
-    )
-
-    assert update.select_plugin_target(plugin_desc(repo), None, "v1.1.0") == (
-        "commit-release",
-        RELEASE_DATE,
-        "1.1.0",
-        "v1.1.0",
-    )
-
-
-def test_commit_tracked_plugin_newer_than_release_stays_on_commit() -> None:
-    repo = FakeRepo(
-        latest_commit=("commit-head", HEAD_DATE),
-        refs={tag_ref("v1.1.0"): ("commit-release", RELEASE_DATE)},
-    )
-    current = plugin(
-        version="1.0.0-unstable-2024-01-20",
-        date=datetime(2024, 1, 20, tzinfo=timezone.utc),
-    )
-
-    assert update.select_plugin_target(plugin_desc(repo), current, "v1.1.0") == (
-        "commit-head",
-        HEAD_DATE,
-        "1.1.0-unstable-2024-02-01",
-        None,
-    )
-    assert repo.latest_commit_calls == 1
-    assert repo.resolve_ref_calls == [tag_ref("v1.1.0")]
-
-
-def test_commit_tracked_plugin_equal_to_release_switches_to_release() -> None:
-    repo = FakeRepo(
-        refs={tag_ref("v1.1.0"): ("commit-release", RELEASE_DATE)},
-    )
-    current = plugin(
-        version="1.0.0-unstable-2024-01-15",
-        date=RELEASE_DATE,
-    )
-
-    assert update.select_plugin_target(plugin_desc(repo), current, "v1.1.0") == (
-        "commit-release",
-        RELEASE_DATE,
-        "1.1.0",
-        "v1.1.0",
-    )
-
-
-def test_no_usable_release_falls_back_to_latest_commit() -> None:
-    repo = FakeRepo(latest_commit=("commit-head", HEAD_DATE))
-
-    assert update.select_plugin_target(plugin_desc(repo), None, "prerelease") == (
-        "commit-head",
-        HEAD_DATE,
-        "0-unstable-2024-02-01",
-        None,
-    )
+@pytest.mark.parametrize(
+    (
+        "repo",
+        "current",
+        "latest_tag",
+        "expected",
+    ),
+    [
+        (
+            FakeRepo(refs={tag_ref("v1.1.0"): ("commit-release", RELEASE_DATE)}),
+            None,
+            "v1.1.0",
+            ("commit-release", RELEASE_DATE, "1.1.0", "v1.1.0"),
+        ),
+        (
+            FakeRepo(
+                latest_commit=("commit-head", HEAD_DATE),
+                refs={tag_ref("v1.1.0"): ("commit-release", RELEASE_DATE)},
+            ),
+            plugin(
+                version="1.0.0-unstable-2024-01-20",
+                date=datetime(2024, 1, 20, tzinfo=timezone.utc),
+            ),
+            "v1.1.0",
+            ("commit-head", HEAD_DATE, "1.1.0-unstable-2024-02-01", None),
+        ),
+        (
+            FakeRepo(
+                latest_commit=("commit-head", HEAD_DATE),
+                refs={tag_ref("v1.3.1"): ("commit-release", RELEASE_DATE)},
+            ),
+            plugin(
+                version="1.4-rc1-unstable-2024-01-20",
+                date=datetime(2024, 1, 20, tzinfo=timezone.utc),
+                last_tag="1.4-rc1",
+            ),
+            "v1.3.1",
+            ("commit-head", HEAD_DATE, "1.4-rc1-unstable-2024-02-01", None),
+        ),
+        (
+            FakeRepo(refs={tag_ref("v1.1.0"): ("commit-release", RELEASE_DATE)}),
+            plugin(version="1.0.0-unstable-2024-01-15", date=RELEASE_DATE),
+            "v1.1.0",
+            ("commit-release", RELEASE_DATE, "1.1.0", "v1.1.0"),
+        ),
+        (
+            FakeRepo(latest_commit=("commit-head", HEAD_DATE)),
+            None,
+            "prerelease",
+            ("commit-head", HEAD_DATE, "0-unstable-2024-02-01", None),
+        ),
+    ],
+)
+def test_auto_branch_selects_expected_target(
+    repo: FakeRepo,
+    current: update.Plugin | None,
+    latest_tag: str,
+    expected: tuple[str, datetime, str, str | None],
+) -> None:
+    assert update.select_plugin_target(plugin_desc(repo), current, latest_tag) == expected
 
 
 def test_explicit_branch_bypasses_release_heuristic() -> None:
@@ -89,6 +90,90 @@ def test_explicit_branch_bypasses_release_heuristic() -> None:
         "1.1.0-unstable-2024-03-01",
         None,
     )
+
+
+def test_get_current_plugins_handles_realistic_mixed_eval_output(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(
+        update,
+        "run_nix_expr",
+        Mock(
+            return_value={
+                "friendly-name": {
+                    "pname": "actual.nvim",
+                    "version": "2.4.0",
+                    "homePage": "https://github.com/owner/actual.nvim",
+                    "checksum": {
+                        "rev": "release-commit",
+                        "submodules": False,
+                        "sha256": "sha256-release",
+                        "tag": "v2.4.0",
+                    },
+                    "license": "Apache-2.0",
+                },
+                "unstable-plugin": {
+                    "pname": "unstable-plugin",
+                    "version": "1.9.0-unstable-2024-05-06",
+                    "homePage": "https://github.com/owner/unstable-plugin",
+                    "checksum": {
+                        "rev": "unstable-commit",
+                        "submodules": True,
+                        "sha256": "sha256-unstable",
+                    },
+                },
+            }
+        ),
+    )
+    editor = update.Editor("vim", tmp_path, "unused")
+
+    plugins = editor.get_current_plugins(update.FetchConfig(1, "token"), str(tmp_path))
+
+    tagged_desc, tagged = plugins[0]
+    unstable_desc, unstable = plugins[1]
+    assert tagged_desc.name == "friendly-name"
+    assert tagged_desc.branch == update.AUTO_BRANCH
+    assert tagged_desc.repo.name == "actual.nvim"
+    assert tagged_desc.repo.token == "token"
+    assert tagged.name == "actual.nvim"
+    assert tagged.tag == "v2.4.0"
+    assert tagged.date is None
+    assert tagged.last_tag is None
+    assert tagged.license == "Apache-2.0"
+    assert unstable_desc.name == "unstable-plugin"
+    assert unstable_desc.branch == update.AUTO_BRANCH
+    assert unstable.tag is None
+    assert unstable.date == datetime(2024, 5, 6)
+    assert unstable.last_tag == "1.9.0"
+    assert unstable.has_submodules is True
+    assert unstable.license is None
+
+
+def test_get_current_plugins_rejects_unparseable_unstable_version(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(
+        update,
+        "run_nix_expr",
+        Mock(
+            return_value={
+                "bad-plugin": {
+                    "pname": "bad-plugin",
+                    "version": "unstable",
+                    "homePage": "https://github.com/owner/bad-plugin",
+                    "checksum": {
+                        "rev": "abcdef",
+                        "submodules": False,
+                        "sha256": "sha256-example",
+                    },
+                },
+            }
+        ),
+    )
+    editor = update.Editor("vim", tmp_path, "unused")
+
+    with pytest.raises(ValueError, match="Cannot parse unstable version"):
+        editor.get_current_plugins(update.FetchConfig(1, ""), str(tmp_path))
 
 
 def test_cache_keys_include_repo_and_selected_ref() -> None:
@@ -400,6 +485,98 @@ def test_cache_store_load_round_trips_plugins(
         tag="v1.2.3",
         license="MIT",
     )
+
+
+def test_cache_load_reads_realistic_tag_and_commit_entries(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path))
+    cache_file_name = "nixpkgs-plugin-update-test-cache.json"
+    cache_file = tmp_path / cache_file_name
+    cache_file.write_text(
+        json.dumps(
+            {
+                "https://github.com/owner/release@refs/tags/v2.4.0": {
+                    "name": "release",
+                    "commit": "release-commit",
+                    "has_submodules": False,
+                    "sha256": "sha256-release",
+                    "version": "2.4.0",
+                    "last_tag": None,
+                    "tag": "v2.4.0",
+                    "license": "Apache-2.0",
+                },
+                "https://github.com/owner/nightly@commit-head": {
+                    "name": "nightly",
+                    "commit": "commit-head",
+                    "has_submodules": True,
+                    "sha256": "sha256-nightly",
+                    "version": "1.9.0-unstable-2024-05-06",
+                    "last_tag": "v1.9.0",
+                    "tag": None,
+                    "license": None,
+                },
+            }
+        )
+    )
+
+    cache = update.Cache([], cache_file_name)
+
+    release = cache["https://github.com/owner/release@refs/tags/v2.4.0"]
+    nightly = cache["https://github.com/owner/nightly@commit-head"]
+    assert release == plugin(
+        name="release",
+        commit="release-commit",
+        has_submodules=False,
+        sha256="sha256-release",
+        version="2.4.0",
+        date=None,
+        last_tag=None,
+        tag="v2.4.0",
+        license="Apache-2.0",
+    )
+    assert nightly == plugin(
+        name="nightly",
+        commit="commit-head",
+        has_submodules=True,
+        sha256="sha256-nightly",
+        version="1.9.0-unstable-2024-05-06",
+        date=None,
+        last_tag="v1.9.0",
+        tag=None,
+        license=None,
+    )
+
+
+def test_prefetch_plugin_uses_real_github_repo_commit_path(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    head_date = BOUNDARY_DATE
+    repo = update.RepoGitHub("owner", "repo", "")
+    monkeypatch.setattr(repo, "get_latest_tag", Mock(return_value=None))
+    monkeypatch.setattr(repo, "latest_commit", Mock(return_value=("commit-head", head_date)))
+    monkeypatch.setattr(repo, "has_submodules", Mock(return_value=False))
+    monkeypatch.setattr(repo, "prefetch_github", Mock(return_value="sha256-github"))
+    monkeypatch.setattr(repo, "get_license_spdx_id", Mock(return_value="MIT"))
+
+    fetched, redirect = update.prefetch_plugin(
+        update.PluginDesc(repo, update.AUTO_BRANCH, None),
+        cache=FakeCache(),
+    )
+
+    assert redirect is None
+    assert fetched == plugin(
+        name="repo",
+        commit="commit-head",
+        has_submodules=False,
+        sha256="sha256-github",
+        version="0-unstable-2024-05-06",
+        date=head_date,
+        last_tag=None,
+        tag=None,
+        license="MIT",
+    )
+    repo.prefetch_github.assert_called_once_with("commit-head")
 
 
 def test_check_results_rewrites_redirected_plugin_name() -> None:

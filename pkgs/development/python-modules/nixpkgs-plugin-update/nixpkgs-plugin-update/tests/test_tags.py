@@ -14,6 +14,9 @@ import nixpkgs_plugin_update as update
         ("v0.10.x", "0.10.x"),
         ("ver.4.2", "4.2"),
         ("vim7.4", "7.4"),
+        ("release-2024.10", "2024.10"),
+        ("v1.0.0+build", "1.0.0+build"),
+        ("v1.0.0-post1", "1.0.0-post1"),
     ],
 )
 def test_normalize_release_version_accepts_real_world_tags(
@@ -39,36 +42,21 @@ def test_normalize_release_version_rejects_non_release_tags(tag: str) -> None:
                 "nightly",
                 "sign-test",
             ],
-            update.normalize_release_version,
-        )
-        == "yocto-5.3.3"
-    )
-
-
-def test_select_latest_tag_handles_real_release_candidate_noise() -> None:
-    assert (
-        update.select_latest_tag(
-            [
-                "v0.10.0-dev",
-                "v0.10.0-rc1",
-                "v0.10.0",
-                "pre-nvim-0.10",
-                "nightly",
-            ],
-            update.normalize_release_version,
-        )
-        == "v0.10.0"
-    )
-
-
-def test_select_latest_tag_keeps_date_release_tags_comparable() -> None:
-    assert (
-        update.select_latest_tag(
-            ["2025-07-10", "2025-07-09", "2024-12-31", "stable"],
-            update.normalize_release_version,
-        )
-        == "2025-07-10"
-    )
+            "yocto-5.3.3",
+        ),
+        (
+            ["v0.10.0-dev", "v0.10.0-rc1", "v0.10.0", "pre-nvim-0.10", "nightly"],
+            "v0.10.0",
+        ),
+        (["v1.9.9", "v1.10.0-rc1", "nightly", "v1.10.0", "v1.2.0"], "v1.10.0"),
+        (["v1.0.0", "v1.0.0+build", "v1.0.0-post1", "stable"], "v1.0.0-post1"),
+        (["2025-07-10", "2025-07-09", "2024-12-31", "stable"], "2025-07-10"),
+    ],
+)
+def test_select_latest_tag_prefers_best_release_version(
+    tags: list[str], expected: str
+) -> None:
+    assert update.select_latest_tag(tags, update.normalize_release_version) == expected
 
 
 def test_select_latest_tag_falls_back_to_max_invalid_tag() -> None:
@@ -77,3 +65,12 @@ def test_select_latest_tag_falls_back_to_max_invalid_tag() -> None:
 
 def test_first_release_tag_uses_api_recency_order() -> None:
     assert update.first_release_tag(["nightly", "v1.2.0", "v1.3.0"]) == "v1.2.0"
+
+
+def test_first_release_tag_skips_prerelease_noise() -> None:
+    assert (
+        update.first_release_tag(
+            ["v0.10.0-dev", "v0.10.0-rc1", "nightly", "v0.10.0"]
+        )
+        == "v0.10.0"
+    )

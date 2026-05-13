@@ -14,6 +14,14 @@ from helpers import (
 )
 
 
+def assert_git_tags_called_once(git_tags: Mock, repo: update.RepoGitHub) -> None:
+    git_tags.assert_called_once_with(
+        ["git", "ls-remote", "--tags", "--refs", repo.uri],
+        stderr=subprocess.STDOUT,
+        timeout=10,
+    )
+
+
 def test_github_execute_graphql_sends_expected_request(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -103,6 +111,7 @@ def test_github_get_latest_tag_sends_real_graphql_tag_query(
     request, _timeout = requests[0]
     payload = json.loads(request.data or b"{}")
     assert 'refs(refPrefix: "refs/tags/", first: 20' in payload["query"]
+    assert "direction: DESC" in payload["query"]
     assert "TAG_COMMIT_DATE" in payload["query"]
     assert "name" in payload["query"]
 
@@ -112,18 +121,128 @@ def test_github_get_latest_tag_falls_back_on_rate_limit(
 ) -> None:
     repo = update.RepoGitHub("owner", "repo", "")
     repo.token = "token"
-    monkeypatch.setattr(
-        repo,
-        "_execute_graphql",
-        Mock(return_value={"errors": [{"type": "RATE_LIMIT"}]}),
+    calls: list[tuple[str, object]] = []
+    graphql = Mock(
+        side_effect=lambda query, variables: (
+            calls.append(("graphql", variables)) or {"errors": [{"type": "RATE_LIMIT"}]}
+        )
     )
-    monkeypatch.setattr(
-        repo,
-        "_get_latest_tag_from_fallbacks",
-        Mock(return_value="v1.0.0"),
-    )
+    fallback = Mock(side_effect=lambda: calls.append(("fallback", None)) or "v1.0.0")
+    monkeypatch.setattr(repo, "_execute_graphql", graphql)
+    monkeypatch.setattr(repo, "_get_latest_tag_from_fallbacks", fallback)
 
     assert repo.get_latest_tag() == "v1.0.0"
+    assert calls == [
+        ("graphql", {"owner": "owner", "name": "repo"}),
+        ("fallback", None),
+    ]
+    graphql.assert_called_once()
+    fallback.assert_called_once_with()
+
+
+@pytest.mark.parametrize(
+    "graphql_response",
+    [
+        {"data": {"repository": None}},
+        {"data": {"repository": {"refs": None}}},
+        {"data": {"repository": {"refs": {}}}},
+        {"data": {"repository": {"refs": {"nodes": []}}}},
+        {"data": {"repository": {"refs": {"nodes": [{"missing": "name"}]}}}},
+        {"errors": [{"message": "backend temporarily unavailable"}]},
+    ],
+)
+def test_github_get_latest_tag_falls_back_on_realistic_bad_graphql_payloads(
+    monkeypatch: pytest.MonkeyPatch, graphql_response: dict[str, object]
+) -> None:
+    repo = update.RepoGitHub("owner", "repo", "")
+    repo.token = "token"
+    calls: list[tuple[str, object]] = []
+    graphql = Mock(
+        side_effect=lambda query, variables: (
+            calls.append(("graphql", variables)) or graphql_response
+        )
+    )
+    fallback = Mock(side_effect=lambda: calls.append(("fallback", None)) or "v1.2.3")
+    monkeypatch.setattr(repo, "_execute_graphql", graphql)
+    monkeypatch.setattr(repo, "_get_latest_tag_from_fallbacks", fallback)
+
+    assert repo.get_latest_tag() == "v1.2.3"
+    assert calls == [
+        ("graphql", {"owner": "owner", "name": "repo"}),
+        ("fallback", None),
+    ]
+    graphql.assert_called_once()
+    fallback.assert_called_once_with()
+
+
+@pytest.mark.parametrize(
+    (
+        "graphql_result",
+        "atom_result",
+        "expected_tag",
+        "expect_git_fallback",
+    ),
+    [
+        pytest.param(
+            graphql_tags(),
+            atom_feed("nightly", "v2.0.0"),
+            "v2.0.0",
+            False,
+            id="empty-graphql-uses-atom",
+        ),
+        pytest.param(
+            {"errors": [{"message": "backend unavailable"}]},
+            b"<feed",
+            "v2.0.0",
+            True,
+            id="bad-graphql-and-atom-use-git",
+        ),
+        pytest.param(
+            urllib.error.URLError("offline"),
+            atom_feed("v1.2.3"),
+            "v1.2.3",
+            False,
+            id="graphql-transport-error-uses-atom",
+        ),
+    ],
+)
+def test_github_get_latest_tag_fallback_call_order(
+    monkeypatch: pytest.MonkeyPatch,
+    graphql_result: dict[str, object] | urllib.error.URLError,
+    atom_result: bytes,
+    expected_tag: str,
+    expect_git_fallback: bool,
+) -> None:
+    repo = update.RepoGitHub("owner", "repo", "")
+    repo.token = "token"
+    calls: list[str] = []
+    git_tags = Mock(return_value=git_ls_remote_tags("v1.9.0", "v2.0.0"))
+
+    def fake_urlopen(
+        request: urllib.request.Request, timeout: int
+    ) -> JsonResponse | BinaryResponse:
+        calls.append(request.full_url)
+        assert timeout == 10
+        if request.full_url == "https://api.github.com/graphql":
+            if isinstance(graphql_result, urllib.error.URLError):
+                raise graphql_result
+            return JsonResponse(graphql_result)
+        if request.full_url == GITHUB_TAGS_ATOM_URL:
+            return BinaryResponse(atom_result)
+        raise AssertionError(f"unexpected request: {request.full_url}")
+
+    monkeypatch.setattr(update.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(update.subprocess, "check_output", git_tags)
+
+    assert repo.get_latest_tag() == expected_tag
+    assert calls == [
+        "https://api.github.com/graphql",
+        GITHUB_TAGS_ATOM_URL,
+    ]
+    if expect_git_fallback:
+        assert_git_tags_called_once(git_tags, repo)
+    else:
+        git_tags.assert_not_called()
 
 
 def test_github_get_latest_tag_raises_on_bad_auth(
@@ -143,23 +262,14 @@ def test_github_get_latest_tag_raises_on_bad_auth(
 
 def test_github_recent_tags_parses_atom_feed(monkeypatch: pytest.MonkeyPatch) -> None:
     repo = update.RepoGitHub("owner", "repo", "")
-    xml = b"""<?xml version="1.0" encoding="utf-8"?>
-    <feed xmlns="http://www.w3.org/2005/Atom">
-      <entry>
-        <link href="https://github.com/owner/repo/releases/tag/nightly" />
-      </entry>
-      <entry>
-        <link href="https://github.com/owner/repo/releases/tag/v1.2.3" />
-      </entry>
-    </feed>
-    """
-    monkeypatch.setattr(
-        update.urllib.request,
-        "urlopen",
-        Mock(return_value=BinaryResponse(xml)),
-    )
+    urlopen = Mock(return_value=BinaryResponse(atom_feed("nightly", "v1.2.3")))
+    monkeypatch.setattr(update.urllib.request, "urlopen", urlopen)
 
     assert repo._get_recent_tags_from_atom() == ["nightly", "v1.2.3"]
+    request = urlopen.call_args.args[0]
+    assert isinstance(request, urllib.request.Request)
+    assert request.full_url == GITHUB_TAGS_ATOM_URL
+    assert urlopen.call_args.kwargs == {"timeout": 10}
 
 
 def test_github_recent_tags_ignores_incomplete_atom_entries(
@@ -192,55 +302,80 @@ def test_github_fallback_tag_feed_selects_first_release(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     repo = update.RepoGitHub("owner", "repo", "")
-    monkeypatch.setattr(
-        repo,
-        "_get_recent_tags_from_atom",
-        Mock(return_value=["nightly", "v1.2.0", "v1.3.0"]),
-    )
+    atom = Mock(return_value=["v1.2.0-rc1", "nightly", "v1.2.0", "v1.3.0"])
+    git_tags = Mock()
+    monkeypatch.setattr(repo, "_get_recent_tags_from_atom", atom)
+    monkeypatch.setattr(update.subprocess, "check_output", git_tags)
 
     assert repo._get_latest_tag_from_fallbacks() == "v1.2.0"
+    atom.assert_called_once_with()
+    git_tags.assert_not_called()
+
+
+def test_github_fallback_tag_feed_retries_atom_before_git(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo = update.RepoGitHub("owner", "repo", "")
+    urlopen = Mock(side_effect=urllib.error.URLError("offline"))
+    sleep = Mock()
+    git_tags = Mock(return_value=git_ls_remote_tags("v1.9.0", "v2.0.0"))
+    monkeypatch.setattr(update.urllib.request, "urlopen", urlopen)
+    monkeypatch.setattr(update.time, "sleep", sleep)
+    monkeypatch.setattr(update.subprocess, "check_output", git_tags)
+
+    assert repo._get_latest_tag_from_fallbacks() == "v2.0.0"
+    assert urlopen.call_count == 4
+    assert [call.args[0].full_url for call in urlopen.call_args_list] == [
+        GITHUB_TAGS_ATOM_URL,
+        GITHUB_TAGS_ATOM_URL,
+        GITHUB_TAGS_ATOM_URL,
+        GITHUB_TAGS_ATOM_URL,
+    ]
+    assert [call.kwargs for call in urlopen.call_args_list] == [
+        {"timeout": 10},
+        {"timeout": 10},
+        {"timeout": 10},
+        {"timeout": 10},
+    ]
+    assert [call.args[0] for call in sleep.call_args_list] == [3, 6, 12]
+    assert_git_tags_called_once(git_tags, repo)
 
 
 def test_github_fallback_tag_feed_uses_git_tags_when_atom_is_malformed(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     repo = update.RepoGitHub("owner", "repo", "")
-    monkeypatch.setattr(
-        repo,
-        "_get_recent_tags_from_atom",
-        Mock(side_effect=update.ET.ParseError("bad xml")),
+    atom = Mock(side_effect=update.ET.ParseError("bad xml"))
+    git_tags = Mock(
+        return_value=git_ls_remote_tags(
+            "v1.9.9",
+            "nightly",
+            "v1.10.0-rc1",
+            "sign-test",
+            "v1.10.0",
+            "v1.2.0",
+        )
     )
-    monkeypatch.setattr(
-        update.subprocess,
-        "check_output",
-        Mock(
-            return_value=(
-                b"0000000000000000000000000000000000000000\trefs/tags/nightly\n"
-                b"1111111111111111111111111111111111111111\trefs/tags/v1.2.0\n"
-                b"2222222222222222222222222222222222222222\trefs/tags/v1.3.0\n"
-            )
-        ),
-    )
+    monkeypatch.setattr(repo, "_get_recent_tags_from_atom", atom)
+    monkeypatch.setattr(update.subprocess, "check_output", git_tags)
 
-    assert repo._get_latest_tag_from_fallbacks() == "v1.3.0"
+    assert repo._get_latest_tag_from_fallbacks() == "v1.10.0"
+    atom.assert_called_once_with()
+    assert_git_tags_called_once(git_tags, repo)
 
 
 def test_github_fallback_tag_feed_returns_none_when_all_sources_fail(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     repo = update.RepoGitHub("owner", "repo", "")
-    monkeypatch.setattr(
-        repo,
-        "_get_recent_tags_from_atom",
-        Mock(side_effect=urllib.error.URLError("offline")),
-    )
-    monkeypatch.setattr(
-        update.subprocess,
-        "check_output",
-        Mock(side_effect=subprocess.CalledProcessError(1, ["git", "ls-remote"])),
-    )
+    atom = Mock(side_effect=urllib.error.URLError("offline"))
+    git_tags = Mock(side_effect=subprocess.CalledProcessError(1, ["git", "ls-remote"]))
+    monkeypatch.setattr(repo, "_get_recent_tags_from_atom", atom)
+    monkeypatch.setattr(update.subprocess, "check_output", git_tags)
 
     assert repo._get_latest_tag_from_fallbacks() is None
+    atom.assert_called_once_with()
+    assert_git_tags_called_once(git_tags, repo)
 
 
 def test_github_latest_commit_parses_atom_feed(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -253,11 +388,8 @@ def test_github_latest_commit_parses_atom_feed(monkeypatch: pytest.MonkeyPatch) 
       </entry>
     </feed>
     """
-    monkeypatch.setattr(
-        update.urllib.request,
-        "urlopen",
-        Mock(return_value=BinaryResponse(xml)),
-    )
+    urlopen = Mock(return_value=BinaryResponse(xml))
+    monkeypatch.setattr(update.urllib.request, "urlopen", urlopen)
 
     assert repo.latest_commit() == (
         "abcdef123456",
