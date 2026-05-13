@@ -5,8 +5,7 @@
   R,
   radian,
   rPackages,
-  jq,
-  moreutils,
+  buildPackages,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -24,10 +23,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
   };
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} -e '
+    ${lib.getExe buildPackages.jq} -e '
       .contributes.configuration.properties."r.libPaths".default =
         [ "${languageserver}/library" ]
-    ' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ' package.json | ${lib.getExe' buildPackages.moreutils "sponge"} package.json
   '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r/changelog";
