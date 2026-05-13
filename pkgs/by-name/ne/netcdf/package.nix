@@ -7,8 +7,8 @@
   bzip2,
   libzip,
   zstd,
-  szipSupport ? false,
-  szip,
+  szipSupport ? hdf5.szipSupport,
+  libaec,
   libxml2,
   m4,
   curl, # for DAP
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     zstd
   ]
-  ++ lib.optional szipSupport szip
+  ++ lib.optional szipSupport libaec
   ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
