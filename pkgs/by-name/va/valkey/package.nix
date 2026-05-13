@@ -102,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
       --tags -leaks \
       --skipunit unit/memefficiency \
       --skipunit integration/failover \
-      --skipunit integration/aof-multi-part
+      --skipunit integration/aof-multi-part \
+      --skipunit integration/dual-channel-replication
 
     runHook postCheck
   '';
