@@ -13,8 +13,14 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "mypy>=1.18.2",
+    "pytest>=8.0",
     "ruff>=0.14.1",
 ]
 
 [tool.mypy]
 packages = ["nixpkgs_plugin_update"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "SLF001", # Tests exercise internal updater boundary helpers directly.
+]

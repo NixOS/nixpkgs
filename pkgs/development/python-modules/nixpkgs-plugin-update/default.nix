@@ -4,6 +4,7 @@
   uv-build,
   gitpython,
   packaging,
+  pytestCheckHook,
   ruff,
   mypy,
 }:
@@ -23,12 +24,13 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
-    ruff
     mypy
+    pytestCheckHook
+    ruff
   ];
 
-  postInstallCheck = ''
-    ruff check
+  preCheck = ''
+    ruff check src tests
     mypy
   '';
 
