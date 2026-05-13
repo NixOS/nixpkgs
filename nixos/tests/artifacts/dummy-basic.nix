@@ -4,8 +4,6 @@ pkgs.testers.nixosTest {
   name = "dummy-basic";
 
   nodes.machine = { ... }: {
-    
-
     security.artifacts.enable = true;
     security.artifacts.provider = "dummy";
     security.artifacts.secrets."test-secret" = {
