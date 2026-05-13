@@ -8,31 +8,56 @@ let
       owner = lib.mkOption {
         type = lib.types.str;
         default = "root";
-        description = "User that owns the deployed secret file.";
+        description = lib.mdDoc ''
+          User that owns the deployed secret file.
+        '';
       };
       group = lib.mkOption {
         type = lib.types.str;
         default = "root";
-        description = "Group that owns the deployed secret file.";
+        description = lib.mdDoc ''
+          Group that owns the deployed secret file.
+        '';
       };
       mode = lib.mkOption {
         type = lib.types.str;
         default = "0400";
-        description = "Octal permission mode for the deployed secret file.";
+        description = lib.mdDoc ''
+          Octal permission mode for the deployed secret file.
+        '';
       };
       path = lib.mkOption {
+        type = lib.types.str;
+        default = "/run/secrets/${name}";
+        description = lib.mdDoc ''
+          Absolute path where the secret will be deployed at runtime.
+          Defaults to `/run/secrets/''${name}`.
+
+          ::: {.warning}
+          This path must NOT be inside `/nix/store`.
+          :::
+        '';
+      };
+      source = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = ''
-          Absolute path where the secret will be deployed.
-          Defaults to /run/secrets/''${name}.
-          Must NOT be inside /nix/store.
+        description = lib.mdDoc ''
+          Path to the encrypted source file for this secret.
+
+          - For the `sops-nix` provider, this is the `.yaml` or `.json` file encrypted with SOPS.
+          - For the `agenix` provider, this is the `.age` file encrypted with age.
+          - For `dummy` and `systemd-creds`, this option is unused.
+
+          When using `sops-nix` or `agenix`, this option is **required**.
         '';
       };
       dummy = lib.mkOption {
         type = lib.types.str;
         default = "";
-        description = "Placeholder content used when the 'dummy' provider is selected.";
+        description = lib.mdDoc ''
+          Placeholder content used when the `dummy` provider is selected.
+          Only used for testing and CI/CD environments.
+        '';
       };
     };
   });
@@ -46,37 +71,58 @@ in {
   ];
 
   options.security.artifacts = {
-    enable = lib.mkEnableOption "nixos-artifacts backend-agnostic secret management";
+    enable = lib.mkEnableOption (lib.mdDoc "backend-agnostic secret management via nixos-artifacts");
 
     provider = lib.mkOption {
       type = lib.types.enum [ "sops-nix" "agenix" "systemd-creds" "dummy" ];
-      description = "The secret management backend to fulfill artifacts requests.";
+      description = lib.mdDoc ''
+        The secret management backend to fulfill artifacts requests.
+
+        Available providers:
+        - `sops-nix` — Uses [sops-nix](https://github.com/Mic92/sops-nix) for decryption.
+        - `agenix` — Uses [agenix](https://github.com/ryantm/agenix) for decryption.
+        - `systemd-creds` — Uses native systemd encrypted credentials.
+        - `dummy` — Writes plaintext values for CI/CD and testing only.
+      '';
     };
 
     secrets = lib.mkOption {
       type = lib.types.attrsOf secretType;
       default = {};
-      description = "Declarations of secrets required by the system.";
+      description = lib.mdDoc ''
+        Set of secrets required by the system. Each secret declares
+        ownership, permissions, and (optionally) the path to the encrypted
+        source file. The active provider translates these declarations into
+        the corresponding backend configuration.
+      '';
     };
   };
 
   config = lib.mkIf cfg.enable {
-    # Assertion to prevent store leakage at evaluation time.
-    # Evaluates the paths of all secrets and aborts if any are rooted in the Nix store.
-    assertions = lib.mapAttrsToList (name: secret: {
-      assertion = let
-        resolvedPath = if secret.path != null then secret.path else "/run/secrets/${name}";
-      in !(lib.hasPrefix builtins.storeDir (builtins.toString resolvedPath));
-      message = "nixos-artifacts: secret '${name}' path '${if secret.path != null then builtins.toString secret.path else "/run/secrets/${name}"}' would leak into the Nix store. Use a path under /run/secrets/ instead.";
-    }) cfg.secrets;
+    # ── Evaluation-time assertions ──────────────────────────────────
 
-    # Expose a target for services to depend upon to guarantee secret readiness.
+    assertions =
+      # 1. Prevent store leakage: no secret path may point into /nix/store
+      (lib.mapAttrsToList (name: secret: {
+        assertion = !(lib.hasPrefix builtins.storeDir (builtins.toString secret.path));
+        message = "security.artifacts: secret '${name}' resolves to '${secret.path}', which is inside /nix/store. Use a runtime path like /run/secrets/${name} instead.";
+      }) cfg.secrets)
+
+      ++
+
+      # 2. Require `source` for providers that need an encrypted input file
+      (lib.optionals (cfg.provider == "sops-nix" || cfg.provider == "agenix")
+        (lib.mapAttrsToList (name: secret: {
+          assertion = secret.source != null;
+          message = "security.artifacts: secret '${name}' requires 'source' when using the '${cfg.provider}' provider. Set security.artifacts.secrets.\"${name}\".source to the path of your encrypted file.";
+        }) cfg.secrets));
+
+    # ── Synchronization target ──────────────────────────────────────
+
     systemd.targets.nixos-artifacts-secrets = {
-      description = "nixos-artifacts secrets provisioned";
+      description = "All nixos-artifacts secrets have been provisioned";
       requires = [ "local-fs.target" ];
       after = [ "local-fs.target" ];
     };
-
-
   };
 }

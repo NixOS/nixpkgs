@@ -4,16 +4,24 @@ let
   cfg = config.security.artifacts;
 in {
   config = lib.mkIf (cfg.enable && cfg.provider == "sops-nix") {
-    # Translate the generic secret abstraction to sops.secrets
+    # Translate the generic nixos-artifacts secret declarations into the
+    # sops-nix module's native `sops.secrets.<name>` options.
+    #
+    # Each artifact secret maps 1:1 to a sops-nix secret.  The `source`
+    # attribute provides the path to the encrypted SOPS file.
+
     sops.secrets = lib.mapAttrs (name: secret: {
+      sopsFile = secret.source;
       owner = secret.owner;
       group = secret.group;
       mode = secret.mode;
-      path = if secret.path != null then secret.path else "/run/secrets/${name}";
+      path = secret.path;
     }) cfg.secrets;
 
-    # Ensure systemd synchronization target knows when sops-nix is finished
-    systemd.targets.nixos-artifacts-secrets.after = [ "sops-nix.service" ];
-    systemd.targets.nixos-artifacts-secrets.requires = [ "sops-nix.service" ];
+    # Wire the synchronization target to sops-nix's activation service.
+    systemd.targets.nixos-artifacts-secrets = {
+      after = [ "sops-nix.service" ];
+      requires = [ "sops-nix.service" ];
+    };
   };
 }

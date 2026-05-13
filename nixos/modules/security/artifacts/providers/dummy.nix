@@ -4,28 +4,34 @@ let
   cfg = config.security.artifacts;
 in {
   config = lib.mkIf (cfg.enable && cfg.provider == "dummy") {
-    # For the dummy provider, we generate a one-shot systemd service that writes
-    # the dummy string into the required path. This avoids writing directly to the Nix store.
+    # The dummy provider writes plaintext placeholder values into the target
+    # paths. It exists solely for CI/CD and NixOS VM integration tests where
+    # real encryption keys are unavailable.
+    #
+    # Each secret gets its own oneshot service so that failures are isolated
+    # and ordering is per-secret.
 
     systemd.services = lib.mapAttrs' (name: secret:
       let
-        resolvedPath = if secret.path != null then builtins.toString secret.path else "/run/secrets/${name}";
+        # Write the dummy content to a Nix store file, then copy it at
+        # runtime.  This avoids shell-injection via the dummy string.
+        dummyContent = pkgs.writeText "dummy-${name}" secret.dummy;
       in lib.nameValuePair "nixos-artifacts-dummy-${name}" {
-        description = "Provision dummy secret for ${name}";
+        description = "Provision dummy secret '${name}'";
         wantedBy = [ "nixos-artifacts-secrets.target" ];
         before = [ "nixos-artifacts-secrets.target" ];
-        
+
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = pkgs.writeShellScript "provision-dummy-${name}" ''
-            mkdir -p $(dirname "${resolvedPath}")
-            # Use printf to avoid trailing newlines unless explicitly in the dummy string
-            ${pkgs.coreutils}/bin/printf '%s' "${secret.dummy}" > "${resolvedPath}"
-            chown ${secret.owner}:${secret.group} "${resolvedPath}"
-            chmod ${secret.mode} "${resolvedPath}"
-          '';
         };
+
+        script = ''
+          install -D -m "${secret.mode}" /dev/null "${secret.path}"
+          cp "${dummyContent}" "${secret.path}"
+          chown "${secret.owner}:${secret.group}" "${secret.path}"
+          chmod "${secret.mode}" "${secret.path}"
+        '';
       }
     ) cfg.secrets;
   };

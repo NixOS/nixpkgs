@@ -2,20 +2,28 @@
 
 pkgs.testers.nixosTest {
   name = "systemd-creds-basic";
-  nodes.machine = { config, lib, pkgs, ... }: {
+
+  nodes.machine = { ... }: {
     
-    
+
     security.artifacts.enable = true;
     security.artifacts.provider = "systemd-creds";
-    security.artifacts.secrets."test-secret" = {};
+    security.artifacts.secrets."cred-secret" = {};
 
-    # Mock the systemd credential file since we can't easily run systemd-creds setup in a VM eval phase
-    environment.etc."systemd/creds/test-secret.cred".text = "encrypted-mock-data";
+    # Mock the credential file at the expected location.
+    # In production, this would be an encrypted credential created with
+    # `systemd-creds encrypt`.
+    environment.etc."credstore/cred-secret".text = "credential-mock-data";
   };
 
   testScript = ''
     machine.wait_for_unit("nixos-artifacts-secrets.target")
-    # Verify the mock cred was placed in the target location
-    machine.succeed("grep 'encrypted-mock-data' /run/secrets/test-secret")
+
+    result = machine.succeed("cat /run/secrets/cred-secret").strip()
+    assert result == "credential-mock-data", f"Wrong content: {result}"
+
+    # Verify default permissions
+    stat = machine.succeed("stat -c '%U %G %a' /run/secrets/cred-secret").strip()
+    assert stat == "root root 400", f"Wrong permissions: {stat}"
   '';
 }

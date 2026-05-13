@@ -4,31 +4,34 @@ let
   cfg = config.security.artifacts;
 in {
   config = lib.mkIf (cfg.enable && cfg.provider == "systemd-creds") {
-    # For systemd-creds, we use LoadCredential in systemd units.
-    # The provider handles copying the decrypted credentials to the expected /run/secrets/ location
-    # so that services expecting file paths do not need to be rewritten to use $CREDENTIALS_DIRECTORY.
+    # The systemd-creds provider uses systemd's native LoadCredentialEncrypted
+    # mechanism.  Each secret gets a oneshot service that copies the decrypted
+    # credential from $CREDENTIALS_DIRECTORY to the artifact target path.
+    #
+    # This allows services that expect file paths (the vast majority) to
+    # work without being rewritten to use $CREDENTIALS_DIRECTORY directly.
 
-    systemd.services = lib.mapAttrs' (name: secret: 
-      let
-        resolvedPath = if secret.path != null then secret.path else "/run/secrets/${name}";
-      in lib.nameValuePair "nixos-artifacts-creds-${name}" {
-        description = "Provision systemd credential for ${name}";
+    systemd.services = lib.mapAttrs' (name: secret:
+      lib.nameValuePair "nixos-artifacts-creds-${name}" {
+        description = "Provision systemd credential '${name}'";
         wantedBy = [ "nixos-artifacts-secrets.target" ];
         before = [ "nixos-artifacts-secrets.target" ];
-        
+
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          # systemd-creds requires LoadCredential configuration
-          LoadCredential = "${name}:/etc/systemd/creds/${name}.cred";
-          # Script ensures the directory exists and copies the credential with proper permissions
-          ExecStart = pkgs.writeShellScript "provision-${name}" ''
-            mkdir -p $(dirname "${resolvedPath}")
-            cp "$CREDENTIALS_DIRECTORY/${name}" "${resolvedPath}"
-            chown ${secret.owner}:${secret.group} "${resolvedPath}"
-            chmod ${secret.mode} "${resolvedPath}"
-          '';
+          # Load the credential from the system credential store.
+          # The credential file should be placed at /etc/credstore/${name}
+          # (or encrypted variant at /etc/credstore.encrypted/${name}).
+          LoadCredential = "${name}:/etc/credstore/${name}";
         };
+
+        script = ''
+          install -D -m "${secret.mode}" /dev/null "${secret.path}"
+          cp "$CREDENTIALS_DIRECTORY/${name}" "${secret.path}"
+          chown "${secret.owner}:${secret.group}" "${secret.path}"
+          chmod "${secret.mode}" "${secret.path}"
+        '';
       }
     ) cfg.secrets;
   };

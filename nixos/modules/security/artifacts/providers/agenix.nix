@@ -4,24 +4,24 @@ let
   cfg = config.security.artifacts;
 in {
   config = lib.mkIf (cfg.enable && cfg.provider == "agenix") {
-    # Translate the generic secret abstraction to age.secrets
+    # Translate the generic nixos-artifacts secret declarations into the
+    # agenix module's native `age.secrets.<name>` options.
+    #
+    # Each artifact secret maps 1:1 to an agenix secret.  The `source`
+    # attribute must point to the `.age` encrypted file.
+
     age.secrets = lib.mapAttrs (name: secret: {
-      # agenix requires a source file path for the .age file.
-      # By convention in this translation layer, we assume it's located at
-      # a path similar to the secret name in a predetermined directory,
-      # but agenix configuration generally expects an explicit `file`.
-      # For a true generic translation, we assume the user provides the age file path
-      # either globally or we default to a standard lookup.
-      # Here we map the exact matching agenix secret name if provided in agenix configuration.
-      file = lib.mkDefault "/etc/nixos/secrets/${name}.age";
+      file = secret.source;
       owner = secret.owner;
       group = secret.group;
       mode = secret.mode;
-      path = if secret.path != null then builtins.toString secret.path else "/run/secrets/${name}";
+      path = secret.path;
     }) cfg.secrets;
 
-    # Link the target to agenix's activation
-    systemd.targets.nixos-artifacts-secrets.after = [ "agenix.service" ];
-    systemd.targets.nixos-artifacts-secrets.requires = [ "agenix.service" ];
+    # Wire the synchronization target to agenix's activation service.
+    systemd.targets.nixos-artifacts-secrets = {
+      after = [ "agenix.service" ];
+      requires = [ "agenix.service" ];
+    };
   };
 }
