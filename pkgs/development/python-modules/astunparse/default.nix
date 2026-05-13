@@ -2,20 +2,23 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "astunparse";
   version = "1.6.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "5ad93a8456f0d084c3456d059fd9a92cce667963232cbf763eac3bc5b7940872";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     six
   ];
 
