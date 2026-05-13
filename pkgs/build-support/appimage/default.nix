@@ -80,11 +80,11 @@ rec {
     );
 
   wrapType2 =
-    args@{
-      src,
-      extraPkgs ? pkgs: [ ],
-      ...
-    }:
+    fnOrAttrs:
+    let
+      args = (lib.fix (lib.toFunction fnOrAttrs));
+      extraPkgs = args.extraPkgs or (pkgs: [ ]);
+    in
     wrapAppImage (
       args
       // {
