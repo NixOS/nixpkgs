@@ -152,12 +152,24 @@ in
 
     netfilterQueues = mkOption {
       type = types.listOf types.ints.u16;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [ 67 68 69 ];
       '';
       description = ''
         The netfilter queue numbers to listen on. They should be consecutive. Use in conjunction with `settings.nfq`.
+      '';
+    };
+
+    extraArgs = mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "-v"
+        "--simulate-ips"
+      ];
+      description = ''
+        Additional command-line arguments to pass to suricata.
       '';
     };
   };
@@ -194,7 +206,9 @@ in
     mkIf cfg.enable {
       assertions = [
         {
-          assertion = lib.xor ((builtins.length captureInterfaces) > 0) ((builtins.length netfilterQueuesSorted) > 0);
+          assertion = lib.xor ((builtins.length captureInterfaces) > 0) (
+            (builtins.length netfilterQueuesSorted) > 0
+          );
           message = "services.suricata.netfilterQueues is mutually exclusive with other capture modes (e.g. af-packet).";
         }
         {
@@ -209,7 +223,8 @@ in
           '';
         }
         {
-          assertion = if builtins.length captureInterfaces == 0 then listIsSequential netfilterQueuesSorted else true;
+          assertion =
+            if builtins.length captureInterfaces == 0 then listIsSequential netfilterQueuesSorted else true;
           message = "`services.suricata.netfilterQueues` must be consecutive (e.g. [ 5 6 7 8 ]).";
         }
       ];
@@ -289,12 +304,12 @@ in
               nfqueueOptions = lib.concatStringsSep " " (
                 map (s: "-q " + builtins.toString s) cfg.netfilterQueues
               );
+              extraOptions = lib.concatStringsSep " " cfg.extraArgs;
+              captureModeOptions = if cfg.settings.nfq != null then nfqueueOptions else interfaceOptions;
             in
             {
               ExecStartPre = "!${pkg}/bin/suricata -c ${cfg.configFile} -T";
-              ExecStart = "!${pkg}/bin/suricata -c ${cfg.configFile} ${
-                (if cfg.settings.nfq != null then nfqueueOptions else interfaceOptions)
-              }";
+              ExecStart = "!${pkg}/bin/suricata -c ${cfg.configFile} ${captureModeOptions} ${extraOptions}";
               Restart = "on-failure";
 
               User = cfg.settings.run-as.user;

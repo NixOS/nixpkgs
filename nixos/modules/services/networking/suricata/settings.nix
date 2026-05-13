@@ -526,34 +526,47 @@ in
                 "route"
               ];
               default = "accept";
+              description = ''
+                The mode determines how packets are handled.
+                - `accept`: Suricata accepts or rejects the packet, and does not send it back through the kernel network stack.
+                - `repeat`: Suricata sends packets back through the kernel network stack after processing.
+                - `route`: Suricata sends packets to another netfilter queue.
+              '';
             };
             repeat-mark = mkOption {
-              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              type = types.ints.u32;
               default = 1;
+              description = "Firewall mark to apply to packets in repeat mode.";
             };
             repeat-mask = mkOption {
-              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              type = types.ints.u32;
               default = 1;
+              description = "Firewall mark mask to apply to packets in repeat mode.";
             };
             bypass-mark = mkOption {
-              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              type = types.ints.u32;
               default = 1;
+              description = "Firewall mark to apply to packets in bypass mode.";
             };
             bypass-mask = mkOption {
-              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              type = types.ints.u32;
               default = 1;
+              description = "Firewall mark mask to apply to packets in bypass mode";
             };
             route-queue = mkOption {
               type = types.ints.u16;
               default = 2;
+              description = "Netfilter queue to route packets to in route mode.";
             };
             batchcount = mkOption {
               type = types.int;
               default = 1;
+              description = "Process this many packets before sending a verdict (worker runmode only).";
             };
             fail-open = mkOption {
               type = types.bool;
               default = true;
+              description = "Whether to accept packets if Suricata is not able to keep pace.";
             };
           };
         });

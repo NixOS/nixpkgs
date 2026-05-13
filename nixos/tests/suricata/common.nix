@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   # shared configuration module for suricata tests. it not a NixOS test by itself.
-  meta.maintainers= with lib.maintainers; [ felbinger ];
+  meta.maintainers = with lib.maintainers; [ felbinger ];
 
   nodes = {
     ids = {

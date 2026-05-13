@@ -19,7 +19,7 @@
     # check that configuration has been applied correctly with suricatasc
     with subtest("suricata configuration test"):
         ids.wait_for_unit("suricata.service")
-        assert '1' in ids.succeed("suricatasc -c 'iface-list' | ${pkgs.jq}/bin/jq .message.count")
+        assert '1' in ids.wait_until_succeeds("suricatasc -c 'iface-list' | ${pkgs.jq}/bin/jq .message.count", timeout=5)
 
     # test detection of events based on a static ruleset (output of id command)
     with subtest("suricata rule test"):

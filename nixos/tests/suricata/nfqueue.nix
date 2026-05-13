@@ -24,7 +24,12 @@
       '';
       services.suricata = {
         enable = true;
-        netfilterQueues = [ 100 101 102 103 ];
+        netfilterQueues = [
+          100
+          101
+          102
+          103
+        ];
         settings.nfq = {
           mode = "accept";
           fail-open = true;
