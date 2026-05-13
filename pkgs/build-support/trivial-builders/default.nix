@@ -723,6 +723,7 @@ rec {
       meta ? { },
       passthru ? { },
       substitutions ? { },
+      __structuredAttrs ? false,
     }@args:
     script:
     runCommand name
@@ -735,7 +736,7 @@ rec {
           # TODO(@Artturin:) substitutions should be inside the env attrset
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll
-          __structuredAttrs = false;
+          inherit __structuredAttrs;
           pname = name;
           version = "26.05pre-git";
           inherit meta;
