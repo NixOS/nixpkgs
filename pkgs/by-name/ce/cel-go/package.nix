@@ -62,6 +62,11 @@ buildGoModule (finalAttrs: {
     mv $out/bin/{main,cel-go}
   '';
 
+  passthru = {
+    inherit cel-spec;
+    updateScript = ./update.sh;
+  };
+
   meta = {
     changelog = "https://github.com/google/cel-go/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
