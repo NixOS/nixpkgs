@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "sshfs.yazi";
-  version = "2.0.0-unstable-2026-04-15";
+  version = "0-unstable-2026-05-11";
 
   src = fetchFromGitHub {
     owner = "uhs-robert";
     repo = "sshfs.yazi";
-    rev = "7ba17a8c8498fca9f0a9c437704e74b56d96ed96";
-    hash = "sha256-TS3/xl8jbbCoF1LzPYvmG9BRqvlzPg4EZRErlL7S2/M=";
+    rev = "a8b8903c0da5a4febe91713108a9b0c8a2749475";
+    hash = "sha256-RYZ0wFkYfR/TfYntRipNPvpSl4gvtmNukLBQONRk1jU=";
   };
 
   meta = {
