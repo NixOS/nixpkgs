@@ -9,14 +9,14 @@
   prisma-engines_6,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "ghostfolio";
   version = "2.254.0";
 
   src = fetchFromGitHub {
     owner = "ghostfolio";
     repo = "ghostfolio";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bcUr0tzq/X2pOmg7ZYj46+TQO9NBKmevm+C6PbyV/yc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -48,8 +48,7 @@ buildNpmPackage rec {
     # Workaround for https://github.com/nrwl/nx/issues/22445
     faketty npm run build:production
 
-    cp -r node_modules dist/apps/api/
-    cp -r prisma dist/apps/api/
+    npm prune --omit=dev --no-save
 
     runHook postBuild
   '';
@@ -57,10 +56,11 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
+    cp -r {node_modules,prisma} dist/apps/api/
+
     mkdir -p "$out/lib/node_modules/ghostfolio"
     cp -r dist/apps/{api,client} "$out/lib/node_modules/ghostfolio/"
 
-    mkdir "$out/bin"
     makeWrapper ${lib.getExe nodejs} "$out/bin/ghostfolio" \
       --add-flags "$out/lib/node_modules/ghostfolio/api/main" "''${user_args[@]}" \
       --prefix PATH : ${lib.makeBinPath [ openssl ]} \
@@ -78,12 +78,27 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+  # Remove dev deps not needed at runtime
+  preFixup = ''
+    find $out/lib/node_modules -name "*.py" -delete
+    apiModules="$out/lib/node_modules/ghostfolio/api/node_modules"
+    rm -rf \
+      "$out/lib/node_modules/ghostfolio/client/development" \
+      "$apiModules"/sass-embedded* \
+      "$apiModules"/{@,}esbuild \
+      "$apiModules"/{@,}rollup \
+      "$apiModules"/@rolldown \
+      "$apiModules"/@parcel/watcher-* \
+      "$apiModules"/typescript \
+      "$apiModules"/.{bin,cache} \
+  '';
+
   meta = {
     description = "Open Source Wealth Management Software";
     homepage = "https://github.com/ghostfolio/ghostfolio";
-    changelog = "https://github.com/ghostfolio/ghostfolio/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ghostfolio/ghostfolio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "ghostfolio";
   };
-}
+})
