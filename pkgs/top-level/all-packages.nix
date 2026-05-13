@@ -9530,10 +9530,6 @@ with pkgs;
     callPackages ../applications/graphics/inkscape/extensions.nix { }
   );
 
-  jabcode-reader = jabcode.override {
-    subproject = "reader";
-  };
-
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
