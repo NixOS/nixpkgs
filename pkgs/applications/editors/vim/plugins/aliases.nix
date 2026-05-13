@@ -69,6 +69,7 @@ mapAliases (
     sparkup = throw "'vimPlugins.sparkup' was removed: the upstream repository got deleted"; # Added 2025-08-06
     syntax-tree-surfer = throw "'vimPlugins.syntax-tree-surfer' has been archived"; # Added 2025-12-18
     todo-nvim = throw "'vimPlugins.todo-nvim' has been removed: abandoned by upstream"; # Added 2023-08-23
+    vim-csharp = throw "'vimPlugins.vim-csharp' has been removed: repository deleted"; # Added 2026-05-12
     vim-sourcetrail = throw "'vimPlugins.vim-sourcetrail' has been removed: abandoned by upstream"; # Added 2022-08-14
     # keep-sorted end
   }

@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Locale internationalization package";
     homepage = "https://github.com/tkhyn/l18n";
-    changelog = "https://github.com/tkhyn/l18n/blob/${finalAttrs.version}/CHANGES.rst";
+    changelog = "https://github.com/tkhyn/l18n/blob/v${finalAttrs.version}.0/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
   };

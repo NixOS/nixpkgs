@@ -7,10 +7,13 @@
   versionCheckHook,
 
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctx7";
   version = "0.3.9";
@@ -31,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-8RRHfCTZVC91T1Qx+ACCo2oG4ZwMNy5WYakCjmBhe3Q=";
   };

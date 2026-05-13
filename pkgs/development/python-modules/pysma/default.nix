@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysma";
-  version = "1.1.3";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kellerza";
     repo = "pysma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0+hnsHFTZHyhtLiYe7V2SjmS6powjgER4azcVTUV0+A=";
+    hash = "sha256-w+uOmFJkfT0speP5hCdWVwGUbyNlidwunsx3Z9O3X9Q=";
   };
 
   postPatch = ''

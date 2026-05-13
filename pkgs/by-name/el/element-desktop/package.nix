@@ -15,7 +15,7 @@
   commandLineArgs ? "",
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   asar,
   copyDesktopItems,
   darwin,
@@ -23,6 +23,7 @@
 }:
 
 let
+  pnpm = pnpm_10;
   electron = electron_41;
   seshat = callPackage ./seshat { };
 in
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-0yqWObZtRntsH7gk+OB8pMuWsrvCQ4L9173Qv0o5abk=";
   };

@@ -107,64 +107,6 @@ optionals noSysDirs (
 
 ## 2. Patches relevant on specific platforms ####################################
 
-### Musl+Go+gcc12
-
-# backport fixes to build gccgo with musl libc
-++ optionals (stdenv.hostPlatform.isMusl && langGo) [
-  # libgo: handle stat st_atim32 field and SYS_SECCOMP
-  # syscall: gofmt
-  # Add blank lines after //sys comments where needed, and then run gofmt
-  # on the syscall package with the new formatter.
-  # See https://go-review.googlesource.com/c/gofrontend/+/412074
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/cf79b1117bd177d3d4c6ed24b6fa243c3628ac2d.diff";
-    hash = "sha256-mS5ZiYi5D8CpGXrWg3tXlbhp4o86ew1imCTwaHLfl+I=";
-  })
-  # libgo: permit loff_t and off_t to be macros
-  # See https://go-review.googlesource.com/c/gofrontend/+/412075
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/7f195a2270910a6ed08bd76e3a16b0a6503f9faf.diff";
-    hash = "sha256-Ze/cFM0dQofKH00PWPDoklXUlwWhwA1nyTuiDAZ6FKo=";
-  })
-  # libgo: handle stat st_atim32 field and SYS_SECCOMP
-  # See https://go-review.googlesource.com/c/gofrontend/+/415294
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/762fd5e5547e464e25b4bee435db6df4eda0de90.diff";
-    hash = "sha256-o28upwTcHAnHG2Iq0OewzwSBEhHs+XpBGdIfZdT81pk=";
-  })
-  # runtime: portable access to sigev_notify_thread_id
-  # See https://sourceware.org/bugzilla/show_bug.cgi?id=27417
-  # See https://go-review.googlesource.com/c/gofrontend/+/434755
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/e73d9fcafbd07bc3714fbaf8a82db71d50015c92.diff";
-    hash = "sha256-1SjYCVHLEUihdON2TOC3Z2ufM+jf2vH0LvYtZL+c1Fo=";
-  })
-  # syscall, runtime: always call XSI strerror_r
-  # See https://go-review.googlesource.com/c/gofrontend/+/454176
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/b6c6a3d64f2e4e9347733290aca3c75898c44b2e.diff";
-    hash = "sha256-RycJ3YCHd3MXtYFjxP0zY2Wuw7/C4bWoBAQtTKJZPOQ=";
-  })
-  # libgo: check for makecontext in -lucontext
-  # See https://go-review.googlesource.com/c/gofrontend/+/458396
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/2b1a604a9b28fbf4f382060bebd04adb83acc2f9.diff";
-    hash = "sha256-WiBQG0Xbk75rHk+AMDvsbrm+dc7lDH0EONJXSdEeMGE=";
-  })
-  # x86: Fix -fsplit-stack feature detection via  TARGET_CAN_SPLIT_STACK
-  # Fixes compiling for non-glibc target
-  (fetchpatch {
-    url = "https://github.com/gcc-mirror/gcc/commit/c86b726c048eddc1be320c0bf64a897658bee13d.diff";
-    hash = "sha256-QSIlqDB6JRQhbj/c3ejlmbfWz9l9FurdSWxpwDebnlI=";
-  })
-]
-
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin and aarch64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.

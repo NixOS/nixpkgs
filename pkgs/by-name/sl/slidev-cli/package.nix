@@ -3,11 +3,14 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  pnpm,
+  pnpm_10,
   nodejs,
   pnpmConfigHook,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slidev-cli";
   version = "52.15.1";
@@ -28,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-DGDzNvau1XjPjkGZqcFZGkjYd3cneXO/gCdnwjjkQDY=";
   };

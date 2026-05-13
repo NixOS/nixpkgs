@@ -2336,6 +2336,13 @@
     githubId = 14922630;
     name = "Richard Smith";
   };
+  artifycz = {
+    email = "richard@tichy.io";
+    github = "ArtifyCZ";
+    githubId = 57506608;
+    matrix = "@artify:artify.zone";
+    name = "Richard Tichy";
+  };
   artturin = {
     email = "artturin@artturin.com";
     matrix = "@artturin:matrix.org";
@@ -12611,7 +12618,7 @@
   };
   jfly = {
     name = "Jeremy Fleischman";
-    email = "jeremyfleischman@gmail.com";
+    email = "me@jfly.fyi";
     github = "jfly";
     githubId = 277474;
     keys = [ { fingerprint = "F1F1 3395 8E8E 9CC4 D9FC  9647 1931 9CD8 416A 642B"; } ];
@@ -24331,6 +24338,12 @@
     github = "SamLukeYes";
     githubId = 12882091;
     name = "Sam L. Yes";
+  };
+  samooyo = {
+    email = "samidarnaud@gmail.com";
+    github = "samooyo";
+    githubId = 46531012;
+    name = "Sami Darnaud";
   };
   samrose = {
     email = "samuel.rose@gmail.com";

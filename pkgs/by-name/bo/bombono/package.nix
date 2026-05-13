@@ -49,7 +49,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/mbase/SConscript \
-      --replace "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
+      --replace-fail "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
+    # adapt to recent C standards
+    substituteInPlace Autoconfig --replace-fail "void (*signal ()) ();" "void (*signal(int,  void (*)(int)))(int);"
   '';
 
   nativeBuildInputs = [

@@ -84,12 +84,10 @@ makeScopeWithSplicing' {
       let
         dotnet_6 = callWithUtils ./dotnet.nix {
           channel = "6.0";
-          withVMR = false;
         };
 
         dotnet_7 = callWithUtils ./dotnet.nix {
           channel = "7.0";
-          withVMR = false;
         };
 
         dotnet_8 = callWithUtils ./dotnet.nix {
