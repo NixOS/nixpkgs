@@ -123,6 +123,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "GitLab Runner the continuous integration executor of GitLab";
     homepage = "https://docs.gitlab.com/runner";
+    changelog = "https://gitlab.com/gitlab-org/gitlab-runner/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
     maintainers = with lib.maintainers; [ zimbatm ];
