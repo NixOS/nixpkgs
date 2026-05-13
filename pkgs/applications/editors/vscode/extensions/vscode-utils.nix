@@ -9,7 +9,6 @@
   unzip,
   makeSetupHook,
   jq,
-  moreutils,
   vscode-extension-update-script,
 }:
 let
@@ -109,9 +108,9 @@ let
             original
             + ''
               cd "$out/$installPrefix"
-              ${lib.getExe jq} -e '
+              ${lib.getExe buildPackages.jq} -e '
                 ${jqExprs}' package.json |
-              ${lib.getExe' moreutils "sponge"} package.json
+              ${lib.getExe' buildPackages.moreutils "sponge"} package.json
             '';
       };
   };
