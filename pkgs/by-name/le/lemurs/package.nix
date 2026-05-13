@@ -1,10 +1,8 @@
 {
   fetchFromGitHub,
   lib,
-  bash,
   linux-pam,
   rustPlatform,
-  systemdMinimal,
   versionCheckHook,
   nixosTests,
 }:
@@ -22,9 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-XoGtIHYCGXNuwnpDTU7NbZAs6rCO+69CAG89VCv9aAc=";
 
   buildInputs = [
-    bash
     linux-pam
-    systemdMinimal
   ];
 
   postInstall = ''
