@@ -3,7 +3,7 @@
   lib,
   nixosTests,
   stdenv,
-  fetchpatch,
+  fetchpatch2,
   ...
 }@args:
 
@@ -24,6 +24,13 @@ callPackage ./generic.nix args {
   // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
     inherit (nixosTests.zfs) installer;
   };
+
+  extraPatches = [
+    (fetchpatch2 {
+      url = "https://github.com/openzfs/zfs/commit/58c8dc5f6926eb96903a3f38b141e8998ef9261b.diff";
+      sha256 = "sha256-ZEhexjy+yWX0CkztdcZva6depjMoqYasClfW4lppZBA=";
+    })
+  ];
 
   maintainers = with lib.maintainers; [
     adamcstephens
