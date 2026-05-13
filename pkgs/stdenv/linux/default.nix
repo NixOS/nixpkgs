@@ -283,11 +283,7 @@ in
     stageFun prevStage {
       name = "bootstrap-stage1";
 
-      # Rebuild binutils to use from stage2 onwards.
       overrides = self: super: {
-        binutils-unwrapped = super.binutils-unwrapped.override {
-          enableGold = false;
-        };
         inherit (prevStage)
           ccWrapperStdenv
           gcc-unwrapped
