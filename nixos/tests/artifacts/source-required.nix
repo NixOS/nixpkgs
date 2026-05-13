@@ -8,6 +8,7 @@ let
   eval = pkgs.lib.nixosSystem {
     modules = [
       {
+        options.sops.secrets = pkgs.lib.mkOption { type = pkgs.lib.types.attrsOf pkgs.lib.types.anything; default = {}; };
         security.artifacts.enable = true;
         security.artifacts.provider = "sops-nix";
         security.artifacts.secrets."no-source" = {
