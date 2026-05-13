@@ -6,11 +6,15 @@
   openssl,
   pkg-config,
   protobuf,
+  python3,
   rocksdb,
   rustPlatform,
   rustc,
 }:
 
+let
+  python = python3.withPackages (ps: [ ps.tomli-w ]);
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "subtensor";
   version = "3.3.14-401";
@@ -37,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # fetchCargoVendor does not rewrite intra-workspace path deps in vendored
     # git-source crates (unlike `cargo vendor`). Fix them so that
     # substrate-wasm-builder's fresh cargo invocation can resolve its deps
-    bash ${./fix-vendor-path-deps.sh} "$cargoDepsCopy"
+    ${python.interpreter} ${./fix-vendor-path-deps.py} "$cargoDepsCopy"
   '';
 
   cargoBuildFlags = [
