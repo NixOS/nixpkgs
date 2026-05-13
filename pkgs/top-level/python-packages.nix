@@ -3456,6 +3456,8 @@ self: super: with self; {
 
   cutie = callPackage ../development/python-modules/cutie { };
 
+  cutlass = callPackage ../development/python-modules/cutlass { };
+
   cv2-enumerate-cameras = callPackage ../development/python-modules/cv2-enumerate-cameras { };
 
   cvelib = callPackage ../development/python-modules/cvelib { };

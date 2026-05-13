@@ -5,7 +5,7 @@
   lwt_log,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "1.2";
   pname = "resource-pooling";
 
@@ -13,8 +13,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "ocsigen";
-    repo = pname;
-    rev = version;
+    repo = "resource-pooling";
+    rev = finalAttrs.version;
     sha256 = "sha256-GNYPxjMTo7y40y7aQdseuFyeVF/hSCZKXfEaH/WIO9w=";
   };
 
@@ -23,9 +23,9 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Library for pooling resources like connections, threads, or similar";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

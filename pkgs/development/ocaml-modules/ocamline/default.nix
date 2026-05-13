@@ -5,13 +5,13 @@
   lib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocamline";
   version = "1.2";
   src = fetchFromGitHub {
     owner = "chrisnevers";
-    repo = pname;
-    rev = version;
+    repo = "ocamline";
+    rev = finalAttrs.version;
     sha256 = "Sljm/Bfr2Eo0d75tmJRuWUkkfHUYQ0g27+FzXBePnVg=";
   };
 
@@ -23,4 +23,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mgttlinger ];
   };
-}
+})
