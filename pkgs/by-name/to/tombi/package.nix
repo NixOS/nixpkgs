@@ -47,7 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "TOML Formatter / Linter / Language Server";
     homepage = "https://github.com/tombi-toml/tombi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ psibi ];
+    maintainers = with lib.maintainers; [
+      faukah
+      psibi
+    ];
     mainProgram = "tombi";
   };
 })
