@@ -11,7 +11,7 @@
   nix-update-script,
 }:
 let
-  version = "5.0.0";
+  version = "5.1.1";
   versionPrefix = "gz-cmake${lib.versions.major version}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gazebosim";
     repo = "gz-cmake";
     tag = "${versionPrefix}_${finalAttrs.version}";
-    hash = "sha256-XF7oglj9Xr6F8a+6uowrY5a040yl4FZlFfW/Y0BJwOs=";
+    hash = "sha256-bp3qaLuE/0sf6u4ZVOGsuJVkuEm2IS0zB0vHMVE0g/g=";
   };
 
   postPatch = ''
