@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vp";
-  version = "1.8-unstable-2025-09-15";
+  version = "0-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "erikg";
