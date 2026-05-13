@@ -161,7 +161,7 @@ let
                 ]
                 ++ old.buildFlags
                 ++ [
-                  "-p:RootRepo=source-build-reference-packages"
+                  "-p:RootRepo=source-build-assets"
                   "-p:SkipPrepareSdkArchive=true"
                 ];
                 prebuiltPackages = null;
