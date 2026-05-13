@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "win2xcur";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantum5";
     repo = "win2xcur";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uG9yrH1BvdGyFosGBXLNB7lr0w7r89MWhW4gCVS+s1w=";
+    hash = "sha256-zr3zLbjbQAY7McoF89W2Dqgj49mpHDZZBS9zzhqTAm8=";
   };
 
   build-system = with python3Packages; [ setuptools ];
