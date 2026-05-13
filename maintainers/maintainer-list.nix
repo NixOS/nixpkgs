@@ -28453,6 +28453,14 @@
     github = "wamserma";
     githubId = 60148;
   };
+  wanderer = {
+    name = "Martin Becze";
+    email = "martin@becze.org";
+    matrix = "@null_radix:matrix.org";
+    github = "wanderer";
+    githubId = 158211;
+    keys = [ { fingerprint = "82CB 91F4 F3E4 04A5 DAB2  78E8 8B99 1293 8FF2 1020"; } ];
+  };
   wariuccio = {
     name = "Wariuccio";
     github = "wariuccio";
