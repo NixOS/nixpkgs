@@ -35,6 +35,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
   pythonRelaxDeps = true;
 
+  patches = [
+    ./0001-Fix-docker-flag-default-for-Click-8.2-compatibility.patch
+  ];
+
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
   ];
