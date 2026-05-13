@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   six,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +17,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     six
-    wheel
   ];
 
   # tests not included with pypi release
