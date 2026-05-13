@@ -3,7 +3,8 @@
   "auto_updater_macos": "sha256-787cMkeT2BlfwVcy4y46XkWioNqLKJgQ/CCxQvERa+A=",
   "auto_updater_platform_interface": "sha256-787cMkeT2BlfwVcy4y46XkWioNqLKJgQ/CCxQvERa+A=",
   "auto_updater_windows": "sha256-787cMkeT2BlfwVcy4y46XkWioNqLKJgQ/CCxQvERa+A=",
+  "background_downloader": "sha256-U41AQVdXceT5ZBgvBR90h3JAAU2BLpguglcVBTrTww4=",
   "material_symbols_icons": "sha256-XRB6AZ4Q33sQKVZFA8lgdXCW/bx55h/RpmuItmFYVJM=",
-  "os_media_controls": "sha256-kSJov92pvzFQGIKnQb6XlwRXTY0Xs4iOZmc/390yf0c=",
-  "wakelock_plus": "sha256-OOTRP8v5mUma3j+G+koWoAufxrynWFMMhCLecvd1MhE="
+  "os_media_controls": "sha256-0Bghn1s28+xlcfSLyVA7B60atJkkdqcFKseSubPtzkQ=",
+  "wakelock_plus": "sha256-89xs0sLNuoCqApFqwEY+SEk2DUqjHf8JsSd7dfxX3P0="
 }

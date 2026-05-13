@@ -44,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 -t $out/lib/pnpm-11-test dist/index.js
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/pnpm11test \
-      --add-flags "$out/lib/pnpm11test"
+    makeWrapper ${lib.getExe nodejs} $out/bin/pnpm-11-test \
+      --add-flags "$out/lib/pnpm-11-test"
 
     runHook postInstall
   '';
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     license = lib.licenses.mit;
-    mainProgram = "pnpm11test";
+    mainProgram = "pnpm-11-test";
     inherit (pnpm.meta) maintainers;
   };
 })
