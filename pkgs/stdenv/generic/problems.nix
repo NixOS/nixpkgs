@@ -48,6 +48,8 @@ rec {
     groupBy
     subtractLists
     genAttrs
+    concatMap
+    unique
     ;
 
   handlers = rec {
@@ -330,7 +332,10 @@ rec {
         };
       };
 
-    Returns both the structure itself for inspection and a function that can query it with very few allocations/lookups
+      Returns:
+      - the structure itself for inspection
+      - a function that can query the structure with very few allocations/lookups
+      - a list of problem kinds/names/packages that require handling
 
     This allows collapsing arbitrarily many problem handlers/matchers into a predictable structure that can be queried in a predictable and fast way
   */
@@ -351,6 +356,20 @@ rec {
             }) forPackage
           ) config.problems.handlers
         );
+
+      # Lookup table for all the kinds/names/packages that actually need to be
+      # handled
+      definedConstraints = listToAttrs (
+        map (ident: {
+          name = "${ident}s"; # plural
+          value = unique (
+            concatMap (
+              constraint:
+              optionals (constraint.${ident} != null && constraint.handler != "ignore") [ (constraint.${ident}) ]
+            ) constraints
+          );
+        }) identOrder
+      );
 
       getHandler =
         list:
@@ -410,7 +429,7 @@ rec {
       switch = doLevel 0 constraints;
     in
     {
-      inherit switch;
+      inherit switch definedConstraints;
       handlerForProblem =
         if isString switch then
           pname: name: kind:
@@ -438,10 +457,19 @@ rec {
       # This is here so that it gets cached for a (checkProblems config) thunk
       inherit (genHandlerSwitch config)
         handlerForProblem
+        definedConstraints
         ;
+
+      # All the problem kinds that actually need to be checked
+      configuredProblems = definedConstraints.kinds ++ definedConstraints.names;
+
+      # Filter out any problems that are always ignored in config.problems.
       # Makes sure that automatic problems can cache with just config applied
-      automaticProblemsConfigCache = map (
-        problem: problem // { condition = problem.condition config; }
+      automaticProblemsConfigCache = concatMap (
+        problem:
+        optionals (elem problem.kindName configuredProblems) [
+          (problem // { condition = problem.condition config; })
+        ]
       ) automaticProblems;
     in
     attrs:
