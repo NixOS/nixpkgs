@@ -80,9 +80,15 @@ pnpmConfigHook() {
     fi
 
     echo "Installing dependencies"
-    if [[ -n "$pnpmWorkspaces" ]]; then
+    if [ -z "${__structuredAttrs:-}" ]; then
+        # Without __structuredAttrs, pnpmWorkspaces is a space-separated string.
         local IFS=" "
         for ws in $pnpmWorkspaces; do
+            pnpmInstallFlags+=("--filter=$ws")
+        done
+    else
+        # With __structuredAttrs, pnpmWorkspaces is a bash array.
+        for ws in "${pnpmWorkspaces[@]}"; do
             pnpmInstallFlags+=("--filter=$ws")
         done
     fi
