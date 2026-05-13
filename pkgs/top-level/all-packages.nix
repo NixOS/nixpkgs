@@ -9530,10 +9530,6 @@ with pkgs;
     callPackages ../applications/graphics/inkscape/extensions.nix { }
   );
 
-  jabcode-writer = jabcode.override {
-    subproject = "writer";
-  };
-
   jabcode-reader = jabcode.override {
     subproject = "reader";
   };
