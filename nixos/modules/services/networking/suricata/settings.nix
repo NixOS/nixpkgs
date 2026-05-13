@@ -513,6 +513,56 @@ in
       '';
     };
 
+    # set defaults according to upstream suricata.yaml.in
+    "nfq" = mkOption {
+      type =
+        with types;
+        nullOr (submodule {
+          options = {
+            mode = mkOption {
+              type = types.enum [
+                "accept"
+                "repeat"
+                "route"
+              ];
+              default = "accept";
+            };
+            repeat-mark = mkOption {
+              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              default = 1;
+            };
+            repeat-mask = mkOption {
+              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              default = 1;
+            };
+            bypass-mark = mkOption {
+              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              default = 1;
+            };
+            bypass-mask = mkOption {
+              type = types.either types.ints.u32 (types.coercedTo (types.str lib.fromHexString types.ints.u32));
+              default = 1;
+            };
+            route-queue = mkOption {
+              type = types.ints.u16;
+              default = 2;
+            };
+            batchcount = mkOption {
+              type = types.int;
+              default = 1;
+            };
+            fail-open = mkOption {
+              type = types.bool;
+              default = true;
+            };
+          };
+        });
+      default = null;
+      description = ''
+        NFQUEUE settings, see [upstream docs](https://docs.suricata.io/en/latest/configuration/suricata-yaml.html#nfq) and [upstream defaults](https://github.com/OISF/suricata/blob/main/suricata.yaml.in). Incompatible with the layer 2 packet capture modes (af-packet, af-xdp, dpdk). Requires a queue rule in the firewall.
+      '';
+    };
+
     "pcap" = mkOption {
       type =
         with types;
