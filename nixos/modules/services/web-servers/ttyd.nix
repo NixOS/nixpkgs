@@ -113,6 +113,16 @@ in
           File containing the password to use for basic http authentication.
           For insecurely putting the password in the globally readable store use
           `pkgs.writeText "ttydpw" "MyPassword"`.
+          Deprecated: use passwordArtifact instead.
+        '';
+      };
+
+      passwordArtifact = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Name of the `security.artifacts` secret to use for basic http authentication.
+          This integrates natively with the backend-agnostic secret management.
         '';
       };
 
@@ -249,8 +259,12 @@ in
         message = "Cannot set both interface and socket for ttyd.";
       }
       {
-        assertion = (cfg.username != null) == (cfg.passwordFile != null);
-        message = "Need to set both username and passwordFile for ttyd";
+        assertion = (cfg.username != null) == (cfg.passwordFile != null || cfg.passwordArtifact != null);
+        message = "Need to set both username and either passwordFile or passwordArtifact for ttyd";
+      }
+      {
+        assertion = !(cfg.passwordFile != null && cfg.passwordArtifact != null);
+        message = "Cannot set both passwordFile and passwordArtifact.";
       }
     ];
 
@@ -258,6 +272,9 @@ in
       description = "ttyd Web Server Daemon";
 
       wantedBy = [ "multi-user.target" ];
+
+      wants = lib.optional (cfg.passwordArtifact != null) "nixos-artifacts-secrets.target";
+      after = lib.optional (cfg.passwordArtifact != null) "nixos-artifacts-secrets.target";
 
       serviceConfig = {
         User = cfg.user;
@@ -267,9 +284,17 @@ in
       };
 
       script =
-        if cfg.passwordFile != null then
+        let
+          pwPath = if cfg.passwordArtifact != null
+                   then let artifact = config.security.artifacts.secrets.${cfg.passwordArtifact};
+                        in if artifact.path != null then artifact.path else "/run/secrets/${cfg.passwordArtifact}"
+                   else if cfg.passwordFile != null
+                   then "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE"
+                   else null;
+        in
+        if pwPath != null then
           ''
-            PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
+            PASSWORD=$(cat "${pwPath}")
             ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
               --credential ${lib.escapeShellArg cfg.username}:"$PASSWORD" \
               ${cfg.entrypoint}
