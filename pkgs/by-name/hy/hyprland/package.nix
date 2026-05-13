@@ -11,6 +11,7 @@
   cairo,
   epoll-shim,
   glaze,
+  glslang,
   hyprcursor,
   hyprgraphics,
   hyprland-qtutils,
@@ -18,13 +19,15 @@
   hyprutils,
   hyprwire,
   hyprwayland-scanner,
+  lcms2,
   libGL,
   libdrm,
   libexecinfo,
+  libgbm,
   libinput,
   libuuid,
   libxkbcommon,
-  libgbm,
+  lua5_5,
   muparser,
   pango,
   pciutils,
@@ -52,7 +55,6 @@ let
   inherit (builtins)
     foldl'
     ;
-  inherit (lib.asserts) assertMsg;
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists)
     concatLists
@@ -81,19 +83,19 @@ let
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.54.3";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e+mVjQL3V+xoaH1c3YqAzRq9wwiuEYQTOgZlK0LwfYA=";
+    hash = "sha256-ZfsIYDDOjeAU8MxMyUitBAZgCgYAm1T8rTGbe8ujC/I=";
   };
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
-    substituteInPlace src/render/OpenGL.cpp \
+    substituteInPlace src/render/types.hpp \
       --replace-fail /usr $out
 
     # Remove extra @PREFIX@ to fix pkg-config paths
@@ -146,10 +148,12 @@ customStdenv.mkDerivation (finalAttrs: {
       aquamarine
       cairo
       glaze
+      glslang
       hyprcursor.dev
       hyprgraphics
       hyprlang
       hyprutils
+      lcms2
       libGL
       libdrm
       libgbm
@@ -157,6 +161,7 @@ customStdenv.mkDerivation (finalAttrs: {
       libuuid
       libxcursor
       libxkbcommon
+      lua5_5
       muparser
       pango
       pciutils

@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerouting";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "freerouting";
     repo = "freerouting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WhEofQs3TwnhB9fSROPQfWd1PHCDoH790lV54ujlmX4=";
+    hash = "sha256-e9aqMYvWp/xfY+g5viH4vyOfl/JhNxMIIUKTy/8aIXs=";
   };
 
   gradleBuildTask = "dist";
@@ -60,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   gradleFlags = [ "--no-configuration-cache" ];
 
   postPatch = ''
-    # The rewrite-gradle plugin breaks the nixDownloadDeps task injected by fetchDeps
-    substituteInPlace build.gradle \
-      --replace-fail "rewrite 'org.openrewrite.recipe:rewrite-gradle:2.3.0'" ""
     # Disable telemetry and contact options by default
     substituteInPlace src/main/java/app/freerouting/settings/UserProfileSettings.java \
       --replace-fail 'public Boolean isTelemetryAllowed = true;' 'public Boolean isTelemetryAllowed = false;'

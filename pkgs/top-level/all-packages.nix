@@ -549,13 +549,6 @@ with pkgs;
         protobuf = protobuf_25.override {
           abseil-cpp = abseil-cpp_202407;
         };
-        stdenv =
-          if stdenv.cc.isClang then
-            llvmPackages_19.stdenv
-          else if stdenv.cc.isGNU then
-            gcc14Stdenv
-          else
-            stdenv;
       };
 
       mysql-shell_9 = callPackage ../development/tools/mysql-shell/9.nix {
@@ -564,7 +557,6 @@ with pkgs;
         protobuf = protobuf_25.override {
           abseil-cpp = abseil-cpp_202407;
         };
-        stdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
       };
     })
     mysql-shell_8
@@ -577,7 +569,6 @@ with pkgs;
     protobuf = protobuf_25.override {
       abseil-cpp = abseil-cpp_202407;
     };
-    stdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
   };
 
   # this is used by most `fetch*` functions
