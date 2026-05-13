@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jalv";
-  version = "1.6.8";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "drobilla";
     repo = "jalv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MAQoc+WcuoG6Psa44VRaZ2TWB2LBpvf6EmqbUZPUf38=";
+    hash = "sha256-hl+fCVtqaA7SqU1S1p+4oDfG3Oj6FJYi0pvju9bHzmA=";
   };
 
   nativeBuildInputs = [
@@ -54,9 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonEnable "portaudio" (!useJack))
     (lib.mesonEnable "jack" useJack)
-    (lib.mesonEnable "gtk2" false)
     (lib.mesonEnable "gtk3" (!useQt))
     (lib.mesonEnable "qt5" useQt)
+    (lib.mesonEnable "qt6" false)
+    (lib.mesonEnable "man_html" false)
   ];
 
   meta = {
