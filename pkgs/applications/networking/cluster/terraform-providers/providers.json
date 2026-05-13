@@ -274,13 +274,13 @@
     "vendorHash": "sha256-3o6YRDrq4rQhNAFyqiGJrAoxuAykWw85OExRGSE3kGI="
   },
   "datadog_datadog": {
-    "hash": "sha256-HgbGKqQ27GBA2BpiwkkLIvLcNCgh05p6ZNno8cNFUso=",
+    "hash": "sha256-acDEAqygINpmFb45Ah5yiiD/kRhGhI6jVRlSN+/1s1Y=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v4.6.0",
+    "rev": "v4.8.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Q4fJbEvV6nvp9mafrOrGnKwyWmNT9CYenAeXND5hKng="
+    "vendorHash": "sha256-1e5Jdn6fSSdoAef4EobC41MhyBtdkYq50F8dbvtx+hk="
   },
   "datadrivers_nexus": {
     "hash": "sha256-yfxlDln4brI8QTFnhVsNOO3vRiqft3YWytvy2GMNBdY=",
@@ -499,13 +499,13 @@
     "vendorHash": "sha256-MYVkNvJ+rbwGw0htClIbmxk3YX2OK/ZO/QOTyMRFiug="
   },
   "hashicorp_aws": {
-    "hash": "sha256-M18L1hMZOy0g5UvlllqELkO4DZxYxDYjcSxBLGglzw8=",
+    "hash": "sha256-+MvxcQn0pnsNDR6ERXFW85fLwQ+AG+UcBo5F25WN4mQ=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v6.43.0",
+    "rev": "v6.44.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4I3YwVn3lGSDXKLqzlOlY4TlaSSJk6uKBNeCn7IdX6w="
+    "vendorHash": "sha256-fsGCKGgH2XM3Eq3rluKs3bODhmXUYEHLWskn+P58emA="
   },
   "hashicorp_awscc": {
     "hash": "sha256-x1IcDODMayfVCZYz4kVf809Up0ictjJ0AzM0rA2z3Ks=",
