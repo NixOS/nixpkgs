@@ -48,5 +48,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/tenstorrent/tt-smi";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
+    broken = true;
   };
 })
