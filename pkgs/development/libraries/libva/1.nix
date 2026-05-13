@@ -63,6 +63,9 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
 
+  # error: conflicting types for 'close_display'
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/vaapi/";
     license = lib.licenses.mit;
