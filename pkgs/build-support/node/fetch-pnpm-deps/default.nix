@@ -59,11 +59,6 @@ in
         else
           pnpm-fixup-state-db;
     in
-    # pnpmWorkspace was deprecated, so throw if it's used.
-    assert
-      !args ? pnpmWorkspace
-      || throw "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`.";
-
     assert
       fetcherVersion != null
       || throw "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
