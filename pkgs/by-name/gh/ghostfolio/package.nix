@@ -7,6 +7,7 @@
   openssl,
   prisma_7,
   prisma-engines_7,
+  runtimeShell,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -85,6 +86,14 @@ buildNpmPackage (finalAttrs: {
           PRISMA_FMT_BINARY = lib.getExe' prisma-engines_7 "prisma-fmt";
         }
       )}
+
+    cat > $out/bin/ghostfolio-migrate <<EOF
+    #!${runtimeShell}
+    set -euo pipefail
+    ${lib.getExe prisma_7} migrate deploy --config "$out/lib/ghostfolio/api/prisma.config.ts"
+    ${lib.getExe prisma_7} db seed --config "$out/lib/ghostfolio/api/prisma.config.ts"
+    EOF
+    chmod +x $out/bin/ghostfolio-migrate
 
     # For compatibility
     mkdir -p $out/lib/node_modules
