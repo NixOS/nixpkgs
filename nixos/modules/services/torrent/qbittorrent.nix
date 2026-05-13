@@ -256,6 +256,7 @@ in
     );
   };
   meta.maintainers = with maintainers; [
+    connor-grady
     fsnkty
     undefined-landmark
   ];

@@ -4,6 +4,7 @@
 
   meta = with pkgs.lib.maintainers; {
     maintainers = [
+      connor-grady
       fsnkty
       undefined-landmark
     ];
