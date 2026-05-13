@@ -48,7 +48,6 @@
   llvmPackages,
 
   # dependencies
-  astunparse,
   binutils,
   expecttest,
   filelock,
@@ -620,7 +619,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     "sympy"
   ];
   dependencies = [
-    astunparse
     expecttest
     filelock
     fsspec
