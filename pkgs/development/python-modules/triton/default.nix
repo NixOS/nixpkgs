@@ -44,15 +44,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "triton";
-  version = "3.6.0";
+  version = "3.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   # Remember to bump triton-llvm as well!
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JFSpQn+WsNnh7CAPlcpOcUp0nyKXNbJEANdXqmkt4Tc=";
+    hash = "sha256-FxbBY1lPq7765MqAPR7UljzPsmjOhKKbYExlKgeudew=";
   };
 
   patches = [
@@ -63,8 +64,9 @@ buildPythonPackage (finalAttrs: {
       libcudaStubsDir =
         if cudaSupport then "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs" else null;
     })
-    # Backport of https://github.com/triton-lang/triton/pull/9628 (does not apply cleanly)
-    ./0005-add-gcn5-gfx906-target.patch
+
+    # Use our `cmakeFlags` instead and avoid downloading dependencies.
+    ./inject-nix-cmakeFlags.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./0003-nvidia-cudart-a-systempath.patch {
@@ -89,13 +91,6 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "[get_llvm_package_info()]" "[]" \
         --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
         --replace-fail "curr_version.group(1) != version" "False"
-    ''
-    # Use our `cmakeFlags` instead and avoid downloading dependencies
-    + ''
-      substituteInPlace setup.py \
-        --replace-fail \
-          "cmake_args.extend(thirdparty_cmake_args)" \
-          "cmake_args.extend(thirdparty_cmake_args + os.environ.get('cmakeFlags', \"\").split())"
     ''
     # Don't fetch googletest
     + ''
@@ -135,7 +130,7 @@ buildPythonPackage (finalAttrs: {
     # `find_package` is called with `NO_DEFAULT_PATH`
     # https://cmake.org/cmake/help/latest/command/find_package.html
     # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
-    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}")
+    (lib.cmakeFeature "LLD_DIR" "${lib.getLib llvm}/lib/cmake/lld")
   ];
 
   buildInputs = [
@@ -158,6 +153,14 @@ buildPythonPackage (finalAttrs: {
     ''
       export MAX_JOBS="$NIX_BUILD_CORES"
     '';
+
+  # `examples/plugins` (an MLIR example dialect plugin and a unit-test helper lib) is built
+  # unconditionally with the Python module and shipped into `triton/plugins/`.
+  # It is unused at runtime and keeps a forbidden RPATH reference to the build directory, which
+  # fails the fixup phase.
+  postInstall = ''
+    rm -rf "$out/${python.sitePackages}/triton/plugins"
+  '';
 
   env = {
     TRITON_BUILD_PROTON = "OFF";
