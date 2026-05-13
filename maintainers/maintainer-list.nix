@@ -28889,6 +28889,12 @@
     githubId = 245573;
     name = "Dmitry Kalinkin";
   };
+  vernalan = {
+    email = "vernalan01@gmail.com";
+    github = "vernalan";
+    githubId = 151489013;
+    name = "vernalan";
+  };
   versality = {
     email = "artyom@pertsovsky.com";
     github = "versality";
