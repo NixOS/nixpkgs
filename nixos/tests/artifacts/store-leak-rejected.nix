@@ -32,7 +32,7 @@ pkgs.runCommand "store-leak-rejected" {} ''
       if failingAssertions == [] then
         ''echo "ERROR: No assertion fired for store-path secret"; exit 1''
       else
-        ''echo "Store-leak assertion correctly fired: ${builtins.head failingAssertions |> a: a.message}"; touch $out''
+        ''echo "Store-leak assertion correctly fired: ${(builtins.head failingAssertions).message}"; touch $out''
   else
     # If evaluation itself failed, that's also acceptable — the assertion
     # abort prevented the config from being built.
