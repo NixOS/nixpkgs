@@ -152,7 +152,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     Note that `allowlistedLicenses` only applies to unfree licenses unless `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses. `blocklistedLicenses` applies to all licenses.
 
-A complete list of licenses can be found in the file `lib/licenses.nix` of the nixpkgs tree.
+A complete list of licenses can be found in the file [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix) of the nixpkgs tree.
 
 ## Installing insecure packages {#sec-allow-insecure}
 
