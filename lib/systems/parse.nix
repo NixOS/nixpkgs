@@ -888,6 +888,12 @@ rec {
 
   # This should revert the job done by config.guess from the gcc compiler.
   mkSystemFromSkeleton =
+    let
+      getCpu = name: cpuTypes.${name} or (throw "Unknown CPU type: ${name}");
+      getVendor = name: vendors.${name} or (throw "Unknown vendor: ${name}");
+      getKernel = name: kernels.${name} or (throw "Unknown kernel: ${name}");
+      getAbi = name: abis.${name} or (throw "Unknown ABI: ${name}");
+    in
     {
       cpu,
       # Optional, but fallback too complex for here.
@@ -902,11 +908,6 @@ rec {
         null,
     }@args:
     let
-      getCpu = name: cpuTypes.${name} or (throw "Unknown CPU type: ${name}");
-      getVendor = name: vendors.${name} or (throw "Unknown vendor: ${name}");
-      getKernel = name: kernels.${name} or (throw "Unknown kernel: ${name}");
-      getAbi = name: abis.${name} or (throw "Unknown ABI: ${name}");
-
       parsed = {
         cpu = getCpu args.cpu;
         vendor =
