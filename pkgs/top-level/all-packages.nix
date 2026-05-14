@@ -7099,8 +7099,6 @@ with pkgs;
     sqlite-rsync
     ;
 
-  sqlite-interactive = (sqlite.override { interactive = true; }).bin;
-
   stlink-gui = callPackage ../by-name/st/stlink/package.nix { withGUI = true; };
 
   streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix { };
