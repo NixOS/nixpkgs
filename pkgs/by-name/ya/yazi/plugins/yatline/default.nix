@@ -3,7 +3,7 @@
   fetchFromGitHub,
   mkYaziPlugin,
 }:
-mkYaziPlugin {
+mkYaziPlugin (finalAttrs: {
   pname = "yatline.yazi";
   version = "0.5.0";
 
@@ -17,7 +17,8 @@ mkYaziPlugin {
   meta = {
     description = "Yazi plugin for customizing both header-line and status-line";
     homepage = "https://github.com/imsi32/yatline.yazi";
+    changelog = "https://github.com/imsi32/yatline.yazi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
-}
+})

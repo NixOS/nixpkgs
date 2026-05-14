@@ -3,7 +3,7 @@
   fetchFromGitHub,
   mkYaziPlugin,
 }:
-mkYaziPlugin {
+mkYaziPlugin (finalAttrs: {
   pname = "sshfs.yazi";
   version = "2.1.0";
 
@@ -17,7 +17,8 @@ mkYaziPlugin {
   meta = {
     description = "Minimal SSHFS integration for the Yazi terminal file‑manager";
     homepage = "https://github.com/uhs-robert/sshfs.yazi";
+    changelog = "https://github.com/uhs-robert/sshfs.yazi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ilosariph ];
   };
-}
+})

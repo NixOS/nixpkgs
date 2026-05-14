@@ -3,7 +3,7 @@
   fetchFromGitHub,
   mkYaziPlugin,
 }:
-mkYaziPlugin {
+mkYaziPlugin (finalAttrs: {
   pname = "compress.yazi";
   version = "0.6";
 
@@ -17,7 +17,8 @@ mkYaziPlugin {
   meta = {
     description = "Yazi plugin that compresses selected files to an archive";
     homepage = "https://github.com/KKV9/compress.yazi";
+    changelog = "https://github.com/KKV9/compress.yazi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})

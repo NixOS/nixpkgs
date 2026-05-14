@@ -13,20 +13,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lasuite-docs-collaboration-server";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yjcnXC46C2Z453oN4/fJc2q+B0yQKL3jKaIIpRlzu5s=";
+    hash = "sha256-Ptg3C+5DbUiWVS8nMCmqmSFMmNI4NW8NYBF+G5xOqSg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/src/frontend/yarn.lock";
-    hash = "sha256-K7AvCt2GMwo+mtTqa3c0OGUGM3Whfo/WfeYG/Vjxhtg=";
+    hash = "sha256-GW60XK+iOM4A/Pyvh120MnNde8dPiZu46aOTfHOczZg=";
   };
 
   nativeBuildInputs = [

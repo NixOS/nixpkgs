@@ -16,7 +16,7 @@
   pipewire,
   scdoc,
   slurp,
-  systemd,
+  systemdLibs,
   wayland,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libgbm
     pipewire
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
   ];
