@@ -33,7 +33,11 @@ let
     ;
   cfg = config.services.jellyfin;
   filteredDecodingCodecs = builtins.filter (
-    c: c != "hevcRExt10bit" && c != "hevcRExt12bit" && cfg.transcoding.hardwareDecodingCodecs.${c}
+    c:
+    c != "hevc10bit"
+    && c != "hevcRExt10bit"
+    && c != "hevcRExt12bit"
+    && cfg.transcoding.hardwareDecodingCodecs.${c}
   ) (builtins.attrNames cfg.transcoding.hardwareDecodingCodecs);
   encodingXmlText = ''
     <?xml version="1.0" encoding="utf-8"?>
@@ -58,6 +62,7 @@ let
       <AllowAv1Encoding>${boolToString cfg.transcoding.hardwareEncodingCodecs.av1}</AllowAv1Encoding>
       <EnableIntelLowPowerH264HwEncoder>${boolToString cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerH264HwEncoder>
       <EnableIntelLowPowerHevcHwEncoder>${boolToString cfg.transcoding.enableIntelLowPowerEncoding}</EnableIntelLowPowerHevcHwEncoder>
+      <EnableDecodingColorDepth10Hevc>${boolToString cfg.transcoding.hardwareDecodingCodecs.hevc10bit}</EnableDecodingColorDepth10Hevc>
       <EnableDecodingColorDepth10HevcRext>${boolToString cfg.transcoding.hardwareDecodingCodecs.hevcRExt10bit}</EnableDecodingColorDepth10HevcRext>
       <EnableDecodingColorDepth12HevcRext>${boolToString cfg.transcoding.hardwareDecodingCodecs.hevcRExt12bit}</EnableDecodingColorDepth12HevcRext>
       <HardwareDecodingCodecs>
