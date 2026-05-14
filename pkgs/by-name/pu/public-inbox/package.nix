@@ -4,7 +4,7 @@
   fetchurl,
   makeWrapper,
   nixosTests,
-  buildPerlPackage,
+  perlPackages,
   coreutils,
   curl,
   git,
@@ -17,31 +17,10 @@
   pkg-config,
   sqlite,
   xapian,
-  AnyURIEscape,
-  DBDSQLite,
-  DBI,
-  EmailAddressXS,
-  EmailMIME,
-  IOSocketSSL,
-  # FIXME: to be packaged
-  #, IOSocketSocks
-  IPCRun,
-  Inline,
-  InlineC,
-  LinuxInotify2,
-  MailIMAPClient,
   # FIXME: to be packaged
   #, NetNetrc
   # FIXME: to be packaged
   #, NetNNTP
-  ParseRecDescent,
-  Plack,
-  PlackMiddlewareReverseProxy,
-  PlackTestExternalServer,
-  Xapian,
-  TimeDate,
-  URI,
-  XMLTreePP,
 }:
 
 let
@@ -86,7 +65,7 @@ let
 
 in
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   pname = "public-inbox";
   version = "2.1.0";
 
@@ -111,25 +90,25 @@ buildPerlPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    AnyURIEscape
-    DBDSQLite
-    DBI
-    EmailAddressXS
+    perlPackages.AnyURIEscape
+    perlPackages.DBDSQLite
+    perlPackages.DBI
+    perlPackages.EmailAddressXS
     highlight
-    IOSocketSSL
-    #IOSocketSocks
-    IPCRun
-    Inline
-    InlineC
-    MailIMAPClient
+    perlPackages.IOSocketSSL
+    perlPackages.IOSocketSocks
+    perlPackages.IPCRun
+    perlPackages.Inline
+    perlPackages.InlineC
+    perlPackages.MailIMAPClient
     #NetNetrc
     #NetNNTP
-    ParseRecDescent
-    Plack
-    PlackMiddlewareReverseProxy
-    Xapian
-    TimeDate
-    URI
+    perlPackages.ParseRecDescent
+    perlPackages.Plack
+    perlPackages.PlackMiddlewareReverseProxy
+    perlPackages.Xapian
+    perlPackages.TimeDate
+    perlPackages.URI
     libgit2 # For Gcf2
     man
   ];
@@ -142,12 +121,12 @@ buildPerlPackage rec {
     pkg-config
     sqlite
     xapian
-    EmailMIME
-    PlackTestExternalServer
-    XMLTreePP
+    perlPackages.EmailMIME
+    perlPackages.PlackTestExternalServer
+    perlPackages.XMLTreePP
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    LinuxInotify2
+    perlPackages.LinuxInotify2
   ];
   preCheck = ''
     perl certs/create-certs.perl

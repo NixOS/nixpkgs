@@ -7941,8 +7941,6 @@ with pkgs;
   postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
 
-  public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
-
   pypiserver = with python3Packages; toPythonApplication pypiserver;
 
   samba4 = callPackage ../servers/samba/4.x.nix { };
