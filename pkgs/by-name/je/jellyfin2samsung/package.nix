@@ -76,19 +76,19 @@ let
         libGL
 
         # ── X11 / Avalonia backend ─────────────────────────────────────────────
-        p.xorg.libX11
-        p.xorg.libICE
-        p.xorg.libSM
-        p.xorg.libXext
-        p.xorg.libXcursor
-        p.xorg.libXi
-        p.xorg.libXrandr
-        p.xorg.libXrender
-        p.xorg.libXinerama
-        p.xorg.libXcomposite
-        p.xorg.libXdamage
-        p.xorg.libXfixes
-        p.xorg.libXtst
+        xorg.libX11
+        xorg.libICE
+        xorg.libSM
+        xorg.libXext
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXrandr
+        xorg.libXrender
+        xorg.libXinerama
+        xorg.libXcomposite
+        xorg.libXdamage
+        xorg.libXfixes
+        xorg.libXtst
 
         # ── networking / utilities used by the app ─────────────────────────────
         nmap
