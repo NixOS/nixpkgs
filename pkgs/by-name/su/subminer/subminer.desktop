@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=SubMiner
+Comment=All-in-one sentence mining overlay with AnkiConnect and dictionary integration for mpv
+Exec=subminer app --background
+Icon=subminer
+Categories=AudioVideo;Video;
+StartupWMClass=SubMiner
+Terminal=false
