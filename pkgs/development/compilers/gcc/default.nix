@@ -14,6 +14,7 @@
   langGo ? false,
   reproducibleBuild ? true,
   profiledCompiler ? false,
+  disableBootstrap ? !stdenv.hostPlatform.isDarwin && !profiledCompiler,
   langJit ? false,
   langRust ? false,
   cargo,
@@ -95,8 +96,6 @@ let
   #   "14.2.1.20250322" -> "14.2.1"
   #   "14.2.0" -> "14.2.0"
   baseVersion = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
-
-  disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
   targetConfig = if (!hostIsTarget) then targetPlatform.config else null;
