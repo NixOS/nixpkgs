@@ -157,7 +157,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
-    sdk_version=$(HOME=$(mktemp -d) ${bootstrapSdk}/bin/dotnet --version)
+    sdk_version=$(${bootstrapSdk}/bin/dotnet --version)
     jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
     mv global.json{~,}
 
@@ -361,13 +361,11 @@ stdenv.mkDerivation {
     in
     ''
       runHook preConfigure
-
       # The build process tries to overwrite some things in the sdk (e.g.
       # SourceBuild.MSBuildSdkResolver.dll), so it needs to be mutable.
-      cp -Tr ${bootstrapSdk}/share/dotnet .dotnet
+      mkdir .dotnet
+      cp -r ${bootstrapSdk}/share/dotnet/* .dotnet/
       chmod -R +w .dotnet
-
-      export HOME=$(mktemp -d)
     ''
     + lib.optionalString (lib.versionAtLeast version "10") ''
       dotnet nuget add source "${bootstrapSdk.artifacts}"
@@ -436,12 +434,9 @@ stdenv.mkDerivation {
 
     # CLR_CC/CXX need to be set to stop the build system from using clang-11,
     # which is unwrapped
-    # dotnet needs to be in PATH to fix:
-    # src/sdk/eng/restore-toolset.sh: line 114: /nix/store/[...]-dotnet-sdk-9.0.100-preview.2.24157.14//.version: Read-only file system
     version= \
     CLR_CC=$(command -v clang) \
     CLR_CXX=$(command -v clang++) \
-    PATH=$PWD/.dotnet:$PATH \
       ./build.sh $buildFlags
 
     runHook postBuild
