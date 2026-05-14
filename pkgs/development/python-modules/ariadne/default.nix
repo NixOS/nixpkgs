@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ariadne";
-  version = "1.0.1";
+  version = "1.1.0.dev1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = "ariadne";
     tag = finalAttrs.version;
-    hash = "sha256-V5/4kLdb3Apnnq91HQ3eApl1R2+pqeWhWi5Y0ULqJrI=";
+    hash = "sha256-EtT9HxuaCYO/JDcCnxBjkoy768ZUQjsYLnpa9zq/1vk=";
   };
 
   build-system = [ hatchling ];
