@@ -100,7 +100,8 @@ buildPythonPackage rec {
     ''
     + ''
       substituteInPlace pyproject.toml \
-        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python \
+        --replace-fail "setuptools_scm>=7,<10" setuptools_scm
 
       patchShebangs tools
     ''
