@@ -31,6 +31,7 @@
   stdenv,
   wrapGAppsHook3,
   zstd,
+  versionCheckHook,
 }:
 
 let
@@ -208,6 +209,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         "LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>" \
         "struct rack::componentlibrary::LightButton<VCVBezelBig, VCVBezelLightBig<WhiteLight>>"
+
+    # Set RACK_VERSION to avoid git describe, which fails in the Nix build sandbox.
+    substituteInPlace Makefile \
+      --replace-fail 'RACK_VERSION ?= $' 'RACK_VERSION ?= ${finalAttrs.version}#$'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Fix reference to zenity
@@ -218,7 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '__yield();' 'asm volatile("yield");'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # * Set VERSION from finalAttrs to avoid build using git to determine version
     # * Darwin needs to build the dist target, which builds the .app container,
     #   yet we want to exclude the documentation from dist target.
     # * Skip stripping the binary to avoid "unsupported load command" error, which
@@ -226,7 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
     # * Replace path to Fundamental module with path to produced build artifact
     #   to avoid downloading a pre-compiled version
     substituteInPlace Makefile \
-      --replace-fail 'VERSION ?= $' 'VERSION ?= ${finalAttrs.version}#$' \
       --replace-fail 'DIST_HTML :=' '#DIST_HTML :=' \
       --replace-fail '$(STRIP)' '#$(STRIP)' \
       --replace-fail 'FUNDAMENTAL_FILENAME := Fundamental' 'FUNDAMENTAL_FILENAME := plugins/Fundamental/dist/Fundamental'
@@ -347,6 +350,9 @@ stdenv.mkDerivation (finalAttrs: {
         $out/bin/${finalAttrs.meta.mainProgram} \
         --add-flags "-s $out/Applications/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app'/Contents/Resources"
     '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Open-source virtual modular synthesizer";
