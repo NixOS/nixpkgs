@@ -83,6 +83,7 @@ buildGo126Module rec {
       ryan4yin
       SchahinRohani
       stealthybox
+      superherointj
     ];
     mainProgram = "flux";
   };
