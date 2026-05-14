@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.36";
+  version = "1.3.40";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-o75r8LFgG3BT3IIPiD9x6gY3fRDoxJ3ZTBPAYr3hLWI=";
+    hash = "sha256-cWp8/ywcZ7YE03CayUoxoFH6WlNTF2Tu2kRk0IadYrk=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-NYPxaVYEaJVcsRX6wLVJd+/UUJrNel0zTPYGdEv8a+U=";
+    hash = "sha256-go9LILtVQ56pOuPH0tE9ywMnB6dAqroCZyURqR1H0ro=";
   };
   cargoRoot = "packages/wasm";
 
