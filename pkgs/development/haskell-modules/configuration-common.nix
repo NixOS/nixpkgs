@@ -3344,6 +3344,14 @@ with haskellLib;
   # including the current one in nixpkgs.
   liquid-fixpoint = dontCheck super.liquid-fixpoint;
 
+  # patch from mgsloan/store#184
+  store = appendPatch (pkgs.fetchpatch2 {
+    name = "store-isthname-ghc-internal-th-syntax.patch";
+    url = "https://github.com/mgsloan/store/commit/c42e0f1eb4fab73abe30c3a24ce14d027e3c5ff6.patch";
+    hash = "sha256-l7SHDuanT1mQGm0KtJQVET1D/XlJw4bpDXKQKqxqEy4=";
+    excludes = [ "ChangeLog.md" ];
+  }) super.store;
+
   # 2025-8-26: Too strict bounds on containers and text, see: https://github.com/stackbuilders/inflections-hs/pull/83
   inflections = doJailbreak super.inflections;
 
