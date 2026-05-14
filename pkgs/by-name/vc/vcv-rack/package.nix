@@ -306,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D -m755 -t $out/lib libRack.so
 
     mkdir -p $out/share/vcv-rack
-    cp -r res cacert.pem Core.json template.vcv LICENSE-GPLv3.txt $out/share/vcv-rack
+    cp -r res translations cacert.pem Core.json template.vcv LICENSE-GPLv3.txt $out/share/vcv-rack
     cp -r plugins/Fundamental/dist/Fundamental-*.vcvplugin $out/share/vcv-rack/Fundamental.vcvplugin
 
     # Extract pngs from the Apple icon image and create
