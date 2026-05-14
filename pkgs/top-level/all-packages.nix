@@ -1891,8 +1891,6 @@ with pkgs;
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
-  bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
-
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
   libceph = ceph.lib;
