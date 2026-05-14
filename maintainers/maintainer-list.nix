@@ -17630,6 +17630,12 @@
     githubId = 7802795;
     name = "Manoj Karthick";
   };
+  ManUtopiK = {
+    email = "emmanuel.salomon@gmail.com";
+    github = "ManUtopiK";
+    githubId = 188172;
+    name = "Emmanuel Salomon";
+  };
   maolonglong = {
     email = "shaolong.chen@outlook.it";
     github = "maolonglong";
