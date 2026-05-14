@@ -28,11 +28,7 @@ buildGoLatestModule (finalAttrs: {
 
   doCheck = false;
 
-  # Only build gopls & modernize, not the integration tests or documentation generator.
-  subPackages = [
-    "."
-    "internal/analysis/modernize/cmd/modernize"
-  ];
+  subPackages = [ "." ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
