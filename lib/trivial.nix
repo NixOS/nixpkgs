@@ -1101,11 +1101,10 @@ in
     ```
   */
   functionArgs =
-    f:
-    if f ? __functor then
-      f.__functionArgs or (functionArgs (f.__functor f))
-    else
-      builtins.functionArgs f;
+    let
+      functionArgs = builtins.functionArgs;
+    in
+    f: if f ? __functor then f.__functionArgs or (functionArgs (f.__functor f)) else functionArgs f;
 
   /**
     Check whether something is a function or something
