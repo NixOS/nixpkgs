@@ -28951,6 +28951,13 @@
     githubId = 123554;
     name = "Thibaut Smith";
   };
+  viena = {
+    name = "Viena";
+    email = "theviena96@gmail.com";
+    github = "devnchill";
+    githubId = 169875752;
+    keys = [ { fingerprint = "BF79 8CD0 CA25 2106 99E1  ED9E F826 F032 DDDA 5560"; } ];
+  };
   vieta = {
     email = "vieta@4d2.org";
     github = "yVieta";

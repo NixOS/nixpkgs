@@ -16,18 +16,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "picocrypt-ng";
-  version = "2.08";
+  version = "2.09";
 
   src = fetchFromGitHub {
     owner = "Picocrypt-NG";
     repo = "Picocrypt-NG";
     tag = finalAttrs.version;
-    hash = "sha256-dXIJTpoupfmHtxhnqroQaxrcTsW07G4zxSib1vs1DaA=";
+    hash = "sha256-s+93NoJ1O6/Af33pUobSA0kAhpw7W0IdA9H6CVxShQY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-qluJIsd7g2UNYQwsDW7ugVzh5Z0xJkHe6OlMt04d/cc=";
+  vendorHash = "sha256-2c8Q7+97jSGo8lwWOYBg76K04+TFXG1DdQzVMR8G7ik=";
 
   ldflags = [
     "-s"

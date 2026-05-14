@@ -14,7 +14,6 @@
   libayatana-appindicator,
   wayland,
   libxkbcommon,
-  mesa,
   libxcb,
   leptonica,
   glib,
@@ -122,7 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     libxkbcommon
     libxcb
-    mesa
     tesseract4
     leptonica
     glib
