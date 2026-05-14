@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchzip,
   installShellFiles,
@@ -9,10 +9,10 @@
 }:
 
 let
-  version = "2.7.5";
-  srcHash = "sha256-vTb1YE73xxCC4GlR6UW5Ibu+ck+N+KKYUg50csb7eUA=";
-  vendorHash = "sha256-AgWDvlXVZXXprWCeoNeAMDb6LeYfa9yG5afc7TNISQs=";
-  manifestsHash = "sha256-CmYuHhEiKxkSRtN+fri2/4ILxpwRy2xGwGqCqcfsQwU=";
+  version = "2.8.6";
+  srcHash = "sha256-pKP4g2pTMYtx/B/Y3ow7tvDdhCSuwbszzeLVXB0W7Bo=";
+  vendorHash = "sha256-VBafft9/AuXaHWvZymy7P9gaSuO8D6IZHfK68Ixp3mI=";
+  manifestsHash = "sha256-h/HR/rJwPWXiuoj9T+LajdsdT4Jo8/EuN+O1I7e9sjI=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
@@ -21,7 +21,7 @@ let
   };
 in
 
-buildGoModule rec {
+buildGo126Module rec {
   pname = "fluxcd";
   inherit vendorHash version;
 
@@ -79,9 +79,9 @@ buildGoModule rec {
     homepage = "https://fluxcd.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       jlesquembre
       ryan4yin
+      stealthybox
     ];
     mainProgram = "flux";
   };
