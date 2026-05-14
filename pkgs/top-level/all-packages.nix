@@ -2917,10 +2917,6 @@ with pkgs;
 
   optifine = optifinePackages.optifine-latest;
 
-  p4c = callPackage ../development/compilers/p4c {
-    protobuf = protobuf_21;
-  };
-
   packagekit = callPackage ../tools/package-management/packagekit { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
