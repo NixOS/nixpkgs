@@ -22,8 +22,8 @@ buildPythonPackage rec {
     (fetchpatch2 {
       # https://github.com/kumar303/mohawk/pull/59
       name = "nose-to-pytest.patch";
-      url = "https://github.com/kumar303/mohawk/compare/b7899166880e890f01cf2531b5686094ba08df8f...66157c7efbf6b0d18c30a9ffe5dfd84bef27bd3a.patch";
-      hash = "sha256-w3sP5XeBqOwoPGsWzYET4djYwuKPaS4OOlC3HBPD0NI=";
+      url = "https://github.com/kumar303/mohawk/compare/b7899166880e890f01cf2531b5686094ba08df8f...66157c7efbf6b0d18c30a9ffe5dfd84bef27bd3a.diff?full_index=1";
+      hash = "sha256-wUA62sHuZuyarVU3NjLy3XqTW0kZeUzfiw2vitkcfLg=";
     })
   ];
 

@@ -395,7 +395,6 @@ let
         systems = [
           "frugal-uuid"
           "frugal-uuid/non-frugal"
-          "frugal-uuid/benchmark"
           "frugal-uuid/test"
         ];
         lispLibs =

@@ -142,16 +142,21 @@ bash.runCommand "${pname}-${version}"
       --with-native-system-header-dir=${musl}/include \
       --with-build-sysroot=${musl} \
       --enable-languages=c,c++ \
+      --enable-checking=release \
       --disable-bootstrap \
       --disable-dependency-tracking \
+      --disable-libgomp \
       --disable-libmudflap \
+      --disable-libquadmath \
+      --disable-libssp \
       --disable-libstdcxx-pch \
       --disable-lto \
-      --disable-multilib
+      --disable-multilib \
+      --disable-nls
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
   ''

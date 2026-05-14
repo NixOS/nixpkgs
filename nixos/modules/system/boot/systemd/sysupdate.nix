@@ -136,7 +136,10 @@ in
       "systemd-sysupdated.service"
     ];
 
-    systemd.services.systemd-sysupdated.aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
+    systemd.services.systemd-sysupdated = {
+      aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
+      path = [ pkgs.gnupg ];
+    };
 
     systemd.timers = {
       "systemd-sysupdate" = {

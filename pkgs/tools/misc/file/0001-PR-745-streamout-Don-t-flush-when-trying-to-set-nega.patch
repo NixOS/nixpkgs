@@ -1,0 +1,57 @@
+From 12b76648185104ce9118d8b5fa57aa34a77ad084 Mon Sep 17 00:00:00 2001
+From: Christos Zoulas <christos@zoulas.com>
+Date: Wed, 15 Apr 2026 20:00:20 +0000
+Subject: [PATCH] PR/745: streamout: Don't flush when trying to set negative
+ offsets     on pipes, just continue, fixes 'cat file.zip | file -'
+
+---
+ ChangeLog       |  2 ++
+ src/softmagic.c | 22 ++++++++++++++++------
+ 2 files changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/src/softmagic.c b/src/softmagic.c
+index 7cf7c798..a5e758eb 100644
+--- a/src/softmagic.c
++++ b/src/softmagic.c
+@@ -245,14 +245,19 @@ match(struct magic_set *ms, struct magic *magic, file_regex_t **magic_rxcomp,
+ flush:
+ 			/* Skip sub-tests */
+ 			while (magindex < nmagic - 1 &&
+-			    magic[magindex + 1].cont_level != 0)
++			    magic[magindex + 1].cont_level != 0) {
+ 				magindex++;
++			}
+ 			cont_level = 0;
+ 			continue; /* Skip to next top-level test*/
+ 		}
+ 
+-		if (msetoffset(ms, m, &bb, b, offset, cont_level) == -1)
+-			goto flush;
++		if (msetoffset(ms, m, &bb, b, offset, cont_level) == -1) {
++			if (b->elen == FILE_BADSIZE)
++				continue;
++			else
++				goto flush;
++		}
+ 		ms->line = m->lineno;
+ 
+ 		/* if main entry matches, print it... */
+@@ -347,8 +352,13 @@ flush:
+ 				 */
+ 				cont_level = m->cont_level;
+ 			}
+-			if (msetoffset(ms, m, &bb, b, offset, cont_level) == -1)
+-				goto flush;
++			if (msetoffset(ms, m, &bb, b, offset, cont_level)
++			    == -1) {
++				if (b->elen == FILE_BADSIZE)
++					continue;
++				else
++					goto flush;
++			}
+ 			if (m->flag & OFFADD) {
+ 				if (cont_level == 0) {
+ 					if ((ms->flags & MAGIC_DEBUG) != 0)
+-- 
+2.53.0
+

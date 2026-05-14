@@ -97,72 +97,86 @@ rec {
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
-  writeTextFile =
-    {
-      name,
-      text,
-      executable ? false,
-      destination ? "",
-      checkPhase ? "",
-      meta ? { },
-      passthru ? { },
-      allowSubstitutes ? false,
-      preferLocalBuild ? true,
-      derivationArgs ? { },
-      pos ? builtins.unsafeGetAttrPos "name" args,
-    }@args:
-    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
-      destination must be an absolute path, relative to the derivation's out path,
-      got '${destination}' instead.
+  writeTextFile = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      Ensure that the path starts with a / and specifies at least the filename.
-    '';
+    excludeDrvArgNames = [
+      "derivationArgs"
+    ];
 
-    let
-      matches = builtins.match "/bin/([^/]+)" destination;
-    in
-    runCommand name
-      (
-        {
-          inherit
-            pos
-            text
-            executable
-            checkPhase
-            allowSubstitutes
-            preferLocalBuild
-            ;
-          passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
-          meta =
-            lib.optionalAttrs (executable && matches != null) {
-              mainProgram = lib.head matches;
-            }
-            // meta
-            // derivationArgs.meta or { };
-          passthru = passthru // derivationArgs.passthru or { };
-        }
-        // removeAttrs derivationArgs [
-          "passAsFile"
-          "meta"
-          "passthru"
-        ]
-      )
-      ''
-        target=$out${lib.escapeShellArg destination}
-        mkdir -p "$(dirname "$target")"
+    extendDrvArgs =
+      finalAttrs:
+      {
+        name,
+        text,
+        executable ? false,
+        destination ? "",
+        checkPhase ? "",
+        meta ? { },
+        passthru ? { },
+        allowSubstitutes ? false,
+        preferLocalBuild ? true,
+        derivationArgs ? { },
+        pos ? builtins.unsafeGetAttrPos "name" args,
+      }@args:
+      {
+        inherit
+          pos
+          name
+          text
+          executable
+          checkPhase
+          allowSubstitutes
+          preferLocalBuild
+          ;
+        destination =
+          assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+            destination must be an absolute path, relative to the derivation's out path,
+            got '${destination}' instead.
 
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$target"
-        else
-          echo -n "$text" > "$target"
-        fi
+            Ensure that the path starts with a / and specifies at least the filename.
+          '';
+          destination;
+        passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
 
-        if [ -n "$executable" ]; then
-          chmod +x "$target"
-        fi
+        buildCommand = ''
+          target=$out$destination
+          mkdir -p "$(dirname "$target")"
 
-        eval "$checkPhase"
-      '';
+          if [ -e "$textPath" ]; then
+            mv "$textPath" "$target"
+          else
+            printf "%s" "$text" > "$target"
+          fi
+
+          if [ -n "$executable" ]; then
+            chmod +x "$target"
+          fi
+
+          eval "$checkPhase"
+        '';
+
+        meta =
+          let
+            matches = builtins.match "/bin/([^/]+)" finalAttrs.destination;
+            isProgram = finalAttrs.executable && matches != null;
+          in
+          {
+            ${if isProgram then "mainProgram" else null} = lib.head matches;
+          }
+          // meta
+          // derivationArgs.meta or { };
+        passthru = passthru // derivationArgs.passthru or { };
+      }
+      // removeAttrs derivationArgs [
+        "passAsFile"
+        "meta"
+        "passthru"
+      ];
+
+    # `writeTextFile`'s set pattern doesn't have ellipses.
+    inheritFunctionArgs = false;
+  };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
@@ -333,10 +347,10 @@ rec {
       {
         inherit pname code;
         executable = true;
-        passAsFile = [ "code" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
+        __structuredAttrs = true;
         meta = {
           mainProgram = pname;
         };
@@ -344,7 +358,7 @@ rec {
       ''
         n=$out/bin/${pname}
         mkdir -p "$(dirname "$n")"
-        mv "$codePath" code.c
+        printf "%s" "$code" > code.c
         $CC -x c code.c -o "$n"
       '';
 
@@ -559,7 +573,10 @@ rec {
         paths = mapPaths (path: "${path}${stripPrefix}") paths;
         buildCommand = ''
           mkdir -p $out
-          for i in $(cat $pathsPath); do
+          if [ -n "''${pathsPath:-}" ] && [ -f "$pathsPath" ]; then
+            mapfile -d " " -t paths < "$pathsPath"
+          fi
+          for i in "''${paths[@]}"; do
             ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
               optionalString (!failOnMissing) "; fi"
             }

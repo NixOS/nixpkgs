@@ -132,10 +132,7 @@ let
       inherit (self.unwrapped) pname version meta;
 
       strictDeps = true;
-      # Currently broken for symlinkJoin, can be removed once the following
-      # reaches branch master:
-      # https://github.com/NixOS/nixpkgs/pull/510526
-      __structuredAttrs = false;
+      __structuredAttrs = true;
 
       paths = with self; [
         # Order is important, we want files from the wrappers to take precedence

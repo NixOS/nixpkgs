@@ -16,7 +16,6 @@
   pythran,
   pkg-config,
   setuptools,
-  xcbuild,
 
   # buildInputs
   # Upstream has support for using Darwin's Accelerate package. However this
@@ -78,6 +77,12 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "numpy>=2.0.0,<2.7" numpy
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace scipy/meson.build \
+      --replace-fail "r = run_command('xcrun', '-sdk', 'macosx', '--show-sdk-version', check: true)" ""
+    substituteInPlace scipy/meson.build \
+      --replace-fail "sdkVersion = r.stdout().strip()" "sdkVersion = '${stdenv.hostPlatform.darwinSdkVersion}'"
   '';
 
   build-system = [
@@ -88,13 +93,6 @@ buildPythonPackage (finalAttrs: {
     pythran
     pkg-config
     setuptools
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Minimal version required according to:
-    # https://github.com/scipy/scipy/blob/v1.16.0/scipy/meson.build#L238-L244
-    (xcbuild.override {
-      sdkVer = "13.3";
-    })
   ];
 
   buildInputs = [

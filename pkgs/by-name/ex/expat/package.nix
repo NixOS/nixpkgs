@@ -18,7 +18,7 @@
 # files.
 
 let
-  version = "2.7.5";
+  version = "2.8.0";
   tag = "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
-    hash = "sha256-EDLf70/xf3BGSCfaooNpsg9lhNEIvDbxerFnbh7dL5E=";
+    hash = "sha256-o3v64KqXdb2FIevYXcRW1Ibw/zETj2yR/ZAupzJiRUI=";
   };
 
   strictDeps = true;

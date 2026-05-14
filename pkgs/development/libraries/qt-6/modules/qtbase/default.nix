@@ -88,6 +88,7 @@
   wayland-scanner,
   # options
   qttranslations ? null,
+  fetchpatch,
 }:
 
 let
@@ -244,6 +245,17 @@ stdenv.mkDerivation {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
+
+    # backport crash fix
+    (fetchpatch {
+      url = "https://github.com/qt/qtbase/commit/1466f88633b2c29a6159a0c2eacd0c0d6601aa5e.diff";
+      hash = "sha256-ubDAXF47SYagRAJ5SYyBxXl2PiHjAZo3xlYPDz1jRYM=";
+    })
+    # another crash fix
+    (fetchpatch {
+      url = "https://github.com/qt/qtbase/commit/515cbbacfba9f4259c9c3b0714a31222c2b4c879.diff";
+      hash = "sha256-93tzp4O7dZxRZv7ilN/gbQSVmaeOGmxpYgM7aomN0n8=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

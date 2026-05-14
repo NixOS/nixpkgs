@@ -5,24 +5,29 @@
   ...
 }:
 let
+  cfg = config.i18n;
+  localeConf = pkgs.writeText "locale.conf" ''
+    LANG=${cfg.defaultLocale}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n}=${v}") cfg.extraLocaleSettings)}
+  '';
   sanitizeUTF8Capitalization =
     lang: (lib.replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] lang);
   aggregatedLocales =
-    lib.optionals (config.i18n.defaultLocale != "C") [
-      "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
+    lib.optionals (cfg.defaultLocale != "C") [
+      "${cfg.defaultLocale}/${cfg.defaultCharset}"
     ]
-    ++ lib.pipe config.i18n.extraLocaleSettings [
+    ++ lib.pipe cfg.extraLocaleSettings [
       # See description of extraLocaleSettings for why is this ignored here.
       (x: lib.removeAttrs x [ "LANGUAGE" ])
       (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
       # C locales are always installed
       (lib.filterAttrs (n: v: v != "C"))
-      (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
+      (lib.mapAttrsToList (LCRole: lang: lang + "/" + (cfg.localeCharsets.${LCRole} or "UTF-8")))
     ]
     ++ (map sanitizeUTF8Capitalization (
-      lib.optionals (builtins.isList config.i18n.extraLocales) config.i18n.extraLocales
+      lib.optionals (builtins.isList cfg.extraLocales) cfg.extraLocales
     ))
-    ++ (lib.optional (builtins.isString config.i18n.extraLocales) config.i18n.extraLocales);
+    ++ (lib.optional (builtins.isString cfg.extraLocales) cfg.extraLocales);
 in
 {
   ###### interface
@@ -33,8 +38,8 @@ in
       glibcLocales = lib.mkOption {
         type = lib.types.path;
         default = pkgs.glibcLocales.override {
-          allLocales = lib.elem "all" config.i18n.supportedLocales;
-          locales = config.i18n.supportedLocales;
+          allLocales = lib.elem "all" cfg.supportedLocales;
+          locales = cfg.supportedLocales;
         };
         defaultText = lib.literalExpression ''
           pkgs.glibcLocales.override {
@@ -143,6 +148,16 @@ in
         '';
       };
 
+      imperativeLocale = lib.mkEnableOption ''
+        imperative locale and keyboard management via localectl.
+
+        When enabled, locale and keyboard settings can be changed at runtime
+        using `localectl set-locale` and `localectl set-keymap`.
+        When disabled (the default), these settings are managed declaratively
+        through {option}`i18n.defaultLocale`, {option}`i18n.extraLocaleSettings`,
+        and {option}`console.keyMap`.
+      '';
+
     };
 
   };
@@ -154,8 +169,8 @@ in
       lib.optional
         (
           !(
-            (lib.subtractLists config.i18n.supportedLocales aggregatedLocales) == [ ]
-            || lib.elem "all" config.i18n.supportedLocales
+            (lib.subtractLists cfg.supportedLocales aggregatedLocales) == [ ]
+            || lib.elem "all" cfg.supportedLocales
           )
         )
         ''
@@ -171,25 +186,34 @@ in
 
     environment.systemPackages =
       # We increase the priority a little, so that plain glibc in systemPackages can't win.
-      lib.optional (config.i18n.supportedLocales != [ ]) (lib.setPrio (-1) config.i18n.glibcLocales);
+      lib.optional (cfg.supportedLocales != [ ]) (lib.setPrio (-1) cfg.glibcLocales);
 
     environment.sessionVariables = {
-      LANG = config.i18n.defaultLocale;
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
     }
-    // config.i18n.extraLocaleSettings;
+    # When imperative, leave LANG/LC_* to pam_systemd so /etc/set-environment
+    # does not override what localectl wrote to /etc/locale.conf.
+    // lib.optionalAttrs (!cfg.imperativeLocale) (
+      {
+        LANG = cfg.defaultLocale;
+      }
+      // cfg.extraLocaleSettings
+    );
 
-    systemd.globalEnvironment = lib.mkIf (config.i18n.supportedLocales != [ ]) {
-      LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
+    systemd.globalEnvironment = lib.mkIf (cfg.supportedLocales != [ ]) {
+      LOCALE_ARCHIVE = "${cfg.glibcLocales}/lib/locale/locale-archive";
     };
 
     # ‘/etc/locale.conf’ is used by systemd.
-    environment.etc."locale.conf".source = pkgs.writeText "locale.conf" ''
-      LANG=${config.i18n.defaultLocale}
-      ${lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings
-      )}
-    '';
+    # If imperative, see below
+    environment.etc."locale.conf" = lib.mkIf (!cfg.imperativeLocale) {
+      source = localeConf;
+    };
 
+    # When imperative, seed /etc/locale.conf on first boot from declared defaults
+    # so the system doesn’t fall back to C.UTF-8
+    systemd.tmpfiles.rules = lib.mkIf cfg.imperativeLocale [
+      "C /etc/locale.conf - - - - ${localeConf}"
+    ];
   };
 }

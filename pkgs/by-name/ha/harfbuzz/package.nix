@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   glib,
   freetype,
@@ -14,6 +13,9 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withRaster ? false,
+  withCairo ? false,
+  cairo,
   icu,
   graphite2,
   harfbuzz, # The icu variant uses and propagates the non-icu one.
@@ -35,21 +37,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "12.3.0";
+  version = "13.2.1";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hmDr08J9lAf8hDO10XK6+6XwMXywu0M58o5TcMk9Qrc=";
+    hash = "sha256-ZpXaPrfhvgqjCS/k2BQzoztH9FGSWcdZ1ynjqaVcFCk=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/harfbuzz/harfbuzz/security/advisories/GHSA-xvjr-f2r9-c7ww
-      name = "CVE-2026-22693.patch";
-      url = "https://github.com/harfbuzz/harfbuzz/commit/1265ff8d990284f04d8768f35b0e20ae5f60daae.patch";
-      hash = "sha256-mdgIhp1ndPSfzplBRB7s+BN2T5Z9dEYZ0bAmSDCUPSE=";
-    })
-  ];
+  # This test fails reliably when executed through mesonCheckPhase but passes with
+  # a direct 'meson test' checkPhase, the validated symbols are fine but msan is not happy
+  # skipping this for now as it is not relevant for the packaging
+  patches = [ ./disable-check-symbols-test.patch ];
 
   postPatch = ''
     patchShebangs src/*.py test
@@ -69,10 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # upstream recommends cairo, but it is only used for development purposes
-    # and is not part of the library.
+    # and hb-raster and is not part of the main library.
     # Cairo causes transitive (build) dependencies on various X11 or other
     # GUI-related libraries, so it shouldn't be re-added lightly.
-    (lib.mesonEnable "cairo" false)
+    (lib.mesonEnable "cairo" withCairo)
+    (lib.mesonEnable "raster" withRaster)
     # chafa is only used in a development utility, not in the library
     (lib.mesonEnable "chafa" false)
     (lib.mesonEnable "coretext" withCoreText)
@@ -97,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
   ]
-  ++ lib.optional withIntrospection gobject-introspection;
+  ++ lib.optional withIntrospection gobject-introspection
+  ++ lib.optional withCairo cairo;
 
   buildInputs = [
     glib
@@ -152,6 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
       "harfbuzz"
       "harfbuzz-gobject"
       "harfbuzz-subset"
-    ];
+      "harfbuzz-vector"
+    ]
+    ++ (lib.optional withIcu "harfbuzz-icu")
+    ++ (lib.optional withRaster "harfbuzz-raster")
+    ++ (lib.optional withCairo "harfbuzz-cairo");
   };
 })

@@ -10,15 +10,15 @@
   fortran,
   zlibSupport ? true,
   zlib,
-  szipSupport ? false,
-  szip,
+  szipSupport ? true,
+  libaec,
   mpiSupport ? false,
   mpi,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   javaSupport ? false,
   jdk,
-  usev110Api ? false,
+  apiVersion ? null,
   threadsafe ? false,
   python3,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       zlibSupport
       zlib
       szipSupport
-      szip
+      libaec
       mpiSupport
       mpi
       ;
@@ -82,31 +82,28 @@ stdenv.mkDerivation rec {
   ++ optional fortranSupport fortran;
 
   buildInputs =
-    optional fortranSupport fortran ++ optional szipSupport szip ++ optional javaSupport jdk;
+    optional fortranSupport fortran ++ optional szipSupport libaec ++ optional javaSupport jdk;
 
   propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
 
   cmakeFlags = [
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
-    "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
+    (lib.cmakeBool "BUILD_STATIC_LIBS" enableStatic)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
+    (lib.cmakeBool "HDF5_BUILD_FORTRAN" fortranSupport)
+    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
+    (lib.cmakeBool "HDF5_ENABLE_PARALLEL" mpiSupport)
+    (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
+    (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
+    (lib.cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe))
+    # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
+    # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
+    (lib.cmakeBool "HDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16" (
+      with stdenv.hostPlatform; !(isDarwin && isx86_64)
+    ))
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
-  ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
-  ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
-  ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
-  ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
-  ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
-  ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
-  ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
-  ++ lib.optionals threadsafe [
-    "-DHDF5_ENABLE_THREADSAFE:BOOL=ON"
-    "-DHDF5_BUILD_HL_LIB=OFF"
-  ]
-  # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
-  # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
-  ++ lib.optional (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF";
+  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
@@ -118,17 +115,15 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5hlcc' "''${!outputDev}"
     moveToOutput 'bin/h5hlc++' "''${!outputDev}"
   ''
-  +
-    lib.optionalString enableShared
-      # The shared build creates binaries with -shared suffixes,
-      # so we remove these suffixes.
-      ''
-        pushd ''${!outputBin}/bin
-        for file in *-shared; do
-          mv "$file" "''${file%%-shared}"
-        done
-        popd
-      ''
+  # The shared build creates binaries with -shared suffixes,
+  # so we remove these suffixes.
+  + lib.optionalString enableShared ''
+    pushd ''${!outputBin}/bin
+    for file in *-shared; do
+      mv "$file" "''${file%%-shared}"
+    done
+    popd
+  ''
   + lib.optionalString fortranSupport ''
     mv $out/mod/shared $dev/include
     rm -r $out/mod

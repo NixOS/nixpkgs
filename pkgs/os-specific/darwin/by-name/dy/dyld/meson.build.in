@@ -71,7 +71,6 @@ lsl = static_library(
     ],
     include_directories : [
         common_inc,
-        'cache-builder',
         'cache_builder',
         'libdyld',
         'lsl',
@@ -174,7 +173,6 @@ libminidyld = static_library(
     dependencies : [ corecrypto_dep, lsl_dep ],
     include_directories : [
         common_inc,
-        'cache-builder',
         'cache_builder',
         'libdyld',
         'libdyld_introspection',
@@ -197,8 +195,8 @@ libdsc_extractor = shared_library(
     ],
     include_directories : [
         common_inc,
-        'cache-builder',
         'cache_builder',
+        'other-tools',
     ],
     install : true,
     link_args : [ '-Wl,-exported_symbol,_dyld_shared_cache_extract_dylibs_progress' ],
@@ -239,14 +237,13 @@ executable(
     ],
     include_directories : [
         common_inc,
-        'cache-builder',
         'cache_builder',
+        'other-tools',
     ],
     install : true,
     link_args : [ '-Wl,-weak-lLTO' ],
     link_with : [ libminidyld ],
     sources : [
-        'cache-builder/FileUtils.cpp',
         'common/Diagnostics.cpp',
         'common/DyldSharedCache.cpp',
         'common/MachOAnalyzer.cpp',
@@ -255,6 +252,7 @@ executable(
         'common/SwiftVisitor.cpp',
         'common/TargetPolicy.cpp',
         'other-tools/dyld_info.cpp',
+        'other-tools/FileUtils.cpp',
         'other-tools/MiscFileUtils.cpp',
         'other-tools/SymbolicatedImage.cpp',
     ],

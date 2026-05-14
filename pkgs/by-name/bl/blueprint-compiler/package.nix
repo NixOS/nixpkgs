@@ -12,6 +12,7 @@
   testers,
   wrapGAppsNoGuiHook,
   xvfb-run,
+  gnome,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueprint-compiler";
@@ -67,17 +68,22 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+      # regression test that `blueprint-compiler` can be used in a standalone
+      # context outside of nix builds, and doesn't rely on the setup hooks of
+      # its propagated inputs for basic functionality.
+      # see https://github.com/NixOS/nixpkgs/pull/400415
+      standalone = runCommand "blueprint-compiler-test-standalone" { } ''
+        ${lib.getExe finalAttrs.finalPackage} --help && touch $out
+      '';
     };
-    # regression test that `blueprint-compiler` can be used in a standalone
-    # context outside of nix builds, and doesn't rely on the setup hooks of
-    # its propagated inputs for basic functionality.
-    # see https://github.com/NixOS/nixpkgs/pull/400415
-    standalone = runCommand "blueprint-compiler-test-standalone" { } ''
-      ${lib.getExe finalAttrs.finalPackage} --help && touch $out
-    '';
+    updateScript = gnome.updateScript {
+      packageName = "blueprint-compiler";
+    };
   };
 
   meta = {
@@ -89,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       benediktbroich
       ranfdev
     ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
 })

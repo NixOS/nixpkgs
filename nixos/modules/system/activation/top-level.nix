@@ -42,7 +42,7 @@ let
 
     ${config.system.systemBuilderCommands}
 
-    cp "$extraDependenciesPath" "$out/extra-dependencies"
+    printf "%s" "$extraDependencies" > "$out/extra-dependencies"
 
     ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
       ${config.boot.bootspec.writer}
@@ -60,7 +60,6 @@ let
       name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
       preferLocalBuild = true;
       allowSubstitutes = false;
-      passAsFile = [ "extraDependencies" ];
       buildCommand = systemBuilder;
 
       systemd = config.systemd.package;
@@ -70,6 +69,9 @@ let
       inherit (config.system) extraDependencies;
     }
     // config.system.systemBuilderArgs
+    // {
+      __structuredAttrs = true;
+    }
   );
 
   # Handle assertions and warnings

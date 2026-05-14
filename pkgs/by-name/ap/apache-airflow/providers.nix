@@ -6,7 +6,7 @@
       "airflow.providers.airbyte"
       "airflow.providers.airbyte.get_provider_info"
     ];
-    version = "5.2.3";
+    version = "5.3.3";
   };
 
   alibaba = {
@@ -15,7 +15,7 @@
       "airflow.providers.alibaba"
       "airflow.providers.alibaba.get_provider_info"
     ];
-    version = "3.2.2";
+    version = "3.3.5";
   };
 
   amazon = {
@@ -29,17 +29,19 @@
       "jsonpath-ng"
       "lxml"
       "marshmallow"
+      "pandas"
       "pyathena"
       "python3-saml"
       "redshift-connector"
       "s3fs"
+      "sqlalchemy"
       "xmlsec"
     ];
     imports = [
       "airflow.providers.amazon"
       "airflow.providers.amazon.get_provider_info"
     ];
-    version = "9.13.0";
+    version = "9.23.0";
   };
 
   apache_beam = {
@@ -52,7 +54,7 @@
       "airflow.providers.apache.beam"
       "airflow.providers.apache.beam.get_provider_info"
     ];
-    version = "6.1.4";
+    version = "6.2.3";
   };
 
   apache_cassandra = {
@@ -61,7 +63,7 @@
       "airflow.providers.apache.cassandra"
       "airflow.providers.apache.cassandra.get_provider_info"
     ];
-    version = "3.8.2";
+    version = "3.9.2";
   };
 
   apache_drill = {
@@ -70,7 +72,7 @@
       "airflow.providers.apache.drill"
       "airflow.providers.apache.drill.get_provider_info"
     ];
-    version = "3.1.2";
+    version = "3.3.0";
   };
 
   apache_druid = {
@@ -79,7 +81,7 @@
       "airflow.providers.apache.druid"
       "airflow.providers.apache.druid.get_provider_info"
     ];
-    version = "4.3.0";
+    version = "4.5.0";
   };
 
   apache_flink = {
@@ -88,11 +90,12 @@
       "airflow.providers.apache.flink"
       "airflow.providers.apache.flink.get_provider_info"
     ];
-    version = "1.7.2";
+    version = "1.8.3";
   };
 
   apache_hdfs = {
     deps = [
+      "fastavro"
       "hdfs"
       "pandas"
     ];
@@ -100,20 +103,21 @@
       "airflow.providers.apache.hdfs"
       "airflow.providers.apache.hdfs.get_provider_info"
     ];
-    version = "4.10.2";
+    version = "4.11.3";
   };
 
   apache_hive = {
     deps = [
       "jmespath"
+      "kerberos"
       "pandas"
-      "thrift"
+      "sqlalchemy"
     ];
     imports = [
       "airflow.providers.apache.hive"
       "airflow.providers.apache.hive.get_provider_info"
     ];
-    version = "9.1.2";
+    version = "9.4.0";
   };
 
   apache_iceberg = {
@@ -122,16 +126,19 @@
       "airflow.providers.apache.iceberg"
       "airflow.providers.apache.iceberg.get_provider_info"
     ];
-    version = "1.3.2";
+    version = "2.0.0";
   };
 
   apache_impala = {
-    deps = [ "kerberos" ];
+    deps = [
+      "kerberos"
+      "sqlalchemy"
+    ];
     imports = [
       "airflow.providers.apache.impala"
       "airflow.providers.apache.impala.get_provider_info"
     ];
-    version = "1.7.2";
+    version = "1.9.0";
   };
 
   apache_kafka = {
@@ -143,7 +150,7 @@
       "airflow.providers.apache.kafka"
       "airflow.providers.apache.kafka.get_provider_info"
     ];
-    version = "1.10.3";
+    version = "1.13.0";
   };
 
   apache_kylin = {
@@ -152,19 +159,16 @@
       "airflow.providers.apache.kylin"
       "airflow.providers.apache.kylin.get_provider_info"
     ];
-    version = "3.9.2";
+    version = "3.10.2";
   };
 
   apache_livy = {
-    deps = [
-      "aiohttp"
-      "asgiref"
-    ];
+    deps = [ "aiohttp" ];
     imports = [
       "airflow.providers.apache.livy"
       "airflow.providers.apache.livy.get_provider_info"
     ];
-    version = "4.4.2";
+    version = "4.5.3";
   };
 
   apache_pig = {
@@ -173,7 +177,7 @@
       "airflow.providers.apache.pig"
       "airflow.providers.apache.pig.get_provider_info"
     ];
-    version = "4.7.2";
+    version = "4.8.2";
   };
 
   apache_pinot = {
@@ -182,7 +186,7 @@
       "airflow.providers.apache.pinot"
       "airflow.providers.apache.pinot.get_provider_info"
     ];
-    version = "4.8.2";
+    version = "4.10.0";
   };
 
   apache_spark = {
@@ -194,7 +198,7 @@
       "airflow.providers.apache.spark"
       "airflow.providers.apache.spark.get_provider_info"
     ];
-    version = "5.3.2";
+    version = "5.6.0";
   };
 
   apache_tinkerpop = {
@@ -203,7 +207,7 @@
       "airflow.providers.apache.tinkerpop"
       "airflow.providers.apache.tinkerpop.get_provider_info"
     ];
-    version = "1.0.3";
+    version = "1.1.1";
   };
 
   apprise = {
@@ -212,7 +216,7 @@
       "airflow.providers.apprise"
       "airflow.providers.apprise.get_provider_info"
     ];
-    version = "2.1.2";
+    version = "2.3.1";
   };
 
   arangodb = {
@@ -221,7 +225,7 @@
       "airflow.providers.arangodb"
       "airflow.providers.arangodb.get_provider_info"
     ];
-    version = "2.8.2";
+    version = "2.9.2";
   };
 
   asana = {
@@ -230,7 +234,7 @@
       "airflow.providers.asana"
       "airflow.providers.asana.get_provider_info"
     ];
-    version = "2.10.2";
+    version = "2.11.1";
   };
 
   atlassian_jira = {
@@ -239,7 +243,7 @@
       "airflow.providers.atlassian.jira"
       "airflow.providers.atlassian.jira.get_provider_info"
     ];
-    version = "3.1.2";
+    version = "3.3.1";
   };
 
   celery = {
@@ -251,7 +255,7 @@
       "airflow.providers.celery"
       "airflow.providers.celery.get_provider_info"
     ];
-    version = "3.12.3";
+    version = "3.17.1";
   };
 
   cloudant = {
@@ -260,7 +264,7 @@
       "airflow.providers.cloudant"
       "airflow.providers.cloudant.get_provider_info"
     ];
-    version = "4.2.2";
+    version = "4.3.2";
   };
 
   cncf_kubernetes = {
@@ -276,25 +280,40 @@
       "airflow.providers.cncf.kubernetes"
       "airflow.providers.cncf.kubernetes.get_provider_info"
     ];
-    version = "10.8.0";
+    version = "10.14.0";
   };
 
   cohere = {
-    deps = [ "cohere" ];
+    deps = [
+      "cohere"
+      "fastavro"
+    ];
     imports = [
       "airflow.providers.cohere"
       "airflow.providers.cohere.get_provider_info"
     ];
-    version = "1.5.3";
+    version = "1.6.3";
+  };
+
+  common_ai = {
+    deps = [
+      "pydantic-ai-slim"
+      "sqlglot"
+    ];
+    imports = [
+      "airflow.providers.common.ai"
+      "airflow.providers.common.ai.get_provider_info"
+    ];
+    version = "0.0.1";
   };
 
   common_compat = {
-    deps = [ ];
+    deps = [ "asgiref" ];
     imports = [
       "airflow.providers.common.compat"
       "airflow.providers.common.compat.get_provider_info"
     ];
-    version = "1.7.4";
+    version = "1.14.1";
   };
 
   common_io = {
@@ -303,7 +322,7 @@
       "airflow.providers.common.io"
       "airflow.providers.common.io.get_provider_info"
     ];
-    version = "1.6.3";
+    version = "1.7.1";
   };
 
   common_messaging = {
@@ -312,22 +331,25 @@
       "airflow.providers.common.messaging"
       "airflow.providers.common.messaging.get_provider_info"
     ];
-    version = "2.0.0";
+    version = "2.0.2";
   };
 
   common_sql = {
     deps = [
+      "datafusion"
       "methodtools"
       "more-itertools"
       "pandas"
       "polars"
+      "pyiceberg-core"
+      "sqlalchemy"
       "sqlparse"
     ];
     imports = [
       "airflow.providers.common.sql"
       "airflow.providers.common.sql.get_provider_info"
     ];
-    version = "1.28.1";
+    version = "1.33.0";
   };
 
   databricks = {
@@ -336,6 +358,7 @@
       "azure-identity"
       "databricks-sdk"
       "databricks-sql-connector"
+      "fastavro"
       "mergedeep"
       "pandas"
       "pyarrow"
@@ -345,7 +368,7 @@
       "airflow.providers.databricks"
       "airflow.providers.databricks.get_provider_info"
     ];
-    version = "7.7.2";
+    version = "7.11.0";
   };
 
   datadog = {
@@ -354,19 +377,20 @@
       "airflow.providers.datadog"
       "airflow.providers.datadog.get_provider_info"
     ];
-    version = "3.9.2";
+    version = "3.10.2";
   };
 
   dbt_cloud = {
     deps = [
       "aiohttp"
       "asgiref"
+      "tenacity"
     ];
     imports = [
       "airflow.providers.dbt.cloud"
       "airflow.providers.dbt.cloud.get_provider_info"
     ];
-    version = "4.4.3";
+    version = "4.7.0";
   };
 
   dingding = {
@@ -375,7 +399,7 @@
       "airflow.providers.dingding"
       "airflow.providers.dingding.get_provider_info"
     ];
-    version = "3.8.2";
+    version = "3.9.2";
   };
 
   discord = {
@@ -384,7 +408,7 @@
       "airflow.providers.discord"
       "airflow.providers.discord.get_provider_info"
     ];
-    version = "3.10.2";
+    version = "3.12.0";
   };
 
   docker = {
@@ -396,11 +420,13 @@
       "airflow.providers.docker"
       "airflow.providers.docker.get_provider_info"
     ];
-    version = "4.4.2";
+    version = "4.5.3";
   };
 
   edge3 = {
     deps = [
+      "aiofiles"
+      "aiohttp"
       "pydantic"
       "retryhttp"
     ];
@@ -408,7 +434,7 @@
       "airflow.providers.edge3"
       "airflow.providers.edge3.get_provider_info"
     ];
-    version = "1.2.0";
+    version = "3.2.0";
   };
 
   elasticsearch = {
@@ -417,30 +443,36 @@
       "airflow.providers.elasticsearch"
       "airflow.providers.elasticsearch.get_provider_info"
     ];
-    version = "6.3.2";
+    version = "6.5.0";
   };
 
   exasol = {
-    deps = [ "pandas" ];
+    deps = [
+      "pandas"
+      "sqlalchemy"
+    ];
     imports = [
       "airflow.providers.exasol"
       "airflow.providers.exasol.get_provider_info"
     ];
-    version = "4.8.2";
+    version = "4.10.0";
   };
 
   fab = {
     deps = [
       "blinker"
-      "connexion"
+      "cachetools"
       "flask"
       "flask-appbuilder"
       "flask-limiter"
       "flask-login"
       "flask-session"
+      "flask-sqlalchemy"
       "flask-wtf"
       "jmespath"
       "kerberos"
+      "marshmallow"
+      "msgpack"
       "werkzeug"
       "wtforms"
     ];
@@ -448,7 +480,7 @@
       "airflow.providers.fab"
       "airflow.providers.fab.get_provider_info"
     ];
-    version = "2.4.2";
+    version = "3.5.0";
   };
 
   facebook = {
@@ -457,7 +489,7 @@
       "airflow.providers.facebook"
       "airflow.providers.facebook.get_provider_info"
     ];
-    version = "3.8.2";
+    version = "3.9.2";
   };
 
   ftp = {
@@ -466,7 +498,7 @@
       "airflow.providers.ftp"
       "airflow.providers.ftp.get_provider_info"
     ];
-    version = "3.13.2";
+    version = "3.14.1";
   };
 
   git = {
@@ -475,7 +507,7 @@
       "airflow.providers.git"
       "airflow.providers.git.get_provider_info"
     ];
-    version = "0.0.7";
+    version = "0.2.4";
   };
 
   github = {
@@ -484,12 +516,11 @@
       "airflow.providers.github"
       "airflow.providers.github.get_provider_info"
     ];
-    version = "2.9.2";
+    version = "2.11.0";
   };
 
   google = {
     deps = [
-      "apache-beam"
       "asgiref"
       "dill"
       "gcsfs"
@@ -531,7 +562,6 @@
       "plyvel"
       "proto-plus"
       "pyarrow"
-      "pyopenssl"
       "python-slugify"
       "ray"
       "tenacity"
@@ -541,7 +571,7 @@
       "airflow.providers.google"
       "airflow.providers.google.get_provider_info"
     ];
-    version = "17.2.0";
+    version = "21.0.0";
   };
 
   grpc = {
@@ -554,7 +584,7 @@
       "airflow.providers.grpc"
       "airflow.providers.grpc.get_provider_info"
     ];
-    version = "3.8.2";
+    version = "3.9.2";
   };
 
   hashicorp = {
@@ -566,7 +596,7 @@
       "airflow.providers.hashicorp"
       "airflow.providers.hashicorp.get_provider_info"
     ];
-    version = "4.3.2";
+    version = "4.5.0";
   };
 
   http = {
@@ -580,7 +610,7 @@
       "airflow.providers.http"
       "airflow.providers.http.get_provider_info"
     ];
-    version = "5.3.4";
+    version = "6.0.0";
   };
 
   imap = {
@@ -589,7 +619,7 @@
       "airflow.providers.imap"
       "airflow.providers.imap.get_provider_info"
     ];
-    version = "3.9.2";
+    version = "3.11.0";
   };
 
   influxdb = {
@@ -601,7 +631,16 @@
       "airflow.providers.influxdb"
       "airflow.providers.influxdb.get_provider_info"
     ];
-    version = "2.9.3";
+    version = "2.10.2";
+  };
+
+  informatica = {
+    deps = [ ];
+    imports = [
+      "airflow.providers.informatica"
+      "airflow.providers.informatica.get_provider_info"
+    ];
+    version = "0.1.1";
   };
 
   jdbc = {
@@ -610,7 +649,7 @@
       "airflow.providers.jdbc"
       "airflow.providers.jdbc.get_provider_info"
     ];
-    version = "5.2.3";
+    version = "5.4.1";
   };
 
   jenkins = {
@@ -619,7 +658,7 @@
       "airflow.providers.jenkins"
       "airflow.providers.jenkins.get_provider_info"
     ];
-    version = "4.1.2";
+    version = "4.2.3";
   };
 
   keycloak = {
@@ -628,12 +667,11 @@
       "airflow.providers.keycloak"
       "airflow.providers.keycloak.get_provider_info"
     ];
-    version = "0.1.0";
+    version = "0.6.0";
   };
 
   microsoft_azure = {
     deps = [
-      "adal"
       "adlfs"
       "azure-batch"
       "azure-cosmos"
@@ -641,6 +679,7 @@
       "azure-identity"
       "azure-keyvault-secrets"
       "azure-kusto-data"
+      "azure-mgmt-compute"
       "azure-mgmt-containerinstance"
       "azure-mgmt-containerregistry"
       "azure-mgmt-cosmosdb"
@@ -666,7 +705,7 @@
       "airflow.providers.microsoft.azure"
       "airflow.providers.microsoft.azure.get_provider_info"
     ];
-    version = "12.7.0";
+    version = "13.0.1";
   };
 
   microsoft_mssql = {
@@ -678,7 +717,7 @@
       "airflow.providers.microsoft.mssql"
       "airflow.providers.microsoft.mssql.get_provider_info"
     ];
-    version = "4.3.2";
+    version = "4.5.0";
   };
 
   microsoft_psrp = {
@@ -687,7 +726,7 @@
       "airflow.providers.microsoft.psrp"
       "airflow.providers.microsoft.psrp.get_provider_info"
     ];
-    version = "3.1.2";
+    version = "3.2.3";
   };
 
   microsoft_winrm = {
@@ -696,7 +735,7 @@
       "airflow.providers.microsoft.winrm"
       "airflow.providers.microsoft.winrm.get_provider_info"
     ];
-    version = "3.11.0";
+    version = "3.14.0";
   };
 
   mongo = {
@@ -708,7 +747,7 @@
       "airflow.providers.mongo"
       "airflow.providers.mongo.get_provider_info"
     ];
-    version = "5.2.2";
+    version = "5.3.3";
   };
 
   mysql = {
@@ -720,7 +759,7 @@
       "airflow.providers.mysql"
       "airflow.providers.mysql.get_provider_info"
     ];
-    version = "6.3.4";
+    version = "6.5.0";
   };
 
   neo4j = {
@@ -729,7 +768,7 @@
       "airflow.providers.neo4j"
       "airflow.providers.neo4j.get_provider_info"
     ];
-    version = "3.10.1";
+    version = "3.11.3";
   };
 
   odbc = {
@@ -738,7 +777,7 @@
       "airflow.providers.odbc"
       "airflow.providers.odbc.get_provider_info"
     ];
-    version = "4.10.2";
+    version = "4.12.0";
   };
 
   openai = {
@@ -747,7 +786,7 @@
       "airflow.providers.openai"
       "airflow.providers.openai.get_provider_info"
     ];
-    version = "1.6.2";
+    version = "1.7.2";
   };
 
   openfaas = {
@@ -756,16 +795,19 @@
       "airflow.providers.openfaas"
       "airflow.providers.openfaas.get_provider_info"
     ];
-    version = "3.8.2";
+    version = "3.9.2";
   };
 
   openlineage = {
-    deps = [ "attrs" ];
+    deps = [
+      "attrs"
+      "sqlalchemy"
+    ];
     imports = [
       "airflow.providers.openlineage"
       "airflow.providers.openlineage.get_provider_info"
     ];
-    version = "2.7.0";
+    version = "2.12.0";
   };
 
   opensearch = {
@@ -774,7 +816,7 @@
       "airflow.providers.opensearch"
       "airflow.providers.opensearch.get_provider_info"
     ];
-    version = "1.7.2";
+    version = "1.8.4";
   };
 
   opsgenie = {
@@ -783,7 +825,7 @@
       "airflow.providers.opsgenie"
       "airflow.providers.opsgenie.get_provider_info"
     ];
-    version = "5.9.2";
+    version = "5.10.1";
   };
 
   oracle = {
@@ -795,7 +837,7 @@
       "airflow.providers.oracle"
       "airflow.providers.oracle.get_provider_info"
     ];
-    version = "4.2.0";
+    version = "4.5.1";
   };
 
   pagerduty = {
@@ -804,7 +846,7 @@
       "airflow.providers.pagerduty"
       "airflow.providers.pagerduty.get_provider_info"
     ];
-    version = "5.0.2";
+    version = "5.2.3";
   };
 
   papermill = {
@@ -818,7 +860,7 @@
       "airflow.providers.papermill"
       "airflow.providers.papermill.get_provider_info"
     ];
-    version = "3.11.2";
+    version = "3.12.1";
   };
 
   pgvector = {
@@ -827,7 +869,7 @@
       "airflow.providers.pgvector"
       "airflow.providers.pgvector.get_provider_info"
     ];
-    version = "1.5.2";
+    version = "1.7.0";
   };
 
   pinecone = {
@@ -836,7 +878,7 @@
       "airflow.providers.pinecone"
       "airflow.providers.pinecone.get_provider_info"
     ];
-    version = "2.3.4";
+    version = "2.4.2";
   };
 
   postgres = {
@@ -846,24 +888,27 @@
       "polars"
       "psycopg"
       "psycopg2-binary"
+      "sqlalchemy"
     ];
     imports = [
       "airflow.providers.postgres"
       "airflow.providers.postgres.get_provider_info"
     ];
-    version = "6.3.0";
+    version = "6.6.1";
   };
 
   presto = {
     deps = [
       "pandas"
       "presto-python-client"
+      "psycopg2-binary"
+      "sqlalchemy"
     ];
     imports = [
       "airflow.providers.presto"
       "airflow.providers.presto.get_provider_info"
     ];
-    version = "5.9.2";
+    version = "5.11.0";
   };
 
   qdrant = {
@@ -872,7 +917,7 @@
       "airflow.providers.qdrant"
       "airflow.providers.qdrant.get_provider_info"
     ];
-    version = "1.4.3";
+    version = "1.5.3";
   };
 
   redis = {
@@ -881,7 +926,7 @@
       "airflow.providers.redis"
       "airflow.providers.redis.get_provider_info"
     ];
-    version = "4.3.0";
+    version = "4.4.2";
   };
 
   salesforce = {
@@ -893,7 +938,7 @@
       "airflow.providers.salesforce"
       "airflow.providers.salesforce.get_provider_info"
     ];
-    version = "5.11.3";
+    version = "5.12.3";
   };
 
   samba = {
@@ -902,7 +947,7 @@
       "airflow.providers.samba"
       "airflow.providers.samba.get_provider_info"
     ];
-    version = "4.11.0";
+    version = "4.12.3";
   };
 
   segment = {
@@ -911,7 +956,7 @@
       "airflow.providers.segment"
       "airflow.providers.segment.get_provider_info"
     ];
-    version = "3.8.2";
+    version = "3.9.2";
   };
 
   sendgrid = {
@@ -923,7 +968,7 @@
       "airflow.providers.sendgrid"
       "airflow.providers.sendgrid.get_provider_info"
     ];
-    version = "4.1.3";
+    version = "4.2.1";
   };
 
   sftp = {
@@ -931,12 +976,13 @@
       "asyncssh"
       "paramiko"
       "pysftp"
+      "sshfs"
     ];
     imports = [
       "airflow.providers.sftp"
       "airflow.providers.sftp.get_provider_info"
     ];
-    version = "5.4.0";
+    version = "5.7.1";
   };
 
   singularity = {
@@ -945,31 +991,35 @@
       "airflow.providers.singularity"
       "airflow.providers.singularity.get_provider_info"
     ];
-    version = "3.8.2";
+    version = "3.9.2";
   };
 
   slack = {
-    deps = [ "slack-sdk" ];
+    deps = [
+      "asgiref"
+      "slack-sdk"
+    ];
     imports = [
       "airflow.providers.slack"
       "airflow.providers.slack.get_provider_info"
     ];
-    version = "9.2.0";
+    version = "9.8.0";
   };
 
   smtp = {
-    deps = [ ];
+    deps = [ "aiosmtplib" ];
     imports = [
       "airflow.providers.smtp"
       "airflow.providers.smtp.get_provider_info"
     ];
-    version = "2.3.1";
+    version = "2.4.3";
   };
 
   snowflake = {
     deps = [
       "pandas"
       "pyarrow"
+      "setuptools"
       "snowflake-connector-python"
       "snowflake-sqlalchemy"
     ];
@@ -977,7 +1027,7 @@
       "airflow.providers.snowflake"
       "airflow.providers.snowflake.get_provider_info"
     ];
-    version = "6.5.3";
+    version = "6.11.0";
   };
 
   sqlite = {
@@ -986,11 +1036,12 @@
       "airflow.providers.sqlite"
       "airflow.providers.sqlite.get_provider_info"
     ];
-    version = "4.1.2";
+    version = "4.3.0";
   };
 
   ssh = {
     deps = [
+      "asyncssh"
       "paramiko"
       "sshtunnel"
     ];
@@ -998,7 +1049,7 @@
       "airflow.providers.ssh"
       "airflow.providers.ssh.get_provider_info"
     ];
-    version = "4.1.3";
+    version = "4.3.2";
   };
 
   standard = {
@@ -1007,7 +1058,7 @@
       "airflow.providers.standard"
       "airflow.providers.standard.get_provider_info"
     ];
-    version = "1.9.0";
+    version = "1.12.1";
   };
 
   tableau = {
@@ -1016,7 +1067,7 @@
       "airflow.providers.tableau"
       "airflow.providers.tableau.get_provider_info"
     ];
-    version = "5.2.0";
+    version = "5.3.3";
   };
 
   telegram = {
@@ -1025,16 +1076,16 @@
       "airflow.providers.telegram"
       "airflow.providers.telegram.get_provider_info"
     ];
-    version = "4.8.2";
+    version = "4.9.2";
   };
 
   teradata = {
-    deps = [ ];
+    deps = [ "sqlalchemy" ];
     imports = [
       "airflow.providers.teradata"
       "airflow.providers.teradata.get_provider_info"
     ];
-    version = "3.2.1";
+    version = "3.5.0";
   };
 
   trino = {
@@ -1043,16 +1094,19 @@
       "airflow.providers.trino"
       "airflow.providers.trino.get_provider_info"
     ];
-    version = "6.3.3";
+    version = "6.5.0";
   };
 
   vertica = {
-    deps = [ "vertica-python" ];
+    deps = [
+      "sqlalchemy"
+      "vertica-python"
+    ];
     imports = [
       "airflow.providers.vertica"
       "airflow.providers.vertica.get_provider_info"
     ];
-    version = "4.1.2";
+    version = "4.3.0";
   };
 
   weaviate = {
@@ -1065,16 +1119,16 @@
       "airflow.providers.weaviate"
       "airflow.providers.weaviate.get_provider_info"
     ];
-    version = "3.2.3";
+    version = "3.3.1";
   };
 
   yandex = {
-    deps = [ ];
+    deps = [ "grpcio" ];
     imports = [
       "airflow.providers.yandex"
       "airflow.providers.yandex.get_provider_info"
     ];
-    version = "4.2.0";
+    version = "4.4.0";
   };
 
   ydb = {
@@ -1083,7 +1137,7 @@
       "airflow.providers.ydb"
       "airflow.providers.ydb.get_provider_info"
     ];
-    version = "2.2.2";
+    version = "2.5.0";
   };
 
   zendesk = {
@@ -1092,7 +1146,7 @@
       "airflow.providers.zendesk"
       "airflow.providers.zendesk.get_provider_info"
     ];
-    version = "4.10.2";
+    version = "4.11.1";
   };
 
 }

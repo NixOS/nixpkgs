@@ -1426,9 +1426,7 @@ with pkgs;
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
-  crystfel = callPackage ../applications/science/physics/crystfel { };
-
-  crystfel-headless = callPackage ../applications/science/physics/crystfel { withGui = false; };
+  crystfel-headless = crystfel.override { withGui = false; };
 
   amule-daemon = amule.override {
     monolithic = false;
@@ -1519,12 +1517,12 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
-  pass-nodmenu = callPackage ../tools/security/pass {
+  pass-nodmenu = pass.override {
     dmenuSupport = false;
     pass = pass-nodmenu;
   };
 
-  pass-wayland = callPackage ../tools/security/pass {
+  pass-wayland = pass.override {
     waylandSupport = true;
     pass = pass-wayland;
   };
@@ -2438,9 +2436,7 @@ with pkgs;
     callPackage ../tools/misc/graylog/plugins.nix { graylogPackage = graylog-6_0; }
   );
 
-  graphviz = callPackage ../tools/graphics/graphviz { };
-
-  graphviz-nox = callPackage ../tools/graphics/graphviz {
+  graphviz-nox = graphviz.override {
     withXorg = false;
   };
 
@@ -2662,7 +2658,7 @@ with pkgs;
   };
 
   medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5.override { usev110Api = true; };
+    hdf5 = hdf5.override { apiVersion = "v110"; };
   };
 
   mhonarc = perlPackages.MHonArc;
@@ -2714,12 +2710,12 @@ with pkgs;
   nodejs_24 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_24; };
   corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_24; };
 
-  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { };
-  nodejs_25 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_25; };
+  nodejs-slim_26 = callPackage ../development/web/nodejs/v26.nix { };
+  nodejs_26 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_26; };
 
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_25;
-  nodejs-slim_latest = nodejs-slim_25;
+  nodejs_latest = nodejs_26;
+  nodejs-slim_latest = nodejs-slim_26;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -2744,8 +2740,7 @@ with pkgs;
     ;
   lerna = lerna_8;
 
-  libint = callPackage ../development/libraries/libint { };
-  libintPsi4 = callPackage ../development/libraries/libint {
+  libintPsi4 = libint.override {
     enableFortran = false;
     enableSSE = false;
     maxAm = 6;
@@ -2817,9 +2812,7 @@ with pkgs;
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
 
-  miniupnpd = callPackage ../tools/networking/miniupnpd { };
-
-  miniupnpd-nftables = callPackage ../tools/networking/miniupnpd { firewall = "nftables"; };
+  miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
 
   mir-qualia = callPackage ../tools/text/mir-qualia {
     pythonPackages = python3Packages;
@@ -2841,9 +2834,7 @@ with pkgs;
 
   metasploit = callPackage ../tools/security/metasploit { };
 
-  mtr = callPackage ../tools/networking/mtr { };
-
-  mtr-gui = callPackage ../tools/networking/mtr { withGtk = true; };
+  mtr-gui = mtr.override { withGtk = true; };
 
   multitran = recurseIntoAttrs (
     let
@@ -2871,7 +2862,7 @@ with pkgs;
   maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
   netcdf-mpi = netcdf.override {
-    hdf5 = hdf5-mpi.override { usev110Api = true; };
+    hdf5 = hdf5-mpi.override { apiVersion = "v110"; };
   };
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
@@ -3330,9 +3321,7 @@ with pkgs;
     w3m = w3m-batch;
   };
 
-  tartube = callPackage ../applications/video/tartube { };
-
-  tartube-yt-dlp = callPackage ../applications/video/tartube {
+  tartube-yt-dlp = tartube.override {
     youtube-dl = yt-dlp;
   };
 
@@ -4486,15 +4475,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_94 = callPackage ../development/compilers/rust/1_94.nix { };
-  rust = rust_1_94;
+  rust_1_95 = callPackage ../development/compilers/rust/1_95.nix { };
+  rust = rust_1_95;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_94 = rust_1_94.packages.stable;
-  rustPackages = rustPackages_1_94;
+  rustPackages_1_95 = rust_1_95.packages.stable;
+  rustPackages = rustPackages_1_95;
 
   inherit (rustPackages)
     cargo
@@ -4702,8 +4691,7 @@ with pkgs;
 
   ### DEVELOPMENT / INTERPRETERS
 
-  acl2 = callPackage ../development/interpreters/acl2 { };
-  acl2-minimal = callPackage ../development/interpreters/acl2 { certifyBooks = false; };
+  acl2-minimal = acl2.override { certifyBooks = false; };
 
   uiua-unstable = callPackage ../by-name/ui/uiua/package.nix { uiua_versionType = "unstable"; };
 
@@ -5614,8 +5602,6 @@ with pkgs;
 
   m4 = gnum4;
 
-  gnumake = callPackage ../development/tools/build-managers/gnumake { };
-
   gradle-packages = callPackage ../development/tools/build-managers/gradle { };
 
   gradle_7-unwrapped = gradle-packages.gradle_7;
@@ -5715,9 +5701,7 @@ with pkgs;
     _7zz = _7zz-rar;
   };
 
-  nwjs = callPackage ../development/tools/nwjs { };
-
-  nwjs-sdk = callPackage ../development/tools/nwjs {
+  nwjs-sdk = nwjs.override {
     sdk = true;
   };
 
@@ -6200,6 +6184,8 @@ with pkgs;
       }
   );
 
+  jsoncppSecureMemory = jsoncpp.override { secureMemory = true; };
+
   mtrace = callPackage ../development/libraries/glibc/mtrace.nix { };
 
   # Provided by libc on Operating Systems that use the Extensible Linker Format.
@@ -6652,11 +6638,11 @@ with pkgs;
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
-  libubox-nossl = callPackage ../development/libraries/libubox { };
+  libubox-nossl = libubox.override { with_ustream_ssl = false; };
 
   libubox = callPackage ../development/libraries/libubox { with_ustream_ssl = true; };
 
-  libubox-mbedtls = callPackage ../development/libraries/libubox {
+  libubox-mbedtls = libubox.override {
     with_ustream_ssl = true;
     ustream-ssl = ustream-ssl-mbedtls;
   };
@@ -7005,9 +6991,8 @@ with pkgs;
     openssl_4_0
     ;
 
-  pcre = callPackage ../development/libraries/pcre { };
   # pcre32 seems unused
-  pcre-cpp = res.pcre.override { variant = "cpp"; };
+  pcre-cpp = pcre.override { variant = "cpp"; };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
@@ -7088,9 +7073,7 @@ with pkgs;
 
   qdjango = libsForQt5.callPackage ../development/libraries/qdjango { };
 
-  quarto = callPackage ../development/libraries/quarto { };
-
-  quartoMinimal = callPackage ../development/libraries/quarto {
+  quartoMinimal = quarto.override {
     rWrapper = null;
     python3 = null;
   };
@@ -7359,7 +7342,7 @@ with pkgs;
   };
 
   vigra = callPackage ../development/libraries/vigra {
-    hdf5 = hdf5.override { usev110Api = true; };
+    hdf5 = hdf5.override { apiVersion = "v110"; };
   };
 
   vte-gtk4 = vte.override {
@@ -7622,14 +7605,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_1 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.1"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_3 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.3"; };
 
@@ -7639,7 +7614,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_3;
+  sbcl_2_6_4 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.4"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_4;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -7964,9 +7947,7 @@ with pkgs;
 
   lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix { };
 
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
-    nodejs = nodejs_20;
-  };
+  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
 
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
@@ -8357,13 +8338,11 @@ with pkgs;
 
   i7z = qt5.callPackage ../os-specific/linux/i7z { };
 
-  ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal { };
-
-  ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
+  ipu6ep-camera-hal = ipu6-camera-hal.override {
     ipuVersion = "ipu6ep";
   };
 
-  ipu6epmtl-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
+  ipu6epmtl-camera-hal = ipu6-camera-hal.override {
     ipuVersion = "ipu6epmtl";
   };
 
@@ -8444,17 +8423,15 @@ with pkgs;
 
   cryptodev = linuxPackages.cryptodev;
 
-  librealsense = callPackage ../development/libraries/librealsense { };
-
-  librealsenseWithCuda = callPackage ../development/libraries/librealsense {
+  librealsenseWithCuda = librealsense.override {
     cudaSupport = true;
   };
 
-  librealsenseWithoutCuda = callPackage ../development/libraries/librealsense {
+  librealsenseWithoutCuda = librealsense.override {
     cudaSupport = false;
   };
 
-  librealsense-gui = callPackage ../development/libraries/librealsense {
+  librealsense-gui = librealsense.override {
     enableGUI = true;
   };
 
@@ -8595,11 +8572,6 @@ with pkgs;
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
-    # provide a super minimal gnupg used for systemd-machined
-    gnupg = gnupg.override {
-      enableMinimal = true;
-      guiSupport = false;
-    };
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
@@ -9551,13 +9523,11 @@ with pkgs;
     callPackages ../applications/graphics/inkscape/extensions.nix { }
   );
 
-  jabcode = callPackage ../development/libraries/jabcode { };
-
-  jabcode-writer = callPackage ../development/libraries/jabcode {
+  jabcode-writer = jabcode.override {
     subproject = "writer";
   };
 
-  jabcode-reader = callPackage ../development/libraries/jabcode {
+  jabcode-reader = jabcode.override {
     subproject = "reader";
   };
 
@@ -9818,9 +9788,7 @@ with pkgs;
 
   pijuice = with python3Packages; toPythonApplication pijuice;
 
-  pinegrow6 = callPackage ../applications/editors/pinegrow { pinegrowVersion = "6"; };
-
-  pinegrow = callPackage ../applications/editors/pinegrow { };
+  pinegrow6 = pinegrow.override { pinegrowVersion = "6"; };
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
 
@@ -9878,9 +9846,7 @@ with pkgs;
 
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
 
-  nufraw = callPackage ../applications/graphics/nufraw { };
-
-  nufraw-thumbnailer = callPackage ../applications/graphics/nufraw {
+  nufraw-thumbnailer = nufraw.override {
     addThumbnailer = true;
   };
 
@@ -9926,9 +9892,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  pantalaimon = callPackage ../applications/networking/instant-messengers/pantalaimon { };
-
-  pantalaimon-headless = callPackage ../applications/networking/instant-messengers/pantalaimon {
+  pantalaimon-headless = pantalaimon.override {
     enableDbusUi = false;
   };
 
@@ -10087,7 +10051,7 @@ with pkgs;
   rke2 = rke2_stable;
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
-  rofi-pass-wayland = callPackage ../tools/security/pass/rofi-pass.nix {
+  rofi-pass-wayland = rofi-pass.override {
     backend = "wayland";
   };
 

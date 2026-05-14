@@ -195,8 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OpenMathLib/OpenBLAS/commit/7086a1b075ca317e12cfe79d40a32ad342a30496.patch";
       hash = "sha256-pA3HK2f2MJr/+h/uale7edIYk/KH194EscYFcsujPXY=";
     })
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # This commit led to miscompilation of certain ASIMD extensions code paths.
     # There was an attempted fix in upstream but this still leaves some scipy tests failing.
     (fetchpatch {

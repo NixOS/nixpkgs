@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cadwyn";
-  version = "6.0.1";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zmievsa";
     repo = "cadwyn";
     tag = finalAttrs.version;
-    hash = "sha256-wvwR4JCPvWoWSdkK61oDmQWNq2UnDZMRlWxo1GLznjk=";
+    hash = "sha256-vkW3ZSIRuIDVQCHMsZrBEs+VBW55kn0dE2nMXqL5XmU=";
   };
 
   disabled = pythonAtLeast "3.14";

@@ -2,9 +2,9 @@
   lib,
   bison,
   bluez,
-  fetchFromGitHub,
   flex,
   mkAppleDerivation,
+  sourceRelease,
   stdenv,
   stdenvNoCC,
   unifdef,
@@ -14,13 +14,7 @@
 }:
 
 let
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  xnu = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "xnu";
-    rev = "xnu-11417.121.6";
-    hash = "sha256-o4tCuCAIgAYg/Li3wTs12mVWr5C/4vbwu1zi+kJ9d6w=";
-  };
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "libpcap-deps-private-headers";
@@ -32,7 +26,9 @@ let
       unifdef -x 1 -DPRIVATE -o "$out/include/net/droptap.h" '${xnu}/bsd/net/droptap.h'
       unifdef -x 1 -DPRIVATE -o "$out/include/net/iptap.h" '${xnu}/bsd/net/iptap.h'
       unifdef -x 1 -DPRIVATE -o "$out/include/net/pktap.h" '${xnu}/bsd/net/pktap.h'
-      unifdef -x 1 -DPRIVATE -o "$out/include/net/bpf.h" '${xnu}/bsd/net/bpf.h'
+      unifdef -x 1 -DPRIVATE -UMODULES_SUPPORTED -o "$out/include/net/bpf.h" '${xnu}/bsd/net/bpf.h'
+      install -D -t "$out/include/net" \
+        '${xnu}/bsd/net/bpf_private.h'
 
       cat <<EOF > "$out/include/net/if.h"
       #pragma once
