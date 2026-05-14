@@ -4,7 +4,6 @@
   fetchFromGitHub,
   testers,
   snyk,
-  nodejs_20,
 }:
 
 let
@@ -32,8 +31,6 @@ buildNpmPackage {
     # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
     find -L $out -type l -print -delete
   '';
-
-  nodejs = nodejs_20;
 
   npmBuildScript = "build:prod";
 

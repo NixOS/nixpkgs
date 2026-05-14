@@ -8,6 +8,7 @@
   darwin,
   ninja,
   pkg-config,
+  python3,
   writableTmpDirAsHomeHook,
 
   # buildInputs
@@ -29,13 +30,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = finalAttrs.version;
-    hash = "sha256-ix3UcTs9CEJ2TCJLdpvZOaoB0wgNDrvSQhZzer8yMRw=";
+    hash = "sha256-H6j4e9V0Nf3kkm1ds9zSjLsHeDXU5PIHreJVRpjf/Ts=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +44,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    python3
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
