@@ -580,6 +580,13 @@
     "hash": "sha256-VTL1/L/UfORNWvyY0hvSJrvoz5zHabLPFX/sEdQaLhI=",
     "description": "Microsoft Azure Command-Line Tools HealthcareApisManagementClient Extension"
   },
+  "horizondb": {
+    "pname": "horizondb",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/horizondb-1.0.0b1-py2.py3-none-any.whl",
+    "hash": "sha256-bvjD6FSGjkuMjnc1XYnglbzd2cLMDuwRiPW9+7n6efA=",
+    "description": "Microsoft Azure Command-Line Tools HorizonDB Extension"
+  },
   "hpc-cache": {
     "pname": "hpc-cache",
     "version": "0.1.6",
