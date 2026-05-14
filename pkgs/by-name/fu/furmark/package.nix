@@ -103,7 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.geeks3d.com/furmark/v2/";
     license = lib.licenses.unfree;
     mainProgram = "FurMark_GUI";
-    maintainers = with lib.maintainers; [ surfaceflinger ];
+    maintainers = with lib.maintainers; [
+      surfaceflinger
+      w1lldu
+    ];
     platforms = [
       "aarch64-linux"
       "i686-linux"
