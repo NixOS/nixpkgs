@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
+  ast-serialize,
   mypy,
   pytestCheckHook,
   requests,
@@ -31,7 +32,10 @@ buildPythonPackage rec {
   build-system = [
     setuptools
   ]
-  ++ lib.optional (withMypyc) mypy;
+  ++ lib.optionals withMypyc [
+    ast-serialize
+    mypy
+  ];
 
   env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString withMypyc "1";
 
