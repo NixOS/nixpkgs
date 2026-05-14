@@ -1007,6 +1007,13 @@
     "hash": "sha256-VRFUS040KwOkpCY2F8YD2HRCrVF5zp2MDR/RCRX5O3o=",
     "description": "Microsoft Azure Command-Line Tools Sentinel Extension"
   },
+  "servicegroup": {
+    "pname": "servicegroup",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/servicegroup-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-6vOfQdjX+/4Sba1qswxVcDBy+xLCgNOEG01wLL10GvQ=",
+    "description": "Microsoft Azure Command-Line Tools ServiceGroup Extension"
+  },
   "sftp": {
     "pname": "sftp",
     "version": "1.0.0b2",
