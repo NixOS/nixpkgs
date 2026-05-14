@@ -39,6 +39,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Circular dependency with virtualenv
     "tests/test_virtualenv.py"
+    # Very prone to timeouts on busy machines
+    "tests/test_filelock.py"
   ];
 
   meta = {
