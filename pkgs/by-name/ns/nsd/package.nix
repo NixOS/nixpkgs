@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+ezCz3m6UFgPLfYpGO/EQAhMW/EQV9tEwZqpZDzUteg=";
   };
 
-  nativeBuildInputs = lib.optionals withSystemd [
+  nativeBuildInputs = [
     pkg-config
   ];
 
@@ -90,5 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Authoritative only, high performance, simple and open source name server";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ruuda ];
   };
 })

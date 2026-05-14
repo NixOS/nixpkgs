@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchFromGitHub,
+  fetchpatch,
   libbpf,
   elfutils,
   zlib,
@@ -25,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-wLSLDgACl6a6gQLvRiRR9HQFRMrGWYZAa5CcdzECExE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/xdp-project/xdp-tools/commit/2ff228be7926ba01e13c8d328828a270af2e7e0d.patch";
+      hash = "sha256-jYdcC36nL4P4IadwGfva8nqMerd/2HHw2RYhc+wR9nk=";
+    })
+  ];
 
   outputs = [
     "out"

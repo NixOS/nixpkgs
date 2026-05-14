@@ -4,6 +4,7 @@ let
       lib,
       stdenv,
       fetchFromGitHub,
+      fetchpatch2,
       autoreconfHook269,
       util-linux,
       nukeReferences,
@@ -99,7 +100,12 @@ let
         inherit rev hash;
       };
 
-      patches = extraPatches;
+      patches =
+        extraPatches
+        ++ lib.optional (kernel != null && lib.versionOlder kernel.version "5.14") (fetchpatch2 {
+          url = "https://github.com/openzfs/zfs/commit/58c8dc5f6926eb96903a3f38b141e8998ef9261b.patch?full_index=1";
+          hash = "sha256-eYkMhHsHBA9MKXnB/GuHpuv44g1SCGV5Or0InPBeNkU=";
+        });
 
       postPatch =
         optionalString buildKernel ''

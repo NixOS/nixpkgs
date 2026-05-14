@@ -1,7 +1,9 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   nix-update-script,
+  stdenvNoCC,
   telegram-desktop,
   withWebkit ? true,
 }:
@@ -21,6 +23,13 @@ telegram-desktop.override {
         hash = "sha256-X0g/zl5pJE8S5rkk7o81LiDNClLEMDyHVxmdoO4X9DE=";
         fetchSubmodules = true;
       };
+
+      patches =
+        (previousAttrs.patches or [ ])
+        ++ (lib.optional stdenvNoCC.hostPlatform.isDarwin (fetchpatch2 {
+          url = "https://github.com/telegramdesktop/tdesktop/commit/923efd9e7ef8ff72d9b83973502e587682119e54.patch?full_index=1";
+          hash = "sha256-XcmH9SSI3K2SsFjHDEMnKA6YOyWF1kRVJJAWP2/vdf8=";
+        }));
 
       passthru.updateScript = nix-update-script { };
 

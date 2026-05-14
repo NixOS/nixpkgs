@@ -4,7 +4,7 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pbrt";
   version = "2.4";
 
@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "mransan";
     repo = "ocaml-protoc";
-    rev = "${version}.0";
+    rev = "${finalAttrs.version}.0";
     hash = "sha256-EXugdcjALukSjB31zAVG9WiN6GMGXi2jlhHWaZ+p+uM=";
   };
 
@@ -23,4 +23,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vyorkin ];
   };
-}
+})

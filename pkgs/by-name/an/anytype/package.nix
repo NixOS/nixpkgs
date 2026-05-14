@@ -57,6 +57,7 @@ buildNpmPackage (finalAttrs: {
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
     ./0002-remove-grpc-devtools.patch
+    ./0003-remove-desktop-entry.patch
   ];
 
   buildPhase = ''
@@ -137,6 +138,7 @@ buildNpmPackage (finalAttrs: {
       autrimpo
       adda
       kira-bruneau
+      xmnlz
     ];
     platforms = [
       "x86_64-linux"

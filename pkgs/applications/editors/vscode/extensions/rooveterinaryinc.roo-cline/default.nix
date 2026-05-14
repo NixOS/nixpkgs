@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -11,6 +11,8 @@
 }:
 
 let
+  pnpm = pnpm_10;
+
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
     name = "roo-code-${finalAttrs.version}.vsix";
     pname = "roo-code-vsix";
@@ -25,6 +27,7 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       fetcherVersion = 3;
       hash = "sha256-t2sPuhn8xdk6hGfmViPGG+5TAhtBBOMYNoOb6DlPzws=";
     };

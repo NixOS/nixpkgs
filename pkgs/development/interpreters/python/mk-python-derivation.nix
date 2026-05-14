@@ -40,7 +40,6 @@ let
     flip
     getName
     hasSuffix
-    head
     isBool
     max
     optional
@@ -48,12 +47,8 @@ let
     optionals
     optionalString
     removePrefix
-    splitString
     stringLength
     ;
-
-  getOptionalAttrs =
-    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
 
   leftPadName =
     name: against:
@@ -271,7 +266,7 @@ lib.extendMkDerivation {
             if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
 
         in
-        attrName: inputs: map (checkDrv attrName) inputs;
+        attrName: map (checkDrv attrName);
 
       isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 
@@ -373,16 +368,16 @@ lib.extendMkDerivation {
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-      propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
-        propagatedBuildInputs
-        ++ getFinalPassthru "dependencies"
+      propagatedBuildInputs =
+        validatePythonMatches "propagatedBuildInputs" (
+          propagatedBuildInputs ++ getFinalPassthru "dependencies"
+        )
         ++ [
           # we propagate python even for packages transformed with 'toPythonApplication'
           # this pollutes the PATH but avoids rebuilds
           # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
           python
-        ]
-      );
+        ];
 
       inherit strictDeps;
 
@@ -463,13 +458,11 @@ lib.extendMkDerivation {
             attrs.${name} == [ ]
           ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
         )
-        (
-          getOptionalAttrs [
-            "enabledTestMarks"
-            "enabledTestPaths"
-            "enabledTests"
-          ] attrs
-        );
+        {
+          ${if attrs ? enabledTestMarks then "enabledTestMarks" else null} = attrs.enabledTestMarks;
+          ${if attrs ? enabledTestPaths then "enabledTestPaths" else null} = attrs.enabledTestPaths;
+          ${if attrs ? enabledTests then "enabledTests" else null} = attrs.enabledTests;
+        };
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.

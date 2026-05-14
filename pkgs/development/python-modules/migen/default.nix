@@ -20,6 +20,11 @@ buildPythonPackage {
     hash = "sha256-gRAvl5cUvrjq4t7htXsDBt4F8MEbHXFZoS0jbhrEs1I=";
   };
 
+  patches = [
+    # Add LOAD_FAST_BORROW to opcode tracer for python 3.14.
+    ./tracer-3.14.patch
+  ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ colorama ];

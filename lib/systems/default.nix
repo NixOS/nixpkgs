@@ -3,8 +3,6 @@
 let
   inherit (lib)
     any
-    attrNames
-    filter
     foldl
     hasInfix
     isAttrs
@@ -35,17 +33,31 @@ let
     compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
     or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
 
-    Hence a custom equality test.
+    To solve this, the elaborated systems also store a version of their data
+    without any functions to be compared.
 
     Note that this does not canonicalize the systems, so you'll want to make sure
     both arguments have been `elaborate`-d.
   */
-  equals =
-    let
-      # System attrs are never __functor-style attrsets, so builtins.isFunction suffices.
-      removeFunctions = a: removeAttrs a (filter (n: builtins.isFunction a.${n}) (attrNames a));
-    in
-    a: b: removeFunctions a == removeFunctions b;
+  equals = a: b: a._withoutFunctions == b._withoutFunctions;
+
+  /**
+    The attribute names within an elaborated system that store functions.
+
+    Due to object identity semantics, `systems.equals` needs a way to compare
+    all non-function attributes. It does this by storing a version of itself
+    without any functions under the attribute name `_withoutFunctions`. The
+    attribute names that contain functions are exposed for regression testing.
+  */
+  functionNames = [
+    "canExecute"
+    "emulator"
+    "emulatorAvailable"
+    "staticEmulatorAvailable"
+  ];
+
+  # Avoiding infrec
+  ignoredNames = functionNames ++ [ "_withoutFunctions" ];
 
   /**
     List of all Nix system doubles the nixpkgs flake will expose the package set
@@ -107,6 +119,7 @@ let
           null;
 
       final = {
+        _withoutFunctions = removeAttrs final ignoredNames;
         # Prefer to parse `config` as it is strictly more informative.
         parsed = parse.mkSystemFromString (args.config or allArgs.system);
         # This can be losslessly-extracted from `parsed` iff parsing succeeds.
@@ -131,9 +144,6 @@ let
               )
           );
 
-        isCompatible =
-          _:
-          throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
         # Derived meta-data
         useLLVM = final.isFreeBSD || final.isOpenBSD;
 
@@ -698,6 +708,7 @@ in
     equals
     examples
     flakeExposed
+    functionNames
     inspect
     parse
     platforms

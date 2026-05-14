@@ -27,6 +27,7 @@ let
     "-Wno-unsafe-buffer-usage"
     "-Wno-reserved-identifier"
     "-Wno-extra-semi-stmt"
+    "-Wno-implicit-void-ptr-cast"
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

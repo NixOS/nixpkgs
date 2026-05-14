@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librearp";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitLab {
     owner = "LibreArp";
     repo = "LibreArp";
     rev = finalAttrs.version;
-    hash = "sha256-jEpES68NuHhelUq/L46CxEeadk3LbuPZ72JaGDbw8fg=";
+    hash = "sha256-PK6U/G7jPAgbg/Ixuk/xcFQNSYT4PpUbz0R67Je29zE=";
     fetchSubmodules = true;
   };
 

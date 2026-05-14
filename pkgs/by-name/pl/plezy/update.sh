@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=./. -i bash -p curl gnused jq nix nix-prefetch-git python3 yq-go
+#! nix-shell -I nixpkgs=./. -i bash -p curl gnused jq nix nix-prefetch-git python3 yq-go flutter338 git
 
 set -eou pipefail
 
@@ -26,8 +26,18 @@ DMG_URL="https://github.com/edde746/plezy/releases/download/${latestVersion}/ple
 DMG_SHA=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(nix-prefetch-url "$DMG_URL")")
 sed -i "/plezy-macos.dmg/,/hash/{s|hash = \".*\"|hash = \"${DMG_SHA}\"|}" "$ROOT/package.nix"
 
-curl --fail --silent "https://raw.githubusercontent.com/edde746/plezy/${latestVersion}/pubspec.lock" \
-  | yq eval --output-format=json --prettyPrint > "$ROOT/pubspec.lock.json"
+# Only here to handle the patched pubsec.yaml
+workdir=$(mktemp -d)
+trap 'rm -rf "$workdir"' EXIT
+
+curl --fail --silent --location "$GIT_SRC_URL" | tar -xz -C "$workdir" --strip-components=1
+patch -d "$workdir" -p1 < "$ROOT/replace-sentry-fork.patch"
+
+export PUB_CACHE="$workdir/.pub-cache"
+flutter --no-version-check config --no-analytics >/dev/null
+flutter --no-version-check pub --directory "$workdir" get
+
+yq eval --output-format=json --prettyPrint "$workdir/pubspec.lock" > "$ROOT/pubspec.lock.json"
 
 python3 "$(dirname "$(readlink -f "$0")")/../../../development/compilers/dart/fetch-git-hashes.py" \
   --input "$ROOT/pubspec.lock.json" \

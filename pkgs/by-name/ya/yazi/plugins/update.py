@@ -1,16 +1,32 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3 python3Packages.requests python3Packages.packaging nix curl git argparse
+#!nix-shell -i python3 -p python3 python3Packages.requests python3Packages.packaging python3Packages.nixpkgs-plugin-update nix curl git argparse
 
 import argparse
+import base64
 import json
 import os
 import re
 import subprocess
 import sys
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 
 import requests
+from nixpkgs_plugin_update import make_unstable_version, normalize_release_version
 from packaging import version
+from packaging.version import InvalidVersion
+
+
+@dataclass
+class UpdateCandidate:
+    """An upstream revision that might be used to update a plugin."""
+
+    rev: str
+    commit: str | None
+    date: str
+    version: str
+    kind: str
 
 
 def run_command(cmd: str, capture_output: bool = True) -> str:
@@ -65,18 +81,42 @@ def get_default_branch(owner: str, repo: str, headers: dict[str, str]) -> str:
         print("Falling back to 'main' as default branch")
         return "main"
 
-def fetch_plugin_content(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> str:
-    """Fetch the plugin's main.lua content from GitHub"""
-    default_branch = get_default_branch(owner, repo, headers)
-    plugin_path = f"{plugin_pname}/" if owner == "yazi-rs" else ""
-    main_lua_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{default_branch}/{plugin_path}main.lua"
+
+def github_get(
+    owner: str,
+    repo: str,
+    path: str,
+    headers: dict[str, str],
+    params: dict[str, str | int] | None = None,
+    allow_404: bool = False,
+) -> dict | list | None:
+    """Fetch JSON from the GitHub API."""
+    api_url = f"https://api.github.com/repos/{owner}/{repo}/{path}"
 
     try:
-        response = requests.get(main_lua_url, headers=headers)
+        response = requests.get(api_url, headers=headers, params=params)
+        if allow_404 and response.status_code == 404:
+            return None
         response.raise_for_status()
-        return response.text
+        return response.json()
     except requests.RequestException as e:
-        raise RuntimeError(f"Error fetching plugin content: {e}")
+        raise RuntimeError(f"Error fetching {api_url}: {e}")
+
+
+def fetch_plugin_content(
+    owner: str,
+    repo: str,
+    plugin_pname: str,
+    ref: str,
+    headers: dict[str, str],
+) -> str:
+    """Fetch the plugin's main.lua content from GitHub"""
+    plugin_path = f"{plugin_pname}/" if owner == "yazi-rs" else ""
+    content_data = github_get(owner, repo, f"contents/{plugin_path}main.lua", headers, {"ref": ref})
+    if not isinstance(content_data, dict) or "content" not in content_data:
+        raise RuntimeError(f"Could not fetch main.lua at {ref}")
+
+    return base64.b64decode(content_data["content"]).decode("utf-8")
 
 
 def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_version: str) -> str:
@@ -95,40 +135,241 @@ def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_vers
     return required_version
 
 
-def get_latest_commit(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> tuple[str, str]:
-    """Get the latest commit hash and date for the plugin"""
+def candidate_sort_key(candidate: UpdateCandidate) -> tuple[int, version.Version | str]:
+    """Sort candidates by parsed version when possible, then by text."""
+    try:
+        return (1, version.parse(candidate.version))
+    except InvalidVersion:
+        return (0, candidate.version)
+
+
+def normalize_candidate(tag: str | None, kind: str) -> UpdateCandidate | None:
+    """Create an unresolved release/tag candidate from a GitHub tag."""
+    candidate_version = normalize_release_version(tag) if tag else None
+    if candidate_version is None:
+        return None
+
+    return UpdateCandidate(
+        rev=tag,
+        commit=None,
+        date="unknown",
+        version=candidate_version,
+        kind=kind,
+    )
+
+
+def resolve_candidate(owner: str, repo: str, candidate: UpdateCandidate, headers: dict[str, str]) -> UpdateCandidate:
+    """Resolve a release/tag candidate to the commit it points at."""
+    if candidate.commit is not None:
+        return candidate
+
+    commit_data = github_get(owner, repo, f"commits/{candidate.rev}", headers)
+    if not isinstance(commit_data, dict):
+        raise RuntimeError(f"Could not resolve {candidate.rev}")
+
+    return UpdateCandidate(
+        rev=candidate.rev,
+        commit=commit_data["sha"],
+        date=commit_data["commit"]["committer"]["date"].split("T")[0],
+        version=candidate.version,
+        kind=candidate.kind,
+    )
+
+
+def get_commit_candidates(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> list[UpdateCandidate]:
+    """Get recent default branch commit candidates for a plugin."""
     default_branch = get_default_branch(owner, repo, headers)
 
     if owner == "yazi-rs":
-        # For official plugins, get commit info for the specific plugin file
-        api_url = f"https://api.github.com/repos/{owner}/{repo}/commits?path={plugin_pname}/main.lua&per_page=1"
+        commits_data = github_get(
+            owner,
+            repo,
+            "commits",
+            headers,
+            {"path": f"{plugin_pname}/main.lua", "per_page": 100},
+        )
+        if not isinstance(commits_data, list) or not commits_data:
+            raise RuntimeError(f"Could not get recent commits for {plugin_pname}")
     else:
-        # For third-party plugins, get latest commit on default branch
-        api_url = f"https://api.github.com/repos/{owner}/{repo}/commits/{default_branch}"
+        commits_data = github_get(
+            owner,
+            repo,
+            "commits",
+            headers,
+            {"sha": default_branch, "per_page": 100},
+        )
+        if not isinstance(commits_data, list) or not commits_data:
+            raise RuntimeError(f"Could not get recent commits for {owner}/{repo}")
 
-    try:
-        response = requests.get(api_url, headers=headers)
-        response.raise_for_status()
-        commit_data = response.json()
-    except requests.RequestException as e:
-        raise RuntimeError(f"Error fetching commit data: {e}")
-
-    if owner == "yazi-rs":
-        latest_commit = commit_data[0]["sha"]
-        commit_date = commit_data[0]["commit"]["committer"]["date"].split("T")[0]
-    else:
-        latest_commit = commit_data["sha"]
+    candidates = []
+    for commit_data in commits_data:
+        commit = commit_data["sha"]
         commit_date = commit_data["commit"]["committer"]["date"].split("T")[0]
+        commit_datetime = datetime.strptime(commit_date, "%Y-%m-%d")
 
-    if not latest_commit:
-        raise RuntimeError("Could not get latest commit hash")
+        candidates.append(
+            UpdateCandidate(
+                rev=commit,
+                commit=commit,
+                date=commit_date,
+                version=make_unstable_version(commit_datetime, None),
+                kind="commit",
+            )
+        )
 
-    return latest_commit, commit_date
+    return candidates
 
 
-def calculate_sri_hash(owner: str, repo: str, latest_commit: str) -> str:
+def get_release_candidates(owner: str, repo: str, headers: dict[str, str]) -> list[UpdateCandidate]:
+    """Get non-prerelease GitHub release candidates without resolving tags."""
+    releases = github_get(owner, repo, "releases", headers, {"per_page": 100})
+    if not isinstance(releases, list):
+        return []
+
+    candidates = []
+    for release in releases:
+        if release.get("draft") or release.get("prerelease"):
+            continue
+
+        candidate = normalize_candidate(release.get("tag_name"), "release")
+        if candidate is not None:
+            candidates.append(candidate)
+
+    candidates.sort(key=candidate_sort_key, reverse=True)
+    return candidates
+
+
+def get_tag_candidates(owner: str, repo: str, headers: dict[str, str]) -> list[UpdateCandidate]:
+    """Get GitHub tag candidates without resolving tags."""
+    tags = github_get(owner, repo, "tags", headers, {"per_page": 100})
+    if not isinstance(tags, list):
+        return []
+
+    candidates = []
+    for tag in tags:
+        candidate = normalize_candidate(tag.get("name"), "tag")
+        if candidate is not None:
+            candidates.append(candidate)
+
+    candidates.sort(key=candidate_sort_key, reverse=True)
+    return candidates
+
+
+def get_update_candidates(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> list[UpdateCandidate]:
+    """Get update candidates, preferring releases, then tags, then commits."""
+    release_candidates = get_release_candidates(owner, repo, headers)
+    if release_candidates:
+        return release_candidates
+
+    tag_candidates = get_tag_candidates(owner, repo, headers)
+    if tag_candidates:
+        return tag_candidates
+
+    return get_commit_candidates(owner, repo, plugin_pname, headers)
+
+
+def compare_to_current(
+    owner: str,
+    repo: str,
+    old_commit: str,
+    candidate: UpdateCandidate,
+    headers: dict[str, str],
+) -> str:
+    """Compare a candidate to the packaged commit."""
+    if old_commit == "unknown":
+        print("Current commit is unknown, skipping to avoid a possible regression")
+        return "unknown"
+
+    if candidate.commit is None:
+        raise RuntimeError(f"Candidate {candidate.rev} is unresolved")
+
+    if old_commit == candidate.commit or old_commit == candidate.rev:
+        return "identical"
+
+    compare_data = github_get(owner, repo, f"compare/{old_commit}...{candidate.commit}", headers, allow_404=True)
+    if not isinstance(compare_data, dict):
+        print(f"Could not compare {old_commit}...{candidate.commit}, skipping to avoid a possible regression")
+        return "unknown"
+
+    return str(compare_data.get("status"))
+
+
+def is_yazi_compatible(
+    owner: str,
+    repo: str,
+    plugin_name: str,
+    plugin_pname: str,
+    candidate: UpdateCandidate,
+    yazi_version: str,
+    headers: dict[str, str],
+) -> bool:
+    """Check if a candidate supports nixpkgs' Yazi version."""
+    try:
+        plugin_content = fetch_plugin_content(owner, repo, plugin_pname, candidate.rev, headers)
+        check_version_compatibility(plugin_content, plugin_name, yazi_version)
+        return True
+    except RuntimeError as e:
+        print(f"Skipping {candidate.rev}: {e}")
+        return False
+
+
+def select_compatible_candidate(
+    owner: str,
+    repo: str,
+    plugin_name: str,
+    plugin_pname: str,
+    old_ref_attr: str,
+    old_ref: str,
+    old_commit: str,
+    old_version: str,
+    yazi_version: str,
+    headers: dict[str, str],
+) -> UpdateCandidate | None:
+    """Select the newest compatible candidate that moves the package forward."""
+    candidates = get_update_candidates(owner, repo, plugin_pname, headers)
+
+    for unresolved_candidate in candidates:
+        try:
+            candidate = resolve_candidate(owner, repo, unresolved_candidate, headers)
+        except RuntimeError as e:
+            print(f"Skipping {unresolved_candidate.rev}: {e}")
+            if unresolved_candidate.kind in ("release", "tag"):
+                break
+            continue
+
+        print(f"Checking {plugin_name} {candidate.kind} {candidate.rev} ({candidate.date})")
+
+        compare_status = compare_to_current(owner, repo, old_commit, candidate, headers)
+        if compare_status == "identical":
+            candidate_ref_attr = "rev" if candidate.kind == "commit" else "tag"
+            source_ref_changed = old_ref_attr != candidate_ref_attr or old_ref != candidate.rev
+            if old_version != candidate.version or source_ref_changed:
+                if not is_yazi_compatible(owner, repo, plugin_name, plugin_pname, candidate, yazi_version, headers):
+                    break
+
+                return candidate
+
+            print(f"{plugin_name} is already at {candidate.rev}; older candidates will not be used")
+            break
+
+        if compare_status != "ahead":
+            print(f"Skipping {candidate.rev}: compare status is {compare_status}, not ahead")
+            if candidate.kind in ("release", "tag"):
+                print(f"{candidate.rev} is not newer than the packaged revision; older {candidate.kind}s will not be used")
+                break
+            continue
+
+        if not is_yazi_compatible(owner, repo, plugin_name, plugin_pname, candidate, yazi_version, headers):
+            continue
+
+        return candidate
+
+    return None
+
+
+def calculate_sri_hash(owner: str, repo: str, rev: str) -> str:
     """Calculate the SRI hash for the plugin source"""
-    prefetch_url = f"https://github.com/{owner}/{repo}/archive/{latest_commit}.tar.gz"
+    prefetch_url = f"https://github.com/{owner}/{repo}/archive/{rev}.tar.gz"
 
     try:
         new_hash = run_command(f"nix-prefetch-url --unpack --type sha256 {prefetch_url} 2>/dev/null")
@@ -167,16 +408,39 @@ def write_nix_file(file_path: str, content: str) -> None:
         raise RuntimeError(f"Error writing to file {file_path}: {e}")
 
 
-def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str, new_hash: str) -> None:
+def get_source_ref(nix_content: str) -> tuple[str, str]:
+    """Get the source ref attribute from a Nix file."""
+    source_ref_match = re.search(r'\b(rev|tag) = "([^"]*)"', nix_content)
+    if source_ref_match is None:
+        raise RuntimeError("Could not find rev or tag attribute")
+
+    return source_ref_match.group(1), source_ref_match.group(2)
+
+
+def resolve_ref_commit(owner: str, repo: str, ref: str, headers: dict[str, str]) -> str:
+    """Resolve a GitHub ref to its commit."""
+    commit_data = github_get(owner, repo, f"commits/{ref}", headers)
+    if not isinstance(commit_data, dict):
+        raise RuntimeError(f"Could not resolve {ref}")
+
+    return commit_data["sha"]
+
+
+def update_nix_file(default_nix_path: str, candidate: UpdateCandidate, new_hash: str) -> None:
     """Update the default.nix file with new version, revision and hash"""
     default_nix_content = read_nix_file(default_nix_path)
 
-    default_nix_content = re.sub(r'rev = "[^"]*"', f'rev = "{latest_commit}"', default_nix_content)
+    source_ref_attr = "rev" if candidate.kind == "commit" else "tag"
+    default_nix_content = re.sub(
+        r'\b(rev|tag) = "[^"]*"',
+        f'{source_ref_attr} = "{candidate.rev}"',
+        default_nix_content,
+    )
 
     if 'version = "' in default_nix_content:
-        default_nix_content = re.sub(r'version = "[^"]*"', f'version = "{new_version}"', default_nix_content)
+        default_nix_content = re.sub(r'version = "[^"]*"', f'version = "{candidate.version}"', default_nix_content)
     else:
-        default_nix_content = re.sub(r'(pname = "[^"]*";)', f'\\1\n  version = "{new_version}";', default_nix_content)
+        default_nix_content = re.sub(r'(pname = "[^"]*";)', f'\\1\n  version = "{candidate.version}";', default_nix_content)
 
     if 'hash = "' in default_nix_content:
         default_nix_content = re.sub(r'hash = "[^"]*"', f'hash = "{new_hash}"', default_nix_content)
@@ -202,6 +466,11 @@ def get_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
 
         excluded_attrs = ["mkYaziPlugin", "override", "overrideDerivation", "overrideAttrs", "recurseForDerivations"]
         plugin_names = [name for name in plugin_names if name not in excluded_attrs]
+        plugin_names = [
+            name
+            for name in plugin_names
+            if Path(nixpkgs_dir, "pkgs/by-name/ya/yazi/plugins", name, "default.nix").exists()
+        ]
 
         plugins = []
         for name in plugin_names:
@@ -247,8 +516,7 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     nix_content = read_nix_file(default_nix_path)
     old_version_match = re.search(r'version = "([^"]*)"', nix_content)
     old_version = old_version_match.group(1) if old_version_match else "unknown"
-    old_commit_match = re.search(r'rev = "([^"]*)"', nix_content)
-    old_commit = old_commit_match.group(1) if old_commit_match else "unknown"
+    old_ref_attr, old_ref = get_source_ref(nix_content)
 
     plugin_info = get_plugin_info(nixpkgs_dir, plugin_name)
     owner = plugin_info["owner"]
@@ -257,34 +525,43 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     yazi_version = get_yazi_version(nixpkgs_dir)
 
     headers = get_github_headers()
+    try:
+        old_commit = old_ref if old_ref_attr == "rev" else resolve_ref_commit(owner, repo, old_ref, headers)
+    except RuntimeError as e:
+        print(f"Could not resolve current {old_ref_attr} {old_ref}: {e}")
+        old_commit = "unknown"
 
-    plugin_content = fetch_plugin_content(owner, repo, plugin_pname, headers)
-    required_version = check_version_compatibility(plugin_content, plugin_name, yazi_version)
-
-    latest_commit, commit_date = get_latest_commit(owner, repo, plugin_pname, headers)
-    print(f"Checking {plugin_name} latest commit {latest_commit} ({commit_date})")
-
-    if latest_commit == old_commit:
-        print(f"No changes for {plugin_name}, already at latest commit {latest_commit}")
+    candidate = select_compatible_candidate(
+        owner,
+        repo,
+        plugin_name,
+        plugin_pname,
+        old_ref_attr,
+        old_ref,
+        old_commit,
+        old_version,
+        yazi_version,
+        headers,
+    )
+    if candidate is None:
+        print(f"No forward compatible update found for {plugin_name}")
         return None
 
-    print(f"Updating {plugin_name} from commit {old_commit} to {latest_commit}")
+    print(f"Updating {plugin_name} from {old_commit} to {candidate.rev}")
 
-    new_version = f"{required_version}-unstable-{commit_date}"
-
-    new_hash = calculate_sri_hash(owner, repo, latest_commit)
+    new_hash = calculate_sri_hash(owner, repo, candidate.rev)
     print(f"Generated SRI hash: {new_hash}")
 
-    update_nix_file(default_nix_path, latest_commit, new_version, new_hash)
+    update_nix_file(default_nix_path, candidate, new_hash)
 
-    print(f"Successfully updated {plugin_name} from {old_version} to {new_version}")
+    print(f"Successfully updated {plugin_name} from {old_version} to {candidate.version}")
 
     return {
         "name": plugin_name,
         "old_version": old_version,
-        "new_version": new_version,
+        "new_version": candidate.version,
         "old_commit": old_commit,
-        "new_commit": latest_commit,
+        "new_commit": candidate.commit,
         "owner": owner,
         "repo": repo,
     }

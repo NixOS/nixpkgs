@@ -3456,6 +3456,8 @@ self: super: with self; {
 
   cutie = callPackage ../development/python-modules/cutie { };
 
+  cutlass = callPackage ../development/python-modules/cutlass { };
+
   cv2-enumerate-cameras = callPackage ../development/python-modules/cv2-enumerate-cameras { };
 
   cvelib = callPackage ../development/python-modules/cvelib { };
@@ -6908,6 +6910,8 @@ self: super: with self; {
   h5py-mpi = self.h5py.override { hdf5 = pkgs.hdf5-mpi; };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
+
+  ha-garmin = callPackage ../development/python-modules/ha-garmin { };
 
   ha-iotawattpy = callPackage ../development/python-modules/ha-iotawattpy { };
 
@@ -16016,8 +16020,6 @@ self: super: with self; {
   python-opensky = callPackage ../development/python-modules/python-opensky { };
 
   python-openstackclient = callPackage ../development/python-modules/python-openstackclient { };
-
-  python-openzwave = callPackage ../development/python-modules/python-openzwave { };
 
   python-osc = callPackage ../development/python-modules/python-osc { };
 

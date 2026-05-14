@@ -82,6 +82,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "pqos-wrapper"
+    ] "The corresponding package was removed from nixpkgs.") # added 2026-05-13
     (mkRemovedOptionModule
       [
         "services"

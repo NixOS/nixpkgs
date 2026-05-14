@@ -480,6 +480,7 @@ mapAliases {
   python-Levenshtein = throw "'python-Levenshtein' has been renamed to/replaced by 'levenshtein'"; # Converted to throw 2025-10-29
   python-lz4 = throw "'python-lz4' has been renamed to/replaced by 'lz4'"; # Converted to throw 2025-10-29
   python-mbedtls = throw "'python-mbedtls' has been removed as it is unmaintained";
+  python-openzwave = throw "python-openzwave was removed because openzwave is no longer maintained upstream. Consider using python3Packages.zwave-js-server-python"; # Added 2026-05-14
   python-qt = throw "python-qt has been removed, because hard to maintain and not required by anything"; # Added 2025-01-14
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = throw "'python-subunit' has been renamed to/replaced by 'subunit'"; # Converted to throw 2025-10-29
@@ -489,7 +490,7 @@ mapAliases {
   python_fedora = throw "'python_fedora' has been renamed to/replaced by 'python-fedora'"; # Converted to throw 2025-10-29
   python_magic = throw "'python_magic' has been renamed to/replaced by 'python-magic'"; # Converted to throw 2025-10-29
   python_mimeparse = throw "'python_mimeparse' has been renamed to/replaced by 'python-mimeparse'"; # Converted to throw 2025-10-29
-  python_openzwave = throw "'python_openzwave' has been renamed to/replaced by 'python-openzwave'"; # Converted to throw 2025-10-29
+  python_openzwave = throw "python-openzwave was removed because openzwave is no longer maintained upstream. Consider using python3Packages.zwave-js-server-python"; # Converted to throw 2025-10-29
   python_simple_hipchat = throw "'python_simple_hipchat' has been renamed to/replaced by 'python-simple-hipchat'"; # Converted to throw 2025-10-29
   pythonix = throw "pythonix was removed as it was unmaintained since 2022"; # added 2025-07-24
   pytorch = throw "'pytorch' has been renamed to/replaced by 'torch'"; # Converted to throw 2025-10-29

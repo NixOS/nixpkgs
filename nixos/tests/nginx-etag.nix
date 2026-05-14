@@ -53,14 +53,18 @@
                 }
                 ''
                   import os
+                  import shutil
                   import time
 
                   from selenium.webdriver import Firefox
                   from selenium.webdriver.firefox.options import Options
+                  from selenium.webdriver.firefox.service import Service
+
+                  service = Service(shutil.which("geckodriver"))
 
                   options = Options()
                   options.add_argument('--headless')
-                  driver = Firefox(options=options)
+                  driver = Firefox(options=options, service=service)
 
                   driver.implicitly_wait(20)
                   driver.get('http://server/')

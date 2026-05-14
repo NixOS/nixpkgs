@@ -190,7 +190,6 @@ in
             priority = 1100;
             extraConfig = ''
               add_header Cache-Control 'public, max-age=604800, must-revalidate';
-              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
           locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {
@@ -213,6 +212,8 @@ in
               fastcgi_param PATH_INFO $fastcgi_path_info;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
+
+              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
         };

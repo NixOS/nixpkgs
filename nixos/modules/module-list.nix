@@ -296,7 +296,6 @@
   ./programs/pay-respects.nix
   ./programs/plotinus.nix
   ./programs/pmount.nix
-  ./programs/pqos-wrapper.nix
   ./programs/projecteur.nix
   ./programs/proxychains.nix
   ./programs/pulseview.nix
@@ -688,6 +687,7 @@
   ./services/hardware/lcd.nix
   ./services/hardware/libinput.nix
   ./services/hardware/lirc.nix
+  ./services/hardware/logiops.nix
   ./services/hardware/monado.nix
   ./services/hardware/nvidia-container-toolkit
   ./services/hardware/nvidia-optimus.nix
