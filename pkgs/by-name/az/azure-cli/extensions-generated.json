@@ -867,6 +867,13 @@
     "hash": "sha256-/k47qFwfZZZqBZKR5G6+t8lW8o2isVtUGwSSdltiOZI=",
     "description": "Microsoft Azure Command-Line Tools PeeringManagementClient Extension"
   },
+  "planetarycomputer": {
+    "pname": "planetarycomputer",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/planetarycomputer-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-FPvUcZx5yHHB2du7F6ulDjoNsNCek2HtuVMJd6g0mBE=",
+    "description": "Microsoft Azure Command-Line Tools Planetary Computer Extension"
+  },
   "portal": {
     "pname": "portal",
     "version": "1.0.0b2",
