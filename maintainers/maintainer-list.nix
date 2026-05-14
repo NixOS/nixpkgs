@@ -27611,6 +27611,11 @@
     githubId = 42005990;
     name = "Ali Mohammadzadeh";
   };
+  Thomas97460 = {
+    github = "Thomas97460";
+    githubId = 114427689;
+    name = "Thomas Collet";
+  };
   thomasdesr = {
     email = "git@hive.pw";
     github = "thomasdesr";
