@@ -18750,6 +18750,12 @@
     githubId = 111859550;
     name = "Morten Slingsby";
   };
+  mslxl = {
+    email = "i@mslxl.com";
+    github = "mslxl";
+    githubId = 11132880;
+    name = "mslxl";
+  };
   msm = {
     email = "msm@tailcall.net";
     github = "msm-code";
