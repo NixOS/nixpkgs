@@ -327,14 +327,31 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    # Revert apple sdk bump to 26.1 and 26.2
+    # Revert apple sdk bump to 26.1, 26.2 and 26.4
+    ++
+      lib.optionals (lib.versionAtLeast version "151" && lib.versionOlder apple-sdk_26.version "26.4")
+        [
+          (fetchpatch {
+            url = "https://github.com/mozilla-firefox/firefox/commit/d06b47c9e398ceb04193f904e090f23a5a1f4906.patch";
+            hash = "sha256-N458KSOOiotmji5VjgdbhueZ3yTVx47UtsWnmOe8XFQ=";
+            revert = true;
+            includes = [
+              "build/moz.configure/toolchain.configure"
+              "python/mozbuild/mozbuild/test/configure/macos_fake_sdk/SDKSettings.plist"
+            ];
+          })
+        ]
     ++
       lib.optionals (lib.versionAtLeast version "148" && lib.versionOlder apple-sdk_26.version "26.2")
         [
           (fetchpatch {
             url = "https://github.com/mozilla-firefox/firefox/commit/73cbb9ff0fdbf8b13f38d078ce01ef6ec0794f9c.patch";
-            hash = "sha256-ghdddJxsaxXzLZpOOfwss+2S/UUcbLqKGzWWqKy9h/k=";
+            hash = "sha256-3eBhCuiT61pbeCrvK13vg0OFV4gn/JTvsGXmLN4MBTQ=";
             revert = true;
+            includes = [
+              "build/moz.configure/toolchain.configure"
+              "python/mozbuild/mozbuild/test/configure/macos_fake_sdk/SDKSettings.plist"
+            ];
           })
         ]
     ++
@@ -342,8 +359,12 @@ buildStdenv.mkDerivation {
         [
           (fetchpatch {
             url = "https://github.com/mozilla-firefox/firefox/commit/c1cd0d56e047a40afb2a59a56e1fd8043e448e05.patch";
-            hash = "sha256-bFHLy3b0jOcROqltIwHwSAqWYve8OZHbiPMOdhLUCLc=";
+            hash = "sha256-NPaA5tYz3BUxB2ads5HZyYWJ+aS9pTzQp+AKFkfmdXA=";
             revert = true;
+            includes = [
+              "build/moz.configure/toolchain.configure"
+              "python/mozbuild/mozbuild/test/configure/macos_fake_sdk/SDKSettings.plist"
+            ];
           })
         ]
     ++ extraPatches;
