@@ -459,6 +459,7 @@ in
           texinfo
           which
           nukeReferences
+          autoconf269
           ;
 
         # Avoids infinite recursion, as this is in the build-time dependencies of libc.
@@ -568,6 +569,7 @@ in
             libunistring
             libxcrypt
             nukeReferences
+            autoconf269
             ;
           # We build a special copy of libgmp which doesn't use libstdc++, because
           # xgcc++'s libstdc++ references the bootstrap-files (which is what
