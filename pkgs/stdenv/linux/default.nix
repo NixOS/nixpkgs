@@ -587,6 +587,8 @@ in
               commonGccOverrides
               // {
                 inherit (prevStage) which;
+                # Self-emit libgcc/libstdc++; otherwise the final stdenv links xgcc-emitted ones.
+                disableBootstrap = false;
               }
             )).overrideAttrs
               (a: {
