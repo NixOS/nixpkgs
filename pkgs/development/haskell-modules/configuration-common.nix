@@ -3344,6 +3344,11 @@ with haskellLib;
   # including the current one in nixpkgs.
   liquid-fixpoint = dontCheck super.liquid-fixpoint;
 
+  # liquid-* wrappers run the LH plugin in Custom Setup, so z3 needed at build time.
+  liquid-parallel = doJailbreak (addBuildTool pkgs.z3 super.liquid-parallel);
+  liquid-prelude = addBuildTool pkgs.z3 super.liquid-prelude;
+  liquid-vector = addBuildTool pkgs.z3 super.liquid-vector;
+
   # patch from mgsloan/store#184
   store = appendPatch (pkgs.fetchpatch2 {
     name = "store-isthname-ghc-internal-th-syntax.patch";

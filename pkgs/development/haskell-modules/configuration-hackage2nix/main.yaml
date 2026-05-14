@@ -46,6 +46,9 @@ default-package-overrides:
   - hsc3 >= 0.21 && < 0.22
   # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
   - liquid-fixpoint == 0.9.6.3.2
+  # pin to versions compatible with liquidhaskell-boot 0.9.10.* (default GHC 9.10 stack)
+  - liquid-prelude == 0.9.10.1.2
+  - liquid-vector == 0.13.1.0.1
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
