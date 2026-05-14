@@ -2,20 +2,46 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
+  chromium,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "resumed";
-  version = "4.1.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "rbardini";
     repo = "resumed";
-    rev = "v${version}";
-    hash = "sha256-kDv6kOVY8IfztmLeby2NgB5q0DtP1ajMselvr1EDQJ8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-K9F6ZxtqAQSc5Dqeoysish+xeRqDcDG/6Ynx7bTJfl8=";
   };
 
-  npmDepsHash = "sha256-7Wdf8NaizgIExeX+Kc8wn5f20al0bnxRpFoPy6p40jw=";
+  npmDepsHash = "sha256-UElS1pEzPv0FnvMGCnqEFBi7JzE8QWRFynkAPHy35FY=";
+
+  postPatch = ''
+    sed -i 's/"version": ".*"/"version": "${finalAttrs.version}"/' package.json
+  '';
+
+  dontNpmPrune = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/resumed \
+      --set PUPPETEER_EXECUTABLE_PATH ${lib.getExe chromium}
+  '';
+
+  env = {
+    PUPPETEER_SKIP_DOWNLOAD = true;
+  };
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit (finalAttrs) version;
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Lightweight JSON Resume builder, no-frills alternative to resume-cli";
@@ -24,4 +50,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "resumed";
   };
-}
+})
