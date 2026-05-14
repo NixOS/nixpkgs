@@ -2,6 +2,9 @@
   lib,
   fetchFromGitHub,
   mkYaziPlugin,
+
+  ripgrep,
+  fzf,
 }:
 mkYaziPlugin {
   pname = "yafg.yazi";
@@ -13,6 +16,11 @@ mkYaziPlugin {
     rev = "e6ba85125bfa4e3a60ef28b70949299712103b2a";
     hash = "sha256-IKQscTTirtfbsXKzCmaokPDrQZqXa4MSY2+6DbEQluU=";
   };
+
+  dependencies = [
+    ripgrep
+    fzf
+  ];
 
   meta = {
     description = "Fuzzy find and grep plugin for Yazi file manager with interactive ripgrep and fzf search";
