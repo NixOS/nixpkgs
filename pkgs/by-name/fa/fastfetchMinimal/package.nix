@@ -3,6 +3,7 @@ fastfetch.override {
   audioSupport = false;
   brightnessSupport = false;
   dbusSupport = false;
+  enlightenmentSupport = false;
   flashfetchSupport = false;
   gnomeSupport = false;
   imageSupport = false;

@@ -116,8 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
-  env = {
-    ${if stdenv.cc.isGNU then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=maybe-uninitialized";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized -Wno-error=array-bounds";
   };
 
   preConfigure = ''

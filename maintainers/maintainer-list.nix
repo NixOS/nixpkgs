@@ -5552,6 +5552,12 @@
     githubId = 32609395;
     name = "B YI";
   };
+  coolcuber = {
+    email = "rpgeorg@clemson.edu";
+    github = "coolcuber";
+    githubId = 35880825;
+    name = "Ross George";
+  };
   coolGi = {
     email = "me@coolgi.dev";
     github = "coolGi69";
@@ -16858,6 +16864,13 @@
     githubId = 20665331;
     name = "Mark";
   };
+  Marker06 = {
+    email = "linuxenjoyerfi@proton.me";
+    github = "Marker06";
+    githubId = 148945811;
+    name = "Marcus";
+    matrix = "@marker06:matrix.org";
+  };
   markus1189 = {
     email = "markus1189@gmail.com";
     github = "markus1189";
@@ -19816,6 +19829,12 @@
     githubId = 45737139;
     name = "nixbitcoindev";
     keys = [ { fingerprint = "577A 3452 7F3E 2A85 E80F  E164 DD11 F9AD 5308 B3BA"; } ];
+  };
+  nixosclaw = {
+    email = "github@nixclaw.io";
+    github = "nixosclaw";
+    githubId = 283803283;
+    name = "NixClaw";
   };
   nixy = {
     email = "nixy@nixy.moe";
@@ -29252,7 +29271,7 @@
     name = "Johannes Mayrhofer";
   };
   vuks = {
-    email = "vuks@allthingslinux.org";
+    email = "vuks@vuks.dev";
     github = "Vuks69";
     githubId = 51289041;
     name = "Vuks";

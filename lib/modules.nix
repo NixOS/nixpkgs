@@ -1433,18 +1433,27 @@ let
   filterOverrides = defs: (filterOverrides' defs).values;
 
   filterOverrides' =
-    defs:
     let
       getPrio =
         def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
-      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip =
         def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in
-    {
-      values = map strip (filter (def: getPrio def == highestPrio) defs);
-      inherit highestPrio;
-    };
+    defs:
+    # Optimize for the singleton case, equivalent to the `else` clause.
+    if length defs == 1 then
+      {
+        values = map strip defs;
+        highestPrio = getPrio (head defs);
+      }
+    else
+      let
+        highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
+      in
+      {
+        values = concatMap (def: if getPrio def == highestPrio then [ (strip def) ] else [ ]) defs;
+        inherit highestPrio;
+      };
 
   /**
     Sort a list of properties.  The sort priority of a property is

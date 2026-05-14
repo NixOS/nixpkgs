@@ -4,8 +4,11 @@
 
 let
   inherit (lib)
+    all
     elem
     flip
+    hasContext
+    functionArgs
     isAttrs
     isBool
     isDerivation
@@ -13,8 +16,10 @@ let
     isFunction
     isInt
     isList
-    isString
+    isPath
     isStorePath
+    isString
+    substring
     throwIf
     toDerivation
     toList
@@ -22,7 +27,6 @@ let
     ;
   inherit (lib.lists)
     concatLists
-    count
     elemAt
     filter
     foldl'
@@ -72,6 +76,7 @@ let
     unions
     empty
     ;
+  inherit (lib.path) hasStorePathPrefix;
 
   inAttrPosSuffix =
     v: name:
@@ -107,10 +112,15 @@ let
 
   checkDefsForError =
     check: loc: defs:
-    let
-      invalidDefs = filter (def: !check def.value) defs;
-    in
-    if invalidDefs != [ ] then { message = "Definition values: ${showDefs invalidDefs}"; } else null;
+    if all (def: check def.value) defs then
+      null
+    else
+      let
+        invalidDefs = filter (def: !check def.value) defs;
+      in
+      {
+        message = "Definition values: ${showDefs invalidDefs}";
+      };
 
   # Check that a type with v2 merge has a coherent check attribute.
   # Throws an error if the type uses an ad-hoc `type // { check }` override.
@@ -653,10 +663,7 @@ rec {
       let
         res = mergeOneOption loc defs;
       in
-      if builtins.isPath res || (builtins.isString res && !builtins.hasContext res) then
-        toDerivation res
-      else
-        res;
+      if isPath res || (isString res && !hasContext res) then toDerivation res else res;
   };
 
   shellPackage = package // {
@@ -714,15 +721,15 @@ rec {
         check =
           x:
           let
-            isInStore = lib.path.hasStorePathPrefix (
-              if builtins.isPath x then
+            isInStore = hasStorePathPrefix (
+              if isPath x then
                 x
               # Discarding string context is necessary to convert the value to
               # a path and safe as the result is never used in any derivation.
               else
                 /. + builtins.unsafeDiscardStringContext x
             );
-            isAbsolute = builtins.substring 0 1 (toString x) == "/";
+            isAbsolute = substring 0 1 (toString x) == "/";
             isExpectedType = (
               if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.
             );
@@ -1078,14 +1085,14 @@ rec {
       merge =
         loc: defs:
         let
-          nrNulls = count (def: def.value == null) defs;
+          nulls = filter (def: def.value == null) defs;
         in
-        if nrNulls == length defs then
+        if nulls == [ ] then
+          elemType.merge loc defs
+        else if length nulls == length defs then
           null
-        else if nrNulls != 0 then
-          throw "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}."
         else
-          elemType.merge loc defs;
+          throw "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}.";
       emptyValue = {
         value = null;
       };
@@ -1109,9 +1116,7 @@ rec {
       check = isFunction;
       merge = loc: defs: {
         # An argument attribute has a default when it has a default in all definitions
-        __functionArgs = lib.zipAttrsWith (_: lib.all (x: x)) (
-          lib.map (fn: lib.functionArgs fn.value) defs
-        );
+        __functionArgs = zipAttrsWith (_: all (x: x)) (map (fn: functionArgs fn.value) defs);
         __functor =
           _: callerArgs:
           (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (
@@ -1513,11 +1518,11 @@ rec {
           self: loc: defs:
           (self.v2 { inherit loc defs; }).value;
         v2 =
-          { loc, defs }:
+          { loc, defs }@args:
           let
             t1CheckedAndMerged =
               if t1.merge ? v2 then
-                checkV2MergeCoherence loc t1 (t1.merge.v2 { inherit loc defs; })
+                checkV2MergeCoherence loc t1 (t1.merge.v2 args)
               else
                 {
                   value = t1.merge loc defs;
@@ -1526,7 +1531,7 @@ rec {
                 };
             t2CheckedAndMerged =
               if t2.merge ? v2 then
-                checkV2MergeCoherence loc t2 (t2.merge.v2 { inherit loc defs; })
+                checkV2MergeCoherence loc t2 (t2.merge.v2 args)
               else
                 {
                   value = t2.merge loc defs;
@@ -1560,7 +1565,7 @@ rec {
       typeMerge =
         f':
         let
-          mt1 = t1.typeMerge (elemAt f'.payload.elemType 0).functor;
+          mt1 = t1.typeMerge (head f'.payload.elemType).functor;
           mt2 = t2.typeMerge (elemAt f'.payload.elemType 1).functor;
         in
         if (name == f'.name) && (mt1 != null) && (mt2 != null) then functor.type mt1 mt2 else null;
@@ -1580,9 +1585,8 @@ rec {
     let
       head' =
         if ts == [ ] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
-      tail' = tail ts;
     in
-    foldl' either head' tail';
+    foldl' either head' (tail ts);
 
   # Either value of type `coercedType` or `finalType`, the former is
   # converted to `finalType` using `coerceFunc`.
@@ -1613,19 +1617,15 @@ rec {
                 def
                 // {
                   value =
-                    let
-                      merged =
-                        if coercedType.merge ? v2 then
-                          checkV2MergeCoherence loc coercedType (
-                            coercedType.merge.v2 {
-                              inherit loc;
-                              defs = [ def ];
-                            }
-                          )
-                        else
-                          null;
-                    in
                     if coercedType.merge ? v2 then
+                      let
+                        merged = checkV2MergeCoherence loc coercedType (
+                          coercedType.merge.v2 {
+                            inherit loc;
+                            defs = [ def ];
+                          }
+                        );
+                      in
                       if merged.headError == null then coerceFunc def.value else def.value
                     else if coercedType.check def.value then
                       coerceFunc def.value
@@ -1683,9 +1683,9 @@ rec {
             self: loc: defs:
             (self.v2 { inherit loc defs; }).value;
           v2 =
-            { loc, defs }:
+            { loc, defs }@args:
             let
-              orig = checkV2MergeCoherence loc elemType (elemType.merge.v2 { inherit loc defs; });
+              orig = checkV2MergeCoherence loc elemType (elemType.merge.v2 args);
               headError' = if orig.headError != null then orig.headError else checkDefsForError check loc defs;
             in
             orig

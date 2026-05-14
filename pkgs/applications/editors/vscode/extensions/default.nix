@@ -365,8 +365,8 @@ let
         mktplcRef = {
           name = "nix-env-selector";
           publisher = "arrterian";
-          version = "1.2.0";
-          hash = "sha256-dvJmBoljMNS7I7c1DicIWW0t4GQvBFF9jAz2Z2v4lXw=";
+          version = "1.3.1";
+          hash = "sha256-dV1FkAOZkWgqlk6j6ppQSUz5N3AoGTPgPkep60gGeP8=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1007,8 +1007,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.14.3";
-          hash = "sha256-W4VciZMvVtRcCibJP5UGTlHCrdF/AF167xlLvZs5BB4=";
+          version = "1.14.5";
+          hash = "sha256-08GsGOtgLhq5vLpQ9VDdVk/q5VSW6d7cXXflNQOpB50=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
@@ -1204,8 +1204,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.132.0";
-          hash = "sha256-AWzHCg6N//+RmQ1I3Qq4c8Kk+e3gZpeqK9yWB8kfl6w=";
+          version = "3.134.0";
+          hash = "sha256-/tWH2uGfOuyvF8mfga2YdGK1ok2UYQchaOeCC2n+IHk=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1215,8 +1215,8 @@ let
         mktplcRef = {
           name = "flutter";
           publisher = "dart-code";
-          version = "3.132.0";
-          hash = "sha256-2R9SwNaJBKv39JLRy0IFm6/0J8Izj2DlEAat+yigIFk=";
+          version = "3.134.0";
+          hash = "sha256-wWANxBh9Tg3VkfbcrR0NgOIC8cpeZJCNfOevT7E4zKY=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1260,8 +1260,8 @@ let
         mktplcRef = {
           name = "languagetool-linter";
           publisher = "davidlday";
-          version = "0.25.7";
-          hash = "sha256-XLW49YkgDuojNEzqWRztK8mKWKbVU5OeGOjHl0heH/w=";
+          version = "0.25.8";
+          hash = "sha256-ddDxe0ZJgQjDUAKAQyboHEi0ZeVBeGE4Zx2peRbBGFA=";
         };
         meta = {
           description = "LanguageTool integration for VS Code";
@@ -1346,8 +1346,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.29.5";
-          hash = "sha256-oWrGDJHVQ8Gwjrh6vlQPKoFlBx3wxzLbMkH0gDFa5jg=";
+          version = "2.29.6";
+          hash = "sha256-CHpRetKZnGzShIePnbVUdR06/1AAO2I1RX7NiZ7GBNs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -3861,8 +3861,8 @@ let
         mktplcRef = {
           name = "ansible";
           publisher = "redhat";
-          version = "26.4.6";
-          hash = "sha256-ckirgCt6+mdnWkvmLwpH7YwqOxQ+JEeRE0/NJGCi7rU=";
+          version = "26.5.0";
+          hash = "sha256-gKe+LC0OOZi5I1Tei64JtQUR1gpWyTex9MoLGT6jgWU=";
         };
         meta = {
           description = "Ansible language support";
@@ -4357,8 +4357,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "5.2.0";
-          hash = "sha256-Q9wP+PqjWVyqVh0FK8lx+k4bxacyQO7aLtZX98fRl7g=";
+          version = "5.2.1";
+          hash = "sha256-GVuFP0n2Su6YAh/KwtkEFvZK9hAyVDIWfoBjaPQyUFM=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -4807,8 +4807,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.110.7";
-          hash = "sha256-9w78/6W/aqJxzoTBqSV7sek2zUf9gKlWFJ/0/XS9124=";
+          version = "0.110.9";
+          hash = "sha256-xHu8GvBoZKMag7BdHddXyjm2IReMujs9cggOn4h32t8=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";

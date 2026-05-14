@@ -7,7 +7,7 @@
   lame,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lame";
   version = "0.3.7";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-lame";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/ZzoGFQQrBf17TaBPSFDQ1yHaQnva56YLmscOacrKBI=";
   };
 
@@ -30,4 +30,4 @@ buildDunePackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

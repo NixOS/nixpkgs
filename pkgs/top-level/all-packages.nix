@@ -549,13 +549,6 @@ with pkgs;
         protobuf = protobuf_25.override {
           abseil-cpp = abseil-cpp_202407;
         };
-        stdenv =
-          if stdenv.cc.isClang then
-            llvmPackages_19.stdenv
-          else if stdenv.cc.isGNU then
-            gcc14Stdenv
-          else
-            stdenv;
       };
 
       mysql-shell_9 = callPackage ../development/tools/mysql-shell/9.nix {
@@ -564,7 +557,6 @@ with pkgs;
         protobuf = protobuf_25.override {
           abseil-cpp = abseil-cpp_202407;
         };
-        stdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
       };
     })
     mysql-shell_8
@@ -577,7 +569,6 @@ with pkgs;
     protobuf = protobuf_25.override {
       abseil-cpp = abseil-cpp_202407;
     };
-    stdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
   };
 
   # this is used by most `fetch*` functions
@@ -2584,8 +2575,6 @@ with pkgs;
 
   jl = haskellPackages.jl;
 
-  jkqtplotter = callPackage ../development/libraries/jkqtplotter { };
-
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
 
   jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
@@ -3258,8 +3247,6 @@ with pkgs;
 
   safety-cli = with python3.pkgs; toPythonApplication safety;
 
-  sasview = callPackage ../applications/science/misc/sasview { };
-
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
 
   semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
@@ -3398,8 +3385,6 @@ with pkgs;
   trytond = with python3Packages; toPythonApplication trytond;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
-
-  twilight = callPackage ../tools/graphics/twilight { };
 
   twitch-chat-downloader =
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
@@ -4857,11 +4842,11 @@ with pkgs;
 
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
   beam28Packages = recurseIntoAttrs beam.packages.erlang_28.beamPackages;
-  beam29Packages = dontRecurseIntoAttrs beam.packages.erlang_29.beamPackages;
+  beam29Packages = recurseIntoAttrs beam.packages.erlang_29.beamPackages;
 
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27.beamPackages;
   beamMinimal28Packages = recurseIntoAttrs beam_minimal.packages.erlang_28.beamPackages;
-  beamMinimal29Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_29.beamPackages;
+  beamMinimal29Packages = recurseIntoAttrs beam_minimal.packages.erlang_29.beamPackages;
 
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
@@ -5703,8 +5688,6 @@ with pkgs;
       })
     );
 
-  minizinc = callPackage ../development/tools/minizinc { };
-
   mkdocs = with python3Packages; toPythonApplication mkdocs;
 
   mold = wrapBintoolsWith {
@@ -6459,8 +6442,6 @@ with pkgs;
     x11Support = false;
   };
 
-  imlibsetroot = callPackage ../applications/graphics/imlibsetroot { };
-
   indilib = callPackage ../development/libraries/science/astronomy/indilib { };
   indi-3rdparty = recurseIntoAttrs (
     callPackages ../development/libraries/science/astronomy/indilib/indi-3rdparty.nix { }
@@ -6971,8 +6952,6 @@ with pkgs;
 
   openexr = callPackage ../development/libraries/openexr/3.nix { };
   openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
-
-  opencolorio = callPackage ../development/libraries/opencolorio { };
 
   openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
@@ -9498,7 +9477,6 @@ with pkgs;
     ;
 
   inherit (callPackages ../development/libraries/wlroots { })
-    wlroots_0_18
     wlroots_0_19
     wlroots_0_20
     ;
@@ -11272,8 +11250,6 @@ with pkgs;
     blas = blas-ilp64;
     lapack = lapack-ilp64;
   };
-
-  suitesparse = callPackage ../development/libraries/science/math/suitesparse { };
 
   trilinos-mpi = trilinos.override { withMPI = true; };
 

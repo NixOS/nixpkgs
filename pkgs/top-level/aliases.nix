@@ -541,6 +541,7 @@ mapAliases {
   conduwuit = throw "'conduwuit' has been removed as the upstream repository has been deleted. Consider migrating to 'matrix-conduit', 'matrix-continuwuity' or 'matrix-tuwunel' instead."; # Added 2025-08-08
   cone = throw "cone has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   connman-ncurses = throw "'connman-ncurses' has been removed due to lack of maintenance upstream."; # Added 2025-05-27
+  copilot-cli = throw "'copilot-cli' was removed due to upstream end-of-life."; # Added 2026-05-11
   copilot-language-server-fhs = warnAlias "The package set `copilot-language-server-fhs` has been renamed to `copilot-language-server`." copilot-language-server; # Added 2025-09-07
   copper = throw "'copper' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   cordless = throw "'cordless' has been removed due to being archived upstream. Consider using 'discordo' instead."; # Added 2025-06-07
@@ -2208,6 +2209,7 @@ mapAliases {
   wireshark-qt = warnAlias "'wireshark-qt' has been renamed to/replaced by 'wireshark'" wireshark; # Added 2026-01-23
   wkhtmltopdf-bin = throw "'wkhtmltopdf-bin' has been renamed to/replaced by 'wkhtmltopdf'"; # Converted to throw 2025-10-27
   wlroots_0_17 = throw "'wlroots_0_17' has been removed in favor of newer versions"; # Added 2026-03-07
+  wlroots_0_18 = throw "'wlroots_0_18' has been removed in favor of newer versions"; # Added 2026-05-13
   wlx-overlay-s = throw "'wlx-overlay-s' and 'wayvr-dashboard' have been merged into a single application. Please switch to 'wayvr'"; # Added 2026-01-09
   wmii_hg = throw "'wmii_hg' has been renamed to/replaced by 'wmii'"; # Converted to throw 2025-10-27
   wolfssl = throw "'wolfssl' has been removed because it has an unclear licensing situation and no remaining users in Nixpkgs"; # Added 2026-04-03

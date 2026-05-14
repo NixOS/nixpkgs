@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-ai-slim";
-  version = "1.94.0";
+  version = "1.95.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7bFlAJiJVxZWNcP/LbLQO97KRXIcG3xy12m1HEji1Rs=";
+    hash = "sha256-JE5ufIfwEVtJ9OOdPnuQPiOOvmo63l6D7IsNIats39c=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_ai_slim";

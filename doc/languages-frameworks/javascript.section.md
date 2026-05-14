@@ -469,9 +469,11 @@ Changes can include workarounds or bug fixes to existing PNPM issues.
 
 ##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
 
-- 1: Initial version, nothing special. **Deprecated: Scheduled for removal in the 26.11 release.**. New packages must not use this value.
+Version 3 is the recommended value for new packages. Versions 1 and 2 are deprecated and scheduled for removal in the 26.11 release; existing packages must migrate.
+
+- 1: Initial version, nothing special.
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
-- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950). **Recommended**
+- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 
 ### Yarn {#javascript-yarn}
 

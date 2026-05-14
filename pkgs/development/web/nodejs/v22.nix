@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "22.22.2";
-  sha256 = "b6bedd3a8cacd5df7df015a5088264b12c74a277ba60684cb9642ae8eb743132";
+  version = "22.22.3";
+  sha256 = "f3e6a578db1ab335a4a72785c1e87ad18a2cf6d2fc25747a1d741fb34af0bd0f";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -57,13 +57,6 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-
-      # TODO: remove this when included in a next release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
-        hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
-        includes = [ "test/*" ];
-      })
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
       # Fix builds with shared llhttp

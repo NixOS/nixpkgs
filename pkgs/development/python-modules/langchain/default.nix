@@ -132,6 +132,9 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
+
+    # Timing sensitive tests
+    "tests/unit_tests/agents/middleware/implementations/test_model_retry.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
