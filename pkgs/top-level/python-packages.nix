@@ -17232,6 +17232,8 @@ self: super: with self; {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  rosbag-resurrector = callPackage ../development/python-modules/rosbag-resurrector { };
+
   rosbags = callPackage ../development/python-modules/rosbags { };
 
   rospkg = callPackage ../development/python-modules/rospkg { };
