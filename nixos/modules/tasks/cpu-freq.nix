@@ -34,6 +34,17 @@ in
     };
 
     cpufreq = {
+      epp = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "balance_performance";
+        description = ''
+          Configure the energy performance preference for the available CPUs.
+          Can only be used with the `amd_pstate` or `intel_pstate` scaling
+          drivers in active mode, and the cpufreq governor must be set to
+          "powersave".
+        '';
+      };
 
       max = mkOption {
         type = types.nullOr types.ints.unsigned;
@@ -61,6 +72,7 @@ in
   config =
     let
       governorEnable = cfg.cpuFreqGovernor != null;
+      eppEnable = cfg.cpufreq.epp != null;
       maxEnable = cfg.cpufreq.max != null;
       minEnable = cfg.cpufreq.min != null;
       enable = !config.boot.isContainer && (governorEnable || maxEnable || minEnable);
@@ -83,11 +95,15 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = "yes";
-          ExecStart =
-            "${cpupower}/bin/cpupower frequency-set "
-            + optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} "
-            + optionalString maxEnable "--max ${toString cfg.cpufreq.max} "
-            + optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
+          ExecStart = [
+            (
+              "${cpupower}/bin/cpupower frequency-set "
+              + optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} "
+              + optionalString maxEnable "--max ${toString cfg.cpufreq.max} "
+              + optionalString minEnable "--min ${toString cfg.cpufreq.min} "
+            )
+          ]
+          ++ lib.optional eppEnable "${cpupower}/bin/cpupower set -e ${cfg.cpufreq.epp}";
           SuccessExitStatus = "0 237";
         };
       };
