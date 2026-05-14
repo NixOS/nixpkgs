@@ -1625,8 +1625,6 @@ with pkgs;
 
   intelLlvmStdenv = intel-llvm.stdenv;
 
-  cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
-
   cot = with python3Packages; toPythonApplication cot;
 
   crossplane = with python3Packages; toPythonApplication crossplane;
