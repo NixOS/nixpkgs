@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-
+  fixDarwinDylibNames,
   gmp,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-LndLfORnypLqFgNMPEJ8jc2Fa2xWWgYS9rZ7gGFbwwo=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     gmp

@@ -70,8 +70,8 @@ in
       "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
     ) true;
 
-    lib.warnIf (fetcherVersion == 1)
-      "fetchPnpmDeps: `fetcherVersion = 1` is deprecated and scheduled for removal in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 3` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
+    lib.warnIf (fetcherVersion < 3)
+      "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` is deprecated and scheduled for removal in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 3` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
 
       stdenvNoCC.mkDerivation
       (

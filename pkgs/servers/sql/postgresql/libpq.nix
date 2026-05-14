@@ -163,7 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # PostgreSQL always builds both shared and static libs, so we delete those we don't want.
-  postInstall = if stdenv.hostPlatform.isStatic then "touch $out/empty" else "rm -rfv $dev/lib/*.a";
+  # Honour the `dontDisableStatic` convention (see `generic.nix`) so consumers can keep
+  # the static archives in `$dev/lib` alongside the shared libraries in `$out/lib`.
+  postInstall =
+    if stdenv.hostPlatform.isStatic then
+      "touch $out/empty"
+    else
+      lib.optionalString (!(finalAttrs.dontDisableStatic or false)) "rm -rfv $dev/lib/*.a";
 
   doCheck = false;
 

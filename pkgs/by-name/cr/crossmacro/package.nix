@@ -3,6 +3,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   fontconfig,
   freetype,
@@ -14,8 +15,6 @@
   libxcursor,
   libxext,
   libxrandr,
-  libxrender,
-  libxfixes,
   libxtst,
   libglvnd,
   mesa,
@@ -66,8 +65,6 @@ buildDotnetModule rec {
     libxcursor
     libxext
     libxrandr
-    libxrender
-    libxfixes
     libxtst
     glib
     libglvnd
@@ -76,7 +73,11 @@ buildDotnetModule rec {
     libxkbcommon
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
+    installManPage docs/man/crossmacro.1
+
     install -Dm644 scripts/assets/CrossMacro.desktop $out/share/applications/crossmacro.desktop
 
     for size in 16 32 48 64 128 256 512; do
@@ -97,7 +98,7 @@ buildDotnetModule rec {
     description = "Cross-platform mouse and keyboard macro recorder and player";
     homepage = "https://github.com/alper-han/CrossMacro";
     changelog = "https://github.com/alper-han/CrossMacro/releases/tag/v${version}";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "crossmacro";
     maintainers = with lib.maintainers; [ alper-han ];

@@ -978,9 +978,9 @@ optionalAttrs allowAliases aliases
               __structuredAttrs = true;
             }
             ''
-              importsPath="$TMPDIR/imports"
+              export importsPath="$TMPDIR/imports"
               printf "%s" "$imports" > "$importsPath"
-              valuePath="$TMPDIR/value"
+              export valuePath="$TMPDIR/value"
               printf "%s" "$value" > "$valuePath"
               cat "$valuePath"
               python3 "$pythonGen" > $out
@@ -1027,7 +1027,7 @@ optionalAttrs allowAliases aliases
                 __structuredAttrs = true;
               }
               ''
-                valuePath="$TMPDIR/value"
+                export valuePath="$TMPDIR/value"
                 printf "%s" "$value" > "$valuePath"
                 python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
