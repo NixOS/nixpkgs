@@ -1889,8 +1889,6 @@ with pkgs;
 
   binlore = callPackage ../development/tools/analysis/binlore { };
 
-  bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
-
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
