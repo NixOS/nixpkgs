@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-qrd0NJS7M3nKFpAOpd8raGLrMj6PixTqiuus25lv+PA=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    (openssl.override { withZlib = true; })
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

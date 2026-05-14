@@ -3109,10 +3109,6 @@ with pkgs;
     python3Packages.callPackage ../applications/science/robotics/sumorobot-manager
       { };
 
-  sslscan = callPackage ../tools/security/sslscan {
-    openssl = openssl.override { withZlib = true; };
-  };
-
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
   stoken = callPackage ../tools/security/stoken (config.stoken or { });
