@@ -145,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
+    substituteInPlace Macaulay2/packages/DeterminantalRepresentations.m2 \
+      --replace-fail "eps = 1e-15" "eps = 1e-14"
   '';
 
   preConfigure = ''
