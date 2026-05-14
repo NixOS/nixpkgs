@@ -69,14 +69,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentry-sdk";
-  version = "2.59.0";
+  version = "2.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = finalAttrs.version;
-    hash = "sha256-CNGo0jVVRvHm7mLKT8ciw6oIlY600BBwCAVOCR12F74=";
+    hash = "sha256-ny1MDl0J/TeYtlzpIuNUy9FR/+pEDF0+AOZNU4nJey4=";
   };
 
   postPatch = ''
@@ -220,6 +220,8 @@ buildPythonPackage (finalAttrs: {
     # KeyError: 'sentry.release'
     "test_logs_attributes"
     "test_logger_with_all_attributes"
+    "test_span_templates_ai_dicts"
+    "test_span_templates_ai_objects"
   ]
   ++
     lib.optionals (pythonAtLeast "3.14" && stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin)

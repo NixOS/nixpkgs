@@ -16021,8 +16021,6 @@ self: super: with self; {
 
   python-openstackclient = callPackage ../development/python-modules/python-openstackclient { };
 
-  python-openzwave = callPackage ../development/python-modules/python-openzwave { };
-
   python-osc = callPackage ../development/python-modules/python-osc { };
 
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };

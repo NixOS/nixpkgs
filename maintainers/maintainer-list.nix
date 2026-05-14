@@ -1803,6 +1803,12 @@
     matrix = "@andrewzah:matrix.abare.party";
     keys = [ { fingerprint = "D87B D9DC F11B ACD6 CDB4 0CB2 1373 2FB1 3E61 E0BE"; } ];
   };
+  andrinoff = {
+    name = "Drew Smirnoff";
+    email = "me@andrinoff.com";
+    github = "andrinoff";
+    githubId = 175145001;
+  };
   Andy3153 = {
     name = "Andrei Dobrete";
     email = "andy3153@protonmail.com";
@@ -9509,6 +9515,11 @@
     githubId = 40049608;
     name = "Faye Chun";
     keys = [ { fingerprint = "ACB8 DB1F E88D A908 6332  BDB1 5A71 B010 2FD7 3FC0"; } ];
+  };
+  fxai = {
+    github = "fxai";
+    githubId = 44463990;
+    name = "fxai";
   };
   fxfactorial = {
     email = "edgar.factorial@gmail.com";
@@ -29763,7 +29774,7 @@
   wolfram444 = {
     name = "Xabibulloh To'xtayev";
     email = "kamiltox2006@gmail.com";
-    github = "woolfram444";
+    github = "wolfram444";
     githubId = 109225370;
   };
   womeier = {
@@ -30051,6 +30062,12 @@
     github = "xlambein";
     githubId = 5629059;
     name = "Xavier Lambein";
+  };
+  xmnlz = {
+    name = "xmnlz";
+    github = "xmnlz";
+    githubId = 63904972;
+    email = "lemmeq9+nixos@gmail.com";
   };
   xnaveira = {
     email = "xnaveira@gmail.com";
