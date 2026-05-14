@@ -13,9 +13,8 @@
   pango,
   pkg-config,
   polkit,
-  python3,
   scons,
-  sphinx,
+  python3Packages,
   util-linux,
   wrapGAppsHook3,
   withGui ? false,
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    sphinx
+    python3Packages.sphinx
     scons
   ]
   ++ lib.optionals withGui [
@@ -65,8 +64,7 @@ stdenv.mkDerivation rec {
     gtksourceview3
     pango
     polkit
-    python3
-    python3.pkgs.pygobject3
+    python3Packages.pygobject3
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
@@ -89,7 +87,7 @@ stdenv.mkDerivation rec {
   # in GUI mode, this shells out to itself, and tries to import python modules
   postInstall = lib.optionalString withGui ''
     gappsWrapperArgs+=(--prefix PATH : "$out/bin")
-    gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
+    gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3Packages.pygobject3}):$(toPythonPath ${python3Packages.pycairo})")
   '';
 
   meta = {

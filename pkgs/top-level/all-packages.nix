@@ -3045,10 +3045,6 @@ with pkgs;
 
   rmate = rubyPackages.rmate;
 
-  rmlint = callPackage ../tools/misc/rmlint {
-    inherit (python3Packages) sphinx;
-  };
-
   rpatool = with python3Packages; toPythonApplication rpatool;
 
   rpm = callPackage ../tools/package-management/rpm {
