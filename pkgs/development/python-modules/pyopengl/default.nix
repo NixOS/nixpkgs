@@ -9,13 +9,13 @@
   mesa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopengl";
   version = "3.1.10";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xKAtaGa1TrEZyOmz+wT6g1qVq4At2WYHq0zbABLfgzU=";
   };
 
@@ -91,4 +91,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     inherit (mesa.meta) platforms;
   };
-}
+})
