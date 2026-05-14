@@ -52,6 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-KVm3iGqsdhhbkK6gyfgNFDQ/YE3grpaz3Sp2D3qzvek=";
   };
 
+  postUnpack =
+    let
+      lua548 = fetchurl {
+        url = "https://www.lua.org/ftp/lua-5.4.8.tar.gz";
+        hash = "sha256-TxjdrhVOeT5G7qtyfFnvHAwMK3ROe5QhlxDXb1MGKa4=";
+      };
+    in
+    ''
+      mkdir -p NetHack-${finalAttrs.version}/lib
+      tar zxf ${lua548} -C NetHack-${finalAttrs.version}/lib
+    '';
+
   buildInputs = [
     ncurses
   ]
@@ -135,18 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
     sh setup.sh hints/${hint}
     popd
   '';
-
-  preBuild =
-    let
-      lua548 = fetchurl {
-        url = "https://www.lua.org/ftp/lua-5.4.8.tar.gz";
-        hash = "sha256-TxjdrhVOeT5G7qtyfFnvHAwMK3ROe5QhlxDXb1MGKa4=";
-      };
-    in
-    ''
-      mkdir -p lib
-      tar zxf ${lua548} -C lib
-    '';
 
   # https://github.com/NixOS/nixpkgs/issues/294751
   enableParallelBuilding = false;
