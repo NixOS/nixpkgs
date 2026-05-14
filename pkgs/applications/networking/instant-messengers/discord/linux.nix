@@ -149,7 +149,9 @@ let
   );
 
   # Symlink native modules from the nix store into the user config dir
-  # where Discord's JS moduleUpdater expects them.
+  # where Discord's legacy JS moduleUpdater expects them. Distro-layout
+  # hosts can still use this path when SKIP_HOST_UPDATE disables the
+  # official native updater.
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
     config_dir="''${DISCORD_USER_DATA_DIR:-''${XDG_CONFIG_HOME:-$HOME/.config}}/${lib.toLower binaryName}"
