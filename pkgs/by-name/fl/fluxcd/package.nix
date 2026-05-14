@@ -81,6 +81,7 @@ buildGo126Module rec {
     maintainers = with lib.maintainers; [
       jlesquembre
       ryan4yin
+      SchahinRohani
       stealthybox
     ];
     mainProgram = "flux";
