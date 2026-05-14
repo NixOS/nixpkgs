@@ -4,29 +4,31 @@
   fetchFromCodeberg,
   libxcursor,
   libx11,
+  libxrender,
   installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sxcs";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromCodeberg {
     owner = "NRK";
     repo = "sxcs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rYmbbdZjeLCvGvNocI3+KVU2KBkYvRisayTyScTRay8=";
+    hash = "sha256-7Dz14gARdiHZApT20PGS5pop327XROBeAXeKUeHo7iA=";
   };
 
   buildInputs = [
     libx11
     libxcursor
+    libxrender
   ];
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
     runHook preBuild
-    ${stdenv.cc.targetPrefix}cc -o sxcs sxcs.c -O3 -s -l X11 -l Xcursor
+    ${stdenv.cc.targetPrefix}cc -o sxcs sxcs.c -O3 -s -l X11 -l Xcursor -l Xrender
     runHook postBuild
   '';
 
