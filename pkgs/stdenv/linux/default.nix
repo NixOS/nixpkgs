@@ -343,6 +343,7 @@ in
           gnum4
           perl
           patchelf
+          nukeReferences
           ;
         ${localSystem.libc} = prevStage.${localSystem.libc};
         gmp = super.gmp.override { cxx = false; };
@@ -457,6 +458,7 @@ in
           bison
           texinfo
           which
+          nukeReferences
           ;
 
         # Avoids infinite recursion, as this is in the build-time dependencies of libc.
@@ -565,6 +567,7 @@ in
             libidn2
             libunistring
             libxcrypt
+            nukeReferences
             ;
           # We build a special copy of libgmp which doesn't use libstdc++, because
           # xgcc++'s libstdc++ references the bootstrap-files (which is what
