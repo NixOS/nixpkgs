@@ -20,6 +20,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     hash = "sha256-Fc0LktN8pCRnrvk9uudXu10J3XfrRbdGlcDKXFNQzmQ=";
   };
 
+  postPatch = ''
+    # turn off Google Analytics per default
+    substituteInPlace src/js/store/index.js \
+      --replace-fail 'allow_reporting: true' 'allow_reporting: false'
+  '';
+
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     hash = "sha256-aQHq80SLaOPOANYV+aDTWC/bxfc1it5iDeRJ8L5iuEU=";
