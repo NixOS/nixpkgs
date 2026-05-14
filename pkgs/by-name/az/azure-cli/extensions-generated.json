@@ -496,6 +496,13 @@
     "hash": "sha256-x1mbd/Y28BcYqEf+T1rZcOHT8wrq9VnWnCfw9rBnl80=",
     "description": "Microsoft Azure Command-Line Tools ExpressRouteCrossConnection Extension"
   },
+  "fileshares": {
+    "pname": "fileshares",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/fileshares-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-IrJwPQaMuX9VItIEkJzK3cmANHzU50fIaWn2s32nDVk=",
+    "description": "Commands for managing Azure file shares, snapshots, and private endpoint connections"
+  },
   "firmwareanalysis": {
     "pname": "firmwareanalysis",
     "version": "2.0.1",
