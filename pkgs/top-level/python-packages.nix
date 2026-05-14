@@ -2098,6 +2098,8 @@ self: super: with self; {
 
   birch = callPackage ../development/python-modules/birch { };
 
+  birdnet = callPackage ../development/python-modules/birdnet { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitbox02 = callPackage ../development/python-modules/bitbox02 { };
