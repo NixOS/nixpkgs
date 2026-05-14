@@ -6699,9 +6699,6 @@ with pkgs;
   libva = libva-minimal.override { minimal = false; };
   libva-utils = callPackage ../development/libraries/libva/utils.nix { };
 
-  libva1 = callPackage ../development/libraries/libva/1.nix { };
-  libva1-minimal = libva1.override { minimal = true; };
-
   libwnck = callPackage ../development/libraries/libwnck { };
   libwnck2 = callPackage ../development/libraries/libwnck/2.nix { };
 
