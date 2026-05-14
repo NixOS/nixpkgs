@@ -2,14 +2,16 @@
 
 let
   inherit (lib)
+    all
     any
+    attrNames
     attrValues
     concatMap
     filter
     hasPrefix
+    isAttrs
     isList
     mapAttrs
-    matchAttrs
     recursiveUpdateUntil
     toList
     ;
@@ -24,19 +26,43 @@ let
     execFormats
     ;
 
+  # Based on lib.attrsets.matchAttrs, but with the initial isAttrs assertion
+  # removed, since this function is only ever called with attrsets
+  matchAttrsUnchecked =
+    pattern: attrs:
+    all (
+      # Compare equality between `pattern` & `attrs`.
+      attr:
+      # Missing attr, not equal.
+      attrs ? ${attr}
+      && (
+        let
+          lhs = pattern.${attr};
+          rhs = attrs.${attr};
+        in
+        # Simple equality check is primarily for non-attrsets, but we run it
+        # on attrsets too, since it may let us avoid recursing
+        lhs == rhs || isAttrs lhs && isAttrs rhs && matchAttrsUnchecked lhs rhs
+      )
+    ) (attrNames pattern);
+
   abis = mapAttrs (_: abi: removeAttrs abi [ "assertions" ]) lib.systems.parse.abis;
 in
 
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
+  #
+  # Note: All toplevel attributes within a pattern are expected to be attrsets.
+  # matchAttrsUnchecked should be changed if a pattern is ever added that
+  # doesn't follow this axiom
   patterns = rec {
     # The patterns below are lists in sum-of-products form.
     #
     # Each attribute is list of product conditions; non-list values are treated
     # as a singleton list.  If *any* product condition in the list matches then
     # the predicate matches.  Each product condition is tested by
-    # `lib.attrsets.matchAttrs`, which requires a match on *all* attributes of
-    # the product.
+    # `matchAttrsUnchecked`, which requires a match on *all* attributes of the
+    # product.
 
     isi686 = {
       cpu = cpuTypes.i686;
@@ -492,9 +518,9 @@ rec {
   matchAnyAttrs =
     patterns:
     if isList patterns then
-      attrs: any (pattern: matchAttrs pattern attrs) patterns
+      attrs: any (pattern: matchAttrsUnchecked pattern attrs) patterns
     else
-      matchAttrs patterns;
+      matchAttrsUnchecked patterns;
 
   predicates = mapAttrs (_: matchAnyAttrs) patterns;
 
