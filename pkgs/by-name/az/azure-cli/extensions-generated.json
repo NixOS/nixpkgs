@@ -533,9 +533,9 @@
   },
   "front-door": {
     "pname": "front-door",
-    "version": "2.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/front_door-2.1.0-py3-none-any.whl",
-    "hash": "sha256-7aa9A+tq+qXzMuabG9McHkXpU3TRZVjQWDbmuHTTsFk=",
+    "version": "2.2.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/front_door-2.2.0-py3-none-any.whl",
+    "hash": "sha256-5vj/OzbfMmv/SI8qS659o+QiMfPofoBCJR/mQV3XZNE=",
     "description": "Manage networking Front Doors"
   },
   "fzf": {
