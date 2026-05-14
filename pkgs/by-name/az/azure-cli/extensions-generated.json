@@ -209,6 +209,13 @@
     "hash": "sha256-w+HDLtCIAIhlFTpR4iUMEKPC2vInPWWmMTX0VT9q1lg=",
     "description": "Microsoft Azure Command-Line Tools Carbon Extension"
   },
+  "cdn": {
+    "pname": "cdn",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cdn-1.0.0b1-py2.py3-none-any.whl",
+    "hash": "sha256-YybIrCjZnZQ0IFgOZbm4JfMnXNC/Sah8YaZuss1M5B4=",
+    "description": "Microsoft Azure Command-Line Tools CDN and AFD Extension"
+  },
   "change-analysis": {
     "pname": "change-analysis",
     "version": "0.1.0",
