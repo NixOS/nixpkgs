@@ -16490,6 +16490,8 @@ self: super: with self; {
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
 
+  pyzhuyin = callPackage ../development/python-modules/pyzhuyin { };
+
   pyzipper = callPackage ../development/python-modules/pyzipper { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
