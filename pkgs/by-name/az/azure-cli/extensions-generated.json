@@ -153,6 +153,13 @@
     "hash": "sha256-sdk0uNtQX6yBiEboywNE8FAreY1pBiimah0PdmCDRYg=",
     "description": "Microsoft Azure Command-Line Tools AutomationClient Extension"
   },
+  "azure-changesafety": {
+    "pname": "azure-changesafety",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/azure_changesafety-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-ZR2Bm9U9C4rXrCfPVGRu65MBFjZ4iUtXS44l+ClJXsY=",
+    "description": "Microsoft Azure Command-Line Tools ChangeSafety Extension"
+  },
   "azure-firewall": {
     "pname": "azure-firewall",
     "version": "2.1.1",
