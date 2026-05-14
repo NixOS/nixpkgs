@@ -944,6 +944,13 @@
     "hash": "sha256-i0w0dd8MNUTbzCjkh161sWPXK0Cv9CUKr9rZQYDD+ZU=",
     "description": "Microsoft Azure Command-Line Tools AzureQuotaExtensionAPI Extension"
   },
+  "relationship": {
+    "pname": "relationship",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/relationship-1.0.0b1-py2.py3-none-any.whl",
+    "hash": "sha256-pEXG6+Gf/JlzjeQGw0VadoArnX+2yjhYVMxg78Qg06g=",
+    "description": "Microsoft Azure Command-Line Tools Relationship Extension"
+  },
   "reservation": {
     "pname": "reservation",
     "version": "0.3.1",
