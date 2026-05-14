@@ -2952,8 +2952,6 @@ with pkgs;
     ssh = openssh;
   };
 
-  phosh = callPackage ../applications/window-managers/phosh { };
-
   inherit (callPackages ../tools/security/pinentry { })
     pinentry-curses
     pinentry-emacs
