@@ -9726,6 +9726,8 @@ self: super: with self; {
 
   mcap = callPackage ../development/python-modules/mcap { };
 
+  mcap-ros2-support = callPackage ../development/python-modules/mcap-ros2-support { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
