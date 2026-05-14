@@ -36,6 +36,9 @@ in
       port = 80;
 
       settings = {
+        # wreq needs a path to the self-signed CA
+        SSL_CERT_FILE = "${certs.ca.cert}";
+
         REDLIB_DEFAULT_USE_HLS = true;
       };
     };
