@@ -570,6 +570,7 @@ in
             libxcrypt
             nukeReferences
             autoconf269
+            python3Minimal
             ;
           # We build a special copy of libgmp which doesn't use libstdc++, because
           # xgcc++'s libstdc++ references the bootstrap-files (which is what
@@ -634,6 +635,7 @@ in
           linuxHeaders
           libidn2
           libunistring
+          python3Minimal
           ;
         ${localSystem.libc} = prevStage.${localSystem.libc};
         # Since this is the first fresh build of binutils since stage2, our own runtimeShell will be used.
