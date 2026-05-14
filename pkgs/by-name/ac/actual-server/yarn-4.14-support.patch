@@ -2,10 +2,10 @@ diff --git a/.yarnrc.yml b/.yarnrc.yml
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
 @@ -6,4 +6,7 @@ enableTransparentWorkspaces: false
- 
+
  nodeLinker: node-modules
- 
--yarnPath: .yarn/releases/yarn-4.10.3.cjs
+
+-yarnPath: .yarn/releases/yarn-4.13.0.cjs
 +approvedGitRepositories:
 +  - "**"
 +
@@ -15,9 +15,9 @@ diff --git a/yarn.lock b/yarn.lock
 +++ b/yarn.lock
 @@ -2,6 +2,6 @@
  # Manual changes might be lost - proceed with caution!
- 
+
  __metadata:
 -  version: 8
 +  version: 9
    cacheKey: 10
- 
+

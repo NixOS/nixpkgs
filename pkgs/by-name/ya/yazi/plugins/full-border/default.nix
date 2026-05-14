@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "full-border.yazi";
-  version = "25.2.26-unstable-2026-04-22";
+  version = "0-unstable-2026-04-22";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";

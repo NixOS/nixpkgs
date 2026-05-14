@@ -11,6 +11,7 @@
   cacert,
   git,
   nix,
+  nix-eval-jobs,
   versionCheckHook,
 
   withAutocomplete ? true,
@@ -55,6 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     let
       binPath = [
         nix
+        nix-eval-jobs
         git
       ]
       ++ lib.optional withSandboxSupport bubblewrap

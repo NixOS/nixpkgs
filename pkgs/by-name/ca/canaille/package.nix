@@ -26,13 +26,13 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     # Backport authlib 1.7 compatibility.
     (fetchpatch2 {
-      url = "https://gitlab.com/yaal/canaille/-/commit/b356baa82109a7fdf61a8258572d199ffd3c9604.patch";
-      hash = "sha256-f5zJBtm9mJpWra5x4vr07eL9xe381lLFp3lfehc4Ypk=";
+      url = "https://gitlab.com/yaal/canaille/-/commit/b356baa82109a7fdf61a8258572d199ffd3c9604.diff";
+      hash = "sha256-/U6S3h6qIl763ZsGpOm6CVk4NaY3A7mq3PkT193aLEs=";
     })
     # Update OIDC tests for authlib 1.7 behavior.
     (fetchpatch2 {
-      url = "https://gitlab.com/yaal/canaille/-/commit/c1b6d103ebf374cd6a21d9af8376c910c2d0d5d9.patch";
-      hash = "sha256-N9kxiKU6iwXq6cw6itZQHairSOgyDgwAVByj0NnxMqY=";
+      url = "https://gitlab.com/yaal/canaille/-/commit/c1b6d103ebf374cd6a21d9af8376c910c2d0d5d9.diff";
+      hash = "sha256-MjwkUb54ikt1+xUXBTOIBi9E+DmPdwYhw0W0c0prF/Q=";
       includes = [ "tests/oidc/*" ];
     })
   ];

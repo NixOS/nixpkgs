@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "mount.yazi";
-  version = "25.12.29-unstable-2026-04-09";
+  version = "0-unstable-2026-04-09";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
