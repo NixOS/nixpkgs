@@ -2954,10 +2954,6 @@ with pkgs;
 
   phosh = callPackage ../applications/window-managers/phosh { };
 
-  phosh-mobile-settings =
-    callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
-      { };
-
   inherit (callPackages ../tools/security/pinentry { })
     pinentry-curses
     pinentry-emacs
