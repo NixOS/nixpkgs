@@ -10,16 +10,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "0.73.0";
+  version = "0.75.3";
 
   src = fetchFromGitHub {
-    owner = "badlogic";
-    repo = "pi-mono";
+    owner = "earendil-works";
+    repo = "pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oE4zMH5KEH185Vdp0CE221sa9rJJw35jFLlfhTa3Sg4=";
+    hash = "sha256-c/+cxkp/EZ2PLERxTENN5edXHEs7M2oqzNepjRA4TIE=";
   };
 
-  npmDepsHash = "sha256-rBlAzAnP9aif1tZ984AO4HftIJsDgLQ+02J3td4jcRg=";
+  npmDepsHash = "sha256-/mWjrZFzRmtkbWYMJOXKnLPxFITFndq5hgdY0DnPfAg=";
 
   npmWorkspace = "packages/coding-agent";
 
@@ -52,9 +52,9 @@ buildNpmPackage (finalAttrs: {
     local nm="$out/lib/node_modules/pi-monorepo/node_modules"
 
     # Replace workspace deps needed at runtime with real copies
-    for ws in @mariozechner/pi-ai:packages/ai \
-              @mariozechner/pi-agent-core:packages/agent \
-              @mariozechner/pi-tui:packages/tui; do
+    for ws in @earendil-works/pi-ai:packages/ai \
+              @earendil-works/pi-agent-core:packages/agent \
+              @earendil-works/pi-tui:packages/tui; do
       IFS=: read -r pkg src <<< "$ws"
       rm "$nm/$pkg"
       cp -r "$src" "$nm/$pkg"
@@ -82,8 +82,8 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Coding agent CLI with read, bash, edit, write tools and session management";
     homepage = "https://pi.dev/";
-    downloadPage = "https://www.npmjs.com/package/@mariozechner/pi-coding-agent";
-    changelog = "https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/CHANGELOG.md";
+    downloadPage = "https://www.npmjs.com/package/@earendil-works/pi-coding-agent";
+    changelog = "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ munksgaard ];
     mainProgram = "pi";
