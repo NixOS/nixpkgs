@@ -27,6 +27,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Hardcode unzip path
     substituteInPlace ./src/updater/moduleUpdater.js \
       --replace \'unzip\' \'${unzip}/bin/unzip\'
+    # Let custom distro updater endpoints install under user data instead of
+    # requiring Discord's mutable app-* root layout.
+    substituteInPlace ./src/updater/updater.js \
+      --replace-fail \
+        "const root_path = paths.getRootPath();" \
+        "const root_path = paths.getRootPath() ?? (repository_url !== 'https://updates.discord.com/' ? paths.getUserData() : null);"
+    substituteInPlace ./src/splash/index.js \
+      --replace-fail \
+        "await inst.startCurrentVersion({});" \
+        "await inst.startCurrentVersion({}, { allowObsoleteHost: require('../Constants').NEW_UPDATE_ENDPOINT !== 'https://updates.discord.com/' && settings.get('SKIP_HOST_UPDATE') });"
     # Remove auto-update feature
     echo "module.exports = async () => log('AsarUpdate', 'Removed');" > ./src/asarUpdate.js
   '';
