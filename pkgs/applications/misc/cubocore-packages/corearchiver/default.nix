@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corearchiver";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corearchiver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+XaBe1fNpAQf3cqXV+A1cZ1tPck3bCpgEDmFeF536q4=";
+    hash = "sha256-r2iXvc9KtRsB5IHvJxs/DxQIf7IiNWoM4h2wDgsXvZE=";
   };
 
   nativeBuildInputs = [
