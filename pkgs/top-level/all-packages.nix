@@ -2816,8 +2816,6 @@ with pkgs;
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
-  pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
-
   nsjail = callPackage ../tools/security/nsjail {
     protobuf = protobuf_21;
   };
