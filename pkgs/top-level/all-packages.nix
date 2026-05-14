@@ -7101,8 +7101,6 @@ with pkgs;
 
   stlink-gui = callPackage ../by-name/st/stlink/package.nix { withGUI = true; };
 
-  streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix { };
-
   szurubooru = callPackage ../servers/web-apps/szurubooru { };
 
   tclap = tclap_1_2;
