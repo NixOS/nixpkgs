@@ -23,7 +23,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer";
-  version = "2.9.7";
+  version = "2.9.8";
 
   # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
   # use together with the version from this package to keep the
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "composer";
     repo = "composer";
     tag = finalAttrs.version;
-    hash = "sha256-cmz5YaxfykkUlF7Ai0Yu8L6sfNePmx3v24g6131+/RM=";
+    hash = "sha256-g9r6l0qjpAxVw0q3wbrUstnq2lISMSLgr13FsjcnHDQ=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -94,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-Ijw84Nn+GBuZr9++tMV5898pOVlZtMSn3snycTLIiks=";
+    outputHash = "sha256-IiSDQ5sWlO0BCb2d8cOeiIPrURLN+zhidfSl6fvDXSg=";
   };
 
   installPhase = ''
