@@ -27,6 +27,12 @@
 
       specialisation.new-generation.configuration = {
         environment.etc."newgen".text = "newgen";
+        # Regression test for https://github.com/NixOS/nixpkgs/issues/505475:
+        # A symlink in a subdirectory that does not exist in the base generation's
+        # lowerdir. If something creates that subdirectory at runtime before
+        # switching (e.g. stage-2-init.sh creating /etc/nixos), overlayfs makes it
+        # opaque, hiding lowerdir content added by the new generation.
+        environment.etc."nixos/newlink".source = pkgs.emptyDirectory;
       };
       specialisation.newer-generation.configuration = {
         environment.etc."newergen".text = "newergen";
@@ -53,6 +59,13 @@
         machine.succeed("stat --format '%F' /etc/modetest2 | tee /dev/stderr | grep -Eq '^regular file$'")
         machine.succeed("stat --format '%a' /etc/modetest2 | tee /dev/stderr | grep -Eq '^300$'")
 
+      with subtest("/etc/nixos created by stage-2-init is opaque in upperdir"):
+        # stage-2-init.sh unconditionally runs `install -d /etc/nixos`. Since
+        # /nixos is not in the lowerdir, overlayfs creates it as an opaque dir
+        # in the upperdir. Verify this precondition for the regression test below.
+        machine.succeed("test -d /.rw-etc/upper/nixos")
+        print(machine.succeed("getfattr -h -d -m 'trusted.overlay' /.rw-etc/upper/nixos 2>&1 || true"))
+
       with subtest("switching to the same generation"):
         machine.succeed("/run/current-system/bin/switch-to-configuration test")
 
@@ -77,6 +90,15 @@
         assert machine.succeed("cat /etc/newgen") == "newgen"
         assert machine.succeed("cat /etc/mutable") == "mutable"
 
+        # Regression test for https://github.com/NixOS/nixpkgs/issues/505475:
+        # The opaque /etc/nixos in the upperdir (created by stage-2-init.sh
+        # before /nixos existed in the lowerdir) must not hide lowerdir entries
+        # added by the new generation. The activation script must have cleared
+        # the stale opaque marker.
+        print(machine.succeed("ls -la /etc/nixos/"))
+        machine.succeed("test -L /etc/nixos/newlink")
+        machine.fail("getfattr -h -n trusted.overlay.opaque /.rw-etc/upper/nixos")
+
         print(machine.succeed("findmnt /etc/mountpoint"))
         print(machine.succeed("stat /etc/mountpoint/extra-file"))
         print(machine.succeed("findmnt /etc/filemount"))
@@ -93,5 +115,23 @@
         numOfMetaMounts = len(metaMounts.splitlines())
         assert numOfTmpMounts == 0, f"Found {numOfTmpMounts} remaining tmpmounts"
         assert numOfMetaMounts == 1, f"Found {numOfMetaMounts} remaining metamounts"
+
+      with subtest("stale opaque markers are cleared by initrd on boot (NixOS/nixpkgs#505475)"):
+        # Simulate the bug precondition: an opaque /pam.d in the upperdir.
+        # /pam.d is guaranteed to exist as a directory in the metadata layer.
+        machine.succeed("mkdir -p /.rw-etc/upper/pam.d")
+        machine.succeed("setfattr -h -n trusted.overlay.opaque -v y /.rw-etc/upper/pam.d")
+        machine.succeed("getfattr -h -n trusted.overlay.opaque /.rw-etc/upper/pam.d")
+        # Also create a non-opaque upperdir directory that exists in the
+        # metadata layer, to ensure clear-etc-opaque tolerates the
+        # already-clear case.
+        machine.succeed("mkdir -p /.rw-etc/upper/systemd")
+
+        # Reboot and verify the initrd rw-etc service cleared the opaque marker.
+        machine.shutdown()
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+        machine.fail("getfattr -h -n trusted.overlay.opaque /.rw-etc/upper/pam.d")
+        machine.succeed("test -e /etc/pam.d/login")
     '';
 }

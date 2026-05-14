@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "4.8.6";
+  version = "5.0.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-8xMHHyj9qUdrd5dFYVlN2bi7EVjcEqoBBxIifC8xk3k=";
+    hash = "sha256-yjcnXC46C2Z453oN4/fJc2q+B0yQKL3jKaIIpRlzu5s=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-B2vtdQYFhhsA7dK5nwAJl65kaedspfYySJJBjVwYeBM=";
+      hash = "sha256-g5MYtHvs0i0AOAydMxJNx1xTwbZtXS0CYDNQC+cnIOM=";
     };
 
     nativeBuildInputs = [
@@ -57,9 +57,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ./postgresql_fix.patch
   ];
 
+  # They use a old version of mistralai which exported a class
+  # at the top level
+  postPatch = ''
+    substituteInPlace core/services/ai_services/legacy.py \
+      --replace-fail \
+        "from mistralai import Mistral" \
+        "from mistralai.client import Mistral"
+  ''
   # Otherwise fails with:
   # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace impress/settings.py \
       --replace-fail \
         "gethostname()" \
@@ -75,6 +83,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       beautifulsoup4
       boto3
       celery
+      emoji
       django
       django-configurations
       django-cors-headers
@@ -100,6 +109,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       langfuse
       lxml
       markdown
+      mistralai
       mozilla-django-oidc
       nested-multipart-parser
       openai

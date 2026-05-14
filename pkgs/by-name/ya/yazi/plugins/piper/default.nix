@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "piper.yazi";
-  version = "26.1.22-unstable-2026-01-24";
+  version = "0-unstable-2026-01-24";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";

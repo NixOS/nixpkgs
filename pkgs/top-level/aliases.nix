@@ -56,6 +56,7 @@ let
     "communicator"
     "dolphin-plugins"
     "eventviews"
+    "extra-cmake-modules"
     "flatpak-kcm"
     "ghostwriter"
     "grantleetheme"
