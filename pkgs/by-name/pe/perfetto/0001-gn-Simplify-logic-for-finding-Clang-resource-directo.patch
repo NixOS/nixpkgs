@@ -1,0 +1,44 @@
+From f6f9f235e1414d83398cdf11e3970aeb06808e8b Mon Sep 17 00:00:00 2001
+From: Peter Collingbourne <peter@pcc.me.uk>
+Date: Sat, 16 May 2026 00:50:56 -0700
+Subject: [PATCH 1/2] gn: Simplify logic for finding Clang resource directory
+
+This code was using a convoluted way of determining the resource directory
+that doesn't always work (for example, the resource directory is not
+guaranteed to have a /clang/ component). Replace it with a call to
+`clang -print-resource-dir`.
+---
+ gn/standalone/toolchain/linux_find_llvm.py | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/gn/standalone/toolchain/linux_find_llvm.py b/gn/standalone/toolchain/linux_find_llvm.py
+index 6d895e4965..fe80cbeeee 100755
+--- a/gn/standalone/toolchain/linux_find_llvm.py
++++ b/gn/standalone/toolchain/linux_find_llvm.py
+@@ -46,18 +46,11 @@ def main():
+   for clang in candidate_clangs():
+     if shutil.which(clang) is None:
+       continue
+-    res = subprocess.check_output([clang, '-print-search-dirs']).decode("utf-8")
+-    for line in res.splitlines():
+-      if not line.startswith('libraries:'):
+-        continue
+-      libs = line.split('=', 1)[1].split(':')
+-      for lib in libs:
+-        if '/clang/' not in lib or not os.path.isdir(lib + '/lib'):
+-          continue
+-        print(os.path.abspath(lib))
+-        print(clang)
+-        print(clang.replace('clang', 'clang++'))
+-        return 0
++    res = subprocess.check_output([clang, '-print-resource-dir']).decode("utf-8")
++    print(os.path.abspath(res.splitlines()[0]))
++    print(clang)
++    print(clang.replace('clang', 'clang++'))
++    return 0
+   print('Could not find the LLVM lib dir')
+   return 1
+ 
+-- 
+2.54.0
+
