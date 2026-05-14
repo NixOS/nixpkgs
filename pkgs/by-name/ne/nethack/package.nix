@@ -119,8 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's,^CFLAGS=-g,CFLAGS=,' \
       -e 's,/bin/gzip,${gzip}/bin/gzip,g' \
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
-      -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
-      -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
       -e 's,NHCFLAGS+=-DCOMPRESS[^ ]*,NHCFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -i sys/unix/hints/linux.500
@@ -133,9 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's,^CFLAGS+=-DCRASHREPORT,#CFLAGS+=-DCRASHREPORT,' \
       -e 's,^NHCFLAGS+=-DGREPPATH,#NHCFLAGS+=-DGREPPATH,' \
       -e 's,/usr/bin/true,${coreutils}/bin/true,g' \
-      -e 's,^endif   # QTDIR,endif   # QTDIR \
-            QTDIR=${qt5.qtbase.dev},' \
-      -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
       -e 's,NHCFLAGS+=-DCOMPRESS[^ ]*,NHCFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -i sys/unix/hints/macOS.500
@@ -149,6 +144,19 @@ stdenv.mkDerivation (finalAttrs: {
     sed \
       -e 's,AR =.*,AR := $(AR),' \
       -i sys/unix/Makefile.src
+    ${lib.optionalString qtMode
+      ''
+      sed \
+        -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
+        -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
+      -i sys/unix/hints/linux.500
+      sed \
+        -e 's,^endif   # QTDIR,endif   # QTDIR \
+              QTDIR=${qt5.qtbase.dev},' \
+        -e 's,PKG_CONFIG_PATH=$(QTDIR)/lib/pkgconfig,,' \
+        -i sys/unix/hints/macOS.500
+      ''
+    }
     ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
       # If we're cross-compiling, replace the paths to the data generation tools
       # with the ones from the build platform's nethack package, since we can't
