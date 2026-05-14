@@ -9724,6 +9724,8 @@ self: super: with self; {
 
   mbstrdecoder = callPackage ../development/python-modules/mbstrdecoder { };
 
+  mcap = callPackage ../development/python-modules/mcap { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
