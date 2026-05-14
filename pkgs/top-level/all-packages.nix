@@ -3033,8 +3033,6 @@ with pkgs;
     opensslSupport = false;
   };
 
-  recoll-nox = recoll.override { withGui = false; };
-
   remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
 
   reptor = with python3.pkgs; toPythonApplication reptor;
