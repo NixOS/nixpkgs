@@ -89,6 +89,7 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [
       bpeetz
       Guanran928
+      ryand56
     ];
   };
 }

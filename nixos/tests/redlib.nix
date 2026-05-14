@@ -1,14 +1,13 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 let
   certs = import redlib/snakeoil-certs.nix;
   redditDomain = certs.domain;
 in
 {
   name = "redlib";
-  meta.maintainers = with lib.maintainers; [
-    bpeetz
-    Guanran928
-  ];
+  meta = {
+    inherit (pkgs.redlib.meta) maintainers;
+  };
 
   nodes.machine = {
     # The test will hang if Redlib can't initialize its OAuth client, so we
