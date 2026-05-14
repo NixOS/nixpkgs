@@ -3806,6 +3806,7 @@ broken-packages:
   - liquid-finfield # failure in job https://hydra.nixos.org/build/321063345 at 2026-02-07
   - liquid-ghc-prim # failure in job https://hydra.nixos.org/build/307520084 at 2025-09-19
   - liquid-parallel # failure in job https://hydra.nixos.org/build/307520068 at 2025-09-19
+  - liquid-platform # abandoned package
   - liquid-prelude # failure in job https://hydra.nixos.org/build/307520076 at 2025-09-19
   - liquid-vector # failure in job https://hydra.nixos.org/build/307520072 at 2025-09-19
   - liquidhaskell-cabal # failure in job https://hydra.nixos.org/build/233249946 at 2023-09-02
