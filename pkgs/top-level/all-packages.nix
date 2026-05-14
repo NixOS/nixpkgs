@@ -2673,15 +2673,6 @@ with pkgs;
     nomad_1_11
     ;
 
-  nvchecker =
-    with python3Packages;
-    toPythonApplication (
-      nvchecker.overridePythonAttrs (oldAttrs: {
-        propagatedBuildInputs =
-          oldAttrs.dependencies ++ lib.concatAttrValues oldAttrs.optional-dependencies;
-      })
-    );
-
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
   op-geth = callPackage ../applications/blockchains/optimism/geth.nix { };
@@ -3061,14 +3052,6 @@ with pkgs;
   trackma-gtk = trackma.override { withGTK = true; };
 
   trackma-qt = trackma.override { withQT = true; };
-
-  trezorctl =
-    with python3Packages;
-    toPythonApplication (
-      trezor.overridePythonAttrs (oldAttrs: {
-        dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.full;
-      })
-    );
 
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
@@ -5302,14 +5285,6 @@ with pkgs;
   inherit (maven) buildMaven;
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
-
-  python-matter-server =
-    with python3Packages;
-    toPythonApplication (
-      python-matter-server.overridePythonAttrs (oldAttrs: {
-        dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.server;
-      })
-    );
 
   mold = wrapBintoolsWith {
     bintools = mold-unwrapped;
@@ -7547,17 +7522,6 @@ with pkgs;
     mullvad
     ;
 
-  napalm =
-    with python3Packages;
-    toPythonApplication (
-      napalm.overridePythonAttrs (attrs: {
-        # add community frontends that depend on the napalm python package
-        dependencies = attrs.dependencies ++ [
-          napalm-hp-procurve
-        ];
-      })
-    );
-
   nginx = nginxStable;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
@@ -9476,13 +9440,6 @@ with pkgs;
 
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
-  qemu-python-utils = python3Packages.toPythonApplication (
-    python3Packages.qemu.override {
-      fuseSupport = true;
-      tuiSupport = true;
-    }
-  );
-
   qemu-utils = qemu.override {
     toolsOnly = true;
   };
@@ -11309,16 +11266,6 @@ with pkgs;
   vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins { });
 
   vimb = wrapFirefox vimb-unwrapped { };
-
-  vivisect =
-    with python3Packages;
-    toPythonApplication (
-      vivisect.override {
-        # https://github.com/vivisect/vivisect/issues/683
-        # gui currently requires qt5 webengine, which has been removed
-        # withGui = true;
-      }
-    );
 
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
