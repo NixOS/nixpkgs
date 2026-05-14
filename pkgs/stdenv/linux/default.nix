@@ -344,6 +344,7 @@ in
           perl
           patchelf
           nukeReferences
+          libxcrypt
           ;
         ${localSystem.libc} = prevStage.${localSystem.libc};
         gmp = super.gmp.override { cxx = false; };
@@ -460,6 +461,7 @@ in
           which
           nukeReferences
           autoconf269
+          libxcrypt
           ;
 
         # Avoids infinite recursion, as this is in the build-time dependencies of libc.
