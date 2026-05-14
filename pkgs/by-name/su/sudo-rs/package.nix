@@ -12,24 +12,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
-  version = "0.2.8";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-82qd9lVwxI9Md7NWpfauGWKtvR1MvX9VNZ9e1RvzmP4=";
+    hash = "sha256-T9QkdpNq7YTR2df1M+lIt+iocVzrFv1yUwq0wgBRHaA=";
   };
 
-  cargoHash = "sha256-hvXVdPs2K1FPi06NZSockNXA9QOnXOsrONiMCTiIs2I=";
+  cargoHash = "sha256-yfML0XO2/Xug0IhbzX1P7PL1YspxWR1FJYP5VtqZzRA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ pam ];
 
   postPatch = ''
-    substituteInPlace build.rs \
-      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/system/audit.rs \
+      --replace-fail '/usr/share/zoneinfo' '/etc/zoneinfo' \
+      --replace-fail '/usr/share/lib/zoneinfo' '${tzdata}/share/zoneinfo'
   '';
 
   postInstall = ''
@@ -49,6 +50,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "common::context::tests::test_build_run_context"
     "common::resolve::test::canonicalization"
     "common::resolve::tests::test_resolve_path"
+    "system::audit::test::test_traverse_secure_open_negative"
+    "system::audit::test::test_traverse_secure_open_positive"
     "system::tests::kill_test"
 
     # Assumes $SHELL is an actual shell
@@ -62,6 +65,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "system::interface::test::test_unix_user"
     "system::tests::test_get_user_and_group_by_id"
 
+    # Store paths are not owned by root in the build sandbox, so the zoneinfo path
+    # doesn't pass the validations done by sudo-rs.
+    # This is not an issue at runtime, since there the zoneinfo path is owned by root.
+    "sudo::env::environment::tests::test_tzinfo"
+
     # Unsure why those are failing
     "env::tests::test_environment_variable_filtering"
     "su::context::tests::invalid_shell"
@@ -72,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   # sudo binary fails because it checks if it is suid 0
   versionCheckProgram = "${placeholder "out"}/bin/su";
-  versionCheckProgramArg = "--version";
 
   postInstallCheck = ''
     [ -e ${placeholder "out"}/share/man/man8/sudo.8.gz ] || \
@@ -80,11 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
-      ];
-    };
+    updateScript = nix-update-script { };
     tests = nixosTests.sudo-rs;
   };
 
@@ -97,6 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      adamcstephens
       nicoo
       rvdp
     ];

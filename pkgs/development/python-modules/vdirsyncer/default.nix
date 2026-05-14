@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   click,
   click-log,
   click-threading,
@@ -30,7 +29,7 @@
 buildPythonPackage rec {
   pname = "vdirsyncer";
   version = "0.20.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

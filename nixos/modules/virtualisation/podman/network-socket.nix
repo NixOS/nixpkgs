@@ -95,5 +95,6 @@ in
     networking.firewall.allowedTCPPorts = lib.optional (cfg.enable && cfg.openFirewall) cfg.port;
   };
 
-  meta.maintainers = lib.teams.podman.members ++ [ lib.maintainers.roberth ];
+  meta.teams = [ lib.teams.podman ];
+  meta.maintainers = [ lib.maintainers.roberth ];
 }

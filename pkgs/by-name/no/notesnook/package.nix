@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.0.19";
+  version = "3.3.17";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -17,6 +17,7 @@ let
   suffix =
     {
       x86_64-linux = "linux_x86_64.AppImage";
+      aarch64-linux = "linux_arm64.AppImage";
       x86_64-darwin = "mac_x64.dmg";
       aarch64-darwin = "mac_arm64.dmg";
     }
@@ -26,18 +27,23 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-yCzREyFyGoAPXVVnNX6GUrr83oaPtoNOgZOOd6vJD1Q=";
-        x86_64-darwin = "sha256-WciEpt0vUuXS6YeZkbyFGqQaotXoZkWnkkn5B6/JXwE=";
-        aarch64-darwin = "sha256-iP3Xd/otYEVwU85U2dlFcX9QjDq2CbIqHmcDYVxzqzI=";
+        x86_64-linux = "sha256-AFy5hk7blipFBYAgxbMTJHITGtpaQGkSFFyUhB3TcCE=";
+        aarch64-linux = "sha256-yLnhxnttlSf43jD0dlVLb5j6kXlUY3w5mLsC826z4rI=";
+        x86_64-darwin = "sha256-d4lmmk4gYnpil/oPak7EohyJRjGx9kYmjopn1UxPR6U=";
+        aarch64-darwin = "sha256-4E+UqZOm7NjHpvxIVnrnl5Og9xdMuuyzdwgiWeENZrg=";
       }
       .${system} or throwSystem;
+  };
+
+  passthru = {
+    updateScript = ./update.sh;
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
       Notesnook is a free (as in speech) & open source note taking app
@@ -46,13 +52,13 @@ let
       XChaCha20-Poly1305 & Argon2.
     '';
     homepage = "https://notesnook.com";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      cig0
-      j0lol
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      keysmashes
     ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
@@ -65,6 +71,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -89,6 +96,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ _7zz ];

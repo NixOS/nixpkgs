@@ -19,22 +19,20 @@
 
 buildPythonPackage rec {
   pname = "zope-security";
-  version = "7.3";
+  version = "8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.security";
     tag = version;
-    hash = "sha256-p+9pCcBsCJY/V6vraVZHMr5VwYHFe217AbRVoSnDphs=";
+    hash = "sha256-iSWSBjtJe4iEvm+VUEWDvRCBdRz1R6m9mlfPLwh01Sk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    zope-proxy
+  ];
 
   dependencies = [
     zope-component
@@ -59,7 +57,7 @@ buildPythonPackage rec {
     zope-exceptions
     zope-testing
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Import process is too complex and some tests fail
   preCheck = ''
@@ -77,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.security";
     changelog = "https://github.com/zopefoundation/zope.security/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

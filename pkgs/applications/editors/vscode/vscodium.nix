@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
+  buildVscode,
   fetchurl,
   nixosTests,
   commandLineArgs ? "",
@@ -19,6 +19,7 @@ let
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
       armv7l-linux = "linux-armhf";
+      loongarch64-linux = "linux-loong64";
     }
     .${system} or throwSystem;
 
@@ -26,22 +27,23 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-Q5Qa0K1tWYyWzTa+H3zBv3jHJ1aV4FcZBOat1TYyMTE=";
-      x86_64-darwin = "sha256-RjRWfqWMxx4GW2eRztaU8g21dxr4+SsG3hElDaMMpjw=";
-      aarch64-linux = "sha256-DOyS3bda4i5U1pnQbA2NnPLfPW5L7QovpjGT2PJ4IC8=";
-      aarch64-darwin = "sha256-fcViJYnWqDsC265F0dA19ZRL3tPfCYf4jmKUsXqhLf0=";
-      armv7l-linux = "sha256-wBCi+xM665xMRlW8Y36296MF6Yi7I+fVAkgqoCBO2sc=";
+      x86_64-linux = "sha256-CP4tIZhDoC56T6N0RUebNRw3CjxG82odHt4WY8rgmS8=";
+      x86_64-darwin = "sha256-4EWKIXc+CKQLot7eN6Bkd/xigByEGafLMKJ832EOSwA=";
+      aarch64-linux = "sha256-5EwENP1lpHzqiWWeXNQzQOp/zAAEanSbDhWcMeup2sY=";
+      aarch64-darwin = "sha256-9n7kVtknqfSfTc2MmFps5bxSqMnL6KNhZgTb+DVUkhY=";
+      armv7l-linux = "sha256-aXGqp7ljvqDJNb5BMiBIm2CluIr70oiNPmR7BULLsv8=";
+      loongarch64-linux = "sha256-XPEssw+7NVKljyrWcc+Q2HzRr31seDwbdNn3EtyHlSY=";
     }
     .${system} or throwSystem;
 
   sourceRoot = lib.optionalString (!stdenv.hostPlatform.isDarwin) ".";
 in
-callPackage ./generic.nix rec {
+buildVscode rec {
   inherit sourceRoot commandLineArgs useVSCodeRipgrep;
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.103.25610";
+  version = "1.112.01907";
   pname = "vscodium";
 
   executableName = "codium";
@@ -53,7 +55,7 @@ callPackage ./generic.nix rec {
     inherit hash;
   };
 
-  tests = nixosTests.vscodium;
+  tests = nixosTests.vscodium.xorg;
 
   updateScript = ./update-vscodium.sh;
 
@@ -79,9 +81,7 @@ callPackage ./generic.nix rec {
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      synthetica
       bobby285271
-      ludovicopiero
     ];
     mainProgram = "codium";
     platforms = [
@@ -90,6 +90,7 @@ callPackage ./generic.nix rec {
       "aarch64-linux"
       "aarch64-darwin"
       "armv7l-linux"
+      "loongarch64-linux"
     ];
     # requires libc.so.6 and other glibc specifics
     broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu;

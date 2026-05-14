@@ -1,37 +1,40 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
   alembic,
   boto3,
   botorch,
   bottle,
+  buildPythonPackage,
   cmaes,
   colorlog,
+  fetchFromGitHub,
+  httpx,
   moto,
   numpy,
+  openai,
   optuna,
   packaging,
   plotly,
   pytestCheckHook,
-  setuptools,
+  respx,
   scikit-learn,
   scipy,
+  setuptools,
   streamlit,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "optuna-dashboard";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna-dashboard";
     tag = "v${version}";
-    hash = "sha256-UTl3X0laEHyc9YjL2RPBeCle0WRKjOU7Bt58BMRXIlU=";
+    hash = "sha256-pg1R8tZjfLDDzDWiLRmaU1a1mKDzeZliPC2X0UV+xEw=";
   };
 
   dependencies = [
@@ -53,8 +56,11 @@ buildPythonPackage rec {
     pytestCheckHook
     boto3
     botorch
+    httpx
     moto
+    openai
     plotly
+    respx
     streamlit
   ];
 

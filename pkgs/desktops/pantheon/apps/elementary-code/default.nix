@@ -11,6 +11,7 @@
   wrapGAppsHook3,
   editorconfig-core-c,
   granite,
+  gsettings-desktop-schemas,
   gtk3,
   gtksourceview4,
   gtkspell3,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "8.1.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
-    rev = version;
-    hash = "sha256-pL/xyD9jwuPixbVdjPa3vdZWHxI+T2ARI4BvcTV61jc=";
+    tag = version;
+    hash = "sha256-nLGjW7aVf+fkrYgqhj1fVhMU3aNpVUlPhBsSOAXGqWs=";
   };
 
   strictDeps = true;
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     editorconfig-core-c
     granite
+    gsettings-desktop-schemas
     gtk3
     gtksourceview4
     gtkspell3
@@ -71,12 +73,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Code editor designed for elementary OS";
     homepage = "https://github.com/elementary/code";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.code";
   };
 }

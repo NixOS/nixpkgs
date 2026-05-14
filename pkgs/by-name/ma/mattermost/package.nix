@@ -5,6 +5,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
@@ -12,21 +13,23 @@
   nixosTests,
 
   versionInfo ? {
-    # ESR releases only.
-    # See https://docs.mattermost.com/upgrade/extended-support-release.html
+    # ESR releases only. Note: if NixOS would release with an ESR that goes out
+    # of support during the lifetime of the NixOS release, it is acceptable
+    # to put the latest non-ESR release here if we change it to an ESR shortly after
+    # the NixOS release.
+    #
+    # See <https://docs.mattermost.com/upgrade/extended-support-release.html>.
     # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(10\\.5\\.[0-9]+)$";
-    version = "10.5.10";
-    srcHash = "sha256-fQqUoSo8saERRfgx4OT26VQktejzYPPqBIL2OA0PQy0=";
-    vendorHash = "sha256-uryErnXPVd/gmiAk0F2DVaqz368H6j97nBn0eNW7DFk=";
-    npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
-    lockfileOverlay = ''
-      unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
-    '';
+    regex = "^v(11\\.[67]\\.[0-9]+)$";
+    version = "11.6.1";
+    srcHash = "sha256-0TUh5qKi64jt3YhgCTceoizOGzqyt70Rh8VH+bSfS5o=";
+    vendorHash = "sha256-bWl1rdVRTOJzS2HKKsSRhzVcH1sPgEAlRLjrc+/o0lo=";
+    npmDepsHash = "sha256-30xwoizNh6fAWS0YdEheXtcO6I9MjoFdCekvLnnoBMc=";
   },
+  ...
 }:
 
 let
@@ -193,6 +196,7 @@ buildMattermost rec {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
         versionInfo.regex
       ]
@@ -220,6 +224,7 @@ buildMattermost rec {
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
 
+      inherit nodejs;
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
       forceGitDeps = true;
@@ -229,10 +234,9 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        npm run build --workspace=platform/types
-        npm run build --workspace=platform/client
-        npm run build --workspace=platform/components
-        npm run build --workspace=channels
+        for ws in platform/{types,client,components,shared} channels; do
+          npm run build --workspace="$ws"
+        done
 
         runHook postBuild
       '';
@@ -258,7 +262,6 @@ buildMattermost rec {
     maintainers = with lib.maintainers; [
       ryantm
       numinit
-      kranzes
       mgdelacroix
     ];
     platforms = lib.platforms.linux;

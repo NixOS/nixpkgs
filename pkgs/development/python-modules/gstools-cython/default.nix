@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gstools-cython";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools-Cython";
     tag = "v${version}";
-    hash = "sha256-Kzn/ThLjTGy3ZYIkTwCV1wi22c7rWo4u/L3llppC6wQ=";
+    hash = "sha256-D5oOSOVfmwAOF7MYpMmOMXIS82NJeztRJh4sDXS+Ouc=";
   };
 
   build-system = [

@@ -18,21 +18,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-player";
-  version = "1.0.0-alpha.7";
+  version = "1.0.12";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-player";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-/xf3IOFVpctfgaaNNq2HUzK/qHt7Qikcv0JKoPJboRU=";
+    hash = "sha256-74iYH1jW5Tau9enem0SeLLTnWhaa/+ow1m3hvGfOt9c=";
   };
 
-  cargoHash = "sha256-0RrtErTR2J5mn/Lfppk+5X8UUOC2LN65krAq1uz/O4M=";
+  cargoHash = "sha256-YPxbOSz/E3hoMT4dutk60jWJMpJHqOWpCSA91b+mHaE=";
 
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     just
@@ -64,8 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-player"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   postInstall = ''
@@ -81,10 +80,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

@@ -3,6 +3,7 @@
 let
   port = 3142;
   defaultPort = 8083;
+  libraryPath = "/var/lib/test-books";
 in
 {
   name = "calibre-web";
@@ -16,7 +17,7 @@ in
           enable = true;
           listen.port = port;
           options = {
-            calibreLibrary = "/tmp/books";
+            calibreLibrary = libraryPath;
             reverseProxyAuth = {
               enable = true;
               header = "X-User";
@@ -30,7 +31,7 @@ in
     start_all()
 
     customized.succeed(
-        "mkdir /tmp/books && calibredb --library-path /tmp/books add -e --title test-book"
+        "mkdir -p ${libraryPath} && calibredb --library-path ${libraryPath} add -e --title test-book"
     )
     customized.succeed("systemctl restart calibre-web")
     customized.wait_for_unit("calibre-web.service")

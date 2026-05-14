@@ -7,15 +7,15 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timewarrior";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
-    tag = "v${version}";
-    hash = "sha256-s7R92AR7pCcXkgI0BKnRship4TkWKx7km1W0ZyAEmnc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wwuyXcLCrNvpDIQvoBt/OQlwoTMhPzGZ+WrZdTo6IPo=";
     fetchSubmodules = true;
   };
 
@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
       --zsh completion/timew.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line time tracker";
     homepage = "https://timewarrior.net";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       mrVanDalo
     ];
     mainProgram = "timew";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

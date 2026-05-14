@@ -11,6 +11,7 @@
   boost,
   curl,
   glib,
+  libcpr,
   libsecret,
   libmaddy-markdown,
   testers,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnick";
-  version = "2025.6.1";
+  version = "2025.10.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "libnick";
     tag = finalAttrs.version;
-    hash = "sha256-Ir2Jke1zK4pKldQJHaT0Ju0ubz7H6nx16hDNl6u48Ck=";
+    hash = "sha256-nxh9WyIP86rnkUgFRMEbO2jw6dtfPR4mcHeGplmL6mc=";
   };
 
   nativeBuildInputs = [
@@ -39,17 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    libmaddy-markdown
   ]
   ++ lib.optionals stdenv.hostPlatform.isUnix [
     glib
     openssl
-  ]
-  ++ lib.optional stdenv.hostPlatform.isWindows sqlcipher;
+  ];
 
   propagatedBuildInputs = [
     curl
+    libcpr
     libsecret
+    libmaddy-markdown
+    sqlcipher
   ];
 
   cmakeFlags = [
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform development base for native Nickvision applications";
     homepage = "https://github.com/NickvisionApps/libnick";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.normalcea ];
+    maintainers = [ ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libnick" ];
   };

@@ -24,7 +24,7 @@
   unar,
   unzip,
   vala,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     poppler
     python3
     sqlite
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   postPatch = ''
@@ -91,14 +91,16 @@ stdenv.mkDerivation {
     patchShebangs $out/share/bookworm/scripts/tasks/*.sh
   '';
 
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Simple, focused eBook reader";
     mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''
       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
     '';
     homepage = "https://babluboy.github.io/bookworm/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

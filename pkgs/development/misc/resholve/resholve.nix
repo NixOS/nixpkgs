@@ -42,7 +42,10 @@ python27.pkgs.buildPythonApplication {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ gawk ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ gawk ])
   ];
 
   postPatch = ''
@@ -78,13 +81,15 @@ python27.pkgs.buildPythonApplication {
     };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Resolve external shell-script dependencies";
     homepage = "https://github.com/abathur/resholve";
     changelog = "https://github.com/abathur/resholve/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ abathur ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ abathur ];
+    platforms = lib.platforms.all;
     knownVulnerabilities = [
       ''
         resholve depends on python27 (EOL). While it's safe to

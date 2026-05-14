@@ -2,7 +2,8 @@
   lib,
   stdenv,
   testers,
-  fetchgit,
+  fetchFromGitHub,
+  fetchpatch,
   replaceVars,
 
   # Xen
@@ -172,7 +173,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xen";
-  version = "4.20.1";
+  version = "4.20.3";
 
   # This attribute can be overriden to correct the file paths in
   # `passthru` when building an unstable Xen.
@@ -184,6 +185,36 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-makefile-efi-output-directory.patch
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
+
+    # XSA #483
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa483.patch";
+      hash = "sha256-pZkSQKAjEIa/EHlCa2hD+3kofzpVHtFxcdp/TiWu9i8=";
+    })
+
+    # XSA #484
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa484.patch";
+      hash = "sha256-6zkTBHKfpAK2poSycEFSb3pE9pDpZwBxAe5Jf862j+U=";
+    })
+
+    # XSA #486
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa486.patch";
+      hash = "sha256-8EC1lv2JAYqchX5sHbO3NbP7haEyu1V0/72KwALG+BA=";
+    })
+
+    # XSA #488
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa488-4.20.patch";
+      hash = "sha256-QttKWdmWC6Zn5k2hd6RIMCpLWv71HB/A9mCbDP+i8to=";
+    })
+
+    # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
+    (fetchpatch {
+      url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
+      hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
+    })
   ];
 
   outputs = [
@@ -194,10 +225,11 @@ stdenv.mkDerivation (finalAttrs: {
     "boot"
   ];
 
-  src = fetchgit {
-    url = "https://xenbits.xenproject.org/git-http/xen.git";
-    rev = "08f043965a7b1047aabd6d81da6b031465f2d797";
-    hash = "sha256-a4dIJBY5aeznXPoI8nSipMgimmww7ejoQ1GE28Gq13o=";
+  src = fetchFromGitHub {
+    owner = "xen-project";
+    repo = "xen";
+    tag = "RELEASE-4.20.3";
+    hash = "sha256-+qTHIsDD2A5lVwmpJ7artnzdviT1XN05CYeu7JFxfqc=";
   };
 
   strictDeps = true;
@@ -296,6 +328,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out $out/share $boot
     cp -prvd dist/install/nix/store/*/* $out/
     cp -prvd dist/install/etc $out
+    # Decompresses the multiboot binary so it's present for bootloaders such as Limine
+    # The find command is used instead of a simple file glob so we skip processing symlinks
+    find dist/install/boot -type f -name '*.gz' -print -exec gunzip -k '{}' ';'
     cp -prvd dist/install/boot $boot
 
     runHook postInstall
@@ -306,7 +341,7 @@ stdenv.mkDerivation (finalAttrs: {
     # We also need to wrap pygrub, which lies in $out/libexec/xen/bin.
     ''
       wrapPythonPrograms
-      wrapPythonProgramsIn "$out/libexec/xen/bin" "$out $pythonPath"
+      wrapPythonProgramsIn "$out/libexec/xen/bin" "$out ''${pythonPath[*]}"
     '';
 
   postFixup = ''
@@ -322,6 +357,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     efi = "boot/xen-${finalAttrs.upstreamVersion}.efi";
+    multiboot = "boot/xen-${finalAttrs.upstreamVersion}";
     flaskPolicy =
       if withFlask then
         warn "This Xen was compiled with FLASK support, but the FLASK file may not match the Xen version number. Please hardcode the path to the FLASK file instead." "boot/xenpolicy-${finalAttrs.upstreamVersion}"
@@ -367,7 +403,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       Use with the `qemu_xen` package.
     ''
-    + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${finalAttrs.meta.branch}-testing/misc/efi.html), available on the `boot` output of this package."
+    + "\nIncludes:\n* `xen-${finalAttrs.upstreamVersion}.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${finalAttrs.meta.branch}-testing/misc/efi.html), available on the `boot` output of this package."
+    + "\n* `xen-${finalAttrs.upstreamVersion}`: The Xen Project's multiboot binary, available on the `boot` output of this package."
     + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy` file is available on the `boot` output of this package."
     + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
     + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."

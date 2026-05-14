@@ -1,0 +1,11 @@
+diff --git a/pyml_stubs.c b/pyml_stubs.c
+index 40e3481..e7826f1 100644
+--- a/pyml_stubs.c
++++ b/pyml_stubs.c
+@@ -11,7 +11,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <errno.h>
+-#include <stdcompat.h>
+ #include <assert.h>
+ #include "pyml_stubs.h"

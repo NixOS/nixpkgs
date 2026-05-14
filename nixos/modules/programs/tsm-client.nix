@@ -71,7 +71,7 @@ let
     {
       freeformType = attrsOf (either scalarType (listOf scalarType));
       # Client system-options file directives are explained here:
-      # https://www.ibm.com/docs/en/storage-protect/8.1.27?topic=commands-processing-options
+      # https://www.ibm.com/docs/en/storage-protect/8.2.1?topic=utilities-processing-options
       options.servername = mkOption {
         type = servernameType;
         default = name;
@@ -280,22 +280,22 @@ let
     # skip `null` value
     else
       [
-        (
-          "  ${key}${
-              if value == true then
-                ""
-              # just output key if value is `true`
-              else if isInt value then
-                "  ${builtins.toString value}"
-              else if path.check value then
-                "  \"${value}\""
-              # enclose path in ".."
-              else if singleLineStr.check value then
-                "  ${value}"
-              else
-                throw "assertion failed: cannot convert type" # should never happen
-            }"
-        )
+
+        "  ${key}${
+            if value == true then
+              ""
+            # just output key if value is `true`
+            else if isInt value then
+              "  ${toString value}"
+            else if path.check value then
+              "  \"${value}\""
+            # enclose path in ".."
+            else if singleLineStr.check value then
+              "  ${value}"
+            else
+              throw "assertion failed: cannot convert type" # should never happen
+          }"
+
       ];
 
   makeDsmSysStanza =

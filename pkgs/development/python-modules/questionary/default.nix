@@ -6,21 +6,18 @@
   poetry-core,
   prompt-toolkit,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tmbo";
     repo = "questionary";
     tag = version;
-    hash = "sha256-HiQsOkG3oK+hnyeFjebnVASxpZhUPGBGz69JvPO43fM=";
+    hash = "sha256-r7F5y6KD6zonQGtO/9OuCTMTWdkCdd9aqTgKg6eWp08=";
   };
 
   pythonRelaxDeps = [ "prompt_toolkit" ];
@@ -38,15 +35,19 @@ buildPythonPackage rec {
   disabledTests = [
     # RuntimeError: no running event loop
     "test_blank_line_fix"
+
+    # TypeError: Attrs.__new__() missing 1 required positional argument: 'dim'
+    # https://github.com/tmbo/questionary/issues/461
+    "test_print_with_style"
   ];
 
   pythonImportsCheck = [ "questionary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to build command line user prompts";
     homepage = "https://github.com/tmbo/questionary";
     changelog = "https://github.com/tmbo/questionary/blob/${src.rev}/docs/pages/changelog.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

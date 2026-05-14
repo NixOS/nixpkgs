@@ -27,7 +27,7 @@
   makeHardcodeGsettingsPatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnma";
   version = "1.10.6";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libnma/${lib.versions.majorMinor finalAttrs.version}/libnma-${finalAttrs.version}.tar.xz";
     sha256 = "U6b7KxkK03xZhsrtPpi+3nw8YCOZ7k+TyPwFQwPXbas=";
   };
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       schemaIdToVariableMapping = {
         "org.gnome.nm-applet.eap" = "NM_APPLET_GSETTINGS";
       };
-      inherit src;
+      inherit (finalAttrs) src;
     };
     updateScript =
       let
@@ -112,11 +112,11 @@ stdenv.mkDerivation rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libnma";
     description = "NetworkManager UI utilities (libnm version)";
-    license = licenses.gpl2Plus; # Mix of GPL and LPGL 2+
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus; # Mix of GPL and LPGL 2+
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
-}
+})

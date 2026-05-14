@@ -28,23 +28,19 @@
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector-python";
     tag = "v${version}";
-    hash = "sha256-QbNzEQctKgxdH1cpMmf2Yg05Q3KOT9tGtK4YSr9GiC4=";
+    hash = "sha256-jzUZK3zQxqajVqGbaQzLPzvK/k3Wck9jX95kkBH2IlY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
-
-  # Temporarily disabled until the following is solved:
-  # https://github.com/NixOS/nixpkgs/pull/425384
-  doCheck = false;
 
   nativeCheckInputs = [
     asyncpg

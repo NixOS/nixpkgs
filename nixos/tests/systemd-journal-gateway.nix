@@ -45,11 +45,11 @@
     client.wait_for_unit("multi-user.target")
 
     def copy_pem(file: str):
-      machine.copy_from_host(source=f"{tmpdir}/{file}", target=f"/run/secrets/{file}")
-      machine.succeed(f"chmod 600 /run/secrets/{file} && chown systemd-journal-gateway /run/secrets/{file}")
+      client.copy_from_host(source=f"{tmpdir}/{file}", target=f"/run/secrets/{file}")
+      client.succeed(f"chmod 600 /run/secrets/{file} && chown systemd-journal-gateway /run/secrets/{file}")
 
     with subtest("Copying keys and certificates"):
-      machine.succeed("mkdir -p /run/secrets/{client,server}")
+      client.succeed("mkdir -p /run/secrets/{client,server}")
       copy_pem("server/cert.pem")
       copy_pem("server/key.pem")
       copy_pem("client/cert.pem")

@@ -1,30 +1,43 @@
 {
   stdenv,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  yarn-berry_4,
   nodejs,
   version,
   src,
+  lib,
 }:
-
+let
+  yarn-berry = yarn-berry_4;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "locust-ui";
   inherit version src;
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-OTGTpAAxr8rmCi5oEWIWzwZqiP3Cx3vyc3r2kbcLyUg=";
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/locustio/locust/blob/master/locust/webui/package.json#L89
+    ./yarn-4.14-support.patch
+  ];
+
+  missingHashes = ./missing-hashes.json;
+  yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-4iRQYw1MrIoY0h939h86F2AROKxpfIXSqr/m0IYS3Jg=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
     nodejs
   ];
 
+  buildPhase = ''
+    runHook preBuild
+    yarn build
+    runHook postBuild
+  '';
+
   dontNpmPrune = true;
-  yarnBuildScript = "build";
   postInstall = ''
     mkdir -p $out/dist
     cp -r dist/** $out/dist

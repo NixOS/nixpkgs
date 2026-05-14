@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  nodejs,
+  nodejs_22,
   node-pre-gyp,
   node-gyp,
   python3,
@@ -15,16 +15,17 @@
   ncVersion,
 }:
 let
+  nodejs = nodejs_22;
   latestVersionForNc = {
-    "31" = {
-      version = "9.0.3";
-      appHash = "sha256-G7SDE72tszifozfT3vNxHW6WmMqQKhrSayQVANQaMbs=";
-      modelHash = "sha256-dB4ot/65xisR700kUXg3+Y+SkrpQO4mWrFfp+En0QEE=";
+    "32" = {
+      version = "10.0.7";
+      appHash = "sha256-quuH9ZNQhvlJ6SsFeboVIrMtF9K6ckpQkXb9OXDvFm8=";
+      modelHash = "sha256-Q862f4mNWE6V4ZUpfNFZrs4kwRF/29uETCroyie0+zA=";
     };
-    "30" = {
-      version = "8.2.1";
-      appHash = "sha256-xSJbfL5HI1bo5KYvk/ssEjSUsWF1hFQkl5MOm/kXYDE=";
-      modelHash = "sha256-O1gh3d0MGQOHUbrIyX3f+R7lGJ7+i8tTmrnfKlczrsk=";
+    "33" = {
+      version = "11.0.1";
+      appHash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
+      modelHash = "sha256-Yx/NJwtD4ltETpkzlcadZsFKqEmMneoZaXiHVSB1WoE=";
     };
   };
   currentVersionInfo =
@@ -80,6 +81,11 @@ stdenv.mkDerivation rec {
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
     ln -s ${lib.getExe ffmpeg-headless} recognize/node_modules/ffmpeg-static/ffmpeg
+
+    substituteInPlace recognize/lib/Classifiers/Classifier.php \
+      --replace-fail \
+        'taskset' \
+        '${lib.getExe' util-linux "taskset"}'
   '';
 
   nativeBuildInputs = lib.optionals useLibTensorflow [
@@ -91,30 +97,39 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = lib.optionalString useLibTensorflow ''
+    runHook preBuild
+
     cd recognize
 
     # Install tfjs dependency
     export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
     node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}
+    rm -r ./build-tmp-napi-v*/
     cd -
 
     # Test tfjs returns exit code 0
     node src/test_libtensorflow.js
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     approot="$(dirname $(dirname $(find -path '*/appinfo/info.xml' | head -n 1)))"
     if [ -d "$approot" ]; then
       mv "$approot/" $out
       chmod -R a-w $out
     fi
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ beardhatcode ];
+  meta = {
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ beardhatcode ];
     longDescription = ''
       Nextcloud app that does Smart media tagging and face recognition with on-premises machine learning models.
       This app goes through your media collection and adds fitting tags, automatically categorizing your photos and music.

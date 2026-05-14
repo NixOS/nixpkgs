@@ -1,6 +1,7 @@
 {
   stdenvNoCC,
   fetchFromGitLab,
+  fetchpatch,
   lib,
   python3,
   rdfind,
@@ -22,13 +23,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20250808";
+  version = "20260410";
 
   src = fetchFromGitLab {
     owner = "kernel-firmware";
     repo = "linux-firmware";
     tag = version;
-    hash = "sha256-bmvhAKAY43WaPr3VLUUYoX6BU2Ret47vDnyCVP7157s=";
+    hash = "sha256-nceQEGm6+Cj6KCeUNwmYsUdArRULfLXysXjzOXdCBQw=";
   };
 
   postUnpack = ''
@@ -51,12 +52,13 @@ stdenvNoCC.mkDerivation rec {
   # Firmware blobs do not need fixing and should not be modified
   dontFixup = true;
 
-  meta = with lib; {
+  meta = {
     description = "Binary firmware collection packaged by kernel.org";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    license = licenses.unfreeRedistributableFirmware;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.unfreeRedistributableFirmware;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
     priority = 6; # give precedence to kernel firmware
+    sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
 }

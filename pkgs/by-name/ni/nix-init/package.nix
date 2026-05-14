@@ -26,16 +26,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-init";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0RLEPVtYnwYH+pMnpO0/Evbp7x9d0RMobOVAqwgMJz4=";
+    hash = "sha256-tjVdiKaa6mGIkjvG6NYnKef9VBJS26FXHGjZ+Zxb0s0=";
   };
 
-  cargoHash = "sha256-kk/SaP/ZtSorSSewAdf0Bq7tiMhB5dZb8v9MlsaUa0M=";
+  cargoHash = "sha256-PUD3c/YnxYCVf/4C++MWxejHsLSS1ysWwiTRZVOp8Vc=";
 
   nativeBuildInputs = [
     curl
@@ -55,7 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
 
   checkFlags = [
-    # requires internet access
+    # require internet access
+    "--skip=e2e"
     "--skip=lang::rust::tests"
   ];
 
@@ -77,15 +78,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    # FIXME: our libgit2 is currently too new
-    # LIBGIT2_NO_VENDOR = 1;
+    LIBGIT2_NO_VENDOR = true;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -96,6 +95,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nix-community/nix-init";
     changelog = "https://github.com/nix-community/nix-init/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      figsoda
+    ];
   };
 })

@@ -138,29 +138,29 @@ in
         exit 1
       '';
     in
+    # python
     ''
-      # List of AS instances
-      machines = [scion01, scion02, scion03, scion04, scion05]
+      vms = [scion01, scion02, scion03, scion04, scion05]
 
       # Functions to avoid many for loops
       def start(allow_reboot=False):
-          for i in machines:
+          for i in vms:
               i.start(allow_reboot=allow_reboot)
 
       def wait_for_unit(service_name):
-          for i in machines:
+          for i in vms:
               i.wait_for_unit(service_name)
 
       def succeed(command):
-          for i in machines:
+          for i in vms:
               i.succeed(command)
 
       def reboot():
-          for i in machines:
+          for i in vms:
               i.reboot()
 
       def crash():
-          for i in machines:
+          for i in vms:
               i.crash()
 
       # Start all machines, allowing reboot for later
@@ -168,6 +168,10 @@ in
 
       # Wait for scion-control.service on all instances
       wait_for_unit("scion-control.service")
+
+      wait_for_unit("scion-dispatcher.service")
+      succeed("test -L /run/shm")
+      succeed('test "$(readlink --no-newline /run/shm)" = /dev/shm')
 
       # Ensure cert is valid against TRC
       succeed("scion-pki certificate verify --trc /etc/scion/certs/*.trc /etc/scion/crypto/as/*.pem >&2")

@@ -54,7 +54,7 @@ in
         }
       '';
       description = ''
-        Contents of the `config.yaml` config file.
+        Contents of the {file}`config.yaml` config file.
         The `--config-path` argument will only be passed if this set is not empty.
 
         See <https://github.com/AdguardTeam/dnsproxy/blob/master/config.yaml.dist>.

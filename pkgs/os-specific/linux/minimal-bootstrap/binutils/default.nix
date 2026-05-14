@@ -18,17 +18,20 @@
 
 let
   # Based on https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a1-static-binutils.nix
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "binutils";
-  version = "2.41";
+  version = "2.46.0";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-${version}.tar.xz";
-    hash = "sha256-rppXieI0WeWWBuZxRyPy0//DHAMXQZHvDQFb3wYAdFA=";
+    hash = "sha256-11qU9Nc+ekCG91E+Z+Q56Pzcu3Jv/mP0ZhdE5iVrLPI=";
   };
 
   patches = [
     # Make binutils output deterministic by default.
     ./deterministic.patch
+    # Fix __attribute__, to fix mmap-related assertion failures.
+    ./fix-tinycc-attribute.patch
   ];
 
   configureFlags = [
@@ -36,6 +39,7 @@ let
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
     "--with-sysroot=/"
+    "--disable-dependency-tracking"
     "--enable-deterministic-archives"
     # depends on bison
     "--disable-gprofng"
@@ -53,7 +57,7 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -73,14 +77,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/ld --version
         mkdir $out
       '';
-
-    meta = with lib; {
-      description = "Tools for manipulating binaries (linker, assembler, etc.)";
-      homepage = "https://www.gnu.org/software/binutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -105,6 +101,7 @@ bash.runCommand "${pname}-${version}"
     export CC="tcc -B ${tinycc.libs}/lib"
     export AR="tcc -ar"
     export lt_cv_sys_max_cmd_len=32768
+
     export CFLAGS="-D__LITTLE_ENDIAN__=1"
     bash ./configure ${lib.concatStringsSep " " configureFlags}
 

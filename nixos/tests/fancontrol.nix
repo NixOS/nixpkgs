@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "fancontrol";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ evils ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine =

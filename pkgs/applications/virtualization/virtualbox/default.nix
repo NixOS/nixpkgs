@@ -10,12 +10,12 @@
   pam,
   libxslt,
   libxml2,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXcursor,
-  libXfixes,
-  libXmu,
+  libxext,
+  libxcursor,
+  libxfixes,
+  libxmu,
   SDL2,
   libcap,
   libGL,
@@ -23,8 +23,8 @@
   libpng,
   glib,
   lvm2,
-  libXrandr,
-  libXinerama,
+  libxrandr,
+  libxinerama,
   libopus,
   libtpms,
   qt6,
@@ -72,12 +72,13 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.12";
+  virtualboxVersion = "7.2.8";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "6f9618f39168898134975f51df7c2d6d5129c0aa82b6ae11cf47f920c70df276";
+  virtualboxSha256 = "0642ed4a12b7204cd30c0abbc2c10c1cc7ad55ce1756a01e86a16d4b6b066592";
 
-  kvmPatchVersion = "20250207";
-  kvmPatchHash = "sha256-GzRLIXhzWL1NLvaGKcWVBCdvay1IxgJUE4koLX1ze7Y=";
+  kvmPatchVboxVersion = "7.2.6";
+  kvmPatchVersion = "20260201";
+  kvmPatchHash = "sha256-pq4DPLwHRRAMJjmfXympDxJK9+d+LwTOxBqxAm0pl3o=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -143,9 +144,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     xorgproto
-    libX11
-    libXext
-    libXcursor
+    libx11
+    libxext
+    libxcursor
     libcap
     glib
     lvm2
@@ -155,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     makeself
     perl
-    libXmu
-    libXrandr
+    libxmu
+    libxrandr
     libpng
     libopus
     libtpms
@@ -171,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qttools
     qtscxml
-    libXinerama
+    libxinerama
     SDL2
     libGLU
   ]
@@ -207,17 +208,13 @@ stdenv.mkDerivation (finalAttrs: {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libXfixes\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libXfixes\.so\.3"@"${libXfixes.out}/lib/libXfixes.so.3"@g'
+      s@"libXfixes\.so\.3"@"${libxfixes.out}/lib/libXfixes.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
 
     substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
       --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
-
-    # this works in conjunction with fix-graphics-driver-loading.patch
-    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-dx-dx11.cpp \
-      --replace-fail \"VBoxDxVk\" \"$out/libexec/virtualbox/VBoxDxVk.so\"
 
     export USER=nix
     set +x
@@ -231,8 +228,8 @@ stdenv.mkDerivation (finalAttrs: {
       # No update patch disables check for update function
       # https://bugs.launchpad.net/ubuntu/+source/virtualbox-ose/+bug/272212
       (fetchpatch {
-        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/42a1ca1291fde365bfba140cb21a8a074aaccce2/debian/patches/16-no-update.patch";
-        hash = "sha256-qM2e4DkkpmA18Z76OUsnY1MhcGb1dT2PG68JUy6fZEE=";
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
+        hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
       })
     ]
     ++ [ ./extra_symbols.patch ]
@@ -250,23 +247,15 @@ stdenv.mkDerivation (finalAttrs: {
     )
     # While the KVM patch should not break any other behavior if --with-kvm is not specified,
     # we don't take any chances and only apply it if people actually want to use KVM support.
-    ++ optional enableKvm (
-      let
-        patchVboxVersion =
-          # There is no updated patch for 7.1.12 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.1.12" then "7.1.6" else finalAttrs.virtualboxVersion;
-      in
-      fetchpatch {
-        name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
-        url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${patchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
-        hash = finalAttrs.kvmPatchHash;
-      }
-    )
+    ++ optional enableKvm (fetchpatch {
+      name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${kvmPatchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
+      hash = finalAttrs.kvmPatchHash;
+    })
     ++ [
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
-      ./fix-graphics-driver-loading.patch
     ];
 
   postPatch = ''
@@ -322,7 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
-      ${optionalString (enableKvm) "--with-kvm"} \
+      ${optionalString enableKvm "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
@@ -425,9 +414,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
-      sander
       friedrichaltheide
-      blitz
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";

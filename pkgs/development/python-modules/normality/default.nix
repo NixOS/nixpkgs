@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "normality";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "normality";
-    tag = version;
-    hash = "sha256-AAxFsdh2pv317hn9vr8Xpz9QPLYEa3KMDcObwR51NWo=";
+    tag = finalAttrs.version;
+    hash = "sha256-A3uaGAa3SQSNM73h/OlwvMc5FKbZvdsE6S07C/sEbSc=";
   };
 
   build-system = [ hatchling ];
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

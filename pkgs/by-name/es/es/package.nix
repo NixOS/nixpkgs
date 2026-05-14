@@ -7,13 +7,13 @@
   bison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "es";
   version = "0.9.2";
 
   src = fetchurl {
-    url = "https://github.com/wryun/es-shell/releases/download/v${version}/es-${version}.tar.gz";
+    url = "https://github.com/wryun/es-shell/releases/download/v${finalAttrs.version}/es-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ySZIK0IITpA+uHHuHrDO/Ana5vGt64QI3Z6TMDXE9d0=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-readline" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible shell with higher order functions";
     mainProgram = "es";
     longDescription = ''
@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
       and the Tcl embeddable programming language.
     '';
     homepage = "http://wryun.github.io/es-shell/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [
       sjmackenzie
       ttuegel
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 
   passthru = {
     shellPath = "/bin/es";
   };
-}
+})

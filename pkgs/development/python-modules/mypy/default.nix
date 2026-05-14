@@ -3,18 +3,19 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   pythonAtLeast,
-  pythonOlder,
   isPyPy,
 
   # build-system
+  pathspec,
   setuptools,
   types-psutil,
   types-setuptools,
-  wheel,
 
   # propagates
+  librt,
   mypy-extensions,
   tomli,
   typing-extensions,
@@ -33,17 +34,17 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.15.0";
+  version = "1.19.1";
   pyproject = true;
 
   # relies on several CPython internals
-  disabled = pythonOlder "3.8" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-y67kt5i8mT9TcSbUGwnNuTAeqjy9apvWIbA2QD96LS4=";
+    hash = "sha256-REUJgYd00qr36hoHevkJEWK/+2hE/caymjD/asqa6eI=";
   };
 
   passthru.updateScript = gitUpdater {
@@ -52,19 +53,19 @@ buildPythonPackage rec {
 
   build-system = [
     mypy-extensions
+    pathspec
     setuptools
     types-psutil
     types-setuptools
     typing-extensions
-    wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   dependencies = [
+    librt
     mypy-extensions
+    pathspec
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     dmypy = [ psutil ];
@@ -100,7 +101,7 @@ buildPythonPackage rec {
     setuptools
     tomli
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # fails with typing-extensions>=4.10
@@ -135,6 +136,7 @@ buildPythonPackage rec {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
     changelog = "https://github.com/python/mypy/blob/${src.rev}/CHANGELOG.md";
+    downloadPage = "https://github.com/python/mypy";
     license = lib.licenses.mit;
     mainProgram = "mypy";
     maintainers = with lib.maintainers; [ lnl7 ];

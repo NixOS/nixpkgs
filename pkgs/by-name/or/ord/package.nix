@@ -6,18 +6,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ord";
-  version = "0.23.2";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "ordinals";
     repo = "ord";
-    rev = version;
-    hash = "sha256-p9WjZ8QsY5fvL91zPUKnK8p0ZJvAxzmPbN/UVWSNjqk=";
+    rev = finalAttrs.version;
+    hash = "sha256-KtJfiQs+2XkFT2l/rpyjeGf/i15BsLFHjSQjzOZkRfg=";
   };
 
-  cargoHash = "sha256-c3+yM7jJyIl2XpSOeqdeQP2OdRc7/t/epDTMoOa/66A=";
+  cargoHash = "sha256-4OFkqErFQ/VPvcHdBJTt877wpd1tALTH89U9u1V2KyY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=subcommand::server::tests::status" # test fails if it built from source tarball
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Index, block explorer, and command-line wallet for Ordinals";
     homepage = "https://github.com/ordinals/ord";
-    changelog = "https://github.com/ordinals/ord/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd ];
+    changelog = "https://github.com/ordinals/ord/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "ord";
   };
-}
+})

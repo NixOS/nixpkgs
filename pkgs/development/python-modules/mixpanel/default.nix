@@ -3,43 +3,54 @@
   fetchFromGitHub,
   lib,
 
-  # Python Dependencies
-  six,
-  urllib3,
+  # build-system
+  setuptools,
+
+  # dependencies
+  asgiref,
+  httpx,
+  pydantic,
   requests,
 
   # tests
+  pytest-asyncio,
   pytestCheckHook,
   responses,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "mixpanel";
-  version = "4.10.1";
-  format = "setuptools";
+  version = "5.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mixpanel";
     repo = "mixpanel-python";
     tag = "v${version}";
-    hash = "sha256-i5vT5FTnw+BanHHrlRsPJ3EooZjQcaosbaHoh/uPRmQ=";
+    hash = "sha256-Q8Kn2dyID1hYjKmEv0e+R/y5dsp/JEkqCdNqQHJsOrI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    asgiref
+    httpx
+    pydantic
     requests
-    six
-    urllib3
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     responses
+    respx
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mixpanel/mixpanel-python";
     description = "Official Mixpanel Python library";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

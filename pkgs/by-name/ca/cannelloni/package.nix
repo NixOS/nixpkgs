@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cannelloni";
-  version = "2.0.0";
+  version = "2.0.1";
   src = fetchFromGitHub {
     owner = "mguentner";
     repo = "cannelloni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b3pBC2XFK+pyONvnkPw/0YUXAG2cRD1OaN7k2ONzFV8=";
+    hash = "sha256-lHZmsgtIL7edODXV8lWfVwMhnS40n9wD8iVyAzJycbA=";
   };
 
   nativeBuildInputs = [

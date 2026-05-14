@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     install -m 755 bin/notify-desktop $out/bin/notify-desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Little application that lets you send desktop notifications with one command";
     longDescription = ''
       It's basically clone of notify-send from libnotify,
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
       It also does not use any external dependencies (except from libdbus of course).
     '';
     homepage = "https://github.com/nowrep/notify-desktop";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ylwghst ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ylwghst ];
     mainProgram = "notify-desktop";
   };
 }

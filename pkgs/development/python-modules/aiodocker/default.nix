@@ -7,16 +7,16 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiodocker";
-  version = "0.24.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiodocker";
-    tag = "v${version}";
-    hash = "sha256-qCOAM4ZyJoLc91FjQpBO97Nyfo1ZOEi0nhXZ7nwLsHk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XpHEgBmcxYoOlzP16BtVOtfuqb+wj0LN0KxXj7p2atk=";
   };
 
   build-system = [
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiodocker" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/aio-libs/aiodocker/releases/tag/${src.tag}";
+  meta = {
+    changelog = "https://github.com/aio-libs/aiodocker/releases/tag/${finalAttrs.src.tag}";
     description = "Docker API client for asyncio";
     homepage = "https://github.com/aio-libs/aiodocker";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

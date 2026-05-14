@@ -8,12 +8,12 @@
 buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  version = "1.3.0";
+  version = "2.0.1";
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "artifacts-credprovider";
     rev = "v${version}";
-    sha256 = "sha256-JbcoDs4c/+uKIgVWZkuo4jqd1hlqe+H949jNfkDwZls=";
+    sha256 = "sha256-rllLLSSebnnmsBtj+oj5FK6qyh4qPf0Zn7fKCnhrHpQ=";
   };
   pname = "azure-artifacts-credprovider";
   projectFile = "CredentialProvider.Microsoft/CredentialProvider.Microsoft.csproj";
@@ -29,6 +29,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anpin ];
     mainProgram = "CredentialProvider.Microsoft";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.unix;
   };
 }

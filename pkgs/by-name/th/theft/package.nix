@@ -4,16 +4,18 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.4.5";
   pname = "theft";
 
   src = fetchFromGitHub {
     owner = "silentbicycle";
     repo = "theft";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
+
+  patches = [ ./disable-failing-test.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -36,14 +38,14 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for property-based testing";
     homepage = "https://github.com/silentbicycle/theft/";
-    platforms = platforms.unix;
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       kquick
       thoughtpolice
     ];
   };
-}
+})

@@ -7,7 +7,7 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpsm2";
   version = "12.0.1";
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "opa-psm2";
-    rev = "PSM2_${version}";
+    rev = "PSM2_${finalAttrs.version}";
     sha256 = "sha256-MzocxY+X2a5rJvTo+gFU0U10YzzazR1IxzgEporJyhI=";
   };
 
@@ -50,16 +50,16 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/intel/opa-psm2";
     description = "PSM2 library supports a number of fabric media and stacks";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [ lib.maintainers.bzizou ];
     # uses __off64_t, srand48_r, lrand48_r, drand48_r
     broken = stdenv.hostPlatform.isMusl;
   };
-}
+})

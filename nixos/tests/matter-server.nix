@@ -16,6 +16,7 @@ in
         services.matter-server = {
           enable = true;
           port = 1234;
+          openFirewall = true;
         };
       };
   };
@@ -29,7 +30,7 @@ in
       start_all()
 
       machine.wait_for_unit("matter-server.service", timeout=20)
-      machine.wait_for_open_port(1234, timeout=20)
+      machine.wait_for_open_port(1234, timeout=100)
 
       with matter_server_running: # type: ignore[union-attr]
         with subtest("Check websocket server initialized"):
@@ -42,6 +43,9 @@ in
 
         with subtest("Check storage directory is created"):
             machine.succeed("ls /var/lib/matter-server/chip.json")
+
+        with subtest("Check dashboard loads"):
+            machine.succeed("curl -f 127.0.0.1:1234")
 
         with subtest("Check systemd hardening"):
             _, output = machine.execute("systemd-analyze security matter-server.service | grep -v '✓'")

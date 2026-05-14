@@ -28,9 +28,9 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP handler for `urllib` that supports HTTP 1.1 and keepalive";
     homepage = "https://github.com/wikier/keepalive";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
   };
 }

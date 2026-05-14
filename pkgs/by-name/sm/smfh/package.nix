@@ -6,25 +6,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smfh";
-  version = "1.1";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "feel-co";
     repo = "smfh";
     tag = finalAttrs.version;
-    hash = "sha256-/9Ww10kYopxfCNNnNDwENTubs7Wzqlw+O6PJAHNOYQw=";
+    hash = "sha256-RgszLC/p9uov6aXnPGbFRkPzT5xleX17wBCdoMT1wcA=";
   };
 
-  cargoHash = "sha256-MpqbmhjNsE1krs7g3zWSXGxzb4G/A+cz/zxD2Jk2HC8=";
+  cargoHash = "sha256-7IcoDgRvpye2lm+bdPlVKj0GO6QBABiQKVwSxL4Mh5k=";
 
   meta = {
     description = "Sleek Manifest File Handler";
     homepage = "https://github.com/feel-co/smfh";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      gerg-l
-    ];
+    teams = [ lib.teams.feel-co ];
     mainProgram = "smfh";
   };
 })

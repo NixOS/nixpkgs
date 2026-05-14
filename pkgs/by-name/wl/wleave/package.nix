@@ -2,6 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
+
+  # Deps
   installShellFiles,
   pkg-config,
   scdoc,
@@ -10,19 +13,22 @@
   glib,
   gtk4,
   gtk4-layer-shell,
+  libadwaita,
+  librsvg,
+  libxml2,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wleave";
-  version = "0.5.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "AMNatty";
     repo = "wleave";
-    rev = version;
-    hash = "sha256-xl0JOepQDvYdeTv0LFYzp8QdufKXkayJcHklLBjupeA=";
+    rev = finalAttrs.version;
+    hash = "sha256-AiZVa8+nCrxgi6E54Aa6+At+6JUZkwESpe5v72S8HyA=";
   };
 
-  cargoHash = "sha256-csnArsVk/Ifhi3aO3bSG0mkSA81KACxR/xC1L8JJfmc=";
+  cargoHash = "sha256-tBjL1l9YH0P6effTYES9urYdKtUh/H3hCI5hUphb9tQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,38 +42,35 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk4
     gtk4-layer-shell
+    libadwaita
+    librsvg
+    libxml2
   ];
 
   postPatch = ''
-    substituteInPlace style.css \
-      --replace-fail "/usr/share/wleave" "$out/share/${pname}"
+    substituteInPlace src/config.rs \
+      --replace-fail "/etc/wleave" "$out/etc/wleave"
 
-    substituteInPlace src/main.rs \
-      --replace-fail "/etc/wleave" "$out/etc/${pname}"
+    substituteInPlace layout.json \
+      --replace-fail "/usr/share/wleave" "$out/share/wleave"
   '';
 
   postInstall = ''
-    install -Dm644 -t "$out/etc/wleave" {"style.css","layout"}
+    install -Dm644 -t "$out/etc/wleave" {"style.css","layout.json"}
     install -Dm644 -t "$out/share/wleave/icons" icons/*
 
-    for f in man/*.scd; do
-      local page="man/$(basename "$f" .scd)"
-      scdoc < "$f" > "$page"
-      installManPage "$page"
-    done
-
-    installShellCompletion --cmd wleave \
-      --bash <(cat completions/wleave.bash) \
-      --fish <(cat completions/wleave.fish) \
-      --zsh <(cat completions/_wleave)
+    # Man pages are currently broken due to upstream scdoc syntax errors.
+    # Disable generation until upstream fixes them.
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Wayland-native logout script written in GTK4";
     homepage = "https://github.com/AMNatty/wleave";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wleave";
-    maintainers = with maintainers; [ ludovicopiero ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ludovicopiero ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,8 +3,7 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
+  isPyPy,
   fetchurl,
 
   # nativeBuildInputs
@@ -17,6 +16,7 @@
 
   # dependencies
   filelock,
+  fsspec,
   jinja2,
   networkx,
   numpy,
@@ -25,8 +25,12 @@
   setuptools,
   sympy,
   typing-extensions,
+  # linux-only
+  cuda-bindings,
+  # x86_64-linux only
   triton,
 
+  config,
   callPackage,
 }:
 
@@ -34,7 +38,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.8.0";
+  version = "2.11.0";
 in
 buildPythonPackage {
   inherit version;
@@ -44,7 +48,8 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
+  # determine supported interpreters by the ones we have x86_64-linux wheels for
+  disabled = isPyPy || !(srcs ? "x86_64-linux-${pyVerNoDot}");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -65,13 +70,14 @@ buildPythonPackage {
       cuda_cupti
       cuda_nvrtc
       cudnn
-      cusparselt
       libcublas
       libcufft
       libcufile
       libcurand
       libcusolver
       libcusparse
+      libcusparse_lt
+      libnvshmem
       nccl
     ]
   );
@@ -84,8 +90,16 @@ buildPythonPackage {
     "libcuda.so.1"
   ];
 
+  pythonRemoveDeps = [
+    "cuda-toolkit"
+    "nvidia-cudnn-cu12"
+    "nvidia-cusparselt-cu12"
+    "nvidia-nccl-cu12"
+    "nvidia-nvshmem-cu12"
+  ];
   dependencies = [
     filelock
+    fsspec
     jinja2
     networkx
     numpy
@@ -95,7 +109,12 @@ buildPythonPackage {
     sympy
     typing-extensions
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cuda-bindings
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ];
 
   postInstall = ''
     # ONNX conversion
@@ -130,7 +149,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ../tests { };
+  passthru.tests = callPackage ../tests {
+    inherit (config) rocmSupport cudaSupport;
+  };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";

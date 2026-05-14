@@ -32,19 +32,18 @@
   graphicsmagick,
   gdal,
   openimageio,
-  freeimage,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SuK9/a6OUAumEe1kz1itFJGKxJzbmHkBVLMnyXhIwmQ=";
+    hash = "sha256-UiC6s86i7UavW86EKm74oPVlEacvoKmwW7KETjpnNaI=";
   };
 
   patches = [
@@ -113,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
         graphicsmagick
         gdal
         openimageio
-        freeimage
         ;
 
       inherit (python3Packages) pillow imread;
@@ -125,13 +123,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/releases/v${finalAttrs.version}.html";
-    license = licenses.libtiff;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.libtiff;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
-    teams = [ teams.geospatial ];
+    teams = [ lib.teams.geospatial ];
   };
 })

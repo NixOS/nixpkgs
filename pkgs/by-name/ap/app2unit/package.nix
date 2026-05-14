@@ -2,21 +2,30 @@
   lib,
   stdenvNoCC,
   dash,
+  xdg-terminal-exec,
   scdoc,
   fetchFromGitHub,
+  nix-update-script,
+  installShellFiles,
+  withTerminalSupport ? true,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "app2unit";
-  version = "1.0.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
-    tag = "v${version}";
-    sha256 = "sha256-7eEVjgs+8k+/NLteSBKgn4gPaPLHC+3Uzlmz6XB0930=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-upYW+aTJ6LCHrI0+IOYnA98uDLKPxu/wCi7uUWe/Geg=";
   };
 
-  nativeBuildInputs = [ scdoc ];
+  passthru.updateScript = nix-update-script { };
+
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+  ];
 
   buildPhase = ''
     scdoc < app2unit.1.scd > app2unit.1
@@ -24,6 +33,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     install -Dt $out/bin app2unit
+    installManPage app2unit.1
 
     for link in \
       app2unit-open \
@@ -41,6 +51,11 @@ stdenvNoCC.mkDerivation rec {
   postFixup = ''
     substituteInPlace $out/bin/app2unit \
       --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
+  ''
+  + lib.optionalString withTerminalSupport ''
+    substituteInPlace $out/bin/app2unit \
+      --replace-fail 'A2U__TERMINAL_HANDLER=xdg-terminal-exec' \
+                     'A2U__TERMINAL_HANDLER=${lib.getExe xdg-terminal-exec}'
   '';
 
   meta = {
@@ -51,4 +66,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ fazzi ];
     platforms = lib.platforms.linux;
   };
-}
+})

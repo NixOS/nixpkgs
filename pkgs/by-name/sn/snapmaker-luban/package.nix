@@ -19,17 +19,17 @@
   gdk-pixbuf,
   libdrm,
   libgbm,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxcb,
   libxshmfence,
   pango,
@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     gcc-unwrapped
     gtk3
     libdrm
-    libXdamage
-    libX11
-    libXScrnSaver
-    libXtst
+    libxdamage
+    libx11
+    libxscrnsaver
+    libxtst
     libxcb
     libxshmfence
     libgbm
@@ -86,22 +86,22 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk3
-    libX11
-    libXcomposite
+    libx11
+    libxcomposite
     libxshmfence
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     nspr
     nss
     libxcb
     pango
-    libXScrnSaver
+    libxscrnsaver
     udev
   ];
 

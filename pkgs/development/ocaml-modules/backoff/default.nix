@@ -5,12 +5,12 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "backoff";
   version = "0.1.1";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/backoff/releases/download/${version}/backoff-${version}.tbz";
+    url = "https://github.com/ocaml-multicore/backoff/releases/download/${finalAttrs.version}/backoff-${finalAttrs.version}.tbz";
     hash = "sha256-AL6jEbInsbwKVYedpNzjix/YRHtOTizxk6aVNzesnwM=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.12";
-}
+})

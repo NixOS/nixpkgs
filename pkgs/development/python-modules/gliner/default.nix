@@ -15,22 +15,25 @@
   transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gliner";
-  version = "0.2.21";
+  version = "0.2.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urchade";
     repo = "GLiNER";
-    tag = version;
-    hash = "sha256-v8Q/+et9yWeVSWt1K9Ahg3I4dz5/Ft+o1ueNOSaGEOU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tiQrb04SfloVJySyKu5XhOaE8Y3RcwBbW2l13UtZL0w=";
   };
 
   build-system = [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "transformers"
+  ];
   dependencies = [
     huggingface-hub
     onnxruntime
@@ -48,7 +51,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generalist and Lightweight Model for Named Entity Recognition";
     homepage = "https://github.com/urchade/GLiNER";
-    changelog = "https://github.com/urchade/GLiNER/releases/tag/${src.tag}";
+    changelog = "https://github.com/urchade/GLiNER/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
@@ -57,4 +60,4 @@ buildPythonPackage rec {
       "aarch64-linux"
     ];
   };
-}
+})

@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  xorg,
+  mkfontscale,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-l4MA3OsMnqPIBWKx3ZO5XnxjE0gnIGyAtsZe2z/9zrw=";
   };
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
     runHook preInstall

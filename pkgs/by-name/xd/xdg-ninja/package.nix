@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "xdg-ninja";
-  version = "0.2.0.2-unstable-2025-08-07";
+  version = "0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "xdg-ninja";
-    rev = "854929e5413e8d2cf84e90c5cc3ccb0188ab5d22";
-    hash = "sha256-Kgu+LEU1SeB3ODyLihYG+IaQ2TMEFf3gxtjNM1FZz98=";
+    rev = "8d3c540111840b4765c7df5c79221508864c8366";
+    hash = "sha256-am8FF2C8BQOS0z6GT5MX2MIfSDNQX7vaeet2tLr05Sg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -41,12 +41,12 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Shell script which checks your $HOME for unwanted files and directories";
     homepage = "https://github.com/b3nj5m1n/xdg-ninja";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ arcuru ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ arcuru ];
     mainProgram = "xdg-ninja";
   };
 }

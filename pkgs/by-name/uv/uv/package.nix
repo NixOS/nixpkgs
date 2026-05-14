@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.8.6";
+  version = "0.11.13";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-82KKnz42Nn2Ef8DHBWBMPTrQVsM+klIOV8hqSKnXqEY=";
+    hash = "sha256-lhNGjMx9vL+G+chf0ASdw9nhdGQ20Y6RKtDVXCKR5Fc=";
   };
 
-  cargoHash = "sha256-l2/PMPiSPE6WpXOuU21NsMx0vsz9cuy/QeCiSTkbvVw=";
+  cargoHash = "sha256-CSkaJTl1a3C6u1SObsC/TBLH4weOPxmc99Tq6bwFJnE=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -56,19 +56,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
     tests.uv-python = python3Packages.uv;
-
-    # Updating `uv` needs to be done on staging. Disabling r-ryantm update bot:
-    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
+    longDescription = ''
+      `uv` manages project dependencies and environments, with support for lockfiles, workspaces, and more.
+
+      Due to `uv`'s (over)eager fetching of dynamically-linked Python executables,
+      as well as vendoring of dynamically-linked libraries within Python modules distributed via PyPI,
+      NixOS users can run into issues when managing Python projects.
+      See the Nixpkgs Reference Manual entry for `uv` for information on how to mitigate these issues:
+      https://nixos.org/manual/nixpkgs/unstable/#sec-uv.
+
+      For building Python projects with `uv` and Nix outside of nixpkgs, check out `uv2nix` at https://github.com/pyproject-nix/uv2nix.
+    '';
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
@@ -79,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       bengsparks
       GaetanLepage
       prince213
+      miniharinn
     ];
     mainProgram = "uv";
 

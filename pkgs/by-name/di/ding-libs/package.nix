@@ -5,12 +5,12 @@
   check,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ding-libs";
   version = "0.6.1";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/SSSD/ding-libs/ding-libs-${version}.tar.gz";
+    url = "https://releases.pagure.org/SSSD/ding-libs/ding-libs-${finalAttrs.version}.tar.gz";
     sha256 = "1h97mx2jdv4caiz4r7y8rxfsq78fx0k4jjnfp7x2s7xqvqks66d3";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
       lib.licenses.lgpl3
     ];
   };
-}
+})

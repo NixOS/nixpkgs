@@ -4,16 +4,16 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lscolors";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchCrate {
-    inherit version pname;
-    hash = "sha256-EUUPVSpHc9tN1Hi7917hJ2psTZq5nnGw6PBeApvlVtw=";
+    inherit (finalAttrs) version pname;
+    hash = "sha256-75RE72Vy4HRRjwa7qOybnUAzxxhBUKSlKfrLrm6Ish8=";
   };
 
-  cargoHash = "sha256-WsbzlL+RbR8Hnrsbgr7gFpBlo3RBKcNYPbOsZWygyrI=";
+  cargoHash = "sha256-a8G9snl6TrH90HvlfhDY/U8BuSoD7Fqn7BJSsRvEQ18=";
 
   buildFeatures = [ "nu-ansi-term" ];
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
-    changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${version}";
+    changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "lscolors";
   };
-}
+})

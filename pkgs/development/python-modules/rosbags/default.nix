@@ -1,7 +1,8 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitLab,
+  buildPythonPackage,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -11,6 +12,7 @@
   lz4,
   numpy,
   ruamel-yaml,
+  safelz4,
   typing-extensions,
   zstandard,
 
@@ -23,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "rosbags";
-  version = "0.10.11";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ternaris";
     repo = "rosbags";
     tag = "v${version}";
-    hash = "sha256-uHRmeHwNswZt5q+RSlzjqZiXhH6qYAkf8AufrRNbBtY=";
+    hash = "sha256-CSRJIGLhQwuaGatfWIbnYNdjUva+klBYPyDbjHfUNlM=";
   };
 
   build-system = [
@@ -44,7 +46,8 @@ buildPythonPackage rec {
     ruamel-yaml
     typing-extensions
     zstandard
-  ];
+  ]
+  ++ lib.optional (pythonAtLeast "3.14") safelz4;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

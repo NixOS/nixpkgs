@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "minidb";
   version = "2.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thp";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minidb" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLite3-based store for Python objects";
     homepage = "https://thp.io/2010/minidb/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ tv ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ tv ];
   };
 }

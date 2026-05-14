@@ -28,17 +28,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
     security.wrappers."gsr-kms-server" = {
       owner = "root";
       group = "root";
       capabilities = "cap_sys_admin+ep";
-      source = "${package}/bin/gsr-kms-server";
-    };
-    security.wrappers."gpu-screen-recorder" = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_sys_nice+ep";
-      source = "${package}/bin/gpu-screen-recorder";
+      source = lib.getExe' package "gsr-kms-server";
     };
   };
 

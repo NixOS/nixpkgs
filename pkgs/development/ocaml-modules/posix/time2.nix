@@ -3,7 +3,7 @@
   buildDunePackage,
   posix-base,
   posix-types,
-  unix-errno,
+  posix-errno,
 }:
 
 buildDunePackage {
@@ -14,7 +14,7 @@ buildDunePackage {
   propagatedBuildInputs = [
     posix-base
     posix-types
-    unix-errno
+    posix-errno
   ];
 
   doCheck = true;

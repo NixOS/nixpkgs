@@ -20,11 +20,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp $src/linux/us_qwerty-fr $out/share/X11/xkb/symbols
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qwerty keyboard layout with French accents";
     changelog = "https://github.com/qwerty-fr/qwerty-fr/blob/v${finalAttrs.version}/linux/debian/changelog";
     homepage = "https://github.com/qwerty-fr/qwerty-fr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ potb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ potb ];
   };
 })

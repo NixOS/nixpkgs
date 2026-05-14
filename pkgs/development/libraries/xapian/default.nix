@@ -62,13 +62,13 @@ let
         python-xapian = python3.pkgs.xapian;
       };
 
-      meta = with lib; {
+      meta = {
         description = "Search engine library";
         homepage = "https://xapian.org/";
         changelog = "https://xapian.org/docs/xapian-core-${version}/NEWS";
-        license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ matthiasbeyer ];
-        platforms = platforms.unix;
+        license = lib.licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [ matthiasbeyer ];
+        platforms = lib.platforms.unix;
       };
     };
 in
@@ -76,5 +76,5 @@ in
   # Don't forget to change the hashes in xapian-omega and
   # python3Packages.xapian. They inherit the version from this package, and
   # should always be built with the equivalent xapian version.
-  xapian_1_4 = generic "1.4.27" "sha256-vLyZz78WCAEZwlcfwpZ5T1Ob1ULKOSbxfCmZYAgwq2E=";
+  xapian_1_4 = generic "1.4.31" "sha256-/s9gnqLv3IpkvjaXFarHMzNqEfdICmVFJElkrmvICBE=";
 }

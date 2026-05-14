@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "konsave";
   version = "2.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Konsave";
     hash = "sha256-tWarqT2jFgCuSsa2NwMHRaR3/wj0khiRHidvRNMwM8M=";
   };
@@ -27,12 +27,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "konsave" ];
 
-  meta = with lib; {
+  meta = {
     description = "Save Linux Customization";
     mainProgram = "konsave";
-    maintainers = with maintainers; [ MoritzBoehme ];
+    maintainers = with lib.maintainers; [ MoritzBoehme ];
     homepage = "https://github.com/Prayag2/konsave";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
-}
+})

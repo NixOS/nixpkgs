@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  uv,
   uv-build,
   anyio,
   pytestCheckHook,
@@ -10,7 +9,7 @@ buildPythonPackage {
   version = "0.1.0";
   pyproject = true;
 
-  src = "${uv.src}/scripts/packages/built-by-uv";
+  src = "${uv-build.src}/test/packages/built-by-uv";
 
   build-system = [ uv-build ];
 

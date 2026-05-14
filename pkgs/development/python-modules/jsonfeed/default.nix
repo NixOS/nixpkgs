@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "jsonfeed";
   version = "0.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonfeed" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to process json feed";
     homepage = "https://pypi.org/project/jsonfeed/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

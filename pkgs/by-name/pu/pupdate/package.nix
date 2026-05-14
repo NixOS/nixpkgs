@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.20.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "pupdate";
     rev = "${version}";
-    hash = "sha256-kdxqG1Vw6jRT/YyRLi60APpayYyLG73KqAFga8N9G2A=";
+    hash = "sha256-XZom0PDK5Vno0lCDFYE0lyH+ZDlfRNYqwUDo+zrI4ow=";
   };
 
   buildInputs = [
@@ -30,7 +30,7 @@ buildDotnetModule rec {
   patches = [ ./add-runtime-identifier.patch ];
   postPatch = ''
     substituteInPlace pupdate.csproj \
-      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+      --replace-fail @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
   '';
 
   projectFile = "pupdate.csproj";
@@ -45,19 +45,19 @@ buildDotnetModule rec {
     "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system} -p:TrimMode=partial"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mattpannella/pupdate";
     description = "Update utility for the openFPGA cores, firmware, and other stuff on your Analogue Pocket";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ p-rintz ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "pupdate";
   };
 }

@@ -1,22 +1,25 @@
 {
   lib,
   stdenv,
-  pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
-  python,
   buildPythonPackage,
-  setuptools,
-  numpy,
-  numpy_1,
-  llvmlite,
   replaceVars,
-  writers,
+  fetchpatch,
+
+  # nativeBuildInputs
+  setuptools,
+
+  # dependencies
+  llvmlite,
+  numpy,
+
+  # tests
   numba,
   pytestCheckHook,
-
-  config,
+  writableTmpDirAsHomeHook,
+  numpy_1,
+  writers,
+  python,
 
   # CUDA-only dependencies:
   addDriverRunpath,
@@ -24,6 +27,7 @@
   cudaPackages,
 
   # CUDA flags:
+  config,
   cudaSupport ? config.cudaSupport,
   testsWithoutSandbox ? false,
   doFullCheck ? false,
@@ -32,26 +36,24 @@
 let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
-buildPythonPackage rec {
-  version = "0.61.2";
+buildPythonPackage (finalAttrs: {
+  version = "0.63.1";
   pname = "numba";
   pyproject = true;
-
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "numba";
     repo = "numba";
-    tag = version;
+    tag = finalAttrs.version;
     # Upstream uses .gitattributes to inject information about the revision
     # hash and the refname into `numba/_version.py`, see:
     #
     # - https://git-scm.com/docs/gitattributes#_export_subst and
     # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-Qa2B5pOWrLb/1V3PSyiwS1x9ueXwDKRhDMDecBCAN+8=";
+    hash = "sha256-M7Hdc1Qakclz7i/HujBUqVEWFsHj9ZGQDzb8Ze9AztA=";
   };
 
   postPatch = ''
@@ -59,14 +61,7 @@ buildPythonPackage rec {
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
-
-    substituteInPlace setup.py \
-      --replace-fail 'max_numpy_run_version = "2.3"' 'max_numpy_run_version = "2.4"'
-    substituteInPlace numba/__init__.py \
-      --replace-fail "numpy_version > (2, 2)" "numpy_version > (2, 3)"
   '';
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   build-system = [
     setuptools
@@ -80,7 +75,9 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
-  pythonRelaxDeps = [ "numpy" ];
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
   dependencies = [
     numpy
@@ -88,11 +85,22 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/numba/numba/commit/e2c8984ba60295def17e363a926d6f75e7fa9f2d.patch";
-      includes = [ "numba/core/bytecode.py" ];
-      hash = "sha256-HIVbp3GSmnq6W7zrRIirIbhGjJsFN3PNyHSfAE8fdDw=";
+    # Support Numpy 2.4, see:
+    #
+    # - https://github.com/numba/numba/pull/10393
+    # - https://github.com/numba/numba/issues/10263
+    (fetchpatch {
+      url = "https://github.com/numba/numba/commit/7ec267efb80d87f0652c00535e8843f35d006f20.patch";
+      hash = "sha256-oAOZa2/m2qs8CeX13/0lmRTg/lQj5aDIaaQeDeLAghc=";
+      excludes = [
+        "azure-pipelines.yml"
+        "buildscripts/azure/azure-windows.yml"
+      ];
     })
+    # The above doesn't fix the source's build and run time checks of Numpy's
+    # version, it only fixes the tests and API. Upstream puts these checks only
+    # in release tarballs, and hence the patch has to be vendored.
+    ./numpy2.4.patch
   ]
   ++ lib.optionals cudaSupport [
     (replaceVars ./cuda_path.patch {
@@ -103,20 +111,24 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = ''
-    export HOME="$(mktemp -d)"
-    # https://github.com/NixOS/nixpkgs/issues/255262
     cd $out
   '';
 
-  enabledTestPaths = lib.optionals (!doFullCheck) [
-    # These are the most basic tests. Running all tests is too expensive, and
-    # some of them fail (also differently on different platforms), so it will
-    # be too hard to maintain such a `disabledTests` list.
-    "${python.sitePackages}/numba/tests/test_usecases.py"
-  ];
+  enabledTestPaths =
+    if doFullCheck then
+      null
+    else
+      [
+        # These are the most basic tests. Running all tests is too expensive, and
+        # some of them fail (also differently on different platforms), so it will
+        # be too hard to maintain such a `disabledTests` list.
+        "${python.sitePackages}/numba/tests/test_usecases.py"
+      ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # captured stderr: Fatal Python error: Segmentation fault
@@ -156,11 +168,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
-    changelog = "https://numba.readthedocs.io/en/stable/release/${version}-notes.html";
+  meta = {
+    changelog = "https://numba.readthedocs.io/en/stable/release/${finalAttrs.version}-notes.html";
     description = "Compiling Python code using LLVM";
     homepage = "https://numba.pydata.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "numba";
   };
-}
+})

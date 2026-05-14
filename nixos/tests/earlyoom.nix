@@ -2,7 +2,6 @@
 {
   name = "earlyoom";
   meta.maintainers = with lib.maintainers; [
-    ncfavier
     oxalica
   ];
 

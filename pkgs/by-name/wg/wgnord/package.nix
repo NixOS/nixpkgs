@@ -18,7 +18,7 @@ resholve.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "phirecc";
-    repo = pname;
+    repo = "wgnord";
     rev = version;
     hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
@@ -59,8 +59,7 @@ resholve.mkDerivation rec {
   meta = {
     description = "NordVPN Wireguard (NordLynx) client in POSIX shell";
     homepage = "https://github.com/phirecc/wgnord";
-    changelog = "https://github.com/phirecc/wgnord/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
     license = lib.licenses.mit;
     mainProgram = "wgnord";
     platforms = lib.platforms.linux;

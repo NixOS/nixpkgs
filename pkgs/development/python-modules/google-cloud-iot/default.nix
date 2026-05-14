@@ -10,15 +10,12 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
   version = "2.9.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -59,11 +56,11 @@ buildPythonPackage rec {
     "google.cloud.iot_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud IoT API API client library";
     homepage = "https://github.com/googleapis/python-iot";
     changelog = "https://github.com/googleapis/python-iot/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

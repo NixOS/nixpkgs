@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "worldpainter";
-  version = "2.26.0";
+  version = "2.26.1";
 
   src = fetchurl {
-    url = "https://www.worldpainter.net/files/${pname}_${version}.tar.gz";
-    hash = "sha256-/ppESrYoNbtxSWaCaKgwvtrW8IGLwigYgQuHF5F/26A=";
+    url = "https://www.worldpainter.net/files/worldpainter_${version}.tar.gz";
+    hash = "sha256-YlFiGim9IeurDZ4H1XzxRDn7GM/U/zL9SqTUT4gJdno=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     find .install4j/ -maxdepth 1 -type f -exec install -Dm644 {} "$out/.install4j/" \;
     find .install4j/user/ -maxdepth 1 -type f -exec install -Dm644 {} "$out/.install4j/user/" \;
 
-    mkdir -p $out/share/{pixmaps,applications}
-    install -Dm644 .install4j/i4j_extf_8_jed6s0_1y6kkxa.png   "$out/share/pixmaps/worldpainter.png"
+    mkdir -p $out/share/applications
+    install -Dm644 .install4j/i4j_extf_8_jed6s0_1y6kkxa.png   "$out/share/icons/hicolor/128x128/apps/worldpainter.png"
     runHook postInstall
   '';
 

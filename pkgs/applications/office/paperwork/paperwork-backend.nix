@@ -26,12 +26,12 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paperwork-backend";
   inherit (callPackage ./src.nix { }) version src;
-  format = "pyproject";
+  pyproject = true;
 
-  sourceRoot = "${src.name}/paperwork-backend";
+  sourceRoot = "${finalAttrs.src.name}/paperwork-backend";
 
   patches = [
     # disables a flaky test https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/issues/1035#note_1493700
@@ -84,13 +84,13 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aszlig
       symphorien
     ];
   };
-}
+})

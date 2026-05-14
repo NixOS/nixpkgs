@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -35,7 +36,7 @@ buildGoModule rec {
     "-X github.com/reproducible-containers/${pname}/pkg/version.Version=v${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd repro-get \
       --bash <($out/bin/repro-get completion bash) \
       --fish <($out/bin/repro-get completion fish) \
@@ -67,11 +68,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Reproducible apt/dnf/apk/pacman, with content-addressing";
     homepage = "https://github.com/reproducible-containers/repro-get";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "repro-get";
   };
 }

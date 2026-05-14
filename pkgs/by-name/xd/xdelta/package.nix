@@ -12,13 +12,13 @@ assert lzmaSupport -> xz != null;
 let
   mkWith = flag: name: if flag then "--with-${name}" else "--without-${name}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdelta";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "xdelta-devel";
     owner = "jmacd";
   };
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
     longDescription = ''
       xdelta is a command line program for delta encoding, which generates two
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
     '';
     # The dedicated homepage pointed to a gambling website
     homepage = "https://github.com/jmacd/xdelta";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "xdelta3";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

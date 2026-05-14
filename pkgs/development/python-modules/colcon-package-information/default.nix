@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "colcon-package-information";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-package-information";
     tag = version;
-    hash = "sha256-BnDrnIgzXrNAPIg7sr8CcaVdisplJdAvjyZ28r4o/wI=";
+    hash = "sha256-1l2c1f0Ppp7EqOtIdaTFpwY74J6OLTg2gK7bbeYmZ5Y=";
   };
 
   build-system = [ setuptools ];

@@ -47,10 +47,15 @@ buildPythonPackage rec {
   # Fix random seed during tests
   pytestFlags = [ "--randomly-seed=0" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # mimic optimizer fails to converge under current numpy
+    "test_mimic_discrete_max_fast"
+  ];
+
+  meta = {
     description = "Machine Learning, Randomized Optimization and SEarch";
     homepage = "https://github.com/gkhayes/mlrose";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

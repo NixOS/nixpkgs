@@ -9,14 +9,14 @@
   openssl,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openpace";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "frankmorgner";
     repo = "openpace";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KsgCTHvbqxNOcf9HWgXGxagpIjHEcQ5Kryjq71F8XRk=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ vaavaav ];
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform; # help2man
   };
-}
+})

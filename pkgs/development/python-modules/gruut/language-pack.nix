@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Language files for gruut tokenizer/phonemizer";
     homepage = "https://github.com/rhasspy/gruut";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

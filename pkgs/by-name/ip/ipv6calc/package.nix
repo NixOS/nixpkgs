@@ -10,15 +10,15 @@
   geolite-legacy ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipv6calc";
-  version = "4.3.3";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = "ipv6calc";
-    rev = version;
-    sha256 = "sha256-+oh9sXcww9S2WtOgLXP7mSGGnGmaSSixZIQk5CZwqyU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-+u+7XdW0bS3nE5djdy7I1/NHZdXU9QKukZAvTkWsCK0=";
   };
 
   buildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
       Now only one utiltity is needed to do a lot.
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

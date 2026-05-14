@@ -1,9 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
-  fetchpatch,
-  pythonOlder,
+  fetchFromCodeberg,
   python,
 
   # build-system
@@ -43,26 +41,15 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.10.0";
+  version = "65.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-pwWrdWk3bARM4dKbEnUWXuyjw/rTcOjk3YXowDa+Hm8=";
+    hash = "sha256-ZtrbIklik0GmVMNtZegXJ8ot+5LKjO0B5ioo5nArKMk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "dj-rest-auth-compat.patch";
-      url = "https://github.com/pennersr/django-allauth/commit/d50a9b09bada6753b52e52571d0830d837dc08ee.patch";
-      hash = "sha256-cFj9HEAlAITbRcR23ptzUYamoLmdtFEUVkDtv4+BBY0=";
-    })
-  ];
 
   nativeBuildInputs = [ gettext ];
 
@@ -81,6 +68,10 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    headless = [
+      pyjwt
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     headless-spec = [ pyyaml ];
     idp-oidc = [
       oauthlib
@@ -114,7 +105,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests require network access
@@ -125,7 +116,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
-    changelog = "https://codeberg.org/allauth/django-allauth/src/tag/${version}/ChangeLog.rst";
+    changelog = "https://codeberg.org/allauth/django-allauth/src/tag/${src.tag}/ChangeLog.rst";
     downloadPage = "https://codeberg.org/allauth/django-allauth";
     homepage = "https://allauth.org";
     license = lib.licenses.mit;

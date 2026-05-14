@@ -23,7 +23,6 @@ in
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2505;
       from = [
-        "virtualisation"
         "vmware"
         "vmFileName"
       ];
@@ -32,19 +31,21 @@ in
         "fileName"
       ];
     })
-
+    (lib.modules.mkRenamedOptionModuleWith {
+      sinceRelease = 2605;
+      from = [
+        "vmware"
+        "baseImageSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
   ];
 
   options = {
     vmware = {
-      baseImageSize = lib.mkOption {
-        type = with lib.types; either (enum [ "auto" ]) int;
-        default = "auto";
-        example = 2048;
-        description = ''
-          The size of the VMWare base image in MiB.
-        '';
-      };
       vmDerivationName = lib.mkOption {
         type = lib.types.str;
         default = "nixos-vmware-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
@@ -78,7 +79,7 @@ in
         rm $diskImage
       '';
       format = "raw";
-      diskSize = cfg.baseImageSize;
+      diskSize = config.virtualisation.diskSize;
       partitionTableType = "efi";
       inherit config lib pkgs;
     };

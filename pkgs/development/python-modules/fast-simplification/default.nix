@@ -11,16 +11,16 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fast-simplification";
-  version = "0.1.12";
+  version = "0.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "fast-simplification";
-    tag = "v${version}";
-    hash = "sha256-OhVJKYmJR+A6JDaM/7Bfkc4PNlhsc6NgRNU+SokCg1U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MgAOGB4wJQ68GyotaxiR9Xdho+TckHKEglQvCE2TWVY=";
   };
 
   build-system = [
@@ -59,10 +59,10 @@ buildPythonPackage rec {
   meta = {
     description = "Fast Quadratic Mesh Simplification";
     homepage = "https://github.com/pyvista/fast-simplification";
-    changelog = "https://github.com/pyvista/fast-simplification/releases/tag/v${version}";
+    changelog = "https://github.com/pyvista/fast-simplification/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       yzx9
     ];
   };
-}
+})

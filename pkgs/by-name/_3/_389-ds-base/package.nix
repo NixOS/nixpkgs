@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoconf,
   automake,
   cargo,
@@ -49,9 +50,26 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hRTK9xBu8v8+SGa/3IB8Alh/aGUiRRn2LmYOvXy0Yd4=";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/389ds/389-ds-base/pull/6930
+      name = "389-ds-base-rustc-1_89.patch";
+      url = "https://github.com/389ds/389-ds-base/commit/1701419551c246e9dc21778b118220eeb2258125.patch";
+      hash = "sha256-trzY/fDH3rs66DWbWI+PY46tIC9ShuVqspMHqEEKZYA=";
+    })
+    ./0001-remove-hard-coded-vendor-paths.patch
+    (fetchpatch {
+      # https://github.com/389ds/389-ds-base/security/advisories/GHSA-4qwg-c5j2-q4hp
+      name = "CVE-2025-14905.patch";
+      url = "https://github.com/389ds/389-ds-base/commit/2e424110def2e3998f6045e136fb0d43f47b7f5a.patch";
+      hash = "sha256-ItxG0bnuNPWLClL677rChTDvDWXxJ2L6ygx4VY2v80w=";
+    })
+  ];
+
+  cargoRoot = "src";
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/src";
+    inherit (finalAttrs) src cargoRoot;
     name = "389-ds-base-${finalAttrs.version}";
     hash = "sha256-pNzMQjeBpmzFg6oWCxhLDmKGUKIW6jGmZQWai5Yunjc=";
   };
@@ -64,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     cargo
     rustc
+    rustPlatform.cargoSetupHook
   ]
   ++ lib.optional withCockpit rsync;
 
@@ -94,10 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     ./autogen.sh --prefix="$out"
-  '';
-
-  preBuild = ''
-    ln -s ${finalAttrs.cargoDeps} ./vendor
   '';
 
   configureFlags = [

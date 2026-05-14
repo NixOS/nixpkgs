@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-W6ltmWCw7jfiTiNlh60YVF7mz//8s+bgu4F9gy5cDgw=";
   };
 
-  postUnpack = ''
+  postConfigure = ''
     ln -s ${
       zig_0_14.fetchDeps {
         inherit (finalAttrs)
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  nativeBuildInputs = [ zig_0_14.hook ];
+  nativeBuildInputs = [ zig_0_14 ];
 
   buildInputs = [
     glfw

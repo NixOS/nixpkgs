@@ -5,19 +5,19 @@
   glibcLocales,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "i3minator";
   version = "0.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carlesso";
     repo = "i3minator";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "07dic5d2m0zw0psginpl43xn0mpxw7wilj49d02knz69f7c416lm";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
   build-system = [
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "i3minator" ];
 
-  meta = with lib; {
+  meta = {
     description = "i3 project manager similar to tmuxinator";
     mainProgram = "i3minator";
     longDescription = ''
@@ -44,8 +44,8 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/carlesso/i3minator";
     license = lib.licenses.wtfpl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 
-}
+})

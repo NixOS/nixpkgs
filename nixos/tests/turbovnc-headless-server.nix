@@ -146,10 +146,10 @@
         machine.succeed("scrot --display :0 /tmp/glxgears.png")
 
     # Copy files down.
-    machine.copy_from_vm("/tmp/glxgears.png")
-    machine.copy_from_vm("/tmp/glxgears.stdout")
-    machine.copy_from_vm("/tmp/Xvnc.stdout")
-    machine.copy_from_vm("/tmp/Xvnc.stderr")
+    machine.copy_from_machine("/tmp/glxgears.png")
+    machine.copy_from_machine("/tmp/glxgears.stdout")
+    machine.copy_from_machine("/tmp/Xvnc.stdout")
+    machine.copy_from_machine("/tmp/Xvnc.stderr")
   '';
 
 }

@@ -12,7 +12,6 @@
   writeText,
   neovim,
   vimPlugins,
-  neovimUtils,
   wrapNeovimUnstable,
   neovim-unwrapped,
   fetchFromGitLab,
@@ -21,8 +20,6 @@
   pkgs,
 }:
 let
-  inherit (neovimUtils) makeNeovimConfig;
-
   plugins = with vimPlugins; [
     {
       plugin = vim-obsession;
@@ -30,12 +27,20 @@ let
         map <Leader>$ <Cmd>Obsession<CR>
       '';
     }
+    {
+      plugin = vim-obsession;
+      type = "lua";
+      config = ''
+        -- this is a comment
+        vim.g.nixpkgs_test_value = 42
+      '';
+    }
   ];
 
   packagesWithSingleLineConfigs = with vimPlugins; [
     {
       plugin = vim-obsession;
-      config = ''map <Leader>$ <Cmd>Obsession<CR>'';
+      config = "map <Leader>$ <Cmd>Obsession<CR>";
     }
     {
       plugin = trouble-nvim;
@@ -43,38 +48,22 @@ let
     }
   ];
 
-  nvimConfSingleLines = makeNeovimConfig {
-    plugins = packagesWithSingleLineConfigs;
-    customRC = ''
-      " just a comment
-    '';
-  };
-
-  nvimConfNix = makeNeovimConfig {
-    inherit plugins;
-    customRC = ''
-      " just a comment
-    '';
-  };
-
-  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
+  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" {
     plugins = [
       {
         plugin = vimPlugins.luasnip;
       }
     ];
-  });
+  };
 
   # build should fail with a wrong
   nvim-run-failing-check =
     (wrapNeovimUnstable neovim-unwrapped {
       luaRcContent = "this is an invalid lua statement to break the build";
     }).overrideAttrs
-      ({
+      {
         doCheck = true;
-      });
-
-  nvimAutoDisableWrap = makeNeovimConfig { };
+      };
 
   wrapNeovim2 =
     suffix: config:
@@ -101,12 +90,12 @@ let
   runTest =
     neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}"
-      ({
-        nativeBuildInputs = [ ];
+      {
         meta.platforms = neovim-drv.meta.platforms;
-      })
+      }
       (
         ''
+          export PATH="${neovim-drv}/bin:$PATH"
           source ${nmt}/bash-lib/assertions.sh
           vimrc="${writeText "test-${neovim-drv.name}-init.vim" neovim-drv.initRc}"
           luarc="${writeText "test-${neovim-drv.name}-init.lua" neovim-drv.luaRcContent}"
@@ -128,7 +117,7 @@ let
     }
   );
 in
-pkgs.recurseIntoAttrs (rec {
+pkgs.lib.recurseIntoAttrs rec {
 
   inherit nmt;
 
@@ -141,8 +130,19 @@ pkgs.recurseIntoAttrs (rec {
 
   ### neovim tests
   ##################
-  nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
-  nvim_singlelines = wrapNeovim2 "-single-lines" nvimConfSingleLines;
+  nvim_with_plugins = wrapNeovim2 "-with-plugins" {
+    inherit plugins;
+    neovimRcContent = ''
+      " just a comment
+    '';
+  };
+
+  nvim_singlelines = wrapNeovim2 "-single-lines" {
+    plugins = packagesWithSingleLineConfigs;
+    neovimRcContent = ''
+      " just a comment
+    '';
+  };
 
   # test that passthru.initRc hasn't changed
   passthruInitRc = runTest nvim_singlelines ''
@@ -203,7 +203,7 @@ pkgs.recurseIntoAttrs (rec {
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
-  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs (oa: {
+  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs {
     plugins = [
       vimPlugins.unicode-vim
       vimPlugins.fzf-hoogle-vim
@@ -211,16 +211,16 @@ pkgs.recurseIntoAttrs (rec {
     autoconfigure = true;
     # legacy wrapper sets it to false
     wrapRc = true;
-  });
+  };
 
-  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs ({
+  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs {
     plugins = [
       pkgs.vimPlugins.hex-nvim
     ];
     autowrapRuntimeDeps = true;
     # legacy wrapper sets it to false
     wrapRc = true;
-  });
+  };
 
   nvim_with_ftplugin =
     let
@@ -247,6 +247,15 @@ pkgs.recurseIntoAttrs (rec {
       };
     };
 
+  nvim_with_no_pname_plugin = neovim.override {
+    extraName = "-with-no-pname-plugin";
+    configure.packages.plugins = {
+      start = [
+        vimPlugins.corePlugins
+      ];
+    };
+  };
+
   # regression test that ftplugin files from plugins are loaded before the ftplugin
   # files from $VIMRUNTIME
   run_nvim_with_ftplugin = runTest nvim_with_ftplugin ''
@@ -258,6 +267,10 @@ pkgs.recurseIntoAttrs (rec {
     result="$(cat plugin_was_loaded_too_late)"
     echo $result
     [ "$result" = 0 ]
+  '';
+
+  run_nvim_with_no_pname_plugin = runTest nvim_with_no_pname_plugin ''
+    ${nvim_with_no_pname_plugin}/bin/nvim -i NONE -e --headless +quit
   '';
 
   # Generate a neovim wrapper with only a init.lua and no init.vim file
@@ -308,15 +321,15 @@ pkgs.recurseIntoAttrs (rec {
   '';
 
   # nixpkgs should detect that no wrapping is necessary
-  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
+  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" { };
 
   # this will generate a neovimRc content but we disable wrapping
-  nvimDontWrap = wrapNeovim2 "-forced-nowrap" (makeNeovimConfig {
+  nvimDontWrap = wrapNeovim2 "-forced-nowrap" {
     wrapRc = false;
-    customRC = ''
+    neovimRcContent = ''
       " this shouldn't trigger the creation of an init.vim
     '';
-  });
+  };
 
   force-nowrap = runTest nvimDontWrap ''
     ! grep -F -- ' -u' ${nvimDontWrap}/bin/nvim
@@ -348,12 +361,12 @@ pkgs.recurseIntoAttrs (rec {
     configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
   };
 
-  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
+  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" {
     extraLuaPackages = ps: [ ps.mpack ];
-    customRC = ''
-      lua require("mpack")
+    luaRcContent = ''
+      require("mpack")
     '';
-  });
+  };
 
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
     ${nvimWithLuaPackages}/bin/nvim -V3log.txt -i NONE --noplugin +quitall! -e
@@ -415,13 +428,20 @@ pkgs.recurseIntoAttrs (rec {
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps = runTest nvim-with-luasnip ''
-    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
+    nvim --headless -i NONE -c "lua require'jsregexp'" -e +quitall!
   '';
 
   inherit nvim_with_rocks_nvim;
   rocks_install_plenary = runTest nvim_with_rocks_nvim ''
-    ${nvim_with_rocks_nvim}/bin/nvim -V3log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
+    nvim -V3rocks-log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
+  '';
+
+  can_load_lua_config = runTest nvim_with_plugins ''
+    if ! nvim --headless -V3lua-config-log.txt -i NONE -c 'lua if vim.g.nixpkgs_test_value ~= 42 then os.exit(42) end' +quit! -e; then
+      echo "Failed to find plugin config"
+      exit 1
+    fi
   '';
 
   inherit (vimPlugins) corePlugins;
-})
+}

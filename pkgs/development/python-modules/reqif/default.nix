@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.46";
+  version = "0.0.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "reqif";
     tag = version;
-    hash = "sha256-QI+OhhV+jKw3g2erSCdTj10JW+XFQQyXuAC0LAnts7c=";
+    hash = "sha256-zI3lW2HxymnIWi9zvVSAxabS6jYScn7KyVfltRrggXY=";
   };
 
   postPatch = ''
@@ -43,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reqif" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for ReqIF format";
     mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
     changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yuu ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

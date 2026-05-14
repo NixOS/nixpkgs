@@ -3,11 +3,12 @@
   buildDunePackage,
   fetchurl,
   angstrom,
-  bigstringaf,
+  base64,
+  bstr,
   faraday,
   httpun-types,
   alcotest,
-  version ? "1.0.0",
+  version ? "1.1.0",
 }:
 
 buildDunePackage {
@@ -17,12 +18,13 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/robur-coop/ocaml-h1/releases/download/v${version}/h1-${version}.tbz";
-    hash = "sha256-uFHRcNmfHiFmdMAMKiS5KilIwMylf/AoJCfxllrIvRM=";
+    hash = "sha256-LTBn7TgBY5IBSfvpFJ1b2mMLT0XjwQvnk77qBqB8bTw=";
   };
 
   propagatedBuildInputs = [
     angstrom
-    bigstringaf
+    base64
+    bstr
     faraday
     httpun-types
   ];

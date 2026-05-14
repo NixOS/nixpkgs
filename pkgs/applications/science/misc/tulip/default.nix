@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
 
   env.NIX_CFLAGS_COMPILE =
     # error: invalid conversion from 'unsigned char*' to 'char*'
@@ -77,5 +77,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = lib.platforms.all;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

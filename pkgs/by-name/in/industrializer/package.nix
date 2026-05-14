@@ -6,6 +6,7 @@
   audiofile,
   autoconf,
   automake,
+  autoreconfHook,
   gettext,
   gnome2,
   gtk2,
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoconf
     automake
+    autoreconfHook
     gettext # autopoint
     libxml2 # AM_PATH_XML2
     alsa-lib # AM_PATH_ALSA
@@ -49,7 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  preConfigure = "./autogen.sh";
+  postPatch = ''
+    # Replace obsolete AM_PATH_XML2 with PKG_CHECK_MODULES
+    substituteInPlace configure.ac \
+      --replace-fail 'AM_PATH_XML2(2.6.0, [], AC_MSG_ERROR(Fatal error: Need libxml2 >= 2.6.0))' \
+                     'PKG_CHECK_MODULES([XML], [libxml-2.0 >= 2.6.0])' \
+      --replace-fail 'XML_CPPFLAGS' 'XML_CFLAGS'
+  '';
 
   # jack.c:190:5: error: initialization of 'const gchar * (*)(int)' {aka 'const char * (*)(int)'} from incompatible pointer type 'const char * (*)(int * (*)())
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";

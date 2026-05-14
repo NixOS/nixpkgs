@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "nanoeigenpy";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "nanoeigenpy";
     tag = "v${version}";
-    hash = "sha256-2Lp3fYw3rQYxjkCQCeHI+N32Y4vTJ8l+PoKqLCmAXIU=";
+    hash = "sha256-FWNIZFzY7BXC3vQKsIUFIJr3dQ8V1+OOmt5mKQP9/3M=";
   };
 
   # Fix:

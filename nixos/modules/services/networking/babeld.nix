@@ -41,8 +41,6 @@ in
 
 {
 
-  meta.maintainers = with lib.maintainers; [ hexa ];
-
   ###### interface
 
   options = {

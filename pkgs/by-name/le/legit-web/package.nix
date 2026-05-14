@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "legit";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     repo = "legit";
     owner = "icyphox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2XeIAeneSKf8TSWOunvRJ7N+3IrmOUjS79ZubsGne9E=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.ratsclub ];
     mainProgram = "legit";
   };
-}
+})

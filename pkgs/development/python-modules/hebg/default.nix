@@ -44,6 +44,12 @@ buildPythonPackage rec {
     pytest-mock
   ];
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { MPLBACKEND = "Agg"; };
+
+  disabledTests = [
+    # exec()'d class no longer leaks into locals() under PEP 667
+    "test_exec_codegen"
+  ];
+
   pythonImportsCheck = [ "hebg" ];
 
   meta = {

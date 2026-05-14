@@ -138,7 +138,15 @@ in
           Type = "simple";
           ExecStart = "${pkgs.nats-server}/bin/nats-server -c ${configFile}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          ExecStop = "${pkgs.coreutils}/bin/kill -SIGINT $MAINPID";
+
+          KillMode = "mixed";
+          KillSignal = "SIGUSR2";
+          SuccessExitStatus = [
+            0
+            "SIGUSR2"
+          ];
+
+          TimeoutStopSec = "150"; # must exceed lame_duck_duration, which defaults to 2min
           Restart = "on-failure";
 
           User = cfg.user;

@@ -4,26 +4,28 @@
   fetchFromGitHub,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "gate";
-  version = "0.52.0";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "minekube";
     repo = "gate";
-    tag = "v${version}";
-    hash = "sha256-DKnJnhfO3Cs80tAYiodxf1alfO4DXNneiqDILgP+v8w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C+XKDFzsCgZpTS2fEpAKOExPyO9WOjdmHKvVpmNyDRo=";
   };
 
-  vendorHash = "sha256-0NcfuCZHR4QHbMNqc+ilPouie+9k7FqOG/JdNX8uO8c=";
+  vendorHash = "sha256-7tDEtZyV4upFG/DGg1rbJbO8XV7MSAzFSs/3NmH4qI4=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  # this test requires network access, therefore it should not be run
+  preCheck = ''
+    rm ./pkg/edition/bedrock/geyser/managed/download_test.go
+  '';
 
   excludedPackages = [ ".web" ];
 
@@ -39,4 +41,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ XBagon ];
     mainProgram = "gate";
   };
-}
+})

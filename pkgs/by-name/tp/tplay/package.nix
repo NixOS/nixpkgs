@@ -4,20 +4,20 @@
   fetchFromGitHub,
   pkg-config,
   clang,
-  ffmpeg-headless,
+  ffmpeg_6-headless,
   openssl,
   alsa-lib,
   opencv,
   makeWrapper,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tplay";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JVkezG2bs99IFOTONeZZRljjbi0EhFf+DMxcfiWI4p4=";
   };
 
@@ -40,13 +40,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl.dev
     alsa-lib.dev
-    ffmpeg-headless.dev
+    ffmpeg_6-headless.dev
     opencv
   ];
 
   postFixup = ''
     wrapProgram $out/bin/tplay \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg_6-headless ]}"
   '';
 
   meta = {
@@ -59,4 +59,4 @@ rustPlatform.buildRustPackage rec {
       colemickens
     ];
   };
-}
+})

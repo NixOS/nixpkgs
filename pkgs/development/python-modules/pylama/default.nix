@@ -24,7 +24,6 @@ let
     format = "setuptools";
 
     src = fetchFromGitHub {
-      name = "${pname}-${version}-source";
       owner = "klen";
       repo = "pylama";
       rev = version;
@@ -73,13 +72,13 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       description = "Code audit tool for python";
       mainProgram = "pylama";
       homepage = "https://github.com/klen/pylama";
       changelog = "https://github.com/klen/pylama/blob/${version}/Changelog";
-      license = licenses.mit;
-      maintainers = with maintainers; [ dotlambda ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ dotlambda ];
     };
   };
 in

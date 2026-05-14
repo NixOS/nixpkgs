@@ -4,29 +4,28 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-tally";
-  version = "1.0.69";
+  version = "1.0.73";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-ZAayOuuCncjQ3+RGega/aQW/s14QB9541EFB7f6CWxE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-aYVo/mI4YoohwxXoIL9vpuPN526sPnQMV1PnUqJEO2U=";
   };
 
-  cargoHash = "sha256-XLnmx84OP3bwhuRfezczKMJsyc95ClK4yC/RqPe9AB8=";
+  cargoHash = "sha256-+TIYJn0BvFBmhVkldOTtAvQv5Uj5sLsJ4OGNH3ic8lU=";
 
   meta = {
     description = "Graph the number of crates that depend on your crate over time";
     mainProgram = "cargo-tally";
     homepage = "https://github.com/dtolnay/cargo-tally";
-    changelog = "https://github.com/dtolnay/cargo-tally/releases/tag/${version}";
+    changelog = "https://github.com/dtolnay/cargo-tally/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };
-}
+})

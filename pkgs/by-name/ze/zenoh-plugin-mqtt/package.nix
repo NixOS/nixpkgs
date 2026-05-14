@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-mqtt";
   version = "1.4.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-mqtt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ijoKL8TReNER3a9dwsPeh56l1Ze2rz6jN6L9rYQLYRU=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "zenoh-bridge-mqtt";
   };
-}
+})

@@ -5,7 +5,6 @@
   pyqt5,
   pyqt-builder,
   python,
-  pythonOlder,
   qt3d,
   setuptools,
   sip,
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "pyqt3d";
   version = "5.15.7";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyQt3D";
@@ -65,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyQt5.Qt3DCore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Qt 3D framework";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

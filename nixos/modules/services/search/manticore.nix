@@ -26,7 +26,7 @@ let
           ${sectName} {
         ''
         + lib.generators.toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues
-        + ''}'';
+        + "}";
     in
     # map input to ini sections
     mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;

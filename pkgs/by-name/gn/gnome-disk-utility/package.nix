@@ -24,17 +24,17 @@
   ninja,
   pkg-config,
   systemd,
-  udisks2,
+  udisks,
   wrapGAppsHook3,
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-disk-utility";
   version = "46.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/gnome-disk-utility-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major finalAttrs.version}/gnome-disk-utility-${finalAttrs.version}.tar.xz";
     hash = "sha256-wk6UOaBNcLz640nKE0xwBUNf4rb0UhFN+Hi/8Libv/4=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libpwquality
     libsecret
     systemd
-    udisks2
+    udisks
     xz
   ];
 
@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/DiskUtility/";
     description = "Udisks graphical front-end";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-disks";
   };
-}
+})

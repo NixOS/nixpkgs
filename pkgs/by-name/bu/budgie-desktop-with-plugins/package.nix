@@ -3,7 +3,7 @@
   stdenv,
   glib,
   gobject-introspection,
-  xorg,
+  lndir,
   wrapGAppsHook3,
   budgie-desktop,
   plugins ? [ ],
@@ -16,8 +16,6 @@ stdenv.mkDerivation {
   src = null;
 
   paths = [ budgie-desktop ] ++ plugins;
-
-  passAsFile = [ "paths" ];
 
   nativeBuildInputs = [
     glib
@@ -36,8 +34,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out
-    for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+    for i in "''${paths[@]}"; do
+      ${lndir}/bin/lndir -silent $i $out
     done
   '';
 
@@ -49,6 +47,8 @@ stdenv.mkDerivation {
       --set RAVEN_PLUGIN_DATADIR "$out/share/budgie-desktop/raven-plugins"
     )
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     inherit (budgie-desktop.meta)

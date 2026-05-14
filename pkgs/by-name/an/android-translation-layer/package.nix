@@ -5,7 +5,6 @@
   meson,
   openjdk17,
   lib,
-  glib,
   pkg-config,
   wayland-protocols,
   wayland,
@@ -23,26 +22,22 @@
   bionic-translation,
   alsa-lib,
   makeWrapper,
-  replaceVars,
   nixosTests,
+  bintools,
 }:
 
 stdenv.mkDerivation {
   pname = "android-translation-layer";
-  version = "0-unstable-2025-07-14";
+  version = "0-unstable-2026-01-19";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "android_translation_layer";
-    rev = "828f779c4f7170f608047c500d6d3b64b480df7f";
-    hash = "sha256-1KYZWlzES3tbskqvA8qSQCegE0uLTLCq4q2CX6uix4o=";
+    rev = "bfcfb696d83c9769e1d99d3cb0d7a5908fe3c767";
+    hash = "sha256-BTVduEJhKEOFhqoG0lgqlcg2x4k9RWABURj2nQECaek=";
   };
 
   patches = [
-    (replaceVars ./configure-art-path.patch {
-      artStandalonePackageDir = "${art-standalone}";
-    })
-
     # Required gio-unix dependency is missing in meson.build
     ./add-gio-unix-dep.patch
 
@@ -84,7 +79,13 @@ stdenv.mkDerivation {
 
   postFixup = ''
     wrapProgram $out/bin/android-translation-layer \
-      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art
+      --prefix LD_LIBRARY_PATH : ${art-standalone}/lib/art \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          art-standalone # dex2oat
+          bintools # addr2line
+        ]
+      }
   '';
 
   passthru.tests = {

@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lnav";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1TS954ysXqSuMEGdzc2b9HTJ+ic0qfyc35j8RFzjLWA=";
+    hash = "sha256-BP4QiGO6x2o+9hRvoB4gz1IfQbr/yLVHgT9PWX/k/3c=";
   };
 
   enableParallelBuilding = true;
@@ -68,11 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = "${finalAttrs.src}/src/third-party/prqlc-c";
-    hash = "sha256-svi+C3ELw6Ly0mtji8xOv+DDqR0z5shFNazHa3kDQVg=";
+    src = "${finalAttrs.src}/src/third-party/lnav-rs-ext";
+    hash = "sha256-Dy+V45X27dy2TN3JRic6nLmmG11I1Pw7m+vYKYJMnQs=";
   };
 
-  cargoRoot = "src/third-party/prqlc-c";
+  cargoRoot = "src/third-party/lnav-rs-ext";
 
   preConfigure = ''
     ./autogen.sh
@@ -81,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^v(\\d+(?:\\.\\d+)*)$" ];
   };
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "https://github.com/tstack/lnav";

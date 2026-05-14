@@ -11,14 +11,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pciutils";
   version = "3.14.0"; # with release-date database
 
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8wSvu8BGzETD1RfwL6/DfSCZcmuj1I+zNH033f48qNQ=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   makeFlags = [
-    "SHARED=${if static then "no" else "yes"}"
+    "SHARED=${lib.boolToYesNo (!static)}"
     "PREFIX=\${out}"
     "STRIP="
     "HOST=${stdenv.hostPlatform.system}"
@@ -47,6 +47,15 @@ stdenv.mkDerivation rec {
   installTargets = [
     "install"
     "install-lib"
+  ];
+
+  # Since this package doesn't use an autotools generated configure script,
+  # splitting the dev or lib outputs produces incorrect files, evident by e.g
+  # pkg-config files which point to wrong paths. manual pages OTH are moved to
+  # the $man outputs naturally by stdenv.
+  outputs = [
+    "out"
+    "man"
   ];
 
   postInstall = ''
@@ -65,12 +74,12 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mj.ucw.cz/sw/pciutils/";
     description = "Collection of programs for inspecting and manipulating configuration of PCI devices";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vcunat ]; # not really, but someone should watch it
     mainProgram = "lspci";
   };
-}
+})

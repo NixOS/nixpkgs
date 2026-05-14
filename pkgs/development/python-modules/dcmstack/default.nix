@@ -7,7 +7,6 @@
   pylibjpeg,
   pint,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage {
   pname = "dcmstack";
   version = "0.9-unstable-2024-12-05";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "moloney";
@@ -43,10 +40,10 @@ buildPythonPackage {
     "test/test_cli.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DICOM to Nifti conversion preserving metadata";
     homepage = "https://github.com/moloney/dcmstack";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

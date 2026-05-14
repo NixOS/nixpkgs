@@ -3,12 +3,14 @@
   mkKdeDerivation,
   replaceVars,
   sshfs,
+  qtbase,
   qtconnectivity,
   qtmultimedia,
-  qtwayland,
   pkg-config,
   wayland,
   wayland-protocols,
+  libei,
+  libevdev,
   libfakekey,
 }:
 mkKdeDerivation {
@@ -30,13 +32,14 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtconnectivity
     qtmultimedia
-    qtwayland
     wayland
     wayland-protocols
+    libei
+    libevdev
     libfakekey
   ];
 
   extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
+    "-DQtWaylandScanner_EXECUTABLE=${qtbase}/libexec/qtwaylandscanner"
   ];
 }

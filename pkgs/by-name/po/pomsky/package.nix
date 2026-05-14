@@ -6,18 +6,18 @@
   oniguruma,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pomsky";
-  version = "0.11";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "pomsky-lang";
     repo = "pomsky";
-    rev = "v${version}";
-    hash = "sha256-BoA59P0jzV08hlFO7NPB9E+fdpYB9G50dNggFkexc/c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0rLY0WZj8p9D834SqHogV77GLHLesyPPxMGszDmkB9U=";
   };
 
-  cargoHash = "sha256-/tJwJ/xF5a2NEP5A/3swq75wCk9qxgbp7ilH1PqcWJY=";
+  cargoHash = "sha256-zUK8v96/jHaprrfbym23X7e/ZRoDwfNyDt+GIcd7BmY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,11 +39,11 @@ rustPlatform.buildRustPackage rec {
     description = "Portable, modern regular expression language";
     mainProgram = "pomsky";
     homepage = "https://pomsky-lang.org";
-    changelog = "https://github.com/pomsky-lang/pomsky/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pomsky-lang/pomsky/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
-}
+})

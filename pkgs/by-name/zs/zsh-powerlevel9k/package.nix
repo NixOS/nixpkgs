@@ -16,8 +16,9 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   installPhase = ''
-    install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel9k
-    install -D functions/* --target-directory=$out/share/zsh-powerlevel9k/functions
+    install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh/themes/powerlevel9k
+    install -D functions/* --target-directory=$out/share/zsh/themes/powerlevel9k/functions
+    ln -s $out/share/zsh/themes/powerlevel9k $out/share/zsh-powerlevel9k
   '';
 
   meta = {

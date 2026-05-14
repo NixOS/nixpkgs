@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_timeout" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to abort hanging tests";
     homepage = "https://github.com/pytest-dev/pytest-timeout/";
     changelog = "https://github.com/pytest-dev/pytest-timeout/tree/${src.tag}#changelog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

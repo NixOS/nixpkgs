@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amcrest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Amcrest and Dahua Cameras";
     homepage = "https://github.com/tchellomello/python-amcrest";
     changelog = "https://github.com/tchellomello/python-amcrest/releases/tag/${src.tag}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

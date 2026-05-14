@@ -8,17 +8,17 @@
   stdenv,
   xdg-utils,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-sso-cli";
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = "aws-sso-cli";
-    rev = "v${version}";
-    hash = "sha256-GoLSdQb6snViYD9QY6NTypKquFsoX3jgClyrgTGoRq8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MomH4Zcc6iyVmLfA0PPsWgEqMBAAaPd+21NX4GdnFk0=";
   };
-  vendorHash = "sha256-SNMU7qDfLRGUSLjzrJHtIMgbcRc2DxXwWEUaUEY6PME=";
+  vendorHash = "sha256-Le5BOD/iBIMQwTNmb7JcW8xJS7WG5isf4HXpJxyvez0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -26,7 +26,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
     "-X main.Tag=nixpkgs"
   ];
 
@@ -54,11 +54,11 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/synfinatic/aws-sso-cli";
     description = "AWS SSO CLI is a secure replacement for using the aws configure sso wizard";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ devusb ];
     mainProgram = "aws-sso";
   };
-}
+})

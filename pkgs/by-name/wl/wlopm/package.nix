@@ -6,14 +6,14 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation (finalAttr: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wlopm";
   version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
     repo = "wlopm";
-    rev = "v${finalAttr.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GrcV51mUZUaiiYhko8ysaTieJoZDcunLn1yG5k+TpQQ=";
   };
 

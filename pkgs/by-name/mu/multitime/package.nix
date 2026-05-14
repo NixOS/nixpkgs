@@ -5,15 +5,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multitime";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "multitime";
-    rev = "multitime-${version}";
-    sha256 = "1p6m4gyy6dw7nxnpsk32qiijagmiq9vwch0fbc25qvmybwqp8qc0";
+    rev = "multitime-${finalAttrs.version}";
+    sha256 = "sha256-oLtBUJbu+tVhzsUv+toz2oLeXCVLYKHQXUNsqpCZBGc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "multitime";
   };
-}
+})

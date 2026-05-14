@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing the installation of multiple software packages in the same run-time directory tree";
 
     longDescription = ''
@@ -36,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
       as .../share, .../man, and so on.
     '';
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://www.gnu.org/software/stow/";
-    maintainers = with maintainers; [ sarcasticadmin ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    platforms = lib.platforms.all;
   };
 })

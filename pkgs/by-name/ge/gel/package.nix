@@ -14,20 +14,20 @@
   gel,
   testers,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gel";
-  version = "7.7.0";
+  version = "7.10.2";
 
   src = fetchFromGitHub {
     owner = "geldata";
     repo = "gel-cli";
-    tag = "v${version}";
-    hash = "sha256-4dFajTGYczolQXnpcRBPWCD68EUiPVDRGIMwGh/K2UY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Fy4J7puunqB5TeUsafnOotoWNvtTGiMJZ06YII14zIM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-4LLGg+f8Q7jskQr/wY0eCDkn9bC+zDpMvyF5D0A1oG4=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-VRZjI8C0u+6MkQgzt0PApeUtrGR5UqvnLZxityMGnDo=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Gel cli";
     homepage = "https://docs.geldata.com/reference/cli";
+    changelog = "https://github.com/geldata/gel-cli/compare/v7.7.0...v7.10.2";
     license = with lib.licenses; [
       asl20
       # or
@@ -79,4 +80,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "gel";
   };
-}
+})

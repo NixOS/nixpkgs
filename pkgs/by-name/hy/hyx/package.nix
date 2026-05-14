@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyx";
   version = "2024.02.29";
 
   src = fetchurl {
-    url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] version}.tar.xz";
+    url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] finalAttrs.version}.tar.xz";
     sha256 = "sha256-dufx3zsabeet7Rp0d60MIuNqisIQd6UgE7WDZYNHl3E=";
   };
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     install -vD hyx $out/bin/hyx
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic but powerful Linux console hex editor";
     mainProgram = "hyx";
     homepage = "https://yx7.cc/code/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

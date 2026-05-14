@@ -32,7 +32,7 @@ Each "solution" (k=v pair) in this attrset describes one resholve invocation.
 >   solutions to resolve the scripts separately, but produce a single package.
 
 `resholve.writeScript` and `resholve.writeScriptBin` support a _single_
-`solution` attrset. This is basically the same as any single solution in `resholve.mkDerivation`, except that it doesn't need a `scripts` attr (it is automatically added). `resholve.phraseSolution` also only accepts a single solution--but it _does_ still require the `scripts` attr.
+`solution` attrset. This is basically the same as any single solution in `resholve.mkDerivation`, except that it doesn't need a `scripts` attr (it is automatically added). `resholve.phraseSolution` also only accepts a single solution, but it _does_ still require the `scripts` attr.
 
 ## Basic `resholve.mkDerivation` Example
 
@@ -129,7 +129,7 @@ trivial, so I'll also link to some real-world examples:
 
 ## Basic `resholve.phraseSolution` example
 
-This function has a similar API to `writeScript` and `writeScriptBin`, except it does require a `scripts` attr. It is intended to make resholve a little easier to mix into more types of build. This example is a little
+This function has a similar API to `writeScript` and `writeScriptBin`, except it does require a `scripts` attr. It is intended to make resholve a little easier to mix into more types of builds. This example is a little
 trivial for now. If you have a real usage that you find helpful, please PR it.
 
 ```nix
@@ -210,7 +210,7 @@ handle any potential problems it encounters with directives. There are currently
    - dynamic (variable) arguments to commands known to accept/run other commands
 
 > NOTE: resholve has a (growing) number of directives detailed in `man resholve`
-> via `nixpkgs.resholve` (though protections against run-time use of python2 in nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into nix-shell).
+> via `nixpkgs.resholve` (though protections against run-time use of Python 2 in Nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into `nix-shell`).
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:

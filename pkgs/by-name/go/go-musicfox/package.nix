@@ -9,27 +9,27 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-musicfox";
-  version = "4.6.6";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "go-musicfox";
     repo = "go-musicfox";
-    rev = "v${version}";
-    hash = "sha256-BLX43eWM1vMXgUThcLEHb3+OZejfUye1m/SCecfzTiE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-EwN8tWoyghG9L++Tl5iz2ZyNsI5IroZXM0Dd5N182dU=";
   };
 
   deleteVendor = true;
 
-  vendorHash = "sha256-RK0mBnRzh9cbqrdJHQk5eJPREFDKGbjnQyEIF23xrvU=";
+  vendorHash = "sha256-MEcdWJts7hzt8fuhVsxHl1mQ57R8vNd3H3Tmpx4A9a4=";
 
   subPackages = [ "cmd/musicfox.go" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/go-musicfox/go-musicfox/internal/types.AppVersion=${version}"
+    "-X github.com/go-musicfox/go-musicfox/internal/types.AppVersion=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -56,4 +56,4 @@ buildGoModule rec {
       aleksana
     ];
   };
-}
+})

@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XsEy2NrG7hq+VXRCRbD4BRaBieU6mVoE0GT52L3mMhs=";
   };
 
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     ncurses
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   patches = [
     # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.

@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
-  version = "0.5.10";
+  version = "0.5.12";
 
   outputs = [
     "out"
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
-    rev = finalAttrs.version;
-    hash = "sha256-40GcyH4Oe9xQh9kXe8HohigtCGmIgqFmSV6/j9yolV4=";
+    tag = finalAttrs.version;
+    hash = "sha256-pkvmeD7O2EUDzw59/e7YcgiHDf2vvIXmd11axGSwCEs=";
   };
 
   patches = [
@@ -128,11 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library that provides automatic proxy configuration management";
     homepage = "https://libproxy.github.io/libproxy/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     badPlatforms = [
       # Mandatory libpxbackend-1.0 shared library.
       lib.systems.inspect.platformPatterns.isStatic

@@ -7,18 +7,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bato";
-  version = "0.1.7";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "doums";
     repo = "bato";
-    rev = "v${version}";
-    hash = "sha256-i2gw8vXiKutq26ACzkVXH3kED7jAngSv2mNo9P3qXnA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pq+i4NGl7yv+vmMoYVT9JRvOsuV7nBqXpsebgMcNEY0=";
   };
 
-  cargoHash = "sha256-bGbLQaYfNLem47iMPsNeKm4pP3+Pij9SJ3Nq5VWX3hE=";
+  cargoHash = "sha256-ZVzIoq+s2Xw996NoQMIGHUqo2uXJMu9lXfY5Us9NMPg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Small program to send battery notifications";
     homepage = "https://github.com/doums/bato";
-    changelog = "https://github.com/doums/bato/releases/tag/v${version}";
+    changelog = "https://github.com/doums/bato/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ HaskellHegemonie ];
     platforms = lib.platforms.linux;
     mainProgram = "bato";
   };
-}
+})

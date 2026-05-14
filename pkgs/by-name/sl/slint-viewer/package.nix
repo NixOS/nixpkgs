@@ -2,29 +2,37 @@
   lib,
   rustPlatform,
   fetchCrate,
-  qt6,
+
+  fontconfig,
   libGL,
+  pkg-config,
+  qt6,
+
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-viewer";
-  version = "1.12.1";
+  version = "1.16.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-xto9oj4ObRxXT29Qi+6HMnVvu0qK+RkTgTm7xlHOk3w=";
+    hash = "sha256-/hv/5qd0JhV2H91VWjzUh4cOPOLj6/fsXHSwdDSnfCc=";
   };
 
-  cargoHash = "sha256-xcWVkZu4AMTnp6E3JqquDVJ+/gKr7T2Csq5KDHN64nA=";
+  cargoHash = "sha256-9x33UuQGFfHFEsTdSjNnfBlgER4fBIfAmemeWSes304=";
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
+    fontconfig
     libGL
   ];
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
 
   # There are no tests
   doCheck = false;

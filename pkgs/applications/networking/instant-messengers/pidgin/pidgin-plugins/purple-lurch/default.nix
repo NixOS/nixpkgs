@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace lib/axc/lib/libsignal-protocol-c/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     pidgin
@@ -37,11 +42,11 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/lib/purple-2 build/lurch.so
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gkdr/lurch";
     description = "XEP-0384: OMEMO Encryption for libpurple";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ emmanuelrosa ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
   };
 }

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   cmake,
   fetchFromGitHub,
   pkg-config,
@@ -13,15 +13,15 @@
   wayland-scanner,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprsunset";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eYLtZJayWWbKBC3u/gvDSqVyffuD+egryr7zPWRAeyY=";
+    hash = "sha256-Yk6nDzCXrOehX3At8qdZ0cLr1kPySqACsihMYuP6T8w=";
   };
 
   postPatch = ''
@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.hyprland ];
+    maintainers = with lib.maintainers; [ logger ];
     mainProgram = "hyprsunset";
   };
 })

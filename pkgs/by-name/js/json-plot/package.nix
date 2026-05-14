@@ -4,14 +4,14 @@
   fetchpatch,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "json-plot";
   version = "1.1.12";
 
   src = fetchFromGitHub {
     owner = "sgreben";
     repo = "jp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WWARAh/CF3lGli3VLRzAGaCA8xQyryPi8WcuwvdInjk=";
   };
 
@@ -30,11 +30,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dead simple terminal plots from JSON (or CSV) data. Bar charts, line charts, scatter plots, histograms and heatmaps are supported";
     homepage = "https://github.com/sgreben/jp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "jp";
   };
-}
+})

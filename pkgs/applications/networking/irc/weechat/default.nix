@@ -4,8 +4,8 @@
   lib,
   ncurses,
   openssl,
-  aspell,
   cjson,
+  enchant,
   gnutls,
   gettext,
   zlib,
@@ -21,7 +21,7 @@
   guileSupport ? true,
   guile,
   luaSupport ? true,
-  lua5,
+  lua5_3,
   perlSupport ? true,
   perl,
   pythonSupport ? true,
@@ -32,12 +32,13 @@
   tcl,
   phpSupport ? !stdenv.hostPlatform.isDarwin,
   php,
-  systemd,
+  systemdLibs,
   libxml2,
   pcre2,
   libargon2,
   extraBuildInputs ? [ ],
   writeScript,
+  versionCheckHook,
 }:
 
 let
@@ -75,7 +76,7 @@ let
       name = "lua";
       enabled = luaSupport;
       cmakeFlag = "ENABLE_LUA";
-      buildInputs = [ lua5 ];
+      buildInputs = [ lua5_3 ];
     }
     {
       name = "python";
@@ -93,7 +94,7 @@ let
         pcre2
         libargon2
       ]
-      ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
     }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
@@ -104,15 +105,17 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.7.1";
+  version = "4.9.0";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-6D+3HKJRxd10vZxaa9P4XcLrjs7AlV9DwH8+CRHtt9M=";
+    hash = "sha256-fLubJ/JafS8djEJqCPjmJe77wdPlm793WSVET3I5S28=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
-  patches = lib.optional gettext.gettextNeedsLdflags ./gettext-intl.patch;
+  patches = lib.optionals gettext.gettextNeedsLdflags [
+    ./gettext-intl.patch
+  ];
 
   outputs = [
     "out"
@@ -136,13 +139,13 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoctor
   ]
-  ++ lib.optional enableTests cpputest;
+  ++ lib.optionals enableTests [ cpputest ];
 
   buildInputs = [
     ncurses
     openssl
-    aspell
     cjson
+    enchant
     gnutls
     gettext
     zlib
@@ -154,8 +157,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.concatMap (p: p.buildInputs) enabledPlugins
   ++ extraBuildInputs;
-
-  hardeningEnable = [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE =
     "-I${python}/include/${python.libPrefix}"
@@ -172,10 +173,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/weechat --version
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = writeScript "update-weechat" ''
     #!/usr/bin/env nix-shell

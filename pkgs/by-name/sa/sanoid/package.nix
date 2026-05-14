@@ -16,14 +16,14 @@
   pigz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sanoid";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
     repo = "sanoid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-s6MP3x4qSuuiJKq2V2oLAXp6zaMSqKRCs5O9UMSgcvE=";
   };
 
@@ -91,14 +91,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Policy-driven snapshot management tool for ZFS filesystems";
     homepage = "https://github.com/jimsalterjrs/sanoid";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       lopsided98
       Frostman
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

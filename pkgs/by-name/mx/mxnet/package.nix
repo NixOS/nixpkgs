@@ -22,13 +22,13 @@
 # mxnet is not maintained, and other projects are migrating away from it.
 # https://github.com/apache/mxnet/issues/21206
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mxnet";
   version = "1.9.1";
 
   src = fetchurl {
-    name = "apache-mxnet-src-${version}-incubating.tar.gz";
-    url = "mirror://apache/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
+    name = "apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
+    url = "mirror://apache/incubator/mxnet/${finalAttrs.version}/apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
     hash = "sha256-EephMoF02MKblvNBl34D3rC/Sww3rOZY+T442euMkyI=";
   };
 
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
     "-DUSE_MKL_IF_AVAILABLE=OFF"
     "-DUSE_CUDA=OFF"
     "-DUSE_CUDNN=OFF"
@@ -88,11 +89,11 @@ stdenv.mkDerivation rec {
     rm "$out"/lib/*.a
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
     homepage = "https://mxnet.incubator.apache.org/";
     maintainers = [ ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
   };
-}
+})

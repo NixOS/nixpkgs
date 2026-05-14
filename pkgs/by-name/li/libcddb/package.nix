@@ -5,12 +5,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcddb";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libcddb/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/libcddb/libcddb-${finalAttrs.version}.tar.bz2";
     sha256 = "0fr21a7vprdyy1bq6s99m0x420c9jm5fipsd63pqv8qyfkhhxkim";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 3 of 5 tests with locale errors
 
-  meta = with lib; {
+  meta = {
     description = "C library to access data on a CDDB server (freedb.org)";
     homepage = "https://libcddb.sourceforge.net/";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     mainProgram = "cddb_query";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

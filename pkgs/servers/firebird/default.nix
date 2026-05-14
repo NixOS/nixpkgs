@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchDebianPatch,
   libedit,
-  autoreconfHook271,
+  autoreconfHook,
+  cmake,
   zlib,
   unzip,
   libtommath,
@@ -16,30 +18,29 @@ let
   base = {
     pname = "firebird";
 
-    meta = with lib; {
+    meta = {
       description = "SQL relational database management system";
       downloadPage = "https://github.com/FirebirdSQL/firebird/";
       homepage = "https://firebirdsql.org/";
       changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
-      license = [
-        "IDPL"
-        "Interbase-1.0"
+      license = with lib.licenses; [
+        mpl11
+        interbase
       ];
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
         bbenno
-        marcweber
       ];
     };
 
-    nativeBuildInputs = [ autoreconfHook271 ];
+    nativeBuildInputs = [ autoreconfHook ];
 
     buildInputs = [
       libedit
       icu73
     ];
 
-    LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
+    env.LD_LIBRARY_PATH = lib.makeLibraryPath [ icu73 ];
 
     configureFlags = [
       "--with-system-editline"
@@ -48,11 +49,14 @@ let
 
     enableParallelBuilding = true;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     installPhase = ''
       runHook preInstall
       mkdir -p $out
       cp -r gen/Release/firebird/* $out
-      rm $out/lib/*.a  # they were just symlinks to /build/source/...
+      rm -f $out/lib/*.a  # they were just symlinks to /build/source/...
       runHook postInstall
     '';
 
@@ -62,14 +66,24 @@ rec {
   firebird_3 = stdenv.mkDerivation (
     base
     // rec {
-      version = "3.0.12";
+      version = "3.0.14";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-po8tMrOahfwayVXa7Eadr9+ZEmZizHlCmxi094cOJSY=";
+        hash = "sha256-X6Jv32VniAefIWjLTPwEipsQVRl7HBb4EKyi2IL1VWM=";
       };
+
+      patches = [
+        (fetchDebianPatch {
+          pname = "firebird3.0";
+          version = "3.0.13.ds7";
+          debianRevision = "2";
+          patch = "no-binary-gbaks.patch";
+          hash = "sha256-LXUMM38PBYeLPdgaxLPau4HWB4ItJBBnx7oGwalL6Pg=";
+        })
+      ];
 
       buildInputs = base.buildInputs ++ [
         zlib
@@ -85,13 +99,13 @@ rec {
   firebird_4 = stdenv.mkDerivation (
     base
     // rec {
-      version = "4.0.6";
+      version = "4.0.7";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-65wfG6huDzvG/tEVllA58OfZqoL4U/ilw5YIDqQywTs=";
+        hash = "sha256-4u1Vgwk5cMCkrGfGSk2xO7hVHiDda0ioitvX/r3KPQc=";
       };
 
       nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];
@@ -103,5 +117,33 @@ rec {
     }
   );
 
-  firebird = firebird_4;
+  firebird_5 = stdenv.mkDerivation (
+    base
+    // rec {
+      version = "5.0.4";
+
+      src = fetchFromGitHub {
+        owner = "FirebirdSQL";
+        repo = "firebird";
+        rev = "v${version}";
+        fetchSubmodules = true;
+        hash = "sha256-IJrfs8q7GtX4Y+Cmg4avT5QJmLpld38tyR3TR1CcgyE=";
+      };
+
+      # CMake is just used for libcds
+      dontUseCmakeConfigure = true;
+
+      nativeBuildInputs = base.nativeBuildInputs ++ [
+        cmake
+        unzip
+      ];
+      buildInputs = base.buildInputs ++ [
+        zlib
+        libtommath
+        libtomcrypt
+      ];
+    }
+  );
+
+  firebird = firebird_5;
 }

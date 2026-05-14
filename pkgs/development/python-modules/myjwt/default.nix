@@ -17,7 +17,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "myjwt";
   version = "2.1.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jqBnxo7Omn5gLMCQ7SNbjo54nyFK7pn94796z2Qc9lg=";
   };
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
   meta = {
     description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
     homepage = "https://github.com/mBouamama/MyJWT";
-    changelog = "https://github.com/tyki6/MyJWT/releases/tag/${src.tag}";
+    changelog = "https://github.com/tyki6/MyJWT/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "myjwt";
     # Build failures
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

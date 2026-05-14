@@ -13,6 +13,8 @@
 
   electron,
   commandLineArgs ? "",
+
+  nix-update-script,
 }:
 
 let
@@ -20,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.9";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -34,13 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
       find -name .git -print0 | xargs -0 rm -rf
     '';
 
-    hash = "sha256-uDm8jDkPwxLa+LUK8fPlJMvXInD7T7B+641YyCgYvnI=c";
+    hash = "sha256-3gUEdkTFaO6WT13HyVssVX0qSmluOPm4AAy1dovHw6g=";
   };
 
   patches = [
     # instead of running git during the build process
     # use the .COMMIT file generated in the fetcher FOD
     ./git-rev-parse.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/ytmdesktop/ytmdesktop/blob/v2.0.11/package.json#L77
+    ./yarn-4.14-support.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -54,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-bBd5wWr+j3HQY2+VIAATYVdCh+0tIRlLg68bx4z1+Ys=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-Vvvhi1db/ld2rNz+XhtNzlgI/4z3ym6QENG0GMlZAd0=";
   };
 
   nativeBuildInputs = [
@@ -137,8 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    changelog = "https://github.com/ytmdesktop/ytmdesktop/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/ytmdesktop/ytmdesktop/releases/tag/v${finalAttrs.version}";
     description = "Desktop App for YouTube Music";
     downloadPage = "https://github.com/ytmdesktop/ytmdesktop/releases";
     homepage = "https://ytmdesktop.app/";

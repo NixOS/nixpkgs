@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage {
   # Doc tests are broken on 0.3.3
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Unformat code into perfect rectangles";
     homepage = "https://github.com/fprasx/cargo-unfmt";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "cargo-unfmt";
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with lib.maintainers; [ cafkafk ];
   };
 }

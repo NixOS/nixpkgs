@@ -38,10 +38,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/samuel-lucas6/Kryptor";
     license = lib.licenses.gpl3Only;
     mainProgram = "kryptor";
-    maintainers = with lib.maintainers; [
-      arthsmn
-      gepbird
-    ];
+    maintainers = with lib.maintainers; [ gepbird ];
     platforms = lib.platforms.all;
     # https://hydra.nixos.org/build/286325419
     # a libsodium.dylib file should be kept as per https://github.com/samuel-lucas6/Kryptor/releases/tag/v4.1.1

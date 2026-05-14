@@ -10,17 +10,15 @@
 let
   python = python3;
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "open-web-calendar";
-  version = "1.49";
+  version = "1.51";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "open_web_calendar";
-    hash = "sha256-vtmIqiF85zn8CiMUWsCKJUzfiiK/j+xlZIyuIMGxR4I=";
+    hash = "sha256-r+7ZKdNOhjnjE1MBNAkni4Rrpx4DMRhUaP1Mmk5wzOo=";
   };
 
   # The Pypi tarball doesn't contain open_web_calendars/features
@@ -41,7 +39,6 @@ python.pkgs.buildPythonApplication rec {
   dependencies =
     with python.pkgs;
     [
-      flask-caching
       flask-allowed-hosts
       flask
       icalendar
@@ -50,6 +47,7 @@ python.pkgs.buildPythonApplication rec {
       bcrypt
       caldav
       requests
+      requests-cache
       pyyaml
       recurring-ical-events
       gunicorn
@@ -61,7 +59,10 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ requests.optional-dependencies.socks;
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python.pkgs; [
+    pytestCheckHook
+    pytest-responses
+  ];
 
   enabledTestPaths = [ "open_web_calendar/test" ];
 
@@ -76,21 +77,21 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly customizable web calendar that can be embedded into websites using ICal source links";
     homepage = "https://open-web-calendar.quelltext.eu";
     changelog =
       let
-        v = builtins.replaceStrings [ "." ] [ "" ] version;
+        v = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
       in
       "https://open-web-calendar.quelltext.eu/changelog/#v${v}";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       cc-by-sa-40
       cc0
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "open-web-calendar";
   };
-}
+})

@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shortscan";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "bitquark";
     repo = "shortscan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pJKhaeax1aHSR8OT6jp/Pe5bMBA7ASLF1MMlzd4Ppag=";
   };
 
@@ -30,9 +30,9 @@ buildGoModule rec {
   meta = {
     description = "IIS short filename enumeration tool";
     homepage = "https://github.com/bitquark/shortscan";
-    changelog = "https://github.com/bitquark/shortscan/releases/tag/${src.tag}";
+    changelog = "https://github.com/bitquark/shortscan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "shortscan";
   };
-}
+})

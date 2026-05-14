@@ -3,15 +3,15 @@
   buildPythonPackage,
   setuptools,
   pytestCheckHook,
-  fetchFromGitea,
+  fetchFromCodeberg,
+  gitUpdater,
 }:
 buildPythonPackage rec {
   pname = "highctidh";
   version = "1.0.2025051200";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "vula";
     repo = "highctidh";
     tag = "v${version}";
@@ -31,6 +31,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "highctidh"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Fork of high-ctidh as as a portable shared library with Python bindings";

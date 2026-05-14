@@ -139,7 +139,6 @@ in
 
         services.nginx = {
           enable = true;
-          package = pkgs.nginxQuic;
 
           virtualHosts."${target_host}" = {
             onlySSL = true;
@@ -249,7 +248,7 @@ in
         ];
 
         environment.systemPackages = [
-          pkgs.curlHTTP3
+          pkgs.curl
           pkgs.iproute2
         ];
 
@@ -308,13 +307,16 @@ in
         ];
 
         environment.systemPackages = [
-          pkgs.curlHTTP3
+          pkgs.curl
           pkgs.iproute2
         ];
 
         services.sing-box = {
           enable = true;
           settings = {
+            inbounds = [
+              tunInbound
+            ];
             outbounds = [
               {
                 type = "block";
@@ -325,7 +327,6 @@ in
               {
                 type = "wireguard";
                 tag = "outbound:wireguard";
-                name = "wg0";
                 address = [ "10.23.42.2/32" ];
                 mtu = 1280;
                 private_key = wg-keys.peer1.privateKey;
@@ -337,12 +338,19 @@ in
                     allowed_ips = [ "0.0.0.0/0" ];
                   }
                 ];
-                system = true;
               }
             ];
             route = {
               default_interface = "eth1";
               final = "outbound:block";
+              rules = [
+                {
+                  inbound = [
+                    "inbound:tun"
+                  ];
+                  outbound = "outbound:wireguard";
+                }
+              ];
             };
           };
         };
@@ -369,7 +377,7 @@ in
           (builtins.readFile ./common/acme/server/ca.cert.pem)
         ];
 
-        environment.systemPackages = [ pkgs.curlHTTP3 ];
+        environment.systemPackages = [ pkgs.curl ];
 
         systemd.services.sing-box.serviceConfig.ExecStartPost = [
           "+${tproxyPost}/bin/exe"
@@ -528,7 +536,6 @@ in
 
     with subtest("tun"):
       tun.wait_for_unit("sing-box.service")
-      tun.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
       tun.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
       tun.succeed("ip addr show ${tunInbound.interface_name}")
       tun.succeed("ip route show table ${toString tunInbound.iproute2_table_index} | grep ${tunInbound.interface_name}")
@@ -540,9 +547,8 @@ in
 
     with subtest("wireguard"):
       wireguard.wait_for_unit("sing-box.service")
-      wireguard.wait_for_unit("sys-devices-virtual-net-wg0.device")
-      wireguard.succeed("ip addr show wg0")
-      test_curl(wireguard, "--interface wg0")
+      fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
+      test_curl(wireguard)
 
     with subtest("tproxy"):
       tproxy.wait_for_unit("sing-box.service")
@@ -550,7 +556,6 @@ in
 
     with subtest("fakeip"):
       fakeip.wait_for_unit("sing-box.service")
-      fakeip.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
       fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
       fakeip.succeed("dig +short A ${target_host} @${target_host} | grep '^198.18.'")
   '';

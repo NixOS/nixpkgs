@@ -17,12 +17,12 @@ mkDerivation rec {
   };
 
   passthru.tests = { inherit (nixosTests) agda; };
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";
     description = "Standard library for use with the Agda compiler";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jwiegley
       mudri
       alexarice

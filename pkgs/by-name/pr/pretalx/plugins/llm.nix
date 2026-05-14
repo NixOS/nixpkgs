@@ -10,16 +10,16 @@
   umap-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pretalx-llm";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "why2025-datenzone";
     repo = "pretalx-llm";
-    rev = "v${version}";
-    hash = "sha256-Ga6Itvc+yL+p6K7w6WYTeNfxahaohDidDWnt0GtcWEM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KnL4X24RESAgO0Oh1k9c+K4zaho6CEFHMQvDeRdLBzs=";
   };
 
   build-system = [
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM support for Pretalx";
     homepage = "https://github.com/why2025-datenzone/pretalx-llm";
-    changelog = "https://github.com/why2025-datenzone/pretalx-llm/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/why2025-datenzone/pretalx-llm/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

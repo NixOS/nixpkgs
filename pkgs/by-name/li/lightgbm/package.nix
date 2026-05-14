@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix boost 1.83+ compatibility
-    # https://github.com/microsoft/LightGBM/issues/6786
+    # https://github.com/lightgbm-org/LightGBM/issues/6786
     # Patch taken from https://github.com/conda-forge/lightgbm-feedstock/pull/69
     (fetchpatch {
       name = "fix-boost-sha1";
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # set the R package buildPhase to null because lightgbm has a
   # custom builder script that builds and installs in one step
-  buildPhase = lib.optionals rLibrary '''';
+  buildPhase = lib.optionals rLibrary "";
 
   inherit doCheck;
 
@@ -180,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r com $out
     cp -r lightgbmlib.jar $out
   ''
-  + ''''
+  + ""
   + lib.optionalString rLibrary ''
     mkdir $out
     mkdir $out/tmp
@@ -219,8 +219,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Gradient boosting framework that uses tree based learning algorithms";
     mainProgram = "lightgbm";
-    homepage = "https://github.com/microsoft/LightGBM";
-    changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/lightgbm-org/LightGBM";
+    changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nviets ];

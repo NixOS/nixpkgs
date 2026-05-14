@@ -10,6 +10,10 @@ let
 
 in
 {
+  meta = {
+    inherit (pkgs.rasdaemon.meta) maintainers;
+  };
+
   options.hardware.rasdaemon = {
 
     enable = lib.mkEnableOption "RAS logging daemon";
@@ -176,7 +180,4 @@ in
       };
     };
   };
-
-  meta.maintainers = [ lib.maintainers.evils ];
-
 }

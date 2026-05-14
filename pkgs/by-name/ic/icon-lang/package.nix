@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   withGraphics ? true,
 }:
 
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = lib.optionals withGraphics [
-    libX11
-    libXt
+    libx11
+    libxt
   ];
 
   configurePhase =
@@ -48,11 +48,13 @@ stdenv.mkDerivation {
     mv $out/doc $out/share/doc/icon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Very high level general-purpose programming language";
-    maintainers = with maintainers; [ yurrriq ];
-    platforms = with platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd ++ cygwin ++ illumos;
-    license = licenses.publicDomain;
+    maintainers = with lib.maintainers; [ yurrriq ];
+    platforms =
+      with lib.platforms;
+      linux ++ darwin ++ freebsd ++ netbsd ++ openbsd ++ cygwin ++ illumos;
+    license = lib.licenses.publicDomain;
     homepage = "https://www.cs.arizona.edu/icon/";
   };
 }

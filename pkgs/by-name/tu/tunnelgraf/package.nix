@@ -1,10 +1,28 @@
 {
   lib,
   fetchFromGitHub,
+  fetchPypi,
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't work with latest paramiko
+      paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4.0";
+        src = fetchPypi {
+          pname = "paramiko";
+          inherit version;
+          hash = "sha256-qsCPJqMdxN/9koIVJ9FoLZnVL572hRloEUqHKPPCdNM=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in
+py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "tunnelgraf";
   version = "1.0.6";
   pyproject = true;
@@ -12,21 +30,22 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "denniswalker";
     repo = "tunnelgraf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6t/rUdz0RyxWxZM0QO1ynRTNQq4GZMIAxMYBB2lfA54=";
   };
 
   pythonRelaxDeps = [
     "click"
     "deepmerge"
-    "paramiko"
     "psutil"
     "pydantic"
+    "python-hosts"
+    "wcwidth"
   ];
 
-  build-system = with python3.pkgs; [ hatchling ];
+  build-system = with py.pkgs; [ hatchling ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     click
     deepmerge
     paramiko
@@ -46,9 +65,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to manage SSH tunnel hops to many endpoints";
     homepage = "https://github.com/denniswalker/tunnelgraf";
-    changelog = "https://github.com/denniswalker/tunnelgraf/releases/tag/v${version}";
+    changelog = "https://github.com/denniswalker/tunnelgraf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tunnelgraf";
   };
-}
+})

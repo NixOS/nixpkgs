@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Very simple, rounded, sans serif family";
     longDescription = ''
       Dosis is a very simple, rounded, sans serif family.
@@ -38,8 +38,8 @@ stdenvNoCC.mkDerivation rec {
       Semibold, Bold & ExtraBold
     '';
     homepage = "http://www.impallari.com/dosis";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

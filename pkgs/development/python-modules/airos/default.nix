@@ -12,9 +12,9 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "airos";
-  version = "0.2.11";
+  version = "0.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CoMPaTech";
     repo = "python-airos";
-    tag = "v${version}";
-    hash = "sha256-rPgrnLMcqUDd1+WL6uwb5Umu3a844B301l+O/GEyCGA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-B94YeY6R+83xo9+tmUbgJNi6AvBZ7h4C9VxovPVOL9E=";
   };
 
   build-system = [ setuptools ];
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Ubiquity airOS module(s) for Python 3";
     homepage = "https://github.com/CoMPaTech/python-airos";
-    changelog = "https://github.com/CoMPaTech/python-airos/releases/tag/v${version}";
+    changelog = "https://github.com/CoMPaTech/python-airos/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

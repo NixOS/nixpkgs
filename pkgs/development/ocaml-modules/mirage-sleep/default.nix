@@ -4,7 +4,7 @@
   fetchurl,
   lwt,
   duration,
-  version ? "4.0.0",
+  version ? "4.1.0",
 }:
 
 buildDunePackage {
@@ -13,7 +13,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-sleep/releases/download/v${version}/mirage-sleep-${version}.tbz";
-    hash = "sha256-J7cw7sE3EE3BIhSdwD1KV3VeXjEqviVmys3LgGhEE/A=";
+    hash = "sha256-CoHl4LgGbADtDvWb3q0u8aMh2jHT9Gvt47vk0Pzp2bs=";
   };
 
   propagatedBuildInputs = [

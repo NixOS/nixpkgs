@@ -97,12 +97,14 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
-  # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+    # needed for internal protobuf c wrapper library
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
+  };
 
   passthru = {
     tests = {
@@ -139,11 +141,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=io::tests::test_controlled_writer_limited_sync"
   ];
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Sub-second search & analytics engine on cloud storage";
     homepage = "https://quickwit.io/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.all;
   };
 }

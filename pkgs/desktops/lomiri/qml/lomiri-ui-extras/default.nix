@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-extras";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-extras";
     tag = finalAttrs.version;
-    hash = "sha256-fN9rZC8J8xyAStvBNTpLqAcssaiQQpu6INwMLlnkvfw=";
+    hash = "sha256-0rP88+OVLzK3ZDXZHqYR+0uF4eNur/RUV8DY0ijZBVo=";
   };
 
   postPatch = ''

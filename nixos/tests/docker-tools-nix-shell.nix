@@ -17,7 +17,7 @@ in
       { ... }:
       {
         virtualisation = {
-          diskSize = 3072;
+          diskSize = 8000;
           docker.enable = true;
         };
       };

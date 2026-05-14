@@ -3,27 +3,27 @@
   buildPythonPackage,
   chameleon,
   fetchFromGitHub,
+  gitpython,
   importlib-metadata,
   lingva,
+  numpy,
   polib,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "holidays";
-  version = "0.79";
+  version = "0.96";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
-    tag = "v${version}";
-    hash = "sha256-z1baUtD+GFPSRi8siT5X5QSSU2enC0cfnzNwYLHcWTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tsDGtNAF69EzE4cs0j1PeLZBITvy04kG8MUKD2aNWx0=";
   };
 
   build-system = [
@@ -32,11 +32,15 @@ buildPythonPackage rec {
     # l10n
     lingva
     chameleon
+    gitpython
     polib
   ];
 
   postPatch = ''
     patchShebangs scripts/l10n/*.py
+
+    substituteInPlace holidays/version.py \
+      --replace-fail 'version("holidays")' '"${finalAttrs.version}"'
   '';
 
   preBuild = ''
@@ -47,24 +51,24 @@ buildPythonPackage rec {
 
   dependencies = [ python-dateutil ];
 
-  doCheck = false;
-
   nativeCheckInputs = [
     importlib-metadata
+    numpy
     polib
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "holidays" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/vacanza/python-holidays";
-    changelog = "https://github.com/vacanza/python-holidays/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/vacanza/holidays/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       jluttine
     ];
   };
-}
+})

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tblite";
-    repo = pname;
+    repo = "tblite";
     rev = "v${version}";
     hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
   };
@@ -92,15 +92,15 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
     homepage = "https://github.com/tblite/tblite";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

@@ -15,15 +15,15 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxcfs";
-  version = "6.0.5";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    tag = "v${version}";
-    hash = "sha256-mRTM06QyWcB4XOi0w2qvyDABGuu1SPJX0gjlBktDOac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xONV9Ss71id2Bwb2BFNqaaP+8vK6540sThs1MCw4gok=";
   };
 
   patches = [
@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
 
     # skip installing systemd files
     ./skip-init.patch
-
-    # fix pidfd checks and include
-    ./pidfd.patch
   ];
 
   nativeBuildInputs = [
@@ -85,9 +82,9 @@ stdenv.mkDerivation rec {
     description = "FUSE filesystem for LXC";
     mainProgram = "lxcfs";
     homepage = "https://linuxcontainers.org/lxcfs";
-    changelog = "https://linuxcontainers.org/lxcfs/news/";
+    changelog = "https://github.com/lxc/lxcfs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxc ];
   };
-}
+})

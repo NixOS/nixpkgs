@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   python,
   py-multiaddr,
   requests,
@@ -23,8 +22,7 @@
 buildPythonPackage rec {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipfs-shipyard";
@@ -85,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ipfshttpclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mguentner
       Luflosi
     ];

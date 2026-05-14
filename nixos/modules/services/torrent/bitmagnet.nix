@@ -15,7 +15,6 @@ let
     ;
   inherit (lib.types)
     bool
-    int
     port
     str
     submodule

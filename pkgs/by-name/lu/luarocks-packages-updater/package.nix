@@ -1,21 +1,32 @@
 {
   nix,
+  nixfmt,
   makeWrapper,
   python3Packages,
   lib,
   nix-prefetch-scripts,
   luarocks-nix,
-  pluginupdate,
+  lua5_1,
+  lua5_2,
+  lua5_3,
+  lua5_4,
+  luajit,
 }:
 let
 
   path = lib.makeBinPath [
     nix
+    nixfmt
     nix-prefetch-scripts
     luarocks-nix
+    lua5_1
+    lua5_2
+    lua5_3
+    lua5_4
+    luajit
   ];
 
-  attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
+  attrs = fromTOML (builtins.readFile ./pyproject.toml);
   pname = attrs.project.name;
   inherit (attrs.project) version;
 in
@@ -31,18 +42,15 @@ python3Packages.buildPythonApplication {
   ];
 
   dependencies = [
-    python3Packages.gitpython
+    python3Packages.nixpkgs-plugin-update
   ];
 
   postFixup = ''
-    echo "pluginupdate folder ${pluginupdate}"
     wrapProgram $out/bin/luarocks-packages-updater \
-     --prefix PYTHONPATH : "${pluginupdate}" \
      --prefix PATH : "${path}"
   '';
 
   shellHook = ''
-    export PYTHONPATH="maintainers/scripts/pluginupdate-py:$PYTHONPATH"
     export PATH="${path}:$PATH"
   '';
 

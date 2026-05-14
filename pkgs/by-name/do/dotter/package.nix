@@ -8,14 +8,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dotter";
   version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cxabaCxbwP2YbnG2XfmVJWFTw9LGO0D1dlLy6fuux+M=";
   };
 
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dotfile manager and templater written in Rust";
     homepage = "https://github.com/SuperCuber/dotter";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "dotter";
   };
-}
+})

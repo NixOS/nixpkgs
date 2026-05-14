@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kulala-fmt";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mistweaverco";
     repo = "kulala-fmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yq7DMrt+g5wM/tynI7Cf6MBJs/d+fP3IppndKnTJMTw=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mistweaverco/kulala-fmt/cmd/kulalafmt.VERSION=${version}"
+    "-X github.com/mistweaverco/kulala-fmt/cmd/kulalafmt.VERSION=${finalAttrs.version}"
   ];
 
   meta = {
@@ -33,4 +33,4 @@ buildGoModule rec {
     mainProgram = "kulala-fmt";
     platforms = lib.platforms.all;
   };
-}
+})

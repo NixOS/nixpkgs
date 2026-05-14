@@ -1,10 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  crystal,
+  crystal_1_17,
   coreutils,
 }:
-
+let
+  crystal = crystal_1_17;
+in
 crystal.buildCrystalPackage rec {
   pname = "ameba";
   version = "1.6.4";
@@ -25,6 +27,6 @@ crystal.buildCrystalPackage rec {
     homepage = "https://crystal-ameba.github.io";
     changelog = "https://github.com/crystal-ameba/ameba/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "yalesmartalarmclient";
   version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "domwillcode";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yalesmartalarmclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interface with Yale Smart Alarm Systems";
     homepage = "https://github.com/domwillcode/yale-smart-alarm-client";
     changelog = "https://github.com/domwillcode/yale-smart-alarm-client/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

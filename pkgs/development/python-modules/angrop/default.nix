@@ -3,7 +3,6 @@
   angr,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   tqdm,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "angrop";
   version = "9.2.12.post3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "angrop" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROP gadget finder and chain builder";
     homepage = "https://github.com/angr/angrop";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

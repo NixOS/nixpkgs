@@ -1,47 +1,63 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  google-api-core,
   google-auth,
   google-cloud-core,
   google-cloud-iam,
   google-cloud-kms,
   google-cloud-testutils,
+  google-crc32c,
   google-resumable-media,
+  grpc-google-iam-v1,
+  grpcio,
+  grpcio-status,
   mock,
+  opentelemetry-api,
+  proto-plus,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
+  pytest-asyncio,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "3.2.0";
+  version = "3.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_cloud_storage";
-    inherit version;
-    hash = "sha256-3syoQwdgNvRWMxmMEl0YYf+/R+v1wOO5jcubLbFViWw=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-storage";
+    tag = "v${version}";
+    hash = "sha256-pKy1A9RNyRlAn4bXclcdvbfW4kZOP9Z4HqKWwcrDePo=";
   };
-
-  pythonRelaxDeps = [ "google-auth" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
+    google-api-core
     google-auth
     google-cloud-core
+    google-crc32c
     google-resumable-media
     requests
   ];
 
   optional-dependencies = {
+    grpc = [
+      google-api-core
+      grpc-google-iam-v1
+      grpcio
+      grpcio-status
+      proto-plus
+      protobuf
+    ]
+    ++ google-api-core.optional-dependencies.grpc;
     protobuf = [ protobuf ];
+    tracing = [ opentelemetry-api ];
   };
 
   nativeCheckInputs = [
@@ -50,6 +66,12 @@ buildPythonPackage rec {
     google-cloud-testutils
     mock
     pytestCheckHook
+    pytest-asyncio
+  ];
+
+  enabledTestPaths = [
+    "tests/unit/"
+    "tests/system/"
   ];
 
   disabledTests = [
@@ -69,6 +91,9 @@ buildPythonPackage rec {
     "test_restore_bucket"
     "test_set_api_request_attr"
     "upload"
+    "test_update_user_agent_when_default_clientinfo_provided"
+    "test_update_user_agent_when_none_clientinfo_provided"
+    "test_update_user_agent_with_existing_user_agent"
   ];
 
   disabledTestPaths = [
@@ -90,11 +115,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.storage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
-    changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/googleapis/python-storage/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

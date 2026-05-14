@@ -14,14 +14,14 @@
   cplex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osi";
   version = "0.108.11";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Osi";
-    rev = "releases/${version}";
+    rev = "releases/${finalAttrs.version}";
     hash = "sha256-3aTO7JGEOP/RCOZ1X9b68rrtv6T78euf1TYGTjyXSRE=";
   };
 
@@ -47,21 +47,25 @@ stdenv.mkDerivation rec {
       "--with-cplex-lib=-lcplex${cplex.libSuffix}"
     ];
 
-  NIX_LDFLAGS = lib.optionalString withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
+  env = {
+    # Compile errors
+    NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
+  }
+  // lib.optionalAttrs withCplex {
+    NIX_LDFLAGS = "-L${cplex}/cplex/bin/${cplex.libArch}";
+  };
 
-  # Compile errors
-  env.NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 
   passthru = { inherit withGurobi withCplex; };
 
-  meta = with lib; {
+  meta = {
     description = "Abstract base class to a generic linear programming (LP) solver";
     homepage = "https://github.com/coin-or/Osi";
-    license = licenses.epl20;
-    platforms = platforms.unix;
+    license = lib.licenses.epl20;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

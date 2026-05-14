@@ -17,6 +17,10 @@ cargo-tauri.overrideAttrs (
       hash = "sha256-UE/mJ0WdbVT4E1YuUCtu80UB+1WR+KRWs+4Emy3Nclc=";
     };
 
+    patches = [ ];
+
+    postPatch = "";
+
     # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
     # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
     sourceRoot = "${finalAttrs.src.name}/tooling/cli";
@@ -46,7 +50,7 @@ cargo-tauri.overrideAttrs (
     };
 
     passthru = {
-      inherit (oldAttrs.passthru) hook;
+      inherit (oldAttrs.passthru) hook gst-plugin;
       tests = { inherit (oldAttrs.passthru.tests) version; };
     };
 

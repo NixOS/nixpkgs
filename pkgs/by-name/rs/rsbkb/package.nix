@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.4";
+  version = "1.9";
 in
 rustPlatform.buildRustPackage {
   pname = "rsbkb";
@@ -16,14 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "trou";
     repo = "rsbkb";
     rev = "release-${version}";
-    hash = "sha256-c5+Q/y2tZfhXQIAs1W67/xfB+qz1Xn33tKXRGDAi3qs=";
+    hash = "sha256-zY8pvpz1Sg/dOb65MR/Z+rIFStwHsZ53OtybKGbjM+o=";
   };
 
-  cargoPatches = [
-    ./time.patch
-  ];
-
-  cargoHash = "sha256-fg8LQXqmw5GXiQe7ZVciORWI/yhKAhywolpapNpHXZY=";
+  cargoHash = "sha256-loHsF4fCefT6I0WAbUuP2wmFAdXHNuZokoBQG65ZyoA=";
 
   # Setup symlinks for all the utilities,
   # busybox style

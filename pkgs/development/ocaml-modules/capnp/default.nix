@@ -12,7 +12,7 @@
   stdio,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "capnp";
   version = "3.6.0";
 
@@ -21,7 +21,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnp-ocaml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-G4B1llsHnGcuGIarDB248QMaRBvS47IEQB5B93wY7nA=";
   };
 
@@ -50,8 +50,8 @@ buildDunePackage rec {
   meta = {
     description = "OCaml code generation plugin for the Cap'n Proto serialization framework";
     homepage = "https://github.com/capnproto/capnp-ocaml";
-    changelog = "https://github.com/capnproto/capnp-ocaml/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/capnproto/capnp-ocaml/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
-}
+})

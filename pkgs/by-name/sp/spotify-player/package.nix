@@ -22,7 +22,7 @@
   # build options
   withStreaming ? true,
   withDaemon ? true,
-  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl
+  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl, gstreamer
   withMediaControl ? true,
   withImage ? true,
   withNotify ? true,
@@ -47,18 +47,18 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
   "gstreamer"
 ];
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotify-player";
-  version = "0.20.7";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
-    tag = "v${version}";
-    hash = "sha256-g+SU6qDnafLiNOzZ75HUPgifuC8A+rb+KoqJoMHBJ04=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LjQGCE4xbD3+k78827u346/qhC6D8vrhyUq6c+8eWSw=";
   };
 
-  cargoHash = "sha256-rwWSKJMI/4fY60m+vGqTqrTijJN6d0PfQH417Ku9+0E=";
+  cargoHash = "sha256-mD1UJn3LjX88Ht6QUpPO9lu9WiCec5+qUphtLoCjiXg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -131,7 +131,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal spotify player that has feature parity with the official client";
     homepage = "https://github.com/aome510/spotify-player";
-    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
+    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${finalAttrs.version}";
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage rec {
       xyven1
       _71zenith
       caperren
+      mattkang
     ];
   };
-}
+})

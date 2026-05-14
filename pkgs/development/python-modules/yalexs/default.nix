@@ -17,7 +17,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests-mock,
   requests,
   typing-extensions,
@@ -25,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "8.12.0";
+  version = "9.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
     tag = "v${version}";
-    hash = "sha256-wOJHeswtGy912repFKFMKAzmODssnNtsJpJZ+9wpqPI=";
+    hash = "sha256-t7C2x3aH3ltDthBlt+ghSj9SEfZ4jm4Fgs0KAIm7cBA=";
   };
 
   build-system = [ poetry-core ];
@@ -67,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yalexs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
     changelog = "https://github.com/bdraco/yalexs/blob/${src.tag}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

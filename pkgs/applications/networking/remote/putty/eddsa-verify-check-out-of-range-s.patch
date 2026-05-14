@@ -1,0 +1,87 @@
+From af996b5ec27ab79bae3882071b9d6acf16044549 Mon Sep 17 00:00:00 2001
+From: Simon Tatham <anakin@pobox.com>
+Date: Wed, 25 Feb 2026 08:29:58 +0000
+Subject: [PATCH] eddsa_verify: add check for out-of-range s.
+
+The integer s in an EdDSA signature is treated as an exponent: the
+curve's base point is raised to that power. (OK, multiplied by it, if
+you use the elliptic curve notational convention rather than the
+general group convention.) Therefore, in principle, it doesn't make
+any difference if s varies by a multiple of the base point's
+order (which is around 2^252, therefore a larger s still fits easily
+within the 256-bit space for it in the signature encoding). However,
+RFC 8032 requires s to be strictly less than that order, so that
+there's a single canonical encoding for any given signature.
+
+I'm not treating this as a vulnerability because I don't believe
+there's any situation in SSH where canonicality of signatures is
+important. But it should be fixed, nonetheless.
+
+In the fix, it's OK to use an ordinary if statement to check the bound
+on s, because they're visible to everybody anyway: the integer s is
+encoded directly in the signature, and the bound we're checking it
+against is a well-known public integer, so nothing new is revealed by
+any timing side channel proving that that was the reason for the
+rejection. (Not even if the message being signed were secret, which it
+is in SSH: the validation of s doesn't depend on the message.)
+
+Thanks to Yujie Zhu for the report.
+---
+ crypto/ecc-ssh.c   |  5 +++++
+ test/cryptsuite.py | 18 ++++++++++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/crypto/ecc-ssh.c b/crypto/ecc-ssh.c
+index e524dfc4..fcde908d 100644
+--- a/crypto/ecc-ssh.c
++++ b/crypto/ecc-ssh.c
+@@ -1091,6 +1091,11 @@ static bool eddsa_verify(ssh_key *key, ptrlen sig, ptrlen data)
+     if (!r)
+         return false;
+     mp_int *s = mp_from_bytes_le(sstr);
++    if (mp_cmp_hs(s, ek->curve->e.G_order)) {
++        ecc_edwards_point_free(r);
++        mp_free(s);
++        return false;
++    }
+ 
+     mp_int *H = eddsa_signing_exponent_from_data(ek, extra, rstr, data);
+ 
+diff --git a/test/cryptsuite.py b/test/cryptsuite.py
+index 1ee283c2..30c4ebeb 100755
+--- a/test/cryptsuite.py
++++ b/test/cryptsuite.py
+@@ -93,6 +93,9 @@ def le_integer(x, nbits):
+ def be_integer(x, nbits):
+     return bytes(reversed(le_integer(x, nbits)))
+ 
++def decode_le_integer(s):
++    return sum(byte << (8*i) for i,byte in enumerate(s))
++
+ @contextlib.contextmanager
+ def queued_random_data(nbytes, seed):
+     hashsize = 512 // 8
+@@ -3518,6 +3521,21 @@ LzN/Ly+uECsga2hoc+P/ZHMULMZkCfrOyWdeXz7BR/acLZJoT579
+                 self.assertEqual(
+                     mlkem_decaps(params, bytes(dk_bytes), c), fail)
+ 
++    def testEd25519Overflow(self):
++        test_key = ssh_key_new_priv('ed25519', b64('AAAAC3NzaC1lZDI1NTE5AAAAIMt0/CMBL+64GQ/r/JyGxo6oHs86i9bOHhMJYbDbxEJf'), b64('AAAAIB38jy02ZWYb4EXrJG9RIljEhqidrG5DdhZvMvoeOTZs'))
++        test_string = b'hello, world'
++        good_sig = test_key.sign(test_string, 0)
++        self.assertTrue(test_key.verify(good_sig, test_string))
++        prefixlen = 4 + len('ssh-ed25519') + 4
++        self.assertEqual(len(good_sig), prefixlen + 64)
++        good_sstr = good_sig[prefixlen+32:]
++        good_s = decode_le_integer(good_sstr)
++        bad_s = good_s + ed25519.G_order
++        bad_sstr = le_integer(bad_s, 256)
++        bad_sig = good_sig[:prefixlen+32] + bad_sstr
++        self.assertEqual(len(bad_sig), len(good_sig))
++        self.assertFalse(test_key.verify(bad_sig, test_string))
++
+ class standard_test_vectors(MyTestBase):
+     def testAES(self):
+         def vector(cipher, key, plaintext, ciphertext):
+-- 
+2.30.2

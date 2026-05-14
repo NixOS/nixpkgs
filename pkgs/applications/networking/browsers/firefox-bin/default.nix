@@ -9,7 +9,7 @@
   curl,
   dbus-glib,
   gtk3,
-  libXtst,
+  libxtst,
   libva,
   pciutils,
   pipewire,
@@ -92,7 +92,7 @@ stdenv.mkDerivation {
     adwaita-icon-theme
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
   runtimeDependencies = [
     curl
@@ -155,7 +155,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
+    changelog = "https://www.firefox.com/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
     license = {

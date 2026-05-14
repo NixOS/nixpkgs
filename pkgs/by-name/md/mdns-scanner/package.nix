@@ -2,20 +2,23 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdns-scanner";
-  version = "0.22.4";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "CramBL";
     repo = "mdns-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9jteWQPI0jQFaLcWP9ZzjX0IoyqoSXDt0U8M7x8IHXk=";
+    hash = "sha256-90+VBCxb4bbmGCpBLmqzhUJ0/9GAH8Fnju61kq7sx+A=";
   };
 
-  cargoHash = "sha256-JtreaCQe52pgJGlYy9hc1B+mUU5x5SpKqqC2q48hDXc=";
+  cargoHash = "sha256-LTL5nlT75Y/cALKVLVBWlMZZn9DewZfCbTAO1QsAfXI=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/CramBL/mdns-scanner";

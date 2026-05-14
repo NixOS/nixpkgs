@@ -12,7 +12,6 @@ let
     mkIf
     mkOption
     types
-    literalExpression
     ;
 
   cfg = config.services.meme-bingo-web;

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "whatfiles";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "spieglt";
     repo = "whatfiles";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5Ju9g7/B9uxLkQzV/MN3vBkjve4EAMseO6K4HTAoS/o=";
   };
 
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Log what files are accessed by any Linux process";
     homepage = "https://github.com/spieglt/whatfiles";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "whatfiles";
   };
-}
+})

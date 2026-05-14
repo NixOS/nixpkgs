@@ -8,14 +8,14 @@
   mono,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taglib-sharp";
   version = "2.1.0.0";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "taglib-sharp";
-    rev = "taglib-sharp-${version}";
+    rev = "taglib-sharp-${finalAttrs.version}";
     sha256 = "12pk4z6ag8w7kj6vzplrlasq5lwddxrww1w1ya5ivxrfki15h5cp";
   };
 
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-docs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing metadata in media files";
     homepage = "https://github.com/mono/taglib-sharp";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
   };
-}
+})

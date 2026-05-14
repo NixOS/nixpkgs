@@ -18,7 +18,9 @@ buildPythonPackage rec {
 
   buildInputs = [ unrar ];
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-headerpad_max_install_names";
+  };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libunrar.so ${unrar}/lib/libunrar.so $out/lib/python*/site-packages/unrardll/unrar.*-darwin.so
@@ -27,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unrardll" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrap the Unrar DLL to enable unraring of files in python";
     homepage = "https://github.com/kovidgoyal/unrardll";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

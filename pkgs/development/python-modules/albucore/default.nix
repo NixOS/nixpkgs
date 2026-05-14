@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "albucore";
   version = "0.0.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "albumentations-team";

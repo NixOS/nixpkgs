@@ -52,12 +52,12 @@ buildPythonPackage rec {
     export OMP_NUM_THREADS=1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python package to load images as numpy arrays";
     homepage = "https://imread.readthedocs.io/";
     changelog = "https://github.com/luispedro/imread/blob/v${version}/ChangeLog";
-    maintainers = with maintainers; [ luispedro ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ luispedro ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

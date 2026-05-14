@@ -6,14 +6,14 @@
   gpython,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gpython";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "go-python";
     repo = "gpython";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xqwq27u41Jgoh7t9UDyatuBQswr+h3xio5AV/npncHc=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
     "-X=main.date=1970-01-01"
   ];
 
@@ -38,12 +38,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python interpreter written in Go";
     mainProgram = "gpython";
     homepage = "https://github.com/go-python/gpython";
-    changelog = "https://github.com/go-python/gpython/releases/tag/${src.rev}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/go-python/gpython/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-}
+})

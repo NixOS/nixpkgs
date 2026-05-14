@@ -6,7 +6,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "id3lib";
   version = "3.8.3";
 
@@ -21,16 +21,16 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/id3lib/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/id3lib/id3lib-${finalAttrs.version}.tar.gz";
     sha256 = "0yfhqwk0w8q2hyv1jib1008jvzmwlpsxvc8qjllhna6p1hycqj97";
   };
 
   doCheck = false; # fails to compile
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading, writing, and manipulating ID3v1 and ID3v2 tags";
     homepage = "https://id3lib.sourceforge.net";
-    platforms = platforms.unix;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl2;
   };
-}
+})

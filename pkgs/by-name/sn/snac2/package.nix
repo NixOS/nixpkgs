@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   curl,
   openssl,
   nix-update-script,
@@ -10,14 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snac2";
-  version = "2.81";
+  version = "2.91";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "grunfink";
     repo = "snac2";
     tag = finalAttrs.version;
-    hash = "sha256-ozK+T8V4KNqNhkLYw4yJd0u56I3wsxl9ctWFmfJplos=";
+    hash = "sha256-v7MKrGEvb4EyyEkRu7wd/uh4IJgfF0Uk6l0kS93NyHM=";
   };
 
   buildInputs = [

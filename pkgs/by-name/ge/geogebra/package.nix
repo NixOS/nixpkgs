@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libGL,
-  xorg,
+  libxxf86vm,
   jre,
   makeDesktopItem,
   makeWrapper,
@@ -37,7 +37,7 @@ let
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
     longDescription = ''
       Dynamic mathematics software for all levels of education that brings
@@ -45,20 +45,20 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sikmir
       soupglasses
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       cc-by-nc-sa-30
       geogebra
     ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode # some jars include native binaries
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     hydraPlatforms = [ ];
   };
 
@@ -86,13 +86,13 @@ let
     installPhase = ''
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
-      # The bundled jogl (required for 3D graphics) links to libXxf86vm, and loads libGL at runtime
+      # The bundled jogl (required for 3D graphics) links to libxxf86vm, and loads libGL at runtime
       # OpenGL versions newer than 3.0 cause "javax.media.opengl.GLException: Not a GL2 implementation"
       makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
         --prefix LD_LIBRARY_PATH : "${
           lib.makeLibraryPath [
             libGL
-            xorg.libXxf86vm
+            libxxf86vm
           ]
         }" \
         --set MESA_GL_VERSION_OVERRIDE 3.0 \

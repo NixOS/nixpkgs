@@ -19,11 +19,11 @@ buildPythonPackage rec {
   # tests require an API key
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Pinboard.in";
     mainProgram = "pinboard";
-    maintainers = with maintainers; [ djanatyn ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ djanatyn ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/lionheart/pinboard.py";
   };
 }

@@ -6,18 +6,16 @@
 
 buildNpmPackage rec {
   pname = "universal-remote-card";
-  version = "4.6.11";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "Nerwyn";
     repo = "android-tv-card";
     rev = version;
-    hash = "sha256-JlP4miJGtOP5738N57xTYgSSGTHAa/JEwCnR8gk/e18=";
+    hash = "sha256-EaZ85XPwsz+XPXc/bxep+sl7txp/K96tgsZouMOd3hg=";
   };
 
-  patches = [ ./dont-call-git.patch ];
-
-  npmDepsHash = "sha256-ALxCA9f1kn73r1f1QhEUg+WEK6CEHvm9lQn4AGG2Js0=";
+  npmDepsHash = "sha256-RtCUWxwYUqJLtYmpaNReMYDXrvQtOny5O+LjbRhfrsI=";
 
   installPhase = ''
     runHook preInstall
@@ -30,11 +28,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "universal-remote-card.min.js";
 
-  meta = with lib; {
+  meta = {
     description = "Completely customizable universal remote card for Home Assistant. Supports multiple platforms out of the box";
     homepage = "https://github.com/Nerwyn/android-tv-card";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

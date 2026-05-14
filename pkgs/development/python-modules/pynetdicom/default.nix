@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynetdicom" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the DICOM networking protocol";
     homepage = "https://github.com/pydicom/pynetdicom";
     changelog = "https://github.com/pydicom/pynetdicom/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   ant,
   jdk,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sleuthkit";
-  version = "4.12.1"; # Note: when updating don't forget to also update the rdeps outputHash
+  version = "4.14.0"; # Note: when updating don't forget to also update the rdeps outputHash
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "sleuthkit-${finalAttrs.version}";
-    hash = "sha256-q51UY2lIcLijycNaq9oQIwUXpp/1mfc3oPN4syOPF44=";
+    hash = "sha256-WvGVEDuhpmcyPOaihDruBbQbcj7s+Zkt2/D5CIsu0u8=";
   };
 
   # Fetch libraries using a fixed output derivation
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-mc/KQrwn3xpPI0ngOLcpoQDaJJm/rM8XgaX//5PiRZk=";
+    outputHash = "sha256-HfO8yWlL16NuXQ+NWIHwii69Vfb1vvSmNC3+6p0ALdg=";
   };
 
   postUnpack = ''
@@ -74,6 +75,18 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${finalAttrs.rdeps}/lib $IVY_HOME
     chmod -R 755 $IVY_HOME
   '';
+
+  patches = [
+    # Fix build with gcc 15
+    (fetchpatch {
+      url = "https://github.com/sleuthkit/sleuthkit/commit/8d710c36a947a2666bbef689155831d76fff56b9.patch";
+      hash = "sha256-/mCal0EVTM2dM5ok3OmAXQ1HiaCUi0lmhavIuwxVEMA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/sleuthkit/sleuthkit/commit/f78bd37db6be72f8f4d444d124be4e26488dce4b.patch";
+      hash = "sha256-ZEeN0jp5cRi6dOpWlcGYm0nLLu5b56ivdR+WrhnhCz0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tsk/img/ewf.cpp --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
@@ -101,19 +114,19 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf */.libs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Forensic/data recovery tool";
     homepage = "https://www.sleuthkit.org/";
     changelog = "https://github.com/sleuthkit/sleuthkit/blob/${finalAttrs.src.rev}/NEWS.txt";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       gfrascadorio
     ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # dependencies
     ];
-    license = licenses.ipl10;
+    license = lib.licenses.ipl10;
   };
 })

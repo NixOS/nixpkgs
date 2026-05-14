@@ -15,7 +15,6 @@
   pygments,
   python,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools-scm,
@@ -25,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.3.2";
+  version = "5.4.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
     tag = version;
-    hash = "sha256-+JOUpjKR0rx+4+hU/5gSov5nW2aj7HR+HYr5FPbUkSA=";
+    hash = "sha256-VVgH4h2OeOu/NKGMSOHo2tg8Owj1t+HhEN8xWGrj3m8=";
   };
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but Django's
@@ -84,11 +81,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
-    changelog = "https://github.com/jazzband/django-silk/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    changelog = "https://github.com/jazzband/django-silk/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

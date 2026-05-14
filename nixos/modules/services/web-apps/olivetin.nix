@@ -17,7 +17,17 @@ in
   options.services.olivetin = {
     enable = lib.mkEnableOption "OliveTin";
 
-    package = lib.mkPackageOption pkgs "olivetin" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      description = "The olivetin package to use.";
+      default =
+        if lib.versionAtLeast config.system.stateVersion "26.05" then pkgs.olivetin-3k else pkgs.olivetin;
+      defaultText = lib.literalExpression ''
+        if lib.versionAtLeast config.system.stateVersion "26.05"
+        then pkgs.olivetin-3k
+        else pkgs.olivetin
+      '';
+    };
 
     user = lib.mkOption {
       type = lib.types.str;

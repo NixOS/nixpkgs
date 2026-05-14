@@ -9,11 +9,11 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "amp-cli";
-  version = "0.0.1756368086-g6e639d";
+  version = "0.0.1778343260-gb9a37d";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${finalAttrs.version}.tgz";
-    hash = "sha256-ekSRtSwoPBL+SKkqqdTnMWZkLfF8SxYcrFPU2hpewC8=";
+    hash = "sha256-48FyPDniLNQoeZ+SaheTvzLCYL3r95e9VDCW4Y5gMq8=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildNpmPackage (finalAttrs: {
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-qQSn1sH1rjbKCEYdWZTgixBS6pe+scMnBofmpUYK7A0=";
+  npmDepsHash = "sha256-Ce7TaJuSrha+NcFmppMm/byAFosBR2I/zMY4KA5JXuE=";
 
   propagatedBuildInputs = [
     ripgrep
@@ -66,7 +66,8 @@ buildNpmPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/amp \
-      --prefix PATH : ${lib.makeBinPath [ ripgrep ]}
+      --prefix PATH : ${lib.makeBinPath [ ripgrep ]} \
+      --set AMP_SKIP_UPDATE_CHECK 1
   '';
 
   passthru.updateScript = ./update.sh;
@@ -82,7 +83,7 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       keegancsmith
-      owickstrom
+      burmudar
     ];
     mainProgram = "amp";
   };

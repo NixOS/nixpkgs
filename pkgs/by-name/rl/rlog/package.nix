@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rlog";
   version = "1.4";
 
   src = fetchurl {
-    url = "http://rlog.googlecode.com/files/rlog-${version}.tar.gz";
+    url = "http://rlog.googlecode.com/files/rlog-${finalAttrs.version}.tar.gz";
     sha256 = "0y9zg0pd7vmnskwac1qdyzl282z7kb01nmn57lsg2mjdxgnywf59";
   };
 
@@ -19,4 +19,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;
   };
-}
+})

@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloak";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "evansmurithi";
     repo = "cloak";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Pd2aorsXdHB1bs609+S5s+WV5M1ql48yIKaoN8SEvsg=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "cloak";
   };
-}
+})

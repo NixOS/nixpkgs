@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   desktopItems = map (
     game:
-    makeDesktopItem ({
+    makeDesktopItem {
       name = game.id;
       exec = game.title;
       icon = "yamagi-quake2";
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
         "Game"
         "Shooter"
       ];
-    })
+    }
   ) games;
 
   meta = {

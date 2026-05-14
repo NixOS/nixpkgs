@@ -5,12 +5,12 @@
   gcc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pxattr";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://www.lesbonscomptes.com/pxattr/pxattr-${version}.tar.gz";
+    url = "https://www.lesbonscomptes.com/pxattr/pxattr-${finalAttrs.version}.tar.gz";
     sha256 = "1dwcqc5z7gzma1zhis2md49bj2nq7m6jimh4zlx9szw6svisz56z";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "pxattr";
   };
-}
+})

@@ -8,7 +8,7 @@
   libevdev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evemu";
   version = "2.7.0";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # each time it is downloaded :/
   src = fetchgit {
     url = "git://git.freedesktop.org/git/evemu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-SQDaARuqBMBVlUz+Nw6mjdxaZfVOukmzTlIqy8U2rus=";
   };
 
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Records and replays device descriptions and events to emulate input devices through the kernel's input system";
     homepage = "https://www.freedesktop.org/wiki/Evemu/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       gpl3Only
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

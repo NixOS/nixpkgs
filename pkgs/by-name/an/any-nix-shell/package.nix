@@ -8,14 +8,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "any-nix-shell";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "haslersn";
     repo = "any-nix-shell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t6+LKSGWmkHQhfqw/4Ztz4QgDXQ2RZr9R/mMEEA3jlY=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ haslersn ];
     mainProgram = "any-nix-shell";
   };
-}
+})

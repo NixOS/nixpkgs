@@ -15,14 +15,14 @@
   withWebSocket ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nfd";
   version = "24.07";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "NFD";
-    rev = "NFD-${version}";
+    rev = "NFD-${finalAttrs.version}";
     hash = "sha256-HbKPO3gwQWOZf4QZE+N7tAiqsNl1GrcwE4EUGjWmf5s=";
   };
 
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (!withWebSocket) "--without-websocket";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://named-data.net/";
     description = "Named Data Networking (NDN) Forwarding Daemon";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bertof ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bertof ];
   };
-}
+})

@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsl-lite";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "gsl-lite";
     repo = "gsl-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QlAeXUKVzH0QYxbKgWPS64h1iL4nnsmJ10h/wzoxq78=";
+    hash = "sha256-lX4s/HyDIEhn7PNyCocFYhizTx6CSkSfmGCSU+eqOYw=";
   };
 
   nativeBuildInputs = [

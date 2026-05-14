@@ -6,12 +6,12 @@
   sonobuoy,
 }:
 
-# SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
+# SHA of ${finalAttrs.version} for the tool's help output. Unfortunately this is needed in build flags.
 # The update script can update this automatically, the comment is used to find the line.
 let
   rev = "a988242e8bbded3ef4602eda48addcfac24a1a91"; # update-commit-sha
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sonobuoy";
   version = "0.57.3"; # Do not forget to update `rev` above
 
@@ -21,7 +21,7 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-X ${t}/pkg/buildinfo.Version=v${version}"
+      "-X ${t}/pkg/buildinfo.Version=v${finalAttrs.version}"
       "-X ${t}/pkg/buildinfo.GitSHA=${rev}"
       "-X ${t}/pkg/buildDate=unknown"
     ];
@@ -29,7 +29,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YFItnwU08g4pVo4OOHscRmPRVXyr+R9YWYTxhSzd7iI=";
   };
 
@@ -42,7 +42,7 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = sonobuoy;
       command = "sonobuoy version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -55,7 +55,7 @@ buildGoModule rec {
     '';
 
     homepage = "https://sonobuoy.io";
-    changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${version}";
+    changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "sonobuoy";
     maintainers = with lib.maintainers; [
@@ -64,4 +64,4 @@ buildGoModule rec {
       wilsonehusin
     ];
   };
-}
+})

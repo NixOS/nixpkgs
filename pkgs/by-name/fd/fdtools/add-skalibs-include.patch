@@ -1,0 +1,120 @@
+diff --git a/fdtools-2024.12.07/src/check_exit_exec.c b/fdtools-2024.12.07/src/check_exit_exec.c
+index 6bb6860..87f26b4 100644
+--- a/fdtools-2024.12.07/src/check_exit_exec.c
++++ b/fdtools-2024.12.07/src/check_exit_exec.c
+@@ -3,6 +3,7 @@
+ #include <errno.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "check_exit_exec.h"
+diff --git a/fdtools-2024.12.07/src/grabconsole.c b/fdtools-2024.12.07/src/grabconsole.c
+index 8da1233..316ea95 100644
+--- a/fdtools-2024.12.07/src/grabconsole.c
++++ b/fdtools-2024.12.07/src/grabconsole.c
+@@ -4,6 +4,7 @@
+ #include <errno.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+diff --git a/fdtools-2024.12.07/src/pipecycle.c b/fdtools-2024.12.07/src/pipecycle.c
+index 5042a52..652dd69 100644
+--- a/fdtools-2024.12.07/src/pipecycle.c
++++ b/fdtools-2024.12.07/src/pipecycle.c
+@@ -5,6 +5,7 @@
+ #include <signal.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+ #include "prjlibs-c/vec.h"
+diff --git a/fdtools-2024.12.07/src/recvfd.c b/fdtools-2024.12.07/src/recvfd.c
+index e2de372..197e40e 100644
+--- a/fdtools-2024.12.07/src/recvfd.c
++++ b/fdtools-2024.12.07/src/recvfd.c
+@@ -7,6 +7,7 @@
+ #include <limits.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+ #include "fdtools.h"
+diff --git a/fdtools-2024.12.07/src/sendfd.c b/fdtools-2024.12.07/src/sendfd.c
+index e5b7236..fc54371 100644
+--- a/fdtools-2024.12.07/src/sendfd.c
++++ b/fdtools-2024.12.07/src/sendfd.c
+@@ -7,6 +7,7 @@
+ #include <limits.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+ #include "fdtools.h"
+diff --git a/fdtools-2024.12.07/src/setstate.c b/fdtools-2024.12.07/src/setstate.c
+index 723d40f..f6ddcbc 100644
+--- a/fdtools-2024.12.07/src/setstate.c
++++ b/fdtools-2024.12.07/src/setstate.c
+@@ -8,6 +8,7 @@
+ #include <errno.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/intattr.h"
+ #include "prjlibs-c/diewarn.h"
+diff --git a/fdtools-2024.12.07/src/statfile.c b/fdtools-2024.12.07/src/statfile.c
+index be66988..41131ee 100644
+--- a/fdtools-2024.12.07/src/statfile.c
++++ b/fdtools-2024.12.07/src/statfile.c
+@@ -6,6 +6,7 @@
+ #include <errno.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/warn.h"
+diff --git a/fdtools-2024.12.07/src/vc-get-linux.c b/fdtools-2024.12.07/src/vc-get-linux.c
+index 5263344..52c29ff 100644
+--- a/fdtools-2024.12.07/src/vc-get-linux.c
++++ b/fdtools-2024.12.07/src/vc-get-linux.c
+@@ -10,6 +10,7 @@
+ #include <sys/sysmacros.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+diff --git a/fdtools-2024.12.07/src/vc-lock-linux.c b/fdtools-2024.12.07/src/vc-lock-linux.c
+index 0d6cee1..e2112e5 100644
+--- a/fdtools-2024.12.07/src/vc-lock-linux.c
++++ b/fdtools-2024.12.07/src/vc-lock-linux.c
+@@ -9,6 +9,7 @@
+ #include <sys/vt.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+diff --git a/fdtools-2024.12.07/src/vc-switch-linux.c b/fdtools-2024.12.07/src/vc-switch-linux.c
+index 6bab00f..59ece24 100644
+--- a/fdtools-2024.12.07/src/vc-switch-linux.c
++++ b/fdtools-2024.12.07/src/vc-switch-linux.c
+@@ -10,6 +10,7 @@
+ #include <sys/sysmacros.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"

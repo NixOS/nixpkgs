@@ -6,7 +6,7 @@ let
     locs: defs:
     if defs == [ ] then
       abort "This case should never happen."
-    else if any (x: x == false) (getValues defs) then
+    else if elem false (getValues defs) then
       false
     else
       true;

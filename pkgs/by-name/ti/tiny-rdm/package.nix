@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   fetchNpmDeps,
+  imagemagick,
   npmHooks,
   nodejs,
   wails,
@@ -16,13 +17,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tiny-rdm";
-  version = "1.2.5";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "tiny-craft";
     repo = "tiny-rdm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LzZsnO14cyYzmEas23Mrf0I+ZZa7y4ZfLg/gPBLcNc8=";
+    hash = "sha256-MyIMGgKzP6SnRzlOd4OQvMNiih7lsjfVFFckkPS2J+w=";
   };
 
   postPatch = ''
@@ -30,13 +31,13 @@ buildGoModule (finalAttrs: {
       --replace-fail "prefStore.autoCheckUpdate" "false"
   '';
 
-  vendorHash = "sha256-dv+1yRl0UUo6lkLjfYAgRDR8pMfuh4lM6JapIXNQG9Q=";
+  vendorHash = "sha256-DaD/NM1ZNVt0X/CJuaGfHqeS9ySTWFd0y5bzog6Yn+E=";
 
   env = {
     CGO_ENABLED = 1;
     npmDeps = fetchNpmDeps {
       src = "${finalAttrs.src}/frontend";
-      hash = "sha256-0QMakUr2QBDYb/BRMALOACsfknrzimgaNkdFMjg73og=";
+      hash = "sha256-DUYUk4OK5UWDanSR5hSVDYloYX4fYD41omYThzi/700=";
     };
     npmRoot = "frontend";
   };
@@ -48,6 +49,7 @@ buildGoModule (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [ webkitgtk_4_1 ];
@@ -79,7 +81,8 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     install -Dm 0755 build/bin/tiny-rdm $out/bin/tiny-rdm
-    install -Dm 0644 frontend/src/assets/images/icon.png $out/share/pixmaps/tiny-rdm.png
+    mkdir -p $out/share/icons/hicolor/96x96/apps
+    magick frontend/src/assets/images/icon.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/tiny-rdm.png
 
     runHook postInstall
   '';
@@ -106,7 +109,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/tiny-craft/tiny-rdm";
     mainProgram = "tiny-rdm";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

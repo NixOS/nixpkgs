@@ -4,13 +4,14 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchurl,
   setuptools,
   boost,
   cgal,
   cmake,
   gmp,
-  tbb,
-  LAStools,
+  onetbb,
+  lastools,
   eigen,
   mpfr,
   numpy,
@@ -19,6 +20,16 @@
   withLAS ? false, # unfree
 }:
 
+let
+  # Use CGAL 6.0.1 for compatibility with cgal-swig-bindings
+  cgal_6_0_1 = cgal.overrideAttrs (oldAttrs: {
+    version = "6.0.1";
+    src = fetchurl {
+      url = "https://github.com/CGAL/cgal/releases/download/v6.0.1/CGAL-6.0.1.tar.xz";
+      hash = "sha256-Cs378xfFVmMN1SbzJTeA8ptuyXE+6SkD6Btck8D1m38=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "cgal";
   version = "6.0.1.post202410241521";
@@ -40,16 +51,16 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    cgal
+    cgal_6_0_1
     gmp
     mpfr
     boost
     zlib
-    tbb
+    onetbb
     eigen
   ]
   ++ lib.optionals withLAS [
-    LAStools
+    lastools
   ];
 
   dependencies = [
@@ -63,6 +74,12 @@ buildPythonPackage rec {
     for file in $out/${python.sitePackages}/CGAL/_*.so; do
       patchelf "$file" --add-rpath $out/${python.sitePackages}/CGAL/_lib
     done
+  '';
+
+  preCheck = ''
+    # CGAL_Alpha_wrap_3.alpha_wrap_3(...) fails with a segmentation fault
+    # https://github.com/CGAL/cgal-swig-bindings/issues/306
+    rm examples/python/test_aw3.py
   '';
 
   checkPhase = ''

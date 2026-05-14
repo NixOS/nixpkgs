@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "demoit";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "dgageot";
     repo = "demoit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3g0k2Oau0d9tXYDtxHpUKvAQ1FnGhjRP05YVTlmgLhM=";
   };
 
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Live coding demos without Context Switching";
     homepage = "https://github.com/dgageot/demoit";
-    license = licenses.asl20;
-    maintainers = [ maintainers.freezeboy ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "demoit";
   };
-}
+})

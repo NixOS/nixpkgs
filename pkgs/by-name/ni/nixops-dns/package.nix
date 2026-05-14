@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nixops-dns";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "museoa";
     repo = "nixops-dns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-d3vVm6YeQTOAE5HFSKI01L9ZqfbQKrdoLsMwHP5HulE=";
   };
 
@@ -22,14 +22,14 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/museoa/nixops-dns";
     description = "DNS server for resolving NixOps machines";
     mainProgram = "nixops-dns";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kamilchm
       sorki
     ];
   };
-}
+})

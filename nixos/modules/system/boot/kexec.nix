@@ -12,7 +12,7 @@ in
   options.boot.kexec = {
     enable = lib.mkEnableOption "kexec" // {
       default = lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexec-tools;
-      defaultText = lib.literalExpression ''lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexec-tools'';
+      defaultText = lib.literalExpression "lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.kexec-tools";
     };
   };
 

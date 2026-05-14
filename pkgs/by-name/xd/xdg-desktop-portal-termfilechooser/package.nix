@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-termfilechooser";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "hunkyburrito";
     repo = "xdg-desktop-portal-termfilechooser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3w6O9Su9COz5dKM8O8wGhSPJ4Cdb9nCU8oIBvuC6qC4=";
+    hash = "sha256-GZi05OsyhLsiY/bTFLGd5KeJaD5CQNJInN0wCkXaOoU=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "xdg-desktop-portal backend for choosing files with your favorite file chooser";
     homepage = "https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       body20002
       ltrump

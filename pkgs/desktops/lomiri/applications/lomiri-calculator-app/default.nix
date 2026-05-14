@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Powerful and easy to use calculator for Ubuntu Touch, with calculations history and formula validation";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-calculator-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-calculator-app";

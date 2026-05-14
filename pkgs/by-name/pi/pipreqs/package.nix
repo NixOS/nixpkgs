@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pipreqs";
   version = "0.4.13";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oX8WeIC2khvjdTPOTIHdxuIrRlwQeq1VfbQ7Gt1WqZs=";
   };
 
@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pipreqs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate requirements.txt file for any project based on imports";
     homepage = "https://github.com/bndr/pipreqs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ psyanticy ];
     mainProgram = "pipreqs";
   };
-}
+})

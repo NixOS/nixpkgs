@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   uv-dynamic-versioning,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pypitoken";
   version = "7.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ewjoachim";
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypitoken" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for generating and manipulating PyPI tokens";
     homepage = "https://pypitoken.readthedocs.io/";
     changelog = "https://github.com/ewjoachim/pypitoken/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

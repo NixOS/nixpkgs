@@ -16,7 +16,7 @@ getLatest() {
         *) local select=".channel == \"${channel^}\"" ;;
     esac
     local result="$(echo "$RELEASES_JSON" \
-        | jq -r ".content.item[] | select(${select}) | [.version, .${attribute}] | join(\" \")" \
+        | jq -r ".content.item[] | select(${select}) | [.version, (${attribute})] | join(\" \")" \
         | sort --version-sort \
         | cut -d' ' -f 2- \
         | tail -n 1)"
@@ -24,14 +24,14 @@ getLatest() {
     if [[ -n "$result" ]]; then
         echo "$result"
     else
-        echo "could not find the latest $attribute for $channel"
+        echo "could not find the latest $attribute for $channel" >&2
         exit 1
     fi
 }
 
 updateChannel() {
     local channel="$1"
-    local latestVersion="$(getLatest "version" "$channel")"
+    local latestVersion="$(getLatest ".version" "$channel")"
 
     local localVersion="$(nix --extra-experimental-features nix-command eval --raw --file . androidStudioPackages."${channel}".version)"
     if [[ "${latestVersion}" == "${localVersion}" ]]; then
@@ -40,15 +40,24 @@ updateChannel() {
     fi
     echo "updating $channel from $localVersion to $latestVersion"
 
-    local latestHash="$(nix-prefetch-url "https://dl.google.com/dl/android/studio/ide-zips/${latestVersion}/android-studio-${latestVersion}-linux.tar.gz")"
-    local latestSri="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$latestHash")"
+    local latestUrl="$(getLatest "[.download[] | select(.link | endswith(\"-linux.tar.gz\"))][0].link" "$channel")"
+    local latestHash="$(getLatest "[.download[] | select(.link | endswith(\"-linux.tar.gz\"))][0].checksum" "$channel")"
+
+    if [[ "$latestUrl" != https://edgedl.me.gvt1.com/android/studio/* ]]; then
+        echo "URL '$latestUrl' had an unexpected value, maybe the server changed?" >&2
+        exit 1
+    fi
+
+    local latestSri="$(nix --extra-experimental-features nix-command hash convert --from base16 --hash-algo sha256 "$latestHash")"
+    local localUrl="$(nix --extra-experimental-features nix-command eval --json --file . androidStudioPackages."${channel}".unwrapped.src.drvAttrs.urls | jq -r '.[0]')"
     local localHash="$(nix --extra-experimental-features nix-command eval --raw --file . androidStudioPackages."${channel}".unwrapped.src.drvAttrs.outputHash)"
     sed -i "s~${localHash}~${latestSri}~g" "${DEFAULT_NIX}"
 
     # Match the formatting of default.nix: `version = "2021.3.1.14"; # "Android Studio Dolphin (2021.3.1) Beta 5"`
-    local versionString="${latestVersion}\"; # \"$(getLatest "name" "${channel}")\""
+    local versionString="${latestVersion}\"; # \"$(getLatest ".name" "${channel}")\""
+    sed -i "s~${localUrl}~${latestUrl}~g" "${DEFAULT_NIX}"
     sed -i "s~${localVersion}.*~${versionString}~g" "${DEFAULT_NIX}"
-    echo "updated ${channel} to ${latestVersion}"
+    echo "updated ${channel} to ${latestVersion}" >&2
 }
 
 if (( $# == 0 )); then
@@ -60,8 +69,10 @@ else
         case "$1" in
             beta|canary|stable)
                 updateChannel "$1" ;;
+            dev)
+                echo "no autoupdate for dev" >&2 && exit 0 ;;
             *)
-                echo "unknown channel: $1" && exit 1 ;;
+                echo "unknown channel: $1" >&2 && exit 1 ;;
         esac
         shift 1
     done

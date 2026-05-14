@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libX11,
+  libx11,
   SDL2,
   SDL2_mixer,
   buildOpenGLES ? false,
@@ -26,13 +26,14 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     SDL2
     SDL2_mixer
   ];
 
   cmakeFlags = [
     "-Wno-dev"
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ]
   ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
 

@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-state-metrics";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kube-state-metrics";
-    rev = "v${version}";
-    hash = "sha256-mGCDxMF61FLCiMgtPdRBhwwx7ut1X3A5Z5hLXJXX3Gs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-w55FOWw9p7yV/bt4leZucOLqjVyHYFF+gVLWLGQKF9M=";
   };
 
-  vendorHash = "sha256-80ielz4che87hkt9U3k+pzuwZjeRz64RfRvXs3JXph8=";
+  vendorHash = "sha256-pcoqeYyOehFNkwD4fWqrk9725BJkv+8sKy1NLv+HJPE=";
 
   excludedPackages = [
     "./tests/e2e"
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.eskytthe ];
     platforms = lib.platforms.unix;
   };
-}
+})

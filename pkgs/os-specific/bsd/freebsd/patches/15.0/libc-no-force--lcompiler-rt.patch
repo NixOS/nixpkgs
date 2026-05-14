@@ -1,0 +1,21 @@
+--- a/lib/libc/Makefile
++++ b/lib/libc/Makefile
+@@ -58,7 +58,6 @@ CFLAGS+=${CANCELPOINTS_CFLAGS}
+ # Link with static libcompiler_rt.a.
+ #
+ LDFLAGS+= -nodefaultlibs
+-LIBADD+=	compiler_rt
+ LIBADD+=	sys
+ 
+ .if ${MK_SSP} != "no" && \
+--- a/lib/libsys/Makefile
++++ b/lib/libsys/Makefile
+@@ -46,7 +46,6 @@
+ #
+ LDFLAGS+= -nodefaultlibs
+ LDFLAGS+= -Wl,-Bsymbolic
+-LIBADD+=	compiler_rt
+
+ .if ${MK_SSP} != "no" && \
+     (${LIBC_ARCH} == "i386" || ${LIBC_ARCH:Mpowerpc*} != "")
+

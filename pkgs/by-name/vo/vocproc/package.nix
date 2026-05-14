@@ -9,12 +9,12 @@
   gtkmm2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vocproc";
   version = "0.2.1";
 
   src = fetchzip {
-    url = "https://hyperglitch.com/files/vocproc/${pname}-${version}.default.tar.gz";
+    url = "https://hyperglitch.com/files/vocproc/vocproc-${finalAttrs.version}.default.tar.gz";
     sha256 = "07a1scyz14mg2jdbw6fpv4qg91zsw61qqii64n9qbnny9d5pn8n2";
   };
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     "INSTALL_DIR=$(out)/lib/lv2"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hyperglitch.com/dev/VocProc";
     description = "LV2 plugin for pitch shifting (with or without formant correction), vocoding, automatic pitch correction and harmonizing of singing voice (harmonizer)";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.michalrus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.michalrus ];
+    platforms = lib.platforms.linux;
   };
-}
+})

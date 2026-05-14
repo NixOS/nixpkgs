@@ -2,9 +2,6 @@
 { pkgs, ... }:
 {
   name = "hound";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ grahamc ];
-  };
   nodes.machine =
     { pkgs, ... }:
     {

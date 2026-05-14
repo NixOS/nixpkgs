@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  pythonAtLeast,
 
   # build system
   setuptools,
@@ -24,17 +24,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastmri";
   version = "0.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "fastMRI";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0IJV8OhY5kPWQwUYPKfmdI67TyYzDAPlwohdc0jWcV4=";
   };
 
@@ -69,6 +67,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: '...' object has no attribute '__annotations__'.
+    "test_unet_scripting"
+    "test_varnet_scripting"
+  ];
+
   disabledTestPaths = [
     # much older version of pytorch-lightning is used
     "tests/test_modules.py"
@@ -79,8 +83,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytorch-based MRI reconstruction tooling";
     homepage = "https://github.com/facebookresearch/fastMRI";
-    changelog = "https://github.com/facebookresearch/fastMRI/releases/tag/v${version}";
+    changelog = "https://github.com/facebookresearch/fastMRI/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ osbm ];
   };
-}
+})

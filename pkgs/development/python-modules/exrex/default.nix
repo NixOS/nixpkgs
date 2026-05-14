@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "exrex";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "exrex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Irregular methods on regular expressions";
     homepage = "https://github.com/asciimoo/exrex";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

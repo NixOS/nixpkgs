@@ -42,7 +42,7 @@ for platform in "${!PLATFORM_URLS[@]}"; do
 
     # Extract file URL and version from metadata
     file_url=$(echo "$response" | jq -r '
-        .releases[0].updateTo
+        .releases[].updateTo
         | select(.url | test("\\.(tar|dmg)(\\.|$)"))
         | .url' | head -1)
 
@@ -89,9 +89,17 @@ for platform in "${!platform_urls[@]}"; do
     platform_hashes["$platform"]=$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url "${platform_urls[$platform]}")")
 done
 
+# Extract vscode version from the Linux tar.gz archive using nix-prefetch-url
+archive_path=$(nix-prefetch-url --print-path "${platform_urls["x86_64-linux"]}" | tail -1)
+vscodeVersion=$(tar -Oxzf "$archive_path" "Kiro/resources/app/product.json" | jq -r '.vsCodeVersion')
+if [[ -z "$vscodeVersion" || "$vscodeVersion" == "null" ]]; then
+    error_exit "Could not extract vsCodeVersion from product.json"
+fi
+
 # Update package.nix and generate sources.json
 echo "Updating package.nix..."
 sed -i "s/version = \".*\"/version = \"$max_version\"/" "$PACKAGE_NIX"
+sed -i "s/vscodeVersion = \".*\"/vscodeVersion = \"$vscodeVersion\"/" "$PACKAGE_NIX"
 
 echo "Generating sources.json..."
 json_content="{}"

@@ -1,16 +1,17 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   marisa,
   qttools,
   qtlocation,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "libosmscout";
   version = "2022.04.25";
 
@@ -36,6 +37,7 @@ mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
   buildInputs = [
     marisa
@@ -43,11 +45,11 @@ mkDerivation {
     qtlocation
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, high-level interfaces for offline location and POI lokup, rendering and routing functionalities based on OpenStreetMap (OSM) data";
     homepage = "https://libosmscout.sourceforge.net/";
-    license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.Thra11 ];
+    platforms = lib.platforms.linux;
   };
 }

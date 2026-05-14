@@ -29,13 +29,14 @@ assert lib.assertMsg (trayStyle >= 1 && trayStyle <= 3) "Tray style must be with
 assert lib.assertMsg (vibeAnimationMaxFps >= 0) "Vibe animation max FPS must be greater then 0";
 stdenvNoCC.mkDerivation rec {
   pname = "yandex-music";
-  version = "5.61.1";
+  version = "5.63.1";
 
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
-    rev = "v${version}";
-    hash = "sha256-/PpIlje7wXHTEI/ymbPsX3k7uYNKMrcjHrmfnr6QNo4=";
+    # tags are retagged for some bug fixes
+    rev = "066a6c7f503304d2181db04c5ed379a80f9137b8";
+    hash = "sha256-z+gmUG0/7ykF42+OlFGZC268Tj8+vpfgZRYrW4otpfM=";
   };
 
   nativeBuildInputs = [
@@ -101,7 +102,6 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram "$out/bin/yandex-music"                                        \
       --set-default YANDEX_MUSIC_CONFIG "$CONFIG_FILE"
 
-    install -Dm644 "./app/favicon.png" "$out/share/pixmaps/yandex-music.png"
     install -Dm644 "./app/favicon.png" "$out/share/icons/hicolor/48x48/apps/yandex-music.png"
     install -Dm644 "./app/favicon.svg" "$out/share/icons/hicolor/scalable/apps/yandex-music.svg"
 

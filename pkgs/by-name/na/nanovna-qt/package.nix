@@ -9,7 +9,7 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanovna-qt";
   # 20200507 dropped support for NanoVNA V2.2
   # We could add later versions as separate packages if someone needs, but not updating it
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nanovna-v2";
     repo = "NanoVNA-QT";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0nRpjLglCog9e4bSkaNSwjrwmLwut3Ykr3AaYZCaMEs=";
   };
 
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
     homepage = "https://nanorfe.com/nanovna-v2.html";
     mainProgram = "vna_qt";
     license = lib.licenses.gpl2Only;
-    changelog = "https://github.com/nanovna-v2/NanoVNA-QT/releases/tag/v${version}";
+    changelog = "https://github.com/nanovna-v2/NanoVNA-QT/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ chuangzhu ];
     platforms = lib.platforms.linux;
   };
-}
+})

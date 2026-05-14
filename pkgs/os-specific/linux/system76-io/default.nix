@@ -3,26 +3,30 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 let
-  version = "1.0.4";
   hash = "sha256-VE6sCehjXlRuOVcK4EN2H+FhaVaBi/jrAYx4TZjbreA=";
 in
-stdenv.mkDerivation {
-  name = "system76-io-module-${version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "system76-io-module";
+  version = "1.0.4";
 
   passthru.moduleName = "system76_io";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-io-dkms";
-    rev = version;
+    rev = finalAttrs.version;
     inherit hash;
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+
+  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -45,4 +49,4 @@ stdenv.mkDerivation {
     description = "DKMS module for controlling System76 Io board";
     homepage = "https://github.com/pop-os/system76-io-dkms";
   };
-}
+})

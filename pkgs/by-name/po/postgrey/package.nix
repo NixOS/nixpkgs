@@ -25,20 +25,21 @@ let
       ParseSyslog
     ]
   );
+  pname = "postgrey";
   version = "1.37";
-  name = "postgrey-${version}";
 in
-runCommand name
+runCommand "${pname}-${version}"
   {
+    inherit pname version;
     src = fetchurl {
-      url = "https://postgrey.schweikert.ch/pub/${name}.tar.gz";
+      url = "https://postgrey.schweikert.ch/pub/${pname}-${version}.tar.gz";
       sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
     };
-    meta = with lib; {
+    meta = {
       description = "Postfix policy server to provide greylisting";
       homepage = "https://postgrey.schweikert.ch/";
       platforms = postfix.meta.platforms;
-      license = licenses.gpl2Plus;
+      license = lib.licenses.gpl2Plus;
     };
   }
   ''

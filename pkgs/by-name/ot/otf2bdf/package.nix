@@ -5,7 +5,7 @@
   freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otf2bdf";
   version = "3.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "otf2bdf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HK9ZrnwKhhYcBvSl+3RwFD7m/WSaPkGKX6utXnk5k+A=";
   };
 
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     cp otf2bdf.man $out/share/man/man1/otf2bdf.1
   '';
 
-  meta = with lib; {
+  meta = {
     #homepage = "http://sofia.nmsu.edu/~mleisher/Software/otf2bdf/";  # timeout
     homepage = "https://github.com/jirutka/otf2bdf";
     description = "OpenType to BDF font converter";
-    license = licenses.mit0;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ hzeller ];
+    license = lib.licenses.mit0;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ hzeller ];
     mainProgram = "otf2bdf";
   };
-}
+})

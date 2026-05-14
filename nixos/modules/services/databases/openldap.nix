@@ -12,7 +12,7 @@ let
   ldapValueType =
     let
       # Can't do types.either with multiple non-overlapping submodules, so define our own
-      singleLdapValueType = lib.mkOptionType rec {
+      singleLdapValueType = lib.mkOptionType {
         name = "LDAP";
         # TODO: It would be nice to define a { secret = ...; } option, using
         # systemd's LoadCredentials for secrets. That would remove the last
@@ -357,7 +357,7 @@ in
             ]
           ) contentsFiles)
           ++ [ "${openldap}/bin/slaptest -u -F ${configDir}" ];
-          ExecStart = lib.escapeShellArgs ([
+          ExecStart = lib.escapeShellArgs [
             "${openldap}/libexec/slapd"
             "-d"
             "0"
@@ -365,7 +365,7 @@ in
             configDir
             "-h"
             (lib.concatStringsSep " " cfg.urlList)
-          ]);
+          ];
           Type = "notify";
           # Fixes an error where openldap attempts to notify from a thread
           # outside the main process:

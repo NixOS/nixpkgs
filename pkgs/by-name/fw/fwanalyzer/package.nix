@@ -7,14 +7,14 @@
   mtools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fwanalyzer";
   version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "cruise-automation";
     repo = "fwanalyzer";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-fcqtyfpxdjD+1GsYl05RSJaFDoLSYQDdWcQV6a+vNGA=";
   };
 
@@ -36,11 +36,11 @@ buildGoModule rec {
   # The tests requires an additional setup (unpacking images, etc.)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to analyze filesystem images";
     homepage = "https://github.com/cruise-automation/fwanalyzer";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fwanalyzer";
   };
-}
+})

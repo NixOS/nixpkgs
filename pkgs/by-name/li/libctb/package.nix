@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
   ];
-  meta = with lib; {
+  meta = {
     description = "Communications toolbox";
     homepage = "https://iftools.com";
-    license = licenses.lgpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.misuzu ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.misuzu ];
   };
 }

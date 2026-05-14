@@ -17,18 +17,18 @@
   includeLSP ? true,
   includeForge ? true,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steel";
-  version = "0-unstable-2025-06-15";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "123adb314702d6520f8ab04115e79308d2400c38";
-    hash = "sha256-o1RZBlAGUht0Q7UVF+yPlrWW7B016fpBBcoaxuzRQo4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GZ0VeoAwVGnK/Px5IvBGIHlpEsAh2do/QPuYtLexLt4=";
   };
 
-  cargoHash = "sha256-/vPDVVOhLO7mnULyU8QLW+YHh+kGd+BSiPi55jrOWps=";
+  cargoHash = "sha256-Z5v+8bhIgBCB2pDB5AgX42vFiNkgqjU95gata0sLUrA=";
 
   nativeBuildInputs = [
     curl
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
   ]
   ++ lib.optionals includeForge [
     "--package"
-    "forge"
+    "steel-forge"
   ];
 
   # Tests are disabled since they always fail when building with Nix
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     mkdir -p $out/lib/steel
 
-    substituteInPlace cogs/installer/download.scm \
+    substituteInPlace crates/forge/installer/download.scm \
       --replace-fail '"cargo-steel-lib"' '"$out/bin/cargo-steel-lib"'
 
     pushd cogs
@@ -91,6 +91,9 @@ rustPlatform.buildRustPackage {
 
   postFixup = ''
     wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"
+    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "$out/lib/steel"
+    wrapProgram $out/bin/forge --set-default STEEL_HOME "$out/lib/steel"
+    wrapProgram $out/bin/cargo-steel-lib --set-default STEEL_HOME "$out/lib/steel"
   '';
 
   env = {
@@ -100,7 +103,10 @@ rustPlatform.buildRustPackage {
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version-regex"
+      "^v(.*)"
+    ];
   };
 
   meta = {
@@ -115,4 +121,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

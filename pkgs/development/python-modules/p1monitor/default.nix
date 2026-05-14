@@ -9,22 +9,19 @@
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
-  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "p1monitor";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
     tag = "v${version}";
-    hash = "sha256-vr/JLvn593cgZ2KEsfDW1lS4QlGiymr0qZ8130zo6Ec=";
+    hash = "sha256-u+hjMTL51GWqYYHOxUjr7D6Q6MfGJhHZ6XsbE1fOF+A=";
   };
 
   postPatch = ''
@@ -49,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "p1monitor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with the P1 Monitor";
     homepage = "https://github.com/klaasnicolaas/python-p1monitor";
     changelog = "https://github.com/klaasnicolaas/python-p1monitor/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

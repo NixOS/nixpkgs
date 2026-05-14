@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podofo";
-  version = "0.10.5";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "podofo";
     repo = "podofo";
     rev = finalAttrs.version;
-    hash = "sha256-lYykDGhxFWLwuZhfBIgbw3B0SEhrAP7vLNNXsPKRFZw=";
+    hash = "sha256-DlCKQYlsgTfnZACk6yTeoIiaOL5AtICcHjRd8jl0RkI=";
   };
 
   outputs = [

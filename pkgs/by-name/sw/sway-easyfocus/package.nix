@@ -13,14 +13,14 @@
   gtk-layer-shell,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sway-easyfocus";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "edzdez";
     repo = "sway-easyfocus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ogqstgJqUczn0LDwpOAppC1J/Cs0IEOAXjNAnbiKn6M=";
   };
 
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pjones ];
     mainProgram = "sway-easyfocus";
   };
-}
+})

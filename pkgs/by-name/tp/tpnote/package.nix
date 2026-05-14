@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpnote";
-  version = "1.25.14";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CgC4aLg1GdqDXzuWfV4i5C4//I3GJ2RJa0y3oFOM0II=";
+    hash = "sha256-FZ/7dDg2SjNV1nEA0WFTKF7G8nJeeq3dD3UOD5bSA98=";
   };
 
-  cargoHash = "sha256-LF17FrWiqfFaVFbOjm9GiW9AsZmleZL++i8YDyrVZVM=";
+  cargoHash = "sha256-hf3H2pgc+ftJItJjMtXCW8qhpp1fugaIcRZIrydEpxo=";
 
   nativeBuildInputs = [
     cmake
@@ -34,21 +34,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
     oniguruma
   ];
 
+  postPatch = ''
+    # In these `Cargo.toml`s, local dependencies should be specified by path,
+    # otherwise they will be looked up in vendored dependencies.
+    substituteInPlace tpnote/Cargo.toml \
+      --replace-fail 'tpnote-lib = { version =' 'tpnote-lib = { path = "../tpnote-lib", version ='
+
+    substituteInPlace tpnote-lib/Cargo.toml \
+      --replace-fail 'tpnote-html2md = { version =' 'tpnote-html2md = { path = "../tpnote-html2md", version ='
+  '';
+
   postInstall = ''
     installManPage docs/build/man/man1/tpnote.1
   '';
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   # The `tpnote` crate has no unit tests. All tests are in `tpnote-lib`.
   checkType = "debug";
-  cargoTestFlags = "--package tpnote-lib";
+  cargoTestFlags = [
+    "--package"
+    "tpnote-lib"
+  ];
   doCheck = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -61,6 +73,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://blog.getreu.net/projects/tp-note/";
     license = lib.licenses.mit;
     mainProgram = "tpnote";
-    maintainers = with lib.maintainers; [ getreu ];
+    maintainers = with lib.maintainers; [
+      getreu
+      starryreverie
+    ];
   };
 })

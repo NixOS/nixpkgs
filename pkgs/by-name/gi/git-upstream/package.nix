@@ -4,17 +4,15 @@
   rustPlatform,
   nix-update-script,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-upstream";
   version = "1.6.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "9999years";
     repo = "git-upstream";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rdxpo1OZD/fpBm76zD7U/YeZOBpliKXJN87LJkw6A28=";
   };
 
@@ -22,7 +20,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/9999years/git-upstream";
-    changelog = "https://github.com/9999years/git-upstream/releases/tag/v${version}";
+    changelog = "https://github.com/9999years/git-upstream/releases/tag/v${finalAttrs.version}";
     description = "Shortcut for `git push --set-upstream`";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers._9999years ];
@@ -30,4 +28,4 @@ rustPlatform.buildRustPackage {
   };
 
   passthru.updateScript = nix-update-script { };
-}
+})

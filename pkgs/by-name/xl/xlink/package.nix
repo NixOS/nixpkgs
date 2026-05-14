@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   libusb1,
@@ -26,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Remove CMake Hunter package manager - needs network connection
   patches = [
     ./001-remove-hunter.patch
+    # Bump CMakeLists.txt to 3.10
+    (fetchpatch {
+      url = "https://github.com/luxonis/XLink/commit/160c6c918c07e28a6a8c5c080a257f7619223304.patch?full_index=1";
+      hash = "sha256-1VMCteJf/an20fI3UTT/X9cH96dCxPRQolfN+e+6jnU=";
+    })
   ];
 
   nativeBuildInputs = [

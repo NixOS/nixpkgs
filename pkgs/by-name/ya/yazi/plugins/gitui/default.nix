@@ -3,26 +3,17 @@
   fetchFromGitHub,
   mkYaziPlugin,
 }:
-let
-  pname = "gitui.yazi";
-in
+
 mkYaziPlugin {
-  inherit pname;
-  version = "0-unstable-2025-05-26";
+  pname = "gitui.yazi";
+  version = "0-unstable-2026-02-24";
 
   src = fetchFromGitHub {
     owner = "gclarkjr5";
-    repo = pname;
-    rev = "397e9cf9cff536a43e746d72e0e81fd5c3050d2d";
-    hash = "sha256-Bo16/5XuSxRhN6URwTBxuw0FTMHLF3nV1UDBQQJFHMM=";
+    repo = "gitui.yazi";
+    rev = "b3362f54db9c0da51b1d4fb2fe8315a0dada7274";
+    hash = "sha256-lNj5dH6LDvl9TlA7/+bnDrRMlpOE0bCW3umrW3gBpP8=";
   };
-
-  installPhase = ''
-    runHook preInstall
-    cp -r . $out
-    mv $out/init.lua $out/main.lua
-    runHook postInstall
-  '';
 
   meta = {
     description = "Plugin for Yazi to manage git repos with gitui";

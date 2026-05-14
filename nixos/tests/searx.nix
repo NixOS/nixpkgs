@@ -79,7 +79,7 @@
 
     with subtest("Environment variables have been substituted"):
         base.succeed("grep -q somesecret /run/searx/settings.yml")
-        base.copy_from_vm("/run/searx/settings.yml")
+        base.copy_from_machine("/run/searx/settings.yml")
 
     with subtest("Basic setup is working"):
         base.wait_for_open_port(8080)
@@ -97,7 +97,7 @@
             "${pkgs.curl}/bin/curl --fail http://localhost/searx >&2"
         )
         fancy.succeed(
-            "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/simple/js/leaflet.js >&2"
+            "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/simple/js/searxng.core.min.js >&2"
         )
   '';
 }

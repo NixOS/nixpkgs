@@ -48,11 +48,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Gustash/hyprshot";
     description = "Utility to easily take screenshots in Hyprland using your mouse";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       Cryolitia
       ryan4yin
     ];

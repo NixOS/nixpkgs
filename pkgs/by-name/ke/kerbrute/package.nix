@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kerbrute";
   version = "0.0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ok/yttRSkCaEdV4aM2670qERjgDBll6Oi3L5TV5YEEA=";
   };
 
@@ -32,4 +32,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ applePrincess ];
   };
-}
+})

@@ -8,19 +8,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tdf";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "itsjunetime";
     repo = "tdf";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-le2xlSVnYbWMDV9+SbrTFHSFZn/H6N7CEaKr5Zzo/c4=";
+    hash = "sha256-YjIMuwQkPtwlGiQ2zs3lEZi28lfn9Z5b5zOYIDFf5qw=";
   };
 
-  cargoHash = "sha256-UB7G5tl90CNq/aYUaUOpgGJcEL9ND3pJ29/lpIkh2iU=";
+  cargoHash = "sha256-lGbsb3hlFen0tXBVLbm8+CE5dddv6Ner4YSAvAd3/ug=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildFeatures = [
+    "epub"
+    "cbz"
+  ];
 
   buildInputs = [
     rustPlatform.bindgenHook
@@ -29,9 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Tests depend on cpuprofiler, which is not packaged in nixpkgs
   doCheck = false;
-
-  # requires nightly features (feature(portable_simd))
-  RUSTC_BOOTSTRAP = true;
 
   meta = {
     description = "Tui-based PDF viewer";
@@ -44,4 +46,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "tdf";
     platforms = lib.platforms.unix;
   };
+
+  # Only used for development
+  postInstall = ''
+    rm "$out/bin/for_profiling"
+  '';
 })

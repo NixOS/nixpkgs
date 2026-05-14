@@ -1,22 +1,21 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "harmonist";
-  version = "0.6.1";
+  version = "1.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "anaseto";
     repo = "harmonist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0YHbASLEcQJVYruFuWUYeb0yItmjnlJrZ4jY4h8WYgw=";
+    hash = "sha256-JR2EM9tlxNuntx//BV/hqsBv5fCkjjxZOcZtx+CZgIo=";
   };
 
-  vendorHash = "sha256-pQgqITlUtKkTZTpumWUoYMIB+fKQIqbTIAeTy2UDvdY=";
+  vendorHash = "sha256-0gtDnV+ofHj705nXFpZHP6imIU5G2ItQr6B17S59teI=";
 
   ldflags = [
     "-s"

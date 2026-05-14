@@ -56,13 +56,13 @@ in
       }
       // (optionalAttrs cfg.coturn.enable rec {
         turnDomain = cfg.domain;
-        turnPort = config.services.coturn.tls-listening-port;
+        turnPort = config.services.coturn.listening-port;
         # We cannot merge a list of attrsets so we have to redefine the whole list
         settings = {
           TURNConfig.Turns = mkDefault [
             {
               Proto = "udp";
-              URI = "turn:${turnDomain}:${builtins.toString turnPort}";
+              URI = "turn:${turnDomain}:${toString turnPort}";
               Username = "netbird";
               Password =
                 if (cfg.coturn.password != null) then

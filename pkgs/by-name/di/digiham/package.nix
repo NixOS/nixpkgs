@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./cpp-17.patch
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.0)" \
+      "cmake_minimum_required (VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
@@ -38,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/dmr_decoder";
+  versionCheckProgram = "${placeholder "out"}/bin/dmr_decoder";
   doInstallCheck = true;
 
   meta = {
@@ -46,6 +52,5 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tools for decoding digital ham communication";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    teams = [ lib.teams.c3d2 ];
   };
 })

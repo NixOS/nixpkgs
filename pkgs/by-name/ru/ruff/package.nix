@@ -16,39 +16,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.12.8";
+  version = "0.15.12";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-ypYtAUQBFSf+cgly9K5eRMegtWrRmLmqrgfRmCJvXEk=";
+    hash = "sha256-BbWOmr1/QsexDZzXPvkAstRBBcFmO0ZRrpkpXJpEXWk=";
   };
-
-  # Patch out test that fails due to ANSI escape codes being written as-is,
-  # causing a snapshot test to fail. The output itself is correct.
-  #
-  # This is the relevant test's output as of 0.12.5
-  # >     0       │-/home/ferris/project/code.py:1:1: E902 Permission denied (os error 13)
-  # >     1       │-/home/ferris/project/notebook.ipynb:1:1: E902 Permission denied (os error 13)
-  # >     2       │-/home/ferris/project/pyproject.toml:1:1: E902 Permission denied (os error 13)
-  # >           0 │+␛[1m/home/ferris/project/code.py␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
-  # >           1 │+␛[1m/home/ferris/project/notebook.ipynb␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
-  # >           2 │+␛[1m/home/ferris/project/pyproject.toml␛[0m␛[36m:␛[0m1␛[36m:␛[0m1␛[36m:␛[0m ␛[1m␛[31mE902␛[0m Permission denied (os error 13)
-  # > ────────────┴───────────────────────────────────────────────────────────────────
-  postPatch = ''
-    substituteInPlace crates/ruff/src/commands/check.rs --replace-fail '
-        #[test]
-        fn unreadable_files() -> Result<()> {' \
-    '
-        #[test]
-        #[ignore = "ANSI Escape Codes trigger snapshot diff"]
-        fn unreadable_files() -> Result<()> {'
-  '';
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  cargoHash = "sha256-0iYwS8Ssi4JDxwr0Q2+iKvYHb179L6BiiuXa2D4qiOA=";
+  cargoHash = "sha256-vv1D3bu0zLuLLxNiRESScs7fQKvx1CNfMKrseRzzxtw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -96,7 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -116,7 +96,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
       bengsparks
-      figsoda
       GaetanLepage
     ];
   };

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  guile,
+  guile_2_2,
   pkg-config,
   texinfo,
 }:
@@ -24,24 +24,24 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    guile
+    guile_2_2
     texinfo
   ];
 
   configureFlags = [
-    "--with-guile-site-dir=$(out)/${guile.siteDir}"
-    "--with-guile-site-ccache-dir=$(out)/${guile.siteCcacheDir}"
+    "--with-guile-site-dir=$(out)/${guile_2_2.siteDir}"
+    "--with-guile-site-ccache-dir=$(out)/${guile_2_2.siteCcacheDir}"
   ];
 
   makeFlags = [
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mwitmer/guile-xcb";
     description = "XCB bindings for Guile";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp ];
-    platforms = guile.meta.platforms;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = guile_2_2.meta.platforms;
   };
 }

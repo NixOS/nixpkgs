@@ -5,21 +5,18 @@
   llama-index-core,
   hatchling,
   pyowm,
-  pythonOlder,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-weather";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_weather";
     inherit version;
-    hash = "sha256-qgrHlJXOKWY5UnB2lZAJun3xA9sxn5+ZNNI6+aDnE98=";
+    hash = "sha256-bqvt09YSRD8BQfZjwnMlsO5oSscjh+piQXbUUZGeXbs=";
   };
 
   build-system = [ hatchling ];
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.readers.weather" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Readers Integration for Weather";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/readers/llama-index-readers-weather";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

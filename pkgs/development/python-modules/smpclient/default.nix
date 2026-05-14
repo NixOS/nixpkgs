@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "smpclient";
-  version = "5.0.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpclient";
     tag = version;
-    hash = "sha256-NQRVEvi/B+KdhPIzw8pm22uXpYPkoaatkCNFnEcibzo=";
+    hash = "sha256-1FyrJivP+sOKXVFuH5NbvIlOTOkuiUO3uIRasH8D+d8=";
   };
 
   pythonRelaxDeps = [
@@ -47,8 +47,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  patches = [ ./bleak-compat.patch ];
 
   pythonImportsCheck = [ "smpclient" ];
 

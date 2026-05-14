@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.25";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-XB3cwxtcOVoAwGJroZuPT8XwaCo3wpkn2KIEuuXMeu4=";
+    hash = "sha256-RVmFRThK6dNJyqxKepk9WfxzXIwkRoYijZjR1HEhDm8=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,13 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.0";
+    pyodideVersion = "0.28.2";
     pyodide = fetchurl {
-      hash = "sha256-4YwDuhcWPYm40VKfOEqPeUSIRQl1DDAdXEUcMuzzU7o=";
+      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-WL1kdXn7uAaBEwWiIJzzisMZ1uiaOVtFViWK/kW6lsY=";
+    npmDepsHash = "sha256-kAUbFAFNo5RHMGqO7sPHSxSEZw9Ky6Pxp/vddDyw90E=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -69,7 +69,7 @@ let
     '';
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -85,12 +85,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  pythonRemoveDeps = [
-    "docker"
-    "pytest"
-    "pytest-docker"
-  ];
-
   dependencies =
     with python3Packages;
     [
@@ -98,6 +92,7 @@ python3Packages.buildPythonApplication rec {
       aiocache
       aiofiles
       aiohttp
+      aiosqlite
       alembic
       anthropic
       apscheduler
@@ -112,85 +107,77 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      brotli
+      brotlicffi
+      chardet
       chromadb
-      colbert-ai
       cryptography
+      datasets_3
       ddgs
       docx2txt
       einops
-      elasticsearch
-      extract-msg
       fake-useragent
       fastapi
       faster-whisper
-      firecrawl-py
       fpdf2
       ftfy
-      gcp-storage-emulator
       google-api-python-client
       google-auth-httplib2
       google-auth-oauthlib
       google-cloud-storage
       google-genai
-      google-generativeai
       googleapis-common-protos
       httpx
-      iso-639
+      itsdangerous
       langchain
+      langchain-classic
       langchain-community
-      langdetect
-      langfuse
+      langchain-text-splitters
       ldap3
       loguru
       markdown
-      moto
+      mcp
+      msoffcrypto-tool
       nltk
       onnxruntime
       openai
       opencv-python-headless
-      openpyxl
-      opensearch-py
       opentelemetry-api
-      opentelemetry-sdk
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
+      opentelemetry-instrumentation-aiohttp-client
       opentelemetry-instrumentation-fastapi
-      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-instrumentation-httpx
+      opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-redis
       opentelemetry-instrumentation-requests
-      opentelemetry-instrumentation-logging
-      opentelemetry-instrumentation-httpx
-      opentelemetry-instrumentation-aiohttp-client
-      oracledb
+      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-sdk
+      openpyxl
+      opensearch-py
       pandas
-      passlib
       peewee
       peewee-migrate
-      pgvector
       pillow
-      pinecone-client
-      playwright
-      posthog
       psutil
-      psycopg2-binary
+      psycopg
       pyarrow
       pycrdt
       pydub
       pyjwt
       pymdown-extensions
-      pymilvus
-      pymongo
       pymysql
       pypandoc
       pypdf
       python-dotenv
       python-jose
+      python-mimeparse
       python-multipart
       python-pptx
       python-socketio
       pytube
+      pytz
       pyxlsb
-      qdrant-client
       rank-bm25
       rapidocr-onnxruntime
       redis
@@ -199,17 +186,54 @@ python3Packages.buildPythonApplication rec {
       sentence-transformers
       sentencepiece
       soundfile
+      sqlalchemy
       starlette-compress
-      tencentcloud-sdk-python
+      starsessions
       tiktoken
       transformers
-      unstructured
       uvicorn
       validators
       xlrd
       youtube-transcript-api
     ]
+    ++ psycopg.optional-dependencies.c
+    ++ pyjwt.optional-dependencies.crypto
+    ++ sqlalchemy.optional-dependencies.asyncio
+    ++ starsessions.optional-dependencies.redis;
+
+  optional-dependencies = with python3Packages; {
+    postgres = [
+      pgvector
+      psycopg2-binary
+    ];
+
+    mariadb = [
+      mariadb
+    ];
+
+    unstructured = [
+      unstructured
+    ];
+
+    all = [
+      azure-search-documents
+      colbert-ai
+      elasticsearch
+      gcp-storage-emulator
+      moto
+      oracledb
+      pinecone-client
+      playwright
+      pymilvus
+      pymongo
+      qdrant-client
+      weaviate-client
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.mariadb
+    ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ finalAttrs.passthru.optional-dependencies.unstructured
     ++ moto.optional-dependencies.s3;
+  };
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -247,6 +271,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
       shivaraj-bh
+      codgician
     ];
   };
-}
+})

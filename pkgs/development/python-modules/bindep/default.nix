@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "bindep";
-  version = "2.13.0";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-33VkdT5YMDO7ETM4FQ13JUAUW00YmkgB7FaiW17eUFA=";
+    hash = "sha256-DIBMfkjdF9skyzkSGt5xcfaE+0Y8iqAdAzjNEdJUNko=";
   };
 
   env.PBR_VERSION = version;
@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bindep" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindep is a tool for checking the presence of binary packages needed to use an application / library";
     homepage = "https://opendev.org/opendev/bindep";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "bindep";
-    teams = [ teams.openstack ];
+    teams = [ lib.teams.openstack ];
   };
 }

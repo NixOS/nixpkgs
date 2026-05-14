@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "capslock";
-  version = "0.2.8";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "capslock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7FMsW51LYEjEXcil6e64tAHaBeDAYRnBBX4E1PjSXtU=";
+    hash = "sha256-IqPzXs8d22tVwYot98i48MLDXZERk0nt1Wh8CnCDeKQ=";
   };
 
-  vendorHash = "sha256-UOpreQceWgwbQ+Qup4iEStQqJA77uiiupfTUFxNBIcM=";
+  vendorHash = "sha256-k4YQaoLIw1jFl4PJUm0b16ORw/OyhmA/5uKfP0S12GU=";
 
   subPackages = [ "cmd/capslock" ];
 

@@ -111,7 +111,7 @@ This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/us
 #### HTML
 
 Inlining HTML is not allowed.
-Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+Parts of the documentation get rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
 
 #### Roles
 
@@ -212,6 +212,70 @@ You, as the writer of documentation, are still in charge of its content.
 Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
+
+Not everything has been migrated to this format yet.
+Please always use it for new content.
+When changing existing content, update formatting if possible, but avoid excessive diffs.
+
+### Examples first
+
+Readers look at examples first: an example communicates what something does faster than a description.
+Put examples before detailed explanations.
+
+Prefer this structure for each documented item:
+
+1. Title
+2. Abstract (optional, one sentence max, the example often speaks for itself)
+3. Example
+4. Explanation (details, edge cases, types, defaults)
+
+For instance:
+
+````markdown
+## `lib.toUpper`
+
+Converts all characters in a string to uppercase.
+
+:::{.example #ex-lib-toUpper}
+# Converting a string to uppercase
+```nix
+lib.toUpper "hello"
+=> "HELLO"
+```
+
+:::
+
+Only acts on ASCII characters.
+Unicode characters are passed through unchanged.
+````
+
+### Writing Function Documentation
+
+Function documentation is *reference documentation*, for which
+[diataxis Reference documentation](https://diataxis.fr/reference/) (8 minutes) is **mandatory reading**.
+
+On top of the diataxis framework, which provides a balanced perspective on what reference documentation should contain, we apply a specific style rule to function documentation:
+the first sentence is in present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
+For example:
+
+```nix
+/**
+  Subtracts value `b` from value `a`.
+
+  Returns the difference as a number.
+*/
+subtractValues # ...elided code
+```
+
+Renders as:
+
+```md
+## `subtractValues`
+
+Subtracts value `b` from value `a`.
+
+Returns the difference as a number.
+```
 
 ### Callouts and examples
 
@@ -375,12 +439,12 @@ To define a referenceable figure use the following fencing:
 :::
 ```
 
-Defining figures through the `figure` fencing class adds them to a `List  of Figures` after the `Table of Contents`.
+Defining figures through the `figure` fencing class adds them to a `List of Figures` after the `Table of Contents`.
 Though this is not shown in the rendered documentation on nixos.org.
 
 #### Footnotes
 
-To add a foonote explanation, use the following syntax:
+To add a footnote explanation, use the following syntax:
 
 ```markdown
 Sometimes it's better to add context [^context] in a footnote.
@@ -415,7 +479,7 @@ This syntax is taken from [CommonMark](https://spec.commonmark.org/0.30/#link-re
 #### Typographic replacements
 
 Typographic replacements are enabled.
-Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
+Check the [list of possible replacement patterns](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
 
 ## Getting help
 

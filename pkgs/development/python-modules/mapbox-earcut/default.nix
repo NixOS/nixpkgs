@@ -2,12 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
   ninja,
-  pybind11,
+  nanobind,
   scikit-build-core,
 
   # dependencies
@@ -19,20 +18,18 @@
 
 buildPythonPackage rec {
   pname = "mapbox-earcut";
-  version = "1.0.3";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skogler";
     repo = "mapbox_earcut_python";
     tag = "v${version}";
-    hash = "sha256-2dUZ78yWSudjozV2zIRNQgUeaNrkL+NXnF51q4T+dRU=";
+    hash = "sha256-R5YDJbfDNf6jAvG3VJQMYay6i8dw616SUs0tPgrJt6I=";
   };
 
   build-system = [
-    pybind11
+    nanobind
     scikit-build-core
   ];
 
@@ -47,12 +44,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  preCheck = ''
+    rm -rf mapbox_earcut
+  '';
+
   pythonImportsCheck = [ "mapbox_earcut" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/skogler/mapbox_earcut_python";
     changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/${src.tag}";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     description = "Mapbox-earcut fast triangulation of 2D-polygons";
     longDescription = ''
       Python bindings for the C++ implementation of the Mapbox Earcut

@@ -18,14 +18,14 @@
   xvfb-run,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gtg";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "gtg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-O8qBD92P2g8QrBdMXa6j0Ozk+W80Ny5yk0KNTy7ekfE=";
   };
 
@@ -62,6 +62,7 @@ python3Packages.buildPythonApplication rec {
     gst-python
     liblarch
     caldav
+    vobject
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -74,11 +75,11 @@ python3Packages.buildPythonApplication rec {
     export HOME="$TMP"
   '';
 
-  format = "other";
+  pyproject = false;
 
   checkPhase = "xvfb-run pytest ../tests/";
 
-  meta = with lib; {
+  meta = {
     description = "Personal tasks and TODO-list items organizer";
     mainProgram = "gtg";
     longDescription = ''
@@ -87,8 +88,8 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/getting-things-gnome/gtg";
     downloadPage = "https://github.com/getting-things-gnome/gtg/releases";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ oyren ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ oyren ];
+    platforms = lib.platforms.linux;
   };
-}
+})

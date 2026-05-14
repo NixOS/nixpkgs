@@ -8,10 +8,10 @@
   qtbase,
   qtsvg,
   qtx11extras ? null, # Qt 5 only
-  kwindowsystem,
+  kwindowsystem ? null, # Qt 6 only
   qtwayland,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   qttools,
   wrapQtAppsHook,
   gitUpdater,
@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtstyleplugin-kvantum${lib.optionalString isQt5 "5"}";
-  version = "1.1.5";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-G1yqToqYVnV/ag//b4C3jUvh2ayIhV3bEavfhpiF0p0=";
+    hash = "sha256-S/oIkr0C4fj78ih8Tm6pKxlREEMLeF5Va7+3jC6bK3c=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qtbase
     qtsvg
-    libX11
-    libXext
+    libx11
+    libxext
   ]
   ++ lib.optionals isQt5 [ qtx11extras ]
   ++ lib.optionals (!isQt5) [

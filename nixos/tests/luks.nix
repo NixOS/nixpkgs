@@ -1,3 +1,5 @@
+# Tests LUKS specifically with scripted stage 1. Remove in 26.11.
+
 { lib, pkgs, ... }:
 {
   name = "luks";
@@ -5,7 +7,8 @@
   nodes.machine =
     { pkgs, ... }:
     {
-      imports = [ ./common/auto-format-root-device.nix ];
+
+      boot.initrd.systemd.enable = false;
 
       # Use systemd-boot
       virtualisation = {
@@ -48,7 +51,12 @@
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
     machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
+    machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdb cryptroot")
+    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
+
     machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdc -")
+    machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdc cryptroot2")
+    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot2")
 
     # Boot from the encrypted disk
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")

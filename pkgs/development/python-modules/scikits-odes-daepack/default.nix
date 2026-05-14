@@ -30,6 +30,9 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+  # https://github.com/bmcage/odes/pull/204
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = scikits-odes-core.meta // {
     description = "Wrapper around daepack";
     homepage = "https://github.com/bmcage/odes/blob/master/packages/scikits-odes-daepack";

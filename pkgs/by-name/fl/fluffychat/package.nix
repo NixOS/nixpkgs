@@ -1,16 +1,19 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
+  fetchzip,
   imagemagick,
   libgbm,
   libdrm,
-  flutter332,
+  flutter341,
   pulseaudio,
+  webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
 
   callPackage,
-  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter332; },
+  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter341; },
 
   targetFlutterPlatform ? "linux",
 }:
@@ -21,28 +24,36 @@ let
     libdrm
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  libwebrtc = fetchzip {
+    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.3.0/libwebrtc.zip";
+    sha256 = "sha256-lGvWAicdKbNdMZAQS9Qyxv737G/sBI/hKbge/Xw5bDM=";
+  };
 in
-flutter332.buildFlutterApplication (
+flutter341.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.0.0";
+    version = "2.5.1";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-fFc6nIVQUY9OiGkEc7jrzXnBQPDWC5x5A4/XHUhu6hs=";
+      hash = "sha256-8iMSfF5K/9bQot7Tzc2XuuiQnquLZmS0ucC5t2T/HEA=";
     };
 
     inherit pubspecLock;
 
     gitHashes = {
       flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
-      flutter_typeahead = "sha256-ZGXbbEeSddrdZOHcXE47h3Yu3w6oV7q+ZnO6GyW7Zg8=";
       flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
     };
 
     inherit targetFlutterPlatform;
+
+    flutterBuildFlags = [
+      # Required since v2.4.0
+      "--enable-experiment=dot-shorthands"
+    ];
 
     meta = {
       description = "Chat with your friends (matrix client)";
@@ -63,6 +74,7 @@ flutter332.buildFlutterApplication (
     nativeBuildInputs = [
       imagemagick
       copyDesktopItems
+      webkitgtk_4_1
     ];
 
     runtimeDependencies = [ pulseaudio ];
@@ -81,8 +93,43 @@ flutter332.buildFlutterApplication (
           "Network"
           "InstantMessaging"
         ];
+        startupWMClass = "fluffychat";
       })
     ];
+
+    customSourceBuilders = {
+      flutter_webrtc =
+        { version, src, ... }:
+        stdenv.mkDerivation {
+          pname = "flutter_webrtc";
+          inherit version src;
+          inherit (src) passthru;
+
+          postPatch = ''
+            substituteInPlace third_party/CMakeLists.txt \
+              --replace-fail "\''${CMAKE_CURRENT_LIST_DIR}/downloads/libwebrtc.zip" ${libwebrtc}
+              ln -s ${libwebrtc} third_party/libwebrtc
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir $out
+            cp -r ./* $out/
+
+            runHook postInstall
+          '';
+        };
+    };
+
+    # Temporary fix for json deprecation error
+    # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+    postPatch = ''
+      substituteInPlace linux/CMakeLists.txt \
+        --replace-fail \
+        "PRIVATE -Wall -Werror" \
+        "PRIVATE -Wall -Werror -Wno-deprecated"
+    '';
 
     postInstall = ''
       FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png

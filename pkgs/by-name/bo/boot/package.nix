@@ -5,12 +5,12 @@
   jdk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.7.2";
   pname = "boot";
 
   src = fetchurl {
-    url = "https://github.com/boot-clj/boot-bin/releases/download/${version}/boot.sh";
+    url = "https://github.com/boot-clj/boot-bin/releases/download/${finalAttrs.version}/boot.sh";
     sha256 = "1hqp3xxmsj5vkym0l3blhlaq9g3w0lhjgmp37g6y3rr741znkk8c";
   };
 
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ jdk ];
 
-  meta = with lib; {
+  meta = {
     description = "Build tooling for Clojure";
     mainProgram = "boot";
     homepage = "https://boot-clj.github.io/";
-    license = licenses.epl10;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ragge ];
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ ragge ];
   };
-}
+})

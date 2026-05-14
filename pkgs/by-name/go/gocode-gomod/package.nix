@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gocode-gomod";
   version = "1.0.0";
 
@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stamblerre";
     repo = "gocode";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "YAOYrPPKgnjCErq8+iW0Le51clGBv0MJy2Nnn7UVo/s=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   doCheck = false; # fails on go 1.17
 
-  meta = with lib; {
+  meta = {
     description = "Autocompletion daemon for the Go programming language";
     mainProgram = "gocode-gomod";
     longDescription = ''
@@ -44,10 +44,10 @@ buildGoModule rec {
       noticeable.
     '';
     homepage = "https://github.com/stamblerre/gocode";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kalbasit
       rvolosatovs
     ];
   };
-}
+})

@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
   django,
@@ -22,5 +23,9 @@ buildPythonPackage rec {
   meta = {
     description = "Generic tagging application for Django projects";
     homepage = "https://github.com/Fantomas42/django-tagging";
+    license = lib.licenses.AND [
+      lib.licenses.mit
+      lib.licenses.bsd3
+    ];
   };
 }

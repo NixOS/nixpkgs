@@ -1,17 +1,16 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kx-aspe-cli";
   version = "0-unstable-2024-04-06";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "keyoxide";
     repo = "kx-aspe-cli";
     rev = "492df7edae95a8636bb59c4e5c1607053dab2c78";
@@ -26,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://codeberg.org/keyoxide/kx-aspe-cli";
-    changelog = "https://codeberg.org/keyoxide/kx-aspe-cli/src/commit/${src.rev}/CHANGELOG.md";
+    changelog = "https://codeberg.org/keyoxide/kx-aspe-cli/src/commit/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Keyoxide profile generator CLI using ASPE";
     mainProgram = "kx-aspe";
     platforms = lib.platforms.linux;
     license = [ lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.nobbz ];
   };
-}
+})

@@ -80,7 +80,7 @@ let
       port = mkOption {
         description = "The port to use for IP sockets. If port is not specified, port 80 (http) is used.";
         default = null;
-        type = with types; nullOr int;
+        type = with types; nullOr port;
       };
       proto = mkOption {
         description = "PROTO can be 'HTTP' (the default) or 'PROXY'.  Both version 1 and 2 of the proxy protocol can be used.";
@@ -223,16 +223,23 @@ in
       '')
     ];
 
-    assertions = concatMap (m: [
-      {
-        assertion = (hasPrefix "/" m.address) || (hasPrefix "@" m.address) -> m.port == null;
-        message = "Listen ports must not be specified with UNIX sockets: ${builtins.toJSON m}";
-      }
-      {
-        assertion = !(hasPrefix "/" m.address) -> m.user == null && m.group == null && m.mode == null;
-        message = "Abstract UNIX sockets or IP sockets can not be used with user, group, and mode settings: ${builtins.toJSON m}";
-      }
-    ]) cfg.listen;
+    assertions =
+      (concatMap (m: [
+        {
+          assertion = (hasPrefix "/" m.address) || (hasPrefix "@" m.address) -> m.port == null;
+          message = "Listen ports must not be specified with UNIX sockets: ${builtins.toJSON m}";
+        }
+        {
+          assertion = !(hasPrefix "/" m.address) -> m.user == null && m.group == null && m.mode == null;
+          message = "Abstract UNIX sockets or IP sockets can not be used with user, group, and mode settings: ${builtins.toJSON m}";
+        }
+      ]) cfg.listen)
+      ++ [
+        {
+          assertion = cfg.package.pname != "vinyl-cache";
+          message = "services.varnish only supports Varnish Cache. Please use services.vinyl-cache.";
+        }
+      ];
 
     warnings =
       lib.optional (!isNull cfg.http_address)

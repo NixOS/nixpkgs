@@ -1,21 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   bash,
   udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "game-devices-udev-rules";
-  version = "0.24";
+  version = "0.25";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fabiscafe";
     repo = "game-devices-udev";
     tag = finalAttrs.version;
-    hash = "sha256-b2NBgGpRQ2pQZYQgiRSAt0loAxq1NEByRHVkQQRDOj0=";
+    hash = "sha256-CLQFdPr489OKZRj1v8EZypM1KOXgAOAOF0VQpeud4uo=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -Dm444 -t "$out/lib/udev/rules.d" *.rules
     substituteInPlace $out/lib/udev/rules.d/71-powera-controllers.rules \
-    --replace-fail "/bin/sh" "${bash}/bin/bash"
+      --replace-fail "/bin/sh" "${bash}/bin/bash"
   '';
 
   meta = {

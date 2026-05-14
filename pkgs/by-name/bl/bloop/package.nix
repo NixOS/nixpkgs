@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "2.0.13";
+  version = "2.0.19";
 
   platform =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
       if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
-        "sha256-d6Fz87qvjIHhcU3sL6PalZGbkt1hZIMJEbiqJtRb2/0="
+        "sha256-HyjsBpSoek56no+19rZtjih+/Deu1NO9bwjMBz44B2U="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-        "sha256-LuX8LFYNzrcqJl9RTLLjQTDsdQg2KmJ+ijKwmi34E3A="
+        "sha256-mYPqqyO3wXKUVYSueHYteJd3z/nNCfP0LxvEQdg+oT8="
       else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        "sha256-jH7zHVns7pDlrRRAGO2nZ5VW71Wyuz0a0oBmXZ4fOAA="
+        "sha256-Yf/oECDSR9FN/rxz2hkBlvMCK0BtLFRBR0VagLaqivc="
       else
         throw "unsupported platform";
   };
@@ -78,10 +78,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scalacenter.github.io/bloop/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
     description = "Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     mainProgram = "bloop";
     platforms = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       agilesteel
       kubukoz
       tomahna

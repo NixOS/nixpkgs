@@ -9,12 +9,12 @@
   talecast,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "talecast";
   version = "0.1.39";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RwB+X+i3CEcTyKac81he9/cT2aQ4M7AqgqSDBEvhFJU=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
       getchoo
     ];
   };
-}
+})

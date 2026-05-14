@@ -2,13 +2,10 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs,
   runtimeShell,
 }:
 
-let
-  nodejs = nodejs_20;
-in
 buildNpmPackage rec {
   pname = "whitebophir";
   version = "1.19.1";
@@ -40,12 +37,12 @@ buildNpmPackage rec {
     chmod +x $out/bin/whitebophir
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     homepage = "https://github.com/lovasoa/whitebophir";
     mainProgram = "whitebophir";
-    maintainers = with maintainers; [ iblech ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms = lib.platforms.unix;
   };
 }

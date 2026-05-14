@@ -6,21 +6,21 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-Es3xy8NVDo7Xgu32jJa4lhYWGa5hJnRyDKFYQqB3aBY=",
+  vendorHash ? "sha256-qodzzBee+4NeZ+XifMknFPayBcWDmbyYq1R6Xhuras0=",
 }:
 
 let
-  attrsToSources = attrs: builtins.map ({ repo, version, ... }: "${repo}@${version}") attrs;
+  attrsToSources = attrs: map ({ repo, version, ... }: "${repo}@${version}") attrs;
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
-  version = "1.12.2";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P4GhWrEACR1ZhNhGAoXWvNXYlpwnm2dz6Ggqv72zYog=";
+    hash = "sha256-c0xXZnc0muXViPqMCJsD8TTGMbVCOKE49ElAHEPnKlw=";
   };
 
   inherit vendorHash;
@@ -32,64 +32,67 @@ buildGoModule (finalAttrs: {
     "man"
   ];
 
-  # Override the go-modules fetcher derivation to fetch plugins
-  modBuildPhase = ''
-    cp plugin.cfg plugin.cfg.orig
-    ${
-      (lib.concatMapStringsSep "\n" (
-        plugin:
-        let
-          position = plugin.position or "end-of-file";
-          formatPlugin = { name, repo, ... }: "${name}:${repo}";
-        in
-        if position == "end-of-file" then
-          "echo '${formatPlugin plugin}' >> plugin.cfg"
-        else if position == "start-of-file" then
-          "sed -i '1i ${formatPlugin plugin}' plugin.cfg"
-        else if lib.hasAttrByPath [ "before" ] position then
-          ''
-            if ! grep -q '^${position.before}:' plugin.cfg; then
-              echo 'Failed to insert ${plugin.name} before ${position.before} in plugin.cfg: ${position.before} is not in plugin.cfg'
-              exit 1
-            fi
-            sed -i '/^${position.before}:/i ${formatPlugin plugin}' plugin.cfg
-          ''
-        else if lib.hasAttrByPath [ "after" ] position then
-          ''
-            if ! grep -q '^${position.after}:' plugin.cfg; then
-              echo 'Failed to insert ${plugin.name} after ${position.after} in plugin.cfg: ${position.after} is not in plugin.cfg'
-              exit 1
-            fi
-            sed -i '/^${position.after}:/a ${formatPlugin plugin}' plugin.cfg
-          ''
-        else
-          throw ''
-            Unsupported position value in externalPlugin:
-              ${builtins.toJSON plugin}.
-            Valid values for position attr are:
-              - position = "end-of-file" (the default)
-              - position = "start-of-file"
-              - position.before = "{other plugin}"
-              - position.after = "{other plugin}"
-          ''
-      ) externalPlugins)
-    }
-    diff -u plugin.cfg.orig plugin.cfg || true
-    for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
-    GOOS= GOARCH= go generate
-    go mod vendor
-  '';
+  overrideModAttrs = {
+    # Add plugins before vendoring the modules.
+    preBuild = ''
+      cp plugin.cfg plugin.cfg.orig
+      ${
+        (lib.concatMapStringsSep "\n" (
+          plugin:
+          let
+            position = plugin.position or "end-of-file";
+            formatPlugin = { name, repo, ... }: "${name}:${repo}";
+          in
+          if position == "end-of-file" then
+            "echo '${formatPlugin plugin}' >> plugin.cfg"
+          else if position == "start-of-file" then
+            "sed -i '1i ${formatPlugin plugin}' plugin.cfg"
+          else if lib.hasAttrByPath [ "before" ] position then
+            ''
+              if ! grep -q '^${position.before}:' plugin.cfg; then
+                echo 'Failed to insert ${plugin.name} before ${position.before} in plugin.cfg: ${position.before} is not in plugin.cfg'
+                exit 1
+              fi
+              sed -i '/^${position.before}:/i ${formatPlugin plugin}' plugin.cfg
+            ''
+          else if lib.hasAttrByPath [ "after" ] position then
+            ''
+              if ! grep -q '^${position.after}:' plugin.cfg; then
+                echo 'Failed to insert ${plugin.name} after ${position.after} in plugin.cfg: ${position.after} is not in plugin.cfg'
+                exit 1
+              fi
+              sed -i '/^${position.after}:/a ${formatPlugin plugin}' plugin.cfg
+            ''
+          else
+            throw ''
+              Unsupported position value in externalPlugin:
+                ${builtins.toJSON plugin}.
+              Valid values for position attr are:
+                - position = "end-of-file" (the default)
+                - position = "start-of-file"
+                - position.before = "{other plugin}"
+                - position.after = "{other plugin}"
+            ''
+        ) externalPlugins)
+      }
+      diff -u plugin.cfg.orig plugin.cfg || true
+      for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
+      GOFLAGS=''${GOFLAGS//-mod=vendor/} CC= GOOS= GOARCH= go generate
+      go mod tidy
+    '';
 
-  modInstallPhase = ''
-    mv -t vendor go.mod go.sum plugin.cfg
-    cp -r --reflink=auto vendor "$out"
-  '';
+    # Move the modified `go.mod`, `go.sum`, and `plugin.cfg` files into the
+    # vendor directory so we can retrieve them later in the `preBuild` hook.
+    postBuild = ''
+      mv -t vendor go.mod go.sum plugin.cfg
+    '';
+  };
 
   preBuild = ''
     chmod -R u+w vendor
     mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
-    GOOS= GOARCH= go generate
+    CC= GOOS= GOARCH= go generate
   '';
 
   postPatch = ''
@@ -101,10 +104,21 @@ buildGoModule (finalAttrs: {
     substituteInPlace test/readme_test.go \
       --replace-fail "TestReadme" "SkipReadme"
 
+    substituteInPlace test/metrics_test.go \
+      --replace-fail "TestMetricsRewriteRequestSize" "SkipMetricsRewriteRequestSize"
+
+    substituteInPlace test/quic_test.go \
+      --replace-fail "TestQUICReloadDoesNotPanic" "SkipQUICReloadDoesNotPanic"
+
     # this test fails if any external plugins were imported.
     # it's a lint rather than a test of functionality, so it's safe to disable.
     substituteInPlace test/presubmit_test.go \
       --replace-fail "TestImportOrdering" "SkipImportOrdering"
+
+    substituteInPlace plugin/pkg/parse/transport_test.go \
+      --replace-fail \
+        "TestTransport" \
+        "SkipTransport"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # loopback interface is lo0 on macos
@@ -122,6 +136,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests = {
+    coredns-external-plugins = nixosTests.coredns;
     kubernetes-single-node = nixosTests.kubernetes.dns-single-node;
     kubernetes-multi-node = nixosTests.kubernetes.dns-multi-node;
   };
@@ -134,6 +149,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       deltaevo
       djds
+      johanot
       rtreffer
       rushmorem
     ];

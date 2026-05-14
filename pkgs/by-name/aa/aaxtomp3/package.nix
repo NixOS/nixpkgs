@@ -30,10 +30,10 @@ resholve.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace AAXtoMP3 \
-      --replace 'AAXtoMP3' 'aaxtomp3'
+      --replace-fail 'AAXtoMP3' 'aaxtomp3'
     substituteInPlace interactiveAAXtoMP3 \
-      --replace 'AAXtoMP3' 'aaxtomp3' \
-      --replace 'call="./aaxtomp3"' 'call="$AAXTOMP3"'
+      --replace-fail 'AAXtoMP3' 'aaxtomp3' \
+      --replace-fail 'call="./aaxtomp3"' 'call="$AAXTOMP3"'
   '';
 
   installPhase = ''
@@ -74,6 +74,6 @@ resholve.mkDerivation rec {
     description = "Convert Audible's .aax filetype to MP3, FLAC, M4A, or OPUS";
     homepage = "https://krumpetpirate.github.io/AAXtoMP3";
     license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
 }

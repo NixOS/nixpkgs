@@ -1,14 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pdm-backend,
   jschon,
   pyvcd,
   jinja2,
-  importlib-resources,
-  importlib-metadata,
   git,
 
   # for tests
@@ -20,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "amaranth";
-  version = "0.5.7";
+  version = "0.5.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
     tag = "v${version}";
-    hash = "sha256-E/PJrvBmlS39KgzDz9sArq4BXwk/JmIMtdxL7MdrWlc=";
+    hash = "sha256-hqMgyQJRz1/5C9KB3nAI2RKPZXZUl3zhfZbk9M1hTxs=";
   };
 
   postPatch = ''
@@ -45,9 +40,7 @@ buildPythonPackage rec {
     jschon
     jinja2
     pyvcd
-  ]
-  ++ lib.optional (pythonOlder "3.9") importlib-resources
-  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -71,12 +64,12 @@ buildPythonPackage rec {
     "tests/test_lib_fifo.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern hardware definition language and toolchain based on Python";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     changelog = "https://github.com/amaranth-lang/amaranth/blob/${src.tag}/docs/changes.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       pbsds
     ];

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corepdf";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corepdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fhEuMk15yCA6IUasD9rJPR8sB+h0tz8niOQtXFIe7Uc=";
+    hash = "sha256-6VLjOf/VZpBH8kIvdvObiyu10yiTYk26eKHFKIUMwN8=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corepdf";
     homepage = "https://gitlab.com/cubocore/coreapps/corepdf";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

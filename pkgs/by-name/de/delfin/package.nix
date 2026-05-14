@@ -4,7 +4,7 @@
   appstream,
   cargo,
   desktop-file-utils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gitUpdater,
   gtk4,
   libadwaita,
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   pname = "delfin";
   version = "0.4.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";
@@ -36,6 +35,12 @@ stdenv.mkDerivation rec {
     inherit pname version src;
     hash = "sha256-zZc2+0oskptpWZE4fyVcR4QHxqzpj71GXMXNXMK4an0=";
   };
+
+  postPatch = ''
+    substituteInPlace delfin/meson.build --replace-fail \
+      "'delfin' / rust_target / meson.project_name()" \
+      "'delfin' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
 
   nativeBuildInputs = [
     appstream
@@ -62,19 +67,22 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "profile" "release")
   ];
 
+  # For https://codeberg.org/avery42/delfin/src/commit/820b466bfd47f71c12e9b2cabb698e8f78942f41/delfin/meson.build#L47-L48
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       colinsane
       avery
     ];
     mainProgram = "delfin";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

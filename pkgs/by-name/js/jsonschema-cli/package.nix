@@ -2,27 +2,31 @@
   lib,
   fetchCrate,
   rustPlatform,
+  cacert,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonschema-cli";
-  version = "0.33.0";
+  version = "0.46.4";
 
   src = fetchCrate {
     pname = "jsonschema-cli";
     inherit (finalAttrs) version;
-    hash = "sha256-09u50o4dg7keJgFC4xlRJ0LtkR7ZxmxnqLdEVKpE77E=";
+    hash = "sha256-Yze2iL+4SAR3WUgypGM94OKKFlD4PTLrvsP+nJz9Kho=";
   };
 
-  cargoHash = "sha256-zY4PtuQuUMvuR7gr42iytR2CW7bQBfbB0L6JE8cSQh8=";
+  cargoHash = "sha256-28OtvYDv7OpIio7WghkuVA8t+d0b91bQ9U/llJEFzmw=";
+
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

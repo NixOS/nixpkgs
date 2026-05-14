@@ -24,12 +24,12 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "archivy";
-  version = "1.7.3";
-  format = "pyproject";
+  version = "1.7.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ns1Y0DqqnTAQMEt+oBJ/P2gqKqPsX9P3/Z4561qzuns";
+    hash = "sha256-XFzWD4KAW5jt5BwXZvO0iZdJKpzC6dRkxNLv5N8XUfc=";
   };
 
   build-system = with py.pkgs; [
@@ -61,11 +61,11 @@ py.pkgs.buildPythonApplication rec {
   # __init__.py attempts to mkdir in read-only file system
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted knowledge repository";
     homepage = "https://archivy.github.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

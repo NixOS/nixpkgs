@@ -1,21 +1,19 @@
 {
-  lib,
-  stdenv,
-  scx-common,
+  buildEnv,
   scx,
-  nixosTests,
 }:
-scx.cscheds.overrideAttrs (oldAttrs: {
+buildEnv {
   pname = "scx_full";
-  postInstall = (oldAttrs.postInstall or "") + ''
-    cp ${scx.rustscheds}/bin/* ${placeholder "bin"}/bin/
-  '';
+  inherit (scx.rustscheds) version;
 
-  passthru.tests.basic = nixosTests.scx;
+  paths = [
+    scx.cscheds
+    scx.rustscheds
+  ];
 
-  passthru.updateScript.command = ./update.sh;
+  passthru.schedulers = scx.cscheds.schedulers ++ scx.rustscheds.schedulers;
 
-  meta = oldAttrs.meta // {
+  meta = {
     description = "Sched-ext C and Rust userspace schedulers";
     longDescription = ''
       This includes C based schedulers such as scx_central, scx_flatcg,
@@ -27,5 +25,6 @@ scx.cscheds.overrideAttrs (oldAttrs: {
       It is recommended to use the latest kernel for the best compatibility.
       :::
     '';
+    homepage = "https://github.com/sched-ext/scx";
   };
-})
+}

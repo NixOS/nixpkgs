@@ -2,12 +2,12 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
   replaceVars,
   gdb,
   lldb,
+  setuptools,
   pytestCheckHook,
   pytest-xdist,
   pytest-timeout,
@@ -25,24 +25,27 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.16";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "1.8.20";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-11P2L3/ePoKrqO2G65XJeDEB6lsC8h7oRyXzGRz18tg=";
+
+    # Upstream uses .gitattributes to inject information about the revision
+    # hash and the refname into `src/debugpy/_version.py`, see:
+    #
+    # - https://git-scm.com/docs/gitattributes#_export_subst and
+    # - https://github.com/microsoft/debugpy/blob/v1.8.17/src/debugpy/_version.py#L24-L30
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
+    '';
+
+    hash = "sha256-0h2VQU5eYb0heXSFmKnwAFW0jcWc+bYllhwxfdzkGWc=";
   };
 
   patches = [
-    # Use nixpkgs version instead of versioneer
-    (replaceVars ./hardcode-version.patch {
-      inherit version;
-    })
-
     # Fix importing debugpy in:
     # - test_nodebug[module-launch(externalTerminal)]
     # - test_nodebug[module-launch(integratedTerminal)]
@@ -76,20 +79,23 @@ buildPythonPackage rec {
   # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
   preBuild = ''
     (
-        set -x
-        cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
-        $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
-          {
-            "x86_64-linux" = "-shared -o attach_linux_amd64.so";
-            "i686-linux" = "-shared -o attach_linux_x86.so";
-            "aarch64-linux" = "-shared -o attach_linux_arm64.so";
-            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
-            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
-            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
-          }
-          .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+      set -x
+      cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
+      $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
+        {
+          "x86_64-linux" = "-shared -o attach_linux_amd64.so";
+          "i686-linux" = "-shared -o attach_linux_x86.so";
+          "aarch64-linux" = "-shared -o attach_linux_arm64.so";
+          "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
+          "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+          "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
         }
-      )'';
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+      }
+    )
+  '';
+
+  build-system = [ setuptools ];
 
   # Disable tests for unmaintained versions of python
   doCheck = pythonAtLeast "3.11";
@@ -136,17 +142,23 @@ buildPythonPackage rec {
     "test_systemexit"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # ConnectionResetError: [Errno 54] Connection reset by peer
+    "tests/debugpy/test_breakpoints.py::test_error_in_condition[program-attach_connect(cli)-]"
+    "tests/debugpy/test_breakpoints.py::test_error_in_condition[program-attach_connect(cli)-NameError]"
+  ];
+
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "debugpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
     changelog = "https://github.com/microsoft/debugpy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -19,7 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Qu7RM6Ew4hEmoIXO0utDDVmjmNX3yt3FxWZXCQ/Xjp4=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    substituteInPlace include/unit_test_util.h \
+      --replace-fail "typedef int bool;" "#include <stdbool.h>"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace-fail \
       ".so" \
       ".dylib"

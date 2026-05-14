@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1173";
 
   src = fetchurl {
-    url = "https://cbftp.eu/${pname}-r${version}.tar.gz";
+    url = "https://cbftp.eu/cbftp-r${version}.tar.gz";
     hash = "sha256-DE6fnLzWsx6Skz2LRJAaijjIqrYFB8/HPp45P5CcEc8=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cbftp.eu/";
     description = "Advanced multi-purpose FTP/FXP client";
     longDescription = ''
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       FTP/FXP use cases in a modern way. It runs in a terminal and provides a
       semi-graphical user interface through ncurses.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
   };
 }

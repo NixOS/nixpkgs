@@ -8,7 +8,7 @@ pypaInstallPhase() {
     pushd dist >/dev/null
 
     for wheel in *.whl; do
-        @pythonInterpreter@ -m installer --prefix "$out" "$wheel"
+        @pythonInterpreter@ -m installer --prefix "$out" --executable "@python@" "$wheel"
         echo "Successfully installed $wheel"
     done
 

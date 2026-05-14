@@ -31,12 +31,12 @@ buildPythonPackage rec {
   # Disabling tests, they rely on dependencies that are outdated and not supported
   doCheck = false;
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Create and clean up temporary directories";
     homepage = "https://github.com/mwilliamson/python-tempman";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

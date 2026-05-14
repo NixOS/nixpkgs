@@ -5,16 +5,16 @@
 }:
 
 with python3Packages;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "tuir";
-  version = "1.31.0";
+  version = "1.31.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "Chocimier";
     repo = "tuir";
-    rev = "v${version}";
-    hash = "sha256-VYBtD3Ex6+iIRNvX6jF0b0iPvno41/58xCRydiyssvk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-lUK6gXwvVjiYrJXMSFlzp07Yt+nSkU933J4vBJWOLlg=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -49,15 +49,14 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "tuir" ];
 
-  meta = with lib; {
+  meta = {
     description = "Browse Reddit from your Terminal (fork of rtv)";
     mainProgram = "tuir";
     homepage = "https://gitlab.com/Chocimier/tuir";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      Br1ght0ne
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       brokenpip3
     ];
   };
-}
+})

@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
+  fetchpatch,
   libbpf,
   elfutils,
   zlib,
@@ -14,16 +16,24 @@
   wireshark-cli,
   nukeReferences,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdp-tools";
-  version = "1.5.6";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
-    rev = "v${version}";
-    hash = "sha256-ztIatDNp0RXUpNsSoNWGj/kHNsCOlI6mqZvaQdlGbtQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wLSLDgACl6a6gQLvRiRR9HQFRMrGWYZAa5CcdzECExE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/xdp-project/xdp-tools/commit/2ff228be7926ba01e13c8d328828a270af2e7e0d.patch";
+      hash = "sha256-jYdcC36nL4P4IadwGfva8nqMerd/2HHw2RYhc+wR9nk=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -42,7 +52,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     bpftools
-    llvmPackages.clang
     llvmPackages.llvm
     pkg-config
     m4
@@ -53,18 +62,28 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "zerocallusedregs" ];
-  # When building BPF, the default CC wrapper is interfering a bit too much.
-  BPF_CFLAGS = "-fno-stack-protector -Wno-error=unused-command-line-argument";
 
-  PRODUCTION = 1;
-  DYNAMIC_LIBXDP = 1;
-  FORCE_SYSTEM_LIBBPF = 1;
-  FORCE_EMACS = 1;
+  env = {
+    # When building BPF, the default CC wrapper is interfering a bit too much.
+    BPF_CFLAGS = toString [
+      "-fno-stack-protector"
+      "-Wno-error=unused-command-line-argument"
+    ];
+    # When cross compiling, configure prefers the unwrapped clang unless told otherwise.
+    CLANG = lib.getExe buildPackages.llvmPackages.clang;
+
+    PRODUCTION = 1;
+    DYNAMIC_LIBXDP = 1;
+    FORCE_SYSTEM_LIBBPF = 1;
+    FORCE_EMACS = 1;
+  };
 
   makeFlags = [
     "PREFIX=$(out)"
     "LIBDIR=$(lib)/lib"
   ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     # Note that even the static libxdp would refer to BPF_OBJECT_DIR ?=$(LIBDIR)/bpf
@@ -73,19 +92,19 @@ stdenv.mkDerivation rec {
     nuke-refs "$lib"/lib/bpf/*.o
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tirex
       vcunat
       vifino
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

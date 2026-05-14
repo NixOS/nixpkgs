@@ -10,14 +10,14 @@
   sblim-sfcc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openwsman";
   version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "Openwsman";
     repo = "openwsman";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jXsnjnYZ2UiEj3sJDhMuWlopIECKLraqgIV4evw5Tbw=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ deepfire ];
     platforms = lib.platforms.linux; # PAM is not available on Darwin
   };
-}
+})

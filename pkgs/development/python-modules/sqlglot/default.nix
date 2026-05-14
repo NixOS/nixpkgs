@@ -13,18 +13,20 @@
   # tests
   pytestCheckHook,
   duckdb,
+  numpy,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "sqlglot";
-  version = "27.6.0";
+  version = "28.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "sqlglot";
     owner = "tobymao";
     tag = "v${version}";
-    hash = "sha256-/+hrbyAQJHbKzjaBr9ssuXuKpbCSWAarLa5oX5NqfOc=";
+    hash = "sha256-2AmHKGAoDF8w9k8VN9d25Js3UiSh8YNqdGRHN7VqRpw=";
   };
 
   build-system = [
@@ -40,6 +42,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     duckdb
+    numpy
+    pandas
   ];
 
   pythonImportsCheck = [ "sqlglot" ];
@@ -47,7 +51,7 @@ buildPythonPackage rec {
   meta = {
     description = "No dependency Python SQL parser, transpiler, and optimizer";
     homepage = "https://github.com/tobymao/sqlglot";
-    changelog = "https://github.com/tobymao/sqlglot/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tobymao/sqlglot/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };

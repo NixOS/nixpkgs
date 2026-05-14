@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scriptisto";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "igor-petruk";
     repo = "scriptisto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iaDdOFmi4kfcJSjXOcGAFG9i1SdB+K5Qz4+NDaVQALY=";
   };
 
@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language-agnostic \"shebang interpreter\" that enables you to write scripts in compiled languages";
     mainProgram = "scriptisto";
     homepage = "https://github.com/igor-petruk/scriptisto";
-    changelog = "https://github.com/igor-petruk/scriptisto/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/igor-petruk/scriptisto/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

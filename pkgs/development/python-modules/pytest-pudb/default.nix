@@ -28,10 +28,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pytest_pudb" ];
 
-  meta = with lib; {
+  meta = {
+    # https://github.com/wronglink/pytest-pudb/issues/28
+    broken = lib.versionAtLeast pytest.version "8.4.0";
     description = "Pytest PuDB debugger integration";
     homepage = "https://github.com/wronglink/pytest-pudb";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

@@ -29,15 +29,19 @@
   poppler-utils,
   pytest-playwright,
   playwright-driver,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
   markdown,
   nh3,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0.17-unstable-2025-07-01";
+  version = "0.17-unstable-2025-08-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,8 +49,8 @@ buildPythonPackage rec {
     repo = "django-filingcabinet";
     # No release tagged yet on GitHub
     # https://github.com/okfde/django-filingcabinet/issues/69
-    rev = "ff39722209acf70bc73fa7074c16ed8a787fceea";
-    hash = "sha256-9SrMWBTk7RQCbVPHOU5rB/pi286hb6UONaLmBOtx6X0=";
+    rev = "e1713921d6d14e0abc8b81315545d7fb6f08c39f";
+    hash = "sha256-R/JNI+PZb0H09ZoYCGV3nbAowkf/YlKia4xkgAgqoNM=";
   };
 
   postPatch = ''
@@ -60,7 +64,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   dependencies = [
@@ -92,10 +97,15 @@ buildPythonPackage rec {
     #annotate = [ fcdocs-annotate ];
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-p+RpEDVbdYmeSD4bB0oUMrTpsVDGYkqME13awnoTNd0=";
   };
 
   postBuild = ''

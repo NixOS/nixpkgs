@@ -27,7 +27,7 @@ buildDotnetModule rec {
   };
 
   # Fixes application reporting 0.0.0.0 as its version.
-  MINVERVERSIONOVERRIDE = version;
+  env.MINVERVERSIONOVERRIDE = version;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -72,11 +72,11 @@ buildDotnetModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://geteventstore.com/";
     description = "Event sourcing database with processing logic in JavaScript";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       puffnfresh
       mdarocha
     ];

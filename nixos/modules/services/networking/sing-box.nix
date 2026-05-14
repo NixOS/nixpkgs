@@ -41,27 +41,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions =
-      let
-        rules = cfg.settings.route.rules or [ ];
-      in
-      [
-        {
-          assertion = !lib.any (r: r ? source_geoip || r ? geoip) rules;
-          message = ''
-            Deprecated option `services.sing-box.settings.route.rules.*.{source_geoip,geoip}` is set.
-            See https://sing-box.sagernet.org/migration/#migrate-geoip-to-rule-sets for migration instructions.
-          '';
-        }
-        {
-          assertion = !lib.any (r: r ? geosite) rules;
-          message = ''
-            Deprecated option `services.sing-box.settings.route.rules.*.geosite` is set.
-            See https://sing-box.sagernet.org/migration/#migrate-geosite-to-rule-sets for migration instructions.
-          '';
-        }
-      ];
-
     # for polkit rules
     environment.systemPackages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
@@ -75,6 +54,7 @@ in
         StateDirectoryMode = "0700";
         RuntimeDirectory = "sing-box";
         RuntimeDirectoryMode = "0700";
+        WorkingDirectory = "/var/lib/sing-box";
         ExecStartPre =
           let
             script = pkgs.writeShellScript "sing-box-pre-start" ''
@@ -88,6 +68,8 @@ in
           "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
         ];
       };
+      # After= is specified by upstream
+      requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
     };
 
@@ -95,6 +77,7 @@ in
       users.sing-box = {
         isSystemUser = true;
         group = "sing-box";
+        home = "/var/lib/sing-box";
       };
       groups.sing-box = { };
     };

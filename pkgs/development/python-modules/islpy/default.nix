@@ -12,23 +12,22 @@
   typing-extensions,
 
   # buildInputs
-  imath,
   isl,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "islpy";
-  version = "2025.2.4";
+  version = "2026.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
-    tag = "v${version}";
-    hash = "sha256-6VNA07XnzmOTsrH16fXzEdl1HmShmrtUjQyUs18CxYc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WZl9ix9ZwJsoUCJ23bYcuYGiJzcOMh7I38PHVxWrPBo=";
   };
 
   build-system = [
@@ -41,18 +40,16 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    imath
     isl
   ];
 
   dontUseCmakeConfigure = true;
 
-  pypaBuildFlags = [
-    "--config-setting=cmake.define.USE_SHIPPED_ISL=OFF"
-    "--config-setting=cmake.define.USE_SHIPPED_IMATH=OFF"
-    "--config-setting=cmake.define.USE_BARVINOK=OFF"
-    "--config-setting=cmake.define.ISL_INC_DIRS:LIST='${lib.getDev isl}/include'"
-    "--config-setting=cmake.define.ISL_LIB_DIRS:LIST='${lib.getLib isl}/lib'"
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SHIPPED_ISL" false)
+    (lib.cmakeBool "USE_BARVINOK" false)
+    (lib.cmakeOptionType "list" "ISL_INC_DIRS" "${lib.getDev isl}/include")
+    (lib.cmakeOptionType "list" "ISL_LIB_DIRS" "${lib.getLib isl}/lib")
   ];
 
   # Force resolving the package from $out to make generated ext files usable by tests
@@ -67,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
-    changelog = "https://github.com/inducer/islpy/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/islpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

@@ -48,6 +48,7 @@
   };
 
   testScript = ''
+    import os
 
     # prepare certificates
 

@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lifecycled";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "lifecycled";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zskN2T0+1xZPjppggeGpPFuQ8/AgPNyN77F33rDoghc=";
   };
 
@@ -22,13 +22,12 @@ buildGoModule rec {
       --replace /usr/bin/lifecycled $out/bin/lifecycled
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for responding to AWS AutoScaling Lifecycle Hooks";
     homepage = "https://github.com/buildkite/lifecycled/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cole-h
-      grahamc
     ];
   };
-}
+})

@@ -20,7 +20,7 @@
     machine.wait_for_x()
 
     with subtest("Wait until Servo has finished loading the Valgrind docs page"):
-      machine.execute("xterm -e 'servo file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' >&2 &");
+      machine.execute("xterm -e '${lib.getExe pkgs.servo} file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' >&2 &");
       machine.wait_for_window("Valgrind")
       machine.wait_for_text("Quick Start Guide")
   '';

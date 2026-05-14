@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "telfhash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Symbol hash for ELF files";
     mainProgram = "telfhash";
     homepage = "https://github.com/trendmicro/telfhash";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

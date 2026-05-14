@@ -8,17 +8,23 @@
   withIntel ? true,
 }:
 mkDerivation rec {
+  path = "...";
   pname =
     "drm-kmod-firmware" + lib.optionalString withAmd "-amd" + lib.optionalString withIntel "-intel";
 
-  version = "20230625_8";
+  version = "20250109";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "drm-kmod-firmware";
     rev = version;
-    hash = "sha256-Ly9B0zf+YODel/X1sZYVVUVWh38faNLhkcXcjEnQwII=";
+    hash = "sha256-Z+hZpOogUI4GCZcRYElkO0oeCAG0WhBFh7kS3wuo43c=";
   };
+
+  outputs = [
+    "out"
+    "debug"
+  ];
 
   extraNativeBuildInputs = [ buildFreebsd.xargs-j ];
 
@@ -39,8 +45,16 @@ mkDerivation rec {
 
   env = sys.passthru.env;
   SYSDIR = "${sys.src}/sys";
+  KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
+  KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
+  KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
 
-  KMODDIR = "${builtins.placeholder "out"}/kernel";
+  KMODDIR = "${placeholder "out"}/kernel";
+
+  makeFlags = [
+    "DEBUG_FLAGS=-g"
+    "XARGS_J=xargs-j"
+  ];
 
   meta = {
     description = "GPU firmware for FreeBSD drm-kmod";

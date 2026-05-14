@@ -55,9 +55,11 @@ mkPackage rec {
     glibcLocales
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString stdenv.hostPlatform.isLinux "${glibcLocales}/lib/locale/locale-archive";
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # https://github.com/NixOS/nixpkgs/issues/38991
+    # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   postPatch = ''
     # not patchShebangs, there is /bin/bash in the body of the script as well
@@ -148,16 +150,16 @@ mkPackage rec {
         ${mono}/bin/mono Helloworld.exe | grep "Hello, world!"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     mainProgram = "msbuild";
     homepage = "https://github.com/mono/msbuild";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # dependencies
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ jdanek ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jdanek ];
+    platforms = lib.platforms.unix;
   };
 }

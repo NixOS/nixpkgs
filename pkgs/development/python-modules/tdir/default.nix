@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tdir" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create, fill a temporary directory";
     homepage = "https://github.com/rec/tdir";
     changelog = "https://github.com/rec/tdir/blob/${src.rev}/CHANGELOG";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

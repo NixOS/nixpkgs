@@ -6,14 +6,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsocket";
   version = "1.4.43";
 
   src = fetchFromGitHub {
     owner = "hackerschoice";
     repo = "gsocket";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7ph7YaY8rbfzvEh1ABgl3Jg15d6WBP4pywFn/nXjPKY=";
   };
 
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
   dontDisableStatic = true;
 
-  meta = with lib; {
+  meta = {
     description = "Connect like there is no firewall, securely";
     homepage = "https://www.gsocket.io";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.msm ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.msm ];
   };
-}
+})

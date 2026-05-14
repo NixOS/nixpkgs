@@ -9,30 +9,43 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  apache-tvm-ffi,
   setuptools,
-  cudaPackages,
+
+  # nativeBuildInputs
   cmake,
   ninja,
-  numpy,
-  torch,
-  pynvml,
+  cudaPackages,
+
+  # dependencies
+  click,
   einops,
+  numpy,
+  nvidia-ml-py,
+  tabulate,
+  torch,
+  tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flashinfer";
-  version = "0.2.14";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
-    tag = "v${version}";
-    hash = "sha256-MZiZwdedz+Vxa1+VBfHDKf4NVSiOAytGboIJ0DvCXmk=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-Hq3oTeEJHRvXwThI8vc06E3Ot/FnPP0sZUfze3ISa2o=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    apache-tvm-ffi
+    setuptools
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -68,16 +81,23 @@ buildPythonPackage rec {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  env.FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
+  pythonRemoveDeps = [
+    "nvidia-cudnn-frontend"
+    "nvidia-cutlass-dsl"
+  ];
   dependencies = [
-    numpy
-    torch
-    pynvml
+    click
     einops
+    numpy
+    nvidia-ml-py
+    tabulate
+    torch
+    tqdm
   ];
 
-  meta = with lib; {
+  meta = {
     broken = !torch.cudaSupport || !config.cudaSupport;
     homepage = "https://flashinfer.ai/";
     description = "Library and kernel generator for Large Language Models";
@@ -88,7 +108,10 @@ buildPythonPackage rec {
       and inference, and delivers state-of-the-art performance across diverse
       scenarios.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ breakds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      breakds
+      daniel-fahey
+    ];
   };
-}
+})

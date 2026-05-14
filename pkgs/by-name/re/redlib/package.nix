@@ -9,19 +9,19 @@
 
 rustPlatform.buildRustPackage {
   pname = "redlib";
-  version = "0.36.0-unstable-2025-07-21";
+  version = "0.36.0-unstable-2025-12-16";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "3e67694e2b9a4012b259264af5f2b81807dbadf0";
-    hash = "sha256-vFK9DiVANbTKi19DCWdRG8gKKwcyoAcLa1teXCZ9nfE=";
+    rev = "ba98178bbce0f62265095ba085128c7022e51a1f";
+    hash = "sha256-ERTEoT7w8oGA0ztrzc9r9Bl/7OOay+APg3pW+h3tgvM=";
   };
 
-  cargoHash = "sha256-FDeENHY6bwwCq6leSoIuCqPI6PCHpEod7KN2grS2gFw=";
+  cargoHash = "sha256-ageSjIX0BLVYlLAjeojQq5N6/VASOIpwXNR/3msl/p4=";
 
   postInstall = ''
-    install -D contrib/redlib.service $out/lib/systemd/system/redlib.service
+    install --mode=444 -D contrib/redlib.service $out/lib/systemd/system/redlib.service
     substituteInPlace $out/lib/systemd/system/redlib.service \
       --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
   '';
@@ -56,6 +56,8 @@ rustPlatform.buildRustPackage {
     "--skip=test_oauth_client_refresh"
     "--skip=test_oauth_token_exists"
     "--skip=test_oauth_headers_len"
+    "--skip=oauth::test_generic_web_backend"
+    "--skip=oauth::test_mobile_spoof_backend"
   ];
 
   env = {

@@ -1,13 +1,17 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
+  glib-networking,
   nodejs,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  wrapGAppsHook3,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -16,19 +20,20 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.9.8";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-9Vai/C9cJgqM3n+FzFPXismR5vF6eQNJHdI7o47zinI=";
+    hash = "sha256-CEJ0yzF2smBlLgZ4EH5UWV4Pc4vA2ZH80TjoudUKWZM=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+    hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ vollate ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -36,20 +41,24 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
+    patches = [ ./frontend-runtime-path.patch ];
+
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 2;
-      hash = "sha256-iVD/9uTK3cUzKE20pJk67uk53UCtfj/YCpgwgxmmg8k=";
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-m9Rmc9Ww4jb2aQ+RXOwF71daZ6puspdMM/xidnk/YHs=";
     };
 
     buildPhase = ''
@@ -75,27 +84,25 @@ let
   });
 in
 
-buildGoModule {
+buildGo126Module {
   inherit pname version src;
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
-  postPatch = ''
-    substituteInPlace bridge/bridge.go \
-      --subst-var out
-  '';
-
-  vendorHash = "sha256-7pFjfUFkpXyYEVjiXbfFUC7FQSlZubKJJ5MI8WY0IVA=";
+  vendorHash = "sha256-9uWrctbQ+vujb1Q8zT7Bv7rVyNY1rCM577c9caOKRNo=";
 
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
     pkg-config
     wails
+    wrapGAppsHook3
   ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs = [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   preBuild = ''
     cp -r ${frontend} frontend/dist
@@ -134,6 +141,8 @@ buildGoModule {
     inherit frontend;
     updateScript = nix-update-script {
       extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
         "--subpackage"
         "frontend"
       ];

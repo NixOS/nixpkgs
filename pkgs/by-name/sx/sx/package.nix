@@ -5,7 +5,8 @@
   makeDesktopItem,
   patsh,
   coreutils,
-  xorg,
+  xorg-server,
+  xauth,
   nixosTests,
 }:
 
@@ -26,8 +27,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   buildInputs = [
     coreutils # needed for cross
-    xorg.xauth
-    xorg.xorgserver
+    xauth
+    xorg-server
   ];
 
   postInstall = ''
@@ -56,8 +57,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "sx";
     maintainers = with lib.maintainers; [
-      figsoda
       thiagokokada
+      liberodark
     ];
     platforms = lib.platforms.linux;
   };

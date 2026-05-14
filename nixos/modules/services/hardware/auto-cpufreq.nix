@@ -24,6 +24,16 @@ in
         '';
 
         default = { };
+        example = {
+          charger = {
+            governor = "performance";
+            turbo = "auto";
+          };
+          battery = {
+            governor = "powersave";
+            turbo = "never";
+          };
+        };
         type = lib.types.submodule { freeformType = format.type; };
       };
     };
@@ -40,6 +50,8 @@ in
         path = with pkgs; [
           bash
           coreutils
+          # Battery thresholds control executes lsmod
+          kmod
         ];
 
         serviceConfig.WorkingDirectory = "";

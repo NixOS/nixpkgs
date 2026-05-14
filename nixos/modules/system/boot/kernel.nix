@@ -412,7 +412,9 @@ in
 
           echo -n "$kernelParams" > $out/kernel-params
 
-          ln -s ${initrdPath} $out/initrd
+          ${optionalString config.boot.initrd.enable ''
+            ln -s ${initrdPath} $out/initrd
+          ''}
 
           ${optionalString (config.boot.initrd.secrets != { }) ''
             ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out

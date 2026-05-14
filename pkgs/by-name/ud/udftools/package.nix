@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "udftools";
   version = "2.3";
 
   src = fetchFromGitHub {
     owner = "pali";
     repo = "udftools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SUdwJpJfbs6LhcyNMPJUhhpp/3htwT/EVep7+4PRgto=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

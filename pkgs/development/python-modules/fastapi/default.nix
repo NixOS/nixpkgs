@@ -2,12 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   pdm-backend,
 
   # dependencies
+  annotated-doc,
   starlette,
   pydantic,
   typing-extensions,
@@ -18,6 +18,7 @@
   flask,
   inline-snapshot,
   passlib,
+  pwdlib,
   pyjwt,
   pytest-asyncio,
   pytestCheckHook,
@@ -41,16 +42,14 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.116.1";
+  version = "0.128.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
-    hash = "sha256-sd0SnaxuuF3Zaxx7rffn4ttBpRmWQoOtXln/amx9rII=";
+    hash = "sha256-qUTSqTe9mQzfuwqsTCQY6u7Tcnh9XNy4tr5o0/qFFLs=";
   };
 
   build-system = [ pdm-backend ];
@@ -61,6 +60,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    annotated-doc
     starlette
     pydantic
     typing-extensions
@@ -103,6 +103,7 @@ buildPythonPackage rec {
     flask
     inline-snapshot
     passlib
+    pwdlib
     pyjwt
     pytestCheckHook
     pytest-asyncio
@@ -131,15 +132,17 @@ buildPythonPackage rec {
     # Don't test docs and examples
     "docs_src"
     "tests/test_tutorial/test_sql_databases"
+    # Infinite recursion with strawberry-graphql
+    "tests/test_tutorial/test_graphql/test_tutorial001.py"
   ];
 
   pythonImportsCheck = [ "fastapi" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
     description = "Web framework for building APIs";
     homepage = "https://github.com/fastapi/fastapi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

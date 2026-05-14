@@ -1,53 +1,63 @@
 {
   stdenv,
+  pnpm,
   lib,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   rustPlatform,
   cargo,
   dump_syms,
   python3,
+  xcodebuild,
+  cctools,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "2.2.2";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vrY2cu8yfwMX7O6h2GgLhdvQvYOgl916E2z1Pf77ZI0=";
+    hash = "sha256-lkSQXiplkY5sBpHsAhW4odWe+MCalAo100EL7h4VKbg=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-regaYG+SDvIgdnHQVR1GG1A1FSBXpzFfLuyTEdMt1kQ=";
+    inherit pnpm; # may be different than top-level pnpm
+    fetcherVersion = 3;
+    hash = "sha256-/EcPuqTXXGw1dEN6l1x84cUGyx890/rujjT+zJouIvM=";
   };
 
   cargoRoot = "deps/extension";
   cargoDeps = rustPlatform.fetchCargoVendor {
     name = "sqlcipher-signal-exentsion";
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-qT4HM/FRL8qugKKNlMYM/0zgUsC6cDOa9fgd1d4VIrc=";
+    hash = "sha256-NtJPwRvjU1WsOxgb2vpokes9eL4DkEcbDaEmML7zsqQ=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     rustPlatform.cargoSetupHook
     cargo
     dump_syms
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcodebuild
+    cctools.libtool
   ];
 
   buildPhase = ''
     runHook preBuild
 
     export npm_config_nodedir=${nodejs}
-    pnpm run prebuildify
+    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
     pnpm run build
 
     runHook postBuild
@@ -71,6 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
       # deps/sqlcipher
       bsd3
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

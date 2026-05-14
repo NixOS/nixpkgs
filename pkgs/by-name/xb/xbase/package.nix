@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/xdb/";
     description = "C++ class library formerly known as XDB";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = true; # Fails to build against gcc-14, no upstream activity.
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
   };
 }

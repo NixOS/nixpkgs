@@ -1,0 +1,102 @@
+[
+  {
+    "pname": "Blake3",
+    "version": "2.0.0",
+    "hash": "sha256-WN+SuzMiv8UfT3r0r124wcbs/8OOixjpZkYwdTfeHvc="
+  },
+  {
+    "pname": "ConsoleAppFramework",
+    "version": "5.7.13",
+    "hash": "sha256-ZI9IqVb5EjVbvItoqYj4PBaxWqUZ3LCmPXvTnJh3Yfg="
+  },
+  {
+    "pname": "K4os.Compression.LZ4",
+    "version": "1.3.8",
+    "hash": "sha256-OmT3JwO4qpkZDL7XqiFqZCyxySj64s9t+mXcN1T+IyA="
+  },
+  {
+    "pname": "KeyValues2",
+    "version": "0.8.0",
+    "hash": "sha256-aE0bZIn1mFlUVUYJBQf8VdlOTmbeaawLoLLjuxZE7G8="
+  },
+  {
+    "pname": "SharpGLTF.Core",
+    "version": "1.0.6",
+    "hash": "sha256-aG6/X5cLoKRBxyvXl/4iX6kWAba7LuMgG86M4CsOVlA="
+  },
+  {
+    "pname": "SharpGLTF.Runtime",
+    "version": "1.0.6",
+    "hash": "sha256-rcvhtFPFQUH1rVt1NW10PFRTJFGeAe5PQU6Mrtz1txg="
+  },
+  {
+    "pname": "SharpGLTF.Toolkit",
+    "version": "1.0.6",
+    "hash": "sha256-cNoihUH9VjaNz2WTSJnO8s0jaPd+aIX3c6YkIDf7tnw="
+  },
+  {
+    "pname": "SkiaSharp",
+    "version": "3.119.2",
+    "hash": "sha256-A9F397K5FfLeOsNZacKmUh4IU/WMK60B4Z6TEtS/oqo="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Linux.NoDependencies",
+    "version": "3.119.2",
+    "hash": "sha256-79BCLZAYjfHP1DZKgB+hsyyBlhnyZQPi+Swvs0RYnng="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.macOS",
+    "version": "3.119.2",
+    "hash": "sha256-KEeGqSiyAiMbzLgH/0JkwUz/pWcL49gYB1T1YLkMPaI="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Win32",
+    "version": "3.119.2",
+    "hash": "sha256-CI6dg+MlxX8t+vbnkxtd5QE3xalMKkA8LUSudxg7TNU="
+  },
+  {
+    "pname": "System.IO.Hashing",
+    "version": "10.0.5",
+    "hash": "sha256-iZrjJEZU+GnKBWYLi0+NUc+yYKrCSQkaLmQrGDQyyeE="
+  },
+  {
+    "pname": "System.IO.Hashing",
+    "version": "9.0.11",
+    "hash": "sha256-TlrAIz1kWyCBCpEZzcvR9Bir1NMJUqKxXtbgjPjPFYs="
+  },
+  {
+    "pname": "TinyBCSharp",
+    "version": "0.1.2",
+    "hash": "sha256-iDoc6eebSXFYN2mzjdKI3yOlRsD3VMFS5MLx1RNE5UQ="
+  },
+  {
+    "pname": "TinyEXR.NET",
+    "version": "0.3.11",
+    "hash": "sha256-/FRb3ZKlACiSM+q8Fj5zEvVMyNmOaO1O/w2c/NULBgA="
+  },
+  {
+    "pname": "ValveKeyValue",
+    "version": "0.70.0.499",
+    "hash": "sha256-HMMO3hXpCK7D+xXJ6RfA/sPPmjDubbZN4fWdv7kTBhg="
+  },
+  {
+    "pname": "ValvePak",
+    "version": "4.0.0.142",
+    "hash": "sha256-NjrVgZgXIQOZ2lHrnN1cLlZprsL5PstiqQ9hwUsgC00="
+  },
+  {
+    "pname": "Vortice.SPIRV",
+    "version": "1.0.5",
+    "hash": "sha256-CMq4YA1ZM5M5t9IKOS8CPM+/W8HGnjA93YiuIvuHRZA="
+  },
+  {
+    "pname": "Vortice.SpirvCross",
+    "version": "1.5.4",
+    "hash": "sha256-T+tgMCiRm9wnbd4qkmjHip7jErEWOnXOju5A3EV8dGk="
+  },
+  {
+    "pname": "ZstdSharp.Port",
+    "version": "0.8.7",
+    "hash": "sha256-WsuDTZOv3TgiE8NV/TXbKRMHBsZKgWB8iDdKKr9OvAo="
+  }
+]

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.9.45";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wqy/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/wqy/wqy-zenhei-${version}.tar.gz";
     hash = "sha256-5LfjBkdb+UJ9F1dXjw5FKJMMhMROqj8WfUxC8RDuddY=";
   };
 

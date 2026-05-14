@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonformatter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Formatter to output JSON log, e.g. output LogStash needed log";
     homepage = "https://github.com/MyColorfulDays/jsonformatter";
     changelog = "https://github.com/MyColorfulDays/jsonformatter/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

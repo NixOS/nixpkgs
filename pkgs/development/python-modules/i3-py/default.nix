@@ -17,10 +17,10 @@ buildPythonPackage rec {
   # no tests in tarball
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for i3 users and developers";
     homepage = "https://github.com/ziberna/i3-py";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -51,17 +51,22 @@
   pipewire,
   gst_all_1,
   adwaita-icon-theme,
+  glycin-loaders,
   gnome-bluetooth,
   gnome-clocks,
   gnome-settings-daemon,
   gnome-autoar,
   gnome-tecla,
   bash-completion,
+  lcms2,
   libgbm,
   libGL,
-  libXi,
-  libX11,
+  libxi,
+  libx11,
+  libxkbcommon,
+  libsoup_3,
   libxml2,
+  webkitgtk_6_0,
 }:
 
 let
@@ -69,7 +74,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "48.4";
+  version = "49.4";
 
   outputs = [
     "out"
@@ -78,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QOLtdLRTZ/DKOPv6oKtHCGjSNZHQPcQNCr1v930jtwc=";
+    hash = "sha256-nW8MovAUDBFPEU9nB0E2EfYU+x6mwxeo0fzEDDxZWwg=";
   };
 
   patches = [
@@ -152,10 +157,13 @@ stdenv.mkDerivation (finalAttrs: {
     ibus
     gnome-desktop
     gnome-settings-daemon
+    lcms2 # required by mutter-clutter
     libgbm
     libGL # for egl, required by mutter-clutter
-    libXi # required by libmutter
-    libX11
+    libxi # required by libmutter
+    libx11
+    libxkbcommon
+    libsoup_3
     libxml2
 
     # recording
@@ -167,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     # not declared at build time, but typelib is needed at runtime
     libgweather
     libnma-gtk4
+    webkitgtk_6_0 # for gnome-shell-portal-helper
 
     # for gnome-extension tool
     bash-completion
@@ -185,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       src/data-to-c.py \
-      meson/generate-app-list.py
+      build-aux/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
@@ -215,9 +224,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # Until glib’s xdgmime is patched
-      # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      --prefix XDG_DATA_DIRS : ${
+        lib.makeSearchPath "share" [
+          # Until glib’s xdgmime is patched
+          # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
+          shared-mime-info
+          # For background images https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/4554
+          glycin-loaders
+        ]
+      }
     )
   '';
 
@@ -240,13 +255,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core user interface for the GNOME 3 desktop";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 
 })

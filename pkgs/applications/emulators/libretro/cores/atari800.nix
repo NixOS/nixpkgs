@@ -5,13 +5,13 @@
 }:
 mkLibretroCore rec {
   core = "atari800";
-  version = "0-unstable-2024-10-31";
+  version = "0-unstable-2026-04-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-atari800";
-    rev = "6a18cb23cc4a7cecabd9b16143d2d7332ae8d44b";
-    hash = "sha256-+cZXHtaXnpU/zCwiDtjkyNMFGDahiHzqV2FoTCRnUWE=";
+    rev = "7f3456f16109c34915d0bad7393b6c4df66c3850";
+    hash = "sha256-7C/0i7LUGHY8bz5wp9ut+5EtvLrAUasn0xQzslQQ1fM=";
   };
 
   makefile = "Makefile";

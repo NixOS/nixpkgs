@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "okolors";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Ivordir";
     repo = "Okolors";
-    rev = "v${version}";
-    hash = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RSkZUkwCn9uvvT2dIqM2Q4+mRqjUegVuXCms5DBugbk=";
   };
 
-  cargoHash = "sha256-3wZeRPG2VrpPlqRVmkrMskqzM6NGZoSGbgGBTJzKCgQ=";
+  cargoHash = "sha256-ceFyFbNmC7PoleTejymQw9Ii9rxx2qJmFifNAQjLVUM=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";
     homepage = "https://github.com/Ivordir/Okolors";
-    license = licenses.mit;
-    maintainers = with maintainers; [ laurent-f1z1 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "okolors";
   };
-}
+})

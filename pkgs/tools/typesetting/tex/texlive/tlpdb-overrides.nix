@@ -11,7 +11,9 @@
   findutils,
   gawk,
   getopt,
+  gettext,
   ghostscript_headless,
+  git-latexdiff,
   gnugrep,
   gnumake,
   gnupg,
@@ -23,6 +25,8 @@
   python3,
   ruby,
   zip,
+  luajit,
+  texinfo,
 }:
 oldTlpdb:
 let
@@ -57,6 +61,7 @@ lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
+  context-legacy.scriptsFolder = "context/ruby";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -84,6 +89,7 @@ lib.recursiveUpdate orig rec {
   crossrefware.extraBuildInputs = [
     (perl.withPackages (
       ps: with ps; [
+        JSON
         LWP
         URI
       ]
@@ -107,6 +113,9 @@ lib.recursiveUpdate orig rec {
     ))
   ];
   exceltex.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ SpreadsheetParseExcel ])) ];
+  latexdiff.extraBuildInputs = [
+    (perl.withPackages (ps: with ps; [ EncodeLocale ]))
+  ];
   latex-git-log.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ IPCSystemSimple ])) ];
   latexindent.extraBuildInputs = [
     (perl.withPackages (
@@ -151,7 +160,9 @@ lib.recursiveUpdate orig rec {
   dtxgen.extraBuildInputs = [
     coreutils
     getopt
+    gettext
     gnumake
+    texinfo
     zip
   ];
   dviljk.extraBuildInputs = [ coreutils ];
@@ -247,11 +258,6 @@ lib.recursiveUpdate orig rec {
     "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
   };
 
-  context-legacy.binlinks = {
-    texexec = tl.context-legacy.tex + "/scripts/context/ruby/texexec.rb";
-    texmfstart = tl.context-legacy.tex + "/scripts/context/ruby/texmfstart.rb";
-  };
-
   dvipdfmx.binlinks = {
     # even though 'ebb' was removed from the Makefile, this symlink is still
     # part of the binary container of dvipdfmx
@@ -300,6 +306,10 @@ lib.recursiveUpdate orig rec {
 
   cjk-gs-integrate.postFixup = ''
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath cjk-gs-integrate.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/cjk-gs-integrate
+  '';
+
+  context-legacy.postFixup = ''
+    sed -i 's!File.dirname(\$0)!'"'"'${tl.context-legacy.tex}/scripts/context/ruby'"'"'!' "$out"/bin/*
   '';
 
   cyrillic-bin.postFixup = ''
@@ -536,18 +546,14 @@ lib.recursiveUpdate orig rec {
 
   #### misc
 
-  # FIXME: remove when https://github.com/borisveytsman/crossrefware/pull/17 is merged and included on CTAN
-  # Typo introduced in https://github.com/borisveytsman/crossrefware/commit/1e67e9773b3d3be983be156e2200478bc263dd93
-  crossrefware.postUnpack = ''
-    if [[ -f "$out"/scripts/crossrefware/ltx2crossrefxml.pl ]] ; then
-      sed -i 's/use IO::file;/use IO::File;/' "$out"/scripts/crossrefware/ltx2crossrefxml.pl
-    fi
-  '';
+  # Use top-level git-latexdiff's version and src. NOTE that this derivation is
+  # still different from top-level's `git-latexdiff`, due to __structuredAttrs
+  # enabled unconditionally. Still though this derivation produces a funcitonal
+  # binary.
+  inherit git-latexdiff;
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
-  luajittex.binfiles = lib.optionals (
-    !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV
-  ) orig.luajittex.binfiles;
+  luajittex.binfiles = lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) orig.luajittex.binfiles;
 
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";

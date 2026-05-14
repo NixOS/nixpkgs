@@ -38,20 +38,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
     tag = finalAttrs.version;
-    hash = "sha256-554ZN+GfkGHN0cthsb/fPWdo+U2IqLz4q+x60SxRAfk=";
+    hash = "sha256-I6CYtKVvE67NSYH/JGJFP5wHhm1xACctz7uTwOFFihA=";
   };
 
   patches = [
-    # update include file path and link with clangAPINotes
-    # https://github.com/casadi/casadi/issues/3969
-    ./clang-19.diff
-
     # Add missing include
     # ref. https://github.com/casadi/casadi/pull/4192
     (fetchpatch {
@@ -76,11 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt --replace-fail \
       "FATROP HPIPM" \
       "FATROP hpipm"
-
-    # nix provide lib/clang headers in libclang, not in llvm.
-    substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
-      '$'{CLANG_LLVM_LIB_DIR} \
-      ${lib.getLib llvmPackages.libclang}/lib
 
     # help casadi find its own libs
     substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
@@ -108,11 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
       "d_print_exp_tran_mat" \
       "//d_print_exp_tran_mat"
-
-    # fix missing symbols
-    substituteInPlace cmake/FindCLANG.cmake --replace-fail \
-      "clangBasic)" \
-      "clangBasic clangASTMatchers clangSupport)"
   '';
 
   nativeBuildInputs = [
@@ -189,7 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_TINYXML" true)
     (lib.cmakeBool "WITH_BUILD_DSDP" true) # not sure where this come from
     (lib.cmakeBool "WITH_DSDP" true)
-    (lib.cmakeBool "WITH_CLANG" true)
+    # "clang_compiler.cpp has basically been abandonded for several years", ref.
+    # https://github.com/casadi/casadi/issues/4225#issuecomment-3352552113
+    (lib.cmakeBool "WITH_CLANG" false)
     (lib.cmakeBool "WITH_LAPACK" true)
     (lib.cmakeBool "WITH_QPOASES" true)
     (lib.cmakeBool "WITH_BLOCKSQP" true)
@@ -223,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
       Python or Matlab/Octave
     '';
     homepage = "https://github.com/casadi/casadi";
+    changelog = "https://github.com/casadi/casadi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.all;

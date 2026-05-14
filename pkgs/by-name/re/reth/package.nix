@@ -5,18 +5,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reth";
-  version = "1.6.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "paradigmxyz";
     repo = "reth";
-    rev = "v${version}";
-    hash = "sha256-dT5H+0lfkf9QeWAV7BsCpctzNCwF3oW9Gn7CM7hexDs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-zTSwRSSZDINHEkbtTiLP3mgod9lDzFrPxMXq88NTOAM=";
   };
 
-  cargoHash = "sha256-jWSeTGtq3K7vuhOhOa3BiNJ3lnhNNG8LYWr/xFFljAM=";
+  cargoHash = "sha256-WDe75Sg7y4GfH3dSfY48aXrIBe89skj1VW0NcgtLEVU=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mitchmindtree ];
     platforms = lib.platforms.unix;
   };
-}
+})

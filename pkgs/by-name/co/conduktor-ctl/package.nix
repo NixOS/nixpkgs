@@ -6,22 +6,22 @@
   stdenv,
   versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "conduktor-ctl";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "conduktor";
     repo = "ctl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o2Pf8ytPQlnZ68K690a6TDoi4mQthYwCXgfPqNiqako=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zaguB4LLkzXlMQCEVOWkUUsEovU53F0B51w3BnVjre8=";
   };
 
-  vendorHash = "sha256-kPCBzLU6aH6MNlKZcKKFcli99ZmdOtPV5+5gxPs5GH4=";
+  vendorHash = "sha256-h9NSOkqpkZ3sKcfsPjF+T2JgX0N8CIAP6y1NVIb/r0E=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-X github.com/conduktor/ctl/utils.version=${version}" ];
+  ldflags = [ "-X github.com/conduktor/ctl/utils.version=${finalAttrs.version}" ];
 
   checkPhase = ''
     go test ./...
@@ -56,4 +56,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

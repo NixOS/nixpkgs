@@ -4,27 +4,32 @@
   fetchFromGitLab,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-pages";
-  version = "18.2.5";
+  version = "18.11.2";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-pages";
-    rev = "v${version}";
-    hash = "sha256-21IsNcVkhtncum2miTOjuCcM681qYa+8e/5CCEiqz/Q=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-lxmwTC02WHwlrMgvTs2lkDj4AX8ovFuW73OHB6CIWTo=";
   };
 
-  vendorHash = "sha256-OubXCpvGtGqegQmdb6R1zw/0DfQ4FdbJGt7qYYRnWnA=";
+  vendorHash = "sha256-PUW4cgAiM1GTtvja894OZ4pe0SWChf5JsL4/fkns2kI=";
   subPackages = [ "." ];
+
+  ldflags = [
+    "-X"
+    "main.VERSION=${finalAttrs.version}"
+  ];
 
   meta = {
     description = "Daemon used to serve static websites for GitLab users";
     mainProgram = "gitlab-pages";
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
-    changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.gitlab ];
   };
-}
+})

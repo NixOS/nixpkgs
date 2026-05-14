@@ -8,13 +8,13 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swingsane";
   version = "0.2";
 
   src = fetchurl {
     sha256 = "15pgqgyw46yd2i367ax9940pfyvinyw2m8apmwhrn0ix5nywa7ni";
-    url = "mirror://sourceforge/swingsane/swingsane-${version}-bin.zip";
+    url = "mirror://sourceforge/swingsane/swingsane-${finalAttrs.version}-bin.zip";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
       execWrapper = ''
         #!${runtimeShell}
-        exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
+        exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${finalAttrs.version}.jar "$@"
       '';
 
       desktopItem = makeDesktopItem {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
         icon = "swingsane";
         desktopName = "SwingSane";
         genericName = "Scan from local or remote SANE servers";
-        comment = meta.description;
+        comment = finalAttrs.meta.description;
         categories = [ "Office" ];
       };
 
@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
       echo "${execWrapper}" > swingsane
       install -v -D -m 755 swingsane $out/bin/swingsane
 
-      unzip -j swingsane-${version}.jar "com/swingsane/images/*.png"
-      install -v -D -m 644 swingsane_512x512.png $out/share/pixmaps/swingsane.png
+      unzip -j swingsane-${finalAttrs.version}.jar "com/swingsane/images/*.png"
+      install -v -D -m 644 swingsane_512x512.png $out/share/icons/hicolor/512x512/apps/swingsane.png
 
       cp -v -r ${desktopItem}/share/applications $out/share
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Java GUI for SANE scanner servers (saned)";
     longDescription = ''
       SwingSane is a powerful, cross platform, open source Java front-end for
@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
       crop, etc), PDF and PNG output.
     '';
     homepage = "http://swingsane.com/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     mainProgram = "swingsane";
   };
-}
+})

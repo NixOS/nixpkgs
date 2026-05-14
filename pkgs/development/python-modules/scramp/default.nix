@@ -6,7 +6,6 @@
   hatchling,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   versioningit,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "scramp";
   version = "1.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tlocke";
@@ -47,10 +44,10 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_readme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the SCRAM authentication protocol";
     homepage = "https://github.com/tlocke/scramp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -254,7 +254,7 @@ In a pull request updating e.g. the standard library, you should write the follo
 ```
 
 This will build all reverse dependencies of the standard library,
-for example `agdaPackages.agda-categories`, or `agdaPackages.generic`.
+for example `agdaPackages.agda-categories`.
 
 In some cases it is useful to build _all_ Agda packages.
 This can be done with the following Github comment:

@@ -6,7 +6,7 @@
   libdv,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   pkg-config,
   SDL,
   SDL_gfx,
@@ -16,14 +16,14 @@
 # TODO:
 # - make dependencies optional
 # - libpng-apng as alternative to libpng?
-# - libXxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
+# - libxxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mjpegtools";
   version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mjpeg/mjpegtools-${version}.tar.gz";
+    url = "mirror://sourceforge/mjpeg/mjpegtools-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-sYBTbX2ZYLBeACOhl7ANyxAJKaSaq3HRnVX0obIQ9Jo=";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!withMinimal) [
     gtk2
-    libX11
+    libx11
     SDL
     SDL_gfx
   ];
@@ -56,6 +56,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure
+  ''
+  # Only ppc64le baseline guarantees AltiVec, no configure option to disable it so just make checks never signal success.
+  # AltiVec code also fails without disabling new compiler warnings:
+  # quant_non_intra.c:72:42: error: initialization of '__vector unsigned short *' {aka '__vector(8) short unsigned int *'} from incompatible pointer type 'uint16_t *' {aka 'short unsigned int *'} [-Wincompatible-pointer-types]
+  + lib.optionalString (!(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)) ''
+    substituteInPlace configure \
+      --replace-fail 'have_altivec=true' 'have_altivec=false'
   '';
 
   enableParallelBuilding = true;
@@ -65,11 +72,11 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of programs for processing MPEG or MJPEG video";
     homepage = "http://mjpeg.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

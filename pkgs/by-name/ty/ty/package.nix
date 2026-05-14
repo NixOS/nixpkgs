@@ -7,6 +7,9 @@
   # nativeBuildInputs
   installShellFiles,
 
+  # buildInputs
+  rust-jemalloc-sys,
+
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -14,14 +17,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.1-alpha.19";
+  version = "0.0.35";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-CCk6ZrhEFMLYtjNrzp7PBH2W4QFSH1Bqlw+Wh2OPFC4=";
+    hash = "sha256-ce3v/ZUlMNMGlikWSriGybScUrRharFswq5Z47dTtKY=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,9 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-TNXWRBJInnLiFyf29O8c6ZE7Qhb6sXM0fPRDqMPWSSw=";
+  cargoHash = "sha256-9/4+cK7BdJbXQKK7xC9MMfqARlivbuyYZ8j02srakxU=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [ rust-jemalloc-sys ];
 
   # `ty`'s tests use `insta-cmd`, which depends on the structure of the `target/` directory,
   # and also fails to find the environment variable `$CARGO_BIN_EXE_ty`, which leads to tests failing.
@@ -56,8 +60,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=ty_test" # test framework tests
   ];
 
+  checkFlags = [
+    # Flaky:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 26, kind: ExecutableFileBusy, message: "Text file busy" }
+    "--skip=python_environment::ty_environment_and_active_environment"
+    "--skip=python_environment::ty_environment_and_discovered_venv"
+    "--skip=python_environment::ty_environment_is_only_environment"
+    "--skip=python_environment::ty_environment_is_system_not_virtual"
+
+    # flaky: unmatched assertion: revealed: Literal[1]
+    "--skip=mdtest::generics/pep695/functions.md"
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -73,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -84,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ty";
     maintainers = with lib.maintainers; [
       bengsparks
+      figsoda
       GaetanLepage
     ];
   };

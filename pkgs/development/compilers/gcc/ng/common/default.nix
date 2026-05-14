@@ -59,12 +59,11 @@ let
       ;
     src = monorepoSrc;
     versionDir =
-      (builtins.toString ../.)
-      + "/${if (gitRelease != null) then "git" else lib.versions.major release_version}";
+      (toString ../.) + "/${if (gitRelease != null) then "git" else lib.versions.major release_version}";
     getVersionFile =
       p:
       builtins.path {
-        name = builtins.baseNameOf p;
+        name = baseNameOf p;
         path =
           let
             patches = args.patchesFn (import ./patches.nix);
@@ -120,7 +119,7 @@ makeScopeWithSplicing' {
         langFortran = true;
       };
 
-      gfortran = wrapCCWith rec {
+      gfortran = wrapCCWith {
         cc = gccPackages.gfortran-unwrapped;
         libcxx = targetGccPackages.libstdcxx;
         bintools = binutils;
@@ -131,11 +130,12 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
+          "-B${targetGccPackages.libgomp}/lib"
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
       };
 
-      gfortranNoLibgfortran = wrapCCWith rec {
+      gfortranNoLibgfortran = wrapCCWith {
         cc = gccPackages.gfortran-unwrapped;
         libcxx = targetGccPackages.libstdcxx;
         bintools = binutils;
@@ -146,10 +146,12 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
+          "-B${targetGccPackages.libgomp}/lib"
+          "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
         ];
       };
 
-      gcc = wrapCCWith rec {
+      gcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = targetGccPackages.libstdcxx;
         bintools = binutils;
@@ -160,10 +162,12 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
+          "-B${targetGccPackages.libgomp}/lib"
+          "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
         ];
       };
 
-      gccNoLibgcc = wrapCCWith rec {
+      gccNoLibgcc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutilsNoLibc;
@@ -177,7 +181,7 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildGccPackages.gccNoLibgcc;
       };
 
-      gccWithLibc = wrapCCWith rec {
+      gccWithLibc = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutils;
@@ -193,7 +197,7 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildGccPackages.gccWithLibc;
       };
 
-      gccWithLibssp = wrapCCWith rec {
+      gccWithLibssp = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutils;
@@ -210,7 +214,7 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildGccPackages.gccWithLibssp;
       };
 
-      gccWithLibatomic = wrapCCWith rec {
+      gccWithLibatomic = wrapCCWith {
         cc = gccPackages.gcc-unwrapped;
         libcxx = null;
         bintools = binutils;
@@ -230,6 +234,10 @@ makeScopeWithSplicing' {
       };
 
       libstdcxx = callPackage ./libstdcxx {
+        stdenv = overrideCC stdenv buildGccPackages.gccWithLibatomic;
+      };
+
+      libgomp = callPackage ./libgomp {
         stdenv = overrideCC stdenv buildGccPackages.gccWithLibatomic;
       };
     };

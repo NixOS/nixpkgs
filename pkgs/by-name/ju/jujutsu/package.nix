@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.32.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TFKUz8hUCRM9RPkp9CBvKnd4e+TnR8H5t9/N76cAKzI=";
+    hash = "sha256-id35e2kzyHyXCRy0aomkd1l0K7qzD0RnzdAzxKUGiso=";
   };
 
-  cargoHash = "sha256-QWbAXqOysIZ7vUeBqAL/iP2QJBHgkZwjsUIregPNezg=";
+  cargoHash = "sha256-zWfdIac+SsNdfXAfD4NVTl7YfXzAlrK82KNduFgG1EA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,12 +51,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jj-cli"
   ];
 
-  # taplo-cli (used in tests) always creates a reqwest client, which
-  # requires configd access on macOS.
-  sandboxProfile = ''
-    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
-  '';
-
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
@@ -81,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/jj";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -89,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/jj-vcs/jj";
+    homepage = "https://jj-vcs.dev/";
     changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

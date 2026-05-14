@@ -8,10 +8,11 @@
   dbus,
   dconf,
   ddcutil,
+  enlightenment,
   glib,
   hwdata,
   imagemagick,
-  libXrandr,
+  libxrandr,
   libdrm,
   libelf,
   libglvnd,
@@ -34,8 +35,10 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
-  xfce,
-  xorg,
+  xfconf,
+  libxext,
+  libxdmcp,
+  libxau,
   yyjson,
   zlib,
   zfs,
@@ -45,6 +48,7 @@
   dbusSupport ? true,
   flashfetchSupport ? false,
   terminalSupport ? true,
+  enlightenmentSupport ? true,
   gnomeSupport ? true,
   imageSupport ? true,
   openclSupport ? true,
@@ -59,13 +63,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.51.0";
+  version = "2.63.1";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-YEKnOvcW4/Syl/iAo8JG63Qw7qEeTpiEp+Oq+O5kFZQ=";
+    hash = "sha256-6c3vA8AFSfew1TdSeUmJ4mIbFyDaJPVWUc93iZyqRY0=";
   };
 
   outputs = [
@@ -121,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
           # Bluetooth, wifi, player & media detection
           dbus
         ]
+        ++ lib.optionals enlightenmentSupport [
+          # Eet support for reading Enlightenment window manager configuration.
+          enlightenment.efl
+        ]
         ++ lib.optionals gnomeSupport [
           # Needed for values that are only stored in DConf + Fallback for GSettings.
           dconf
@@ -166,16 +174,16 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optionals x11Support [
           # At least one of them sould be present in X11 sessions for better display detection and faster WM detection.
           # The *randr ones provide multi monitor support The libxcb* ones usually have better performance.
-          libXrandr
+          libxrandr
           libxcb
           # Required by libxcb messages
-          xorg.libXau
-          xorg.libXdmcp
-          xorg.libXext
+          libxau
+          libxdmcp
+          libxext
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.
-          xfce.xfconf
+          xfconf
         ]
         ++ lib.optionals zfsSupport [
           # Needed for zpool module
@@ -212,6 +220,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_DDCUTIL" brightnessSupport)
 
     (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
+
+    (lib.cmakeBool "ENABLE_EET" enlightenmentSupport)
 
     (lib.cmakeBool "ENABLE_ELF" terminalSupport)
 
@@ -257,7 +267,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -281,6 +290,7 @@ stdenv.mkDerivation (finalAttrs: {
       * audioSupport: PulseAudio functionality
       * brightnessSupport: External display brightness detection via DDCUtil
       * dbusSupport: DBus functionality for Bluetooth, WiFi, player & media detection
+      * enlightenmentSupport: Enlightenment configuration detection via EFL's Eet
       * flashfetchSupport: Build the flashfetch utility (default: false)
       * gnomeSupport: GNOME integration (dconf, dbus, gio)
       * imageSupport: Image rendering (chafa and imagemagick)

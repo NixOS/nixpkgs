@@ -72,7 +72,7 @@ in
       ];
       script = ''
         ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /tmp/sachet.yaml
-        exec ${pkgs.prometheus-sachet}/bin/sachet -config /tmp/sachet.yaml -listen-address ${cfg.address}:${builtins.toString cfg.port}
+        exec ${pkgs.prometheus-sachet}/bin/sachet -config /tmp/sachet.yaml -listen-address ${cfg.address}:${toString cfg.port}
       '';
 
       serviceConfig = {

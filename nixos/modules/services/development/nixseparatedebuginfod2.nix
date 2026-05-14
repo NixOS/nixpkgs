@@ -7,23 +7,30 @@
 }:
 let
   cfg = config.services.nixseparatedebuginfod2;
-  url = "127.0.0.1:${toString cfg.port}";
+  address = "127.0.0.1:${toString cfg.port}";
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "nixseparatedebuginfod2" "substituter" ] ''
+      Instead of `services.nixseparatedebuginfod2.substituter = "foo"`, set `services.nixseparatedebuginfod2.substituters = [ "foo" ]` (possibly with mkForce to override the default value).
+    '')
+  ];
   options = {
     services.nixseparatedebuginfod2 = {
       enable = lib.mkEnableOption "nixseparatedebuginfod2, a debuginfod server providing source and debuginfo for nix packages";
       port = lib.mkOption {
         description = "port to listen";
-        default = 1950;
+        default = 1949;
         type = lib.types.port;
       };
       package = lib.mkPackageOption pkgs "nixseparatedebuginfod2" { };
-      substituter = lib.mkOption {
-        description = "nix substituter to fetch debuginfo from. Either http/https substituters, or `local:` to use debuginfo present in the local store.";
-        default = "https://cache.nixos.org";
-        example = "local:";
-        type = lib.types.str;
+      substituters = lib.mkOption {
+        description = "nix substituter to fetch debuginfo from. Either http/https/file substituters, or `local:` to use debuginfo present in the local store.";
+        default = [
+          "local:"
+          "https://cache.nixos.org"
+        ];
+        type = lib.types.listOf lib.types.str;
       };
       cacheExpirationDelay = lib.mkOption {
         description = "keep unused cache entries for this long. A number followed by a unit";
@@ -33,21 +40,26 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    systemd.services.nixseparatedebuginfod2 = {
+    systemd.sockets.nixseparatedebuginfod2 = {
       wantedBy = [ "multi-user.target" ];
-      path = [ config.nix.package ];
+      socketConfig.ListenStream = [ address ];
+    };
+    systemd.services.nixseparatedebuginfod2 = {
       serviceConfig = {
         ExecStart = [
-          (utils.escapeSystemdExecArgs [
-            (lib.getExe cfg.package)
-            "--listen-address"
-            url
-            "--substituter"
-            cfg.substituter
-            "--expiration"
-            cfg.cacheExpirationDelay
-          ])
+          (utils.escapeSystemdExecArgs (
+            [
+              (lib.getExe cfg.package)
+              "--expiration"
+              cfg.cacheExpirationDelay
+            ]
+            ++ (lib.lists.concatMap (s: [
+              "--substituter"
+              s
+            ]) cfg.substituters)
+          ))
         ];
+        Type = "notify";
         Restart = "on-failure";
         CacheDirectory = "nixseparatedebuginfod2";
         DynamicUser = true;
@@ -76,7 +88,6 @@ in
         ProtectKernelLogs = true; # Prevent access to kernel logs
         ProtectClock = true; # Prevent setting the RTC
         ProtectProc = "noaccess";
-        ProcSubset = "pid";
 
         # Networking
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
@@ -91,7 +102,7 @@ in
       };
     };
 
-    environment.debuginfodServers = [ "http://${url}" ];
+    environment.debuginfodServers = [ "http://${address}" ];
 
   };
 }

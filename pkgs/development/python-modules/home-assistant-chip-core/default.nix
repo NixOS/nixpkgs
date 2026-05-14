@@ -1,18 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  aenum,
   home-assistant-chip-wheels,
   coloredlogs,
   construct,
   cryptography,
   dacite,
   deprecation,
-  ecdsa,
   ipdb,
-  mobly,
-  pygobject3,
   pyyaml,
   rich,
 }:
@@ -22,8 +17,6 @@ buildPythonPackage rec {
   inherit (home-assistant-chip-wheels) version;
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
-
   src = home-assistant-chip-wheels;
 
   # format=wheel needs src to be a wheel not a folder of wheels
@@ -31,21 +24,19 @@ buildPythonPackage rec {
     src=($src/home_assistant_chip_core*.whl)
   '';
 
-  propagatedBuildInputs = [
-    aenum
+  dependencies = [
     coloredlogs
     construct
     cryptography
     dacite
-    ecdsa
     rich
     pyyaml
     ipdb
     deprecation
-    mobly
-    pygobject3
-  ]
-  ++ home-assistant-chip-wheels.propagatedBuildInputs;
+  ];
+
+  # only used for testing purposes, unsafe to use in production
+  pythonRemoveDeps = [ "ecdsa" ];
 
   pythonNamespaces = [
     "chip"
@@ -64,11 +55,11 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Python-base APIs and tools for CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
     changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

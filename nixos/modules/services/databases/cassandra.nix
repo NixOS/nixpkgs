@@ -9,7 +9,6 @@ let
   inherit (lib)
     concatStringsSep
     flip
-    literalMD
     literalExpression
     optionalAttrs
     optionals
@@ -19,7 +18,6 @@ let
     mkIf
     mkOption
     types
-    versionAtLeast
     ;
 
   cfg = config.services.cassandra;
@@ -415,7 +413,7 @@ in
     };
 
     jmxPort = mkOption {
-      type = types.int;
+      type = types.port;
       default = 7199;
       description = ''
         Specifies the default port over which Cassandra will be available for
@@ -504,7 +502,7 @@ in
         MAX_HEAP_SIZE = toString cfg.maxHeapSize;
         HEAP_NEWSIZE = toString cfg.heapNewSize;
         MALLOC_ARENA_MAX = toString cfg.mallocArenaMax;
-        LOCAL_JMX = if cfg.remoteJmx then "no" else "yes";
+        LOCAL_JMX = lib.boolToYesNo (!cfg.remoteJmx);
         JMX_PORT = toString cfg.jmxPort;
       };
       wantedBy = [ "multi-user.target" ];

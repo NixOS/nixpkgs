@@ -4,6 +4,7 @@
   fetchFromGitHub,
   bzip2,
   nix,
+  perl,
   makeWrapper,
   nixosTests,
 }:
@@ -31,11 +32,11 @@ stdenv.mkDerivation {
     install -Dm0755 nix-serve.psgi $out/libexec/nix-serve/nix-serve.psgi
 
     makeWrapper ${
-      nix.perl-bindings.perl.withPackages (p: [
+      perl.withPackages (p: [
         p.DBDSQLite
         p.Plack
         p.Starman
-        nix.perl-bindings
+        nix.libs.nix-perl-bindings or null
       ])
     }/bin/starman $out/bin/nix-serve \
       --prefix PATH : "${
@@ -57,11 +58,10 @@ stdenv.mkDerivation {
     nix-serve-ssh = nixosTests.nix-serve-ssh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/edolstra/nix-serve";
     description = "Utility for sharing a Nix store as a binary cache";
-    maintainers = [ maintainers.eelco ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     # See https://github.com/edolstra/nix-serve/issues/57
     broken = stdenv.hostPlatform.isDarwin;
     platforms = nix.meta.platforms;

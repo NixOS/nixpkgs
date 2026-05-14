@@ -35,11 +35,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mung" ];
 
-  meta = with lib; {
+  meta = {
     description = "Music Notation Graph: a data model for optical music recognition";
     homepage = "https://github.com/OMR-Research/mung";
     changelog = "https://github.com/OMR-Research/mung/blob/${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ piegames ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ piegames ];
   };
 }

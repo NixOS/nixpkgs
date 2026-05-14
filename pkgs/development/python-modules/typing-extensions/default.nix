@@ -11,17 +11,17 @@
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.14.1";
+  version = "4.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "typing_extensions";
     tag = version;
-    hash = "sha256-KzfxVUgPN1cLg73A3TC2zQjYfeLc8x9TtbLmOfmlOkY=";
+    hash = "sha256-3oAlwvNSJ7NhPiHekh4SJI99cPFh29KCCR9314QzsvQ=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   pythonImportsCheck = [ "typing_extensions" ];
 
@@ -29,11 +29,11 @@ buildPythonPackage rec {
     inherit mashumaro pydantic;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Backported and Experimental Type Hints for Python";
     changelog = "https://github.com/python/typing_extensions/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/python/typing";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ pmiddend ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ pmiddend ];
   };
 }

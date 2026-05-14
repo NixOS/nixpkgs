@@ -15,7 +15,7 @@
   ffmpeg,
   cmake,
   pkg-config,
-  buildGo123Module,
+  buildGoModule,
   makeWrapper,
   ncurses,
   which,
@@ -112,7 +112,7 @@ let
           hash = "sha256-b9B5I3EbBFrkWc6RLXMWcCRKayyWjlGuQrogUcrISrc=";
           fetchSubmodules = true;
         };
-        postPatch = prev.postPatch + ''
+        postPatch = ''
           cd examples
           cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
           cp llava/clip* llava/llava.* grpc-server
@@ -187,7 +187,7 @@ let
     passthru.espeak-ng = espeak-ng';
   };
 
-  piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
+  piper-tts' = piper-tts.overrideAttrs (self: {
     name = "piper-tts'";
     inherit (go-piper) src;
     sourceRoot = "${go-piper.src.name}/piper";
@@ -356,7 +356,7 @@ let
       ${cp} ${stable-diffusion} sources/stablediffusion-ggml.cpp
     '';
 
-  self = buildGo123Module.override { stdenv = effectiveStdenv; } {
+  self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
     vendorHash = "sha256-1OY/y1AeL0K+vOU4Jk/cj7rToVLC9EkkNhgifB+icDM=";
@@ -528,16 +528,19 @@ let
     passthru.tests = callPackages ./tests.nix { inherit self; };
     passthru.lib = callPackages ./lib.nix { };
 
-    meta = with lib; {
+    meta = {
       description = "OpenAI alternative to run local LLMs, image and audio generation";
       mainProgram = "local-ai";
       homepage = "https://localai.io";
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         onny
         ck3d
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
+      # Doesn't build with >buildGo123Module.
+      # 'cp: cannot stat 'bin/rpc-server': No such file or directory'
+      broken = true;
     };
   };
 in

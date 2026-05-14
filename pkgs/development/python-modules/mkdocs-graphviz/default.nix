@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Configurable Python markdown extension for graphviz and Mkdocs";
     homepage = "https://gitlab.com/rod2ik/mkdocs-graphviz";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

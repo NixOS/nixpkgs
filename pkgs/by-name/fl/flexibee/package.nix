@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "http://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
+    url = "https://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-WorRyfjWucV8UhAjvuW+22CRzPcz5tjXF7Has4wrLMI=";
   };
 
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client for an accouting economic system";
     homepage = "https://www.flexibee.eu/";
-    license = licenses.unfree;
-    maintainers = [ maintainers.mmahut ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
 }

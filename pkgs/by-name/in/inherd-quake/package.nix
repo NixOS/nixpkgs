@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inherd-quake";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "phodal";
     repo = "quake";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HKAR4LJm0lrQgTOCqtYIRFbO3qHtPbr4Fpx2ek1oJ4Q=";
   };
 
@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Knowledge management meta-framework for geeks";
     homepage = "https://github.com/phodal/quake";
-    license = licenses.mit;
-    maintainers = [ maintainers.elliot ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.elliot ];
     mainProgram = "quake";
   };
-}
+})

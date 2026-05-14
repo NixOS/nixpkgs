@@ -1,0 +1,24 @@
+diff --git a/src/Linux/curl_easy.h b/src/Linux/curl_easy.h
+index 047f3e2..c9c5e83 100644
+--- a/src/Linux/curl_easy.h
++++ b/src/Linux/curl_easy.h
+@@ -6,6 +6,7 @@
+ #define CURL_EASY_H
+ 
+ #define _CRT_SECURE_NO_WARNINGS // Use strncpy for portability.
++#include <cstdint>
+ #include <cassert>
+ #include <cstddef>
+ #include <exception>
+diff --git a/src/local_cache.h b/src/local_cache.h
+index da86967..d9b0d3f 100644
+--- a/src/local_cache.h
++++ b/src/local_cache.h
+@@ -5,6 +5,7 @@
+ #ifndef LOCAL_CACHE_H
+ #define LOCAL_CACHE_H
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ #include <memory>

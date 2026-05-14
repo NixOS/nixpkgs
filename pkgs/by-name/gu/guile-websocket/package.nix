@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-websocket";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://files.dthompson.us/releases/guile-websocket/guile-websocket-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MurFAPXYjp1oq9gNCIH2e8xLmVsMUH0OdCpTVxhffVU=";
+    hash = "sha256-G6bA0dF19KaLWM4AMldHfjkx/qDXBZOIGqcXfLmUg/w=";
   };
 
   strictDeps = true;

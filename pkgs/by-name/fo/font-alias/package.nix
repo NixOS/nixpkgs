@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitLab,
   gitUpdater,
   autoreconfHook,
@@ -8,9 +8,9 @@
   util-macros,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "font-alias";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "font";
     repo = "alias";
     tag = "font-alias-${finalAttrs.version}";
-    hash = "sha256-qglRNSt/PgFprpsvOVCeLMA+YagJw8DZMAfFdZ0m0/s=";
+    hash = "sha256-WGCC4OTerSRf+2sGNqggSBzVVv7gcuP6s3QQHBLahdM=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
       cronyx
       mit
     ];
-    maintainers = [ ];
-    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ qweered ];
   };
 })

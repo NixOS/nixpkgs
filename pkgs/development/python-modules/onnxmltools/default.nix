@@ -23,22 +23,15 @@
 
 buildPythonPackage rec {
   pname = "onnxmltools";
-  version = "1.14.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnxmltools";
     tag = version;
-    hash = "sha256-CcZlGLX8/ANHnhoOv5s/ybBN74gRH/8eLYJ6q/BJo/4=";
+    hash = "sha256-2cAxk/Qvu39N/IaIofuTFMciKyxVv3kwsnH4xpGrkIg=";
   };
-
-  postPatch = ''
-    substituteInPlace onnxmltools/proto/__init__.py \
-      --replace-fail \
-        "from onnx.helper import split_complex_to_pairs" \
-        "from onnx.helper import _split_complex_to_pairs as split_complex_to_pairs"
-  '';
 
   build-system = [
     setuptools

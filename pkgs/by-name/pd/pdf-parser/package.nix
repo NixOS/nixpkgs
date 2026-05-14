@@ -5,14 +5,14 @@
   writeScript,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdf-parser";
   version = "0.7.10";
   pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdf-parser_V${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     hash = "sha256-RhgEGue3RcALjLXKOnnXyx/0subXHNuXfDg8hbO3VDg=";
   };
@@ -61,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "pdf-parser.py";
   };
-}
+})

@@ -13,6 +13,7 @@
   pyyaml,
   rich-argparse,
   ruamel-yaml,
+  tomli,
   tomlkit,
   u-msgpack-python,
 
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "1.0.1"; # test with `nix-build pkgs/pkgs-lib/format`
+  version = "1.3.0"; # test with `nix-build pkgs/pkgs-lib/format`
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "remarshal";
     tag = "v${version}";
-    hash = "sha256-7Gng/Oc9dwtWx4Xej6hf5IuUGM9/E9Hk9QTntqWk/Z0=";
+    hash = "sha256-/K8x6ij23pk5O1+XJdFHaGbZ47nFMbXzp+4UMO5dGp4=";
   };
 
   build-system = [ poetry-core ];
@@ -41,18 +42,19 @@ buildPythonPackage rec {
     pyyaml
     rich-argparse
     ruamel-yaml
+    tomli
     tomlkit
     u-msgpack-python
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/${src.tag}";
     description = "Convert between TOML, YAML and JSON";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
-    maintainers = with maintainers; [ offline ];
+    maintainers = [ ];
     mainProgram = "remarshal";
   };
 }

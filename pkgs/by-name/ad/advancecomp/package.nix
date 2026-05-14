@@ -6,14 +6,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "advancecomp";
   version = "2.6";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "advancecomp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MwXdXT/ZEvTcYV4DjhCUFflrPKBFu0fk5PmaWt4MMOU=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # the full git repo. so we have to put the version number in `.version`, otherwise
   # the binaries get built reporting "none" as their version number.
   postPatch = ''
-    echo "${version}" >.version
+    echo "${finalAttrs.version}" >.version
   '';
 
   meta = {
@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "https://github.com/amadvance/advancecomp";
-    changelog = "https://github.com/amadvance/advancecomp/blob/v${version}/HISTORY";
+    changelog = "https://github.com/amadvance/advancecomp/blob/v${finalAttrs.version}/HISTORY";
   };
-}
+})

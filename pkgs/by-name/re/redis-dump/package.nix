@@ -14,15 +14,13 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "redis-dump";
 
-  meta = with lib; {
+  meta = {
     description = "Backup and restore your Redis data to and from JSON";
     homepage = "https://delanotes.com/redis-dump/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      offline
-      manveru
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

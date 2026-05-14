@@ -17,12 +17,12 @@ buildGoModule {
 
   vendorHash = "sha256-ypYuQKxRhRQGX1HtaWt6F6BD9vBpD8AJwx/4esLrJsw=";
 
-  meta = with lib; {
+  meta = {
     description = "Drone pipeline runner that executes builds directly on the host machine";
     homepage = "https://github.com/drone-runners/drone-runner-exec";
     # https://polyformproject.org/licenses/small-business/1.0.0/
-    license = licenses.unfree;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "drone-runner-exec";
   };
 }

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "assign-lb-ip";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "Nordix";
     repo = "assign-lb-ip";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Sfi58wcX61HNCmlDoparTqnfsuxu6barSnV0uYlC+ng=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ starcraft66 ];
   };
-}
+})

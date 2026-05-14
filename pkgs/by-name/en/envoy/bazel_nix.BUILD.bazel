@@ -1,12 +1,26 @@
 load("@bazel_tools//tools/sh:sh_toolchain.bzl", "sh_toolchain")
 load("@rules_rust//rust:toolchain.bzl", "rust_toolchain")
+load("@rules_rust//rust:defs.bzl", "rust_stdlib_filegroup")
 
 toolchains = {
     "x86_64": "x86_64-unknown-linux-gnu",
     "aarch64": "aarch64-unknown-linux-gnu",
 }
 
-exports_files(["cargo", "rustdoc", "ruststd", "rustc"])
+exports_files(["cargo", "rustdoc", "rustc"])
+
+[
+    rust_stdlib_filegroup(
+        name = "rust_nix_" + k + "_stdlib",
+        srcs = glob(
+            [
+                "rustcroot/lib/rustlib/" + v + "/lib/**",
+            ],
+            allow_empty=True,
+        ),
+    )
+    for k, v in toolchains.items()
+]
 
 [
     rust_toolchain(
@@ -16,7 +30,7 @@ exports_files(["cargo", "rustdoc", "ruststd", "rustc"])
         exec_triple = v,
         cargo = ":cargo",
         rust_doc = ":rustdoc",
-        rust_std = ":ruststd",
+        rust_std = ":rust_nix_" + k + "_stdlib",
         rustc = ":rustc",
         stdlib_linkflags = ["-ldl", "-lpthread"],
         staticlib_ext = ".a",

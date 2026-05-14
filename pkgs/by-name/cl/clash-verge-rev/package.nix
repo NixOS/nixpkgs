@@ -8,36 +8,25 @@
   wrapGAppsHook3,
   v2ray-geoip,
   v2ray-domain-list-community,
-  libsoup,
+  libsoup_3,
 }:
 let
   pname = "clash-verge-rev";
-  version = "2.4.0";
+  # Please keep service version in sync
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     tag = "v${version}";
-    hash = "sha256-Kw2QXePBjDs0kUMPLE7UyN/v9GvsMNYi1rxcy+O6EWs=";
+    hash = "sha256-Jw9GXD0RFFPkqhJuNZaooxIHVDt1ti0a4g863jIwtkY=";
   };
 
-  src-service = fetchFromGitHub {
-    owner = "clash-verge-rev";
-    repo = "clash-verge-service";
-    rev = "2b36be1417cb30ce592951cbadb1503e61c2c784"; # no meaningful tags in this repo. The only way is updating manully every time.
-    hash = "sha256-yTttQpWmqhgOx9wPGE01Bjp52QjTXLAfg+7+kPny+yg=";
-  };
-
-  service-cargo-hash = "sha256-HET7/Lyc0Ip1f9WMVzUWr0QFuL8YN3dgZdK0adl/rYc=";
-  pnpm-hash = "sha256-O6JO5sW3eKjOPcnu2JDnXEUnR2Yma+SkRMOfEjG5X/E=";
-  vendor-hash = "sha256-kUPzKfrcMaGAMGzYy666I9l3ctac7b1xTCO8oMA9fYg=";
+  pnpm-hash = "sha256-2iGCe9LmH99hVOWEWkDy7/XH4r/Jlr8rzL5FrCRpn3Q=";
+  vendor-hash = "sha256-EHsGCrphP6SRQ04Q0sIh8CmzMwbvqDQeiL44ItBGIaM=";
 
   service = callPackage ./service.nix {
     inherit
-      version
-      src-service
-      service-cargo-hash
-      pname
       meta
       ;
   };
@@ -50,7 +39,7 @@ let
       pnpm-hash
       vendor-hash
       meta
-      libsoup
+      libsoup_3
       ;
   };
 
@@ -97,4 +86,6 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+  # For testing convenience
+  passthru = { inherit unwrapped service; };
 }

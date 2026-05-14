@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "git-point";
   version = "0.2.2";
 

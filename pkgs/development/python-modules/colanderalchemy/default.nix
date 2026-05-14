@@ -7,12 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "colanderclchemy";
+  pname = "colanderalchemy";
   version = "0.3.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "ColanderAlchemy";
     sha256 = "006wcfch2skwvma9bq3l06dyjnz309pa75h1rviq7i4pd9g463bl";
   };
 
@@ -24,9 +25,9 @@ buildPythonPackage rec {
   # Tests are not included in Pypi
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Autogenerate Colander schemas based on SQLAlchemy models";
     homepage = "https://github.com/stefanofontanelli/ColanderAlchemy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

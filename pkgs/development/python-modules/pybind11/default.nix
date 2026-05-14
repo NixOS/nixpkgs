@@ -2,19 +2,20 @@
   stdenv,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   ninja,
-  setuptools,
+  scikit-build-core,
   boost,
   eigen,
   python,
-  catch,
+  catch2,
   numpy,
-  pytestCheckHook,
-  libxcrypt,
+  pytest,
   makeSetupHook,
+  # Build tests to verify cross-compilation works, but only when CPU bit
+  # depth matches (otherwise Python headers cause LONG_BIT mismatch errors)
+  buildTests ? stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
 }:
 let
   setupHook = makeSetupHook {
@@ -22,88 +23,88 @@ let
     substitutions = {
       out = placeholder "out";
       pythonInterpreter = python.pythonOnBuildForHost.interpreter;
-      pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
+      pythonIncludeDir = "${python}/include/${python.libPrefix}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
   } ./setup-hook.sh;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybind11";
-  version = "2.13.6";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    tag = "v${version}";
-    hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q609c2Q1n37OJ9fK0uDcniQZPO2PL+fnWdArV56qR64=";
   };
 
   build-system = [
     cmake
     ninja
-    setuptools
+    finalAttrs.passthru.scikit-build-core-no-tests
   ];
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = lib.optionals buildTests [
+    catch2
+    boost
+    eigen
+  ];
+
   propagatedNativeBuildInputs = [ setupHook ];
 
-  dontUseCmakeBuildDir = true;
+  nativeCheckInputs = [
+    numpy
+    pytest
+  ];
 
-  # Don't build tests if not needed, read the doInstallCheck value at runtime
-  preConfigure = ''
-    if [ -n "$doInstallCheck" ]; then
-      cmakeFlagsArray+=("-DBUILD_TESTING=ON")
-    fi
-  '';
+  pypaBuildFlags = [
+    # Keep the build directory around to run the tests.
+    "-Cbuild-dir=build"
+  ];
 
   cmakeFlags = [
-    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
-    "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-  ]
-  ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [ "-DPYBIND11_CXX_STANDARD=-std=c++17" ];
+    (lib.cmakeBool "BUILD_TESTING" buildTests)
 
-  postBuild = ''
-    # build tests
-    make -j $NIX_BUILD_CORES
-  '';
+    # Override the `PYBIND11_NOPYTHON = true` in `pyproject.toml`. This
+    # is required to build the tests.
+    (lib.cmakeBool "PYBIND11_NOPYTHON" (!buildTests))
+  ];
 
+  dontUseCmakeConfigure = true;
+
+  ninjaFlags = [
+    "-C"
+    "build"
+  ];
+
+  checkTarget = "check";
+
+  checkPhase = "ninjaCheckPhase";
+
+  # Make the headers and CMake/pkg-config files inside the wheel
+  # discoverable. This simulates the effect of the `pybind11[global]`
+  # installation but works better for our build.
   postInstall = ''
-    make install
-    # Symlink the CMake-installed headers to the location expected by setuptools
-    mkdir -p $out/include/${python.libPrefix}
-    ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
+    ln -s $out/${python.sitePackages}/pybind11/{include,share} $out/
   '';
 
-  nativeCheckInputs = [
-    catch
-    numpy
-    pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # require dependencies not available in nixpkgs
-    "tests/test_embed/test_trampoline.py"
-    "tests/test_embed/test_interpreter.py"
-    # numpy changed __repr__ output of numpy dtypes
-    "tests/test_numpy_dtypes.py"
-    # no need to test internal packaging
-    "tests/extra_python_package/test_files.py"
-    # tests that try to parse setuptools stdout
-    "tests/extra_setuptools/test_setuphelper.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # expects KeyError, gets RuntimeError
-    # https://github.com/pybind/pybind11/issues/4243
-    "test_cross_module_exception_translator"
-  ];
+  passthru = {
+    # scikit-build-core's tests depend upon pybind11, and hence introduce
+    # infinite recursion. To avoid this, we define here a scikit-build-core
+    # derivation that doesn't depend on pybind11, and use it for pybind11's
+    # build-system.
+    scikit-build-core-no-tests = scikit-build-core.overridePythonAttrs {
+      doCheck = false;
+    };
+  };
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pybind/pybind11";
-    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/pybind/pybind11/blob/${finalAttrs.src.tag}/docs/changelog.md";
     description = "Seamless operability between C++11 and Python";
     mainProgram = "pybind11-config";
     longDescription = ''
@@ -111,10 +112,10 @@ buildPythonPackage rec {
       C++ types in Python and vice versa, mainly to create Python
       bindings of existing C++ code.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       yuriaisaka
       dotlambda
     ];
   };
-}
+})

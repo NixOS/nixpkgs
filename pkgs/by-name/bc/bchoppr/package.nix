@@ -4,18 +4,18 @@
   fetchFromGitHub,
   pkg-config,
   cairo,
-  libX11,
+  libx11,
   lv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bchoppr";
   version = "1.12.6";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "bchoppr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/aLoLUpWu66VKd9lwjli+FZZctblrZUPSEsdYH85HwQ=";
     fetchSubmodules = true;
   };
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo
-    libX11
+    libx11
     lv2
   ];
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sjaehn/BChoppr";
     description = "Audio stream chopping LV2 plugin";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

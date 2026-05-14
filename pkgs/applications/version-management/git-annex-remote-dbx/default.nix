@@ -23,11 +23,11 @@ buildPythonApplication rec {
     humanfriendly
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Git-annex special remote for Dropbox";
     homepage = "https://pypi.org/project/git-annex-remote-dbx/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "git-annex-remote-dbx";
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

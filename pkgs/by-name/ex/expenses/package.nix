@@ -1,19 +1,20 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   sqlite,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "expenses";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "manojkarthick";
     repo = "expenses";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sqsogF2swMvYZL7Kj+ealrB1AAgIe7ZXXDLRdHL6Q+0=";
   };
 
@@ -29,20 +30,20 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/manojkarthick/expenses/cmd.Version=${version}"
+    "-X github.com/manojkarthick/expenses/cmd.Version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd expenses \
       --bash <($out/bin/expenses completion bash) \
       --zsh <($out/bin/expenses completion zsh) \
       --fish <($out/bin/expenses completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive command line expense logger";
-    license = licenses.mit;
-    maintainers = [ maintainers.manojkarthick ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.manojkarthick ];
     mainProgram = "expenses";
   };
-}
+})

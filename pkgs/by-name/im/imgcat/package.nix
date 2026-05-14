@@ -6,7 +6,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imgcat";
   version = "2.6.0";
 
@@ -24,18 +24,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eddieantonio";
     repo = "imgcat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-miFjlahTI0GDpgsjnA/K1R4R5654M8AoK78CycoLTqA=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with lib; {
+  meta = {
     description = "It's like cat, but for images";
     homepage = "https://github.com/eddieantonio/imgcat";
-    license = licenses.isc;
-    maintainers = with maintainers; [ jwiegley ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ jwiegley ];
+    platforms = lib.platforms.unix;
     mainProgram = "imgcat";
   };
-}
+})

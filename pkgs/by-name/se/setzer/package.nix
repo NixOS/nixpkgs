@@ -19,7 +19,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "setzer";
   version = "66";
   pyproject = false;
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hqwwDR9jCk2XptcqpaReZ73jqpq4JpYD3Rc2OmrEPxg=";
   };
 
@@ -78,4 +78,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

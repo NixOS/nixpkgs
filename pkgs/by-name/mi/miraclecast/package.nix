@@ -80,11 +80,11 @@ stdenv.mkDerivation {
     version = "Miraclecast 1";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Connect external monitors to your system via Wifi-Display specification also known as Miracast";
     homepage = "https://github.com/albfan/miraclecast";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.wizardlink ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.wizardlink ];
+    platforms = lib.platforms.linux;
   };
 }

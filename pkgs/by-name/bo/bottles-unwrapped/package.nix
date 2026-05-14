@@ -30,15 +30,15 @@
   removeWarningPopup ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "51.24";
+  version = "63.2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
-    tag = version;
-    hash = "sha256-cKW2b8MVpVksDnthn9kPBtUoCiiCMTQ993KTJSJuZDE=";
+    tag = finalAttrs.version;
+    hash = "sha256-cBqKUf96BLYyVD8onkvejL7pcxYrVCnhjhhT9FSwuNo=";
   };
 
   patches = [
@@ -95,6 +95,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
     ]
     ++ [
       cabextract
@@ -114,7 +115,7 @@ python3Packages.buildPythonApplication rec {
       procps
     ];
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
@@ -130,11 +131,10 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
       XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
   };
-}
+})

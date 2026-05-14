@@ -1,0 +1,41 @@
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
+
+python3Packages.buildPythonApplication {
+  pname = "i3-swallow";
+  version = "unstable-2022-02-19";
+
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "jamesofarrell";
+    repo = "i3-swallow";
+    rev = "6fbc04645c483fe733de56b56743e453693d4c78";
+    hash = "sha256-LjrT0JaCci8a+0pianBV19sn4y6fg+stBZZg3mNFfdA=";
+  };
+
+  nativeBuildInputs = [
+    python3Packages.poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    python3Packages.i3ipc
+    python3Packages.xlib
+    python3Packages.six
+  ];
+
+  # No tests available
+  doCheck = false;
+
+  meta = {
+    homepage = "https://github.com/jamesofarrell/i3-swallow";
+    description = "Swallow a terminal window in i3wm";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    mainProgram = "swallow";
+    maintainers = [ ];
+  };
+}

@@ -49,312 +49,327 @@ in
   ];
 
   ###### interface
-  options.services.kubernetes.apiserver = with lib.types; {
+  options.services.kubernetes.apiserver =
+    let
+      inherit (lib.types)
+        nullOr
+        str
+        bool
+        listOf
+        enum
+        attrs
+        path
+        separatedString
+        attrsOf
+        int
+        ;
+    in
+    {
 
-    advertiseAddress = lib.mkOption {
-      description = ''
-        Kubernetes apiserver IP address on which to advertise the apiserver
-        to members of the cluster. This address must be reachable by the rest
-        of the cluster.
-      '';
-      default = null;
-      type = nullOr str;
-    };
-
-    allowPrivileged = lib.mkOption {
-      description = "Whether to allow privileged containers on Kubernetes.";
-      default = false;
-      type = bool;
-    };
-
-    authorizationMode = lib.mkOption {
-      description = ''
-        Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/Webhook/RBAC/Node). See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
-      '';
-      default = [
-        "RBAC"
-        "Node"
-      ]; # Enabling RBAC by default, although kubernetes default is AllowAllow
-      type = listOf (enum [
-        "AlwaysAllow"
-        "AlwaysDeny"
-        "ABAC"
-        "Webhook"
-        "RBAC"
-        "Node"
-      ]);
-    };
-
-    authorizationPolicy = lib.mkOption {
-      description = ''
-        Kubernetes apiserver authorization policy file. See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
-      '';
-      default = [ ];
-      type = listOf attrs;
-    };
-
-    basicAuthFile = lib.mkOption {
-      description = ''
-        Kubernetes apiserver basic authentication file. See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
-      '';
-      default = null;
-      type = nullOr path;
-    };
-
-    bindAddress = lib.mkOption {
-      description = ''
-        The IP address on which to listen for the --secure-port port.
-        The associated interface(s) must be reachable by the rest
-        of the cluster, and by CLI/web clients.
-      '';
-      default = "0.0.0.0";
-      type = str;
-    };
-
-    clientCaFile = lib.mkOption {
-      description = "Kubernetes apiserver CA file for client auth.";
-      default = top.caFile;
-      defaultText = lib.literalExpression "config.${otop.caFile}";
-      type = nullOr path;
-    };
-
-    disableAdmissionPlugins = lib.mkOption {
-      description = ''
-        Kubernetes admission control plugins to disable. See
-        <https://kubernetes.io/docs/admin/admission-controllers/>
-      '';
-      default = [ ];
-      type = listOf str;
-    };
-
-    enable = lib.mkEnableOption "Kubernetes apiserver";
-
-    enableAdmissionPlugins = lib.mkOption {
-      description = ''
-        Kubernetes admission control plugins to enable. See
-        <https://kubernetes.io/docs/admin/admission-controllers/>
-      '';
-      default = [
-        "NamespaceLifecycle"
-        "LimitRanger"
-        "ServiceAccount"
-        "ResourceQuota"
-        "DefaultStorageClass"
-        "DefaultTolerationSeconds"
-        "NodeRestriction"
-      ];
-      example = [
-        "NamespaceLifecycle"
-        "NamespaceExists"
-        "LimitRanger"
-        "SecurityContextDeny"
-        "ServiceAccount"
-        "ResourceQuota"
-        "PodSecurityPolicy"
-        "NodeRestriction"
-        "DefaultStorageClass"
-      ];
-      type = listOf str;
-    };
-
-    etcd = {
-      servers = lib.mkOption {
-        description = "List of etcd servers.";
-        default = [ "http://127.0.0.1:2379" ];
-        type = types.listOf types.str;
-      };
-
-      keyFile = lib.mkOption {
-        description = "Etcd key file.";
+      advertiseAddress = lib.mkOption {
+        description = ''
+          Kubernetes apiserver IP address on which to advertise the apiserver
+          to members of the cluster. This address must be reachable by the rest
+          of the cluster.
+        '';
         default = null;
-        type = types.nullOr types.path;
+        type = nullOr str;
       };
 
-      certFile = lib.mkOption {
-        description = "Etcd cert file.";
+      allowPrivileged = lib.mkOption {
+        description = "Whether to allow privileged containers on Kubernetes.";
+        default = false;
+        type = bool;
+      };
+
+      authorizationMode = lib.mkOption {
+        description = ''
+          Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/Webhook/RBAC/Node). See
+          <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
+        '';
+        default = [
+          "RBAC"
+          "Node"
+        ]; # Enabling RBAC by default, although kubernetes default is AllowAllow
+        type = listOf (enum [
+          "AlwaysAllow"
+          "AlwaysDeny"
+          "ABAC"
+          "Webhook"
+          "RBAC"
+          "Node"
+        ]);
+      };
+
+      authorizationPolicy = lib.mkOption {
+        description = ''
+          Kubernetes apiserver authorization policy file. See
+          <https://kubernetes.io/docs/reference/access-authn-authz/authorization/>
+        '';
+        default = [ ];
+        type = listOf attrs;
+      };
+
+      basicAuthFile = lib.mkOption {
+        description = ''
+          Kubernetes apiserver basic authentication file. See
+          <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
+        '';
         default = null;
-        type = types.nullOr types.path;
+        type = nullOr path;
       };
 
-      caFile = lib.mkOption {
-        description = "Etcd ca file.";
+      bindAddress = lib.mkOption {
+        description = ''
+          The IP address on which to listen for the --secure-port port.
+          The associated interface(s) must be reachable by the rest
+          of the cluster, and by CLI/web clients.
+        '';
+        default = "0.0.0.0";
+        type = str;
+      };
+
+      clientCaFile = lib.mkOption {
+        description = "Kubernetes apiserver CA file for client auth.";
         default = top.caFile;
         defaultText = lib.literalExpression "config.${otop.caFile}";
-        type = types.nullOr types.path;
+        type = nullOr path;
       };
-    };
 
-    extraOpts = lib.mkOption {
-      description = "Kubernetes apiserver extra command line options.";
-      default = "";
-      type = separatedString " ";
-    };
+      disableAdmissionPlugins = lib.mkOption {
+        description = ''
+          Kubernetes admission control plugins to disable. See
+          <https://kubernetes.io/docs/admin/admission-controllers/>
+        '';
+        default = [ ];
+        type = listOf str;
+      };
 
-    extraSANs = lib.mkOption {
-      description = "Extra x509 Subject Alternative Names to be added to the kubernetes apiserver tls cert.";
-      default = [ ];
-      type = listOf str;
-    };
+      enable = lib.mkEnableOption "Kubernetes apiserver";
 
-    featureGates = lib.mkOption {
-      description = "Attribute set of feature gates.";
-      default = top.featureGates;
-      defaultText = lib.literalExpression "config.${otop.featureGates}";
-      type = attrsOf bool;
-    };
+      enableAdmissionPlugins = lib.mkOption {
+        description = ''
+          Kubernetes admission control plugins to enable. See
+          <https://kubernetes.io/docs/admin/admission-controllers/>
+        '';
+        default = [
+          "NamespaceLifecycle"
+          "LimitRanger"
+          "ServiceAccount"
+          "ResourceQuota"
+          "DefaultStorageClass"
+          "DefaultTolerationSeconds"
+          "NodeRestriction"
+        ];
+        example = [
+          "NamespaceLifecycle"
+          "NamespaceExists"
+          "LimitRanger"
+          "SecurityContextDeny"
+          "ServiceAccount"
+          "ResourceQuota"
+          "PodSecurityPolicy"
+          "NodeRestriction"
+          "DefaultStorageClass"
+        ];
+        type = listOf str;
+      };
 
-    kubeletClientCaFile = lib.mkOption {
-      description = "Path to a cert file for connecting to kubelet.";
-      default = top.caFile;
-      defaultText = lib.literalExpression "config.${otop.caFile}";
-      type = nullOr path;
-    };
+      etcd = {
+        servers = lib.mkOption {
+          description = "List of etcd servers.";
+          default = [ "http://127.0.0.1:2379" ];
+          type = listOf str;
+        };
 
-    kubeletClientCertFile = lib.mkOption {
-      description = "Client certificate to use for connections to kubelet.";
-      default = null;
-      type = nullOr path;
-    };
+        keyFile = lib.mkOption {
+          description = "Etcd key file.";
+          default = null;
+          type = nullOr path;
+        };
 
-    kubeletClientKeyFile = lib.mkOption {
-      description = "Key to use for connections to kubelet.";
-      default = null;
-      type = nullOr path;
-    };
+        certFile = lib.mkOption {
+          description = "Etcd cert file.";
+          default = null;
+          type = nullOr path;
+        };
 
-    preferredAddressTypes = lib.mkOption {
-      description = "List of the preferred NodeAddressTypes to use for kubelet connections.";
-      type = nullOr str;
-      default = null;
-    };
+        caFile = lib.mkOption {
+          description = "Etcd ca file.";
+          default = top.caFile;
+          defaultText = lib.literalExpression "config.${otop.caFile}";
+          type = nullOr path;
+        };
+      };
 
-    proxyClientCertFile = lib.mkOption {
-      description = "Client certificate to use for connections to proxy.";
-      default = null;
-      type = nullOr path;
-    };
+      extraOpts = lib.mkOption {
+        description = "Kubernetes apiserver extra command line options.";
+        default = "";
+        type = separatedString " ";
+      };
 
-    proxyClientKeyFile = lib.mkOption {
-      description = "Key to use for connections to proxy.";
-      default = null;
-      type = nullOr path;
-    };
+      extraSANs = lib.mkOption {
+        description = "Extra x509 Subject Alternative Names to be added to the kubernetes apiserver tls cert.";
+        default = [ ];
+        type = listOf str;
+      };
 
-    runtimeConfig = lib.mkOption {
-      description = ''
-        Api runtime configuration. See
-        <https://kubernetes.io/docs/tasks/administer-cluster/cluster-management/>
-      '';
-      default = "authentication.k8s.io/v1beta1=true";
-      example = "api/all=false,api/v1=true";
-      type = str;
-    };
+      featureGates = lib.mkOption {
+        description = "Attribute set of feature gates.";
+        default = top.featureGates;
+        defaultText = lib.literalExpression "config.${otop.featureGates}";
+        type = attrsOf bool;
+      };
 
-    storageBackend = lib.mkOption {
-      description = ''
-        Kubernetes apiserver storage backend.
-      '';
-      default = "etcd3";
-      type = enum [
-        "etcd2"
-        "etcd3"
-      ];
-    };
+      kubeletClientCaFile = lib.mkOption {
+        description = "Path to a cert file for connecting to kubelet.";
+        default = top.caFile;
+        defaultText = lib.literalExpression "config.${otop.caFile}";
+        type = nullOr path;
+      };
 
-    securePort = lib.mkOption {
-      description = "Kubernetes apiserver secure port.";
-      default = 6443;
-      type = int;
-    };
+      kubeletClientCertFile = lib.mkOption {
+        description = "Client certificate to use for connections to kubelet.";
+        default = null;
+        type = nullOr path;
+      };
 
-    apiAudiences = lib.mkOption {
-      description = ''
-        Kubernetes apiserver ServiceAccount issuer.
-      '';
-      default = "api,https://kubernetes.default.svc";
-      type = str;
-    };
+      kubeletClientKeyFile = lib.mkOption {
+        description = "Key to use for connections to kubelet.";
+        default = null;
+        type = nullOr path;
+      };
 
-    serviceAccountIssuer = lib.mkOption {
-      description = ''
-        Kubernetes apiserver ServiceAccount issuer.
-      '';
-      default = "https://kubernetes.default.svc";
-      type = str;
-    };
+      preferredAddressTypes = lib.mkOption {
+        description = "List of the preferred NodeAddressTypes to use for kubelet connections.";
+        type = nullOr str;
+        default = null;
+      };
 
-    serviceAccountSigningKeyFile = lib.mkOption {
-      description = ''
-        Path to the file that contains the current private key of the service
-        account token issuer. The issuer will sign issued ID tokens with this
-        private key.
-      '';
-      type = path;
-    };
+      proxyClientCertFile = lib.mkOption {
+        description = "Client certificate to use for connections to proxy.";
+        default = null;
+        type = nullOr path;
+      };
 
-    serviceAccountKeyFile = lib.mkOption {
-      description = ''
-        File containing PEM-encoded x509 RSA or ECDSA private or public keys,
-        used to verify ServiceAccount tokens. The specified file can contain
-        multiple keys, and the flag can be specified multiple times with
-        different files. If unspecified, --tls-private-key-file is used.
-        Must be specified when --service-account-signing-key is provided
-      '';
-      type = path;
-    };
+      proxyClientKeyFile = lib.mkOption {
+        description = "Key to use for connections to proxy.";
+        default = null;
+        type = nullOr path;
+      };
 
-    serviceClusterIpRange = lib.mkOption {
-      description = ''
-        A CIDR notation IP range from which to assign service cluster IPs.
-        This must not overlap with any IP ranges assigned to nodes for pods.
-      '';
-      default = "10.0.0.0/24";
-      type = str;
-    };
+      runtimeConfig = lib.mkOption {
+        description = ''
+          Api runtime configuration. See
+          <https://kubernetes.io/docs/tasks/administer-cluster/cluster-management/>
+        '';
+        default = "authentication.k8s.io/v1beta1=true";
+        example = "api/all=false,api/v1=true";
+        type = str;
+      };
 
-    tlsCertFile = lib.mkOption {
-      description = "Kubernetes apiserver certificate file.";
-      default = null;
-      type = nullOr path;
-    };
+      storageBackend = lib.mkOption {
+        description = ''
+          Kubernetes apiserver storage backend.
+        '';
+        default = "etcd3";
+        type = enum [
+          "etcd2"
+          "etcd3"
+        ];
+      };
 
-    tlsKeyFile = lib.mkOption {
-      description = "Kubernetes apiserver private key file.";
-      default = null;
-      type = nullOr path;
-    };
+      securePort = lib.mkOption {
+        description = "Kubernetes apiserver secure port.";
+        default = 6443;
+        type = int;
+      };
 
-    tokenAuthFile = lib.mkOption {
-      description = ''
-        Kubernetes apiserver token authentication file. See
-        <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
-      '';
-      default = null;
-      type = nullOr path;
-    };
+      apiAudiences = lib.mkOption {
+        description = ''
+          Kubernetes apiserver ServiceAccount issuer.
+        '';
+        default = "api,https://kubernetes.default.svc";
+        type = str;
+      };
 
-    verbosity = lib.mkOption {
-      description = ''
-        Optional glog verbosity level for logging statements. See
-        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
-      '';
-      default = null;
-      type = nullOr int;
-    };
+      serviceAccountIssuer = lib.mkOption {
+        description = ''
+          Kubernetes apiserver ServiceAccount issuer.
+        '';
+        default = "https://kubernetes.default.svc";
+        type = str;
+      };
 
-    webhookConfig = lib.mkOption {
-      description = ''
-        Kubernetes apiserver Webhook config file. It uses the kubeconfig file format.
-        See <https://kubernetes.io/docs/reference/access-authn-authz/webhook/>
-      '';
-      default = null;
-      type = nullOr path;
-    };
+      serviceAccountSigningKeyFile = lib.mkOption {
+        description = ''
+          Path to the file that contains the current private key of the service
+          account token issuer. The issuer will sign issued ID tokens with this
+          private key.
+        '';
+        type = path;
+      };
 
-  };
+      serviceAccountKeyFile = lib.mkOption {
+        description = ''
+          File containing PEM-encoded x509 RSA or ECDSA private or public keys,
+          used to verify ServiceAccount tokens. The specified file can contain
+          multiple keys, and the flag can be specified multiple times with
+          different files. If unspecified, --tls-private-key-file is used.
+          Must be specified when --service-account-signing-key is provided
+        '';
+        type = path;
+      };
+
+      serviceClusterIpRange = lib.mkOption {
+        description = ''
+          A CIDR notation IP range from which to assign service cluster IPs.
+          This must not overlap with any IP ranges assigned to nodes for pods.
+        '';
+        default = "10.0.0.0/24";
+        type = str;
+      };
+
+      tlsCertFile = lib.mkOption {
+        description = "Kubernetes apiserver certificate file.";
+        default = null;
+        type = nullOr path;
+      };
+
+      tlsKeyFile = lib.mkOption {
+        description = "Kubernetes apiserver private key file.";
+        default = null;
+        type = nullOr path;
+      };
+
+      tokenAuthFile = lib.mkOption {
+        description = ''
+          Kubernetes apiserver token authentication file. See
+          <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
+        '';
+        default = null;
+        type = nullOr path;
+      };
+
+      verbosity = lib.mkOption {
+        description = ''
+          Optional glog verbosity level for logging statements. See
+          <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
+        '';
+        default = null;
+        type = nullOr int;
+      };
+
+      webhookConfig = lib.mkOption {
+        description = ''
+          Kubernetes apiserver Webhook config file. It uses the kubeconfig file format.
+          See <https://kubernetes.io/docs/reference/access-authn-authz/webhook/>
+        '';
+        default = null;
+        type = nullOr path;
+      };
+
+    };
 
   ###### implementation
   config = lib.mkMerge [

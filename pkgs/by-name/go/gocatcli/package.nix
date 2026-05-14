@@ -8,18 +8,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gocatcli";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "deadc0de6";
     repo = "gocatcli";
-    tag = "v${version}";
-    hash = "sha256-kNXuQlBLiDEbKwtSmdX4XPLyMZFyBvLKEmQdCDug4ao=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MUOyxDdU5xCQ7mQpNP1sS1zKGe/6/bqN1sSu5JqW36o=";
   };
 
-  vendorHash = "sha256-gi4/ekLGh5T5D3ifW/FF+ewHesWOyhY01ZZIG6+OENo=";
+  vendorHash = "sha256-Zp9m0v/F4AJ9b3GH3/SoZx1jijHGR854f8KhhcIPjS8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,7 +37,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/deadc0de6/gocatcli";
-    changelog = "https://github.com/deadc0de6/gocatcli/releases/tag/v${version}";
+    changelog = "https://github.com/deadc0de6/gocatcli/releases/tag/v${finalAttrs.version}";
     description = "Command line catalog tool for your offline data";
     longDescription = ''
       gocatcli is a catalog tool for your offline data. It indexes external
@@ -50,4 +50,4 @@ buildGoModule rec {
     ];
     mainProgram = "gocatcli";
   };
-}
+})

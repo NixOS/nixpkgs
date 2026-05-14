@@ -62,7 +62,7 @@ in
                 "logo64"
                 "extraPaths"
               ];
-              kernel = lib.filterAttrs (n: v: (lib.any (x: x == n) allowedKernelKeys)) unfilteredKernel;
+              kernel = lib.filterAttrs (n: v: (lib.elem n allowedKernelKeys)) unfilteredKernel;
               config = builtins.toJSON (
                 kernel
                 // {
@@ -93,7 +93,7 @@ in
       meta = {
         description = "Wrapper to create jupyter notebook kernel definitions";
         homepage = "https://jupyter.org/";
-        maintainers = with lib.maintainers; [ aborsu ];
+        maintainers = [ ];
       };
     };
 }

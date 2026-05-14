@@ -96,7 +96,7 @@ in
       webserver.succeed("mkdir -p /var/web")
       webserver.succeed("chown nginx:nginx /var/web")
       webserver.succeed("$(curl -vvv http://sandbox.test/test2-write)")
-      assert "404 Not Found" in machine.succeed(
+      assert "404 Not Found" in webserver.succeed(
           "curl -vvv -s http://sandbox.test/test2-read/bar.txt"
       )
     '';

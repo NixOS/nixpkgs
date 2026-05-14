@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "2.09";
 
   src = fetchurl {
-    url = "http://files.identiv.com/products/smart-card-readers/contactless/scl010-011/Linux_Driver_Ver${version}.zip";
+    url = "https://files.identiv.com/products/smart-card-readers/contactless/scl010-011/Linux_Driver_Ver${version}.zip";
     sha256 = "0ik26sxgqgsqplksl87z61vwmx51k7plaqmrkdid7xidgfhfxr42";
   };
 
@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
       $out/pcsc/drivers/SCLGENERIC.bundle/Contents/Linux/libSCLGENERIC.so.${version};
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SCM Microsystems SCL011 chipcard reader user space driver";
     homepage = "https://www.scm-pc-card.de/index.php?lang=en&page=product&function=show_product&product_id=630";
     downloadPage = "https://support.identiv.com/scl010-scl011/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ sephalon ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ sephalon ];
+    platforms = lib.platforms.linux;
   };
 }

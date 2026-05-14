@@ -7,7 +7,8 @@
 }:
 
 symlinkJoin {
-  inherit name;
+  pname = name;
+  inherit (arcan) version;
 
   paths = appls ++ [ arcan ];
 

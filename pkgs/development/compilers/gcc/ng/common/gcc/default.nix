@@ -193,6 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-multilib"
     "--disable-nls"
     "--disable-shared"
+    "--enable-default-pie"
     "--enable-languages=${
       lib.concatStrings (
         lib.intersperse "," (

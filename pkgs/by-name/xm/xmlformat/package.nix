@@ -1,34 +1,39 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   perl,
+  unstableGitUpdater,
 }:
-stdenv.mkDerivation rec {
-  pname = "xmlformat";
-  version = "1.04";
 
-  src = fetchurl {
-    url = "http://www.kitebird.com/software/xmlformat/xmlformat-${version}.tar.gz";
-    sha256 = "1vwgzn4ha0az7dx0cyc6dx5nywwrx9gxhyh08mvdcq27wjbh79vi";
+stdenv.mkDerivation {
+  pname = "xmlformat";
+  version = "1.9-unstable-2026-02-12";
+
+  src = fetchFromGitHub {
+    owner = "someth2say";
+    repo = "xmlformat";
+    rev = "172a7db1bde6abe91836048a20afe2805a963e76";
+    hash = "sha256-gtG4PaSqrnRoUWiVtrs8/k3qc8j8++5eJj9pqEo20Bk=";
   };
 
   buildInputs = [ perl ];
-  buildPhase = ''
-    patchShebangs ./xmlformat.pl
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ./xmlformat.pl $out/bin/xmlformat
-    cp ./LICENSE $out/
+    cp bin/xmlformat.pl $out/bin/xmlformat
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Configurable formatter (or 'pretty-printer') for XML documents";
+    homepage = "https://github.com/someth2say/xmlformat";
+    license = lib.licenses.gpl3Only;
     mainProgram = "xmlformat";
-    homepage = "http://www.kitebird.com/software/xmlformat/";
-    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
     platforms = lib.platforms.all;
   };
 }

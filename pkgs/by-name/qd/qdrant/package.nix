@@ -2,26 +2,28 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   protobuf,
   pkg-config,
   openssl,
   rust-jemalloc-sys,
-  nix-update-script,
   rust-jemalloc-sys-unprefixed,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qdrant";
-  version = "1.14.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
-    tag = "v${version}";
-    hash = "sha256-o9Nv4UsFgVngKWpe5sUR8tovtpB81tJBSm6We6DN20c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EGk1BM8/SjH4LO25fG5GGtRXTnhA9prmGR5MxyzJNd4=";
   };
 
-  cargoHash = "sha256-xt7uu+YZGazbKwXEKXeIwcGg8G4djQx7nKpQYFv/L3Y=";
+  cargoHash = "sha256-8+tMZQUsyouNbxlvykfQ66/THd9PMPnVUbWaXwMtVCM=";
 
   nativeBuildInputs = [
     protobuf
@@ -38,6 +40,24 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;
 
+  nativeCheckInputs = [ cacert ];
+
+  checkFlags = [
+    # This test assumes the process starts without any existing children,
+    # which is not reliable in the Nix build sandbox.
+    "--skip=common::metrics::procfs_metrics::test_child_processes"
+  ];
+
+  # Fix cargo-auditable issue with bench_rocksdb = ["dep:rocksdb"]
+  auditable = false;
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -48,6 +68,9 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/qdrant/qdrant";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [
+      dit7ya
+      miniharinn
+    ];
   };
-}
+})

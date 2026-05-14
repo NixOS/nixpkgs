@@ -11,28 +11,28 @@
   libGL,
   libpng,
   lunasvg,
+  nativefiledialog-extended,
   nlohmann_json,
   plutovg,
-  xorg,
+  xvfb-run,
   zlib,
-  nativeFileDialog ? null,
   python3Packages ? null,
-  enableNFD ? false,
+  enableNFD ? true,
   enablePython ? false,
   enableTests ? false,
   enableExamples ? false,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather-tk";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "darbyjohnston";
     repo = "feather-tk";
     tag = finalAttrs.version;
-    fetchSubmodules = true;
-    hash = "sha256-776V1nMsAatGkYNBq7QFRX28cI3/NU/2YRSbhfezr0g=";
+    hash = "sha256-hcV99y14o3YFUtKDLEKaR7MxBB3pBdd3sferrYvtvYw=";
   };
 
   nativeBuildInputs = [
@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libGL
   ]
-  ++ lib.optionals (enableNFD && nativeFileDialog != null) [
-    nativeFileDialog
+  ++ lib.optionals enableNFD [
+    nativefiledialog-extended
   ]
-  ++ lib.optionals (enableNFD && stdenv.isLinux) [
+  ++ lib.optionals (enableNFD && stdenv.hostPlatform.isLinux) [
     gtk3
   ]
   ++ lib.optionals enablePython [
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "feather_tk_UI_LIB" true)
     (lib.cmakeFeature "feather_tk_API" "GL_4_1")
     (lib.cmakeBool "feather_tk_nfd" enableNFD)
@@ -74,15 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = enableTests;
 
-  nativeCheckInputs = lib.optionals (enableTests && stdenv.isLinux) [
-    xorg.xvfb-run
+  nativeCheckInputs = lib.optionals (enableTests && stdenv.hostPlatform.isLinux) [
+    xvfb-run
   ];
 
   checkPhase = lib.optionalString enableTests ''
     runHook preCheck
 
     cd feather-tk/src/feather-tk-build
-    ${if stdenv.isLinux then "xvfb-run" else ""} ctest --verbose -C Release
+    ${if stdenv.hostPlatform.isLinux then "xvfb-run" else ""} ctest --verbose -C Release
 
     runHook postCheck
   '';
@@ -93,5 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    badPlatforms = [
+      # Broken on darwin with latest SDK, see https://github.com/darbyjohnston/feather-tk/issues/1
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 })

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumictl";
   version = "0.0.50";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumictl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Jq7H2lM5Vu/cb+mgoUP6p8MQxJ3w0Pgt+adWey2mPKk=";
   };
 
@@ -20,16 +20,16 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumictl/pkg/version.Version=${src.rev}"
+    "-X=github.com/pulumi/pulumictl/pkg/version.Version=${finalAttrs.src.rev}"
   ];
 
   subPackages = [ "cmd/pulumictl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Swiss Army Knife for Pulumi Development";
     mainProgram = "pulumictl";
     homepage = "https://github.com/pulumi/pulumictl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vincentbernat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vincentbernat ];
   };
-}
+})

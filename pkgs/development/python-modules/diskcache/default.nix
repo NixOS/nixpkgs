@@ -7,15 +7,12 @@
   pytest-django,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "diskcache";
   version = "5.6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
@@ -45,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diskcache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -4,30 +4,32 @@
   cmake,
   enet,
   fetchFromGitHub,
+  fetchpatch2,
   fixDarwinDylibNames,
   flac,
   freetype,
+  gitUpdater,
   gtk3,
   libGL,
   libGLU,
   libjpeg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libtheora,
   libvorbis,
   libwebp,
-  libX11,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXi,
-  libXpm,
-  libXt,
-  libXxf86dga,
-  libXxf86misc,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxi,
+  libxpm,
+  libxt,
+  libxxf86dga,
+  libxxf86misc,
+  libxxf86vm,
   openal,
   physfs,
   pkg-config,
@@ -52,6 +54,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-agE3K+6VhhG/LO52fiesCsOq1fNYVRhdW7aKdPCbTOo=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "Bump-CMake-minimum-version-to-3.5";
+      url = "https://github.com/liballeg/allegro5/commit/6e93fcaabaafd81701f4cd1b74f4b69dd598bc9b.patch?full_index=1";
+      hash = "sha256-IEnn66bS2m6MVFCNf341yLtd7jTl2gflL5EFJFmbEt4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -80,19 +90,19 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
-    libX11
-    libXcursor
-    libXdmcp
-    libXext
-    libXfixes
-    libXi
-    libXpm
-    libXt
-    libXxf86dga
-    libXxf86misc
-    libXxf86vm
+    libx11
+    libxcursor
+    libxdmcp
+    libxext
+    libxfixes
+    libxi
+    libxpm
+    libxt
+    libxxf86dga
+    libxxf86misc
+    libxxf86vm
     xorgproto
   ]
   ++ lib.optionals useSDL [
@@ -117,11 +127,15 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     description = "Game programming library";
     homepage = "https://liballeg.org/";
-    license = licenses.zlib;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

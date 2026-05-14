@@ -7,12 +7,12 @@
   lapack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csdp";
   version = "6.1.1";
 
   src = fetchurl {
-    url = "https://www.coin-or.org/download/source/Csdp/Csdp-${version}.tgz";
+    url = "https://www.coin-or.org/download/source/Csdp/Csdp-${finalAttrs.version}.tgz";
     sha256 = "1f9ql6cjy2gwiyc51ylfan24v1ca9sjajxkbhszlds1lqmma8n05";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     description = "C Library for Semidefinite Programming";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-python";
     name = "mypy-type-checker";
-    version = "2025.2.0";
-    hash = "sha256-VJ/XSC4cbIjgxKLsXxUxwko+HR0U59c8OrhYnKPJu4g=";
+    version = "2026.4.0";
+    hash = "sha256-N0zml16XSBwjGHzCR1L0W9WiSgqD/375VIQGpGfCkFE=";
   };
 
   meta = {
@@ -17,6 +17,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.mypy-type-checker";
     homepage = "https://github.com/microsoft/vscode-mypy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

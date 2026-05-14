@@ -3,6 +3,7 @@
   config,
   ags,
   astal,
+  awww,
   bluez,
   bluez-tools,
   brightnessctl,
@@ -25,19 +26,30 @@
   networkmanager,
   nix-update-script,
   python3,
-  pywal,
+  pywal16,
   stdenv,
-  swww,
   upower,
   wireplumber,
   wl-clipboard,
   writeShellScript,
+  writeShellScriptBin,
 
   enableCuda ? config.cudaSupport,
 }:
+
+let
+  # TODO: Remove once hyprpanel updates to use `awww`
+  swww-compat = writeShellScriptBin "swww" ''
+    exec awww "$@"
+  '';
+  swww-daemon-compat = writeShellScriptBin "swww-daemon" ''
+    exec awww-daemon "$@"
+  '';
+in
+
 ags.bundle {
   pname = "hyprpanel";
-  version = "0-unstable-2025-08-19";
+  version = "0-unstable-2026-04-23";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,8 +57,8 @@ ags.bundle {
   src = fetchFromGitHub {
     owner = "Jas-SinghFSU";
     repo = "HyprPanel";
-    rev = "6385f2e15df908e0c13bed800f4b091300e5b981";
-    hash = "sha256-ukXfV1cAsxoar0IVEO2/s3qnVEZpZf0wvqE3PIESobw=";
+    rev = "1961ba86ad5ab880beb639e5454054b2b5037e0d";
+    hash = "sha256-QowlCOrE4jGOTDCUCEx/E8gHjqSx3r25y7v4dEBpBhk=";
   };
 
   # keep in sync with https://github.com/Jas-SinghFSU/HyprPanel/blob/master/flake.nix#L42
@@ -63,6 +75,7 @@ ags.bundle {
     astal.tray
     astal.wireplumber
 
+    awww
     bluez
     bluez-tools
     brightnessctl
@@ -79,8 +92,9 @@ ags.bundle {
     libsoup_3
     matugen
     networkmanager
-    pywal
-    swww
+    pywal16
+    swww-compat
+    swww-daemon-compat
     upower
     wireplumber
     wl-clipboard
@@ -121,7 +135,7 @@ ags.bundle {
     description = "Bar/Panel for Hyprland with extensive customizability";
     homepage = "https://github.com/Jas-SinghFSU/HyprPanel";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
     mainProgram = "hyprpanel";
     platforms = lib.platforms.linux;
   };

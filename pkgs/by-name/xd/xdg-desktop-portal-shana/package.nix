@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-shana";
-  version = "0.3.15";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "xdg-desktop-portal-shana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6D21Dwpi7Zrf6Whxy41RwdKLLHmevP2M9pgdnz7mgE0=";
+    hash = "sha256-NFeXM2ujv9F9vPyRm1mFbLuThwTki5Uu2DEEwPpHK30=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-j5M8rKKq2pdHHUQyGf1EZZWj5dpw4RnKxKEbzfT7coc=";
+    hash = "sha256-2cPUNxZhrqJ9ODAi6MshlJIdLZGssA85ZFmbrqEE1p4=";
   };
 
   nativeBuildInputs = [

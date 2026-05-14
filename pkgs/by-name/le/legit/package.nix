@@ -5,13 +5,13 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "legit";
   version = "1.2.0.post0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-lJOWtoApqK9AWrIMkBkCNB72vVXH/sbatxFB1j1AaxE=";
   };
 
@@ -33,11 +33,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "legit" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frostming/legit";
     description = "Git for Humans, Inspired by GitHub for Mac";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ryneeverett ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ryneeverett ];
     mainProgram = "legit";
   };
-}
+})

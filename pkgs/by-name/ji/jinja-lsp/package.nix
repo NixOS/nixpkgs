@@ -3,18 +3,18 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jinja-lsp";
-  version = "0.1.89";
+  version = "0.1.91";
 
   src = fetchFromGitHub {
     owner = "uros-5";
     repo = "jinja-lsp";
-    tag = "v${version}";
-    hash = "sha256-K+7HS1dtDtHNMIseXopWzkFM3wC5b/sfYeHI3vxw74Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BOZIbuEZQAEVtB/rfZVPuUki4hdbq0+NEsXr26+zZ3o=";
   };
 
-  cargoHash = "sha256-TxpQ5kGGjEXNSzLdcwVmzuD189xcX1ndYRdRvLTlIQw=";
+  cargoHash = "sha256-1tXgHd4PBOxa4YzHClahrrkRsbwBoT5lMdigB5CE5Zw=";
 
   cargoBuildFlags = [
     "-p"
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ adamjhf ];
     mainProgram = "jinja-lsp";
   };
-}
+})

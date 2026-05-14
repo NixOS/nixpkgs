@@ -3,25 +3,26 @@
   makeWrapper,
   gawk,
   perl,
-  bash,
+  runtimeShellPackage,
   stdenv,
   which,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   python3Packages,
-  bashNonInteractive,
   buildPackages,
 
   # apparmor deps
-  libapparmor,
   apparmor-parser,
   apparmor-teardown,
 }:
+let
+  inherit (python3Packages) libapparmor;
+in
 python3Packages.buildPythonApplication {
   pname = "apparmor-utils";
   inherit (libapparmor) version src;
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs common
     cd utils
 
     substituteInPlace aa-remove-unknown \
@@ -35,7 +36,7 @@ python3Packages.buildPythonApplication {
     sed -i Makefile -e "/\<vim\>/d"
   '');
 
-  format = "other";
+  pyproject = false;
   strictDeps = true;
 
   doCheck = true;
@@ -43,13 +44,12 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = [
     makeWrapper
     which
-    bashNonInteractive
     python3Packages.setuptools
   ];
 
   buildInputs = [
-    bash
     perl
+    runtimeShellPackage
   ];
 
   pythonPath = [

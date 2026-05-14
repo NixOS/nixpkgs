@@ -6,6 +6,10 @@
   git,
   testers,
   d2,
+  libdrm,
+  libgbm,
+  makeWrapper,
+  playwright-driver,
 }:
 
 buildGoModule (finalAttrs: {
@@ -29,13 +33,26 @@ buildGoModule (finalAttrs: {
     "-X oss.terrastruct.com/d2/lib/version.Version=v${finalAttrs.version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
+
+  buildInputs = lib.optionals libdrm.meta.available [
+    libgbm
+    playwright-driver.browsers
+  ];
+
+  nativeCheckInputs = [ git ];
 
   postInstall = ''
     installManPage ci/release/template/man/d2.1
+  ''
+  # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
+  + lib.optionalString (finalAttrs.buildInputs != [ ]) ''
+    wrapProgram $out/bin/d2 \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
   '';
-
-  nativeCheckInputs = [ git ];
 
   preCheck = ''
     # See https://github.com/terrastruct/d2/blob/master/docs/CONTRIBUTING.md#running-tests.

@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   stdenv,
   buildPythonPackage,
   fetchPypi,
@@ -35,14 +34,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.16.0";
+  version = "2.17.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-ZdS0T98ty73+CqGs5KhC1Kr3RqK3sWgTTVqu01Yht/Y=";
+    hash = "sha256-w46omFZpZMiItHcq4e1Y7KhFkuiCUdLPxNFx+B9+mdU=";
   };
 
   build-system = [
@@ -105,12 +103,16 @@ buildPythonPackage rec {
     "test_subscribe_websocket"
     # test is presumable broken in sandbox
     "test_authorized_requests"
+    # Fails under load on Hydra; kernel stays in 'starting' state due to a zmq socket error
+    "test_cull_connected"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
     # Insufficient access privileges for operation
     "test_regression_is_hidden"
+    # Fails under load (which causes failure on Hydra)
+    "test_execution_state"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>

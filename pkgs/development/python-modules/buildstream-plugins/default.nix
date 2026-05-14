@@ -2,20 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   setuptools,
   cython,
 }:
 
 buildPythonPackage rec {
   pname = "buildstream-plugins";
-  version = "2.4.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream-plugins";
     tag = version;
-    hash = "sha256-VAHDMy4DvNneWP1jhrIZzogZ5Gz5PS/GcFpOg2cGYvs=";
+    hash = "sha256-vbHfceMdaedAg0fVt8pBF+S7yPYhfQlgEYvb48ym+4I=";
   };
 
   build-system = [
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   # May be fixable by skipping certain tests? TODO.
 
   pythonImportsCheck = [ "buildstream_plugins" ];
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "dev";
+  };
 
   meta = {
     description = "BuildStream plugins";

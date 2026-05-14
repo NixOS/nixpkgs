@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iotop";
   version = "0.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchurl {
-    url = "http://guichaz.free.fr/iotop/files/iotop-${version}.tar.bz2";
+    url = "http://guichaz.free.fr/iotop/files/iotop-${finalAttrs.version}.tar.bz2";
     sha256 = "0nzprs6zqax0cwq8h7hnszdl3d2m4c2d4vjfxfxbnjfs9sia5pis";
   };
 
@@ -28,12 +28,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "iotop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find out the processes doing the most IO";
     homepage = "http://guichaz.free.fr/iotop";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "iotop";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})

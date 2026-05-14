@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "pyocd";
-  version = "0.38.0";
+  version = "0.42.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "pyOCD";
     tag = "v${version}";
-    hash = "sha256-4fdVcTNH125e74S3mA/quuDun17ntGCazX6CV+obUGc=";
+    hash = "sha256-VSEItt+mXiV3u3SAKQc8uGiJdT6b4nER/u6BwfaX2CM=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
@@ -83,7 +83,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       frogamic
-      sbruder
     ];
   };
 }

@@ -6,29 +6,31 @@
   copyDesktopItems,
   fetchpatch,
   fetchurl,
-  libX11,
-  libXpm,
-  libXt,
+  libx11,
+  libxpm,
+  libxt,
   motif,
+  imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xbill";
   version = "2.1";
 
   nativeBuildInputs = [
     autoreconfHook # Fix configure script that fails basic compilation check
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [
-    libX11
-    libXpm
-    libXt
+    libx11
+    libxpm
+    libxt
     motif
   ];
 
-  NIX_CFLAGS_LINK = "-lXpm";
+  env.NIX_CFLAGS_LINK = "-lXpm";
 
   configureFlags = [
     "--with-x"
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://www.xbill.org/download/${pname}-${version}.tar.gz";
+    url = "http://www.xbill.org/download/xbill-${finalAttrs.version}.tar.gz";
     hash = "sha256-Dv3/8c4t9wt6FWActIjNey65GNIdeOh3vXc/ESlFYI0=";
   };
 
@@ -65,7 +67,8 @@ stdenv.mkDerivation rec {
   makeFlags = "-B";
 
   postInstall = ''
-    install -Dm644 pixmaps/icon.xpm $out/share/pixmaps/xbill.xpm
+    mkdir -p $out/share/icons/hicolor/48x48/apps
+    magick pixmaps/icon.xpm -resize 48x48 $out/share/icons/hicolor/48x48/apps/xbill.png
   '';
 
   doInstallCheck = true;
@@ -91,4 +94,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xbill";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   stdenv,
-  pythonOlder,
   requests,
   numpy,
   pandas,
@@ -31,16 +30,14 @@
 
 buildPythonPackage rec {
   pname = "tsfresh";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blue-yonder";
     repo = "tsfresh";
     tag = "v${version}";
-    hash = "sha256-XwNCI1J/Z6w7nq59s9rSN4eVGgrMDQjPpGFy9SxrTn0=";
+    hash = "sha256-KwUI33t5KFcTUWdSDg81OPbNn5SYv4Gw/0dPjCB502w=";
   };
 
   patches = [
@@ -108,6 +105,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/blue-yonder/tsfresh";
     changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

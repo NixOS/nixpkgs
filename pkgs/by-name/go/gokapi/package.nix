@@ -7,18 +7,20 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gokapi";
-  version = "2.0.1";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "Forceu";
     repo = "Gokapi";
-    tag = "v${version}";
-    hash = "sha256-sYosoG4bZ5B024tFr2tEjf5EezoWmtO3vFE6W6grm1M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N9rV8/IJy4eMwdXXh+7z3raPcalSFUWP7EwN84tfbk8=";
   };
 
-  vendorHash = "sha256-GeS+lfFw7jUuXX1qQPiu9eKjz6nswpRtbZXjqu4DnHg=";
+  vendorHash = "sha256-oZyZD4kPqgSIaphXRyXVzY+8gYd7kpWAAo1cfiE1ln8=";
+
+  proxyVendor = true;
 
   patches = [ ];
 
@@ -49,7 +51,6 @@ buildGoModule rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -62,7 +63,7 @@ buildGoModule rec {
   meta = {
     description = "Lightweight selfhosted Firefox Send alternative without public upload";
     homepage = "https://github.com/Forceu/Gokapi";
-    changelog = "https://github.com/Forceu/Gokapi/releases/tag/v${version}";
+    changelog = "https://github.com/Forceu/Gokapi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -70,4 +71,4 @@ buildGoModule rec {
     ];
     mainProgram = "gokapi";
   };
-}
+})

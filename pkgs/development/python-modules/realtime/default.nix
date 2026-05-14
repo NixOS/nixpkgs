@@ -1,57 +1,65 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  python-dateutil,
-  typing-extensions,
-  websockets,
-  aiohttp,
+  pydantic,
+  pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dotenv,
+  typing-extensions,
+  websockets,
 }:
 
-buildPythonPackage rec {
-  pname = "realtime-py";
-  version = "2.5.2";
+buildPythonPackage (finalAttrs: {
+  pname = "realtime";
+  version = "2.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
-    repo = "realtime-py";
-    rev = "v${version}";
-    hash = "sha256-NFxWcnt/zpgDehacqK7QlXhmjrh6JoA6xh+sFjD/tt0=";
+    repo = "supabase-py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LaSlAYFvx/HHdfmc9J+KScVQ9JFGS98Yfihzn8F7t3g=";
   };
 
+  sourceRoot = "${finalAttrs.src.name}/src/realtime";
+
+  pythonRelaxDeps = [ "websockets" ];
+
+  build-system = [ poetry-core ];
+
   dependencies = [
-    python-dateutil
+    pydantic
     typing-extensions
     websockets
+  ];
+
+  nativeCheckInputs = [
     aiohttp
-  ];
-
-  pythonRelaxDeps = [
-    "websockets"
-    "aiohttp"
-    "typing-extensions"
-  ];
-
-  # Can't run all the tests due to infinite loop in pytest-asyncio
-  nativeBuildInputs = [
+    pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     python-dotenv
   ];
 
   pythonImportsCheck = [ "realtime" ];
 
-  build-system = [ poetry-core ];
-
-  doCheck = false;
+  disabledTestPaths = [
+    "tests/test_connection.py"
+    "tests/test_presence.py"
+  ];
 
   meta = {
-    homepage = "https://github.com/supabase/realtime-py";
+    description = "Client library for Supabase Functions";
+    homepage = "https://github.com/supabase/supabase-py";
+    changelog = "https://github.com/supabase/supabase-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    description = "Python Realtime Client for Supabase";
-    maintainers = with lib.maintainers; [ siegema ];
+    maintainers = with lib.maintainers; [
+      siegema
+      macbucheron
+    ];
   };
-}
+})

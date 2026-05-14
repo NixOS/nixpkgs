@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
@@ -16,9 +15,7 @@ buildPythonPackage rec {
   pname = "jaraco-email";
   version = "3.1.1";
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
@@ -44,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.email/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/jaraco.email/blob/${src.tag}/NEWS.rst";
     description = "E-mail facilities by jaraco";
     homepage = "https://github.com/jaraco/jaraco.email";
     license = lib.licenses.mit;

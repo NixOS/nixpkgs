@@ -5,12 +5,12 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shellcheck-sarif";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-G69DiDl78vkPuLodsRTL7dbbIFtNNF/XWuLZpCHKJws=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "shellcheck-sarif";
   };
-}
+})

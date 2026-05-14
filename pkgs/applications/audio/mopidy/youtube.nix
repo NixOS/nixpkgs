@@ -7,7 +7,7 @@
   extraPkgs ? pkgs: [ ],
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-youtube";
   version = "3.7";
   pyproject = true;
@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "natumbri";
     repo = "mopidy-youtube";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iFt7r8Ljymc+grNJiOClTHkZOeo7AcYpcNc8tLMPROk=";
   };
 
@@ -63,10 +63,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_youtube" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mopidy extension for playing music from YouTube";
     homepage = "https://github.com/natumbri/mopidy-youtube";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

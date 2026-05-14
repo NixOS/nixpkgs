@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   untokenize,
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # lib2to3 usage and unmaintained since 2019
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "myint";
@@ -38,11 +37,11 @@ buildPythonPackage rec {
     "test_format_code_with_backslash_in_comment"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modifies strings to all use the same quote where possible";
     mainProgram = "unify";
     homepage = "https://github.com/myint/unify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

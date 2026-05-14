@@ -14,7 +14,6 @@ buildPythonApplication rec {
   pyproject = true;
 
   # it needs `secrets` which was introduced in 3.6
-  disabled = pythonOlder "3.6";
 
   # GH is newer than Pypi and contains both library *and* the actual program
   # whereas Pypi only has the library
@@ -49,11 +48,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "pwgen_secure" ];
 
-  meta = with lib; {
+  meta = {
     description = "Secure password generation library to replace pwgen";
     homepage = "https://github.com/mjmunger/pwgen_secure/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "spwgen";
   };
 }

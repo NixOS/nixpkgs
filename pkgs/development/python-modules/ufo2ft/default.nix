@@ -6,11 +6,10 @@
   compreffor,
   cu2qu,
   defcon,
-  fetchPypi,
+  fetchFromGitHub,
   fontmath,
   fonttools,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   skia-pathops,
   syrupy,
@@ -19,21 +18,19 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.6.0";
+  version = "3.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hKqTjD8cTgyxHZnaojPAT5JY11okvLiNOnemoULnpmw=";
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = "ufo2ft";
+    tag = "v${version}";
+    hash = "sha256-PHd4l3kbWdJmtZMF9gKbz5DtdaaO3C/Rldw3pdMJJC0=";
   };
 
   build-system = [
     setuptools-scm
   ];
-
-  pythonRelaxDeps = [ "cffsubr" ];
 
   dependencies = [
     cu2qu
@@ -69,11 +66,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ufo2ft" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
-    changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

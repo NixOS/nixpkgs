@@ -26,7 +26,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-algebra.version ]
       [
-        (case (range "9.0" "9.1") (range "2.4.0" "2.4.0") "2.2.0")
+        (case (range "9.0" "9.1") (range "2.4.0" "2.5.0") "2.2.0")
       ]
       null;
   release."2.2.0".sha256 = "sha256-VnfK+RHWiq27hxEJ9stpVp609/dMiPH6UHFhzaHdAnM=";
@@ -37,9 +37,9 @@ mkCoqDerivation {
     stdlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Coq library of Partial Commutative Monoids";
-    license = licenses.asl20;
-    maintainers = [ maintainers.proux01 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.proux01 ];
   };
 }

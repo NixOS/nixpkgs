@@ -4,22 +4,21 @@
   fetchFromGitHub,
   nix-update-script,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   nodejs,
 }:
 
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
-  version = "2.4.2";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BUgWx6SVpQ6qIJnb6EoiogRXuKo9uDRrl7bPuXTGQy8=";
+    hash = "sha256-8DCgbfp3ttpMTXS9SNkN1R63LZHaklsNHViRhmWVFuk=";
   };
 
   patches = [
@@ -29,14 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-fail-on-plugins-json.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-/o2WaB63lcWbbe8nCwMSYhGr9zra7QPL1Er78vW8Kjw=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-2nKpmGxC+KVg0oF0BsswS9L84QxzpRF7NvKyqyQ7WJM=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
   ];
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     # remove unnecessary files
     rm node_modules/.modules.yaml
-    pnpm prune --prod --ignore-scripts
+    CI=true pnpm prune --prod --ignore-scripts
     find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
 
     # remove non-deterministic files
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
-      --suffix PATH : "${lib.makeBinPath [ pnpm ]}" \
+      --suffix PATH : "${lib.makeBinPath [ pnpm_9 ]}" \
       --set NODE_PATH "$out/lib/node_modules:$out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node_modules" \
       --set-default NODE_ENV production
     find $out/lib -xtype l -delete

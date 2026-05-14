@@ -7,7 +7,7 @@
   installShellFiles,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "you-get";
   version = "0.4.1700";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XNIUkgEqRGrBtSxvfkSUSqxltZ6ZdkWoTc9kz4BD6Zw=";
   };
 
@@ -47,9 +47,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tiny command line utility to download media contents from the web";
     homepage = "https://you-get.org";
-    changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/soimort/you-get/raw/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryneeverett ];
     mainProgram = "you-get";
   };
-}
+})

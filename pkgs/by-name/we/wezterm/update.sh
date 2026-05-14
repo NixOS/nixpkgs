@@ -22,8 +22,8 @@ NEW_VERSION="0-unstable-$COMMIT_DATE"
 FETCH_JSON=$(nix-prefetch-git --url "https://github.com/$OWNER/$REPO" --rev "$LATEST_REV" --fetch-submodules)
 FETCH_HASH=$(echo "$FETCH_JSON" | jq --raw-output .hash)
 
-(cd "$NIXPKGS_ROOT" && nix-update wezterm)
-(cd "$NIXPKGS_ROOT" && update-source-version "$PACKAGE_NIX_ATTR_PATH" "$NEW_VERSION" "$FETCH_HASH" --rev="$LATEST_REV")
+(cd "$NIXPKGS_ROOT" && update-source-version "$PACKAGE_NIX_ATTR_PATH" "$NEW_VERSION" "$FETCH_HASH" --rev="$LATEST_REV" --ignore-same-version --print-changes)
+(cd "$NIXPKGS_ROOT" && nix-update --version=skip "$PACKAGE_NIX_ATTR_PATH")
 
 sed -i -e "s#version = \".*\"#version = \"$NEW_VERSION\"#" "$NIXPKGS_ROOT/pkgs/by-name/we/wezterm/package.nix"
 

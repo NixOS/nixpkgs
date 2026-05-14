@@ -8,7 +8,7 @@ This function can create images in two ways:
 - using a virtual machine to create a full NixOS installation.
 
 When testing early-boot or lifecycle parts of NixOS such as a bootloader or multiple generations, it is necessary to opt for a full NixOS system installation.
-Whereas for many web servers, applications, it is possible to work with a Nix store only disk image and is faster to build.
+Whereas for many web servers and applications, it is possible to work with a Nix store only disk image, which is faster to build.
 
 NixOS tests also use this function when preparing the VM. The `cptofs` method is used when `virtualisation.useBootLoader` is false (the default). Otherwise the second method is used.
 
@@ -39,7 +39,7 @@ Features are separated in various sections depending on if you opt for a Nix-sto
 
 ### On bit-to-bit reproducibility {#sec-make-disk-image-features-reproducibility}
 
-Images are **NOT** deterministic, please do not hesitate to try to fix this, source of determinisms are (not exhaustive) :
+Images are **NOT** deterministic. Please do not hesitate to try to fix this. Sources of non-determinism are (not exhaustive):
 
 - bootloader installation has timestamps
 - SQLite Nix store database contains registration times

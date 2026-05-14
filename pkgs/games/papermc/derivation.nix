@@ -56,7 +56,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       aaronjanse
-      neonfuz
       MayNiklas
     ];
     mainProgram = "minecraft-server";

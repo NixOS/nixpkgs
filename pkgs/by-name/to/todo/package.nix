@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "todo";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "sioodmy";
     repo = "todo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "oyRdXvVnCfdFM8lI1eCDHHYNWcJc0Qg0TKxQXUqNo40=";
   };
 
@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
-  meta = with lib; {
+  meta = {
     description = "Simple todo cli program written in rust";
     homepage = "https://github.com/sioodmy/todo";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sioodmy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sioodmy ];
     mainProgram = "todo";
   };
-}
+})

@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.39.4";
+  version = "0.42.1";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = finalAttrs.version;
-    hash = "sha256-V5nBfYCPJKxhpWRG44GdoFIL5fRFyZB4W7YBtTNPv2I=";
+    hash = "sha256-TdVjoJmWZ76e9h+/z4/TlytJgwQpQu/esRuZg1sZw8A=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-qVUWK3p7S3biucy5Mz3eMjBndrlwJ8pn1TS8qLutNYs=";
+  cargoHash = "sha256-EokHEduK+8h+JzIKRRga+QXLkfC4CK+qyoIxMwD2OPI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -63,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
-      montchr
+      astratagem
       lord-valen
       cafkafk
     ];

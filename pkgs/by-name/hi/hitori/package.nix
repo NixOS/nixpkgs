@@ -53,13 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "hitori"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/hitori";
     changelog = "https://gitlab.gnome.org/GNOME/hitori/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GTK application to generate and let you play games of Hitori";
     mainProgram = "hitori";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 })

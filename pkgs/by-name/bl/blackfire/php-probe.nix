@@ -16,52 +16,57 @@ let
   phpMajor = lib.versions.majorMinor php.version;
   inherit (stdenv.hostPlatform) system;
 
-  version = "1.92.40";
+  version = "1.92.51";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-5yfhpseazq9XADYR4/Wo3xg6jGNbSdFrTn+cP+pCbN4=";
-        "8.2" = "sha256-ipUXh7pV9qiol6j9PpOyAyxriHDpBHDWin/dIxl4AqA=";
-        "8.3" = "sha256-6JcS+aTYhT14D2/wwxJad4MnsilgSjsckSzsx+lVvOM=";
-        "8.4" = "sha256-XYcRjHRLhF3f8INEnyGNnhrZlwQGt0wIdGtY3TTnA7s=";
+        "8.1" = "sha256-HxVqkPupo3LrKfbQGOqoxpGJjFN17Jlkdya4BjBsBVw=";
+        "8.2" = "sha256-ssbMa4Wa27nwhJZ16FT+qrB4LH/HztOtCx+MI+i16Pg=";
+        "8.3" = "sha256-p9SXxHQGmsjtSeRFt9vYS5XK6nouT7qbqmlWbEpb2Hk=";
+        "8.4" = "sha256-ArI/SNjPIbjwEBMHvKCdSOkth8qqBWT6W0RnoWyWA+o=";
+        "8.5" = "sha256-5e4f9iEn5QPZY6Z+05O7QxTwaW+cjmP6nB5fkpValoM=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-+ApXqJCew4/LKNc+nzDDat+jyqCs8P/kX7Sxt7fAnIE=";
-        "8.2" = "sha256-IxarxqbjA3Rei7eR/AUSOHSCoLAsHPwebIXQJYW05Ig=";
-        "8.3" = "sha256-HZAOO+VnK3qax/++jAKllHSbCVAgUeEmlSr/HVsXPQY=";
-        "8.4" = "sha256-uRG07BkUmZFMvMzVsuF0qRF/wv74QqP2YtGV1Emgcsg=";
+        "8.1" = "sha256-mTw8v5DaP7D5qb3XwRZvx8XH4bTiuu2xzzo82KsrrZU=";
+        "8.2" = "sha256-Vtb0DVfPBC0JtK1XOPQ8KmA0Jq0pBBA3jkDaCV7icGg=";
+        "8.3" = "sha256-vnL8gfA6ejMcpnfKXalSOvl7vixwQLJBC3DTO4Dafow=";
+        "8.4" = "sha256-x9/BcZPJib0hal6M2vUVk1cLmN1gc3k6hypViTqForo=";
+        "8.5" = "sha256-aVmQ8vHS/oQeb44RyV5hggOt+VXLqP7wKDxgfpbopQQ=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-PkXmLsLwNF132SM+aOA1mfc+6EoaBlwpgoKTKXE0JFI=";
-        "8.2" = "sha256-edsH+Xb0lrw9Dg1aHHtjRGMjGS7+ZDxk/IJFZt5A5ho=";
-        "8.3" = "sha256-uP7bY8Pw/1GNdTd897eqsiVfQKr5HLVJ1BVHIloVdRA=";
-        "8.4" = "sha256-5MqridoL7fcMXnmC+XJoj3opkmrO1dVQWbZE1ot5y+E=";
+        "8.1" = "sha256-S41qr5wU2dsK0IBsR/mTALguPQU+SKYVTLP7DwGQo40=";
+        "8.2" = "sha256-eQkvDRxwQNXlkZ9XzcSRfkKjp/CTZGaFwolXq6TZWaE=";
+        "8.3" = "sha256-GBjjx0cSJjYCOdDiArUPA4iqOcgpk3y9o0wi6b6UJgM=";
+        "8.4" = "sha256-s4zcHogsOy1GjTAGJuO6i7S6dp/lmRVzbjJk3/t8Zn4=";
+        "8.5" = "sha256-/lFwv6p9izXj7X+pqZe9clcp+wSYtzIPnwqeE/HFqNk=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-G2Zq6n1Ndx5MN3hbDlPDpT+wpNcYBm+mMnbnVNfAHvw=";
-        "8.2" = "sha256-9i65PvfjmyFWmgjQPyYRRLV/SOX88tFub2+XmnRlgVA=";
-        "8.3" = "sha256-Lf1p55Ae9pddT3Z82h7p/9jC7zN5Md3hOzXXLu/kDjM=";
-        "8.4" = "sha256-A3k/IEyDoLmGcJzl60nclB8f+lUmvWXKF851ZMpgwfM=";
+        "8.1" = "sha256-+ko465G24UELdMmEg4ZqOA9p0/0DSs3p+On6Gg2IVMM=";
+        "8.2" = "sha256-TERILY6E1vnl+L6t+oel+1H3HTHWTTeEb1rVXtriJ8w=";
+        "8.3" = "sha256-R5Ue3erVCe1gOPk1SuDRXGA05WPm1IisHCnbXfmjFcw=";
+        "8.4" = "sha256-qqbmZa4qd7Ck87GylHeHP9m3K47DAEiTxlKdtXEnzVo=";
+        "8.5" = "sha256-3d9glqfXCMXwtLZm8fuj9DVzCIczynX7MRxnbMC7/NE=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-3uCvCbkpaawMnW6IXS9VPp8GU4SOwqh/9oxcP1W3h2E=";
-        "8.2" = "sha256-PCnUHwtNex9juVL5evY37qyuDRguZs4ByOfOnY7HQs0=";
-        "8.3" = "sha256-/3XZPG8+O71sbrVPDg0Thn+pTPGNYBTkJ3s/txI0Q3k=";
-        "8.4" = "sha256-XY2rS2p1WAVp1Rd1V8JUnCiTQe2WouLwlmtZTnRqs04=";
+        "8.1" = "sha256-XvV6x8LKjR4j081PIdKpYCVl+ayXOmPsXf+gsMeFOro=";
+        "8.2" = "sha256-qxFWj1HpWokwzsFTiRhi4vw67H8yLwu1xbhja+fAxqY=";
+        "8.3" = "sha256-ffrwc48MZzX0MJHbaDmWQpday1LicOxhR2+fwylItD0=";
+        "8.4" = "sha256-P8j8gc8lZRbuVd1UmSpYmle88h50vhJfNxTZp3v9/Sg=";
+        "8.5" = "sha256-zy24hLCTajY+BVdkJCiXoy8abhQ82Ntw7Wuqn6zJKOQ=";
       };
     };
   };
@@ -156,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Blackfire Profiler PHP module";
     homepage = "https://blackfire.io/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -4,8 +4,9 @@
   fetchFromGitLab,
   pkg-config,
   autoreconfHook,
-  xorg-autoconf,
-  xorg,
+  util-macros,
+  libxt,
+  xtrans,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,12 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    xorg-autoconf
+    util-macros
   ];
 
   buildInputs = [
-    xorg.libXt
-    xorg.xtrans
+    libxt
+    xtrans
   ];
 
   meta = {

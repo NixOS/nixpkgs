@@ -8,11 +8,11 @@
 }:
 
 let
-  suitesparseVersion = "7.11.0";
+  suitesparseVersion = "7.12.1";
 in
 stdenv.mkDerivation {
   pname = "mongoose";
-  version = "3.3.5";
+  version = "3.3.6";
 
   outputs = [
     "bin"
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     tag = "v${suitesparseVersion}";
-    hash = "sha256-8CnN2P/W15GpK0nCNoRQongOrzcz5E8l9SgKksqLxd0=";
+    hash = "sha256-6EMPEH5dcNT1qtuSlzR26RhpfN7MbYJdSKcrsQ0Pzow=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
 
   cmakeFlags = [
-    "-DBLAS_LIBRARIES=${blas}"
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
@@ -65,12 +64,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graph Coarsening and Partitioning Library";
     mainProgram = "suitesparse_mongoose";
     homepage = "https://github.com/DrTimothyAldenDavis/SuiteSparse/tree/dev/Mongoose";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wegank ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = with lib.platforms; unix;
   };
 }

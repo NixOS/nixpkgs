@@ -1,37 +1,49 @@
 {
   lib,
-  aiolimiter,
-  azure-identity,
-  azure-storage-blob,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
+
+  # build-system
   hatchling,
+  uv-dynamic-versioning,
+
+  # dependencies
+  aiolimiter,
   httpx,
   json-repair,
-  openai,
-  polyfactory,
   pydantic,
+  tenacity,
+
+  # optional-dependencies
+  # azure
+  azure-identity,
+  azure-storage-blob,
+  # openai
+  openai,
+  tiktoken,
+
+  # tests
+  polyfactory,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
-  tenacity,
-  tiktoken,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fnllm";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q7aeFXuXIrwjjXEHVpACohWommIxJZo9PRUgh4uLtfA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-gKdFBpNpG/CDLhKi1wQgZHv+o1pDy5HEqcteLzkXK1A=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     aiolimiter
@@ -58,7 +70,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "fnllm" ];
 
@@ -77,6 +89,10 @@ buildPythonPackage rec {
     "test_clear"
     "test_handles_common_errors"
     "test_children"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    "test_call_batch_raises_if_response_length_mismatch"
   ];
 
   meta = {
@@ -85,4 +101,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

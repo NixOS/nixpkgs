@@ -13,15 +13,15 @@ let
     sha256 = "sha256-4BhTK+gKO8HW1CelGa30THpfkqfqFthK+b7p9QWl4Pw=";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "immudb";
-  version = "1.9.7";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = "immudb";
-    rev = "v${version}";
-    sha256 = "sha256-tYQYQyYhHMn0+PQWDEb4zY9EbDt1pVzZIcP0Gnsplrk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-RsDM+5/a3huBJ6HfaALpw+KpcIfg198gZfC4c4DsDlU=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildGoModule rec {
 
   tags = [ "webconsole" ];
 
-  ldflags = [ "-X github.com/codenotary/immudb/cmd/version.Version=${version}" ];
+  ldflags = [ "-X github.com/codenotary/immudb/cmd/version.Version=${finalAttrs.version}" ];
 
   subPackages = [
     "cmd/immudb"
@@ -63,10 +63,10 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Immutable database based on zero trust, SQL and Key-Value, tamperproof, data change history";
     homepage = "https://github.com/codenotary/immudb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

@@ -24,9 +24,6 @@ buildDunePackage rec {
     export sourceRoot=$PWD
   '';
 
-  # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
-  hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
-
   nativeBuildInputs = [
     menhir
     odoc

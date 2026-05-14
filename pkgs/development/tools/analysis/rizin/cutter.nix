@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   stdenv,
   # for passthru.plugins
   pkgs,
@@ -34,6 +34,14 @@ let
       hash = "sha256-fNOznaFzWJ4Dve9U1+E4xPaznnyxae2jHNaBCdJzDyQ=";
       fetchSubmodules = true;
     };
+
+    patches = [
+      (fetchpatch2 {
+        name = "fix-shiboken6-type-index-case.patch";
+        url = "https://github.com/rizinorg/cutter/commit/07fea9c772dc573588dc2e5771f0740ee1883738.patch?full_index=1";
+        hash = "sha256-/C/s+Ui5F7MCxbzbChQ5Tv/oUHUQxXmk9xOnNI80xwQ=";
+      })
+    ];
 
     nativeBuildInputs = [
       cmake
@@ -88,15 +96,12 @@ let
         };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Free and Open Source Reverse Engineering Platform powered by rizin";
       homepage = src.meta.homepage;
-      license = licenses.gpl3;
+      license = lib.licenses.gpl3;
       mainProgram = "cutter";
-      maintainers = with maintainers; [
-        mic92
-        dtzWill
-      ];
+      maintainers = with lib.maintainers; [ mic92 ];
       inherit (rizin.meta) platforms;
     };
   };

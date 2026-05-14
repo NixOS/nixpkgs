@@ -8,24 +8,26 @@
   gitMinimal,
 }:
 let
-  version = "1.6.0";
+  version = "1.10.2";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-IHRYgKcYP+JDGu8Vtawgzlhq25vpROFqb8KmpfVMwCk=";
+    hash = "sha256-C1FpyGw0f35NdHvDUGPXxmKdOgw3SpIteK1gAjVy6Ns=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
-    cargoHash = "sha256-QsVCugYWRri4qu64wHnbJQZBhy4tQrr+gCYbXtRBlqE=";
+    cargoHash = "sha256-z8koRYVM9mkgKB6rdZAKIfjZfinVUUpYAW0IvPgmjZ4=";
 
     nativeBuildInputs = [ gitMinimal ];
 
     env = {
       # TODO: remove this if plugin stops using nightly rust
       RUSTC_BOOTSTRAP = true;
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
     };
   };
 in

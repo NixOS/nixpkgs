@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_37,
+  electron_40,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,20 +18,20 @@
 }:
 
 let
-  electron = electron_37;
+  electron = electron_40;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.24.3";
+  version = "1.27.2";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q0d+SKCLtT/gv9mrx0o8qIdWYVwNM2x8/LfRsG4J4rw=";
+    hash = "sha256-VaHIDhTYcGT4J7ken/Cz0QwSlL42RMcP4lqFR4P7/SM=";
   };
 
-  npmDepsHash = "sha256-mCECqh2iRVD4lsCWYdf15VMuaH8dqpDfWWs/6q4H6Lo=";
+  npmDepsHash = "sha256-2NeiCpcX1j7z+PtIF3euQamVTa+6G4SEHPGk8IVC1Dw=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -39,11 +39,12 @@ buildNpmPackage (finalAttrs: {
       --replace-fail 'npm run install:electron && ' ""
 
     substituteInPlace .electron-builder.config.mjs \
-      --replace-fail 'AppImage' 'dir'
+      --replace-fail 'AppImage' 'dir' \
+      --replace-fail 'await signMacApp' '// await signMacApp'
   ''
   # Workaround for https://github.com/electron/electron/issues/31121
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace src/background/window/path.ts \
+    substituteInPlace src/background/proc/env.ts \
       --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
 
@@ -143,7 +144,7 @@ buildNpmPackage (finalAttrs: {
         ];
         runtimeEnv = {
           PNAME = finalAttrs.pname;
-          PKG_FILE = builtins.toString ./package.nix;
+          PKG_FILE = toString ./package.nix;
         };
         text = ''
           new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
@@ -157,10 +158,12 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Shogi frontend supporting USI engines";
     homepage = "https://sunfish-shogi.github.io/shogihome/";
-    license = with lib.licenses; [
-      mit
-      asl20 # for icons
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        mit
+        asl20 # for icons
+      ];
     maintainers = with lib.maintainers; [
       kachick
     ];

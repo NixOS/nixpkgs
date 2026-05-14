@@ -4,27 +4,28 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "glow";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "glow";
-    rev = "v${version}";
-    hash = "sha256-lDGCRtwCpW/bZlfcb100g7tMXN2dlCPnCY7qVFyayUo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8E3hDbZlROMPn6F2jx1KMavlBUsCnrpGdJeEaYt5bcU=";
   };
 
-  vendorHash = "sha256-JqQnLwkxRt+CiP90F+1i4MAiOw3akMQ5BeQXCplZdxA=";
+  vendorHash = "sha256-o5Z2ABRw6v4wFXp+KxgdKQn5/Lk5LG73VTiDOA/kBIs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -36,15 +37,14 @@ buildGoModule rec {
       --zsh <($out/bin/glow completion zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Render markdown on the CLI, with pizzazz";
     homepage = "https://github.com/charmbracelet/glow";
-    changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
+    changelog = "https://github.com/charmbracelet/glow/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      penguwin
-    ];
+    maintainers = with lib.maintainers; [ higherorderlogic ];
     mainProgram = "glow";
   };
-}
+})

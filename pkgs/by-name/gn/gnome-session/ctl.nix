@@ -10,15 +10,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session-ctl";
-  version = "47.0.1";
+  version = "49.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "gnome-session-ctl";
-    rev = version;
-    hash = "sha256-RY0+iIwwjd7268m3EYrZ1yUBLHXmaWddtSxqgUUH6qQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-rudb7ioTE5iaou0tzU5i2gWFW06NyWF5W5tjx2b5/0Y=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "gnome-session-ctl extracted from gnome-session for nixpkgs";
     homepage = "https://github.com/nix-community/gnome-session-ctl";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
-}
+})

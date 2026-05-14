@@ -235,7 +235,7 @@ runCommand "test.pdf" { nativeBuildInputs = [ latex_with_foiltex ]; } ''
 The font cache for LuaLaTeX is written to `$HOME`.
 Therefore, it is necessary to set `$HOME` to a writable path, e.g. [before using LuaLaTeX in nix derivations](https://github.com/NixOS/nixpkgs/issues/180639):
 ```nix
-runCommandNoCC "lualatex-hello-world" { buildInputs = [ texliveFull ]; } ''
+runCommand "lualatex-hello-world" { buildInputs = [ texliveFull ]; } ''
   mkdir $out
   echo '\documentclass{article} \begin{document} Hello world \end{document}' > main.tex
   env HOME=$(mktemp -d) lualatex  -interaction=nonstopmode -output-format=pdf -output-directory=$out ./main.tex

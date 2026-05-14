@@ -6,13 +6,13 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fabric-installer";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
-    sha256 = "sha256-wgxAfVyksRmq6XhH6y+7HTTJKWm2R/u7HeL9NsoAc44=";
+    url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${finalAttrs.version}/fabric-installer-${finalAttrs.version}.jar";
+    hash = "sha256-JIemndb52cJgUmWnFC13wmq2LtxiDmvPgQ1YHS7jG3k=";
   };
 
   dontUnpack = true;
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/lib/fabric/fabric-installer.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fabricmc.net/";
     description = "Lightweight, experimental modding toolchain for Minecraft";
     mainProgram = "fabric-installer";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
   # Keep the shebangs of the examples from being patched
   dontPatchShebangs = true;
 
-  meta = with lib; {
+  meta = {
     inherit (raspa.meta) homepage license maintainers;
     description = "Example packs and documentation of RASPA";
     outputsToInstall = [

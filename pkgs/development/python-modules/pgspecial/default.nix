@@ -11,6 +11,7 @@
   setuptools,
   setuptools-scm,
   sqlparse,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,9 @@ buildPythonPackage rec {
     psycopg
   ];
 
+  # postgresqlTestHook is not available on Darwin
+  doCheck = stdenv.hostPlatform.isLinux;
+
   nativeCheckInputs = [
     configobj
     pytestCheckHook
@@ -41,7 +45,7 @@ buildPythonPackage rec {
     postgresql
   ];
 
-  pytestFlagsArray = [ "-vvv" ];
+  pytestFlags = [ "-vvv" ];
 
   env = {
     PGDATABASE = "_test_db";
@@ -54,11 +58,11 @@ buildPythonPackage rec {
     "test_slash_ddp_pattern"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Meta-commands handler for Postgres Database";
     homepage = "https://github.com/dbcli/pgspecial";
     changelog = "https://github.com/dbcli/pgspecial/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.SuperSandro2000 ];
   };
 }

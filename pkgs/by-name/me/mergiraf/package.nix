@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   nix-update-script,
 
@@ -11,24 +11,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mergiraf";
-  version = "0.13.0";
+  version = "0.17.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mergiraf";
     repo = "mergiraf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MPmpS4iLur05jkSUrGl6NCtzRO/8Pch9pRNuT6psNRo=";
+    hash = "sha256-Tqz1gNg2XIYO/dFETajF3XUs3A1+mY82U4pz+mMb/ws=";
   };
 
-  cargoHash = "sha256-nT9HsG9eRBf4mRr7fqmRSQVI+yz+yr7wKCSQHG5JtD4=";
+  cargoHash = "sha256-8Geu6Cd83hTnd53/ZTKq1YIEMIX4oIgwzSS6h8RNaP8=";
 
   nativeCheckInputs = [ git ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   cargoBuildFlags = [
     # don't install the `mgf_dev`

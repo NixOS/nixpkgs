@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       ln -s ${defaultCfg} ${defaultCfgPath}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Software MIDI player and library";
     mainProgram = "wildmidi";
     longDescription = ''
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wildmidi.sourceforge.net/";
     # The library is LGPLv3, the wildmidi executable is GPLv3
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

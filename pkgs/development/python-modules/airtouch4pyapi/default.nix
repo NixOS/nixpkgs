@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airtouch4pyapi";
   version = "1.0.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "LonePurpleWolf";
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airtouch4pyapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Airtouch 4 controllers";
     homepage = "https://github.com/LonePurpleWolf/airtouch4pyapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

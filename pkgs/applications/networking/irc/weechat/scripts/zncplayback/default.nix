@@ -24,9 +24,9 @@ stdenv.mkDerivation {
     scripts = [ "zncplayback.py" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Add support for the ZNC Playback module";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

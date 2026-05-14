@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "rasdaemon";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ evils ];
+  meta = {
+    inherit (pkgs.rasdaemon.meta) maintainers;
   };
 
   nodes.machine =

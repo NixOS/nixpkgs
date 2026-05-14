@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitHub,
   pkg-config,
   cmake,
   glib,
@@ -24,12 +24,13 @@
 
 stdenv.mkDerivation {
   pname = "pulseview";
-  version = "0.4.2-unstable-2024-03-14";
+  version = "0.5.0-unstable-2025-11-10";
 
-  src = fetchgit {
-    url = "git://sigrok.org/pulseview";
-    rev = "d00efc65ef47090b71c4da12797056033bee795f";
-    hash = "sha256-MwfMUqV3ejxesg+3cFeXVB5hwg4r0cOCgHJuH3ZLmNE=";
+  src = fetchFromGitHub {
+    owner = "sigrokproject";
+    repo = "pulseview";
+    rev = "af02198741b4e57c9f9b796bd5e6c0f2ae9f2f2b";
+    hash = "sha256-4K3sMCTlFnu8iiokMYc1O7jNVQ7vTtSiT2dCpLRC44s=";
   };
 
   nativeBuildInputs = [
@@ -56,15 +57,15 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";
     mainProgram = "pulseview";
     homepage = "https://sigrok.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       bjornfor
       vifino
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -4,8 +4,10 @@
   fetchFromGitHub,
   cmake,
   makeWrapper,
+  openssl,
   xz,
   python3,
+  nix-update-script,
 }:
 
 let
@@ -21,17 +23,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chameleon-cli";
-  version = "2.0.0-unstable-2025-08-19";
+  version = "2.1.0-unstable-2026-05-08";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "ChameleonUltra";
-    rev = "09870c3fc5094fee779b821feaae31397d4f040c";
-    sparseCheckout = [ "software" ];
-    hash = "sha256-ePY602AT9+LBRcVLWR7I46rV+6JK0HYcb9iy/UQwmwU=";
+    rev = "f06efdf81574406943142f4a14db338d2b145a15";
+    rootDir = "software";
+    hash = "sha256-2zc9Uww1t1XJzQpI4KChe1cbqJXoewTo3vBbQKJdjfI=";
   };
-
-  sourceRoot = "${finalAttrs.src.name}/software";
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    openssl
     xz
   ];
 
@@ -67,7 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=v(.*)"
+    ];
+  };
 
   meta = {
     description = "Command line interface for Chameleon Ultra";

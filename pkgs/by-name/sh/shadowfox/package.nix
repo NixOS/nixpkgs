@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shadowfox";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "SrKomodo";
     repo = "shadowfox-updater";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
@@ -32,14 +32,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.tag=v${version}"
+    "-X main.tag=v${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal dark theme for Firefox while adhering to the modern design principles set by Mozilla";
     homepage = "https://overdodactyl.github.io/ShadowFox/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "shadowfox-updater";
   };
-}
+})

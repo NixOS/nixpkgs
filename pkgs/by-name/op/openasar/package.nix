@@ -1,22 +1,26 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   unstableGitUpdater,
   nodejs,
   asar,
   unzip,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openasar";
-  version = "0-unstable-2025-07-15";
+  version = "0-unstable-2026-04-18";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "92abbb0e3efc39e553fd24e9125c42cdba1318ec";
-    hash = "sha256-9PTseQdQ6YbeuBbcBnPr+OXP5wNYDJgv8s9sn8hGSgk=";
+    rev = "6232c4f44ddf26d1256ae201aa539eadccd71b24";
+    hash = "sha256-ktS0aqv9BSFuZ44A1ux3QsXAHO5z7B33psaJ3Q7+nYk=";
   };
 
   postPatch = ''
@@ -48,16 +52,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater {
-    # Only has a "nightly" tag (untaged version 0.2 is latest) see https://github.com/GooseMod/OpenAsar/commit/8f79dcef9b1f7732421235a392f06e5bd7382659
-    hardcodeZeroVersion = true;
+  passthru = {
+    updateScript = unstableGitUpdater {
+      # Only has a "nightly" tag (untaged version 0.2 is latest) see https://github.com/GooseMod/OpenAsar/commit/8f79dcef9b1f7732421235a392f06e5bd7382659
+      hardcodeZeroVersion = true;
+    };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withOpenASAR
+    );
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source alternative of Discord desktop's \"app.asar\"";
     homepage = "https://openasar.dev";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       Scrumplex
       jopejoe1
     ];

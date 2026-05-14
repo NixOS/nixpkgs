@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sharp_aquos_rc" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jmoore987/sharp_aquos_rc";
     description = "Control Sharp Aquos SmartTVs through the IP interface";
     changelog = "https://github.com/jmoore987/sharp_aquos_rc/releases/tag/${version}";
-    maintainers = with maintainers; [ jamiemagee ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
   };
 }

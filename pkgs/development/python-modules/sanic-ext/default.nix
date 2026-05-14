@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sanic-ext";
-  version = "24.12.0";
+  version = "25.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-ext";
     tag = "v${version}";
-    hash = "sha256-H1tqiPQ4SwlNGj7GtB2h7noZpU+gbGXIbmRK1TSSqVA=";
+    hash = "sha256-h1yN5VYFPFUZoeZeJ6+CfGE3m/5zz+/G3BbetDKtZAo=";
   };
 
   build-system = [ setuptools ];

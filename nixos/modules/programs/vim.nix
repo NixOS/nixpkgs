@@ -10,7 +10,7 @@ let
 in
 {
   options.programs.vim = {
-    enable = lib.mkEnableOption "Vi IMproved, an advanced text";
+    enable = lib.mkEnableOption "Vi IMproved, an advanced text editor";
 
     defaultEditor = lib.mkEnableOption "vim as the default editor";
 
@@ -26,7 +26,7 @@ in
     ];
     environment = {
       systemPackages = [ cfg.package ];
-      variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "vim");
+      sessionVariables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "vim");
       pathsToLink = [ "/share/vim-plugins" ];
     };
   };

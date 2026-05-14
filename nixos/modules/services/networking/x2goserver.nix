@@ -37,14 +37,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.x2goserver;
-      defaultText = literalExpression "pkgs.x2goserver";
-      description = ''
-        The x2goserver package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "x2goserver" { };
 
     superenicer = {
       enable = mkEnableOption "superenicer" // {
@@ -172,8 +165,8 @@ in
         "L+ /usr/local/bin/cp - - - - ${coreutils}/bin/cp"
         "L+ /usr/local/bin/sed - - - - ${gnused}/bin/sed"
         "L+ /usr/local/bin/setsid - - - - ${util-linux}/bin/setsid"
-        "L+ /usr/local/bin/xrandr - - - - ${xorg.xrandr}/bin/xrandr"
-        "L+ /usr/local/bin/xmodmap - - - - ${xorg.xmodmap}/bin/xmodmap"
+        "L+ /usr/local/bin/xrandr - - - - ${xrandr}/bin/xrandr"
+        "L+ /usr/local/bin/xmodmap - - - - ${xmodmap}/bin/xmodmap"
       ];
 
     systemd.services.x2goserver = {

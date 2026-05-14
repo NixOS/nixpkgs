@@ -40,7 +40,6 @@
   sourceDebug ? false,
   projectDscPath ?
     {
-      i686 = "OvmfPkg/OvmfPkgIa32.dsc";
       x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
       aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
       riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
@@ -50,7 +49,6 @@
       or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}"),
   fwPrefix ?
     {
-      i686 = "OVMF";
       x86_64 = "OVMF";
       aarch64 = "AAVMF";
       riscv64 = "RISCV_VIRT";
@@ -58,16 +56,12 @@
     }
     .${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  metaPlatforms ? edk2.meta.platforms,
+  metaPlatforms ? lib.subtractLists lib.platforms.i686 edk2.meta.platforms,
 }:
 
 let
 
   platformSpecific = {
-    i686.msVarsArgs = {
-      flavor = "OVMF";
-      archDir = "Ia32";
-    };
     x86_64.msVarsArgs = {
       flavor = "OVMF_4M";
       archDir = "X64";
@@ -95,9 +89,10 @@ let
       "debian/edk2-vars-generator.py"
       "debian/python"
       "debian/PkKek-1-*.pem"
+      "debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch"
     ];
-    rev = "refs/tags/debian/2025.02-8";
-    hash = "sha256-kAwfS8TBdN1PTm5kxTvqFuA9edBfBuMt6XmRWnFnolQ=";
+    tag = "debian/2025.02-8";
+    hash = "sha256-n/6T5UBwW8U49mYhITRZRgy2tNdipeU4ZgGGDu9OTkg=";
   };
 
   buildPrefix = "Build/*/*";
@@ -141,7 +136,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     "stackprotector"
     "pic"
     "fortify"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "relro";
 
   buildFlags =
     # IPv6 has no reason to be disabled.
@@ -171,6 +167,10 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   postUnpack = lib.optionalDrvAttr msVarsTemplate ''
     ln -s ${debian-edk-src}/debian
   '';
+
+  patches = [
+    (debian-edk-src + "/debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch")
+  ];
 
   postConfigure = lib.optionalDrvAttr msVarsTemplate ''
     tr -d '\n' < ${vendorPkKek} | sed \
@@ -274,6 +274,5 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
       mjoerg
       sigmasquadron
     ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

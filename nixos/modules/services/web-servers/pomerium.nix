@@ -66,7 +66,7 @@ in
       cfgFile =
         if cfg.configFile != null then cfg.configFile else (format.generate "pomerium.yaml" cfg.settings);
     in
-    mkIf cfg.enable ({
+    mkIf cfg.enable {
       systemd.services.pomerium = {
         description = "Pomerium authenticating reverse proxy";
         wants = [
@@ -148,5 +148,5 @@ in
           ExecStart = "/run/current-system/systemd/bin/systemctl --no-block restart pomerium.service";
         };
       };
-    });
+    };
 }

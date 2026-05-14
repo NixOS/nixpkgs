@@ -11,7 +11,8 @@ let
   cfg = config.networking.networkmanager;
   ini = pkgs.formats.ini { };
 
-  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
+  # Whether wpa_supplicant is managed independently
+  delegateWireless = config.networking.wireless.networks != { } && cfg.unmanaged != [ ];
 
   enableIwd = cfg.wifi.backend == "iwd";
 
@@ -136,15 +137,13 @@ let
     cfg.package
   ]
   ++ cfg.plugins
-  ++ pluginRuntimeDeps
-  ++ lib.optionals (!delegateWireless && !enableIwd) [
-    pkgs.wpa_supplicant
-  ];
+  ++ pluginRuntimeDeps;
 in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members;
+    teams = [ lib.teams.freedesktop ];
+    maintainers = [ lib.maintainers.frontear ];
   };
 
   ###### interface
@@ -238,7 +237,7 @@ in
           types.listOf networkManagerPluginPackage;
         default = [ ];
         example = literalExpression ''
-          [
+          with pkgs; [
             networkmanager-fortisslvpn
             networkmanager-iodine
             networkmanager-l2tp
@@ -346,7 +345,7 @@ in
         ];
         default = "default";
         description = ''
-          Set the DNS (`resolv.conf`) processing mode.
+          Set the DNS ({file}`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
           [
@@ -539,9 +538,9 @@ in
 
     assertions = [
       {
-        assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [ ];
+        assertion = config.networking.wireless.networks != { } -> cfg.unmanaged != [ ];
         message = ''
-          You can not use networking.networkmanager with networking.wireless.
+          You can not use networking.networkmanager with networking.wireless.networks.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
         '';
       }
@@ -674,6 +673,13 @@ in
         useDHCP = false;
       })
 
+      (mkIf (!delegateWireless && !enableIwd) {
+        # Enable wpa_supplicant but fully control it over DBus
+        wireless.enable = true;
+        wireless.autoDetectInterfaces = false;
+        wireless.dbusControlled = true;
+      })
+
       (mkIf enableIwd {
         wireless.iwd.enable = true;
       })
@@ -684,13 +690,7 @@ in
         networkmanager.connectionConfig = {
           "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
           "wifi.cloned-mac-address" = cfg.wifi.macAddress;
-          "wifi.powersave" =
-            if cfg.wifi.powersave == null then
-              null
-            else if cfg.wifi.powersave then
-              3
-            else
-              2;
+          "wifi.powersave" = lib.mkIf (cfg.wifi.powersave != null) (if cfg.wifi.powersave then 3 else 2);
         };
       }
     ];
@@ -701,6 +701,8 @@ in
     security.polkit.extraConfig = polkitConf;
 
     services.dbus.packages = packages ++ pluginDbusDeps ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
+
+    services.firewalld.packages = packages;
 
     services.udev.packages = packages;
 

@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Correlation vector implementation in python";
     homepage = "https://github.com/OpenXbox/ms_cv";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

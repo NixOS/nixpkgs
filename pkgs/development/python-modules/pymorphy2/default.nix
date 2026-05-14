@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymorphy2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Morphological analyzer/inflection engine for Russian and Ukrainian";
     mainProgram = "pymorphy";
     homepage = "https://github.com/kmike/pymorphy2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -7,7 +7,7 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-checksums";
   # nixpkgs-update: no auto update
   version = "0.2.7";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-checksums";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dYDTDWZJJ0JlvkMfLS376uUt5QzSmbV0UNRC4aq35TY=";
   };
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "HW accelerated CRC32c and CRC32";
     homepage = "https://github.com/awslabs/aws-checksums";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

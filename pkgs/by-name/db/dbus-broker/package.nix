@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   docutils,
   meson,
   ninja,
@@ -9,6 +10,7 @@
   dbus,
   linuxHeaders,
   systemd,
+  expat,
 }:
 
 let
@@ -120,6 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./paths.patch
     ./disable-test.patch
+    (fetchpatch {
+      name = "backport-test-sockopt-6.16-fix.patch";
+      url = "https://github.com/bus1/dbus-broker/commit/fd5c6e191bffcf5b3e6c9abb8b0b03479accc04b.patch";
+      hash = "sha256-+QgZzm/qRnVSr0wDNw9Np3LRreRKl6CQXJextLPy6fc=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -140,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     linuxHeaders
     systemd
+    expat
   ];
 
   mesonFlags = [
@@ -149,9 +157,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-D=system-console-users=gdm,sddm,lightdm"
   ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
-  PKG_CONFIG_SYSTEMD_CATALOGDIR = "${placeholder "out"}/lib/systemd/catalog";
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+    PKG_CONFIG_SYSTEMD_CATALOGDIR = "${placeholder "out"}/lib/systemd/catalog";
+  };
 
   postInstall = ''
     install -Dm444 $src/README.md $out/share/doc/dbus-broker/README

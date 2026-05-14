@@ -14,7 +14,7 @@
   gst_all_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kana";
   version = "1.4";
 
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "fkinoshita";
     repo = "Kana";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/Ri723ub8LMlhbPObC83bay63JuWIQpgxAT5UUYuwZI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "kana-${version}";
+    inherit (finalAttrs) src;
+    name = "kana-${finalAttrs.version}";
     hash = "sha256-3ODkAstBZQE3eqGmRUdm3xyCoBXV41hK4ndxeDK8+Yc=";
   };
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
-  meta = with lib; {
+  meta = {
     description = "Learn Japanese hiragana and katakana characters";
     homepage = "https://gitlab.gnome.org/fkinoshita/kana";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "kana";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
-}
+})

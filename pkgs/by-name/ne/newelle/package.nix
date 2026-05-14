@@ -20,7 +20,7 @@
 }:
 
 let
-  version = "1.0.1";
+  version = "1.3.7";
 in
 python3Packages.buildPythonApplication {
   pname = "newelle";
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-l/eNf1KLZeuDWf1A/5Y8fggOovKmjW6UFNMvNxuJXkc=";
+    hash = "sha256-Qa1f6lNfKt1hh1gWJ45n9rwjO5lSO2d0tMII27glU/E=";
   };
 
   postPatch = ''
@@ -104,6 +104,6 @@ python3Packages.buildPythonApplication {
     mainProgram = "newelle";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

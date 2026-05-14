@@ -21,12 +21,12 @@ buildGoModule rec {
     sha256 = "1v74zd0x2xh10603p8raazssacv3y0x0lr9apkpsdk0bfp5jj0lr";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gets documentation for items in Go source code";
     mainProgram = "gogetdoc";
     homepage = "https://github.com/zmb3/gogetdoc";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

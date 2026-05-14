@@ -1,0 +1,154 @@
+diff --git i/package-lock.json w/package-lock.json
+index 07428d0..4901a94 100644
+--- i/package-lock.json
++++ w/package-lock.json
+@@ -3 +3 @@
+-  "version": "4.0.0-beta",
++  "version": "4.0.0",
+@@ -9 +9 @@
+-      "version": "4.0.0-beta",
++      "version": "4.0.0",
+@@ -131,0 +132,2 @@
++      "resolved": "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz",
++      "integrity": "sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==",
+@@ -144,0 +147,2 @@
++      "resolved": "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.4.3.tgz",
++      "integrity": "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==",
+@@ -154,0 +159,2 @@
++      "resolved": "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.11.1.tgz",
++      "integrity": "sha512-m4DVN9ZqskZoLU5GlWZadwDnYo3vAEydiUayB9widCl9ffWx2IvPnp6n3on5rJmziJSw9Bv+Z3ChDVdMwXCY8Q==",
+@@ -161,0 +168,2 @@
++      "resolved": "https://registry.npmjs.org/@eslint/config-array/-/config-array-0.18.0.tgz",
++      "integrity": "sha512-fTxvnS1sRMu3+JjXwJG0j/i4RT9u4qJ+lqS/yCGap4lH4zZGzQ7tu+xZqQmcMZq5OBZDL4QRxQzRjkWcGt8IVw==",
+@@ -173,0 +182,2 @@
++      "resolved": "https://registry.npmjs.org/@eslint/core/-/core-0.6.0.tgz",
++      "integrity": "sha512-8I2Q8ykA4J0x0o7cg67FPVnehcqWTBehu/lmY+bolPFHGjh49YzGBMXTvpqVgEbBdvNCSxj6iFgiIyHzf03lzg==",
+@@ -180,0 +191,2 @@
++      "resolved": "https://registry.npmjs.org/@eslint/eslintrc/-/eslintrc-3.1.0.tgz",
++      "integrity": "sha512-4Bfj15dVJdoy3RfZmmo86RK1Fwzn6SstsvK9JS+BaVKqC6QQQQyXekNaC+g+LKNgkQ+2VhGAzm6hO40AhMR3zQ==",
+@@ -223,0 +236,2 @@
++      "resolved": "https://registry.npmjs.org/@eslint/object-schema/-/object-schema-2.1.4.tgz",
++      "integrity": "sha512-BsWiH1yFGjXXS2yvrf5LyuoSIIbPrGUWob917o+BTKuZ7qJdxX8aJLRxs1fS9n6r7vESrq1OUqb68dANcFXuQQ==",
+@@ -260,0 +275,2 @@
++      "resolved": "https://registry.npmjs.org/@humanfs/core/-/core-0.19.0.tgz",
++      "integrity": "sha512-2cbWIHbZVEweE853g8jymffCA+NCMiuqeECeBBLm8dg2oFdjuGJhgN4UAbI+6v0CKbbhvtXA4qV8YR5Ji86nmw==",
+@@ -267,0 +284,2 @@
++      "resolved": "https://registry.npmjs.org/@humanfs/node/-/node-0.16.5.tgz",
++      "integrity": "sha512-KSPA4umqSG4LHYRodq31VDwKAvaTF4xmVlzM8Aeh4PlU1JQ3IG0wiA8C25d3RQ9nJyM3mBHyI53K06VVL/oFFg==",
+@@ -304,0 +323,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/checkbox/-/checkbox-4.0.0.tgz",
++      "integrity": "sha512-TNd+u1fAG8vf8YMgXzK2BI0u0xsphFv//T5rpF1eZ+8AAXby5Ll1qptr4/XVS45dvWDIzuBmmWIpVJRvnaNqzQ==",
+@@ -318,0 +339,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/confirm/-/confirm-5.0.0.tgz",
++      "integrity": "sha512-6QEzj6bZg8atviRIL+pR0tODC854cYSjvZxkyCarr8DVaOJPEyuGys7GmEG3W0Rb8kKSQec7P6okt0sJvNneFw==",
+@@ -329,0 +352,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/core/-/core-10.0.0.tgz",
++      "integrity": "sha512-7dwoKCGvgZGHWTZfOj2KLmbIAIdiXP9NTrwGaTO/XDfKMEmyBahZpnombiG6JDHmiOrmK3GLEJRXrWExXCDLmQ==",
+@@ -373,0 +398,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/editor/-/editor-4.0.0.tgz",
++      "integrity": "sha512-bhHAP7hIOxUjiTZrpjyAYD+2RFRa+PNutWeW7JdDPcWWG3GVRiFsu3pBGw9kN2PktoiilDWFGSR0dwXBzGQang==",
+@@ -385,0 +412,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/expand/-/expand-4.0.0.tgz",
++      "integrity": "sha512-mR7JHNIvCB4o12f75KN42he7s1O9tmcSN4wJ6l04oymfXKLn+lYJFI7z9lbe4/Ald6fm8nuF38fuY5hNPl3B+A==",
+@@ -397,0 +426,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/figures/-/figures-1.0.7.tgz",
++      "integrity": "sha512-m+Trk77mp54Zma6xLkLuY+mvanPxlE4A7yNKs2HBiyZ4UkVs28Mv5c/pgWrHeInx+USHeX/WEPzjrWrcJiQgjw==",
+@@ -404,0 +435,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/input/-/input-4.0.0.tgz",
++      "integrity": "sha512-LD7MNzaX+q2OpU4Fn0i/SedhnnBCAnEzRr6L0MP6ohofFFlx9kp5EXX7flbRZlUnh8icOwC3NFmXTyP76hvo0g==",
+@@ -415,0 +448,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/number/-/number-3.0.0.tgz",
++      "integrity": "sha512-DUYfROyQNWm3q+JXL3S6s1/y/cOWRstnmt5zDXhdYNJ5N8TgCnHcDXKwW/dRZL7eBZupmDVHxdKCWZDUYUqmeg==",
+@@ -426,0 +461,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/password/-/password-4.0.0.tgz",
++      "integrity": "sha512-W4QRSzJDMKIvWSvQWOIhs6qba1MJ6yIoy+sazSFhl2QIwn58B0Yw3iZ/zLk3QqVcCsTmKcyrSNVWUJ5RVDLStw==",
+@@ -438,0 +475,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/prompts/-/prompts-7.0.0.tgz",
++      "integrity": "sha512-y8kX/TmyBqV0H1i3cWbhiTljcuBtgVgyVXAVub3ba1j5/G+dxhYohK1JLRkaosPGKKf3LnEJsYK+GPabpfnaHw==",
+@@ -457,0 +496,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/rawlist/-/rawlist-4.0.0.tgz",
++      "integrity": "sha512-frzJNoMsQBO1fxLXrtpxt2c8hUy/ASEmBpIOEnXY2CjylPnLsVyxrEq7hcOIqVJKHn1tIPfplfiSPowOTrrUDg==",
+@@ -469,0 +510,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/search/-/search-3.0.0.tgz",
++      "integrity": "sha512-AT9vkC2KD/PLHZZXIW5Tn/FnJzEU3xEZMLxNo9OggKoreDEKfTOKVM1LkYbDg6UQUOOjntXd0SsrvoHfCzS8cw==",
+@@ -482,0 +525,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/select/-/select-4.0.0.tgz",
++      "integrity": "sha512-XTN4AIFusWbNCBU1Xm2YDxbtH94e/FOrC27U3QargSsoDT1mRm+aLfqE+oOZnUuxwtTnInRT8UHRU3MVOu52wg==",
+@@ -496,0 +541,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/testing/-/testing-2.1.35.tgz",
++      "integrity": "sha512-DUMxGJP6Y7QTrjk4hE6kunQUfMDxCphJaO0xCsH+AmaTPbvIW2HV+7ZQTCFQXrOTFuvLssF9lbbnC0keGYbVgA==",
+@@ -523,0 +570,2 @@
++      "resolved": "https://registry.npmjs.org/@inquirer/type/-/type-3.0.0.tgz",
++      "integrity": "sha512-YYykfbw/lefC7yKj7nanzQXILM7r3suIvyFlCcMskc99axmsSewXWkAfXKwMbgxL76iAFVmRwmYdwNZNc8gjog==",
+@@ -728,0 +777,2 @@
++      "resolved": "https://registry.npmjs.org/@sinonjs/fake-timers/-/fake-timers-13.0.2.tgz",
++      "integrity": "sha512-4Bb+oqXZTSTZ1q27Izly9lv8B9dlV61CROxPiVtywwzv5SnytJqhvYe6FclHYuXml4cd1VHPo1zd5PmTeJozvA==",
+@@ -765,0 +816,2 @@
++      "resolved": "https://registry.npmjs.org/@types/chai/-/chai-5.0.0.tgz",
++      "integrity": "sha512-+DwhEHAaFPPdJ2ral3kNHFQXnTfscEEFsUxzD+d7nlcLrFK23JtNjH71RGasTcHb88b4vVi4mTyfpf8u2L8bdA==",
+@@ -828,0 +881,2 @@
++      "resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-10.0.9.tgz",
++      "integrity": "sha512-sicdRoWtYevwxjOHNMPTl3vSfJM6oyW8o1wXeI7uww6b6xHg8eBznQDNSGBCDJmsE8UMxP05JgZRtsKbTqt//Q==",
+@@ -833,0 +888,2 @@
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-22.7.5.tgz",
++      "integrity": "sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==",
+@@ -886,0 +943,2 @@
++      "resolved": "https://registry.npmjs.org/acorn/-/acorn-8.12.1.tgz",
++      "integrity": "sha512-tcpGyI9zbizT9JbV6oYE477V6mTlXvvi0T0G3SNIYE2apm/G5huBa1+K89VGeovbg+jycCrfhl3ADxErOuO6Jg==",
+@@ -1049,0 +1108,2 @@
++      "resolved": "https://registry.npmjs.org/awilix/-/awilix-12.0.2.tgz",
++      "integrity": "sha512-BoXlUZmTJc2j+uCDAMglNnWNf1b9KDEGmrgYs3vnOldK+bkiAiJnisgbIJWvGC1MFt/uYd3tG+Esd/0VmLreKw==",
+@@ -1293,0 +1354,2 @@
++      "resolved": "https://registry.npmjs.org/chai/-/chai-5.1.1.tgz",
++      "integrity": "sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==",
+@@ -1569,0 +1632,2 @@
++      "resolved": "https://registry.npmjs.org/debug/-/debug-4.3.7.tgz",
++      "integrity": "sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==",
+@@ -1851,0 +1916,2 @@
++      "resolved": "https://registry.npmjs.org/eslint/-/eslint-9.12.0.tgz",
++      "integrity": "sha512-UVIOlTEWxwIopRL1wgSQYdnVDcEvs2wyaO6DGo5mXqe3r16IoCNWkR29iHhyaP4cICWjbgbmFUGAhh0GJRuGZw==",
+@@ -1932,0 +1999,2 @@
++      "resolved": "https://registry.npmjs.org/eslint-scope/-/eslint-scope-8.1.0.tgz",
++      "integrity": "sha512-14dSvlhaVhKKsa9Fx1l8A17s7ah7Ef7wCakJ10LYk6+GYmP9yDti2oq2SEwcyndt6knfcZyhyxwY3i9yL78EQw==",
+@@ -1946,0 +2015,2 @@
++      "resolved": "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-4.1.0.tgz",
++      "integrity": "sha512-Q7lok0mqMUSf5a/AdAZkA5a/gHcO6snwQClVNNvFKCAVlxXucdU8pKydU5ZVZjBx5xr37vGbFFWtLQYreLzrZg==",
+@@ -1993,0 +2064,2 @@
++      "resolved": "https://registry.npmjs.org/espree/-/espree-10.2.0.tgz",
++      "integrity": "sha512-upbkBJbckcCNBDBDXEbuhjbP68n+scUd3k/U2EkyM9nw+I/jPiL4cLF/Al06CF96wRltFda16sxDFrxsI1v0/g==",
+@@ -2227,0 +2300,2 @@
++      "resolved": "https://registry.npmjs.org/flatted/-/flatted-3.3.1.tgz",
++      "integrity": "sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==",
+@@ -2367,0 +2442,2 @@
++      "resolved": "https://registry.npmjs.org/globals/-/globals-15.11.0.tgz",
++      "integrity": "sha512-yeyNSjdbyVaWurlwCpcA6XNBrHTMIeDdj0/hnvX/OLJ9ekOXYbLsLinH/MucQyGvNnXhidTdNhTtJaffL2sMfw==",
+@@ -2581,0 +2658,2 @@
++      "resolved": "https://registry.npmjs.org/inquirer/-/inquirer-12.0.0.tgz",
++      "integrity": "sha512-W3mwgzLtWIqHndtAb82zCHbRfdPit3jcqEyYkAjM/4p15g/1tOoduYydx6IJ3sh31FHT82YoqYZB8RoTwoMy7w==",
+@@ -2874,0 +2953,2 @@
++      "resolved": "https://registry.npmjs.org/ky/-/ky-1.7.2.tgz",
++      "integrity": "sha512-OzIvbHKKDpi60TnF9t7UUVAF1B4mcqc02z5PIvrm08Wyb+yOcz63GRvEuVxNT18a9E1SrNouhB4W2NNLeD7Ykg==",
+@@ -3210,0 +3291,2 @@
++      "resolved": "https://registry.npmjs.org/mocha/-/mocha-10.7.3.tgz",
++      "integrity": "sha512-uQWxAu44wwiACGqjbPYmjo7Lg8sFrS3dQe7PP2FQI+woptP4vZXSMcfMyFL/e1yFEeEpV4RtyTpZROOKmxis+A==",
+@@ -3707,0 +3790,2 @@
++      "resolved": "https://registry.npmjs.org/prettier/-/prettier-3.3.3.tgz",
++      "integrity": "sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==",
+@@ -3899,0 +3984,2 @@
++      "resolved": "https://registry.npmjs.org/registry-auth-token/-/registry-auth-token-5.0.2.tgz",
++      "integrity": "sha512-o/3ikDxtXaA59BmZuZrJZDJv8NMDGSj+6j6XaeBmHw8eY1i1qd9+6H+LjVvQXx3HN6aRCGa1cUdJ9RaJZUugnQ==",
+@@ -4319,0 +4406,2 @@
++      "resolved": "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz",
++      "integrity": "sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==",
+@@ -4373,0 +4462,2 @@
++      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.7.0.tgz",
++      "integrity": "sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==",
+@@ -4405,0 +4496,2 @@
++      "resolved": "https://registry.npmjs.org/type-fest/-/type-fest-4.26.1.tgz",
++      "integrity": "sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==",
+@@ -4415,0 +4508,2 @@
++      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.6.3.tgz",
++      "integrity": "sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==",
+@@ -4427,0 +4522,2 @@
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-6.19.8.tgz",
++      "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==",

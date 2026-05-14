@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "bite-parser";
   version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jgosmann";

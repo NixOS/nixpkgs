@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Python API for UniFi accesspoints";
     homepage = "https://github.com/tofuSCHNITZEL/unifi_ap";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

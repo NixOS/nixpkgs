@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   qtbase,
   qtmultimedia,
@@ -9,9 +9,10 @@
   pkg-config,
   cmake,
   gettext,
+  wrapQtAppsHook,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "kvirc";
   version = "2022-06-29";
 
@@ -33,13 +34,14 @@ mkDerivation {
     pkg-config
     cmake
     gettext
+    wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced IRC Client";
     homepage = "https://www.kvirc.net/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.suhr ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.suhr ];
+    platforms = lib.platforms.linux;
   };
 }

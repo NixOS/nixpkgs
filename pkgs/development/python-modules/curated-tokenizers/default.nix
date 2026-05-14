@@ -21,6 +21,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  # Fix gcc15 build failures due to missing <cstdint>
+  postPatch = ''
+    sed -i '1i #include <cstdint>' sentencepiece/src/sentencepiece_processor.h
+  '';
+
   build-system = [
     cython
     setuptools
@@ -46,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "curated_tokenizers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight piece tokenization library";
     homepage = "https://github.com/explosion/curated-tokenizers";
     changelog = "https://github.com/explosion/curated-tokenizers/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ danieldk ];
   };
 }

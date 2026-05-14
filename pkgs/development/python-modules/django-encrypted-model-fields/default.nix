@@ -5,13 +5,11 @@
   fetchPypi,
   lib,
   poetry-core,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "django-encrypted-model-fields";
   version = "0.6.5";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -27,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "encrypted_model_fields" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of fields that wrap standard Django fields with encryption provided by the python cryptography library";
     homepage = "https://gitlab.com/lansharkconsulting/django/django-encrypted-model-fields";
-    license = licenses.mit;
-    maintainers = with maintainers; [ centromere ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ centromere ];
   };
 }

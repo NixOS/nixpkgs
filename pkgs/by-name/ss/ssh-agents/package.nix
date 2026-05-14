@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Spawn and maintain multiple ssh-agents across terminals";
     longDescription = ''
       The SSH agent is usually spawned by running eval $(ssh-agent), however this
@@ -37,9 +37,9 @@ stdenvNoCC.mkDerivation rec {
         keys to include in the agent.
     '';
     homepage = "https://github.com/kalbasit/ssh-agents";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.unix;
     mainProgram = "ssh-agents";
   };
 }

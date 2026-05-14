@@ -11,6 +11,7 @@
         useBootLoader = true;
         # Booting off the TPM2-encrypted device requires an available init script
         mountHostNixStore = true;
+        efi.OVMF = pkgs.OVMFFull; # this really should be the default. Only OVMFFull contains TCG
         useEFIBoot = true;
         tpm.enable = true;
       };
@@ -31,7 +32,6 @@
           };
         };
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
-        virtualisation.fileSystems."/".autoFormat = true;
       };
     };
 
@@ -39,6 +39,8 @@
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
     machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
+    machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdb cryptroot")
+    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
     machine.succeed("PASSWORD=supersecret SYSTEMD_LOG_LEVEL=debug systemd-cryptenroll --tpm2-pcrs= --tpm2-device=auto /dev/vdb |& systemd-cat")
 
     # Boot from the encrypted disk

@@ -97,6 +97,30 @@
         '';
         default = [ ];
       };
+
+      subuid = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        description = ''
+          List of subuid entries to configure in {file}`/etc/nsswitch.conf`.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [ ];
+      };
+
+      subgid = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        description = ''
+          List of subgid entries to configure in {file}`/etc/nsswitch.conf`.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [ ];
+      };
     };
   };
 
@@ -133,6 +157,9 @@
       services:  ${lib.concatStringsSep " " config.system.nssDatabases.services}
       protocols: files
       rpc:       files
+
+      subuid:    ${lib.concatStringsSep " " config.system.nssDatabases.subuid}
+      subgid:    ${lib.concatStringsSep " " config.system.nssDatabases.subgid}
     '';
 
     system.nssDatabases = {
@@ -145,6 +172,8 @@
         (lib.mkOrder 1499 [ "dns" ])
       ];
       services = lib.mkBefore [ "files" ];
+      subuid = lib.mkBefore [ "files" ];
+      subgid = lib.mkBefore [ "files" ];
     };
   };
 }

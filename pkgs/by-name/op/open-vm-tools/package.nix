@@ -16,13 +16,13 @@
   procps,
   libtirpc,
   rpcsvc-proto,
-  libX11,
-  libXext,
-  libXinerama,
-  libXi,
-  libXrender,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxext,
+  libxinerama,
+  libxi,
+  libxrender,
+  libxrandr,
+  libxtst,
   libxcrypt,
   libxml2,
   pkg-config,
@@ -53,13 +53,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-vm-tools";
-  version = "13.0.0";
+  version = "13.0.5";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     tag = "stable-${finalAttrs.version}";
-    hash = "sha256-1ZW1edwKW3okKNdWw6rBgfeOt9afESbhe1L1TNp0+Kc=";
+    hash = "sha256-N0z7OpJP8ubYOeb0KHEQkITlWkKP04rpm79VXRnCe0I=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/open-vm-tools";
@@ -98,13 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf-xlib
     gtk3
     gtkmm3
-    libX11
-    libXext
-    libXinerama
-    libXi
-    libXrender
-    libXrandr
-    libXtst
+    libx11
+    libxext
+    libxinerama
+    libxi
+    libxrender
+    libxrandr
+    libxtst
   ];
 
   postPatch = ''

@@ -6,16 +6,16 @@
   postgresql,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reshape";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-wv2gKyXCEH+tnZkUUAisMbuseth3dsFiJujH8VO1ii4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-viS//3ZFqogI0BbZ0rypo5zpQUgqKiLgK585iw3BMgM=";
   };
 
-  cargoHash = "sha256-lK54SEayI015f2AQ6h4zadgkECLp4jCeJO7enBG0LeM=";
+  cargoHash = "sha256-NLVNOgwc3C1QgEfiNkxV+KslMQeYW4YPt5vFyS01/Kg=";
 
   nativeCheckInputs = [
     postgresqlTestHook
@@ -34,8 +34,8 @@ rustPlatform.buildRustPackage rec {
     description = "Easy-to-use, zero-downtime schema migration tool for Postgres";
     mainProgram = "reshape";
     homepage = "https://github.com/fabianlindfors/reshape";
-    changelog = "https://github.com/fabianlindfors/reshape/releases/tag/v${version}";
+    changelog = "https://github.com/fabianlindfors/reshape/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ilyakooo0 ];
   };
-}
+})

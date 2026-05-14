@@ -17,7 +17,11 @@
   fontconfig,
   freetype,
   libffi,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   zlib,
   # runtime dependencies
   cups,
@@ -63,11 +67,11 @@ let
       fontconfig
       freetype
       (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libx11
+      libxext
+      libxi
+      libxrender
+      libxtst
       zlib
     ]
     ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;
@@ -129,19 +133,19 @@ let
       home = result;
     };
 
-    meta = with lib; {
-      license = with licenses; [
+    meta = {
+      license = with lib.licenses; [
         gpl2
         classpathException20
       ];
-      sourceProvenance = with sourceTypes; [
+      sourceProvenance = with lib.sourceTypes; [
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ];
-      teams = [ teams.java ];
+      platforms = map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
+      maintainers = with lib.maintainers; [ taku0 ];
+      teams = [ lib.teams.java ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

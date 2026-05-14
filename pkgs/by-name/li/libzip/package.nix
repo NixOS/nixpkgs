@@ -6,13 +6,13 @@
   perl,
   zlib,
   groff,
-  withBzip2 ? false,
+  withBzip2 ? true,
   bzip2,
-  withLZMA ? false,
+  withLZMA ? true,
   xz,
   withOpenssl ? false,
   openssl,
-  withZstd ? false,
+  withZstd ? true,
   zstd,
   testers,
 }:
@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libzip.org/";
     description = "C library for reading, creating and modifying zip archives";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     pkgConfigModules = [ "libzip" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
   };
 })

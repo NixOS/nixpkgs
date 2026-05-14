@@ -1,30 +1,21 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl gzip dpkg common-updater-scripts
+#! nix-shell -i bash -p curl common-updater-scripts
 
-index_file=$(curl -sL https://packages.microsoft.com/ubuntu/22.04/prod/dists/jammy/main/binary-amd64/Packages.gz | gzip -dc)
+set -euo pipefail
 
-latest_version="0"
+# Scrape the pool directory since Microsoft doesn't keep Packages.gz up to date
+pool_url="https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/m/microsoft-identity-broker/"
+pool_listing=$(curl -sL "$pool_url")
 
-echo "$index_file" | while read -r line; do
-    if [[ "$line" =~ ^Package:[[:space:]]*(.*) ]]; then
-        Package="${BASH_REMATCH[1]}"
-    fi
-    if [[ "$line" =~ ^Version:[[:space:]]*(.*) ]]; then
-        Version="${BASH_REMATCH[1]}"
-    fi
-    if [[ "$line" =~ ^SHA256:[[:space:]]*(.*) ]]; then
-        SHA256="${BASH_REMATCH[1]}"
-    fi
+# Extract version from filenames like: microsoft-identity-broker_2.5.0-noble_amd64.deb
+latest_version=$(echo "$pool_listing" \
+    | grep -oP 'microsoft-identity-broker_\K[0-9]+\.[0-9]+\.[0-9]+' \
+    | sort -V \
+    | tail -n1)
 
-    if ! [[ "$line" ]] && [[ "${Package}" == "microsoft-identity-broker" ]]; then
-        if ( dpkg --compare-versions ${Version} gt ${latest_version} ); then
-            latest_version="${Version}"
-            sri_hash=$(nix-hash --to-sri --type sha256 "$SHA256")
+if [[ -z "$latest_version" ]]; then
+    echo "Failed to find any versions" >&2
+    exit 1
+fi
 
-            echo $latest_version $sri_hash
-        fi
-
-        Package=""
-        Version=""
-    fi
-done | tail -n 1 | (read version hash; update-source-version microsoft-identity-broker $version $hash)
+update-source-version microsoft-identity-broker "$latest_version" --file="$(dirname "$0")/package.nix"

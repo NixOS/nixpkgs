@@ -96,11 +96,11 @@ stdenv.mkDerivation rec {
     --prefix NIX_LDFLAGS_BEFORE_${gcc.bintools.suffixSalt} ' ' "-L${lib.getLib libffi}/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     teams = [ lib.teams.lisp ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   c-ares,
+  cacert,
   curl,
   darwin,
   expat,
@@ -17,6 +18,7 @@
   openssl,
   stdenv,
   unzip,
+  writeShellScript,
   xercesc,
   zlib,
   acceptBroadcomEula ? false,
@@ -33,13 +35,13 @@ let
       fileName,
       version,
       toolId ? ovftoolId,
-      artifactId ? 21342,
+      artifactId ? 29161,
       fileType ? "Download",
       source ? "",
       hash ? "",
     }:
     let
-      requestJson = builtins.toJSON {
+      requestJson = lib.strings.toJSON {
         inherit
           fileName
           artifactId
@@ -48,39 +50,59 @@ let
           ;
       };
     in
-    fetchurl {
+    stdenv.mkDerivation {
       name = fileName;
       url =
         (mkBaseUrl toolId)
         + "?p_p_id=SDK_AND_TOOL_DETAILS_INSTANCE_iwlk&p_p_lifecycle=2&p_p_resource_id=documentDownloadArtifact";
-      curlOptsList = [
-        "--json"
-        requestJson
-      ];
-      downloadToTemp = true;
-      nativeBuildInputs = [ jq ];
-      postFetch = ''
-        # Try again with the new URL
-        urls="$(jq -r 'if (.success == true) then .data.downloadUrl else error(. | tostring) end' < "$downloadedFile" || exit $?)" \
-          downloadToTemp="" \
-          curlOptsList="" \
-          curlOpts="" \
-          postFetch="" \
-          exec "$SHELL" "''${BASH_ARGV[@]}"
+      builder = writeShellScript "builder.sh" ''
+        curlVersion=$(${curl}/bin/curl -V | head -1 | cut -d' ' -f2)
+
+        curl=(
+          ${lib.getExe curl}
+          --location
+          --retry 3
+          --user-agent "curl/$curlVersion Nixpkgs/${lib.trivial.release}"
+          --cacert ${cacert}/etc/ssl/certs/ca-bundle.crt
+          $NIX_CURL_FLAGS
+        )
+
+        "''${curl[@]}" --json ${lib.escapeShellArg requestJson} --output details.json "$url"
+
+        echo "Details: $(<details.json)" >&2
+        url="$(jq -r 'if (.success == true) then .data.downloadUrl else error(. | tostring) end' < details.json || exit 1)"
+
+        echo "Redirect URL: $url" >&2
+        if [ -n "$url" ]; then
+          "''${curl[@]}" --output "$out" "$url"
+        else
+          echo "Couldn't get redirect URL, exiting." >&2
+          exit 1
+        fi
       '';
-      inherit hash;
+      nativeBuildInputs = [
+        curl
+        jq
+      ];
+      outputHashAlgo = "sha256";
+      outputHash = hash;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        # This variable allows the user to pass additional options to curl
+        "NIX_CURL_FLAGS"
+      ];
     };
 
   ovftoolSystems = {
     "x86_64-linux" = rec {
-      version = "4.6.3-24031167";
+      version = "5.0.0-24781994";
       fileName = "VMware-ovftool-${version}-lin.x86_64.zip";
-      hash = "sha256-NEwwgmEh/mrZkMMhI+Kq+SYdd3MJ0+IBLdUhd1+kPow=";
+      hash = "sha256-I389VdRZQH9BJT/qxSyUPlRZC7MHv++TDc8rJ1jY788=";
     };
     "x86_64-darwin" = rec {
-      version = "4.6.3-24031167";
+      version = "5.0.0-24781994";
       fileName = "VMware-ovftool-${version}-mac.x64.zip";
-      hash = "sha256-vhACcc4tjaQhvKwZyWkgpaKaoC+coWGl1zfSIC6WebM=";
+      hash = "sha256-vfhagEOnTGxOsY8kFY555c8EhI12GwQ2JwgTjEz7UT0=";
     };
   };
 
@@ -95,7 +117,7 @@ let
     };
   });
 in
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovftool";
   inherit (ovftoolSystem) version;
 
@@ -109,7 +131,7 @@ stdenv.mkDerivation (final: {
         See the following URL for terms of using this software:
         ${mkBaseUrl ovftoolId}
 
-        Use `${final.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
+        Use `${finalAttrs.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
         and would like to use this package.
       '';
 
@@ -158,9 +180,7 @@ stdenv.mkDerivation (final: {
     # libgoogleurl and libcurl.
     #
     # FIXME: Replace libgoogleurl? Possibly from Chromium?
-    # FIXME: Tell VMware to use a modern version of OpenSSL on macOS. As of ovftool
-    # v4.6.3 ovftool uses openssl-1.0.2zj which in seems to be the extended
-    # support LTS release: https://www.openssl.org/support/contracts.html
+    # FIXME: Tell VMware to use a modern version of OpenSSL on macOS.
 
     # Install all libs that are not patched in preFixup.
     # Darwin dylibs are under `lib` in the zip.
@@ -174,7 +194,7 @@ stdenv.mkDerivation (final: {
     libvmacore.so \
     libvmomi.so
   ''
-  # macOS still relies on OpenSSL 1.0.2 as of v4.6.3, but Linux is in the clear
+  # macOS still relies on OpenSSL 1.0.2 as of v4.6.3 and later, but Linux is in the clear
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     lib/libcrypto.1.0.2.dylib \
     lib/libgoogleurl.59.0.30.45.2.dylib \
@@ -240,7 +260,6 @@ stdenv.mkDerivation (final: {
       done
 
       # Patches for ovftool binary
-      change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
       change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
       change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
       change_args+=(-change /usr/lib/libz.1.dylib ${zlib}/lib/libz.1.dylib)
@@ -327,24 +346,24 @@ stdenv.mkDerivation (final: {
       set +x
     '';
 
-  meta = with lib; {
+  meta = {
     description = "VMware tools for working with OVF, OVA, and VMX images";
     homepage = "https://developer.vmware.com/web/tool/ovf-tool/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       numinit
       thanegill
     ];
-    platforms = builtins.attrNames ovftoolSystems;
+    platforms = lib.attrNames ovftoolSystems;
     mainProgram = "ovftool";
-    knownVulnerabilities = lib.optionals (stdenv.hostPlatform.isDarwin) [
-      "The bundled version of openssl 1.0.2zj in ovftool for Darwin has open vulnerabilities."
+    knownVulnerabilities = lib.optionals stdenv.hostPlatform.isDarwin [
+      "The bundled version of openssl 1.0.2zk in ovftool for Darwin has open vulnerabilities (maximum severity: Moderate)"
       "https://openssl-library.org/news/vulnerabilities-1.0.2/"
-      "CVE-2024-0727"
-      "CVE-2024-5535"
+      "Please nag Broadcom to update to OpenSSL 3 for Darwin."
       "CVE-2024-9143"
       "CVE-2024-13176"
+      "CVE-2025-9230"
     ];
   };
 })

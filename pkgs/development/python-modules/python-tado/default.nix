@@ -2,35 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytest-cov-stub,
   pytest-mock,
-  pytest-socket,
   pytestCheckHook,
   requests,
   responses,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-tado";
-  version = "0.19.2";
+  version = "0.18.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    tag = version;
-    hash = "sha256-me62VPjKU+vh0vo4Fl86sEse1QZYD2zDpxchSiUcxTY=";
+    tag = finalAttrs.version;
+    hash = "sha256-jHPTu0/DYJXbSqiJXQzmiK6gmtJf88Y0BV1wj/X+qpc=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-mock
-    pytest-socket
     pytestCheckHook
     responses
   ];
@@ -48,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyTado" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for Tado web API";
     homepage = "https://github.com/wmalgadey/PyTado";
-    changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jamiemagee ];
+    changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jamiemagee ];
     mainProgram = "pytado";
   };
-}
+})

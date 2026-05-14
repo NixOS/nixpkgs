@@ -31,10 +31,10 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sloonz/ua";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     description = "Universal Aggregator";
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

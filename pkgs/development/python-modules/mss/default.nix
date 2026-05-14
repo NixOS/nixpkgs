@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   stdenv,
   replaceVars,
 
@@ -10,12 +9,15 @@
   hatchling,
 
   # native dependencies
-  xorg,
+  libxrandr,
+  libxfixes,
+  libx11,
 
   # tests
   lsof,
   pillow,
   pytest-cov-stub,
+  pytest-rerunfailures,
   pytest,
   pyvirtualdisplay,
   xvfb-run,
@@ -26,8 +28,6 @@ buildPythonPackage rec {
   version = "10.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-cYK69+4WylaeKAQCi2q5vL9r5cRvwogIQPM7UTuctPg=";
@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./linux-paths.patch {
-      x11 = "${xorg.libX11}/lib/libX11.so";
-      xfixes = "${xorg.libXfixes}/lib/libXfixes.so";
-      xrandr = "${xorg.libXrandr}/lib/libXrandr.so";
+      x11 = "${libx11}/lib/libX11.so";
+      xfixes = "${libxfixes}/lib/libXfixes.so";
+      xrandr = "${libxrandr}/lib/libXrandr.so";
     })
   ];
 
@@ -49,6 +49,7 @@ buildPythonPackage rec {
     lsof
     pillow
     pytest-cov-stub
+    pytest-rerunfailures
     pytest
     pyvirtualdisplay
     xvfb-run
@@ -56,18 +57,18 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    xvfb-run pytest -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
+    xvfb-run pytest -v -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
     runHook postCheck
   '';
 
   pythonImportsCheck = [ "mss" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform multiple screenshots module";
     mainProgram = "mss";
     homepage = "https://github.com/BoboTiG/python-mss";
     changelog = "https://github.com/BoboTiG/python-mss/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ austinbutler ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ austinbutler ];
   };
 }

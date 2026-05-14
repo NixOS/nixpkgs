@@ -1,11 +1,13 @@
-{ lib, nodes, ... }:
+testModuleArgs@{
+  lib,
+  ...
+}:
 
 let
   inherit (lib)
     attrNames
-    concatMap
+    concatMapAttrsStringSep
     concatMapStrings
-    flip
     forEach
     head
     listToAttrs
@@ -20,27 +22,14 @@ let
     zipLists
     ;
 
-  nodeNumbers = listToAttrs (zipListsWith nameValuePair (attrNames nodes) (range 1 254));
+  nodeNumbers = listToAttrs (
+    zipListsWith nameValuePair (attrNames testModuleArgs.config.allMachines) (range 1 254)
+  );
 
   networkModule =
-    {
-      config,
-      nodes,
-      pkgs,
-      ...
-    }:
+    { config, ... }:
     let
-      qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
-
-      # Convert legacy VLANs to named interfaces and merge with explicit interfaces.
-      vlansNumbered = forEach (zipLists config.virtualisation.vlans (range 1 255)) (v: {
-        name = "eth${toString v.snd}";
-        vlan = v.fst;
-        assignIP = true;
-      });
-      explicitInterfaces = lib.mapAttrsToList (n: v: v // { name = n; }) config.virtualisation.interfaces;
-      interfaces = vlansNumbered ++ explicitInterfaces;
-      interfacesNumbered = zipLists interfaces (range 1 255);
+      interfaces = lib.attrValues config.virtualisation.allInterfaces;
 
       # Automatically assign IP addresses to requested interfaces.
       assignIPs = lib.filter (i: i.assignIP) interfaces;
@@ -62,17 +51,6 @@ let
         }
       );
 
-      qemuOptions = lib.flatten (
-        forEach interfacesNumbered (
-          { fst, snd }: qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber
-        )
-      );
-      udevRules = forEach interfacesNumbered (
-        { fst, snd }:
-        # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"''
-      );
-
       networkConfig = {
         networking.hostName = mkDefault config.virtualisation.test.nodeName;
 
@@ -86,33 +64,51 @@ let
           optionalString (ipInterfaces != [ ])
             (head (head ipInterfaces).value.ipv6.addresses).address;
 
-        # Put the IP addresses of all VMs in this machine's
-        # /etc/hosts file.  If a machine has multiple
-        # interfaces, use the IP address corresponding to
-        # the first interface (i.e. the first network in its
-        # virtualisation.vlans option).
-        networking.extraHosts = flip concatMapStrings (attrNames nodes) (
-          m':
+        # Generate /etc/hosts including every remote's primary IP addresses
+        # (whichever VLAN they may belong to) as well as all IP addresses from
+        # VLANs that both the local machine and the remote machine share.
+        networking.extraHosts =
           let
-            config = nodes.${m'};
-            hostnames =
-              optionalString (
-                config.networking.domain != null
-              ) "${config.networking.hostName}.${config.networking.domain} "
-              + "${config.networking.hostName}\n";
+            localVlans = config.virtualisation.vlans;
           in
-          optionalString (
-            config.networking.primaryIPAddress != ""
-          ) "${config.networking.primaryIPAddress} ${hostnames}"
-          + optionalString (config.networking.primaryIPv6Address != "") (
-            "${config.networking.primaryIPv6Address} ${hostnames}"
-          )
-        );
+          concatMapAttrsStringSep "" (
+            mName: remoteConfig:
+            let
+              remoteInterfaces = remoteConfig.networking.interfaces;
+              sharedIps = lib.flatten (
+                lib.mapAttrsToList (
+                  ifaceName: ifaceCfg:
+                  let
+                    remoteIfaceMeta = remoteConfig.virtualisation.allInterfaces."${ifaceName}" or { };
+                    vlanId = remoteIfaceMeta.vlan or null;
+                  in
+                  if vlanId != null && builtins.elem vlanId localVlans then
+                    builtins.map (addr: addr.address) ifaceCfg.ipv4.addresses
+                    ++ builtins.map (addr: addr.address) ifaceCfg.ipv6.addresses
+                  else
+                    [ ]
+                ) remoteInterfaces
+              );
 
-        virtualisation.qemu.options = qemuOptions;
-        boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
+              # We also want to test router protocols that enable connections
+              # between nodes even if they don't share a VLAN, so we include
+              # the primary IPs of all machines in the hosts file.
+              primaryIPs = [
+                remoteConfig.networking.primaryIPAddress
+                remoteConfig.networking.primaryIPv6Address
+              ];
+
+              allReachableIps = lib.lists.uniqueStrings (sharedIps ++ primaryIPs);
+
+              hostnames =
+                optionalString (
+                  remoteConfig.networking.domain != null
+                ) "${remoteConfig.networking.hostName}.${remoteConfig.networking.domain} "
+                + "${remoteConfig.networking.hostName}\n";
+            in
+            builtins.concatStringsSep "" (map (ip: "${ip} ${hostnames}") allReachableIps)
+          ) testModuleArgs.config.allMachines;
       };
-
     in
     {
       key = "network-interfaces";
@@ -121,6 +117,31 @@ let
         # that need to recreate the network config.
         system.build.networkConfig = networkConfig;
       };
+    };
+
+  qemuNetworkModule =
+    { config, pkgs, ... }:
+    let
+      qemu-common = import ../qemu-common.nix { inherit (pkgs) lib stdenv; };
+
+      interfaces = lib.attrValues config.virtualisation.allInterfaces;
+
+      interfacesNumbered = zipLists interfaces (range 1 255);
+
+      qemuOptions = lib.flatten (
+        forEach interfacesNumbered (
+          { fst, snd }: qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber
+        )
+      );
+      udevRules = map (
+        interface:
+        # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
+        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower (qemu-common.qemuNicMac interface.vlan config.virtualisation.test.nodeNumber)}",NAME="${interface.name}"''
+      ) interfaces;
+    in
+    {
+      virtualisation.qemu.options = qemuOptions;
+      boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
     };
 
   nodeNumberModule = (
@@ -133,7 +154,7 @@ let
           # We need to force this in specialisations, otherwise it'd be
           # readOnly = true;
           description = ''
-            The `name` in `nodes.<name>`; stable across `specialisations`.
+            The `name` in `nodes.<name>` and `containers.<name>`; stable across `specialisations`.
           '';
         };
         virtualisation.test.nodeNumber = mkOption {
@@ -142,7 +163,7 @@ let
           readOnly = true;
           default = nodeNumbers.${config.virtualisation.test.nodeName};
           description = ''
-            A unique number assigned for each node in `nodes`.
+            A unique number assigned for each machine in `nodes` and `containers`.
           '';
         };
 
@@ -176,6 +197,11 @@ in
       imports = [
         networkModule
         nodeNumberModule
+      ];
+    };
+    extraBaseNodeModules = {
+      imports = [
+        qemuNetworkModule
       ];
     };
   };

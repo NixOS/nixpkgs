@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gemmi";
-  version = "0.7.3";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "project-gemmi";
     repo = "gemmi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7vmQEP7+3yNkQ7l36xbeLJsm5eYZvt7oRq/ksy6zQU=";
+    hash = "sha256-6KtLgohnDLlA2SI8GIqcjyKAucrxLBd/t8wnmbX372E=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
       addBinToPathHook
       versionCheckHook
     ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Numerical precision error

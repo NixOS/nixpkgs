@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "3.18.6";
+  version = "3.20.2";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-aUnPLjSt1law6O2M4IQnHB3QiMDYVQ6h//zJbE2vap8=";
+    sha256 = "sha256-YF5djCmCoPdLlEa/cksQgGtscEmIsQTiRqYZNyFjsEY=";
   };
-  vendorHash = "sha256-Gn2h7a4bu9nWPEiqW9uN8SnKSZ7NRfchfRoFfpp49+M=";
+  vendorHash = "sha256-kqx23LekpuZJFisVZUoXBY9vHh9zviKyaW5NSa4ecxM=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
@@ -38,6 +38,11 @@ buildGoModule (finalAttrs: {
     ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
     ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
   '';
+
+  overrideModAttrs = _: {
+    # the goModules derivation will otherwise inherit the preBuild phase defined above
+    preBuild = "";
+  };
 
   __darwinAllowLocalNetworking = true;
 
@@ -70,12 +75,12 @@ buildGoModule (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/helm/helm";
     description = "Package manager for kubernetes";
     mainProgram = "helm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rlupton20
       edude03
       saschagrunert

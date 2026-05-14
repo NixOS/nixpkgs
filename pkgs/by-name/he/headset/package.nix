@@ -7,12 +7,12 @@
   electron,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "headset";
   version = "4.2.1";
 
   src = fetchurl {
-    url = "https://github.com/headsetapp/headset-electron/releases/download/v${version}/headset_${version}_amd64.deb";
+    url = "https://github.com/headsetapp/headset-electron/releases/download/v${finalAttrs.version}/headset_${finalAttrs.version}_amd64.deb";
     hash = "sha256-81gsIq74sggauE6g8pM6z05KTmsbe49CZa9aRQEDwMo=";
   };
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple music player for YouTube and Reddit";
     homepage = "https://headsetapp.co/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ muscaln ];
+    maintainers = with lib.maintainers; [ muscaln ];
     mainProgram = "headset";
   };
-}
+})

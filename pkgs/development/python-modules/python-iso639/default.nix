@@ -6,16 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-iso639";
-  version = "2025.2.18";
+  version = "2026.4.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jacksonllee";
     repo = "iso639";
-    tag = "v${version}";
-    hash = "sha256-CVLyeXA0FXLCthNO3SLgTvxi4sJI5fPhuqEbnDb4L/s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aXckFcWG8zcP9GELTT5eHnQzklAYG70LyX34fhVGdTo=";
   };
 
   build-system = [ setuptools ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jacksonllee/iso639/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jacksonllee/iso639/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "ISO 639 language codes, names, and other associated information";
     homepage = "https://github.com/jacksonllee/iso639";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

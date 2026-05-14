@@ -6,14 +6,14 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylyrics";
   version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyLyrics";
-    inherit version;
+    inherit (finalAttrs) version;
     extension = "zip";
     hash = "sha256-xfNujvDtO0h6kkLONMGfloTkGKW7/9XTZ9wdFgS0zQs=";
   };
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   # tries to connect to lyrics.wikia.com
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic Implementation of lyrics.wikia.com for getting lyrics of songs";
     homepage = "https://github.com/geekpradd/PyLyrics";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

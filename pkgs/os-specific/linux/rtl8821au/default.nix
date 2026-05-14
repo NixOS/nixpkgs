@@ -60,11 +60,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "rtl8821AU and rtl8812AU chipset driver with firmware";
     homepage = "https://github.com/morrownr/8821au-20210708";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ plchldr ];
+    maintainers = with lib.maintainers; [ plchldr ];
+    broken = kernel.kernelOlder "5.4" || kernel.kernelAtLeast "6.15";
   };
 }

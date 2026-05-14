@@ -37,6 +37,10 @@ stdenv.mkDerivation {
     ./0002-Fix-build-with-C-17.patch
     ./0003-Modernize-CMake-build-system.patch
     ./0004-Use-pkg-config-to-find-libresample-and-kissfft.patch
+    # Fix build with gcc15: minilog.h uses Get() instead of get() in unused
+    # template code
+    # https://github.com/dominikschnitzer/musly/pull/55
+    ./0005-Fix-minilog-get.patch
   ];
 
   nativeBuildInputs = [

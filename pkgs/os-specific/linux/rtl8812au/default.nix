@@ -54,11 +54,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
     homepage = "https://github.com/morrownr/8812au-20210820";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ moni ];
+    broken = kernel.kernelOlder "5.10" || kernel.kernelAtLeast "6.15";
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rexi";
   version = "1.2.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "royreznik";
     repo = "rexi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tag2/QTM6tDCU3qr4e1GqRYAZgpvEgtA+FtR4P7WdiU=";
   };
 
@@ -52,4 +52,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gauravghodinde ];
     mainProgram = "rexi";
   };
-}
+})

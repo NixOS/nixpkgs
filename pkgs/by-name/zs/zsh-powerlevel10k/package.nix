@@ -32,17 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D powerlevel10k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
-    install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
-    install -D config/* --target-directory=$out/share/zsh-powerlevel10k/config
-    install -D internal/* --target-directory=$out/share/zsh-powerlevel10k/internal
-    cp -R gitstatus $out/share/zsh-powerlevel10k/gitstatus
+    install -D powerlevel10k.zsh-theme --target-directory=$out/share/zsh/themes/powerlevel10k
+    install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh/themes/powerlevel10k
+    install -D config/* --target-directory=$out/share/zsh/themes/powerlevel10k/config
+    install -D internal/* --target-directory=$out/share/zsh/themes/powerlevel10k/internal
+    cp -R gitstatus $out/share/zsh/themes/powerlevel10k/gitstatus
+    ln -s $out/share/zsh/themes/powerlevel10k $out/share/zsh-powerlevel10k
 
     runHook postInstall
   '';
 
   meta = {
-    changelog = "https://github.com/romkatv/powerlevel10k/releases/tag/v${finalAttrs.version}";
     description = "Fast reimplementation of Powerlevel9k ZSH theme";
     longDescription = ''
       To make use of this derivation, use
@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/romkatv/powerlevel10k";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

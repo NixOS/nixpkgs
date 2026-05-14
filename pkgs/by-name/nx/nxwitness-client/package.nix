@@ -17,14 +17,14 @@
   openal,
   qt6Packages,
   wayland,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
 }:
 let
-  version = "6.0.3";
-  build = "40736";
+  version = "6.0.6";
+  build = "41837";
 
   buildInputs = [
     glib
@@ -45,10 +45,10 @@ let
     qt6Packages.qtwebsockets
     qt6Packages.qtwebview
     wayland
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
   ];
 
   meta = {
@@ -67,12 +67,16 @@ let
 
     src = fetchurl {
       url = "https://updates.networkoptix.com/default/${build}/linux/nxwitness-client-${finalAttrs.version}-linux_x64.deb";
-      hash = "sha256-flOTNKklovpvtFDWE64clL3Jk1cmT4SVgs1NQZZaXpc=";
+      hash = "sha256-qp3frZqVr6nJonUrcyM2xIliWkwf4aSge3oyWkrzzSs=";
     };
 
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
+    ];
+
+    autoPatchelfIgnoreMissingDeps = [
+      "libQt6WaylandEglClientHwIntegration.so.6"
     ];
 
     dontUnpack = true;

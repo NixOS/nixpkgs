@@ -103,32 +103,31 @@ in
     };
 
   testScript = ''
-    import crypt
-
-    def assert_password_match(machine, username, password):
+    def assert_password_sha512crypt_match(machine, username, password):
       shadow_entry = machine.succeed(f"getent shadow {username}")
       print(shadow_entry)
-      hash = shadow_entry.split(":")[1]
-      seed = "$".join(hash.split("$")[:-1])
-      assert crypt.crypt(password, seed) == hash, f"{username} user password does not match"
+      stored_hash = shadow_entry.split(":")[1]
+      salt = stored_hash.split("$")[2]
+      pass_hash = machine.succeed(f"mkpasswd -m sha512crypt {password} {salt}").strip()
+      assert stored_hash == pass_hash, f"{username} user password does not match"
 
     with subtest("alice user has correct password"):
-      for machine in machines:
-        assert_password_match(machine, "alice", "${password1}")
+      for machine in machines_qemu:
+        assert_password_sha512crypt_match(machine, "alice", "${password1}")
         assert "${hashed_sha512crypt}" not in machine.succeed("getent shadow alice"), f"{machine}: alice user password is not correct"
 
     with subtest("bob user has correct password"):
-      for machine in machines:
+      for machine in machines_qemu:
         print(machine.succeed("getent shadow bob"))
         assert "${hashed_bcrypt}" in machine.succeed("getent shadow bob"), f"{machine}: bob user password is not correct"
 
     with subtest("cat user has correct password"):
-      for machine in machines:
+      for machine in machines_qemu:
         print(machine.succeed("getent shadow cat"))
         assert "${hashed_bcrypt}" in machine.succeed("getent shadow cat"), f"{machine}: cat user password is not correct"
 
     with subtest("dan user has correct password"):
-      for machine in machines:
+      for machine in machines_qemu:
         print(machine.succeed("getent shadow dan"))
         assert "${hashed_bcrypt}" in machine.succeed("getent shadow dan"), f"{machine}: dan user password is not correct"
 
@@ -136,14 +135,14 @@ in
       print(mutable.succeed("getent shadow greg"))
       assert "${hashed_sha512crypt}" in mutable.succeed("getent shadow greg"), "greg user password is not correct"
 
-      assert_password_match(immutable, "greg", "${password1}")
+      assert_password_sha512crypt_match(immutable, "greg", "${password1}")
       assert "${hashed_sha512crypt}" not in immutable.succeed("getent shadow greg"), "greg user password is not correct"
 
-    for machine in machines:
+    for machine in machines_qemu:
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
 
-    def check_login(machine: Machine, tty_number: str, username: str, password: str):
+    def check_login(machine: QemuMachine, tty_number: str, username: str, password: str):
       machine.send_key(f"alt-f{tty_number}")
       machine.wait_until_succeeds(f"[ $(fgconsole) = {tty_number} ]")
       machine.wait_for_unit(f"getty@tty{tty_number}.service")
@@ -159,11 +158,11 @@ in
       assert username in machine.succeed(f"cat /tmp/{tty_number}"), f"{machine}: {username} password is not correct"
 
     with subtest("Test initialPassword override"):
-      for machine in machines:
+      for machine in machines_qemu:
         check_login(machine, "2", "egon", "${password1}")
 
     with subtest("Test initialHashedPassword override"):
-      for machine in machines:
+      for machine in machines_qemu:
         check_login(machine, "3", "fran", "meow")
   '';
 }

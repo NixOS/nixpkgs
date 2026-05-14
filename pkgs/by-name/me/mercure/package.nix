@@ -7,20 +7,20 @@
   mercure,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mercure";
-  version = "0.20.0";
+  version = "0.21.8";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
-    rev = "v${version}";
-    hash = "sha256-JBvfNzsOP4ggJ7D2+5yW8837QsN15wO6EbFrTKVensU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-M/RzcR0FPkjBCRw0faRHF2ML25vzxcmNbAnnSWo+NFU=";
   };
 
-  sourceRoot = "${src.name}/caddy";
+  sourceRoot = "${finalAttrs.src.name}/caddy";
 
-  vendorHash = "sha256-ZCvIgyGw4F4VGbnuan5O+to5n969ThRZNFezu+byKWg=";
+  vendorHash = "sha256-KtjKrCqu+MAJpSL/HbLipxKbLOqDvzPOA5QN9ppu2aY=";
 
   subPackages = [ "mercure" ];
   excludedPackages = [ "../cmd/mercure" ];
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'github.com/caddyserver/caddy/v2.CustomVersion=Mercure.rocks v${version} Caddy'"
+    "-X 'github.com/caddyserver/caddy/v2.CustomVersion=Mercure.rocks v${finalAttrs.version} Caddy'"
   ];
 
   doCheck = false;
@@ -36,7 +36,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
       package = mercure;
       command = "mercure version";
     };
@@ -45,10 +45,10 @@ buildGoModule rec {
   meta = {
     description = "Open, easy, fast, reliable and battery-efficient solution for real-time communications";
     homepage = "https://github.com/dunglas/mercure";
-    changelog = "https://github.com/dunglas/mercure/releases/tag/v${version}";
+    changelog = "https://github.com/dunglas/mercure/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "mercure";
   };
-}
+})

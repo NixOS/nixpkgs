@@ -5,7 +5,7 @@
   p7zip,
 }:
 let
-  version = "1.022";
+  version = "1.028";
 
   source =
     with lib.attrsets;
@@ -18,10 +18,10 @@ let
         })
       )
       {
-        Mono = "sha256-kRUnhNXTcU6DCgM0yDVZTzr+2SooANoSkj5bJ1zK+YI=";
-        Round = "sha256-5VJsgTSOGNW87ybKtu55rn+1wp7aUBBC3IPwZopcb9o=";
-        Sans = "sha256-Bss244+gG00tnWUt6hri3BO11tBMWB3+VUEuWqHqr6Y=";
-        Serif = "sha256-PYuqBGxU/T6dlVpa5gqaxe5BShiaIlVisRGtPamlykE=";
+        Mono = "sha256-QQgEUQbWOr3sOIT2yQpkY9cL2sHFO/Z/hrhV5YqA3Zk=";
+        Round = "sha256-izPntZyAfeL/DuhDvZ+FWKq71Uj4WuHWC4d7Z3qEsvc=";
+        Sans = "sha256-a05MO8vq+PqDlYtuDstN6hlx/IkNY0JCwcmlYYK3Xcw=";
+        Serif = "sha256-A1/KygN+OC1e3p8T6OAN8jCAi8HuswkE/xjo65GVweY=";
       };
 
   extraOutputs = builtins.attrNames source;
@@ -61,11 +61,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GuiWonder/Shanggu";
     description = "Heritage glyph (old glyph) font based on Siyuan";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Cryolitia ];
   };
 }

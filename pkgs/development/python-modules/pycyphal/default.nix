@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build system
   setuptools,
@@ -23,16 +24,19 @@
 
 buildPythonPackage rec {
   pname = "pycyphal";
-  version = "1.24.3";
+  version = "1.24.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pycyphal";
     tag = version;
-    hash = "sha256-aa7PJ6QkqwwPwQvYc6QKaxtm1Mnz3d7SLEik55qN6/Y=";
+    hash = "sha256-yrGKmJW4W8bPazKHWkwgNWDPiQYg1KTEuI7hC3yOWek=";
     fetchSubmodules = true;
   };
+
+  # Set an event loop in the doctest helper; policy.get_event_loop no longer auto-creates one on 3.14.
+  patches = lib.optional (pythonAtLeast "3.14") ./python-3.14-asyncio-loop.patch;
 
   build-system = [ setuptools ];
 
@@ -56,7 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
   ]
-  ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -93,14 +97,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycyphal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured implementation of the Cyphal protocol stack in Python";
     longDescription = ''
       Cyphal is an open technology for real-time intravehicular distributed computing and communication based on modern networking standards (Ethernet, CAN FD, etc.).
     '';
     homepage = "https://opencyphal.org/";
     changelog = "https://github.com/OpenCyphal/pycyphal/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    teams = [ teams.ororatech ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

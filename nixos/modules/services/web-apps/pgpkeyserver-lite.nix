@@ -47,7 +47,7 @@ in
       hkpPort = mkOption {
         default = sksCfg.hkpPort;
         defaultText = literalExpression "config.${sksOpt.hkpPort}";
-        type = types.int;
+        type = types.port;
         description = ''
           Which port the sks-keyserver is listening on.
         '';
@@ -61,7 +61,7 @@ in
 
     services.nginx.virtualHosts =
       let
-        hkpPort = builtins.toString cfg.hkpPort;
+        hkpPort = toString cfg.hkpPort;
       in
       {
         ${cfg.hostname} = {

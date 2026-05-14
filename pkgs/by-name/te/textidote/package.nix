@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "sylvainhalle";
       repo = "textidote";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-QMSoxk5jDn6qsdxffXJ/S4eTIzLjJdAEbdaK8MZIavI=";
     };
 

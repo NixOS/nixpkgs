@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cadsondemak.github.io/kanit/";
     description = "Loopless Thai and sans serif Latin typeface for contemporary and futuristic uses";
     longDescription = ''
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
       which allows the design to enjoy decreased spacing between letters while
       preserving readability and legibility at smaller point sizes.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.toastal ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.toastal ];
   };
 }

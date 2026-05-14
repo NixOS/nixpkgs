@@ -1,8 +1,8 @@
 {
   lib,
-  python311,
+  python3,
+  python3Packages,
   fetchFromGitHub,
-  file,
   gnupg,
   gawk,
   procps,
@@ -10,8 +10,7 @@
   withManpage ? false,
 }:
 
-with python311.pkgs;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alot";
   version = "0.11";
   pyproject = true;
@@ -26,7 +25,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
   };
 
@@ -35,32 +34,35 @@ buildPythonApplication rec {
       --replace-fail /usr/share "$out/share"
   '';
 
-  build-system = [
-    setuptools-scm
-  ]
-  ++ lib.optional withManpage sphinx;
+  build-system =
+    with python3Packages;
+    [
+      setuptools
+      setuptools-scm
+    ]
+    ++ lib.optional withManpage sphinx;
 
-  dependencies = [
+  dependencies = with python3Packages; [
     configobj
-    file
     gpgme
     notmuch2
     python-magic
-    service-identity
+    standard-mailcap
     twisted
     urwid
     urwidtrees
   ];
 
   nativeCheckInputs = [
-    future
     gawk
     gnupg
-    mock
-    procps
-    pytestCheckHook
     notmuch
-  ];
+    procps
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    mock
+  ]);
 
   postBuild = lib.optionalString withManpage [
     "make -C docs man"
@@ -76,7 +78,7 @@ buildPythonApplication rec {
 
   postInstall =
     let
-      completionPython = python.withPackages (ps: [ ps.configobj ]);
+      completionPython = python3.withPackages (ps: [ ps.configobj ]);
     in
     lib.optionalString withManpage ''
       mkdir -p $out/man
@@ -96,10 +98,10 @@ buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
-    changelog = "https://github.com/pazz/alot/releases/tag/${src.tag}";
+    changelog = "https://github.com/pazz/alot/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "alot";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ milibopp ];
   };
-}
+})

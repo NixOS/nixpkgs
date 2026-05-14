@@ -4,35 +4,34 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pluto";
-  version = "5.22.5";
+  version = "5.24.0";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "pluto";
-    rev = "v${version}";
-    hash = "sha256-MserKZcOkif56XeTLRzHDDk6HYeVhgKsnOjsfv0vPeQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-s46O/lSrF7kNaUWOrWnxQpLxWh/jbvI9k+t2jZqOAjU=";
   };
 
-  vendorHash = "sha256-59mRVfQ2rduTvIJE1l/j3K+PY3OEMfNpjjYg3hqNUhs=";
+  vendorHash = "sha256-mNY1BmugJ7OauR3nSoiD7EpJ8dlk5PKPL/4urvPtOIY=";
 
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   __darwinAllowLocalNetworking = true; # for tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/FairwindsOps/pluto";
     description = "Find deprecated Kubernetes apiVersions";
     mainProgram = "pluto";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      peterromfeldhk
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kashw2
     ];
   };
-}
+})

@@ -20,6 +20,12 @@
   release."0.2.3+8.19".sha256 = "sha256-0eQQheY2yjS7shifhUlVPLXvTmyvgNpx7deLWXBRTfA=";
   release."0.2.3+8.20".sha256 = "sha256-TUVS8jkgf1MMOOx5y70OaeZkdIgdgmyGQ2/zKxeplEk=";
   release."0.2.3+9.0".sha256 = "sha256-eZMM4gYRXQroEIKz6XlffyHNYryEF5dIeIoVbEulh6M=";
+  release."0.2.4+8.20".sha256 = "sha256-mQxh2/Cb5hZ99TtqWYLpZ/BRPrm5GRDYPDfKlCTK9N4=";
+  release."0.2.4+9.0".sha256 = "sha256-ICPdNxJODNqmUErdTkNk7s52MRuINWLbAPm0rmXFW18=";
+  release."0.2.4+9.1".sha256 = "sha256-HNHA2vbX70oZkd4QtbP28UbTRXatqxJdxw1OWDVDE8U=";
+  release."0.2.5+8.20".sha256 = "sha256-OduwwJESXVEkeX+w8nLEhLUtPo4YGDPj21yWyc1uv3U=";
+  release."0.2.5+9.0".sha256 = "sha256-nbMf7xziBYoBH0F8YBUEybCHSdsaOxlqXnyngeQNg3c=";
+  release."0.2.5+9.1".sha256 = "sha256-PzIgo15zI3JjibT8GzyHdTwofd3IF6eRmUc47NveH70=";
 
   inherit version;
   defaultVersion =
@@ -43,11 +49,15 @@
       }
       {
         case = isEq "8.20";
-        out = "0.2.3+8.20";
+        out = "0.2.5+8.20";
       }
       {
         case = isEq "9.0";
-        out = "0.2.3+9.0";
+        out = "0.2.5+9.0";
+      }
+      {
+        case = isEq "9.1";
+        out = "0.2.5+9.1";
       }
     ] null;
 
@@ -68,12 +78,12 @@
     yojson
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol and VS Code Extension for Coq";
     homepage = "https://github.com/ejgallego/coq-lsp";
     changelog = "https://github.com/ejgallego/coq-lsp/blob/${defaultVersion}/CHANGES.md";
-    maintainers = with maintainers; [ alizter ];
-    license = licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ alizter ];
+    license = lib.licenses.lgpl21Only;
   };
 }).overrideAttrs
   (
@@ -86,7 +96,7 @@
               camlp-streams
               serapi
             ]
-          else
+          else if o.version != null && lib.versions.isLe "0.2.3" o.version && o.version != "dev" then
             [
               cmdliner
               ppx_deriving
@@ -96,6 +106,16 @@
               ppx_compare
               ppx_hash
               sexplib
+            ]
+          else
+            [
+              cmdliner
+              ppx_deriving_yojson
+              ppx_hash
+              ppx_import
+              ppx_sexp_conv
+              sexplib
+              tyxml
             ]
         );
 

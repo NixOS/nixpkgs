@@ -104,7 +104,11 @@ stdenv.mkDerivation rec {
     # Fails to build on x86_64-linux as of 2025-03-16 and potentially earlier
     broken = true;
     description = "Jagged Alliance 2, with community fixes";
-    license = "SFI Source Code license agreement";
+    license = {
+      fullName = "Strategy First Inc. Source Code License Agreement";
+      url = "https://github.com/ja2-stracciatella/ja2-stracciatella/blob/master/SFI%20Source%20Code%20license%20agreement.txt";
+      free = false;
+    };
     homepage = "https://ja2-stracciatella.github.io/";
     maintainers = [ ];
   };

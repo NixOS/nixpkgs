@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iina";
-  version = "1.3.5";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/iina/iina/releases/download/v${finalAttrs.version}/IINA.v${finalAttrs.version}.dmg";
-    hash = "sha256-O4uRmfQaGMKqizDlgk0MnazMHVkXaDLqZQ9TP8vcajg=";
+    hash = "sha256-Lg/Yn7uhySpsEVFx5bUZBIg7tJf75ROmlh0ID7qwj/Y=";
   };
 
   nativeBuildInputs = [ undmg ];

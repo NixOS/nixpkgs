@@ -28,4 +28,10 @@
       inherit package;
     };
   };
+  ui = runTest {
+    imports = [ ./ui.nix ];
+    _module.args = {
+      inherit package;
+    };
+  };
 }

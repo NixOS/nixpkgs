@@ -1,102 +1,41 @@
 {
   lib,
-  stdenvNoCC,
   fetchFromGitHub,
   callPackage,
   php,
-  unzip,
-  _7zz,
-  xz,
-  gitMinimal,
-  curl,
-  cacert,
   makeBinaryWrapper,
+  _7zz,
+  curl,
+  gitMinimal,
+  unzip,
+  xz,
   versionCheckHook,
 }:
-
-stdenvNoCC.mkDerivation (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "composer";
-  version = "2.8.11";
-
-  # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
-  # use together with the version from this package to keep the
-  # bootstrap phar file up-to-date together with the end user composer
-  # package.
-  passthru.pharHash = "sha256-JXqWnpqdJ+DkXP6VSDXBenYDO6hKOI4PRy24Pt7WWos=";
-
-  composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
-    inherit (finalAttrs) version;
-    inherit (finalAttrs.passthru) pharHash;
-  };
+  version = "2.9.7";
 
   src = fetchFromGitHub {
     owner = "composer";
     repo = "composer";
     tag = finalAttrs.version;
-    hash = "sha256-ufkrrCnIwJHtAsjKdaFzlJkCH0i7Tm17+eIqgSqDwlE=";
+    hash = "sha256-cmz5YaxfykkUlF7Ai0Yu8L6sfNePmx3v24g6131+/RM=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
-  buildInputs = [ php ];
-
-  vendor = stdenvNoCC.mkDerivation {
-    pname = "${finalAttrs.pname}-vendor";
-
-    inherit (finalAttrs) src version;
-
-    nativeBuildInputs = [
-      cacert
-      finalAttrs.composer
-    ];
-
-    dontPatchShebangs = true;
-    doCheck = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      composer install --no-dev --no-interaction --no-progress --optimize-autoloader
-
-      runHook postBuild
-    '';
-
-    checkPhase = ''
-      runHook preCheck
-
-      composer validate
-
-      runHook postCheck
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cp -ar . $out/
-
-      runHook postInstall
-    '';
-
-    env = {
-      COMPOSER_CACHE_DIR = "/dev/null";
-      COMPOSER_DISABLE_NETWORK = "0";
-      COMPOSER_HTACCESS_PROTECT = "0";
-      COMPOSER_MIRROR_PATH_REPOS = "1";
-      COMPOSER_ROOT_VERSION = finalAttrs.version;
-    };
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-elh3zgN4DJK0lY6TDRGWfBjmnWZzy7s1sMWe34RsLEE=";
+  # Bootstrapping Composer (source) with Composer (PHAR distribution).
+  # Override the default `composer` attribute to prevent infinite recursion.
+  composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
+    inherit (finalAttrs) version;
+    inherit (finalAttrs.passthru) pharHash;
   };
 
-  installPhase = ''
-    runHook preInstall
+  vendorHash = "sha256-yMT32j3Qt4X0IbE1Mmge7PjVjVVrA4fvJm8O/8sz/V4=";
 
-    mkdir -p $out
-    cp -ar ${finalAttrs.vendor}/* $out/
-    chmod +w $out/bin
-
+  postInstall = ''
     wrapProgram $out/bin/composer \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -107,13 +46,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           xz
         ]
       }
-
-    runHook postInstall
   '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+
+  # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
+  # use together with the version from this package to keep the
+  # bootstrap phar file up-to-date together with the end user composer
+  # package.
+  passthru.pharHash = "sha256-08aAHqbl3SkdDxSSlaTQ8VOadNUjGVj+j9qoiaSX5s8=";
 
   meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";

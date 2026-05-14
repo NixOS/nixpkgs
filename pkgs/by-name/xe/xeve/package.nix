@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches =
-    builtins.map fetchpatch2 [
+    map fetchpatch2 [
       {
         url = "https://github.com/mpeg5/xeve/commit/954ed6e0494cd2438fd15c717c0146e88e582b33.patch?full_index=1";
         hash = "sha256-//NtOUm1fqPFvOM955N6gF+QgmOdmuVunwx/3s/G/J8=";
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     optional isAarch64 (cmakeBool "ARM" true)
     ++ optional isDarwin (cmakeFeature "CMAKE_SYSTEM_NAME" "Darwin");
 
-  env.NIX_CFLAGS_COMPILE = builtins.toString (
-    builtins.map (w: "-Wno-" + w) [
+  env.NIX_CFLAGS_COMPILE = toString (
+    map (w: "-Wno-" + w) [
       # Patch addressing an if without a body was rejected upstream, third
       # line-based comment in this thread, https://github.com/mpeg5/xeve/pull/122#pullrequestreview-2187744305
       # Evaluate on version bump whether still necessary.

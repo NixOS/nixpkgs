@@ -18,9 +18,9 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exiv2";
-  version = "0.28.5";
+  version = "0.28.8";
 
   outputs = [
     "out"
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exiv2";
     repo = "exiv2";
-    rev = "v${version}";
-    hash = "sha256-+Fe0+wkWWtM3MNgY6qp34/kC8jkOjOLusnd9WquYpA8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Qe+lNBO24qQyKDXe7RMCqoDa61iha2QFhRpLJlCSMo=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,10 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs ../test/
     mkdir ../test/tmp
+
+    # template.exv_test (test_regression_allfiles.TestAllFiles.template.exv_test) ... ERROR
+    substituteInPlace ../tests/regression_tests/test_regression_allfiles.py \
+      --replace-fail '"issue_2403_poc.exv",' '"issue_2403_poc.exv", "template.exv",'
   ''
   + lib.optionalString stdenv.hostPlatform.isAarch32 ''
     # Fix tests on arm
@@ -90,8 +94,8 @@ stdenv.mkDerivation rec {
     export LC_ALL=C
 
     # disable tests that requires loopback networking
-    substituteInPlace  ../tests/bash_tests/testcases.py \
-      --replace "def io_test(self):" "def io_disabled(self):"
+    substituteInPlace ../tests/bash_tests/testcases.py \
+      --replace-fail "def io_test(self):" "def io_disabled(self):"
   '';
 
   preFixup = ''
@@ -103,12 +107,12 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://exiv2.org";
     description = "Library and command-line utility to manage image metadata";
     mainProgram = "exiv2";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wegank ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

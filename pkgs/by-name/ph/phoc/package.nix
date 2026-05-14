@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitLab,
+  callPackage,
   meson,
   ninja,
   pkg-config,
@@ -20,7 +21,7 @@
   libdrm,
   libxkbcommon,
   wlroots_0_19,
-  xorg,
+  libxcb-wm,
   nix-update-script,
   nixosTests,
   testers,
@@ -35,19 +36,23 @@ let
     repo = "gvdb";
     rev = "4758f6fb7f889e074e13df3f914328f3eecb1fd3";
     hash = "sha256-4mqoHPlrMPenoGPwDqbtv4/rJ/uq9Skcm82pRvOxNIk=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.48.0";
+  version = "0.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
     repo = "phoc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ve69Na6iZwsNM0y7AZ0p/CObUfE6uEbhOV4sb5NaCYg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P81D3gCC4Q1JQPUlAtLbMZdlVOPpJJ1/rLX7zijFcc0=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   nativeBuildInputs = [
@@ -72,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     wayland
     finalAttrs.wlroots
-    xorg.xcbutilwm
+    libxcb-wm
     gmobile
   ];
 
@@ -101,19 +106,19 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
+    tests.dependency-versions = callPackage ./test-dependency-versions.nix { inherit gvdb; };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wayland compositor for mobile phones like the Librem 5";
     mainProgram = "phoc";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      masipcat
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       zhaofengli
       armelclo
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

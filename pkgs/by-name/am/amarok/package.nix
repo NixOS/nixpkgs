@@ -3,7 +3,6 @@
   fetchurl,
   lib,
   cmake,
-  extra-cmake-modules,
   pkg-config,
   kdePackages,
   fftw,
@@ -99,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://amarok.kde.org";
     description = "Powerful music player with an intuitive interface";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "amarok";
   };
 })

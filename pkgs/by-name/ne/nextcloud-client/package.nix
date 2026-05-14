@@ -5,7 +5,6 @@
   qt6Packages,
   stdenv,
   cmake,
-  extra-cmake-modules,
   inotify-tools,
   kdePackages,
   libcloudproviders,
@@ -21,9 +20,9 @@
   libsysprof-capture,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "3.17.1";
+  version = "4.0.8";
 
   outputs = [
     "out"
@@ -33,8 +32,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
-    tag = "v${version}";
-    hash = "sha256-HXi3DDjOFLY9G+aK+QrkmLvLwL6s9lAT+8jVpG87eNM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EKJj2z3CkWrNL2idBHu5jHuPXQXKwjEjUAgo6OOY/08=";
   };
 
   patches = [
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     librsvg
     sphinx
     qt6Packages.wrapQtAppsHook
@@ -95,15 +94,14 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
+    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${finalAttrs.version}";
     description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kranzes
       SuperSandro2000
     ];
     platforms = lib.platforms.linux;
     mainProgram = "nextcloud";
   };
-}
+})

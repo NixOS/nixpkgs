@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     homepage = "https://harelang.org/";
     description = "Hare's documentation tool";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    maintainers = [ ];
     mainProgram = "haredoc";
     inherit (hareHook.meta) platforms badPlatforms;
   };

@@ -7,18 +7,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pat";
-  version = "0.17.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "la5nta";
     repo = "pat";
-    rev = "v${version}";
-    hash = "sha256-2CQQKZ9ZnabMhvmbFeYBZ2iv9WJo6QR5IqROUXy7sck=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AYaHslPYNSl/s0d7gBxmC7IRvDGEezxzbABJSgRFuPg=";
   };
 
-  vendorHash = "sha256-ajkRUnfYHCrFBxZsJLd6ypRl9+gYz+q4C/asOJZrVYg=";
+  vendorHash = "sha256-HkCXbJJFOlcp0Q9XcM1HC64EDWe/rn/nMpdpNOpgYFM=";
 
   ldflags = [
     "-s"
@@ -37,15 +37,15 @@ buildGoModule rec {
     installManPage man/pat-configure.1 man/pat.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform Winlink client written in Go";
     homepage = "https://getpat.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotemup
       sarcasticadmin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "pat";
   };
-}
+})

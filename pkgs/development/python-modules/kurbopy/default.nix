@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "kurbopy";
-  version = "0.11.1";
+  version = "0.13.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-05ezUpcHxCxo/4oyPKogq4/vdfpNnEBhtv+lYBjKdvg=";
+    hash = "sha256-JiXNgUeY2booOp1zaWtCuEqdyp/CxXy4rUo5kKmq0eQ=";
   };
 
   propagatedBuildInputs = [ fonttools ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-51qJAcJvolYCW3XWeymc2xd2QHiKLd7MdRdDedEH8QY=";
+    hash = "sha256-dWYOQk6kSGRL8nl3f89FWzdB17hgBALvsQkjeT9oKNc=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -38,10 +38,10 @@ buildPythonPackage rec {
     rm -r kurbopy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the Rust kurbo library for 2D curve manipulation";
     homepage = "https://github.com/simoncozens/kurbopy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

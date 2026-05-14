@@ -9,9 +9,9 @@
   libimobiledevice-glue,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libirecovery";
-  version = "1.2.1";
+  version = "1.3.1";
 
   outputs = [
     "out"
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libirecovery";
-    rev = version;
-    hash = "sha256-R+oBC7F4op0qoIk3d/WqS4MwzZY3WMAMIqlJfJb188Q=";
+    rev = finalAttrs.version;
+    hash = "sha256-CSDG8mOLvKAIpxmZnNLMKY1HvQIqk66/rkjmzq7F8vY=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   # Packager note: Not clear whether this needs a NixOS configuration,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ''--with-udevrule=OWNER="root",GROUP="myusergroup",MODE="0660"''
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
     longDescription = ''
       libirecovery is a cross-platform library which implements communication to
@@ -58,9 +58,9 @@ stdenv.mkDerivation rec {
       provided.
     '';
     homepage = "https://github.com/libimobiledevice/libirecovery";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ nh2 ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "irecovery";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

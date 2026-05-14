@@ -6,6 +6,7 @@
   lapack,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cudaSupport ? config.cudaSupport,
 
   # build-system
@@ -38,24 +39,34 @@
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.7.1";
+  version = "0.10.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    tag = "jax-v${version}";
-    hash = "sha256-k3yuWs+SOxrDXysVWCFR3wliATtro+aDdDXfFVtOTBo=";
+    tag = "jax-v${finalAttrs.version}";
+    hash = "sha256-/RCihrjONN/+QwyQRNEmlIa7JsCLzz+SkBe5sd+ThgU=";
   };
+
+  patches = [
+    # setup.py: Include only jax.* in the built wheel
+    # https://github.com/jax-ml/jax/pull/37182
+    (fetchpatch {
+      url = "https://github.com/jax-ml/jax/commit/cb5a91780f84f124090d8f94e99c8771e87590f6.patch";
+      hash = "sha256-p6X9IFe4YUb2MQp7YjJHme1dueZ1Y37IKnANGruW1cM=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
-  JAX_RELEASE = "1";
+  env.JAX_RELEASE = "1";
 
   dependencies = [
     jaxlib
@@ -64,7 +75,7 @@ buildPythonPackage rec {
     opt-einsum
     scipy
   ]
-  ++ lib.optionals cudaSupport optional-dependencies.cuda;
+  ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
   optional-dependencies = rec {
     cuda = [ jax-cuda12-plugin ];
@@ -178,7 +189,11 @@ buildPythonPackage rec {
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
+    changelog = "https://docs.jax.dev/en/latest/changelog.html";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+    ];
   };
-}
+})

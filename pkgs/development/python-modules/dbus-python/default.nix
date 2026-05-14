@@ -63,11 +63,6 @@ lib.fix (
       dbus-glib
     ];
 
-    pypaBuildFlags = [
-      # Don't discard meson build directory, still needed for tests!
-      "-Cbuild-dir=_meson-build"
-    ];
-
     mesonFlags = [ (lib.mesonBool "tests" finalPackage.doInstallCheck) ];
 
     # workaround bug in meson-python
@@ -87,15 +82,15 @@ lib.fix (
     checkPhase = ''
       runHook preCheck
 
-      meson test -C _meson-build --no-rebuild --print-errorlogs --timeout-multiplier 0
+      meson test -C build --no-rebuild --print-errorlogs --timeout-multiplier 0
 
       runHook postCheck
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Python DBus bindings";
       homepage = "https://gitlab.freedesktop.org/dbus/dbus-python";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       platforms = dbus.meta.platforms;
       maintainers = [ ];
     };

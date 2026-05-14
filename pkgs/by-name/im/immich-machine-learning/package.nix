@@ -17,9 +17,14 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   pythonRelaxDeps = [
+    "huggingface-hub"
     "numpy"
     "pillow"
     "pydantic-settings"
+  ];
+
+  pythonRemoveDeps = [
+    "setuptools"
   ];
 
   build-system = with python.pkgs; [
@@ -45,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
       gunicorn
       huggingface-hub
       tokenizers
+      rapidocr
     ]
     ++ uvicorn.optional-dependencies.standard;
 

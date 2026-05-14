@@ -8,7 +8,7 @@
   snippetexpanderx,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit (snippetexpanderd) src version;
 
   pname = "snippetexpander";
@@ -33,7 +33,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'main.version=${src.rev}'"
+    "-X 'main.version=${finalAttrs.src.rev}'"
   ];
 
   postInstall = ''
@@ -56,8 +56,8 @@ buildGoModule rec {
     description = "Your little expandable text snippet helper CLI";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpander";
   };
-}
+})

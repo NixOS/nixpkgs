@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nap";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "nap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0b3sz8zp1nwcjl02b3lli5yjc7vfay1ig6fs8bgxwz22imfx076p";
   };
 
@@ -26,7 +26,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       phdcybersec
-      maaslalani
     ];
   };
-}
+})

@@ -8,24 +8,18 @@
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clipcat";
-  version = "0.21.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = "clipcat";
-    tag = "v${version}";
-    hash = "sha256-CIqV5V7NN2zsqBwheJrcBnOTOBEncIwqqXdsZ9DLAog=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ht+9TFugVckj5xCCHgwPHbXqeJRBP4MzBROMBIbYAYI=";
   };
 
-  cargoHash = "sha256-UA+NTtZ2qffUPUmvCidnTHwFzD3WOPTlxHR2e2vKwPQ=";
-
-  patches = [
-    # Fix compilation errors caused by stricter restrictions on unused code in Rust 1.89.
-    # TODO: remove this patch after upstream fix it.
-    ./dummy.patch
-  ];
+  cargoHash = "sha256-pejtrvCD1HkAZ+pMynRRLw+EV/pHwzh/7OnnoI5LHoc=";
 
   nativeBuildInputs = [
     protobuf
@@ -63,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "clipcatd";
   };
-}
+})

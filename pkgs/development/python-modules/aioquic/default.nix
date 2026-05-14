@@ -8,21 +8,18 @@
   pylsqpack,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   service-identity,
 }:
 
 buildPythonPackage rec {
   pname = "aioquic";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+RJjuz9xlIxciRW01Q7jcABPIKQW9n+rPcyQVWx+cZk=";
+    hash = "sha256-KNBwshg+PnmvqdTnvVWJYNDVOuuYvAzwo1iyebp5fJI=";
   };
 
   build-system = [ setuptools ];
@@ -43,10 +40,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of QUIC and HTTP/3";
     homepage = "https://github.com/aiortc/aioquic";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/aiortc/aioquic/blob/${version}/docs/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

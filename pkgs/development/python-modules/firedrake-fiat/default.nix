@@ -11,18 +11,19 @@
   symengine,
   fenics-ufl,
   pytestCheckHook,
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
-  pname = "firdrake-fiat";
-  version = "2025.4.0";
+buildPythonPackage (finalAttrs: {
+  pname = "firedrake-fiat";
+  version = "2025.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "fiat";
-    tag = version;
-    hash = "sha256-i+hDpeg4SYRF7OK6uh1p1gVscyuJ4FjmyUUiLR7P7/A=";
+    tag = finalAttrs.version;
+    hash = "sha256-x1/gf/QVez6GxPUafxdhxqyT0MkL6w2Qz6VAxRNufdc=";
   };
 
   postPatch =
@@ -62,6 +63,18 @@ buildPythonPackage rec {
     "--skip-download"
   ];
 
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
+  };
+
   meta = {
     description = "FInite element Automatic Tabulator";
     homepage = "http://fenics-fiat.readthedocs.org/";
@@ -69,4 +82,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

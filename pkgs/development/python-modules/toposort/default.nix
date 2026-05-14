@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "toposort";
   version = "1.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "toposort" ];
 
-  meta = with lib; {
+  meta = {
     description = "Topological sort algorithm";
     homepage = "https://pypi.python.org/pypi/toposort/";
     maintainers = [ ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "notebook-shim";
   version = "0.2.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
@@ -39,14 +39,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notebook_shim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Switch frontends to Jupyter Server";
     longDescription = ''
       This project provides a way for JupyterLab and other frontends to switch
       to Jupyter Server for their Python Web application backend.
     '';
     homepage = "https://github.com/jupyter/notebook_shim";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

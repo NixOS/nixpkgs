@@ -13,11 +13,11 @@ let
     types
     concatStringsSep
     concatMapStringsSep
-    any
+    elem
     optionals
     ;
-  collectorIsEnabled = final: any (collector: (final == collector)) cfg.enabledCollectors;
-  collectorIsDisabled = final: any (collector: (final == collector)) cfg.disabledCollectors;
+  collectorIsEnabled = final: elem final cfg.enabledCollectors;
+  collectorIsDisabled = final: elem final cfg.disabledCollectors;
 in
 {
   port = 9100;

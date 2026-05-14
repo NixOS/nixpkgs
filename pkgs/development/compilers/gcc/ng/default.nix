@@ -3,7 +3,6 @@
   callPackage,
   stdenv,
   stdenvAdapters,
-  recurseIntoAttrs,
   gccVersions ? { },
   patchesFn ? lib.id,
   buildPackages,
@@ -15,7 +14,7 @@
 }@packageSetArgs:
 let
   versions = {
-    "15.1.0".officialRelease.sha256 = "sha256-4rCewhZg8B/s/7cV4BICZSFpQ/A40OSKmGhxPlTwbOo=";
+    "15.2.0".officialRelease.sha256 = "sha256-Q4/ZloJrDIJIWinaA6ctcdbjVBqD7HAt9Ccfb+Al0k4=";
   }
   // gccVersions;
 
@@ -44,7 +43,7 @@ let
         args.name or (if (gitRelease != null) then "git" else lib.versions.major release_version);
     in
     lib.nameValuePair attrName (
-      recurseIntoAttrs (
+      lib.recurseIntoAttrs (
         callPackage ./common (
           {
             inherit (stdenvAdapters) overrideCC;

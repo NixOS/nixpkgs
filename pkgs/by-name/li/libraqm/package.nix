@@ -10,15 +10,15 @@
   fribidi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libraqm";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "HOST-Oman";
     repo = "libraqm";
-    rev = "v${version}";
-    sha256 = "sha256-URW29aEONbMN/DQ6mkKksnwtbIL+SGm5VvKsC9h5MH4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-8tCMxhRhqbrpry4ktHYQc9eAH49W4Wo39TbIVgjVF5g=";
   };
 
   buildInputs = [
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library for complex text layout";
     homepage = "https://github.com/HOST-Oman/libraqm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sifmelcara ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sifmelcara ];
+    platforms = lib.platforms.all;
   };
-}
+})

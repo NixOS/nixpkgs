@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      envfs = nixosTests.envfs;
+      inherit (nixosTests) envfs envfs-systemd-stage-1;
     };
 
     updateScript = nix-update-script { };

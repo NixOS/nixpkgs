@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "web-archives";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "birros";
     repo = "web-archives";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-EYHChI+4tpjRp4KveHTB+5BSLtw0YLp5z2JJmA0xTlM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aP42WiSmpkAw7FtxUftIsHKDztt60xKcL8Zq2iTSRn8=";
   };
 
   web-archive-darkreader = fetchurl {

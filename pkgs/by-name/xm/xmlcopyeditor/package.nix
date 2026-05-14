@@ -10,7 +10,7 @@
   libxml2,
   libxslt,
   pcre2,
-  wxGTK32,
+  wxwidgets_3_2,
   xercesc,
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libxslt
     pcre2
-    wxGTK32
+    wxwidgets_3_2
     xercesc
   ];
 

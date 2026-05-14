@@ -6,6 +6,7 @@
   libcosmicAppHook,
   cmake,
   just,
+  cosmic-randr,
   libinput,
   linux-pam,
   udev,
@@ -13,26 +14,30 @@
   xkeyboard_config,
   nix-update-script,
   nixosTests,
+  orca,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.0-alpha.7";
+  version = "1.0.12";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-o9ZoRHi+k+HCSGfRz1lQFAeJMCqcTQEHf5rf9wn3qqY=";
+    hash = "sha256-mfgIVi/o5O715IX7Wt8QHfxzBX6ye+wztWU/GHaj9C0=";
   };
 
-  cargoHash = "sha256-hUHkyz/avFu9g1FMdC+4vz6xM75CauurrarhouuVZXc=";
+  cargoHash = "sha256-jhugV3eF7g6WU5ez3LzqKc/wP952Zpi8Hplg9SZflns=";
 
-  env.VERGEN_GIT_COMMIT_DATE = "2025-04-25";
+  separateDebugInfo = true;
+
   env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   cargoBuildFlags = [ "--all" ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -42,9 +47,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    cosmic-randr
     libinput
     linux-pam
     udev
+    orca
   ];
 
   dontUseJustBuild = true;
@@ -55,19 +62,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter"
-    "--set"
-    "daemon-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter-daemon"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   postPatch = ''
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
   '';
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
       --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
       --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
     )
@@ -82,10 +88,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

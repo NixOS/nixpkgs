@@ -30,7 +30,7 @@
   pypdfium2,
   python-docx,
   python-pptx,
-  rapidocr-onnxruntime,
+  rapidocr,
   requests,
   rtree,
   scipy,
@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.47.1";
+  version = "2.69.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-U82hGvWXkKwZ4um0VevVoYiIfzswu5hLDYvxtqJqmHU=";
+    hash = "sha256-r7jAah/tqLylPyyzrK0NW2ok66NVdb/V/YLV95McGC4=";
   };
 
   build-system = [
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     pypdfium2
     python-docx
     python-pptx
-    rapidocr-onnxruntime
+    rapidocr
     requests
     rtree
     scipy
@@ -112,7 +112,7 @@ buildPythonPackage rec {
     ];
     rapidocr = [
       onnxruntime
-      rapidocr-onnxruntime
+      rapidocr
     ];
     tesserocr = [
       tesserocr

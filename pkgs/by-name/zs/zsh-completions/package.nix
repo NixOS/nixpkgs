@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-completions";
   version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-completions";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-GFHlZjIHUWwyeVoCpszgn4AmLPSSE8UVNfRmisnhkpg=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.olejorgenb ];
   };
-}
+})

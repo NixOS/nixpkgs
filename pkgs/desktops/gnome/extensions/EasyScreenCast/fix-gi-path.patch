@@ -1,8 +1,8 @@
-diff --git i/extension.js w/extension.js
-index c151057..1b6dfc3 100644
---- i/extension.js
-+++ w/extension.js
-@@ -717,7 +717,7 @@ const EasyScreenCastIndicator = GObject.registerClass({
+diff --git a/extension.js b/extension.js
+index 32a7c7c..a7ed98e 100644
+--- a/extension.js
++++ b/extension.js
+@@ -720,7 +720,7 @@ const EasyScreenCastIndicator = GObject.registerClass({
              Lib.TalkativeLog('-*-execute post command');
  
              // launch cmd after registration
@@ -11,22 +11,11 @@ index c151057..1b6dfc3 100644
  
              const mapObj = {
                  _fpath: pathFile,
-diff --git i/prefs.js w/prefs.js
-index e0dd1a2..9dcb87a 100644
---- i/prefs.js
-+++ w/prefs.js
-@@ -13,8 +13,8 @@
- 'use strict';
- 
- import GIRepository from 'gi://GIRepository';
--GIRepository.Repository.prepend_search_path('/usr/lib64/gnome-shell');
--GIRepository.Repository.prepend_library_path('/usr/lib64/gnome-shell');
-+GIRepository.Repository.prepend_search_path('@gnomeShell@/lib/gnome-shell');
-+GIRepository.Repository.prepend_library_path('@gnomeShell@/lib/gnome-shell');
- 
- import Adw from 'gi://Adw';
- import GObject from 'gi://GObject';
-@@ -713,7 +713,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
+diff --git a/prefs.js b/prefs.js
+index b58b160..2298d5a 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -709,7 +709,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
                  Lib.TalkativeLog('-^-NOT SET xdg-user video');
  
                  ctx.CtrlExe.Execute(
@@ -35,7 +24,7 @@ index e0dd1a2..9dcb87a 100644
                      true,
                      (success, out) => {
                          Lib.TalkativeLog(`-^-CALLBACK sync S: ${success} out: ${out}`);
-@@ -883,7 +883,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
+@@ -879,7 +879,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
                  );
  
                  ctx.CtrlExe.Execute(
@@ -44,20 +33,4 @@ index e0dd1a2..9dcb87a 100644
                      false,
                      success => {
                          Lib.TalkativeLog(`-^-CALLBACK async S= ${success}`);
-diff --git i/utilaudio.js w/utilaudio.js
-index b07e181..ed7d3ba 100644
---- i/utilaudio.js
-+++ w/utilaudio.js
-@@ -14,10 +14,8 @@
- 
- import GObject from 'gi://GObject';
- import GIRepository from 'gi://GIRepository';
--GIRepository.Repository.prepend_search_path('/usr/lib/gnome-shell');
--GIRepository.Repository.prepend_library_path('/usr/lib/gnome-shell');
--GIRepository.Repository.prepend_search_path('/usr/lib64/gnome-shell');
--GIRepository.Repository.prepend_library_path('/usr/lib64/gnome-shell');
-+GIRepository.Repository.prepend_search_path('@gnomeShell@/lib/gnome-shell');
-+GIRepository.Repository.prepend_library_path('@gnomeShell@/lib/gnome-shell');
- import Gvc from 'gi://Gvc';
- 
- import * as Lib from './convenience.js';
+

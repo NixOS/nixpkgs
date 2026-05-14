@@ -8,7 +8,7 @@
   buildPackages,
   libGLU,
   libepoxy,
-  libX11,
+  libx11,
   libdrm,
   libgbm,
   libva,
@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "virglrenderer";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "virgl";
     repo = "virglrenderer";
     tag = finalAttrs.version;
-    hash = "sha256-ah6+AAf7B15rPMb4uO873wieT3+gf/5iGH+ZFoZKAAI=";
+    hash = "sha256-2RoKIjtxShJCaezbkCrtW+lSaWKnOoUZzpSEPCJHSC8=";
   };
 
   separateDebugInfo = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGLU
-    libX11
+    libx11
     libdrm
     libgbm
   ]
@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.optionalString nativeContextSupport (
         lib.concatStringsSep "," [
           "amdgpu-experimental"
+          "asahi"
           "msm"
         ]
       )
@@ -81,9 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Virtual 3D GPU for use inside QEMU virtual machines";
     homepage = "https://docs.mesa3d.org/drivers/virgl";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      normalcea
-    ];
+    maintainers = [ ];
     mainProgram = "virgl_test_server";
     platforms = lib.platforms.unix;
   };

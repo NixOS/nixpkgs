@@ -182,7 +182,7 @@ in
           "@chown"
         ];
       }
-      // (lib.optionalAttrs (usingDefaultDataDir) {
+      // (lib.optionalAttrs usingDefaultDataDir {
         StateDirectory = "quickwit";
         StateDirectoryMode = "0700";
       });

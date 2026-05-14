@@ -7,7 +7,6 @@
 }:
 
 let
-  name = "legends-browser-${version}";
   version = "1.19.2";
 
   jar = fetchurl {
@@ -29,18 +28,19 @@ let
 in
 
 buildEnv {
-  inherit name;
+  inherit version;
+  pname = "legends-browser";
   paths = [ script ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform, open source, java-based legends viewer for dwarf fortress";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Baughn
       numinit
     ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     homepage = "https://github.com/robertjanetzko/LegendsBrowser";
   };
 }

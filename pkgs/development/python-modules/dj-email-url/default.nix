@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dj-email-url";
   version = "1.0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Use an URL to configure email backend settings in your Django Application";
     homepage = "https://github.com/migonzalvar/dj-email-url";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

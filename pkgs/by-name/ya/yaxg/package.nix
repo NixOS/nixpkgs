@@ -11,7 +11,7 @@
   xdpyinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaxg";
   version = "0-unstable-2018-05-03";
 
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Yet Another X Grabber script";
     longDescription = ''
       Capture and record your screen with callbacks. Wraps maim, slop, ffmpeg,
@@ -57,9 +57,8 @@ stdenv.mkDerivation rec {
       of your screen. Similar command-line interface to scrot but is overall
       more flexible and less buggy.
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ neonfuz ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "yaxg";
   };
-}
+})

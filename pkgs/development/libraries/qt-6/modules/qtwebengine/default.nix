@@ -15,19 +15,25 @@
   python3,
   which,
   nodejs,
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -38,7 +44,6 @@
   libopus,
   jsoncpp,
   protobuf,
-  libvpx,
   srtp,
   snappy,
   nss,
@@ -60,6 +65,7 @@
   lcms2,
   libkrb5,
   libgbm,
+  libva,
   enableProprietaryCodecs ? true,
   # darwin
   bootstrap_cmds,
@@ -111,14 +117,6 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
-    (fetchpatch2 {
-      url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch?full_index=1";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-wcby9uD8xb4re9+s+rdl1hcpxDcHxuI68vUNAC7Baas=";
-    })
   ];
 
   postPatch = ''
@@ -208,7 +206,6 @@ qtModule {
 
     # Video formats
     srtp
-    libvpx
 
     # Audio formats
     libopus
@@ -226,6 +223,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy
@@ -248,25 +246,26 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
-    libXScrnSaver
-    libXcursor
-    libXrandr
-    xorg.libpciaccess
-    libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    xrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libpciaccess
+    libxtst
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
-    libXi
-    xorg.libXext
+    libxi
+    libxext
 
     # Pipewire
     pipewire
 
     libkrb5
     libgbm
+    libva
   ];
 
   buildInputs = [
@@ -282,7 +281,7 @@ qtModule {
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
 
-  meta = with lib; {
+  meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
       "x86_64-darwin"

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-documents";
-  version = "0.7.3";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jasonyates";
     repo = "netbox-documents";
     tag = "v${version}";
-    hash = "sha256-lEbD+NuLyHXnXjGBdceE8RYhmoKEccRB4rKuxknjZL4=";
+    hash = "sha256-XFVfNLU9a/0tQAVTrN2B1Oia/isOD8G5BdA3fVUn2sM=";
   };
 
   build-system = [ setuptools ];

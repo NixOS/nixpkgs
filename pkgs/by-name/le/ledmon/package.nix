@@ -7,14 +7,14 @@
   sg3_utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ledmon";
   version = "0.92";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ledmon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1lz59606vf2sws5xwijxyffm8kxcf8p9qbdpczsq1b5mm3dk6lvp";
   };
 
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     "LEDMON_INSTDIR=${placeholder "out"}/sbin"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/intel/ledmon";
     description = "Enclosure LED Utilities";
-    platforms = platforms.linux;
-    license = with licenses; [ gpl2Only ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ sorki ];
   };
-}
+})

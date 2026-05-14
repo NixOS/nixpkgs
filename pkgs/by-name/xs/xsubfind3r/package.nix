@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xsubfind3r";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "hueristiq";
     repo = "xsubfind3r";
-    tag = version;
-    hash = "sha256-whe7GXstGj2Yh/UtpNAh71WwnRU9aEHtS0diW0m9QXs=";
+    tag = finalAttrs.version;
+    hash = "sha256-UiOBLvbK3QcmtCn3vySis9rGeAFyRPxxnMze+762hvM=";
   };
 
-  vendorHash = "sha256-cYutO+N974ZJE/UJiYS0ZuWqRKlfDgEL5qqsejBptcs=";
+  vendorHash = "sha256-ww17mIM0UbEHMU8DnrUtEHQzVUaPNjHO9t+aRpoviII=";
 
   ldflags = [
     "-s"
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "CLI utility to find subdomains from curated passive online sources";
     homepage = "https://github.com/hueristiq/xsubfind3r";
-    changelog = "https://github.com/hueristiq/xsubfind3r/releases/tag/${version}";
+    changelog = "https://github.com/hueristiq/xsubfind3r/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xsubfind3r";
   };
-}
+})

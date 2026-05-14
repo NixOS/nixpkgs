@@ -5,14 +5,14 @@
   unzip,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pzip";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ybirader";
     repo = "pzip";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bb2TSSyA7TwgoV53M/7WkNcTq8F0EjCA7ObHfnGL9l0=";
   };
 
@@ -27,12 +27,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast concurrent zip archiver and extractor";
     homepage = "https://github.com/ybirader/pzip";
-    changelog = "https://github.com/ybirader/pzip/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/ybirader/pzip/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "pzip";
   };
-}
+})

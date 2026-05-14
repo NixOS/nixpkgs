@@ -33,13 +33,13 @@ lib.checkListOfEnum "${pname}: theme accent"
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2025-08-09";
+    version = "0-unstable-2025-12-27";
 
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "Kvantum";
-      rev = "48246af7ad19a6b9cde04526a9b57afdecfa0b7b";
-      hash = "sha256-Axjl2jQinpazVz8w7yFSWkjG/CnmEMmcmrACJrdS1zg=";
+      rev = "71105d224fef95dd023691303477ce3eea487457";
+      hash = "sha256-gcvCVZjVbj5fRZWaM+mZTwH/g158MH36JmMuMgCBuqQ=";
     };
 
     installPhase = ''

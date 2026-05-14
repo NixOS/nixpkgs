@@ -9,13 +9,13 @@
   gtk-doc,
   docbook_xsl,
   docbook_xml_dtd_412,
-  libX11,
+  libx11,
   glib,
   gtk3,
   pango,
   cairo,
-  libXres,
-  libXi,
+  libxres,
+  libxi,
   libstartup_notification,
   gettext,
   gobject-introspection,
@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
-  version = "43.2";
+  version = "43.3";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libwnck/${lib.versions.major version}/libwnck-${version}.tar.xz";
-    sha256 = "VadETsH7uVwIbUCWc4jyMbXAu8jP+qCGv5KQrkSeUdU=";
+    sha256 = "avisQajwZ63h08qu0lSoNCO19hrT96Rg/Ky6wuGSvfc=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libstartup_notification
     pango
     cairo
-    libXres
-    libXi
+    libxres
+    libxi
   ];
 
   propagatedBuildInputs = [
@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ liff ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ liff ];
   };
 }

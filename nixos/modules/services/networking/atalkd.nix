@@ -27,7 +27,7 @@ in
       default = atalkdConfFile;
       defaultText = "/nix/store/xxx-atalkd.conf";
       description = ''
-        Optional path to a custom `atalkd.conf` file. When set, this overrides the generated
+        Optional path to a custom {file}`atalkd.conf` file. When set, this overrides the generated
         configuration from `services.atalkd.interfaces`.
       '';
     };

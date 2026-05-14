@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyituran";
   version = "0.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "shmuelzon";

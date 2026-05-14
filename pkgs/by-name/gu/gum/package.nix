@@ -6,18 +6,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gum";
-  version = "0.16.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "gum";
-    rev = "v${version}";
-    hash = "sha256-Qs7I9AdJx1FwQK+stgLJbXAIiL+zOYCDf1u+kT7u+Bg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TbheGevUrUKwT97JayW7rfAEgAfRnpOvHyvAxt27sIg=";
   };
 
-  vendorHash = "sha256-jCJUT7RXXPMgKgP48qip8MxcNB+EkrxUruOAj9WRSQA=";
+  vendorHash = "sha256-9vHlQuJA5g5sonfxe+whXDdkROuE3lZzOPYq74tJZtE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
     "-linkmode=external"
@@ -46,9 +46,11 @@ buildGoModule rec {
   meta = {
     description = "Tasty Bubble Gum for your shell";
     homepage = "https://github.com/charmbracelet/gum";
-    changelog = "https://github.com/charmbracelet/gum/releases/tag/v${version}";
+    changelog = "https://github.com/charmbracelet/gum/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ maaslalani ];
+    maintainers = with lib.maintainers; [
+      savtrip
+    ];
     mainProgram = "gum";
   };
-}
+})

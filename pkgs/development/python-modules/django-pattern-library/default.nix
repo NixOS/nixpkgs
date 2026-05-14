@@ -15,6 +15,7 @@
   beautifulsoup4,
   pytestCheckHook,
   pytest-django,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
@@ -41,17 +42,18 @@ buildPythonPackage rec {
     beautifulsoup4
     pytestCheckHook
     pytest-django
+    mkdocs # only needed for jinja2, we don't build docs
   ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings.dev";
 
   pythonImportsCheck = [ "pattern_library" ];
 
-  meta = with lib; {
+  meta = {
     description = "UI pattern libraries for Django templates";
     homepage = "https://github.com/torchbox/django-pattern-library/";
     changelog = "https://github.com/torchbox/django-pattern-library/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

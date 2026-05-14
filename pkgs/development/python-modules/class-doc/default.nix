@@ -11,7 +11,7 @@
 buildPythonPackage {
   pname = "class-doc";
   version = "0.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danields761";
@@ -37,10 +37,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "class_doc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract attributes docstrings defined in various ways";
     homepage = "https://github.com/danields761/class-doc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

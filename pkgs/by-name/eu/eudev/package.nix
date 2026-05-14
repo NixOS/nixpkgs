@@ -6,7 +6,7 @@
   gperf,
   kmod,
   pkg-config,
-  util-linux,
+  util-linuxMinimal,
   testers,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     kmod
-    util-linux
+    util-linuxMinimal
   ];
 
   configureFlags = [

@@ -4,18 +4,18 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinyfetch";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "abrik1";
     repo = "tinyfetch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-I0OurcPKKZntZn7Bk9AnWdpSrU9olGp7kghdOajPDeQ=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   buildPhase = ''
     runHook preBuild
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pagedMov ];
     platforms = lib.platforms.unix;
   };
-}
+})

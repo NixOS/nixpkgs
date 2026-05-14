@@ -2,7 +2,7 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  systemdStage1 ? false,
+  systemdStage1,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -42,7 +42,7 @@ let
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
-        ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
+        boot.initrd.systemd.enable = ${boolToString systemdStage1};
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
@@ -640,6 +640,7 @@ let
       clevisFallbackTest ? false,
       disableFileSystems ? false,
       selectNixPackage ? pkgs: pkgs.nixVersions.stable,
+      broken ? false,
     }:
     let
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -656,12 +657,13 @@ let
           "x86_64-darwin"
           "i686-linux"
         ];
+        inherit broken;
       };
       nodes =
         let
           commonConfig = {
             # builds stuff in the VM, needs more juice
-            virtualisation.diskSize = 8 * 1024;
+            virtualisation.diskSize = 12 * 1024;
             virtualisation.cores = 8;
             virtualisation.memorySize = 2048;
 
@@ -669,7 +671,7 @@ let
             virtualisation.diskImage = "./target.qcow2";
 
             # and the same TPM options
-            virtualisation.qemu.options = mkIf (clevisTest) [
+            virtualisation.qemu.options = mkIf clevisTest [
               "-chardev socket,id=chrtpm,path=$NIX_BUILD_TOP/swtpm-sock"
               "-tpmdev emulator,id=tpm0,chardev=chrtpm"
               "-device tpm-tis,tpmdev=tpm0"
@@ -698,7 +700,7 @@ let
               # Use a small /dev/vdb as the root disk for the
               # installer. This ensures the target disk (/dev/vda) is
               # the same during and after installation.
-              virtualisation.emptyDiskImages = [ 512 ];
+              virtualisation.emptyDiskImages = [ 1024 ];
               virtualisation.rootDevice = "/dev/vdb";
 
               nix.package = selectNixPackage pkgs;
@@ -726,10 +728,7 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
-                  (nixos-rebuild-ng.override {
-                    withNgSuffix = false;
-                    withReexec = true;
-                  })
+                  nixos-rebuild-ng
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp
@@ -743,7 +742,7 @@ let
                   switch-to-configuration-ng
                   texinfo
                   unionfs-fuse
-                  xorg.lndir
+                  lndir
                   shellcheck-minimal
 
                   # Only the out output is included here, which is what is
@@ -774,7 +773,7 @@ let
                   config.boot.bootspec.package
                 ]
                 ++ optionals clevisTest [ pkgs.klibc ]
-                ++ optional systemdStage1 pkgs.chroot-realpath;
+                ++ optional systemdStage1 config.system.nixos-init.package;
 
               nix.settings = {
                 substituters = mkForce [ ];
@@ -849,14 +848,23 @@ let
             "mount LABEL=boot /mnt/boot",
         )
       '';
-      extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-      '';
-      enableOCR = true;
-      postBootCommands = ''
-        target.wait_for_text("[Pp]assphrase for")
-        target.send_chars("supersecret\n")
-      '';
+      # The serial console is much more reliable than OCR, but
+      # scripted stage 1 doesn't forward logs / password prompts to
+      # it. (TODO: The test framework should use 'console=ttyS0'
+      # anyway, but currently it uses 'console=tty0' for the sake of
+      # the interactive driver)
+      enableOCR = !systemdStage1;
+      postBootCommands =
+        if systemdStage1 then
+          ''
+            target.wait_for_console_text("passphrase for")
+            target.send_console("supersecret\n")
+          ''
+        else
+          ''
+            target.wait_for_text("[Pp]assphrase for")
+            target.send_chars("supersecret\n")
+          '';
     };
 
   # The (almost) simplest partitioning scheme: a swap partition and
@@ -882,11 +890,13 @@ let
 
   simple-test-config-by-attr = simple-test-config // {
     testByAttrSwitch = true;
+    broken = true;
   };
 
   simple-test-config-from-by-attr-to-flake = simple-test-config // {
     testByAttrSwitch = true;
     testFlakeSwitch = true;
+    broken = true;
   };
 
   simple-uefi-grub-config = {
@@ -1064,7 +1074,7 @@ let
           "echo -n password | zfs create"
           + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
         ''
-        + optionalString (parentDataset) ''
+        + optionalString parentDataset ''
           "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
           "zfs create -o mountpoint=legacy rpool/root",
         ''
@@ -1079,7 +1089,7 @@ let
           optionalString (!parentDataset) ''
             boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
-          + optionalString (parentDataset) ''
+          + optionalString parentDataset ''
             boot.initrd.clevis.devices."rpool".secretFile = "/etc/nixos/clevis-secret.jwe";
           ''
           + ''
@@ -1096,7 +1106,7 @@ let
           ${
             if systemdStage1 then
               ''
-                target.wait_for_text("Enter key for rpool/root")
+                target.wait_for_text("Enter key for rpool${optionalString (!parentDataset) "/root"}")
               ''
             else
               ''
@@ -1313,7 +1323,7 @@ in
   };
 
   # Create two physical LVM partitions combined into one volume group
-  # that contains the logical swap and root partitions.
+  # that contains the logical swap, boot and root partitions.
   lvm = makeInstallerTest "lvm" {
     createPartitions = ''
       installer.succeed(
@@ -1326,11 +1336,15 @@ in
           "pvcreate /dev/vda1 /dev/vda2",
           "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
           "lvcreate --size 1G --name swap MyVolGroup",
-          "lvcreate --size 6G --name nixos MyVolGroup",
+          "lvcreate --size 1G --name boot MyVolGroup",
+          "lvcreate --size 5G --name nixos MyVolGroup",
           "mkswap -f /dev/MyVolGroup/swap -L swap",
           "swapon -L swap",
+          "mkfs.ext4 -L boot /dev/MyVolGroup/boot",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
           "mount LABEL=nixos /mnt",
+          "mkdir /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
       )
     '';
     extraConfig = optionalString systemdStage1 ''
@@ -1390,6 +1404,7 @@ in
   # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
   # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
   fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
+    broken = true;
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
@@ -1451,9 +1466,9 @@ in
           "cat /proc/partitions >&2",
           "udevadm control --stop-exec-queue",
           "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 "
-          + "--raid-devices=2 /dev/vda5 /dev/vda6",
+          + "--raid-devices=2 --bitmap=internal /dev/vda5 /dev/vda6",
           "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 "
-          + "--raid-devices=2 /dev/vda7 /dev/vda8",
+          + "--raid-devices=2 --bitmap=internal /dev/vda7 /dev/vda8",
           "udevadm control --start-exec-queue",
           "udevadm settle",
           "mkswap -f /dev/md1 -L swap",

@@ -13,9 +13,12 @@
   gobject-introspection,
   grail,
   gtk3,
-  xorg,
+  libxtst,
+  libxi,
+  libxext,
+  libx11,
   pango,
-  xorgserver,
+  xorg-server,
   testers,
   validatePkgConfig,
 }:
@@ -51,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     grail
     gtk3
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXtst
+    libx11
+    libxext
+    libxi
+    libxtst
     pango
     python3Packages.python
-    xorgserver
+    xorg-server
   ];
 
   prePatch = ''
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
   '';
 

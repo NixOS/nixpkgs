@@ -6,14 +6,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simde";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "simd-everywhere";
     repo = "simde";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-igjDHCpKXy6EbA9Mf6peL4OTVRPYTV0Y2jbgYQuWMT4=";
   };
 
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://simd-everywhere.github.io";
     description = "Implementations of SIMD instruction sets for systems which don't natively support them";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ whiteley ];
-    platforms = flatten (
-      with platforms;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ whiteley ];
+    platforms = lib.flatten (
+      with lib.platforms;
       [
         arm
         armv7
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
       ]
     );
   };
-}
+})

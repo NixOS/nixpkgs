@@ -18,15 +18,15 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdeltachat";
-  version = "2.12.0";
+  version = "2.49.0";
 
   src = fetchFromGitHub {
     owner = "chatmail";
     repo = "core";
-    tag = "v${version}";
-    hash = "sha256-EoRUoZz2L+k9M5J5OQUFUOkjUc1Qqy8ERZkdtG3ur+k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iMgWXlffbGG25iM/SMCQzer1J6clDWwP0hURloL3n2k=";
   };
 
   patches = [
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "chatmail-core";
-    inherit version src;
-    hash = "sha256-PNi1oA9iBBQZRQXIHcWMAmLlgzlzt0nxh8hkPsFEx28=";
+    inherit (finalAttrs) version src;
+    hash = "sha256-0QhMJis1Hbl/Tn3Rwiz+UjCSieodfYhgL060DWjEOIM=";
   };
 
   nativeBuildInputs = [
@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Delta Chat Rust Core library";
     homepage = "https://github.com/chatmail/core";
-    changelog = "https://github.com/chatmail/core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/chatmail/core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -40,6 +40,10 @@
   nixosTests,
   gmobile,
   appstream,
+  qrcodegen,
+  gobject-introspection,
+  docutils,
+  gi-docgen,
 }:
 
 let
@@ -49,8 +53,10 @@ let
     group = "World";
     owner = "Phosh";
     repo = "libcall-ui";
-    tag = "v0.1.4";
-    hash = "sha256-6fiqdvagcMnvaZ9UxC05haBwObcsqwgJL/V03LuSMF8=";
+    tag = "v0.1.5";
+    hash = "sha256-4lSTwSRZditK51N/4s3tmIOgffe5+WyKxVq2IGqWRn4=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   # Derived from subprojects/gvc.wrap
@@ -58,13 +64,15 @@ let
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgnome-volume-control";
-    rev = "5f9768a2eac29c1ed56f1fbb449a77a3523683b6";
-    hash = "sha256-gdgTnxzH8BeYQAsvv++Yq/8wHi7ISk2LTBfU8hk12NM=";
+    rev = "d2442f455844e5292cb4a74ffc66ecc8d7595a9f";
+    hash = "sha256-10n441b7m/mvQRdrmEsxGxqjKUWzjGvnzJy256NZN5s=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.48.0";
+  version = "0.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -72,7 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HnjR0hVjkGfoD8RYCJqpGjRhl0W+QO8tYwSo71XFL6A=";
+    hash = "sha256-gByZRyUe17JY5imgtRdubJl1VH1JxlzmDQkHOtEIvj8=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   nativeBuildInputs = [
@@ -83,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wayland-scanner
     wrapGAppsHook4
+    docutils
+    gi-docgen
   ];
 
   buildInputs = [
@@ -111,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     feedbackd
     appstream
+    qrcodegen
+    gobject-introspection
   ];
 
   nativeCheckInputs = [
@@ -131,6 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Save some time building if tests are disabled
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0/"
+    "-Dsearchd=true"
+    "-Dbindings-lib=true"
+    "-Dgtk_doc=true"
+    "-Dman=true"
   ];
 
   checkPhase = ''
@@ -156,17 +174,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = "Pure Wayland shell prototype for GNOME on mobile devices";
+  meta = {
+    description = "Pure Wayland shell for mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      masipcat
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       zhaofengli
       armelclo
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "phosh-session";
   };
 })

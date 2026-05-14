@@ -1,33 +1,30 @@
 {
   lib,
-  azure-common,
   azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
-  isodate,
-  pythonOlder,
+  msrest,
+  typing-extensions,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "39.0.0";
+  version = "41.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_containerservice";
     inherit version;
-    hash = "sha256-qgAWke3WPQc3S1gggcC7IMi+b/uIWlkqFXfSH0EYqDc=";
+    hash = "sha256-mDDQpCcwYJyXoTOpE+LK/70WPU0/8xWvw6dnKCIqP2E=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    azure-common
+    msrest
     azure-mgmt-core
-    isodate
+    typing-extensions
   ];
 
   # has no tests
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.containerservice" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Container Service Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/containerservice/azure-mgmt-containerservice";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-containerservice_${version}/sdk/containerservice/azure-mgmt-containerservice/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

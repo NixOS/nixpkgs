@@ -3,14 +3,12 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyhomepilot";
   version = "0.0.3";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nico0302";
@@ -26,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhomepilot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with the Rademacher HomePilot API";
     homepage = "https://github.com/nico0302/pyhomepilot";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

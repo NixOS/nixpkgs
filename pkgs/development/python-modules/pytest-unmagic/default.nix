@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dimagi/pytest-unmagic";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }

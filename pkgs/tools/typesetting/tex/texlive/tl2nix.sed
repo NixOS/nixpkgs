@@ -60,6 +60,9 @@ $a}
       s/ ([^ ]+)/ "\1"/g
       # adjust naming as in nixpkgs, the full texts of the licenses are available at https://www.ctan.org/license/${licenseName}
       s/"(cc-by(-sa)?-[1-4])"/"\10"/g
+      s/"0bsd"/"bsd0"/g
+      s/"agpl3"/"agpl3Only"/g
+      s/"agpl3\+"/"agpl3Plus"/g
       s/"apache2"/"asl20"/g
       s/"artistic"/"artistic1-cl8"/g
       s/"bsd"/"bsd3"/g          # license text does not match exactly, but is pretty close

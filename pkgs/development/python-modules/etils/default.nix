@@ -2,13 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
 
   # tests
   chex,
   jaxlib,
-  pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
   yapf,
@@ -20,7 +18,6 @@
   packaging,
   protobuf,
   fsspec,
-  importlib-resources,
   typing-extensions,
   zipp,
   absl-py,
@@ -39,14 +36,20 @@ buildPythonPackage rec {
   version = "1.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-pbYMcflbzS1D1On7PcOHkSDB9gRyu1zhn3qGCx1E9gc=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    # https://github.com/google/etils/pull/722
+    substituteInPlace etils/epath/resource_utils.py \
+      --replace-fail importlib_resources importlib.resources
+    substituteInPlace pyproject.toml \
+      --replace-fail '"importlib_resources",' ""
+  '';
+
+  build-system = [ flit-core ];
 
   optional-dependencies = rec {
     array-types = enp;
@@ -73,7 +76,6 @@ buildPythonPackage rec {
     ++ epy;
     epath = [
       fsspec
-      importlib-resources
       typing-extensions
       zipp
     ]
@@ -113,7 +115,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     chex
     jaxlib
-    pytest-subtests
     pytest-xdist
     pytestCheckHook
     yapf
@@ -126,11 +127,11 @@ buildPythonPackage rec {
 
   doCheck = false; # error: infinite recursion encountered
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
     description = "Collection of eclectic utils";
     homepage = "https://github.com/google/etils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcwitt ];
   };
 }

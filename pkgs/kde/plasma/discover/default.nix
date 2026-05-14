@@ -2,6 +2,7 @@
   mkKdeDerivation,
   qtwebview,
   pkg-config,
+  qcoro,
   discount,
   flatpak,
   fwupd,
@@ -9,15 +10,12 @@
 mkKdeDerivation {
   pname = "discover";
 
-  patches = [
-    # remove forced QML dependency check
-    # FIXME: fix the check in ECM instead
-    ./qml-deps.patch
-  ];
-
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtwebview
+
+    qcoro
+
     discount
     flatpak
     fwupd

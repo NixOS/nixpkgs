@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
+  installShellFiles,
   dbus,
   libpulseaudio,
   notmuch,
@@ -12,28 +13,31 @@
   lm_sensors,
   iw,
   iproute2,
+  pandoc,
   pipewire,
   withICUCalendar ? false,
   withPipewire ? true,
   withNotmuch ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3status-rust";
-  version = "0.34.0";
+  version = "0.36.1";
 
   src = fetchFromGitHub {
     owner = "greshake";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E0HGF7oyffBWUT61fQZ+tjwDi7q9IhtV6DiF8TGeVsU=";
+    repo = "i3status-rust";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tCMoYbsiVBX7GZZVhzAKuMFS1L7DITQZSUfQ6iQMofg=";
   };
 
-  cargoHash = "sha256-S6GdPntLC0351GaPmirxVsngOtbcWaPNkzax0yZNNb4=";
+  cargoHash = "sha256-mnLl+JegA96z95VQqZ5d8bGYCf1PG/ip2LVyPm4HjVI=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    installShellFiles
+    pandoc
   ]
   ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
 
@@ -59,9 +63,14 @@ rustPlatform.buildRustPackage rec {
       --replace "/usr/share/i3status-rust" "$out/share"
   '';
 
+  postBuild = ''
+    cargo xtask generate-manpage
+  '';
+
   postInstall = ''
     mkdir -p $out/share
     cp -R examples files/* $out/share
+    installManPage man/*
   '';
 
   postFixup = ''
@@ -77,15 +86,14 @@ rustPlatform.buildRustPackage rec {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "i3status-rs";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       backuitist
-      globin
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

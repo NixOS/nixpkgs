@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 

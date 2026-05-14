@@ -3,7 +3,7 @@
   stdenv,
   fetchgit,
   alsa-lib,
-  ladspaH,
+  ladspa-header,
   libjack2,
   fftw,
   zita-alsa-pcmi,
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    ladspaH
+    ladspa-header
     libjack2
     fftw
     zita-alsa-pcmi
@@ -40,12 +40,12 @@ stdenv.mkDerivation {
     qttools
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Realtime modular synthesizer for ALSA";
     mainProgram = "ams";
     homepage = "https://alsamodular.sourceforge.net";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sjfloat ];
   };
 }

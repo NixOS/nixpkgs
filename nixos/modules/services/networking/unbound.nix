@@ -9,8 +9,6 @@ with lib;
 let
   cfg = config.services.unbound;
 
-  yesOrNo = v: if v then "yes" else "no";
-
   toOption =
     indent: n: v:
     "${indent}${toString n}: ${v}";
@@ -22,7 +20,7 @@ let
     else if isInt v then
       (toOption indent n (toString v))
     else if isBool v then
-      (toOption indent n (yesOrNo v))
+      (toOption indent n (lib.boolToYesNo v))
     else if isString v then
       (toOption indent n v)
     else if isList v then
@@ -33,10 +31,10 @@ let
       throw (traceSeq v "services.unbound.settings: unexpected type");
 
   confNoServer = concatStringsSep "\n" (
-    (mapAttrsToList (toConf "") (builtins.removeAttrs cfg.settings [ "server" ])) ++ [ "" ]
+    (mapAttrsToList (toConf "") (removeAttrs cfg.settings [ "server" ])) ++ [ "" ]
   );
   confServer = concatStringsSep "\n" (
-    mapAttrsToList (toConf "  ") (builtins.removeAttrs cfg.settings.server [ "define-tag" ])
+    mapAttrsToList (toConf "  ") (removeAttrs cfg.settings.server [ "define-tag" ])
   );
 
   confFileUnchecked = pkgs.writeText "unbound.conf" ''

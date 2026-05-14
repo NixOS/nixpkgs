@@ -2,20 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  versionCheckHook,
+  writableTmpDirAsHomeHook,
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "blint";
-  version = "2.4.1";
+  version = "3.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "blint";
-    tag = "v${version}";
-    hash = "sha256-mGeC7+YzQWSlT3sW2la/f21fN8V+YoFd4fwj/PBPCMI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RloxQlnhl4zCto6QO09UZs+29QRCpL0/PJCzYrVi8ng=";
   };
 
   build-system = [
@@ -51,6 +51,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-cov-stub
+    writableTmpDirAsHomeHook
   ];
 
   # only runs on windows and fails, obviously
@@ -63,11 +64,11 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Binary Linter to check the security properties, and capabilities in executables";
     homepage = "https://github.com/owasp-dep-scan/blint";
-    changelog = "https://github.com/owasp-dep-scan/blint/releases/tag/v${version}";
+    changelog = "https://github.com/owasp-dep-scan/blint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "blint";
   };
-}
+})

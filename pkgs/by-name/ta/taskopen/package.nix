@@ -8,14 +8,14 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskopen";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "ValiValpas";
     repo = "taskopen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/xf7Ph2KKiZ5lgLKk95nCgw/z9wIBmuWf3QGaNebgHg=";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
          --set PERL5LIB "$PERL5LIB"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Script for taking notes and open urls with taskwarrior";
     mainProgram = "taskopen";
     homepage = "https://github.com/ValiValpas/taskopen";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.winpat ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.winpat ];
   };
-}
+})

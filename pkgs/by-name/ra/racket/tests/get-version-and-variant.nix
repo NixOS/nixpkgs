@@ -10,7 +10,7 @@ runCommandLocal "racket-test-get-version-and-variant"
   }
   (
     lib.concatLines (
-      builtins.map
+      map
         (
           { expectation, output }:
           ''

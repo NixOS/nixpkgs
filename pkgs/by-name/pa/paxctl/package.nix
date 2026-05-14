@@ -5,12 +5,12 @@
   elf-header,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "paxctl";
   version = "0.9";
 
   src = fetchurl {
-    url = "https://pax.grsecurity.net/${pname}-${version}.tar.gz";
+    url = "https://pax.grsecurity.net/paxctl-${finalAttrs.version}.tar.gz";
     sha256 = "0biw882fp1lmgs6kpxznp1v6758r7dg9x8iv5a06k0b82bcdsc53";
   };
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     "MANDIR=share/man/man1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for controlling PaX flags on a per binary basis";
     mainProgram = "paxctl";
     homepage = "https://pax.grsecurity.net";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

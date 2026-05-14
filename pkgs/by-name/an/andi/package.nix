@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "andi";
-  version = "0.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "evolbioinf";
     repo = "andi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tjQ9exFyqu/xnbUGpF6k0kE5C1D93kISjRErwHfjW9E=";
+    hash = "sha256-199CjhOdC0BnNyhhTSn/DWmqn/0vSziV+aW2shE1Vuo=";
   };
 
   nativeBuildInputs = [

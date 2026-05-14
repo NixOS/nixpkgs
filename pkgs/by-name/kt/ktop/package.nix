@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ktop";
   version = "0.4.1";
   excludedPackages = [ ".ci" ];
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = "ktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5iFFYTZq5DcMYVnW90MKVDchVXzjXOPd5BeYcrqL9pQ=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/vladimirvivien/ktop/buildinfo.Version=v${version}"
+    "-X github.com/vladimirvivien/ktop/buildinfo.Version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -29,14 +29,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Top-like tool for your Kubernetes cluster";
     mainProgram = "ktop";
     longDescription = ''
       Following the tradition of Unix/Linux top tools, ktop is a tool that displays useful metrics information about nodes, pods, and other workload resources running in a Kubernetes cluster.
     '';
     homepage = "https://github.com/vladimirvivien/ktop/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

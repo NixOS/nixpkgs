@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.99.5";
+  version = "4.99.6";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    hash = "sha256-zn09cwFFz5ZNJu8GwGGSSGNx5jvXbKLT6/+Lcmn1wK8=";
+    hash = "sha256-M/2xcii8ibGAI/6f34AE7aEb9fmn+iSWqWqnyDhg4CI=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
+  env.LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase =
     let
       genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
@@ -87,8 +87,8 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    license = lib.licenses.purdueBsd;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    license = lib.licenses.lsof;
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

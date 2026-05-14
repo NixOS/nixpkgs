@@ -4,15 +4,12 @@
   fetchFromGitHub,
   setuptools,
   typing-extensions,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tls-client";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "FlorianREGAZ";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tls_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced HTTP Library";
     homepage = "https://github.com/FlorianREGAZ/Python-Tls-Client";
     changelog = "https://github.com/FlorianREGAZ/Python-Tls-Client/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

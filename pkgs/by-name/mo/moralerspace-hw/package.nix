@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://github.com/yuru7/moralerspace/releases/download/v${finalAttrs.version}/MoralerspaceHW_v${finalAttrs.version}.zip";
-    hash = "sha256-V02Lp7bWKjUGhFJ5fOTVrk74ei0T5UtITQeHZ4OHytw=";
+    hash = "sha256-gd195o0acZL8AhGvcLLQYxd1VWvUYjpVRMOT5D7zDME=";
   };
 
   installPhase = ''

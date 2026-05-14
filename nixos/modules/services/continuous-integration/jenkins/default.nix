@@ -83,17 +83,19 @@ in
 
       package = lib.mkPackageOption pkgs "jenkins" { };
 
-      javaPackage = lib.mkPackageOption pkgs "jdk21" { };
+      javaPackage = lib.mkPackageOption pkgs "jdk25" { };
 
       packages = lib.mkOption {
-        default = [
-          pkgs.stdenv
-          pkgs.git
-          pkgs.jdk21
-          config.programs.ssh.package
-          pkgs.nix
-        ];
-        defaultText = lib.literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ]";
+        default = [ ];
+        example = lib.literalExpression ''
+          [
+            pkgs.stdenv
+            pkgs.git
+            pkgs.jdk25
+            config.programs.ssh.package
+            pkgs.nix
+          ]
+        '';
         type = lib.types.listOf lib.types.package;
         description = ''
           Packages to add to PATH for the jenkins process.
@@ -251,10 +253,50 @@ in
 
       serviceConfig = {
         User = cfg.user;
+        Group = cfg.group;
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
+        StateDirectoryMode = "750";
         # For (possible) socket use
         RuntimeDirectory = "jenkins";
+        RuntimeDirectoryMode = "750";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        # MemoryDenyWriteExecute = false;   Breaks execution;
+        MountAPIVFS = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.home
+        ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    felixsinger
+  ];
 }

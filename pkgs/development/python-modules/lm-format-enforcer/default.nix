@@ -32,11 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lmformatenforcer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Enforce the output format (JSON Schema, Regex etc) of a language model";
     changelog = "https://github.com/noamgat/lm-format-enforcer/releases/tag/${src.tag}";
     homepage = "https://github.com/noamgat/lm-format-enforcer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cfhammill ];
+    license = lib.licenses.mit;
   };
 }

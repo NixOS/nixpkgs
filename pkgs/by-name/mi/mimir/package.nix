@@ -5,15 +5,15 @@
   nixosTests,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mimir";
-  version = "2.17.0";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
-    rev = "mimir-${version}";
+    rev = "mimir-${finalAttrs.version}";
     owner = "grafana";
     repo = "mimir";
-    hash = "sha256-auA063TveLtfLD7W1/RuN4COljiwKqz0K/l2vwtxPTQ=";
+    hash = "sha256-rz1Wzsnxt8eGf0rkI8pvhpft+EhTUsdFK4s+9QVn7dg=";
   };
 
   vendorHash = null;
@@ -39,7 +39,7 @@ buildGoModule rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "mimir-([0-9.]+)"
+        "mimir-(3\\.[0-9.]+)"
       ];
     };
     tests = {
@@ -54,19 +54,20 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus. ";
     homepage = "https://github.com/grafana/mimir";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/grafana/mimir/releases/tag/mimir-${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       bryanhonof
       adamcstephens
     ];
   };
-}
+})

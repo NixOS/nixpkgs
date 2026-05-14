@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   runCommand,
+  stdenv,
+  clang_20,
   buildNpmPackage,
   docify,
   testers,
@@ -16,16 +18,16 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
-  version = "1.31.3";
+  version = "1.39.3";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     tag = "v${version}";
-    hash = "sha256-sk/jqTVWLnE0qP7iSZFTegOkfz8s0TenUlctDmAEVW4=";
+    hash = "sha256-80RQO0UwDA9ZxIGQ0/8WaEj9QlqrQ4g7m9+WJDZrZbI=";
   };
 
-  npmDepsHash = "sha256-O7OypjSMxMEajJZOHOt1AJXChQQbGZ4u63g8agU95Qw=";
+  npmDepsHash = "sha256-jut63CiYGTNIP27wYCPZnE/Ab90EWJnVkx58Oy3uo9o=";
   npmWorkspace = "packages/pyright";
 
   preBuild = ''
@@ -37,7 +39,8 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     docify
     pkg-config
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 
@@ -49,7 +52,6 @@ buildNpmPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

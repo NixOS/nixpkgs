@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch2,
   pytestCheckHook,
   numpy,
   pillow,
   pydicom,
+  pyjpegls,
   pylibjpeg,
   pylibjpeg-libjpeg,
   pylibjpeg-openjpeg,
@@ -16,17 +17,23 @@
 
 buildPythonPackage rec {
   pname = "highdicom";
-  version = "0.26.1";
+  version = "0.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
     tag = "v${version}";
-    hash = "sha256-zaa0daGMQHktYkG56JA2a7s5UZSv8AbinO5roe9rWQc=";
+    hash = "sha256-Tfy7u5MVapRE24CZLFzTnYChnH9JJ9V7FuUhDoktBFc=";
   };
+
+  patches = [
+    # Fix time-of-day-dependent failure in series_time validation.
+    (fetchpatch2 {
+      url = "https://github.com/ImagingDataCommons/highdicom/commit/e9e3f2514a74b0d4be736cff222c934ef66d67ff.patch";
+      hash = "sha256-48dJAimxXYG0FQouquY5TLXi+3HarS8yx9HoLXiFymM=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -36,6 +43,7 @@ buildPythonPackage rec {
     numpy
     pillow
     pydicom
+    pyjpegls
     typing-extensions
   ];
 
@@ -47,32 +55,12 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonRemoveDeps = [
-    "pyjpegls" # not directly used
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/
     ln -s ${pydicom.passthru.pydicom-data}/data_store/data $HOME/.pydicom/data
   '';
-
-  disabledTests = [
-    # require pyjpegls
-    "test_construction_10"
-    "test_jpegls_monochrome"
-    "test_jpegls_rgb"
-    "test_jpeglsnearlossless_monochrome"
-    "test_jpeglsnearlossless_rgb"
-    "test_multi_frame_sm_image_ushort_encapsulated_jpegls"
-    "test_monochrome_jpegls"
-    "test_monochrome_jpegls_near_lossless"
-    "test_rgb_jpegls"
-    "test_construction_autotile"
-    "test_pixel_types_fractional"
-    "test_pixel_types_labelmap"
-  ];
 
   pythonImportsCheck = [
     "highdicom"

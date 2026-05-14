@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    sed -i "1i\#include <cstdint>" src/ScaLP/Solver.cpp
     substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.3.2)" "cmake_minimum_required (VERSION 3.5)" \
       --replace-fail "\''$ORIGIN" "\''${CMAKE_INSTALL_PREFIX}/lib" \
       --replace-fail "-m64" ""
     substituteInPlace src/tests/CMakeLists.txt \

@@ -188,9 +188,9 @@ in
       into the cmdline of the exporter making the connection string effectively
       world-readable.
     '')
-    ({
+    {
       options.warnings = options.warnings;
       options.assertions = options.assertions;
-    })
+    }
   ];
 }

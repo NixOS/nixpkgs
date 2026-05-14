@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   dataclasses-json,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyecotrend-ista";
-  version = "3.3.3";
+  version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Ludy87";
     repo = "pyecotrend-ista";
     tag = version;
-    hash = "sha256-x9teLjIJPLYi/mE6vy4KBUl7NI4aAwWPYSEwYZQ+4I4=";
+    hash = "sha256-O5HU0U19E+cS1/UVYouxbyTBNjenJw9kkH80GCZ04cw=";
   };
 
   postPatch = ''

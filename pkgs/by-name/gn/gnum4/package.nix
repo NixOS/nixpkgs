@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gnulib,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -11,12 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnum4";
-  version = "1.4.20";
+  version = "1.4.21";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-rGmJ7l0q7YFzl4BjDMLOCX4qZUb+uWpKVNs31GoUUuQ=";
+    hash = "sha256-3Eh+EdLwyeAVVbsa8mvk6umD7I8HJnRlBbQycYbrIfw=";
   };
+
+  patches = lib.optional stdenv.hostPlatform.isCygwin gnulib.patches.memcpy-fix-backport-250512;
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure

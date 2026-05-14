@@ -9,7 +9,6 @@
   pcsclite,
   pkg-config,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
   vcrpy,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "johnnycanencrypt";
   version = "0.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kushaldas";
@@ -70,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for OpenPGP written in Rust";
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${version}/changelog.md";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
   };
 }

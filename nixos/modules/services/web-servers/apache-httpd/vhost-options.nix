@@ -37,7 +37,7 @@ in
     listen = mkOption {
       type =
         with types;
-        listOf (submodule ({
+        listOf (submodule {
           options = {
             port = mkOption {
               type = types.port;
@@ -54,7 +54,7 @@ in
               description = "Whether to enable SSL (https) support.";
             };
           };
-        }));
+        });
       default = [ ];
       example = [
         {

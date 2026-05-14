@@ -21,12 +21,12 @@ buildGoModule {
   proxyVendor = true;
   vendorHash = "sha256-C7lUusq/cWBCnA2wP9fzQglJCXvQyvFG4JY13H0cP6g=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to download nicovideo.jp livestreams";
     homepage = "https://github.com/himananiito/livedl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wakira ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wakira ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     broken = stdenv.hostPlatform.isDarwin; # build fails with go > 1.17
     mainProgram = "livedl";
   };

@@ -4,15 +4,12 @@
   fetchPypi,
   gevent,
   gunicorn,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gevent-websocket";
   version = "0.10.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geventwebsocket" ];
 
-  meta = with lib; {
+  meta = {
     description = "Websocket handler for the gevent pywsgi server";
     homepage = "https://www.gitlab.com/noppo/gevent-websocket";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

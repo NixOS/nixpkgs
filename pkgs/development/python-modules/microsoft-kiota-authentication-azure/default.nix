@@ -11,25 +11,22 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-authentication-azure";
-  version = "1.9.5";
+  version = "1.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-authentication-azure-v${version}";
-    hash = "sha256-h0sZhBIGZyhzYtCvLHRAn73HspgyOAKU3p4xSn+uXFU=";
+    tag = "microsoft-kiota-authentication-azure-v${finalAttrs.version}";
+    hash = "sha256-KBCjVNZDPMh0wxWm8UVLsrfl2AYp3rKMjAT5c8F7+64=";
   };
 
-  sourceRoot = "${src.name}/packages/authentication/azure/";
+  sourceRoot = "${finalAttrs.src.name}/packages/authentication/azure/";
 
   build-system = [ poetry-core ];
 
@@ -53,11 +50,11 @@ buildPythonPackage rec {
     rev-prefix = "microsoft-kiota-authentication-azure-v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kiota Azure authentication provider";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/authentication/azure";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-authentication-azure-${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-authentication-azure-${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

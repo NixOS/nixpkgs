@@ -81,22 +81,30 @@ in
     };
   };
 
-  config.image.modules = lib.mkIf (!config.system.build ? image) imageModules;
-  config.system.build.images = lib.mkIf (!config.system.build ? image) (
-    lib.mapAttrs (
-      name: nixos:
-      let
-        inherit (nixos) config;
-        inherit (config.image) filePath;
-        builder =
-          config.system.build.image
-            or (throw "Module for `system.build.images.${name}` misses required `system.build.image` option.");
-      in
-      lib.recursiveUpdate builder {
-        passthru = {
-          inherit config filePath;
-        };
-      }
-    ) imageConfigs
-  );
+  config.image.modules = imageModules;
+  config.system.build.images =
+    lib.warnIf (config.system.build ? image)
+      ''
+        `system.build.image` is defined, while `system.build.images` is used.
+        The former will conflict with variants in the latter.
+        Maybe you are importing an image-building module into the toplevel?
+        Add it to `image.modules` instead, or adjust priorities manually.
+      ''
+      (
+        lib.mapAttrs (
+          name: nixos:
+          let
+            inherit (nixos) config;
+            inherit (config.image) filePath;
+            builder =
+              config.system.build.image
+                or (throw "Module for `system.build.images.${name}` misses required `system.build.image` option.");
+          in
+          lib.recursiveUpdate builder {
+            passthru = {
+              inherit config filePath;
+            };
+          }
+        ) imageConfigs
+      );
 }

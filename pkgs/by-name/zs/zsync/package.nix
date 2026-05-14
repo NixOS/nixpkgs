@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsync";
   version = "0.6.3-unstable-2025-05-29";
 
@@ -16,9 +16,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-gJs1P83AKWGipspeoFCSibZH+X6mmj3aL4+yjGO2YJo=";
   };
 
-  sourceRoot = "${src.name}/c";
+  sourceRoot = "${finalAttrs.src.name}/c";
 
-  patches = [ ./remove-inexisting-rsumtest.patch ];
+  patches = [
+    ./remove-inexisting-rsumtest.patch
+    ./c23.patch
+  ];
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
@@ -48,4 +51,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; all;
   };
-}
+})

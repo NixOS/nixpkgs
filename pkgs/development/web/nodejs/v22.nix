@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -14,11 +13,18 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches =
+    if stdenv.buildPlatform.isDarwin then
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+      ]
+    else
+      [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "22.18.0";
-  sha256 = "120e0f74419097a9fafae1fd80b9de7791a587e6f1c48c22b193239ccd0f7084";
+  version = "22.22.3";
+  sha256 = "f3e6a578db1ab335a4a72785c1e87ad18a2cf6d2fc25747a1d741fb34af0bd0f";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -44,12 +50,26 @@ buildNodejs {
         hash = "sha256-hSTLljmVzYmc3WAVeRq9EPYluXGXFeWVXkykufGQPVw=";
       })
     ]
+    ++ gypPatches
     ++ [
       ./configure-armv6-vfpv2.patch
-      ./disable-darwin-v8-system-instrumentation-node19.patch
-      ./bypass-darwin-xcrun-node16.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
+      ./use-nix-codesign.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      # Fix builds with shared llhttp
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
+        hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
+      })
+      # update tests for nghttp2 1.65
+      ./deprecate-http2-priority-signaling.patch
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
+        hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
+        includes = [ "test/*" ];
+      })
     ];
 }

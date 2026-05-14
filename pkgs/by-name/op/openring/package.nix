@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "openring";
   version = "1.0.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "openring";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-BY2AtgZXzPLqHk3hd6D+XXbrwvWS9DNTKwLqsua/3uw=";
   };
 
@@ -20,11 +20,11 @@ buildGoModule rec {
   # The package has no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Webring for static site generators";
     homepage = "https://sr.ht/~sircmpwn/openring";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "openring";
   };
-}
+})

@@ -17,22 +17,28 @@
   python3,
   qtbase,
   qtdeclarative,
+  withDocumentation ? true,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-+ttmtvt18NMKYfGntEXgBOSJ3lW9Bf55327XYIzxMh8=";
+    hash = "sha256-2CVSKPZXZ74KUU5xVYSVIZLSPSyIudUcKR0CSfSpJyw=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withDocumentation [
     "doc"
   ];
 
@@ -40,23 +46,25 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $(find test -name '*.py')
 
     substituteInPlace data/liblomiri-api.pc.in \
-      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
 
     # Variable is queried via pkg-config by reverse dependencies
     # TODO This is likely not supposed to be the regular Qt QML import prefix
     # but otherwise i.e. lomiri-notifications cannot be found in lomiri
     substituteInPlace CMakeLists.txt \
-      --replace 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
+      --replace-fail 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
   '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    graphviz
     pkg-config
     qtdeclarative
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    graphviz
   ];
 
   buildInputs = [
@@ -75,6 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
+  ];
+
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   preBuild = ''
@@ -91,13 +104,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    # https://gitlab.com/ubports/development/core/lomiri-api/-/issues/5
+    tests = lib.optionalAttrs (!withQt6) {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 
   meta = {
     description = "Lomiri API Library for integrating with the Lomiri shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-api";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-api/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       lgpl3Only
       gpl3Only
@@ -106,10 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"
-      "lomiri-shell-api"
-      "lomiri-shell-application"
-      "lomiri-shell-launcher"
-      "lomiri-shell-notifications"
+      "lomiri-shell-api${lib.optionalString withQt6 "-qt6"}"
+      "lomiri-shell-application${lib.optionalString withQt6 "-qt6"}"
+      "lomiri-shell-launcher${lib.optionalString withQt6 "-qt6"}"
+      "lomiri-shell-notifications${lib.optionalString withQt6 "-qt6"}"
     ];
   };
 })

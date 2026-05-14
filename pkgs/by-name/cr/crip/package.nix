@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   pname = "crip";
   version = "3.9";
   src = fetchurl {
-    url = "http://bach.dynet.com/${pname}/src/${pname}-${version}.tar.gz";
+    url = "http://bach.dynet.com/crip/src/crip-${version}.tar.gz";
     sha256 = "0pk9152wll6fmkj1pki3fz3ijlf06jyk32v31yarwvdkwrk7s9xz";
   };
 

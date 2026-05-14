@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   autoreconfHook,
+  autoconf269,
   ...
 }@args:
 

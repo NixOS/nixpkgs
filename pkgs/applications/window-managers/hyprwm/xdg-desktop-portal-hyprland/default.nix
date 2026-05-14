@@ -28,13 +28,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.10";
+  version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-js2sLRtsOUA/aT10OCDaTjO80yplqwOIaLUqEe0nMx0=";
+    hash = "sha256-B7nwX0PE0KBo1/ZtuwJtA7dBG6gdPW5tSBb0skY8DHA=";
   };
 
   depsBuildBuild = [

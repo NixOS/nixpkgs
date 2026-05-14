@@ -243,5 +243,5 @@ in
       lib.mkDefault "${stateDir}/logging.properties-journal";
   };
 
-  meta.maintainers = lib.teams.jitsi.members;
+  meta.teams = [ lib.teams.jitsi ];
 }

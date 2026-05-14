@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "minimal-grub-theme";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "tomdewildt";
     repo = "minimal-grub-theme";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CegLznlW+UJZbVe+WG/S8tREFdw0aq3flGvJeDrLWK0=";
+    hash = "sha256-otGWChSgoxRKfJZkw9usY1sxAc/RsXmkNVMxbSqtc04=";
   };
 
   dontBuild = true;
@@ -21,9 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/
-
-    cp -r minimal/icons minimal/theme.txt minimal/*.png $out/
+    cp -r minimal/ $out/
 
     runHook postInstall
   '';

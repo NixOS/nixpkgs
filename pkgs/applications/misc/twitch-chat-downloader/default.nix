@@ -9,7 +9,7 @@
 
 buildPythonApplication rec {
   pname = "twitch-chat-downloader";
-  version = "2.5.4";
+  version = "2.5.5";
   format = "setuptools";
 
   # NOTE: Using maintained fork because upstream has stopped working, and it has
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "TheDrHax";
     repo = "twitch-chat-downloader";
     rev = version;
-    hash = "sha256-mV60ygrtQa9ZkJ2CImhAV59ckCJ7vJSA9cWkYE2xo1M=";
+    hash = "sha256-9wIp0uttVBOdexOMb8VvpUEEdZ97SGSlZcFQ4jM/tqM=";
   };
 
   postPatch = ''
@@ -39,11 +39,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "tcd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitch Chat Downloader";
     mainProgram = "tcd";
     homepage = "https://github.com/TheDrHax/Twitch-Chat-Downloader";
-    license = licenses.mit;
-    maintainers = with maintainers; [ assistant ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ assistant ];
   };
 }

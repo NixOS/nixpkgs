@@ -1,37 +1,48 @@
 {
-  mkDerivation,
-  fetchurl,
+  fetchFromGitLab,
+  stdenv,
   lib,
+  cmake,
   extra-cmake-modules,
   kdoctools,
+  wrapQtAppsHook,
   kconfig,
   kcrash,
-  kinit,
+  kwidgetsaddons,
+  kxmlgui,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kronometer";
-  version = "2.3.0";
+  version = "2.3.0-unstable-2026-04-06";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/kronometer/${version}/src/kronometer-${version}.tar.xz";
-    sha256 = "sha256-dbnhom8PRo0Bay3DzS2P0xQSrJaMXD51UadQL3z6xHY=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "utilities";
+    repo = "kronometer";
+    rev = "ca1e662f4e58540bd072982103204fa1418f5657";
+    hash = "sha256-IhKlFGxUqr7wKcNKnRA6gK9QJeR0QyQaSwYlIsr0wyE=";
   };
 
-  meta = with lib; {
-    homepage = "https://kde.org/applications/utilities/kronometer/";
-    description = "Stopwatch application";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    mainProgram = "kronometer";
-  };
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
+    wrapQtAppsHook
   ];
-  propagatedBuildInputs = [
+
+  buildInputs = [
     kconfig
     kcrash
-    kinit
+    kwidgetsaddons
+    kxmlgui
   ];
+
+  meta = {
+    homepage = "https://kde.org/applications/utilities/kronometer/";
+    description = "Stopwatch application";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    mainProgram = "kronometer";
+  };
 }

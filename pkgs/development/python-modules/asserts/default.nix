@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "asserts";
-  version = "0.13.1";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "srittau";
     repo = "python-asserts";
     tag = "v${version}";
-    hash = "sha256-hjTzGCcURI0NH9pgZ6KB0J3tSbgIaneDnWr8zrLVG6M=";
+    hash = "sha256-nSL28LaKWVkzOmyI1TpCXJxyKdqpvK/YHRLUJ77sRA8=";
   };
 
   build-system = [

@@ -2,39 +2,39 @@
   lib,
   bitvector-for-humans,
   buildPythonPackage,
-  fetchFromGitHub,
+  busylight-core,
   fastapi,
+  fetchFromGitHub,
+  hatchling,
   hidapi,
+  httpx,
   loguru,
-  poetry-core,
   pyserial,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typer,
+  udevCheckHook,
   uvicorn,
   webcolors,
-  udevCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "busylight-for-humans";
-  version = "0.37.0";
+  version = "0.48.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
-    tag = "v${version}";
-    hash = "sha256-uKuQy4ce6WTTpprAbQ6QE7WlotMlVacaDZ+dsvY1N58=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5sQXW55P/iWhDWY6bGzN8IrWCJyrSvu2ObtIOolo2X0=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     bitvector-for-humans
+    busylight-core
     hidapi
     loguru
     pyserial
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    web = [ fastapi ];
     webapi = [
       fastapi
       uvicorn
@@ -50,10 +51,12 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    httpx
     pytestCheckHook
     pytest-mock
     udevCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestPaths = [ "tests/test_pydantic_models.py" ];
 
@@ -64,12 +67,15 @@ buildPythonPackage rec {
     $out/bin/busylight udev-rules -o $out/lib/udev/rules.d/99-busylight.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";
-    changelog = "https://github.com/JnyJny/busylight/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    teams = [ teams.helsinki-systems ];
+    changelog = "https://github.com/JnyJny/busylight/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+    ];
     mainProgram = "busylight";
   };
-}
+})

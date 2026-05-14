@@ -4,17 +4,17 @@
   cmake,
   fetchFromGitHub,
   openssl,
-  xxHash,
+  xxhash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xva-img";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "eriklax";
     repo = "xva-img";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YyWfN6VcEABmzHkkoA/kRehLum1UxsNJ58XBs1pl+c8=";
   };
 
@@ -22,8 +22,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
-    xxHash
+    xxhash
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = {
     maintainers = [ ];
@@ -32,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "xva-img";
   };
-}
+})

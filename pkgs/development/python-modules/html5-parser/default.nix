@@ -8,15 +8,12 @@
   pkg-config,
   pkgs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "html5-parser";
   version = "0.4.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
@@ -43,10 +40,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast C based HTML 5 parsing for python";
     homepage = "https://html5-parser.readthedocs.io";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

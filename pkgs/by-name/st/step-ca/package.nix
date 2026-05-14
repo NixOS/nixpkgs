@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   buildGoModule,
   coreutils,
   pcsclite,
@@ -12,7 +13,7 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.28.4";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "smallstep";
@@ -23,10 +24,10 @@ buildGoModule rec {
     # Use forceFetchGit to fetch the source as git repo, as fetchGit isn't effected,
     # see https://github.com/NixOS/nixpkgs/issues/84312#issuecomment-2475948960.
     forceFetchGit = true;
-    hash = "sha256-ZIpsSNdQVkelo5b3H03N8qToHU7z+lalAE7Ur6m2YwY=";
+    hash = "sha256-TFpgVE394r6FkRWovlmDd3v/tGic2CekmO1Hp7S6KCE=";
   };
 
-  vendorHash = "sha256-gGPrrl5J8UrjUpof2DaSs1fAQsMSsyAMlC67h5V75+k=";
+  vendorHash = "sha256-9PlJaB3BCwoE+uFo5jUggANSH7ZWnintZYBgFL21LZ4=";
 
   ldflags = [
     "-w"

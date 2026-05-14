@@ -1,10 +1,7 @@
 {
-  applyPatches,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
-  k3s,
   lib,
   nixosTests,
   stdenv,
@@ -12,25 +9,17 @@
 }:
 
 let
-  version = "3.6.4";
-  etcdSrcHash = "sha256-otz+06cOD2MVnMZWKId1GN+MeZfnDbdudiYfVCKdzuo=";
-  etcdCtlVendorHash = "sha256-kTH+s/SY+xwo6kt6iPJ7XDhin0jPk0FBr0eOe/717bE=";
-  etcdUtlVendorHash = "sha256-P0yx9YMMD9vT7N6LOlo26EAOi+Dj33p3ZjAYEoaL19A=";
-  etcdServerVendorHash = "sha256-kgbCT1JxI98W89veCItB7ZfW4d9D3/Ip3tOuFKEX9v4=";
+  version = "3.6.11";
+  etcdSrcHash = "sha256-xn6PJin0xZXR/xoWhCxdEq7uVXSBqv+BapwbP1Pdv84=";
+  etcdCtlVendorHash = "sha256-+W8spn3T1vej4QD52ZxGXqTplwQBVG6Nuxf2P/u7nkQ=";
+  etcdUtlVendorHash = "sha256-s9/QFtbtRx7Jgd/S9pRx8/JMQWmi92Jz/H8YcRS9huk=";
+  etcdServerVendorHash = "sha256-nUangVgI4/62O7jhq2vNqrcJB/PtpZp+40X1W91+HOY=";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "etcd-io";
-      repo = "etcd";
-      tag = "v${version}";
-      hash = etcdSrcHash;
-    };
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/etcd-io/etcd/commit/31650ab0c8df43af05fc4c13b48ffee59271eec7.patch";
-        hash = "sha256-Q94HOLFx2fnb61wMQsAUT4sIBXfxXqW9YEayukQXX18=";
-      })
-    ];
+  src = fetchFromGitHub {
+    owner = "etcd-io";
+    repo = "etcd";
+    tag = "v${version}";
+    hash = etcdSrcHash;
   };
 
   env = {
@@ -42,7 +31,10 @@ let
     downloadPage = "https://github.com/etcd-io/etcd";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [ dtomvan ];
+    maintainers = with lib.maintainers; [
+      dtomvan
+      superherointj
+    ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
@@ -124,7 +116,7 @@ let
   };
 in
 symlinkJoin {
-  name = "etcd-${version}";
+  pname = "etcd";
 
   inherit meta version;
 
@@ -132,11 +124,7 @@ symlinkJoin {
     deps = {
       inherit etcdserver etcdutl etcdctl;
     };
-    # Fix-Me: Tests for etcd 3.6 needs work.
-    # tests = {
-    #   inherit (nixosTests) etcd etcd-cluster;
-    #   k3s = k3s.passthru.tests.etcd;
-    # };
+    tests = nixosTests.etcd."3_6";
     updateScript = ./update.sh;
   };
 

@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "buf";
-  version = "1.56.0";
+  version = "1.69.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a2yU8KgMRNEz5fgFx/e0U6Hrtw53neeO5PWsTU8AV14=";
+    hash = "sha256-x8Dj4xl67Jq0ViWu+Tz+3lAnfIpE926dIr+oe4ul0gI=";
   };
 
-  vendorHash = "sha256-lWcqXMkOpa+bh40zH8LQ86mIbTAqB2mk8naN1oY7Xuc=";
+  vendorHash = "sha256-zhXpWpYd/bim5f4EQJujVm072LPgBusjCFGYAwK10HE=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -45,8 +45,8 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # Some tests take longer depending on builder load.
     substituteInPlace private/bufpkg/bufcheck/lint_test.go \
-      --replace-fail 'context.WithTimeout(context.Background(), 60*time.Second)' \
-                     'context.WithTimeout(context.Background(), 600*time.Second)'
+      --replace-fail 'context.WithTimeout(t.Context(), 60*time.Second)' \
+                     'context.WithTimeout(t.Context(), 600*time.Second)'
     # For WebAssembly runtime tests
     GOOS=wasip1 GOARCH=wasm go build -o $GOPATH/bin/buf-plugin-suffix.wasm \
       ./private/bufpkg/bufcheck/internal/cmd/buf-plugin-suffix
@@ -88,6 +88,7 @@ buildGoModule (finalAttrs: {
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      hythera
       jk
       lrewega
     ];

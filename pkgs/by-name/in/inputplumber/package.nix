@@ -8,18 +8,18 @@
   libevdev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inputplumber";
-  version = "0.60.8";
+  version = "0.77.0";
 
   src = fetchFromGitHub {
     owner = "ShadowBlip";
     repo = "InputPlumber";
-    tag = "v${version}";
-    hash = "sha256-k3SkjLjtCRionDwi2S/pZ40ShKgbsbQhBuLAs3Kd458=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sSLazAjwkTu4Vns8Vs4Gx47WG8fYQYJX6zhk0p139q0=";
   };
 
-  cargoHash = "sha256-i9mFQ12z3YE6Kb89Tt27reG1Y3rUmzTkAlT4Zd8rgXg=";
+  cargoHash = "sha256-OEpv09DipaGtmlUWmvl4+Hm3DyBvSRkZaGePDy14/OU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage rec {
     description = "Open source input router and remapper daemon for Linux";
     homepage = "https://github.com/ShadowBlip/InputPlumber";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/ShadowBlip/InputPlumber/releases/tag/v${version}";
+    changelog = "https://github.com/ShadowBlip/InputPlumber/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ shadowapex ];
     mainProgram = "inputplumber";
   };
-}
+})

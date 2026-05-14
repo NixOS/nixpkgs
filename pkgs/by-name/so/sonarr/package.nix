@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "4.0.15.2941";
+  version = "4.0.17.2952";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,10 +29,14 @@ let
       owner = "Sonarr";
       repo = "Sonarr";
       tag = "v${version}";
-      hash = "sha256-1lBUkodBDFpJD7pyHAFb8HRLrbK8wyAboX0A2oBQnTM=";
+      hash = "sha256-nOpCKQqX6lHBcLtIC18CZ0nCrhXTjpEPcO0L2/kcNEo=";
     };
     postPatch = ''
       mv src/NuGet.Config NuGet.Config
+
+      # error CS0104: 'IPNetwork' is an ambiguous reference between 'Microsoft.AspNetCore.HttpOverrides.IPNetwork' and 'System.Net.IPNetwork'
+      substituteInPlace src/NzbDrone.Host/Startup.cs \
+        --replace-fail 'IPNetwork' 'Microsoft.AspNetCore.HttpOverrides.IPNetwork'
     '';
     patches = lib.optionals (lib.versionOlder version "5.0") [
       # See https://github.com/Sonarr/Sonarr/issues/7442 and
@@ -58,6 +62,8 @@ buildDotnetModule {
   pname = "sonarr";
   inherit version src;
 
+  # Upstream expects to be ran from a "bin" directory
+  installPath = "${placeholder "out"}/lib/sonarr/bin";
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
@@ -83,12 +89,18 @@ buildDotnetModule {
     yarn --offline run build --env production
   '';
   postInstall =
+    let
+      packageInfo = writers.writeText "package_info" ''
+        PackageVersion=${version}
+        PackageAuthor=[NixOS](https://nixos.org)
+      '';
+    in
     lib.optionalString withFFmpeg ''
-      rm -- "$out/lib/sonarr/ffprobe"
-      ln -s -- "$ffprobe" "$out/lib/sonarr/ffprobe"
+      ln -sf -- "$ffprobe" "$out/lib/sonarr/bin/ffprobe"
     ''
     + ''
-      cp -a -- _output/UI "$out/lib/sonarr/UI"
+      cp -a -- _output/UI "$out/lib/sonarr/bin/UI"
+      ln -s ${packageInfo} $out/lib/sonarr/package_info
     '';
   # Add an alias for compatibility with Sonarr v3 package.
   postFixup = ''
@@ -137,39 +149,35 @@ buildDotnetModule {
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.
-  dotnetTestFlags = [
-    "--filter:${
-      lib.concatStringsSep "&" (
-        [
-          "TestCategory!=ManualTest"
-          "TestCategory!=IntegrationTest"
-          "TestCategory!=AutomationTest"
+  testFilters = [
+    "TestCategory!=ManualTest"
+    "TestCategory!=IntegrationTest"
+    "TestCategory!=AutomationTest"
 
-          # setgid tests
-          "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
-          "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
+    # makes real HTTP requests
+    "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+    "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # fails on macOS
+    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+  ];
 
-          # we do not set application data directory during tests (i.e. XDG data directory)
-          "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+  disabledTests = [
+    # setgid tests
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
 
-          # attempts to read /etc/*release and fails since it does not exist
-          "FullyQualifiedName!=NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
+    # we do not set application data directory during tests (i.e. XDG data directory)
+    "NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+    "NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
 
-          # fails to start test dummy because it cannot locate .NET runtime for some reason
-          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
-          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+    # attempts to read /etc/*release and fails since it does not exist
+    "NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
 
-          # makes real HTTP requests
-          "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
-          "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-        ]
-        ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-          # fails on macOS
-          "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-          "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
-        ]
-      )
-    }"
+    # fails to start test dummy because it cannot locate .NET runtime for some reason
+    "NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
   ];
 
   passthru = {
@@ -196,10 +204,10 @@ buildDotnetModule {
     homepage = "https://sonarr.tv";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      fadenb
       purcell
       tie
       niklaskorz
+      karaolidis
     ];
     mainProgram = "Sonarr";
     # platforms inherited from dotnet-sdk.

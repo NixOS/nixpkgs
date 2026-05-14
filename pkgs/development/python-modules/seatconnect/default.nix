@@ -7,7 +7,6 @@
   fetchFromGitHub,
   lxml,
   pyjwt,
-  pythonOlder,
   setuptools-scm,
   xmltodict,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "seatconnect";
   version = "1.1.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "farfar";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seatconnect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with Seat Connect";
     homepage = "https://github.com/farfar/seatconnect";
     changelog = "https://github.com/Farfar/seatconnect/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

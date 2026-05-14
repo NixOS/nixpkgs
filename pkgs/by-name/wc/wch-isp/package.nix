@@ -6,14 +6,14 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wch-isp";
   version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~jmaselbas";
     repo = "wch-isp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JB7cvZPzRhYJ8T3QJkguHOzZFrLOft5rRz0F0sVav/k=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lesuisse ];
     platforms = lib.platforms.unix;
   };
-}
+})

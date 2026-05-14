@@ -27,5 +27,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 }

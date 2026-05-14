@@ -53,11 +53,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       autoPatchelf $out
     ''
-    + ''
+    + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
       export PATH=$PATH:$out/bin
       installShellCompletion --cmd bleep \
         --bash <(bleep install-tab-completions-bash --stdout) \
-        --zsh <(bleep install-tab-completions-zsh --stdout) \
+        --zsh <(bleep install-tab-completions-zsh --stdout)
     '';
 
   passthru.tests.version = testers.testVersion {

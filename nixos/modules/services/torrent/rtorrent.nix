@@ -247,6 +247,7 @@ in
               SystemCallFilter = [
                 "@system-service"
                 "~@privileged"
+                "@chown"
               ];
             };
           };

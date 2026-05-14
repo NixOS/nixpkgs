@@ -4,6 +4,7 @@
   llvmPackages_18,
   llvmPackages_19,
   llvmPackages_20,
+  llvmPackages_21,
   zigVersions ? { },
 }:
 let
@@ -16,9 +17,13 @@ let
       llvmPackages = llvmPackages_19;
       hash = "sha256-DhVJIY/z12PJZdb5j4dnCRb7k1CmeQVOnayYRP8azDI=";
     };
-    "0.15.1" = {
+    "0.15.2" = {
       llvmPackages = llvmPackages_20;
-      hash = "sha256-RFbJYeTHj/aNjWSsG+HHtmOL1VY4dpvJjbx04OhF4bI=";
+      hash = "sha256-u3pEMcYN71d83MJh14vtzU4DJXnMHu/Jw86d9XvwKE8=";
+    };
+    "0.16.0" = {
+      llvmPackages = llvmPackages_21;
+      hash = "sha256-2sTMhaasyrKoBnyH/hQrNCbi0Vh6HekIrpE4XkyQulQ=";
     };
   }
   // zigVersions;

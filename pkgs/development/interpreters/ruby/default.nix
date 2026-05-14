@@ -4,7 +4,6 @@
   lib,
   fetchurl,
   fetchpatch,
-  fetchFromSavannah,
   zlib,
   gdbm,
   ncurses,
@@ -21,7 +20,6 @@
   buildEnv,
   bundler,
   bundix,
-  cargo,
   rustPlatform,
   rustc,
   makeBinaryWrapper,
@@ -38,7 +36,6 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems {
     inherit
       stdenv
@@ -59,14 +56,9 @@ let
     }:
     let
       ver = version;
-      atLeast31 = lib.versionAtLeast ver.majMin "3.1";
-      atLeast32 = lib.versionAtLeast ver.majMin "3.2";
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
-        atLeast32
-        && (
-          stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
-        );
+        stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64);
       rubyDrv = lib.makeOverridable (
         {
           stdenv,
@@ -74,7 +66,6 @@ let
           lib,
           fetchurl,
           fetchpatch,
-          fetchFromSavannah,
           rubygemsSupport ? true,
           zlib,
           zlibSupport ? true,
@@ -108,7 +99,6 @@ let
           # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
           removeReferencesTo,
           jitSupport ? yjitSupport,
-          cargo,
           rustPlatform,
           rustc,
           yjitSupport ? yjitSupported,
@@ -139,9 +129,6 @@ let
             inherit hash;
           };
 
-          # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
-          NROFF = if docSupport then "${groff}/bin/nroff" else null;
-
           outputs = [ "out" ] ++ lib.optional docSupport "devdoc";
 
           strictDeps = true;
@@ -158,7 +145,6 @@ let
           ])
           ++ ops yjitSupport [
             rustPlatform.cargoSetupHook
-            cargo
             rustc
           ]
           ++ op useBaseRuby baseRuby;
@@ -185,31 +171,35 @@ let
           ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
+          env =
+            lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
+              # The ruby build system will use a bare `rust` command by default for its rust.
+              # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
+              # for cross-compilation output for the build target by default.
+              NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
+            }
+            // lib.optionalAttrs docSupport {
+              # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
+              NROFF = "${groff}/bin/nroff";
+            }
+            // lib.optionalAttrs (docSupport && ver.majMin == "4.0") {
+              # RDoc parses referenced source files with the locale encoding.
+              LANG = "C.UTF-8";
+            };
+
           enableParallelBuilding = true;
           # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
           #   No such file or directory @ apply2files - ...-ruby-2.7.7-devdoc/share/ri/2.7.0/system/ARGF/inspect-i.ri (Errno::ENOENT)
           # make: *** [uncommon.mk:373: do-install-all] Error 1
           enableParallelInstalling = false;
 
-          patches =
-            op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-            ++ op useBaseRuby (
-              if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch else ./do-not-update-gems-baseruby.patch
-            )
-            ++ ops (ver.majMin == "3.0") [
-              # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
-              (fetchpatch {
-                url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
-                hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
-              })
-            ]
-            ++ ops atLeast31 [
-              # When using a baseruby, ruby always sets "libdir" to the build
-              # directory, which nix rejects due to a reference in to /build/ in
-              # the final product. Removing this reference doesn't seem to break
-              # anything and fixes cross compilation.
-              ./dont-refer-to-build-dir.patch
-            ];
+          patches = op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch ++ [
+            # When using a baseruby, ruby always sets "libdir" to the build
+            # directory, which nix rejects due to a reference in to /build/ in
+            # the final product. Removing this reference doesn't seem to break
+            # anything and fixes cross compilation.
+            ./dont-refer-to-build-dir.patch
+          ];
 
           cargoRoot = opString yjitSupport "yjit";
 
@@ -229,10 +219,10 @@ let
             cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           '';
 
+          # Ruby >= 2.1.0 tries to download config.{guess,sub}; copy it from autoconf instead.
           postPatch = ''
             sed -i configure.ac -e '/config.guess/d'
-            cp --remove-destination ${config}/config.guess tool/
-            cp --remove-destination ${config}/config.sub tool/
+            cp --remove-destination ${autoconf}/share/autoconf/build-aux/config.{guess,sub} tool/
           '';
 
           configureFlags = [
@@ -253,13 +243,9 @@ let
           ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3"
           ++ [
           ]
-          ++ ops stdenv.hostPlatform.isDarwin [
-            # on darwin, we have /usr/include/tk.h -- so the configure script detects
-            # that tk is installed
-            "--with-out-ext=tk"
-            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-            "--with-setjmp-type=setjmp"
-          ]
+          # on darwin, we have /usr/include/tk.h -- so the configure script detects
+          # that tk is installed
+          ++ lib.optional stdenv.hostPlatform.isDarwin "--with-out-ext=tk"
           ++ ops stdenv.hostPlatform.isFreeBSD [
             "rb_cv_gnu_qsort_r=no"
             "rb_cv_bsd_qsort_r=yes"
@@ -345,6 +331,8 @@ let
               $rbConfig $out/lib/libruby*
           '';
 
+          # TODO: this check got relaxed on darwin;
+          # see https://github.com/NixOS/nixpkgs/pull/499156#issuecomment-4221517043
           installCheckPhase = ''
             overriden_cc=$(CC=foo $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
             if [[ "$overriden_cc" != "foo" ]]; then
@@ -353,7 +341,9 @@ let
             fi
 
             fallback_cc=$(unset CC; $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
-            if [[ "$fallback_cc" != "$CC" ]]; then
+            if [[ ${
+              if stdenv.hostPlatform.isDarwin then ''! "$fallback_cc" =~ "$CC"'' else ''"$fallback_cc" != "$CC"''
+            } ]]; then
                echo "CC='$fallback_cc' should be '$CC' by default" >&2
                false
             fi
@@ -362,12 +352,11 @@ let
 
           disallowedRequisites = op (!jitSupport) stdenv.cc ++ op useBaseRuby baseRuby;
 
-          meta = with lib; {
+          meta = {
             description = "Object-oriented language for quick and easy programming";
             homepage = "https://www.ruby-lang.org/";
-            license = licenses.ruby;
-            maintainers = with maintainers; [ manveru ];
-            platforms = platforms.all;
+            license = lib.licenses.ruby;
+            platforms = lib.platforms.all;
             mainProgram = "ruby";
             knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
           };
@@ -413,26 +402,22 @@ in
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "7" "";
-    hash = "sha256-BVas1p8UHdrOA/pd2NdufqDY9SMu3wEkKVebzaqzDns=";
-  };
-
-  ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "9" "";
-    hash = "sha256-q7rZjbmusVJ3Ow01ho5QADuMRn89BhUld8Tf7Z2I7So=";
-    cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
-  };
-
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "8" "";
-    hash = "sha256-WuKKh6WaPkrWa8KTHSMturlT0KqPa687xPj4CXfInKs=";
+    version = rubyVersion "3" "3" "10" "";
+    hash = "sha256-tVW6pGejBs/I5sbtJNDSeyfpob7R2R2VUJhZ6saw6Sg=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "5" "";
-    hash = "sha256-HYjYontEL93kqgbcmehrC78LKIlj2EMxEt1frHmP1e4=";
+    version = rubyVersion "3" "4" "9" "";
+    hash = "sha256-e7TU9egHzCclHRTZ1ghtGCxbJYdRkeRKsVtwnNen3Zw=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
+
+  ruby_4_0 = generic {
+    version = rubyVersion "4" "0" "4" "";
+    hash = "sha256-819u36Pauz9yP50M8ZBsZRKud/TkEqseaMxukdIw+oA=";
+    cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+  };
+
 }

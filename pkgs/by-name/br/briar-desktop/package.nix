@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "briar-desktop";
-  version = "0.6.3-beta";
+  version = "0.6.5-beta";
 
   src = fetchurl {
     url = "https://desktop.briarproject.org/jars/linux/${finalAttrs.version}/briar-desktop-linux-${finalAttrs.version}.jar";
-    hash = "sha256-8JX4cgRJZDCBlu5iVL7t5nZSZn8XTk3DU3rasViQgtg=";
+    hash = "sha256-YDFvM6EicHe6s7SDTiKRySCTO9IUwDrEtO373bavfmw=";
   };
 
   dontUnpack = true;
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  # TODO: Add a custom update script
   meta = {
     description = "Decentralized and secure messenger";
     mainProgram = "briar-desktop";

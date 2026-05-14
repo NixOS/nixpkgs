@@ -1,17 +1,17 @@
-{ lib, fetchzip }:
+{ lib, fetchFromGitHub }:
 let
-  version = "3.9.0";
-  srcHash = "sha256-Ymg6nJr83jt2EAv/p1B1wmZv3jvpx/3xRVRii3S1cNU=";
-  # The tarball contains vendored dependencies
-  vendorHash = null;
+  version = "3.14.1";
+  vendorHash = "sha256-fibx+Ky2cfP71tPzeiDybx+0f/+XvZbDXC7PAWQMRIY=";
+  nodeModulesHash = "sha256-wQUOUB5uhWbdEP1nP02ihRZf3F1sEvQeZTDxOa5P1lQ=";
 in
 {
-  inherit version vendorHash;
+  inherit version vendorHash nodeModulesHash;
 
-  src = fetchzip {
-    url = "https://github.com/woodpecker-ci/woodpecker/releases/download/v${version}/woodpecker-src.tar.gz";
-    hash = srcHash;
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "woodpecker-ci";
+    repo = "woodpecker";
+    tag = "v${version}";
+    hash = "sha256-D9AC9D8O3n420yvEzYhV7ev7dLZULAZ55iUWDmla4z0=";
   };
 
   postInstall = ''
@@ -38,14 +38,14 @@ in
     "-X go.woodpecker-ci.org/woodpecker/v3/version.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://woodpecker-ci.org/";
     changelog = "https://github.com/woodpecker-ci/woodpecker/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ambroisie
+      marcusramberg
       techknowlogick
-      adamcstephens
     ];
   };
 }

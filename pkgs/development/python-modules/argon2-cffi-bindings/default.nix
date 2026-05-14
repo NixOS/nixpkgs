@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "_argon2_cffi_bindings" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/hynek/argon2-cffi-bindings/releases/tag/${src.tag}";
     description = "Low-level CFFI bindings for Argon2";
     homepage = "https://github.com/hynek/argon2-cffi-bindings";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

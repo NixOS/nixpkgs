@@ -12,20 +12,23 @@
   gtk2,
   libpulseaudio,
   openssl,
-  xorg,
+  libxv,
+  libxscrnsaver,
+  libxext,
+  libx11,
 }:
 
 let
   jdk = jdk8;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jitsi";
   version = "2.11.5633";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi";
-    tag = lib.versions.patch version;
+    tag = lib.versions.patch finalAttrs.version;
     hash = "sha256-CN4o0VfHdoUteI2wyJ2hFJ9UsQ2wWUzcvrLMbR/l36M=";
   };
 
@@ -40,18 +43,18 @@ stdenv.mkDerivation rec {
     categories = [ "Chat" ];
   };
 
-  libPath = lib.makeLibraryPath ([
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc # For libstdc++.
     alsa-lib
     dbus
     gtk2
     libpulseaudio
     openssl
-    xorg.libX11
-    xorg.libXext
-    xorg.libXScrnSaver
-    xorg.libXv
-  ]);
+    libx11
+    libxext
+    libxscrnsaver
+    libxv
+  ];
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [
@@ -81,16 +84,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://desktop.jitsi.org/";
     description = "Open Source Video Calls and Chat";
     mainProgram = "jitsi";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.jitsi ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.jitsi ];
   };
-}
+})

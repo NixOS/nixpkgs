@@ -9,6 +9,7 @@
   boost,
   cmake,
   cmake-extras,
+  ctestCheckHook,
   doxygen,
   gst_all_1,
   gdk-pixbuf,
@@ -31,15 +32,18 @@
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.0.4";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
-    hash = "sha256-pf/bzpooCcoIGb5JtSnowePcobcfVSzHyBaEkb51IOg=";
+    hash = "sha256-lXvXK7UCLX5aoGID8sOoeHBEMhdle7RUMACLHiWpcEo=";
   };
 
   outputs = [
@@ -49,21 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fix compat with taglib 2.x
-    # Remove when version > 3.0.4
-    (fetchpatch {
-      name = "0001-lomiri-thumbnailer-Fix-taglib-2.x-compat.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/b7f1055e36cd6e33314bb9f6648f93e977a33267.patch";
-      hash = "sha256-9RHtxqsgdMkgIyswaeL5yS6+o/YvzT+HgRD8KL/RfNM=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/23 merged & in release
-    ./1001-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DO.patch
-    ./1002-Re-enable-documentation.patch
-    ./1003-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_m.patch
-    ./1004-Re-enable-coverge-reporting.patch
-    ./1005-Make-GTest-available-to-example-test.patch
-
     # In aarch64 lomiri-gallery-app VM tests, default 10s timeout for thumbnail extractor is often too tight
     # Raise to 20s to work around this (too much more will run into D-Bus' call timeout)
     ./2001-Raise-default-extraction-timeout.patch
@@ -75,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/thumbnailer-admin/thumbnailer-admin_test.cpp \
       --replace-fail '/usr/bin/test' 'test'
 
-    substituteInPlace plugins/*/Thumbnailer*/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+    substituteInPlace plugins/Lomiri/Thumbnailer*/CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
     # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
@@ -90,6 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Tests run in parallel to other builds, don't suck up cores
     substituteInPlace tests/headers/compile_headers.py \
       --replace-fail 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
+  ''
+  # https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/31
+  # Too simple to bother with fetchpatch
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'find_package(Boost COMPONENTS filesystem iostreams regex system REQUIRED)' \
+        'find_package(Boost COMPONENTS filesystem iostreams regex REQUIRED)'
   '';
 
   strictDeps = true;
@@ -130,13 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
-    # Something seems borked with bad's h264 decoder, add libav as a workaround
-    # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
-    gst-libav
     # maybe add ugly to cover all kinds of formats?
   ]);
 
   nativeCheckInputs = [
+    ctestCheckHook
     shared-mime-info
     xvfb-run
   ];
@@ -149,20 +144,19 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # QSignalSpy tests in QML suite always fail, pass when running interactively
-        "-E"
-        "^qml"
-      ]
-    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = [
+    # QSignalSpy tests in QML suite always fail, pass when running interactively
+    "qml"
+  ];
 
   enableParallelChecking = false;
 
@@ -186,6 +180,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+    }
+    // lib.optionalAttrs (!withQt6) {
       # gallery app delegates to thumbnailer, tests various formats
       inherit (nixosTests.lomiri-gallery-app)
         format-mp4
@@ -197,8 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       # music app relies on thumbnailer to extract embedded cover art
       music-app = nixosTests.lomiri-music-app;
-
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater { };
   };
@@ -215,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "liblomiri-thumbnailer-qt"
+      "liblomiri-thumbnailer-qt${lib.optionalString withQt6 "6"}"
     ];
   };
 })

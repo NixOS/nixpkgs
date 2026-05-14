@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "signalslot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Signal/Slot implementation";
     homepage = "https://github.com/numergy/signalslot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ myaats ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ myaats ];
   };
 }

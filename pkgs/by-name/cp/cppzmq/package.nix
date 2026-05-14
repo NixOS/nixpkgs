@@ -6,14 +6,14 @@
   zeromq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppzmq";
   version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-c6IZ5PnuB96NLYHDHdNclYSF4LpqAfFWxVzeP8BzhCE=";
   };
 
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     "-DCPPZMQ_BUILD_TESTS=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zeromq/cppzmq";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     description = "C++ binding for 0MQ";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

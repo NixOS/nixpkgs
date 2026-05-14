@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "3.26.6";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/totem-pl-parser/${lib.versions.majorMinor version}/totem-pl-parser-${version}.tar.xz";
     sha256 = "wN8PaNXPnX2kPIHH8T8RFYNYNo+Ywi1Hci870EvTrBw=";
   };
 
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     "-Dintrospection=false"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/totem-pl-parser";
     description = "Simple GObject-based library to parse and save a host of playlist formats";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gfls";
-  version = "0.3.0";
+  version = "0.4.1";
 
   outputs = [
     "out"
@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "libgedit-gfls";
     tag = finalAttrs.version;
-    hash = "sha256-X56QPcmNB0Ey+kzSqDnb6/j6/w7IU7MFSAxW8mX8I3w=";
+    forceFetchGit = true; # To avoid occasional 501 failures.
+    hash = "sha256-61jq7tcAAzYuhKM4OlH/GniGTfiWg/Pcznb03+vaLvw=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gfls";

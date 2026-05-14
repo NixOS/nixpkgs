@@ -124,7 +124,7 @@ in
                   builtins.stringLength name <= 12
                 ) "Modeline name must be 12 characters or less" ''Modeline "${name}" ${value}''
               ))
-              (builtins.map (line: "${line}\n"))
+              (map (line: "${line}\n"))
               (lib.strings.concatStringsSep "")
             ];
           };
@@ -132,7 +132,7 @@ in
 
     hardware.display.outputs = lib.mkOption {
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options = {
             edid = lib.mkOption {
               type = with lib.types; nullOr str;
@@ -161,7 +161,7 @@ in
               '';
             };
           };
-        })
+        }
       );
       description = ''
         Hardware/kernel-level configuration of specific outputs.

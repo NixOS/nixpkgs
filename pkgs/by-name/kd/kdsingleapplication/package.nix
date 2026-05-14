@@ -6,15 +6,15 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "KDSingleApplication";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "KDSingleApplication";
-    tag = "v${version}";
-    hash = "sha256-rglt89Gw6OHXXVOEwf0TxezDzyHEvWepeGeup7fBlLs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LmiQL8hQR5U4S/L5FS9Pb2WpOoZJyiAaWGoMkGl5aUM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hellwolf ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
-    changelog = "https://github.com/KDAB/KDSingleApplication/releases/tag/v${version}";
+    changelog = "https://github.com/KDAB/KDSingleApplication/releases/tag/v${finalAttrs.version}";
   };
-}
+})

@@ -72,6 +72,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Cangjians/ibus-cangjie";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

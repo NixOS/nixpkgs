@@ -22,7 +22,7 @@
   noStaticAssert,
 }:
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   pname = "nanopb-runtime";
   inherit src version;
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation ({
     "-Dnanopb_BUILD_GENERATOR=OFF"
     "-Dnanopb_BUILD_RUNTIME=ON"
   ];
-})
+}

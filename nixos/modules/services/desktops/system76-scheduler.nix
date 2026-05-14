@@ -136,9 +136,9 @@ let
       ++ (optional (a.nice != null) "nice=${toString a.nice}")
       ++ (optional (a.class != null) "sched=${prioToString a.class a.prio}")
       ++ (optional (a.ioClass != null) "io=${prioToString a.ioClass a.ioPrio}")
-      ++ (optional ((builtins.length a.matchers) != 0) (
+      ++ (optional ((builtins.length a.matchers) != 0)
         "{\n${concatStringsSep "\n" (map (m: "  ${indent}${m}") a.matchers)}\n${indent}}"
-      ))
+      )
     );
 
 in

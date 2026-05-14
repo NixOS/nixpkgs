@@ -2,21 +2,27 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
-(php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject
+(php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject2
   (finalAttrs: {
     pname = "phan";
-    version = "5.5.1";
+    version = "6.0.5";
 
     src = fetchFromGitHub {
       owner = "phan";
       repo = "phan";
-      rev = finalAttrs.version;
-      hash = "sha256-G17ORkHmu6nkfJ8UrGzcaybPOKPrq1Q+LXVS56aVOZ8=";
+      tag = finalAttrs.version;
+      hash = "sha256-R49f3SljQjNywDi7AsOHbce+4RhC59ugL5ClY8XBQho=";
     };
 
-    vendorHash = "sha256-Ake5/7IyoweC2ONDuWt9jJSbG0JbnU9lmCRu2p6uUQM=";
+    vendorHash = "sha256-pzMsPFN3PXLEEWyjPTMdDCsAv6VDsIYGpma84Mu/Gos=";
+
+    composerStrictValidation = false;
+    doInstallCheck = true;
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgramArg = "--version";
 
     meta = {
       description = "Static analyzer for PHP";
@@ -27,7 +33,7 @@
         and attempts to prove incorrectness rather than correctness.
       '';
       mainProgram = "phan";
-      maintainers = with lib.maintainers; [ apeschar ];
+      maintainers = [ ];
       teams = [ lib.teams.php ];
     };
   })

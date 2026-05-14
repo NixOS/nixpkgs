@@ -4,21 +4,18 @@
   fetchFromGitHub,
   flask,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-paginate";
   version = "2024.4.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "lixxu";
     repo = "flask-paginate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YaAgl+iuoXB0eWVzhmNq2UTOpM/tHfDISIb9CyaXiuA=";
   };
 
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pagination support for Flask";
     homepage = "https://github.com/lixxu/flask-paginate";
-    changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${version}";
-    license = licenses.bsd3;
+    changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

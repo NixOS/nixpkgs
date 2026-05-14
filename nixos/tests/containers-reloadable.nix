@@ -2,7 +2,7 @@
 {
   name = "containers-reloadable";
   meta = {
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = [ ];
   };
 
   nodes = {

@@ -31,7 +31,8 @@
   readline,
   rtrlib,
   protobufc,
-  zeromq,
+  sqlite,
+  lua53Packages,
 
   # tests
   net-tools,
@@ -43,9 +44,7 @@
   numMultipath ? 64,
   watchfrrSupport ? true,
   cumulusSupport ? false,
-  rtadvSupport ? true,
   irdpSupport ? true,
-  routeReplacementSupport ? true,
   mgmtdSupport ? true,
   # Experimental as of 10.1, reconsider if upstream changes defaults
   grpcSupport ? false,
@@ -82,18 +81,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.4.1";
+  version = "10.6.0";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = "frr";
     rev = "frr-${finalAttrs.version}";
-    hash = "sha256-pEnMOy1/gIs8a/XCGixF3ZkSwUZ1PPuaSFBminY86DA=";
+    hash = "sha256-o0h9adGvb9FEcAMYrjrjTb7MMozdXriOsK6fE0fGjss=";
   };
 
   # Without the std explicitly set, we may run into abseil-cpp
   # compilation errors.
-  CXXFLAGS = "-std=gnu++23";
+  env.CXXFLAGS = "-std=gnu++23";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -121,7 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     readline
     rtrlib
-    zeromq
+    lua53Packages.lua
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
@@ -150,25 +150,25 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configureFlags = [
+    "--disable-zeromq"
     "--disable-silent-rules"
-    "--disable-exampledir"
     "--enable-configfile-mask=0640"
     "--enable-group=frr"
     "--enable-logfile-mask=0640"
     "--enable-multipath=${toString numMultipath}"
+    "--enable-config-rollbacks"
+    "--enable-scripting"
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
-    "--localstatedir=/run/frr"
+    "--localstatedir=/var"
     "--sbindir=${placeholder "out"}/libexec/frr"
-    "--sysconfdir=/etc/frr"
+    "--sysconfdir=/etc"
     "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
     # general options
     (lib.strings.enableFeature snmpSupport "snmp")
     (lib.strings.enableFeature rpkiSupport "rpki")
     (lib.strings.enableFeature watchfrrSupport "watchfrr")
-    (lib.strings.enableFeature rtadvSupport "rtadv")
     (lib.strings.enableFeature irdpSupport "irdp")
-    (lib.strings.enableFeature routeReplacementSupport "rr-semantics")
     (lib.strings.enableFeature mgmtdSupport "mgmtd")
     (lib.strings.enableFeature grpcSupport "grpc")
 
@@ -221,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://frrouting.org/";
     description = "FRR BGP/OSPF/ISIS/RIP/RIPNG routing daemon suite";
     longDescription = ''
@@ -246,16 +246,18 @@ stdenv.mkDerivation (finalAttrs: {
       infrastructure, web 2.0 businesses, hyperscale services, and Fortune 500
       private clouds.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       woffs
       thillux
     ];
     # adapt to platforms stated in http://docs.frrouting.org/en/latest/overview.html#supported-platforms
-    platforms = (platforms.linux ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd);
+    platforms = (
+      lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd
+    );
   };
 
   passthru.tests = { inherit (nixosTests) frr; };

@@ -4,24 +4,24 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termsnap";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "tomcur";
     repo = "termsnap";
-    rev = "termsnap-v${version}";
+    rev = "termsnap-v${finalAttrs.version}";
     hash = "sha256-bYqhrMmgkEAiA1eiDbIOwH/PktwtIfxmYJRwDrFsNIc=";
   };
 
   cargoHash = "sha256-lfWQ7VzFYhbEjrhKxPT8quhxbL+5pTzIPUVjBBHRk7Q=";
 
-  meta = with lib; {
+  meta = {
     description = "Create SVGs from terminal output";
     homepage = "https://github.com/tomcur/termsnap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yash-garg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yash-garg ];
     mainProgram = "termsnap";
   };
-}
+})

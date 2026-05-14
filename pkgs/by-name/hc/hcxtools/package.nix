@@ -8,15 +8,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hcxtools";
-  version = "7.0.1";
+  version = "7.1.2";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = "hcxtools";
-    rev = version;
-    sha256 = "sha256-WV5+1PQF999qSIMrIYApmIx6C+ovbKOtJDFglzxzSB4=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-v33RpDKA4OeUU4YXXWhHpdlqQvxk4HIWQKCPskdTSTU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for capturing wlan traffic and conversion to hashcat and John the Ripper formats";
     homepage = "https://github.com/ZerBea/hcxtools";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dywedir ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dywedir ];
   };
-}
+})

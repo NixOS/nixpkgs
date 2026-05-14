@@ -14,14 +14,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "irssi";
   version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "irssi";
     repo = "irssi";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-D+KMjkweStMqVhoQoiJPFt/G0vdf7x2FjYCvqGS8UqY=";
   };
 
@@ -47,15 +47,14 @@ stdenv.mkDerivation rec {
     "-Dwith-perl=yes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal based IRC client";
     mainProgram = "irssi";
     homepage = "https://irssi.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       fab
-      lovek323
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

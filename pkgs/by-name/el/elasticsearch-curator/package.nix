@@ -7,7 +7,7 @@
   testers,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "elasticsearch-curator";
   version = "8.0.21";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yVOZBz4AJNjmpxRp3t03KwDzp/3W8uJiHwuSRJbfLvk=";
   };
 
@@ -81,7 +81,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
     homepage = "https://github.com/elastic/curator";
-    changelog = "https://github.com/elastic/curator/releases/tag/v${version}";
+    changelog = "https://github.com/elastic/curator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     longDescription = ''
       Elasticsearch Curator helps you curate, or manage, your Elasticsearch
@@ -98,4 +98,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "curator";
     maintainers = with lib.maintainers; [ basvandijk ];
   };
-}
+})

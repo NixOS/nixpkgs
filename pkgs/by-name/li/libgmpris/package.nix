@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.2.1-8";
 
   src = fetchurl {
-    url = "https://www.sonarnerd.net/src/focal/src/${pname}_${version}.tar.gz";
+    url = "https://www.sonarnerd.net/src/focal/src/libgmpris_${version}.tar.gz";
     sha256 = "sha256-iyKNmg6sf+mxlY/4vt5lKdrKfJzkoCYU2j1O8uwk8K4=";
   };
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     cp ./README $out/share/doc/${pname}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sonarnerd.net/src/";
     description = "GMPRIS GDBus bindings GDBus bindings generated from the GMPRIS XML spec files";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

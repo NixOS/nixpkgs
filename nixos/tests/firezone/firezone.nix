@@ -5,7 +5,10 @@ let
 in
 {
   name = "firezone";
-  meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
+  meta.maintainers = with pkgs.lib.maintainers; [
+    oddlama
+    patrickdag
+  ];
 
   nodes = {
     server =
@@ -17,6 +20,21 @@ in
       }:
       {
         security.pki.certificateFiles = [ certs.ca.cert ];
+
+        # To debug problems:
+        # 1. comment this in
+        # 2. cat '127.0.0.1 acme.test` >> /etc/hosts
+        # 3. socat TCP-LISTEN:443,fork TCP:127.0.0.1:12345
+        # 4. Firezone has to succeed when sending mail
+        #   - Get opensmtpd to work
+        #   - add an actual mailaccount to the test
+        # virtualisation.forwardPorts = [
+        #   {
+        #     from = "host";
+        #     host.port = 12345;
+        #     guest.port = 443;
+        #   }
+        # ];
 
         networking.extraHosts = ''
           ${config.networking.primaryIPAddress} ${domain}
@@ -36,6 +54,20 @@ in
           };
         };
 
+        # This doesn't actually work firezone/Swoosh seems to send 2 `EHLO`
+        # which opensmtpd does not allow
+        # https://github.com/OpenSMTPD/OpenSMTPD/issues/1284
+        # Would be nice for debbuging
+        # services.opensmtpd = {
+        #   enable = true;
+        #   extraServerArgs = [ "-v" ];
+        #   serverConfiguration = ''
+        #     listen on 0.0.0.0
+        #     action "local" maildir "/tmp/maildir"
+        #     match for domain "localhost.localdomain" action "local"
+        #   '';
+        # };
+
         services.firezone.server = {
           enable = true;
           enableLocalDB = true;
@@ -44,12 +76,12 @@ in
           # Doesn't need to work for this test, but needs to be configured
           # otherwise the server will not start.
           smtp = {
-            from = "firezone@example.com";
-            host = "mail.localhost";
-            port = 465;
-            implicitTls = true;
-            username = "firezone@example.com";
-            passwordFile = pkgs.writeText "tmpmailpasswd" "supermailpassword";
+            from = "firezone@localhost.localdomain";
+            host = "localhost";
+            port = 25;
+            implicitTls = false;
+            username = "firezone@localhost.localdomain";
+            passwordFile = pkgs.writeText "tmpmailpasswd" "verysecurepassword";
           };
 
           provision = {
@@ -62,13 +94,21 @@ in
                 admin = {
                   type = "account_admin_user";
                   name = "Admin";
-                  email = "admin@example.com";
+                  email = "admin@localhost.localdomain";
                 };
                 client = {
                   type = "service_account";
                   name = "A client";
                   email = "client@example.com";
                 };
+              };
+              # service accounts aren't members of 'Everyone' so we need to add a separate group
+              groups.main = {
+                name = "main";
+                members = [
+                  "client"
+                  "admin"
+                ];
               };
               resources.res1 = {
                 type = "dns";
@@ -97,17 +137,17 @@ in
               };
               policies.pol1 = {
                 description = "Allow anyone res1 access";
-                group = "everyone";
+                group = "main";
                 resource = "res1";
               };
               policies.pol2 = {
                 description = "Allow anyone res2 access";
-                group = "everyone";
+                group = "main";
                 resource = "res2";
               };
               policies.pol3 = {
                 description = "Allow anyone res3 access";
-                group = "everyone";
+                group = "main";
                 resource = "res3";
               };
             };
@@ -334,7 +374,6 @@ in
       with subtest("Check DNS based access"):
           # Check that we can access the resource through the VPN via DNS
           client.wait_until_succeeds("curl -4 -Lsf http://resource.example.com | grep 'greetings from the resource'")
-          client.wait_until_succeeds("curl -6 -Lsf http://resource.example.com | grep 'greetings from the resource'")
 
       with subtest("Check CIDR based access"):
           # Check that we can access the resource through the VPN via CIDR

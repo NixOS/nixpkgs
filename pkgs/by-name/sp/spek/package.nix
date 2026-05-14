@@ -6,7 +6,7 @@
   intltool,
   pkg-config,
   ffmpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   wrapGAppsHook3,
 }:
@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./autoconf.patch
+    # https://github.com/alexkay/spek/pull/338
+    ./ffmpeg8-compat.patch
   ];
 
   nativeBuildInputs = [
@@ -35,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     ffmpeg
-    wxGTK32
+    wxwidgets_3_2
     gtk3
   ];
 
   meta = {
     description = "Analyse your audio files by showing their spectrogram";
-    homepage = "http://spek.cc/";
+    homepage = "https://www.spek.cc/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.all;

@@ -8,19 +8,19 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "rescrobbled";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "InputUsername";
     repo = "rescrobbled";
-    rev = "v${version}";
-    hash = "sha256-+5BkM4L2eB54idZ6X2ESw6ERMhG5CM4AF4BMEJm3xLU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/p9SY4XZNXl1ApB2gI8PMAp53lOBl0gcSPybRJe5MtE=";
   };
 
-  cargoHash = "sha256-ZawdZdP87X7xMdSdZ1VJDJxz7dBGVYo+8jR8qb2Jgq8=";
+  cargoHash = "sha256-1uQiMn8X5joyBcIbzTDVM7GQB6Ks/jaEuSb4KR3hBW0=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,12 +39,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 rescrobbled.service -t "$out/share/systemd/user"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MPRIS music scrobbler daemon";
     homepage = "https://github.com/InputUsername/rescrobbled";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "rescrobbled";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ negatethis ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ negatethis ];
   };
-}
+})

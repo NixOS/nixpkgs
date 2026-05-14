@@ -20,10 +20,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "upnpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "UPnP client library for Python";
     homepage = "https://github.com/5kyc0d3r/upnpy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

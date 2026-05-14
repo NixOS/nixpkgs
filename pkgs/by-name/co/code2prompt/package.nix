@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code2prompt";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "code2prompt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KZqh0Vq4Mn56PhUO1JUzVpNBAGOZqUAsj31Cj5K+Lyk=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "code2prompt";
   };
-}
+})

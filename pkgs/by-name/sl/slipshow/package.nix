@@ -9,13 +9,13 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "slipshow";
-  version = "0.5.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "panglesd";
     repo = "slipshow";
     tag = "v${version}";
-    hash = "sha256-Q/ga5sQ3QfoRzlC7TD7HVKig+nxxk92hizDqYzJlW1Y=";
+    hash = "sha256-6i7zbfk0uBgwoXlg5fLvC+onZMYKBJwUd74FUakt3jc=";
   };
 
   postPatch = ''
@@ -40,14 +40,19 @@ ocamlPackages.buildDunePackage rec {
     lwt
     magic-mime
     ppx_blob
+    ppx_deriving_yojson
     ppx_sexp_value
     sexplib
   ];
 
+  # This check fails with cmdliner ≥ 2.0
+  preCheck = ''
+    rm -f test/compiler/dimension.t/run.t
+  '';
+
   doCheck = true;
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

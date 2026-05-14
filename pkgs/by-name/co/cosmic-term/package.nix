@@ -15,24 +15,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-term";
-  version = "1.0.0-alpha.7";
+  version = "1.0.12";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-leCKdnlevfLiPJkloWCpOjkHaSf7+EYdobZRZ/Jis+4=";
+    hash = "sha256-GpbLNr6B16hy7emdkjDfzOFfGgMOz6vfmmhCSL7lR5c=";
   };
 
-  cargoHash = "sha256-Re9t25tkwmrvXB9GmPSVG+QDUZmk5rwrrY2ntlB3Tdw=";
+  cargoHash = "sha256-9iHcmImA2tscpRuRKE/nUrwhR5RU5xA2zxJpcDt+2sE=";
 
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-04-20";
-    VERGEN_GIT_SHA = finalAttrs.src.tag;
-  };
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     just
@@ -54,8 +50,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   passthru = {
@@ -67,10 +63,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

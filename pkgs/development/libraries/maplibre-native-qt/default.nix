@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   qtlocation,
   stdenv,
@@ -18,8 +19,30 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix build with gcc15
+    (fetchpatch {
+      url = "https://github.com/maplibre/maplibre-native/commit/dde3fdd398a5f7b49300b1a761057bdd3286ae24.patch";
+      hash = "sha256-UQ4Y2aoBsHQHEqlrwn4OUzICeT3MNVZlHFK/KphvV/c=";
+      stripLen = 1;
+      extraPrefix = "vendor/maplibre-native/";
+    })
+  ];
+
+  postPatch = lib.optionals (lib.versionAtLeast qtlocation.version "6.10") ''
+    # fix build with Qt 6.10
+    # included in https://github.com/maplibre/maplibre-native-qt/pull/216
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(Qt''${QT_VERSION_MAJOR} COMPONENTS Location REQUIRED)' \
+                     'find_package(Qt''${QT_VERSION_MAJOR} COMPONENTS Location LocationPrivate REQUIRED)'
+  '';
+
   nativeBuildInputs = [
     cmake
+  ];
+
+  env.CXXFLAGS = toString [
+    "-DQT_NO_USE_NODISCARD_FILE_OPEN"
   ];
 
   buildInputs = [

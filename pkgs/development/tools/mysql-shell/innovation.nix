@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "9.4.0";
-  mysqlServerVersion = "9.4.0";
+  mysqlShellVersion = "9.7.0";
+  mysqlServerVersion = "9.7.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-a7UJxU5YtUq776SeKW5yIPXnz+RGkUujYV9ZSWfPqSE=";
+      hash = "sha256-dLV0urxWsOy2MqvTWdITxnlOz0Qq5Ekov8WB+z1iMG0=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-BpiDGA3Lxf/MrKqtPSA+apFNZx9N805PYYVa+2vQxPE=";
+      hash = "sha256-s/omxSFTC/n3B8OtYddDqXzCd4GE4b5O8NUKbLdvwRI=";
     })
   ];
 
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
-  env = {
-    ${if stdenv.cc.isGNU then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=maybe-uninitialized";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized -Wno-error=array-bounds";
   };
 
   preConfigure = ''

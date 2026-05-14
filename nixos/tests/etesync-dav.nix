@@ -2,7 +2,7 @@
 {
 
   name = "etesync-dav";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

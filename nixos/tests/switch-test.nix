@@ -60,11 +60,19 @@ in
         environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
         users.mutableUsers = false;
 
+        # A lingering user so the user systemd instance is running and
+        # switch-to-configuration can exercise the user-unit path.
+        users.users.usertest = {
+          isNormalUser = true;
+          uid = 1001;
+          linger = true;
+        };
+
         # Test that no boot loader still switches, e.g. in the ISO
         boot.loader.grub.enable = false;
 
         specialisation = rec {
-          brokenInitInterface.configuration.config.system.extraSystemBuilderCmds = ''
+          brokenInitInterface.configuration.config.system.systemBuilderCommands = ''
             echo "systemd 0" > $out/init-interface-version
           '';
 
@@ -89,6 +97,14 @@ in
 
           storeMountModified.configuration = {
             virtualisation.fileSystems."/".device = lib.mkForce "auto";
+          };
+
+          automount.configuration = {
+            virtualisation.fileSystems."/testauto" = {
+              device = "tmpfs";
+              fsType = "tmpfs";
+              options = [ "x-systemd.automount" ];
+            };
           };
 
           swap.configuration.swapDevices = lib.mkVMOverride [
@@ -627,6 +643,118 @@ in
                 (pkgs.writeText "dbus-reload-dummy" "dbus reload dummy")
               ];
             };
+
+          generators.configuration =
+            { lib, pkgs, ... }:
+            {
+              systemd.generators.simple-generator = pkgs.writeShellScript "simple-generator" ''
+                ${lib.getExe' pkgs.coreutils "cat"} >$1/simple-generated.service <<EOF
+                [Service]
+                ExecStart=${lib.getExe' pkgs.coreutils "sleep"} infinity
+                EOF
+              '';
+            };
+
+          simpleUserService.configuration = {
+            systemd.user.services.usertest = {
+              wantedBy = [ "default.target" ];
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = "${pkgs.coreutils}/bin/true";
+                ExecReload = "${pkgs.coreutils}/bin/true";
+              };
+            };
+          };
+
+          simpleUserServiceModified.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.serviceConfig.X-Test = "1";
+          };
+
+          simpleUserServiceNostop.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.stopIfChanged = false;
+          };
+
+          simpleUserServiceReload.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest = {
+              reloadIfChanged = true;
+              serviceConfig.X-Test = "1";
+            };
+          };
+
+          simpleUserServiceReloadTrigger.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.reloadTriggers = [ "/dev/null" ];
+          };
+
+          simpleUserServiceFailing.configuration = {
+            imports = [ simpleUserService.configuration ];
+            systemd.user.services.usertest.serviceConfig.ExecStart = lib.mkForce "${pkgs.coreutils}/bin/false";
+          };
+
+          # A unit that NixOS defines while a copy already exists in
+          # ~/.config/systemd/user (e.g. home-manager). The home copy shadows
+          # /etc, so switch-to-configuration must leave it alone.
+          userServiceMigratedShadowed.configuration = {
+            systemd.user.services.migrated = {
+              wantedBy = [ "default.target" ];
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = "${pkgs.runtimeShell} -c 'echo nixos > %t/migrated-owner'";
+              };
+            };
+          };
+
+          # As above, but the per-user activation removes the home copy and
+          # stops the unit (mimicking home-manager/sd-switch dropping it).
+          # switch-to-configuration must then start the now-unmasked
+          # /etc/systemd/user copy in a second pass.
+          userServiceMigratedToNixos.configuration = {
+            imports = [ userServiceMigratedShadowed.configuration ];
+            system.userActivationScripts.fakeSdSwitch = ''
+              if [ -e "$HOME/.config/systemd/user/migrated.service" ]; then
+                rm -f "$HOME/.config/systemd/user/migrated.service"
+                rm -f "$HOME/.config/systemd/user/default.target.wants/migrated.service"
+                ${pkgs.systemd}/bin/systemctl --user daemon-reload
+                ${pkgs.systemd}/bin/systemctl --user stop migrated.service || true
+              fi
+            '';
+          };
+
+          # As above, but the previous manager leaves the unit running instead
+          # of stopping it. switch-to-configuration must restart it so the
+          # /etc definition takes effect.
+          userServiceMigratedToNixosNoStop.configuration = {
+            imports = [ userServiceMigratedShadowed.configuration ];
+            system.userActivationScripts.fakeSdSwitch = ''
+              if [ -e "$HOME/.config/systemd/user/migrated.service" ]; then
+                rm -f "$HOME/.config/systemd/user/migrated.service"
+                rm -f "$HOME/.config/systemd/user/default.target.wants/migrated.service"
+                ${pkgs.systemd}/bin/systemctl --user daemon-reload
+              fi
+            '';
+          };
+
+          no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
+
+          inhibitors.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            quz = "bor";
+          };
+
+          inhibitors_changed.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "baz";
+            quz = "boz";
+          };
+
+          inhibitors_new.configuration.system.switch.inhibitors = lib.mkForce {
+            foo = "bar";
+            qux = "baz";
+          };
         };
       };
 
@@ -639,6 +767,7 @@ in
         echo "this should succeed (config: $config, action: $action)"
         [ "$action" == "check" ] || [ "$action" == "test" ]
       '';
+      boot.loader.grub.enable = false;
       specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
         echo this will fail
         false
@@ -672,6 +801,15 @@ in
           "broker" = "dbus-broker.service";
         }
         .${nodes.machine.services.dbus.implementation};
+
+      # Unit file placed in ~/.config/systemd/user to simulate a unit managed
+      # by home-manager (see the userServiceMigrated* specialisations).
+      homeMigratedUnit = pkgs.writeText "migrated.service" ''
+        [Service]
+        Type=oneshot
+        RemainAfterExit=true
+        ExecStart=${pkgs.runtimeShell} -c 'echo home > %t/migrated-owner'
+      '';
     in
     # python
     ''
@@ -725,6 +863,27 @@ in
           machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
           out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
           assert_contains(out, "this will fail")
+
+      with subtest("switch inhibitors"):
+          # Start without any inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
+          # Check that we can switch into a generation with inhibitors from one that doesn't have any
+          switch_to_specialisation("${machine}", "inhibitors", action="switch")
+          # Check that we cannot switch into a generation that has a different value for an existing inhibitor
+          out = switch_to_specialisation("${machine}", "inhibitors_changed", action="switch", fail=True)
+          assert_contains(out, "There are changes to critical components of the system")
+          assert_contains(out, "foo")
+          assert_contains(out, "bar")
+          assert_contains(out, "baz")
+          # Confirm that we can set that same generation as the new boot default
+          switch_to_specialisation("${machine}", "inhibitors_changed", action="boot")
+          # Confirm that dry-activate is not blocked by inhibitors
+          out = switch_to_specialisation("${machine}", "inhibitors_changed", action="dry-activate")
+          assert_contains(out, "Not checking switch inhibitors")
+          # Check that we can switch into a new generation with new inhibitors, but same values for existing ones
+          switch_to_specialisation("${machine}", "inhibitors_new", action="switch")
+          # Check that we can switch back into a generation without inhibitors
+          switch_to_specialisation("${machine}", "no_inhibitors", action="switch")
 
       with subtest("actions"):
           # boot action
@@ -786,6 +945,14 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_contains(out, "the following new units were started: test.mount\n")
+          # we can start inactive mounts
+          machine.succeed("systemctl stop test.mount")
+          out = switch_to_specialisation("${machine}", "addedMount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: local-fs.target, test.mount\n")
           # modify the mountpoint's options
           out = switch_to_specialisation("${machine}", "addedMountOptsModified")
           assert_lacks(out, "stopping the following units:")
@@ -826,9 +993,21 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_lacks(out, "the following new units were started:")
+          # add an automount
+          out = switch_to_specialisation("${machine}", "automount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: testauto.automount\n")
+          # remove the automount
+          out = switch_to_specialisation("${machine}", "")
+          assert_contains(out, "stopping the following units: testauto.automount\n")
+          assert_lacks(out, "reloading the following units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_lacks(out, "the following new units were started:")
 
       with subtest("swaps"):
-          switch_to_specialisation("${machine}", "")
           # add a swap
           out = switch_to_specialisation("${machine}", "swap")
           assert_lacks(out, "stopping the following units:")
@@ -1377,6 +1556,15 @@ in
           switch_to_specialisation("${machine}", "mount")
           out = machine.succeed("mount | grep 'on /testmount'")
           assert_contains(out, "size=1024k")
+          # We can start inactive mounts
+          machine.succeed("systemctl stop testmount.mount")
+          out = switch_to_specialisation("${machine}", "mount")
+          assert_lacks(out, "stopping the following units:")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "reloading the following units")
+          assert_lacks(out, "restarting the following units:")
+          assert_lacks(out, "starting the following units:")
+          assert_contains(out, "the following new units were started: testmount.mount\n")
           # Changing options reloads the unit
           out = switch_to_specialisation("${machine}", "mountOptionsModified")
           assert_lacks(out, "stopping the following units:")
@@ -1520,5 +1708,130 @@ in
           assert_lacks(out, "\nrestarting the following units:")
           assert_lacks(out, "\nstarting the following units:")
           assert_lacks(out, "the following new units were started:")
+
+      with subtest("generators"):
+          out = switch_to_specialisation("${machine}", "generators")
+          # The service is not started by anything, so we start it manually
+          machine.succeed("systemctl start simple-generated.service && systemctl is-active simple-generated.service")
+          out = switch_to_specialisation("${machine}", "")
+          # Assert switching to a different generation doesn't touch units created by generators
+          machine.succeed("systemctl is-active simple-generated.service")
+
+      with subtest("user services"):
+          machine.wait_for_unit("user@1001.service")
+          user_env = "XDG_RUNTIME_DIR=/run/user/1001"
+
+          def user_systemctl(args):
+              return machine.succeed(f"sudo -u usertest {user_env} systemctl --user {args}")
+
+          # Add a user service — starting default.target should pull it in via
+          # the WantedBy dependency.
+          out = switch_to_specialisation("${machine}", "simpleUserService")
+          user_systemctl("is-active usertest.service")
+
+          # No-op switch does nothing
+          out = switch_to_specialisation("${machine}", "simpleUserService")
+          assert_lacks(out, "user units:")
+
+          # Modifying the unit stop-starts it (default stopIfChanged=true)
+          out = switch_to_specialisation("${machine}", "simpleUserServiceModified")
+          assert_contains(out, "stopping the following user units: usertest.service")
+          assert_contains(out, "starting the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # stopIfChanged=false restarts instead
+          out = switch_to_specialisation("${machine}", "simpleUserServiceNostop")
+          assert_lacks(out, "stopping the following user units:")
+          assert_contains(out, "restarting the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # reloadIfChanged=true reloads instead
+          out = switch_to_specialisation("${machine}", "simpleUserServiceReload")
+          assert_lacks(out, "stopping the following user units:")
+          assert_lacks(out, "restarting the following user units:")
+          assert_contains(out, "reloading the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # reloadTriggers change triggers a reload
+          switch_to_specialisation("${machine}", "simpleUserService")
+          user_systemctl("is-active usertest.service")
+          out = switch_to_specialisation("${machine}", "simpleUserServiceReloadTrigger")
+          assert_contains(out, "reloading the following user units: usertest.service")
+          user_systemctl("is-active usertest.service")
+
+          # A failing user unit propagates a non-zero exit to the parent so
+          # the overall switch reports failure.
+          out = switch_to_specialisation("${machine}", "simpleUserServiceFailing", fail=True)
+          assert_contains(out, "stopping the following user units: usertest.service")
+          assert_contains(out, "Failed to start user unit usertest.service")
+          assert_contains(out, "warning: the following user units failed: usertest.service")
+          assert_contains(out, "warning: user activation for usertest failed")
+          # Recover for the removal assertion below.
+          switch_to_specialisation("${machine}", "simpleUserService")
+          user_systemctl("is-active usertest.service")
+
+          # Removing the unit stops it
+          out = switch_to_specialisation("${machine}", "")
+          assert_contains(out, "stopping the following user units: usertest.service")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active usertest.service")
+
+          # Migration from a home-directory manager to NixOS: pre-seed a unit
+          # in ~/.config/systemd/user and start it, then switch to a config
+          # that defines the same unit in /etc/systemd/user and whose user
+          # activation removes the ~/.config copy (mimicking sd-switch).
+          def seed_home_unit():
+              machine.succeed(
+                  "sudo -u usertest mkdir -p ~usertest/.config/systemd/user/default.target.wants",
+                  "sudo -u usertest cp ${homeMigratedUnit} ~usertest/.config/systemd/user/migrated.service",
+                  "sudo -u usertest ln -sfn ../migrated.service ~usertest/.config/systemd/user/default.target.wants/migrated.service",
+              )
+              user_systemctl("daemon-reload")
+              user_systemctl("start migrated.service")
+              user_systemctl("is-active migrated.service")
+              out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+              assert_contains(out, "home")
+              out = user_systemctl("show -p FragmentPath migrated.service")
+              assert_contains(out, "/.config/systemd/user/migrated.service")
+
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedToNixos")
+          # Pass 1 must not touch it (still owned by ~/.config at that point)
+          assert_lacks(out, "stopping the following user units: migrated.service")
+          # Pass 2 starts the now-unmasked /etc copy after sd-switch stopped it
+          assert_contains(out, "starting (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/etc/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "nixos")
+
+          # Reset and test the variant where the previous manager leaves the
+          # unit running: pass 2 must restart it.
+          switch_to_specialisation("${machine}", "")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active migrated.service")
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedToNixosNoStop")
+          assert_contains(out, "restarting (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/etc/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "nixos")
+
+          # Units that remain shadowed by ~/.config must be left alone in both
+          # passes even though /etc now also defines them.
+          switch_to_specialisation("${machine}", "")
+          seed_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMigratedShadowed")
+          assert_lacks(out, "migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/.config/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "home")
+          # Clean up
+          machine.succeed("sudo -u usertest rm -rf ~usertest/.config/systemd")
+          user_systemctl("daemon-reload")
+          user_systemctl("stop migrated.service")
+          switch_to_specialisation("${machine}", "")
     '';
 }

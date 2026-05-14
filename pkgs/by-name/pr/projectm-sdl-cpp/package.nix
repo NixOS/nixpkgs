@@ -5,7 +5,7 @@
   cmake,
   libprojectm,
   libGL,
-  libX11,
+  libx11,
   poco,
   utf8proc,
   SDL2,
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "projectm-sdl-cpp";
-  version = "0-unstable-2025-05-20";
+  version = "0-unstable-2026-01-20";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "frontend-sdl-cpp";
-    rev = "85dfdda3dcb139c7e1eb47fd5e4723114e4fb86b";
-    hash = "sha256-FHOncC6fhs1CPNMBGtA+QB+NHVn4QlF2Qn9NJb5j3p8=";
+    rev = "7a07229428c51378f43843cf160bcddc21ef70ff";
+    hash = "sha256-hz1Au5Gn10Yi5f7d7UiQOHTCU00Ze5UoQ40jirg54Pc=";
     fetchSubmodules = true;
   };
 
@@ -46,12 +46,12 @@ stdenv.mkDerivation {
     poco
     utf8proc
     libGL
-    libX11
+    libx11
     SDL2
   ];
 
   # poco 1.14 requires c++17
-  NIX_CFLAGS_COMPILE = [ "-std=gnu++17" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu++17" ];
 
   strictDeps = true;
 

@@ -8,15 +8,15 @@
   meson,
   ninja,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "persepolis";
   version = "5.2.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E295Y76EmG6H1nwu7d4+OVPRtoCthROqYY5sIsBvUPI=";
   };
 
@@ -54,14 +54,14 @@ python3.pkgs.buildPythonApplication rec {
     ])
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Download manager GUI written in Python";
     mainProgram = "persepolis";
     homepage = "https://persepolisdm.github.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       iFreilicht
       L0L1P0P
     ];
   };
-}
+})

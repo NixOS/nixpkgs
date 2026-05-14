@@ -19,16 +19,16 @@ let
     }:
     buildGoModule rec {
       pname = stname;
-      version = "1.30.0";
+      version = "2.0.15";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         tag = "v${version}";
-        hash = "sha256-GKyzJ2kzs2h/tfb3StSleGBofiKk6FwVcSkCjsJRvRY=";
+        hash = "sha256-v77ovjV+UoCRA1GteP+HDqC8dsRvtOhFX/IkSgSIf8Y=";
       };
 
-      vendorHash = "sha256-Soky/3wEmP1QRy8xfL68sTHi3CSl4nbCINmG0DY2Qys=";
+      vendorHash = "sha256-boYTLgvH+iWlh3y3Z0LPvSVGEget3X94AthtJKphhCw=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -41,8 +41,10 @@ let
 
       doCheck = false;
 
-      BUILD_USER = "nix";
-      BUILD_HOST = "nix";
+      env = {
+        BUILD_USER = "nix";
+        BUILD_HOST = "nix";
+      };
 
       buildPhase = ''
         runHook preBuild
@@ -67,8 +69,10 @@ let
         tests = {
           inherit (nixosTests)
             syncthing
+            syncthing-folders
+            syncthing-guiPassword
+            syncthing-guiPasswordFile
             syncthing-init
-            syncthing-many-devices
             syncthing-no-settings
             syncthing-relay
             ;
@@ -106,6 +110,12 @@ in
       done
 
       install -Dm644 etc/linux-desktop/syncthing-ui.desktop $out/share/applications/syncthing-ui.desktop
+      install -Dm644 assets/logo-32.png   $out/share/icons/hicolor/32x32/apps/syncthing.png
+      install -Dm644 assets/logo-64.png   $out/share/icons/hicolor/64x64/apps/syncthing.png
+      install -Dm644 assets/logo-128.png  $out/share/icons/hicolor/128x128/apps/syncthing.png
+      install -Dm644 assets/logo-256.png  $out/share/icons/hicolor/256x256/apps/syncthing.png
+      install -Dm644 assets/logo-512.png  $out/share/icons/hicolor/512x512/apps/syncthing.png
+      install -Dm644 assets/logo-only.svg $out/share/icons/hicolor/scalable/apps/syncthing.svg
 
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corehunt";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corehunt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QJJ+e+5UKka1Hbrtyn+agpJ7FLADHupZt41K8Mq8H4c=";
+    hash = "sha256-D3O1RnhXZmIGlk75OxfYvQI+8sytXTho2MvccI5Xyvg=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corehunt";
     homepage = "https://gitlab.com/cubocore/coreapps/corehunt";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

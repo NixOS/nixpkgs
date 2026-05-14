@@ -7,14 +7,14 @@
   judy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.6";
   pname = "miredo";
 
   buildInputs = [ judy ];
 
   src = fetchurl {
-    url = "https://www.remlab.net/files/miredo/miredo-${version}.tar.xz";
+    url = "https://www.remlab.net/files/miredo/miredo-${finalAttrs.version}.tar.xz";
     sha256 = "0j9ilig570snbmj48230hf7ms8kvcwi2wblycqrmhh85lksd49ps";
   };
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib/systemd $out/var $out/etc/miredo/miredo.conf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Teredo IPv6 Tunneling Daemon";
     homepage = "https://www.remlab.net/miredo/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

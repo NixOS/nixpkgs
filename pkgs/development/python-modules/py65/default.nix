@@ -6,7 +6,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py65";
   version = "1.2.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mnaberez";
     repo = "py65";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BMX+sMPx/YBFA4NFkaY0rl0EPicGHgb6xXVvLEIdllA=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
       debugger. Py65Mon provides a command line with many convenient commands
       for interacting with the simulated 6502-based system.
     '';
-    changelog = "https://github.com/mnaberez/py65/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/mnaberez/py65/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.bsd3;
     mainProgram = "py65mon";
     maintainers = with lib.maintainers; [
       tomasajt
     ];
   };
-}
+})

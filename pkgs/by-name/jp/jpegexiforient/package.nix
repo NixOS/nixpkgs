@@ -19,13 +19,13 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dt $out/bin jpegexiforient
   '';
-  meta = with lib; {
+  meta = {
     description = "Utility program to get and set the Exif Orientation Tag";
     homepage = "http://sylvana.net/jpegcrop/exif_orientation.html";
     # Website doesn't mention any license, but I think it's safe to assume this
     # to be free since it's from IJG, the current maintainers of libjpeg
-    license = licenses.free;
-    platforms = platforms.all;
+    license = lib.licenses.free;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "jpegexiforient";
   };

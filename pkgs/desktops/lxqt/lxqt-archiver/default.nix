@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    hash = "sha256-4xGP/3ft29PFzJ3ty/9wJbv/hqcdTw9U+4xDneKHF8g=";
+    hash = "sha256-f8s29INIJeqmPr6BWqQxYWWkjbG1wy+bUYZSy2OECKg=";
   };
 
   nativeBuildInputs = [
@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-archiver/";
     description = "Archive tool for the LXQt desktop environment";
     mainProgram = "lxqt-archiver";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ];
-    teams = [ teams.lxqt ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; [ jchw ];
+    teams = [ lib.teams.lxqt ];
   };
 }

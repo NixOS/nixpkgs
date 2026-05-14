@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcello";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://libcello.org/static/libCello-${version}.tar.gz";
+    url = "https://libcello.org/static/libCello-${finalAttrs.version}.tar.gz";
     sha256 = "0a1b2x5ni07vd9ridnl7zv7h2s32070wsphjy94qr066b99gdb29";
   };
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.MostAwesomeDude ];
     platforms = lib.platforms.unix;
   };
-}
+})

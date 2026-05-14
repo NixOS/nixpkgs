@@ -7,10 +7,10 @@
 
   bzip2,
   libGL,
-  libX11,
-  libXcursor,
+  libx11,
+  libxcursor,
   libxkbcommon,
-  libXi,
+  libxi,
   moltenvk,
   sdl3,
   wayland,
@@ -42,6 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # make the build script use the @GIT_REV@ string that will be substituted in the logic below
     ./set-git-rev.patch
+
+    # enum CicType is not used, but dead code is treated as an error
+    ./allow-unused-type.patch
   ];
 
   postPatch = ''
@@ -74,9 +77,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
 
     # for X11
-    libX11
-    libXcursor
-    libXi
+    libx11
+    libxcursor
+    libxi
 
     # for wayland
     wayland

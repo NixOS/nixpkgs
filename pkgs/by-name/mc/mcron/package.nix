@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mcron";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "mirror://gnu/mcron/mcron-${version}.tar.gz";
+    url = "mirror://gnu/mcron/mcron-${finalAttrs.version}.tar.gz";
     sha256 = "0bkn235g2ia4f7ispr9d55c7bc18282r3qd8ldhh5q2kiin75zi0";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

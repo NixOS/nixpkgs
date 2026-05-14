@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://www.drpetter.se/files/sfxr-sdl-${finalAttrs.version}.tar.gz";
+    url = "https://www.drpetter.se/files/sfxr-sdl-${finalAttrs.version}.tar.gz";
     sha256 = "0dfqgid6wzzyyhc0ha94prxax59wx79hqr25r6if6by9cj4vx4ya";
   };
 
@@ -56,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://www.drpetter.se/project_sfxr.html";
     description = "Videogame sound effect generator";
     mainProgram = "sfxr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.unix;
   };
 })

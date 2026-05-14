@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywayland" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flacjacket/pywayland";
     description = "Python bindings to wayland using cffi";
     mainProgram = "pywayland-scanner";
-    license = licenses.ncsa;
-    maintainers = with maintainers; [ chvp ];
+    license = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ chvp ];
   };
 }

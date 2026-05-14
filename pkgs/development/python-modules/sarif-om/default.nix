@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # no tests included with tarball
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Classes implementing the SARIF 2.1.0 object model";
     homepage = "https://github.com/microsoft/sarif-python-om";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

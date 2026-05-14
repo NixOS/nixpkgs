@@ -10,17 +10,16 @@
   common-updater-scripts,
   versionCheckHook,
   writeShellScript,
-  xcbuild,
-  coreutils,
+  re-plistbuddy,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rapidapi";
-  version = "4.2.8-4002008002";
+  version = "4.5.5-4005005001";
 
   src = fetchurl {
     url = "https://cdn-builds.paw.cloud/paw/RapidAPI-${finalAttrs.version}.zip";
-    hash = "sha256-ApBOYMOjpQJvUe+JsEAnyK7xpIZNt6qkX/2KUIT6S8g=";
+    hash = "sha256-1UR7Lj/4fdhwYIvlWjso8tGDO+0sH8XkiysXN2i6/78=";
   };
 
   dontPatch = true;
@@ -59,8 +58,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''
-    marketing_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1" | ${coreutils}/bin/tr -d '"')
-    build_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1")
+    marketing_version=$(${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleShortVersionString" "$1")
+    build_version=$(${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleVersion" "$1")
     echo $marketing_version-$build_version
   '';
   versionCheckProgramArg = [ "${placeholder "out"}/Applications/RapidAPI.app/Contents/Info.plist" ];

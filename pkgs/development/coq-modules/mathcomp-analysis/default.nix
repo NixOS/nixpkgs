@@ -7,7 +7,6 @@
   hierarchy-builder,
   stdlib,
   single ? false,
-  coqPackages,
   coq,
   version ? null,
 }@args:
@@ -16,6 +15,8 @@ let
   repo = "analysis";
   owner = "math-comp";
 
+  release."1.14.0".sha256 = "sha256-FFcfxnF1wtz2e9Rdqu4Wd0rtLW0DYoXswCTji//RSCQ=";
+  release."1.13.0".sha256 = "sha256-nn2gl6cAO93QEdMvLGlB9WAPddQiOdeRtk1pLO+gxII=";
   release."1.12.0".sha256 = "sha256-PF10NlZ+aqP3PX7+UsZwgJT9PEaDwzvrS/ZGzjP64Wo=";
   release."1.11.0".sha256 = "sha256-1apbzBvaLNw/8ARLUhGGy89CyXW+/6O4ckdxKPraiVc=";
   release."1.9.0".sha256 = "sha256-zj7WSDUg8ISWxcipGpjEwvvnLp1g8nm23BZiib/15+g=";
@@ -58,6 +59,8 @@ let
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
+        (case (range "8.20" "9.1") (range "2.4.0" "2.5.0") "1.14.0")
+        (case (range "8.20" "9.1") (range "2.1.0" "2.4.0") "1.13.0")
         (case (range "8.20" "9.1") (range "2.1.0" "2.4.0") "1.12.0")
         (case (range "8.19" "8.20") (range "2.1.0" "2.3.0") "1.9.0")
         (case (range "8.17" "8.20") (range "2.0.0" "2.2.0") "1.1.0")
@@ -126,7 +129,7 @@ let
         }
       ] package;
       pname = if package == "single" then "mathcomp-analysis-single" else "mathcomp-${package}";
-      derivation = mkCoqDerivation ({
+      derivation = mkCoqDerivation {
         inherit
           version
           pname
@@ -172,7 +175,7 @@ let
         };
 
         passthru = lib.mapAttrs (package: deps: mathcomp_ package) packages;
-      });
+      };
       # split packages didn't exist before 0.6, so building nothing in that case
       patched-derivation1 = derivation.overrideAttrs (
         o:
@@ -228,4 +231,25 @@ let
     in
     patched-derivation;
 in
-mathcomp_ (if single then "single" else "analysis")
+# this is just a wrapper for rocqPackages.mathcomp-analysis for Rocq >= 9.0
+if
+  coq.rocqPackages ? mathcomp-analysis
+  && !(lib.elem version [
+    "1.12.0"
+    "1.13.0"
+    "1.14.0"
+    "1.15.0"
+  ])
+then
+  coq.rocqPackages.mathcomp-analysis.override {
+    inherit version single;
+    inherit
+      mathcomp
+      mathcomp-finmap
+      mathcomp-bigenough
+      stdlib
+      ;
+    inherit (coq.rocqPackages) rocq-core;
+  }
+else
+  mathcomp_ (if single then "single" else "analysis")

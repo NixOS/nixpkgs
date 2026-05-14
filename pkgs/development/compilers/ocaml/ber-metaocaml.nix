@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ncurses,
-  libX11,
+  libx11,
   xorgproto,
   buildEnv,
   useX11 ? stdenv.hostPlatform.isx86,
@@ -11,7 +11,7 @@
 
 let
   x11deps = [
-    libX11
+    libx11
     xorgproto
   ];
   inherit (lib) optionals;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   metaocaml = fetchurl {
-    url = "http://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
+    url = "https://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
     sha256 = "sha256-vvq3xI4jSAsrXcDk97TPbFDYgO9NcQeN/yBcUbcb/y0=";
   };
 
@@ -85,18 +85,18 @@ stdenv.mkDerivation rec {
     nativeCompilers = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-Stage Programming extension for OCaml";
     homepage = "https://okmij.org/ftp/ML/MetaOCaml.html";
-    license = with licenses; [
+    license = with lib.licenses; [
       # compiler
       qpl # library
       lgpl2
     ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
 
     branch = baseOcamlBranch;
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isMips;
 
     longDescription = ''

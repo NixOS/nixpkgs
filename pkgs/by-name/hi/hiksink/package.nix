@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hiksink";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "CornerBit";
     repo = "hiksink";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-k/cBCc7DywyBbAzCRCHdrOVmo+QVCsSgDn8hcyTIUI8=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hik_sink";
   };
-}
+})

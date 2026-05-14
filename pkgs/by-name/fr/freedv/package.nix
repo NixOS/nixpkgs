@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
+  autoconf,
+  automake,
+  libtool,
   cmake,
   pkg-config,
   python3,
-  libopus,
   macdylibbundler,
   makeWrapper,
   darwin,
@@ -17,30 +20,58 @@
   portaudio,
   speexdsp,
   hamlib_4,
-  wxGTK32,
-  sioclient,
+  wxwidgets_3_2,
   dbus,
   apple-sdk_15,
   nix-update-script,
 }:
 
 let
+  codec2' = codec2.override { freedvSupport = true; };
+  ebur128Src = fetchFromGitHub {
+    owner = "jiixyj";
+    repo = "libebur128";
+    rev = "v1.2.6";
+    hash = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
+  };
+  opusSrc = fetchFromGitHub {
+    owner = "xiph";
+    repo = "opus";
+    rev = "940d4e5af64351ca8ba8390df3f555484c567fbb";
+    postFetch = ''
+      cd $out
+      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
+      dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"
+      substituteInPlace autogen.sh \
+        --replace-fail 'dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"' ""
+    '';
+    hash = "sha256-P84gjnuiQQBVBExJBY3sUbwo00lXY6HB+AMpx/oovRg=";
+  };
   radaeSrc = fetchFromGitHub {
     owner = "drowe67";
     repo = "radae";
-    rev = "2354cd2a4b3af60c7feb1c0d6b3d6dd7417c2ac9";
-    hash = "sha256-yEr/OCXV83qXi89QHXMrUtQ2UwNOsijQMN35Or2JP+Y=";
+    rev = "5d640a028ab2b8e4ff23ed7136caee396cdcb844";
+    # upstream repository archive fetching is broken
+    forceFetchGit = true;
+    hash = "sha256-+Sd+FWycEJabT3RN/zyKXS2Xzr060/ekYdzg6s1gQcM=";
+  };
+  radeInteg = fetchFromGitHub {
+    owner = "drowe67";
+    repo = "radae";
+    rev = "7bd3ae2401fcba58e314755576a2940085835312";
+    hash = "sha256-WVYKvttiNh6uEzw0b27winyDfzzGkEEhYq7DIwfZW74=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.0.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+hVh5GgSz8MWib10dVV6gx9EvocvLAJm2Eid/4y//2E=";
+    hash = "sha256-7SOGz2+MzAkXd5JDKasSJcKVXcnuYk+C0S9N/NPRfOM=";
   };
 
   patches = [
@@ -48,14 +79,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    cp -R ${ebur128Src} ebur128
     cp -R ${radaeSrc} radae
-    chmod -R u+w radae
-    substituteInPlace radae/cmake/BuildOpus.cmake \
-      --replace-fail "https://gitlab.xiph.org/xiph/opus/-/archive/main/opus-main.tar.gz" "${libopus.src}" \
-      --replace-fail "./autogen.sh && " ""
+    cp -R ${radeInteg} rade_integ
+    chmod -R u+w ebur128 radae rade_integ
+    substituteInPlace cmake/BuildEbur128.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
+      --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
+      --replace-fail "git apply" "patch -p1 <"
     substituteInPlace cmake/BuildRADE.cmake \
+      --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
       --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
       --replace-fail "GIT_TAG main" ""
+    substituteInPlace cmake/BuildRADEForIntegrations.cmake \
+      --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
+      --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath rade_integ)" \
+      --replace-fail "GIT_TAG ms-disable-python-gc" ""
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \
       --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
@@ -69,6 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
     cmake
     pkg-config
     python3
@@ -87,14 +129,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    codec2
+    codec2'
     libsamplerate
     libsndfile
     lpcnet
     speexdsp
     hamlib_4
-    wxGTK32
-    sioclient
+    wxwidgets_3_2
     python3.pkgs.numpy
   ]
   ++ (
@@ -120,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_NATIVE_AUDIO" (with stdenv.hostPlatform; isLinux || isDarwin))
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${codec2.src}/src";
+  env.NIX_CFLAGS_COMPILE = "-I${codec2'.src}/src";
 
   doCheck = false;
 

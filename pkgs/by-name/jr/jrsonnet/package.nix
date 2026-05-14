@@ -6,12 +6,12 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jrsonnet";
   version = "0.4.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "CertainLach";
     repo = "jrsonnet";
     sha256 = "sha256-OX+iJJ3vdCsWWr8x31psV9Vne6xWDZnJc83NbJqMK1A=";
@@ -39,13 +39,12 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Purely-functional configuration language that helps you define JSON data";
     homepage = "https://github.com/CertainLach/jrsonnet";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lach
     ];
   };
-}
+})

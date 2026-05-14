@@ -9,15 +9,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rosa";
-  version = "1.2.55";
+  version = "1.2.62";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
-    rev = "v${version}";
-    hash = "sha256-IarqpS3KY6cL5Njkd14APfPcUqicNzODIZz6CiuCzIk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vBIh4drMBd6BXkwmnBFzHuayLmgAX9DtXVENAGnJghY=";
   };
   vendorHash = null;
 
@@ -43,7 +43,7 @@ buildGoModule rec {
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rosa \
       --bash <($out/bin/rosa completion bash) \
       --fish <($out/bin/rosa completion fish) \
@@ -58,10 +58,10 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for the Red Hat OpenShift Service on AWS";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/openshift/rosa";
-    maintainers = with maintainers; [ jfchevrette ];
+    maintainers = with lib.maintainers; [ jfchevrette ];
   };
-}
+})

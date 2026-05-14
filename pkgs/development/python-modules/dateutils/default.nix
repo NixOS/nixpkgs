@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dateutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for working with datetime objects";
     homepage = "https://github.com/jmcantrell/python-dateutils";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

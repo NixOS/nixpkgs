@@ -1,6 +1,6 @@
 {
-  buildGoModule,
-  fetchFromGitea,
+  buildGo126Module,
+  fetchFromCodeberg,
   lib,
   jq,
   installShellFiles,
@@ -9,19 +9,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "ijq";
-  version = "1.1.2";
+  version = "1.3.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ijq";
-    rev = "v${version}";
-    hash = "sha256-7vG9T+gC6HeSGwFDf3m7nM0hBz32n6ATiM30AKNC1Og=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-U4UKhWI/xd7+rLa350oIFlCqbiMSZe3ztPFR0uierOo=";
   };
 
-  vendorHash = "sha256-zRa8MPWFvcoVm+LstbSAl1VY3oWMujZPjWS/ti1VXjE=";
+  vendorHash = "sha256-aU/0CIbI49OwgY6ioT50uPxld/rHAve3+KoILgPpWSQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   postBuild = ''
@@ -47,15 +46,15 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Interactive wrapper for jq";
     mainProgram = "ijq";
     homepage = "https://codeberg.org/gpanders/ijq";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       justinas
       mattpolzin
       SuperSandro2000
     ];
   };
-}
+})

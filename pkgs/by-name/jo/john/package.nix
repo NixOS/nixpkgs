@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "rolling-2404";
+  version = "rolling-2604";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
+    rev = "f514ece8ec4ae5e38ad75aaa322eac86d73dcd76";
+    hash = "sha256-Fzt9KnMFBTdPpQMSlXe/zG9LMylAZnC6uzU4yJ6HSUk=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -39,6 +39,9 @@ stdenv.mkDerivation {
       ocl_icd = ocl-icd;
     })
   ];
+
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   postPatch = ''
     sed -ri -e '
@@ -130,15 +133,17 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "John the Ripper password cracker";
-    license = [ licenses.gpl2Plus ] ++ lib.optionals enableUnfree [ licenses.unfreeRedistributable ];
+    license = [
+      lib.licenses.gpl2Plus
+    ]
+    ++ lib.optionals enableUnfree [ lib.licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
-    maintainers = with maintainers; [
-      offline
-      matthewbauer
+    maintainers = with lib.maintainers; [
       cherrykitten
+      therealhammer
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

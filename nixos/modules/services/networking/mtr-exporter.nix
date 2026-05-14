@@ -9,7 +9,6 @@ let
   inherit (lib)
     maintainers
     types
-    literalExpression
     escapeShellArg
     escapeShellArgs
     mkEnableOption
@@ -17,7 +16,6 @@ let
     mkRemovedOptionModule
     mkIf
     mkPackageOption
-    optionalString
     concatMapStrings
     concatStringsSep
     ;

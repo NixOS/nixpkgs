@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "compiledb";
   version = "0.10.7";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nickdiego";
     repo = "compiledb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-toqBf5q1EfZVhZN5DAtxkyFF7UlyNbqxWAIWFMwacxw=";
   };
 
@@ -44,4 +44,4 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/nickdiego/compiledb";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

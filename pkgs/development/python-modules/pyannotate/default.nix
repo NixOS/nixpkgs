@@ -5,7 +5,6 @@
   mypy-extensions,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyannotate";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -45,10 +42,10 @@ buildPythonPackage rec {
     "pyannotate_tools/annotations/tests/dundermain_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Auto-generate PEP-484 annotations";
     homepage = "https://github.com/dropbox/pyannotate";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pyannotate";
   };

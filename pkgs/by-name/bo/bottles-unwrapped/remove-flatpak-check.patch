@@ -16,10 +16,10 @@ index 6ff7c011..c26ea0b9 100644
    '__init__.py',
    'main.py',
 diff --git a/bottles/frontend/views/bottle_details.py b/bottles/frontend/views/bottle_details.py
-index 65667ea9..7ae1eb19 100644
+index f897953c..393572ed 100644
 --- a/bottles/frontend/views/bottle_details.py
 +++ b/bottles/frontend/views/bottle_details.py
-@@ -436,20 +436,19 @@ class BottleView(Adw.PreferencesPage):
+@@ -824,20 +824,17 @@ class BottleView(Adw.PreferencesPage):
              dialog.connect("response", execute)
              dialog.show()
  
@@ -33,7 +33,7 @@ index 65667ea9..7ae1eb19 100644
 -                    ),
 -                )
 -                dialog.add_response("dismiss", _("_Dismiss"))
--                dialog.connect("response", show_chooser)
+-                dialog.connect("response", lambda *args: show_chooser())
 -                dialog.present()
 -            else:
 -                show_chooser()
@@ -48,16 +48,14 @@ index 65667ea9..7ae1eb19 100644
 +            dialog.add_response("dismiss", _("_Dismiss"))
 +            dialog.connect("response", show_chooser)
 +            dialog.present()
-+        else:
-+            show_chooser()
+         else:
+             show_chooser()
  
-     def __backup(self, widget, backup_type):
-         """
 diff --git a/bottles/frontend/views/bottle_preferences.py b/bottles/frontend/views/bottle_preferences.py
-index 288e693b..b8b57618 100644
+index 1e0090f8..983097f2 100644
 --- a/bottles/frontend/views/bottle_preferences.py
 +++ b/bottles/frontend/views/bottle_preferences.py
-@@ -139,7 +139,7 @@ class PreferencesView(Adw.PreferencesPage):
+@@ -148,7 +148,7 @@ class PreferencesView(Adw.PreferencesPage):
          self.queue = details.queue
          self.details = details
  
@@ -67,7 +65,7 @@ index 288e693b..b8b57618 100644
  
          _not_available = _("This feature is unavailable on your system.")
 diff --git a/bottles/frontend/views/list.py b/bottles/frontend/views/list.py
-index 43ab9c22..a283b178 100644
+index 6bd8fc81..0f96ab70 100644
 --- a/bottles/frontend/views/list.py
 +++ b/bottles/frontend/views/list.py
 @@ -82,8 +82,6 @@ class BottlesBottleRow(Adw.ActionRow):
@@ -80,10 +78,10 @@ index 43ab9c22..a283b178 100644
          def set_path(_dialog, response):
              if response != Gtk.ResponseType.ACCEPT:
 diff --git a/bottles/frontend/views/new_bottle_dialog.py b/bottles/frontend/views/new_bottle_dialog.py
-index a8b007d4..c6f0a156 100644
+index 9c386862..3ed98f7c 100644
 --- a/bottles/frontend/views/new_bottle_dialog.py
 +++ b/bottles/frontend/views/new_bottle_dialog.py
-@@ -80,7 +80,7 @@ class BottlesNewBottleDialog(Adw.Dialog):
+@@ -86,7 +86,7 @@ class BottlesNewBottleDialog(Adw.Dialog):
          super().__init__(**kwargs)
          # common variables and references
          self.window = GtkUtils.get_parent_window()

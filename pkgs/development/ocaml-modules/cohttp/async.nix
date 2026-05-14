@@ -1,4 +1,5 @@
 {
+  lib,
   buildDunePackage,
   ppx_sexp_conv,
   base,
@@ -18,6 +19,7 @@
   ounit,
   mirage-crypto,
   core,
+  digestif,
 }:
 
 buildDunePackage {
@@ -28,7 +30,7 @@ buildDunePackage {
     src
     ;
 
-  minimalOCamlVersion = "4.14";
+  minimalOCamlVersion = if lib.versionOlder cohttp.version "6.0.0" then "4.14" else "5.1";
 
   buildInputs = [ ppx_sexp_conv ];
 
@@ -49,12 +51,14 @@ buildDunePackage {
     ipaddr
   ];
 
-  # Examples don't compile with core 0.15.  See https://github.com/mirage/ocaml-cohttp/pull/864.
-  doCheck = false;
+  doCheck = true;
   checkInputs = [
     ounit
-    mirage-crypto
     core
+    digestif
+  ]
+  ++ lib.optionals (lib.versionOlder cohttp.version "6.0.0") [
+    mirage-crypto
   ];
 
   meta = cohttp.meta // {

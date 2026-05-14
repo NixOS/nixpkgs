@@ -5,28 +5,24 @@
   fetchFromGitHub,
   freezegun,
   tzdata,
-  pyparsing,
   pydantic,
   pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
   python-dateutil,
   setuptools,
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ical";
-  version = "11.0.0";
+  version = "13.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "ical";
-    tag = version;
-    hash = "sha256-jn4xPwnJ/RQNTItYv4QY54UejayI0MmDhKZtg2lkpr8=";
+    tag = finalAttrs.version;
+    hash = "sha256-7EKnwfXRU7hzFVre5EVil8/HN+XnCh2qz0BF69sLDHc=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +31,6 @@ buildPythonPackage rec {
     python-dateutil
     tzdata
     pydantic
-    pyparsing
   ];
 
   nativeCheckInputs = [
@@ -53,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for handling iCalendar";
     homepage = "https://github.com/allenporter/ical";
-    changelog = "https://github.com/allenporter/ical/releases/tag/${src.tag}";
+    changelog = "https://github.com/allenporter/ical/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

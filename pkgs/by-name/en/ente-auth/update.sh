@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gojq nix-prefetch-github common-updater-scripts
+#!nix-shell -i bash -p curl gojq nix-prefetch-github nix-prefetch-git common-updater-scripts
 
 set -eou pipefail
 pkg_dir="$(dirname "$0")"
@@ -20,13 +20,19 @@ echo "Updating to $short_version"
 mobile_tree="$(gh-curl "https://api.github.com/repos/ente-io/ente/git/trees/$version" | gojq '.tree[] | select(.path == "mobile") | .url' --raw-output)"
 apps_tree="$(gh-curl "$mobile_tree" | gojq '.tree[] | select(.path == "apps") | .url' --raw-output)"
 auth_tree="$(gh-curl "$apps_tree" | gojq '.tree[] | select(.path == "auth") | .url' --raw-output)"
+packages_tree="$(gh-curl "$mobile_tree" | gojq '.tree[] | select(.path == "packages") | .url' --raw-output)"
+strings_tree="$(gh-curl "$packages_tree" | gojq '.tree[] | select(.path == "strings") | .url' --raw-output)"
 
 pushd "$pkg_dir"
 
-# Get lockfile, filter out incompatible sqlite dependency and convert to JSON
+# Get lockfile and convert to JSON
 echo "Updating lockfile"
 pubspec_lock="$(gh-curl "$auth_tree" | gojq '.tree[] | select(.path == "pubspec.lock") | .url' --raw-output)"
-gh-curl "$pubspec_lock" | gojq '.content | @base64d' --raw-output | gojq --yaml-input 'del(.packages.sqlite3_flutter_libs)' > pubspec.lock.json
+gh-curl "$pubspec_lock" | gojq '.content | @base64d' --raw-output | gojq --yaml-input > pubspec.lock.json
+
+echo "Updating strings lockfile"
+strings_pubspec_lock="$(gh-curl "$strings_tree" | gojq '.tree[] | select(.path == "pubspec.lock") | .url' --raw-output)"
+gh-curl "$strings_pubspec_lock" | gojq '.content | @base64d' --raw-output | gojq --yaml-input > strings.pubspec.lock.json
 
 echo "Updating git hashes"
 ./fetch-git-hashes.py

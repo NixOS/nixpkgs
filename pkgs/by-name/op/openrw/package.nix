@@ -16,7 +16,7 @@
   libGL,
   libGLU,
   libmad,
-  libX11,
+  libx11,
   openal,
 
   unstableGitUpdater,
@@ -34,10 +34,17 @@ stdenv.mkDerivation {
     hash = "sha256-2fQQL0JoV8YukU+VW2iWS4DpBi1j361SfiXRHRmocRg=";
   };
 
-  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
-    substituteInPlace cmake_configure.cmake \
-      --replace-fail 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
-  '';
+  postPatch =
+    lib.optionalString (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
+      substituteInPlace cmake_configure.cmake \
+        --replace-fail 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
+    ''
+    + ''
+      # boost 1.89 removed the boost_system stub library
+      substituteInPlace CMakeLists.txt --replace-fail \
+        'find_package(Boost COMPONENTS program_options system REQUIRED)' \
+        'find_package(Boost COMPONENTS program_options REQUIRED)'
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +60,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     libmad
-    libX11
+    libx11
     openal
   ];
 

@@ -6,7 +6,6 @@
   fetchPypi,
   isPy27,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
 }:
 
@@ -37,7 +36,7 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/unittests.py" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
     # https://github.com/WojciechMula/aspell-python/issues/22
     "test_add"
     "test_get"
@@ -46,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aspell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for aspell (C extension and Python version)";
     homepage = "https://github.com/WojciechMula/aspell-python";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -2,15 +2,16 @@
   lib,
   mkDerivation,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "1lab";
-  version = "unstable-2025-07-01";
+  version = "0-unstable-2025-07-01";
 
   src = fetchFromGitHub {
     owner = "the1lab";
-    repo = pname;
+    repo = "1lab";
     rev = "e9c2ad2b3ba9cefad36e72cb9d732117c68ac862";
     hash = "sha256-wKh77+xCdfMtnq9jMlpdnEptGO+/WVNlQFa1TDbdUGs=";
   };
@@ -25,11 +26,13 @@ mkDerivation rec {
     sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' "''${files[@]}"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
-    homepage = src.meta.homepage;
-    license = licenses.agpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ncfavier ];
+    homepage = "https://github.com/the1lab/1lab";
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ncfavier ];
   };
 }

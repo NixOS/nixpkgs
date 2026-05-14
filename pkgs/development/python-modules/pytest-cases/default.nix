@@ -5,7 +5,6 @@
   makefun,
   decopatch,
   packaging,
-  pythonOlder,
   pytest,
   setuptools-scm,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-cases";
   version = "3.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pytest_cases";
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_cases" ];
 
-  meta = with lib; {
+  meta = {
     description = "Separate test code from test cases in pytest";
     homepage = "https://github.com/smarie/python-pytest-cases";
     changelog = "https://github.com/smarie/python-pytest-cases/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

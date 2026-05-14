@@ -1,15 +1,14 @@
 {
   lib,
   buildNimPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 buildNimPackage (finalAttrs: {
   pname = "snekim";
   version = "1.2.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "snekim";
     rev = "v${finalAttrs.version}";

@@ -2,48 +2,75 @@
   lib,
   stdenv,
   buildGoModule,
+  docker,
   fetchFromGitHub,
-  nix-update-script,
   installShellFiles,
+  nix-update-script,
+  oras,
   versionCheckHook,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "copacetic";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
-    tag = "v${version}";
-    hash = "sha256-aLFRhmxJ5Hj2vvdYCwALBeK0avPF/jDWUgQiSw0fFGg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FTldgBYOmJt3VIC3vwp415oPNRCAiR1cxEF8lJr5TSU=";
   };
 
-  vendorHash = "sha256-+iS6nom52eofgcj/fZPVs2Eog9Un5ThSX+EBVmHTSlo=";
+  vendorHash = "sha256-nkVAHqe61AR0GBK5upsk650kl8UDp1ppFWhyi3erpr4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
+  nativeCheckInputs = [
+    docker
+    oras
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   env.CGO_ENABLED = "0";
+
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/project-copacetic/copacetic/pkg/version.GitVersion=${version}"
-    "-X main.version=${version}"
+    "-X=github.com/project-copacetic/copacetic/pkg/version.GitVersion=${finalAttrs.version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let
-      # Skip tests that require network access
+      # Skip tests that require network access and container services
       skippedTests = [
         "TestNewClient/custom_buildkit_addr"
         "TestPatch"
         "TestPlugins/docker.io"
+        "TestPatchPartialArchitectures"
+        "TestPushToRegistry"
+        "TestMultiPlatformPluginPatch"
+        "TestPodmanLoader_Load_Success"
+        "TestMultiArchBulkPatching"
+        "TestComprehensiveBulkPatching"
+        "TestTrivyParserParseWithNodeJS/OS_and_Node.js_packages"
+        "TestLocalImageDescriptor"
+        "TestGetImageDescriptor"
+        "TestDotNetSDKImagePatching"
+        "TestGenerateWithoutReport"
+        "TestGenerateToStdout"
+        "TestCustomBuildPatching"
+        "TestNodeJSPatching"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   postInstall = ''
     mv $out/bin/copacetic $out/bin/copa
@@ -58,10 +85,11 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://project-copacetic.github.io/copacetic/";
     description = "Tool for directly patching vulnerabilities in container images";
+    homepage = "https://project-copacetic.github.io/copacetic/";
+    changelog = "https://github.com/project-copacetic/copacetic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "copa";
-    maintainers = with lib.maintainers; [ bmanuel ];
+    maintainers = with lib.maintainers; [ tbutter ];
   };
-}
+})

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmpdclient";
-  version = "2.23";
+  version = "2.24";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "libmpdclient";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8/BE8K3e6U9i8/ByfKaCQgzcWFXOGGoES3gYoTx+jQg=";
+    hash = "sha256-VACe7/RnKgoA3qRIWmjFhCW+GVk9qUGp4+tSXMTo8Bk=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/${finalAttrs.src.rev}/NEWS";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

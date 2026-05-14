@@ -7,29 +7,23 @@
   stdenv,
   installShellFiles,
   versionCheckHook,
+  testers,
+  curl,
+  cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hydra-check";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "hydra-check";
-    tag = "v${version}";
-    hash = "sha256-TdMZC/EE52UiJ+gYQZHV4/ReRzMOdCGH+n7pg1vpCCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5nZnY/EA5SF3KNZbsvNGn77cOgEZsBpxBJwiREyF/fE=";
   };
 
-  cargoHash = "sha256-G9M+1OWp2jlDeSDFagH/YOCdxGQbcru1KFyKEUcMe7g=";
-
-  patches =
-    lib.optional (stdenv.hostPlatform.system == "x86_64-darwin")
-      # work around rust 1.88 compiler / linker bug for x86_64-darwin. This is
-      # applied conditionally because it will introduce a performance penalty on
-      # other host platforms. NOTE: Please check the patch applies if you update
-      # the package on a different platform (e.g x86_64-linux).
-      # see: https://github.com/NixOS/nixpkgs/issues/427072
-      ./fix-cargo-1_88-reqwest.patch;
+  cargoHash = "sha256-DN2LSYCR9QL1090C6dt21EOq9aUtZkAvxh4B6KYXPAU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -53,6 +47,29 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
+  passthru.tests.mainCommand =
+    testers.runCommand # allows internet access
+      {
+        name = "hydra-check-test";
+
+        # only runs the test when internet access is confirmed:
+        script = ''
+          set -e
+          if curl hydra.nixos.org > /dev/null; then
+            hydra-check
+          else
+            echo "no internet access, skipping test"
+          fi
+          touch $out
+        '';
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+          curl
+          cacert # for https connectivity
+        ];
+      };
+
   meta = {
     description = "Check hydra for the build status of a package";
     homepage = "https://github.com/nix-community/hydra-check";
@@ -65,4 +82,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "hydra-check";
   };
-}
+})

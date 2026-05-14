@@ -2,27 +2,31 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "muffet";
-  version = "2.11.0";
+  version = "2.11.3";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "muffet";
-    rev = "v${version}";
-    hash = "sha256-GfRR+9PdfY63Pzv2XZenKs8XXAKRr9qMzcHOVhl+hv4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c/ionFvWOPZ/MFNos/Q0KdlFH9qlOeAXldQZljaEF8k=";
   };
 
-  vendorHash = "sha256-oidOSV8y0VwTabipe7XwurUAra9F65nkTXslwXJ94Jw=";
+  vendorHash = "sha256-ZTPaNeozhbl6FReJowzVHDcSGLCXdt8e3UEW69lFx88=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Website link checker which scrapes and inspects all pages in a website recursively";
     homepage = "https://github.com/raviqqe/muffet";
-    changelog = "https://github.com/raviqqe/muffet/releases/tag/v${version}";
+    changelog = "https://github.com/raviqqe/muffet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ hythera ];
     mainProgram = "muffet";
   };
-}
+})

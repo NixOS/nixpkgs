@@ -32,7 +32,7 @@ to your Nixpkgs configuration (`~/.config/nixpkgs/config.nix`) and install it by
 $ nix-env -f '<nixpkgs>' -qaP -A eclipses.plugins --description
 ```
 
-If there is a need to install plugins that are not available in Nixpkgs then it may be possible to define these plugins outside Nixpkgs using the `buildEclipseUpdateSite` and `buildEclipsePlugin` functions found in the `nixpkgs.eclipses.plugins` attribute set. Use the `buildEclipseUpdateSite` function to install a plugin distributed as an Eclipse update site. This function takes `{ name, src }` as argument, where `src` indicates the Eclipse update site archive. All Eclipse features and plugins within the downloaded update site will be installed. When an update site archive is not available, then the `buildEclipsePlugin` function can be used to install a plugin that consists of a pair of feature and plugin JARs. This function takes an argument `{ name, srcFeature, srcPlugin }` where `srcFeature` and `srcPlugin` are the feature and plugin JARs, respectively.
+If there is a need to install plugins that are not available in Nixpkgs then it may be possible to define these plugins outside Nixpkgs using the `buildEclipseUpdateSite` and `buildEclipsePlugin` functions found in the `nixpkgs.eclipses.plugins` attribute set. Use the `buildEclipseUpdateSite` function to install a plugin distributed as an Eclipse update site. This function takes `{ src }` and either `pname` or `name` + `version` as arguments, where `src` indicates the Eclipse update site archive. All Eclipse features and plugins within the downloaded update site will be installed. When an update site archive is not available, then the `buildEclipsePlugin` function can be used to install a plugin that consists of a pair of feature and plugin JARs. This function takes `{ srcFeature, srcPlugin }` and either `pname` or `name` + `version` as arguments, where `srcFeature` and `srcPlugin` are the feature and plugin JARs, respectively.
 
 Expanding the previous example with two plugins using the above functions, we have:
 
@@ -47,7 +47,8 @@ Expanding the previous example with two plugins using the above functions, we ha
         plugins = [
           plugins.color-theme
           (plugins.buildEclipsePlugin {
-            name = "myplugin1-1.0";
+            pname = "myplugin1";
+            version = "1.0";
             srcFeature = fetchurl {
               url = "http://…/features/myplugin1.jar";
               hash = "sha256-123…";
@@ -58,7 +59,8 @@ Expanding the previous example with two plugins using the above functions, we ha
             };
           })
           (plugins.buildEclipseUpdateSite {
-            name = "myplugin2-1.0";
+            pname = "myplugin2";
+            version = "1.0";
             src = fetchurl {
               stripRoot = false;
               url = "http://…/myplugin2.zip";

@@ -91,7 +91,7 @@ This section describes how changes can be proposed with a pull request (PR).
 
 6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
    Use the branch from step 1 as the PR's base branch.
-   Go through the [pull request template](#pull-request-template).
+   Go through the [pull request template][pr-template].
 
 7. Respond to review comments and potentially to CI failures and merge conflicts by updating the PR.
    Always keep it in a mergeable state.
@@ -210,7 +210,7 @@ The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.
 This document details our standards for commit messages, reviews, licensing of contributions, etc...
 Everyone should read and understand these standards before submitting a pull request.
 
-### Rebasing between branches (i.e. from master to staging)
+### Rebasing between branches (i.e. from `master` to `staging`)
 [rebase]: #rebasing-between-branches-ie-from-master-to-staging
 
 Sometimes, changes must be rebased between branches.
@@ -271,8 +271,8 @@ To manually create a backport, follow [the standard pull request process][pr-cre
   Here is [an example](https://github.com/nixos/nixpkgs/commit/5688c39af5a6c5f3d646343443683da880eaefb8).
 
 > [!Warning]
-> Ensure the commits exist on the master branch.
-> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
+> Ensure the commits exist on the `master` branch.
+> In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the `master` pull request.
 
 - In the pull request description, link to the original pull request to `master`.
   The pull request title should include `[YY.MM]` matching the release you're backporting to.
@@ -329,18 +329,17 @@ You can invoke the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot mer
 The bot will verify the following conditions, refusing to merge otherwise:
 
 - the PR author should be @r-ryantm or a Nixpkgs committer;
-- the invoker should be among the package maintainers;
+- the invoker should be among the package maintainers on the targeted branch;
 - the package should reside in `pkgs/by-name`.
 
-Further, nixpkgs-merge-bot will ensure all CI checks and the ofborg builds for Linux have successfully completed before merging the pull request.
-Should the checks still be underway, the bot will wait for them to finish before attempting the merge again.
+Required status checks prevent PRs that fail them ("PR / ..." jobs) from being merged. Ofborg is not required by the checks.
 
 For other pull requests, please see [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
 
 In case the PR is stuck waiting for the author to apply a trivial change and the author allowed members to modify the PR, consider applying it yourself.
 You should pay extra attention to make sure the addition doesn't go against the idea of the original PR and would not be opposed by the author.
 
-Please see the discussion in [GitHub nixpkgs issue #321665](https://github.com/NixOS/nixpkgs/issues/321665) for information on how to proceed to be granted this level of access.
+Please see the [`nixpkgs-committers` repository](https://github.com/NixOS/nixpkgs-committers) for information on how to proceed to be granted this level of access.
 
 As a maintainer, when you leave the Nix community, please create an issue or post on [Discourse](https://discourse.nixos.org) with references to the packages and modules you maintained, so they can be taken over by other contributors.
 
@@ -430,19 +429,21 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging-next` | `staging` |
-| --- | --- | --- | --- |
-| Used for development | ✔️ | ❌ | ✔️ |
-| Built by Hydra | ✔️ | ✔️ | ❌ |
-| [Mass rebuilds][mass-rebuild] | ❌ | ⚠️  Only to fix Hydra builds | ✔️ |
-| Critical security fixes | ✔️ for non-mass-rebuilds | ✔️ for mass-rebuilds | ❌ |
-| Automatically merged into | `staging-next` | `staging` | - |
-| Manually merged into | - | `master` | `staging-next` |
+| branch | `master` | `staging-next` | `staging` | [`staging-nixos`][test-driver-rebuild] |
+| --- | --- | --- | --- | --- |
+| Used for development | ✔️ | ❌ | ✔️ | ✔️ |
+| Built by Hydra | ✔️ | ✔️ | ❌ | ❌ |
+| [Mass rebuilds][mass-rebuild] | ❌ | ⚠️  Only to fix Hydra builds | ✔️ | ❌[^1]  |
+| Critical security fixes | ✔️ for non-mass-rebuilds | ✔️ for mass-rebuilds | ❌ | ✔️ |
+| Automatically merged into | `staging-next` & `staging-nixos` | `staging` | - | - |
+| Manually merged into | - | `master` | `staging-next` | `master` |
 
 The staging workflow is used for all stable branches with corresponding names:
 - `master`/`release-YY.MM`
 - `staging`/`staging-YY.MM`
 - `staging-next`/`staging-next-YY.MM`
+
+[^1]: Except changes that cause no more rebuilds than kernel updates
 
 # Conventions
 
@@ -460,7 +461,7 @@ Is the change [acceptable for releases][release-acceptable] and do you wish to h
   - Yes: Use the `master` branch and [backport the pull request](#how-to-backport-pull-requests).
   - No: Create separate pull requests to the `master` and `release-YY.MM` branches.
 
-If the change causes a [mass rebuild][mass-rebuild], use the staging branch instead:
+If the change causes a [mass rebuild][mass-rebuild], use the `staging` branch instead:
 - Mass rebuilds to `master` should go to `staging` instead.
 - Mass rebuilds to `release-YY.MM` should go to `staging-YY.MM` instead.
 
@@ -492,8 +493,28 @@ In addition, major package version updates with breaking changes are also accept
 
 Which changes cause mass rebuilds is not formally defined.
 In order to help the decision, CI automatically assigns [`rebuild` labels](https://github.com/NixOS/nixpkgs/labels?q=rebuild) to pull requests based on the number of packages they cause rebuilds for.
-As a rule of thumb, if the number of rebuilds is **over 500**, it can be considered a mass rebuild.
-To get a sense for what changes are considered mass rebuilds, see [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged).
+As a rule of thumb, if the number of rebuilds is **500 or more**, consider targeting the `staging` branch instead of `master`; if the number is **1000 or more**, the pull request causes a mass rebuild, and should target the `staging` branch.
+See [previously merged pull requests to the staging branches](https://github.com/NixOS/nixpkgs/issues?q=base%3Astaging+-base%3Astaging-next+is%3Amerged) to get a sense for what changes are considered mass rebuilds.
+
+Please note that changes to the Linux kernel are an exception to this rule.
+These PRs go to `staging-nixos`, see [the next section for more context](#changes-rebuilding-all-tests).
+
+### Changes rebuilding all NixOS tests
+[test-driver-rebuild]: #changes-rebuilding-all-nixos-tests
+
+Changes causing a rebuild of all NixOS tests get a special [`10.rebuild-nixos-tests`](https://github.com/NixOS/nixpkgs/issues?q=state%3Aopen%20label%3A10.rebuild-nixos-tests) label.
+These changes pose a significant impact on the build infrastructure.
+
+Hence, these PRs should either target a `staging`-branch or `staging-nixos`, provided one of following conditions applies:
+
+* The label `10.rebuild-nixos-tests` is set, or
+* The PR is a change affecting the Linux kernel.
+
+The branch gets merged whenever mainline kernel updates or critical security fixes land on the branch.
+This usually happens on a weekly basis.
+
+Backports are not handled by such a branch.
+The relevant PRs from this branch must be backported manually.
 
 ## Commit conventions
 [commit-conventions]: #commit-conventions
@@ -526,8 +547,23 @@ While this potentially can be understood by reading code, PR discussion or upstr
 Simple package version updates need to include the attribute name, old and new versions, as well as a reference to the release notes or changelog.
 Package upgrades with more extensive changes require more verbose commit messages.
 
-Pull requests should not be squash-merged, as this discards information including detail from commit messages, GPG signatures, and authorship.
-Many pull requests don't make sense as a single commit anyway.
+## Review and Merge conventions
+
+Comments on Pull Requests are considered non-blocking by default.
+Every blocking comment must be explicitly marked as such by using GitHub's "Request Changes" review type.
+A reviewer who submits a blocking review should be available for discussion and re-review.
+An abandoned review may be dismissed after reasonable time was given at the discretion of the merger.
+
+All suggestions for change, blocking or not, should be acknowledged before merge.
+This can happen implicitly by applying the suggestion, or explicitly by rejecting it.
+
+To make changes on commit structure and commit messages or apply simple suggestions, committers are encouraged to [checkout the PR](https://cli.github.com/manual/gh_pr_checkout) and push directly to the contributor's branch before merging.
+Committers will carefully weigh the cost of another review cycle against the feelings of the contributor when pushing to their branch.
+They should also transparently communicate which changes they made.
+If a contributor does not want committers to push to their branch, they must uncheck the "Allow edits and access to secrets by maintainers" box explicitly.
+
+> [!WARNING]
+> Committers: Branches created via `gh pr checkout` can't be pushed with `--force-with-lease`, so do a sanity check before pushing.
 
 ## Code conventions
 [code-conventions]: #code-conventions
@@ -622,13 +658,13 @@ If you have any problems with formatting, please ping the [formatting team](http
   Do
 
   ```nix
-  { rev = version; }
+  { tag = version; }
   ```
 
   instead of
 
   ```nix
-  { rev = "${version}"; }
+  { tag = "${version}"; }
   ```
 
 - Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
@@ -643,8 +679,14 @@ If you have any problems with formatting, please ping the [formatting team](http
   { buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null; }
   ```
 
-  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  As an exception, an explicit conditional expression with null can be used when fixing an important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
+- Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
+  The purpose of this is:
+   - to avoid churn as contributors with different style preferences undo each other's changes,
+   - to ensure that style rules are written down and consistent (and can thus be followed when authoring changes, reducing review cycles),
+   - and to encourage reviews to focus on more impactful considerations.
 
 # Practical contributing advice
 
@@ -822,7 +864,7 @@ If someone approved and didn't merge a few days later, they most likely just for
 Please see it as your responsibility to actively remind reviewers of your open PRs.
 
 The easiest way to do so is to notify them via GitHub.
-Github notifies people involved, whenever you add a comment or push to your PR or re-request their review.
+GitHub notifies people involved, whenever you add a comment or push to your PR or re-request their review.
 Doing any of that will get their attention again.
 Everyone deserves proper attention, and yes, that includes you!
 However, please be mindful that committers can sadly not always give everyone the attention they deserve.

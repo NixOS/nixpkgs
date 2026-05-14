@@ -6,13 +6,16 @@
   makeWrapper,
   gdal,
   geos,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
 }:
 let
+  pnpm = pnpm_10;
 
   python = python3Packages.python.override {
     packageOverrides = self: super: {
@@ -39,14 +42,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide";
-  version = "0-unstable-2025-07-01";
+  version = "0-unstable-2025-09-10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
     repo = "froide";
-    rev = "362bddb5a8fdfe762d59cdebd29016568c9531b2";
-    hash = "sha256-c8I/FvXQSkAeacxMQJCpCMKFueNEnLI4R0ElqRbVbNg=";
+    rev = "826415bbc402c3b71c62477f5eed112787169c95";
+    hash = "sha256-K9TMtDfYP6v/lbL7SXeHBa6EngK+fsHgU13C1hat/K0=";
   };
 
   patches = [ ./django_42_storages.patch ];
@@ -62,7 +65,8 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   dependencies = with python.pkgs; [
@@ -116,10 +120,15 @@ python.pkgs.buildPythonApplication rec {
     websockets
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-g7YX2fVXGmb3Qq9NNCb294bk4/0khcIZVSskYbE8Mdw=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-NbfCVD+gmtoxuYUCumTKj9P72utK787VdlnuU4lMMGc=";
   };
 
   postBuild = ''
@@ -135,7 +144,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
-    (postgresql.withPackages (p: [ p.postgis ])).out
+    (postgresql.withPackages (p: [ p.postgis ]))
     postgresqlTestHook
     pytest-django
     pytest-playwright
@@ -190,6 +199,10 @@ python.pkgs.buildPythonApplication rec {
 
   # Playwright tests not supported on RiscV yet
   doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
+
+  passthru = {
+    inherit python;
+  };
 
   meta = {
     description = "Freedom of Information Portal";

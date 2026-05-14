@@ -18,12 +18,12 @@ let
   prebuilt_crt = choosePlatform {
     aarch64 = fetchzip {
       url = "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
-      sha256 = "sha256-LLD2OJi78sNN5NulOsJZl7Ei4F1EUYItGG6eUsKWULc=";
+      hash = "sha256-LLD2OJi78sNN5NulOsJZl7Ei4F1EUYItGG6eUsKWULc=";
       stripRoot = false;
     };
     x86_64 = fetchzip {
       url = "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9/+archive/7e8507d2a2d4df3bced561b894576de70f065be4/lib/gcc/x86_64-linux-android/4.9.x.tar.gz";
-      sha256 = "sha256-y7CFLF76pTlj+oYev9taBnL2nlT3+Tx8c6wmicWmKEw=";
+      hash = "sha256-y7CFLF76pTlj+oYev9taBnL2nlT3+Tx8c6wmicWmKEw=";
       stripRoot = false;
     };
   };
@@ -31,12 +31,12 @@ let
   prebuilt_libs = choosePlatform {
     aarch64 = fetchzip {
       url = "https://android.googlesource.com/platform/prebuilts/ndk/+archive/f2c77d8ba8a7f5c2d91771e31164f29be0b8ff98/platform/platforms/android-30/arch-arm64/usr/lib.tar.gz";
-      sha256 = "sha256-TZBV7+D1QvKOCEi+VNGT5SStkgj0xRbyWoLH65zSrjw=";
+      hash = "sha256-TZBV7+D1QvKOCEi+VNGT5SStkgj0xRbyWoLH65zSrjw=";
       stripRoot = false;
     };
     x86_64 = fetchzip {
       url = "https://android.googlesource.com/platform/prebuilts/ndk/+archive/f2c77d8ba8a7f5c2d91771e31164f29be0b8ff98/platform/platforms/android-30/arch-x86_64/usr/lib64.tar.gz";
-      sha256 = "sha256-n2EuOKy3RGKmEYofNlm+vDDBuiQRuAJEJT6wq6NEJQs=";
+      hash = "sha256-n2EuOKy3RGKmEYofNlm+vDDBuiQRuAJEJT6wq6NEJQs=";
       stripRoot = false;
     };
   };
@@ -44,19 +44,19 @@ let
   prebuilt_ndk_crt = choosePlatform {
     aarch64 = fetchzip {
       url = "https://android.googlesource.com/toolchain/prebuilts/ndk/r23/+archive/6c5fa4c0d3999b9ee932f6acbd430eb2f31f3151/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/aarch64-linux-android/30.tar.gz";
-      sha256 = "sha256-KHw+cCwAwlm+5Nwp1o8WONqdi4BBDhFaVVr+7GxQ5uE=";
+      hash = "sha256-KHw+cCwAwlm+5Nwp1o8WONqdi4BBDhFaVVr+7GxQ5uE=";
       stripRoot = false;
     };
     x86_64 = fetchzip {
       url = "https://android.googlesource.com/toolchain/prebuilts/ndk/r23/+archive/6c5fa4c0d3999b9ee932f6acbd430eb2f31f3151/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/30.tar.gz";
-      sha256 = "sha256-XEd7L3cBzn+1pKfji40V92G/uZhHSMMuZcRZaiKkLnk=";
+      hash = "sha256-XEd7L3cBzn+1pKfji40V92G/uZhHSMMuZcRZaiKkLnk=";
       stripRoot = false;
     };
   };
 
   ndk_support_headers = fetchzip {
     url = "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
-    sha256 = "sha256-NBv7Pk1CEaz8ns9moleEERr3x/rFmVmG33LgFSeO6fY=";
+    hash = "sha256-NBv7Pk1CEaz8ns9moleEERr3x/rFmVmG33LgFSeO6fY=";
     stripRoot = false;
   };
 
@@ -64,24 +64,24 @@ let
     version = "android-common-11-5.4";
     src = fetchzip {
       url = "https://android.googlesource.com/kernel/common/+archive/48ffcbf0b9e7f0280bfb8c32c68da0aaf0fdfef6.tar.gz";
-      sha256 = "1y7cmlmcr5vdqydd9n785s139yc4aylc3zhqa59xsylmkaf5habk";
+      hash = "sha256-cylYnJqVet1TURj+wahXhPk0gi7o2NSax22XzCqt7Pg=";
       stripRoot = false;
     };
   };
 
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bionic-prebuilt";
   version = "ndk-release-r23";
-  name = "${stdenv.hostPlatform.parsed.cpu.name}-${pname}-${version}";
+  name = "${stdenv.hostPlatform.parsed.cpu.name}-${finalAttrs.pname}-${finalAttrs.version}";
 
   src = fetchzip {
     url = "https://android.googlesource.com/platform/bionic/+archive/00e8ce1142d8823b0d2fc8a98b40119b0f1f02cd.tar.gz";
-    sha256 = "10z5mp4w0acvjvgxv7wlqa7m70hcyarmjdlfxbd9rwzf4mrsr8d1";
+    hash = "sha256-oaGscyXu85za6o42WbPyDIJTj8KUn93flpspwMmt5YM=";
     stripRoot = false;
   };
 
-  NIX_DONT_SET_RPATH = true;
+  env.NIX_DONT_SET_RPATH = true;
 
   dontConfigure = true;
   dontBuild = true;
@@ -91,9 +91,9 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace libc/include/sys/cdefs.h --replace \
+    substituteInPlace libc/include/sys/cdefs.h --replace-fail \
       "__has_builtin(__builtin_umul_overflow)" "1"
-    substituteInPlace libc/include/bits/ioctl.h --replace \
+    substituteInPlace libc/include/bits/ioctl.h --replace-fail \
       "!defined(BIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD)" "0"
   '';
 
@@ -113,9 +113,9 @@ stdenvNoCC.mkDerivation rec {
     sed -i 's,union semun {,union Xsemun {,' $out/include/linux/sem.h
     sed -i 's,struct __kernel_sockaddr_storage,#define sockaddr_storage __kernel_sockaddr_storage\nstruct __kernel_sockaddr_storage,' $out/include/linux/socket.h
     sed -i 's,#ifndef __UAPI_DEF_.*$,#if 1,' $out/include/linux/libc-compat.h
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imr_" "struct in_addr		imr_"
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imsf_" "struct in_addr		imsf_"
-    substituteInPlace $out/include/linux/sysctl.h --replace "__unused" "_unused"
+    substituteInPlace $out/include/linux/in.h --replace-fail "__be32		imr_" "struct in_addr		imr_"
+    substituteInPlace $out/include/linux/in.h --replace-fail "__be32		imsf_" "struct in_addr		imsf_"
+    substituteInPlace $out/include/linux/sysctl.h --replace-fail "__unused" "_unused"
 
     # what could possibly live in <linux/compiler.h>
     touch $out/include/linux/compiler.h
@@ -151,11 +151,11 @@ stdenvNoCC.mkDerivation rec {
   ];
   passthru.linuxHeaders = kernelHeaders;
 
-  meta = with lib; {
+  meta = {
     description = "Android libc implementation";
     homepage = "https://android.googlesource.com/platform/bionic/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
-}
+})

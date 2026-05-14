@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "catdoc";
   version = "0.95";
 
   src = fetchurl {
-    url = "http://ftp.wagner.pp.ru/pub/catdoc/${pname}-${version}.tar.gz";
+    url = "http://ftp.wagner.pp.ru/pub/catdoc/catdoc-${finalAttrs.version}.tar.gz";
     sha256 = "514a84180352b6bf367c1d2499819dfa82b60d8c45777432fa643a5ed7d80796";
   };
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-wordview" ];
 
-  meta = with lib; {
+  meta = {
     description = "MS-Word/Excel/PowerPoint to text converter";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

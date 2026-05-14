@@ -11,22 +11,38 @@
   pyasn1-modules,
   pycryptodomex,
   pyopenssl,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   six,
+  writeText,
 }:
 
+let
+  opensslConf = writeText "openssl.conf" ''
+    openssl_conf = openssl_init
+
+    [openssl_init]
+    providers = provider_sect
+
+    [provider_sect]
+    default = default_sect
+    legacy = legacy_sect
+
+    [default_sect]
+    activate = 1
+
+    [legacy_sect]
+    activate = 1
+  '';
+in
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iVh9G4NqUiDXSEjJNHV5YrOCiG3KixtKDETWk/JgBkM=";
+    hash = "sha256-0JpSvvxU24IDM2BWfetwxIoIGBPQiiIhstGiWc1+Tjo=";
   };
 
   pythonRelaxDeps = [ "pyopenssl" ];
@@ -49,7 +65,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "impacket" ];
+  makeWrapperArgs = [ "--set-default OPENSSL_CONF ${opensslConf}" ];
+
+  pythonImportsCheck = [
+    "impacket"
+    "impacket.msada_guids"
+  ];
 
   disabledTestPaths = [
     # Skip all RPC related tests
@@ -57,14 +78,14 @@ buildPythonPackage rec {
     "tests/SMB_RPC/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network protocols Constructors and Dissectors";
     homepage = "https://github.com/SecureAuthCorp/impacket";
     changelog =
       "https://github.com/fortra/impacket/releases/tag/impacket_"
-      + replaceStrings [ "." ] [ "_" ] version;
+      + lib.replaceStrings [ "." ] [ "_" ] version;
     # Modified Apache Software License, Version 1.1
-    license = licenses.free;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

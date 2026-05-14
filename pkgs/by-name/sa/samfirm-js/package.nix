@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "samfirm-js";
   version = "0.3.0-unstable-2023-12-27";
 
@@ -27,7 +27,6 @@ buildNpmPackage rec {
     description = "Program for downloading Samsung firmware";
     homepage = "https://github.com/DavidArsene/samfirm.js";
     license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "samfirm-js";
   };

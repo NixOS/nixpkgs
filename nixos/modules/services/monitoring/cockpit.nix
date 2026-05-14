@@ -15,6 +15,33 @@ let
     mkPackageOption
     ;
   settingsFormat = pkgs.formats.ini { };
+
+  pathPkgs = [ cfg.package ] ++ cfg.plugins;
+
+  resourcesEnv = pkgs.buildEnv {
+    name = "cockpit-plugins";
+    paths = pathPkgs;
+    pathsToLink = [ "/share/cockpit" ];
+  };
+
+  depsEnv = pkgs.buildEnv {
+    name = "cockpit-plugins-env";
+    paths = lib.concatMap (p: p.passthru.cockpitPath or [ ]) pathPkgs;
+    pathsToLink = [
+      "/bin"
+      "/share"
+      "/lib"
+    ];
+  };
+
+  share = pkgs.buildEnv {
+    name = "cockpit-share";
+    paths = [
+      resourcesEnv
+      depsEnv
+    ];
+    pathsToLink = [ "/share" ];
+  };
 in
 {
   options = {
@@ -25,11 +52,24 @@ in
         default = [ "cockpit" ];
       };
 
+      plugins = lib.mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        description = ''
+          List of cockpit plugins.
+
+          This add the passthru.cockpitPath of the packages to the systemd cockpit service.
+        '';
+        example = lib.literalExpression ''
+          [
+            pkgs.cockpit-zfs
+          ]
+        '';
+      };
+
       allowed-origins = lib.mkOption {
         type = types.listOf types.str;
-
         default = [ ];
-
         description = ''
           List of allowed origins.
 
@@ -49,6 +89,13 @@ in
         '';
       };
 
+      showBanner = mkOption {
+        description = "Whether to add the Cockpit banner to the issue and motd files.";
+        type = types.bool;
+        default = true;
+        example = false;
+      };
+
       port = mkOption {
         description = "Port where cockpit will listen.";
         type = types.port;
@@ -62,16 +109,41 @@ in
       };
     };
   };
+
   config = mkIf cfg.enable {
+    warnings =
+      lib.optional (lib.versionOlder cfg.package.version "360" && cfg.settings.WebService.LoginTo or true)
+        ''
+          The current Cockpit version is older than 360, and logging into other
+          hosts is enabled. This makes the system vulnerable to CVE-2026-4631,
+          which allows unauthenticated users on the network that can reach Cockpit
+          to gain code execution on the machine. Please upgrade your Cockpit
+          package or disable logging into other hosts by setting the option:
 
-    # expose cockpit-bridge system-wide
-    environment.systemPackages = [ cfg.package ];
+            services.cockpit.settings.WebService.LoginTo = false;
+        '';
 
-    # allow cockpit to find its plugins
-    environment.pathsToLink = [ "/share/cockpit" ];
+    environment.etc = {
+      # generate cockpit settings
+      "cockpit/cockpit.conf".source = settingsFormat.generate "cockpit.conf" cfg.settings;
 
-    # generate cockpit settings
-    environment.etc."cockpit/cockpit.conf".source = settingsFormat.generate "cockpit.conf" cfg.settings;
+      # Add "Web console: ..." line to issue and MOTD
+      "issue.d/cockpit.issue" = {
+        enable = cfg.showBanner;
+        source = "/run/cockpit/issue";
+      };
+      "motd.d/cockpit" = {
+        enable = cfg.showBanner;
+        source = "/run/cockpit/issue";
+      };
+
+      # Add plugins in discoverable folder
+      "cockpit/share".source = "${share}/share";
+
+      # Add plugins dependencies
+      "cockpit/bin".source = "${depsEnv}/bin";
+      "cockpit/lib".source = "${depsEnv}/lib";
+    };
 
     security.pam.services.cockpit = {
       startSession = true;
@@ -80,11 +152,26 @@ in
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.packages = [ cfg.package ];
-    systemd.sockets.cockpit.wantedBy = [ "multi-user.target" ];
-    systemd.sockets.cockpit.listenStreams = [
-      "" # workaround so it doesn't listen on both ports caused by the runtime merging
-      (toString cfg.port)
-    ];
+
+    systemd.sockets.cockpit = {
+      wantedBy = [ "multi-user.target" ];
+      listenStreams = [
+        "" # workaround so it doesn't listen on both ports caused by the runtime merging
+        (toString cfg.port)
+      ];
+    };
+
+    # Enable connecting to remote hosts from the login page
+    systemd.services = mkIf (cfg.settings.WebService.LoginTo or false) {
+      "cockpit-wsinstance-http".path = [
+        config.programs.ssh.package
+        cfg.package
+      ];
+      "cockpit-wsinstance-https@".path = [
+        config.programs.ssh.package
+        cfg.package
+      ];
+    };
 
     systemd.tmpfiles.rules = [
       # From $out/lib/tmpfiles.d/cockpit-tmpfiles.conf
@@ -98,8 +185,10 @@ in
       "https://localhost:${toString config.services.cockpit.port}"
     ];
 
-    services.cockpit.settings.WebService.Origins =
-      builtins.concatStringsSep " " config.services.cockpit.allowed-origins;
+    services.cockpit.settings.WebService = {
+      Origins = builtins.concatStringsSep " " config.services.cockpit.allowed-origins;
+      LoginTo = lib.mkDefault false;
+    };
   };
 
   meta.maintainers = pkgs.cockpit.meta.maintainers;

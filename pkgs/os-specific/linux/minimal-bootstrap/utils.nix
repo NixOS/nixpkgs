@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   buildPlatform,
   callPackage,
   kaem,
@@ -7,6 +8,12 @@
   checkMeta,
 }:
 rec {
+  maybeContentAddressed = lib.optionalAttrs config.contentAddressedByDefault {
+    __contentAddressed = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
   derivationWithMeta =
     attrs:
     let
@@ -18,7 +25,8 @@ rec {
           inherit (buildPlatform) system;
           inherit (meta) name;
         }
-        // (builtins.removeAttrs attrs [
+        // maybeContentAddressed
+        // (removeAttrs attrs [
           "meta"
           "passthru"
         ])
@@ -57,7 +65,7 @@ rec {
           ''
             target=''${out}''${destination}
           ''
-          + lib.optionalString (builtins.dirOf destination == ".") ''
+          + lib.optionalString (dirOf destination == ".") ''
             mkdir -p ''${out}''${destinationDir}
           ''
           + ''
@@ -70,7 +78,7 @@ rec {
       ];
 
       PATH = lib.makeBinPath [ mescc-tools-extra ];
-      destinationDir = builtins.dirOf destination;
+      destinationDir = dirOf destination;
       inherit destination;
     };
 

@@ -7,14 +7,14 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnm";
   version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "neurobin";
     repo = "rnm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cMWIxRuL7UCDjGr26+mfEYBPRA/dxEt0Us5qU92TelY=";
   };
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://neurobin.org/projects/softwares/unix/rnm/";
     description = "Bulk rename utility";
-    changelog = "https://github.com/neurobin/rnm/blob/${version}/ChangeLog";
+    changelog = "https://github.com/neurobin/rnm/blob/${finalAttrs.version}/ChangeLog";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Only;
     mainProgram = "rnm";
   };
-}
+})

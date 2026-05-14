@@ -42,10 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
       "-DBLA_VENDOR=Generic"
     ];
 
-  # https://github.com/mpimd-csc/qrupdate-ng/issues/4
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    ./disable-zch1dn-test.patch
-  ];
+  patches =
+    # https://github.com/mpimd-csc/qrupdate-ng/issues/4
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      ./disable-zch1dn-test.patch
+    ]
+    # https://github.com/mpimd-csc/qrupdate-ng/issues/7
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      ./disable-aarch64-single-precision-tests.patch
+    ];
+
+  postPatch = ''
+    sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i ./CMakeLists.txt
+  '';
 
   doCheck = true;
 
@@ -59,11 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for fast updating of qr and cholesky decompositions";
     homepage = "https://github.com/mpimd-csc/qrupdate-ng";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.unix;
   };
 })

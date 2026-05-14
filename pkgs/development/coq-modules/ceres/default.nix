@@ -19,7 +19,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.version [
-      (case (range "8.14" "9.1") "0.4.1")
+      (case (range "8.14" "9.2") "0.4.1")
       (case (range "8.8" "8.16") "0.4.0")
     ] null;
   release."0.4.1".sha256 = "sha256-9vyk8/8IVsqNyhw3WPzl8w3L9Wu7gfaMVa3n2nWjFiA=";
@@ -29,9 +29,9 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ stdlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for serialization to S-expressions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Zimmi48 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
   };
 }

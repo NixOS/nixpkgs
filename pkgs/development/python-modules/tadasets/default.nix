@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "tadasets";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PWbq+dCQ8mGR81lolBDSArxjkTdis1ZpLY0MqZfZ66I=";
+    hash = "sha256-C+l19J0PHjZTlzAhXbojicaOyr/gjN8fuH7cLyb449w=";
   };
 
   propagatedBuildInputs = [
@@ -28,10 +28,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Great data sets for Topological Data Analysis";
     homepage = "https://tadasets.scikit-tda.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

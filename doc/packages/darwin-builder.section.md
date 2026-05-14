@@ -64,13 +64,15 @@ builders = ssh-ng://builder@linux-builder ${ARCH}-linux /etc/nix/builder_ed25519
 builders-use-substitutes = true
 ```
 
-To allow Nix to connect to a remote builder not running on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
+To allow Nix to connect to the default remote builder, which does not run on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
 
 ```
 Host linux-builder
   Hostname localhost
   HostKeyAlias linux-builder
   Port 31022
+  User builder
+  IdentityFile /etc/nix/builder_ed25519
 ```
 
 … and then restart your Nix daemon to apply the change:
@@ -78,6 +80,8 @@ Host linux-builder
 ```ShellSession
 $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
+
+Note that if the builder is running and you have created the above ssh conf file, you can ssh into the builder with `sudo ssh builder@linux-builder`.
 
 ## Example flake usage {#sec-darwin-builder-example-flake}
 

@@ -20,9 +20,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.portaudio ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for PortAudio";
     homepage = "https://people.csail.mit.edu/hubert/pyaudio/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

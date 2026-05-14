@@ -1,0 +1,15 @@
+diff --git a/pkg/runner/internal/test_deps.go b/pkg/runner/internal/test_deps.go
+index f7728f3..90dbca5 100644
+--- a/pkg/runner/internal/test_deps.go
++++ b/pkg/runner/internal/test_deps.go
+@@ -41,6 +41,10 @@ func (*TestDeps) ImportPath() string {
+ 	return ""
+ }
+ 
++func (*TestDeps) ModulePath() string {
++	return ""
++}
++
+ func (*TestDeps) StartTestLog(w io.Writer) {}
+ 
+ func (*TestDeps) StopTestLog() error {

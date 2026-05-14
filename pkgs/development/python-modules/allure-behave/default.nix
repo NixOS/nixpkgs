@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "allure-behave";
-  version = "2.15.0";
+  version = "2.15.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allure-framework";
     repo = "allure-python";
     tag = version;
-    hash = "sha256-I3Zh9frOplcPqLd8b4peNM9WtbNmQjHX6ocVJJwPzyc=";
+    hash = "sha256-06SKodvyoT0mYn4RmAIryZc+VyTI79KXFK+2/zuhzQ0=";
   };
 
   sourceRoot = "${src.name}/allure-behave";
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allure_behave" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allure behave integration";
     homepage = "https://github.com/allure-framework/allure-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -50,7 +50,7 @@ let
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-LXQfGFgnM7WYUQjJ2Y3jskdeJ/dEKz+Afg+UOQjv5kc=";
     };
 
@@ -78,10 +78,12 @@ let
     bazel = bazel;
 
     bazelTargets = [ ":pip_pkg" ];
+    bazelFlags = [ "--noenable_bzlmod" ];
+    removeRulesCC = false;
     LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";
+      sha256 = "sha256-RzX8Shr8It9EahXDd3KotcZ2CjFcuzZVyK5aQutLPA4=";
     };
 
     buildAttrs = {
@@ -146,7 +148,5 @@ buildPythonPackage {
     changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # Needs update for Bazel 7.
-    broken = true;
   };
 }

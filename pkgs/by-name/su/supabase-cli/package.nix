@@ -8,23 +8,23 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "supabase-cli";
-  version = "2.40.0";
+  version = "2.98.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-j/MtVPFs1nQAOggXWPUabyNqaKmuFF3HmBUJ3AF9Wys=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BDmd9SXHe5dYvn37XNweFUqKjF4LkiNUeeAyV6nd4ZA=";
   };
 
-  vendorHash = "sha256-yeZdUfXyWI/F5Y7lv5RB2cNN3fmVlWRyfm+v5xBGmRo=";
+  vendorHash = "sha256-5HP9NMd0ByepiJOU3G9fNcz6XYFl71Pm0ZZE9Qg94vo=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/supabase/cli/internal/utils.Version=${version}"
+    "-X=github.com/supabase/cli/internal/utils.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -46,17 +46,22 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = supabase-cli;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      # Fetch versions from GitHub releases to detect pre-releases and
+      # avoid updating to them.
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for interacting with supabase";
     homepage = "https://github.com/supabase/cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gerschtli
       kashw2
+      yuannan
     ];
     mainProgram = "supabase";
   };
-}
+})

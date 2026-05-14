@@ -22,10 +22,10 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Serve embedded files from jteeuwen/go-bindata";
     mainProgram = "go-bindata-assetfs";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ avnik ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ avnik ];
   };
 }

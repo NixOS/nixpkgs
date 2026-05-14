@@ -6,22 +6,22 @@
 
 buildPythonPackage rec {
   pname = "xstatic-bootstrap";
-  version = "4.5.3.1";
+  version = "5.3.8.0";
   format = "setuptools";
 
   src = fetchPypi {
-    pname = "XStatic-Bootstrap";
+    pname = "xstatic_bootstrap";
     inherit version;
-    sha256 = "cf67d205437b32508a88b69a7e7c5bbe2ca5a8ae71097391a6a6f510ebfd2820";
+    hash = "sha256-BPXMlbvlQ40ehR0GxMoa1/hL02oJtN5aH1S1JOhQaFk=";
   };
 
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://getbootstrap.com";
     description = "Bootstrap packaged static files for python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ makefu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

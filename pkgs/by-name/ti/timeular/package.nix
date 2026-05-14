@@ -29,7 +29,7 @@ appimageTools.wrapType2 rec {
       --replace "Exec=AppRun --no-sandbox %U" "Exec=$out/bin/${pname}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Timetracking by flipping 8-sided dice";
     longDescription = ''
       The Timeular Tracker is an 8-sided dice that sits on your desk.
@@ -37,8 +37,8 @@ appimageTools.wrapType2 rec {
       The desktop app tell you where every minute of your day is spent.
     '';
     homepage = "https://timeular.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ ktor ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ ktor ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "timeular";
   };

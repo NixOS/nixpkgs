@@ -15,15 +15,20 @@
 
 buildPythonPackage rec {
   pname = "python-melcloud";
-  version = "0.1.0";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "python-melcloud";
     tag = version;
-    hash = "sha256-1WFE8k16aDIp1S/WDHXVdUtQmISEoE8yQAn9nndmQWs=";
+    hash = "sha256-i0/Ra5V3W/TOW+wRZZfKXuGtJTJeHqs+tPuS6KBZasE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core>=1.5,<2.0" poetry-core
+  '';
 
   build-system = [ poetry-core ];
 

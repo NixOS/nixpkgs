@@ -7,14 +7,14 @@
   lapack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plink-ng";
   version = "1.90b3";
 
   src = fetchFromGitHub {
     owner = "chrchang";
     repo = "plink-ng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1zhffjbwpd50dxywccbnv1rxy9njwz73l4awc5j7i28rgj3davcq";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

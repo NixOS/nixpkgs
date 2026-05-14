@@ -9,11 +9,11 @@
 
 buildTopkgPackage rec {
   pname = "odig";
-  version = "0.0.9";
+  version = "0.1.0";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/odig-${version}.tbz";
-    sha256 = "sha256-sYKvGYkxeF5FmrNQdOyMAtlsJqhlmUESi9SkPn/cjM4=";
+    url = "https://erratique.ch/software/odig/releases/odig-${version}.tbz";
+    hash = "sha256-uyiJXYKNGGb2FIRW0CDyB7QW9e4FI0+zVfkE7kNjtuE=";
   };
 
   buildInputs = [
@@ -22,7 +22,7 @@ buildTopkgPackage rec {
     b0
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lookup documentation of installed OCaml packages";
     longDescription = ''
       odig is a command line tool to lookup documentation of installed OCaml
@@ -30,7 +30,7 @@ buildTopkgPackage rec {
       cross-referenced `odoc` API documentation and manuals.
     '';
     homepage = "https://erratique.ch/software/odig";
-    license = licenses.isc;
-    maintainers = [ maintainers.Julow ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.Julow ];
   };
 }

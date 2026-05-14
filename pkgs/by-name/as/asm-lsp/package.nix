@@ -6,25 +6,23 @@
   pkg-config,
   openssl,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asm-lsp";
-  version = "0.10.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "asm-lsp";
-    rev = "v${version}";
-    hash = "sha256-RAyiE+Msmr/Qt5v7rWuUTAji383XLKxeMQJove2b1NE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vEilIoIK6fxZBhmyDueP2zvbh1/t2wd4cnq/0y6p+TI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
-  cargoHash = "sha256-41iWqgywfFdqf3TzZT5peh39jiSZw8FRTI1AeL5CroY=";
+  cargoHash = "sha256-D91n+sx8qwkn/rEWP5ftS/mhmRru43TmKZUyvAc47H0=";
 
   # tests expect ~/.cache/asm-lsp to be writable
   preCheck = ''
@@ -42,4 +40,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "asm-lsp";
     platforms = lib.platforms.unix;
   };
-}
+})

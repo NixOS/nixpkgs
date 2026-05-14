@@ -1,0 +1,24 @@
+diff --git a/usr.bin/passwd/Makefile b/usr.bin/passwd/Makefile
+index f8734053deb0..3bfc1d0e9b5a 100644
+--- a/usr.bin/passwd/Makefile
++++ b/usr.bin/passwd/Makefile
+@@ -3,7 +3,7 @@
+ PACKAGE	 = runtime
+ PROG	 = passwd
+ BINOWN	 = root
+-BINMODE	 = 4555
++BINMODE	 = 0555
+ PRECIOUSPROG=
+ LIBADD   = pam
+ .if ${MK_NIS} != "no"
+@@ -11,10 +11,4 @@ SYMLINKS = passwd ${BINDIR}/yppasswd
+ MLINKS	 = passwd.1 yppasswd.1
+ .endif
+ 
+-beforeinstall:
+-.for i in passwd yppasswd
+-	[ ! -e ${DESTDIR}${BINDIR}/$i ] || \
+-		chflags noschg ${DESTDIR}${BINDIR}/$i || true
+-.endfor
+-
+ .include <bsd.prog.mk>

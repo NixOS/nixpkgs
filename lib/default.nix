@@ -63,7 +63,7 @@ let
       customisation = callLibs ./customisation.nix;
       derivations = callLibs ./derivations.nix;
       maintainers = import ../maintainers/maintainer-list.nix;
-      teams = callLibs ../maintainers/team-list.nix;
+      teams = callLibs ../maintainers/computed-team-list.nix;
       meta = callLibs ./meta.nix;
       versions = callLibs ./versions.nix;
 
@@ -73,7 +73,7 @@ let
       types = callLibs ./types.nix;
 
       # constants
-      licenses = callLibs ./licenses.nix;
+      licenses = callLibs ./licenses;
       sourceTypes = callLibs ./source-types.nix;
       systems = callLibs ./systems;
 
@@ -105,28 +105,40 @@ let
       # network
       network = callLibs ./network;
 
-      # TODO: For consistency, all builtins should also be available from a sub-library;
-      # these are the only ones that are currently not
+      # flakes
+      flakes = callLibs ./flakes.nix;
+
       inherit (builtins)
-        addErrorContext
-        isPath
-        trace
-        typeOf
-        unsafeGetAttrPos
+        getContext
+        hasContext
+        convertHash
+        hashString
+        parseDrvName
+        placeholder
+        fromJSON
+        fromTOML
+        toFile
+        toJSON
+        toString
+        toXML
+        tryEval
         ;
       inherit (self.trivial)
         id
         const
         pipe
         concat
-        or
+        "or"
         and
+        mul
+        div
         xor
         bitAnd
         bitOr
         bitXor
         bitNot
         boolToString
+        boolToYesNo
         mergeAttrs
         flip
         defaultTo
@@ -171,6 +183,8 @@ let
         pathExists
         genericClosure
         readFile
+        ceil
+        floor
         ;
       inherit (self.fixedPoints)
         fix
@@ -206,6 +220,8 @@ let
         concatMapAttrs
         mapAttrsRecursive
         mapAttrsRecursiveCond
+        mapAttrsToListRecursive
+        mapAttrsToListRecursiveCond
         genAttrs
         genAttrs'
         isDerivation
@@ -229,12 +245,9 @@ let
         getInclude
         getMan
         chooseDevOutputs
-        zipWithNames
-        zip
         recurseIntoAttrs
         dontRecurseIntoAttrs
         cartesianProduct
-        cartesianProductOfSets
         mapCartesianProduct
         updateManyAttrsByPath
         listToAttrs
@@ -303,6 +316,8 @@ let
         elem
         elemAt
         isList
+        concatAttrValues
+        replaceElemAt
         ;
       inherit (self.strings)
         concatStrings
@@ -328,6 +343,7 @@ let
         hasInfix
         hasPrefix
         hasSuffix
+        join
         stringToCharacters
         stringAsChars
         escape
@@ -343,13 +359,13 @@ let
         escapeRegex
         escapeURL
         escapeXML
-        replaceChars
         lowerChars
         upperChars
         toLower
         toUpper
         toCamelCase
         toSentenceCase
+        typeOf
         addContextFrom
         splitString
         splitStringBy
@@ -376,8 +392,9 @@ let
         fixedWidthNumber
         toInt
         toIntBase10
-        readPathsFromFile
         fileContents
+        appendContext
+        unsafeDiscardStringContext
         ;
       inherit (self.stringsWithDeps)
         textClosureList
@@ -398,8 +415,17 @@ let
         makeScopeWithSplicing
         makeScopeWithSplicing'
         extendMkDerivation
+        renameCrossIndexFrom
+        renameCrossIndexTo
+        mapCrossIndex
         ;
-      inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
+      inherit (self.derivations)
+        lazyDerivation
+        optionalDrvAttr
+        warnOnInstantiate
+        addDrvOutputDependencies
+        unsafeDiscardOutputDependency
+        ;
       inherit (self.generators) mkLuaInline;
       inherit (self.meta)
         addMetaAttrs
@@ -423,7 +449,13 @@ let
         pathType
         pathIsDirectory
         pathIsRegularFile
+        baseNameOf
+        dirOf
+        isPath
         packagesFromDirectoryRecursive
+        hashFile
+        readDir
+        readFileType
         ;
       inherit (self.sources)
         cleanSourceFilter
@@ -437,6 +469,7 @@ let
         pathIsGitRepo
         revOrTag
         repoRevToName
+        filterSource
         ;
       inherit (self.modules)
         evalModules
@@ -494,14 +527,12 @@ let
         optionAttrSetToDocList'
         scrubOptionValue
         literalExpression
-        literalExample
         showOption
         showOptionWithDefLocs
         showFiles
         unknownModule
         mkOption
         mkPackageOption
-        mkPackageOptionMD
         literalMD
         ;
       inherit (self.types)
@@ -517,6 +548,7 @@ let
         assertOneOf
         ;
       inherit (self.debug)
+        trace
         traceIf
         traceVal
         traceValFn
@@ -527,6 +559,8 @@ let
         traceValSeqN
         traceValSeqNFn
         traceFnSeqN
+        addErrorContext
+        unsafeGetAttrPos
         runTests
         testAllTrue
         ;
@@ -549,7 +583,6 @@ let
         modifySumArgs
         innerClosePropagation
         closePropagation
-        mapAttrsFlatten
         nvs
         setAttr
         setAttrMerge
@@ -567,7 +600,15 @@ let
         imap
         ;
       inherit (self.versions)
+        compareVersions
         splitVersion
+        ;
+      inherit (self.network.ipv6)
+        mkEUI64Suffix
+        ;
+      inherit (self.flakes)
+        parseFlakeRef
+        flakeRefToString
         ;
     }
   );

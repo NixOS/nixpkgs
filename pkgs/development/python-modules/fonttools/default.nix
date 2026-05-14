@@ -21,21 +21,19 @@
   xattr,
   skia-pathops,
   uharfbuzz,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.59.0";
+  version = "4.61.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256-f3iedVwwh98XkFzPJ/+XZ2n4pcDXDoPlQki+neGVuXE=";
+    hash = "sha256-762bqAhOqqnuNSH8yFLTBnzYuigs716nt+uC1UwUqT4=";
   };
 
   build-system = [
@@ -61,16 +59,14 @@ buildPythonPackage rec {
         plot = [ matplotlib ];
         symfont = [ sympy ];
         type1 = lib.optional stdenv.hostPlatform.isDarwin xattr;
-        pathops = [ skia-pathops ];
+        pathops = lib.optional (lib.meta.availableOn stdenv.hostPlatform skia-pathops) skia-pathops;
         repacker = [ uharfbuzz ];
       };
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
-    # test suite fails with pytest>=8.0.1
-    # https://github.com/fonttools/fonttools/issues/3458
-    pytest7CheckHook
+    pytestCheckHook
   ]
   ++ lib.concatLists (
     lib.attrVals (
@@ -101,11 +97,11 @@ buildPythonPackage rec {
     "test_ttcompile_timestamp_calcs"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
     changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

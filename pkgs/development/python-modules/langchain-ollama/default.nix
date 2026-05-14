@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -22,20 +22,20 @@
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.6";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-GQkyJaYvwRbjDR0Rfen7/X5hFhY2+WU74B6/9Ufhpo4=";
+    hash = "sha256-4MbrfHf/ElBFR9cXIx+spQB+xsw2aj94IBJ5hcB6SJ0=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
 
   build-system = [
-    pdm-backend
+    hatchling
   ];
 
   pythonRelaxDeps = [

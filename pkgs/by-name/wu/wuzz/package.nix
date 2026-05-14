@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wuzz";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "wuzz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };
 
@@ -27,10 +27,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-oIm6DWSs6ZDKi6joxydguSXxqtGyKP21cmWtz8MkeIQ=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/asciimoo/wuzz";
     description = "Interactive cli tool for HTTP inspection";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "wuzz";
   };
-}
+})

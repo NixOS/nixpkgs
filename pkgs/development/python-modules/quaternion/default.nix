@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "quaternion";
-  version = "2024.0.10";
+  version = "2024.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moble";
     repo = "quaternion";
     tag = "v${version}";
-    hash = "sha256-jkaSxnq1i5DZP7unbKktJWFmsDNc1ZGOKMcN9SiObMg=";
+    hash = "sha256-W35R+S6yzcKTpKtemjiLzH9v5owduUtos9DyoY28qbc=";
   };
 
   build-system = [

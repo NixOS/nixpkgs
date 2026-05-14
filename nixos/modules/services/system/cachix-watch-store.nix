@@ -8,10 +8,13 @@ let
   cfg = config.services.cachix-watch-store;
 in
 {
-  meta.maintainers = [
-    lib.maintainers.jfroche
-    lib.maintainers.domenkozar
-  ];
+  meta = {
+    maintainers = with lib.maintainers; [
+      domenkozar
+      jfroche
+      sandydoo
+    ];
+  };
 
   options.services.cachix-watch-store = {
     enable = lib.mkEnableOption "Cachix Watch Store: <https://docs.cachix.org>";
@@ -37,13 +40,13 @@ in
     };
 
     compressionLevel = lib.mkOption {
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr (lib.types.ints.between 0 16);
       description = "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
     jobs = lib.mkOption {
-      type = lib.types.nullOr lib.types.int;
+      type = lib.types.nullOr lib.types.ints.positive;
       description = "Number of threads used for pushing store paths";
       default = null;
     };

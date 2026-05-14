@@ -14,14 +14,14 @@
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusb";
   version = "1.0.29";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-m1w+uF8+2WCn72LvoaGUYa+R0PyXHtFFONQjdRfImYY=";
   };
 
@@ -48,8 +48,7 @@ stdenv.mkDerivation rec {
   dontAddDisableDepTrack = stdenv.hostPlatform.isWindows;
 
   configureFlags =
-    lib.optional (!enableUdev) "--disable-udev"
-    ++ lib.optional (withExamples) "--enable-examples-build";
+    lib.optional (!enableUdev) "--disable-udev" ++ lib.optional withExamples "--enable-examples-build";
 
   postBuild = lib.optionalString withDocs ''
     make -C doc
@@ -67,17 +66,17 @@ stdenv.mkDerivation rec {
     ln -s $out/examples/bin/fxload $out/sbin/fxload
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libusb.info/";
     description = "Cross-platform user-mode USB device library";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
     '';
-    platforms = platforms.all;
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       prusnak
-      realsnick
+      logger
     ];
   };
-}
+})

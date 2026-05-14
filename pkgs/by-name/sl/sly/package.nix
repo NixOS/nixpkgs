@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter335,
   runCommand,
   yq,
   sly,
@@ -9,7 +9,7 @@
   gitUpdater,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "sly";
   version = "1.0.0";
 
@@ -48,7 +48,7 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://github.com/kra-mo/Sly";
     mainProgram = "sly";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   wrapGAppsHook3,
   readline,
@@ -59,7 +60,7 @@
   # wxWidgets is preferred over X11 for this project but we only have it on Linux
   # and Darwin.
   enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  wxGTK32,
+  wxwidgets_3_2,
   # X11: OFF by default for platform consistency. Use X where WX is not available
   enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin),
 }:
@@ -121,6 +122,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gnudatalanguage/gdl/commit/b648a63c5070f38e90167f858a79ba6f01dad1d3.patch?full_index=1";
+      includes = [ "CMakeLists.txt" ];
+      hash = "sha256-lYtAstI21Up4RArf6pXnjiTwJ3Omoisw43Ih1H2Wc0s=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'FATAL_ERROR "The src' 'WARNING "The src' \
@@ -158,10 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     netcdf-custom
     plplot-with-drivers
   ]
-  ++ lib.optional enableXWin plplot-with-drivers.libX11
+  ++ lib.optional enableXWin plplot-with-drivers.libx11
   ++ lib.optional enableGRIB eccodes
   ++ lib.optional enableGLPK glpk
-  ++ lib.optional enableWX wxGTK32
+  ++ lib.optional enableWX wxwidgets_3_2
   ++ lib.optional enableMPI mpi
   ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
   ++ lib.optional enableSzip szip;
@@ -181,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enableSzip "-DSZIPDIR=${szip}"
     ++ lib.optionals enableXWin [
       "-DX11=ON"
-      "-DX11DIR=${plplot-with-drivers.libX11}"
+      "-DX11DIR=${plplot-with-drivers.libx11}"
     ]
     ++ lib.optionals enableMPI [
       "-DMPI=ON"

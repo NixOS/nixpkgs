@@ -1,4 +1,4 @@
 {
-  python3Packages,
+  python3,
 }:
-python3Packages.toPythonApplication python3Packages.keymap-drawer
+python3.pkgs.toPythonApplication python3.pkgs.keymap-drawer

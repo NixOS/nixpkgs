@@ -8,7 +8,7 @@ let
   pname = "molotov";
   version = "4.4.0";
   src = fetchurl {
-    url = "http://desktop-auto-upgrade.molotov.tv/linux/${version}/molotov.AppImage";
+    url = "https://desktop-auto-upgrade.molotov.tv/linux/${version}/molotov.AppImage";
     sha256 = "sha256-l4Il6i8uXSeJqH3ITC8ZUpKXPQb0qcW7SpKx1R46XDc=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -23,14 +23,11 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
-  meta = with lib; {
+  meta = {
     description = "French TV service";
     homepage = "https://www.molotov.tv/";
-    license = with licenses; [ unfree ];
-    maintainers = with maintainers; [
-      apeyroux
-      freezeboy
-    ];
+    license = with lib.licenses; [ unfree ];
+    maintainers = with lib.maintainers; [ apeyroux ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "molotov";
   };

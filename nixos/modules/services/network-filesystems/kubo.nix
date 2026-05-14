@@ -10,29 +10,22 @@ let
 
   settingsFormat = pkgs.formats.json { };
 
-  rawDefaultConfig = lib.importJSON (
+  defaultConfig =
     pkgs.runCommand "kubo-default-config"
       {
-        nativeBuildInputs = [ cfg.package ];
+        nativeBuildInputs = [
+          cfg.package
+          pkgs.jq
+        ];
       }
       ''
         export IPFS_PATH="$TMPDIR"
         ipfs init --empty-repo --profile=${profile}
-        ipfs --offline config show > "$out"
-      ''
-  );
+        # Remove the variable key to make the result deterministic.
+        ipfs --offline config show | jq 'del(.Identity)' > $out
+      '';
 
-  # Remove the PeerID (an attribute of "Identity") of the temporary Kubo repo.
-  # The "Pinning" section contains the "RemoteServices" section, which would prevent
-  # the daemon from starting as that setting can't be changed via ipfs config replace.
-  defaultConfig = builtins.removeAttrs rawDefaultConfig [
-    "Identity"
-    "Pinning"
-  ];
-
-  customizedConfig = lib.recursiveUpdate defaultConfig cfg.settings;
-
-  configFile = settingsFormat.generate "kubo-config.json" customizedConfig;
+  configFile = settingsFormat.generate "kubo-config.json" cfg.settings;
 
   # Create a fake repo containing only the file "api".
   # $IPFS_PATH will point to this directory instead of the real one.
@@ -167,7 +160,7 @@ in
       autoMigrate = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether Kubo should try to run the fs-repo-migration at startup.";
+        description = "Whether Kubo should try to migrate its filesystem repository automatically.";
       };
 
       enableGC = lib.mkOption {
@@ -241,6 +234,12 @@ in
               type = lib.types.str;
               default = "/mfs";
               description = "Where to mount the MFS namespace to";
+            };
+
+            Mounts.FuseAllowOther = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Allow all users to access the FUSE mount points";
             };
           };
         };
@@ -330,10 +329,10 @@ in
     environment.variables.IPFS_PATH = fakeKuboRepo;
 
     # https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
-    boot.kernel.sysctl."net.core.rmem_max" = lib.mkDefault 2500000;
-    boot.kernel.sysctl."net.core.wmem_max" = lib.mkDefault 2500000;
+    boot.kernel.sysctl."net.core.rmem_max" = lib.mkDefault 7500000;
+    boot.kernel.sysctl."net.core.wmem_max" = lib.mkDefault 7500000;
 
-    programs.fuse = lib.mkIf cfg.autoMount {
+    programs.fuse = lib.mkIf (cfg.autoMount && cfg.settings.Mounts.FuseAllowOther) {
       userAllowOther = true;
     };
 
@@ -344,9 +343,6 @@ in
         createHome = false;
         uid = config.ids.uids.ipfs;
         description = "IPFS daemon user";
-        packages = [
-          pkgs.kubo-migrator
-        ];
       };
     };
 
@@ -369,14 +365,11 @@ in
     systemd.packages =
       if cfg.autoMount then [ cfg.package.systemd_unit ] else [ cfg.package.systemd_unit_hardened ];
 
-    services.kubo.settings = lib.mkIf cfg.autoMount {
-      Mounts.FuseAllowOther = lib.mkDefault true;
-    };
-
     systemd.services.ipfs = {
       path = [
         "/run/wrappers"
         cfg.package
+        pkgs.kubo-fs-repo-migrations # Used by 'ipfs repo migrate --to=...'
       ];
       environment.IPFS_PATH = cfg.dataDir;
 
@@ -388,12 +381,24 @@ in
           rm -vf "$IPFS_PATH/api"
       ''
       + lib.optionalString cfg.autoMigrate ''
-        '${lib.getExe pkgs.kubo-migrator}' -to '${cfg.package.repoVersion}' -y
+        '${lib.getExe cfg.package}' repo migrate '--to=${cfg.package.repoVersion}' --allow-downgrade
       ''
       + ''
         fi
+
+        # We need the Identity and Pinning configuration from the current settings.
         ipfs --offline config show |
-          ${pkgs.jq}/bin/jq -s '.[0].Pinning as $Pinning | .[0].Identity as $Identity | .[1] + {$Identity,$Pinning}' - '${configFile}' |
+          ${lib.getExe pkgs.jq} '{ Identity, Pinning, }' |
+
+          # Now we deep-merge all configuration sources (later data wins):
+          # 1. the default configuration
+          # 2. the user-provided configuration
+          # 3. the dynamic keys from the existing configuration
+          ${lib.getExe pkgs.jq} -s 'reduce .[] as $config ({}; . * $config)' \
+            ${defaultConfig} \
+            ${configFile} \
+            - \
+          |
 
           # This command automatically injects the private key and other secrets from
           # the old config file back into the new config file.
@@ -412,7 +417,7 @@ in
       serviceConfig = {
         ExecStart = [
           ""
-          "${cfg.package}/bin/ipfs daemon ${kuboFlags}"
+          "${lib.getExe cfg.package} daemon ${kuboFlags}"
         ];
         User = cfg.user;
         Group = cfg.group;

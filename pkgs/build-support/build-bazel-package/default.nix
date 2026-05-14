@@ -86,6 +86,8 @@ let
       targetRunFlags ? [ ],
     }:
     lib.optionalString (targets != [ ]) ''
+      concatTo bazelFlagsArray bazelFlags
+
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
@@ -99,7 +101,7 @@ let
         "''${host_copts[@]}" \
         "''${linkopts[@]}" \
         "''${host_linkopts[@]}" \
-        $bazelFlags \
+        "''${bazelFlagsArray[@]}" \
         ${lib.strings.concatStringsSep " " additionalFlags} \
         ${lib.strings.concatStringsSep " " targets} \
         ${
@@ -136,7 +138,7 @@ stdenv.mkDerivation (
     deps = stdenv.mkDerivation (
       fFetchAttrs
       // {
-        name = "${name}-deps.tar.gz";
+        name = "${name}-deps.tar";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [ ];
 
@@ -232,20 +234,31 @@ stdenv.mkDerivation (
 
               echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
 
-              (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
+              (cd $bazelOut/ && tar cf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
               runHook postInstall
             ''
           );
 
         dontFixup = true;
-        allowedRequisites = [ ];
 
         inherit (lib.fetchers.normalizeHash { hashTypes = [ "sha256" ]; } fetchAttrs)
           outputHash
           outputHashAlgo
           ;
       }
+      // (
+        if fFetchAttrs.__structuredAttrs or false then
+          {
+            # With __structuredAttrs = true, the build always fails with “output $out is not allowed to refer to the following paths: $out”.
+            # This appears to be the same issue as in 283bca9648fc1afb01d3e4c3b5919251429da907.
+            outputChecks.out.allowedRequisites = [ "out" ];
+          }
+        else
+          {
+            allowedRequisites = [ ];
+          }
+      )
     );
 
     nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [ ] ++ [
@@ -261,7 +274,7 @@ stdenv.mkDerivation (
     preConfigure = ''
       mkdir -p "$bazelOut"
 
-      (cd $bazelOut && tar xfz $deps)
+      (cd $bazelOut && tar xf $deps)
 
       test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
         echo "fixed output derivation was built for a different bazel version" >&2

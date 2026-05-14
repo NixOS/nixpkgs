@@ -21,15 +21,6 @@ stdenv.mkDerivation {
   inherit (sources) version;
   src = sources.swift-corelibs-foundation;
 
-  patches = [
-    # from https://github.com/apple/swift-corelibs-foundation/pull/4811
-    # fix build with glibc >=2.38
-    (fetchpatch {
-      url = "https://github.com/apple/swift-corelibs-foundation/commit/47260803a108c6e0d639adcebeed3ac6a76e8bcd.patch";
-      hash = "sha256-1JUSQW86IHKkBZqxvpk0P8zcSKntzOTNlMoGBfgeT4c=";
-    })
-  ];
-
   outputs = [
     "out"
     "dev"

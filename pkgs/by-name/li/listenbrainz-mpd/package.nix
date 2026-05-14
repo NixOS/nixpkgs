@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   stdenv,
   openssl,
@@ -9,21 +9,21 @@
   sqlite,
   installShellFiles,
   asciidoctor,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "listenbrainz-mpd";
-  version = "2.3.9";
+  version = "2.5.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
-    rev = "v${version}";
-    hash = "sha256-j9MlvE2upocwC5xxroms3am6tqJX30sSw7PFNw8Ofog=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-087+l3calge6hKu3h84C98mIpW6qFAZwRMe4lkQCU4o=";
   };
 
-  cargoHash = "sha256-1x3F2TqNlqwfPUvLwU8ac4aEeEwpIy5gEyxRBC0Q5YM=";
+  cargoHash = "sha256-SxXEathWAGqdgeJmIn5h9Zvv7Z3DGXa4htkODf/ANRQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,12 +62,17 @@ rustPlatform.buildRustPackage rec {
     installManPage listenbrainz-mpd.1
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://codeberg.org/elomatreb/listenbrainz-mpd";
-    changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${version}/CHANGELOG.md";
+    changelog = "https://codeberg.org/elomatreb/listenbrainz-mpd/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     description = "ListenBrainz submission client for MPD";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ DeeUnderscore ];
+    maintainers = with lib.maintainers; [
+      DeeUnderscore
+      Kladki
+    ];
     mainProgram = "listenbrainz-mpd";
   };
-}
+})

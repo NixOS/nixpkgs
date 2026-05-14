@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tailspin";
-  version = "5.4.5";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
     tag = finalAttrs.version;
-    hash = "sha256-Cl1S183iAyFPa3KijHCn/CyRXQBluphNMQFAgdIOzuM=";
+    hash = "sha256-coatx8Ud6iLnXvr+/X9hUEe3+0j9jnP5N3+aHQ+eWV8=";
   };
 
-  cargoHash = "sha256-2p4jkta6w2vje169KCHw0ErC7FweLabF6B7ZIkTmNBI=";
+  cargoHash = "sha256-7N/vkhytkDF2ef0T6RJv8YzCpjzi+hjg061Uz9dyEM0=";
 
   postPatch = ''
     substituteInPlace tests/utils.rs --replace-fail \
@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/tspin";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

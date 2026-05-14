@@ -30,14 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.8.1";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-zeyg/VdzcWbMXuCE1RELiyGg9mytfpNfIa911BwqqIA=";
+    hash = "sha256-XClMtQfCGWpLtILGQyYCsKMcOlhLHC5i7UabzXH/imc=";
   };
 
   postPatch = ''

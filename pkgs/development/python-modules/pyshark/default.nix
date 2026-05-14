@@ -1,30 +1,42 @@
 {
   lib,
   stdenv,
-  appdirs,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
+
+  # patches
   fetchpatch,
+  replaceVars,
+  wireshark-cli,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  appdirs,
   lxml,
   packaging,
-  py,
-  pytestCheckHook,
-  pythonOlder,
   termcolor,
-  wireshark-cli,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyshark";
   version = "0.6";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # Almost all tests fail with:
+  # RuntimeError: There is no current event loop in thread 'MainThread'
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = "pyshark";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kzJDzUK6zknUyXPdKc4zMvWim4C5NQCSJSS45HI6hKM=";
   };
 
@@ -37,29 +49,32 @@ buildPythonPackage rec {
       url = "https://github.com/KimiNewt/pyshark/commit/7142c5bf88abcd4c65c81052a00226d6155dda42.patch";
       hash = "sha256-Ti7cwRyYSbF4a4pEEV9FntNevkV/JVXNqACQWzoma7g=";
     })
+    # fixes tests that failed related to elastic-mapping
+    # remove fix if this is ever merged upstream
+    (fetchpatch {
+      url = "https://github.com/KimiNewt/pyshark/commit/0e1d8d0e06108f2887c3147c93049de63b475f8a.patch";
+      hash = "sha256-fpgiBHcfS/TGYIB65ioZJrWUuDIrLxxXqGVJ9y18b2w=";
+    })
+    (replaceVars ./hardcode-tshark-path.patch {
+      tshark = lib.getExe' wireshark-cli "tshark";
+    })
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  # propagate wireshark, so pyshark can find it when used
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
     lxml
     packaging
-    py
     termcolor
-    wireshark-cli
   ];
 
   nativeCheckInputs = [
-    py
     pytestCheckHook
-    wireshark-cli
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # flaky
@@ -76,11 +91,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "../tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
-    changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

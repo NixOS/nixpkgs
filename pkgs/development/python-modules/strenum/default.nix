@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "strenum";
   version = "0.4.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "irgeek";
@@ -44,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "strenum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for enum that inherits from str";
     homepage = "https://github.com/irgeek/StrEnum";
     changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

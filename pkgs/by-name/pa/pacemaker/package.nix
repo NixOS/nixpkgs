@@ -28,14 +28,14 @@
   ocf-resource-agents,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pacemaker";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = "pacemaker";
-    rev = "Pacemaker-${version}";
+    rev = "Pacemaker-${finalAttrs.version}";
     sha256 = "sha256-23YkNzqiimLy/KjO+hxVQQ4rUhSEhn5Oc2jUJO/VRo0=";
   };
 
@@ -97,14 +97,14 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pacemaker;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://clusterlabs.org/pacemaker/";
     description = "Open source, high availability resource manager suitable for both small and large clusters";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       ryantm
       astro
     ];
   };
-}
+})

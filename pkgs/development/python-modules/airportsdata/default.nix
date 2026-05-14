@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "airportsdata";
-  version = "20250811";
+  version = "20251008";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mborsetti";
     repo = "airportsdata";
     tag = "v${version}";
-    hash = "sha256-MJMZzRyahh39qldgbObApneKrN9qgU9HSW2zgpk0jfQ=";
+    hash = "sha256-9Y4W5yhICiB5Py36RoVTe7obVtKUaUf0du2i1AihFdE=";
   };
 
   build-system = [ setuptools ];

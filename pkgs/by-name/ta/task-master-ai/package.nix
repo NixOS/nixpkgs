@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs,
   nix-update-script,
+  versionCheckHook,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "task-master-ai";
@@ -20,6 +21,8 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
 
+  npmFlags = [ "--ignore-scripts" ];
+
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ nodejs ]}" ];
 
   passthru.updateScript = nix-update-script { };
@@ -34,13 +37,17 @@ buildNpmPackage (finalAttrs: {
     PUPPETEER_SKIP_DOWNLOAD = 1;
   };
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/task-master";
+
+  meta = {
     description = "Node.js agentic AI workflow orchestrator";
     homepage = "https://task-master.dev";
     changelog = "https://github.com/eyaltoledano/claude-task-master/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "task-master-ai";
-    maintainers = [ maintainers.repparw ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.repparw ];
+    platforms = lib.platforms.all;
   };
 })

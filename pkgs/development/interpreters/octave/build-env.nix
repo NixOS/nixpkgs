@@ -19,6 +19,11 @@
 let
   packages = computeRequiredOctavePackages extraLibs;
 
+  # glibcLocalesUtf8 is null on darwin
+  localeArchiveArgs = lib.optionalString (glibcLocalesUtf8 != null) ''
+    --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
+  '';
+
 in
 buildEnv {
   name = "${octave.name}-env";
@@ -47,7 +52,7 @@ buildEnv {
            if [ -x $prg ]; then
               makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" \
                           --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc" \
-                          --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
+                          ${localeArchiveArgs}
            fi
        done
        cd $out
@@ -64,10 +69,14 @@ buildEnv {
     touch $out/.octave_packages
     for path in ${lib.concatStringsSep " " packages}; do
         if [ -e $path/*.tar.gz ]; then
+           # Glob-match here so that we grab the paths of all tarballs produced
+           # by "octave build" in buildOctavePackage's buildPhase. We can then
+           # Use this list later.
+           pkg_tarballs=($path/*.tar.gz)
            $out/bin/octave-cli --eval "pkg local_list $out/.octave_packages; \
                                        pkg prefix $out/${octave.octPkgsPath} $out/${octave.octPkgsPath}; \
                                        pfx = pkg (\"prefix\"); \
-                                       pkg install -nodeps -local $path/*.tar.gz"
+                                       pkg install -nodeps -local $pkg_tarballs"
         fi
     done
 
@@ -87,9 +96,9 @@ buildEnv {
   ''
   + postBuild;
 
-  inherit (octave) meta;
+  inherit (octave) meta version;
 
-  passthru = octave.passthru // {
+  passthru = (removeAttrs octave.passthru [ "tests" ]) // {
     interpreter = "$out/bin/octave";
     inherit octave;
     env = stdenv.mkDerivation {

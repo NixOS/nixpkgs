@@ -37,11 +37,11 @@ mkDerivation rec {
     "LIBDIR=${placeholder "out"}/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt5 Configuration Tool";
     homepage = "https://sourceforge.net/projects/qt5ct/";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "qt5ct";
   };

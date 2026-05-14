@@ -45,7 +45,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   passthru.tests = {
     version = testers.testVersion {

@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ooniprobe-cli";
-  version = "3.26.0";
+  version = "3.29.1";
 
   src = fetchFromGitHub {
     owner = "ooni";
     repo = "probe-cli";
-    tag = "v${version}";
-    hash = "sha256-CTrjr3f7x2xtKvo/pO2BRVCl/5osI7seKY0lwSLvQhg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l45gVWddIQpVb3VDQ44K0MEjLiowLX120S0R/EMrAJU=";
   };
 
-  vendorHash = "sha256-ZQIuRZdS96mO72JyVUQ0lIost6ZgBPqRvTYpWl6grxY=";
+  vendorHash = "sha256-kbvdUqAz9k3AHtitoVr4q1kGMf2Jzfs6iSRUl1sp4UU=";
 
   subPackages = [ "cmd/ooniprobe" ];
 
@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/ooni/probe-cli/releases/tag/${src.tag}";
+  meta = {
+    changelog = "https://github.com/ooni/probe-cli/releases/tag/${finalAttrs.src.tag}";
     description = "Open Observatory of Network Interference command line network probe";
     homepage = "https://ooni.org/install/cli";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "ooniprobe";
   };
-}
+})

@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "k9s";
-  version = "0.50.9";
+  version = "0.50.18";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wTQOBxJgrDPcWSiezCwHNgvfGa6oWBM+DNa7RC/9PJA=";
+    hash = "sha256-WIcT4LfoIZ8BctwrUgn+mLbqwJ2NZx6Sc5sJeT9fsus=";
   };
 
   ldflags = [
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-SDl47tAYiE00gFpCvoBeiV8XL/E29457b1RQW3pogmM=";
+  vendorHash = "sha256-QvMT/pHtwXAsbGxcOLwqYQoa2gdplhDUnPhwc/50PFs=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
@@ -73,9 +73,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "k9s";
     maintainers = with lib.maintainers; [
-      Gonzih
       markus1189
-      bryanasdev000
       qjoly
       devusb
       ryan4yin

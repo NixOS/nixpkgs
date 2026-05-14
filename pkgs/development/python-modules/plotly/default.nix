@@ -5,8 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  jupyter-packaging,
-  setuptools,
+  hatchling,
 
   # dependencies
   narwhals,
@@ -36,29 +35,38 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotly";
-  version = "6.3.0";
+  version = "6.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
-    tag = "v${version}";
-    hash = "sha256-s+kWJy/dOqlNqRD/Ytxy/SSRsFJvp13jSvPMd0LQliQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gykhl1aBgKCkJVv507UJk4xdYaruV/aU+JLYmvyFYbY=";
   };
 
+  patches = [
+    # https://numpy.org/devdocs/release/2.4.0-notes.html#removed-numpy-in1d
+    # Upstream PR: https://github.com/plotly/plotly.py/pull/5522
+    ./numpy-2.4-in1d.patch
+  ];
+
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"hatch", ' "" \
-      --replace-fail "jupyter_packaging~=0.10.0" jupyter_packaging
+    # `pytest_ignore_collect` takes only `collection_path` starting with
+    # pytest 9. Most of the paths referenced in `plotly/conftest.py`
+    # don't exist anymore and wouldn't be collected anyway, so we can just
+    # remove the file.
+    # https://docs.pytest.org/en/latest/deprecations.html#py-path-local-arguments-for-hooks-replaced-with-pathlib-path
+    # Upstream PR: https://github.com/plotly/plotly.py/pull/5521
+    rm plotly/conftest.py
   '';
 
   env.SKIP_NPM = true;
 
   build-system = [
-    setuptools
-    jupyter-packaging
+    hatchling
   ];
 
   dependencies = [
@@ -90,7 +98,7 @@ buildPythonPackage rec {
     which
     xarray
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions
@@ -102,6 +110,8 @@ buildPythonPackage rec {
     "test_lazy_imports"
     # [0.0, 'rgb(252, 255, 164)'] != [0.0, '#fcffa4']
     "test_acceptance_named"
+    # AssertionError: assert '' == 'browser'
+    "test_default_renderer"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -115,6 +125,8 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails to launch kaleido subprocess
     "tests/test_optional/test_kaleido"
+    # requiress access to osascript, which is not available while building
+    "tests/test_plot.py::test_plot[plotly-psnr-rgb]"
     # numpy2 related error, RecursionError
     # See: https://github.com/plotly/plotly.py/issues/4852
     "tests/test_plotly_utils/validators/test_angle_validator.py"
@@ -147,4 +159,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

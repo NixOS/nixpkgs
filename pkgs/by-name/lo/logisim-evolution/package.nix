@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logisim-evolution";
-  version = "3.9.0";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://github.com/logisim-evolution/logisim-evolution/releases/download/v${finalAttrs.version}/logisim-evolution-${finalAttrs.version}-all.jar";
-    hash = "sha256-QxU1h6LKzWy25wtXgEufPT0KsIsLhrKnq9CRcS4Mlzc=";
+    hash = "sha256-/mOGoyF6WRvMMRpO2knh9Do4m0md09D29A80T8hfJXc=";
   };
   dontUnpack = true;
 

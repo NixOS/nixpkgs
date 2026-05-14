@@ -1,47 +1,47 @@
 {
-  version,
   rustPlatform,
-  src-service,
-  pkg-config,
-  openssl,
-  pname,
-  service-cargo-hash,
+  fetchFromGitHub,
   meta,
+  procps,
 }:
-rustPlatform.buildRustPackage {
-  pname = "${pname}-service";
-  inherit version meta;
 
-  src = src-service;
-  sourceRoot = "${src-service.name}";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "clash-verge-service-ipc";
+  version = "2.1.3";
 
-  patches = [
-    # I want to keep these patches because it's not harmful.
-
-    # Patch: Restrict bin_path in spawn_process to be under the clash-verge-service directory.
-    # This prevents arbitrary code execution by ensuring only trusted binaries from the Nix store are allowed to run.
-    ./0001-core-validate-bin_path-to-prevent-RCE-in-start_clash.patch
-
-    # Patch: Add validation to prevent overwriting existing files.
-    # This mitigates arbitrary file overwrite risks by ensuring a file does not already exist before writing.
-    ./0002-core-prevent-overwriting-existing-file-by-validating.patch
-
-    # Patch: move IPC directory from /tmp to /run/clash-verge-rev/service.lock
-    # This allows we enable ProtectSystem="strict" and PrivateTmp
-    ./0003-IPC-move-path-to-run-clash-verge-rev-service.sock.patch
-  ];
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ];
-
-  env = {
-    OPENSSL_NO_VENDOR = 1;
+  src = fetchFromGitHub {
+    owner = "clash-verge-rev";
+    repo = "clash-verge-service-ipc";
+    # upstream uses branch
+    rev = "a486e7df6ac3d641014085f43bd08e99ff09b5a2";
+    hash = "sha256-WmQ3s6uED4Q1E2ORtjDqdxaUaPD+RIB5x8bYPOuGUSk=";
   };
 
-  cargoHash = service-cargo-hash;
-}
+  patches = [
+    # 1. Don't SetGID because the path is managed by systemd in NixOS, and we
+    #    use different IPC path for sidecar mode. We can keep RestrictSUIDSGID
+    #    in systemd serviceConfig.
+    # 2. Set IPC socket path
+    ./patch-service-directory.patch
+  ];
+
+  cargoHash = "sha256-xE8ihRlox7qrmLHEGQ76pbisFj+1bqjwr+tllxLRDoA=";
+
+  buildFeatures = [
+    "standalone"
+  ];
+
+  nativeCheckInputs = [
+    procps
+  ];
+  # build mock_binary for tests
+  preCheck = ''
+    cargo build --features=test
+  '';
+  checkFeatures = [
+    "standalone"
+    "test"
+    "client"
+  ];
+  inherit meta;
+})

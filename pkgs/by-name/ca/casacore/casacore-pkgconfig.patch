@@ -1,0 +1,29 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 574150c05..109e96889 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -566,6 +566,14 @@ foreach (module ${_modules})
+ endforeach (module)
+ 
+ # Install pkg-config support file
++set(pc_req_public "")
++if (_usewcs AND WCSLIB_FOUND)
++    list(APPEND pc_req_public "wcslib")
++endif()
++if (_usefits AND CFITSIO_FOUND)
++    list(APPEND pc_req_public "cfitsio")
++endif()
++list(JOIN pc_req_public " " pc_req_public)
+ CONFIGURE_FILE("casacore.pc.in" "casacore.pc" @ONLY)
+ set(CASA_PKGCONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+ INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/casacore.pc" DESTINATION "${CASA_PKGCONFIG_INSTALL_PREFIX}")
+diff --git a/casacore.pc.in b/casacore.pc.in
+index 6881300df..d0a01b240 100644
+--- a/casacore.pc.in
++++ b/casacore.pc.in
+@@ -9,4 +9,4 @@ Version: @PROJECT_VERSION@
+ Requires: @pc_req_public@
+ Requires.private: @pc_req_private@
+ Libs: -L${libdir} @PRIVATE_LIBS@
+-Cflags: -I${includedir} -I@WCSLIB_INCLUDE_DIR@
++Cflags: -I${includedir}

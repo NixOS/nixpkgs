@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
     homepage = "https://get.vial.today";
     license = lib.licenses.gpl2Plus;
     mainProgram = "Vial";
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

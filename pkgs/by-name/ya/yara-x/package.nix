@@ -1,27 +1,31 @@
 {
   lib,
-  rust,
+  buildPackages,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
   cargo-c,
-  testers,
-  yara-x,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yara-x";
-  version = "1.5.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YZmhwHA6PnQb3QXhbWK8cbV0CScbiD5k+HceDcV6iCI=";
+    hash = "sha256-n/AhEKlQmjbTtPncal6NDn7BcXb4HfnkuJctvDjW2V0=";
   };
 
-  cargoHash = "sha256-8LofNTLa3a2dDH72T54HJR/+qArXt+X6OMJIQwmjQIQ=";
+  cargoHash = "sha256-MbMjrrPN1ctlYoE6R5p8g354OOmu4NplcGwSm3IcHRI=";
+
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,11 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postBuild = ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   postInstall = ''
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yr \
@@ -42,9 +46,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/yr completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = yara-x;
-  };
+  checkFlags = [
+    # Seems to be flaky
+    "--skip=scanner::blocks::tests::block_scanner_timeout"
+  ];
+  checkType = "debug";
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to do pattern matching for malware research";

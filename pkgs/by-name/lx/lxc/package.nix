@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.5";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bnvKSs7w1cq3vP2BzX4kfDrGUIFhU4Fnu5pM81jPVQ8=";
+    hash = "sha256-eB68l7SmVxJViGmVlVtEXVD+cRtr4WqOrA8b9ImQ89g=";
   };
 
   nativeBuildInputs = [
@@ -92,19 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
-      lxd = nixosTests.lxd.container;
     };
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "v(6\\.0\\.*)"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    homepage = "https://linuxcontainers.org/";
+    homepage = "https://linuxcontainers.org/lxc/";
+    changelog = "https://github.com/lxc/lxc/releases/tag/v${finalAttrs.version}";
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
     license = lib.licenses.gpl2;
 

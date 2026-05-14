@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   aiohttp,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "youtubeaio";
-  version = "2.0.0";
+  version = "2.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-youtube";
     tag = "v${version}";
-    hash = "sha256-lpmqQXizfFJXgGcKWhFqS4XMML12CFlB40k2ixdszCM=";
+    hash = "sha256-GE06T3NSA2JdPSd2kS7rf3abI+b/zegS34n3Oxj2tnE=";
   };
 
   build-system = [ poetry-core ];

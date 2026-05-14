@@ -3,10 +3,10 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   buildEnv,
   linkFarm,
+  writers,
 
   cmake,
   ninja,
@@ -22,54 +22,19 @@
   rPackages,
 }:
 
-let
-  version = "0.95.0";
-
+stdenv.mkDerivation (finalAttrs: {
+  pname = "jasp-desktop";
+  version = "0.96.0";
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RR7rJJb0qKqZs7K3zP6GxlDXpmSNnGQ3WDExUgm9pKQ=";
+    hash = "sha256-5yvnlhPHssWfO9xxgBRULAMe6e5EyAWr8JVY0BQxKog=";
   };
-
-  moduleSet = import ./modules.nix {
-    inherit fetchFromGitHub rPackages;
-    jasp-src = src;
-    jasp-version = version;
-  };
-
-  inherit (moduleSet) jaspBase modules;
-
-  # Merges ${R}/lib/R with all used R packages (even propagated ones)
-  customREnv = buildEnv {
-    name = "jasp-${version}-env";
-    paths = [
-      "${R}/lib/R"
-      rPackages.RInside
-      jaspBase # Should already be propagated from modules, but include it again, just in case
-    ]
-    ++ lib.attrValues modules;
-  };
-
-  moduleLibs = linkFarm "jasp-${version}-module-libs" (
-    lib.mapAttrsToList (name: drv: {
-      name = name;
-      path = "${drv}/library";
-    }) modules
-  );
-in
-stdenv.mkDerivation {
-  pname = "jasp-desktop";
-  inherit version src;
 
   patches = [
-    (fetchpatch {
-      name = "readstat-use-find-library.patch";
-      url = "https://github.com/jasp-stats/jasp-desktop/commit/87c5a1f4724833aed0f7758499b917b3107ee196.patch";
-      hash = "sha256-0CrMKJkZpS97KmQFvZPyV1h3C7eKVr/IT0dARYBoKFo=";
-    })
-    ./link-boost-dynamically.patch
+    ./boost.patch # link boost dynamically, don't try to find removed system stub library
     ./disable-module-install-logic.patch # don't try to install modules via cmake
     ./disable-renv-logic.patch
     ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
@@ -80,7 +45,7 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "GITHUB_PAT_DEF" "dummy")
     (lib.cmakeBool "LINUX_LOCAL_BUILD" false)
     (lib.cmakeBool "INSTALL_R_MODULES" false)
-    (lib.cmakeFeature "CUSTOM_R_PATH" "${customREnv}")
+    (lib.cmakeFeature "CUSTOM_R_PATH" "${finalAttrs.passthru.customREnv}")
   ];
 
   nativeBuildInputs = [
@@ -91,8 +56,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    finalAttrs.passthru.customREnv
     boost
-    customREnv
     freexl
     libarchive
     librdata
@@ -115,12 +80,48 @@ stdenv.mkDerivation {
       --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
-    ln -s ${moduleLibs} $out/Modules/module_libs
+    ln -s ${finalAttrs.passthru.moduleLibs} $out/Modules/module_libs
+    ln -s ${finalAttrs.passthru.moduleManifests} $out/Modules/manifests
   '';
 
   passthru = {
-    inherit jaspBase modules;
-    env = customREnv;
+    inherit
+      (import ./modules.nix {
+        inherit fetchFromGitHub rPackages;
+        jasp-src = finalAttrs.src;
+        jasp-version = finalAttrs.version;
+      })
+      jaspBase
+      modules
+      ;
+
+    # Merges ${R}/lib/R with all used R packages (even propagated ones)
+    customREnv = buildEnv {
+      name = "jasp-desktop-${finalAttrs.version}-env";
+      paths = [
+        "${R}/lib/R"
+        rPackages.RInside
+        finalAttrs.passthru.jaspBase # Should already be propagated from modules, but include it again, just in case
+      ]
+      ++ lib.attrValues finalAttrs.passthru.modules;
+    };
+
+    moduleLibs = linkFarm "jasp-desktop-${finalAttrs.version}-module-libs" (
+      lib.mapAttrsToList (name: drv: {
+        name = name;
+        path = "${drv}/library";
+      }) finalAttrs.passthru.modules
+    );
+
+    moduleManifests = linkFarm "jasp-desktop-${finalAttrs.version}-module-manifests" (
+      lib.mapAttrsToList (name: drv: {
+        name = "${name}_manifest.json";
+        path = writers.writeJSON "${name}_manifest.json" {
+          name = name;
+          version = drv.version;
+        };
+      }) finalAttrs.passthru.modules
+    );
   };
 
   meta = {
@@ -134,4 +135,4 @@ stdenv.mkDerivation {
     # Perhaps the Darwin-specific things could be changed to be the same as Linux
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,46 +1,47 @@
 {
+  lib,
   annexremote,
   buildPythonPackage,
   datalad,
   datasalad,
+  distutils,
   fetchFromGitHub,
   git-annex,
   git,
+  hatch-vcs,
+  hatchling,
   humanize,
-  lib,
   more-itertools,
   openssh,
   psutil,
   pytestCheckHook,
   pythonAtLeast,
-  setuptools,
+  requests-toolbelt,
+  requests,
   unzip,
-  versioneer,
   webdavclient3,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "datalad-next";
-  version = "1.5.0";
+  version = "1.6.0-unstable-2025-07-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad-next";
-    tag = version;
-    hash = "sha256-fqP6nG2ncDRg48kvlsmPjNBOzfQp9+7wTcGvsYVrRzA=";
+    rev = "2d2b1526c1e396964dd3ffdbb37597adefe7682d";
+    hash = "sha256-47cRxaxOGzR6hDfiW2hS3MNHp2aP9rxtWNxV+33PPfs=";
   };
 
-  postPatch = ''
-    # Remove vendorized versioneer.py
-    rm versioneer.py
-  '';
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "1.6.0";
 
   nativeBuildInputs = [ git ];
 
   build-system = [
-    setuptools
-    versioneer
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -51,18 +52,22 @@ buildPythonPackage rec {
     more-itertools
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  optional-dependencies = {
+    httpsupport = [
+      requests
+      requests-toolbelt
+    ];
+  };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    webdavclient3
-    psutil
-    git-annex
     datalad
+    git-annex
     openssh
+    psutil
+    pytestCheckHook
     unzip
+    webdavclient3
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -89,14 +94,16 @@ buildPythonPackage rec {
     # hardcoded /bin path
     "test_auto_if_wanted_data_transfer_path_restriction"
 
-    # requires internet access
-    "test_push_wanted"
+    # Test require internet access
     "test_auto_data_transfer"
-    "test_http_url_operations"
-    "test_transparent_decompression"
     "test_compressed_file_stay_compressed"
-    "test_ls_file_collection_tarfile"
+    "test_delete_method"
+    "test_delete_timeout"
+    "test_http_url_operations"
     "test_iter_tar"
+    "test_ls_file_collection_tarfile"
+    "test_push_wanted"
+    "test_transparent_decompression"
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # RuntimeError
@@ -104,7 +111,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # requires internet access
+    # Tests require internet access
     "datalad_next/commands/tests/test_download.py"
     "datalad_next/archive_operations/tests/test_tarfile.py"
   ];

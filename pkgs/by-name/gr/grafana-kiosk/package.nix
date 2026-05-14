@@ -6,30 +6,30 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana-kiosk";
-  version = "1.0.9";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-kiosk";
-    rev = "v${version}";
-    hash = "sha256-kh62qGMVHNTssQMEBwLaEW0tRtP3iWMrxXeQU+fe+44=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NfLS7N1J71HnDx3oTfWf3lsWp3XNx18Jk7qwNPMfOZA=";
   };
 
-  vendorHash = "sha256-LZLmXGPYvNR4meqen0h0UHj62392hfPs9BLNK+X6sKA=";
+  vendorHash = "sha256-Czxxuy4ptsUx9cqog6wsHkUzS+j7WGj8PGsa4MDRJEE=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''
     wrapProgram $out/bin/grafana-kiosk --prefix PATH : ${lib.makeBinPath [ chromium ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kiosk Utility for Grafana";
     homepage = "https://github.com/grafana/grafana-kiosk";
-    changelog = "https://github.com/grafana/grafana-kiosk/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ marcusramberg ];
+    changelog = "https://github.com/grafana/grafana-kiosk/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ marcusramberg ];
     mainProgram = "grafana-kiosk";
   };
-}
+})

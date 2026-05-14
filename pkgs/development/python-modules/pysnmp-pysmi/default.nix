@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   ply,
   poetry-core,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysnmp-pysmi";
   version = "1.1.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pysnmp";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmi" ];
 
-  meta = with lib; {
+  meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/pysnmp/pysmi";
     changelog = "https://github.com/pysnmp/pysmi/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

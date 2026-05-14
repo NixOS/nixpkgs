@@ -1,37 +1,31 @@
 {
   lib,
   buildPythonPackage,
+  dask,
   fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-  xarray,
-
-  # optional-dependencies
   matplotlib,
   pint,
   pooch,
+  pytestCheckHook,
   regex,
   rich,
-  shapely,
-
-  # tests
-  dask,
-  pytestCheckHook,
   scipy,
+  setuptools-scm,
+  setuptools,
+  shapely,
+  xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cf-xarray";
-  version = "0.10.7";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
-    tag = "v${version}";
-    hash = "sha256-hFM3xZzal+i4H8wF83LDEL4nAJE1d59LNQgkcrLSE80=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EUavqGATUZ5w3XzDiPKCveJfaTQwikS4wFIbcAAwH7k=";
   };
 
   build-system = [
@@ -58,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
     scipy
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cf_xarray" ];
 
@@ -72,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Accessor for xarray objects that interprets CF attributes";
     homepage = "https://github.com/xarray-contrib/cf-xarray";
-    changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/${src.tag}";
+    changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -9,13 +9,13 @@
   vimacsExtraArgs ? "",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vimacs";
-  version = lib.getVersion vimPackage;
+  version = lib.getVersion finalAttrs.vimPackage;
   vimPackage = if useMacvim then macvim else vim-full;
 
   buildInputs = [
-    vimPackage
+    finalAttrs.vimPackage
     vimPlugins.vimacs
   ];
 
@@ -28,17 +28,17 @@ stdenv.mkDerivation rec {
       --replace '--cmd "let g:VM_Enabled = 1"' \
                 '--cmd "let g:VM_Enabled = 1" --cmd "set rtp^=@rtp@" ${vimacsExtraArgs}' \
       --replace @rtp@ ${vimPlugins.vimacs} \
-      --replace @bin@ ${vimPackage}
+      --replace @bin@ ${finalAttrs.vimPackage}
     for prog in vm gvm gvimacs vmdiff vimacsdiff
     do
       ln -s "$out"/bin/vimacs $out/bin/$prog
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vim-Improved eMACS: Emacs emulation for Vim";
     homepage = "http://algorithm.com.au/code/vimacs";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ millerjason ];
   };
-}
+})

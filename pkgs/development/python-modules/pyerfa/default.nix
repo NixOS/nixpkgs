@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   # See https://github.com/liberfa/pyerfa/issues/112#issuecomment-1721197483
-  NIX_CFLAGS_COMPILE = "-O2";
+  env.NIX_CFLAGS_COMPILE = "-O2";
   nativeCheckInputs = [
     pytestCheckHook
     pytest-doctestplus
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "erfa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for ERFA routines";
     longDescription = ''
       PyERFA is the Python wrapper for the ERFA library (Essential Routines
@@ -62,7 +62,7 @@ buildPythonPackage rec {
       array inputs.
     '';
     homepage = "https://github.com/liberfa/pyerfa";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.rmcgibbo ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.rmcgibbo ];
   };
 }

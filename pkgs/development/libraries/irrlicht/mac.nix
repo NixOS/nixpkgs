@@ -27,7 +27,6 @@ stdenv.mkDerivation {
   '';
 
   patches = [ ./mac_device.patch ];
-  dontFixCmake = true;
 
   cmakeFlags = [
     "-DIRRLICHT_STATIC_LIBRARY=ON"

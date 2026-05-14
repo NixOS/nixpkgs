@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   geopandas,
   libpysal,
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   pname = "mapclassify";
   version = "2.10.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pysal";
@@ -48,10 +46,16 @@ buildPythonPackage rec {
 
   # requires network access
   disabledTestPaths = [
+    # this module does http requests *at import time*
     "mapclassify/tests/test_greedy.py"
+    # depends on remote data
     "mapclassify/tests/test_rgba.py"
-    # Abort trap: 6
-    "mapclassify/tests/test_mapclassify.py"
+  ];
+
+  disabledTests = [
+    # depends on remote datasets
+    "test_legendgram_map"
+    "test_legendgram_most_recent_cmap"
   ];
 
   pythonImportsCheck = [ "mapclassify" ];

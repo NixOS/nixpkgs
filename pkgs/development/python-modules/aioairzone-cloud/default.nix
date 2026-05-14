@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "aioairzone-cloud";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Noltari";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to control Airzone via Cloud API";
     homepage = "https://github.com/Noltari/aioairzone-cloud";
     changelog = "https://github.com/Noltari/aioairzone-cloud/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

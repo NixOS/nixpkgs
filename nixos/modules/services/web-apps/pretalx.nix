@@ -12,9 +12,7 @@ let
 
   configFile = format.generate "pretalx.cfg" cfg.settings;
 
-  finalPackage = cfg.package.override {
-    inherit (cfg) plugins;
-  };
+  inherit (cfg) finalPackage;
 
   pythonEnv = finalPackage.python.buildEnv.override {
     extraLibs =
@@ -32,14 +30,39 @@ let
 in
 
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
-  };
+  meta.maintainers = pkgs.pretalx.meta.maintainers;
 
   options.services.pretalx = {
     enable = lib.mkEnableOption "pretalx";
 
     package = lib.mkPackageOption pkgs "pretalx" { };
+
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      default = cfg.package.override {
+        inherit (cfg) plugins;
+      };
+      defaultText = ''
+        config.services.package.override {
+          inherit (config.services.pretalx) plugins;
+        }
+      '';
+      readOnly = true;
+      description = ''
+        The effective pretalx package used. This is the base package with the selected plugins applied.
+      '';
+    };
+
+    environmentFiles = lib.mkOption {
+      description = ''
+        Environment files that allow passing secret configuration values.
+
+        Each line must follow the `PRETALX_SECTION_KEY=value` pattern.
+      '';
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
+      example = [ "/run/secrets/pretalx/env" ];
+    };
 
     group = lib.mkOption {
       type = lib.types.str;
@@ -220,8 +243,8 @@ in
             };
             static = lib.mkOption {
               type = lib.types.path;
-              default = "${cfg.package.static}/";
-              defaultText = lib.literalExpression "\${config.services.pretalx.package}.static}/";
+              default = "${finalPackage.static}/";
+              defaultText = "\${config.services.pretalx.finalPackage.static}/";
               readOnly = true;
               description = ''
                 Path to the directory that contains static files.
@@ -299,7 +322,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # https://docs.pretalx.org/administrator/installation.html
+    # https://docs.pretalx.org/administrator/installation/
 
     environment.systemPackages = [
       (pkgs.writeScriptBin "pretalx-manage" ''
@@ -308,6 +331,9 @@ in
         if [[ "$USER" != ${cfg.user} ]]; then
           sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env=PRETALX_CONFIG_FILE'
         fi
+        set -a
+        ${lib.concatMapStringsSep "\n" (file: ". ${lib.escapeShellArg file}") cfg.environmentFiles}
+        set +a
         export PRETALX_CONFIG_FILE=${configFile}
         $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
       '')
@@ -331,7 +357,7 @@ in
         recommendedTlsSettings = lib.mkDefault true;
         upstreams.pretalx.servers."unix:/run/pretalx/pretalx.sock" = { };
         virtualHosts.${cfg.nginx.domain} = {
-          # https://docs.pretalx.org/administrator/installation.html#step-7-ssl
+          # https://docs.pretalx.org/administrator/installation/#step-8-reverse-proxy
           extraConfig = ''
             more_set_headers "Referrer-Policy: same-origin";
             more_set_headers "X-Content-Type-Options: nosniff";
@@ -381,6 +407,7 @@ in
           serviceConfig = {
             User = "pretalx";
             Group = "pretalx";
+            EnvironmentFile = cfg.environmentFiles;
             StateDirectory = [
               "pretalx"
               "pretalx/media"
@@ -439,16 +466,23 @@ in
             "mysql.service"
           ];
           wantedBy = [ "multi-user.target" ];
-          preStart = ''
-            versionFile="${cfg.settings.filesystem.data}/.version"
-            version=$(cat "$versionFile" 2>/dev/null || echo 0)
+          preStart =
+            let
+              versionString = lib.concatStringsSep "\n" (
+                [ "pretalx-${finalPackage.version}" ]
+                ++ map (plugin: "${plugin.pname}-${plugin.version}") cfg.plugins
+              );
+            in
+            ''
+              versionFile="${cfg.settings.filesystem.data}/.version"
+              version="$(cat "$versionFile" 2>/dev/null || echo 0)"
 
-            if [[ $version != ${cfg.package.version} ]]; then
-              ${lib.getExe' pythonEnv "pretalx-manage"} migrate
+              if [[ "$version" != "${versionString}" ]]; then
+                ${lib.getExe' pythonEnv "pretalx-manage"} migrate
 
-              echo "${cfg.package.version}" > "$versionFile"
-            fi
-          '';
+                echo "${versionString}" > "$versionFile"
+              fi
+            '';
           serviceConfig = {
             ExecStart = "${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretalx/pretalx.sock ${cfg.gunicorn.extraArgs} pretalx.wsgi";
             RuntimeDirectory = "pretalx";

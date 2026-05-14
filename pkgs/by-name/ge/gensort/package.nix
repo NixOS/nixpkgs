@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "gensort";
+  pname = "gensort";
   version = "1.5";
 
   src = fetchurl {

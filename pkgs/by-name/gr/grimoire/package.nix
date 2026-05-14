@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grimoire";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "grimoire";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-V6j6PBoZqTvGfYSbpxd0vOyTb/i2EV8pDVSuZeq1s5o=";
   };
 
@@ -27,9 +27,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to generate datasets of cloud audit logs for common attacks";
     homepage = "https://github.com/DataDog/grimoire";
-    changelog = "https://github.com/DataDog/grimoire/releases/tag/v${version}";
+    changelog = "https://github.com/DataDog/grimoire/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "grimoire";
   };
-}
+})

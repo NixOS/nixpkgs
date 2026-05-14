@@ -4,22 +4,19 @@
   fetchFromGitHub,
   pefile,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dnfile";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "malwarefrank";
     repo = "dnfile";
-    tag = "v${version}";
-    hash = "sha256-JiJ7qvBP0SDGMynQuu2AyCwHU9aDI7Pq5/Z9IiWPWng=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lIhhiOtMZnYziGeLUK7awJSibP3k8JCYg43jvIl5Puw=";
     fetchSubmodules = true;
   };
 
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dnfile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse .NET executable files";
     homepage = "https://github.com/malwarefrank/dnfile";
-    changelog = "https://github.com/malwarefrank/dnfile/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/malwarefrank/dnfile/blob/${finalAttrs.src.tag}/HISTORY.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

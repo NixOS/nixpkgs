@@ -1,13 +1,13 @@
 diff --git a/lua/Makefile.linux b/lua/Makefile.linux
-index 9f5aa68..77660d4 100644
+index 7afda4c..87b4a11 100644
 --- a/lua/Makefile.linux
 +++ b/lua/Makefile.linux
-@@ -37,5 +37,5 @@ nfd_zenity.o: src/nfd_zenity.c
+@@ -37,5 +37,5 @@ clean:
  clean: 
  	rm nfd_common.o nfd_gtk.o nfd_wrap_lua.o nfd.so
  
--install: nfd.so
--	cp nfd.so $(INST_LIBDIR)
+-install: nfd.so nfd_zenity.so
+-	cp nfd.so nfd_zenity.so $(INST_LIBDIR)
 +install:
 +	cp nfd*.so $(INST_LIBDIR)
 diff --git a/lua/nfd-scm-1.rockspec b/lua/nfd-scm-1.rockspec

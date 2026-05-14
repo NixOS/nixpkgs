@@ -5,16 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vunnel";
-  version = "0.37.0";
+  version = "0.57.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
-    tag = "v${version}";
-    hash = "sha256-x6J0MbwPQvqG1WXrnwMf0uzAu7MDDVxmDRzbDMb+RSk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ofxc4Mbd5MUoIQ+iAUPF54rxWuwQEA2t3T+vjO3UUgA=";
     leaveDotGit = true;
   };
 
@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       lxml
       mashumaro
       mergedeep
+      oras
       orjson
       packageurl-python
       pytest-snapshot
@@ -54,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
       sqlalchemy
       xsdata
       xxhash
+      yardstick
       zstandard
     ]
     ++ xsdata.optional-dependencies.cli
@@ -77,14 +79,16 @@ python3.pkgs.buildPythonApplication rec {
     "test_status"
     # TypeError
     "test_parser"
+    # Test require network access
+    "test_rhel_provider_supports_ignore_hydra_errors"
   ];
 
   meta = {
     description = "Tool for collecting vulnerability data from various sources";
     homepage = "https://github.com/anchore/vunnel";
-    changelog = "https://github.com/anchore/vunnel/releases/tag/${src.tag}";
+    changelog = "https://github.com/anchore/vunnel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vunnel";
   };
-}
+})

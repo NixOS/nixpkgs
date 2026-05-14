@@ -1,7 +1,7 @@
 {
   addDriverRunpath,
   allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; },
-  allowedPatterns ? rec {
+  allowedPatterns ? {
     # This config is just an example.
     # When the hook observes either of the following requiredSystemFeatures:
     nvidia-gpu.onFeatures = [
@@ -17,6 +17,7 @@
       "/dev/nvidia*"
     ];
     nvidia-gpu.unsafeFollowSymlinks = true;
+    nvidia-gpu.safePrefixes = [ builtins.storeDir ];
   },
   callPackage,
   extraWrapperArgs ? [ ],
@@ -28,7 +29,7 @@
 }:
 
 let
-  attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
+  attrs = fromTOML (builtins.readFile ./pyproject.toml);
   pname = attrs.project.name;
   inherit (attrs.project) version;
 in
@@ -37,11 +38,21 @@ python3Packages.buildPythonApplication {
   inherit pname version;
   pyproject = true;
 
-  src = lib.cleanSource ./.;
+  src = lib.sourceByRegex ./. [
+    "^pyproject.toml$"
+    "^.*nix_required_mounts.py$" # app and unit test file
+  ];
 
   nativeBuildInputs = [
     makeWrapper
     python3Packages.setuptools
+  ];
+
+  checkInputs = [
+    python3Packages.pytestCheckHook
+  ];
+  pythonImportsCheck = [
+    "nix_required_mounts"
   ];
 
   postFixup = ''
@@ -55,6 +66,7 @@ python3Packages.buildPythonApplication {
     inherit allowedPatterns;
     tests = {
       inherit (nixosTests) nix-required-mounts;
+      eval-nvidia-gpu-preset = callPackage ./eval-test.nix { };
     };
   };
   meta = {

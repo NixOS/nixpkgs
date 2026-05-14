@@ -4,7 +4,6 @@
   fetchFromGitHub,
   oldest-supported-numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "ecos";
   version = "2.0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "embotech";
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ecos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for ECOS";
     homepage = "https://github.com/embotech/ecos-python";
     changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

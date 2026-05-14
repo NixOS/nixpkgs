@@ -3,6 +3,7 @@
   fetchurl,
   mkTclDerivation,
   openssl,
+  tcl,
 }:
 
 mkTclDerivation rec {
@@ -20,11 +21,14 @@ mkTclDerivation rec {
     "--with-ssl-dir=${openssl.dev}"
   ];
 
+  tclRequiresCheck = [ "tls" ];
+
   meta = {
     homepage = "https://core.tcl-lang.org/tcltls/index";
     description = "OpenSSL / RSA-bsafe Tcl extension";
     maintainers = [ lib.maintainers.agbrooks ];
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
+    broken = tcl.isTcl9;
   };
 }

@@ -4,7 +4,7 @@
   makeWrapper,
   stdenvNoCC,
   lib,
-  xorg,
+  lndir,
   gaugePlugins,
   plugins ? [ ],
 }:
@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     gauge-unwrapped
     makeWrapper
-    xorg.lndir
+    lndir
   ];
 
   passthru = {

@@ -10,15 +10,15 @@
 
 assert cudaSupport -> cudaPackages != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umpire";
-  version = "2025.03.1";
+  version = "2025.12.0";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "umpire";
-    tag = "v${version}";
-    hash = "sha256-MHvJRXAMV64GxGgCJjQPlaNyxVjBvyQXogbla9UMFL8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9lGI5SKpDIIzZvsG/yKopfXS1PuHOQB9bwSuML2Xh/8=";
     fetchSubmodules = true;
   };
 
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application-focused API for memory management on NUMA & GPU architectures";
     homepage = "https://github.com/LLNL/Umpire";
-    maintainers = with maintainers; [ sheepforce ];
-    license = with licenses; [ mit ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ sheepforce ];
+    license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.linux;
   };
-}
+})

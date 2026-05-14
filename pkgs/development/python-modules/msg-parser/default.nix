@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # dependencies
   olefile,
   # test dependencies
@@ -16,8 +15,6 @@ buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "vikramarsid";
     repo = "msg_parser";
@@ -29,11 +26,11 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to read, parse and converting Microsoft Outlook MSG E-Mail files";
     mainProgram = "msg_parser";
     homepage = "https://github.com/vikramarsid/msg_parser";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

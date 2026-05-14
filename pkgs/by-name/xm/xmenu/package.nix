@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   imlib2,
-  libX11,
-  libXft,
-  libXinerama,
+  libx11,
+  libxft,
+  libxinerama,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     imlib2
-    libX11
-    libXft
-    libXinerama
+    libx11
+    libxft
+    libxinerama
   ];
 
   makeFlags = [
@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Menu utility for X";
     homepage = "https://github.com/phillbush/xmenu";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ neonfuz ];
     platforms = lib.platforms.all;
     mainProgram = "xmenu";
   };

@@ -16,7 +16,9 @@
   gnused,
   imagemagick,
   procps,
-  xorg,
+  xset,
+  xrandr,
+  xdpyinfo,
 }:
 
 let
@@ -30,21 +32,21 @@ let
     gnused
     imagemagick
     procps
-    xorg.xdpyinfo
-    xorg.xrandr
-    xorg.xset
+    xdpyinfo
+    xrandr
+    xset
   ]
   ++ lib.optionals withDunst [ dunst ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "betterlockscreen";
   version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "betterlockscreen";
     repo = "betterlockscreen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-59Ct7XIfZqU3yaW9FO7UV8SSMLdcZMPRc7WJangxFPo=";
   };
 
@@ -61,15 +63,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and sweet looking lockscreen for linux systems with effects";
     homepage = "https://github.com/betterlockscreen/betterlockscreen";
     mainProgram = "betterlockscreen";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       eyjhb
       sebtm
     ];
   };
-}
+})

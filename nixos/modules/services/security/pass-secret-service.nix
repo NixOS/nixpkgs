@@ -12,7 +12,7 @@ in
     enable = lib.mkEnableOption "pass secret service";
 
     package = lib.mkPackageOption pkgs "pass-secret-service" {
-      example = "pass-secret-service.override { python3 = pkgs.python310 }";
+      example = "pass-secret-service.override { python3 = pkgs.python315 }";
     };
   };
 
@@ -21,5 +21,5 @@ in
     services.dbus.packages = [ cfg.package ];
   };
 
-  meta.maintainers = with lib.maintainers; [ aidalgol ];
+  meta.maintainers = with lib.maintainers; [ jluttine ];
 }

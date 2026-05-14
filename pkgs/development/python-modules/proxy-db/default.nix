@@ -5,7 +5,6 @@
   click,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   six,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "proxy-db";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Nekmo";
@@ -45,12 +42,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proxy_db" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to manage proxies in a local database";
     mainProgram = "proxy-db";
     homepage = "https://github.com/Nekmo/proxy-db/";
     changelog = "https://github.com/Nekmo/proxy-db/blob/v${version}/HISTORY.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -22,18 +22,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "e-imzo-manager";
-  version = "0.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "xinux-org";
-    repo = "e-imzo";
+    repo = "e-imzo-manager";
     tag = finalAttrs.version;
-    hash = "sha256-uDaqkz2VDvqTgi+k8EGGKjLkjoH93xXHQcgUc1NVo30=";
+    hash = "sha256-LX13zdwjlV99NziEP7PoJH8yxPV1gVQQH/L0VkuRLD4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rulWG4L/uN6+JBk+SzC0y57Pdw5N0Q1dJlpXGVo+vbQ=";
+    hash = "sha256-qnwAJ0gRzIxEkkDeNqiYMB+Dvth4MugUIe9sv7c46/E=";
   };
 
   strictDeps = true;
@@ -72,14 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/xinux-org/e-imzo";
+    homepage = "https://github.com/xinux-org/e-imzo-manager";
     mainProgram = "E-IMZO-Manager";
     description = "GTK application for managing E-IMZO keys";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license = with lib.licenses; [ agpl3Plus ];
     platforms = lib.platforms.linux;
-    teams = [ lib.teams.uzinfocom ];
+    maintainers = with lib.maintainers; [
+      orzklv
+      shakhzodkudratov
+      bahrom04
+      bemeritus
+    ];
   };
 })

@@ -6,14 +6,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cache";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "matthiaskrgr";
     repo = "cargo-cache";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
   };
 
@@ -25,17 +25,16 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [ "offline_tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";
     mainProgram = "cargo-cache";
     homepage = "https://github.com/matthiaskrgr/cargo-cache";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
-      Br1ght0ne
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

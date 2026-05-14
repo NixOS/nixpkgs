@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-embedded-template";
-  version = "0.23.2";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-embedded-template";
     tag = "v${version}";
-    hash = "sha256-C2Lo3tT2363O++ycXiR6x0y+jy2zlmhcKp7t1LhvCe8=";
+    hash = "sha256-nBQain0Lc21jOgQFfvkyq615ZmT8qdMxtqIoUcOcO3A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-DscTKXKukh3RsqtKjplyzrxY977zUgpFpeXtFOLJEXA=";
+    hash = "sha256-C+P/fALEmRDrX59diXS/cdzffvJyn0qnCUD5nFsW+ww=";
   };
 
   build-system = [

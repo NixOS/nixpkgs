@@ -10,7 +10,4 @@ update-source-version pcsx2 \
   --rev=$latestPatchesRev \
   --source-key=pcsx2_patches
 
-latestVersion="`curl "https://api.github.com/repos/PCSX2/pcsx2/releases/latest" \
-  | jq -r ".tag_name[1:]"`"
-
-nix-update pcsx2 --version=$latestVersion
+nix-update pcsx2 --use-github-releases

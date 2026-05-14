@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
 }:
 
 buildPythonPackage {
@@ -17,7 +16,5 @@ buildPythonPackage {
       ./typeddep
     ];
   };
-
-  disabled = pythonOlder "3.7";
 
 }

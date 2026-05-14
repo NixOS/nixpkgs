@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.services.paperless;
+  opt = options.services.paperless;
 
   defaultUser = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
@@ -328,7 +329,8 @@ in
     };
 
     domain = lib.mkOption {
-      type = lib.types.str;
+      type = with lib.types; nullOr str;
+      default = null;
       example = "paperless.example.com";
       description = "Domain under which paperless will be available.";
     };
@@ -387,6 +389,13 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion = cfg.configureNginx -> cfg.domain != null;
+            message = "${opt.configureNginx} requires ${opt.domain} to be configured.";
+          }
+        ];
+
         services.paperless.manage = manage;
         environment.systemPackages = [ manage ];
 
@@ -425,7 +434,7 @@ in
         };
 
         services.paperless.settings = lib.mkMerge [
-          (lib.mkIf (cfg.domain != "") {
+          (lib.mkIf (cfg.domain != null) {
             PAPERLESS_URL = "https://${cfg.domain}";
           })
           (lib.mkIf cfg.database.createLocally {
@@ -476,6 +485,7 @@ in
             PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
           };
           environment = env;
+          unitConfig.RequiresMountsFor = defaultServiceConfig.ReadWritePaths;
 
           preStart = ''
               # remove old papaerless-manage symlink
@@ -620,9 +630,10 @@ in
 
         users = lib.optionalAttrs (cfg.user == defaultUser) {
           users.${defaultUser} = {
+            extraGroups = [ config.services.redis.servers.paperless.group ];
             group = defaultUser;
-            uid = config.ids.uids.paperless;
             home = cfg.dataDir;
+            uid = config.ids.uids.paperless;
           };
 
           groups.${defaultUser} = {
@@ -677,7 +688,7 @@ in
           path = [ manage ];
           script = ''
             paperless-manage document_exporter ${cfg.exporter.directory} ${
-              lib.cli.toGNUCommandLineShell { } cfg.exporter.settings
+              lib.cli.toCommandLineShellGNU { } cfg.exporter.settings
             }
           '';
         };

@@ -3,30 +3,30 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  wrapGAppsHook3,
-  atk,
+  wrapGAppsHook4,
+  anyrun-provider,
   cairo,
   gdk-pixbuf,
   glib,
-  gtk3,
+  gtk4,
   pango,
   wayland,
-  gtk-layer-shell,
+  gtk4-layer-shell,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anyrun";
-  version = "25.9.0.pre-release.1-unstable-2025-08-19";
+  version = "25.12.0";
 
   src = fetchFromGitHub {
     owner = "anyrun-org";
     repo = "anyrun";
-    rev = "af1ffe4f17921825ff2a773995604dce2b2df3cd";
-    hash = "sha256-PKxVhfjd2AlzTopuVEx5DJMC4R7LnM5NIoMmirKMsKI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KEEJLERvo04AsPo/SWHFJUmHaGGOVjUoGwA9e8GVIQQ=";
   };
 
-  cargoHash = "sha256-KpAnfytTtCJunhpk9exv8LYtF8mKDGFUUbsPP47M+Kk=";
+  cargoHash = "sha256-IDrDgmksDdKw5JYY/kw+CCEIDJ6S2KARxUDSul713pw=";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -34,22 +34,22 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    atk
     cairo
     gdk-pixbuf
     glib
-    gtk3
-    gtk-layer-shell
+    gtk4
+    gtk4-layer-shell
     pango
     wayland
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(
+     --prefix PATH ":" ${lib.makeBinPath [ anyrun-provider ]}
      --prefix ANYRUN_PLUGINS : $out/lib
     )
   '';
@@ -58,7 +58,11 @@ rustPlatform.buildRustPackage {
     install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru = {
+    updateScript = nix-update-script { };
+    # This is used for detecting whether or not an Anyrun package has the provider
+    inherit anyrun-provider;
+  };
 
   meta = {
     description = "Wayland-native, highly customizable runner";
@@ -71,4 +75,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "anyrun";
     platforms = lib.platforms.linux;
   };
-}
+})

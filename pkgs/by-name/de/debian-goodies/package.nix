@@ -9,7 +9,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "debian-goodies";
   version = "0.88.2";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "debian-goodies";
-    rev = "debian/${version}";
+    tag = "debian/${finalAttrs.version}";
     sha256 = "sha256-KPPRxYmCEYwlUAR29tc8w4rerXpswO/rbpEjXPoDV4Q=";
   };
 
@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small toolbox-style utilities for Debian systems";
     homepage = "https://salsa.debian.org/debian/debian-goodies";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

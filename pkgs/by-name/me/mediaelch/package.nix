@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     HOME = "/tmp"; # for the font cache
     LANG = "C.UTF-8";
     QT_QPA_PLATFORM = "offscreen"; # the tests require a UI
+    QT_QPA_PLATFORM_PLUGIN_PATH = "${qt'.qtbase}/${qt'.qtbase.qtPluginPrefix}/platforms";
   };
 
   doCheck = true;

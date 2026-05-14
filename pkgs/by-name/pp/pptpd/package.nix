@@ -5,12 +5,12 @@
   ppp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pptpd";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/poptop/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/poptop/pptpd/pptpd-${finalAttrs.version}/pptpd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-anJChLHOAOoj99dgjQgYQ6EMio2H2VHLLqhucKobTnc=";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     substituteInPlace plugins/Makefile --replace-fail "install -o root" "install"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://poptop.sourceforge.net/dox/";
     description = "PPTP Server for Linux";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ obadz ];
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ obadz ];
+    license = lib.licenses.gpl2Only;
   };
-}
+})

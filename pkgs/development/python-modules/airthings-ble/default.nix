@@ -1,7 +1,6 @@
 {
   lib,
   async-interrupt,
-  async-timeout,
   bleak,
   bleak-retry-connector,
   buildPythonPackage,
@@ -15,25 +14,25 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "vincegio";
     repo = "airthings-ble";
     tag = version;
-    hash = "sha256-eZjMRely3UxcnjPB6DQDBOKdP+2kFCe/5fchiX+rcEM=";
+    hash = "sha256-y6vpkq3u5JKImwxevMupUVVAclUcsyrqxoIOYRK0YGQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     async-interrupt
-    bleak
     bleak-retry-connector
     cbor2
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    bleak
   ];
 
   nativeCheckInputs = [
@@ -43,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airthings_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Airthings BLE devices";
     homepage = "https://github.com/vincegio/airthings-ble";
-    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

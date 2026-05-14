@@ -5,19 +5,19 @@
   nixosTests,
   testers,
   sqlite3-to-mysql,
-  mysql80,
+  mysql84,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlite3-to-mysql";
-  version = "2.4.2";
-  format = "pyproject";
+  version = "2.5.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
-    tag = "v${version}";
-    hash = "sha256-wyUJW7G92O3jnwSL5zFy/k/jI6c1H23xYcq7S8wAmsc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6WIGQVZZBWVGP8nr7Gxvd3j9wrt08EcCmb9ljRMkUgc=";
   };
 
   build-system = with python3Packages; [
@@ -37,9 +37,9 @@ python3Packages.buildPythonApplication rec {
     tabulate
     unidecode
     packaging
-    mysql80
+    mysql84
     python-dateutil
-    types-python-dateutil
+    sqlglot
   ];
 
   pythonRelaxDeps = [
@@ -65,4 +65,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "sqlite3mysql";
   };
-}
+})

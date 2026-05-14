@@ -7,14 +7,14 @@
   help2man,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postsrsd";
   version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "roehling";
     repo = "postsrsd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Q7tXCd2Mz3WIGnIrbb8mfgT7fcmtVS4EtF0ztYmEsmM=";
   };
 
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     libconfuse
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/roehling/postsrsd";
     description = "Postfix Sender Rewriting Scheme daemon";
     mainProgram = "postsrsd";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

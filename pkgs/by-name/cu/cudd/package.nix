@@ -25,11 +25,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://davidkebo.com/cudd";
     description = "Binary Decision Diagram (BDD) library";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ chessai ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ chessai ];
   };
 }

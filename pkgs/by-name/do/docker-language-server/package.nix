@@ -1,23 +1,30 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
   docker,
   gotestsum,
+  versionCheckHook,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "docker-language-server";
-  version = "0.16.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker-language-server";
-    tag = "v${version}";
-    hash = "sha256-P3DwlCjQllFtf05ssXYNraQFGEEzChSE5eJvcODdF6Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OSAySCTK2temrVxmkRnrl5YWVbmkp8DRlXFVxTzEW3Q=";
   };
 
-  vendorHash = "sha256-xvRHxi7aem88mrmdAmSyRNtBUSZD4rjUut2VjPeoejg=";
+  vendorHash = "sha256-ztA+/4l180UKTKrsqTyysDcD4oQSDgnBYUaiKDF6LvI=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     docker
@@ -26,22 +33,45 @@ buildGoModule rec {
 
   checkPhase = ''
     runHook preCheck
-    gotestsum -- $(go list ./... | grep -vE "e2e-tests|/buildkit$|/scout$") -timeout 30s -skip "TestCollectDiagnostics"
-    go test $(go list ./... | grep e2e-tests) -timeout 120s -skip "TestPublishDiagnostics|TestHover"
+
+    # disable some tests because of sandbox
+    excludedPackages="e2e-tests|/buildkit$|/scout$"
+    packages=$(go list ./... | grep -vE "$excludedPackages")
+
+    gotestsum -- $packages \
+      -timeout 30s \
+      -skip "TestCollectDiagnostics|TestCompletion_ImageTags|TestInlayHint"
+
+    go test ./e2e-tests/... \
+      -timeout 120s \
+      -skip "TestPublishDiagnostics|TestHover"
+
     runHook postCheck
   '';
 
   ldflags = [
     "-s"
-    "-w"
-    "-X 'github.com/docker/docker-language-server/internal/pkg/cli/metadata.Version=${version}'"
+    "-X 'github.com/docker/docker-language-server/internal/pkg/cli/metadata.Version=${finalAttrs.version}'"
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/docker/docker-language-server";
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd '${finalAttrs.meta.mainProgram}' \
+      --bash <("$out/bin/${finalAttrs.meta.mainProgram}" completion bash) \
+      --zsh <("$out/bin/${finalAttrs.meta.mainProgram}" completion zsh) \
+      --fish <("$out/bin/${finalAttrs.meta.mainProgram}" completion fish)
+  '';
+
+  meta = {
     description = "Language server for providing language features for file types in the Docker ecosystem (Dockerfiles, Compose files, and Bake files)";
+    homepage = "https://github.com/docker/docker-language-server";
+    changelog = "https://github.com/docker/docker-language-server/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "docker-language-server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ baongoc124 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ baongoc124 ];
   };
-}
+})

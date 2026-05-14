@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  clang-tools,
   cmake,
   cython,
   ninja,
@@ -17,21 +18,29 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.14.0";
+  version = "3.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-KPVv4WU6MC17QDvcdpV86FH+FUcS8RMHxzmN/Gx2Cx8=";
+    hash = "sha256-wF7eeSD6GQfN0EOwDvrgjMqN5u2wxXFlktQS7nIKgkU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.1.6, <3.3.0" "Cython >=3.1.6"
+  '';
 
   build-system = [
     cmake
     cython
     ninja
     scikit-build-core
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    clang-tools # provides wrapped clang-scan-deps
   ];
 
   dontUseCmakeConfigure = true;

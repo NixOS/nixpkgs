@@ -4,9 +4,9 @@
   buildPythonPackage,
   docopt,
   fetchPypi,
-  libX11,
-  libXext,
-  libXres,
+  libx11,
+  libxext,
+  libxres,
   meson-python,
   meson,
   pillow,
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXres
-    libXext
+    libx11
+    libxres
+    libxext
   ];
 
   dependencies = [
@@ -50,12 +50,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ueberzug" ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative for w3mimgdisplay";
     homepage = "https://github.com/ueber-devel/ueberzug";
     changelog = "https://github.com/ueber-devel/ueberzug/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "ueberzug";
-    maintainers = with maintainers; [ Br1ght0ne ];
+    platforms = lib.platforms.linux;
   };
 }

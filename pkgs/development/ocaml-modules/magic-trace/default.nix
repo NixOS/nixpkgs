@@ -18,7 +18,7 @@
   zstandard ? null,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "magic-trace";
   version = "1.2.4";
 
@@ -27,13 +27,14 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = "magic-trace";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LkhnlOd5rI8cbOYbVqrkRJ2qTcRn3Zzl6GjQEdjBjVA=";
   };
 
   nativeBuildInputs = [
     ocaml-crunch
   ];
+
   buildInputs = [
     angstrom
     async
@@ -50,10 +51,12 @@ buildDunePackage rec {
     zstandard
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collects and displays high-resolution traces of what a process is doing";
-    license = licenses.mit;
-    maintainers = [ maintainers.alizter ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/janestreet/magic-trace";
+    platforms = lib.platforms.linux;
+    mainProgram = "magic-trace";
   };
-}
+})

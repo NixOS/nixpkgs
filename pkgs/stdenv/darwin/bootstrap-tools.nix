@@ -5,7 +5,7 @@
   unpack,
 }:
 
-builtins.derivation {
+derivation {
   inherit (stdenv.hostPlatform) system;
 
   name = "bootstrap-tools";
@@ -17,7 +17,7 @@ builtins.derivation {
   ];
 
   PATH = lib.makeBinPath [
-    (builtins.placeholder "out")
+    (placeholder "out")
     unpack
   ];
 

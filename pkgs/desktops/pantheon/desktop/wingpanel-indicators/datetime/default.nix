@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel-indicator-datetime";
     rev = version;
     sha256 = "sha256-iR80pF3KUe0WboFm2/f1ZK9/wER2LfmRBd92e8jGTHs=";
   };
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Date & Time Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

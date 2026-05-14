@@ -1,26 +1,32 @@
 {
-  stdenvNoCC,
+  stdenv,
   lib,
   makeBinaryWrapper,
-  runtimeShell,
   fetchurl,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
-  jdk23,
+  zulu25,
   dpkg,
   writeShellScript,
-  bash,
   tor,
   zip,
   gnupg,
   coreutils,
+
+  # Used by the bundled webcam-app
+  libv4l,
+
+  # Used by the testing package bisq2-webcam-app
+  callPackage,
+  socat,
+  unzip,
 }:
 
 let
-  version = "2.1.7";
+  version = "2.1.10";
 
-  jdk = jdk23.override { enableJavaFX = true; };
+  jdk = zulu25.override { enableJavaFX = true; };
 
   bisq-launcher =
     args:
@@ -44,8 +50,18 @@ let
       hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
     };
   };
+
+  binPath = lib.makeBinPath [
+    coreutils
+    tor
+  ];
+
+  libraryPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    libv4l
+  ];
 in
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   pname = "bisq2";
@@ -53,7 +69,7 @@ stdenvNoCC.mkDerivation rec {
   # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
-    hash = "sha256-kNQbTZoHFR2qFw/Jjc9iaEews/oUOYoJanmbVH/vs44=";
+    hash = "sha256-e1b2F4JKm7i7iMEqi+OTBryScWWhdvLJW3iKecQgqvg=";
 
     # Verify the upstream Debian package prior to extraction.
     # See https://bisq.wiki/Bisq_2#Installation
@@ -67,7 +83,7 @@ stdenvNoCC.mkDerivation rec {
       export GNUPGHOME=./gnupg
       mkdir -m 700 -p $GNUPGHOME
       ln -s $downloadedFile ./Bisq-${version}.deb
-      ln -s ${signature} ./signature.asc
+      ln -s ${finalAttrs.signature} ./signature.asc
       gpg --import ${publicKey."E222AA02"}
       gpg --import ${publicKey."387C8307"}
       gpg --batch --verify signature.asc Bisq-${version}.deb
@@ -78,7 +94,7 @@ stdenvNoCC.mkDerivation rec {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
-    hash = "sha256-Cl9EIp+ycD8Tp/bx5dXQK206jZzrYJkI/U9ItfXDRWw=";
+    hash = "sha256-2B8rmNwCcJ/cSv7P0FYi2DlRcWkG0o0lMFPsr5zaoIk=";
   };
 
   nativeBuildInputs = [
@@ -137,21 +153,11 @@ stdenvNoCC.mkDerivation rec {
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2
-    wrapProgram $out/bin/bisq2 --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        tor
-      ]
-    }
+    wrapProgram $out/bin/bisq2 --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
 
     install -D -m 777 ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq2-hidpi
     substituteAllInPlace $out/bin/bisq2-hidpi
-    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        tor
-      ]
-    }
+    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
@@ -161,6 +167,15 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  # The bisq2.webcam-app package is for maintainers to test scanning QR codes.
+  passthru.webcam-app = callPackage ./webcam-app.nix {
+    inherit
+      jdk
+      libraryPath
+      ;
+    bisq2 = finalAttrs.finalPackage.out;
+  };
 
   meta = {
     description = "Decentralized bitcoin exchange network";
@@ -176,4 +191,4 @@ stdenvNoCC.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

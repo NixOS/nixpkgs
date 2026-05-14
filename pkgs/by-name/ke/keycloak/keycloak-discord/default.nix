@@ -1,32 +1,35 @@
 {
   stdenv,
+  maven,
   lib,
-  fetchurl,
+  fetchFromGitHub,
 }:
-
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "keycloak-discord";
-  version = "0.5.0";
+  version = "1.3.1";
 
-  src = fetchurl {
-    url = "https://github.com/wadahiro/keycloak-discord/releases/download/v${version}/keycloak-discord-${version}.jar";
-    hash = "sha256-radvUu2a6t0lbo5f/ADqy7+I/ONXB7/8pk2d1BtYzQA=";
+  src = fetchFromGitHub {
+    owner = "iForged";
+    repo = "keycloak-discord";
+    tag = "v${version}";
+    hash = "sha256-xTGXETkE5Ct+h3mYbj3VUoQhi5Wx5oZqz3G1uN0pDns=";
   };
 
-  dontUnpack = true;
-  dontBuild = true;
+  mvnHash = "sha256-zFsVRFFGrHvTFW6+Y1o2OVFaf34JgqPVv+vMAfkSOJw=";
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 "$src" "$out/keycloak-discord-$version.jar"
+    install -Dm444 -t "$out" target/keycloak-discord-${version}.jar
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/wadahiro/keycloak-discord";
-    description = "Keycloak Social Login extension for Discord";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mkg20001 ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+  meta = {
+    homepage = "https://github.com/iForged/keycloak-discord";
+    description = "Keycloak Identity Provider extension for Discord";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      mkg20001
+      anish
+    ];
   };
 }

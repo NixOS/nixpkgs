@@ -9,15 +9,12 @@
   pytest-cov-stub,
   zope-deprecation,
   pyramid,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyramid-jinja2";
   version = "2.10.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pyramid_jinja2";
@@ -47,10 +44,10 @@ buildPythonPackage rec {
     "test_options"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jinja2 template bindings for the Pyramid web framework";
     homepage = "https://github.com/Pylons/pyramid_jinja2";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd0;
+    maintainers = [ ];
   };
 }

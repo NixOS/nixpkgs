@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "1.1.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -52,11 +52,11 @@ buildPythonPackage rec {
     })
   ];
 
-  pytestFlagsArray = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # AssertionError: Arrays are not almost equal to 6 decimals
-    "--deselect=tests/distributions/test_normal_full.py::test_fit"
-    "--deselect=tests/distributions/test_normal_full.py::test_from_summaries"
-    "--deselect=tests/distributions/test_normal_full.py::test_serialization"
+    "tests/distributions/test_normal_full.py::test_fit"
+    "tests/distributions/test_normal_full.py::test_from_summaries"
+    "tests/distributions/test_normal_full.py::test_serialization"
   ];
 
   disabledTests = [

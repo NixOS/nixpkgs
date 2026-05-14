@@ -7,23 +7,20 @@
   ply,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.9.3";
+  version = "6.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
     tag = version;
-    hash = "sha256-lKjxPYlVCRew1SHYvehcGWKlLz6DsCG9Bocg6G+491c=";
+    hash = "sha256-DHA/OukSK1p65imJEZg7hbErJGL7aQiDbW4vUUuSEko=";
   };
 
   build-system = [
@@ -55,11 +52,11 @@ buildPythonPackage rec {
     "test_get_os_version"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Optimization Modeling Objects";
     homepage = "http://www.pyomo.org/";
     changelog = "https://github.com/Pyomo/pyomo/releases/tag/${src.tag}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "pyomo";
   };

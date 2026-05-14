@@ -43,9 +43,9 @@ def main [] {
   # Extract the newest version out of the URL
   let new_version = $newest
     | split column /
-    | get column4.0
-    | split column -
     | get column3.0
+    | split column -
+    | get column2.0
     | str replace .tar.bz2 ""
     | str trim -c v
 

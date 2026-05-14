@@ -8,13 +8,13 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.12.0";
   pname = "librem";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "rem";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MsXSUxFH89EqxMe4285xFV1Tsqmv2l5RnEeli48O3XQ=";
   };
   nativeBuildInputs = [ cmake ];
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     license = lib.licenses.bsd3;
   };
-}
+})

@@ -3,6 +3,7 @@
   mkTclDerivation,
   fetchzip,
   graphicsmagick,
+  tcl,
   tk,
 }:
 
@@ -34,5 +35,6 @@ mkTclDerivation rec {
     homepage = "http://www.graphicsmagick.org/TclMagick/doc/";
     license = lib.licenses.tcltk;
     maintainers = with lib.maintainers; [ fgaz ];
+    broken = tcl.isTcl9;
   };
 }

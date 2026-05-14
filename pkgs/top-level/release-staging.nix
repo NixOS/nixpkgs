@@ -12,12 +12,7 @@
     revision = "0000000000000000000000000000000000000000";
   },
   # The platform doubles for which we build Nixpkgs.
-  supportedSystems ? [
-    "x86_64-linux"
-    "x86_64-darwin"
-    "aarch64-linux"
-    "aarch64-darwin"
-  ],
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {

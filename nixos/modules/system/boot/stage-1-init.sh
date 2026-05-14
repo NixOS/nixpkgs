@@ -73,7 +73,7 @@ trap 'fail' 0
 
 # Print a greeting.
 info
-info "[1;32m<<< @distroName@ Stage 1 >>>[0m"
+info "[1;32m@stage1Greeting@[0m"
 info
 
 # Make several required directories.

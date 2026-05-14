@@ -13,12 +13,12 @@
   withPython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastnlo-toolkit";
   version = "2.5.0-2826";
 
   src = fetchurl {
-    url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${version}.tar.gz";
+    url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${finalAttrs.version}.tar.gz";
     hash = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   # Use a workaround from https://github.com/swig/swig/issues/1538
   env.CXXFLAGS = "-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fastnlo.hepforge.org";
     description = "Fast pQCD calculations for hadron-induced processes";
     longDescription = ''
@@ -102,9 +102,9 @@ stdenv.mkDerivation rec {
       in PDF fits or in systematic studies. Very time consuming complete
       recalculations are thus avoided.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

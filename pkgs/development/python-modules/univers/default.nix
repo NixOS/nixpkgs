@@ -6,7 +6,6 @@
   fetchPypi,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   saneyaml,
   semantic-version,
   semver,
@@ -14,16 +13,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "univers";
-  version = "31.0.0";
+  version = "32.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BqP5seUOhkZQBdi7ClaUDasr7h8A7YRidgISpQHVR1E=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-+uGHJF9yvuFYHymwsLbpBwSbLqE24+Ur+Njtv+8Q5/A=";
   };
 
   build-system = [
@@ -56,18 +53,17 @@ buildPythonPackage rec {
     "test_semver_version"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for parsing version ranges and expressions";
     homepage = "https://github.com/aboutcode-org/univers";
-    changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    changelog = "https://github.com/aboutcode-org/univers/blob/${finalAttrs.version}/CHANGELOG.rst";
+    license = with lib.licenses; [
       asl20
       bsd3
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       armijnhemel
-      sbruder
     ];
   };
-}
+})

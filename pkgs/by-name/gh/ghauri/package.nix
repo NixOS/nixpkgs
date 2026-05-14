@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghauri";
   version = "1.3.8";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "r0oth3x49";
     repo = "ghauri";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GEUuQMtp8XO32uOIILWiMfngPXx/3vCKk+YbA0E13rg=";
   };
 
@@ -37,9 +37,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for detecting and exploiting SQL injection security flaws";
     homepage = "https://github.com/r0oth3x49/ghauri";
-    changelog = "https://github.com/r0oth3x49/ghauri/releases/tag/${version}";
+    changelog = "https://github.com/r0oth3x49/ghauri/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ghauri";
   };
-}
+})

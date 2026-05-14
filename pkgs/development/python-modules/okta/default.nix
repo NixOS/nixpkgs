@@ -2,12 +2,13 @@
   lib,
   aenum,
   aiohttp,
+  blinker,
   buildPythonPackage,
   fetchPypi,
   flatdict,
   jwcrypto,
-  pycryptodome,
   pycryptodomex,
+  pydantic,
   pydash,
   pyfakefs,
   pyjwt,
@@ -15,9 +16,9 @@
   pytest-mock,
   pytest-recording,
   pytestCheckHook,
-  python-jose,
-  pythonOlder,
+  python-dateutil,
   pyyaml,
+  requests,
   setuptools,
   xmltodict,
   yarl,
@@ -25,14 +26,12 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.13";
+  version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jY6SZ1G3+NquF5TfLsGw6T9WO4smeBYT0gXLnRDoN+8=";
+    hash = "sha256-7ZYDrup+HJxlrOmSBGsWD4Ku8HRlQR4E68olWQtcazg=";
   };
 
   build-system = [ setuptools ];
@@ -40,14 +39,16 @@ buildPythonPackage rec {
   dependencies = [
     aenum
     aiohttp
+    blinker
     flatdict
     jwcrypto
-    pycryptodome
     pycryptodomex
+    pydantic
     pydash
     pyjwt
-    python-jose
+    python-dateutil
     pyyaml
+    requests
     xmltodict
     yarl
   ];
@@ -82,11 +83,11 @@ buildPythonPackage rec {
     "okta.request_executor"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for the Okta Management API";
     homepage = "https://github.com/okta/okta-sdk-python";
     changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
 }

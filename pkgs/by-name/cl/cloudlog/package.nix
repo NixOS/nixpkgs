@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cloudlog";
-  version = "2.7.0";
+  version = "2.8.12";
 
   src = fetchFromGitHub {
     owner = "magicbug";
     repo = "Cloudlog";
     rev = version;
-    hash = "sha256-OP+CUBuc0Zl/cqZlF1Ryo4WlTDEmAflwxpYPJr3BPvg=";
+    hash = "sha256-9NC9hon+okj4jmOY0TMoDUPELDObJiermqSfgmf0gyY=";
   };
 
   postPatch = ''
@@ -35,11 +35,11 @@ stdenvNoCC.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web based amateur radio logging application built using PHP & MySQL";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://www.magicbug.co.uk/cloudlog";
     platforms = php.meta.platforms;
-    maintainers = with maintainers; [ melling ];
+    maintainers = with lib.maintainers; [ haennetz ];
   };
 }

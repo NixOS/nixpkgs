@@ -32,26 +32,20 @@
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
-  version = "1.22.0";
+  version = "1.24.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "ModemManager";
     rev = version;
-    hash = "sha256-/D9b2rCCUhpDCUfSNAWR65+3EyUywzFdH1R17eSKRDo=";
+    hash = "sha256-rBLOqpx7Y2BB6/xvhIw+rDEXsLtePhHLBvfpSuJzQik=";
   };
 
   patches = [
     # Since /etc is the domain of NixOS, not Nix, we cannot install files there.
     # But these are just placeholders so we do not need to install them at all.
     ./no-dummy-dirs-in-sysconfdir.patch
-
-    (fetchpatch {
-      name = "GI_TYPELIB_PATH.patch";
-      url = "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/daa829287894273879799a383ed4dc373c6111b0.patch";
-      hash = "sha256-tPQokiZO2SpTlX8xMlkWjP1AIXgoLHW3rJwnmG33z/k=";
-    })
   ];
 
   strictDeps = true;
@@ -127,11 +121,11 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WWAN modem manager, part of NetworkManager";
     homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
-    license = licenses.gpl2Plus;
-    teams = [ teams.freedesktop ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.freedesktop ];
+    platforms = lib.platforms.linux;
   };
 }

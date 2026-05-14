@@ -8,20 +8,15 @@
 
 buildPythonPackage rec {
   pname = "zope-proxy";
-  version = "6.1";
+  version = "7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.proxy";
     tag = version;
-    hash = "sha256-RgkUojCAfwAGv8Jek2Ucg0KMtPviwXjuiO70iisParM=";
+    hash = "sha256-p5uDHNF7kZJkFibNbM0JLrw5BYqs+qnNH3t0UBt0Krg=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 
@@ -37,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopefoundation/zope.proxy";
     description = "Generic Transparent Proxies";
-    changelog = "https://github.com/zopefoundation/zope.proxy/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.proxy/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };

@@ -52,7 +52,7 @@ let
     arg:
     if builtins.isPath arg then
       {
-        args = args ++ [ { __rawShell = "\"\$${builtins.toString maxArgIndex}\""; } ];
+        args = args ++ [ { __rawShell = "\"\$${toString maxArgIndex}\""; } ];
         maxArgIndex = maxArgIndex + 1;
         paths = paths ++ [ arg ];
       }
@@ -144,7 +144,7 @@ rec {
     scripts:
 
     let
-      scriptsNormalized = builtins.map normalize scripts;
+      scriptsNormalized = map normalize scripts;
     in
     let
       scripts = scriptsNormalized;
@@ -174,7 +174,7 @@ rec {
       builtins.length (
         lib.unique (
           builtins.filter (attrPath: attrPath != null) (
-            builtins.map (
+            map (
               {
                 attrPath ? null,
                 ...
@@ -187,7 +187,7 @@ rec {
     ) "Combining update scripts with different attr paths is currently unsupported.";
 
     {
-      command = commandsToShellInvocation (builtins.map ({ command, ... }: command) scripts);
+      command = commandsToShellInvocation (map ({ command, ... }: command) scripts);
       supportedFeatures =
         if hasCommitSupport then
           [ "commit" ]

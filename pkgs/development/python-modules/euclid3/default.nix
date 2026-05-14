@@ -15,11 +15,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "euclid3" ];
 
-  meta = with lib; {
+  meta = {
     description = "2D and 3D vector, matrix, quaternion and geometry module";
     homepage = "http://code.google.com/p/pyeuclid/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       jfly
       matusf
     ];

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     else if stdenv.hostPlatform.isDarwin then
       ./binary-builder-darwin.sh
     else
-      throw "Not supported on ${stdenv.hostPlatform}.";
+      throw "Not supported on ${stdenv.hostPlatform.system}.";
 
   meta = {
     description = "Free Pascal Compiler from a binary distribution";

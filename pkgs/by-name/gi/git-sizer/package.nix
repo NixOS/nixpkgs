@@ -6,14 +6,14 @@
   git-sizer,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-sizer";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "git-sizer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-On7QBTzKfnuuzwMQ8m1odxGqfIKL+EDg5V05Kxuhmqw=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.BuildVersion=${version}"
+    "-X main.BuildVersion=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -31,11 +31,11 @@ buildGoModule rec {
     package = git-sizer;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Compute various size metrics for a Git repository";
     homepage = "https://github.com/github/git-sizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "git-sizer";
   };
-}
+})

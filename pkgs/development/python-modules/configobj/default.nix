@@ -4,7 +4,6 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "configobj";
   version = "5.0.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DiffSK";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configobj" ];
 
-  meta = with lib; {
+  meta = {
     description = "Config file reading, writing and validation";
     homepage = "https://github.com/DiffSK/configobj";
     changelog = "https://github.com/DiffSK/configobj/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

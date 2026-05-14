@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "udev-gothic-nf";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchzip {
     url = "https://github.com/yuru7/udev-gothic/releases/download/v${version}/UDEVGothic_NF_v${version}.zip";
-    hash = "sha256-55SHOQD+6eJ2L3+95eofr18fp1nFeBKcZvZq8gfj7rA=";
+    hash = "sha256-pX62FnoHTB6LmwI1wDHvjWsko82b8jOet3MzQrn/CXI=";
   };
 
   installPhase = ''
@@ -19,11 +19,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programming font that combines BIZ UD Gothic, JetBrains Mono and nerd-fonts";
     homepage = "https://github.com/yuru7/udev-gothic";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ haruki7049 ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ haruki7049 ];
+    platforms = lib.platforms.all;
   };
 }

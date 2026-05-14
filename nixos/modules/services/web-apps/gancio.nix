@@ -20,7 +20,6 @@ let
     concatMapStringsSep
     getExe
     mkMerge
-    mkDefault
     ;
 in
 {
@@ -44,7 +43,7 @@ in
       default = "gancio";
     };
 
-    settings = mkOption rec {
+    settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
         options = {

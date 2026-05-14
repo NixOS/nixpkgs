@@ -9,12 +9,12 @@
   libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmlstarlet";
   version = "1.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xmlstar/xmlstarlet-${version}.tar.gz";
+    url = "mirror://sourceforge/xmlstar/xmlstarlet-${finalAttrs.version}.tar.gz";
     sha256 = "1jp737nvfcf6wyb54fla868yrr39kcbijijmjpyk4lrpyg23in0m";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xmlstarlet";
     platforms = lib.platforms.unix;
   };
-}
+})

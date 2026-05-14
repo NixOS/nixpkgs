@@ -3,12 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   pythonAtLeast,
-  pythonOlder,
   decorator,
   ipython,
   isPyPy,
-  exceptiongroup,
-  tomli,
   setuptools,
   pytestCheckHook,
   pytest-timeout,
@@ -17,7 +14,7 @@
 buildPythonPackage rec {
   pname = "ipdb";
   version = "0.13.13";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPyPy; # setupterm: could not find terminfo database
 
@@ -31,10 +28,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ipython
     decorator
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -52,11 +45,11 @@ buildPythonPackage rec {
     "tests/test_opts.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gotcha/ipdb";
     description = "IPython-enabled pdb";
     mainProgram = "ipdb3";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

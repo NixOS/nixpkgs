@@ -25,7 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace rtl-sdr.rules \
       --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
+
+  patches = [
+    ./use-stdbool.patch
+  ];
 
   nativeBuildInputs = [
     cmake

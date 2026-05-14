@@ -7,26 +7,24 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.73.1";
+  version = "3.95.1";
 
   src = fetchFromGitHub {
     owner = "PHP-CS-Fixer";
     repo = "PHP-CS-Fixer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1sivnmQDqyYVimac6yjKHTGSmJlx9WFCoQJXiZVce9Y=";
+    hash = "sha256-nQSVAEb57kcboaqTa344eIsDC7qRiCAA6M9x77hsTio=";
   };
 
-  # Upstream doesn't provide a composer.lock.
-  # More info at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
   composerLock = ./composer.lock;
-  vendorHash = "sha256-ywJ2Gj9vMeu1pOg2UtfWDaxU+mpt/ay5KNQiWZGm6h4=";
+  vendorHash = "sha256-VIwZQutV2qlz0kZDQCncEM8Wa2zT9o+oM9O+FmhiTas=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
-    broken = lib.versionOlder php.version "8.2" || lib.versionAtLeast php.version "8.4";
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
     description = "Tool to automatically fix PHP coding standards issues";
     homepage = "https://cs.symfony.com/";

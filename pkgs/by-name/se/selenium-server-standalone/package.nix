@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "${minorVersion}.${patchVersion}";
 
   src = fetchurl {
-    url = "http://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
+    url = "https://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
     sha256 = "1jzkx0ahsb27zzzfvjqv660x9fz2pbcddgmhdzdmasxns5vipxxc";
   };
 
@@ -37,16 +37,15 @@ stdenv.mkDerivation rec {
       --add-flags "org.openqa.grid.selenium.GridLauncherV3"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.seleniumhq.org/";
     description = "Selenium Server for remote WebDriver";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       coconnor
-      offline
     ];
     mainProgram = "selenium-server";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

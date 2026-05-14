@@ -2,11 +2,17 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "atkinson-hyperlegible-next";
   version = "2.001-unstable-2025-02-21";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "googlefonts";
@@ -17,12 +23,11 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
+  nativeBuildInputs = [ installFonts ];
+
+  # default installPhase invokes python, but we still want the font hook to run
   installPhase = ''
     runHook preInstall
-
-    install -Dm644 -t $out/share/fonts/opentype fonts/otf/*
-    install -Dm644 -t $out/share/fonts/variable fonts/variable/*
-
     runHook postInstall
   '';
 

@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   nix-update-script,
   python3Packages,
   gdk-pixbuf,
@@ -9,7 +10,7 @@
   gobject-introspection,
   gtk3,
   wrapGAppsHook3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libnotify,
   keybinder3,
   libappindicator,
@@ -17,18 +18,18 @@
   wmctrl,
   xvfb-run,
   librsvg,
-  libX11,
+  libx11,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ulauncher";
   version = "5.15.7";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
+    url = "https://github.com/Ulauncher/Ulauncher/releases/download/${finalAttrs.version}/ulauncher_${finalAttrs.version}.tar.gz";
     hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
   };
 
@@ -48,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator
     libnotify
     librsvg
-    webkitgtk_4_0
+    webkitgtk_4_1
     wmctrl
   ];
 
@@ -80,6 +81,11 @@ python3Packages.buildPythonApplication rec {
   patches = [
     ./fix-path.patch
     ./fix-extensions.patch
+    (fetchpatch {
+      name = "support-gir1.2-webkit2-4.1.patch";
+      url = "https://src.fedoraproject.org/rpms/ulauncher/raw/rawhide/f/support-gir1.2-webkit2-4.1.patch";
+      hash = "sha256-w1c+Yf6SA3fyMrMn1LXzCXf5yuynRYpofkkUqZUKLS8=";
+    })
   ];
 
   postPatch = ''
@@ -117,7 +123,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(
      "''${gappsWrapperArgs[@]}"
      --prefix PATH : "${lib.makeBinPath [ wmctrl ]}"
-     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libX11 ]}"
+     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libx11 ]}"
      --prefix WEBKIT_DISABLE_COMPOSITING_MODE : "1"
     )
   '';
@@ -136,14 +142,14 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "ulauncher";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aaronjanse
     ];
   };
-}
+})

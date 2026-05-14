@@ -13,7 +13,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "a2jmidid";
   version = "12";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitea.ladish.org";
     owner = "LADI";
     repo = "a2jmidid";
-    rev = "refs/tags/${version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-PZKGhHmPMf0AucPruOLB9DniM5A3BKdghFCrd5pTzeM=";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
-    substituteInPlace $out/bin/a2j --replace "a2j_control" "$out/bin/a2j_control"
+    substituteInPlace $out/bin/a2j --replace-fail "a2j_control" "$out/bin/a2j_control"
   '';
 
   passthru.updateScript = gitUpdater { };
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
     homepage = "https://a2jmidid.ladish.org/";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
   };
-}
+})

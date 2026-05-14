@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "utpm";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Thumuss";
     repo = "utpm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NlH+fPkTNqaQc2BrjerktnKS2L731K9G3z+N2xdx3kg=";
+    hash = "sha256-MGvPj+qF05zc2rPf1LxWVIpkZGOoDj09UfCZbQ/lBOM=";
   };
 
-  cargoHash = "sha256-WR9LD5HjLgh9jirnjTc6BeNg8KjVZI+DuJRYEbN3tmE=";
+  cargoHash = "sha256-eWEriaKakEIORrQgcD5hrvSVfGRS2kU8GKNAOTIFCo0=";
 
   env.OPENSSL_NO_VENDOR = 1;
 

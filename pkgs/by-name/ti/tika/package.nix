@@ -5,6 +5,7 @@
   jdk17,
   jre17_minimal,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   mvnDepsHash ? null,
   enableGui ? true,
@@ -16,10 +17,10 @@
 
 let
   mvnDepsHashes = {
-    "x86_64-linux" = "sha256-OTd51n6SSlFziqvvHmfyMAyQRwIzsHxFGuJ62zlX1Ec=";
-    "aarch64-linux" = "sha256-tPaGLqm0jgEoz0BD/C6AG9xupovQvib/v0kB/jjqwB8=";
-    "x86_64-darwin" = "sha256-Rs7nTiGazUW8oJJr6fbJKelzFqd2n278sJYoMy2/0N4=";
-    "aarch64-darwin" = "sha256-gnP+G33LPRMQ6HRzeZ8cEV9oSohrlPcMwlBB4rvH7+E=";
+    "x86_64-linux" = "sha256-ZlGOxVXU63AKzfWeOLGPa2l8v+Rv8Bzr4H/Er62cxk8=";
+    "aarch64-linux" = "sha256-CrOYBEnp8cVpdF2PrpGQjmdYH8ZKupm9Jf1LVyNoObk=";
+    "x86_64-darwin" = "sha256-D1QkCTYep9RbNUaZPrnbgkR94cvQkX3xxxUxwyLIqx8=";
+    "aarch64-darwin" = "sha256-zvvko6wSJoc2cgMLl7XVmypq0vVTirrIpJiEdypPlrU=";
   };
 
   knownMvnDepsHash =
@@ -48,6 +49,14 @@ maven.buildMavenPackage rec {
     tag = version;
     hash = "sha256-nuiE+MWJNA4PLprAC0vDBadk34TFsVEDBcCZct1XRxo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-54988.patch";
+      url = "https://github.com/apache/tika/commit/bfee6d5569fe9197c4ea947a96e212825184ca33.patch";
+      hash = "sha256-LHM2SafZ85f53mWWSbA4ZQ/QSiDeiwNnzAbLGqGQqPM=";
+    })
+  ];
 
   buildOffline = true;
 

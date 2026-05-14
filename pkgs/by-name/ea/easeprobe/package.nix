@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "easeprobe";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "megaease";
     repo = "easeprobe";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LrfUQxxoC20pJXdBWa8wMuxbTbD3DRnsOlIDdBarNMY=";
   };
 
@@ -25,15 +25,15 @@ buildGoModule rec {
     "-s"
     "-w"
     "-extldflags -static"
-    "-X github.com/megaease/easeprobe/global.Ver=${version}"
+    "-X github.com/megaease/easeprobe/global.Ver=${finalAttrs.version}"
     "-X github.com/megaease/easeprobe/pkg/version.REPO=megaease/easeprobe"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, standalone, and lightweight tool that can do health/status checking, written in Go";
     homepage = "https://github.com/megaease/easeprobe";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "easeprobe";
   };
-}
+})

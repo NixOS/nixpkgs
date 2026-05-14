@@ -17,7 +17,7 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = with pkgs.xorg; [
+      default = with pkgs; [
         xclock
         bitmap
         xlsfonts
@@ -30,7 +30,7 @@ in
         xwud
       ];
       defaultText = literalExpression ''
-        with pkgs.xorg; [
+        with pkgs; [
           xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
         ]
       '';

@@ -9,7 +9,7 @@
   gtkglext,
   libjpeg_turbo,
   libtheora,
-  libXmu,
+  libxmu,
   lua,
   libGLU,
   libGL,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     perl
     libjpeg_turbo
     libtheora
-    libXmu
+    libxmu
     libGLU
     libGL
   ];
@@ -70,7 +70,9 @@ stdenv.mkDerivation rec {
     mainProgram = "celestia";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ hjones2199 ];
+    maintainers = with lib.maintainers; [
+      returntoreality
+    ];
     platforms = lib.platforms.linux;
   };
 }

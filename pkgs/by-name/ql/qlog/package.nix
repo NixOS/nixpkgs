@@ -9,15 +9,15 @@
   qt6Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qlog";
-  version = "0.45.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
-    tag = "v${version}";
-    hash = "sha256-Baw5IbO+A91Kt20DPAvh5oERkojBgegHK70g6XUysvs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Grsrh+WDobWC+zRFYP3xtfGp0VIyTt6XhTMs0+s9qh4=";
     fetchSubmodules = true;
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; unix;
   };
-}
+})

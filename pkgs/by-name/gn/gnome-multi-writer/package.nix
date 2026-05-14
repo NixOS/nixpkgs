@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "3.35.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-multi-writer/${lib.versions.majorMinor version}/gnome-multi-writer-${version}.tar.xz";
     sha256 = "07vgzjjdrxcp7h73z13h9agafxb4vmqx5i81bcfyw0ilw9kkdzmp";
   };
 
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for writing an ISO file to multiple USB devices at once";
     mainProgram = "gnome-multi-writer";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-multi-writer";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

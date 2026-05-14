@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.7.6";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-sqlalchemy";
     tag = "v${version}";
-    hash = "sha256-8Q4cqfldSilBpj/1/4u5HRUDT8fD9MPzVGcokYt0dJA=";
+    hash = "sha256-HxETZOHGfVcjopnoi8h37qanJa4pbjAmBk08u7HLRvA=";
   };
 
   build-system = [ hatchling ];
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Snowflake SQLAlchemy Dialect";
     changelog = "https://github.com/snowflakedb/snowflake-sqlalchemy/blob/${src.tag}/DESCRIPTION.md";
     homepage = "https://github.com/snowflakedb/snowflake-sqlalchemy";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

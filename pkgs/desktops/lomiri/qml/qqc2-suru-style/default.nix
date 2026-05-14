@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qqc2-suru-style";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-kAgHsNWwUWxHg26bTMmlq8m9DR4+ob4pl/oUX7516hM=";
   };
 

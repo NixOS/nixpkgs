@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -8,22 +8,27 @@
   cairo,
   file,
   hyprutils,
+  lcms2,
+  libGL,
+  libdrm,
   libjpeg,
   libjxl,
+  librsvg,
   libspng,
   libwebp,
+  pango,
   pixman,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.1.5";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gbh1HL98Fdqu0jJIWN4OJQN7Kkth7+rbkFpSZLm/62A=";
+    hash = "sha256-48DubZbx8PDfuJkksNgi5aWFnX/Rq1OUaLsUvsdf2Bo=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     file
     hyprutils
+    lcms2
+    libGL
+    libdrm
     libjpeg
     libjxl
+    librsvg
     libspng
     libwebp
+    pango
     pixman
   ];
 

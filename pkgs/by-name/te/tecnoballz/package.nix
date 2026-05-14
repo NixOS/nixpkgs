@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     "scoredir=$(TMPDIR)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://linux.tlk.fr/games/TecnoballZ/";
     downloadPage = "https://linux.tlk.fr/games/TecnoballZ/download/";
     description = "Brick breaker game with a sophisticated system of weapons and bonuses";
@@ -63,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
       by gaining bonuses. Numerous decors, musics and sounds complete this great
       game. This game was ported from the Commodore Amiga.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

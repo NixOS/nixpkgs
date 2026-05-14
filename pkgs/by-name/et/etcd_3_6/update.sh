@@ -30,7 +30,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     ETCD_SRC_HASH=$(nix hash to-sri --type sha256 $ETCD_SRC_HASH)
 
     setKV () {
-        sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "$ETCD_PATH/default.nix"
+        sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "$ETCD_PATH/package.nix"
     }
 
     setKV version $LATEST_VERSION
@@ -63,7 +63,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     # `git` flag here is to be used by local maintainers to speed up the bump process
     if [ $# -eq 1 ] && [ "$1" = "git" ]; then
         git switch -c "package-$ETCD_PKG_NAME-$LATEST_VERSION"
-        git add "$ETCD_PATH"/default.nix
+        git add "$ETCD_PATH"/package.nix
         git commit -m "$ETCD_PKG_NAME: $OLD_VERSION -> $LATEST_VERSION
 
 Release: https://github.com/etcd-io/etcd/releases/tag/$LATEST_TAG"

@@ -12,13 +12,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgtap";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pgtap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YgvfLGF7pLVcCKD66NnWAydDxtoYHH1DpLiYTEKHJ0E=";
+    hash = "sha256-SKac6JJmH/z7G1GmQYATMNfywsDIHjNdskzn2MT3kBg=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,6 @@ postgresqlBuildExtension (finalAttrs: {
       postgresqlTestHook
       (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
     ];
-    passAsFile = [ "sql" ];
     sql = ''
       CREATE EXTENSION pgtap;
 
@@ -47,10 +46,13 @@ postgresqlBuildExtension (finalAttrs: {
     '';
     checkPhase = ''
       runHook preCheck
+      sqlPath=$TMPDIR/test.sql
+      printf "%s" "$sql" > $sqlPath
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath
       runHook postCheck
     '';
     installPhase = "touch $out";
+    __structuredAttrs = true;
   };
 
   meta = {

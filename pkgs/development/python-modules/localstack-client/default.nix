@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "localstack-client";
-  version = "2.10";
+  version = "2.11";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "localstack_client";
     inherit version;
-    hash = "sha256-cyoH4j//1qWBrycUu+AGrW+ISsT4rJVSEaimMyHNxAk=";
+    hash = "sha256-HL178fA7m1U//n6hD+E39E6NaQo3r5xlFeumGiN5/EY=";
   };
 
   propagatedBuildInputs = [ boto3 ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
     inherit (pkgs) localstack;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python client for LocalStack";
     homepage = "https://github.com/localstack/localstack-python-client";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

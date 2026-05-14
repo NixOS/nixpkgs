@@ -8,8 +8,7 @@
   pyasn1-modules,
   pycparser,
   pyqt5,
-  pyqtwebengine,
-  pythonOlder,
+  # pyqtwebengine, # removed
   withGui ? false,
   wrapQtAppsHook,
   setuptools,
@@ -17,14 +16,12 @@
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.2.1";
+  version = "1.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zBWrVBub48rYBg7k9CDmgCWPpPz3R38/mtUCM1P3Mpk=";
+    hash = "sha256-UQryZ4aGVEr5vRLElmTwRNtgi3h6CPzzq5n+E58tuo8=";
   };
 
   pythonRelaxDeps = [
@@ -36,7 +33,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals withGui [
     wrapQtAppsHook
   ];
 
@@ -47,14 +44,14 @@ buildPythonPackage rec {
     msgpack
     pycparser
   ]
-  ++ lib.optionals (withGui) optional-dependencies.gui;
+  ++ lib.optionals withGui optional-dependencies.gui;
 
   optional-dependencies.gui = [
     pyqt5
-    pyqtwebengine
+    # pyqtwebengine
   ];
 
-  postFixup = ''
+  postFixup = lib.optionalString withGui ''
     wrapQtApp $out/bin/vivbin
   '';
 
@@ -63,11 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vivisect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
     changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
+    broken = withGui; # https://github.com/vivisect/vivisect/issues/683
   };
 }

@@ -8,7 +8,6 @@
   pkg-config,
   gtk3,
   libsoup_2_4,
-  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -54,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     gtk3
     libsoup_2_4
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   postInstall = ''
@@ -74,6 +73,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     changelog = "https://github.com/b-inary/desktop-postflop/releases/tag/${src.rev}";
     description = "Free, open-source GTO solver for Texas hold'em poker";
     homepage = "https://github.com/b-inary/desktop-postflop";

@@ -5,15 +5,12 @@
   pymeeus,
   pytz,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "convertdate";
   version = "2.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fitnr";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "convertdate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utils for converting between date formats and calculating holidays";
     mainProgram = "censusgeocode";
     homepage = "https://github.com/fitnr/convertdate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

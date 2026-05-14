@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "pyspinel";
   version = "unstable-2021-08-19";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openthread";
@@ -27,10 +24,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "spinel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to the OpenThread Network Co-Processor (NCP)";
     homepage = "https://github.com/openthread/pyspinel";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

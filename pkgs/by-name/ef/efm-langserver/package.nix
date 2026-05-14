@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "efm-langserver";
-  version = "0.0.54";
+  version = "0.0.56";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "efm-langserver";
-    rev = "v${version}";
-    sha256 = "sha256-3ZrWc8/4aC5TOoL9vybkMZC9HkIL43TokebFcJYyrcI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-M2I5UQYCkIVfINWEVa4tOt0Dtl4sBZoHP/q0ia/Bo2Y=";
   };
 
-  vendorHash = "sha256-FOAKxKqhrUpfXkoasSd7v3kKAqV11p5ieZaMPni5Hx4=";
+  vendorHash = "sha256-3Rz/9p1moT3rQPY3/lka9HZ16T00+bAWCc950IBTkFE=";
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "General purpose Language Server";
     mainProgram = "efm-langserver";
-    maintainers = with maintainers; [ Philipp-M ];
+    maintainers = with lib.maintainers; [ Philipp-M ];
     homepage = "https://github.com/mattn/efm-langserver";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

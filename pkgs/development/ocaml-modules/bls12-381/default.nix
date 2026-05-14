@@ -10,13 +10,13 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bls12-381";
   version = "6.1.0";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-bls12-381";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-z2ZSOrXgm+XjdrY91vqxXSKhA0DyJz6JkkNljDZznX8=";
   };
 
@@ -46,4 +46,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

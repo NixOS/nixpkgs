@@ -10,7 +10,7 @@ The hook runs in `installCheckPhase`, requiring `doInstallCheck` is enabled for 
   lib,
   stdenv,
   udevCheckHook,
-# ...
+  # ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {

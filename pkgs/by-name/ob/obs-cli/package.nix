@@ -5,14 +5,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "obs-cli";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "obs-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4tjS+PWyP/T0zs4IGE6VQ5c+3tuqxlBwfpPBVEcim6c=";
   };
 
@@ -32,10 +32,10 @@ buildGoModule rec {
   meta = {
     description = "Command-line remote control for OBS";
     homepage = "https://github.com/muesli/obs-cli";
-    changelog = "https://github.com/muesli/obs-cli/releases/tag/v${version}";
+    changelog = "https://github.com/muesli/obs-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flexiondotorg ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "obs-cli";
   };
-}
+})

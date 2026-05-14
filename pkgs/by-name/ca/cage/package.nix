@@ -8,28 +8,27 @@
   wayland-scanner,
   scdoc,
   makeWrapper,
-  wlroots_0_18,
+  wlroots_0_20,
   wayland,
   wayland-protocols,
   pixman,
   libxkbcommon,
-  xcbutilwm,
-  systemd,
+  libxcb-wm,
   libGL,
-  libX11,
+  libx11,
   xwayland ? null,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cage";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "cage-kiosk";
     repo = "cage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2SFtz62z0EF8cpFTC6wGi125MD4a5mkXqP/C+7fH+3g=";
+    hash = "sha256-NLoz11bfeZwesmwLmyytuB6/vSwIsnDWKzyAXFe+YZ0=";
   };
 
   depsBuildBuild = [
@@ -46,18 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wlroots_0_18
+    wlroots_0_20
     wayland
     wayland-protocols
     pixman
     libxkbcommon
-    xcbutilwm
-    systemd
+    libxcb-wm
     libGL
-    libX11
+    libx11
   ];
 
-  postFixup = lib.optionalString wlroots_0_18.enableXWayland ''
+  postFixup = lib.optionalString wlroots_0_20.enableXWayland ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 
@@ -69,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.hjdskes.nl/projects/cage/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cage";
   };
 })

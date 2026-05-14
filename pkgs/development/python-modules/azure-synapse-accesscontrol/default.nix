@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-synapse-accesscontrol";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.synapse.accesscontrol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Synapse AccessControl Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-accesscontrol";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-accesscontrol_${version}/sdk/synapse/azure-synapse-accesscontrol/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

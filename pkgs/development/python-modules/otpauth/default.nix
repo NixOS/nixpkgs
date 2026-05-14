@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   version = "2.2.1";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,11 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "otpauth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implements one time password of HOTP/TOTP";
     homepage = "https://otp.authlib.org/";
     changelog = "https://github.com/authlib/otpauth/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

@@ -6,10 +6,10 @@
   docutils,
   pkg-config,
   glib,
-  libpthreadstubs,
-  libXau,
-  libXdmcp,
-  xcbutil,
+  libpthread-stubs,
+  libxau,
+  libxdmcp,
+  libxcb-util,
   nixosTests,
 }:
 
@@ -24,6 +24,12 @@ stdenv.mkDerivation {
     sha256 = "040nqgfh564frvqkrkmak3x3h0yadz6kzk81jkfvd9vd20a9drh7";
   };
 
+  patches = [
+    # Update CMake minimum required version for CMake 4 compatibility
+    # https://github.com/xdbob/xss-lock/pull/3
+    ./cmake-3.10.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -31,22 +37,21 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     glib
-    libpthreadstubs
-    libXau
-    libXdmcp
-    xcbutil
+    libpthread-stubs
+    libxau
+    libxdmcp
+    libxcb-util
   ];
 
   passthru.tests = { inherit (nixosTests) xss-lock; };
 
-  meta = with lib; {
+  meta = {
     description = "Use external locker (such as i3lock) as X screen saver";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "xss-lock";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       malyn
-      offline
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

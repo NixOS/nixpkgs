@@ -6,13 +6,13 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rss2email";
   version = "3.14";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RwORS2PHquxBZLNKqCJtR5XX4SHqPCb/Fn+Y68dfI/g=";
   };
 
@@ -22,6 +22,8 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/rss2email/rss2email/commit/b5c0e78006c2db6929b5ff50e8529de58a00412a.patch";
       hash = "sha256-edmsi3I0acx5iF9xoAS9deSexqW2UtWZR/L7CgeZs/M=";
     })
+    # https://github.com/rss2email/rss2email/pull/279
+    ./html2text-2025.4.15-compat.patch
     (fetchpatch2 {
       name = "use-poetry-core.patch";
       url = "https://github.com/rss2email/rss2email/commit/183a17aefe4eb66f898cf088519b1e845559f2bd.patch";
@@ -69,14 +71,13 @@ python3Packages.buildPythonApplication rec {
     "test"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool that converts RSS/Atom newsfeeds to email";
     homepage = "https://pypi.python.org/pypi/rss2email";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ekleog ];
+    license = lib.licenses.gpl2;
     mainProgram = "r2e";
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;
   };
-}
+})

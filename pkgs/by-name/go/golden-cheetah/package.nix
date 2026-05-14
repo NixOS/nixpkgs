@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
-  version = "3.7";
+  version = "3.8-DEV2603";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-INlkFWugIoln7wrmgLZUC/Ye8eV+mlT6BZ0ZdP7CiqE=";
+    hash = "sha256-FxQ18KJfR+fegQ5Qu4vI3vqckj4mB8s9VtSdRtIQISg=";
   };
 
   buildInputs =
@@ -70,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Fix-building-with-bison-3.7.patch
   ];
 
-  NIX_LDFLAGS = "-lz -lgsl -lblas";
+  env.NIX_LDFLAGS = toString [
+    "-lz"
+    "-lgsl"
+    "-lblas"
+  ];
 
   qtWrapperArgs = [
     "--prefix"
@@ -96,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $out/bin
         cp src/GoldenCheetah $out/bin
         install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
-        install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
+        install -Dm644 src/Resources/images/gc.png $out/share/icons/hicolor/512x512/apps/goldencheetah.png
 
         runHook postInstall
       ''

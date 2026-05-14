@@ -2,62 +2,51 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
-  numpy,
-  deprecation,
-  hightime,
-  tzlocal,
-  python-decouple,
   click,
+  deprecation,
   distro,
-  requests,
-  sphinx,
-  sphinx-rtd-theme,
+  fetchFromGitHub,
   grpcio,
+  hightime,
+  numpy,
+  poetry-core,
   protobuf,
+  python-decouple,
+  requests,
+  sphinx-rtd-theme,
+  sphinx,
   toml,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
     tag = version;
-    hash = "sha256-uxf+1nmJ+YFS3zGu+0YP4zOdBlSCHPYC8euqZIGwb00=";
+    hash = "sha256-Khydb14+yJKWYcO4pROfbainXw3bHceXK5Gc9GCIYNo=";
   };
-
-  disabled = pythonOlder "3.8";
 
   build-system = [ poetry-core ];
 
-  prePatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
-
-    substituteInPlace pyproject.toml \
-      --replace-fail '["poetry>=1.2"]' '["poetry-core>=1.0.0"]'
-  '';
-
   dependencies = [
-    numpy
+    click
     deprecation
     hightime
-    tzlocal
+    numpy
     python-decouple
-    click
     requests
+    tzlocal
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     distro
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     docs = [
       sphinx
       sphinx-rtd-theme

@@ -40,7 +40,7 @@ let
     isValid
     ;
 
-  # Return the reason why a subpath is invalid, or `null` if it's valid
+  # Returns the reason why a subpath is invalid, or `null` if it's valid
   subpathInvalidReason =
     value:
     if !isString value then
@@ -115,7 +115,7 @@ let
       # An empty string is not a valid relative path, so we need to return a `.` when we have no components
       (if components == [ ] then "." else concatStringsSep "/" components);
 
-  # Type: Path -> { root :: Path, components :: [ String ] }
+  # Type: Path -> { root :: Path; components :: [String]; }
   #
   # Deconstruct a path value type into:
   # - root: The filesystem root of the path, generally `/`
@@ -143,7 +143,7 @@ let
   # The number of store directory components, typically 2
   storeDirLength = length storeDirComponents;
 
-  # Type: [ String ] -> Bool
+  # Type: [String] -> Bool
   #
   # Whether path components have a store path as a prefix, according to
   # https://nixos.org/manual/nix/stable/store/store-path.html#store-path.
@@ -239,7 +239,7 @@ in
     # The subpath string to append
     subpath:
     assert assertMsg (isPath path)
-      ''lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected'';
+      "lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected";
     assert assertMsg (isValid subpath) ''
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
@@ -395,7 +395,7 @@ in
     # Type
 
     ```
-    splitRoot :: Path -> { root :: Path, subpath :: String }
+    splitRoot :: Path -> { root :: Path; subpath :: String; }
     ```
 
     # Examples
@@ -607,7 +607,7 @@ in
     # Type
 
     ```
-    subpath.join :: [ String ] -> String
+    subpath.join :: [String] -> String
     ```
 
     # Examples
@@ -679,7 +679,7 @@ in
     # Type
 
     ```
-    subpath.components :: String -> [ String ]
+    subpath.components :: String -> [String]
     ```
 
     # Examples

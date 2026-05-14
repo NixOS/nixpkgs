@@ -1,33 +1,52 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
   click,
-  primp,
+  fastapi,
+  fetchFromGitHub,
+  lib,
   lxml,
+  mcp,
+  primp,
+  setuptools,
+  trio,
+  uvicorn,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ddgs";
-  version = "9.5.2";
+  version = "9.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
-    tag = "v${version}";
-    hash = "sha256-UDmgRuMpLQu7I0t+0RmK0GkXpV5NTJ1NgsXYIl+A1i0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4kTGiEVsmjlPH8pAbAoeTrC6a/ZshsPSErmPkLRwR9A=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
-    primp
     lxml
+    primp
   ];
+
+  optional-dependencies = {
+    api = [
+      fastapi
+      uvicorn
+    ];
+    mcp = [
+      mcp
+    ];
+    dht = [
+      fastapi
+      uvicorn
+      trio
+    ];
+  };
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
@@ -35,11 +54,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ddgs" ];
 
   meta = {
-    description = "D.D.G.S. | Dux Distributed Global Search. A metasearch library that aggregates results from diverse web search services";
+    description = "A metasearch library that aggregates results from diverse web search services";
     mainProgram = "ddgs";
     homepage = "https://github.com/deedy5/ddgs";
-    changelog = "https://github.com/deedy5/ddgs/releases/tag/${src.tag}";
+    changelog = "https://github.com/deedy5/ddgs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drawbu ];
   };
-}
+})

@@ -13,9 +13,9 @@
   ruby,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mblaze";
-  version = "1.3";
+  version = "1.4";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "mblaze";
-    rev = "v${version}";
-    sha256 = "sha256-398wiXJ/iG9ZfPGDZc57xH37lft3NpEZuLE0Qhb2GGc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v7g4kzCZFkkZ/VPogDObduFzgjBVQFziBzHocAdEw9A=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/leahneukirchen/mblaze";
     description = "Unix utilities for processing and interacting with mail messages which are stored in maildir folders";
-    license = licenses.cc0;
-    platforms = platforms.all;
-    maintainers = [ maintainers.ajgrf ];
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.ajgrf ];
   };
-}
+})

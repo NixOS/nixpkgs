@@ -2,26 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   cython,
   numpy,
   setuptools,
+
+  # nativeBuildInputs
   pkgs,
-  jxrlib,
   lcms2,
+  openjpeg,
+
+  # buildInputs
+  jxrlib,
   lerc,
   libdeflate,
+  libjpeg,
   libpng,
   libtiff,
   libwebp,
-  openjpeg,
   xz,
   zlib,
-  zstd,
-  pytest,
+
+  # tests
+  pytestCheckHook,
 }:
 
 let
-  version = "2025.8.2";
+  version = "2026.3.6";
 in
 buildPythonPackage rec {
   pname = "imagecodecs";
@@ -32,7 +40,7 @@ buildPythonPackage rec {
     owner = "cgohlke";
     repo = "imagecodecs";
     tag = "v${version}";
-    hash = "sha256-HDyA5SQNZe9G83ARfvD4AAIIos8Oatp+RhnEQTdnRp4=";
+    hash = "sha256-UOyhTzejLJ1HnwHtvFe9Mo8nxOkLNANnJL2z/SSRjXs=";
   };
 
   build-system = [
@@ -48,18 +56,19 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    pkgs.lz4
     jxrlib
     lcms2
     lerc
     libdeflate
+    libjpeg
     libpng
     libtiff
     libwebp
+    pkgs.lz4
     openjpeg
     xz # liblzma
     zlib
-    zstd
+    pkgs.zstd
   ];
 
   dependencies = [
@@ -73,7 +82,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

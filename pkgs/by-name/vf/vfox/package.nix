@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "vfox";
-  version = "0.6.10";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "version-fox";
     repo = "vfox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bH7rHhjmfXCOAv+K0HDyPAi+ZBfLllsGyhLSo8rpcl4=";
+    hash = "sha256-dTs+GY3R01pUWINLnZqGg3HBWVsLvSlhxrnecznXeZk=";
   };
 
-  vendorHash = "sha256-TmWhzjjv+DkFHV4kEKpVYgQpI0Vl4aYvKR9QVpawrYA=";
+  vendorHash = "sha256-494nqL6KiUk4VeKlG9YHFpgACgaYC3SR1I1EViD71Jw=";
 
   __darwinAllowLocalNetworking = true;
 
@@ -46,6 +46,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/version-fox/vfox/releases/tag/v${finalAttrs.version}";
     mainProgram = "vfox";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

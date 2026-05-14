@@ -15,6 +15,19 @@
   windows,
 }:
 
+let
+  getOptionalAttrs =
+    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
+
+  interpolateString =
+    s:
+    if lib.isList s then
+      lib.concatMapStringsSep " " (s: "${s}") (lib.filter (s: s != null) s)
+    else if s == null then
+      ""
+    else
+      "${s}";
+in
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
 
@@ -23,21 +36,15 @@ lib.extendMkDerivation {
     "cargoUpdateHook"
     "cargoLock"
     "useFetchCargoVendor"
+    "RUSTFLAGS"
   ];
 
   extendDrvArgs =
     finalAttrs:
     {
-      name ? "${args.pname}-${args.version}",
-
       # Name for the vendored dependencies tarball
-      cargoDepsName ? name,
+      cargoDepsName ? null,
 
-      src ? null,
-      srcs ? null,
-      preUnpack ? null,
-      unpackPhase ? null,
-      postUnpack ? null,
       cargoPatches ? [ ],
       patches ? [ ],
       sourceRoot ? null,
@@ -77,11 +84,22 @@ lib.extendMkDerivation {
     assert lib.warnIf (args ? useFetchCargoVendor)
       "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
       true;
+    {
+      env =
+        let
+          isDarwinDebug = stdenv.hostPlatform.isDarwin && buildType == "debug";
+        in
+        {
+          PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+          RUST_LOG = logLevel;
+          # Prevent shadowing *_RUSTFLAGS environment variables
+          ${if args ? RUSTFLAGS || isDarwinDebug then "RUSTFLAGS" else null} =
+            lib.optionalString isDarwinDebug "-C split-debuginfo=packed "
+            # Workaround the existing RUSTFLAGS specified as a list.
+            + interpolateString (args.RUSTFLAGS or "");
+        }
+        // args.env or { };
 
-    lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
-      RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
-    }
-    // {
       cargoDeps =
         if cargoVendorDir != null then
           null
@@ -93,17 +111,20 @@ lib.extendMkDerivation {
           throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
         else
           fetchCargoVendor (
-            {
-              inherit
-                src
-                srcs
-                sourceRoot
-                cargoRoot
-                preUnpack
-                unpackPhase
-                postUnpack
-                ;
-              name = cargoDepsName;
+            getOptionalAttrs [
+              "name"
+              "pname"
+              "version"
+              "src"
+              "srcs"
+              "sourceRoot"
+              "cargoRoot"
+              "preUnpack"
+              "unpackPhase"
+              "postUnpack"
+            ] finalAttrs
+            // {
+              ${if cargoDepsName != null then "name" else null} = cargoDepsName;
               patches = cargoPatches;
               hash = args.cargoHash;
             }
@@ -142,15 +163,6 @@ lib.extendMkDerivation {
       buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
       patches = cargoPatches ++ patches;
-
-      PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
-
-      postUnpack = ''
-        eval "$cargoDepsHook"
-
-        export RUST_LOG=${logLevel}
-      ''
-      + (args.postUnpack or "");
 
       configurePhase =
         args.configurePhase or ''

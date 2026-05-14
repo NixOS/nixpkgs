@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rwmjones";
     repo = "rhsrvany";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eeEiAdm7NO5fFYKtHQbeBq4RhP8Xwgw2p2Wkm+n0EWM=";
   };
 

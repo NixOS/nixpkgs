@@ -403,7 +403,7 @@ in
       }
     ];
     services.public-inbox.settings = filterAttrsRecursive (n: v: v != null) {
-      publicinbox = mapAttrs (n: filterAttrs (n: v: n != "description")) cfg.inboxes;
+      publicinbox = mapAttrs (n: v: removeAttrs v [ "description" ]) cfg.inboxes;
     };
     users = {
       users.public-inbox = {
@@ -605,7 +605,7 @@ in
           ];
         }
       )
-      ({
+      {
         public-inbox-init =
           let
             PI_CONFIG = gitIni.generate "public-inbox.ini" (
@@ -674,9 +674,9 @@ in
               };
             }
           ];
-      })
+      }
     ];
-    environment.systemPackages = with pkgs; [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
   };
   meta.maintainers = with lib.maintainers; [
     julm

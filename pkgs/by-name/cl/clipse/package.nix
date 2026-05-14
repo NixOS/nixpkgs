@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clipse";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "savedra1";
     repo = "clipse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yUkHT7SZT7Eudvk1n43V+WGWqUKtXaV+p4ySMK/XzQw=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     mainProgram = "clipse";
     maintainers = [ lib.maintainers.savedra1 ];
   };
-}
+})

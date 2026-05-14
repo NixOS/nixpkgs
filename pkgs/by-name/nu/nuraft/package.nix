@@ -5,19 +5,19 @@
   fetchpatch,
   cmake,
   boost,
-  asio,
+  asio_1_32_0,
   openssl,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nuraft";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "eBay";
     repo = "NuRaft";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-puO8E7tSLqB0oq/NlzEZqQgIZKm7ZUb4HhR0XuI9dco=";
   };
 
@@ -34,16 +34,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     boost
-    asio
+    # Depends on io_service
+    asio_1_32_0
     openssl
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eBay/NuRaft";
     description = "C++ implementation of Raft core logic as a replication library";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wheelsandmetal ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wheelsandmetal ];
+    platforms = lib.platforms.all;
   };
-}
+})

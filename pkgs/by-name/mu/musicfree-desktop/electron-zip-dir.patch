@@ -1,0 +1,12 @@
+diff --git a/forge.config.ts b/forge.config.ts
+index 0b0b282..d732b68 100644
+--- a/forge.config.ts
++++ b/forge.config.ts
+@@ -14,6 +14,7 @@ const config: ForgeConfig = {
+     icon: path.resolve(__dirname, "res/logo"),
+     executableName: "MusicFree",
+     extraResource: [path.resolve(__dirname, "res")],
++    electronZipDir: path.resolve(__dirname, ".electron-packager/electron-zips"),
+     protocols: [
+       {
+         name: "MusicFree",

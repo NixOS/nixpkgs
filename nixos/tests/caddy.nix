@@ -3,7 +3,6 @@
   name = "caddy";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      Br1ght0ne
       stepbrobd
     ];
   };
@@ -73,8 +72,8 @@
         specialisation.with-plugins.configuration = {
           services.caddy = {
             package = pkgs.caddy.withPlugins {
-              plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20241211194404-3865845790a7" ];
-              hash = "sha256-RrB0/qXL0mCvkxKaz8zhj5GWKEtOqItXP2ASYz7VdMU=";
+              plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20250618171559-80962887e4c6" ];
+              hash = "sha256-kKWXpxEAn23yud8tcgw7FFOaxLjoodZ/cuM1239TRoY=";
             };
             configFile = pkgs.writeText "Caddyfile" ''
               {

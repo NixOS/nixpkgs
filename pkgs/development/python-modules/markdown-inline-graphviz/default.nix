@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cesaremorel/markdown-inline-graphviz/";
     changelog = "https://github.com/cesaremorel/markdown-inline-graphviz/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

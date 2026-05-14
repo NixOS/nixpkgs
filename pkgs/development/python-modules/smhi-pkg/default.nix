@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smhi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing SMHI open forecast data";
     homepage = "https://github.com/joysoftware/pypi_smhi";
     changelog = "https://github.com/joysoftware/pypi_smhi/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

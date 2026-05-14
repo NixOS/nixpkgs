@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   qemu,
   setuptools,
   fuseSupport ? false,
@@ -16,8 +15,6 @@ buildPythonPackage {
   pname = "qemu";
   version = "0.6.1.0a1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = qemu.src;
 
@@ -62,11 +59,11 @@ buildPythonPackage {
       rm $out/bin/qom-fuse
     '');
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.qemu.org/";
     description = "Python tooling used by the QEMU project to build, configure, and test QEMU";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       devplayer0
       davhau
     ];

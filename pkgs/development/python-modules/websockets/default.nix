@@ -5,23 +5,20 @@
   fetchFromGitHub,
   unittestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "15.0.1";
+  version = "16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "websockets";
     tag = version;
-    hash = "sha256-DC1nK+TvCoCqchyWJOyT4Ul4gkTYXixu7XmTqvytqEo=";
+    hash = "sha256-75FkU45qbOb+xbJO4VKqfWBTep+Toh6OWch2WXnU4bg=";
   };
 
   build-system = [ setuptools ];
@@ -40,10 +37,6 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonAtLeast "3.13") [
     # https://github.com/python-websockets/websockets/issues/1569
     "test_writing_in_send_context_fails"
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    # Our Python 3.10 and older raise SSLError instead of SSLCertVerificationError
-    "test_reject_invalid_server_certificate"
   ];
 
   nativeCheckInputs = [
@@ -65,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "websockets" ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket implementation in Python";
     homepage = "https://websockets.readthedocs.io/";
     changelog = "https://github.com/aaugustin/websockets/blob/${src.tag}/docs/project/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

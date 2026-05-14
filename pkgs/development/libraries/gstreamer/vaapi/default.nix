@@ -13,7 +13,13 @@
   wayland-scanner,
   libdrm,
   udev,
-  xorg,
+  libxv,
+  libxrandr,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   libGLU,
   libGL,
   gstreamer,
@@ -30,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer-vaapi";
-  version = "1.26.3";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -39,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LWQ/vRQgKX2lpNaUXRHwpbT4L+6lTqauyTaNQpldiwM=";
+    hash = "sha256-8S+TAnPHodPg1/hblP+dE3nRYqzMky6Mo9OJk+0n/Kw=";
   };
 
   nativeBuildInputs = [
@@ -63,12 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     libdrm
     udev
-    xorg.libX11
-    xorg.libXext
-    xorg.libXv
-    xorg.libXrandr
-    xorg.libSM
-    xorg.libICE
+    libx11
+    libxcb
+    libxext
+    libxv
+    libxrandr
+    libsm
+    libice
     nasm
     libvpx
   ]
@@ -92,15 +99,19 @@ stdenv.mkDerivation (finalAttrs: {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

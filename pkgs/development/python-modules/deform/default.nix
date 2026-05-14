@@ -53,6 +53,6 @@ buildPythonPackage rec {
       lib.licenses.bsd3
       lib.licenses.cc-by-30
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

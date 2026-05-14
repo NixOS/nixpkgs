@@ -1,12 +1,11 @@
 { lib, ... }:
 let
-  inherit (lib) types mkOption setDefaultModuleLocation;
+  inherit (lib) types mkOption;
   inherit (types)
     deferredModule
     lazyAttrsOf
     submodule
     str
-    raw
     enum
     ;
 in

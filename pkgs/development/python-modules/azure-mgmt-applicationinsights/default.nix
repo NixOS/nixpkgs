@@ -6,15 +6,12 @@
   azure-common,
   azure-mgmt-core,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-applicationinsights";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "azure_mgmt_applicationinsights";
@@ -35,11 +32,11 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Application Insights Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/applicationinsights/azure-mgmt-applicationinsights";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-applicationinsights_${version}/sdk/applicationinsights/azure-mgmt-applicationinsights/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

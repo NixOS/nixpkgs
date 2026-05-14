@@ -37,19 +37,19 @@
   withNotmuch ? true,
 }:
 
-assert lib.warnIf (
-  enableMixmaster
-) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
+assert lib.warnIf enableMixmaster
+  "Support for mixmaster has been removed from neomutt since the 20241002 release"
+  true;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20250510";
+  version = "20260105";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-62J7qyHC3hSgEgTA2zB+BQtZb+5BUXjQEOB3vGZGSNw=";
+    hash = "sha256-rdnk1wESnnoaxctkR6WvWpq+DUg86PbH9f1EtpSL5uk=";
   };
 
   buildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace auto.def --replace /usr/sbin/sendmail sendmail
-    substituteInPlace contrib/smime_keys \
+    substituteInPlace smime/smime_keys \
       --replace /usr/bin/openssl ${openssl}/bin/openssl
 
     for f in doc/*.{xml,xsl}*  ; do
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
   ''
   + lib.optionalString enableSmimeKeys ''
-    install -m 755 $src/contrib/smime_keys $out/bin;
+    install -m 755 $src/smime/smime_keys $out/bin;
     substituteInPlace $out/bin/smime_keys \
       --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl';
   ''

@@ -45,13 +45,13 @@ in
       owner = mkOption {
         type = str;
         default = "root";
-        example = "nobody";
+        example = "alice";
         description = "Owner ${set}";
       };
       group = mkOption {
         type = str;
         default = defaultGroup;
-        example = "nobody";
+        example = "users";
         description = "Group ${set}";
       };
       mode = mkOption {
@@ -107,7 +107,7 @@ in
     '';
   };
 
-  meta = with lib; {
-    maintainers = with maintainers; [ lorenzleutgeb ];
+  meta = {
+    maintainers = with lib.maintainers; [ lorenzleutgeb ];
   };
 }

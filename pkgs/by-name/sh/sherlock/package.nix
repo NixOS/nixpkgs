@@ -5,16 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sherlock";
-  version = "0.15.0";
-  format = "pyproject";
+  version = "0.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    tag = "v${version}";
-    hash = "sha256-+fQDvvwsLpiEvy+vC49AzlOA/KaKrhhpS97sZvFbpLA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MP/INeD/dkS0lwACa9g3JqROuOinfr3LKmxjHnVUOdk=";
   };
 
   patches = [
@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3.pkgs; [
+    rstr
     pytestCheckHook
     poetry-core
     jsonschema
@@ -77,4 +78,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "sherlock";
     maintainers = with lib.maintainers; [ applePrincess ];
   };
-}
+})

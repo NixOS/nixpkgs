@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
   doCheck = true;
   nativeCheckInputs = [
@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     ln -sv $out/include/iniparser/*.h $out/include/
   '';
+
+  strictDeps = true;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

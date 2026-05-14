@@ -2,32 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
+  redisTestHook,
+
+  hatchling,
   hypothesis,
   jsonpath-ng,
   lupa,
-  hatchling,
+  numpy,
   pyprobables,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
   redis,
-  redisTestHook,
   sortedcontainers,
+  valkey,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fakeredis";
-  version = "2.30.3";
+  version = "2.35.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
-    owner = "dsoftwareinc";
+    owner = "cunla";
     repo = "fakeredis-py";
-    tag = "v${version}";
-    hash = "sha256-SQVLuO5cA+XO7hEBph7XGlnomTcysB3ye9jZ8sy9GAI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-euhWKXFERpRoXX7G81ffAygt5e1mt7uy9Y9zAGacu38=";
   };
 
   build-system = [ hatchling ];
@@ -43,14 +43,20 @@ buildPythonPackage rec {
     bf = [ pyprobables ];
     cf = [ pyprobables ];
     probabilistic = [ pyprobables ];
+    valkey = [ valkey ];
+    vectorset = [
+      jsonpath-ng
+      numpy
+    ];
   };
 
   nativeCheckInputs = [
     hypothesis
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
     redisTestHook
+    valkey
   ];
 
   pythonImportsCheck = [ "fakeredis" ];
@@ -58,19 +64,19 @@ buildPythonPackage rec {
   disabledTestMarks = [ "slow" ];
 
   disabledTests = [
-    "test_init_args" # AttributeError: module 'fakeredis' has no attribute 'FakeValkey'
-    "test_async_init_kwargs" # AttributeError: module 'fakeredis' has no attribute 'FakeAsyncValkey'"
+    # redis.exceptions.ResponseError: unknown command 'evalsha'
+    "test_async_lock"
   ];
 
   preCheck = ''
     redisTestPort=6390
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fake implementation of Redis API";
-    homepage = "https://github.com/dsoftwareinc/fakeredis-py";
-    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${src.tag}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/cunla/fakeredis-py";
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,7 +7,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-scopes";
   version = "2.0.0";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-scopes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CtToztLVvSb91pMpPNL8RysQJzlRkeXuQbpvbkX3jfM=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_scopes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safely separate multiple tenants in a Django database";
     homepage = "https://github.com/raphaelm/django-scopes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

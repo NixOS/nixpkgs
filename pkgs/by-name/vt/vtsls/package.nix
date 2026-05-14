@@ -6,9 +6,13 @@
   gitMinimal,
   gitSetupHook,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
 }:
-
+let
+  pnpm' = pnpm_8.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
   version = "0.2.9";
@@ -26,29 +30,31 @@ stdenv.mkDerivation (finalAttrs: {
     # patches are applied with git during build
     gitMinimal
     gitSetupHook
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm'
   ];
 
   buildInputs = [ nodejs_22 ];
 
   pnpmWorkspaces = [ "@vtsls/language-server" ];
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pnpmWorkspaces
       pname
       src
       version
       ;
-    fetcherVersion = 1;
-    hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
+    pnpm = pnpm';
+    fetcherVersion = 3;
+    hash = "sha256-1P2ph8ZX6/KptkLP4wk0dZzuvnYCLOWorM1b9+otKsE=";
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'
   patches = [ ./vtsls-build-patch.patch ];
 
   # Skips manual confirmations during build
-  CI = true;
+  env.CI = true;
 
   buildPhase = ''
     runHook preBuild

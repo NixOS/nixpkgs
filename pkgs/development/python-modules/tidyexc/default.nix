@@ -2,16 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit,
 }:
 
 buildPythonPackage rec {
   pname = "tidyexc";
   version = "0.10.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tidyexc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Raise rich, helpful exceptions";
     homepage = "https://github.com/kalekundert/tidyexc";
     changelog = "https://github.com/kalekundert/tidyexc/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

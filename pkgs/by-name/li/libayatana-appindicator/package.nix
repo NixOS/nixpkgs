@@ -12,7 +12,7 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libayatana-appindicator";
   version = "0.5.92";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-appindicator";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-NzaWQBb2Ez1ik23wCgW1ZQh1/rY7GcPlLvaSgV7uXrA=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Ayatana Application Indicators Shared Library";
     homepage = "https://github.com/AyatanaIndicators/libayatana-appindicator";
-    changelog = "https://github.com/AyatanaIndicators/libayatana-appindicator/blob/${version}/ChangeLog";
+    changelog = "https://github.com/AyatanaIndicators/libayatana-appindicator/blob/${finalAttrs.version}/ChangeLog";
     license = [
       lib.licenses.lgpl3Plus
       lib.licenses.lgpl21Plus
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.nickhu ];
     platforms = lib.platforms.linux;
   };
-}
+})

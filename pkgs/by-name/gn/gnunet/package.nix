@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnunet";
-  version = "0.24.3";
+  version = "0.26.2";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WwaJew6ESJu7Q4J47HPkNiRCsuBaY+QAI+wdDMzGxXY=";
+    hash = "sha256-d7fjcM2EA39XktgSU2vFoQNUCeajSqBo0Iyegb6Ak4k=";
   };
 
   enableParallelBuilding = true;
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ pstn ];
     teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.unix;
-    changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${finalAttrs.version}";
+    changelog = "https://git-www.taler.net/gnunet.git/tree/NEWS/?h=v${finalAttrs.version}";
     # meson: "Can not run test applications in this cross environment." (for dane_verify_crt_raw)
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };

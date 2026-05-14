@@ -9,14 +9,14 @@
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lbzip2";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "kjn";
     repo = "lbzip2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
   };
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     ./build-aux/autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/
     description = "Parallel bzip2 compression utility";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

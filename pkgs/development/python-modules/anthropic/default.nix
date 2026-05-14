@@ -11,18 +11,24 @@
   # dependencies
   anyio,
   distro,
+  docstring-parser,
   httpx,
   jiter,
   pydantic,
   sniffio,
-  tokenizers,
   typing-extensions,
 
   # optional dependencies
   google-auth,
+  boto3,
+  botocore,
+  aiohttp,
+  httpx-aiohttp,
 
   # test
   dirty-equals,
+  http-snapshot,
+  inline-snapshot,
   nest-asyncio,
   pytest-asyncio,
   pytest-xdist,
@@ -30,16 +36,16 @@
   respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "0.62.0";
+  version = "0.97.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
-    tag = "v${version}";
-    hash = "sha256-EVLSC6ClHnmGqMoefMXj3M4dh812ZN5t9nF3gfCLyCo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jekixY/D80M9wPvq14GZj20+hDBVhzpmylh8mFSdL6k=";
   };
 
   postPatch = ''
@@ -55,26 +61,37 @@ buildPythonPackage rec {
   dependencies = [
     anyio
     distro
+    docstring-parser
     httpx
     jiter
     pydantic
     sniffio
-    tokenizers
     typing-extensions
   ];
 
   optional-dependencies = {
-    vertex = [ google-auth ];
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
+    bedrock = [
+      boto3
+      botocore
+    ];
+    vertex = [ google-auth ] ++ google-auth.optional-dependencies.requests;
   };
 
   nativeCheckInputs = [
     dirty-equals
+    http-snapshot
+    inline-snapshot
     nest-asyncio
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
     respx
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "anthropic" ];
 
@@ -101,11 +118,11 @@ buildPythonPackage rec {
   meta = {
     description = "Anthropic's safety-first language model APIs";
     homepage = "https://github.com/anthropics/anthropic-sdk-python";
-    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.natsukium
       lib.maintainers.sarahec
     ];
   };
-}
+})

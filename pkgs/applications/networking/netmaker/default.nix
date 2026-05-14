@@ -8,21 +8,25 @@
     "."
     "netclient"
   ],
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
 buildGoModule rec {
   pname = "netmaker";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
-    repo = pname;
+    repo = "netmaker";
     rev = "v${version}";
-    hash = "sha256-CaN6sTD34hHAMwW90Ofe76me/vaO5rz7IlqQzEhgXQc=";
+    hash = "sha256-acsIe3N6F76KktfPOHreFwDatyuv1q7ui6MMhVXfj7c=";
   };
 
-  vendorHash = "sha256-Eo+7L1LffJXzsBwTcOMry2ZWUHBepLOcLm4bmkNMmLY=";
+  vendorHash = "sha256-Ur8cuE0jToOme79BTaYbaLDl2cRMjsr1DTvZjm8zmtc=";
 
   inherit subPackages;
 
@@ -30,11 +34,11 @@ buildGoModule rec {
 
   buildInputs = [
     libglvnd
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   meta = {
@@ -43,7 +47,6 @@ buildGoModule rec {
     changelog = "https://github.com/gravitl/netmaker/-/releases/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      urandom
       qjoly
     ];
     mainProgram = "netmaker";

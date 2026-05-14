@@ -4,7 +4,7 @@
   lib,
   bluez,
   libevdev,
-  libX11,
+  libx11,
   pkg-config,
   qtbase,
   udev,
@@ -34,7 +34,7 @@ qtModule {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     bluez
     libevdev
-    libX11
+    libx11
     udev
   ];
 

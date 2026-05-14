@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mescc-tools";
-  version = "1.5.2";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-k2wYbLNasuLRq03BG/DXJySNabKOv9sakgst1V8wU8k=";
+    hash = "sha256-toL3v1dvieVdCxxjjZ3i2b6yhVciaPWPq/TtFNm2V1w=";
   };
 
   # Don't use vendored M2libc
@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://savannah.nongnu.org/projects/mescc-tools";
-    license = licenses.gpl3Only;
-    teams = [ teams.minimal-bootstrap ];
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.minimal-bootstrap ];
     inherit (m2libc.meta) platforms;
   };
 })

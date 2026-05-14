@@ -5,29 +5,28 @@
   nix-update-script,
   versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "regolith";
-  version = "1.5.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Bedrock-OSS";
     repo = "regolith";
-    tag = version;
-    hash = "sha256-ZAOQluoeE6c32ETtikBPoDppk1RpuSVjh9p42fT5W48=";
+    tag = finalAttrs.version;
+    hash = "sha256-9mRfK93eHuCA19RSdLKhlhbnQ0UTmBS46Gp1cXstTIk=";
   };
 
   # Requires network access.
   doCheck = false;
 
-  vendorHash = "sha256-+4J4Z7lhbAphi6WUEJN9pzNXf6ROUKqN4NdKI2sQSW0=";
+  vendorHash = "sha256-jQeIPJJyANS+U9NrjLSnXHAecCK4rHPZrP5JFsMwcm8=";
 
   ldflags = [
     "-X main.buildSource=nix"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -35,9 +34,9 @@ buildGoModule rec {
   meta = {
     description = "Add-on Compiler for the Bedrock Edition of Minecraft";
     homepage = "https://github.com/Bedrock-OSS/regolith";
-    changelog = "https://github.com/Bedrock-OSS/regolith/releases/tag/${version}";
+    changelog = "https://github.com/Bedrock-OSS/regolith/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arexon ];
     mainProgram = "regolith";
   };
-}
+})

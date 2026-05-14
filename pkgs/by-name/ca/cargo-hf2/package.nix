@@ -6,12 +6,12 @@
   libusb1,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-hf2";
   version = "0.3.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0o3j7YfgNNnfbrv9Gppo24DqYlDCxhtsJHIhAV214DU=";
   };
 
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libusb1 ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo Subcommand for Microsoft HID Flashing Library for UF2 Bootloaders";
     mainProgram = "cargo-hf2";
     homepage = "https://lib.rs/crates/cargo-hf2";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ astrobeastie ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ astrobeastie ];
   };
-}
+})

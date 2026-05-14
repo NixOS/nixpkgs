@@ -4,12 +4,14 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   autoPatchelfHook,
   cacert,
   llvmPackages,
   musl,
-  xorg,
+  libx11,
   jq,
   moreutils,
   nix-update-script,
@@ -17,24 +19,25 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.30.0";
+  version = "4.90.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-wncNdsQnmvZFf5sBw/sxDCF1SYuOIhj4bIeDpFj2FyI=";
+    hash = "sha256-M2m8dRhTjAYof3S7lVaFYP61p38LvXFSTxantCsUHtE=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       postPatch
       ;
-    fetcherVersion = 2;
-    hash = "sha256-w2AwYhn2+U+Kj8d9SXZssiH8tqSi9P3gSpLCR6L3T+A=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-Bo9V3MJaDnKR7TZO4u0mDy9223n7/En8aAdYOgHyYxE=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -53,13 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     musl # not used, but requires extra work to remove
-    xorg.libX11 # for the clipboardy package
+    libx11 # for the clipboardy package
   ];
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     jq
     moreutils
   ]
@@ -69,12 +73,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it
-  postBuild = ''
-    mv packages/vitest-pool-workers packages/~vitest-pool-workers
-    NODE_ENV="production" pnpm --filter workers-shared run build
-    NODE_ENV="production" pnpm --filter miniflare run build
-    NODE_ENV="production" pnpm --filter wrangler run build
-  '';
+  postBuild =
+    let
+      extraDeps = [
+        "unenv-preset"
+        "workers-utils"
+        "local-explorer-ui"
+        "codemod"
+        "cli-shared-helpers"
+        "miniflare"
+        "wrangler"
+      ];
+    in
+    ''
+      mv packages/vitest-pool-workers packages/~vitest-pool-workers
+
+      for pkg in ${toString extraDeps}; do
+        NODE_ENV="production" pnpm --filter "$pkg" run build
+      done
+    '';
 
   # I'm sure this is suboptimal but it seems to work. Points:
   # - when build is run in the original repo, no specific executable seems to be generated; you run the resulting build with pnpm run start
@@ -85,11 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
   # - Update: Now we're copying everything over due to broken symlink errors
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/lib $out/lib/packages/wrangler
+    mkdir -p $out/{bin,lib}
     mv packages/~vitest-pool-workers packages/vitest-pool-workers
-    cp -r fixtures $out/lib
-    cp -r packages $out/lib
-    cp -r node_modules $out/lib
+    cp -r {fixtures,packages,node_modules} $out/lib
     cp -r tools $out/lib/tools
     rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin
@@ -105,6 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  preFixup = ''
+    # fixupPhase spends a lot of time trying to strip text files, which is especially slow on Darwin
+    stripExclude+=("*.js" "*.ts" "*.map" "*.json" "*.md")
+  '';
+
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
     homepage = "https://github.com/cloudflare/workers-sdk#readme";

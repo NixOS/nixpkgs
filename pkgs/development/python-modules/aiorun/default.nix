@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
   pygments,
   pytestCheckHook,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "aiorun";
   version = "2025.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cjrh";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorun" ];
 
-  meta = with lib; {
+  meta = {
     description = "Boilerplate for asyncio applications";
     homepage = "https://github.com/cjrh/aiorun";
     changelog = "https://github.com/cjrh/aiorun/blob/v${version}/CHANGES";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

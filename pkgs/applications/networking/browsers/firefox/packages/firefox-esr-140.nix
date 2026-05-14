@@ -9,15 +9,15 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "140.2.0esr";
+  version = "140.10.2esr";
   applicationName = "Firefox ESR";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "e4597c4d83ae1a84fce9248fe6ca652af6c3615607fc8973bd917bfdbd2abbceca937fe4c629c0cdc89fa0a5c846b5e2d8a4b44dabf7feb201deb382de0ccc5b";
+    sha512 = "bda7d5e6d59a2ad310e3f3e6e8ec05c78222edce266671d5d454dfa3e8f0086add3b9c0099db907cb62b2587ed47026ba7b3aa4f0406693d142d8d91b818d551";
   };
 
   meta = {
-    changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
+    changelog = "https://www.firefox.com/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
     description = "Web browser built from Firefox source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [ hexa ];

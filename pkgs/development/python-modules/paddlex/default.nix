@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   numpy,
   pillow,
   pyyaml,
@@ -17,55 +18,32 @@
   ruamel-yaml,
   typing-extensions,
   ujson,
-  distutils,
+  gputil,
   huggingface-hub,
+  modelscope,
+  aistudio-sdk,
   nix-update-script,
 }:
 
-let
-  gputil = buildPythonPackage rec {
-    pname = "gputil";
-    version = "1.4.0";
-    pyproject = true;
-
-    src = fetchFromGitHub {
-      owner = "anderskm";
-      repo = "gputil";
-      tag = "v${version}";
-      hash = "sha256-iOyB653BMmDBtK1fM1ZyddjlnaypsuLMOV0sKaBt+yE=";
-    };
-
-    build-system = [ setuptools ];
-
-    dependencies = [ distutils ];
-
-    pythonImportsCheck = [ "GPUtil" ];
-
-    meta = {
-      homepage = "https://github.com/anderskm/gputil";
-      license = lib.licenses.mit;
-      description = "Getting GPU status from NVIDA GPUs using nvidia-smi";
-      changelog = "https://github.com/anderskm/gputil/releases/tag/${src.tag}";
-    };
-  };
-in
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.1.4";
+  version = "3.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-Oc8fgAv8T/9PjxW8yU31t3m3CUxFuAXdVS71BGhtlJo=";
+    hash = "sha256-XQrRo4B/xn7uBbQv7YjfKaK4DLiTciGnXjb+dL1hkw4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
-    "numpy"
-    "pandas"
+    "pyyaml"
   ];
 
   dependencies = [
@@ -85,6 +63,8 @@ buildPythonPackage rec {
     ujson
     gputil
     huggingface-hub
+    modelscope
+    aistudio-sdk
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -94,7 +74,7 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
     changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

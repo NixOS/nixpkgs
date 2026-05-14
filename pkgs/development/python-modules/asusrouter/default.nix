@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "asusrouter";
-  version = "1.20.1";
+  version = "1.21.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Vaskivskyi";
     repo = "asusrouter";
     tag = version;
-    hash = "sha256-RZdSwLR/7uJICc56lLO0YyFs1ZDzpk/8Ebm3juG+gss=";
+    hash = "sha256-7OmuJ3VKBdg5hK8RAkA8DQGd4L+g9S17VT0B5JhNaSA=";
   };
 
   postPatch = ''
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Vaskivskyi/asusrouter";
     changelog = "https://github.com/Vaskivskyi/asusrouter/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

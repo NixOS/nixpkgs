@@ -41,6 +41,8 @@ in
         '';
       };
 
+      package = lib.mkPackageOption pkgs "audit" { };
+
       failureMode = lib.mkOption {
         type = lib.types.enum [
           "silent"
@@ -93,9 +95,12 @@ in
       "audit_backlog_limit=${toString cfg.backlogLimit}"
     ];
 
-    environment.systemPackages = [ pkgs.audit ];
+    environment.systemPackages = [ cfg.package ];
 
-    systemd.services.audit-rules = {
+    # upstream contains a audit-rules.service, which uses augenrules.
+    # That script does not handle cleanup correctly and insists on loading from /etc/audit.
+    # So, instead we have our own service for loading rules.
+    systemd.services.audit-rules-nixos = {
       description = "Load Audit Rules";
       wantedBy = [ "sysinit.target" ];
       before = [
@@ -116,12 +121,12 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${lib.getExe' pkgs.audit "auditctl"} -R ${rules}/audit.rules";
+        ExecStart = "${lib.getExe' cfg.package "auditctl"} -R ${rules}/audit.rules";
         ExecStopPost = [
           # Disable auditing
-          "${lib.getExe' pkgs.audit "auditctl"} -e 0"
+          "${lib.getExe' cfg.package "auditctl"} -e 0"
           # Delete all rules
-          "${lib.getExe' pkgs.audit "auditctl"} -D"
+          "${lib.getExe' cfg.package "auditctl"} -D"
         ];
       };
     };

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "staticmap3";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "staticmap";
     tag = "v${version}";
-    hash = "sha256-SMy4yxHA9Z3BFW6kX8vC7WfsmuZMNqocJ9+dJB6zwSs=";
+    hash = "sha256-SV9D8wYph82IaITXxraC+8YO+taeEc6g/CPjFITzV5Q=";
   };
 
   build-system = [

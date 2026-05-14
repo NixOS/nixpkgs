@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/threerings/openvpn-auth-ldap/pull/92.patch";
       hash = "sha256-SXuo1D/WywKO5hCsmoeDdTsR7EelxFxJAKmlAQJ6vuE=";
     })
+    (fetchpatch2 {
+      name = "gcc-15-fix";
+      url = "https://sources.debian.org/data/main/o/openvpn-auth-ldap/2.0.4-5/debian/patches/gcc-15.patch";
+      hash = "sha256-VwUwRBBfxgxEO4PKC/97vEN4e6XcUG6esc0Khu+iDxM=";
+    })
   ];
 
   # clang > 17 dropped support for `-export-dynamic` but `-rdynamic` does the
@@ -64,14 +69,14 @@ stdenv.mkDerivation rec {
     cp auth-ldap.conf $out/share/doc/openvpn/examples/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LDAP authentication plugin for OpenVPN";
     homepage = "https://github.com/threerings/openvpn-auth-ldap";
     license = [
-      licenses.asl20
-      licenses.bsd3
+      lib.licenses.asl20
+      lib.licenses.bsd3
     ];
-    maintainers = [ maintainers.benley ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.benley ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   python-dotenv,
   pytz,
   requests,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "transmission-rpc";
   version = "7.0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Trim21";
@@ -48,11 +45,11 @@ buildPythonPackage rec {
     "test_real"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that implements the Transmission bittorent client RPC protocol";
     homepage = "https://github.com/Trim21/transmission-rpc";
     changelog = "https://github.com/trim21/transmission-rpc/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

@@ -17,6 +17,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "wf-shell";
   version = "0.10.0";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
@@ -50,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       wucke13
-      rewine
+      wineee
     ];
     platforms = lib.platforms.unix;
   };

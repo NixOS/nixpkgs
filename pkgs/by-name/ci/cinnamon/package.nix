@@ -18,12 +18,12 @@
   gobject-introspection,
   gsound,
   gtk3,
-  intltool,
+  ibus,
   json-glib,
   libsecret,
   libstartup_notification,
-  libXtst,
-  libXdamage,
+  libxtst,
+  libxdamage,
   libgbm,
   muffin,
   networkmanager,
@@ -34,7 +34,6 @@
   wrapGAppsHook3,
   libxml2,
   gtk-doc,
-  caribou,
   python3,
   keybinder3,
   cairo,
@@ -45,6 +44,7 @@
   accountsservice,
   gnome-online-accounts,
   glib-networking,
+  graphene,
   pciutils,
   timezonemap,
   libnma,
@@ -57,7 +57,6 @@
 let
   pythonEnv = python3.withPackages (
     pp: with pp; [
-      dbus-python
       setproctitle
       pygobject3
       pycairo
@@ -73,15 +72,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon";
-  version = "6.4.10";
+  version = "6.6.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
-    rev = version;
-    hash = "sha256-8yg39x5rWxJ2IcDFO4AjqrctPSjqdUSfmrKbjT3Yx+0=";
+    tag = finalAttrs.version;
+    hash = "sha256-ByPn2VV40y+3/FW/KPIsLt43FhVxQAQldCK26KNKdjw=";
   };
 
   patches = [
@@ -101,13 +100,15 @@ stdenv.mkDerivation rec {
     gcr
     gdk-pixbuf
     glib
+    graphene
     gsound
     gtk3
+    ibus
     json-glib
     libsecret
     libstartup_notification
-    libXtst
-    libXdamage
+    libxtst
+    libxdamage
     libgbm
     muffin
     networkmanager
@@ -119,7 +120,6 @@ stdenv.mkDerivation rec {
 
     # bindings
     cairo
-    caribou
     keybinder3
     upower
     xapp
@@ -139,7 +139,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     wrapGAppsHook3
-    intltool
     gtk-doc
     perl
     python3.pkgs.libsass # for pysassc
@@ -165,7 +164,6 @@ stdenv.mkDerivation rec {
                                                           --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
                                                           --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
       substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
-      substituteInPlace ./modules/cs_keyboard.py          --replace-fail "/usr/bin/cinnamon-dbus-command" "$out/bin/cinnamon-dbus-command"
       substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
       substituteInPlace ./modules/cs_user.py              --replace-fail "/usr/bin/passwd" "/run/wrappers/bin/passwd"
     popd
@@ -177,7 +175,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
       --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
-    patchShebangs src/data-to-c.pl data/theme/parse-sass.sh
+    patchShebangs src/data-to-c.pl
   '';
 
   postInstall = ''
@@ -186,11 +184,6 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # https://github.com/NixOS/nixpkgs/issues/101881
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${caribou}/share"
-    )
-
     buildPythonPath "$out ${python3.pkgs.python-xapp}"
 
     # https://github.com/NixOS/nixpkgs/issues/200397
@@ -215,11 +208,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "Cinnamon desktop environment";
-    license = [ licenses.gpl2 ];
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = [ lib.licenses.gpl2 ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

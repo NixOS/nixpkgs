@@ -9,14 +9,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sopwith";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
-    tag = "sdl-sopwith-${version}";
+    tag = "sdl-sopwith-${finalAttrs.version}";
     hash = "sha256-s7npLid3GYZArQmctSwOu8zeC+mSfTiiiOaOEa9dcrg=";
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fragglet/sdl-sopwith";
     description = "Classic biplane shoot ‘em-up game";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "sopwith";
-    maintainers = with maintainers; [ evilbulgarian ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ evilbulgarian ];
+    platforms = lib.platforms.unix;
   };
-}
+})

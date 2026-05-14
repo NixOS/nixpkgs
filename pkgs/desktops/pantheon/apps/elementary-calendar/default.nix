@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calendar";
-    rev = version;
-    sha256 = "sha256-gBQfrRSaw3TKcsSAQh/hcTpBoEQstGdLbppoZ1/Z1q8=";
+    tag = version;
+    hash = "sha256-kkdz82eCc9dKemUtCaz9OUObeICU5W1Ino4JNUvmhAw=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop calendar app designed for elementary OS";
     homepage = "https://github.com/elementary/calendar";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.calendar";
   };
 }

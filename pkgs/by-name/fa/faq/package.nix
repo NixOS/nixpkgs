@@ -6,7 +6,7 @@
   oniguruma,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "faq";
   # Latest git release (0.0.7) presents vendor issues - using latest commit instead.
   version = "unstable-2022-01-09";
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/jzelinskie/faq/internal/version.Version=${version}"
+    "-X github.com/jzelinskie/faq/internal/version.Version=${finalAttrs.version}"
   ];
 
   tags = [
@@ -40,11 +40,11 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intended to be a more flexible jq, supporting additional formats";
     mainProgram = "faq";
     homepage = "https://github.com/jzelinskie/faq";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ quentin-m ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ quentin-m ];
   };
-}
+})

@@ -4,8 +4,10 @@
   fetchFromGitHub,
   pycryptodome,
   uvloop,
+  asyncssh,
+  aioquic,
+  python-daemon,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,21 +15,26 @@ buildPythonPackage rec {
   version = "2.7.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "qwj";
     repo = "python-proxy";
-    rev = "7fccf8dd62204f34b0aa3a70fc568fd6ddff7728";
-    sha256 = "sha256-bOqDdNiaZ5MRi/UeF0hJwMs+rfQBKRsTmXrZ6ieIguo=";
+    tag = version;
+    hash = "sha256-DWxbU2LtXzec1T175cMVJuWuhnxWYhe0FH67stMyOTM=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pycryptodome
-    uvloop
-  ];
+  optional-dependencies = {
+    accelerated = [
+      pycryptodome
+      uvloop
+    ];
+    sshtunnel = [ asyncssh ];
+    quic = [ aioquic ];
+    daemon = [ python-daemon ];
+  };
+
+  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pproxy" ];
 
@@ -46,11 +53,11 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Proxy server that can tunnel among remote servers by regex rules";
     mainProgram = "pproxy";
     homepage = "https://github.com/qwj/python-proxy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ryand56 ];
   };
 }

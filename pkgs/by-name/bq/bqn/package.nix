@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bqn";
-  version = "0-unstable-2024-05-13";
+  version = "0-unstable-2026-03-01";
 
   src = fetchFromGitHub {
     owner = "mlochbaum";
     repo = "BQN";
-    rev = "c971a177421d532a13c4b7515535552df19681e1";
-    hash = "sha256-Fru1IIb4IxBQxrEEBoRYStxBqYJJqd+Q+Hwyk++QA68=";
+    rev = "df1d848328194249e68635f8b8c04641d9fa6bdc";
+    hash = "sha256-2S675ru67bcSSXGLEWfPkyW+U+cHzKs/HbM8ZSWMcEs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mlochbaum/BQN/";
     description = "Original BQN implementation in Javascript";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (nodejs.meta) platforms;
   };
 })

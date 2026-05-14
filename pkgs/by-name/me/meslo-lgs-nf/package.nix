@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenv.mkDerivation {
@@ -15,16 +16,13 @@ stdenv.mkDerivation {
     sha256 = "sha256-8xwVOlOP1SresbReNh1ce2Eu12KdIwdJSg6LKM+k2ng=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp $src/*.ttf $out/share/fonts/truetype
-  '';
+  nativeBuildInputs = [ installFonts ];
 
-  meta = with lib; {
+  meta = {
     description = "Meslo Nerd Font patched for Powerlevel10k";
     homepage = "https://github.com/romkatv/powerlevel10k-media";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras ];
+    platforms = lib.platforms.all;
   };
 }

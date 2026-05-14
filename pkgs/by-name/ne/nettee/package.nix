@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./fix-cmake-output.patch ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required (VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   # additional shell scripts require accudate (not in nixpkgs)
@@ -34,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/nettee";
     description = ''Network "tee" program'';
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "nettee";
   };

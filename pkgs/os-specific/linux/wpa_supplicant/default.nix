@@ -14,6 +14,7 @@
   readline,
   withPcsclite ? !stdenv.hostPlatform.isStatic,
   pcsclite,
+  unprivileged ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,13 +34,20 @@ stdenv.mkDerivation rec {
       hash = "sha256-X6mBbj7BkW66aYeSCiI3JKBJv10etLQxaTRfRgwsFmM=";
       revert = true;
     })
-    ./unsurprising-ext-password.patch
     (fetchpatch {
       name = "suppress-ctrl-event-signal-change.patch";
       url = "https://w1.fi/cgit/hostap/patch/?id=c330b5820eefa8e703dbce7278c2a62d9c69166a";
       hash = "sha256-5ti5OzgnZUFznjU8YH8Cfktrj4YBzsbbrEbNvec+ppQ=";
     })
-  ];
+    (fetchpatch {
+      name = "ensure-full-key-match";
+      url = "https://git.w1.fi/cgit/hostap/patch/?id=1ce37105da371c8b9cf3f349f78f5aac77d40836";
+      hash = "sha256-leCk0oexNBZyVK5Q5gR4ZcgWxa0/xt/aU+DssTa0UwE=";
+    })
+    ./unsurprising-ext-password.patch
+    ./multiple-configs.patch
+  ]
+  ++ lib.optional unprivileged ./unprivileged-daemon.patch;
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
@@ -163,14 +171,13 @@ stdenv.mkDerivation rec {
     inherit wpa_supplicant_gui; # inherits the src+version updates
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://w1.fi/wpa_supplicant/";
     description = "Tool for connecting to WPA and WPA2-protected wireless networks";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
-      marcweber
-      ma27
+    license = lib.licenses.bsd3;
+    maintainers = [
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "w1.fi" version;
   };
 }

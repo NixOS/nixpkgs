@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "onnxconverter-common";
-  version = "1.15.0";
+  version = "0.16.0";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "onnxconverter-common";
     tag = "v${version}";
-    hash = "sha256-e4rk1qTTSEFu+g/cP+RmMUqxkBQfodIpr2CVK24DPv4=";
+    hash = "sha256-M62mbIqFwnPdRlf6J8DrNRhLH0uHns51K/pWnWLxI5Q=";
   };
 
   build-system = [

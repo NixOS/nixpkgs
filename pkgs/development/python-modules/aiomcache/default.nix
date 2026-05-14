@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
   python-memcached,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -26,17 +24,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ python-memcached ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = [ python-memcached ];
 
   doCheck = false; # executes memcached in docker
 
   pythonImportsCheck = [ "aiomcache" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/aio-libs/aiomcache/blob/${src.rev}/CHANGES.rst";
     description = "Minimal asyncio memcached client";
     homepage = "https://github.com/aio-libs/aiomcache/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

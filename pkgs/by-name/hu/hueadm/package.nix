@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "bahamas10";
     repo = "hueadm";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-QNjkfE8V/lUkYP8NAf11liKXILBk3wSNm3NSrgaH+nc=";
   };
 

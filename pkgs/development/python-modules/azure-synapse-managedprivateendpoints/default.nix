@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "azure-synapse-managedprivateendpoints";
   version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.synapse.managedprivateendpoints" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Synapse Managed Private Endpoints Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-managedprivateendpoints";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-synapse-managedprivateendpoints_${version}/sdk/synapse/azure-synapse-managedprivateendpoints";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.5.2";
+  version = "7.6.1";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/powershell}
     cp -R * $out/share/powershell
     chmod +x $out/share/powershell/pwsh
-    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh \
+    wrapProgram $out/share/powershell/pwsh \
       --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath buildInputs}" \
-      --set TERM xterm \
       --set POWERSHELL_TELEMETRY_OPTOUT 1 \
       --set DOTNET_CLI_TELEMETRY_OPTOUT 1
+    cp $out/share/powershell/pwsh $out/bin/pwsh
 
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -96,19 +96,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-oC0deViccejTXkWNkPCFz8HwpojrvqTauGMhh8BX96E=";
+        hash = "sha256-nhB49wsRxA4Q9LrRNU2xzcrzjNZ3X89A4HOOP1rGgH4=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-1NLFVih1X1zYsmCa1xF8Hq2gqgCG8ZXUgTHuSC731xo=";
+        hash = "sha256-c0mIExlOoNhJ1ZQjMu5uUWV+pm2gghaqEFB4jVxSt0E=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-kF3J7Au1iJk6rKn//hXdv/x2QWSwnL32PV6iXoNig5w=";
+        hash = "sha256-tfh0qDK+wrp4zT5E/bywTBthRNnqtCuYgcuLlAC8xQQ=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-j6lYT2+V0pyhRmxDl6w5w3E3PWWBwS366evVPAbXdmQ=";
+        hash = "sha256-38lCKXZ5IWA/fD4csaxaqTFEivdJbM9ldyO2J4BXxBU=";
       };
     };
     tests.version = testers.testVersion {
@@ -138,14 +138,14 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://microsoft.com/PowerShell";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pwsh";
-    maintainers = with maintainers; [ wegank ];
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = builtins.attrNames passthru.sources;
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];

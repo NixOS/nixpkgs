@@ -15,18 +15,18 @@
   xlsSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sc-im";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-V2XwzZwn+plMxQuTCYxbeTaqdud69z77oMDDDi+7Jw0=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     makeWrapper
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/andmarti1424/sc-im/blob/${src.rev}/CHANGES";
+  meta = {
+    changelog = "https://github.com/andmarti1424/sc-im/blob/${finalAttrs.src.rev}/CHANGES";
     homepage = "https://github.com/andmarti1424/sc-im";
     description = "Ncurses spreadsheet program for terminal";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
   };
-}
+})

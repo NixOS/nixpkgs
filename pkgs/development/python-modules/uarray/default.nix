@@ -9,7 +9,6 @@
   ninja,
   matchpy,
   numpy,
-  astunparse,
   typing-extensions,
   nix-update-script,
   pytestCheckHook,
@@ -18,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "uarray";
     tag = version;
-    hash = "sha256-eCrmmP+9TI+T8Km8MOz0EqseneFwPizlnZloK5yNLcM=";
+    hash = "sha256-Nog7jvRG/EFf3n3W2DWC7UML5NyrlaaS0ECis5rtCSk=";
   };
 
   build-system = [
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [
-    astunparse
     matchpy
     numpy
     typing-extensions
@@ -64,10 +62,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
-    license = licenses.bsd0;
+    changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
+    license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.pbsds ];
   };
 }

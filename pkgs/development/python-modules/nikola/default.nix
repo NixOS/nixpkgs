@@ -7,6 +7,7 @@
   docutils,
   doit,
   feedparser,
+  fetchpatch,
   fetchPypi,
   freezegun,
   ghp-import,
@@ -31,10 +32,10 @@
   pytestCheckHook,
   pytest-cov-stub,
   python-dateutil,
-  pythonOlder,
   requests,
   ruamel-yaml,
   setuptools,
+  stdenv,
   toml,
   typogrify,
   unidecode,
@@ -47,12 +48,19 @@ buildPythonPackage rec {
   version = "8.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Y219b/wqsk9MJknoaV+LtWBOMJFT6ktgt4b6yuA6scc=";
   };
+
+  patches = [
+    # Upstream PR: https://github.com/getnikola/nikola/pull/3878
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/getnikola/nikola/commit/635366b64149055844f2d2ef6070b456bd4ba245.patch";
+      hash = "sha256-TmrYHEIvC8ZKngBJnnKcyU5S4kjzIjLk7KKm72hXx1A=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -109,14 +117,21 @@ buildPythonPackage rec {
     "test_format_date_locale_variants"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Segfault in darwin sandbox via watchdog
+    "tests/integration/test_dev_server_auto.py::test_serves_root_dir"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "nikola" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static website and blog generator";
     homepage = "https://getnikola.com/";
     changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
     mainProgram = "nikola";
   };
 }

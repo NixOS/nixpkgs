@@ -10,14 +10,14 @@
 }:
 buildPythonPackage rec {
   pname = "essentials";
-  version = "1.1.6";
+  version = "1.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials";
     tag = "v${version}";
-    hash = "sha256-wOZ0y6sAPEy2MgcwmM9SjnULe6oWlVuNeC7Zl070CK4=";
+    hash = "sha256-kKAXCtcl6duVpuGDnSqVfJmfltv9ybU8Gmr3y32Dg9I=";
   };
 
   build-system = [ hatchling ];

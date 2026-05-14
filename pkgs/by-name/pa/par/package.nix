@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "par";
   version = "1.53.0";
 
   src = fetchurl {
-    url = "http://www.nicemice.net/par/Par-${version}.tar.gz";
+    url = "http://www.nicemice.net/par/Par-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-yAnGIOuCtYlVOsVLmJjI2lUZbSYjOdE8BG8r5ErEeAQ=";
   };
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     cp  par.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.nicemice.net/par/";
     description = "Paragraph reflow for email";
     mainProgram = "par";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # See https://fedoraproject.org/wiki/Licensing/Par for license details
-    license = licenses.free;
+    license = lib.licenses.free;
   };
-}
+})

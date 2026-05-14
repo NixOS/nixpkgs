@@ -6,14 +6,14 @@
   cbfmt,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cbfmt";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "lukas-reineke";
     repo = "cbfmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/ZvL1ZHXcmE1n+hHvJeSqmnI9nSHJ+zM9lLNx0VQfIE=";
   };
 
@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
     package = cbfmt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to format codeblocks inside markdown and org documents";
     mainProgram = "cbfmt";
     homepage = "https://github.com/lukas-reineke/cbfmt";
-    license = licenses.mit;
-    maintainers = [ maintainers.stehessel ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.stehessel ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snabb";
   version = "2024.08";
 
   src = fetchFromGitHub {
     owner = "snabbco";
     repo = "snabb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2ULkzNeyEkXFdd8BUEcY5wZswh8Z4s4ONqSQbeWK2Qs=";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
       It is especially intended for ISPs and other network operators.
     '';
     platforms = [ "x86_64-linux" ];
-    license = licenses.asl20;
-    maintainers = [ maintainers.lukego ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.lukego ];
     mainProgram = "snabb";
   };
-}
+})

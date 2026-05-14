@@ -12,19 +12,20 @@
   nix-update-script,
   enableWlrSupport ? !stdenv.hostPlatform.isDarwin,
   enableMonochromeIcon ? false,
+  wrapGAppsHook3,
 }:
 
 assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flameshot";
-  version = "13.1.0";
+  version = "13.3.0";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wg0jc1AqgetaESmTyhzAHx3zal/5DMDum7fzhClqeck=";
+    hash = "sha256-RyoLniRmJRinLUwgmaA4RprYAVHnoPxCP9LyhHfUPe0=";
   };
 
   cmakeFlags = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qttools
     kdePackages.wrapQtAppsHook
     makeBinaryWrapper
+    wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -94,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $out/share/metainfo
   '';
 
+  dontWrapGApps = true;
   dontWrapQtApps = true;
 
   postFixup =
@@ -107,7 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       wrapProgram $out/${binary} \
         ${lib.optionalString enableWlrSupport "--prefix PATH : ${lib.makeBinPath [ grim ]}"} \
-        ''${qtWrapperArgs[@]}
+        ''${qtWrapperArgs[@]} \
+        ''${gappsWrapperArgs[@]}
     '';
 
   passthru.updateScript = nix-update-script { };

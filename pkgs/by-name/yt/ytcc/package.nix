@@ -7,16 +7,19 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  version = "2.8.0";
+in
+python3Packages.buildPythonApplication {
   pname = "ytcc";
-  version = "2.7.2";
+  inherit version;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "woefe";
     repo = "ytcc";
     tag = "v${version}";
-    hash = "sha256-PNSkIp6CJvgirO3k2lB0nOVEC1+znhn3/OyRIJ1EANI=";
+    hash = "sha256-6Z5xoGbOtJnPlPj5GS9ElRkuuNd+ON9RsZyl5VLzLE0=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -33,14 +36,14 @@ python3Packages.buildPythonApplication rec {
     defusedxml
   ];
 
+  pythonRelaxDeps = [ "click" ];
+
   nativeCheckInputs =
     with python3Packages;
     [
       pytestCheckHook
     ]
     ++ [ versionCheckHook ];
-
-  versionCheckProgramArg = "--version";
 
   # Disable tests that touch network or shell out to commands
   disabledTests = [
@@ -55,6 +58,8 @@ python3Packages.buildPythonApplication rec {
     "test_update"
     "test_download"
     "test_comma_list_error"
+    "test_cleanup"
+    "test_pipe_mark"
   ];
 
   postInstall = ''

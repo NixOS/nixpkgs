@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiocron" ];
 
-  meta = with lib; {
+  meta = {
     description = "Crontabs for asyncio";
     homepage = "https://github.com/gawel/aiocron/";
-    license = licenses.mit;
-    maintainers = [ maintainers.starcraft66 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.starcraft66 ];
   };
 }

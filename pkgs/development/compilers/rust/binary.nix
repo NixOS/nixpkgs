@@ -29,15 +29,15 @@ rec {
     inherit version;
     inherit src;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.rust-lang.org/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       description = "Safe, concurrent, practical language";
       mainProgram = "rustc";
-      maintainers = with maintainers; [ qknight ];
+      maintainers = with lib.maintainers; [ qknight ];
       license = [
-        licenses.mit
-        licenses.asl20
+        lib.licenses.mit
+        lib.licenses.asl20
       ];
     };
 
@@ -89,6 +89,7 @@ rec {
         "armv7l-linux"
         "i686-linux"
         "loongarch64-linux"
+        "powerpc-linux"
         "powerpc64-linux"
         "powerpc64le-linux"
         "riscv64-linux"
@@ -136,14 +137,14 @@ rec {
     inherit version;
     inherit src;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://doc.rust-lang.org/cargo/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       description = "Rust package manager";
-      maintainers = with maintainers; [ qknight ];
+      maintainers = with lib.maintainers; [ qknight ];
       license = [
-        licenses.mit
-        licenses.asl20
+        lib.licenses.mit
+        lib.licenses.asl20
       ];
     };
 

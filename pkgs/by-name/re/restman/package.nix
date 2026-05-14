@@ -6,14 +6,14 @@
   restman,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restman";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     repo = "restman";
     owner = "jackMort";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KN3iahDdPSHPnGEacsmaVMRNI3mV9qrH3HyJOTtB2hA=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -30,7 +30,7 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = restman;
-      version = "restman version ${version}";
+      version = "restman version ${finalAttrs.version}";
       command = "restman --version";
     };
   };
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "restman";
   };
-}
+})

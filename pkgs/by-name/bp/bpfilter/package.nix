@@ -21,13 +21,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "bpfilter";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "bpfilter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qL5wRm6QmfMa5L+oZc5E2kAVqvJfCt5fBxjmtWzb2kA=";
+    hash = "sha256-mlJQIvOWF8WL4pX8KTKM1ddEFva+dvj5m2S3sWQJsKE=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +40,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     pkg-config
     sphinx
     tinyxxd
-
-    # bpfilter's cmake files requires this, even if we specify the version
-    # we're using without needing to detect the version during the build.
-    gitMinimal
   ];
 
   buildInputs = [

@@ -6,15 +6,15 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geographiclib";
-  version = "2.5.2";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "geographiclib";
     repo = "geographiclib";
-    tag = "v${version}";
-    hash = "sha256-bFErzgjxBCtN12UNtnGPuS6bg1sI31gR7WZjawsY3Yo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xqrt7KeYyYB90kuvn2qmK8VI3RVQuIhNN8qCzV//yko=";
   };
 
   outputs = [
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

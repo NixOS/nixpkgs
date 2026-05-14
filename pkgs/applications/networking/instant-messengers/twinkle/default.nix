@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   libxml2,
@@ -16,11 +17,11 @@
   alsa-lib,
   speex,
   ilbc,
-  mkDerivation,
   bcg729,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "twinkle";
   version = "unstable-2024-20-11";
 
@@ -51,6 +52,7 @@ mkDerivation rec {
     bison
     flex
     bcg729
+    wrapQtAppsHook
   ];
 
   cmakeFlags = [

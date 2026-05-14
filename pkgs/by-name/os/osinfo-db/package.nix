@@ -7,13 +7,13 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osinfo-db";
-  version = "20250606";
+  version = "20251212";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
-    hash = "sha256-mUCqR98pgHPFHc+KTcyFX0lKuGTCTNvaRr2JeVc1f+E=";
+    url = "https://releases.pagure.org/libosinfo/osinfo-db-${finalAttrs.version}.tar.xz";
+    hash = "sha256-BjeSUMkTBsmMuXJq9E6uWQnf3VRJ+QMx6QSuEiHY1ec=";
   };
 
   nativeBuildInputs = [
@@ -23,15 +23,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    osinfo-db-import --dir "$out/share/osinfo" "${src}"
+    osinfo-db-import --dir "$out/share/osinfo" "${finalAttrs.src}"
   '';
 
   meta = {
     description = "Osinfo database of information about operating systems for virtualization provisioning tools";
     homepage = "https://gitlab.com/libosinfo/osinfo-db/";
-    changelog = "https://gitlab.com/libosinfo/osinfo-db/-/commits/v${version}";
+    changelog = "https://gitlab.com/libosinfo/osinfo-db/-/commits/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

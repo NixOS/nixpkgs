@@ -138,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pythonImportsCheckHook
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=deprecated-literal-operator";
+
   doCheck = true;
 
   pythonImportsCheck = [ "dartpy" ];

@@ -14,20 +14,34 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "g3proxy";
-  version = "1.12.1";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "bytedance";
     repo = "g3";
     tag = "g3proxy-v${finalAttrs.version}";
-    hash = "sha256-nEvkzWbjbnhFC4HqYgw89FIKx2HlvX+fYR05bgzKdMg=";
+    hash = "sha256-oVjHJPLNWV2bSJcm7La1z0M93kooYBZ+lSayYQ4aUxg=";
   };
 
-  cargoHash = "sha256-Ey0STb6VeExYIYx/k5o5d2oMDwmxS7gvH31+3WPea/M=";
+  cargoHash = "sha256-zHnvrSI3NLyL7eP5PjB0xvLC7SjG/4UifR3OlqwwVIg=";
 
   cargoBuildFlags = [
     "-p"
     "g3proxy"
+    "-p"
+    "g3proxy-ctl"
+    "-p"
+    "g3proxy-lua"
+    "-p"
+    "g3proxy-ftp"
+    "-p"
+    "g3mkcert"
+    "-p"
+    "g3fcgen"
+    "-p"
+    "g3iploc"
+    "-p"
+    "g3statsd"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 

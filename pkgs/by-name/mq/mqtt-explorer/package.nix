@@ -13,7 +13,7 @@
   copyDesktopItems,
 }:
 # NOTE mqtt-explorer has 3 yarn subpackages and uses relative links
-# between them, which makes it hard to package them via 3 `mkYarnPackage`
+# between them, which makes it hard to package them via 3 `fetchYarnDeps`
 # since the resulting `node_modules` directories don't have the same structure
 # as if they were installed directly. Hence why we opted to use a
 # `stdenv.mkDerivation` instead.

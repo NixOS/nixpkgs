@@ -27,11 +27,11 @@ buildGoModule {
 
   proxyVendor = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tailscale systray";
     homepage = "https://github.com/mattn/tailscale-systray";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qbit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qbit ];
     mainProgram = "tailscale-systray";
   };
 }

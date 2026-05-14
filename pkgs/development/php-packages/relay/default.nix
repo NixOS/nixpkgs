@@ -15,36 +15,36 @@
 }:
 
 let
-  version = "0.11.1";
+  version = "0.21.0";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.1" = "sha256-m7WWbrOwKH/IV4mCtmxzkNaBeKwUe89QlSMNxUAbq5A=";
-        "8.2" = "sha256-ytYYtxo43H8GTDOiLpBPtJmvoi4Q9rpJ2uY0AQWm2Dg=";
-        "8.3" = "12UvfJhJn3B70Q3xxfKfAzOH/fyC/ZftC4RMWGsEO88=";
-        "8.4" = "sha256-TszXByZtkJZ0uf1BFX2RJXQqfJFPzW1CokxRFnLBZpI=";
-        "8.5" = "WYJKnDuqsprgtev5g/LGcFbZTphEcCZb6/zanur4g8U=";
+        "8.1" = "sha256-BL4XH7oyZBmZThhfdaqwtArxjF+0CKYYIqxRBafhjCI=";
+        "8.2" = "sha256-CDNSwdU+/7STdSzZigzq0qc58s2Tz0GtKsXnXpQodic=";
+        "8.3" = "10cDKh5aXhUN8bONZAXKr8o7UMlngYCXmqD829Ht3oU=";
+        "8.4" = "sha256-t2cNqYl4U4qDmpK6+4iFKmAAd2D66EJqzt+5l1gB0wg=";
+        "8.5" = "JBitKlONDaXsDW1wf08JqDbado8Fy+uVzYU9Lvi8fFc=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.1" = "sha256-e8eeQhzMLoXo1UaqFkSYMOwnkiNo7Fp8mKjVJY3SJIY=";
-        "8.2" = "sha256-dYkX4zV3lOwveMrZHLs2a7P+T3AGMv3dZNVUujpzJ9Q=";
-        "8.3" = "sha256-hU9jgz6gCWDSeoqWMznmNipfcMk7Ju7leRdSYFTl+Go=";
-        "8.4" = "gsSNY8cxWHPCm3UZNyhk9qs+9BgnnFLjeFIiksOG2A4=";
-        "8.5" = "M0SRivsTn1wQVuOt4v8F+OynZBpUkUJLR/E59veyH+Y=";
+        "8.1" = "sha256-I0gMRnN3y/57f0IBNDx5TaFtdFnFmotaqI8vnwGwxqg=";
+        "8.2" = "sha256-gsk/Kz/zJUXGFubfnQ7wia/5JEHgrIoTM396QpX5YaE=";
+        "8.3" = "sha256-6+ALZru+ee4lE41bKd06bnSqqTZ1FlcNVW4xOAWZP4g=";
+        "8.4" = "fYWndjBhKQQjFUwT0aP4A6EUkNCYsEvKtUcXR9l11Yg=";
+        "8.5" = "0UEvha64GSG/Mysc7oUJ6GMmY1uRZxN/gCkkNzWq/ng=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.1" = "sha256-poEjqvCVvdWmO2pw7jon+nzK52itsBfRkxcIjpHEa0M=";
-        "8.2" = "sha256-0xKV0Ro5VDaLU45BFiVhwT/a7Y7jeL7DerTmVLB0glo=";
-        "8.3" = "sha256-LggNCDl9vYXNPhIZpgeZ4h3nzddBg7FgzzJmcD+1nIA=";
-        "8.4" = "FGgHJWqlLIPXs1UBXEfgTyL6EHuP5P4fnMjop8QVmzo=";
-        "8.5" = "C5YrgTyag2ug+8sQIt7KolhXv1y63D6aSABrwU1HlWs=";
+        "8.1" = "sha256-g5H+3q0ehto/Ug87nb69quiWfR+AhZD5RdrYKl9fmU8=";
+        "8.2" = "sha256-pUAACcw24DuTDla0L375P+iPhZ/ttlMU2rnQKF6WU8k=";
+        "8.3" = "sha256-kKF7+zs0WXaMNh7rYUBrg+VixK+AEn3b65EtQiQpJUA=";
+        "8.4" = "FMYVQ2LDOWnmjkj5UdogwRB4q6NZqebUivbDmAjBONg=";
+        "8.5" = "T4RL15DJ/rkFLMCXiK7/2PD62LUkrlqFeLwDu1F7Ev0=";
       };
     };
   };
@@ -90,10 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       let
         args =
           lib.strings.concatMapStrings
-            (
-              v:
-              " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
-            )
+            (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${baseNameOf v.name}")
             (
               with lib.attrsets;
               [
@@ -166,13 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
         );
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation Redis extension for PHP";
     changelog = "https://github.com/cachewerk/relay/releases/tag/v${version}";
     homepage = "https://relay.so/";
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       tillkruss
       ostrolucky
     ];

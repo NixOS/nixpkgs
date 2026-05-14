@@ -5,7 +5,6 @@
   cargo,
   rustPlatform,
   rustc,
-  pyinstaller,
 
   # dependencies
   msgpack,
@@ -19,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "ormsgpack";
-  version = "1.10.0";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aviramha";
     repo = "ormsgpack";
     tag = version;
-    hash = "sha256-7VESiHAkDynf31xrQQh0Vv5vSfMOjnVXRFackUQdB68=";
+    hash = "sha256-a2PgCCIPPJt6YNW7UFl9urYZkAoVj5Np0lbv4QfzMAs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-um6PzwL0M5lz4gDkTO/lvWJ0wwuCneNKRW8qysKMmM0=";
+    hash = "sha256-PLLSVoQLsbTOIMqOsaaei/dm8SybfyqP0WLJW8hTOoo=";
   };
 
   build-system = [
@@ -46,10 +45,6 @@ buildPythonPackage rec {
 
   dependencies = [
     msgpack
-  ];
-
-  nativeBuildInputs = [
-    pyinstaller
   ];
 
   nativeCheckInputs = [

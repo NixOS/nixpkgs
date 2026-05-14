@@ -18,7 +18,7 @@ let
     }
     // (lib.optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
-      addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
+      addr = "${cfg.listenAddress}:${toString cfg.port}";
       headers.X-Content-Type-Options = [ "nosniff" ];
     };
     health.storagedriver = {
@@ -28,27 +28,13 @@ let
     };
   };
 
-  registryConfig.redis = lib.mkIf cfg.enableRedisCache {
-    addr = "${cfg.redisUrl}";
-    password = "${cfg.redisPassword}";
-    db = 0;
-    dialtimeout = "10ms";
-    readtimeout = "10ms";
-    writetimeout = "10ms";
-    pool = {
-      maxidle = 16;
-      maxactive = 64;
-      idletimeout = "300s";
-    };
-  };
-
   configFile = cfg.configFile;
 in
 {
   options.services.dockerRegistry = {
     enable = lib.mkEnableOption "Docker Registry";
 
-    package = lib.mkPackageOption pkgs "docker-distribution" {
+    package = lib.mkPackageOption pkgs "distribution" {
       example = "gitlab-container-registry";
     };
 
@@ -139,15 +125,29 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.dockerRegistry.extraConfig = lib.mkIf cfg.enableRedisCache {
+      redis = {
+        addr = "${cfg.redisUrl}";
+        password = "${cfg.redisPassword}";
+        db = 0;
+        dialtimeout = "10ms";
+        readtimeout = "10ms";
+        writetimeout = "10ms";
+        pool = {
+          maxidle = 16;
+          maxactive = 64;
+          idletimeout = "300s";
+        };
+      };
+    };
+
     systemd.services.docker-registry = {
       description = "Docker Container Registry";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      script = ''
-        ${cfg.package}/bin/registry serve ${configFile}
-      '';
 
       serviceConfig = {
+        ExecStart = "${lib.getExe cfg.package} serve ${configFile}";
         User = "docker-registry";
         WorkingDirectory = cfg.storagePath;
         AmbientCapabilities = lib.mkIf (cfg.port < 1024) "cap_net_bind_service";

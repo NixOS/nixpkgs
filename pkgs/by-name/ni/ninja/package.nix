@@ -21,19 +21,19 @@ stdenv.mkDerivation (finalAttrs: {
   version =
     {
       "1.11" = "1.11.1";
-      latest = "1.13.1";
+      latest = "1.13.2";
     }
     .${ninjaRelease};
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash =
       {
         # TODO: Remove Ninja 1.11 as soon as possible.
         "1.11" = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
-        latest = "sha256-GhAF5wUT19E02ZekW+ywsCMVGYrt56hES+MHCH4lNG4=";
+        latest = "sha256-D9HsIjv8EJ1qAdXFAKy260K77cCvopgQ2Fx6uXpt6VI=";
       }
       .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
   };
@@ -52,8 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt.bin
   ];
 
+  patches = [
+    ./0001-spawn-sh-instead-of-bin-sh.patch
+  ]
   # TODO: remove together with ninja 1.11
-  patches = lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
     (fetchpatch {
       name = "ninja1.11-python3.13-compat.patch";
       url = "https://github.com/ninja-build/ninja/commit/9cf13cd1ecb7ae649394f4133d121a01e191560b.patch";
@@ -63,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # write rebuild args to file after bootstrap
-    substituteInPlace configure.py --replace "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
+    substituteInPlace configure.py --replace-fail "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
   '';
 
   buildPhase = ''
@@ -126,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       thoughtpolice
       bjornfor
-      orivej
     ];
   };
 })

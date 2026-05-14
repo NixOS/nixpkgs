@@ -2,26 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   cmake,
   pkg-config,
   libusb1,
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  # udev rules are in another unversioned repo
+  udevRules = fetchurl {
+    url = "https://raw.githubusercontent.com/probe-rs/webpage/054a0b16831593091a8a5624d0e2305573e860ee/public/files/69-probe-rs.rules";
+    hash = "sha256-yjxld5ebm2jpfyzkw+vngBfHu5Nfh2ioLUKQQDY4KYo=";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "probe-rs-tools";
-  version = "0.29.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
-    tag = "v${version}";
-    hash = "sha256-/gP9abygktYSzg/054o1PEcQywiPFTtKNdUdI3hCYyc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZcH2FBKsbBtTYfRQgPfOOODDpyB7VydcO7F7pq8xzD0=";
   };
 
-  cargoHash = "sha256-txHl0+HDCVdmbZppGsFqPjsEbPBCJVEB3XZWZJBBoOk=";
+  cargoHash = "sha256-fVmwZw34lK6eKkqNT/SW5wzeeyWg6Qp48eso6yibICE=";
 
-  buildAndTestSubdir = pname;
+  buildAndTestSubdir = finalAttrs.pname;
 
   nativeBuildInputs = [
     # required by libz-sys, no option for dynamic linking
@@ -34,6 +42,10 @@ rustPlatform.buildRustPackage rec {
     libusb1
     openssl
   ];
+
+  postInstall = ''
+    install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+  '';
 
   checkFlags = [
     # require a physical probe
@@ -64,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
-    changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/probe-rs/probe-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -74,4 +86,4 @@ rustPlatform.buildRustPackage rec {
       newam
     ];
   };
-}
+})

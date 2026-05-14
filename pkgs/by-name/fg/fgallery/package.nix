@@ -20,12 +20,12 @@
 #   $jpegoptim = 0;
 # }
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fgallery";
   version = "1.9.1";
 
   src = fetchurl {
-    url = "https://www.thregr.org/~wavexx/software/fgallery/releases/fgallery-${version}.zip";
+    url = "https://www.thregr.org/~wavexx/software/fgallery/releases/fgallery-${finalAttrs.version}.zip";
     hash = "sha256-FvF0wkRe3wTPUG9/GEBxkaxvZ1B4wEd9kI9rURHKxn0=";
   };
 
@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
         }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static photo gallery generator";
     homepage = "https://www.thregr.org/~wavexx/software/fgallery/";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "fgallery";
   };
-}
+})

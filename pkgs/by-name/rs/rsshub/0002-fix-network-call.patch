@@ -1,18 +1,31 @@
-diff --git a/scripts/workflow/build-routes.ts b/scripts/workflow/build-routes.ts
-index 9807cfc..b9dcfb9 100644
---- a/scripts/workflow/build-routes.ts
-+++ b/scripts/workflow/build-routes.ts
-@@ -4,6 +4,7 @@ import { parse } from 'tldts';
- import fs from 'node:fs';
- import path from 'node:path';
- import toSource from 'tosource';
-+import { exit } from 'node:process';
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: RSSHub Nix packagers
+Date: Mon, 10 Mar 2026 00:00:00 +0000
+Subject: [PATCH] support BUILD_ROUTES_MODE for offline builds
 
- import { getCurrentPath } from '../../lib/utils/helpers';
- const __dirname = getCurrentPath(import.meta.url);
-@@ -73,3 +74,5 @@ fs.writeFileSync(path.join(__dirname, '../../assets/build/radar-rules.js'), `(${
- fs.writeFileSync(path.join(__dirname, '../../assets/build/maintainers.json'), JSON.stringify(maintainers, null, 2));
- fs.writeFileSync(path.join(__dirname, '../../assets/build/routes.json'), JSON.stringify(namespaces, null, 2));
- fs.writeFileSync(path.join(__dirname, '../../assets/build/routes.js'), `export default ${JSON.stringify(namespaces, null, 2)}`.replaceAll(/"module": "(.*)"\n/g, `"module": $1\n`));
-+
-+exit(0);
+Add BUILD_ROUTES_MODE environment variable support to lib/registry.ts
+so that route metadata can be built using directoryImport without
+executing module-level code that would trigger network requests.
+This is required for building in the Nix sandbox (no network access).
+
+---
+ lib/registry.ts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/lib/registry.ts b/lib/registry.ts
+--- a/lib/registry.ts
++++ b/lib/registry.ts
+@@ -56,7 +56,12 @@
+ 
+ let namespaces: NamespacesType = {};
+ 
+-if (config.isPackage) {
++if (process.env.BUILD_ROUTES_MODE) {
++    modules = directoryImport({
++        targetDirectoryPath: path.join(__dirname, './routes'),
++        importPattern: /\.tsx?$/,
++    }) as typeof modules;
++} else if (config.isPackage) {
+     namespaces = (await import('../assets/build/routes.js')).default;
+ } else {
+     switch (process.env.NODE_ENV || process.env.VERCEL_ENV) {

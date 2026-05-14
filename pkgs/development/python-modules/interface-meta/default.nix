@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "interface-meta";
   version = "1.3.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthewwardrop";

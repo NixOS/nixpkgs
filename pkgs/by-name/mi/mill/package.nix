@@ -1,21 +1,50 @@
 {
-  lib,
-  stdenv,
+  autoPatchelfHook,
   fetchurl,
   jre,
+  lib,
   makeWrapper,
+  stdenvNoCC,
+  zlib,
+  writeScript,
+  stdenv,
+  curl,
+  libxml2,
+  common-updater-scripts,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  suffixMap = {
+    aarch64-darwin = "native-mac-aarch64";
+    x86_64-darwin = "native-mac-amd64";
+    aarch64-linux = "native-linux-aarch64";
+    x86_64-linux = "native-linux-amd64";
+  };
+  suffix =
+    suffixMap.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+stdenvNoCC.mkDerivation rec {
   pname = "mill";
-  version = "0.12.14";
+  version = "1.1.2";
 
   src = fetchurl {
-    url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${finalAttrs.version}/mill-dist-${finalAttrs.version}.exe";
-    hash = "sha256-2MyufFcgKH/bxVB83qXNESByAdgbzhyIHqAr36Bb9o0=";
+    url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${suffix}/${version}/mill-dist-${suffix}-${version}.exe";
+    sha256 =
+      {
+        aarch64-darwin = "sha256-UiooqMbxceUepk4uJV8ZSL1o4VLeTZgWs3URQFXFmQs=";
+        x86_64-darwin = "sha256-EvIH0GHrdFtE5m6WqHAu7XDJn/8rElpmSxLrdCx5CKY=";
+        aarch64-linux = "sha256-Az/NCaFVrKANJvgIHx9QlW/fPyFVc4XiJ6BZr4ahfxk=";
+        x86_64-linux = "sha256-YhygFs8+ffOgoOSpggrYQ+xS19q8koYbN9UnozlLTPY=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ zlib ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -26,24 +55,53 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm555 "$src" "$out/bin/.mill-wrapped"
+
+    install -Dm 555 $src $out/bin/.mill-wrapped
     # can't use wrapProgram because it sets --argv0
-    makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" \
+    makeWrapper $out/bin/.mill-wrapped $out/bin/mill \
       --prefix PATH : "${jre}/bin" \
-      --set JAVA_HOME "${jre}"
+      --set-default JAVA_HOME "${jre}"
+
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  # The default release is a script which will do an impure download
-  # just ensure that the application can run without network
-  installCheckPhase = ''
-    $out/bin/mill --help > /dev/null
+  passthru.updateScript = writeScript "${pname}-updater" ''
+    #!${stdenv.shell}
+    set -eu -o pipefail
+    PATH=${
+      lib.makeBinPath [
+        curl
+        libxml2 # xmllint
+        common-updater-scripts
+      ]
+    }:$PATH
+    metadataUrl="https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/maven-metadata.xml"
+    latestVersion="$(curl -sS $metadataUrl | xmllint --xpath '/metadata/versioning/release/text()' -)"
+
+    ${lib.strings.concatStrings (
+      builtins.map (
+        platform:
+        let
+          suffix = suffixMap.${platform} or (throw "Platform not in suffixMap: ${platform}");
+        in
+        ''
+          {
+            dlUrl="https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${suffix}/$latestVersion/mill-dist-${suffix}-$latestVersion.exe"
+
+            prefetch="$(nix-prefetch-url $dlUrl)"
+            hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
+
+
+            update-source-version mill "$latestVersion" "$hash" --system=${platform} --ignore-same-version
+          }
+        ''
+      ) meta.platforms
+    )}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://com-lihaoyi.github.io/mill/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Build tool for Scala, Java and more";
     mainProgram = "mill";
     longDescription = ''
@@ -53,10 +111,15 @@ stdenv.mkDerivation (finalAttrs: {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
-    maintainers = with maintainers; [
-      scalavision
+    maintainers = with lib.maintainers; [
       zenithal
     ];
-    platforms = lib.platforms.all;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-})
+}

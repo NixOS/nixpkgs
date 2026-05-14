@@ -2,25 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  iana-etc,
   installShellFiles,
+  libredirect,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zarf";
-  version = "0.57.0";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
     repo = "zarf";
-    tag = "v${version}";
-    hash = "sha256-KcBF3Iw3hiQ25UHaCCvsU5HOYWVE2b5RpeyprZ8omAA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gQWEKLtNvb61UddbVj7SbwOXHYQxzE2ve5xuuxv3dC8=";
   };
 
-  vendorHash = "sha256-SgXOBLw2vtVsgLIcoYQTz1npQwzj99X/GnnqqSsmb10=";
+  vendorHash = "sha256-djU3gNWDQtzCR0U+DNrcENQktrozjEN8/lDs53LeeGQ=";
   proxyVendor = true;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
   preBuild = ''
     mkdir -p build/ui
@@ -34,30 +39,34 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "github.com/zarf-dev/zarf/src/config.CLIVersion=${src.tag}"
+    "github.com/zarf-dev/zarf/src/config.CLIVersion=${finalAttrs.src.tag}"
     "-X"
-    "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${src.tag}"
+    "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${finalAttrs.src.tag}"
     "-X"
-    "k8s.io/component-base/version.gitCommit=${src.tag}"
+    "k8s.io/component-base/version.gitCommit=${finalAttrs.src.tag}"
     "-X"
     "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export K9S_LOGS_DIR=$(mktemp -d)
-    installShellCompletion --cmd zarf \
-      --bash <($out/bin/zarf completion bash) \
-      --fish <($out/bin/zarf completion fish) \
-      --zsh  <($out/bin/zarf completion zsh)
-  '';
+  postInstall =
+    lib.optionalString
+      (stdenv.buildPlatform.canExecute stdenv.hostPlatform && stdenv.hostPlatform.isDarwin)
+      "export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services"
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export K9S_LOGS_DIR=$(mktemp -d)
+      installShellCompletion --cmd zarf \
+        --bash <($out/bin/zarf completion bash) \
+        --fish <($out/bin/zarf completion fish) \
+        --zsh  <($out/bin/zarf completion zsh)
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     mainProgram = "zarf";
     homepage = "https://zarf.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ragingpastry
     ];
   };
-}
+})

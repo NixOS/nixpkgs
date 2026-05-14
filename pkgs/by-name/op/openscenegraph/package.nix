@@ -7,9 +7,9 @@
   cmake,
   pkg-config,
   doxygen,
-  libX11,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxinerama,
+  libxrandr,
   libGLU,
   libGL,
   glib,
@@ -32,7 +32,7 @@
   curlSupport ? true,
   curl,
   colladaSupport ? false,
-  opencollada,
+  collada-dom,
   opencascadeSupport ? false,
   opencascade-occt,
   ffmpegSupport ? false,
@@ -48,7 +48,7 @@
   vncSupport ? false,
   libvncserver,
   lasSupport ? false,
-  libLAS,
+  liblas,
   luaSupport ? false,
   lua,
   sdlSupport ? false,
@@ -60,14 +60,14 @@
   fltk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openscenegraph";
   version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "OpenSceneGraph-${version}";
+    rev = "OpenSceneGraph-${finalAttrs.version}";
     sha256 = "00i14h82qg3xzcyd8p02wrarnmby3aiwmz0z43l50byc9f8i05n1";
   };
 
@@ -79,9 +79,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXinerama
-      libXrandr
+      libx11
+      libxinerama
+      libxrandr
       libGLU
       libGL
     ]
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional gdalSupport gdal
     ++ lib.optional curlSupport curl
     ++ lib.optionals colladaSupport [
-      opencollada
+      collada-dom
       pcre
     ]
     ++ lib.optional opencascadeSupport opencascade-occt
@@ -108,12 +108,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional svgSupport librsvg
     ++ lib.optional pdfSupport poppler
     ++ lib.optional vncSupport libvncserver
-    ++ lib.optional lasSupport libLAS
+    ++ lib.optional lasSupport liblas
     ++ lib.optional luaSupport lua
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio
     ++ lib.optionals withExamples [ fltk ]
     ++ lib.optional (restSupport || colladaSupport) boost;
+
+  env = lib.optionalAttrs colladaSupport { COLLADA_DIR = collada-dom; };
 
   patches = [
     (fetchpatch {
@@ -133,18 +135,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # ref. https://github.com/openscenegraph/OpenSceneGraph/pull/1373
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)" \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+  '';
+
   cmakeFlags =
     lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF"
     ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with lib; {
+  meta = {
     description = "3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aanderse
       raskin
     ];
-    platforms = with platforms; linux ++ darwin;
-    license = "OpenSceneGraph Public License - free LGPL-based license";
+    platforms = with lib.platforms; linux ++ darwin;
+    license = with lib.licenses; [
+      lgpl21Only
+      wxWindowsException31
+    ];
   };
-}
+})

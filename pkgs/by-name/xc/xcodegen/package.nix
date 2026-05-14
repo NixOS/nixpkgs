@@ -16,13 +16,13 @@ in
 
 swiftPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "xcodegen";
-  version = "2.42.0";
+  version = "2.44.1";
 
   src = fetchFromGitHub {
     owner = "yonaskolb";
     repo = "XcodeGen";
     tag = finalAttrs.version;
-    hash = "sha256-wcjmADG+XnS2kR8BHe6ijApomucS9Tx7ZRjWZmTCUiI=";
+    hash = "sha256-RQlmQfmrLZRrgIA09fE84JuqmYkkrz4KSw2dvYXw0Rs=";
   };
 
   # Including SwiftPM as a nativeBuildInput provides a buildPhase for you.
@@ -55,7 +55,6 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -65,7 +64,7 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Swift command line tool for generating your Xcode project";
     homepage = "https://github.com/yonaskolb/XcodeGen";
-    changelog = "https://github.com/XcodeGen/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/yonaskolb/XcodeGen/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.samasaur ];

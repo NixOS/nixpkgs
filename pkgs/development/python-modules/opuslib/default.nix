@@ -54,11 +54,17 @@ buildPythonPackage {
     "tests/hl_encoder.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Likely related to libopus 1.5.2 -> 1.6.1 bump
+    # AssertionError: 1500000 not less than 700000
+    "test_bitrate"
+  ];
+
+  meta = {
     description = "Python bindings to the libopus, IETF low-delay audio codec";
     homepage = "https://github.com/orion-labs/opuslib";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thelegy ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thelegy ];
   };
 }

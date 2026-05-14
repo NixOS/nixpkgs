@@ -16,22 +16,23 @@
 
 buildGoModule rec {
   pname = "mautrix-gmessages";
-  version = "0.6.5";
+  version = "25.11";
+  tag = "v0.2511.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "gmessages";
-    tag = "v${version}";
-    hash = "sha256-AIw7Grh4BEDT33N4004XjOtIepguO2SbdUmTHGJ1A2M=";
+    inherit tag;
+    hash = "sha256-WmZ2eRKRckZtYMsI7r0b+atLSYA5e3N4ifeSEI2Rvu8=";
   };
 
-  vendorHash = "sha256-73a+OyauFJv2Rx6tbjwN9SBaXu4ZL5qM5xFt5m8a7c4=";
+  vendorHash = "sha256-HVM9W4gOZFs9BDT1wFzDXkhDklCDtKUyNdYxPWkGZ3w=";
 
   ldflags = [
     "-s"
     "-w"
     "-X"
-    "main.Tag=${version}"
+    "main.Tag=${tag}"
   ];
 
   buildInputs = lib.optional (!withGoolm) olm;
@@ -44,12 +45,12 @@ buildGoModule rec {
     tests.version = testers.testVersion { package = mautrix-gmessages; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix-Google Messages puppeting bridge";
     homepage = "https://github.com/mautrix/gmessages";
     changelog = "https://github.com/mautrix/gmessages/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "mautrix-gmessages";
   };
 }

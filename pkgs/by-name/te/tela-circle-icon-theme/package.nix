@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   adwaita-icon-theme,
-  libsForQt5,
+  kdePackages,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -13,10 +13,7 @@
   colorVariants ? [ ], # default is standard
 }:
 
-let
-  pname = "tela-circle-icon-theme";
-in
-lib.checkListOfEnum "${pname}: color variants"
+lib.checkListOfEnum "tela-circle-icon-theme: color variants"
   [
     "standard"
     "black"
@@ -38,12 +35,12 @@ lib.checkListOfEnum "${pname}: color variants"
 
   stdenvNoCC.mkDerivation
   rec {
-    inherit pname;
+    pname = "tela-circle-icon-theme";
     version = "2025-02-10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "tela-circle-icon-theme";
       tag = version;
       hash = "sha256-5Kqf6QNM+/JGGp2H3Vcl69Vh1iZYPq3HJxhvSH6k+eQ=";
     };
@@ -55,11 +52,12 @@ lib.checkListOfEnum "${pname}: color variants"
 
     propagatedBuildInputs = [
       adwaita-icon-theme
-      libsForQt5.breeze-icons
+      kdePackages.breeze-icons
       hicolor-icon-theme
     ];
 
     dontDropIconThemeCache = true;
+    dontWrapQtApps = true;
 
     # These fixup steps are slow and unnecessary for this package.
     # Package may install almost 400 000 small files.
@@ -75,7 +73,7 @@ lib.checkListOfEnum "${pname}: color variants"
 
       ./install.sh -d $out/share/icons \
         ${lib.optionalString circularFolder "-c"} \
-        ${if allColorVariants then "-a" else builtins.toString colorVariants}
+        ${if allColorVariants then "-a" else toString colorVariants}
 
       jdupes --quiet --link-soft --recurse $out/share
 

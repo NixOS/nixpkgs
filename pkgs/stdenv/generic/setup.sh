@@ -25,7 +25,7 @@ if [[ ${NIX_DEBUG:-0} -ge 6 ]]; then
     set -x
 fi
 
-if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
+if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
 
@@ -33,16 +33,6 @@ if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-
-    # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
-    # https://github.com/NixOS/nix/issues/6736; please keep around until the
-    # fix reaches *every patch version* that's >= lib/minver.nix
-    if ! [[ -e "${NIX_ATTRS_JSON_FILE:-}" ]]; then
-        export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
-    fi
-    if ! [[ -e "${NIX_ATTRS_SH_FILE:-}" ]]; then
-        export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
-    fi
 else
     __structuredAttrs=
     : "${outputs:=out}"
@@ -1465,7 +1455,16 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        prependToVar configureFlags "${prefixKey:---prefix=}$prefix"
+        # For __structuredAttrs: if prefixKey ends in a space,
+        # we need to add the prefixKey and the prefix as separate entries,
+        # and since we prepend, we do it in reverse order.
+        local -r prefixKeyOrDefault="${prefixKey:---prefix=}"
+        if [ "${prefixKeyOrDefault: -1}" = " " ]; then
+            prependToVar configureFlags "$prefix"
+            prependToVar configureFlags "${prefixKeyOrDefault::-1}"
+        else
+            prependToVar configureFlags "$prefixKeyOrDefault$prefix"
+        fi
     fi
 
     if [[ -f "$configureScript" ]]; then
@@ -1770,6 +1769,25 @@ runPhase() {
     fi
 }
 
+definePhases() {
+    # only defines phases if it is not already defined
+    if [ -z "${phases[*]:-}" ]; then
+        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
+            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
+            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
+            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}"
+    fi
+}
+
+printPhases() {
+    definePhases
+    # one phase per line, to make it easy to consume with tools like xargs
+    # explicitly uses the same splitting as genericBuild
+    local phase
+    for phase in ${phases[*]}; do
+        printf '%s\n' "$phase"
+    done
+}
 
 genericBuild() {
     # variable used by our gzip wrapper to add -n.
@@ -1785,12 +1803,7 @@ genericBuild() {
         return
     fi
 
-    if [ -z "${phases[*]:-}" ]; then
-        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
-            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
-            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
-            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
-    fi
+    definePhases
 
     # The use of ${phases[*]} gives the correct behavior both with and
     # without structured attrs.  This relies on the fact that each

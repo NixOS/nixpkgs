@@ -12,7 +12,6 @@
   lxml,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semgrep,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "whispers";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.1";
 
   src = fetchFromGitHub {
     owner = "adeptex";
@@ -81,12 +78,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whispers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to identify hardcoded secrets in static structured text";
     homepage = "https://github.com/adeptex/whispers";
     changelog = "https://github.com/adeptex/whispers/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "whispers";
   };
 }

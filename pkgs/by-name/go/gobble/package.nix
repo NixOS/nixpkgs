@@ -2,25 +2,25 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  xorg,
+  libxcb,
   installShellFiles,
   pandoc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gobble";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "EmperorPenguin18";
     repo = "gobble";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-g4154Axvjp9jbE0lvMeNGM+v2UxkAsZqt9kPv5bhVK8=";
   };
 
   cargoHash = "sha256-DnIZTeRyxhmVK2uB21ScPiEyL4k9kAWfVoLNIAM9P68=";
 
-  buildInputs = [ xorg.libxcb ];
+  buildInputs = [ libxcb ];
   nativeBuildInputs = [
     pandoc
     installShellFiles
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "gobble";
   };
-}
+})

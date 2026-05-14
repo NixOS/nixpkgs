@@ -14,8 +14,8 @@
   testScript = ''
     start_all()
 
-    machine.systemctl("start network-online.target")
-    machine.wait_for_unit("network-online.target")
+    serviceEmptyConf.systemctl("start network-online.target")
+    serviceEmptyConf.wait_for_unit("network-online.target")
 
     with subtest("empty/default config test"):
       serviceEmptyConf.wait_for_unit("paisa.service")

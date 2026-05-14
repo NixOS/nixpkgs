@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   mpi,
   perl,
   autoreconfHook,
@@ -18,6 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-WsfJWHHfkiHZ+rPk6ck6mDErTXwt6Dhgm+yqOtw4Fvo=";
   };
+
+  patches = [
+    # Fix gcc-15 build:
+    #   https://github.com/hpc/ior/pull/525
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://github.com/hpc/ior/commit/526c5ad06695a91a27163c520ce3305109f50bef.patch";
+      hash = "sha256-HvbRMt2EcuO7kxLL9qKpozpNKEOmWuHkKQTSUhfU7/w=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

@@ -16,8 +16,10 @@
   libxml2,
   libyaml,
   libffi,
-  llvmPackages_15,
-  llvmPackages_18,
+  llvmPackages_19,
+  llvmPackages_20,
+  llvmPackages_21,
+  llvmPackages_22,
   makeWrapper,
   openssl,
   pcre2,
@@ -168,11 +170,7 @@ let
         export threads=$NIX_BUILD_CORES
         export CRYSTAL_CACHE_DIR=$TMP
         export MACOSX_DEPLOYMENT_TARGET=10.11
-
-        # Available since 1.13.0 https://github.com/crystal-lang/crystal/pull/14574
-        if [[ -f src/SOURCE_DATE_EPOCH ]]; then
-          export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
-        fi
+        export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
       '';
 
       strictDeps = true;
@@ -201,15 +199,16 @@ let
         "progress=1"
       ];
 
-      LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+      env = {
+        LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
-      FLAGS = [
-        "--single-module" # needed for deterministic builds
-      ];
+        # needed for deterministic builds
+        FLAGS = "--single-module";
 
-      # This makes sure we don't keep depending on the previous version of
-      # crystal used to build this one.
-      CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+        # This makes sure we don't keep depending on the previous version of
+        # crystal used to build this one.
+        CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+      };
 
       # We *have* to add `which` to the PATH or crystal is unable to build
       # stuff later if which is not available.
@@ -270,15 +269,14 @@ let
       };
       passthru.llvmPackages = llvmPackages;
 
-      meta = with lib; {
+      meta = {
         inherit (binary.meta) platforms;
         description = "Compiled language with Ruby like syntax and type inference";
         mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
-        license = licenses.asl20;
-        maintainers = with maintainers; [
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
           david50407
-          manveru
           peterhoeg
           donovanglover
         ];
@@ -296,19 +294,11 @@ rec {
     };
   };
 
-  # When removing this version, also remove checks for src/SOURCE_DATE_EPOCH existence
-  crystal_1_11 = generic {
-    version = "1.11.2";
-    sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
-    binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_15;
-  };
-
   crystal_1_14 = generic {
     version = "1.14.1";
     sha256 = "sha256-cQWK92BfksOW8GmoXn4BmPGJ7CLyLAeKccOffQMh5UU=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_19;
     doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
@@ -316,7 +306,7 @@ rec {
     version = "1.15.1";
     sha256 = "sha256-L/Q8yZdDq/wn4kJ+zpLfi4pxznAtgjxTCbLnEiCC2K0=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_19;
     doCheck = false;
   };
 
@@ -324,9 +314,33 @@ rec {
     version = "1.16.3";
     sha256 = "sha256-U9H1tHUMyDNicZnXzEccDki5bGXdV0B2Wu2PyCksPVI=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_20;
     doCheck = false;
   };
 
-  crystal = crystal_1_16;
+  crystal_1_17 = generic {
+    version = "1.17.1";
+    sha256 = "sha256-+wHhozPhpIsfQy1Lw+V48zvuWCfXzT4IC9KA1AU/DLw=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_21;
+    doCheck = false;
+  };
+
+  crystal_1_18 = generic {
+    version = "1.18.2";
+    sha256 = "sha256-bwKs9bwD1WfS95DSxVY5AjT5Q61jOsfAH897tmiurng=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_21;
+    doCheck = false;
+  };
+
+  crystal_1_19 = generic {
+    version = "1.19.1";
+    sha256 = "sha256-vMS2GJb6c6RvflDSS2EWHsERJ0rvzZMVm50gaTXRs4Y=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal = crystal_1_19;
 }

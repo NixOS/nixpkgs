@@ -10,16 +10,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.5";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bPoYEPCWj7vAKDL/P4yjhrfp4HK9sbBh4eK0Co+xaZc=";
+    hash = "sha256-FxJWoFNyIGQ6o9g2Q0/jaBMyeH8UnbTgha2goHAurvY=";
   };
 
-  vendorHash = "sha256-nJCxWIrsdGQxdiJe9skHv4AnqUpqZHuqXrl/cQrT9Ps=";
+  vendorHash = "sha256-4x+vvkQUhqxBwm+9Lx7n6Ww6qvfLwqd8IXXCuCSAijE=";
 
   postInstall = ''
     chmod -R u+w $out/share
@@ -40,11 +40,11 @@ php.buildComposerProject2 (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Federated image sharing platform";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://pixelfed.org/";
-    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
     platforms = php.meta.platforms;
   };
 })

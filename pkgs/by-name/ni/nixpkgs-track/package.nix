@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-track";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "uncenter";
     repo = "nixpkgs-track";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NXEX2C2UhXmzyhN8jfqkv3d028axR1KIuXU94EPUmrU=";
+    hash = "sha256-wxmM69bUp98CS4oCYhaliH7fRts9+Ay/JjhuP5IMgeE=";
   };
 
-  cargoHash = "sha256-AbT0r6T2+ag70zEMjN3/2AMK1DfVkLfLAbG9puchD58=";
+  cargoHash = "sha256-lnv0nCyb2+7Xl+qAAeaHdbk4XOGdq4FINxPOIPchDhg=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [

@@ -19,7 +19,8 @@
   gst_all_1,
   harfbuzz,
   harfbuzzFull,
-  icu70,
+  hyphen,
+  icu74,
   lcms,
   libavif,
   libdrm,
@@ -38,27 +39,25 @@
   libwpe,
   libwpe-fdo,
   libxkbcommon,
-  libxml2,
+  libxml2_13,
   libxslt,
+  mesa,
   libgbm,
   sqlite,
   systemdLibs,
   wayland-scanner,
   woff2,
   zlib,
-  suffix,
   revision,
   system,
   throwSystem,
 }:
 let
-  suffix' =
-    if lib.hasPrefix "linux" suffix then
-      "ubuntu-22.04" + (lib.removePrefix "linux" suffix)
-    else if lib.hasPrefix "mac" suffix then
-      "mac-14" + (lib.removePrefix "mac" suffix)
-    else
-      suffix;
+  download =
+    (import ./browser-downloads.nix {
+      name = "webkit";
+      inherit revision;
+    }).${system} or throwSystem;
   libvpx' = libvpx.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "1.12.0";
@@ -70,20 +69,6 @@ let
       };
     }
   );
-  libavif' = libavif.overrideAttrs (
-    finalAttrs: previousAttrs: {
-      version = "0.9.3";
-      src = fetchFromGitHub {
-        owner = "AOMediaCodec";
-        repo = finalAttrs.pname;
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-ME/mkaHhFeHajTbc7zhg9vtf/8XgkgSRu9I/mlQXnds=";
-      };
-      postPatch = "";
-      patches = [ ];
-    }
-  );
-
   libjxl' = libjxl.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "0.8.2";
@@ -106,6 +91,14 @@ let
         # Fix multiple definition errors by using C++17 instead of C++11
         substituteInPlace CMakeLists.txt \
           --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"
+        # Fix the build with CMake 4.
+        # See:
+        # * <https://github.com/webmproject/sjpeg/commit/9990bdceb22612a62f1492462ef7423f48154072>
+        # * <https://github.com/webmproject/sjpeg/commit/94e0df6d0f8b44228de5be0ff35efb9f946a13c9>
+        substituteInPlace third_party/sjpeg/CMakeLists.txt \
+          --replace-fail \
+            'cmake_minimum_required(VERSION 2.8.7)' \
+            'cmake_minimum_required(VERSION 3.5...3.10)'
       '';
       postInstall = "";
 
@@ -125,12 +118,11 @@ let
   webkit-linux = stdenv.mkDerivation {
     name = "playwright-webkit";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
-      stripRoot = false;
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-OSVHFGdcQrzmhLPdXF61tKmip/6/D+uaQgSBBQiOIZI=";
-          aarch64-linux = "sha256-b8XwVMCwSbujyqgkJKIPAVNX83Qmmsthprr2x9XSb10=";
+          x86_64-linux = "sha256-BVIZxnnfhBvI737ojRZ+yUX8mcbQ6WOlNdYJ9t4R5yY=";
+          aarch64-linux = "sha256-t9kqUdyOgDXroKp7LWQsaiaRGZVZN3ZdfYLahl5GW2E=";
         }
         .${system} or throwSystem;
     };
@@ -154,9 +146,10 @@ let
       gst_all_1.gstreamer
       harfbuzz
       harfbuzzFull
-      icu70
+      hyphen
+      icu74
       lcms
-      libavif'
+      libavif
       libdrm
       libepoxy
       libevent
@@ -172,7 +165,7 @@ let
       libwpe
       libwpe-fdo
       libvpx'
-      libxml2
+      libxml2_13
       libxslt
       libgbm
       sqlite
@@ -192,26 +185,26 @@ let
       # remove bundled libs
       rm -rf $out/minibrowser-wpe/sys
 
-      # TODO: still fails on ubuntu trying to find libEGL_mesa.so.0
       wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
         --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
-        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
-
-    '';
-
-    preFixup = ''
-      # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-      mkdir -p "$out/lib"
-      ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib \
+        --run '
+          # Use Mesa as EGL vendor fallback when no system EGL vendor is configured.
+          # libglvnd discovers vendors via JSON files https://github.com/NVIDIA/libglvnd/blob/master/src/EGL/icd_enumeration.md
+          if [ -z "$__EGL_VENDOR_LIBRARY_DIRS" ] && [ -z "$__EGL_VENDOR_LIBRARY_FILENAMES" ] && \
+             ! [ -d /usr/share/glvnd/egl_vendor.d ] && ! [ -d /etc/glvnd/egl_vendor.d ] && \
+             ! [ -d /run/opengl-driver/share/glvnd/egl_vendor.d ]; then
+            export __EGL_VENDOR_LIBRARY_FILENAMES="${mesa}/share/glvnd/egl_vendor.d/50_mesa.json"
+          fi
+        '
     '';
   };
   webkit-darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-shjhozJS2VbBjpjJVlM9hwBzGWwgva1qhfEUhY8t9Bk=";
-        aarch64-darwin = "sha256-ZRl86L/OOTNPWfZDl6JQfuXL41kI/Wir99/JIbf7T7M=";
+        x86_64-darwin = "sha256-NjuRZrYzraE1FrPAmyMcQFAS2zWZXYe8cBQVbSU6zFw=";
+        aarch64-darwin = "sha256-9g7YHg+TQNmAE07K6jKSSRUJ7IENUQMp2q54Mk2BbaY=";
       }
       .${system} or throwSystem;
   };

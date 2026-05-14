@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   # nixpkgs functions
   buildGoModule,
   callPackage,
@@ -10,7 +11,7 @@
   replaceVars,
   # Language dependencies
   fetchYarnDeps,
-  mkYarnModules,
+  yarnConfigHook,
   python3,
   # Misc dependencies
   charm-freeze,
@@ -21,7 +22,7 @@
   direnv,
   fzf,
   gawk,
-  gperf,
+  git,
   helm-ls,
   himalaya,
   htop,
@@ -31,7 +32,6 @@
   libgit2,
   llvmPackages,
   neovim-unwrapped,
-  nim1,
   nodejs,
   openscad,
   openssh,
@@ -49,7 +49,7 @@
   xdg-utils,
   xdotool,
   xkb-switch,
-  xorg,
+  xwininfo,
   xxd,
   ycmd,
   zathura,
@@ -71,8 +71,13 @@
   pandoc,
   # nvim-tinygit
   gitMinimal,
+  # opencode-nvim,
+  opencode,
+  lsof,
   # Preview-nvim dependencies
   md-tui,
+  # sidekick-nvim dependencies
+  copilot-language-server,
   # sved dependencies
   glib,
   gobject-introspection,
@@ -100,6 +105,8 @@
   impl,
   reftools,
   revive,
+  tree-sitter-grammars,
+  neovimUtils,
   # hurl dependencies
   hurl,
   # must be lua51Packages
@@ -120,6 +127,9 @@
   # search-and-replace.nvim dependencies
   fd,
   sad,
+  # tv.nvim dependency
+  television,
+  tree-sitter,
 }:
 self: super:
 let
@@ -141,16 +151,30 @@ let
 in
 
 assertNoAdditions {
+  # keep-sorted start case=no block=yes newline_separated=yes
+  ack-vim = super.ack-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     checkInputs = with self; [
+      fzf-lua
       snacks-nvim
+      telescope-nvim
     ];
     dependencies = with self; [
-      telescope-nvim
       vim-fugitive
       vim-rhubarb
-      fzf-lua
       plenary-nvim
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "advanced_git_search.fzf.previewers.init"
+      "advanced_git_search.fzf.pickers.init"
+      "advanced_git_search.fzf.pickers.utils"
     ];
   };
 
@@ -160,6 +184,11 @@ assertNoAdditions {
       lualine-nvim
       telescope-nvim
       fzf-lua
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "aerial.fzf-lua"
     ];
   };
 
@@ -171,8 +200,8 @@ assertNoAdditions {
   };
 
   aider-nvim = super.aider-nvim.overrideAttrs {
-    patches = [
-      (replaceVars ./patches/aider-nvim/bin.patch { aider = lib.getExe' aider-chat "aider"; })
+    runtimeDeps = [
+      aider-chat
     ];
   };
 
@@ -180,10 +209,30 @@ assertNoAdditions {
     dependencies = [ self.middleclass ];
   };
 
+  argtextobj-vim = super.argtextobj-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  arrow-nvim = super.arrow-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
+
   arshlib-nvim = super.arshlib-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
       plenary-nvim
+    ];
+  };
+
+  artio-nvim = super.artio-nvim.overrideAttrs {
+    # Requires extui enabled
+    nvimSkipModules = [
+      "artio.view"
+      "artio.picker"
     ];
   };
 
@@ -196,29 +245,55 @@ assertNoAdditions {
     checkInputs = [ self.astrocore ];
   };
 
+  async-nvim = super.async-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "docgen"
+    ];
+  };
+
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];
   };
 
-  autosave-nvim = super.autosave-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
+  augment-vim = super.augment-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = with lib.licenses; [
+        mit
+        unfree
+      ];
+    };
+  });
+
+  auto-git-diff = super.auto-git-diff.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  auto-pairs = super.auto-pairs.overrideAttrs (old: {
+    meta = old.meta // {
+      # README contains the full MIT license text.
+      license = lib.licenses.mit;
+    };
+  });
 
   auto-session = super.auto-session.overrideAttrs {
     # Optional integration
     checkInputs = [ self.telescope-nvim ];
   };
 
+  autosave-nvim = super.autosave-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
-    patches = [
-      (replaceVars ./patches/aw-watcher-vim/program_paths.patch {
-        curl = lib.getExe curl;
-      })
+    runtimeDeps = [
+      curl
     ];
   };
 
-  bamboo-nvim = super.bamboo-nvim.overrideAttrs {
+  bamboo-nvim = super.bamboo-nvim.overrideAttrs (old: {
     # Optional integration
     checkInputs = with self; [
       barbecue-nvim
@@ -234,9 +309,12 @@ assertNoAdditions {
       "bamboo-multiplex"
       "barbecue.theme.bamboo"
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
-  barbar-nvim = super.barbar-nvim.overrideAttrs {
+  barbar-nvim = super.barbar-nvim.overrideAttrs (old: {
     # Optional integrations
     checkInputs = with self; [
       bufferline-nvim
@@ -244,7 +322,11 @@ assertNoAdditions {
     ];
     # E5108: Error executing lua ...implugin-barbar.nvim-2025-04-28/lua/bufferline/utils.lua:10: module 'barbar.utils.hl' not found:
     nvimSkipModules = [ "bufferline.utils" ];
-  };
+
+    meta = old.meta // {
+      license = lib.licenses.json;
+    };
+  });
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [
@@ -259,7 +341,13 @@ assertNoAdditions {
     };
   });
 
-  base46 = super.base46.overrideAttrs {
+  base16-vim = super.base16-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  base46 = super.base46.overrideAttrs (old: {
     dependencies = [ self.nvchad-ui ];
     # Requires global config setup
     nvimSkipModules = [
@@ -270,6 +358,20 @@ assertNoAdditions {
       "nvchad.configs.nvimtree"
       "nvchad.configs.telescope"
     ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  bitbake = super.bitbake.overrideAttrs (old: {
+    sourceRoot = "source/contrib/vim";
+    meta = old.meta // {
+      license = lib.licenses.gpl2Only;
+    };
+  });
+
+  blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
   };
 
   blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
@@ -280,8 +382,20 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  blink-cmp-env = super.blink-cmp-env.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   blink-cmp-git = super.blink-cmp-git.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  blink-cmp-latex = super.blink-cmp-latex.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
+  blink-cmp-nixpkgs-maintainers = super.blink-cmp-nixpkgs-maintainers.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
   };
 
   blink-cmp-npm-nvim = super.blink-cmp-npm-nvim.overrideAttrs {
@@ -296,6 +410,24 @@ assertNoAdditions {
     ];
   };
 
+  blink-cmp-words = super.blink-cmp-words.overrideAttrs (old: {
+    dependencies = [ self.blink-cmp ];
+    meta = old.meta // {
+      # TODO: Upstream also includes WordNet 3.0 data; add a license entry for
+      # the Princeton WordNet license and use it here.
+      license = lib.licenses.mit;
+      description = "Offline word and synonym completion provider for Neovim";
+      maintainers = with lib.maintainers; [ m3l6h ];
+    };
+  });
+
+  blink-cmp-yanky = super.blink-cmp-yanky.overrideAttrs (old: {
+    dependencies = [ self.blink-cmp ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
@@ -303,14 +435,6 @@ assertNoAdditions {
   blink-nerdfont-nvim = super.blink-nerdfont-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
-
-  blink-cmp-words = super.blink-cmp-words.overrideAttrs (old: {
-    dependencies = [ self.blink-cmp ];
-    meta = old.meta // {
-      description = "Offline word and synonym completion provider for Neovim";
-      maintainers = with lib.maintainers; [ m3l6h ];
-    };
-  });
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
@@ -327,11 +451,27 @@ assertNoAdditions {
     };
   });
 
+  bullets-vim = super.bullets-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  camelcasemotion = super.camelcasemotion.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   catppuccin-nvim = super.catppuccin-nvim.overrideAttrs {
     nvimSkipModules = [
       "catppuccin.groups.integrations.noice"
       "catppuccin.groups.integrations.feline"
       "catppuccin.lib.vim.init"
+
+      # TODO(@mrcjkb): re-enable when https://github.com/catppuccin/nvim/pull/995
+      # has been merged and released.
+      "catppuccin.lib.detect_integrations"
     ];
   };
 
@@ -342,6 +482,8 @@ assertNoAdditions {
   };
 
   chadtree = super.chadtree.overrideAttrs {
+    # > E5108: Error executing lua ...implugin-chadtree-0-unstable-2026-01-18/lua/chadtree.lua:162: Vim:Failed to start server: address already in use
+    doCheck = stdenv.hostPlatform.isLinux;
     buildInputs = [
       python3
     ];
@@ -370,6 +512,12 @@ assertNoAdditions {
     ];
   };
 
+  CheckAttach = super.CheckAttach.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   checkmate-nvim = super.checkmate-nvim.overrideAttrs {
     checkInputs = with self; [
       # checkmate.snippets
@@ -395,11 +543,48 @@ assertNoAdditions {
     '';
   };
 
+  clangd_extensions-nvim = super.clangd_extensions-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   claude-code-nvim = super.claude-code-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
     ];
   };
+
+  claude-fzf-history-nvim = super.claude-fzf-history-nvim.overrideAttrs (old: {
+    dependencies = with self; [
+      fzf-lua
+    ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  claude-fzf-nvim = super.claude-fzf-nvim.overrideAttrs (old: {
+    dependencies = with self; [
+      claudecode-nvim
+      fzf-lua
+    ];
+    # Failed to build help tags!
+    # E670: Mix of help file encodings within a language: doc/claude-fzf-zh.txt
+    # E154: Duplicate tag "claude-fzf-keymaps" in file doc/claude-fzf-en.txt
+    preInstall = ''
+      rm -r doc
+    '';
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  clever-f-vim = super.clever-f-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   clighter8 = super.clighter8.overrideAttrs {
     preFixup = ''
@@ -413,6 +598,12 @@ assertNoAdditions {
       sed -i -e 's/require "health"/vim.health/' lua/clipboard-image/health.lua
     '';
   };
+
+  close-buffers-vim = super.close-buffers-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   cmake-tools-nvim = super.cmake-tools-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -432,6 +623,13 @@ assertNoAdditions {
       plenary-nvim
     ];
   };
+
+  cmp-async-path = super.cmp-async-path.overrideAttrs (old: {
+    checkInputs = [ self.nvim-cmp ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   cmp-beancount = super.cmp-beancount.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
@@ -482,6 +680,10 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
+  cmp-dotenv = super.cmp-dotenv.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+  };
+
   cmp-fish = super.cmp-fish.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
   };
@@ -507,11 +709,6 @@ assertNoAdditions {
 
   cmp-look = super.cmp-look.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
-  };
-
-  cmp_luasnip = super.cmp_luasnip.overrideAttrs {
-    checkInputs = [ self.nvim-cmp ];
-    dependencies = [ self.luasnip ];
   };
 
   cmp-neosnippet = super.cmp-neosnippet.overrideAttrs {
@@ -608,6 +805,11 @@ assertNoAdditions {
     dependencies = [ zsh ];
   };
 
+  cmp_luasnip = super.cmp_luasnip.overrideAttrs {
+    checkInputs = [ self.nvim-cmp ];
+    dependencies = [ self.luasnip ];
+  };
+
   cobalt2-nvim = super.cobalt2-nvim.overrideAttrs {
     dependencies = with self; [ colorbuddy-nvim ];
     # Few broken themes
@@ -619,6 +821,45 @@ assertNoAdditions {
       "cobalt2.plugins.indent-blankline"
       "cobalt2.plugins.marks"
       "cobalt2.theme"
+    ];
+  };
+
+  coc-clap = super.coc-clap.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  coc-denite = super.coc-denite.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  coc-fzf = super.coc-fzf.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  coc-neco = super.coc-neco.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  coc-nvim = super.coc-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  codecompanion-history-nvim = super.codecompanion-history-nvim.overrideAttrs {
+    dependencies = with self; [
+      # transitive dependency for codecompanion-nvim
+      plenary-nvim
+
+      codecompanion-nvim
     ];
   };
 
@@ -646,100 +887,13 @@ assertNoAdditions {
     ];
   };
 
-  codecompanion-history-nvim = super.codecompanion-history-nvim.overrideAttrs {
-    dependencies = with self; [
-      # transitive dependency for codecompanion-nvim
-      plenary-nvim
-
-      codecompanion-nvim
-    ];
+  codesettings-nvim = super.codesettings-nvim.overrideAttrs {
+    # This module is a build CLI and should not be `require`d directly!
+    nvimSkipModules = [ "codesettings.build.cli" ];
   };
 
-  windsurf-nvim =
-    let
-      # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-      codeiumVersion = "1.20.9";
-      codeiumHashes = {
-        x86_64-linux = "sha256-IeNK7UQtOhqC/eQv7MAya4jB1WIGykSR7IgutZatmHM=";
-        aarch64-linux = "sha256-ujTFki/3V79El2WCkG0PJhbaMT0knC9mrS9E7Uv9HD4=";
-        x86_64-darwin = "sha256-r2KloEQsUku9sk8h76kwyQuMTHcq/vwfTSK2dkiXDzE=";
-        aarch64-darwin = "sha256-1jNH0Up8mAahDgvPF6g42LV+RVDVsPqDM54lE2KYY48=";
-      };
-
-      codeium' = codeium.overrideAttrs rec {
-        version = codeiumVersion;
-
-        src =
-          let
-            inherit (stdenv.hostPlatform) system;
-            throwSystem = throw "Unsupported system: ${system}";
-
-            platform =
-              {
-                x86_64-linux = "linux_x64";
-                aarch64-linux = "linux_arm";
-                x86_64-darwin = "macos_x64";
-                aarch64-darwin = "macos_arm";
-              }
-              .${system} or throwSystem;
-
-            hash = codeiumHashes.${system} or throwSystem;
-          in
-          fetchurl {
-            name = "codeium-${version}.gz";
-            url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${version}/language_server_${platform}.gz";
-            inherit hash;
-          };
-      };
-
-    in
-    super.windsurf-nvim.overrideAttrs {
-      dependencies = [ self.plenary-nvim ];
-      buildPhase = ''
-        cat << EOF > lua/codeium/installation_defaults.lua
-        return {
-          tools = {
-            language_server = "${codeium'}/bin/codeium_language_server"
-          };
-        };
-        EOF
-      '';
-
-      doCheck = true;
-      checkInputs = [
-        jq
-        codeium'
-      ];
-      checkPhase = ''
-        runHook preCheck
-
-        expected_codeium_version=$(jq -r '.version' lua/codeium/versions.json)
-        actual_codeium_version=$(codeium_language_server --version)
-
-        expected_codeium_stamp=$(jq -r '.stamp' lua/codeium/versions.json)
-        actual_codeium_stamp=$(codeium_language_server --stamp | grep STABLE_BUILD_SCM_REVISION | cut -d' ' -f2)
-
-        if [ "$actual_codeium_stamp" != "$expected_codeium_stamp" ]; then
-          echo "
-        The version of codeium patched in vimPlugins.codeium-nvim is incorrect.
-        Expected stamp: $expected_codeium_stamp
-        Actual stamp: $actual_codeium_stamp
-
-        Expected codeium version: $expected_codeium_version
-        Actual codeium version: $actual_codeium_version
-
-        Please, update 'codeiumVersion' in pkgs/applications/editors/vim/plugins/overrides.nix accordingly to:
-        https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-          "
-          exit 1
-        fi
-
-        runHook postCheck
-      '';
-    };
-
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   colorful-menu-nvim = super.colorful-menu-nvim.overrideAttrs {
@@ -787,18 +941,24 @@ assertNoAdditions {
     '';
   };
 
-  completion-treesitter = super.completion-treesitter.overrideAttrs {
-    dependencies = with self; [
-      completion-nvim
-      nvim-treesitter
-    ];
-  };
+  conflict-marker-vim = super.conflict-marker-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   conjure = super.conjure.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
+      "conjure-spec.client.clojure.nrepl.server_spec"
+      "conjure-spec.client.common-lisp.swank_spec"
       "conjure-spec.client.fennel.nfnl_spec"
+      "conjure-spec.client.guile.socket_spec"
+      "conjure-spec.client.scheme.stdio_spec"
+      "conjure-spec.process_spec"
+      # No parser for fennel
+      "conjure.client.fennel.def-str-util"
     ];
   };
 
@@ -807,18 +967,11 @@ assertNoAdditions {
     nvimSkipModules = [ "context.highlight" ];
   };
 
-  CopilotChat-nvim = super.CopilotChat-nvim.overrideAttrs {
-    checkInputs = with self; [
-      # Optional integrations
-      fzf-lua
-      telescope-nvim
-      snacks-nvim
-    ];
-    dependencies = with self; [
-      copilot-lua
-      plenary-nvim
-    ];
-  };
+  context_filetype-vim = super.context_filetype-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   copilot-cmp = super.copilot-cmp.overrideAttrs {
     dependencies = [ self.copilot-lua ];
@@ -835,12 +988,31 @@ assertNoAdditions {
   copilot-vim = super.copilot-vim.overrideAttrs (old: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/client.vim \
-        --replace-fail "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
-                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+        --replace-fail "let node = s:GetCommand('copilot_node_command', ['node'])" \
+                       "let node = s:GetCommand('copilot_node_command', ['${nodejs}/bin/node'])"
     '';
 
     meta = old.meta // {
       license = lib.licenses.unfree;
+    };
+  });
+
+  CopilotChat-nvim = super.CopilotChat-nvim.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      fzf-lua
+      telescope-nvim
+      snacks-nvim
+    ];
+    dependencies = with self; [
+      copilot-lua
+      plenary-nvim
+    ];
+  };
+
+  coq-vim = super.coq-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
     };
   });
 
@@ -872,7 +1044,7 @@ assertNoAdditions {
     '';
   };
 
-  cpsm = super.cpsm.overrideAttrs {
+  cpsm = super.cpsm.overrideAttrs (old: {
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       python3
@@ -881,11 +1053,15 @@ assertNoAdditions {
       ncurses
     ];
     buildPhase = ''
+      runHook preBuild
+
       patchShebangs .
       export PY3=ON
       ./install.sh
+
+      runHook postBuild
     '';
-  };
+  });
 
   crates-nvim = super.crates-nvim.overrideAttrs {
     checkInputs = [
@@ -927,6 +1103,18 @@ assertNoAdditions {
     '';
   };
 
+  ctrlp-vim = super.ctrlp-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  ctrlp-z = super.ctrlp-z.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   dailies-nvim = super.dailies-nvim.overrideAttrs {
     runtimeDeps = [
       dailies
@@ -947,9 +1135,12 @@ assertNoAdditions {
     dependencies = [ self.ddc-vim ];
   };
 
-  ddc-fuzzy = super.ddc-fuzzy.overrideAttrs {
+  ddc-fuzzy = super.ddc-fuzzy.overrideAttrs (old: {
     dependencies = [ self.ddc-vim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   ddc-source-around = super.ddc-source-around.overrideAttrs {
     dependencies = [ self.ddc-vim ];
@@ -959,7 +1150,14 @@ assertNoAdditions {
     dependencies = [ self.ddc-vim ];
   };
 
-  ddc-source-lsp = super.ddc-source-lsp.overrideAttrs {
+  ddc-source-lsp = super.ddc-source-lsp.overrideAttrs (old: {
+    dependencies = [ self.ddc-vim ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  ddc-ui-native = super.ddc-ui-native.overrideAttrs {
     dependencies = [ self.ddc-vim ];
   };
 
@@ -968,10 +1166,6 @@ assertNoAdditions {
       ddc-vim
       pum-vim
     ];
-  };
-
-  ddc-ui-native = super.ddc-ui-native.overrideAttrs {
-    dependencies = [ self.ddc-vim ];
   };
 
   ddc-vim = super.ddc-vim.overrideAttrs {
@@ -995,6 +1189,12 @@ assertNoAdditions {
       description = "Overloaded ; and , keys in Neovim";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ m3l6h ];
+    };
+  });
+
+  denite-nvim = super.denite-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
     };
   });
 
@@ -1022,6 +1222,12 @@ assertNoAdditions {
     '';
   };
 
+  deoplete-julia = super.deoplete-julia.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   deoplete-khard = super.deoplete-khard.overrideAttrs (old: {
     dependencies = [ self.deoplete-nvim ];
     passthru.python3Dependencies = ps: [ (ps.toPythonModule khard) ];
@@ -1030,6 +1236,24 @@ assertNoAdditions {
       homepage = "https://github.com/nicoe/deoplete-khard";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ jorsn ];
+    };
+  });
+
+  deoplete-lsp = super.deoplete-lsp.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  deoplete-nvim = super.deoplete-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  deoplete-zsh = super.deoplete-zsh.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
     };
   });
 
@@ -1045,11 +1269,24 @@ assertNoAdditions {
     ];
   };
 
+  devdocs-vim = super.devdocs-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      # README contains the MIT license text.
+      license = lib.licenses.mit;
+    };
+  });
+
   diagram-nvim = super.diagram-nvim.overrideAttrs {
     dependencies = [ self.image-nvim ];
   };
 
-  diffview-nvim = super.diffview-nvim.overrideAttrs {
+  diffs-nvim = super.diffs-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "minimal_init"
+    ];
+  };
+
+  diffview-nvim = super.diffview-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
 
     nvimSkipModules = [
@@ -1082,7 +1319,10 @@ assertNoAdditions {
     ];
 
     doInstallCheck = true;
-  };
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
 
   direnv-vim = super.direnv-vim.overrideAttrs (old: {
     preFixup = old.preFixup or "" + ''
@@ -1107,19 +1347,32 @@ assertNoAdditions {
   easy-dotnet-nvim = super.easy-dotnet-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
-      telescope-nvim
     ];
     checkInputs = with self; [
-      # Pickers, can use telescope or fzf-lua
+      # Pickers, can use telescope, fzf-lua, or snacks
       fzf-lua
+      telescope-nvim
+      neotest
     ];
   };
+
+  echodoc-vim = super.echodoc-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   ecolog-nvim = super.ecolog-nvim.overrideAttrs {
     nvimSkipModules = [
       "repro"
     ];
   };
+
+  editorconfig-vim = super.editorconfig-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd2;
+    };
+  });
 
   efmls-configs-nvim = super.efmls-configs-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
@@ -1131,6 +1384,21 @@ assertNoAdditions {
       patchShebangs $(find $out/bin/ -type f -not -name credo-language-server)
     '';
   };
+
+  evergarden-nvim = super.evergarden-nvim.overrideAttrs (old: {
+    # optional modules
+    nvimSkipModules = [
+      "evergarden.extras"
+      "minidoc"
+    ];
+    meta = old.meta // {
+      # EUPL-1.2 project with bundled Catppuccin MIT files.
+      license = with lib.licenses; [
+        eupl12
+        mit
+      ];
+    };
+  });
 
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
@@ -1155,6 +1423,12 @@ assertNoAdditions {
     };
   });
 
+  file-line = super.file-line.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
   flash-nvim = super.flash-nvim.overrideAttrs {
     # Docs require lazyvim
     # dependencies = with self; [ lazy-nvim ];
@@ -1165,14 +1439,21 @@ assertNoAdditions {
     dependencies = [ self.leap-nvim ];
   };
 
+  floaterm = super.floaterm.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
+  };
+
+  flow-nvim = super.flow-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Optional barbecue integration requires flow.setup() first.
+      "barbecue.theme.flow"
+    ];
+  };
+
   flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
     # Optional dap integration
     checkInputs = [ self.nvim-dap ];
     dependencies = [ self.plenary-nvim ];
-  };
-
-  follow-md-links-nvim = super.follow-md-links-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
   };
 
   forms = super.forms.overrideAttrs {
@@ -1182,40 +1463,6 @@ assertNoAdditions {
   freeze-nvim = super.freeze-nvim.overrideAttrs {
     runtimeDeps = [ charm-freeze ];
   };
-
-  fruzzy =
-    let
-      # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
-      nimpy = fetchFromGitHub {
-        owner = "yglukhov";
-        repo = "nimpy";
-        rev = "4840d1e438985af759ddf0923e7a9250fd8ea0da";
-        sha256 = "0qqklvaajjqnlqm3rkk36pwwnn7x942mbca7nf2cvryh36yg4q5k";
-      };
-      binaryheap = fetchFromGitHub {
-        owner = "bluenote10";
-        repo = "nim-heap";
-        rev = "c38039309cb11391112571aa332df9c55f625b54";
-        sha256 = "05xdy13vm5n8dw2i366ppbznc4cfhq23rdcklisbaklz2jhdx352";
-      };
-    in
-    super.fruzzy.overrideAttrs (old: {
-      buildInputs = [ nim1 ];
-      patches = [
-        (replaceVars ./patches/fruzzy/get_version.patch {
-          inherit (old) version;
-        })
-      ];
-      configurePhase = ''
-        substituteInPlace Makefile \
-          --replace-fail \
-            "nim c" \
-            "nim c --nimcache:$TMP --path:${nimpy} --path:${binaryheap}"
-      '';
-      buildPhase = ''
-        make build
-      '';
-    });
 
   fugit2-nvim = super.fugit2-nvim.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
@@ -1228,7 +1475,7 @@ assertNoAdditions {
     ];
     # Patch libgit2 library dependency
     postPatch = ''
-      substituteInPlace lua/fugit2/libgit2.lua \
+      substituteInPlace lua/fugit2/core/libgit2.lua \
         --replace-fail \
         'M.library_path = "libgit2"' \
         'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
@@ -1253,6 +1500,8 @@ assertNoAdditions {
       "fyler.views.explorer.init"
       "fyler.views.explorer.actions"
       "fyler.views.explorer.ui"
+      "fyler.explorer.ui"
+      "fyler.explorer"
     ];
   };
 
@@ -1264,7 +1513,7 @@ assertNoAdditions {
     '';
   };
 
-  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (oa: {
+  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (old: {
     # add this to your lua config to prevent the plugin from trying to write in the
     # nix store:
     # vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json'
@@ -1273,7 +1522,7 @@ assertNoAdditions {
       gawk
     ];
     dependencies = [ self.fzf-vim ];
-    passthru = oa.passthru // {
+    passthru = old.passthru // {
 
       initLua = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
     };
@@ -1301,17 +1550,28 @@ assertNoAdditions {
     runtimeDeps = [ curl ];
   };
 
-  ghcid = super.ghcid.overrideAttrs {
-    configurePhase = "cd plugins/nvim";
-  };
+  gentoo-syntax = super.gentoo-syntax.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   gh-nvim = super.gh-nvim.overrideAttrs {
     dependencies = [ self.litee-nvim ];
   };
 
-  gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
+  ghcid = super.ghcid.overrideAttrs (old: {
+    configurePhase = "cd plugins/nvim";
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
+
+  ghcmod-vim = super.ghcmod-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
 
   git-conflict-nvim = super.git-conflict-nvim.overrideAttrs {
     # TODO: Remove after next fixed version
@@ -1329,23 +1589,40 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  gitlab-vim = super.gitlab-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   go-nvim = super.go-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      guihua-lua
+    ];
     checkInputs = with self; [
       luasnip
       null-ls-nvim
-      nvim-treesitter
     ];
     nvimSkipModules = [
+      "init"
       # _GO_NVIM_CFG
+      "go.ai.init"
+      "go.comment"
+      "go.format"
+      "go.ginkgo"
+      "go.gotest"
+      "go.gotests"
       "go.inlay"
       "go.project"
-      "go.comment"
+      "go.snips"
       "go.tags"
-      "go.gotests"
-      "go.format"
       "go.ts.go"
       "go.ts.nodes"
-      "go.snips"
       "snips.go"
     ];
   };
@@ -1357,21 +1634,52 @@ assertNoAdditions {
     ];
   };
 
+  gruvbox = super.gruvbox.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   guard-collection = super.guard-collection.overrideAttrs {
     dependencies = [ self.guard-nvim ];
   };
 
+  guihua-lua = super.guihua-lua.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd lua/fzy
+      make
+      popd
+
+      runHook postBuild
+    '';
+
+    nvimSkipModules = [
+      # lua module '.init' not found
+      "fzy.fzy-lua-native"
+      # Requires removed Neovim internal module vim.treesitter._highlight
+      "guihua.ts_obsolete.highlight"
+    ];
+  };
+
+  gundo-vim = super.gundo-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl2Plus;
+    };
+  });
+
   gx-nvim = super.gx-nvim.overrideAttrs {
-    patches = lib.optionals stdenv.hostPlatform.isLinux [
-      (replaceVars ./patches/gx-nvim/fix-paths.patch {
-        inherit xdg-utils;
-      })
+    runtimeDeps = [
+      xdg-utils
     ];
 
     nvimRequireCheck = "gx";
   };
 
-  hardhat-nvim = super.hardhat-nvim.overrideAttrs {
+  hardhat-nvim = super.hardhat-nvim.overrideAttrs (old: {
     checkInputs = with self; [
       # optional integrations
       neotest
@@ -1387,7 +1695,16 @@ assertNoAdditions {
       # Cannot find hardhat.extmarks
       "overseer.component.hardhat.refresh_gas_extmarks"
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  hare-vim = super.hare-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   harpoon = super.harpoon.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -1402,7 +1719,7 @@ assertNoAdditions {
   };
 
   haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-parsers.haskell ];
   };
 
   haskell-snippets-nvim = super.haskell-snippets-nvim.overrideAttrs {
@@ -1435,6 +1752,22 @@ assertNoAdditions {
       fzf-lua
       telescope-nvim
     ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "himalaya.folder.pickers.fzflua"
+    ];
+  };
+
+  hop-nvim = super.hop-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
+
+  hotpot-nvim = super.hotpot-nvim.overrideAttrs {
+    # NOTE: Vim:E919: Directory not found in 'packpath': "pack/*/opt/hotpot-fennel-update"
+    doCheck = false;
   };
 
   hover-nvim = super.hover-nvim.overrideAttrs {
@@ -1443,6 +1776,13 @@ assertNoAdditions {
     nvimSkipModules = "hover.providers.fold_preview";
   };
 
+  html5-vim = super.html5-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      # README contains the MIT license text.
+      license = lib.licenses.mit;
+    };
+  });
+
   hunk-nvim = super.hunk-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
@@ -1450,7 +1790,7 @@ assertNoAdditions {
   hurl-nvim = super.hurl-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
-      nvim-treesitter
+      nvim-treesitter-parsers.hurl
       plenary-nvim
     ];
 
@@ -1480,9 +1820,13 @@ assertNoAdditions {
   };
 
   indent-tools-nvim = super.indent-tools-nvim.overrideAttrs {
+    checkInputs = [
+      # nvim-treesitter-textobjects dep
+      self.nvim-treesitter
+    ];
     dependencies = with self; [
       arshlib-nvim
-      nvim-treesitter
+      # Optional dep for repeatable jumps
       nvim-treesitter-textobjects
     ];
   };
@@ -1498,6 +1842,16 @@ assertNoAdditions {
 
   intellitab-nvim = super.intellitab-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
+  };
+
+  intero-neovim = super.intero-neovim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
+
+  iswap-nvim = super.iswap-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   jdd-nvim = super.jdd-nvim.overrideAttrs {
@@ -1517,8 +1871,57 @@ assertNoAdditions {
     dependencies = [ self.lush-nvim ];
   };
 
+  jinja-vim = super.jinja-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  jj-nvim = super.jj-nvim.overrideAttrs {
+    # Don't install 30 MB of GIFs
+    postPatch = ''
+      rm -rf assets/
+    '';
+  };
+
+  jq-vim = super.jq-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  jsonfly-nvim = super.jsonfly-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      # Top-level GPL-3.0 plus bundled luaunit BSD-2-Clause.
+      license = with lib.licenses; [
+        gpl3Only
+        bsd2
+      ];
+      maintainers = old.meta.maintainers or [ ] ++ [
+        lib.maintainers.myzel394
+      ];
+    };
+  });
+
+  julia-vim = super.julia-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
+  };
+
+  just-nvim = super.just-nvim.overrideAttrs {
+    checkInputs = with self; [
+      fidget-nvim
+      nvim-notify
+      telescope-nvim
+    ];
+    dependencies = with self; [
+      plenary-nvim
+    ];
   };
 
   kanagawa-paper-nvim = super.kanagawa-paper-nvim.overrideAttrs {
@@ -1529,19 +1932,54 @@ assertNoAdditions {
     ];
   };
 
-  kulala-nvim = super.kulala-nvim.overrideAttrs {
-    dependencies = with self; [
-      nvim-treesitter
-      nvim-treesitter-parsers.http
-    ];
-    buildInputs = [ curl ];
-    postPatch = ''
-      substituteInPlace lua/kulala/config/defaults.lua \
-        --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
-    '';
+  kulala-nvim = super.kulala-nvim.overrideAttrs (
+    old:
+    let
+      kulala-http-grammar = neovimUtils.grammarToPlugin (
+        tree-sitter.buildGrammar {
+          inherit (old) version src meta;
+          language = "kulala_http";
+          location = "lua/tree-sitter";
+          generate = false;
+        }
+      );
+    in
+    {
+      dependencies = [ kulala-http-grammar ];
+      buildInputs = [ curl ];
+
+      postPatch = ''
+        substituteInPlace lua/kulala/config/defaults.lua \
+          --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
+      '';
+
+      nvimSkipModules = [
+        # Requires some extra work to get CLI working in nixpkgs
+        "cli.kulala_cli"
+      ];
+    }
+  );
+
+  LanguageTool-nvim = super.LanguageTool-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  lazy-lsp-nvim = super.lazy-lsp-nvim.overrideAttrs {
+    dependencies = [ self.nvim-lspconfig ];
+  };
+
+  lazy-nvim = super.lazy-nvim.overrideAttrs {
+    patches = [ ./patches/lazy-nvim/no-helptags.patch ];
     nvimSkipModules = [
-      # Requires some extra work to get CLI working in nixpkgs
-      "cli.kulala_cli"
+      # Requires headless config option
+      "lazy.manage.task.init"
+      "lazy.manage.checker"
+      "lazy.manage.init"
+      "lazy.manage.runner"
+      "lazy.view.commands"
+      "lazy.build"
     ];
   };
 
@@ -1564,6 +2002,8 @@ assertNoAdditions {
     nvimSkipModules = [
       # attempt to index global 'LazyVim' (a nil value)
       "lazyvim.config.keymaps"
+      "lazyvim.plugins.extras.ai.copilot-native"
+      "lazyvim.plugins.extras.ai.sidekick"
       "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
@@ -1572,31 +2012,17 @@ assertNoAdditions {
       "lazyvim.plugins.extras.editor.snacks_picker"
       "lazyvim.plugins.extras.editor.telescope"
       "lazyvim.plugins.extras.formatting.prettier"
+      "lazyvim.plugins.extras.lang.dotnet"
       "lazyvim.plugins.extras.lang.markdown"
       "lazyvim.plugins.extras.lang.omnisharp"
       "lazyvim.plugins.extras.lang.python"
       "lazyvim.plugins.extras.lang.svelte"
       "lazyvim.plugins.extras.lang.typescript"
+      "lazyvim.plugins.extras.lang.typescript.init"
+      "lazyvim.plugins.extras.lang.typescript.vtsls"
       "lazyvim.plugins.init"
       "lazyvim.plugins.ui"
       "lazyvim.plugins.xtras"
-    ];
-  };
-
-  lazy-lsp-nvim = super.lazy-lsp-nvim.overrideAttrs {
-    dependencies = [ self.nvim-lspconfig ];
-  };
-
-  lazy-nvim = super.lazy-nvim.overrideAttrs {
-    patches = [ ./patches/lazy-nvim/no-helptags.patch ];
-    nvimSkipModules = [
-      # Requires headless config option
-      "lazy.manage.task.init"
-      "lazy.manage.checker"
-      "lazy.manage.init"
-      "lazy.manage.runner"
-      "lazy.view.commands"
-      "lazy.build"
     ];
   };
 
@@ -1615,7 +2041,6 @@ assertNoAdditions {
 
   lean-nvim = super.lean-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-lspconfig
       plenary-nvim
     ];
   };
@@ -1623,16 +2048,25 @@ assertNoAdditions {
   leap-ast-nvim = super.leap-ast-nvim.overrideAttrs {
     dependencies = with self; [
       leap-nvim
-      nvim-treesitter
+      nvim-treesitter-legacy
     ];
   };
 
+  leap-nvim = super.leap-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
-    checkInputs = [ self.snacks-nvim ];
+    checkInputs = with self; [
+      snacks-nvim
+      telescope-nvim
+      mini-nvim
+    ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
-      telescope-nvim
     ];
 
     doInstallCheck = true;
@@ -1653,6 +2087,7 @@ assertNoAdditions {
       "leetcode.picker.question.init"
       "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
+      "leetcode.picker.question.mini"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
       "leetcode-plugins.cn.api"
@@ -1679,14 +2114,23 @@ assertNoAdditions {
     ];
   };
 
-  lens-vim = super.lens-vim.overrideAttrs {
+  lens-vim = super.lens-vim.overrideAttrs (old: {
     # remove duplicate g:lens#animate in doc/lens.txt
     # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
     # https://github.com/camspiers/lens.vim/pull/40/files
     patches = [
       ./patches/lens-vim/remove_duplicate_g_lens_animate.patch
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  lessspace-vim = super.lessspace-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   lf-nvim = super.lf-nvim.overrideAttrs {
     dependencies = [ self.toggleterm-nvim ];
@@ -1696,14 +2140,38 @@ assertNoAdditions {
     dependencies = [ self.vim-floaterm ];
   };
 
+  lh-brackets = super.lh-brackets.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
+  lh-vim-lib = super.lh-vim-lib.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
   lightline-bufferline = super.lightline-bufferline.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
     checkInputs = [ self.nvim-web-devicons ];
   };
 
+  lightline-lsp = super.lightline-lsp.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.isc;
+    };
+  });
+
   lightswitch-nvim = super.lightswitch-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
   };
+
+  lingua-franca-vim = super.lingua-franca-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd2;
+    };
+  });
 
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -1754,6 +2222,36 @@ assertNoAdditions {
     };
   });
 
+  live-share-nvim = super.live-share-nvim.overrideAttrs (old: {
+    nvimSkipModules = (old.nvimSkipModules or [ ]) ++ [
+      # These modules unconditionally load OpenSSL via LuaJIT FFI and abort in
+      # the headless require check on Darwin.
+      "live-share.host"
+      "live-share.guest"
+      "live-share.collab.crypto"
+    ];
+  });
+
+  lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
+  lsp-format-nvim = super.lsp-format-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  lsp_extensions-nvim = super.lsp_extensions-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
+  lsp_lines-nvim = super.lsp_lines-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.isc;
+    };
+  });
+
   lspcontainers-nvim = super.lspcontainers-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -1767,10 +2265,6 @@ assertNoAdditions {
   lspsaga-nvim = super.lspsaga-nvim.overrideAttrs {
     # Other modules require setup call first
     nvimRequireCheck = "lspsaga";
-  };
-
-  lsp_extensions-nvim = super.lsp_extensions-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
   };
 
   ltex_extra-nvim = super.ltex_extra-nvim.overrideAttrs {
@@ -1815,27 +2309,41 @@ assertNoAdditions {
       ];
   };
 
+  maple-nvim = super.maple-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
+  markdoc-nvim = super.markdoc-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter-parsers.markdown
+      nvim-treesitter-parsers.markdown_inline
+      nvim-treesitter-parsers.html
+    ];
+  };
+
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
-      nodeDep = mkYarnModules rec {
-        inherit (super.markdown-preview-nvim) pname version;
-        packageJSON = ./patches/markdown-preview-nvim/package.json;
-        yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
-        offlineCache = fetchYarnDeps {
-          inherit yarnLock;
+      nodeDep = stdenv.mkDerivation {
+        inherit (super.markdown-preview-nvim) pname version src;
+        nativeBuildInputs = [
+          yarnConfigHook
+        ];
+        yarnOfflineCache = fetchYarnDeps {
+          yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
           hash = "sha256-kzc9jm6d9PJ07yiWfIOwqxOTAAydTpaLXVK6sEWM8gg=";
         };
+        installPhase = ''
+          cp -r node_modules $out
+        '';
       };
     in
     super.markdown-preview-nvim.overrideAttrs {
-      patches = [
-        (replaceVars ./patches/markdown-preview-nvim/fix-node-paths.patch {
-          node = "${nodejs}/bin/node";
-        })
+      runtimeDeps = [
+        nodejs
       ];
       postInstall = ''
-        ln -s ${nodeDep}/node_modules $out/app
+        cp -r ${nodeDep} $out/app/node_modules
       '';
 
       nativeBuildInputs = [ nodejs ];
@@ -1846,7 +2354,7 @@ assertNoAdditions {
     };
 
   markid = super.markid.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs {
@@ -1863,19 +2371,19 @@ assertNoAdditions {
     ];
   };
 
-  mason-nvim-dap-nvim = super.mason-nvim-dap-nvim.overrideAttrs {
-    dependencies = with self; [
-      mason-nvim
-      nvim-dap
-    ];
-  };
-
   mason-nvim = super.mason-nvim.overrideAttrs {
     nvimSkipModules = [
       # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
       "mason-vendor.zzlib.inflate-bwo"
       # E5108: Error executing lua ...mplugin-mason.nvim-2025-05-06/lua/mason-test/helpers.lua:7: module 'luassert.spy' not found:
       "mason-test.helpers"
+    ];
+  };
+
+  mason-nvim-dap-nvim = super.mason-nvim-dap-nvim.overrideAttrs {
+    dependencies = with self; [
+      mason-nvim
+      nvim-dap
     ];
   };
 
@@ -1888,9 +2396,30 @@ assertNoAdditions {
     checkInputs = [ self.lualine-nvim ];
   };
 
-  mind-nvim = super.mind-nvim.overrideAttrs {
+  mattn-calendar-vim = super.mattn-calendar-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  mcphub-nvim = super.mcphub-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+    checkInputs = [
+      # Required by mcphub.extensions.luali
+      self.lualine-nvim
+    ];
+
+    nvimSkipModules = [
+      # ENOENT: no such file or directory (cmd): 'npm'
+      "bundled_build"
+    ];
   };
+
+  mediawiki-vim = super.mediawiki-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
 
   mini-nvim = super.mini-nvim.overrideAttrs {
     # reduce closure size
@@ -1941,6 +2470,12 @@ assertNoAdditions {
     nvimSkipModules = "modicator.integration.lualine.init";
   };
 
+  molokai = super.molokai.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   molten-nvim = super.molten-nvim.overrideAttrs {
     # Optional image providers
     checkInputs = with self; [
@@ -1950,16 +2485,24 @@ assertNoAdditions {
     ];
   };
 
+  mru = super.mru.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       hydra-nvim
     ];
   };
 
-  muren-nvim = super.muren-nvim.overrideAttrs {
+  muren-nvim = super.muren-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   ncm2 = super.ncm2.overrideAttrs {
     dependencies = [ self.nvim-yarp ];
@@ -1989,6 +2532,35 @@ assertNoAdditions {
     dependencies = [ self.ultisnips ];
   };
 
+  neco-ghc = super.neco-ghc.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
+
+  neco-look = super.neco-look.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
+
+  neco-syntax = super.neco-syntax.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
+    checkInputs = [ git ];
+    dependencies = with self; [
+      plenary-nvim
+      nui-nvim
+    ];
+    nvimSkipModule = [
+      "neo-tree.types.fixes.compat-0.10"
+    ];
+  };
+
   neoconf-nvim = super.neoconf-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
 
@@ -2007,12 +2579,31 @@ assertNoAdditions {
     ];
   };
 
+  neoinclude-vim = super.neoinclude-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  neomru-vim = super.neomru-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   neorepl-nvim = super.neorepl-nvim.overrideAttrs {
     nvimSkipModules = [
       # Requires main module loaded first
       "neorepl.bufs"
       "neorepl.map"
       "neorepl.repl"
+    ];
+  };
+
+  neorg = super.neorg.overrideAttrs {
+    dependencies = [
+      (neovimUtils.grammarToPlugin tree-sitter-grammars.tree-sitter-norg)
+      (neovimUtils.grammarToPlugin tree-sitter-grammars.tree-sitter-norg-meta)
     ];
   };
 
@@ -2024,6 +2615,24 @@ assertNoAdditions {
       telescope-nvim
     ];
   };
+
+  neosnippet-snippets = super.neosnippet-snippets.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  neosnippet-vim = super.neosnippet-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  neoterm = super.neoterm.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.asl20;
+    };
+  });
 
   neotest-bash = super.neotest-bash.overrideAttrs {
     dependencies = with self; [
@@ -2151,16 +2760,15 @@ assertNoAdditions {
     nvimSkipModules = "neotest-jest-assertions";
   };
 
-  neotest-mocha = super.neotest-mocha.overrideAttrs {
+  neotest-minitest = super.neotest-minitest.overrideAttrs {
     dependencies = with self; [
       neotest
       nvim-nio
-      nvim-treesitter
       plenary-nvim
     ];
   };
 
-  neotest-minitest = super.neotest-minitest.overrideAttrs {
+  neotest-mocha = super.neotest-mocha.overrideAttrs {
     dependencies = with self; [
       neotest
       nvim-nio
@@ -2185,11 +2793,14 @@ assertNoAdditions {
   };
 
   neotest-playwright = super.neotest-playwright.overrideAttrs {
+    checkInputs = with self; [
+      # Optional picker integration
+      telescope-nvim
+    ];
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
-      telescope-nvim
     ];
     # Unit test assert
     nvimSkipModules = "neotest-playwright-assertions";
@@ -2261,30 +2872,15 @@ assertNoAdditions {
     ];
   };
 
-  neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      nui-nvim
-    ];
-    nvimSkipModule = [
-      "neo-tree.types.fixes.compat-0.10"
-    ];
-  };
+  neovim-sensible = super.neovim-sensible.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
-  netman-nvim = super.netman-nvim.overrideAttrs {
-    # Optional neo-tree integration
-    checkInputs = with self; [
-      neo-tree-nvim
-      # FIXME: propagate `neo-tree` dependencies
-      nui-nvim
-      plenary-nvim
-    ];
-  };
-
-  neuron-nvim = super.neuron-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
+  neovim-tips = super.neovim-tips.overrideAttrs {
+    dependencies = [
+      self.nui-nvim
     ];
   };
 
@@ -2294,6 +2890,35 @@ assertNoAdditions {
       telescope-nvim
     ];
   };
+
+  neoyank-vim = super.neoyank-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  netman-nvim = super.netman-nvim.overrideAttrs {
+    # Optional neo-tree integration
+    checkInputs = with self; [
+      neo-tree-nvim
+      # FIXME: propagate `neo-tree` dependencies
+      git
+      nui-nvim
+      plenary-nvim
+    ];
+  };
+
+  nginx-vim = super.nginx-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  nidhogg-nvim = super.nidhogg-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   nlsp-settings-nvim = super.nlsp-settings-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
@@ -2314,13 +2939,22 @@ assertNoAdditions {
   NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
   };
 
+  NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   nterm-nvim = super.nterm-nvim.overrideAttrs {
     dependencies = [ self.aniseed ];
   };
 
-  null-ls-nvim = super.null-ls-nvim.overrideAttrs {
+  null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.unlicense;
+    };
+  });
 
   nvchad = super.nvchad.overrideAttrs {
     # You've signed up for a distro, providing dependencies.
@@ -2331,7 +2965,8 @@ assertNoAdditions {
       nvim-cmp
       nvim-lspconfig
       telescope-nvim
-      nvim-treesitter
+      nvim-treesitter-legacy
+      nvchad-ui
     ];
     nvimSkipModules = [
       # Requires global config setup
@@ -2373,7 +3008,7 @@ assertNoAdditions {
 
   nvim-biscuits = super.nvim-biscuits.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
+      nvim-treesitter-legacy
       plenary-nvim
     ];
   };
@@ -2381,6 +3016,12 @@ assertNoAdditions {
   nvim-cokeline = super.nvim-cokeline.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
+
+  nvim-colorizer-lua = super.nvim-colorizer-lua.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
 
   nvim-coverage = super.nvim-coverage.overrideAttrs {
     dependencies = with self; [
@@ -2393,11 +3034,13 @@ assertNoAdditions {
     ];
   };
 
-  nvim-dap-cortex-debug = super.nvim-dap-cortex-debug.overrideAttrs {
-    dependencies = [ self.nvim-dap ];
-  };
+  nvim-dap = super.nvim-dap.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
 
-  nvim-dap-vscode-js = super.nvim-dap-vscode-js.overrideAttrs {
+  nvim-dap-cortex-debug = super.nvim-dap-cortex-debug.overrideAttrs {
     dependencies = [ self.nvim-dap ];
   };
 
@@ -2405,9 +3048,12 @@ assertNoAdditions {
     dependencies = [ self.nvim-dap ];
   };
 
-  nvim-dap-python = super.nvim-dap-python.overrideAttrs {
+  nvim-dap-python = super.nvim-dap-python.overrideAttrs (old: {
     dependencies = [ self.nvim-dap ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
 
   nvim-dap-rego = super.nvim-dap-rego.overrideAttrs {
     dependencies = [ self.nvim-dap ];
@@ -2434,9 +3080,16 @@ assertNoAdditions {
     dependencies = [ self.nvim-dap ];
   };
 
-  nvim-FeMaco-lua = super.nvim-FeMaco-lua.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+  nvim-dap-vscode-js = super.nvim-dap-vscode-js.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
   };
+
+  nvim-FeMaco-lua = super.nvim-FeMaco-lua.overrideAttrs (old: {
+    dependencies = [ self.nvim-treesitter-legacy ];
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   nvim-fzf-commands = super.nvim-fzf-commands.overrideAttrs {
     dependencies = [ self.nvim-fzf ];
@@ -2450,10 +3103,6 @@ assertNoAdditions {
     doInstallCheck = true;
   };
 
-  nvim-gps = super.nvim-gps.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
     nvimSkipModules = [
@@ -2464,6 +3113,12 @@ assertNoAdditions {
       "nvim-highlight-colors.color.utils_spec"
     ];
   };
+
+  nvim-highlite = super.nvim-highlite.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
 
   nvim-java = super.nvim-java.overrideAttrs {
     dependencies = with self; [
@@ -2504,6 +3159,25 @@ assertNoAdditions {
     dependencies = [ self.nvim-java-core ];
   };
 
+  nvim-jdtls = super.nvim-jdtls.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
+  nvim-julia-autotest = super.nvim-julia-autotest.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.agpl3Only;
+    };
+  });
+
+  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
+    ];
+  };
+
   nvim-lilypond-suite = super.nvim-lilypond-suite.overrideAttrs {
     nvimSkipModule = [
       # Option not set immediately
@@ -2512,6 +3186,12 @@ assertNoAdditions {
       "nvls.texinfo"
     ];
   };
+
+  nvim-lint = super.nvim-lint.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
 
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -2538,17 +3218,21 @@ assertNoAdditions {
       nvim-navic
     ];
   };
+
   nvim-navic = super.nvim-navic.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
 
-  nvim-neoclip-lua = super.nvim-neoclip-lua.overrideAttrs {
+  nvim-neoclip-lua = super.nvim-neoclip-lua.overrideAttrs (old: {
     # Optional dependencies
     checkInputs = with self; [
       fzf-lua
       telescope-nvim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   nvim-nonicons = super.nvim-nonicons.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
@@ -2570,14 +3254,23 @@ assertNoAdditions {
 
   nvim-nu = super.nvim-nu.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       none-ls-nvim
+      nvim-treesitter-parsers.nu
+      plenary-nvim
     ];
   };
 
-  nvim-paredit = super.nvim-paredit.overrideAttrs {
-    dependencies = with self; [ nvim-treesitter ];
-  };
+  nvim-parinfer = super.nvim-parinfer.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
+  nvim-remote-containers = super.nvim-remote-containers.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.unfree;
+    };
+  });
 
   nvim-rip-substitute = super.nvim-rip-substitute.overrideAttrs {
     buildInputs = [ ripgrep ];
@@ -2587,20 +3280,21 @@ assertNoAdditions {
     checkInputs = [
       # Optional telescope picker
       self.telescope-nvim
+      # Optional fzf-lua integration
+      self.fzf-lua
     ];
   };
+
+  nvim-sioyek-highlights = super.nvim-sioyek-highlights.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   nvim-snippets = super.nvim-snippets.overrideAttrs {
     checkInputs = [
       # Optional cmp integration
       self.nvim-cmp
-    ];
-  };
-
-  nvim-surround = super.nvim-surround.overrideAttrs {
-    checkInputs = [
-      # Optional treesitter integration
-      self.nvim-treesitter
     ];
   };
 
@@ -2616,7 +3310,7 @@ assertNoAdditions {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];
     dependencies = with self; [
-      nvim-treesitter
+      nvim-treesitter-legacy
       nvim-treesitter-parsers.c_sharp
       nvim-treesitter-parsers.go
       nvim-treesitter-parsers.haskell
@@ -2636,24 +3330,47 @@ assertNoAdditions {
   };
 
   nvim-tinygit = super.nvim-tinygit.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
-
     checkInputs = [
       gitMinimal
-      # transitive dependency (telescope-nvim) not properly propagated to the test environment
-      self.plenary-nvim
+      # interactive staging support
+      self.telescope-nvim
     ];
   };
 
-  nvim-tree-lua = super.nvim-tree-lua.overrideAttrs {
+  nvim-tree-lua = super.nvim-tree-lua.overrideAttrs (old: {
     nvimSkipModules = [
       # Meta can't be required
       "nvim-tree._meta.api"
       "nvim-tree._meta.api_decorator"
+      "nvim-tree._meta.api.decorator_example"
+      "nvim-tree._meta.classes"
+      "nvim-tree._meta.config.filters"
+      "nvim-tree._meta.config.actions"
+      "nvim-tree._meta.config.git"
+      "nvim-tree._meta.config.renderer"
+      "nvim-tree._meta.config.experimental"
+      "nvim-tree._meta.config.tab"
+      "nvim-tree._meta.config.modified"
+      "nvim-tree._meta.config.help"
+      "nvim-tree._meta.config.notify"
+      "nvim-tree._meta.config.sort"
+      "nvim-tree._meta.config.view"
+      "nvim-tree._meta.config.update_focused_file"
+      "nvim-tree._meta.config.diagnostics"
+      "nvim-tree._meta.config.log"
+      "nvim-tree._meta.config.system_open"
+      "nvim-tree._meta.config.ui"
+      "nvim-tree._meta.config.hijack_directories"
+      "nvim-tree._meta.config.trash"
+      "nvim-tree._meta.config.filesystem_watchers"
+      "nvim-tree._meta.config.live_filter"
+      "nvim-tree._meta.config.bookmarks"
+      "nvim-tree._meta.config"
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
 
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (
     callPackage ./nvim-treesitter/overrides.nix { } self super
@@ -2664,36 +3381,44 @@ assertNoAdditions {
     nvimSkipModules = [ "install_parsers" ];
   };
 
-  nvim-treesitter-endwise = super.nvim-treesitter-endwise.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
+  # TODO: raise warning at 26.05; drop at 26.11
+  nvim-treesitter-legacy =
+    let
+      drv = super.nvim-treesitter-legacy.overrideAttrs (
+        callPackage ./nvim-treesitter-legacy/overrides.nix { } self super
+      );
+    in
+    if config.allowAliases then
+      lib.warnOnInstantiate "nvim-treesitter-legacy is deprecated, please migrate to the new version. This will become an error in 26.11" drv
+    else
+      drv;
 
   nvim-treesitter-pairs = super.nvim-treesitter-pairs.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-pyfold = super.nvim-treesitter-pyfold.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-refactor = super.nvim-treesitter-refactor.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-sexp = super.nvim-treesitter-sexp.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-treesitter-textobjects = super.nvim-treesitter-textobjects.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
 
-  nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+  nvim-treesitter-textobjects-legacy = super.nvim-treesitter-textobjects-legacy.overrideAttrs {
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
-  nvim-trevJ-lua = super.nvim-trevJ-lua.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+  nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
+    dependencies = [ self.nvim-treesitter-legacy ];
   };
 
   nvim-ufo = super.nvim-ufo.overrideAttrs {
@@ -2716,6 +3441,12 @@ assertNoAdditions {
     dependencies = [ self.nvim-lspconfig ];
   };
 
+  nvim-whichkey-setup-lua = super.nvim-whichkey-setup-lua.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   nvzone-menu = super.nvzone-menu.overrideAttrs {
     # Plugin managers like Lazy.nvim expect pname to match the name of the git repository
     pname = "menu";
@@ -2724,6 +3455,7 @@ assertNoAdditions {
       nvim-tree-lua
       neo-tree-nvim
       # FIXME: should propagate from neo-tree-nvim
+      git
       nui-nvim
       plenary-nvim
     ];
@@ -2759,8 +3491,17 @@ assertNoAdditions {
     nvimSkipModules = [
       # Issue reproduction file
       "minimal"
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "obsidian.picker._fzf"
     ];
   };
+
+  oceanic-next = super.oceanic-next.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.asl20;
+    };
+  });
 
   octo-nvim = super.octo-nvim.overrideAttrs {
     checkInputs = with self; [
@@ -2774,7 +3515,18 @@ assertNoAdditions {
     ];
   };
 
+  oil-git-nvim = super.oil-git-nvim.overrideAttrs (old: {
+    dependencies = [ self.oil-nvim ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
+  };
+
+  oil-lsp-diagnostics-nvim = super.oil-lsp-diagnostics-nvim.overrideAttrs {
     dependencies = [ self.oil-nvim ];
   };
 
@@ -2786,6 +3538,14 @@ assertNoAdditions {
     # Optional lightline integration
     nvimSkipModules = "omni-lightline";
   };
+
+  one-nvim = super.one-nvim.overrideAttrs (old: {
+    # E5108: /lua/one-nvim.lua:14: Unknown option 't_Co'
+    # https://github.com/Th3Whit3Wolf/one-nvim/issues/23
+    meta = old.meta // {
+      broken = true;
+    };
+  });
 
   onedark-nvim = super.onedark-nvim.overrideAttrs {
     nvimSkipModules = [
@@ -2801,20 +3561,29 @@ assertNoAdditions {
     configurePhase = "cd vim";
   };
 
-  one-nvim = super.one-nvim.overrideAttrs (old: {
-    # E5108: /lua/one-nvim.lua:14: Unknown option 't_Co'
-    # https://github.com/Th3Whit3Wolf/one-nvim/issues/23
+  open-browser-vim = super.open-browser-vim.overrideAttrs (old: {
     meta = old.meta // {
-      broken = true;
+      license = lib.licenses.bsd3;
     };
   });
+
+  opencode-nvim = super.opencode-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+      opencode
+      lsof
+    ];
+  };
 
   # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
   # avoid choosing one of them and leave it to the user
   openscad-nvim = super.openscad-nvim.overrideAttrs {
+    runtimeDeps = [
+      openscad
+    ];
+
     buildInputs = [
       zathura
-      htop
       openscad
     ];
 
@@ -2824,11 +3593,16 @@ assertNoAdditions {
       "openscad.snippets.openscad"
       "openscad.utilities"
     ];
-    patches = [
-      (replaceVars ./patches/openscad.nvim/program_paths.patch {
-        htop = lib.getExe htop;
-        openscad = lib.getExe openscad;
-      })
+  };
+
+  org-notebook-nvim = super.org-notebook-nvim.overrideAttrs {
+    dependencies = [
+      self.orgmode
+      self.jupyter-api-nvim
+    ];
+    nvimSkipModules = [
+      # Requires mini.test, deno, and some deno dependencies, look into it once https://github.com/NixOS/nixpkgs/pull/453904 is merged
+      "org-notebook.test"
     ];
   };
 
@@ -2857,6 +3631,7 @@ assertNoAdditions {
       # Optional integration
       neotest
       toggleterm-nvim
+      nodejs
       nvim-dap
     ];
     checkPhase = ''
@@ -2880,11 +3655,10 @@ assertNoAdditions {
     dependencies = with self; [
       nvim-parinfer
       nvim-paredit
-      nvim-treesitter
     ];
   };
 
-  parrot-nvim = super.parrot-nvim.overrideAttrs {
+  parrot-nvim = super.parrot-nvim.overrideAttrs (old: {
     runtimeDeps = [
       curl
     ];
@@ -2900,25 +3674,33 @@ assertNoAdditions {
       self.blink-cmp
       self.nvim-cmp
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   peek-nvim = super.peek-nvim.overrideAttrs (old: {
+    runtimeDeps = [
+      deno
+    ];
+
     patches = [
       # Patch peek-nvim to run using nixpkgs deno
       # This means end-users have to build peek-nvim the first time they use it...
-      (replaceVars ./patches/peek-nvim/cmd.patch {
-        deno = lib.getExe deno;
-      })
+      ./patches/peek-nvim/cmd.patch
     ];
   });
 
-  perfanno-nvim = super.perfanno-nvim.overrideAttrs (old: {
-    dependencies = [ gperf ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ fredeb ];
-    };
-  });
+  perfanno-nvim = super.perfanno-nvim.overrideAttrs {
+    checkInputs = with self; [
+      fzf-lua
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "perfanno.fzf_lua"
+    ];
+  };
 
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
@@ -2940,13 +3722,6 @@ assertNoAdditions {
     dependencies = [ self.LibDeflate-nvim ];
   };
 
-  playground = super.playground.overrideAttrs {
-    dependencies = with self; [
-      # we need the 'query' grammar to make
-      (nvim-treesitter.withPlugins (p: [ p.query ]))
-    ];
-  };
-
   poimandres-nvim = super.poimandres-nvim.overrideAttrs {
     # Optional treesitter support
     nvimSkipModules = "poimandres.highlights";
@@ -2957,10 +3732,8 @@ assertNoAdditions {
   };
 
   Preview-nvim = super.Preview-nvim.overrideAttrs {
-    patches = [
-      (replaceVars ./patches/preview-nvim/hardcode-mdt-binary-path.patch {
-        mdt = lib.getExe md-tui;
-      })
+    runtimeDeps = [
+      md-tui
     ];
   };
 
@@ -2971,14 +3744,29 @@ assertNoAdditions {
     ];
   };
 
-  python-mode = super.python-mode.overrideAttrs {
-    postPatch = ''
+  python-mode = super.python-mode.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
       # NOTE: Fix broken symlink - the pytoolconfig directory was moved to src/
       # https://github.com/python-mode/python-mode/pull/1189#issuecomment-3109528360
       rm -f pymode/libs/pytoolconfig
       ln -sf ../../submodules/pytoolconfig/src/pytoolconfig pymode/libs/pytoolconfig
+
+      # The current source tarball only ships a subset of the historical
+      # submodules, so drop the now-dangling vendored linter symlinks.
+      rm -f \
+        pymode/libs/appdirs.py \
+        pymode/libs/astroid \
+        pymode/libs/mccabe.py \
+        pymode/libs/pycodestyle.py \
+        pymode/libs/pydocstyle \
+        pymode/libs/pyflakes \
+        pymode/libs/pylama \
+        pymode/libs/pylint \
+        pymode/libs/snowballstemmer \
+        pymode/libs/toml \
+        pymode/autopep8.py
     '';
-  };
+  });
 
   pywal-nvim = super.pywal-nvim.overrideAttrs {
     # Optional feline integration
@@ -2999,7 +3787,7 @@ assertNoAdditions {
     ];
   };
 
-  quarto-nvim = super.quarto-nvim.overrideAttrs {
+  quarto-nvim = super.quarto-nvim.overrideAttrs (old: {
     checkInputs = [
       # Optional runner
       self.iron-nvim
@@ -3011,24 +3799,49 @@ assertNoAdditions {
     nvimSkipModules = [
       "quarto.runner.init"
     ];
-  };
+    meta = old.meta // {
+      # LICENSE says GPL-2.0-or-later.
+      license = lib.licenses.gpl2Plus;
+    };
+  });
+
+  rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs (old: {
+    nvimSkipModules = [
+      # rainbow-delimiters.types.lua
+      "rainbow-delimiters.types"
+      # Test that requires an unpackaged dependency
+      "rainbow-delimiters._test.highlight"
+    ];
+    meta = old.meta // {
+      license = lib.licenses.asl20;
+    };
+  });
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
     dependencies = [ self.cmd-parser-nvim ];
   };
 
   ranger-nvim = super.ranger-nvim.overrideAttrs {
-    patches = [ ./patches/ranger.nvim/fix-paths.patch ];
-
-    postPatch = ''
-      substituteInPlace lua/ranger-nvim.lua --replace-fail '@ranger@' ${ranger}/bin/ranger
-    '';
+    runtimeDeps = [
+      ranger
+    ];
   };
+
+  rcshell-vim = super.rcshell-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
+  Recover-vim = super.Recover-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
-      plenary-nvim
+      async-nvim
     ];
   };
 
@@ -3060,8 +3873,14 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  rocks-nvim = super.rocks-nvim.overrideAttrs (oa: {
-    passthru = oa.passthru // {
+  riv-vim = super.riv-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  rocks-nvim = super.rocks-nvim.overrideAttrs (old: {
+    passthru = old.passthru // {
       initLua = ''
         vim.g.rocks_nvim = {
           luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
@@ -3071,6 +3890,33 @@ assertNoAdditions {
 
   });
 
+  rtorrent-syntax-file = super.rtorrent-syntax-file.overrideAttrs (old: {
+    meta = old.meta // {
+      # README is the only upstream MIT notice.
+      license = lib.licenses.mit;
+    };
+  });
+
+  run-nvim = super.run-nvim.overrideAttrs (old: {
+    dependencies = [
+      self.telescope-nvim
+    ];
+
+    checkInputs = [
+      # Transitive dependency of telescope.nvim
+      # Issue: https://github.com/NixOS/nixpkgs/issues/394939
+      self.plenary-nvim
+    ];
+
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
+  rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
+    dependencies = [ self.nvim-lspconfig ];
+  };
+
   rustaceanvim = super.rustaceanvim.overrideAttrs {
     checkInputs = [
       # Optional integration
@@ -3078,13 +3924,15 @@ assertNoAdditions {
     ];
   };
 
-  rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
-    dependencies = [ self.nvim-lspconfig ];
-  };
-
   rzls-nvim = super.rzls-nvim.overrideAttrs {
     dependencies = [ self.roslyn-nvim ];
   };
+
+  salt-vim = super.salt-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.asl20;
+    };
+  });
 
   samodostal-image-nvim = super.samodostal-image-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -3094,11 +3942,15 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  scretch-nvim = super.scretch-nvim.overrideAttrs {
-  };
+  screensaver-nvim = super.screensaver-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      description = "Screensaver plugin for Neovim";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ m3l6h ];
+    };
+  });
 
-  searchbox-nvim = super.searchbox-nvim.overrideAttrs {
-    dependencies = [ self.nui-nvim ];
+  scretch-nvim = super.scretch-nvim.overrideAttrs {
   };
 
   search-and-replace-nvim = super.search-and-replace-nvim.overrideAttrs {
@@ -3108,9 +3960,32 @@ assertNoAdditions {
     ];
   };
 
-  skim-vim = super.skim-vim.overrideAttrs {
-    dependencies = [ self.skim ];
+  searchbox-nvim = super.searchbox-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
   };
+
+  seoul256-vim = super.seoul256-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  sidekick-nvim = super.sidekick-nvim.overrideAttrs {
+    runtimeDeps = [
+      copilot-language-server
+    ];
+
+    nvimSkipModules = [
+      "sidekick.docs"
+    ];
+  };
+
+  skim-vim = super.skim-vim.overrideAttrs (old: {
+    dependencies = [ self.skim ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   smart-open-nvim = super.smart-open-nvim.overrideAttrs {
     dependencies = with self; [
@@ -3131,6 +4006,12 @@ assertNoAdditions {
     ];
   };
 
+  smartpairs-vim = super.smartpairs-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   snacks-nvim = super.snacks-nvim.overrideAttrs {
     # Optional trouble integration
     checkInputs = [ self.trouble-nvim ];
@@ -3140,6 +4021,12 @@ assertNoAdditions {
       "snacks.dashboard"
       "snacks.debug"
       "snacks.dim"
+      "snacks.explorer.init"
+      "snacks.gh.actions"
+      "snacks.gh.buf"
+      "snacks.gh.init"
+      "snacks.gh.render"
+      "snacks.gh.render.init"
       "snacks.git"
       "snacks.image.convert"
       "snacks.image.image"
@@ -3152,6 +4039,8 @@ assertNoAdditions {
       "snacks.picker.actions"
       "snacks.picker.config.highlights"
       "snacks.picker.core.list"
+      "snacks.picker.source.gh"
+      "snacks.picker.util.diff"
       "snacks.scratch"
       "snacks.scroll"
       "snacks.terminal"
@@ -3187,13 +4076,22 @@ assertNoAdditions {
     ];
   };
 
+  sonarlint-nvim = super.sonarlint-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+      maintainers = old.meta.maintainers or [ ] ++ [
+        lib.maintainers.sinics
+      ];
+    };
+  });
+
   spaceman-nvim = super.spaceman-nvim.overrideAttrs {
     # Optional telescope integration
     nvimSkipModules = "spaceman.adapters.telescope";
   };
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (
-    oa:
+    old:
     let
       libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
     in
@@ -3203,7 +4101,7 @@ assertNoAdditions {
           --replace-fail "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or '${lib.escapeShellArg libsqlite}'"
       '';
 
-      passthru = oa.passthru // {
+      passthru = old.passthru // {
         initLua = ''vim.g.sqlite_clib_path = "${libsqlite}"'';
       };
 
@@ -3216,9 +4114,11 @@ assertNoAdditions {
     }
   );
 
-  ssr-nvim = super.ssr-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
+  srcery-vim = super.srcery-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   startup-nvim = super.startup-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -3228,14 +4128,27 @@ assertNoAdditions {
     postPatch = ''
       substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace-fail xdotool ${xdotool}/bin/xdotool
       substituteInPlace lua/stylish/components/menu.lua --replace-fail xdotool ${xdotool}/bin/xdotool
-      substituteInPlace lua/stylish/components/menu.lua --replace-fail xwininfo ${xorg.xwininfo}/bin/xwininfo
+      substituteInPlace lua/stylish/components/menu.lua --replace-fail xwininfo ${xwininfo}/bin/xwininfo
     '';
   };
+
+  SudoEdit-vim = super.SudoEdit-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   supermaven-nvim = super.supermaven-nvim.overrideAttrs {
     # TODO: handle supermaven binary
     doCheck = false;
   };
+
+  supertab = super.supertab.overrideAttrs (old: {
+    meta = old.meta // {
+      # README.rst contains the BSD-3-Clause notice.
+      license = lib.licenses.bsd3;
+    };
+  });
 
   sved =
     let
@@ -3283,11 +4196,22 @@ assertNoAdditions {
       };
     });
 
-  syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs (old: {
-    dependencies = [ self.nvim-treesitter ];
+  switcher-nvim = super.switcher-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-web-devicons
+    ];
+  };
 
+  tabular = super.tabular.overrideAttrs (old: {
     meta = old.meta // {
-      maintainers = with lib.maintainers; [ callumio ];
+      license = lib.licenses.bsd3;
+    };
+  });
+
+  tagbar = super.tagbar.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
     };
   });
 
@@ -3297,6 +4221,13 @@ assertNoAdditions {
       maintainers = with lib.maintainers; [ fredeb ];
     };
   });
+
+  taskwiki = super.taskwiki.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   telekasten-nvim = super.telekasten-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
@@ -3407,12 +4338,22 @@ assertNoAdditions {
     dependencies = [ self.telescope-nvim ];
   };
 
-  telescope-live-grep-args-nvim = super.telescope-live-grep-args-nvim.overrideAttrs {
+  telescope-hierarchy-nvim = super.telescope-hierarchy-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+  };
+
+  telescope-live-grep-args-nvim = super.telescope-live-grep-args-nvim.overrideAttrs (old: {
     dependencies = with self; [
       plenary-nvim
       telescope-nvim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.cc0;
+    };
+  });
 
   telescope-lsp-handlers-nvim = super.telescope-lsp-handlers-nvim.overrideAttrs {
     dependencies = with self; [
@@ -3502,6 +4443,12 @@ assertNoAdditions {
     dependencies = [ self.nvzone-volt ];
   };
 
+  tinted-vim = super.tinted-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
     # Vim plugin with optional nvim-compe lua module
     nvimSkipModules = [ "compe_tmux" ];
@@ -3530,6 +4477,10 @@ assertNoAdditions {
     ];
   };
 
+  treesitter-modules-nvim = super.treesitter-modules-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   triptych-nvim = super.triptych-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -3539,19 +4490,46 @@ assertNoAdditions {
     nvimSkipModules = "trouble.docs";
   };
 
-  tsc-nvim = super.tsc-nvim.overrideAttrs {
-    patches = [ ./patches/tsc.nvim/fix-path.patch ];
+  trust-vim = super.trust-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      # TODO: Upstream includes bundled NYSL-licensed code; add an NYSL license
+      # entry and include it alongside the Apache-2.0/MIT terms.
+      license = lib.licenses.mit;
+    };
+  });
 
+  tsc-nvim = super.tsc-nvim.overrideAttrs {
     postPatch = ''
-      substituteInPlace lua/tsc/utils.lua --replace-fail '@tsc@' ${typescript}/bin/tsc
+      substituteInPlace lua/tsc/utils.lua --replace-fail \
+      'bin_name = bin_name or "tsc"' \
+      'bin_name = bin_name or "${typescript}/bin/tsc"'
     '';
 
     # Unit test
     nvimSkipModules = "tsc.better-messages-test";
   };
 
-  tssorter-nvim = super.tssorter-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+  tslime-vim = super.tslime-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
+  tsuquyomi = super.tsuquyomi.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  tuis-nvim = super.tuis-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      # README contains the MIT license text.
+      license = lib.licenses.mit;
+    };
+  });
+
+  tv-nvim = super.tv-nvim.overrideAttrs {
+    runtimeDeps = [ television ];
   };
 
   typescript-nvim = super.typescript-nvim.overrideAttrs {
@@ -3561,6 +4539,7 @@ assertNoAdditions {
     ];
     dependencies = with self; [
       nvim-lspconfig
+      plenary-nvim
     ];
   };
 
@@ -3590,7 +4569,7 @@ assertNoAdditions {
         sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
       };
     in
-    super.unicode-vim.overrideAttrs (oa: {
+    super.unicode-vim.overrideAttrs (old: {
       # redirect to /dev/null else changes terminal color
       buildPhase = ''
         cp "${unicode-data}" autoload/unicode/UnicodeData.txt
@@ -3598,23 +4577,37 @@ assertNoAdditions {
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
 
-      passthru = oa.passthru // {
-
+      passthru = old.passthru // {
         initLua = ''vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"'';
+      };
+      meta = old.meta // {
+        license = lib.licenses.vim;
       };
     });
 
-  unison = super.unison.overrideAttrs {
+  unison = super.unison.overrideAttrs (old: {
     # Editor stuff isn't at top level
     postPatch = "cd editor-support/vim";
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  unite-vim = super.unite-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   uv-nvim = super.uv-nvim.overrideAttrs {
-    dependencies = with self; [
-      telescope-nvim
-    ];
     runtimeDeps = [ uv ];
   };
+
+  vader-vim = super.vader-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
@@ -3625,55 +4618,11 @@ assertNoAdditions {
     };
   });
 
-  vimacs = super.vimacs.overrideAttrs (old: {
-    buildPhase = ''
-      substituteInPlace bin/vim \
-        --replace-fail '/usr/bin/vim' 'vim' \
-        --replace-fail '/usr/bin/gvim' 'gvim'
-      # remove unnecessary duplicated bin wrapper script
-      rm -r plugin/vimacs
-    '';
+  vim-abolish = super.vim-abolish.overrideAttrs (old: {
     meta = old.meta // {
-      description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
-      homepage = "http://algorithm.com.au/code/vimacs";
-      license = lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [ millerjason ];
+      license = lib.licenses.vim;
     };
   });
-
-  vimade = super.vimade.overrideAttrs {
-    checkInputs = with self; [
-      # Optional providers
-      hlchunk-nvim
-      mini-nvim
-      snacks-nvim
-    ];
-  };
-
-  vimsence = super.vimsence.overrideAttrs (old: {
-    meta = old.meta // {
-      description = "Discord rich presence for Vim";
-      homepage = "https://github.com/hugolgst/vimsence";
-      maintainers = with lib.maintainers; [ hugolgst ];
-    };
-  });
-
-  vimproc-vim = super.vimproc-vim.overrideAttrs {
-    buildInputs = [ which ];
-
-    # TODO: revisit
-    buildPhase = ''
-      substituteInPlace autoload/vimproc.vim \
-        --replace-fail vimproc_mac.so vimproc_unix.so \
-        --replace-fail vimproc_linux64.so vimproc_unix.so \
-        --replace-fail vimproc_linux32.so vimproc_unix.so
-      make -f make_unix.mak
-    '';
-  };
-
-  vimshell-vim = super.vimshell-vim.overrideAttrs {
-    dependencies = [ self.vimproc-vim ];
-  };
 
   vim-addon-actions = super.vim-addon-actions.overrideAttrs {
     dependencies = with self; [
@@ -3690,6 +4639,12 @@ assertNoAdditions {
     dependencies = [ self.vim-addon-mw-utils ];
   };
 
+  vim-addon-commenting = super.vim-addon-commenting.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-addon-completion = super.vim-addon-completion.overrideAttrs {
     dependencies = [ self.tlib_vim ];
   };
@@ -3697,6 +4652,12 @@ assertNoAdditions {
   vim-addon-goto-thing-at-cursor = super.vim-addon-goto-thing-at-cursor.overrideAttrs {
     dependencies = [ self.tlib_vim ];
   };
+
+  vim-addon-manager = super.vim-addon-manager.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-addon-mru = super.vim-addon-mru.overrideAttrs {
     dependencies = with self; [
@@ -3747,12 +4708,30 @@ assertNoAdditions {
     ];
   };
 
+  vim-advanced-sorters = super.vim-advanced-sorters.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-agda = super.vim-agda.overrideAttrs {
     preFixup = ''
       substituteInPlace "$out"/autoload/agda.vim \
         --replace-fail "jobstart(['agda'" "jobstart(['${agda}/bin/agda'"
     '';
   };
+
+  vim-angry = super.vim-angry.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-apathy = super.vim-apathy.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-apm = super.vim-apm.overrideAttrs {
     nvimSkipModules = [ "run" ];
@@ -3762,9 +4741,60 @@ assertNoAdditions {
     dependencies = [ self.vim-maktaba ];
   };
 
-  vim-beancount = super.vim-beancount.overrideAttrs {
+  vim-bbye = super.vim-bbye.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.agpl3Plus;
+    };
+  });
+
+  vim-beancount = super.vim-beancount.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-bepoptimist = super.vim-bepoptimist.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-capslock = super.vim-capslock.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-characterize = super.vim-characterize.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-clang-format = super.vim-clang-format.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-classpath = super.vim-classpath.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-clojure-static = super.vim-clojure-static.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-cmake = super.vim-cmake.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-codefmt = super.vim-codefmt.overrideAttrs {
     dependencies = [ self.vim-maktaba ];
@@ -3772,6 +4802,28 @@ assertNoAdditions {
 
   # Due to case-sensitivity issues, the hash differs on Darwin systems, see:
   # https://github.com/NixOS/nixpkgs/issues/157609
+  vim-coffee-script = super.vim-coffee-script.overrideAttrs (old: {
+    meta = old.meta // {
+      license = with lib.licenses; [
+        wtfpl
+        mit
+      ];
+    };
+  });
+
+  vim-colors-paramount = super.vim-colors-paramount.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-colors-solarized = super.vim-colors-solarized.overrideAttrs (old: {
+    meta = old.meta // {
+      # README carries the MIT license text.
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-colorschemes = super.vim-colorschemes.overrideAttrs (old: {
     src = old.src.overrideAttrs (srcOld: {
       postFetch =
@@ -3782,6 +4834,18 @@ assertNoAdditions {
     });
   });
 
+  vim-commentary = super.vim-commentary.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-dadbod = super.vim-dadbod.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-dadbod-ui = super.vim-dadbod-ui.overrideAttrs {
     dependencies = [ self.vim-dadbod ];
 
@@ -3789,14 +4853,53 @@ assertNoAdditions {
     vimCommandCheck = "DBUI";
   };
 
-  vim-dasht = super.vim-dasht.overrideAttrs {
+  vim-dasht = super.vim-dasht.overrideAttrs (old: {
     preFixup = ''
       substituteInPlace $out/autoload/dasht.vim \
         --replace-fail "['dasht']" "['${dasht}/bin/dasht']"
     '';
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
-  vim-easytags = super.vim-easytags.overrideAttrs {
+  vim-DetectSpellLang = super.vim-DetectSpellLang.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.unlicense;
+    };
+  });
+
+  vim-dirvish = super.vim-dirvish.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
+
+  vim-dispatch = super.vim-dispatch.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-dotenv = super.vim-dotenv.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-easy-align = super.vim-easy-align.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-easymotion = super.vim-easymotion.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-easytags = super.vim-easytags.overrideAttrs (old: {
     dependencies = [ self.vim-misc ];
     patches = [
       (fetchpatch {
@@ -3805,20 +4908,94 @@ assertNoAdditions {
         sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
       })
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
-  vim-flog = super.vim-flog.overrideAttrs {
+  vim-elixir = super.vim-elixir.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.asl20;
+    };
+  });
+
+  vim-endwise = super.vim-endwise.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-erlang-omnicomplete = super.vim-erlang-omnicomplete.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-erlang-tags = super.vim-erlang-tags.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.asl20;
+    };
+  });
+
+  vim-eunuch = super.vim-eunuch.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-fireplace = super.vim-fireplace.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-flagship = super.vim-flagship.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-flog = super.vim-flog.overrideAttrs (old: {
     # Not intended to be required, used by vim plugin
     nvimSkipModules = "flog.graph_bin";
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-fugitive = super.vim-fugitive.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-fzf-coauthorship = super.vim-fzf-coauthorship.overrideAttrs {
     dependencies = with self; [ fzf-vim ];
   };
 
+  vim-gist = super.vim-gist.overrideAttrs (old: {
+    dependencies = [ self.webapi-vim ];
+    meta = old.meta // {
+      # README carries the BSD-2-Clause text; GitHub did not detect it.
+      license = lib.licenses.bsd2;
+    };
+  });
+
   # change the go_bin_path to point to a path in the nix store. See the code in
   # fatih/vim-go here
   # https://github.com/fatih/vim-go/blob/155836d47052ea9c9bac81ba3e937f6f22c8e384/autoload/go/path.vim#L154-L159
+  vim-github-dashboard = super.vim-github-dashboard.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-gnupg = super.vim-gnupg.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl2Plus;
+    };
+  });
+
   vim-go =
     let
       binPath = lib.makeBinPath [
@@ -3842,17 +5019,16 @@ assertNoAdditions {
         revive
       ];
     in
-    super.vim-go.overrideAttrs {
+    super.vim-go.overrideAttrs (old: {
       postPatch = ''
         sed -i autoload/go/config.vim -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g'
       '';
-    };
+      meta = old.meta // {
+        license = lib.licenses.bsd3;
+      };
+    });
 
-  vim-gist = super.vim-gist.overrideAttrs {
-    dependencies = [ self.webapi-vim ];
-  };
-
-  vim-grammarous = super.vim-grammarous.overrideAttrs {
+  vim-grammarous = super.vim-grammarous.overrideAttrs (old: {
     # use `:GrammarousCheck` to initialize checking
     # In neovim, you also want to use set
     #   let g:grammarous#show_first_error = 1
@@ -3862,7 +5038,30 @@ assertNoAdditions {
         inherit languagetool;
       })
     ];
-  };
+    meta = old.meta // {
+      # README carries the MIT license text; GitHub did not detect it.
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-gruvbox8 = super.vim-gruvbox8.overrideAttrs (old: {
+    meta = old.meta // {
+      # README declares MIT; GitHub did not detect it.
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-hcl = super.vim-hcl.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-helm = super.vim-helm.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
 
   vim-hexokinase = super.vim-hexokinase.overrideAttrs (old: {
     preFixup =
@@ -3886,20 +5085,77 @@ assertNoAdditions {
     buildInputs = [ vim ];
   };
 
-  vim-illuminate = super.vim-illuminate.overrideAttrs {
-    # Optional treesitter integration
-    checkInputs = [ self.nvim-treesitter ];
+  vim-hypr-nav = super.vim-hypr-nav.overrideAttrs {
+    runtimeDeps = [ jq ];
   };
 
+  vim-indentwise = super.vim-indentwise.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Plus;
+    };
+  });
+
   vim-isort = super.vim-isort.overrideAttrs {
-    # Code updated to find relative path at runtime
-    # https://github.com/fisadev/vim-isort/pull/41
-    dontCheckForBrokenSymlinks = true;
     postPatch = ''
-      substituteInPlace ftplugin/python_vimisort.vim \
+      substituteInPlace autoload/vimisort.vim \
         --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
     '';
   };
+
+  vim-javascript = super.vim-javascript.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-jdaddy = super.vim-jdaddy.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-jsbeautify = super.vim-jsbeautify.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-json = super.vim-json.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-LanguageTool = super.vim-LanguageTool.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-ledger = super.vim-ledger.overrideAttrs (old: {
+    meta = old.meta // {
+      # README carries the GPL-2.0-or-later notice; GitHub did not detect it.
+      license = lib.licenses.gpl2Plus;
+    };
+  });
+
+  vim-lexical = super.vim-lexical.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-llvm = super.vim-llvm.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
+    };
+  });
+
+  vim-markdown = super.vim-markdown.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-matchup = super.vim-matchup.overrideAttrs {
     # Optional treesitter integration
@@ -3914,13 +5170,142 @@ assertNoAdditions {
     preInstall = "cd vim";
   };
 
+  vim-misc = super.vim-misc.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-obsession = super.vim-obsession.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-openscad = super.vim-openscad.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
+  vim-operator-surround = super.vim-operator-surround.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-orgmode = super.vim-orgmode.overrideAttrs (old: {
+    meta = old.meta // {
+      # Source is AGPL-3.0-only; bundled docs are GFDL-1.3-or-later.
+      license = with lib.licenses; [
+        agpl3Only
+        fdl13Plus
+      ];
+    };
+  });
+
+  vim-peekaboo = super.vim-peekaboo.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-pencil = super.vim-pencil.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-pico8-syntax = super.vim-pico8-syntax.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-pluto = super.vim-pluto.overrideAttrs {
     dependencies = [ self.denops-vim ];
   };
 
-  vim-sensible = super.vim-sensible.overrideAttrs {
+  vim-projectionist = super.vim-projectionist.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-ps1 = super.vim-ps1.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.asl20;
+    };
+  });
+
+  vim-ragtag = super.vim-ragtag.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-rails = super.vim-rails.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-repeat = super.vim-repeat.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-ReplaceWithRegister = super.vim-ReplaceWithRegister.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-ReplaceWithSameIndentRegister = super.vim-ReplaceWithSameIndentRegister.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-rsi = super.vim-rsi.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-salve = super.vim-salve.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-scriptease = super.vim-scriptease.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-sensible = super.vim-sensible.overrideAttrs (old: {
     patches = [ ./patches/vim-sensible/fix-nix-store-path-regex.patch ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-sexp-mappings-for-regular-people =
+    super.vim-sexp-mappings-for-regular-people.overrideAttrs
+      (old: {
+        meta = old.meta // {
+          license = lib.licenses.vim;
+        };
+      });
+
+  vim-sleuth = super.vim-sleuth.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-snipmate = super.vim-snipmate.overrideAttrs {
     dependencies = with self; [
@@ -3929,9 +5314,18 @@ assertNoAdditions {
     ];
   };
 
-  vim-speeddating = super.vim-speeddating.overrideAttrs {
+  vim-speeddating = super.vim-speeddating.overrideAttrs (old: {
     dependencies = [ self.vim-repeat ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-stationeers-ic10-syntax = super.vim-stationeers-ic10-syntax.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
     postPatch = old.postPatch or "" + ''
@@ -3941,17 +5335,58 @@ assertNoAdditions {
     '';
   });
 
-  vim-surround = super.vim-surround.overrideAttrs {
+  vim-surround = super.vim-surround.overrideAttrs (old: {
     dependencies = [ self.vim-repeat ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-syntax-shakespeare = super.vim-syntax-shakespeare.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-SyntaxRange = super.vim-SyntaxRange.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-tabby = super.vim-tabby.overrideAttrs {
   };
+
+  vim-tbone = super.vim-tbone.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
     dependencies = [ self.vim-textobj-user ];
     meta = old.meta // {
       maintainers = with lib.maintainers; [ workflow ];
+    };
+  });
+
+  vim-textobj-line = super.vim-textobj-line.overrideAttrs (old: {
+    dependencies = [ self.vim-textobj-user ];
+    meta = old.meta // {
+      maintainers = with lib.maintainers; [ llakala ];
+    };
+  });
+
+  vim-textobj-quote = super.vim-textobj-quote.overrideAttrs (old: {
+    dependencies = [ self.vim-textobj-user ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-textobj-user = super.vim-textobj-user.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
     };
   });
 
@@ -3966,9 +5401,31 @@ assertNoAdditions {
     nvimSkipModules = [ "ultest" ];
   };
 
-  vim-unimpaired = super.vim-unimpaired.overrideAttrs {
+  vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {
     dependencies = [ self.vim-repeat ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-vinegar = super.vim-vinegar.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vim-visual-increment = super.vim-visual-increment.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-waikiki = super.vim-waikiki.overrideAttrs (old: {
+    meta = old.meta // {
+      # README-only CC-BY-SA-4.0 notice; GitHub detection missed it.
+      license = lib.licenses.cc-by-sa-40;
+    };
+  });
 
   vim-wakatime = super.vim-wakatime.overrideAttrs {
     buildInputs = [ python3 ];
@@ -3981,9 +5438,18 @@ assertNoAdditions {
     '';
   };
 
-  vim-xdebug = super.vim-xdebug.overrideAttrs {
+  vim-wordy = super.vim-wordy.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
     postInstall = null;
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs {
     buildInputs = [ xkb-switch ];
@@ -4003,17 +5469,126 @@ assertNoAdditions {
     ];
   };
 
+  vim-zscript = super.vim-zscript.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.cc0;
+    };
+  });
+
+  vimacs = super.vimacs.overrideAttrs (old: {
+    buildPhase = ''
+      substituteInPlace bin/vim \
+        --replace-fail '/usr/bin/vim' 'vim' \
+        --replace-fail '/usr/bin/gvim' 'gvim'
+      # remove unnecessary duplicated bin wrapper script
+      rm -r plugin/vimacs
+    '';
+    meta = old.meta // {
+      description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
+      homepage = "http://algorithm.com.au/code/vimacs";
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ millerjason ];
+    };
+  });
+
+  vimade = super.vimade.overrideAttrs {
+    checkInputs = with self; [
+      # Optional providers
+      hlchunk-nvim
+      mini-nvim
+      snacks-nvim
+    ];
+  };
+
+  vimagit = super.vimagit.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  VimCompletesMe = super.VimCompletesMe.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
+  vimfiler-vim = super.vimfiler-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
+  vimoutliner = super.vimoutliner.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
+  vimproc-vim = super.vimproc-vim.overrideAttrs {
+    buildInputs = [ which ];
+
+    # TODO: revisit
+    buildPhase = ''
+      substituteInPlace autoload/vimproc.vim \
+        --replace-fail vimproc_mac.so vimproc_unix.so \
+        --replace-fail vimproc_linux64.so vimproc_unix.so \
+        --replace-fail vimproc_linux32.so vimproc_unix.so
+      make -f make_unix.mak
+    '';
+  };
+
+  vimsence = super.vimsence.overrideAttrs (old: {
+    meta = old.meta // {
+      description = "Discord rich presence for Vim";
+      homepage = "https://github.com/hugolgst/vimsence";
+      maintainers = with lib.maintainers; [ hugolgst ];
+    };
+  });
+
+  vimshell-vim = super.vimshell-vim.overrideAttrs {
+    dependencies = [ self.vimproc-vim ];
+  };
+
+  vimtex = super.vimtex.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      fzf-lua
+      snacks-nvim
+    ];
+  };
+
+  vimwiki = super.vimwiki.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   virt-column-nvim = super.virt-column-nvim.overrideAttrs {
     # Meta file
     nvimSkipModules = "virt-column.config.types";
   };
 
+  vis = super.vis.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      telescope-nvim
+    checkInputs = [
+      # Optional telescope integration
+      self.telescope-nvim
+    ];
+    dependencies = [
+      self.plenary-nvim
     ];
   };
+
+  webapi-vim = super.webapi-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
 
   which-key-nvim = super.which-key-nvim.overrideAttrs {
     nvimSkipModules = [ "which-key.docs" ];
@@ -4028,8 +5603,9 @@ assertNoAdditions {
 
   wiki-vim = super.wiki-vim.overrideAttrs {
     checkInputs = [
-      # Optional telescope integration
+      # Optional picker integration
       self.telescope-nvim
+      self.fzf-lua
     ];
   };
 
@@ -4052,6 +5628,12 @@ assertNoAdditions {
     ];
   };
 
+  xeno-nvim = super.xeno-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   xmake-nvim = super.xmake-nvim.overrideAttrs {
     nvimSkipModule = [
       # attempt to index upvalue 'options' (a nil value)
@@ -4060,6 +5642,13 @@ assertNoAdditions {
       "xmake.runner_wrapper"
     ];
   };
+
+  xterm-color-table-vim = super.xterm-color-table-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      # README-only MIT notice; GitHub detection missed it.
+      license = lib.licenses.mit;
+    };
+  });
 
   yaml-companion-nvim = super.yaml-companion-nvim.overrideAttrs {
     dependencies = [
@@ -4074,6 +5663,12 @@ assertNoAdditions {
       nvim-lspconfig
     ];
   };
+
+  yank-path-nvim = super.yank-path-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   yanky-nvim = super.yanky-nvim.overrideAttrs {
     checkInputs = with self; [
@@ -4105,8 +5700,6 @@ assertNoAdditions {
       homepage = "https://github.com/Valloric/YouCompleteMe";
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
-        marcweber
-        jagajaga
         mel
       ];
       platforms = lib.platforms.unix;
@@ -4114,13 +5707,21 @@ assertNoAdditions {
   });
 
   zenbones-nvim = super.zenbones-nvim.overrideAttrs {
+    checkInputs = with self; [
+      # Optional lush-nvim integration
+      lush-nvim
+    ];
     nvimSkipModules = [
       # Requires global variable set
       "randombones"
       "randombones.palette"
+      "randombones_dark.palette"
+      "randombones_light"
+      "randombones_light.palette"
       # Optional shipwright
       "zenbones.shipwright.runners.alacritty"
       "zenbones.shipwright.runners.foot"
+      "zenbones.shipwright.runners.ghostty"
       "zenbones.shipwright.runners.iterm"
       "zenbones.shipwright.runners.kitty"
       "zenbones.shipwright.runners.lightline"
@@ -4129,35 +5730,21 @@ assertNoAdditions {
       "zenbones.shipwright.runners.vim"
       "zenbones.shipwright.runners.wezterm"
       "zenbones.shipwright.runners.windows_terminal"
-      # Optional lush-nvim integration
-      "duckbones"
-      "duckbones.palette"
-      "forestbones"
-      "forestbones.palette"
-      "kanagawabones"
-      "kanagawabones.palette"
-      "neobones"
-      "neobones.palette"
-      "nordbones"
-      "nordbones.palette"
-      "rosebones"
-      "rosebones.palette"
-      "seoulbones"
-      "seoulbones.palette"
-      "tokyobones"
-      "tokyobones.palette"
-      "vimbones"
-      "vimbones.palette"
-      "zenbones"
-      "zenbones.palette"
-      "zenbones.specs.dark"
-      "zenbones.specs.light"
-      "zenburned"
-      "zenburned.palette"
-      "zenwritten"
-      "zenwritten.palette"
+      "randombones_dark"
     ];
   };
+
+  zenburn = super.zenburn.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
+
+  zig-vim = super.zig-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   zk-nvim = super.zk-nvim.overrideAttrs {
     checkInputs = with self; [
@@ -4166,6 +5753,11 @@ assertNoAdditions {
       mini-nvim
       snacks-nvim
       telescope-nvim
+    ];
+    nvimSkipModules = [
+      # Address in use error from fzf-lua on darwin
+      # https://github.com/NixOS/nixpkgs/issues/431458
+      "zk.pickers.fzf_lua"
     ];
   };
 
@@ -4184,11 +5776,5 @@ assertNoAdditions {
         --replace-fail "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
   };
-
-  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
-    dependencies = with self; [
-      plenary-nvim
-      nvim-lspconfig
-    ];
-  };
+  # keep-sorted end
 }

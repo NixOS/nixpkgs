@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
 }:
@@ -9,8 +8,6 @@
 buildPythonPackage rec {
   pname = "pytube";
   version = "15.0.0";
-
-  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytube" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 library for downloading YouTube Videos";
     mainProgram = "pytube";
     homepage = "https://github.com/nficano/pytube";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

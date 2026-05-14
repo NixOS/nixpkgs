@@ -33,11 +33,11 @@ in
     ./retroarch.nix
     ./kodi.nix
     ./mate.nix
-    ./pantheon.nix
+    ../../desktop-managers/pantheon.nix
     ./surf-display.nix
     ./cde.nix
     ./cinnamon.nix
-    ./budgie.nix
+    ../../desktop-managers/budgie.nix
     ../../desktop-managers/lomiri.nix
     ../../desktop-managers/cosmic.nix
     ../../desktop-managers/gnome.nix

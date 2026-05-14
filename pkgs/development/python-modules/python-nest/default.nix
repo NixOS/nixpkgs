@@ -6,15 +6,12 @@
   requests,
   six,
   sseclient-py,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-nest";
   version = "4.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API and command line tool for talking to the Nest™ Thermostat";
     homepage = "https://github.com/jkoelker/python-nest";
-    license = licenses.cc-by-nc-sa-40;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.cc-by-nc-sa-40;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

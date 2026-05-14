@@ -4,14 +4,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zycore";
   version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zycore-c";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/RQl43gx3CO0OxH1syz4l3E4+/m46ql+HKVyuC1x4sA=";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
-}
+})

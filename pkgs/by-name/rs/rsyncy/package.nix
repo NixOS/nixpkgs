@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "rsyncy";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "laktak";
     repo = "rsyncy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sy0aMYT7xrBfXB3YxLGL49jKVnRpWo5k+3mjQNAOagU=";
+    hash = "sha256-ZWahPfAW6m86C0jdUB8Hfmx2A3i4NLsnAWI0HVoAbcE=";
   };
 
-  vendorHash = "sha256-vexWkbUQdkWrDJVvu2T4z4hbiCANuW0qLNFNSiTmYtY=";
+  vendorHash = "sha256-xEjLMp4hbRrSvHBsuFxYsyNB7s2P876dV1NyAXycGoo=";
 
   ldflags = [
     "-s"

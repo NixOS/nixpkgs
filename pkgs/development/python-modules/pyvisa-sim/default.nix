@@ -1,7 +1,6 @@
 {
   lib,
   fetchPypi,
-  pythonOlder,
   buildPythonPackage,
   pyvisa,
   pyyaml,
@@ -15,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-sim";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyvisa_sim";
     inherit version;
-    hash = "sha256-fVpnLKSK25SL5hbwYSuFMrHu5mSvZ8Gt8Qv/Tjv7+NA=";
+    hash = "sha256-EbEGWOIVJwjuraDIZifYlMTRFIQxLwLTzzhRlrS8hw8=";
   };
 
   build-system = [
@@ -43,10 +42,10 @@ buildPythonPackage rec {
   # should be fixed after 0.5.1, remove at next release
   disabledTestPaths = [ "pyvisa_sim/testsuite/test_all.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulated backend for PyVISA implementing TCPIP, GPIB, RS232, and USB resources";
     homepage = "https://pyvisa.readthedocs.io/projects/pyvisa-sim/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evilmav ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evilmav ];
   };
 }

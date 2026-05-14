@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "llm-fragments-pypi";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samueldg";
     repo = "llm-fragments-pypi";
     tag = version;
-    hash = "sha256-1XqAmuZ1WMHD6JbLbLsK9K4Uf3FvvKJD4mn1G2J/3C8=";
+    hash = "sha256-6gG7oPughxbpG0ZgKGniTfS9pJAcmXL7unru5kE2bEY=";
   };
 
   build-system = [ hatchling ];

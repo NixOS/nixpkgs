@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   attrs,
   twisted,
@@ -12,14 +12,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-mailbox-server";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oAegNnIpMgRldoHb9QIEXW1YF8V/mq4vIibm6hoAjKE=";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole-mailbox-server";
+    tag = finalAttrs.version;
+    hash = "sha256-Ckwkvw4pMEGUTarfzg1GOodHMwM5hVix2bPCZTI6hxU=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +29,6 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     autobahn
-    setuptools # pkg_resources is referenced at runtime
     twisted
   ]
   ++ autobahn.optional-dependencies.twisted
@@ -52,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Securely transfer data between computers";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server";
-    changelog = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server/blob/${version}/NEWS.md";
+    changelog = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server/blob/${finalAttrs.src.rev}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})

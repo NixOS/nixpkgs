@@ -5,12 +5,12 @@
   libevent,
   mandoc,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopensmtpd";
   version = "0.7";
 
   src = fetchurl {
-    url = "https://imperialat.at/releases/libopensmtpd-${version}.tar.gz";
+    url = "https://imperialat.at/releases/libopensmtpd-${finalAttrs.version}.tar.gz";
     hash = "sha256-zdbV4RpwY/kmXaQ6QjCcZGVUuLaLA5gsqEctvisIphM=";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     "LOCALBASE="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating OpenSMTPD filters";
     homepage = "http://imperialat.at/dev/libopensmtpd/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ malte-v ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ malte-v ];
   };
-}
+})

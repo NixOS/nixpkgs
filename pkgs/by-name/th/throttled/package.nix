@@ -8,14 +8,14 @@
   wrapGAppsNoGuiHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "throttled";
   version = "0.11";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = "throttled";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+3ktDkr5hvOfHcch4+mjgJqcuw24UgWTkJqTyDQumyk=";
   };
 
@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
 
   postFixup = "wrapPythonPrograms";
 
-  meta = with lib; {
+  meta = {
     description = "Fix for Intel CPU throttling issues";
     homepage = "https://github.com/erpalma/throttled";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };
-}
+})

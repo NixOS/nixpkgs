@@ -13,8 +13,9 @@
   # buildInputs
   expat,
   fontconfig,
-  libXft,
-  libXinerama,
+  libxft,
+  libxinerama,
+  libxcb,
   aspell,
   xclip,
   xdg-utils,
@@ -36,14 +37,14 @@
 let
   cargoLockFile = if enablePlugins then ./enablePlugins.Cargo.lock else ./Cargo.lock;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dmenu-rs";
   version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "Shizcow";
     repo = "dmenu-rs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-05Ia+GHeL8PzOwR7H+NEVhKJVMPhlIaQLwGfvwOAl0g=";
   };
 
@@ -59,8 +60,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat
     fontconfig
-    libXft
-    libXinerama
+    libxft
+    libxinerama
+    libxcb
   ]
   ++ lib.optionals enablePlugins [
     aspell
@@ -109,4 +111,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
-}
+})

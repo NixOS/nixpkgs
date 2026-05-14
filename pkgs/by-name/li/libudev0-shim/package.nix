@@ -5,14 +5,14 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libudev0-shim";
   version = "1";
 
   src = fetchFromGitHub {
     owner = "archlinux";
     repo = "libudev0-shim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1460qm6rp1cqnns39lj24z7191m8sbpvbjabqbzb55dkdd2kw50z";
   };
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     ln -s "$name" "$out/lib/libudev.so.0"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shim to preserve libudev.so.0 compatibility";
     homepage = "https://github.com/archlinux/libudev0-shim";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
-}
+})

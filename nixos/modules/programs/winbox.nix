@@ -10,7 +10,7 @@ let
 in
 {
   options.programs.winbox = {
-    enable = lib.mkEnableOption ("MikroTik Winbox");
+    enable = lib.mkEnableOption "MikroTik Winbox";
     package = lib.mkPackageOption pkgs "winbox" { };
 
     openFirewall = lib.mkOption {
@@ -25,7 +25,10 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedUDPPorts = [ 5678 ];
+      allowedUDPPorts = [
+        5678
+        20561
+      ];
       allowedUDPPortRanges = [
         {
           from = 40000;

@@ -17,7 +17,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcab";
   version = "1.6";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gcab/${lib.versions.majorMinor version}/gcab-${version}.tar.xz";
+    url = "mirror://gnome/sources/gcab/${lib.versions.majorMinor finalAttrs.version}/gcab-${finalAttrs.version}.tar.xz";
     hash = "sha256-LwyWFVd8QSaQniUfneBibD7noVI3bBW1VE3xD8h+Vgs=";
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gcab";
       versionPolicy = "none";
     };
 
@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GObject library to create cabinet files";
     mainProgram = "gcab";
     homepage = "https://gitlab.gnome.org/GNOME/gcab";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
-}
+})

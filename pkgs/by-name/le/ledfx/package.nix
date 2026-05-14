@@ -1,24 +1,34 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ledfx";
-  version = "2.0.109";
+  version = "2.1.8";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fSb3NBl1bYCfwDkWI7/KeFIVcXTPDKBbLe0sQhneX6A=";
+  src = fetchFromGitHub {
+    owner = "LedFx";
+    repo = "LedFx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-le3SEGI9uis7wx9+SFpn0BJbpCybSecXEcxxAkC910U=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/conftest.py \
+      --replace-fail '"uv",' "" \
+      --replace-fail '"run",' "" \
+      --replace-fail '"ledfx",' "\"$out/bin/ledfx\","
+  '';
 
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [
     # not packaged
     "rpi-ws281x"
+    "xled"
   ];
 
   build-system = with python3.pkgs; [
@@ -27,49 +37,69 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
+    # sorted like in pyproject.toml in upstream
+    numpy
+    cffi
     aiohttp
     aiohttp-cors
-    aubio
+    aubio-ledfx
+    cython
     certifi
-    flux-led
-    python-dotenv
-    icmplib
-    mss
     multidict
-    numpy
     openrgb-python
     paho-mqtt
-    pillow
     psutil
-    pybase64
     pyserial
     pystray
-    python-mbedtls
-    python-osc
     python-rtmidi
-    # rpi-ws281x # not packaged
     requests
     sacn
-    samplerate
     sentry-sdk
-    setuptools
     sounddevice
-    stupidartnet
-    uvloop
-    vnoise
+    icmplib
     voluptuous
     zeroconf
+    pillow
+    flux-led
+    lifx-async
+    python-osc
+    pybase64
+    mss
+    uvloop
+    stupidartnet
+    python-dotenv
+    pyfastnoiselite
+    netifaces2
+    packaging
+    samplerate-ledfx
+    audio-hotplug
+    aiosendspin
+    pyflac
   ];
 
-  # Project has no tests
-  doCheck = false;
+  optional-dependencies = {
+    hue = with python3.pkgs; [ python-mbedtls ];
+  };
+
+  nativeCheckInputs = with python3.pkgs; [
+    lifx-emulator-core
+    pytest-asyncio
+    pytest-order
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # requires internet
+    "TestURLDownloadWithExternalURL"
+  ];
 
   meta = {
     description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
-    changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/LedFx/LedFx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.c3d2 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ledfx";
   };
-}
+})

@@ -9,18 +9,18 @@
   go-md2man,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netavark";
-  version = "1.16.1";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "netavark";
-    rev = "v${version}";
-    hash = "sha256-8Yai0c5AHHx+xTEVH23C5dy4VXRERLeg0iIAbD/Glis=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FdJNcHYK6Jc1dNqcUr5Ne8dv1dzlHRhcjoldiihrov8=";
   };
 
-  cargoHash = "sha256-U8rNA5sAR9+q7cWQBt18iJfnylcCq/tVLXAdxWpAhjw=";
+  cargoHash = "sha256-wp/1lWc3OfNQt74m8DtpuFO/Mf07+M7numq2FMEkeGo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
-    changelog = "https://github.com/containers/netavark/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/containers/netavark/releases/tag/${finalAttrs.src.rev}";
     description = "Rust based network stack for containers";
     homepage = "https://github.com/containers/netavark";
-    license = licenses.asl20;
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
   };
-}
+})

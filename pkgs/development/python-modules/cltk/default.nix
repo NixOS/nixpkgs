@@ -21,6 +21,8 @@
   stanza,
   torch,
   tqdm,
+  colorama,
+  python-dotenv,
 
   # tests
   pytestCheckHook,
@@ -28,23 +30,15 @@
 }:
 buildPythonPackage rec {
   pname = "cltk";
-  version = "1.5.0";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cltk";
     repo = "cltk";
     tag = "v${version}";
-    hash = "sha256-aeWbfDVNn6DwW+KFh62n5RBgWp5uSWDv2RHmB27/xI4=";
+    hash = "sha256-tAomXxI6XsIAxQzPiUsT5t1CHrFDPkwyWtVuHXQCz2A=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "poetry>=1.1.13" poetry-core \
-      --replace-fail "poetry.masonry.api" "poetry.core.masonry.api" \
-      --replace-fail 'scipy = "<1.13.0"' 'scipy = "^1"' \
-      --replace-fail 'boltons = "^21.0.0"' 'boltons = "^24.0.0"'
-  '';
 
   build-system = [ poetry-core ];
 
@@ -67,6 +61,8 @@ buildPythonPackage rec {
     stanza
     torch
     tqdm
+    colorama
+    python-dotenv
   ];
 
   nativeCheckInputs = [

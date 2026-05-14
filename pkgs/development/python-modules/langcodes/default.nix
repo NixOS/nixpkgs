@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   marisa-trie,
-  pythonOlder,
   fetchPypi,
   pytestCheckHook,
   language-data,
@@ -12,14 +11,12 @@
 
 buildPythonPackage rec {
   pname = "langcodes";
-  version = "3.5.0";
+  version = "3.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hu+BaNB+UeExokl//srUtmP2II58OuO43BXFFzSm+AE=";
+    hash = "sha256-QL/zFeAbAdEcKuOSjdT1y9dN04+b2RLBK5o2BsFD9zE=";
   };
 
   build-system = [
@@ -38,13 +35,17 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: assert 'Unknown language [aqk]' == 'Aninka'
     "test_updated_iana"
+    # doctest mismatches
+    "speaking_population"
+    "writing_population"
+    "README.md"
   ];
 
   pythonImportsCheck = [ "langcodes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python toolkit for working with and comparing the standardized codes for languages";
     homepage = "https://github.com/georgkrause/langcodes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

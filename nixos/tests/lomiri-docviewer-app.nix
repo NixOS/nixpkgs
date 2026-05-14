@@ -49,7 +49,7 @@ in
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(5)
-        machine.wait_for_text("No documents")
+        machine.wait_for_text(r"(No documents|Connect your device|drag files|removable media)")
         machine.screenshot("lomiri-docviewer_open")
 
     machine.succeed("pkill -f lomiri-docviewer-app")
@@ -93,7 +93,7 @@ in
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(5)
-        machine.wait_for_text("Keine Dokumente")
+        machine.wait_for_text(r"(Keine Dokumente|Rechner verbinden|Dokumentenordner ziehen|Dokumenten einstecken)")
         machine.screenshot("lomiri-docviewer_localised")
   '';
 }

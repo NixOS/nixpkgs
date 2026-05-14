@@ -1,67 +1,49 @@
 {
   bats,
+  cmake,
   fetchFromGitHub,
   lib,
+  ninja,
   python3,
   stdenv,
-  testers,
   uncrustify,
+  versionCheckHook,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "packcc";
-  version = "2.2.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "arithy";
     repo = "packcc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fmZL34UL7epFFGo0gCsj8TcyhBt5uCfnLCLCQugXF6U=";
+    hash = "sha256-vBRi9Pxcy6MhdrbZd13Xgel3w3qiIrU8F3rO1GFqSgE=";
   };
 
   postPatch = ''
-    patchShebangs tests
+    # Remove broken tests.
+    rm -rf \
+      tests/ast-calc.v3.d \
+      tests/style.d
   '';
 
-  dontConfigure = true;
-
-  preBuild = ''
-    cd build/${
-      if stdenv.cc.isGNU then
-        "gcc"
-      else if stdenv.cc.isClang then
-        "clang"
-      else
-        throw "Unsupported C compiler"
-    }
-  '';
-
-  doCheck = true;
-
-  nativeCheckInputs = [
-    bats
-    uncrustify
-    python3
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
 
-  preCheck = ''
-    # Style tests will always fail because upstream uses an older version of
-    # uncrustify.
-    rm -rf ../../tests/style.d
-  ''
-  + lib.optionalString stdenv.cc.isClang ''
-    export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
-  '';
+  doCheck = true;
+  checkTarget = "check";
+  nativeCheckInputs = [
+    bats
+    python3
+    uncrustify
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 release/bin/packcc $out/bin/packcc
-    runHook postInstall
-  '';
+  doInstallCheck = true;
+  installCheckInputs = [ versionCheckHook ];
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-
-  meta = with lib; {
+  meta = {
     description = "Parser generator for C";
     longDescription = ''
       PackCC is a parser generator for C. Its main features are as follows:
@@ -71,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/arithy/packcc";
     changelog = "https://github.com/arithy/packcc/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
     mainProgram = "packcc";
   };
 })

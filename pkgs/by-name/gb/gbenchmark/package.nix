@@ -8,14 +8,14 @@
   prometheus-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gbenchmark";
   version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P7wJcKkIBoWtN9FCRticpBzYbEZPq71a0iW/2oDTZRU=";
   };
 
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     inherit prometheus-cpp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
     maintainers = [ ];
   };
-}
+})

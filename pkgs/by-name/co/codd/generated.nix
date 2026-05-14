@@ -41,7 +41,7 @@
 }:
 mkDerivation {
   pname = "codd";
-  version = "0.1.6";
+  version = "0.1.8";
   src = ./.;
   isLibrary = true;
   isExecutable = true;
@@ -72,6 +72,7 @@ mkDerivation {
     unliftio
     unliftio-core
     unordered-containers
+    uuid
     vector
   ];
   executableHaskellDepends = [

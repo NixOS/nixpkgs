@@ -7,14 +7,14 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tangara-cli";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "tangara-companion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pTE+xlXWIOOt1oiKosnbXTCLYoAqP3CfXA283a//Ds0=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ stevestreza ];
     platforms = lib.platforms.linux;
   };
-}
+})

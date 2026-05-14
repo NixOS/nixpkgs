@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
+  libx11,
   xorgproto,
   libxau,
   writeScript,
@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxext";
-  version = "1.3.6";
+  version = "1.3.7";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXext-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7bWfojmU5AX9xbQAr99YIK5hYLlPNePcPaRFehbol1M=";
+    hash = "sha256-bGQ8cDXNrPZ6/WjyXQG5DviJ1UbJ/NfArffCz5Hjoy0=";
   };
 
   strictDeps = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     xorgproto
   ];
   propagatedBuildInputs = [

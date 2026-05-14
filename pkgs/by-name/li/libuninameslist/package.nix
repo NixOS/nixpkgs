@@ -5,15 +5,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libuninameslist";
-  version = "20250714";
+  version = "20260107";
 
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = "libuninameslist";
-    rev = version;
-    hash = "sha256-2SC8hu4yHbSbmQL17bfF4BwPLzBhUvF8iGqEtueUZaU=";
+    rev = finalAttrs.version;
+    hash = "sha256-o+moQBFXIhnqvAc9F08kLRiXVS5pJEuUJwWl4Y/8AS4=";
   };
 
   nativeBuildInputs = [
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/fontforge/libuninameslist/";
-    changelog = "https://github.com/fontforge/libuninameslist/blob/${version}/ChangeLog";
+    changelog = "https://github.com/fontforge/libuninameslist/blob/${finalAttrs.version}/ChangeLog";
     description = "Library of Unicode names and annotation data";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erictapen ];
     platforms = lib.platforms.all;
   };
-}
+})

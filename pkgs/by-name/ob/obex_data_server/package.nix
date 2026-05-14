@@ -11,12 +11,12 @@
   dbus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obex-data-server";
   version = "0.4.6";
 
   src = fetchurl {
-    url = "http://tadas.dailyda.com/software/obex-data-server-${version}.tar.gz";
+    url = "http://tadas.dailyda.com/software/obex-data-server-${finalAttrs.version}.tar.gz";
     sha256 = "0kq940wqs9j8qjnl58d6l3zhx0jaszci356xprx23l6nvdfld6dk";
   };
 
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://wiki.muiline.com/obex-data-server";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

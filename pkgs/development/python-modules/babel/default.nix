@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # tests
   freezegun,
+  glibcLocales,
   pytestCheckHook,
   pytz,
   tzdata,
@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-DFTP+xn2kM3MUqO1C8v3HgeoCNHIDVSfJFm50s8K+50=";
@@ -31,6 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    glibcLocales
     pytestCheckHook
     # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz

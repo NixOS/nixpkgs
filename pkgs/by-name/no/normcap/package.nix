@@ -7,7 +7,7 @@
   leptonica,
   wl-clipboard,
   libnotify,
-  xorg,
+  xvfb,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -27,18 +27,16 @@ let
 
 in
 
-ps.buildPythonApplication rec {
+ps.buildPythonApplication (finalAttrs: {
   pname = "normcap";
-  version = "0.5.9";
-  format = "pyproject";
-
-  disabled = ps.pythonOlder "3.9";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dynobo";
     repo = "normcap";
-    tag = "v${version}";
-    hash = "sha256-K8BkPRHmcJSzYPxv49a1whKpe+StK7m0ea7t2YNUESw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jkaXwBpa09J6Q07vlnQW8TsUtpiYrPkfMspZI1TyE1g=";
   };
 
   pythonRemoveDeps = [
@@ -66,12 +64,12 @@ ps.buildPythonApplication rec {
     ps.pyside6
     ps.jeepney
     ps.toml
+    ps.zxing-cpp
   ];
 
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
-      --set QT_QPA_PLATFORM xcb
       --prefix PATH : ${lib.makeBinPath wrapperDeps}
     )
   ''
@@ -99,8 +97,8 @@ ps.buildPythonApplication rec {
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/share/pixmaps
-    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/pixmaps/
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/icons/hicolor/256x256/apps
   '';
 
   nativeCheckInputs =
@@ -113,7 +111,7 @@ ps.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       ps.pytest-xvfb
-      xorg.xvfb
+      xvfb
     ];
 
   preCheck = ''
@@ -214,7 +212,7 @@ ps.buildPythonApplication rec {
   meta = {
     description = "OCR powered screen-capture tool to capture information instead of images";
     homepage = "https://dynobo.github.io/normcap/";
-    changelog = "https://github.com/dynobo/normcap/releases/tag/v${version}";
+    changelog = "https://github.com/dynobo/normcap/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       cafkafk
@@ -222,4 +220,4 @@ ps.buildPythonApplication rec {
     ];
     mainProgram = "normcap";
   };
-}
+})

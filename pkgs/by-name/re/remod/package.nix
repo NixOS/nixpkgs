@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   doInstallCheck = true;
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "chmod for human beings";
     homepage = "https://github.com/samuela/remod";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "remod";
   };
 })

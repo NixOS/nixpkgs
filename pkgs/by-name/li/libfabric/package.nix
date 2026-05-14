@@ -11,17 +11,17 @@
   numactl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfabric";
-  version = "2.2.0";
+  version = "2.5.0";
 
   enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "ofiwg";
     repo = "libfabric";
-    rev = "v${version}";
-    sha256 = "sha256-BY3a7CxtMJl5/+7t4BzJRTbMnDs1oL3UhDOPRB+D3+U=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-VgVCsurXmeJdS6cUhSp6ILcL4b31FuycVB6lv7jf0JM=";
   };
 
   outputs = [
@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     (if enableOpx then "--enable-opx" else "--disable-opx")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ofiwg.github.io/libfabric/";
     description = "Open Fabric Interfaces";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       bsd2
     ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.bzizou ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bzizou ];
   };
-}
+})

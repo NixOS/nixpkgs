@@ -23,12 +23,12 @@ buildNpmPackage rec {
     rm -r $out/lib/node_modules/mapscii/node_modules/.bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Braille & ASCII world map renderer for your console";
     homepage = "https://github.com/rastapasta/mapscii";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kinzoku ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kinzoku ];
     mainProgram = "mapscii";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

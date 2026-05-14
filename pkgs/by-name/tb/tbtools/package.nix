@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tbtools";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "tbtools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xLMnB8KliwHVU5y4L7K0a43gfdhLKFxnAx4wxGL9xMc=";
+    hash = "sha256-tDAaWFMZeJcU2wzrOD/4DLHerm/Iy56HTe5Qz98I23M=";
   };
 
-  cargoHash = "sha256-QuiDI2/XzhUKF7BGnoKeJ2143keJtmi+8WG1MpulLZo=";
+  cargoHash = "sha256-94O+ma6twGfXr/QM7nZRmNVV4s4Z2YnsYNsNELjnhiQ=";
 
   nativeBuildInputs = [
     pkg-config

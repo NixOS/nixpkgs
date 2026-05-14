@@ -1,5 +1,5 @@
 # QEMU-related utilities shared between various Nix expressions.
-{ lib, pkgs }:
+{ lib, stdenv }:
 
 let
   zeroPad =
@@ -17,37 +17,44 @@ rec {
   ];
 
   qemuSerialDevice =
-    if with pkgs.stdenv.hostPlatform; isx86 || isLoongArch64 || isMips64 || isRiscV then
+    if with stdenv.hostPlatform; isx86 || isLoongArch64 || isMips64 || isRiscV then
       "ttyS0"
-    else if (with pkgs.stdenv.hostPlatform; isAarch || isPower) then
+    else if (with stdenv.hostPlatform; isAarch || isPower) then
       "ttyAMA0"
     else
-      throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
+      throw "Unknown QEMU serial device for system '${stdenv.hostPlatform.system}'";
 
-  qemuBinary =
-    qemuPkg:
+  qemuBinary = qemuPkg: qemuBinaryWith { inherit qemuPkg; };
+
+  qemuBinaryWith =
+    {
+      qemuPkg,
+      forceAccel ? false,
+    }:
     let
       hostStdenv = qemuPkg.stdenv;
       hostSystem = hostStdenv.system;
-      guestSystem = pkgs.stdenv.hostPlatform.system;
+      guestSystem = stdenv.hostPlatform.system;
+
+      accel = accelName: if forceAccel then accelName else "${accelName}:tcg";
 
       linuxHostGuestMatrix = {
-        x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=kvm:tcg -cpu max";
-        armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -machine virt,accel=kvm:tcg -cpu max";
-        aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=max,accel=kvm:tcg -cpu max";
+        x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=${accel "kvm"} -cpu max";
+        armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -machine virt,accel=${accel "kvm"} -cpu max";
+        aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=max,accel=${accel "kvm"} -cpu max";
         powerpc64le-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
         powerpc64-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
         riscv32-linux = "${qemuPkg}/bin/qemu-system-riscv32 -machine virt";
         riscv64-linux = "${qemuPkg}/bin/qemu-system-riscv64 -machine virt";
-        x86_64-darwin = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=kvm:tcg -cpu max";
+        x86_64-darwin = "${qemuPkg}/bin/qemu-system-x86_64 -machine accel=${accel "kvm"} -cpu max";
       };
       otherHostGuestMatrix = {
         aarch64-darwin = {
-          aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=2,accel=hvf:tcg -cpu max";
+          aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=2,accel=${accel "hvf"} -cpu max";
           inherit (otherHostGuestMatrix.x86_64-darwin) x86_64-linux;
         };
         x86_64-darwin = {
-          x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine type=q35,accel=hvf:tcg -cpu max";
+          x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine type=q35,accel=${accel "hvf"} -cpu max";
         };
       };
 

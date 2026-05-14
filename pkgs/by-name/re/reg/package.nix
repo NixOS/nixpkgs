@@ -5,14 +5,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "reg";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "genuinetools";
     repo = "reg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tfBetjoJkr84XLEEcfdRTtc0UZ4m/uRH1Fpr91lQn8o=";
   };
 
@@ -33,11 +33,11 @@ buildGoModule rec {
   vendorHash = null;
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Docker registry v2 command line client and repo listing generator with security checks";
     homepage = "https://github.com/genuinetools/reg";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ereslibre ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ereslibre ];
     mainProgram = "reg";
   };
-}
+})

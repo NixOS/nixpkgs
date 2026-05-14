@@ -8,14 +8,14 @@
   xz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rdedup";
   version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "dpc";
     repo = "rdedup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GEYP18CaCQShvCg8T7YTvlybH1LNO34KBxgmsTv2Lzs=";
   };
 
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     xz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data deduplication with compression and public key encryption";
     mainProgram = "rdedup";
     homepage = "https://github.com/dpc/rdedup";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dywedir ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dywedir ];
   };
-}
+})

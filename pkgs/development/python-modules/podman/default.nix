@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fixtures,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   rich,
@@ -13,18 +12,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "podman";
-  version = "5.5.0";
+  version = "5.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
-    tag = "v${version}";
-    hash = "sha256-c8uU5WZsZufi/QNJkXh2Z1bmoM/oOm6+rggm4J+pnIc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i4eWC1MyBdc+en3W3+4fdeDP79Z2hsk9SIg3PfG0mI0=";
   };
 
   build-system = [ setuptools ];
@@ -61,11 +58,18 @@ buildPythonPackage rec {
     "VolumesIntegrationTest"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Access to the host's filesystem
+    "podman/tests/integration/test_container_create.py"
+    "podman/tests/unit/test_utils.py"
+    "podman/tests/integration/test_volumes.py"
+  ];
+
+  meta = {
     description = "Python bindings for Podman's RESTful API";
     homepage = "https://github.com/containers/podman-py";
-    changelog = "https://github.com/containers/podman-py/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/containers/podman-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -15,15 +15,15 @@
   libwebsockets,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seafile-shared";
-  version = "9.0.14";
+  version = "9.0.15";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
-    rev = "v${version}";
-    hash = "sha256-1vQ2iGwdzd4c69LYAJjSsUPt8AVL3kOPw0GsxgeN+bU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mWIOk8O3vlg7Sm/5ZQUB5nOgi8/pEczCGQ94p0km/GI=";
   };
 
   postPatch = ''
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
       schmittlauch
     ];
   };
-}
+})

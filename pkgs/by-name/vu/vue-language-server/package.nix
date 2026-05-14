@@ -2,31 +2,38 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
   nix-update-script,
   makeBinaryWrapper,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.0.6";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-APzsrj/Ap6bSVw6atKYK4mndw2JJLZ8aNlaZL+GYLSM=";
+    hash = "sha256-Igy7Tc2rWbLX7jeuQm8MYbgeKfPYA1a92E8B11CrUyo=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-cgFA2yhq/gjjJFrTzg5QKdk8Lt+BYUo/qFpe6ZSon+k=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-koRJkT/JloptmtQKLprqms53TL/Q4XHaktIl/6PIasw=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     makeBinaryWrapper
   ];
 
@@ -37,8 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    pnpm prune --prod
-    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    # the mv commands are workaround for https://github.com/pnpm/pnpm/issues/8307
+    mv packages packages.dontpruneme
+    CI=true pnpm prune --prod
+    find packages.dontpruneme/**/node_modules -xtype l -delete
+    mv packages.dontpruneme packages
+
+    find -type f \( -name "*.ts" ! -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
 
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules packages/language-server/node_modules -xtype l -delete

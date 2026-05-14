@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pywmspro";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mback2k";
     repo = "pywmspro";
     tag = version;
-    hash = "sha256-o/+WjdU9+Vh1CnZYF2IsNpK5cubAFvsqANZ4GxrKFHI=";
+    hash = "sha256-cQ2qDVH7CfCj3he4f01tkwVrgCuE+NxSTeKINh75gxc=";
   };
 
   build-system = [

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "libopenglrecorder";
-  version = "unstable-2020-08-13";
+  version = "0.1.0-unstable-2025-10-07";
 
   src = fetchFromGitHub {
     owner = "Benau";
     repo = "libopenglrecorder";
-    rev = "c1b81ce26e62fae1aaa086b5cd337cb12361ea3d";
-    sha256 = "13s2d7qs8z4w0gb3hx03n97xmwl07d4s473m4gw90qcvmz217kiz";
+    rev = "6101627e9952ec1a835dad38475f281878526052";
+    hash = "sha256-GTwj0StGvcxEH9JX5W1H+eUj8c6mankGuil+QqCv8QM=";
   };
 
   nativeBuildInputs = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     libvorbis
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library allowing Optional async readback OpenGL frame buffer with optional audio recording";
     homepage = "https://github.com/Benau/libopenglrecorder";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = with platforms; windows ++ linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = with lib.platforms; windows ++ linux;
   };
 }

@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "revive";
   version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = "revive";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-89BlSc2tgxAJUGZM951fF+0H+SOsl0+xz/G18neRZxI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -29,7 +29,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mgechev/revive/cli.version=${version}"
+    "-X github.com/mgechev/revive/cli.version=${finalAttrs.version}"
     "-X github.com/mgechev/revive/cli.builtBy=nix"
   ];
 
@@ -48,11 +48,11 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
     mainProgram = "revive";
     homepage = "https://revive.run";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maaslalani ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

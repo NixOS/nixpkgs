@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dcrd";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrd";
-    tag = "release-v${version}";
+    tag = "release-v${finalAttrs.version}";
     hash = "sha256-nSocqwXgJhvfbdElddbb1gGxoygmtVtK6DbiSuMxYew=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ juaningan ];
   };
-}
+})

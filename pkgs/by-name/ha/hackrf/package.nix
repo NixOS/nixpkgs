@@ -8,15 +8,15 @@
   fftwSinglePrec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hackrf";
-  version = "2024.02.1";
+  version = "2026.01.3";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "hackrf";
-    rev = "v${version}";
-    sha256 = "sha256-b3nGrk2P6ZLYBSCSD7c0aIApCh3ZoVDcFftybqm4vx0=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-/RSZ+jkh4wmb0n8Kiee9Nr5D6LPYdmZVigpsBagAaLg=";
   };
 
   nativeBuildInputs = [
@@ -40,16 +40,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  postPatch = ''
-    substituteInPlace host/cmake/modules/FindFFTW.cmake \
-      --replace "find_library (FFTW_LIBRARIES NAMES fftw3)" "find_library (FFTW_LIBRARIES NAMES fftw3f)"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Open source SDR platform";
     homepage = "https://greatscottgadgets.com/hackrf/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ sjmackenzie ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ sjmackenzie ];
   };
-}
+})

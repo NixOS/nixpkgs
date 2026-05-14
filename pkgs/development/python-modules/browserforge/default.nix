@@ -1,34 +1,33 @@
 {
   lib,
   aiofiles,
+  apify-fingerprint-datapoints,
   buildPythonPackage,
   click,
   fetchFromGitHub,
   httpx,
   orjson,
   poetry-core,
-  pythonOlder,
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "browserforge";
-  version = "1.2.3";
+  version = "1.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "daijro";
     repo = "browserforge";
-    tag = "v${version}";
-    hash = "sha256-D5GlUZ4KT6kqPQVcpli8T++xoXl1YUVGZu8rePJQ44A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8mh1Wok96rwUNAdnaoI1VYkyNr50JX/K7o04n/epuMo=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiofiles
+    apify-fingerprint-datapoints
     click
     httpx
     orjson
@@ -46,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   bitarray,
   setuptools,
   pytest-benchmark,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "bitstring";
   version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";
@@ -46,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitstring" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
     changelog = "https://github.com/scott-griffiths/bitstring/releases/tag/${src.tag}";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

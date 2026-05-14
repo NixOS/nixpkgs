@@ -9,10 +9,12 @@
   lib,
   libdrm,
   libedit,
+  libgbm,
   libpulseaudio,
   libva,
   libxkbcommon,
   libxml2_13,
+  makeDesktopItem,
   makeShellWrapper,
   minizip,
   nss,
@@ -20,12 +22,23 @@
   stdenv,
   writeShellScript,
   xkeyboard_config,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxinerama,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxshmfence,
 }:
 let
   pname = "plex-desktop";
-  version = "1.109.0";
-  rev = "85";
+  version = "1.112.0";
+  rev = "87";
   meta = {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
@@ -40,12 +53,21 @@ let
     platforms = [ "x86_64-linux" ];
     mainProgram = "plex-desktop";
   };
+  desktopItem = makeDesktopItem {
+    name = "plex-desktop";
+    desktopName = "Plex";
+    exec = "plex-desktop";
+    icon = "plex-desktop";
+    terminal = false;
+    categories = [ "AudioVideo" ];
+    startupWMClass = "Plex";
+  };
   plex-desktop = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchurl {
       url = "https://api.snapcraft.io/api/v1/snaps/download/qc6MFRM433ZhI1XjVzErdHivhSOhlpf0_${rev}.snap";
-      hash = "sha512-BSnA84purHv6qIVELp+AJI2m6erTngnupbuoCZTaje6LCd2+5+U+7gqWdahmO1mxJEGvuBwzetdDrp1Ibz5a6A==";
+      hash = "sha512-xDBnqPkYIpSsUe+X6oalecNz1bsX0O3pXUTI9GBZLAsT+4U4qdovn2ILPh4APJaqwNEswoIYepkjTSmm9pOI9A==";
     };
 
     nativeBuildInputs = [
@@ -58,6 +80,7 @@ let
       elfutils
       ffmpeg_6-headless
       libedit
+      libgbm
       libpulseaudio
       libva
       libxkbcommon
@@ -65,18 +88,18 @@ let
       minizip
       nss
       stdenv.cc.cc
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libxshmfence
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.xrandr
+      libxcomposite
+      libxdamage
+      libxinerama
+      libxrandr
+      libxrender
+      libxtst
+      libxshmfence
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+      xrandr
     ];
 
     strictDeps = true;
@@ -133,11 +156,8 @@ buildFHSEnv {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
-    install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
-    substituteInPlace $out/share/applications/plex-desktop.desktop \
-      --replace-fail \
-      'Icon=''${SNAP}/meta/gui/icon.png' \
-      'Icon=${plex-desktop}/meta/gui/icon.png'
+    install -m 444 -D ${desktopItem}/share/applications/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
+    install -m 444 -D ${plex-desktop}/meta/gui/icon.png $out/share/icons/hicolor/scalable/apps/plex-desktop.png
   '';
 
   runScript = writeShellScript "plex-desktop.sh" ''

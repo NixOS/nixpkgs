@@ -1,60 +1,87 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  installShellFiles,
-  mock,
-  openstacksdk,
+  fetchFromGitHub,
   pbr,
+  setuptools,
+  installShellFiles,
+
+  # direct
   python-keystoneclient,
-  pythonOlder,
+
+  # tests
+  stestrCheckHook,
+  versionCheckHook,
+  hacking,
+  keystoneauth1,
   stestr,
+  openstacksdk,
+
+  # docs
+  sphinxHook,
+  openstackdocstheme,
+  sphinxcontrib-apidoc,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-swiftclient";
-  version = "4.8.0";
+  version = "4.10.0";
   pyproject = true;
-
-  src = fetchPypi {
-    pname = "python_swiftclient";
-    inherit version;
-    hash = "sha256-RBYsq0aTaMr9wl4MjE6VornbGkRFakjOCA/iyppLOGM=";
-  };
-
-  nativeBuildInputs = [ installShellFiles ];
 
   build-system = [
     pbr
+    setuptools
   ];
+
+  env.PBR_VERSION = finalAttrs.version;
+
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-swiftclient";
+    tag = finalAttrs.version;
+    hash = "sha256-G3o9R3+hDQgvSnmle0paZo/KV56OMU38tIXqUJGmUaQ=";
+  };
+
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxcontrib-apidoc
+    sphinxHook
+    installShellFiles
+  ];
+
+  sphinxBuilders = [ "man" ];
 
   dependencies = [
     python-keystoneclient
   ];
 
   nativeCheckInputs = [
-    mock
+    stestrCheckHook
     openstacksdk
+    hacking
+    keystoneauth1
     stestr
+    openstacksdk
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   postInstall = ''
-    installShellCompletion --cmd swift \
-      --bash tools/swift.bash_completion
+    installShellCompletion --cmd swift --bash tools/swift.bash_completion
     installManPage doc/manpages/*
   '';
 
-  checkPhase = ''
-    stestr run
-  '';
+  pythonImportsCheck = [
+    "swiftclient"
+  ];
 
-  pythonImportsCheck = [ "swiftclient" ];
-
-  meta = with lib; {
-    homepage = "https://github.com/openstack/python-swiftclient";
-    description = "Python bindings to the OpenStack Object Storage API";
+  meta = {
+    description = "Client library for OpenStack Swift API";
     mainProgram = "swift";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    homepage = "https://docs.openstack.org/python-swiftclient/latest/";
+    downloadPage = "https://github.com/openstack/python-swiftclient/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
-}
+})

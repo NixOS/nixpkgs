@@ -12,14 +12,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
-  version = "2.53.7";
+  version = "2.54.0";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QmYcxzsnbRDQdqkLh82OLWrLF6v3qzf1aOIcnz0kwEk=";
+    hash = "sha256-48d+HuFuhjztWz0aoi6DNlBPrV9J05/jjBofXY1PVBg=";
   };
+
+  # Allow the build scripts to correctly call ocamlfind & detect dependencies
+  patches = [ ./fix-ocamlfind-env.patch ];
 
   strictDeps = true;
 

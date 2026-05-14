@@ -10,6 +10,16 @@
   xdg-user-dirs,
   keybinder3,
   libnotify,
+  gst_all_1,
+  libva,
+  libvdpau,
+  lcms2,
+  libarchive,
+  alsa-lib,
+  libpulseaudio,
+  libgbm,
+  libxscrnsaver,
+  libxv,
 }:
 
 let
@@ -17,11 +27,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-GzG1IpI3azJP9uWHUm90+MJjeU+3QZuDtekkpB9/R7c=";
+        hash = "sha256-6akFImNU5EQLW6f2dQRUXUC8srM32xyVI14pjVxV6Sw=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-E1V/F+ZM6r/R8r/AhifS2rQwZHrL2J67FbCvVMhm89Q=";
+        hash = "sha256-sJ4mXSYsJICXMpDZemqRF3uYgB9SWNdbzcT1s2gHpZA=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -30,7 +40,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.9.7";
+  version = "0.11.8";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -44,10 +54,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     gtk3
     keybinder3
     libnotify
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    libva
+    libvdpau
+    lcms2
+    libarchive
+    alsa-lib
+    libpulseaudio
+    libgbm
+    libxscrnsaver
+    libxv
   ];
 
   dontBuild = true;
@@ -101,14 +122,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "appflowy";
   };
 })

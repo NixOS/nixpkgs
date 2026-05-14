@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dontgo403";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "devploit";
     repo = "dontgo403";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qA1i8l2oBQQ5IF8ho3K2k+TAndUTFGwb2NfhyFqfKzU=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
     description = "Tool to bypass 40X response codes";
     mainProgram = "nomore403";
     homepage = "https://github.com/devploit/dontgo403";
-    changelog = "https://github.com/devploit/dontgo403/releases/tag/${version}";
+    changelog = "https://github.com/devploit/dontgo403/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,18 +1,17 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   libGL,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxc";
   version = "1.0.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "wxHaskell";
     repo = "wxHaskell";
     rev = "wxc-${finalAttrs.version}";
@@ -23,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wxGTK32 # in nativeBuildInputs because of wx-config
+    wxwidgets_3_2 # in nativeBuildInputs because of wx-config
   ];
 
   buildInputs = [
@@ -42,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
       wxWindowsException31
     ];
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = wxGTK32.meta.platforms;
+    platforms = wxwidgets_3_2.meta.platforms;
   };
 })

@@ -16,8 +16,6 @@
   libgee,
   libnotify,
   libpulseaudio,
-  libqtdbusmock,
-  libqtdbustest,
   libsForQt5,
   libxml2,
   lomiri,
@@ -58,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       tests/volume-control-test.cc \
       --replace-quiet 'loop(50)' 'loop(500)' \
       --replace-quiet 'loop(100)' 'loop(1000)' \
-      --replace-quiet 'loop(500)' 'loop(5000)' \
+      --replace-quiet 'loop(500)' 'loop(5000)'
   '';
 
   strictDeps = true;
@@ -99,8 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-test-runner
     gtest
     libsForQt5.qtbase
-    libqtdbusmock
-    libqtdbustest
+    libsForQt5.libqtdbusmock
+    libsForQt5.libqtdbustest
     lomiri.gmenuharness
   ];
 

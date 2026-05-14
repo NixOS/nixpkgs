@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coregarage";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "coregarage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-boe7z8KPnMaoWekBFS4g/Ay98rpREeLMAsHOr2olYws=";
+    hash = "sha256-aPBqlt/bL1cx6mLaf/gEFQB+NEvGQJioBJZ4QAxTwzw=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "coregarage";
     homepage = "https://gitlab.com/cubocore/coreapps/coregarage";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

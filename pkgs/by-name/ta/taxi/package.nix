@@ -51,12 +51,12 @@ stdenv.mkDerivation {
   ];
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ellie-commons/taxi";
     description = "FTP Client that drives you anywhere";
-    license = licenses.lgpl3Plus;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "io.github.ellie_commons.taxi";
   };
 }

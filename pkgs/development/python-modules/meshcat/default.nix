@@ -11,13 +11,13 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meshcat";
   version = "0.3.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LP4XzeT+hdByo94Bip2r9WJvgMJV//LOY7JqSNJIStk=";
   };
 
@@ -40,11 +40,11 @@ buildPythonPackage rec {
   # requires a running MeshCat viewer
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rdeits/meshcat-python";
     description = "WebGL-based 3D visualizer for Python";
     mainProgram = "meshcat-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

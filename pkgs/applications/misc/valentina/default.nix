@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/smart-pattern/valentina/-/blob/v${version}/ChangeLog.txt";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

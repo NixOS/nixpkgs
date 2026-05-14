@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "3.2.9";
+  version = "3.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "andrewsayre";
     repo = "pysmartthings";
     tag = "v${version}";
-    hash = "sha256-5buCkZ+VBZFHId616YxTUPNVd1QRh+bO0OBq0JL4dvo=";
+    hash = "sha256-Z3E+7z/4P08OI/pgMe0g5vnzfNLLTd712jFdUqgBFXc=";
   };
 
   build-system = [ poetry-core ];
@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmartthings" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the SmartThings cloud API";
     homepage = "https://github.com/andrewsayre/pysmartthings";
     changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

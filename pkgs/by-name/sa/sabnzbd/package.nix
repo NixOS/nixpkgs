@@ -15,8 +15,8 @@
 }:
 
 let
-  sabctoolsVersion = "8.2.5";
-  sabctoolsHash = "sha256-ZEC813/JpGPEFL+nXKFAXFfUrrhECCIqONe27LwS00g=";
+  sabctoolsVersion = "9.4.0";
+  sabctoolsHash = "sha256-JkRRtZnzp83dMKXiuqOXaTm8UOpkkhmjH2ysS8TY0DI=";
 
   pythonEnv = python3.withPackages (
     ps: with ps; [
@@ -45,6 +45,7 @@ let
       pysocks
       python-dateutil
       pytz
+      rarfile
       rebulk
       # sabnzbd requires a specific version of sabctools
       (sabctools.overridePythonAttrs (old: {
@@ -72,14 +73,14 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "4.5.2";
+  version = "5.0.1";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
     rev = version;
-    hash = "sha256-8Q/6H9DfiVkonsIvlv7Y4yDHrvpE9dB/5KxUff14qkA=";
+    hash = "sha256-wx3lNGeHsNvd+nLiI9jfIKHcsVstfjEpZry6o3xbWd4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -103,11 +104,11 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
     homepage = "https://sabnzbd.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jojosch
       adamcstephens

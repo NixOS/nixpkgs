@@ -14,25 +14,30 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.137.0";
-  format = "pyproject";
+  version = "1.152.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-jnbW1p5JK00Of6XqoDfWs/4SqIztafjkvXUDWhMTm30=";
+    hash = "sha256-81nqT6/TuqtQjjqnT6O+72WCCPlZ9JJKbWczMh6mbcU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-qpgDErV1VVzaUHHQX4ReXCPihdrSKI/4HtbDeQIblR8=";
+    hash = "sha256-RwUsiS6JM5dmqquKVtyaBp67DYZys6Uecy0V6AabTk4=";
   };
 
-  build-system = with python3Packages; [
-    poetry-core
-    setuptools-rust
-  ];
+  build-system =
+    with python3Packages;
+    [
+      poetry-core
+      setuptools-rust
+    ]
+    ++ [
+      rustPlatform.maturinBuildHook
+    ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -46,8 +51,6 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
-
-  pythonRemoveDeps = [ "setuptools_rust" ];
 
   dependencies =
     with python3Packages;
@@ -74,6 +77,8 @@ python3Packages.buildPythonApplication rec {
       pydantic
       pymacaroons
       pyopenssl
+      pyparsing
+      pyrsistent
       pyyaml
       service-identity
       signedjson
@@ -102,7 +107,7 @@ python3Packages.buildPythonApplication rec {
       authlib
     ];
     systemd = [
-      systemd
+      systemd-python
     ];
     url-preview = [
       lxml
@@ -129,7 +134,7 @@ python3Packages.buildPythonApplication rec {
     mock
     parameterized
   ])
-  ++ lib.filter (pkg: !pkg.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
+  ++ lib.filter (pkg: !pkg.meta.broken) (lib.concatAttrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

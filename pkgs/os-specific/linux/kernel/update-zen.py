@@ -58,30 +58,30 @@ def nix_prefetch_url(url, unpack=False):
     return out.decode('utf-8').rstrip()
 
 
-def update_file(relpath, variant, version, suffix, sha256):
+def update_file(relpath, version, suffix, sha256):
     file_path = os.path.join(DIR, relpath)
     with fileinput.FileInput(file_path, inplace=True) as f:
         for line in f:
             result = line
             result = re.sub(
-                fr'^      version = ".+"; # {variant}',
-                f'      version = "{version}"; # {variant}',
+                r'^(\s*)version = ".+";',
+                fr'\1version = "{version}";',
                 result)
             result = re.sub(
-                fr'^      suffix = ".+"; # {variant}',
-                f'      suffix = "{suffix}"; # {variant}',
+                r'^(\s*)suffix = ".+";',
+                fr'\1suffix = "{suffix}";',
                 result)
             result = re.sub(
-                fr'^      sha256 = ".+"; # {variant}',
-                f'      sha256 = "{sha256}"; # {variant}',
+                r'^(\s*)sha256 = ".+";',
+                fr'\1sha256 = "{sha256}";',
                 result)
             print(result, end='')
 
 
-def read_file(relpath, variant):
+def read_file(relpath):
     file_path = os.path.join(DIR, relpath)
-    re_version = re.compile(fr'^\s*version = "(.+)"; # {variant}')
-    re_suffix = re.compile(fr'^\s*suffix = "(.+)"; # {variant}')
+    re_version = re.compile(r'^\s*version = "(.+)";')
+    re_suffix = re.compile(r'^\s*suffix = "(.+)";')
     version = None
     suffix = None
     with fileinput.FileInput(file_path, mode='r') as f:
@@ -102,12 +102,7 @@ def read_file(relpath, variant):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 1:
-        panic("Update variant expected")
-    variant = sys.argv[1]
-    if variant not in ("zen", "lqx"):
-        panic(f"Unexepected variant instead of 'zen' or 'lqx': {sys.argv[1]}")
-    pattern = re.compile(fr"v(\d+\.\d+\.?\d*)-({variant}\d+)")
+    pattern = re.compile(fr"v(\d+\.\d+\.?\d*)-(zen\d+)")
     zen_tags = github_api_request('repos/zen-kernel/zen-kernel/releases')
     for tag in zen_tags:
         zen_match = pattern.match(tag['tag_name'])
@@ -116,7 +111,7 @@ if __name__ == "__main__":
             zen_version = zen_match.group(1)
             zen_suffix = zen_match.group(2)
             break
-    old_version, old_suffix = read_file('zen-kernels.nix', variant)
+    old_version, old_suffix = read_file('zen-kernels.nix')
     if old_version != zen_version or old_suffix != zen_suffix:
         zen_hash = nix_prefetch_git('https://github.com/zen-kernel/zen-kernel.git', zen_tag)
-        update_file('zen-kernels.nix', variant, zen_version, zen_suffix, zen_hash)
+        update_file('zen-kernels.nix', zen_version, zen_suffix, zen_hash)

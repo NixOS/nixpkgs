@@ -5,11 +5,11 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.4.41";
   pname = "libzen";
   src = fetchurl {
-    url = "https://mediaarea.net/download/source/libzen/${version}/libzen_${version}.tar.bz2";
+    url = "https://mediaarea.net/download/source/libzen/${finalAttrs.version}/libzen_${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-6yN9fT3Kbca6BocZQgon3gk0p4PMrrKGdWKzWvOQHi0=";
   };
 
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Shared library for libmediainfo and mediainfo";
     homepage = "https://mediaarea.net/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.devhell ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.devhell ];
   };
-}
+})

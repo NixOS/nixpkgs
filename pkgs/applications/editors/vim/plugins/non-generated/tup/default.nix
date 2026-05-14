@@ -17,5 +17,16 @@ vimUtils.buildVimPlugin {
     cp "${ftdetect}" vim-plugin/ftdetect/tup.vim
     cd vim-plugin
   '';
-  meta.maintainers = with lib.maintainers; [ enderger ];
+  meta = {
+    inherit (tup.meta)
+      description
+      mainProgram
+      longDescription
+      homepage
+      license
+      platforms
+      broken
+      ;
+    maintainers = with lib.maintainers; [ enderger ];
+  };
 }

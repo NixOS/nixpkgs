@@ -3,6 +3,7 @@
   lib,
   options,
   pkgs,
+  utils,
   ...
 }:
 
@@ -67,7 +68,7 @@ let
         ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ configFile ] ++ cfg.extraConfigFiles)} \
         "${listenerProtocol}://${
           if (isIpv6 bindAddress) then "[${bindAddress}]" else "${bindAddress}"
-        }:${builtins.toString clientListener.port}/"
+        }:${toString clientListener.port}/"
     '';
 
   defaultExtras = [
@@ -1297,6 +1298,15 @@ in
           '';
         };
 
+        extraArgs = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          example = [ "--no-secrets-in-config" ];
+          description = ''
+            Extra command lines argument that are passed to synapse and workers.
+          '';
+        };
+
         extraConfigFiles = mkOption {
           type = types.listOf types.path;
           default = [ ];
@@ -1431,6 +1441,10 @@ in
       gid = config.ids.gids.matrix-synapse;
     };
 
+    systemd.slices.system-synapse = {
+      description = "Matrix reference homeserver";
+    };
+
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
       wants = [ "network-online.target" ];
@@ -1470,6 +1484,7 @@ in
             ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
             Restart = "on-failure";
             UMask = "0077";
+            Slice = "system-synapse.slice";
 
             # Security Hardening
             # Refer to systemd.exec(5) for option descriptions.
@@ -1541,7 +1556,8 @@ in
                         ]
                         ++ cfg.extraConfigFiles
                       )}
-                      --keys-directory ${cfg.dataDir}
+                      --keys-directory ${cfg.dataDir} \
+                      ${utils.escapeSystemdExecArgs cfg.extraArgs}
                   '';
                 };
               }
@@ -1574,7 +1590,8 @@ in
                   ${concatMapStringsSep "\n  " (x: "--config-path ${x} \\") (
                     [ configFile ] ++ cfg.extraConfigFiles
                   )}
-                  --keys-directory ${cfg.dataDir}
+                  --keys-directory ${cfg.dataDir} \
+                  ${utils.escapeSystemdExecArgs cfg.extraArgs}
               '';
             };
           }

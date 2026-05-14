@@ -890,12 +890,13 @@ in
         '';
 
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
         ExecStart = "${exe} web --pid /run/gitea/gitea.pid";
         Restart = "always";
+        WatchdogSec = 30;
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
@@ -912,11 +913,12 @@ in
         ]
         ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
-        # Capabilities
-        CapabilityBoundingSet = "";
-        # Security
-        NoNewPrivileges = !useSendmail;
+        # one mid size deployments, Gitea already gets killed when doing DB migrations
+        TimeoutStartSec = "3m";
+
         # Sandboxing
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = !useSendmail;
         ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;

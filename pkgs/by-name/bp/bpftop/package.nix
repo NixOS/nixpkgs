@@ -8,20 +8,18 @@
   libbpf,
   clangStdenv,
 }:
-let
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "bpftop";
-  version = "0.7.0";
-in
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
-  inherit pname version;
+  version = "0.9.0";
+
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "bpftop";
-    tag = "v${version}";
-    hash = "sha256-h6iNc2z5UF+Z4FTaZXfhbz7gIIGlT8pbJ7OcP6uZENc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QukcBq80tASPSHRg1yRouYiZqvca+ipp6RGzXqP2CwA=";
   };
 
-  cargoHash = "sha256-Z7E61XiEKM6zKm7LFIXPYCFoSwSHfq6QCfbRMmiBW+o=";
+  cargoHash = "sha256-33VamoVq8O4cgdweWRaDqo5ey2lbLAHoPQVPgmyQwh0=";
 
   buildInputs = [
     elfutils
@@ -46,4 +44,4 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     ];
     mainProgram = "bpftop";
   };
-}
+})

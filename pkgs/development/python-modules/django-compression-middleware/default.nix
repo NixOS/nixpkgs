@@ -23,11 +23,11 @@ buildPythonPackage rec {
     brotli
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Django middleware to compress responses using several algorithms";
     homepage = "https://github.com/friedelwolff/django-compression-middleware";
     changelog = "https://github.com/friedelwolff/django-compression-middleware/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ e1mo ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ e1mo ];
   };
 }

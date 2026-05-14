@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   copyDesktopItems,
   makeDesktopItem,
   desktopToDarwinBundle,
@@ -16,10 +17,10 @@
   libjpeg,
   gumbo,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
   enableCurl ? true,
   curl,
   openssl,
@@ -34,40 +35,39 @@
   enablePython ? false,
   which,
   swig,
-  xcbuild,
   gitUpdater,
   enableBarcode ? false,
-
   # for passthru.tests
   cups-filters,
   zathura,
   mupdf,
 }:
-
 assert enablePython -> enableCxx;
-
 let
-
   freeglut-mupdf = freeglut.overrideAttrs (old: rec {
     pname = "freeglut-mupdf";
     version = "3.0.0-r${src.rev}";
     src = fetchFromGitHub {
       owner = "ArtifexSoftware";
       repo = "thirdparty-freeglut";
-      rev = "13ae6aa2c2f9a7b4266fc2e6116c876237f40477";
-      hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
+      rev = "d5e2256d571b3ef66fb60716c99e35e9d3e570a2";
+      hash = "sha256-yVnVFh2KMpkRB0Emr1iiUwg8ZcPn/k4fnBtBsnv6jX0=";
     };
+
+    # cmake 4 compatibility, upstream is dead
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)"
+    '';
   });
-
 in
-
 stdenv.mkDerivation rec {
-  version = "1.26.1";
+  version = "1.27.2";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-vc4BfHdnRMKIsCECl37gN4y0NseN+BJ6I/KB8TYEBv0=";
+    hash = "sha256-VThnsTUwPcTCWrZ8XyNNjpAKDjbmboSE2ZrcBf4ehzc=";
   };
 
   patches = [
@@ -101,8 +101,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
   ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ]
-  ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ]
-  ++ lib.optionals (enableBarcode) [
+  ++ lib.optionals enableOcr [ "USE_TESSERACT=yes" ]
+  ++ lib.optionals enableBarcode [
     "barcode=yes"
     "USE_SYSTEM_ZXINGCPP=no"
   ];
@@ -118,13 +118,12 @@ stdenv.mkDerivation rec {
       ps.libclang
     ]))
   ]
-  ++ lib.optionals (enablePython) [
+  ++ lib.optionals enablePython [
     which
     swig
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
-    xcbuild
   ];
 
   buildInputs = [
@@ -136,10 +135,10 @@ stdenv.mkDerivation rec {
     gumbo
   ]
   ++ lib.optionals enableX11 [
-    libX11
-    libXext
-    libXi
-    libXrandr
+    libx11
+    libxext
+    libxi
+    libxrandr
   ]
   ++ lib.optionals enableCurl [
     curl
@@ -169,7 +168,7 @@ stdenv.mkDerivation rec {
 
   postBuild = lib.optionalString (enableCxx || enablePython) ''
     for dir in build/*; do
-      ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString (enableCxx) "01"}${lib.optionalString (enablePython) "23"}
+      ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString enableCxx "01"}${lib.optionalString enablePython "23"}
     done
   '';
 
@@ -239,15 +238,15 @@ stdenv.mkDerivation rec {
         ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
       ''
     else
-      lib.optionalString (enableX11) ''
+      lib.optionalString enableX11 ''
         ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
       ''
   )
-  + (lib.optionalString (enableCxx) ''
+  + (lib.optionalString enableCxx ''
     cp platform/c++/include/mupdf/*.h $out/include/mupdf
     cp build/*/libmupdfcpp.so* $out/lib
   '')
-  + (lib.optionalString (enablePython) (
+  + (lib.optionalString enablePython (
     ''
       mkdir -p $out/${python3.sitePackages}/mupdf
       cp build/*/_mupdf.so $out/${python3.sitePackages}/mupdf
@@ -260,7 +259,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.USE_SONAME = if (stdenv.hostPlatform.isDarwin) then "no" else "yes";
+  env.USE_SONAME = lib.boolToYesNo (!stdenv.hostPlatform.isDarwin);
 
   passthru = {
     tests = {
@@ -276,7 +275,7 @@ stdenv.mkDerivation rec {
     };
 
     updateScript = gitUpdater {
-      url = "https://git.ghostscript.com/mupdf.git";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git";
       ignoredVersions = ".rc.*";
     };
   };
@@ -284,7 +283,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
-    changelog = "https://git.ghostscript.com/?p=mupdf.git;a=blob_plain;f=CHANGES;hb=${version}";
+    changelog = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/mupdf.git/plain/CHANGES?h=refs/tags/${version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.unix;

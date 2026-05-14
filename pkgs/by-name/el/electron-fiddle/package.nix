@@ -1,9 +1,8 @@
 {
   buildFHSEnv,
-  electron_36,
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchurl,
+  electron,
   git,
   lib,
   makeDesktopItem,
@@ -17,32 +16,24 @@
 
 let
   pname = "electron-fiddle";
-  version = "0.36.5-unstable-2025-07-17";
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
-    rev = "0f3cd3007a336562a3c49ce95469022e6a729121"; # a revision that uses electron_36 instead of electron_33
-    hash = "sha256-1q8bDpEPrQNbngrGZj6/AQFFo06ED6uJ4Z/XVg6KNXw=";
-  };
-
-  electron = electron_36;
-
-  # As of https://github.com/electron/fiddle/pull/1316 this is fetched
-  # from the network and has no stable hash.  Grab an old version from
-  # the repository.
-  releasesJson = fetchurl {
-    url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
-    hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
+    tag = "v${version}";
+    hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
   };
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
     inherit version src;
 
+    patches = [ ./dont-use-initial-releases-json.patch ];
+
     offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
-      hash = "sha256-n6rzi4VohVaX+IIE1NITDsxXGyw0Z6Fx1WJb15YT9Sg=";
+      inherit src;
+      hash = "sha256-mB8WG6tX204u6AJ8qLbWrA+pSN3oDihHqj0t3bWcuAI=";
     };
 
     nativeBuildInputs = [
@@ -67,9 +58,7 @@ let
 
       # force @electron/packager to use our electron instead of downloading it, even if it is a different version
       substituteInPlace node_modules/@electron/packager/dist/packager.js \
-          --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
-
-      ln -s ${releasesJson} static/releases.json
+        --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
     '';
 
     yarnBuildScript = "package";
@@ -105,7 +94,7 @@ let
 in
 buildFHSEnv {
   inherit pname version;
-  runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+  runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
@@ -138,28 +127,28 @@ buildFHSEnv {
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
 
       # for running Electron before 18.3.5/19.0.5/20.0.0 inside
       gdk-pixbuf
 
       # for running Electron before 16.0.0 inside
-      xorg.libxshmfence
+      libxshmfence
 
       # for running Electron before 11.0.0 inside
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libxcursor
+      libxi
+      libxrender
+      libxtst
 
       # for running Electron before 10.0.0 inside
-      xorg.libXScrnSaver
+      libxscrnsaver
 
       # for running Electron before 8.0.0 inside
       libuuid
@@ -174,12 +163,12 @@ buildFHSEnv {
       # https://github.com/electron/electron/issues/13972
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron-fiddle";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       andersk
       tomasajt
     ];

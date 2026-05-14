@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kapowbang";
   version = "0.7.1";
 
@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "BBVA";
     repo = "kapow";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HUZ1Uf8Z2YbYvqKEUHckKAZ5q+C83zafi3UjemqHFM4=";
   };
 
@@ -21,11 +21,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BBVA/kapow";
     description = "Expose command-line tools over HTTP";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nilp0inter ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nilp0inter ];
     mainProgram = "kapow";
   };
-}
+})

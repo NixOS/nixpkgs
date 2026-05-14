@@ -5,27 +5,27 @@
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-nomad";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "rraval";
     repo = "git-nomad";
-    rev = "v${version}";
-    sha256 = "sha256-G/i+mCKZSe8tPMuCLzymkU9SGyFNHY74cGhcC4ru0/k=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-0svIieFrWIXH25q9dNDzlywYrSe0syhb0qpkDbRAfd4=";
   };
 
-  cargoHash = "sha256-WfmHQ9HXEGfAKQXPMJFNeuOYA0NbmwWdntZjP/YHWCw=";
+  cargoHash = "sha256-zmjHD7EBXTppfB40UOT/SvKIqQj+vb7Sriasu1twTrg=";
 
   nativeCheckInputs = [ git ];
 
   meta = {
     description = "Synchronize work-in-progress git branches in a light weight fashion";
     homepage = "https://github.com/rraval/git-nomad";
-    changelog = "https://github.com/rraval/git-nomad/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rraval/git-nomad/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rraval ];
     mainProgram = "git-nomad";
   };
-}
+})

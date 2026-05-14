@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bedops";
   version = "2.4.42";
 
   src = fetchFromGitHub {
     owner = "bedops";
     repo = "bedops";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-IF2MWGpdnP8PKwLRboe5bxu8N+gV4qZ82BemJE/JCU0=";
   };
 
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Suite of tools for addressing questions arising in genomics studies";
     homepage = "https://github.com/bedops/bedops";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.x86_64;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.x86_64;
   };
-}
+})

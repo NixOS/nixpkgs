@@ -10,7 +10,6 @@
   pillow,
   psutil,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   ujson,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.28.0";
+  version = "4.30.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     tag = version;
-    hash = "sha256-T6OzlL+IzQr38sjE8DhVO3NN3apgHzJQjGx3No8kRNA=";
+    hash = "sha256-WFikKZxc9PjqcAcKrZIXaFO7XiUBAg8y60/UH2so4Vc=";
   };
 
   build-system = [ hatchling ];
@@ -56,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "telebot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation for the Telegram Bot API";
     homepage = "https://github.com/eternnoir/pyTelegramBotAPI";
     changelog = "https://github.com/eternnoir/pyTelegramBotAPI/releases/tag/${src.tag}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ das_j ];
   };
 }

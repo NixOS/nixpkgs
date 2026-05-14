@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shadowenv";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "shadowenv";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WsUeqkuT4NhoaCJG1hqz+uWyvWQBfxtDheEkWkYmSWU=";
   };
 
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://shopify.github.io/shadowenv/";
     description = "Reversible directory-local environment variable manipulations";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "shadowenv";
   };
-}
+})

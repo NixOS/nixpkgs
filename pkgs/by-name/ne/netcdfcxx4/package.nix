@@ -2,20 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   netcdf,
   hdf5,
   curl,
   cmake,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netcdf-cxx4";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Unidata";
     repo = "netcdf-cxx4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GZ6n7dW3l8Kqrk2Xp2mxRTUWWQj0XEd2LDTG9EtrfhY=";
   };
 
@@ -23,6 +24,11 @@ stdenv.mkDerivation rec {
     # This fix is included upstream, remove with next upgrade
     ./cmake-h5free.patch
     ./netcdf.patch
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/Unidata/netcdf-cxx4/commit/8455a69867a420cffa226978174bc0f99029bc8b.patch?full_index=1";
+      hash = "sha256-AS2nQIXEW1iSR2LAzvTB04M+kyureJAn63+mPNoCq+0=";
+    })
   ];
 
   preConfigure = ''
@@ -53,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

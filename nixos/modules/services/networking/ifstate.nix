@@ -31,7 +31,7 @@ let
 
     inherit (pkgs.formats.yaml { }) type;
   };
-  initrdInterfaceTypes = builtins.map (interface: interface.link.kind) (
+  initrdInterfaceTypes = map (interface: interface.link.kind) (
     builtins.attrValues initrdCfg.settings.interfaces
   );
   # IfState interface kind to kernel modules mapping
@@ -66,6 +66,38 @@ let
     "wireguard" = [ "wireguard" ];
     "xfrm" = [ "xfrm_interface" ];
   };
+  # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
+  commonServiceConfig = {
+    after = [
+      "network-pre.target"
+      "systemd-sysusers.service"
+      "systemd-sysctl.service"
+    ];
+    before = [
+      "network.target"
+      "multi-user.target"
+      "shutdown.target"
+      "initrd-switch-root.target"
+    ];
+    conflicts = [
+      "shutdown.target"
+      "initrd-switch-root.target"
+    ];
+    wants = [
+      "network.target"
+    ];
+
+    # We wait for the udev events queue to empty in the *hope* that the
+    # devices needed here become available. This is terribly broken and
+    # essentially no better than a random sleep().
+    # FIXME: use .device units dependecies instead.
+    serviceConfig.ExecStartPre = "-${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
+
+    unitConfig = {
+      # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
+      DefaultDependencies = "no";
+    };
+  };
 in
 {
   meta.maintainers = with lib.maintainers; [ marcel ];
@@ -79,7 +111,7 @@ in
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
-        description = "Content of IfState's configuration file. See <https://ifstate.net/2.0/schema/> for details.";
+        description = "Content of IfState's configuration file. See <https://ifstate.net/2.2/schema/> for details.";
       };
     };
 
@@ -96,32 +128,35 @@ in
         type = lib.types.package;
         default = cfg.package.override {
           withConfigValidation = false;
-          withWireguard = false;
         };
-        defaultText = lib.literalExpression "pkgs.ifstate.override { withConfigValidation = false; withWireguard = false; }";
+        defaultText = lib.literalExpression "pkgs.ifstate.override { withConfigValidation = false; }";
         description = "The initrd IfState package to use.";
       };
 
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
-        description = "Content of IfState's initrd configuration file. See <https://ifstate.net/2.0/schema/> for details.";
+        description = "Content of IfState's initrd configuration file. See <https://ifstate.net/2.2/schema/> for details.";
       };
 
       cleanupSettings = lib.mkOption {
         inherit (settingsFormat) type;
-        default = {
-          # required by json schema
-          interfaces = { };
-          # https://codeberg.org/liske/ifstate/issues/118
-          namespaces = { };
-        };
-        description = "Content of IfState's initrd cleanup configuration file. See <https://ifstate.net/2.0/schema/> for details. This configuration gets applied before systemd switches to stage two. The goas is to deconfigurate the whole network in order to prevent access to services, before the firewall is configured. The stage two IfState configuration will start after the firewall is configured.";
+        # required by json schema
+        default.interfaces = { };
+        description = "Content of IfState's initrd cleanup configuration file. See <https://ifstate.net/2.0/schema/> for details. This configuration gets applied before systemd switches to stage two. The goal is to deconfigurate the whole network in order to prevent access to services, before the firewall is configured. The stage two IfState configuration will start after the firewall is configured.";
       };
     };
   };
 
   config = lib.mkMerge [
+    (lib.mkIf (cfg.enable || initrdCfg.enable) {
+      # sane defaults to not let IfState work against the kernel
+      boot.extraModprobeConfig = ''
+        options bonding max_bonds=0
+        options dummy numdummies=0
+        options ifb numifbs=0
+      '';
+    })
     (lib.mkIf cfg.enable {
       assertions = [
         {
@@ -136,13 +171,6 @@ in
 
       networking.useDHCP = lib.mkDefault false;
 
-      # sane defaults to not let IfState work against the kernel
-      boot.extraModprobeConfig = ''
-        options bonding max_bonds=0
-        options dummy numdummies=0
-        options ifb numifbs=0
-      '';
-
       environment = {
         # ifstatecli command should be available to use user, there are other useful subcommands like check or show
         systemPackages = [ cfg.package ];
@@ -150,30 +178,11 @@ in
         etc."ifstate/ifstate.yaml".source = settingsFormat.generate "ifstate.yaml" cfg.settings cfg.package;
       };
 
-      systemd.services.ifstate = {
+      systemd.services.ifstate = lib.recursiveUpdate commonServiceConfig {
         description = "IfState";
 
         wantedBy = [
           "multi-user.target"
-        ];
-        after = [
-          "systemd-udevd.service"
-          "network-pre.target"
-          "systemd-sysusers.service"
-          "systemd-sysctl.service"
-        ];
-        before = [
-          "network.target"
-          "multi-user.target"
-          "shutdown.target"
-          "initrd-switch-root.target"
-        ];
-        conflicts = [
-          "shutdown.target"
-          "initrd-switch-root.target"
-        ];
-        wants = [
-          "network.target"
         ];
 
         # mount is always available on nixos, avoid adding additional store paths to the closure
@@ -191,12 +200,6 @@ in
     })
     (lib.mkIf initrdCfg.enable {
       assertions = [
-        {
-          assertion =
-            initrdCfg.package.passthru.features.withWireguard
-            || !(builtins.any (kind: kind == "wireguard") initrdInterfaceTypes);
-          message = "IfState initrd package is configured without the `wireguard` feature, but wireguard interfaces are configured. Please see the `boot.initrd.network.ifstate.package` option.";
-        }
         {
           assertion = initrdCfg.allowIfstateToDrasticlyIncreaseInitrdSize;
           message = "IfState in initrd drastically increases the size of initrd, your boot partition may be too small and/or you may have significantly fewer generations. By setting boot.initrd.network.initrd.allowIfstateToDrasticlyIncreaseInitrdSize to true, you acknowledge this fact and keep it in mind when reporting issues.";
@@ -230,7 +233,7 @@ in
               type:
               if builtins.hasAttr type interfaceKernelModules then interfaceKernelModules."${type}" else [ ];
           in
-          lib.flatten (builtins.map enableModule initrdInterfaceTypes);
+          lib.flatten (map enableModule initrdInterfaceTypes);
 
         systemd = {
           storePaths = [
@@ -254,30 +257,22 @@ in
             )
           ];
 
-          services.ifstate-initrd = {
+          # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/boot/networkd.nix#L3444
+          additionalUpstreamUnits = [
+            "network-online.target"
+            "network-pre.target"
+            "network.target"
+            "nss-lookup.target"
+            "nss-user-lookup.target"
+            "remote-fs-pre.target"
+            "remote-fs.target"
+          ];
+
+          services.ifstate-initrd = lib.recursiveUpdate commonServiceConfig {
             description = "IfState initrd";
 
             wantedBy = [
               "initrd.target"
-            ];
-            after = [
-              "systemd-udevd.service"
-              "network-pre.target"
-              "systemd-sysusers.service"
-              "systemd-sysctl.service"
-            ];
-            before = [
-              "network.target"
-              "multi-user.target"
-              "shutdown.target"
-              "initrd-switch-root.target"
-            ];
-            conflicts = [
-              "shutdown.target"
-              "initrd-switch-root.target"
-            ];
-            wants = [
-              "network.target"
             ];
 
             # mount is always available on nixos, avoid adding additional store paths to the closure
@@ -291,9 +286,6 @@ in
               # Otherwise systemd starts ifstate again, after the encryption password was entered by the user
               # and we are able to implement the cleanup using ExecStop rather than a separate unit.
               RemainAfterExit = true;
-              # When using network namespaces pyroute2 expects this directory to exists.
-              # @liske is currently investigating whether this should be considered a bug in pyroute2.
-              ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} /var/run";
               ExecStart = "${lib.getExe initrdCfg.package} --config ${
                 config.environment.etc."ifstate/ifstate.initrd.yaml".source
               } apply";

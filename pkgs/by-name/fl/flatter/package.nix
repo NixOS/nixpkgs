@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "flatter";
-  version = "0-unstable-2025-08-12";
+  version = "0-unstable-2025-08-25";
 
   src = fetchFromGitHub {
     owner = "keeganryan";
     repo = "flatter";
-    rev = "7757f6c1166ce5feda1cb829736976b8d20741fc";
-    hash = "sha256-n/JtSdX8kZIEXcxj344APRo7fuRIR8+ZeUnk7QX8f3Q=";
+    rev = "d2b8026f29b4a69e987b15d4b240f8a5053275d3";
+    hash = "sha256-NAefYPJ+syTmpDiOzkgKB1IZmgQ2DNmvLrtoBee/IX4=";
   };
 
   strictDeps = true;
@@ -42,12 +42,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Fast lattice reduction of integer lattice bases";
     homepage = "https://github.com/keeganryan/flatter";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     mainProgram = "flatter";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ josephsurin ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ josephsurin ];
   };
 }

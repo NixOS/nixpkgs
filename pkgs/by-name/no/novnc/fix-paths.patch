@@ -1,5 +1,5 @@
 diff --git a/utils/novnc_proxy b/utils/novnc_proxy
-index 0900f7e..a931763 100755
+index e1efb9f..1540698 100755
 --- a/utils/novnc_proxy
 +++ b/utils/novnc_proxy
 @@ -22,7 +22,7 @@ usage() {
@@ -10,8 +10,8 @@ index 0900f7e..a931763 100755
 +    echo "                          Default: @out@/share/webapps/novnc"
      echo "    --ssl-only            Disable non-https connections."
      echo "                                    "
-     echo "    --record FILE         Record traffic to FILE.session.js"
-@@ -44,7 +44,7 @@ PORT="6080"
+     echo "    --file-only           Disable directory listing in web server."
+@@ -53,7 +53,7 @@ LISTEN="$PORT"
  VNC_DEST="localhost:5900"
  CERT=""
  KEY=""
@@ -19,4 +19,5 @@ index 0900f7e..a931763 100755
 +WEB="@out@/share/webapps/novnc"
  proxy_pid=""
  SSLONLY=""
- RECORD_ARG=""
+ RECORD=""
+

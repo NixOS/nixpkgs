@@ -13,16 +13,16 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imgw-pib";
-  version = "1.5.4";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
-    tag = version;
-    hash = "sha256-IRT0tEVKQ1ebvRtBsdf30DII1U6vjV2/MTk7PoC9zd4=";
+    tag = finalAttrs.version;
+    hash = "sha256-R1WhKOboItkKamO+hyyJyTl0veDCHDc4N70UE7IuFqI=";
   };
 
   build-system = [ setuptools ];
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/bieniu/imgw-pib/releases/tag/${src.tag}";
+    changelog = "https://github.com/bieniu/imgw-pib/releases/tag/${finalAttrs.src.tag}";
     description = "Python async wrapper for IMGW-PIB API";
     homepage = "https://github.com/bieniu/imgw-pib";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

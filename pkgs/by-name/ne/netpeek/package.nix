@@ -8,21 +8,20 @@
   desktop-file-utils,
   gobject-introspection,
   wrapGAppsHook4,
-  pkg-config,
   libadwaita,
   libportal-gtk4,
-  gnome,
+  nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "netpeek";
-  version = "0.2.3.1";
+  version = "0.2.6";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "ZingyTomato";
     repo = "NetPeek";
-    tag = "v${version}";
-    hash = "sha256-3PbGK8e/W4pHlXwIvW6kmyeBMvzBIS2DrV0pxafgJOY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SFY/bUUS4AOniOGjngH/fUHrYiq+dMWxHYvoSkhfnkA=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ python3Packages.buildPythonApplication rec {
     desktop-file-utils
     gobject-introspection
     wrapGAppsHook4
-    pkg-config
   ];
 
   buildInputs = [
@@ -43,6 +41,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygobject3
     ping3
+    python-nmap
   ];
 
   dontWrapGApps = true;
@@ -51,13 +50,15 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Modern network scanner for GNOME";
     homepage = "https://github.com/ZingyTomato/NetPeek";
-    changelog = "https://github.com/ZingyTomato/NetPeek/releases/tag/${src.tag}";
+    changelog = "https://github.com/ZingyTomato/NetPeek/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Cameo007 ];
     mainProgram = "netpeek";
     platforms = lib.platforms.linux;
   };
-}
+})
