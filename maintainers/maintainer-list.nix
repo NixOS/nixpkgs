@@ -21949,6 +21949,13 @@
     githubId = 138074;
     name = "Pedro Pombeiro";
   };
+  pompydev = {
+    name = "pomp";
+    github = "pompydev";
+    githubId = 201753364;
+    email = "hello@pompy.dev";
+    keys = [ { fingerprint = "C11A 893F DB6F 2EFF 2312  57B0 9E9C 8C5C 4A36 1D83"; } ];
+  };
   pongo1231 = {
     email = "pongo12310@gmail.com";
     github = "pongo1231";
