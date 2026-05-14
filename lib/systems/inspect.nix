@@ -26,8 +26,11 @@ let
     execFormats
     ;
 
-  # Based on lib.attrsets.matchAttrs, but with the initial isAttrs assertion
-  # removed, since this function is only ever called with attrsets
+  # Based on lib.attrsets.matchAttrs, but with:
+  # - the initial isAttrs assertion removed, since this function is only ever
+  # called with attrsets
+  # - isAttrs only performed on one side when recursing, since our input data
+  # will always share a structure
   matchAttrsUnchecked =
     pattern: attrs:
     all (
@@ -42,7 +45,7 @@ let
         in
         # Simple equality check is primarily for non-attrsets, but we run it
         # on attrsets too, since it may let us avoid recursing
-        lhs == rhs || isAttrs lhs && isAttrs rhs && matchAttrsUnchecked lhs rhs
+        lhs == rhs || isAttrs lhs && matchAttrsUnchecked lhs rhs
       )
     ) (attrNames pattern);
 
