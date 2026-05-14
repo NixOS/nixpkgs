@@ -1,0 +1,90 @@
+From e4449f06a8989ff22947309151855b388c311aed Mon Sep 17 00:00:00 2001
+From: Jared Baur <jaredbaur@fastmail.com>
+Date: Mon, 22 Jan 2024 20:42:48 -0800
+Subject: [PATCH] Add dlopen discoverer
+
+---
+ internal/lookup/dlopen.go  | 57 ++++++++++++++++++++++++++++++++++++++
+ internal/lookup/library.go |  3 ++
+ 2 files changed, 60 insertions(+)
+ create mode 100644 internal/lookup/dlopen.go
+
+diff --git a/internal/lookup/dlopen.go b/internal/lookup/dlopen.go
+new file mode 100644
+index 00000000..7cd84522
+--- /dev/null
++++ b/internal/lookup/dlopen.go
+@@ -0,0 +1,57 @@
++package lookup
++
++// #cgo LDFLAGS: -ldl
++// #define _GNU_SOURCE
++// #include <dlfcn.h>
++// #include <stdlib.h>
++import "C"
++
++import (
++	"fmt"
++	"path/filepath"
++	"unsafe"
++)
++
++// dlopenLocator can be used to locate libraries given a system's dynamic
++// linker.
++type dlopenLocator struct {
++	file
++}
++
++// NewDlopenLocator creats a locator that can be used for locating libraries
++// through the dlopen mechanism.
++func NewDlopenLocator(opts ...Option) Locator {
++	f := newFileLocator(opts...)
++	d := dlopenLocator{file: *f}
++	return &d
++}
++
++// Locate finds the specified pattern if the systems' dynamic linker can find
++// it via dlopen. Note that patterns with wildcard patterns will likely not be
++// found as it is uncommon for libraries to have wildcard patterns in their
++// file name.
++func (d dlopenLocator) Locate(pattern string) ([]string, error) {
++	libname := C.CString(pattern)
++	defer C.free(unsafe.Pointer(libname))
++
++	d.logger.Debugf("Calling dlopen for %s", pattern)
++
++	handle := C.dlopen(libname, C.RTLD_LAZY)
++	if handle == nil {
++		return nil, fmt.Errorf("dlopen %s failed", pattern)
++	}
++	defer C.dlclose(handle)
++
++	libParentPath := C.CString("")
++
++	d.logger.Debugf("Calling dlinfo on handle for %s", pattern)
++	ret := C.dlinfo(handle, C.RTLD_DI_ORIGIN, unsafe.Pointer(libParentPath))
++	if ret == -1 {
++		return nil, fmt.Errorf("dlinfo on handle for %s failed", pattern)
++	}
++
++	libAbsolutePath := filepath.Join(C.GoString(libParentPath), pattern)
++	d.logger.Debugf("Found library for %s at %s", pattern, libAbsolutePath)
++
++	return []string{libAbsolutePath}, nil
++}
+diff --git a/internal/lookup/library.go b/internal/lookup/library.go
+index 7f5cf7c8..916edde2 100644
+--- a/internal/lookup/library.go
++++ b/internal/lookup/library.go
+@@ -61,7 +61,10 @@ func NewLibraryLocator(opts ...Option) Locator {
+ 	// We construct a symlink locator for expected library locations.
+ 	symlinkLocator := NewSymlinkLocator(opts...)
+ 
++	dlopenLocator := NewDlopenLocator(opts...)
++
+ 	l := First(
++		dlopenLocator,
+ 		symlinkLocator,
+ 		newLdcacheLocator(opts...),
+ 	)
+--

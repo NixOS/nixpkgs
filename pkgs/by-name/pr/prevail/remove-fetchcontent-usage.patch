@@ -1,0 +1,25 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -75,9 +75,7 @@
+ endif ()
+ 
+ FetchContent_Declare(GSL
+-  GIT_REPOSITORY "https://github.com/microsoft/GSL"
+-  GIT_TAG "v4.2.0"
+-  GIT_SHALLOW ON
++  SOURCE_DIR "@gslSrc@"
+ )
+ set(GSL_INSTALL ON CACHE BOOL "Force GSL install to vendor it with prevail" FORCE)
+ set(GSL_TEST OFF CACHE BOOL "Skip GSL tests when building as a dependency" FORCE)
+@@ -196,9 +194,7 @@
+ # Tests
+ if (prevail_ENABLE_TESTS)
+   FetchContent_Declare(Catch2
+-    GIT_REPOSITORY "https://github.com/catchorg/Catch2.git"
+-    GIT_TAG "v3.13.0"
+-    GIT_SHALLOW ON
++    SOURCE_DIR "@catch2Src@"
+   )
+   FetchContent_MakeAvailable(Catch2)
+ 

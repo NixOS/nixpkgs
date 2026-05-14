@@ -1,0 +1,206 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  perl,
+  enableGhostscript ? false,
+  ghostscript,
+  gawk,
+  libx11,
+  libxaw,
+  libxt,
+  libxmu, # for postscript and html output
+  enableHtml ? false,
+  psutils,
+  netpbm, # for html output
+  enableIconv ? false,
+  iconv,
+  enableLibuchardet ? false,
+  libuchardet, # for detecting input file encoding in preconv(1)
+  enableUrwFonts ? false,
+  buildPackages,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
+  bison,
+  bashNonInteractive,
+}:
+let
+  urw-fonts = fetchFromGitHub {
+    name = "groff-urw-base35-fonts";
+    owner = "ArtifexSoftware";
+    repo = "urw-base35-fonts";
+    tag = "20200910";
+    hash = "sha256-YQl5IDtodcbTV3D6vtJi7CwxVtHHl58fG6qCAoSaP4U=";
+  };
+  nativeGroffBinPath = lib.makeBinPath [
+    buildPackages.groff
+    (lib.getOutput "perl" buildPackages.groff)
+  ];
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "groff";
+  version = "1.24.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/groff/groff-${finalAttrs.version}.tar.gz";
+    hash = "sha256-dOKBl5W2r/QxrqyYPWOpyJaO6roqLrp9+LpMe0Hnz9g=";
+  };
+
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "info"
+    "perl"
+  ];
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    # POSIX_SHELL_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
+    substituteInPlace contrib/gdiffmk/gdiffmk.sh \
+      --replace-fail "@POSIX_SHELL_PROG@" "/bin/sh"
+  ''
+  + lib.optionalString enableHtml ''
+    substituteInPlace src/preproc/html/pre-html.cpp \
+      --replace-fail "pamcut" "${lib.getExe' netpbm "pamcut"}" \
+      --replace-fail "pnmcrop" "${lib.getExe' netpbm "pnmcrop"}" \
+      --replace-fail "pnmtopng" "${lib.getExe' netpbm "pnmtopng"}"
+    substituteInPlace tmac/www.tmac.in \
+      --replace-fail "pnmcrop" "${lib.getExe' netpbm "pnmcrop"}" \
+      --replace-fail "pngtopnm" "${lib.getExe' netpbm "pngtopnm"}" \
+      --replace-fail "@PNMTOPS_NOSETPAGE@" "${lib.getExe' netpbm "pnmtops"} -nosetpage"
+  '';
+
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    texinfo
+  ]
+  # Required due to the patch that changes .ypp files.
+  ++ lib.optional (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") bison;
+  buildInputs = [
+    perl
+    bashNonInteractive
+  ]
+  ++ lib.optionals enableGhostscript [
+    ghostscript
+    gawk
+    libx11
+    libxaw
+    libxt
+    libxmu
+  ]
+  ++ lib.optionals enableHtml [
+    psutils
+    netpbm
+  ]
+  ++ lib.optionals enableIconv [ iconv ]
+  ++ lib.optionals enableLibuchardet [ libuchardet ];
+
+  # Builds running without a chroot environment may detect the presence
+  # of /usr/X11 in the host system, leading to an impure build of the
+  # package. To avoid this issue, X11 support is explicitly disabled.
+  configureFlags = [
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+    "--enable-year2038"
+  ]
+  ++ lib.optionals (stdenv.cc.isClang) [
+    "CFLAGS=-std=gnu11" # https://github.com/NixOS/nixpkgs/pull/481765
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "gl_cv_func_signbit=yes"
+  ]
+  ++ lib.optionals enableGhostscript [
+    "--with-gs=${lib.getExe ghostscript}"
+    "--with-appdefdir=${placeholder "out"}/lib/X11/app-defaults"
+  ]
+  ++ lib.optionals (!enableGhostscript) [
+    "--without-x"
+  ]
+  ++ lib.optionals enableUrwFonts [
+    "--with-urw-fonts-dir=${urw-fonts}/fonts"
+  ];
+
+  postConfigure = ''
+    # Move mom docs instead of linking them to avoid dangling symlinks
+    substituteInPlace Makefile \
+      --replace-fail '$(LN_S) $(exampledir)' 'mv $(exampledir)'
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # pdfmom uses GROFF_COMMAND to find the groff executable internally.
+    substituteInPlace Makefile \
+      --replace-fail 'GROFF_COMMAND=test-groff \' 'GROFF_COMMAND=$(GROFFBIN) \'
+  '';
+
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Trick to get the build system find the proper 'native' groff
+    # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
+    "GROFF_BIN_PATH=${nativeGroffBinPath}"
+    "GROFFBIN=${lib.getExe' buildPackages.groff "groff"}"
+  ];
+
+  doCheck = true;
+
+  preCheck = ''
+    # The neqn-smoke-test fails on nixpkgs because neqn exec's eqn,
+    # but eqn, isn't in the PATH in the nixpkgs test env, to remedy
+    # that GROFF_BIN_PATH is set as follows:
+    export GROFF_BIN_PATH=.
+  '';
+
+  postInstall = ''
+    for f in 'man.local' 'mdoc.local'; do
+        cat '${./site.tmac}' >>"$out/share/groff/site-tmac/$f"
+    done
+
+    moveToOutput bin/gropdf $perl
+    moveToOutput bin/pdfmom $perl
+    moveToOutput bin/roff2text $perl
+    moveToOutput bin/roff2pdf $perl
+    moveToOutput bin/roff2ps $perl
+    moveToOutput bin/roff2dvi $perl
+    moveToOutput bin/roff2ps $perl
+    moveToOutput bin/roff2html $perl
+    moveToOutput bin/glilypond $perl
+    moveToOutput bin/mmroff $perl
+    moveToOutput bin/roff2x $perl
+    moveToOutput bin/afmtodit $perl
+    moveToOutput bin/gperl $perl
+    moveToOutput bin/chem $perl
+    moveToOutput bin/gpinyin $perl
+    moveToOutput lib/groff/gpinyin $perl
+    moveToOutput bin/grog $perl
+    moveToOutput lib/groff/grog $perl
+
+    find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
+  '';
+
+  meta = {
+    homepage = "https://www.gnu.org/software/groff/";
+    description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
+
+    longDescription = ''
+      groff is the GNU implementation of troff, a document formatting
+      system.  Included in this release are implementations of troff,
+      pic, eqn, tbl, grn, refer, -man, -mdoc, -mom, and -ms macros,
+      and drivers for PostScript, TeX dvi format, HP LaserJet 4
+      printers, Canon CAPSL printers, HTML and XHTML format (beta
+      status), and typewriter-like devices.  Also included is a
+      modified version of the Berkeley -me macros, the enhanced
+      version gxditview of the X11 xditview previewer, and an
+      implementation of the -mm macros.
+    '';
+
+    outputsToInstall = [
+      "out"
+      "perl"
+    ];
+  };
+})

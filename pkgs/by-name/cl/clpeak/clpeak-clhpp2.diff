@@ -1,0 +1,72 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 86fec9e..b9d0341 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -22,7 +22,7 @@ elseif(WIN32 AND ${OpenCL_LIBRARIES} MATCHES "OpenCL.lib")
+   set(OpenCL_LIBRARIES ${OpenCL_LIBRARIES} cfgmgr32.lib)
+ endif()
+ 
+-FIND_PATH(HPP_FOUND CL/cl.hpp PATHS ${OpenCL_INCLUDE_DIRS})
++FIND_PATH(HPP_FOUND CL/cl2.hpp PATHS ${OpenCL_INCLUDE_DIRS})
+ if(NOT HPP_FOUND)
+   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+   include(BuildCLHpp)
+diff --git a/include/clpeak.h b/include/clpeak.h
+index c090d31..0d9d5e2 100644
+--- a/include/clpeak.h
++++ b/include/clpeak.h
+@@ -1,14 +1,10 @@
+ #ifndef CLPEAK_HPP
+ #define CLPEAK_HPP
+ 
+-#define __CL_ENABLE_EXCEPTIONS
+-
+-#include <CL/cl.hpp>
+-
+ #include <iostream>
+ #include <stdio.h>
+ #include <iomanip>
+-#include <string.h>
++#include <string>
+ #include <sstream>
+ #include <common.h>
+ #include <logger.h>
+diff --git a/include/common.h b/include/common.h
+index 91318cb..6aaca04 100644
+--- a/include/common.h
++++ b/include/common.h
+@@ -1,7 +1,11 @@
+ #ifndef COMMON_H
+ #define COMMON_H
+ 
+-#include <CL/cl.hpp>
++#define CL_HPP_ENABLE_EXCEPTIONS
++#define CL_HPP_MINIMUM_OPENCL_VERSION 120
++#define CL_HPP_TARGET_OPENCL_VERSION 120
++#include <CL/cl2.hpp>
++
+ #if defined(__APPLE__) || defined(__MACOSX) || defined(__FreeBSD__)
+ #include <sys/types.h>
+ #endif
+diff --git a/src/clpeak.cpp b/src/clpeak.cpp
+index 8708463..4a47842 100644
+--- a/src/clpeak.cpp
++++ b/src/clpeak.cpp
+@@ -3,7 +3,7 @@
+ 
+ #define MSTRINGIFY(...) #__VA_ARGS__
+ 
+-static const char *stringifiedKernels =
++static const std::string stringifiedKernels =
+ #include "global_bandwidth_kernels.cl"
+ #include "compute_sp_kernels.cl"
+ #include "compute_hp_kernels.cl"
+@@ -65,7 +65,7 @@ int clPeak::runAll()
+ 
+       cl::Context ctx(CL_DEVICE_TYPE_ALL, cps);
+       vector<cl::Device> devices = ctx.getInfo<CL_CONTEXT_DEVICES>();
+-      cl::Program::Sources source(1, make_pair(stringifiedKernels, (strlen(stringifiedKernels) + 1)));
++      cl::Program::Sources source(1, stringifiedKernels);
+       cl::Program prog = cl::Program(ctx, source);
+ 
+       for (size_t d = 0; d < devices.size(); d++)

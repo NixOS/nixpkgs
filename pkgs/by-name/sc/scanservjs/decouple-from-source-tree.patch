@@ -1,0 +1,64 @@
+diff --git a/packages/server/src/api.js b/packages/server/src/api.js
+index bd43842..71ce7c9 100644
+--- a/packages/server/src/api.js
++++ b/packages/server/src/api.js
+@@ -105,7 +105,7 @@ module.exports = new class Api {
+     }
+ 
+     // If not then it's possible the default image is not quite the correct aspect ratio
+-    const buffer = FileInfo.create(`${config.previewDirectory}/default.jpg`).toBuffer();
++    const buffer = FileInfo.create('NIX_OUT_PLACEHOLDER/lib/node_modules/scanservjs-api/data/preview/default.jpg').toBuffer();
+ 
+     try {
+       // We need to know the correct aspect ratio from the device
+diff --git a/packages/server/src/application.js b/packages/server/src/application.js
+index 2771036..0c2a4c0 100644
+--- a/packages/server/src/application.js
++++ b/packages/server/src/application.js
+@@ -26,7 +26,7 @@ module.exports = new class Application {
+ 
+   userOptions() {
+     if (this._userOptions === null) {
+-      this._userOptions = new UserOptions('../../config/config.local.js');
++      this._userOptions = new UserOptions(process.env.NIX_SCANSERVJS_CONFIG_PATH);
+     }
+     return this._userOptions;
+   }
+diff --git a/packages/server/src/classes/user-options.js b/packages/server/src/classes/user-options.js
+index f129e3c..c71e754 100644
+--- a/packages/server/src/classes/user-options.js
++++ b/packages/server/src/classes/user-options.js
+@@ -4,7 +4,7 @@ const path = require('path');
+ module.exports = class UserOptions {
+   constructor(localConfigPath) {
+     if (localConfigPath) {
+-      const localPath = path.join(__dirname, localConfigPath);
++      const localPath = localConfigPath;
+       if (fs.existsSync(localPath)) {
+         this.local = require(localPath);
+       }
+diff --git a/packages/server/src/configure.js b/packages/server/src/configure.js
+index c9e5ed8..484949c 100644
+--- a/packages/server/src/configure.js
++++ b/packages/server/src/configure.js
+@@ -71,6 +71,7 @@ function initialize(rootPath) {
+ 
+   try {
+     fs.mkdirSync(config.outputDirectory, { recursive: true });
++    fs.mkdirSync(config.previewDirectory, { recursive: true });
+     fs.mkdirSync(config.tempDirectory, { recursive: true });
+   } catch (exception) {
+     log.warn(`Error ensuring output and temp directories exist: ${exception}`);
+diff --git a/packages/server/src/server.js b/packages/server/src/server.js
+index e1a9fb0..3d58d37 100644
+--- a/packages/server/src/server.js
++++ b/packages/server/src/server.js
+@@ -5,7 +5,7 @@ const configure = require('./configure');
+ const config = application.config();
+ const app = express();
+ 
+-app.use(express.static('client'));
++app.use(express.static('@client@'));
+ 
+ configure(app);
+ 

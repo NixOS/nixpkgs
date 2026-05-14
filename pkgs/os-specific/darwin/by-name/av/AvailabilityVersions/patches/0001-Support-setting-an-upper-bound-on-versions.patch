@@ -1,0 +1,243 @@
+From dd3a2378cca465ec783fd792158b2fc11f83722c Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 2 Jul 2024 20:04:56 -0400
+Subject: [PATCH] Support setting an upper bound on versions
+
+---
+ availability | 94 ++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 61 insertions(+), 33 deletions(-)
+
+diff --git a/availability b/availability
+index 8ebd250..5bb9edb 100755
+--- a/availability
++++ b/availability
+@@ -17,12 +17,34 @@ MIN_PYTHON = (3, 7) #Required for ordered dictionaries as default
+ if sys.version_info < MIN_PYTHON:
+     sys.exit("Python %s.%s or later is required.\n" % MIN_PYTHON)
+ 
++
++def parse_version(ver):
++    if hasattr(ver, "string"):
++        ver = ver.string()
++
++    return (tuple(map(int, ver.split("."))) + (0, 0))[:3]
++
++
++def version_older_or_equal(lhs, rhs):
++    if not rhs:
++        return True
++
++    lhs_major, lhs_minor, lhs_patch = parse_version(lhs)
++    rhs_major, rhs_minor, rhs_patch = parse_version(rhs)
++
++    return (
++        lhs_major < rhs_major
++        or (lhs_major == rhs_major and lhs_minor < rhs_minor)
++        or (lhs_major == rhs_major and lhs_minor == rhs_minor and lhs_patch <= rhs_patch)
++    )  
++     
++
+ # The build script will embed the DSL content here, otherwise we build it at runtime
+ dslContent = None
+ # @@INSERT_DSL_CONTENT()@@
+ 
+ class VersionSetDSL:
+-    def __init__(self, data):   self.parsedDSL = self.Parser(data)
++    def __init__(self, data, threshold):   self.parsedDSL = self.Parser(data, threshold)
+     def sets(self):             return self.parsedDSL.version_sets
+     def platforms(self):        return self.parsedDSL.platforms
+ 
+@@ -104,12 +126,15 @@ class VersionSetDSL:
+                 self.availability_deprecation_define_name = optionals["availability_deprecation_define_name"]
+             if "version_define_name" in optionals:
+                 self.availability_define_prefix = f"__{optionals['version_define_name']}_"
+-        def add_version(self, version): return self.versions.append(version);
++        def add_version(self, version, threshold):
++            if version_older_or_equal(version, threshold):
++                self.versions.append(version)
+         def add_variant(self, variant): return self.variants.append(variant);
+     class Parser:
+         platforms       = {}
+         version_sets    = []
+-        def __init__(self, data):
++        def __init__(self, data, threshold):
++            self.threshold = threshold
+             for line in data.splitlines():
+                 line = line.strip().split('#',1)[0]
+                 if not line:
+@@ -129,7 +154,7 @@ class VersionSetDSL:
+         def set(self, name, version, uversion):
+             platforms = {}
+             for (platformName, platform) in self.platforms.items():
+-                if platform.versioned:
++                if platform.versioned and platform.versions:
+                     platforms[platformName] = platform.versions[-1]
+             version_set                 = {}
+             version_set["name"]         = name
+@@ -138,7 +163,7 @@ class VersionSetDSL:
+             self.version_sets.append(version_set)
+             # TODO add error checking for version decrease
+         def version(self, platform, version):
+-            if platform in self.platforms: self.platforms[platform].add_version(VersionSetDSL.Version(version))
++            if platform in self.platforms: self.platforms[platform].add_version(VersionSetDSL.Version(version), self.threshold)
+             else:
+                 print(f"Unknown platform \"{platform}\"")
+                 exit(-1)
+@@ -165,9 +190,8 @@ if not dslContent:
+             parts = line.split()
+             if uversion and parts and parts[0] == "set" and parts[3] == uversion:
+                 break
+-versions = VersionSetDSL(dslContent)
+ 
+-def print_sets():
++def print_sets(versions):
+     print("---")
+     for set in versions.sets():
+         print(f'{set["name"]}:')
+@@ -178,7 +202,8 @@ def print_versions(platform):
+     print(" ".join([version.string() for version in versions.platforms()[platform].versions]))
+ 
+ class Preprocessor:
+-    def __init__(self, inputFile, outputFile):
++    def __init__(self, versions, inputFile, outputFile):
++        self.versions = versions
+         bufferedOutput = ""
+         with tempfile.NamedTemporaryFile('w') as tmp:
+             with open(inputFile, 'r') as input:
+@@ -207,10 +232,10 @@ class Preprocessor:
+         output.write("\"\"\"\n")
+     def VERSION_MAP(self, output):
+         sets = []
+-        for set in versions.sets():
++        for set in self.versions.sets():
+             set_string = ", ".join(sorted({".{} = {}".format(os,osVersion.hex()) for (os,osVersion) in set["platforms"].items()}))
+             sets.append("\t{{ .set = {}, {} }}".format(set["version"].hex(), set_string))
+-        platform_string = "\n".join(["    uint32_t {} = 0;".format(name) for name in versions.platforms().keys()])  
++        platform_string = "\n".join(["    uint32_t {} = 0;".format(name) for name in self.versions.platforms().keys()])
+         output.write("""
+ #include <set>
+ #include <array>
+@@ -229,16 +254,16 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
+ }};
+ """.format(platform_string, len(sets), ",\n".join(sets)))
+     def DYLD_HEADER_VERSIONS(self, output):
+-        for (name,platform) in versions.platforms().items():
++        for (name,platform) in self.versions.platforms().items():
+             for version in platform.versions:
+                 output.write(f"#define {platform.dyld_version_define_name + version.symbol() : <48}{version.hex()}\n");
+             output.write("\n")
+-        for set in versions.sets():
++        for set in self.versions.sets():
+             set_string = " / ".join(sorted({"{} {}".format(os,osVersion.string()) for(os,osVersion) in set["platforms"].items()}))
+             output.write("// dyld_{}_os_versions => {}\n".format(set["name"], set_string))
+             output.write("#define dyld_{}_os_versions".format(set["name"]).ljust(56, ' '))
+             output.write("({{ (dyld_build_version_t){{0xffffffff, {}}}; }})\n\n".format(set["version"].hex()))
+-        for (name,platform) in versions.platforms().items():
++        for (name,platform) in self.versions.platforms().items():
+             for version in platform.versions:
+                 output.write("#define dyld_platform_version_{}_{}".format(platform.stylized_name, version.symbol()).ljust(56, ' '))
+                 output.write("({{ (dyld_build_version_t){{{}, {}{}}}; }})\n".format(platform.platform_define, platform.dyld_version_define_name, version.symbol()))
+@@ -247,14 +272,14 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
+     def ALIAS_VERSION_MACROS(self, output, platformString, newName, oldName, **optionals):
+         minVersion =  literal_eval(optionals.get("minVersion", "0x00000000"))
+         maxVersion =  literal_eval(optionals.get("maxVersion", "0xFFFFFFFF"))
+-        platform = versions.platforms()[platformString];
++        platform = self.versions.platforms()[platformString];
+         for version in platform.versions:
+             if literal_eval(version.hex()) < minVersion: continue
+             if literal_eval(version.hex()) >= maxVersion: continue
+             output.write(f'#define {newName + version.symbol() : <48} {oldName + version.symbol()}\n')
+     def AVAILABILITY_DEFINES(self, output):
+-        for platformString in versions.platforms():
+-            platform = versions.platforms()[platformString];
++        for platformString in self.versions.platforms():
++            platform = self.versions.platforms()[platformString];
+             if platform.bleached:
+                 output.write(f"#ifndef __APPLE_BLEACH_SDK__\n")
+             output.write(f"#ifndef __API_TO_BE_DEPRECATED_{platform.availability_deprecation_define_name}\n")
+@@ -268,16 +293,16 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
+                 output.write(f"#endif /* __APPLE_BLEACH_SDK__ */\n")
+             output.write(f"\n");
+     def AVAILABILITY_VERSION_DEFINES(self, output):
+-        for platformString in versions.platforms():
+-            short = platform = versions.platforms()[platformString].short_version_numbers
+-            platform = versions.platforms()[platformString];
++        for platformString in self.versions.platforms():
++            short = platform = self.versions.platforms()[platformString].short_version_numbers
++            platform = self.versions.platforms()[platformString];
+             for version in platform.versions:
+                 output.write(f"#define {platform.availability_define_prefix + version.symbol() : <48}{version.decimal(short)}\n")
+             output.write(f"/* {platform.availability_define_prefix}_NA is not defined to a value but is used as a token by macros to indicate that the API is unavailable */\n\n")
+     def AVAILABILITY_MIN_MAX_DEFINES(self, output):
+-        for platformString in versions.platforms():
+-            platform = versions.platforms()[platformString];
+-            if not platform.versioned:
++        for platformString in self.versions.platforms():
++            platform = self.versions.platforms()[platformString];
++            if not platform.versioned or not platform.versions:
+                 continue
+             if platform.bleached:
+                 output.write(f"#ifndef __APPLE_BLEACH_SDK__\n")
+@@ -310,8 +335,8 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
+             output.write(f"   #define __API_UNAVAILABLE_PLATFORM_{displayName} {realName},unavailable\n")
+         output.write(f"#if defined(__has_feature) && defined(__has_attribute)\n")
+         output.write(f" #if __has_attribute(availability)\n")
+-        for platformString in versions.platforms():
+-            platform = versions.platforms()[platformString];
++        for platformString in self.versions.platforms():
++            platform = self.versions.platforms()[platformString];
+             if platform.bleached:
+                 output.write(f"#ifndef __APPLE_BLEACH_SDK__\n")
+             writeDefines(platformString, platformString, platform.versioned)
+@@ -327,9 +352,9 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
+         output.write(f"#endif /* defined(__has_feature) && defined(__has_attribute) */\n")
+     def AVAILABILITY_MACRO_IMPL(self, output, prefix, dispatcher, **optionals):
+         av_version_hash = zlib.adler32(avVersion.encode()) # This does not need to cryptographically secure as it is meant to detect accidental failures
+-        count = len(versions.platforms())
+-        for platformString in versions.platforms():
+-            platform = versions.platforms()[platformString]
++        count = len(self.versions.platforms())
++        for platformString in self.versions.platforms():
++            platform = self.versions.platforms()[platformString]
+             count = count + len(platform.variants)
+         platformList    = []
+         argList         = []
+@@ -344,9 +369,9 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
+         scoped_availablity = False
+         if "scoped_availablity" in optionals and optionals["scoped_availablity"] == "TRUE":
+             scoped_availablity=True
+-        count = len(versions.platforms())
+-        for platformString in versions.platforms():
+-            platform = versions.platforms()[platformString]
++        count = len(self.versions.platforms())
++        for platformString in self.versions.platforms():
++            platform = self.versions.platforms()[platformString]
+             count = count + len(platform.variants)
+         argList = ','.join([f'{macroName}{x}' for x in reversed(range(0, count))])
+         if "argCount" in optionals:
+@@ -358,8 +383,9 @@ static const std::array<VersionSetEntry, {}> sVersionMap = {{{{
+             output.write(f"    #define {name}(...) {macroName}_GET_MACRO(__VA_ARGS__,{argList},0)(__VA_ARGS__)\n")
+ 
+ parser = argparse.ArgumentParser()
++parser.add_argument("--threshold",                          default=False,                      help='Specifies the maximum version (inclusive) included in pre-processed headers')
+ group = parser.add_mutually_exclusive_group()
+-for (name, platform) in versions.platforms().items():
++for (name, platform) in VersionSetDSL(dslContent, threshold=None).platforms().items():
+     group.add_argument("--{}".format(name), default=False, action='store_true', help="Prints all SDK versions defined for {}".format(name))
+     for alias in platform.cmd_aliases:
+         group.add_argument("--{}".format(alias), dest=name, default=False, action='store_true', help="Alias for --{}".format(name))
+@@ -367,8 +393,10 @@ group.add_argument("--sets",                                default=False, actio
+ group.add_argument("--preprocess",                          nargs=2,                            help=argparse.SUPPRESS)
+ args = parser.parse_args()
+ 
+-if args.sets:                                   print_sets();
+-elif args.preprocess:                           Preprocessor(args.preprocess[0], args.preprocess[1]);
++versions = VersionSetDSL(dslContent, threshold=args.threshold)
++
++if args.sets:                                   print_sets(versions);
++elif args.preprocess:                           Preprocessor(versions, args.preprocess[0], args.preprocess[1]);
+ else:
+     for platform in versions.platforms().keys():
+         if getattr(args, platform, None):
+-- 
+2.45.2

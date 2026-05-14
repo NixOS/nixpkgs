@@ -1,0 +1,52 @@
+--- a/CMakeLists.txt  2022-10-20 17:03:52.000000000 +0200
++++ b/CMakeLists.txt  2024-09-05 21:39:27.172090291 +0200
+@@ -98,7 +98,9 @@
+    src/magencd.c
+    src/rp2mag.c
+    src/utils.c
+-   src/rp2mag_encode.c)
++   src/rp2mag_encode.c
++   src/commandmb1.c
++   src/command_helper.c)
+ 
+ target_compile_options(rastertoultra PRIVATE ${CUPS_CFLAGS})
+ target_link_libraries(rastertoultra ${CUPS_LIBS})
+@@ -164,38 +166,3 @@
+    )
+ set(CPACK_VERBATIM_VARIABLES YES)
+ include(CPack)
+-
+-## TESTS
+-
+-add_subdirectory(test/unity EXCLUDE_FROM_ALL)
+-add_executable(test_rp2_mag EXCLUDE_FROM_ALL test/test_rp2_mag.c
+-   src/rp2mag.c
+-   src/rp2mag_encode.c
+-   src/utils.c)
+-target_compile_definitions(test_rp2_mag PRIVATE TEST)
+-target_include_directories(test_rp2_mag PRIVATE src)
+-target_link_libraries(test_rp2_mag unity)
+-
+-add_executable(test_dpi EXCLUDE_FROM_ALL test/test_dpi.c
+-   src/rastertoultra.c
+-   src/utils.c
+-   src/crc32.c
+-   src/rp2mag.c
+-   src/colrmtch.c
+-   src/rp2mag_encode.c
+-   src/magencd.c
+-   src/colour-profiles/magir2x.c
+-   src/colour-profiles/magiox.c
+-   src/colour-profiles/magiry.c)
+-target_include_directories(test_dpi PRIVATE src)
+-target_compile_definitions(test_dpi PRIVATE TEST)
+-target_compile_options(test_dpi PRIVATE -Wno-unused-function)
+-target_link_libraries(test_dpi unity m ${CUPS_LIBS})
+-
+-enable_testing()
+-add_test(test_rp2_mag test_rp2_mag)
+-add_test(test_dpi test_dpi)
+-
+-# Autotools-style "make check" command
+-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+-add_dependencies(check test_rp2_mag test_dpi)

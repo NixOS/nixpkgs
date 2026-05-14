@@ -1,0 +1,35 @@
+From 3288c6da64add3b4561b8c10fff522027caea01c Mon Sep 17 00:00:00 2001
+From: Nicholas Miell <nmiell@gmail.com>
+Date: Sat, 17 Jun 2017 18:21:07 -0700
+Subject: [PATCH] Align the stack on entry to __tls_get_addr()
+
+Old versions of gcc (4 & 5) didn't align the stack according to the
+AMD64 psABI when calling __tls_get_addr(). Apparently new versions of
+gcc (7) got much more aggressive about vectorizing and generating MOVAPS
+instructions, which means old binaries built with the buggy versions of
+gcc are much more likely to crash when using versions of glibc built
+using gcc 7.
+
+For example, a large number of Linux games built using the Unity game
+engine and available for purchase on Steam.
+---
+ elf/dl-tls.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/elf/dl-tls.c b/elf/dl-tls.c
+index 5aba33b3fa..3f3cb917de 100644
+--- a/elf/dl-tls.c
++++ b/elf/dl-tls.c
+@@ -827,6 +827,10 @@ rtld_hidden_proto (__tls_get_addr)
+ rtld_hidden_def (__tls_get_addr)
+ #endif
+
++#ifdef __x86_64__
++/* Old versions of gcc didn't align the stack. */
++__attribute__((force_align_arg_pointer))
++#endif
+ /* The generic dynamic and local dynamic model cannot be used in
+    statically linked applications.  */
+ void *
+--
+2.13.0

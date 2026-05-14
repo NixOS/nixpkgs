@@ -1,0 +1,60 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libpng,
+  zlib,
+  nasm,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  version = "4.1.5";
+  pname = "mozjpeg";
+
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "mozjpeg";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-k8qWtU4j3ipIHvY60ae7kdNnPvWnUa0qgacqlSIJijo=";
+  };
+
+  cmakeFlags = [
+    # Fix the build with CMake 4
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    "-DENABLE_STATIC=NO"
+    "-DPNG_SUPPORTED=TRUE"
+  ]; # See https://github.com/mozilla/mozjpeg/issues/351
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    libpng
+    zlib
+    nasm
+  ];
+
+  meta = {
+    description = "Mozilla JPEG Encoder Project";
+    longDescription = ''
+      This project's goal is to reduce the size of JPEG files without reducing quality or compatibility with the
+      vast majority of the world's deployed decoders.
+
+      The idea is to reduce transfer times for JPEGs on the Web, thus reducing page load times.
+    '';
+    homepage = "https://github.com/mozilla/mozjpeg";
+    license = lib.licenses.bsd3;
+    # Houses multiple utilities but you're most likely to want to encode a JPEG
+    # with this as that's the primary purpose of the entire project: encode
+    # JPEGs better. Technically there is also `djpeg` but it's not officially
+    # supported:
+    # https://github.com/mozilla/mozjpeg/issues/309#issuecomment-440674126
+    mainProgram = "cjpeg";
+    maintainers = [ ];
+    platforms = lib.platforms.all;
+  };
+})
