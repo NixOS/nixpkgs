@@ -39,6 +39,7 @@
   scipy,
   shap,
   skops,
+  starlette,
   sqlalchemy,
   sqlparse,
   uvicorn,
@@ -46,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "3.11.1";
+  version = "3.12.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -55,7 +56,7 @@ buildPythonPackage rec {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-j2vxI4rAT5dmTCKd1IA4DFwlSni9s8DkM+OgOXUIsa8=";
+    hash = "sha256-4cKO1MSFV8xSx2bxfxylgmdT3fJB1D8w+ZxF9+prPOA=";
   };
 
   # Nix-wrapped python populates sys.path via NIX_PYTHONPATH/site hooks,
@@ -110,6 +111,7 @@ buildPythonPackage rec {
     scipy
     shap
     skops
+    starlette
     sqlalchemy
     sqlparse
     uvicorn
