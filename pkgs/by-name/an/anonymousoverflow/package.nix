@@ -43,6 +43,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/httpjamesm/AnonymousOverflow/releases/tag/v1.13.0";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ philocalyst ];
-    mainProgram = finalAttrs.pname;
+    mainProgram = "anonymousoverflow";
   };
 })
