@@ -7,7 +7,6 @@
   buildPackages,
   bison,
   coreutils,
-  fetchpatch2,
   flex,
   gperf,
   ninja,
