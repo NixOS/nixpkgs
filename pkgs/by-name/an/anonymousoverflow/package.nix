@@ -8,7 +8,6 @@
 buildGoModule (finalAttrs: {
   pname = "anonymousoverflow";
   version = "1.13.0";
-  repo = "AnonymousOverflow";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
