@@ -39,8 +39,8 @@ buildGoModule (finalAttrs: {
       AnonymousOverflow is a lightweight server-side rendered frontend for
       Stack Overflow threads that proxies requests through the instance.
     '';
-    homepage = "https://github.com/httpjamesm/${finalAttrs.repo}";
-    changelog = "https://github.com/httpjamesm/${finalAttrs.repo}/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/httpjamesm/AnonymousOverflow";
+    changelog = "https://github.com/httpjamesm/AnonymousOverflow/releases/tag/v1.13.0";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ philocalyst ];
     mainProgram = finalAttrs.pname;
