@@ -14,22 +14,39 @@
   sqlite,
   openssl,
   desktop-file-utils,
+  bash,
+  dbus,
+  gtk4,
+  ffmpeg,
+  gsettings-desktop-schemas,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
+  libxcb,
+  libxkbcommon,
+  vulkan-loader,
+  wayland,
+  xdg-utils,
+  makeWrapper,
+  xdg-desktop-portal,
+  libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytrogen";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = finalAttrs.version;
-    hash = "sha256-+1HiTmJAkhd+zbLAyRRk9tHDbR7qcslkfJ2HyGipZCo=";
+    hash = "sha256-q+44xYmxXWkYfoMQtARCIIjvxwCxNTl1mH+wxcATnAk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UKd/h/O9EE7gZ8B+QtFVGJEit0BIQ0OC0CG/GLYzMEo=";
+    hash = "sha256-4FGY/MS8sB3dh8iCrA5yOl0/qiP9rzXf7v43iZe6FxU=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +58,38 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustc
     desktop-file-utils
+    glib
+    bash
+    dbus
+    makeWrapper
+    sqlite
+    gtk4
+    dbus
+    xdg-utils
+    xdg-desktop-portal
   ];
 
   buildInputs = [
     glib
     sqlite
     openssl
+    glib
+    gtk4
+    ffmpeg
+    sqlite
+    openssl
+    gsettings-desktop-schemas
+    libx11
+    libxcursor
+    libxrandr
+    libxi
+    libxcb
+    libxkbcommon
+    vulkan-loader
+    wayland
+    dbus
+    xdg-utils
+    xdg-desktop-portal
   ];
 
   preBuild = "export OUT_PATH=$out";
@@ -55,16 +98,28 @@ stdenv.mkDerivation (finalAttrs: {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  mesonFlags = [ "-Dcargo_features=nixos" ];
-
   passthru.updateScript = nix-update-script { };
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --suffix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          wayland
+          libxkbcommon
+          vulkan-loader
+          libGL
+          dbus
+        ]
+      }
+    )
+  '';
 
   meta = {
     description = "Lightning fast wallpaper setter for Wayland";
     longDescription = ''
       A GUI wallpaper setter for Wayland that is a spiritual successor
       for the minimalistic wallpaper changer for X11 nitrogen. Written purely
-      in the Rust 🦀 programming language. Supports hyprpaper, swaybg, mpvpaper and swww wallpaper changers.
+      in the Rust 🦀 programming language. Supports hyprpaper, swaybg, mpvpaper, swww  and gSlapper wallpaper changers.
     '';
     homepage = "https://github.com/nikolaizombie1/waytrogen";
     changelog = "https://github.com/nikolaizombie1/waytrogen/releases/tag/${finalAttrs.version}";
