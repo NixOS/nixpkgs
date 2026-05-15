@@ -25,7 +25,7 @@ versions into the Python environment.
   fetchFromGitHub,
 }:
 
-buildHomeAssistantComponent {
+buildHomeAssistantComponent (finalAttrs: {
   # owner, domain, version
 
   src = fetchFromGitHub {
@@ -39,7 +39,7 @@ buildHomeAssistantComponent {
   meta = {
     # changelog, description, homepage, license, maintainers
   };
-}
+})
 ```
 
 ## Package attribute

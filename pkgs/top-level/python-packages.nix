@@ -17875,6 +17875,8 @@ self: super: with self; {
 
   simple-parsing = callPackage ../development/python-modules/simple-parsing { };
 
+  simple-pid = callPackage ../development/python-modules/simple-pid { };
+
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
   simple-rlp = callPackage ../development/python-modules/simple-rlp { };
