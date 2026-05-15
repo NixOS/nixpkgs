@@ -22,6 +22,7 @@
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ e1618033 ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    mainProgram = "internxt-drive";
   };
 }).overrideAttrs
   (_: {
