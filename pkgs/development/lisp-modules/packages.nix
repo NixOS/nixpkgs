@@ -540,7 +540,7 @@ let
         meta = {
           description = "Functional collections library";
           homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
-          license = pkgs.lib.licenses.llgpl21;
+          license = with pkgs.lib.licenses; WITH lgpl21Only llgplPreamble;
         };
       });
 

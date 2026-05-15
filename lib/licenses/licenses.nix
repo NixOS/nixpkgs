@@ -1002,9 +1002,9 @@ lib.mapAttrs mkLicense (
       fullName = "Licence Libre du Québec – Permissive version 1.1";
     };
 
-    llgpl21 = {
-      fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
-      url = "https://opensource.franz.com/preamble.html";
+    llgplPreamble = {
+      spdxId = "LLGPL";
+      fullName = "LLGPL Preamble";
     };
 
     llvm-exception = {

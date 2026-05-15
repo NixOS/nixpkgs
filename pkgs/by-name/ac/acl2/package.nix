@@ -185,20 +185,22 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/acl2-devel/acl2-devel/releases";
     license =
       with lib.licenses;
-      [
-        # ACL2 itself is bsd3
-        bsd3
-      ]
-      ++ lib.optionals certifyBooks [
-        # The community books are mostly bsd3 or mit but with a few
-        # other things thrown in.
-        mit
-        gpl2
-        llgpl21
-        cc0
-        publicDomain
-        unfreeRedistributable
-      ];
+      AND (
+        [
+          # ACL2 itself is bsd3
+          bsd3
+        ]
+        ++ lib.optionals certifyBooks [
+          # The community books are mostly bsd3 or mit but with a few
+          # other things thrown in.
+          mit
+          gpl2
+          (WITH lgpl21Only llgplPreamble)
+          cc0
+          publicDomain
+          unfreeRedistributable
+        ]
+      );
     maintainers = with lib.maintainers; [
       kini
       raskin
