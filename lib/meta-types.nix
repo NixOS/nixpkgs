@@ -173,10 +173,10 @@ lib.fix (self: {
 
   enum =
     values:
-    assert isList values && all isString values;
+    assert isList values;
     {
-      name = "enum<${concatStringsSep "," values}>";
-      verify = v: isString v && elem v values;
+      name = if all isString values then "enum<${concatStringsSep "," values}>" else "enum";
+      verify = v: elem v values;
     };
 
   record =
