@@ -49,6 +49,7 @@ in
           # clobbering the PATH that niri-session imported into the user
           # manager and breaking spawn actions that rely on it.
           enableDefaultPath = false;
+          overrideStrategy = "asDropin";
         };
 
         xdg.portal = {
