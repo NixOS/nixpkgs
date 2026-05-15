@@ -2052,7 +2052,7 @@ let
       {
         exporterConfig = {
           enable = true;
-          instance = "/run/varnish/varnish";
+          instance = "/var/run/varnishd";
           group = "varnish";
         };
         metricProvider = {
