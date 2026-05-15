@@ -7,14 +7,14 @@
 }:
 
 let
-  version = "2.9.8.1";
+  version = "2.9.9.1";
 in
 skawarePackages.buildPackage {
   inherit version;
 
   pname = "execline";
   # ATTN: also check whether there is a new manpages version
-  sha256 = "sha256-IzUNEHl5CWNgYFImB1kctKIRgyjLWMXmX7GaLA1HJk4=";
+  sha256 = "sha256-vmNTMpepPDb9JnGVEXtOZoaHpSb4NFF6jbR9hbbH7Go=";
 
   # Maintainer of manpages uses following versioning scheme: for every
   # upstream $version he tags manpages release as ${version}.1, and,
