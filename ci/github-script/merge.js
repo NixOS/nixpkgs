@@ -7,8 +7,8 @@ function runChecklist({
   pull_request,
   log,
   maintainers,
-  user,
-  userIsMaintainer,
+  user = null,
+  userIsMaintainer = false,
 }) {
   const allByName = files.every(
     ({ filename }) =>

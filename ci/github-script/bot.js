@@ -59,6 +59,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
+          workflowRunId: run.id,
           repositoryName: context.repo.repo,
           repositoryOwner: context.repo.owner,
           token: core.getInput('github-token'),
@@ -278,7 +279,7 @@ module.exports = async ({ github, context, core, dry }) => {
     // This is intentionally less than the time that Eval takes, so that the label job
     // running after Eval can indeed label the PR as conflicted if that is the case.
     const merge_commit_sha_valid =
-      Date.now() - new Date(pull_request.created_at) > 3 * 60 * 1000
+      Date.now() - new Date(pull_request.created_at).getTime() > 3 * 60 * 1000
 
     const prLabels = {
       // We intentionally don't use the mergeable or mergeable_state attributes.
@@ -373,6 +374,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
+          workflowRunId: run_id,
           repositoryName: context.repo.repo,
           repositoryOwner: context.repo.owner,
           token: core.getInput('github-token'),
@@ -740,6 +742,7 @@ module.exports = async ({ github, context, core, dry }) => {
             artifact.id,
             {
               findBy: {
+                workflowRunId: lastRun.id,
                 repositoryName: context.repo.repo,
                 repositoryOwner: context.repo.owner,
                 token: core.getInput('github-token'),

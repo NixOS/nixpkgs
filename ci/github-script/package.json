@@ -6,11 +6,18 @@
     "Keep `@actions/artifact` and `bottleneck` in sync with",
     "`.github/workflows/bot.yml`."
   ],
+  "scripts": {
+    "typecheck": "tsc --project jsconfig.json"
+  },
   "dependencies": {
     "@actions/artifact": "5.0.3",
     "@actions/core": "1.11.1",
     "@actions/github": "6.0.1",
     "bottleneck": "2.19.5",
     "commander": "14.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.7.0"
   }
 }
