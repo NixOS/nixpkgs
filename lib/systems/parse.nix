@@ -790,6 +790,21 @@ rec {
     };
 
   mkSkeletonFromList =
+    let
+      linuxComponents = [
+        "eabi"
+        "eabihf"
+        "elf"
+        "gnu"
+      ];
+      appleComponents = [
+        "redox"
+        "mmixware"
+        "ghcjs"
+        "mingw32"
+        "uefi"
+      ];
+    in
     l:
     {
       "1" =
@@ -842,15 +857,7 @@ rec {
           thirdComponent = elemAt l 2;
         in
         # cpu-kernel-environment
-        if
-          secondComponent == "linux"
-          || elem thirdComponent [
-            "eabi"
-            "eabihf"
-            "elf"
-            "gnu"
-          ]
-        then
+        if secondComponent == "linux" || elem thirdComponent linuxComponents then
           {
             cpu = head l;
             kernel = secondComponent;
@@ -860,13 +867,7 @@ rec {
         # cpu-vendor-os
         else if
           secondComponent == "apple"
-          || elem thirdComponent [
-            "redox"
-            "mmixware"
-            "ghcjs"
-            "mingw32"
-            "uefi"
-          ]
+          || elem thirdComponent appleComponents
           || hasPrefix "freebsd" thirdComponent
           || hasPrefix "netbsd" thirdComponent
           || hasPrefix "openbsd" thirdComponent
