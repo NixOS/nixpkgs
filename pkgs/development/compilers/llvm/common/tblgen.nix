@@ -14,6 +14,17 @@
   stdenv,
   version,
   clangPatches,
+  # List of tablegen targets.
+  targets ? [
+    # TODO: sort on mass rebuild
+    "llvm-tblgen"
+    "clang-tblgen"
+    "clang-tidy-confusable-chars-gen"
+    "mlir-tblgen"
+  ]
+  ++ lib.optionals (lib.versionOlder release_version "20") [
+    "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
+  ],
 }:
 
 let
@@ -36,30 +47,37 @@ let
   # to build.
   pname = "llvm-tblgen";
 
+  # TODO: remove on mass rebuild
+  targetsSortedToAvoidMassRebuild = lib.filter (lib.flip lib.elem targets) [
+    "clang-tblgen"
+    "lldb-tblgen"
+    "llvm-tblgen"
+    "clang-tidy-confusable-chars-gen"
+    "mlir-tblgen"
+  ];
+
+  targetsToProject = {
+    "clang-pseudo-gen" = "clang-tools-extra";
+    "clang-tblgen" = "clang";
+    "clang-tidy-confusable-chars-gen" = "clang-tools-extra";
+    "lldb-tblgen" = "lldb";
+    "llvm-tblgen" = "llvm";
+    "mlir-tblgen" = "mlir";
+  };
+
+  # TODO: sort on mass rebuild
+  projects = lib.unique (map (t: targetsToProject."${t}") targets);
+
   src' =
     if monorepoSrc != null then
       runCommand "${pname}-src-${version}" { } ''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/third-party "$out"
-        cp -r ${monorepoSrc}/llvm "$out"
-        cp -r ${monorepoSrc}/clang "$out"
-        cp -r ${monorepoSrc}/clang-tools-extra "$out"
-        cp -r ${monorepoSrc}/mlir "$out"
+        ${lib.concatStringsSep "\n" (map (p: ''cp -r ${monorepoSrc}/${p} "$out"'') projects)}
       ''
     else
       src;
-
-  # List of tablegen targets.
-  targets = [
-    "clang-tblgen"
-    "llvm-tblgen"
-    "clang-tidy-confusable-chars-gen"
-    "mlir-tblgen"
-  ]
-  ++ lib.optionals (lib.versionOlder release_version "20") [
-    "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
-  ];
 
   self = stdenv.mkDerivation (finalAttrs: {
     inherit pname version patches;
@@ -69,7 +87,7 @@ let
 
     __structuredAttrs = true;
 
-    postPatch = ''
+    postPatch = lib.optionalString (lib.elem "clang" projects) ''
       (
         cd ../clang
         chmod u+rwX -R .
@@ -92,20 +110,13 @@ let
 
     cmakeFlags = [
       # Projects with tablegen-like tools.
-      "-DLLVM_ENABLE_PROJECTS=${
-        lib.concatStringsSep ";" [
-          "llvm"
-          "clang"
-          "clang-tools-extra"
-          "mlir"
-        ]
-      }"
+      "-DLLVM_ENABLE_PROJECTS=${lib.concatStringsSep ";" projects}"
     ]
     ++ devExtraCmakeFlags;
 
-    ninjaFlags = targets;
+    ninjaFlags = finalAttrs.targets;
 
-    inherit targets;
+    targets = targetsSortedToAvoidMassRebuild;
 
     installPhase = ''
       mkdir -p $out/bin
