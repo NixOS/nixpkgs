@@ -28091,12 +28091,6 @@
     githubId = 50843046;
     name = "tornax";
   };
-  toschmidt = {
-    email = "tobias.schmidt@in.tum.de";
-    github = "toschmidt";
-    githubId = 27586264;
-    name = "Tobias Schmidt";
-  };
   totalchaos = {
     email = "basil.keeler@outlook.com";
     github = "totalchaos05";

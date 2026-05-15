@@ -17,10 +17,7 @@ let
       Mailspring's sync engine runs locally, but its source is not open.
     '';
     mainProgram = "mailspring";
-    maintainers = with lib.maintainers; [
-      toschmidt
-      wrench-exile-legacy
-    ];
+    maintainers = with lib.maintainers; [ wrench-exile-legacy ];
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
