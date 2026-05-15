@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: npm install bottleneck@2.19.5
 
-      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_COMMIT_CHECK_CLIENT_ID
         id: app-token
         with:
@@ -102,7 +102,7 @@ jobs:
           sparse-checkout: |
             ci/github-script
 
-      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_MANUAL_EDIT_CHECK_CLIENT_ID
         id: app-token
         with:
