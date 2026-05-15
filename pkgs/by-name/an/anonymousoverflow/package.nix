@@ -26,8 +26,8 @@ buildGoModule (finalAttrs: {
   env.CGO_ENABLED = 0;
 
   postInstall = ''
-    install -d $out/share/${finalAttrs.pname}
-    cp -r templates public $out/share/${finalAttrs.pname}/
+    install -d $out/share/anonymousoverflow
+    cp -r templates public $out/share/anonymousoverflow/
 
     wrapProgram $out/bin/${finalAttrs.pname} \
       --chdir "$out/share/${finalAttrs.pname}"
