@@ -181,8 +181,9 @@ buildPythonPackage (finalAttrs: {
     "test_form_dirty_clears_on_submit_to_peer[chromium]"
 
     # playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 5000ms exceeded.
-    # (same issue with 20s)
     "test_long_underscore_label_wraps_within_container[chromium]"
+    "test_command_description_update[chromium]"
+    "test_command_icon_update[chromium]"
 
     # playwright._impl._errors.TargetClosedError: Browser.new_context: Target page, context or browser has been closed
     "test_late_joining_client_sees_dirty_form[chromium]"
