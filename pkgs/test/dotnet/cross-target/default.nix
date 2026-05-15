@@ -18,7 +18,7 @@ let
     dotnet-sdk_target:
 
     stdenv.mkDerivation {
-      name = "dotnet-cross-target-${dotnet-sdk_target.version}-test";
+      name = "dotnet-cross-target-${dotnet-sdk_target.version}-from-${dotnet-sdk.version}-test";
 
       nativeBuildInputs = [
         (dotnetCorePackages.combinePackages [
