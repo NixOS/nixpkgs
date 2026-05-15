@@ -24,6 +24,7 @@
   gamescope,
   mangohud,
   vkbasalt-cli,
+  vulkan-tools,
   vmtouch,
   libportal,
   nix-update-script,
@@ -103,6 +104,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       xdpyinfo
       imagemagick
       vkbasalt-cli
+      vulkan-tools
 
       gamemode
       gamescope

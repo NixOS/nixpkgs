@@ -1352,6 +1352,7 @@ assertNoAdditions {
       # Pickers, can use telescope, fzf-lua, or snacks
       fzf-lua
       telescope-nvim
+      neotest
     ];
   };
 

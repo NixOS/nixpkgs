@@ -66,9 +66,12 @@ let
         '';
 
         postConfigure = old.postConfigure or "" + ''
-          [[ ! -v prebuiltPackages ]] || \
-            ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
-          ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+          (
+            shopt -s nullglob
+            [[ ! -v prebuiltPackages ]] || \
+              ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+            ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+          )
         '';
 
         buildFlags =
@@ -132,8 +135,35 @@ let
                       -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1901' \
                       src/$proj/Directory.Build.props
                   done
+
+                  # disable all the after-build targets
+                  substituteInPlace build.proj \
+                    --replace-fail 'AfterTargets="Build"' "" \
+                    --replace-quiet '$(RepoProjectsDir)dotnet.proj' '$(RepoProjectsDir)$(RootRepo).proj'
+
+                  [[ ! -e eng/finish-source-only.proj ]] ||
+                    substituteInPlace eng/finish-source-only.proj \
+                      --replace-quiet 'AfterTargets="Build"' "" \
+                      --replace-quiet 'BeforeTargets="Build"' ""
+
+                  [[ ! -e eng/extract-sdk-archive.proj ]] ||
+                    substituteInPlace eng/extract-sdk-archive.proj \
+                      --replace-quiet 'BeforeTargets="AfterBuild"' "" \
+                      --replace-quiet 'BeforeTargets="Build"' ""
+
+                  [[ ! -e eng/PublishSourceBuild.props ]] ||
+                    substituteInPlace eng/PublishSourceBuild.props \
+                      --replace-fail 'AfterTargets="Publish"' "" \
+                      --replace-fail 'AfterTargets="DiscoverArtifacts"' ""
                 '';
-                buildFlags = [ "--online" ] ++ old.buildFlags;
+                buildFlags = [
+                  "--online"
+                ]
+                ++ old.buildFlags
+                ++ [
+                  "-p:RootRepo=source-build-reference-packages"
+                  "-p:SkipPrepareSdkArchive=true"
+                ];
                 prebuiltPackages = null;
               });
 

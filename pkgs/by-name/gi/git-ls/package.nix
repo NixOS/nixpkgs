@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-ls";
-  version = "6.0.0";
+  version = "6.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "llimllib";
     repo = "git-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Is1bt1XLrzatxhMTrzClBeIWkTdepzDaDla1Ng+wrJ0=";
+    hash = "sha256-RSSddZRgYYQcHQA7ZVGLx/iZFx0crFiSY/EF2luWVjA=";
   };
 
   vendorHash = "sha256-Bk6IBG+BrqY4FNVIlbSSSnqqAeL+8SJUtRXuIp4e8f8=";

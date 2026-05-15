@@ -21,26 +21,26 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-6mLUxHFQOlDRsNrmS8HoczrxhBxKMnku47SZzLCW87k=";
+          hash = "sha256-av844ENiMjenpHu5HOFHotAZ2OcZETpuxhfrKW/GYRk=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-x5HBuPHDH81gXoCAA0UhsyDfKmq37C7FauAMDTXsVv0=";
+          hash = "sha256-LKGZ2TWJWVhn2D6NmQFszB3B/kf3FJd6+PR6ZZ2r1Hc=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
-          hash = "sha256-geBnM2AmZPSmxF6uHGNysRM7ujx3tluda6yYW5nzaXQ=";
+          hash = "sha256-n/wWN6SeRPUTX2X/0eXDRUy4UM0nYT3Yk8gVxy4wyXc=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-13LvDqpmzYmRi2EugJH1t7h6azzGcJAusOSMXcnXC40=";
+          hash = "sha256-oW16SY7D7q6/3PyWSBz04/JU1T8x6DnIkTe3+T/RSzY=";
         };
       };
     in
     {
       name = "claude-code";
       publisher = "anthropic";
-      version = "2.1.138";
+      version = "2.1.140";
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");

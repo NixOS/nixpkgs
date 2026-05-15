@@ -8,6 +8,7 @@
   dbus,
   dconf,
   ddcutil,
+  enlightenment,
   glib,
   hwdata,
   imagemagick,
@@ -47,6 +48,7 @@
   dbusSupport ? true,
   flashfetchSupport ? false,
   terminalSupport ? true,
+  enlightenmentSupport ? true,
   gnomeSupport ? true,
   imageSupport ? true,
   openclSupport ? true,
@@ -61,13 +63,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.62.1";
+  version = "2.63.1";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-lI3p0LPDg5EXQ60NIYkpv0sNeckUdZjJSsmc2XP1l0E=";
+    hash = "sha256-6c3vA8AFSfew1TdSeUmJ4mIbFyDaJPVWUc93iZyqRY0=";
   };
 
   outputs = [
@@ -122,6 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optionals dbusSupport [
           # Bluetooth, wifi, player & media detection
           dbus
+        ]
+        ++ lib.optionals enlightenmentSupport [
+          # Eet support for reading Enlightenment window manager configuration.
+          enlightenment.efl
         ]
         ++ lib.optionals gnomeSupport [
           # Needed for values that are only stored in DConf + Fallback for GSettings.
@@ -215,6 +221,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
 
+    (lib.cmakeBool "ENABLE_EET" enlightenmentSupport)
+
     (lib.cmakeBool "ENABLE_ELF" terminalSupport)
 
     (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
@@ -282,6 +290,7 @@ stdenv.mkDerivation (finalAttrs: {
       * audioSupport: PulseAudio functionality
       * brightnessSupport: External display brightness detection via DDCUtil
       * dbusSupport: DBus functionality for Bluetooth, WiFi, player & media detection
+      * enlightenmentSupport: Enlightenment configuration detection via EFL's Eet
       * flashfetchSupport: Build the flashfetch utility (default: false)
       * gnomeSupport: GNOME integration (dconf, dbus, gio)
       * imageSupport: Image rendering (chafa and imagemagick)

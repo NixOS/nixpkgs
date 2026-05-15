@@ -25,13 +25,13 @@
 
 let
   pname = "plezy";
-  version = "1.30.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-9bB9L9f2s0i2xF4JIe4vlEpt/bmF1gf3gxcoHdCrYqc=";
+    hash = "sha256-Pi5M74CI6J31Pzaf7wnUFFTpbOSwOTWdKUoYuXt8+Zs=";
   };
 
   simdutf = fetchurl {
@@ -46,7 +46,7 @@ let
   '';
 
   meta = {
-    description = "Modern cross-platform Plex client built with Flutter";
+    description = "Modern cross-platform Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
@@ -69,6 +69,11 @@ let
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = lib.importJSON ./git-hashes.json;
+
+    # Upstream uses a sentry-dart fork that fetches sentry-native as a zip instead of via
+    # git clone. The PR was merged and reverted upstream (getsentry/sentry-dart#3630), so
+    # we use upstream since theres no actual meaningful difference
+    patches = [ ./replace-sentry-fork.patch ];
 
     nativeBuildInputs = [
       pkg-config
@@ -134,7 +139,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-a3LvwWZvLPD7yKKbC+oYXSgoHXUS+mOojzfDyW7/QOE=";
+      hash = "sha256-zkctxQIgpU9dGhv8SdVy2S4eFUQ7GgeaWzwSEvFrWWc=";
     };
 
     nativeBuildInputs = [

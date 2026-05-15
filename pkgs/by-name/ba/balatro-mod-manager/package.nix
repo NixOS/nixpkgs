@@ -50,7 +50,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-97O4DrnjZO2mhSrCQz9xbcRCSaxMNNa4NaLNPlmecJg=";
+    outputHash =
+      {
+        x86_64-linux = "sha256-97O4DrnjZO2mhSrCQz9xbcRCSaxMNNa4NaLNPlmecJg=";
+        aarch64-linux = "sha256-0H14Be8jhBwOBG2Ui8gYrnAcTtatLVsBxFVfTyzmutw=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   };
 
   cargoHash = "sha256-TPZf4jtv/3mIpe6ASzPkIusQC/iPFpYN51XiiH6pkZc=";
@@ -92,13 +97,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    # Rollup for ARM64 is broken with Node modules
-    broken = stdenv.hostPlatform.isAarch64;
     description = "A mod manager for the game Balatro";
     homepage = "https://balatro-mod-manager.dasguney.com/";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mhdask ];
+    platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.aarch64);
+    maintainers = with lib.maintainers; [
+      mhdask
+      ryand56
+    ];
     mainProgram = "BMM";
   };
 })

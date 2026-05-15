@@ -2,25 +2,23 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  garminconnect,
-  tzlocal,
+  ha-garmin,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "cyberjunky";
   domain = "garmin_connect";
-  version = "0.2.38";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "home-assistant-garmin_connect";
     tag = version;
-    hash = "sha256-Df/ecgePR10LIeaGy0kmIWqiP9G7j+KscL/YA3VsARE=";
+    hash = "sha256-omHgfkrje5xR9gLnQpAz33+LtXm5eGJ8nERYBX4F2sY=";
   };
 
   dependencies = [
-    garminconnect
-    tzlocal
+    ha-garmin
   ];
 
   meta = {

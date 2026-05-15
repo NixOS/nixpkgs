@@ -5,7 +5,6 @@
   eio,
   lwt,
 }:
-
 buildDunePackage (finalAttrs: {
   pname = "lwt_eio";
   version = if lib.versionAtLeast lwt.version "6.0.0" then "0.6" else "0.5.1";

@@ -393,7 +393,6 @@ in
       };
 
       serviceConfig = {
-        Type = "notify";
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
         ExecStartPre = [
           (
@@ -407,7 +406,6 @@ in
           )
         ];
         ExecStart = "${cfg.package}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
         # Create rootDir in the host's mount namespace.
@@ -513,7 +511,18 @@ in
           "quotactl"
         ];
         SystemCallArchitectures = "native";
-      };
+      }
+      // (
+        if lib.versionAtLeast cfg.package.version "4.1.1" then
+          {
+            Type = "notify-reload";
+          }
+        else
+          {
+            Type = "notify";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          }
+      );
     };
 
     # It's useful to have transmission in path, e.g. for remote control

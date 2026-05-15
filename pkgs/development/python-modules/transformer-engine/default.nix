@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  fetchpatch,
   python,
   cudaPackages,
 
@@ -34,6 +33,9 @@
   onnx,
   onnxscript,
 
+  # passthru
+  transformer-engine,
+
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ?
     if withPytorch then torch.cudaCapabilities else cudaPackages.flags.cudaCapabilities,
@@ -41,6 +43,7 @@
   withPytorch ? true,
   withJax ? true,
   withNvshmem ? false,
+  withCusolvermp ? false,
 }:
 
 let
@@ -77,7 +80,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.14";
+  version = "2.15";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -87,42 +90,18 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-yxcUn75blB5ssEqGXZFDUrBv2/WM8yzumJCt5olV5Po=";
+    hash = "sha256-0a6etDttNoTL1pe2OZb1CcS0/AtozeAG8NFz2Hkppn8=";
   };
 
-  patches =
-    optionals cudaSupport [
-      (replaceVars ./cuda-libs-paths.patch {
-        libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
-        libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
-        libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
+  patches = optionals cudaSupport [
+    (replaceVars ./cuda-libs-paths.patch {
+      libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
+      libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
+      libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
 
-        cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
-      })
-
-      # https://github.com/NVIDIA/TransformerEngine/pull/2832
-      (fetchpatch {
-        name = "fix-cuda-arch-cmake-logic";
-        url = "https://github.com/NVIDIA/TransformerEngine/commit/fca261ecd09c318d22e7eeebda79632eed8cb9e4.patch";
-        hash = "sha256-nph01cIfmjN7RUFZif5ORoz29CEHWwetiHMEZVnnOyY=";
-      })
-    ]
-    ++ optionals withNvshmem [
-      # https://github.com/NVIDIA/TransformerEngine/pull/2815
-      (fetchpatch {
-        name = "fix-nvshmem-build";
-        url = "https://github.com/NVIDIA/TransformerEngine/commit/e83c09742166dfef3f871cfa1407605feafb3afe.patch";
-        hash = "sha256-5pf0Dg1XL7oAQjR1JZcdgbeaGj9qw9G5+i9Ac0iff64=";
-      })
-    ]
-    ++ optionals (withMpi && withJax) [
-      # https://github.com/NVIDIA/TransformerEngine/pull/2835
-      (fetchpatch {
-        name = "fix-jax-extension-build-with-mpi";
-        url = "https://github.com/NVIDIA/TransformerEngine/commit/2dd31bb849e83cce51c7d169db883862063d3a95.patch";
-        hash = "sha256-QSRMetseYPGGZCgGkS9rIj9nJdazCD4hv2IgPc+ClSM=";
-      })
-    ];
+      cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
+    })
+  ];
 
   postPatch =
     # Patch build-system requirements:
@@ -171,6 +150,9 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
 
     NVTE_ENABLE_NVSHMEM = if withNvshmem then 1 else 0;
     NVSHMEM_HOME = optionalString withNvshmem cudaPackages.libnvshmem.outPath;
+
+    NVTE_WITH_CUSOLVERMP = if withCusolvermp then 1 else 0;
+    CUSOLVERMP_HOME = optionalString withCusolvermp (getLib cudaPackages.libcusolvermp).outPath;
   };
 
   build-system = [
@@ -216,6 +198,9 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   ]
   ++ optionals withMpi [
     mpi # mpi.h
+  ]
+  ++ optionals withCusolvermp [
+    cudaPackages.libcusolvermp
   ];
 
   runtimeDependencies = optionals withNvshmem [
@@ -245,23 +230,37 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     torch
   ];
 
-  # When built with nvshmem support `dlopen`ing libtransformer_engine.so `dlopen`s
-  # libnvidia-ml.so.1 which is provided by the GPU driver at run time:
-  # OSError: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
-  pythonImportsCheck = optionals (!withNvshmem) (
-    [
-      "transformer_engine"
-    ]
-    ++ optionals withJax [
-      "transformer_engine_jax"
-    ]
-    ++ optionals withPytorch [
-      "transformer_engine_torch"
-    ]
-  );
+  dontUsePythonImportsCheck =
+    # When built with cusolvermp support `dlopen`ing libtransformer_engine.so `dlopen`s
+    # libcuda.so.1 which is provided by the GPU driver at run time:
+    # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
+    withCusolvermp
+
+    # When built with nvshmem support `dlopen`ing libtransformer_engine.so `dlopen`s
+    # libnvidia-ml.so.1 which is provided by the GPU driver at run time:
+    # OSError: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
+    || withNvshmem;
+
+  pythonImportsCheck = [
+    "transformer_engine"
+  ]
+  ++ optionals withJax [
+    "transformer_engine_jax"
+  ]
+  ++ optionals withPytorch [
+    "transformer_engine_torch"
+  ];
 
   # Almost all tests require GPU access
   doCheck = false;
+
+  passthru.tests = {
+    withMpi = transformer-engine.override { withMpi = true; };
+    withPytorch = transformer-engine.override { withPytorch = true; };
+    withJax = transformer-engine.override { withJax = true; };
+    withNvshmem = transformer-engine.override { withNvshmem = true; };
+    withCusolvermp = transformer-engine.override { withCusolvermp = true; };
+  };
 
   meta = {
     description = "Library for accelerating Transformer models on NVIDIA GPUs";

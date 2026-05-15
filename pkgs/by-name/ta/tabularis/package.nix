@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   cargo-tauri,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   wrapGAppsHook4,
   webkitgtk_4_1,
@@ -14,6 +14,9 @@
   openssl,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabularis";
   version = "0.9.12";
@@ -38,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-S/XCypKyYlJtuISNiG8NtJzisAejiUwqPVltXEmVlZw=";
   };

@@ -59,7 +59,6 @@ resholve.mkDerivation rec {
   meta = {
     description = "NordVPN Wireguard (NordLynx) client in POSIX shell";
     homepage = "https://github.com/phirecc/wgnord";
-    changelog = "https://github.com/phirecc/wgnord/releases/tag/v${version}";
     maintainers = [ ];
     license = lib.licenses.mit;
     mainProgram = "wgnord";

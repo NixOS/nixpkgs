@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+versionAtLeast () {
+    local cur_version=$1 min_version=$2
+    printf "%s\0%s" "$min_version" "$cur_version" | sort -zVC
+}
+
 pnpmConfigHook() {
     echo "Executing pnpmConfigHook"
 
@@ -17,13 +22,18 @@ pnpmConfigHook() {
       exit 1
     fi
 
-    # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
-    # any pnpm command would fail in that directory, the following disables this
-    pushd $HOME
-    pnpm config set manage-package-manager-versions false
+    pushd "$HOME"
+    pnpmVersion=$(pnpm --version)
+
+    if versionAtLeast "$pnpmVersion" "11"; then
+      # pnpm 11 uses a different mechanism to manage package manager versions
+      export pnpm_config_pm_on_fail=ignore
+    else
+      pnpm config set manage-package-manager-versions false
+    fi
     popd
 
-    echo "Found 'pnpm' with version '$(pnpm --version)'"
+    echo "Found 'pnpm' with version '$pnpmVersion'"
 
     fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version" || echo 1)
 
@@ -33,7 +43,9 @@ pnpmConfigHook() {
 
     export STORE_PATH=$(mktemp -d)
     export npm_config_arch="@npmArch@"
+    export pnpm_config_arch="@npmArch@"
     export npm_config_platform="@npmPlatform@"
+    export pnpm_config_platform="@npmPlatform@"
 
     if [[ $fetcherVersion -ge 3 ]]; then
       tar --zstd -xf "$pnpmDeps/pnpm-store.tar.zst" -C "$STORE_PATH"
