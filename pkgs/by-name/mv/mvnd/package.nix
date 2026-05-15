@@ -5,7 +5,6 @@
   installShellFiles,
   makeWrapper,
   maven,
-  mvnd,
   nix-update-script,
   runCommand,
   stdenv,
@@ -19,16 +18,15 @@ let
     x86_64-darwin = "darwin-amd64";
     x86_64-linux = "linux-amd64";
   };
-  inherit (platformMap.${stdenv.system}) os arch;
 in
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "mvnd";
   version = "1.0.5";
   src = fetchFromGitHub {
     owner = "apache";
     repo = "maven-mvnd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/ODRS6xaxkn7okUh8phN1GUNG7tDAKjmAIQn8NrC+ag=";
   };
 
@@ -42,7 +40,7 @@ maven.buildMavenPackage rec {
     makeWrapper
   ];
 
-  mvnDepsParameters = mvnParameters;
+  mvnDepsParameters = finalAttrs.mvnParameters;
   mvnParameters = lib.concatStringsSep " " (
     [
       "-Dmaven.buildNumber.skip=true" # skip build number generation; requires a git repository
@@ -69,7 +67,7 @@ maven.buildMavenPackage rec {
     mkdir -p $out/bin
     mkdir -p $out/mvnd-home
 
-    cp -r dist/target/maven-mvnd-${version}-${platformMap.${stdenv.system}}/* $out/mvnd-home
+    cp -r dist/target/maven-mvnd-${finalAttrs.version}-${platformMap.${stdenv.system}}/* $out/mvnd-home
     makeWrapper $out/mvnd-home/bin/mvnd $out/bin/mvnd \
       --set-default MVND_HOME $out/mvnd-home
 
@@ -89,13 +87,13 @@ maven.buildMavenPackage rec {
       package =
         runCommand "mvnd"
           {
-            inherit version;
+            inherit (finalAttrs) version;
             nativeBuildInputs = [ makeWrapper ];
           }
           ''
             mkdir -p $out/bin
-            makeWrapper ${mvnd}/bin/mvnd $out/bin/mvnd \
-              --suffix PATH : ${lib.makeBinPath [ mvnJdk ]}
+            makeWrapper ${finalAttrs.finalPackage}/bin/mvnd $out/bin/mvnd \
+              --suffix PATH : ${lib.makeBinPath [ finalAttrs.mvnJdk ]}
           '';
     };
   });
@@ -108,4 +106,4 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ nathanregner ];
     mainProgram = "mvnd";
   };
-}
+})
