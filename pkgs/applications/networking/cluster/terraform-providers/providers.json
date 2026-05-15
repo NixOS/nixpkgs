@@ -45,13 +45,13 @@
     "vendorHash": "sha256-qjtyg+b3CfF24us0Fqw1KqKEbuoqL4eLe4QCuIAp4SE="
   },
   "aliyun_alicloud": {
-    "hash": "sha256-1CeivnFt+2RaO29JdqUhoHaIh/5K1dGG23Ca/P5fjT8=",
+    "hash": "sha256-IM7vrhWZG5aAm9qEdEthQJpLj/NPEPIVNzX3KFR8do0=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.277.0",
+    "rev": "v1.278.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-1cvxBtsehwAhF48d/i8qTi6XJxxYMAeq1MAInuUE3Sw="
+    "vendorHash": "sha256-lBD9ifRpUwg45V7zZG3grHvndG0V42oiX68zgcM7t74="
   },
   "aminueza_minio": {
     "hash": "sha256-u3kCxgZ0Mg63TinXnncopP2nKpjnmXTUQYTN7g4DIRA=",
@@ -661,13 +661,13 @@
     "vendorHash": "sha256-JNTe1RI2aDw86jNzYJqmiBr5BBnr824/DhkJeaMpbKI="
   },
   "hashicorp_time": {
-    "hash": "sha256-ZArYfbzbrkxGlL1BRFM7PN3hLzdssIL4COsUBdLVMYY=",
+    "hash": "sha256-5+iPq2It3oFHPBHWshfIuNo1xkOPcuSYyljt6j+j7lg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/time",
     "owner": "hashicorp",
     "repo": "terraform-provider-time",
-    "rev": "v0.13.1",
+    "rev": "v0.14.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4XCCzB5Va1jtTn5vgIVKjQq4g8sKe0SIw3ynZExz/Vg="
+    "vendorHash": "sha256-boeh/lZHlBD/bQqLnrY9oul4GcRZUHT97FyhKb4nE/c="
   },
   "hashicorp_tls": {
     "hash": "sha256-r7nthgw7MycME+edQ4jHQQ33mmpNv3t/LDbD5IkXDYA=",
@@ -1229,13 +1229,13 @@
     "vendorHash": "sha256-skswuFKhN4FFpIunbom9rM/FVRJVOFb1WwHeAIaEjn8="
   },
   "spacelift-io_spacelift": {
-    "hash": "sha256-oS3Ikmi5wUlVbQos16x1BXoqhgOMIGyJcpl7sIXmDtk=",
+    "hash": "sha256-m8l0fmDo8lFu8xIqO3tVD0vHIvgWSKVE7J6BxKm7LSY=",
     "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
     "owner": "spacelift-io",
     "repo": "terraform-provider-spacelift",
-    "rev": "v1.48.0",
+    "rev": "v1.49.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-/4v25xY/fmfSAEALRbXu/a+x3nC1Ly/IJPOEKmYjgmw="
+    "vendorHash": "sha256-C8TE7uxMf6LOTS6v22mXwUdk2eqQRinwrCH4ZVUCx4k="
   },
   "splunk-terraform_signalfx": {
     "hash": "sha256-pzro0Uyu12u1pKy22GrZAktoTKngjn4h5mZpABqARk0=",
