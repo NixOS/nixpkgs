@@ -793,48 +793,58 @@ rec {
     l:
     {
       "1" =
-        if head l == "avr" then
+        let
+          firstComponent = head l;
+        in
+        if firstComponent == "avr" then
           {
-            cpu = head l;
+            cpu = firstComponent;
             kernel = "none";
             abi = "unknown";
           }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 1 component is ambiguous";
       "2" = # We only do 2-part hacks for things Nix already supports
-        if elemAt l 1 == "cygwin" then
+        let
+          secondComponent = elemAt l 1;
+        in
+        if secondComponent == "cygwin" then
           mkSkeletonFromList [
             (head l)
             "pc"
-            "cygwin"
+            secondComponent
           ]
         # MSVC ought to be the default ABI so this case isn't needed. But then it
         # becomes difficult to handle the gnu* variants for Aarch32 correctly for
         # minGW. So it's easier to make gnu* the default for the MinGW, but
         # hack-in MSVC for the non-MinGW case right here.
-        else if elemAt l 1 == "windows" then
+        else if secondComponent == "windows" then
           {
             cpu = head l;
-            kernel = "windows";
+            kernel = secondComponent;
             abi = "msvc";
           }
-        else if (elemAt l 1) == "elf" then
+        else if secondComponent == "elf" then
           {
             cpu = head l;
             vendor = "unknown";
             kernel = "none";
-            abi = elemAt l 1;
+            abi = secondComponent;
           }
         else
           {
             cpu = head l;
-            kernel = elemAt l 1;
+            kernel = secondComponent;
           };
       "3" =
+        let
+          secondComponent = elemAt l 1;
+          thirdComponent = elemAt l 2;
+        in
         # cpu-kernel-environment
         if
-          elemAt l 1 == "linux"
-          || elem (elemAt l 2) [
+          secondComponent == "linux"
+          || elem thirdComponent [
             "eabi"
             "eabihf"
             "elf"
@@ -843,41 +853,41 @@ rec {
         then
           {
             cpu = head l;
-            kernel = elemAt l 1;
-            abi = elemAt l 2;
+            kernel = secondComponent;
+            abi = thirdComponent;
             vendor = "unknown";
           }
         # cpu-vendor-os
         else if
-          elemAt l 1 == "apple"
-          || elem (elemAt l 2) [
+          secondComponent == "apple"
+          || elem thirdComponent [
             "redox"
             "mmixware"
             "ghcjs"
             "mingw32"
             "uefi"
           ]
-          || hasPrefix "freebsd" (elemAt l 2)
-          || hasPrefix "netbsd" (elemAt l 2)
-          || hasPrefix "openbsd" (elemAt l 2)
-          || hasPrefix "genode" (elemAt l 2)
-          || hasPrefix "wasm32" (elemAt l 0)
+          || hasPrefix "freebsd" thirdComponent
+          || hasPrefix "netbsd" thirdComponent
+          || hasPrefix "openbsd" thirdComponent
+          || hasPrefix "genode" thirdComponent
+          || hasPrefix "wasm32" (head l)
         then
           {
             cpu = head l;
-            vendor = elemAt l 1;
+            vendor = secondComponent;
             kernel =
-              if elemAt l 2 == "mingw32" then
+              if thirdComponent == "mingw32" then
                 "windows" # autotools breaks on -gnu for window
               else
-                elemAt l 2;
+                thirdComponent;
           }
         # lots of tools expect a triplet for Cygwin, even though the vendor is just "pc"
-        else if elemAt l 2 == "cygwin" then
+        else if thirdComponent == "cygwin" then
           {
             cpu = head l;
-            vendor = elemAt l 1;
-            kernel = "cygwin";
+            vendor = secondComponent;
+            kernel = thirdComponent;
           }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 3 components is ambiguous";
