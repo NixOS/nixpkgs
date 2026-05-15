@@ -142,7 +142,8 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  checkInputs = finalAttrs.passthru.optional-dependencies.dev;
+  # adding pre-commit here break PYTHONPATH in 3.14
+  checkInputs = lib.filter (p: p.pname != "pre-commit") finalAttrs.passthru.optional-dependencies.dev;
 
   env = {
     PLAYWRIGHT_BROWSERS_PATH = playwright-driver.browsers;
