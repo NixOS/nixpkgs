@@ -57,14 +57,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "napari";
-  version = "0.7.0";
+  version = "0.7.1a6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fDt9n4+yQcA03IO7sMhcpiP3TfOWfyvbCjY7ImEj+Qg=";
+    hash = "sha256-WHIPNq3tjYRqCX8w4D7x0b5OTewBpVM91qRAXuC6WlM=";
   };
 
   postPatch = ''
