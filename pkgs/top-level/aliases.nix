@@ -1728,6 +1728,7 @@ mapAliases {
   poac = throw "'poac' has been renamed to/replaced by 'cabinpkg'"; # Converted to throw 2025-10-27
   pocket-updater-utility = throw "'pocket-updater-utility' has been renamed to/replaced by 'pupdate'"; # Converted to throw 2025-10-27
   podofo010 = throw "'podofo010' has been renamed to/replaced by 'podofo_0_10'"; # Converted to throw 2025-10-27
+  podofo_1_0 = throw "'podofo_1_0' has been deprecated in favour of 'podofo'"; # Added 2026-05-16
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18
   polonium = throw "'polonium' has been removed, as Plasma 5 has reached end of life."; # Added 2026-05-01
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
