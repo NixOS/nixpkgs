@@ -898,6 +898,8 @@ rec {
       getVendor = name: vendors.${name} or (throw "Unknown vendor: ${name}");
       getKernel = name: kernels.${name} or (throw "Unknown kernel: ${name}");
       getAbi = name: abis.${name} or (throw "Unknown ABI: ${name}");
+      hasDarwinPrefix = hasPrefix "darwin";
+      hasBsdPrefix = hasPrefix "netbsd";
     in
     {
       cpu,
@@ -925,10 +927,10 @@ rec {
           else
             vendors.unknown;
         kernel =
-          if hasPrefix "darwin" args.kernel then
-            getKernel "darwin"
-          else if hasPrefix "netbsd" args.kernel then
-            getKernel "netbsd"
+          if hasDarwinPrefix args.kernel then
+            kernels.darwin
+          else if hasBsdPrefix args.kernel then
+            kernels.netbsd
           else
             getKernel (removeAbiSuffix args.kernel);
         abi =
