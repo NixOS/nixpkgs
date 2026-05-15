@@ -1,9 +1,7 @@
 {
   lib,
   vscode-utils,
-  jq,
   chez,
-  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -14,10 +12,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-Pfy0aJXq8I53o5mG4dfzyqsyLQX0bs+phBgN46yU/Yw=";
   };
 
-  postInstall = ''
-    cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."chezScheme.schemePath" = "${lib.getExe' chez "scheme"}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
-  '';
+  executableConfig."chezScheme.schemePath".package = chez;
 
   meta = {
     description = "Uses REPL for autocompletions and to evaluate expressions";

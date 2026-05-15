@@ -1,8 +1,6 @@
 {
   lib,
   vscode-utils,
-  jq,
-  moreutils,
   ungoogled-chromium,
 }:
 
@@ -13,13 +11,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "2.0.1";
     hash = "sha256-XykOUbCiTVtfmp5H9UC4gFPBxmrIJR7jv9VvLljOSM0=";
   };
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-  postInstall = ''
-    jq '.contributes.configuration.properties."markdown-pdf.executablePath".default = "${lib.getExe ungoogled-chromium}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
-  '';
+  executableConfig."markdown-pdf.executablePath".package = ungoogled-chromium;
   meta = {
     description = "Converts Markdown files to pdf, html, png or jpeg files";
     homepage = "https://github.com/yzane/vscode-markdown-pdf#readme";
