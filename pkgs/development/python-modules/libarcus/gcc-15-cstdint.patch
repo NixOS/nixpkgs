@@ -1,0 +1,86 @@
+diff --git a/src/MessageTypeStore.cpp b/src/MessageTypeStore.cpp
+index 1d9b624..e9df3e0 100644
+--- a/src/MessageTypeStore.cpp
++++ b/src/MessageTypeStore.cpp
+@@ -17,6 +17,7 @@
+ 
+ #include "MessageTypeStore.h"
+ 
++#include <cstdint>
+ #include <unordered_map>
+ #include <sstream>
+ #include <iostream>
+diff --git a/src/MessageTypeStore.h b/src/MessageTypeStore.h
+index a0d4c08..d740681 100644
+--- a/src/MessageTypeStore.h
++++ b/src/MessageTypeStore.h
+@@ -20,6 +20,7 @@
+ #define ARCUS_MESSAGE_TYPE_STORE_H
+ 
+ #include <memory>
++#include <cstdint>
+ 
+ #include "ArcusExport.h"
+ #include "Types.h"
+diff --git a/src/PlatformSocket.cpp b/src/PlatformSocket.cpp
+index 4fa53bf..c3148a8 100644
+--- a/src/PlatformSocket.cpp
++++ b/src/PlatformSocket.cpp
+@@ -17,6 +17,8 @@
+  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
++#include <cstdint>
++
+ #include "PlatformSocket_p.h"
+ 
+ #ifdef _WIN32
+diff --git a/src/PlatformSocket_p.h b/src/PlatformSocket_p.h
+index e34a5e1..c95abe0 100644
+--- a/src/PlatformSocket_p.h
++++ b/src/PlatformSocket_p.h
+@@ -21,6 +21,7 @@
+ #define ARCUS_PLATFORM_SOCKET_P_H
+ 
+ #include <memory>
++#include <cstdint>
+ #include <string>
+ 
+ namespace Arcus
+diff --git a/src/Socket_p.h b/src/Socket_p.h
+index 09db6a8..f5761e8 100644
+--- a/src/Socket_p.h
++++ b/src/Socket_p.h
+@@ -17,6 +17,7 @@
+  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
++#include <cstdint>
+ #include <thread>
+ #include <mutex>
+ #include <string>
+diff --git a/src/Types.h b/src/Types.h
+index ef33f5d..527237c 100644
+--- a/src/Types.h
++++ b/src/Types.h
+@@ -19,6 +19,7 @@
+ #define ARCUS_TYPES_H
+ 
+ #include <string>
++#include <cstdint>
+ #include <memory>
+ 
+ namespace google
+diff --git a/src/WireMessage_p.h b/src/WireMessage_p.h
+index 3cf4594..319a6ac 100644
+--- a/src/WireMessage_p.h
++++ b/src/WireMessage_p.h
+@@ -20,6 +20,8 @@
+ #ifndef ARCUS_WIRE_MESSAGE_P_H
+ #define ARCUS_WIRE_MESSAGE_P_H
+ 
++#include <cstdint>
++
+ #include "Types.h"
+ 
+ namespace Arcus

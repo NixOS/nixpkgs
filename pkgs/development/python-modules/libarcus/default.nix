@@ -29,6 +29,9 @@ buildPythonPackage rec {
       url = "https://raw.githubusercontent.com/coryan/vcpkg/f69b85aa403b04e7d442c90db3418d484e44024f/ports/arcus/0001-fix-protobuf-deprecated.patch";
       sha256 = "0bqj7pxzpwsamknd6gadj419x6mwx8wnlfzg4zqn6cax3cmasjb2";
     })
+    # Fix build with GCC 15: https://github.com/Ultimaker/libArcus/pull/160
+    # That PR is on top of v5.3.0 which refactored things, so we must vendor it.
+    ./gcc-15-cstdint.patch
   ];
 
   propagatedBuildInputs = [
