@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kPOAiy2siIKZ6/zz43qPW7bp27T98MOhwmZMxpVpito=";
+    hash = "sha256-/EE1+mlbCQmeLqhbHM+k1JwrRw1Z1mOZmq/ffR1l4bg=";
   };
 
-  cargoHash = "sha256-nXiprz5ryGJeTy9nnKaLSKE0FSl17YE88xFt9bUTTL8=";
+  cargoHash = "sha256-1alU6Hl7wHM69JK1ZRWzhT843ROs0WhkBUuDDweZSvk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -86,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "scx_chaos"
     "scx_cosmos"
     "scx_flash"
+    "scx_flow"
     "scx_lavd"
     "scx_layered"
     "scx_mitosis"
@@ -95,7 +96,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "scx_rustland"
     "scx_rusty"
     "scx_tickless"
-    "scx_wd40"
   ];
 
   meta = {
