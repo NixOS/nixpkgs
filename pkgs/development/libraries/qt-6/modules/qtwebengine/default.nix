@@ -70,6 +70,7 @@
   # darwin
   bootstrap_cmds,
   cctools,
+  darwin,
   xcbuild,
 }:
 
@@ -158,6 +159,13 @@ qtModule {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
       --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+
+    # Standalone clang (not Xcode) does not automatically search the SDK's
+    # libc++ headers. Add them explicitly so headers like <atomic> are found.
+    substituteInPlace src/3rdparty/chromium/build/config/mac/BUILD.gn \
+      --replace-fail \
+        'cflags = common_flags' \
+        'cflags = common_flags + [ "-isystem", "${lib.getDev stdenv.cc.libcxx}/include/c++/v1", "-isystem", "${lib.getDev darwin.libresolv}/include" ]'
   '';
 
   cmakeFlags = [
