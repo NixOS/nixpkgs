@@ -310,6 +310,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    bugroff = {
+      fullName = "Bugroff License";
+      url = "https://tunes.org/legalese/bugroff.html";
+    };
+
     bzip2 = {
       spdxId = "bzip2-1.0.6";
       fullName = "bzip2 and libbzip2 License v1.0.6";
