@@ -120,6 +120,11 @@ import ./versions.nix (
     meta = {
       description = "Enterprise-class open source distributed monitoring solution";
       homepage = "https://www.zabbix.com/";
+      knownVulnerabilities =
+        if (lib.versions.majorMinor version == "7.2") then
+          [ "Zabbix 7.2 has reached end-of-life on 2025-12-31" ]
+        else
+          [ ];
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
