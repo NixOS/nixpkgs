@@ -815,6 +815,7 @@ let
           };
           # initialize wallet, creates macaroon needed by exporter
           systemd.services.lnd.postStart = ''
+            until [ -f /var/lib/lnd/tls.cert ]; do sleep 1; done
             ${pkgs.curl}/bin/curl \
               --retry 20 \
               --retry-delay 1 \
