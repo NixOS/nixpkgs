@@ -12,8 +12,8 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "httpjamesm";
-    repo = finalAttrs.repo;
-    tag = "v${finalAttrs.version}";
+    repo = "AnonymousOverflow";
+    tag = "v1.13.0";
     hash = "sha256-hvcOJctvNswEws+cCoeGQSvFzZvnThhKk3fJ7TnNulY=";
   };
 
