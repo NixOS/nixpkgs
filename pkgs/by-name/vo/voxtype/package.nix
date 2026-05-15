@@ -21,6 +21,7 @@
   pciutils,
   wl-clipboard,
   wtype,
+  which,
   xclip,
   xdotool,
 
@@ -131,6 +132,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         (lib.makeBinPath (
           [
             libnotify
+            which
           ]
           ++ lib.optionals vulkanSupport [
             pciutils
