@@ -18664,7 +18664,7 @@
     github = "msgilligan";
     githubId = 61612;
     name = "Sean Gilligan";
-    keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
+    keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
   };
   mshnwq = {
     email = "mshnwq.com@gmail.com";
@@ -20035,6 +20035,15 @@
     githubId = 1254858;
     keys = [ { fingerprint = "BE62 7373 8E61 6D6D 1B3A  08E8 A21A 0202 4881 6103"; } ];
   };
+  nothingneko = {
+      name = "Jaiden Riordan";
+      email = "me@jaiden.sh";
+      github = "nothingneko";
+      githubId = 37665485;
+      keys = [{
+        fingerprint = "3C61 D1EA 324D 5BF0 23CC  1A6E 641F 4714 D5B2 4331";
+      }];
+    };
   notohh = {
     email = "contact@notohh.dev";
     github = "notohh";
