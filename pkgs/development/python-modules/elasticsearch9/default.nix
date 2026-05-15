@@ -7,20 +7,20 @@
   fetchPypi,
   hatchling,
   orjson,
-  pyarrow,
   python-dateutil,
   requests,
+  sniffio,
   typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "elasticsearch";
+  pname = "elasticsearch9";
   version = "9.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-924UnAoi1cy7pYvcMMn1HPiUIxs1nvT9foObVYtZ+FY=";
+    hash = "sha256-WPj2PfqPLHXm2HVM6avl0noLL+35OHNW0z9zaKMvAXo=";
   };
 
   build-system = [ hatchling ];
@@ -29,21 +29,21 @@ buildPythonPackage (finalAttrs: {
     anyio
     elastic-transport
     python-dateutil
+    sniffio
     typing-extensions
   ];
 
   optional-dependencies = {
-    requests = [ requests ];
     async = [ aiohttp ];
+    requests = [ requests ];
     orjson = [ orjson ];
-    pyarrow = [ pyarrow ];
   };
 
-  pythonImportsCheck = [ "elasticsearch" ];
-
   # Check is disabled because running them destroy the content of the local cluster!
-  # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
+  # https://github.com/elasticsearch/elasticsearch-py/tree/main/test_elasticsearch
   doCheck = false;
+
+  pythonImportsCheck = [ "elasticsearch9" ];
 
   meta = {
     description = "Official low-level client for Elasticsearch";
