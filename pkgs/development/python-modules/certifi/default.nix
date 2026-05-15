@@ -1,22 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
   fetchFromGitHub,
   setuptools,
+  cacert,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certifi";
-  version = "2026.01.04";
+  version = "2026.04.22";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "certifi";
     repo = "python-certifi";
-    rev = version;
-    hash = "sha256-JXv12im46xKabIRVZ4FMSZUbpw2k8WCcaZZLX2pFteY=";
+    rev = finalAttrs.version;
+    hash = "sha256-bGeOrYd7ZUG0VIbgRiYIBK3JDRC5wpST5IrFHyWO/cg=";
   };
 
   patches = [
@@ -24,8 +25,8 @@ buildPythonPackage rec {
     ./env.patch
   ];
 
+  # Use our system-wide ca-bundle instead of the bundled one
   postPatch = ''
-    # Use our system-wide ca-bundle instead of the bundled one
     rm -v "certifi/cacert.pem"
     ln -snvf "${cacert}/etc/ssl/certs/ca-bundle.crt" "certifi/cacert.pem"
   '';
@@ -47,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})
