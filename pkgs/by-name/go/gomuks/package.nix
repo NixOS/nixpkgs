@@ -10,7 +10,7 @@
 }:
 
 buildGoModule (finalAttrs: {
-  pname = "gomuks-web";
+  pname = "gomuks";
   version = "26.04";
 
   src = fetchFromGitHub {
@@ -69,10 +69,6 @@ buildGoModule (finalAttrs: {
 
   preBuild = ''
     CGO_ENABLED=0 go generate ./web
-  '';
-
-  postInstall = ''
-    mv $out/bin/gomuks $out/bin/gomuks-web
   '';
 
   passthru.updateScript = ./update.sh;
