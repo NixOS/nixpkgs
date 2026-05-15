@@ -27,4 +27,13 @@
     name = "request-key-helper";
     patch = ./request-key-helper.patch;
   };
+
+  security_ptrace_dumpable = rec {
+    name = "security-ptrace-dumpable";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=31e62c2ebbfdc3fe3dbdf5e02c92a9dc67087a3a";
+      sha256 = "sha256-fRjdobOdUN1UC+788vXhW6MXtSMg11H1E4w6TaTkJsE=";
+    };
+  };
 }
