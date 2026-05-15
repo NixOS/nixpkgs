@@ -38,6 +38,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       abbe
       rebmit
+      ryand56
     ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
