@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiotankerkoenig";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiotankerkoenig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LpaJyx5w0htbvWJ8kL8BlyMdlLOKlR6p+XW7qWMhXZo=";
+    hash = "sha256-0s0wapqMb0R/0aa7jlJLHgs7cXhLrqUjMiwZj2kUGEw=";
   };
 
   postPatch = ''

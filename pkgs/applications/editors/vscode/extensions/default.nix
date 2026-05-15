@@ -1145,8 +1145,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.4.5";
-          hash = "sha256-CViXcQ8k4eTd5adFvSK4cCFJDRov09wK80QBveziom4=";
+          version = "8.4.6";
+          hash = "sha256-GBz0hS75VgfuGuHY/K/VHxp5sFptUCJaz/CXrm6wFPc=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -5108,8 +5108,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.27.2";
-          hash = "sha256-1ix/MtZ801uX0Q1/t+S6AG3sSkILDugouecOq9BO1IQ=";
+          version = "0.27.3";
+          hash = "sha256-8ZkdAZLplf9RI5sFGqsjVMlsletck/qXJ6D1Dxz9AuI=";
         };
         meta = {
           license = lib.licenses.mit;

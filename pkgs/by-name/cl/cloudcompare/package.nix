@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   makeDesktopItem,
   copyDesktopItems,
   cmake,
@@ -31,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # https://github.com/CloudCompare/CloudCompare/pull/2208
+    (fetchpatch2 {
+      url = "https://github.com/CloudCompare/CloudCompare/commit/8e1c0562a7c19fd26ccd0c23bb05fb7c36980e0c.patch?full_index=1";
+      hash = "sha256-DARxLiRjcBJEo63o92ujjxBU42Y8CY2c7px8Y9UD5A4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -71,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPLUGIN_IO_QE57=ON"
     "-DPLUGIN_IO_QFBX=OFF" # Autodesk FBX SDK is gratis+proprietary; not packaged in nixpkgs
     "-DPLUGIN_IO_QLAS=ON" # required for .las/.laz support
+    "-DLASZIP_INCLUDE_DIR=${lib.getInclude laszip}/include/laszip"
     "-DPLUGIN_IO_QPHOTOSCAN=ON"
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
 
