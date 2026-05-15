@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tuatara";
-  version = "1631040452-unstable-2025-04-29";
+  version = "1631040452";
 
   src = fetchFromGitHub {
     owner = "q60";
