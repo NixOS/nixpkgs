@@ -17,6 +17,9 @@
 { lib }:
 
 let
+  inherit (import ../meta-types.nix { inherit lib; })
+    enum
+    ;
   inherit (lib)
     all
     any
@@ -28,7 +31,6 @@ let
     id
     length
     mapAttrs
-    mergeOneOption
     optionalString
     splitString
     versionAtLeast
@@ -46,20 +48,16 @@ let
     isCygwin
     ;
 
-  inherit (lib.types)
-    enum
-    isType
-    mkOptionType
-    setType
-    ;
-
   setTypes =
     type:
-    mapAttrs (
-      name: value:
-      assert type.check value;
-      setType type.name ({ inherit name; } // value)
-    );
+    if type ? verify then
+      mapAttrs (
+        name: value:
+        assert type.verify value;
+        { inherit name; } // value
+      )
+    else
+      mapAttrs (name: value: { inherit name; } // value);
 
   # gnu-config will ignore the portion of a triple matching the
   # regex `e?abi.*$` when determining the validity of a triple.  In
@@ -76,11 +74,9 @@ in
 rec {
 
   ################################################################################
-
-  types.openSignificantByte = mkOptionType {
+  types.openSignificantByte = {
     name = "significant-byte";
     description = "Endianness";
-    merge = mergeOneOption;
   };
 
   types.significantByte = enum (attrValues significantBytes);
@@ -103,21 +99,20 @@ rec {
 
   ################################################################################
 
-  types.openCpuType = mkOptionType {
+  types.openCpuType = {
     name = "cpu-type";
     description = "instruction set architecture name and information";
-    merge = mergeOneOption;
-    check =
-      x:
-      types.bitWidth.check x.bits
-      && (if 8 < x.bits then types.significantByte.check x.significantByte else !(x ? significantByte));
+    verify =
+      v:
+      types.bitWidth.verify v.bits
+      && (if 8 < v.bits then types.significantByte.verify v.significantByte else !(v ? significantByte));
   };
 
   types.cpuType = enum (attrValues cpuTypes);
 
   cpuTypes =
     let
-      inherit (significantBytes) bigEndian littleEndian;
+      inherit (significantBytes) littleEndian bigEndian;
     in
     setTypes types.openCpuType {
       arm = {
@@ -487,10 +482,9 @@ rec {
 
   ################################################################################
 
-  types.openVendor = mkOptionType {
+  types.openVendor = {
     name = "vendor";
     description = "vendor for the platform";
-    merge = mergeOneOption;
   };
 
   types.vendor = enum (attrValues vendors);
@@ -499,23 +493,19 @@ rec {
     apple = { };
     pc = { };
     knuth = { };
-
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = { };
-
     none = { };
     unknown = { };
   };
 
   ################################################################################
 
-  types.openExecFormat = mkOptionType {
+  types.openExecFormat = {
     name = "exec-format";
     description = "executable container used by the kernel";
-    merge = mergeOneOption;
   };
-
   types.execFormat = enum (attrValues execFormats);
 
   execFormats = setTypes types.openExecFormat {
@@ -524,16 +514,14 @@ rec {
     macho = { };
     pe = { };
     wasm = { };
-
     unknown = { };
   };
 
   ################################################################################
 
-  types.openKernelFamily = mkOptionType {
+  types.openKernelFamily = {
     name = "exec-format";
     description = "executable container used by the kernel";
-    merge = mergeOneOption;
   };
 
   types.kernelFamily = enum (attrValues kernelFamilies);
@@ -545,12 +533,11 @@ rec {
 
   ################################################################################
 
-  types.openKernel = mkOptionType {
-    name = "kernel";
+  types.openKernel = {
+    name = "open-kernel";
     description = "kernel name and information";
-    merge = mergeOneOption;
-    check =
-      x: types.execFormat.check x.execFormat && all types.kernelFamily.check (attrValues x.families);
+    verify =
+      v: types.execFormat.verify v.execFormat && all types.kernelFamily.verify (attrValues v.families);
   };
 
   types.kernel = enum (attrValues kernels);
@@ -647,10 +634,9 @@ rec {
 
   ################################################################################
 
-  types.openAbi = mkOptionType {
+  types.openAbi = {
     name = "abi";
     description = "binary interface for compiled code and syscalls";
-    merge = mergeOneOption;
   };
 
   types.abi = enum (attrValues abis);
@@ -760,29 +746,31 @@ rec {
 
   ################################################################################
 
-  types.parsedPlatform = mkOptionType {
+  types.parsedPlatform = {
     name = "system";
     description = "fully parsed representation of llvm- or nix-style platform tuple";
-    merge = mergeOneOption;
-    check =
+    verify =
       {
         cpu,
         vendor,
         kernel,
         abi,
       }:
-      types.cpuType.check cpu
-      && types.vendor.check vendor
-      && types.kernel.check kernel
-      && types.abi.check abi;
+      types.cpuType.verify cpu
+      && types.vendor.verify vendor
+      && types.kernel.verify kernel
+      && types.abi.verify abi;
   };
 
-  isSystem = isType "system";
+  isSystem = v: v._type or null == "system";
 
   mkSystem =
     components:
-    assert types.parsedPlatform.check components;
-    setType "system" components;
+    assert types.parsedPlatform.verify components;
+    components
+    // {
+      _type = "system";
+    };
 
   mkSkeletonFromList =
     l:
