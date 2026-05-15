@@ -1845,13 +1845,6 @@
     githubId = 102513;
     keys = [ { fingerprint = "B7B7 582E 564E 789B FCB8  71AB 0C6D FE2F B234 534A"; } ];
   };
-  anhdle14 = {
-    name = "Le Anh Duc";
-    email = "anhdle14@icloud.com";
-    github = "anhdle14";
-    githubId = 9645992;
-    keys = [ { fingerprint = "AA4B 8EC3 F971 D350 482E  4E20 0299 AFF9 ECBB 5169"; } ];
-  };
   anhduy = {
     email = "vo@anhduy.io";
     github = "voanhduy1512";
@@ -1966,12 +1959,6 @@
     github = "antipatico";
     githubId = 14838767;
     name = "Jacopo Scannella";
-  };
-  antoinerg = {
-    email = "roygobeil.antoine@gmail.com";
-    github = "antoinerg";
-    githubId = 301546;
-    name = "Antoine Roy-Gobeil";
   };
   anton-4 = {
     name = "Anton";
@@ -6981,12 +6968,6 @@
     github = "divi255";
     githubId = 40633781;
     name = "Sergei S.";
-  };
-  dit7ya = {
-    email = "7rat13@gmail.com";
-    github = "dit7ya";
-    githubId = 14034137;
-    name = "Mostly Void";
   };
   ditsuke = {
     name = "Tushar";
@@ -20054,15 +20035,6 @@
     githubId = 1254858;
     keys = [ { fingerprint = "BE62 7373 8E61 6D6D 1B3A  08E8 A21A 0202 4881 6103"; } ];
   };
-  nothingneko = {
-    name = "Jaiden Riordan";
-    email = "me@jaiden.sh";
-    github = "nothingneko";
-    githubId = 37665485;
-    keys = [{
-      fingerprint = "3C61 D1EA 324D 5BF0 23CC  1A6E 641F 4714 D5B2 4331";
-    }];
-  };
   notohh = {
     email = "contact@notohh.dev";
     github = "notohh";
@@ -24815,12 +24787,6 @@
     name = "Sebastian Rutofski";
     keys = [ { fingerprint = "F1D4 8061 2830 3AF6 42DC  3867 C37F 3374 2A95 C547"; } ];
   };
-  sebtm = {
-    email = "mail@sebastian-sellmeier.de";
-    github = "SebTM";
-    githubId = 17243347;
-    name = "Sebastian Sellmeier";
-  };
   secona = {
     email = "secona00+nixpkgs@gmail.com";
     github = "secona";
@@ -25592,12 +25558,6 @@
     github = "SirSeruju";
     githubId = 74881555;
     name = "Fofanov Sergey";
-  };
-  sitaaax = {
-    email = "johannes@kle1n.com";
-    github = "SitAAAx";
-    githubId = 74413170;
-    name = "Johannes Klein";
   };
   sith-lord-vader = {
     email = "nixpkgs@xpertsre.rocks";
@@ -28236,12 +28196,6 @@
     github = "tricktron";
     githubId = 16036882;
     name = "Thibault Gagnaux";
-  };
-  trino = {
-    email = "muehlhans.hubert@ekodia.de";
-    github = "hmuehlhans";
-    githubId = 9870613;
-    name = "Hubert Mühlhans";
   };
   tris203 = {
     email = "admin@snappeh.com";
