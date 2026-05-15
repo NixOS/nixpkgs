@@ -20,7 +20,7 @@ let
 
   versions = {
     "x86_64-linux" = "2.10.2";
-    "aarch64-linux" = "2.3.0.0";
+    "aarch64-linux" = "2.10.1";
     "i686-linux" = "2.0.16";
   };
 
@@ -30,8 +30,8 @@ let
       hash = "sha256-s9AEj9r7kBhPGPU365HgxS9tEyrm7UjLtoxD21pCrts=";
     };
     "aarch64-linux" = {
-      url = "https://gpumagick.com/downloads/files/2024/furmark2/FurMark_${versions.x86_64-linux}_rpi64.zip";
-      hash = "sha256-az4prQbg9I+6rt2y1OTy3t21/VHyZS++57r4Ahe3fcQ=";
+      url = "https://gpumagick.com/downloads/files/2025/fm2/2_10_dbc69dd0a08da5ff09169a4fc759ddaa/FurMark_${versions.aarch64-linux}_arm64.7z";
+      hash = "sha256-XQuK6UgZOjwqpENkHVYsoiG9zyZAbNjR+65hj9dvAY8=";
     };
     "i686-linux" = {
       url = "https://gpumagick.com/downloads/files/2024/furmark2/FurMark_${versions.i686-linux}_linux32.zip";
@@ -39,9 +39,11 @@ let
     };
   };
 
-  is7z = stdenv.hostPlatform.system == "x86_64-linux";
+  is7z =
+    (stdenv.hostPlatform.system == "x86_64-linux") || (stdenv.hostPlatform.system == "aarch64-linux");
 
-  linkLogs = stdenv.hostPlatform.system == "x86_64-linux";
+  linkLogs =
+    (stdenv.hostPlatform.system == "x86_64-linux") || (stdenv.hostPlatform.system == "aarch64-linux");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "furmark";
