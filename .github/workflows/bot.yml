@@ -56,7 +56,7 @@ jobs:
         run: npm install @actions/artifact@5.0.3 bottleneck@2.19.5
 
       # Use a GitHub App, because it has much higher rate limits: 12,500 instead of 5,000 req / hour.
-      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_APP_ID
         id: app-token
         with:
