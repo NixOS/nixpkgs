@@ -109,6 +109,12 @@ stdenv.mkDerivation {
     for f in p4admin p4merge p4v p4vc; do
       ln -s ${unwrapped}/bin/$f $out/bin
     done
+    mkdir -p $out/share
+    ln -s ${unwrapped}/lib/P4VResources/icons $out/share/icons
+    mkdir -p $out/share/applications
+    substituteAll ${./p4v.desktop} $out/share/applications/p4v.desktop
+    substituteAll ${./p4admin.desktop} $out/share/applications/p4admin.desktop
+    substituteAll ${./p4merge.desktop} $out/share/applications/p4merge.desktop
   '';
   preferLocalBuild = true;
 

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=P4Admin
+Version=@version@
+Name[en_GB]=P4Admin
+GenericName=Perforce Administrative Tool
+GenericName[en_GB]=Perforce Administrative Tool
+Comment=Administer Perforce Servers
+Type=Application
+Exec=@out@/bin/p4admin %U
+TryExec=@out@/bin/p4admin
+Icon=@out@/share/icons/p4admin.png
+Terminal=false
+Categories=Development;RevisionControl;Qt;
