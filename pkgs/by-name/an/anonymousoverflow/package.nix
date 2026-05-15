@@ -29,8 +29,8 @@ buildGoModule (finalAttrs: {
     install -d $out/share/anonymousoverflow
     cp -r templates public $out/share/anonymousoverflow/
 
-    wrapProgram $out/bin/${finalAttrs.pname} \
-      --chdir "$out/share/${finalAttrs.pname}"
+    wrapProgram $out/bin/anonymousoverflow \
+      --chdir "$out/share/anonymousoverflow"
   '';
 
   meta = {
