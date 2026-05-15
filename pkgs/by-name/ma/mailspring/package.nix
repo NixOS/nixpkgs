@@ -5,7 +5,7 @@
 }:
 let
   pname = "mailspring";
-  version = "1.19.0";
+  version = "1.21.0";
 
   meta = {
     description = "Beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
@@ -17,7 +17,10 @@ let
       Mailspring's sync engine runs locally, but its source is not open.
     '';
     mainProgram = "mailspring";
-    maintainers = with lib.maintainers; [ toschmidt ];
+    maintainers = with lib.maintainers; [
+      toschmidt
+      wrench-exile-legacy
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"

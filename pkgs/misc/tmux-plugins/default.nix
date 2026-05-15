@@ -44,6 +44,7 @@ let
             pname = namePrefix + pluginName;
 
             strictDeps = true;
+            __structuredAttrs = true;
 
             inherit
               pluginName
