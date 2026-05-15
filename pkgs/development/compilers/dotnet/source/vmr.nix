@@ -149,6 +149,7 @@ stdenv.mkDerivation {
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
     ]
+    # see passthru.hasCrossTargetBug
     ++ lib.optional (
       lib.versionAtLeast version "10" && lib.versionOlder version "11"
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
@@ -515,6 +516,7 @@ stdenv.mkDerivation {
     icu = _icu;
     # ilcompiler is currently broken: https://github.com/dotnet/source-build/issues/1215
     hasILCompiler = lib.versionAtLeast version "9";
+    hasCrossTargetBug = false;
   };
 
   meta = {

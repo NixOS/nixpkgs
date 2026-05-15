@@ -44,4 +44,6 @@ let
     };
 
 in
-lib.recurseIntoAttrs (lib.mapAttrs (_: mkTest) sdks)
+lib.optionalAttrs (!dotnet-sdk.hasCrossTargetBug) (
+  lib.recurseIntoAttrs (lib.mapAttrs (_: mkTest) sdks)
+)
