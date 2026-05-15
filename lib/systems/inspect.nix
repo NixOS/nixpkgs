@@ -8,6 +8,7 @@ let
     attrValues
     concatMap
     filter
+    flip
     hasPrefix
     isAttrs
     isList
@@ -49,7 +50,10 @@ let
       )
     ) (attrNames pattern);
 
-  abis = mapAttrs (_: abi: removeAttrs abi [ "assertions" ]) lib.systems.parse.abis;
+  removeAssertions = flip removeAttrs [ "assertions" ];
+  abis = mapAttrs (
+    _: abi: if abi ? assertions then removeAssertions abi else abi
+  ) lib.systems.parse.abis;
 in
 
 rec {
