@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   getopt,
   lua,
   boost,
@@ -23,6 +24,14 @@ let
       rev = "v${version}";
       hash = "sha256-QYW6kj5cp+TVLXwj7kxbgj0kpN0n5qXYU3xZ5UW66vc=";
     };
+
+    patches = [
+      (fetchpatch {
+        name = "shellscript-crash-fix.patch";
+        url = "https://gitlab.com/saalen/highlight/-/commit/2c0e95290fe7ca26185851f38ac205d81e4b7015.patch";
+        hash = "sha256-aan2s7wKzBO/QbK+Q+Zq1RiyFORJjEYDcscjCAxMJg8=";
+      })
+    ];
 
     enableParallelBuilding = true;
 
