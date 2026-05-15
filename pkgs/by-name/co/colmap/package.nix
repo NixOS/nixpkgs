@@ -101,7 +101,7 @@ let
   ];
 in
 stdenv'.mkDerivation {
-  version = "4.0.3";
+  version = "4.0.4";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
