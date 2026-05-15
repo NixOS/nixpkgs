@@ -397,32 +397,15 @@ rec {
     ```
   */
   extendDerivation =
+    let
+      defaultOutputs = [ "out" ];
+    in
     condition: passthru: drv:
     let
-      commonAttrs =
-        drv
-        // listToAttrs (
-          outputsList
-          ++ [
-            {
-              name = "all";
-              value = map (x: x.value) outputsList;
-            }
-          ]
-        )
-        // passthru
+      mkOutput =
+        outputName:
+        commonAttrs
         // {
-          drvPath =
-            assert condition;
-            drv.drvPath;
-          outPath =
-            assert condition;
-            drv.outPath;
-        };
-
-      outputsList = map (outputName: {
-        name = outputName;
-        value = commonAttrs // {
           inherit (drv.${outputName}) type outputName;
           outputSpecified = true;
           drvPath =
@@ -438,7 +421,42 @@ rec {
           ${if passthru ? overrideAttrs then "overrideAttrs" else null} =
             f: (passthru.overrideAttrs f).${outputName};
         };
-      }) (drv.outputs or [ "out" ]);
+      commonAttrs =
+        if !drv ? outputs || drv.outputs == defaultOutputs then
+          let
+            out = mkOutput "out";
+          in
+          drv
+          // {
+            inherit out;
+            all = [ out ];
+            drvPath =
+              assert condition;
+              drv.drvPath;
+            outPath =
+              assert condition;
+              drv.outPath;
+          }
+          // passthru
+        else
+          let
+            outputsData = map (outputName: {
+              name = outputName;
+              value = mkOutput outputName;
+            }) drv.outputs;
+          in
+          drv
+          // (listToAttrs outputsData)
+          // {
+            all = map (x: x.value) outputsData;
+            drvPath =
+              assert condition;
+              drv.drvPath;
+            outPath =
+              assert condition;
+              drv.outPath;
+          }
+          // passthru;
     in
     commonAttrs;
 
