@@ -964,7 +964,8 @@ rec {
 
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s));
 
-  kernelName = kernel: kernel.name + toString (kernel.version or "");
+  kernelName =
+    kernel: if kernel ? version then kernel.name + toString kernel.version else kernel.name;
 
   darwinArch = cpu: if cpu.name == "aarch64" then "arm64" else cpu.name;
 
