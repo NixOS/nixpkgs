@@ -15,3 +15,26 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - run: echo This is a no-op only used as a trigger for workflow_run.
+
+  # Hand off IDs to the workflow_run context. The consumer (review.yml) re-fetches the
+  # review server-side, so the artifact is not trusted as a source of truth.
+  upload:
+    name: Upload review identifiers
+    runs-on: ubuntu-slim
+    timeout-minutes: 2
+    steps:
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const fs = require('fs')
+            fs.writeFileSync('review-info.json', JSON.stringify({
+              pr_number: context.payload.pull_request.number,
+              review_id: context.payload.review.id,
+            }))
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          archive: false
+          path: review-info.json
+          retention-days: 1 # One-off usage; there's no reason to retain it for multiple days.
+          if-no-files-found: error
