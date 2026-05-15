@@ -58,8 +58,14 @@ let
 
   finalConfig = defaultConfig // cfg.settings;
 
-  cfgFile = iniFmt.generate "config.ini" { globalSection = finalConfig; };
-
+  cfgFile =
+    let
+      origCfgFile = iniFmt.generate "config.ini" { globalSection = finalConfig; };
+    in
+    pkgs.runCommand "validated-config.ini" ''
+      cat ${origCfgFile} > $out
+      ${lib.getExe ly} validate $out
+    '';
 in
 {
   options = {
@@ -83,6 +89,12 @@ in
         description = ''
           Extra settings merged in and overwriting defaults in config.ini.
         '';
+      };
+
+      cfgFile = mkOption {
+        type = lib.types.anything;
+        default = cfgFile;
+        readOnly = true;
       };
     };
   };
