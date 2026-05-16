@@ -6,17 +6,22 @@
   mypy-extensions,
   python,
   pytest,
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "librt";
   version = "0.11.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   src = fetchFromGitHub {
     owner = "mypyc";
     repo = "librt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y9z1EdrZRiDtT8cxz/Ex/f6B/RfjnAXdGf7tM+77HGg=";
   };
 
@@ -45,10 +50,12 @@ buildPythonPackage rec {
     "librt.internal"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Mypyc runtime library";
     homepage = "https://github.com/mypyc/librt";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jackr ];
   };
-}
+})
