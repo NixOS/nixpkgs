@@ -241,7 +241,6 @@ let
       makeFontsConf
       makeWrapper
       runCommand
-      writeShellScript
       toTLPkgSets
       perl
       coreutils
