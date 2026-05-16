@@ -250,6 +250,8 @@ rec {
         ...
       }@args:
       {
+        strictDeps = true;
+        __structuredAttrs = true;
         pname = "${pname}-unresholved";
         passthru = passthru // {
           # needed to resholve in outer drv
@@ -287,8 +289,7 @@ rec {
 
         postFixup = unresholved.postResholve;
 
-        # don't break the metadata...
-        meta = unresholved.meta;
+        inherit (unresholved) meta strictDeps __structuredAttrs;
       };
   };
 }
