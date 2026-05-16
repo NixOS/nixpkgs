@@ -6,6 +6,7 @@
   mock,
   pytestCheckHook,
   requests,
+  setuptools,
   tldextract,
   urllib3,
   validators,
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "corsair-scan";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Santandersecurityresearch";
@@ -28,7 +29,9 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     validators
     requests
     urllib3
