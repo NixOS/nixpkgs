@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   cmake,
-  tinycmmc,
   libiconv,
 }:
 
@@ -19,13 +18,14 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ tinycmmc ];
   propagatedBuildInputs = [ libiconv ];
+
+  patches = [ ./replace-tinymcc.patch ];
 
   meta = {
     description = "A simple gettext replacement that works directly on .po files";
     maintainers = [ lib.maintainers.SchweGELBin ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     license = lib.licenses.zlib;
   };
 }
