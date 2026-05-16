@@ -46,7 +46,7 @@ buildNpmPackage rec {
 
     maintainers = with lib.maintainers; [
       ehllie
-      naho
+      noahbiewesch
     ];
 
     platforms = lib.platforms.all;

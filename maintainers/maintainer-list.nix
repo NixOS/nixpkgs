@@ -19065,12 +19065,6 @@
     github = "nagymathev";
     githubId = 49335802;
   };
-  naho = {
-    github = "trueNAHO";
-    githubId = 90870942;
-    name = "Noah Pierre Biewesch";
-    keys = [ { fingerprint = "5FC6 088A FB1A 609D 4532  F919 0C1C 177B 3B64 68E0"; } ];
-  };
   nalbyuites = {
     email = "ashijit007@gmail.com";
     github = "nalbyuites";
@@ -19891,6 +19885,13 @@
     github = "Noah765";
     githubId = 99338019;
   };
+  noahbiewesch = {
+    github = "trueNAHO";
+    githubId = 90870942;
+    name = "Noah Biewesch";
+    email = "nix@noahbiewesch.com";
+    keys = [ { fingerprint = "5FC6 088A FB1A 609D 4532  F919 0C1C 177B 3B64 68E0"; } ];
+  };
   noahfraiture = {
     name = "Noahcode";
     email = "pro@noahcode.dev";
@@ -20497,7 +20498,7 @@
     name = "Erik Timan";
   };
   olduser101 = {
-    email = "nathan.j.gill@outlook.com";
+    email = "n@ngill.net";
     github = "OldUser101";
     githubId = 64069240;
     matrix = "@olduser101:matrix.org";
