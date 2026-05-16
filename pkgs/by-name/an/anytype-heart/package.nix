@@ -59,16 +59,11 @@ buildGoModule (finalAttrs: {
     cp ${tantivy-go}/lib/libtantivy_go.a deps/libs/${arch}
   '';
 
-  postBuild = ''
-    protoc -I ./  --js_out=import_style=commonjs,binary:./dist/js/pb pb/protos/service/*.proto pb/protos/*.proto pkg/lib/pb/model/protos/*.proto
-    protoc -I ./  --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./dist/js/pb pb/protos/service/*.proto pb/protos/*.proto pkg/lib/pb/model/protos/*.proto
-  '';
-
   postInstall = ''
     mv $out/bin/grpcserver $out/bin/anytypeHelper
-    mkdir -p $out/lib
-    cp -r dist/js/pb/* $out/lib
-    cp -r dist/js/pb/* $out/lib
+    mkdir -p $out/lib/protos
+    find pb -type f -name "*.proto" -exec cp {} $out/lib/protos/ \;
+    find pkg/lib/pb -type f -name "*.proto" -exec cp {} $out/lib/protos/ \;
 
     mkdir -p $out/lib/json/generated
     cp pkg/lib/bundle/system*.json $out/lib/json/generated
