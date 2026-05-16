@@ -1,0 +1,44 @@
+diff --git a/src/cmd/dist/buildruntime.go b/src/cmd/dist/buildruntime.go
+index 87e8867176..dbb635011f 100644
+--- a/src/cmd/dist/buildruntime.go
++++ b/src/cmd/dist/buildruntime.go
+@@ -62,7 +62,7 @@ func mkbuildcfg(file string) {
+ 	fmt.Fprintf(&buf, "const DefaultGORISCV64 = `%s`\n", goriscv64)
+ 	fmt.Fprintf(&buf, "const defaultGOEXPERIMENT = `%s`\n", goexperiment)
+ 	fmt.Fprintf(&buf, "const defaultGO_EXTLINK_ENABLED = `%s`\n", goextlinkenabled)
+-	fmt.Fprintf(&buf, "const defaultGO_LDSO = `%s`\n", defaultldso)
++	fmt.Fprintf(&buf, "const DefaultGO_LDSO = `%s`\n", defaultldso)
+ 	fmt.Fprintf(&buf, "const version = `%s`\n", findgoversion())
+ 	fmt.Fprintf(&buf, "const defaultGOOS = runtime.GOOS\n")
+ 	fmt.Fprintf(&buf, "const defaultGOARCH = runtime.GOARCH\n")
+diff --git a/src/cmd/link/internal/ld/elf.go b/src/cmd/link/internal/ld/elf.go
+index 6ff1d94383..147a7d91c9 100644
+--- a/src/cmd/link/internal/ld/elf.go
++++ b/src/cmd/link/internal/ld/elf.go
+@@ -1927,8 +1927,12 @@ func asmbElf(ctxt *Link) {
+ 		sh.Flags = uint64(elf.SHF_ALLOC)
+ 		sh.Addralign = 1
+ 
+-		if interpreter == "" && buildcfg.GOOS == runtime.GOOS && buildcfg.GOARCH == runtime.GOARCH && buildcfg.GO_LDSO != "" {
+-			interpreter = buildcfg.GO_LDSO
++		if interpreter == "" {
++			if goLdso := os.Getenv("GO_LDSO"); goLdso != "" {
++				interpreter = goLdso
++			} else if buildcfg.GOOS == runtime.GOOS && buildcfg.GOARCH == runtime.GOARCH {
++				interpreter = buildcfg.DefaultGO_LDSO
++			}
+ 		}
+ 
+ 		if interpreter == "" {
+diff --git a/src/internal/buildcfg/cfg.go b/src/internal/buildcfg/cfg.go
+index 7e4ee365df..8aaa70fb36 100644
+--- a/src/internal/buildcfg/cfg.go
++++ b/src/internal/buildcfg/cfg.go
+@@ -33,7 +33,6 @@ var (
+ 	GORISCV64 = goriscv64()
+ 	GOWASM    = gowasm()
+ 	ToolTags  = toolTags()
+-	GO_LDSO   = defaultGO_LDSO
+ 	GOFIPS140 = gofips140()
+ 	Version   = version
+ )

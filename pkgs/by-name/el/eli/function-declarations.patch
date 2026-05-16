@@ -1,0 +1,231 @@
+diff --git a/Eli/pkg/Input/Include.fw b/Eli/pkg/Input/Include.fw
+index 7b841d9..17740c4 100644
+--- a/Eli/pkg/Input/Include.fw
++++ b/Eli/pkg/Input/Include.fw
+@@ -58,6 +58,7 @@ extern char *auxEOF();
+ #include "clp_dapto.h"
+ #endif
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ 
+ /* Action to switch to a new input file: */
+ 
+diff --git a/Eli/pkg/burg/burg/be.c b/Eli/pkg/burg/burg/be.c
+index 8540f5b..55b1332 100644
+--- a/Eli/pkg/burg/burg/be.c
++++ b/Eli/pkg/burg/burg/be.c
+@@ -332,7 +332,7 @@ makeLHSmap()
+ 	fprintf(outfile, "};\n\n");
+ }
+ 
+-static int seminal(from, to)
++static int seminal(int from, int to)
+ {
+ 	return allpairs[from][to].rule ? allpairs[from][to].rule->erulenum : 0;
+ 
+diff --git a/Eli/pkg/cola/option/derivedSrcs/clpintf.c b/Eli/pkg/cola/option/derivedSrcs/clpintf.c
+index 77b28ce..ba988eb 100644
+--- a/Eli/pkg/cola/option/derivedSrcs/clpintf.c
++++ b/Eli/pkg/cola/option/derivedSrcs/clpintf.c
+@@ -53,6 +53,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ /*
+  * SetFileErr
+  */
+diff --git a/Eli/pkg/cola/trafos/pgs2cmr/derivedSrcs/clpintf.c b/Eli/pkg/cola/trafos/pgs2cmr/derivedSrcs/clpintf.c
+index 77b28ce..ba988eb 100644
+--- a/Eli/pkg/cola/trafos/pgs2cmr/derivedSrcs/clpintf.c
++++ b/Eli/pkg/cola/trafos/pgs2cmr/derivedSrcs/clpintf.c
+@@ -53,6 +53,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ /*
+  * SetFileErr
+  */
+diff --git a/Eli/pkg/eli/treebuild.c b/Eli/pkg/eli/treebuild.c
+index 9718bf0..c789a6b 100644
+--- a/Eli/pkg/eli/treebuild.c
++++ b/Eli/pkg/eli/treebuild.c
+@@ -40,6 +40,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ #endif
+ 
+ extern void Zerteiler ELI_ARG((void));
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ 
+ void
+ #ifdef PROTO_OK
+diff --git a/Eli/pkg/gla/frontend/clpintf.c b/Eli/pkg/gla/frontend/clpintf.c
+index 77b28ce..ba988eb 100644
+--- a/Eli/pkg/gla/frontend/clpintf.c
++++ b/Eli/pkg/gla/frontend/clpintf.c
+@@ -53,6 +53,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ /*
+  * SetFileErr
+  */
+diff --git a/Eli/pkg/info/texinfo/makeinfo.c b/Eli/pkg/info/texinfo/makeinfo.c
+index 9b2923f..d58e371 100644
+--- a/Eli/pkg/info/texinfo/makeinfo.c
++++ b/Eli/pkg/info/texinfo/makeinfo.c
+@@ -4788,7 +4788,7 @@ int px_ref_flag = 0;		/* Controls initial output string. */
+ 
+ /* Make a cross reference. */
+ int
+-cm_xref (arg)
++cm_xref (int arg)
+ {
+   if (arg == START)
+     {
+diff --git a/Eli/pkg/info/texinfo/texindex.c b/Eli/pkg/info/texinfo/texindex.c
+index 7bd6a00..d2003e3 100644
+--- a/Eli/pkg/info/texinfo/texindex.c
++++ b/Eli/pkg/info/texinfo/texindex.c
+@@ -897,6 +897,7 @@ readline (linebuffer, stream)
+ void
+ sort_offline (infile, nfiles, total, outfile)
+      char *infile;
++     int nfiles;
+      long total;
+      char *outfile;
+ {
+diff --git a/Eli/pkg/kwd/derivedSrcs/clpintf.c b/Eli/pkg/kwd/derivedSrcs/clpintf.c
+index 77b28ce..ba988eb 100644
+--- a/Eli/pkg/kwd/derivedSrcs/clpintf.c
++++ b/Eli/pkg/kwd/derivedSrcs/clpintf.c
+@@ -53,6 +53,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ /*
+  * SetFileErr
+  */
+diff --git a/Eli/pkg/liga/frontend/derivedSrcs/treebuild.c b/Eli/pkg/liga/frontend/derivedSrcs/treebuild.c
+index 71ac16e..a463673 100644
+--- a/Eli/pkg/liga/frontend/derivedSrcs/treebuild.c
++++ b/Eli/pkg/liga/frontend/derivedSrcs/treebuild.c
+@@ -40,6 +40,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ #endif
+ 
+ extern void Zerteiler ELI_ARG((void));
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ 
+ void
+ #ifdef PROTO_OK
+diff --git a/Eli/pkg/liga/idl/lookup_idl.c b/Eli/pkg/liga/idl/lookup_idl.c
+index 839bc7f..9350b8e 100644
+--- a/Eli/pkg/liga/idl/lookup_idl.c
++++ b/Eli/pkg/liga/idl/lookup_idl.c
+@@ -161,7 +161,7 @@ void free_did_table()
+ *****************************************/
+ 
+ Def 
+-lookup_def(did)
++lookup_def(int did)
+ {
+ 
+    /* returns a pointer to the definition with id did */
+@@ -175,7 +175,7 @@ lookup_def(did)
+ *****************************************/
+ 
+ Attrdef 
+-lookup_attrdef(did)
++lookup_attrdef(int did)
+ {
+ 
+    /* returns a pointer to the attributedefinition with id did */
+diff --git a/Eli/pkg/liga/ligaProd/derivedSrcs/treebuild.c b/Eli/pkg/liga/ligaProd/derivedSrcs/treebuild.c
+index 9718bf0..c789a6b 100644
+--- a/Eli/pkg/liga/ligaProd/derivedSrcs/treebuild.c
++++ b/Eli/pkg/liga/ligaProd/derivedSrcs/treebuild.c
+@@ -40,6 +40,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ #endif
+ 
+ extern void Zerteiler ELI_ARG((void));
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ 
+ void
+ #ifdef PROTO_OK
+diff --git a/Eli/pkg/liga/middle/order/initdp.c b/Eli/pkg/liga/middle/order/initdp.c
+index 38358eb..0cfd822 100644
+--- a/Eli/pkg/liga/middle/order/initdp.c
++++ b/Eli/pkg/liga/middle/order/initdp.c
+@@ -313,7 +313,7 @@ char * pr_graphstate_text(graph_state)
+ ************************************************************************/
+ static
+ void enter_dp_matrix (seqexpr, pid, tosymptr, toaid)
+-	SEQExpr seqexpr; SLNODE *tosymptr; int toaid;
++	SEQExpr seqexpr; int pid; SLNODE *tosymptr; int toaid;
+ /*
+ on entry:	pid is the current rule,
+ 		row is the graph row of the target attribute,
+diff --git a/Eli/pkg/liga/option/derivedSrcs/treebuild.c b/Eli/pkg/liga/option/derivedSrcs/treebuild.c
+index 512803e..f64bddf 100644
+--- a/Eli/pkg/liga/option/derivedSrcs/treebuild.c
++++ b/Eli/pkg/liga/option/derivedSrcs/treebuild.c
+@@ -40,6 +40,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ #endif
+ 
+ extern void Zerteiler ELI_ARG((void));
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ 
+ void
+ #ifdef PROTO_OK
+diff --git a/Eli/pkg/maptool/complete/clpintf.c b/Eli/pkg/maptool/complete/clpintf.c
+index 77b28ce..1e83aea 100644
+--- a/Eli/pkg/maptool/complete/clpintf.c
++++ b/Eli/pkg/maptool/complete/clpintf.c
+@@ -53,6 +53,8 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
++
+ /*
+  * SetFileErr
+  */
+diff --git a/Eli/pkg/maptool/ebnf/clpintf.c b/Eli/pkg/maptool/ebnf/clpintf.c
+index 77b28ce..ba988eb 100644
+--- a/Eli/pkg/maptool/ebnf/clpintf.c
++++ b/Eli/pkg/maptool/ebnf/clpintf.c
+@@ -53,6 +53,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ /*
+  * SetFileErr
+  */
+diff --git a/Eli/pkg/pdl/derivedSrcs/clpintf.c b/Eli/pkg/pdl/derivedSrcs/clpintf.c
+index ca18187..1920382 100644
+--- a/Eli/pkg/pdl/derivedSrcs/clpintf.c
++++ b/Eli/pkg/pdl/derivedSrcs/clpintf.c
+@@ -53,6 +53,8 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
++
+ /*
+  * SetFileErr
+  */
+diff --git a/Eli/pkg/ptg/derivedSrcs/clpintf.c b/Eli/pkg/ptg/derivedSrcs/clpintf.c
+index 77b28ce..ba988eb 100644
+--- a/Eli/pkg/ptg/derivedSrcs/clpintf.c
++++ b/Eli/pkg/ptg/derivedSrcs/clpintf.c
+@@ -53,6 +53,7 @@ Suite 330, Boston, MA 02111-1307, USA.  */
+ static CONST char *fileerrmsg;
+ static int fileerrmsgusage;
+ 
++extern void _dapto_source_changed(const char *, int, int, int, int, int);
+ /*
+  * SetFileErr
+  */

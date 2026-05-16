@@ -1,0 +1,12 @@
+diff -Naur --strip-trailing-cr source.org/src/src.pro source/src/src.pro
+--- source.org/src/src.pro	1970-01-01 01:00:01.000000000 +0100
++++ source/src/src.pro	2019-01-17 19:14:46.256821852 +0000
+@@ -10,7 +10,7 @@
+ CONFIG += qt plugin
+ QT += qml quick svg
+ 
+-target.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
++target.path = $$NIX_OUTPUT_QML/$$PLUGIN_IMPORT_PATH
+ INSTALLS += target
+ 
+ qmldir.files += $$_PRO_FILE_PWD_/qmldir $$_PRO_FILE_PWD_/pyotherside.qmltypes

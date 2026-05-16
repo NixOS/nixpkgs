@@ -1,0 +1,18 @@
+diff --git a/configure.ac b/configure.ac
+index 20a4e42..921ba18 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -8,9 +8,13 @@ AC_PREREQ([2.59])
+ 
+ AC_CONFIG_HEADERS([config.h])
+ AC_CONFIG_SRCDIR([src])
++AC_CONFIG_MACRO_DIRS([m4])
+ 
+ AM_MAINTAINER_MODE
+ 
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ IT_PROG_INTLTOOL([0.40.0])
+ 
+ AC_PROG_CC

@@ -1,0 +1,77 @@
+From fda825d390af8b5eaf79d7b7c39c19ab5ce317ac Mon Sep 17 00:00:00 2001
+From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
+Date: Wed, 26 Mar 2025 10:24:42 +0000
+Subject: [PATCH] cmake4 compat :
+
+* up cmake_minimum_required to 3.10
+* delete CMP0042 because OLD behavior is removed in cmake-4 and
+is no longer used.
+* set ENABLE_EXPORTS for test_runner (OLD behavior for CMP0065 is removed
+in cmake4)
+
+Signed-off-by: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
+---
+ CMakeLists.txt                                | 7 ++-----
+ doc/examples/static_executable/CMakeLists.txt | 2 +-
+ scripts/CMakeLists.txt                        | 2 +-
+ test/CMakeLists.txt                           | 1 +
+ 4 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9d2a9f143e..f8440e412e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+-# Please ensure that any changes remain compliant with 3.1.
++# Please ensure that any changes remain compliant with 3.10.
+ if(NOT EMBED_OPENBABEL)
+-  cmake_minimum_required(VERSION 3.1)
++  cmake_minimum_required(VERSION 3.10)
+ endif()
+ 
+ project(openbabel)
+@@ -10,9 +10,6 @@ set (CMAKE_CXX_STANDARD 11)
+ 
+ if(COMMAND cmake_policy)
+   cmake_policy(SET CMP0003 NEW)
+-  if(POLICY CMP0042)
+-    cmake_policy(SET CMP0042 OLD)
+-  endif()
+ endif()
+ 
+ include (CheckCXXCompilerFlag)
+diff --git a/doc/examples/static_executable/CMakeLists.txt b/doc/examples/static_executable/CMakeLists.txt
+index 0ed21beaaf..63dae2a468 100644
+--- a/doc/examples/static_executable/CMakeLists.txt
++++ b/doc/examples/static_executable/CMakeLists.txt
+@@ -25,7 +25,7 @@
+ #
+ 
+ # This line is required for cmake backwards compatibility.
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.10)
+ 
+ # Name of your project
+ project(myproject)
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 792e4592d0..eafda66c5a 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6.0)
++cmake_minimum_required(VERSION 3.10.0)
+ # Library versioning (used in Mac Python bindings)x
+ set(SOVERSION 4)
+ 
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 2ecf0dbe22..280eac471f 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -152,6 +152,7 @@ endif()
+ 
+ add_executable(test_runner ${srclist} obtest.cpp)
+ target_link_libraries(test_runner ${libs})
++set_target_properties(test_runner PROPERTIES ENABLE_EXPORTS TRUE)
+ 
+ if(NOT BUILD_SHARED AND NOT BUILD_MIXED)
+   set_target_properties(test_runner PROPERTIES LINK_SEARCH_END_STATIC TRUE)

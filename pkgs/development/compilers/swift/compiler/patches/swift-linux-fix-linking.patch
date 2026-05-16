@@ -1,0 +1,17 @@
+diff --git a/lib/Driver/ToolChains.cpp b/lib/Driver/ToolChains.cpp
+index c0ee9217e8..bf7737d6fa 100644
+--- a/lib/Driver/ToolChains.cpp
++++ b/lib/Driver/ToolChains.cpp
+@@ -1489,6 +1489,12 @@
+       LinkerDriver = Args.MakeArgString(tool.get());
+   }
+ 
++  // For Nix, prefer linking using the wrapped Nixpkgs clang, instead of using
++  // the unwrapped clang packaged with swift. The latter is unable to link, but
++  // we still want to use it for other purposes (clang importer).
++  if (auto tool = llvm::sys::findProgramByName(LinkerDriver, {"@clang@/bin"}))
++    return Args.MakeArgString(tool.get());
++
+   return LinkerDriver;
+ }
+ 
