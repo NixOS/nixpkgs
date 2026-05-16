@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     mainProgram = "wasmi_cli";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
   };
 })
