@@ -12,7 +12,7 @@
   validators,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "corsair-scan";
   version = "0.2.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Santandersecurityresearch";
     repo = "corsair_scan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-s94ZiTL7tBrhUaeB/O3Eh8o8zqtfdt0z8LKep1bZWiY=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
     description = "Python module to check for Cross-Origin Resource Sharing (CORS) misconfigurations";
     mainProgram = "corsair";
     homepage = "https://github.com/Santandersecurityresearch/corsair_scan";
-    changelog = "https://github.com/Santandersecurityresearch/corsair_scan/releases/tag/v${version}";
+    changelog = "https://github.com/Santandersecurityresearch/corsair_scan/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
