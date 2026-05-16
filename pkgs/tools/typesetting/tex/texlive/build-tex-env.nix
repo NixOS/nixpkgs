@@ -10,7 +10,6 @@
   makeFontsConf,
   makeWrapper,
   runCommand,
-  writeShellScript,
   toTLPkgSets,
   perl,
 
@@ -279,12 +278,12 @@ lib.fix (
           );
           derivationArgs = {
             outputs = [ outName ];
-            nativeBuildInputs = [
-              # force the output to be ${outName} or nix-env will not work
-              (writeShellScript "force-output.sh" ''
-                export out="''${${outName}-}"
-              '')
-            ];
+
+            # force the output to be ${outName} or nix-env will not work
+            preHook = ''
+              export out="''${${outName}}"
+            '';
+
             inherit meta passthru;
           };
         }
