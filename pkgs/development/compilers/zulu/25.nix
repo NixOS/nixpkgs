@@ -6,7 +6,7 @@
 
 let
   # For Zulu 25, FX and non-FX versions can differ
-  zuluVersion = if enableJavaFX then "25.28.85" else "25.28.85";
+  zuluVersion = if enableJavaFX then "25.32.21" else "25.32.21";
 in
 callPackage ./common.nix (
   {
@@ -15,42 +15,42 @@ callPackage ./common.nix (
     dists = {
       x86_64-linux = {
         inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        jdkVersion = "25.0.2";
         hash =
           if enableJavaFX then
-            "sha256-5Hhob86uCxrrdrFEvNaqPaQEaGrF47jpgUibKkNs1AQ="
+            "sha256-KpdyDAQxZjgftuHniElprJ2RSRB2eOwvQk1QaXxV+kk="
           else
-            "sha256-Fk2QHlokC4wYUW9atVvBH8lomrboKQRa6oRnNW3Ns0A=";
+            "sha256-lGrZdm2Y/Gq0laGhIAchl9tUmX9pJfuWaA8ezVWR204=";
       };
 
       aarch64-linux = {
         inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        jdkVersion = "25.0.2";
         hash =
           if enableJavaFX then
-            "sha256-HmfKOh0X2jcLrEMmKV81nQebtOOJjzpHWe1Ca+qIFYI="
+            "sha256-kLusgsgOD2HVasawwjsDF6b8M4BxVO+Kzs/rta4IAnw="
           else
-            "sha256-tg651UyXukFZVHg0qYzF0BYoHdKz5g50dcukkRMkvLQ=";
+            "sha256-mQPGsZGDozclyh39rltyQAydAJlcdvr8Sg0xxRUvM/c=";
       };
 
       x86_64-darwin = {
         inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        jdkVersion = "25.0.2";
         hash =
           if enableJavaFX then
-            "sha256-J5Akv28y3XoJgw5q2Rh4xHv1AV1I33jnPslhxDrTc0E="
+            "sha256-8iIkfaV+BhEjdUrXMrOxg5XmcfJOLmHVFlE+UlKynzc="
           else
-            "sha256-ws3h0xPZBLeTw3YCFO76IH7Mp98E58QISr3x9rvrwno=";
+            "sha256-PT6eVE6g0bBCulI0RTPpIF74JyP/BXgCYsyxcayYDVU=";
       };
 
       aarch64-darwin = {
         inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        jdkVersion = "25.0.2";
         hash =
           if enableJavaFX then
-            "sha256-urxxVoayeNW0g0g80eefmG+FMVzVBaBvmMKj+S3URNE="
+            "sha256-sGl624HftGDuwCfvgZLUaNJOBUQU9y6I1BLROL0HlPc="
           else
-            "sha256-c/ZPa618PfMfunQPvLu+98Glzt7/u13zht15vHKrqbY=";
+            "sha256-WZL+3hKV/d9uGc0HPCTmETW0L3n/v9pbzsVEIGJGoHk=";
       };
     };
   }
