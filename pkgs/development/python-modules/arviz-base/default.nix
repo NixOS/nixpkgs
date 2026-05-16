@@ -7,6 +7,7 @@
   flit-core,
 
   # dependencies
+  lazy-loader,
   numpy,
   typing-extensions,
   xarray,
@@ -23,14 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-base";
-  version = "0.8.2";
+  version = "1.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz-base";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g2DmhYqO9dgvDZwAXXSDFn5wHU0BvxXNgOzk6mmEmsw=";
+    hash = "sha256-/v1LPgM2rDw9Z0en0MYGELGiRlmwQX4ILKsBEqOhhSs=";
   };
 
   build-system = [
@@ -38,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    lazy-loader
     numpy
     typing-extensions
     xarray

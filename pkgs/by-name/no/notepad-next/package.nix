@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform, reimplementation of Notepad++";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ sebtm ];
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "NotepadNext";
   };

@@ -3476,6 +3476,8 @@ self: super: with self; {
 
   cwlformat = callPackage ../development/python-modules/cwlformat { };
 
+  cwsandbox = callPackage ../development/python-modules/cwsandbox { };
+
   cx-freeze = callPackage ../development/python-modules/cx-freeze { };
 
   cx-logging = callPackage ../development/python-modules/cx-logging { };
@@ -17873,6 +17875,8 @@ self: super: with self; {
 
   simple-parsing = callPackage ../development/python-modules/simple-parsing { };
 
+  simple-pid = callPackage ../development/python-modules/simple-pid { };
+
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
   simple-rlp = callPackage ../development/python-modules/simple-rlp { };
@@ -18538,6 +18542,8 @@ self: super: with self; {
   spidev = callPackage ../development/python-modules/spidev { };
 
   spinners = callPackage ../development/python-modules/spinners { };
+
+  splines = callPackage ../development/python-modules/splines { };
 
   splinter = callPackage ../development/python-modules/splinter { };
 

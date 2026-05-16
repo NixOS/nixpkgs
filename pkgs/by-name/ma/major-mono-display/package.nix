@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,13 +16,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-ishGGr8bY6UjEG/Hn5We8hOO5mcDq/41+DMn+dQGGUA=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 -t $out/share/fonts/truetype fonts/*.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Monospaced geometric sans serif all-uppercase typeface";
