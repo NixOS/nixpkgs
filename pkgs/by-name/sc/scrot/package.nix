@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command-line screen capture utility";
     mainProgram = "scrot";
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
     license = lib.licenses.mitAdvertising;
   };
 })
