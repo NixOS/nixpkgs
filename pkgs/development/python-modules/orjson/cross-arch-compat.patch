@@ -1,0 +1,48 @@
+From 8a6c16fd79e78aaaf1223090e673bdbe11451abc Mon Sep 17 00:00:00 2001
+From: DavHau <hsngrmpf+github@gmail.com>
+Date: Wed, 22 Oct 2025 10:40:03 +0700
+Subject: [PATCH] Fix cross-compilation by checking target arch in build.rs
+
+Previously, build.rs used #[cfg(target_arch)] attributes which check
+the host architecture where the build script runs, not the target
+being compiled for. This caused AVX-512 features to be incorrectly
+enabled when cross-compiling from x86_64 to other architectures like
+riscv64, leading to compilation errors.
+
+Now uses CARGO_CFG_TARGET_ARCH environment variable to correctly
+detect the target architecture during cross-compilation.
+---
+ build.rs | 7 ++++++--
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/build.rs b/build.rs
+index 49a9a9a4..0a99698d 100644
+--- a/build.rs
++++ b/build.rs
+@@ -11,6 +11,9 @@ fn main() {
+     #[allow(unused_variables)]
+     let is_64_bit_python = matches!(python_config.pointer_width, Some(64));
+
++    let target_arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap_or_default();
++    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
++
+     match python_config.implementation {
+         pyo3_build_config::PythonImplementation::CPython => {
+             println!("cargo:rustc-cfg=CPython");
+@@ -18,7 +21,7 @@ fn main() {
+             println!("cargo:rustc-cfg=CPython");
+             #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
+-            if is_64_bit_python {
++            if (target_arch == "x86_64" || target_arch == "aarch64") && is_64_bit_python {
+                 println!("cargo:rustc-cfg=feature=\"inline_int\"");
+                 #[cfg(target_endian = "little")]
+                 println!("cargo:rustc-cfg=feature=\"inline_str\"");
+             }
+@@ -50,7 +53,7 @@ fn main() {
+     println!("cargo:rustc-check-cfg=cfg(PyPy)");
+
+     #[cfg(all(target_arch = "x86_64", not(target_os = "macos")))]
+-    if is_64_bit_python {
++    if target_arch == "x86_64" && target_os != "macos" && is_64_bit_python {
+         println!("cargo:rustc-cfg=feature=\"avx512\"");
+     }

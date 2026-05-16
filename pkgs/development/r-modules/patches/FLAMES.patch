@@ -1,0 +1,13 @@
+diff --git a/src/Makevars b/src/Makevars
+index ce72c93..b52a2c6 100755
+--- a/src/Makevars
++++ b/src/Makevars
+@@ -42,7 +42,7 @@ RUST_OK := $(shell [ "$(RUST_VERSION)" != "" ] && \
+                    [ "$$(printf '%s\n' 1.77.0 $(RUST_VERSION) | sort -V | head -n1)" = "1.77.0" ] && echo "yes" || echo "no")
+ 
+ # Targets
+-all: strippedLib ../inst/bin/minimap2 ../inst/bin/oarfish
++all: ../inst/bin/minimap2 ../inst/bin/oarfish
+ 
+ strippedLib: $(SHLIB)
+ 	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; then /usr/bin/strip --strip-debug $(SHLIB); fi

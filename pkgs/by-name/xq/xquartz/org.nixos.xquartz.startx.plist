@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>org.nixos.xquartz.startx</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>@LAUNCHD_STARTX@</string>
+      <string>@STARTX@</string>
+      <string>--</string>
+      <string>@XQUARTZ@</string>
+    </array>
+    <key>Sockets</key>
+    <dict>
+      <key>org.nixos.xquartz:0</key>
+      <dict>
+        <key>SecureSocketWithKey</key>
+        <string>DISPLAY</string>
+      </dict>
+    </dict>
+    <key>ServiceIPC</key>
+    <true/>
+    <key>EnableTransactions</key>
+    <true/>
+  </dict>
+</plist>

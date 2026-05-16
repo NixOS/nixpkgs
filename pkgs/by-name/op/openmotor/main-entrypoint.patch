@@ -1,0 +1,17 @@
+diff --git a/main.py b/main.py
+index 1ecf103..fb4e8fe 100644
+--- a/main.py
++++ b/main.py
+@@ -1,6 +1,9 @@
+ import sys
+ from app import App
+-from PyQt6.QtCore import Qt
+ 
+-app = App(sys.argv)
+-sys.exit(app.exec())
++def main():
++    app = App(sys.argv)
++    sys.exit(app.exec())
++
++if __name__ == '__main__':
++    main()

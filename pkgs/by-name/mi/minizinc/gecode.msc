@@ -1,0 +1,16 @@
+{
+    "id": "org.gecode.gecode",
+    "name": "Gecode",
+    "description": "Gecode FlatZinc executable",
+    "version": "VERSION-WILL-BE-REPLACED-BY-JQ",
+    "mznlib": "MZNLIB-WILL-BE-REPLACED-BY-JQ",
+    "executable": "FZN_GECODE-WILL-BE-REPLACED-BY-JQ",
+    "tags": ["cp","int", "float", "set", "restart"],
+    "stdFlags": ["-a","-f","-n","-p","-r","-s","-t"],
+    "supportsMzn": false,
+    "supportsFzn": true,
+    "needsSolns2Out": true,
+    "needsMznExecutable": false,
+    "needsStdlibDir": false,
+    "isGUIApplication": false
+}

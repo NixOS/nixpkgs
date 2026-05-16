@@ -1,0 +1,15 @@
+diff --git a/src/webview/app/mod.rs b/src/webview/app/mod.rs
+index 2c6125e..26ab73f 100644
+--- a/src/webview/app/mod.rs
++++ b/src/webview/app/mod.rs
+@@ -23,6 +23,10 @@ cef_impl!(
+                 CMD_SWITCHES.iter().for_each(|switch| {
+                     line.append_switch(Some(&CefString::from(switch.to_owned())));
+                 });
++                line.append_switch_with_value(
++                    Some(&CefString::from("disable-features")),
++                    Some(&CefString::from("LocalNetworkAccessChecks")),
++                );
+             }
+         }
+ 

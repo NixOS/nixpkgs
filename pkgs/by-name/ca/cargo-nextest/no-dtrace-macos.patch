@@ -1,0 +1,62 @@
+diff --git a/nextest-runner/Cargo.toml b/nextest-runner/Cargo.toml
+index 748f162e4c..2cda438ded 100644
+--- a/nextest-runner/Cargo.toml
++++ b/nextest-runner/Cargo.toml
+@@ -126,7 +126,7 @@
+ #
+ # Also, usdt 0.6.0 fails to compile on x86_64-apple-darwin, so restrict it to
+ # aarch64-apple-darwin.
+-[target.'cfg(any(all(target_arch = "x86_64", any(target_os = "linux", target_os = "freebsd", target_os = "illumos")), all(target_arch = "aarch64", any(target_os = "macos", target_os = "freebsd", target_os = "illumos"))))'.dependencies]
++[target.'cfg(any(all(target_arch = "x86_64", any(target_os = "linux", target_os = "freebsd", target_os = "illumos")), all(target_arch = "aarch64", any(target_os = "freebsd", target_os = "illumos"))))'.dependencies]
+ usdt = { version = "0.6.0", optional = true }
+ 
+ [target.'cfg(windows)'.dependencies]
+diff --git a/nextest-runner/src/usdt.rs b/nextest-runner/src/usdt.rs
+index b0905030a4..a1abbcfdca 100644
+--- a/nextest-runner/src/usdt.rs
++++ b/nextest-runner/src/usdt.rs
+@@ -30,7 +30,7 @@
+         ),
+         all(
+             target_arch = "aarch64",
+-            any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++            any(target_os = "freebsd", target_os = "illumos")
+         )
+     )
+ ))]
+@@ -48,7 +48,7 @@
+         ),
+         all(
+             target_arch = "aarch64",
+-            any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++            any(target_os = "freebsd", target_os = "illumos")
+         )
+     )
+ )))]
+@@ -65,7 +65,7 @@
+         ),
+         all(
+             target_arch = "aarch64",
+-            any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++            any(target_os = "freebsd", target_os = "illumos")
+         )
+     )
+ ))]
+@@ -146,7 +146,7 @@
+         ),
+         all(
+             target_arch = "aarch64",
+-            any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++            any(target_os = "freebsd", target_os = "illumos")
+         )
+     )
+ ))]
+@@ -260,7 +260,7 @@
+         ),
+         all(
+             target_arch = "aarch64",
+-            any(target_os = "macos", target_os = "freebsd", target_os = "illumos")
++            any(target_os = "freebsd", target_os = "illumos")
+         )
+     )
+ )))]
