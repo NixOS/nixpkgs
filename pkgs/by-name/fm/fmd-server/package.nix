@@ -89,6 +89,7 @@ buildGoModule (
       ];
       teams = [ lib.teams.ngi ];
       mainProgram = "fmd-server";
+      platforms = lib.platforms.linux;
     };
   }
 )
