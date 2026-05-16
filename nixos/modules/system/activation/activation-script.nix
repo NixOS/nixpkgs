@@ -322,6 +322,7 @@ in
         description = "Run user-specific NixOS activation";
         script = config.system.userActivationScripts.script;
         unitConfig.ConditionUser = "!@system";
+        unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";
         wantedBy = [ "default.target" ];
       };
