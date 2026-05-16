@@ -7,27 +7,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-hound";
-  version = "1.7.2";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "tillson";
     repo = "git-hound";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-W+rYDyRIw4jWWO4UZkUHFq/D/7ZXM+y5vdbclk6S0ro=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zd9ttx3U2XtXhsqe3sT8oCUeFmFg5k519TPntCFf+0s=";
   };
-
-  patches = [
-    # https://github.com/tillson/git-hound/pull/66
-    (fetchpatch {
-      url = "https://github.com/tillson/git-hound/commit/cd8aa19401cfdec9e4d76c1f6eb4d85928ec4b03.patch";
-      hash = "sha256-EkdR2KkxxlMLNtKFGpxsQ/msJT5NcMF7irIUcU2WWJY=";
-    })
-  ];
 
   # tests fail outside of nix
   doCheck = false;
 
-  vendorHash = "sha256-8teIa083oMXm0SjzMP+mGOVAel1Hbsp3TSMhdvqVbQs=";
+  vendorHash = "sha256-AgVNfYLs1myhOjIgylcchWKbFwW9qSsYqzqRxRHvKQ0=";
 
   meta = {
     description = "Reconnaissance tool for GitHub code search";
@@ -37,6 +29,7 @@ buildGoModule (finalAttrs: {
       and a unique result scoring system.
     '';
     homepage = "https://github.com/tillson/git-hound";
+    changelog = "https://github.com/tillson/git-hound/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "git-hound";
