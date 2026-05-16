@@ -160,6 +160,10 @@ buildPythonPackage (finalAttrs: {
     # assert 0 != 0
     # (only when xdist)
     "test_server_port_is_freed"
+
+    # counts ffmpeg pids, can be confused when
+    # building multiple times this package in parallel
+    "test_process_termination"
   ];
 
   pythonImportsCheck = [
