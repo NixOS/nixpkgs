@@ -74,6 +74,7 @@ let
 
   needUserConfig =
     stdenv.hostPlatform != stdenv.buildPlatform
+    || enablePython
     || useMpi
     || (stdenv.hostPlatform.isDarwin && enableShared);
 
