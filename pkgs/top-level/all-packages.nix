@@ -3598,10 +3598,6 @@ with pkgs;
     egg2nix
     ;
 
-  cdb = callPackage ../development/tools/database/cdb {
-    stdenv = gccStdenv;
-  };
-
   libclang = llvmPackages.libclang;
   clang-manpages = llvmPackages.clang-manpages;
 

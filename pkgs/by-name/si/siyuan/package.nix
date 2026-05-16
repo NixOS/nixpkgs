@@ -169,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       ltrump
+      myul
     ];
     platforms = lib.attrNames platformIds;
   };

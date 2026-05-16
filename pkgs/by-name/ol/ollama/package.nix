@@ -141,13 +141,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.23.1";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-19rx+PNCpvRxhVr1+bgqsQIwpZzgdazlCoppxlDKzvE=";
+    hash = "sha256-uwdhGT2ZG7c3Qe4QVcuKfAsUyPdlkHcwh1Dvh/oH07M=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
@@ -318,7 +318,6 @@ goBuild (finalAttrs: {
       if (rocmRequested || cudaRequested || vulkanRequested) then platforms.linux else platforms.unix;
     mainProgram = "ollama";
     maintainers = with maintainers; [
-      dit7ya
       prusnak
     ];
   };

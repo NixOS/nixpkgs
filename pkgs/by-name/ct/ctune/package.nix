@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctune";
-  version = "1.3.9";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "An7ar35";
     repo = "ctune";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HGCXtntsCQsWKoTbhRZ71NxfD4rFuYDE2IbGVh0Cj/E=";
+    hash = "sha256-pC1xlcEX1f2kGewkq88iDAZwSlcRHmBpIw1aW74X6jw=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Avoid a wrong nested install path location
     # Set to "$out" instead of "$out/$out"
     "-DCMAKE_INSTALL_PREFIX=''"
-  ];
-
-  patches = [
-    ./cmake_remove_git_check.patch
-    ./docs_cmake_fix_man_install_dir.patch
   ];
 
   meta = {
