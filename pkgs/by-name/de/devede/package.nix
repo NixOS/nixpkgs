@@ -63,10 +63,9 @@ buildPythonApplication (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'/usr'," ""
     substituteInPlace src/devedeng/configuration_data.py \
-      --replace "/usr/share" "$out/share" \
-      --replace "/usr/local/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share" \
+      --replace-fail "/usr/local/share" "$out/share"
   '';
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
