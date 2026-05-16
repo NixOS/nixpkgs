@@ -6,14 +6,14 @@
   kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation rec {
-  pname = "nullfs";
-  version = "0.22";
+  pname = "nullfsvfs";
+  version = "0.26";
 
   src = fetchFromGitHub {
     owner = "abbbi";
     repo = "nullfsvfs";
     rev = "v${version}";
-    sha256 = "sha256-UJubWx5QfzLAiYTN1BPaziT3gKsTI0OVCmcuwKX3Gp0=";
+    sha256 = "sha256-gEvkl8IKekuiQjY+TVaC72vJ310k2A/kXfR5mxdvPpc=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/fs/nullfs/"
-    install -p -m 644 nullfs.ko $out/lib/modules/${kernel.modDirVersion}/kernel/fs/nullfs/
+    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/fs/nullfsvfs/"
+    install -p -m 644 nullfsvfs.ko $out/lib/modules/${kernel.modDirVersion}/kernel/fs/nullfsvfs/
     runHook postInstall
   '';
 
