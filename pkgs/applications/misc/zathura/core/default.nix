@@ -117,5 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mithicspirit ];
+    mainProgram = "zathura";
   };
 })
