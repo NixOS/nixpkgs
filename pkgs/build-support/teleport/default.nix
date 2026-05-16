@@ -82,7 +82,7 @@ let
         version
         ;
       pnpm = pnpm_10;
-      fetcherVersion = 2;
+      fetcherVersion = 3;
       hash = pnpmHash;
     };
 
