@@ -328,11 +328,11 @@
     "vendorHash": "sha256-fP6brpY/wRI1Yjgapzi+FfOci65gxWeOZulXbGdilrE="
   },
   "dnsimple_dnsimple": {
-    "hash": "sha256-j3O1gztyDCiq0Rchcx1lYktY2EhaNaa3t1yL+lH7IAg=",
+    "hash": "sha256-8ZanbgHaszFiorzY/ulpVvUesmyx7O3SKXmwOi5WUSU=",
     "homepage": "https://registry.terraform.io/providers/dnsimple/dnsimple",
     "owner": "dnsimple",
     "repo": "terraform-provider-dnsimple",
-    "rev": "v2.1.1",
+    "rev": "v2.1.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-1CpswocnTe6aj4TP7fMGy6mv0d/yX8FcYAKkAW5k7kk="
   },

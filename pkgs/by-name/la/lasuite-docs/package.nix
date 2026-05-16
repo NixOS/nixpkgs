@@ -181,6 +181,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ma27
     ];
     mainProgram = "docs";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

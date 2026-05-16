@@ -518,6 +518,12 @@ let
               "test-tick-processor-arguments"
               "test-set-raw-mode-reset-signal"
             ]
+            # Apple SDK update broke something related to those tests, so skipping them for now
+            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isDarwin) [
+              "test-worker-track-unmanaged-fds"
+              "test-esm-import-meta-main-eval"
+              "test-worker-debug"
+            ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             ++ lib.optional (
