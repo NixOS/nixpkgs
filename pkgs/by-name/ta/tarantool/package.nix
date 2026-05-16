@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.tarantool.io/";
     license = lib.licenses.bsd2;
     mainProgram = "tarantool";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

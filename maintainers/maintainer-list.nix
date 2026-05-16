@@ -6976,12 +6976,6 @@
     githubId = 40633781;
     name = "Sergei S.";
   };
-  dit7ya = {
-    email = "7rat13@gmail.com";
-    github = "dit7ya";
-    githubId = 14034137;
-    name = "Mostly Void";
-  };
   ditsuke = {
     name = "Tushar";
     email = "hello@ditsuke.com";
@@ -18937,6 +18931,11 @@
     github = "MysteryBlokHed";
     githubId = 13910387;
     keys = [ { fingerprint = "086E EF20 D54E D348 E5BA  6263 16E9 43E6 596F FB4E"; } ];
+  };
+  myul = {
+    github = "myul";
+    githubId = 27887735;
+    name = "myul";
   };
   myypo = {
     email = "nikirsmcgl@gmail.com";

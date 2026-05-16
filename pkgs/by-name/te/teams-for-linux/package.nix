@@ -125,6 +125,7 @@ buildNpmPackage rec {
     description = "Unofficial Microsoft Teams client for Linux";
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
+    changelog = "https://github.com/IsmaelMartinez/teams-for-linux/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       muscaln

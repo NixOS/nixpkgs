@@ -37,7 +37,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.9.5";
+  version = "2.9.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NiW4VZyQerFhDEDXOOTNzOpsPnZvoyxJWMfg9hHJJ8c=";
+    hash = "sha256-4zfeMbqM43Gd/s7EDROEHste1+0+X9Qs3LUIxCp2Clg=";
   };
 
   build-system = with python3Packages; [
@@ -56,6 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "agent-client-protocol"
+    "certifi"
     "cryptography"
     "gitpython"
     "mistralai"
@@ -69,6 +70,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     agent-client-protocol
     anyio
     cachetools
+    certifi
     charset-normalizer
     cryptography
     gitpython

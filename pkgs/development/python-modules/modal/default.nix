@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modal";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";
     repo = "modal-client";
     tag = "py/v${finalAttrs.version}";
-    hash = "sha256-Ol6KYncP1F9EHbcyJmScuBwev79/vxrKWlO/ZkoxOhQ=";
+    hash = "sha256-MXaiei2hUBwI9qlB7HZtWbnrsZq/iLnZgqIejn2ZgX8=";
   };
   sourceRoot = "${finalAttrs.src.name}/py";
 
