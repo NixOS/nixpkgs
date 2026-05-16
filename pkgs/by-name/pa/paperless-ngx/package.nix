@@ -283,6 +283,7 @@ python.pkgs.buildPythonApplication (
     passthru = {
       frontend = callPackage ./frontend.nix {
         inherit (finalAttrs) src version;
+        meta = removeAttrs finalAttrs.meta [ "mainProgram" ];
       };
       inherit
         nltkDataDir

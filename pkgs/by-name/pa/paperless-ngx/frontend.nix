@@ -13,6 +13,7 @@
   xcbuild,
   src,
   version,
+  meta,
 }:
 let
   pnpm = pnpm_10;
@@ -82,4 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  inherit meta;
 })
