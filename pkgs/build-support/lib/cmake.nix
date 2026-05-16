@@ -7,6 +7,8 @@ let
     with platform;
     if isCygwin then
       "CYGWIN"
+    else if isAndroid then
+      "Android"
     else if isRedox then
       "Generic"
     else
@@ -21,6 +23,13 @@ let
     ]
     ++ optionals (stdenv.hostPlatform.uname.release != null) [
       "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+    ]
+    ++ optionals (stdenv.hostPlatform.uname.release == null && stdenv.hostPlatform.isAndroid) [
+      # This setting is for "Commonly used Android toolchain files that
+      # pre-date CMake upstream support" and disables CMake's way of
+      # interfering with them. Here we use it to prevent CMake from
+      # interefering with Nix's way of setting up androidsdk environments
+      "-DCMAKE_SYSTEM_VERSION=1"
     ]
     ++ optionals (stdenv.hostPlatform.isDarwin) [
       "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
