@@ -327,11 +327,6 @@ with pkgs;
 
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
-  aocd = with python3Packages; toPythonApplication aocd;
-
-  cve = with python3Packages; toPythonApplication cvelib;
-
-  bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
   # wheel building fail with:
@@ -383,8 +378,6 @@ with pkgs;
 
   dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
-  dinghy = with python3Packages; toPythonApplication dinghy;
-
   djgpp = djgpp_i586;
   djgpp_i586 = callPackage ../development/compilers/djgpp {
     targetArchitecture = "i586";
@@ -397,8 +390,6 @@ with pkgs;
     }
   );
 
-  dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
-
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
   enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
@@ -408,8 +399,6 @@ with pkgs;
   lshw-gui = lshw.override { withGUI = true; };
 
   kdePackages = callPackage ../kde { };
-
-  buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
   mumps-mpi = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
 
@@ -422,8 +411,6 @@ with pkgs;
   deviceTree = callPackage ../os-specific/linux/device-tree { };
 
   octodns-providers = octodns.providers;
-
-  oletools = with python3.pkgs; toPythonApplication oletools;
 
   ollama-cpu = callPackage ../by-name/ol/ollama/package.nix { acceleration = false; };
   ollama-rocm = callPackage ../by-name/ol/ollama/package.nix { acceleration = "rocm"; };
@@ -536,8 +523,6 @@ with pkgs;
     ;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
-
-  magika = with python3Packages; toPythonApplication magika;
 
   mysql-shell = mysql-shell_8;
 
@@ -1015,17 +1000,11 @@ with pkgs;
 
   _7zz-rar = _7zz.override { enableUnfree = true; };
 
-  acquire = with python3Packages; toPythonApplication acquire;
-
-  actdiag = with python3.pkgs; toPythonApplication actdiag;
-
   opnplug = adlplug.override { type = "OPN"; };
 
   aflplusplus = callPackage ../tools/security/aflplusplus { wine = null; };
 
   libdislocator = callPackage ../tools/security/aflplusplus/libdislocator.nix { };
-
-  aioblescan = with python3Packages; toPythonApplication aioblescan;
 
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku
@@ -1035,24 +1014,14 @@ with pkgs;
   alice-tools-qt5 = alice-tools.override { withQt5 = true; };
   alice-tools-qt6 = alice-tools.override { withQt6 = true; };
 
-  auditwheel = with python3Packages; toPythonApplication auditwheel;
-
-  btrsync = with python3Packages; toPythonApplication btrsync;
-
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
     studioVariant = true;
   };
-
-  dehinter = with python3Packages; toPythonApplication dehinter;
 
   gamescope-wsi = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = false;
     enableWsi = true;
   };
-
-  font-v = with python3Packages; toPythonApplication font-v;
-
-  fontbakery = with python3Packages; toPythonApplication fontbakery;
 
   genealogos-api = genealogos-cli.override {
     crate = "api";
@@ -1080,17 +1049,9 @@ with pkgs;
     withUsdView = true;
   };
 
-  py7zr = with python3Packages; toPythonApplication py7zr;
-
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
 
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
-
-  sdkmanager = with python3Packages; toPythonApplication sdkmanager;
-
-  shaperglot = with python3Packages; toPythonApplication shaperglot;
-
-  ufolint = with python3Packages; toPythonApplication ufolint;
 
   ventoy-full = ventoy.override {
     withCryptsetup = true;
@@ -1106,8 +1067,6 @@ with pkgs;
   ventoy-full-qt = ventoy-full.override {
     defaultGuiType = "qt5";
   };
-
-  vprof = with python3Packages; toPythonApplication vprof;
 
   waydroid-nftables = waydroid.override { withNftables = true; };
 
@@ -1148,12 +1107,6 @@ with pkgs;
     rustSupport = false; # Needed for bootstrap
     withpcre2 = false;
   };
-
-  bump2version = with python3Packages; toPythonApplication bump2version;
-
-  datalad = with python3Packages; toPythonApplication datalad;
-
-  datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
@@ -1197,12 +1150,6 @@ with pkgs;
   inherit (haskellPackages) git-brunch;
 
   git-autofixup = perlPackages.GitAutofixup;
-
-  ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
-
-  git-filter-repo = with python3Packages; toPythonApplication git-filter-repo;
-
-  git-revise = with python3Packages; toPythonApplication git-revise;
 
   ### APPLICATIONS/EMULATORS
 
@@ -1280,8 +1227,6 @@ with pkgs;
       };
     in
     ppsspp.override argset;
-
-  py65 = with python3.pkgs; toPythonApplication py65;
 
   rmg-wayland = callPackage ../by-name/rm/rmg/package.nix {
     withWayland = true;
@@ -1363,8 +1308,6 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  twine = with python3Packages; toPythonApplication twine;
-
   inherit (callPackages ../development/tools/ammonite { })
     ammonite_2_12
     ammonite_2_13
@@ -1403,8 +1346,6 @@ with pkgs;
   arpack-mpi = arpack.override { useMpi = true; };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
-
-  autoflake = with python3.pkgs; toPythonApplication autoflake;
 
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
@@ -1453,8 +1394,6 @@ with pkgs;
 
   bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
 
-  blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
-
   bucklespring-x11 = callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; };
   bucklespring = bucklespring-x11;
 
@@ -1469,31 +1408,17 @@ with pkgs;
     buildbot-worker
     ;
 
-  certipy = with python3Packages; toPythonApplication certipy-ad;
-
   fedora-backgrounds = recurseIntoAttrs (callPackage ../data/misc/fedora-backgrounds { });
 
-  coconut = with python312Packages; toPythonApplication coconut;
-
-  corsair = with python3Packages; toPythonApplication corsair-scan;
-
   inherit (cue) writeCueValidator;
-
-  detect-secrets = with python3Packages; toPythonApplication detect-secrets;
 
   deterministic-host-uname = deterministic-uname.override {
     forPlatform = stdenv.targetPlatform; # offset by 1 so it works in nativeBuildInputs
   };
 
-  dkimpy = with python3Packages; toPythonApplication dkimpy;
-
   esbuild = callPackage ../development/tools/esbuild { };
 
   esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
-
-  libfx2 = with python3Packages; toPythonApplication fx2;
-
-  foxdot = with python3Packages; toPythonApplication foxdot;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
 
@@ -1503,17 +1428,11 @@ with pkgs;
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
-  github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
-
-  gistyc = with python3Packages; toPythonApplication gistyc;
-
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
 
   go2tv-lite = go2tv.override { withGui = false; };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
-
-  hwi = with python3Packages; toPythonApplication hwi;
 
   pass = callPackage ../tools/security/pass { };
 
@@ -1552,8 +1471,6 @@ with pkgs;
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
-  apprise = with python3Packages; toPythonApplication apprise;
-
   avahi-compat = callPackage ../by-name/av/avahi/package.nix {
     withLibdnssdCompat = true;
   };
@@ -1561,8 +1478,6 @@ with pkgs;
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
-
-  beautysh = with python3.pkgs; toPythonApplication beautysh;
 
   inherit (callPackages ../misc/logging/beats/7.x.nix { })
     auditbeat7
@@ -1578,8 +1493,6 @@ with pkgs;
   metricbeat = metricbeat7;
   packetbeat = packetbeat7;
 
-  biliass = with python3.pkgs; toPythonApplication biliass;
-
   charles = charles5;
   inherit (callPackages ../applications/networking/charles { })
     charles3
@@ -1591,10 +1504,6 @@ with pkgs;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
 
-  behave = with python3Packages; toPythonApplication behave;
-
-  blockdiag = with python3Packages; toPythonApplication blockdiag;
-
   bogofilter-sqlite = bogofilter.override { database = sqlite; };
   bogofilter-db = bogofilter.override { database = db; };
 
@@ -1603,8 +1512,6 @@ with pkgs;
   cabal2nix-unwrapped = haskell.lib.compose.justStaticExecutables (
     haskellPackages.generateOptparseApplicativeCompletions [ "cabal2nix" ] haskellPackages.cabal2nix
   );
-
-  stac-validator = with python3Packages; toPythonApplication stac-validator;
 
   stack2nix =
     with haskell.lib;
@@ -1615,14 +1522,6 @@ with pkgs;
           --prefix PATH ":" "${git}/bin:${cabal-install}/bin"
       '';
     });
-
-  clevercsv = with python3Packages; toPythonApplication clevercsv;
-
-  cleanit = with python3Packages; toPythonApplication cleanit;
-
-  clickgen = with python3Packages; toPythonApplication clickgen;
-
-  coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
   czkawka-full = czkawka.wrapper.override {
     extraPackages = [ ffmpeg ];
@@ -1653,16 +1552,6 @@ with pkgs;
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
-
-  cot = with python3Packages; toPythonApplication cot;
-
-  crossplane = with python3Packages; toPythonApplication crossplane;
-
-  csv2md = with python3Packages; toPythonApplication csv2md;
-
-  dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
-
-  datasette = with python3Packages; toPythonApplication datasette;
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
@@ -1699,8 +1588,6 @@ with pkgs;
 
   dune_3 = callPackage ../by-name/du/dune/package.nix { };
 
-  dvc = with python3.pkgs; toPythonApplication dvc;
-
   dvc-with-remotes = dvc.override {
     enableGoogle = true;
     enableAWS = true;
@@ -1720,8 +1607,6 @@ with pkgs;
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
 
-  easyocr = with python3.pkgs; toPythonApplication easyocr;
-
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = !stdenv.hostPlatform.isDarwin;
@@ -1734,8 +1619,6 @@ with pkgs;
   };
 
   dblatexFull = dblatex.override { enableAllFeatures = true; };
-
-  latex2mathml = with python3Packages; toPythonApplication latex2mathml;
 
   pgf = pgf2;
 
@@ -1778,8 +1661,6 @@ with pkgs;
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
-  hocr-tools = with python3Packages; toPythonApplication hocr-tools;
-
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };
 
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
@@ -1792,11 +1673,7 @@ with pkgs;
     callPackage ../applications/window-managers/hyprwm/hyprland-plugins { }
   );
 
-  intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
-
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
-
-  klaus = with python3Packages; toPythonApplication klaus;
 
   klipper = callPackage ../servers/klipper { };
 
@@ -1806,8 +1683,6 @@ with pkgs;
 
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
-  lexicon = with python3Packages; toPythonApplication dns-lexicon;
-
   lgogdownloader-gui = callPackage ../by-name/lg/lgogdownloader/package.nix { enableGui = true; };
 
   # Less secure variant of lowdown for use inside Nix builds.
@@ -1815,13 +1690,9 @@ with pkgs;
     enableDarwinSandbox = false;
   };
 
-  kaggle = with python3Packages; toPythonApplication kaggle;
-
   maliit-framework = libsForQt5.callPackage ../applications/misc/maliit-framework { };
 
   maliit-keyboard = libsForQt5.callPackage ../applications/misc/maliit-keyboard { };
-
-  materialx = with python3Packages; toPythonApplication materialx;
 
   # while building documentation meson may want to run binaries for host
   # which needs an emulator
@@ -1858,33 +1729,15 @@ with pkgs;
 
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
-  nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
-
-  nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
-
-  nsz = with python3.pkgs; toPythonApplication nsz;
-
-  ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
-
   online-judge-template-generator =
     python3Packages.callPackage ../tools/misc/online-judge-template-generator
       { };
 
-  online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
-
   inherit (ocamlPackages) patdiff;
-
-  patool = with python3Packages; toPythonApplication patool;
-
-  pixcat = with python3Packages; toPythonApplication pixcat;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
-
-  ropgadget = with python3Packages; toPythonApplication ropgadget;
-
-  scour = with python3Packages; toPythonApplication scour;
 
   steampipePackages = recurseIntoAttrs (callPackage ../tools/misc/steampipe-packages { });
 
@@ -1997,8 +1850,6 @@ with pkgs;
 
   collectd-data = callPackage ../tools/system/collectd/data.nix { };
 
-  unify = with python3Packages; toPythonApplication unify;
-
   inherit (import ../development/libraries/libsbsms pkgs)
     libsbsms
     libsbsms_2_0_2
@@ -2066,8 +1917,6 @@ with pkgs;
         { };
   };
 
-  blacken-docs = with python3Packages; toPythonApplication blacken-docs;
-
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
 
   calyx-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
@@ -2075,8 +1924,6 @@ with pkgs;
   };
 
   cask-server = libsForQt5.callPackage ../applications/misc/cask-server { };
-
-  cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   clickhouse-lts = callPackage ../by-name/cl/clickhouse/lts.nix { };
 
@@ -2203,8 +2050,6 @@ with pkgs;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
-  xkcdpass = with python3Packages; toPythonApplication xkcdpass;
-
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
   ### DEVELOPMENT / EMSCRIPTEN
@@ -2239,13 +2084,9 @@ with pkgs;
 
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
 
-  executor = with python3Packages; toPythonApplication executor;
-
   exiftool = perlPackages.ImageExifTool;
 
   expect = tclPackages.expect;
-
-  Fabric = with python3Packages; toPythonApplication fabric;
 
   chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
 
@@ -2302,8 +2143,6 @@ with pkgs;
 
   gaugePlugins = recurseIntoAttrs (callPackage ../by-name/ga/gauge/plugins { });
 
-  gawd = python3Packages.toPythonApplication python3Packages.gawd;
-
   gawk = callPackage ../tools/text/gawk {
     inherit (darwin) locale;
   };
@@ -2314,8 +2153,6 @@ with pkgs;
   gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix { };
 
   gawkInteractive = gawk.override { interactive = true; };
-
-  gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gitlab-ee = callPackage ../by-name/gi/gitlab/package.nix {
     gitlabEnterprise = true;
@@ -2409,17 +2246,11 @@ with pkgs;
     with-gce = true;
   };
 
-  google-compute-engine = with python3.pkgs; toPythonApplication google-compute-engine;
-
   gparted-full = gparted.override { withAllTools = true; };
-
-  gdown = with python3Packages; toPythonApplication gdown;
 
   gpt4all-cuda = gpt4all.override {
     cudaSupport = true;
   };
-
-  gprof2dot = with python3Packages; toPythonApplication gprof2dot;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
@@ -2440,21 +2271,13 @@ with pkgs;
     withXorg = false;
   };
 
-  gruut = with python3.pkgs; toPythonApplication gruut;
-
-  gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
-
   gup = callPackage ../development/tools/build-managers/gup { };
-
-  gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
 
   gzip = callPackage ../tools/compression/gzip { };
 
   haskell-language-server =
     callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix
       { };
-
-  hassil = with python3Packages; toPythonApplication hassil;
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
@@ -2495,15 +2318,9 @@ with pkgs;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
 
-  hpccm = with python3Packages; toPythonApplication hpccm;
-
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
-  httpie = with python3Packages; toPythonApplication httpie;
-
   hue-plus = libsForQt5.callPackage ../applications/misc/hue-plus { };
-
-  humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
@@ -2526,23 +2343,13 @@ with pkgs;
 
   incus-lts = callPackage ../by-name/in/incus/lts.nix { };
 
-  indexed-bzip2 = with python3Packages; toPythonApplication indexed-bzip2;
-
   infisical = callPackage ../development/tools/infisical { };
 
   input-remapper = python3Packages.callPackage ../tools/inputmethods/input-remapper { };
 
-  internetarchive = with python3Packages; toPythonApplication internetarchive;
-
-  iocextract = with python3Packages; toPythonApplication iocextract;
-
-  iocsearcher = with python3Packages; toPythonApplication iocsearcher;
-
   iperf2 = callPackage ../tools/networking/iperf/2.nix { };
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
-
-  i-pi = with python3Packages; toPythonApplication i-pi;
 
   # ipscan is commonly known under the name angryipscanner
   angryipscanner = ipscan;
@@ -2565,17 +2372,7 @@ with pkgs;
     usePulseaudio = true;
   };
 
-  jc = with python3Packages; toPythonApplication jc;
-
-  jello = with python3Packages; toPythonApplication jello;
-
   jl = haskellPackages.jl;
-
-  jpylyzer = with python3Packages; toPythonApplication jpylyzer;
-
-  jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
-
-  json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
 
   jupyter = callPackage ../applications/editors/jupyter { };
 
@@ -2601,8 +2398,6 @@ with pkgs;
     plugins = [ ]; # override with the list of desired plugins
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
-
-  keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
 
   keybase = callPackage ../tools/security/keybase { };
 
@@ -2647,12 +2442,6 @@ with pkgs;
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
-  maubot = with python3Packages; toPythonApplication maubot;
-
-  m2r = with python3Packages; toPythonApplication m2r;
-
-  md2gemini = with python3.pkgs; toPythonApplication md2gemini;
-
   mdcat = callPackage ../tools/text/mdcat {
     inherit (python3Packages) ansi2html;
   };
@@ -2662,8 +2451,6 @@ with pkgs;
   };
 
   mhonarc = perlPackages.MHonArc;
-
-  nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
   buildNavidromePlugin = callPackage ../by-name/na/navidrome/plugins/build-plugin.nix { };
   navidromePlugins = recurseIntoAttrs (
@@ -2727,10 +2514,6 @@ with pkgs;
     ;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
-
-  ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
-
-  leanblueprint = with python3Packages; toPythonApplication leanblueprint;
 
   leanPackages = recurseIntoAttrs (callPackage ../top-level/lean-packages.nix { });
 
@@ -2800,17 +2583,11 @@ with pkgs;
 
   linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
 
-  liquidctl = with python3Packages; toPythonApplication liquidctl;
-
   xz = callPackage ../tools/compression/xz { };
 
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
   man = man-db;
-
-  marimo = with python3Packages; toPythonApplication marimo;
-
-  mcstatus = with python3Packages; toPythonApplication mcstatus;
 
   miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
 
@@ -2818,15 +2595,11 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  mitmproxy = with python3Packages; toPythonApplication mitmproxy;
-
   mjpegtoolsFull = mjpegtools.override {
     withMinimal = false;
   };
 
   mkpasswd = hiPrio (callPackage ../tools/security/mkpasswd { });
-
-  molecule = with python3Packages; toPythonApplication molecule;
 
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
@@ -2900,8 +2673,6 @@ with pkgs;
     nomad_1_11
     ;
 
-  nth = with python3Packages; toPythonApplication name-that-hash;
-
   nvchecker =
     with python3Packages;
     toPythonApplication (
@@ -2944,19 +2715,13 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  nwdiag = with python3Packages; toPythonApplication nwdiag;
-
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
 
   ola = callPackage ../applications/misc/ola {
     protobuf = protobuf_21;
   };
 
-  ome_zarr = with python3Packages; toPythonApplication ome-zarr;
-
   ophcrack-cli = ophcrack.override { enableGui = false; };
-
-  open-interpreter = with python3Packages; toPythonApplication open-interpreter;
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
@@ -3013,8 +2778,6 @@ with pkgs;
 
   namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };
 
-  update-dotdee = with python3Packages; toPythonApplication update-dotdee;
-
   update-nix-fetchgit = haskell.lib.compose.justStaticExecutables haskellPackages.update-nix-fetchgit;
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
@@ -3061,8 +2824,6 @@ with pkgs;
 
   pulumiPackages = recurseIntoAttrs pulumi.pkgs;
 
-  py3dtiles = with python3Packages; toPythonApplication py3dtiles;
-
   patch = gnupatch;
 
   pcscliteWithPolkit = pcsclite.override {
@@ -3071,8 +2832,6 @@ with pkgs;
   };
 
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
-
-  pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
   pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
 
@@ -3109,8 +2868,6 @@ with pkgs;
   playwright-driver = (callPackage ../development/web/playwright/driver.nix { }).playwright-core;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
-  tabview = with python3Packages; toPythonApplication tabview;
-
   tdarrPackages = callPackage ../tools/misc/tdarr { };
 
   tdarr-server = tdarrPackages.server;
@@ -3133,20 +2890,6 @@ with pkgs;
   po4a = perlPackages.Po4a;
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
-
-  pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
-
-  pyinfra = with python3Packages; toPythonApplication pyinfra;
-
-  pylint = with python3Packages; toPythonApplication pylint;
-
-  pyocd = with python3Packages; toPythonApplication pyocd;
-
-  pypass = with python3Packages; toPythonApplication pypass;
-
-  pydeps = with python3Packages; toPythonApplication pydeps;
-
-  remarshal = with python3Packages; toPythonApplication remarshal;
 
   riseup-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
     provider = "riseup";
@@ -3172,20 +2915,10 @@ with pkgs;
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
-  rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
-
-  rapidgzip = with python3Packages; toPythonApplication rapidgzip;
-
-  ratarmount = with python3Packages; toPythonApplication ratarmount;
-
   inherit (callPackage ../tools/security/rekor { })
     rekor-cli
     rekor-server
     ;
-
-  rst2pdf = with python3Packages; toPythonApplication rst2pdf;
-
-  rstcheck = with python3Packages; toPythonApplication rstcheck;
 
   rstcheckWithSphinx = rstcheck.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.sphinx;
@@ -3204,23 +2937,17 @@ with pkgs;
 
   remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
 
-  reptor = with python3.pkgs; toPythonApplication reptor;
-
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
   inherit (callPackage ../development/misc/resholve { })
     resholve
     ;
 
-  reuse = with python3.pkgs; toPythonApplication reuse;
-
   rmate = rubyPackages.rmate;
 
   rmlint = callPackage ../tools/misc/rmlint {
     inherit (python3Packages) sphinx;
   };
-
-  rpatool = with python3Packages; toPythonApplication rpatool;
 
   rpm = callPackage ../tools/package-management/rpm {
     lua = lua5_4;
@@ -3234,22 +2961,10 @@ with pkgs;
 
   s3cmd = python3Packages.callPackage ../tools/networking/s3cmd { };
 
-  s3-credentials = with python3Packages; toPythonApplication s3-credentials;
-
-  safety-cli = with python3.pkgs; toPythonApplication safety;
-
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
-
-  semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
   inherit (semgrep.passthru) semgrep-core;
 
-  seqdiag = with python3Packages; toPythonApplication seqdiag;
-
   shellify = haskellPackages.shellify.bin;
-
-  shiv = with python3Packages; toPythonApplication shiv;
-
-  slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
   # aka., pgp-tools
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
@@ -3272,10 +2987,6 @@ with pkgs;
     isDesktopVariant = true;
   };
 
-  stm32loader = with python3Packages; toPythonApplication stm32loader;
-
-  solc-select = with python3Packages; toPythonApplication solc-select;
-
   splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
 
   sshfs = sshfs-fuse; # added 2017-08-14
@@ -3297,8 +3008,6 @@ with pkgs;
     openssl = openssl.override { withZlib = true; };
   };
 
-  staticjinja = with python3.pkgs; toPythonApplication staticjinja;
-
   stoken = callPackage ../tools/security/stoken (config.stoken or { });
 
   stutter = haskell.lib.compose.justStaticExecutables haskellPackages.stutter;
@@ -3310,8 +3019,6 @@ with pkgs;
   stylish-haskell = haskell.lib.compose.justStaticExecutables haskellPackages.stylish-haskell;
 
   su = shadow.su;
-
-  subzerod = with python3Packages; toPythonApplication subzerod;
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
@@ -3363,15 +3070,7 @@ with pkgs;
       })
     );
 
-  trezor-agent = with python3Packages; toPythonApplication trezor-agent;
-
-  ttp = with python3.pkgs; toPythonApplication ttp;
-
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
-
-  translatepy = with python3.pkgs; toPythonApplication translatepy;
-
-  trytond = with python3Packages; toPythonApplication trytond;
 
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
@@ -3383,10 +3082,6 @@ with pkgs;
     withLuaJIT = true;
     withPython = true;
   };
-
-  unrpa = with python3Packages; toPythonApplication unrpa;
-
-  usort = with python3Packages; toPythonApplication usort;
 
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
@@ -3460,8 +3155,6 @@ with pkgs;
 
   vinyl-cache = vinyl-cache_9;
 
-  vncdo = with python3Packages; toPythonApplication vncdo;
-
   # An alias to work around the splicing incidents
   # Related:
   # https://github.com/NixOS/nixpkgs/issues/204303
@@ -3477,8 +3170,6 @@ with pkgs;
   # It is also needed to reduce the amount of unnecessary stuff in the Darwin bootstrap.
   xarMinimal = callPackage ../by-name/xa/xar/package.nix { e2fsprogs = null; };
 
-  xdot = with python3Packages; toPythonApplication xdot;
-
   libxfs = xfsprogs.dev;
 
   xorriso = libisoburn;
@@ -3486,8 +3177,6 @@ with pkgs;
   xvfb-run = callPackage ../tools/misc/xvfb-run {
     inherit (texFunctions) fontsConf;
   };
-
-  yapf = with python3Packages; toPythonApplication yapf;
 
   yarn-berry_4 = yarn-berry.override { berryVersion = 4; };
   yarn-berry_4-fetcher = callPackage ../by-name/ya/yarn-berry/fetcher {
@@ -3497,8 +3186,6 @@ with pkgs;
   yarn-berry_3-fetcher = callPackage ../by-name/ya/yarn-berry/fetcher {
     yarn-berry = yarn-berry_3;
   };
-
-  yamllint = with python3Packages; toPythonApplication yamllint;
 
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
@@ -3536,8 +3223,6 @@ with pkgs;
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
-
-  powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
   temurin-bin-25 = javaPackages.compiler.temurin-bin.jdk-25;
@@ -3656,8 +3341,6 @@ with pkgs;
       callPackage ../development/compilers/fbc/mac-bin.nix { }
     else
       callPackage ../development/compilers/fbc { };
-
-  filecheck = with python3Packages; toPythonApplication filecheck;
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutterPackages-source = recurseIntoAttrs (
@@ -4577,14 +4260,10 @@ with pkgs;
     stdenv = gcc14Stdenv;
   };
 
-  vcard = python3Packages.toPythonApplication python3Packages.vcard;
-
   inherit (callPackage ../development/compilers/vala { })
     vala_0_56
     vala
     ;
-
-  vyper = with python3Packages; toPythonApplication vyper;
 
   wrapCCWith =
     {
@@ -5043,11 +4722,7 @@ with pkgs;
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs { });
 
-  svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
-
   poetryPlugins = recurseIntoAttrs poetry.plugins;
-
-  pipx = with python3.pkgs; toPythonApplication pipx;
 
   racket-minimal = callPackage ../by-name/ra/racket/minimal.nix {
     stdenv = stdenvAdapters.makeStaticLibraries stdenv;
@@ -5197,15 +4872,9 @@ with pkgs;
     alloy
     ;
 
-  anybadge = with python3Packages; toPythonApplication anybadge;
-
-  ansible = python3Packages.toPythonApplication python3Packages.ansible-core;
-
   ansible-language-server =
     callPackage ../development/tools/language-servers/ansible-language-server
       { };
-
-  ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
   yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
 
@@ -5242,8 +4911,6 @@ with pkgs;
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
   libastyle = astyle.override { asLibrary = true; };
-
-  aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   electron-source = callPackage ../development/tools/electron { };
 
@@ -5310,8 +4977,6 @@ with pkgs;
   automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
 
   automake118x = callPackage ../development/tools/misc/automake/automake-1.18.x.nix { };
-
-  bandit = with python3Packages; toPythonApplication bandit;
 
   bazel = bazel_7;
 
@@ -5405,10 +5070,6 @@ with pkgs;
     wrapGas = true;
   };
 
-  black = with python3Packages; toPythonApplication black;
-
-  black-macchiato = with python3Packages; toPythonApplication black-macchiato;
-
   buildkite-test-collector-rust =
     callPackage ../development/tools/continuous-integration/buildkite-test-collector-rust
       {
@@ -5416,8 +5077,6 @@ with pkgs;
 
   libbpf = callPackage ../os-specific/linux/libbpf { };
   libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
-
-  bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
 
   # Wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
@@ -5480,8 +5139,6 @@ with pkgs;
 
   chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
 
-  cookiecutter = with python3Packages; toPythonApplication cookiecutter;
-
   ctags = callPackage ../development/tools/misc/ctags { };
 
   ctagsWrapped = callPackage ../development/tools/misc/ctags/wrapped.nix { };
@@ -5506,10 +5163,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  credstash = with python3Packages; toPythonApplication credstash;
-
-  css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
-
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     # cvise needs a port to latest llvm-21:
     #   https://github.com/marxin/cvise/issues/340
@@ -5520,8 +5173,6 @@ with pkgs;
     pname = "daggerfall-unity-unfree";
     includeUnfree = true;
   };
-
-  dbt = with python3Packages; toPythonApplication dbt-core;
 
   libcxx = llvmPackages.libcxx;
 
@@ -5572,12 +5223,6 @@ with pkgs;
         binutils = binutils;
       };
 
-  docutils = with python3Packages; toPythonApplication docutils;
-
-  doit = with python3Packages; toPythonApplication doit;
-
-  dot2tex = with python3.pkgs; toPythonApplication dot2tex;
-
   doxygen_gui = lowPrio (doxygen.override { withGui = true; });
 
   drake = callPackage ../development/tools/build-managers/drake { };
@@ -5612,8 +5257,6 @@ with pkgs;
   gradle_9 = gradle-packages.gradle_9.wrapped;
   gradle = gradle-packages.gradle.wrapped;
 
-  griffe = with python3Packages; toPythonApplication griffe;
-
   hadolint =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
     (
@@ -5637,8 +5280,6 @@ with pkgs;
     inochi-session
     ;
 
-  jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
-
   kustomize = callPackage ../development/tools/kustomize { };
 
   kustomize_3 = callPackage ../development/tools/kustomize/3.nix { };
@@ -5657,8 +5298,6 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  lit = with python3Packages; toPythonApplication lit;
-
   maven3 = maven;
   inherit (maven) buildMaven;
 
@@ -5671,8 +5310,6 @@ with pkgs;
         dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.server;
       })
     );
-
-  mkdocs = with python3Packages; toPythonApplication mkdocs;
 
   mold = wrapBintoolsWith {
     bintools = mold-unwrapped;
@@ -5705,10 +5342,6 @@ with pkgs;
 
   obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
 
-  openai = with python3Packages; toPythonApplication openai;
-
-  openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
-
   openocd-rp2040 = openocd.overrideAttrs (old: {
     pname = "openocd-rp2040";
     src = fetchFromGitHub {
@@ -5739,8 +5372,6 @@ with pkgs;
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
-  pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
-
   pkgconf-unwrapped = libpkgconf;
 
   pkgconf = callPackage ../build-support/pkg-config-wrapper {
@@ -5762,17 +5393,11 @@ with pkgs;
 
   portableService = callPackage ../build-support/portable-service { };
 
-  pyprof2calltree = with python3Packages; toPythonApplication pyprof2calltree;
-
   premake4 = callPackage ../development/tools/misc/premake { };
 
   premake5 = callPackage ../development/tools/misc/premake/5.nix { };
 
   premake = premake4;
-
-  pycobertura = with python3Packages; toPythonApplication pycobertura;
-
-  pycritty = with python3Packages; toPythonApplication pycritty;
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit { };
 
@@ -5797,14 +5422,10 @@ with pkgs;
 
   inherit (regclient) regbot regctl regsync;
 
-  reno = with python312Packages; toPythonApplication reno;
-
   inherit (callPackage ../development/tools/replay-io { })
     replay-io
     replay-node-cli
     ;
-
-  rnginline = with python3Packages; toPythonApplication rnginline;
 
   rr = callPackage ../development/tools/analysis/rr { };
 
@@ -5838,8 +5459,6 @@ with pkgs;
   # pandoc takes long to build and documentation isn't needed for just running the cli
   shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
 
-  speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
-
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
   };
@@ -5852,10 +5471,6 @@ with pkgs;
     withGUI = true;
     protobuf = protobuf_21;
   };
-
-  sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
-
-  sqlmap = with python3Packages; toPythonApplication sqlmap;
 
   teensyduino = arduino-core.override {
     withGui = true;
@@ -5923,12 +5538,6 @@ with pkgs;
 
   xxdiff-tip = xxdiff;
 
-  yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
-
-  mypy = with python3Packages; toPythonApplication mypy;
-
-  mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
-
   ### DEVELOPMENT / LIBRARIES
 
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
@@ -5941,11 +5550,7 @@ with pkgs;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
 
-  ansi2html = with python3.pkgs; toPythonApplication ansi2html;
-
   appstream = callPackage ../development/libraries/appstream { };
-
-  argparse-manpage = with python3Packages; toPythonApplication argparse-manpage;
 
   asio_1_32_0 = callPackage ../by-name/as/asio/package.nix { asioVersion = "1.32.0"; };
   asio_1_36_0 = callPackage ../by-name/as/asio/package.nix { asioVersion = "1.36.0"; };
@@ -6156,8 +5761,6 @@ with pkgs;
   gdalMinimal = gdal.override {
     useMinimalFeatures = true;
   };
-
-  ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
   glfw = glfw3;
@@ -6409,8 +6012,6 @@ with pkgs;
 
   icu = icu76;
 
-  idasen = with python3Packages; toPythonApplication idasen;
-
   imlib2Full = imlib2.override {
     # Compilation error on Darwin with librsvg. For more information see:
     # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
@@ -6525,8 +6126,6 @@ with pkgs;
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
-
-  libretranslate = with python3.pkgs; toPythonApplication libretranslate;
 
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
@@ -6815,8 +6414,6 @@ with pkgs;
 
   mpeg2dec = libmpeg2;
 
-  msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
-
   mpich = callPackage ../development/libraries/mpich {
     automake = automake116x;
     ch4backend = libfabric;
@@ -6826,8 +6423,6 @@ with pkgs;
     pmixSupport = true;
     withPm = [ ];
   };
-
-  mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
@@ -6934,23 +6529,9 @@ with pkgs;
 
   openexr = callPackage ../development/libraries/openexr/3.nix { };
   openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
-
-  openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  barbicanclient = with python313Packages; toPythonApplication python-barbicanclient;
-  glanceclient = with python313Packages; toPythonApplication python-glanceclient;
-  heatclient = with python313Packages; toPythonApplication python-heatclient;
-  ironicclient = with python313Packages; toPythonApplication python-ironicclient;
-  magnumclient = with python313Packages; toPythonApplication python-magnumclient;
-  manilaclient = with python313Packages; toPythonApplication python-manilaclient;
-  mistralclient = with python313Packages; toPythonApplication python-mistralclient;
-  neutronclient = with python313Packages; toPythonApplication python-neutronclient;
-  swiftclient = with python313Packages; toPythonApplication python-swiftclient;
-  troveclient = with python313Packages; toPythonApplication python-troveclient;
-  watcherclient = with python313Packages; toPythonApplication python-watcherclient;
-  zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../by-name/li/libressl { })
     libressl_4_1
@@ -7112,8 +6693,6 @@ with pkgs;
 
   readline = callPackage ../development/libraries/readline/8.3.nix { };
 
-  readmdict = with python3Packages; toPythonApplication readmdict;
-
   kissfftFloat = kissfft.override {
     datatype = "float";
   };
@@ -7199,8 +6778,6 @@ with pkgs;
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
 
-  sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
-
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix { };
 
   simavr = callPackage ../development/tools/simavr {
@@ -7264,12 +6841,6 @@ with pkgs;
   speexdsp = callPackage ../development/libraries/speexdsp {
     fftw = fftwFloat;
   };
-
-  sphinx = with python3Packages; toPythonApplication sphinx;
-
-  sphinx-autobuild = with python3Packages; toPythonApplication sphinx-autobuild;
-
-  sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
 
   inherit (python3Packages) sphinxHook;
 
@@ -7815,8 +7386,6 @@ with pkgs;
   dnsutils = bind.dnsutils;
   dig = lib.addMetaAttrs { mainProgram = "dig"; } bind.dnsutils;
 
-  clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
-
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
     erlang = beamMinimalPackages.erlang;
   };
@@ -7829,8 +7398,6 @@ with pkgs;
   dictdDBs = recurseIntoAttrs (callPackages ../servers/dict/dictd-db.nix { });
 
   dictDBCollector = callPackage ../servers/dict/dictd-db-collector.nix { };
-
-  dodgy = with python3Packages; toPythonApplication dodgy;
 
   dovecot_2_3 = callPackage ../by-name/do/dovecot/2.3.nix {
     dovecot_pigeonhole = dovecot_pigeonhole_0_5;
@@ -8142,8 +7709,6 @@ with pkgs;
 
   public-inbox = perlPackages.callPackage ../servers/mail/public-inbox { };
 
-  pypiserver = with python3Packages; toPythonApplication pypiserver;
-
   samba4 = callPackage ../servers/samba/4.x.nix { };
 
   samba = samba4;
@@ -8160,8 +7725,6 @@ with pkgs;
   );
 
   sambaFull = samba4Full;
-
-  scalene = with python3Packages; toPythonApplication scalene;
 
   shairport-sync-airplay2 = shairport-sync.override {
     enableAirplay2 = true;
@@ -8189,10 +7752,6 @@ with pkgs;
     ;
 
   tomcat = tomcat11;
-
-  virtualenv = with python3Packages; toPythonApplication virtualenv;
-
-  virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
 
   mkfontdir = mkfontscale;
   xcbproto = xcb-proto;
@@ -8870,8 +8429,6 @@ with pkgs;
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
 
-  papis = with python3Packages; toPythonApplication papis;
-
   scheherazade-new = scheherazade.override {
     version = "4.400";
   };
@@ -8913,8 +8470,6 @@ with pkgs;
 
   xkeyboard_config = xkeyboard-config;
   xkeyboard-config_custom = callPackage ../by-name/xk/xkeyboard-config/custom.nix { };
-
-  xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
 
   ### APPLICATIONS / GIS
 
@@ -8967,8 +8522,6 @@ with pkgs;
   apngasm = callPackage ../applications/graphics/apngasm { };
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
 
-  arelle = with python3Packages; toPythonApplication arelle;
-
   astroid = callPackage ../applications/networking/mailreaders/astroid {
     vim = vim-full.override { features = "normal"; };
     protobuf = protobuf_21;
@@ -9017,8 +8570,6 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  breezy = with python3Packages; toPythonApplication breezy;
-
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
   inherit (callPackage ../applications/networking/cluster/calico { })
     calico-apiserver
@@ -9034,8 +8585,6 @@ with pkgs;
   cbconvert-gui = cbconvert.gui;
 
   cdparanoia = cdparanoia-iii;
-
-  cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
@@ -9386,8 +8935,6 @@ with pkgs;
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
-  minari = python3Packages.toPythonApplication python3Packages.minari;
-
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
   graphicsmagick_q16 = graphicsmagick.override { quantumdepth = 16; };
@@ -9401,8 +8948,6 @@ with pkgs;
   };
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
-
-  hachoir = with python3Packages; toPythonApplication hachoir;
 
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
@@ -9427,21 +8972,16 @@ with pkgs;
         haskell.lib.compose.justStaticExecutables
     )
       haskellPackages.hledger-web;
-  hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
-
-  hyperglot = with python3Packages; toPythonApplication hyperglot;
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
-
-  pinboard = with python3Packages; toPythonApplication pinboard;
 
   pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
 
@@ -9514,8 +9054,6 @@ with pkgs;
       ghostscriptSupport = true;
     }
   );
-
-  img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
@@ -9657,11 +9195,7 @@ with pkgs;
     withFonts = true;
   };
 
-  luddite = with python3Packages; toPythonApplication luddite;
-
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
-
-  magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
   magnetophonDSP = recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
@@ -9790,15 +9324,11 @@ with pkgs;
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
-  pijuice = with python3Packages; toPythonApplication pijuice;
-
   pinegrow6 = pinegrow.override { pinegrowVersion = "6"; };
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
 
   pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
-
-  pnglatex = with python3Packages; toPythonApplication pnglatex;
 
   polybarFull = polybar.override {
     alsaSupport = true;
@@ -9824,8 +9354,6 @@ with pkgs;
     softmaker-office
     softmaker-office-nx
     ;
-
-  taxi-cli = with python3Packages; toPythonApplication taxi;
 
   mupdf-headless = mupdf.override {
     enableX11 = false;
@@ -9889,8 +9417,6 @@ with pkgs;
     ;
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
-
-  openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
   orpie = callPackage ../applications/misc/orpie {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
@@ -10097,10 +9623,6 @@ with pkgs;
 
   dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
 
-  maestral = with python3Packages; toPythonApplication maestral;
-
-  myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
-
   lightdm_qt = lightdm.override { withQt5 = true; };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
@@ -10117,8 +9639,6 @@ with pkgs;
   super-slicer-beta = super-slicer.beta;
 
   super-slicer-latest = super-slicer.latest;
-
-  socialscan = with python3.pkgs; toPythonApplication socialscan;
 
   squeezelite-pulse = callPackage ../by-name/sq/squeezelite/package.nix {
     audioBackend = "pulse";
@@ -10201,8 +9721,6 @@ with pkgs;
       {
         stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
       };
-
-  terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;
 
   inherit
     (callPackage ../applications/graphics/tesseract {
@@ -10306,8 +9824,6 @@ with pkgs;
 
   typstPackages = recurseIntoAttrs typst.packages;
 
-  ueberzug = with python3Packages; toPythonApplication ueberzug;
-
   uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix { });
   uefitool = uefitoolPackages.new-engine;
 
@@ -10327,8 +9843,6 @@ with pkgs;
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
-
-  vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vim = vimUtils.makeCustomizable (
     callPackage ../applications/editors/vim {
@@ -10467,8 +9981,6 @@ with pkgs;
   kiro-fhs = kiro.fhs;
   kiro-fhsWithPackages = kiro.fhsWithPackages;
 
-  whispers = with python3Packages; toPythonApplication whispers;
-
   # Should always be the version with the most features
   w3m-full = w3m;
 
@@ -10504,8 +10016,6 @@ with pkgs;
       wf-shell
     ];
   };
-
-  webssh = with python3Packages; toPythonApplication webssh;
 
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
 
@@ -10607,15 +10117,9 @@ with pkgs;
     xppen_4
     ;
 
-  ydiff = with python3.pkgs; toPythonApplication ydiff;
-
   yokadi = python3Packages.callPackage ../applications/misc/yokadi { };
 
   your-editor = callPackage ../applications/editors/your-editor { stdenv = gccStdenv; };
-
-  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
-
-  youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
@@ -10691,13 +10195,7 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  ledger-agent = with python3Packages; toPythonApplication ledger-agent;
-
-  napari = with python312Packages; toPythonApplication napari;
-
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
-
-  pycoin = with python3Packages; toPythonApplication pycoin;
 
   inherit (callPackages ../applications/blockchains/teos { })
     teos
@@ -10711,17 +10209,7 @@ with pkgs;
     withGui = false;
   };
 
-  beancount = with python3.pkgs; toPythonApplication beancount;
-
-  beancount_2 = with python3.pkgs; toPythonApplication beancount_2;
-
-  beancount-black = with python3.pkgs; toPythonApplication beancount-black;
-
-  beanhub-cli = with python3.pkgs; toPythonApplication beanhub-cli;
-
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
-
-  beanquery = with python3.pkgs; toPythonApplication beanquery;
 
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
@@ -10949,8 +10437,6 @@ with pkgs;
   steam-run = steam.run;
   steam-run-free = steam.run-free;
 
-  protonup-ng = with python3Packages; toPythonApplication protonup-ng;
-
   teeworlds-server = teeworlds.override { buildClient = false; };
 
   tengine = callPackage ../servers/http/tengine {
@@ -11114,8 +10600,6 @@ with pkgs;
 
   libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
 
-  molbar = with python3Packages; toPythonApplication molbar;
-
   nwchem = callPackage ../applications/science/chemistry/nwchem {
     blas = blas-ilp64;
     lapack = lapack-ilp64;
@@ -11124,8 +10608,6 @@ with pkgs;
 
   autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
 
-  pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
-
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
     hdf5 = hdf5-fortran;
   };
@@ -11133,10 +10615,6 @@ with pkgs;
   siesta-mpi = callPackage ../by-name/si/siesta/package.nix { useMpi = true; };
 
   ### SCIENCE/BIOLOGY
-
-  deepdiff = with python3Packages; toPythonApplication deepdiff;
-
-  deep-translator = with python3Packages; toPythonApplication deep-translator;
 
   hh-suite = callPackage ../applications/science/biology/hh-suite {
     inherit (llvmPackages) openmp;
@@ -11159,8 +10637,6 @@ with pkgs;
 
   ### SCIENCE/MACHINE LEARNING
 
-  streamlit = with python3Packages; toPythonApplication streamlit;
-
   ### SCIENCE/MATH
 
   blas-ilp64 = blas.override { isILP64 = true; };
@@ -11170,8 +10646,6 @@ with pkgs;
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
   liblapack = lapack-reference;
-
-  notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
   openblas = callPackage ../development/libraries/science/math/openblas {
     inherit (llvmPackages) openmp;
@@ -11485,8 +10959,6 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
 
-  spyder = with python3.pkgs; toPythonApplication spyder;
-
   tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
     python3 = python312; # fails to build otherwise
   };
@@ -11559,15 +11031,9 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hjson = with python3Packages; toPythonApplication hjson;
-
   libjack2 = jack2.override { prefix = "lib"; };
 
   jack_autoconnect = jack-autoconnect;
-
-  j2cli = with python311Packages; toPythonApplication j2cli;
-
-  j2lint = with python3Packages; toPythonApplication j2lint;
 
   kmonad = haskellPackages.kmonad.bin;
 
@@ -11740,8 +11206,6 @@ with pkgs;
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };
 
-  nix-prefetch-github = with python3Packages; toPythonApplication nix-prefetch-github;
-
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
     nix-prefetch-cvs
@@ -11777,12 +11241,6 @@ with pkgs;
   );
 
   pgadmin4-desktopmode = pgadmin4.override { server-mode = false; };
-
-  philipstv = with python3Packages; toPythonApplication philipstv;
-
-  pyupgrade = with python3Packages; toPythonApplication pyupgrade;
-
-  pwntools = with python3Packages; toPythonApplication pwntools;
 
   putty = callPackage ../applications/networking/remote/putty {
     gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
@@ -11820,8 +11278,6 @@ with pkgs;
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   selinuxPackages = recurseIntoAttrs (callPackage ../os-specific/linux/selinux { });
-
-  snscrape = with python3Packages; toPythonApplication snscrape;
 
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;
@@ -11864,8 +11320,6 @@ with pkgs;
       }
     );
 
-  py-wacz = with python3Packages; toPythonApplication wacz;
-
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
   winePackagesFor = wineBuild: callPackage ./wine-packages.nix { inherit wineBuild; };
@@ -11895,8 +11349,6 @@ with pkgs;
       languages = lib.importJSON ../servers/web-apps/wordpress/packages/languages.json;
     }
   );
-
-  yamale = with python3Packages; toPythonApplication yamale;
 
   zap-chip-gui = zap-chip.override { withGui = true; };
 
@@ -11942,8 +11394,6 @@ with pkgs;
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
 
   nitrokey-app2 = python3Packages.callPackage ../tools/security/nitrokey-app2 { };
-
-  hy = with python3Packages; toPythonApplication hy;
 
   ghc-standalone-archive =
     {
@@ -11994,10 +11444,6 @@ with pkgs;
 
   compressDrvWeb = callPackage ../build-support/compress-drv/web.nix { };
 
-  diceware = with python3Packages; toPythonApplication diceware;
-
-  xml2rfc = with python3Packages; toPythonApplication xml2rfc;
-
   ape = callPackage ../applications/misc/ape { };
   attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
   apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
@@ -12045,13 +11491,7 @@ with pkgs;
     nanoizeNewlib = true;
   };
 
-  wfuzz = with python3Packages; toPythonApplication wfuzz;
-
-  sieveshell = with python3.pkgs; toPythonApplication managesieve;
-
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
-
-  duden = python3Packages.toPythonApplication python3Packages.duden;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
