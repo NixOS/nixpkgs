@@ -1,5 +1,1 @@
-{
-  python3Packages,
-}:
-
-python3Packages.toPythonApplication python3Packages.sbom4files
+{ python3Packages }: with python3Packages; toPythonApplication sbom4files

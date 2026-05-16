@@ -1,5 +1,1 @@
-{
-  python3Packages,
-}:
-
-python3Packages.toPythonApplication python3Packages.slob
+{ python3Packages }: with python3Packages; toPythonApplication slob

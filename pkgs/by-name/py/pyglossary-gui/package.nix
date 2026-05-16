@@ -1,9 +1,7 @@
-{
-  python3,
-}:
-
-python3.pkgs.toPythonApplication (
-  python3.pkgs.pyglossary.override {
+{ python3Packages }:
+with python3Packages;
+toPythonApplication (
+  pyglossary.override {
     enableGui = true;
     enableCmd = true;
   }

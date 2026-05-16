@@ -1,4 +1,1 @@
-{
-  python3,
-}:
-python3.pkgs.toPythonApplication python3.pkgs.keymap-drawer
+{ python3Packages }: with python3Packages; toPythonApplication keymap-drawer

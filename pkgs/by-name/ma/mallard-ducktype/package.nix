@@ -1,4 +1,1 @@
-{ python3 }:
-
-with python3.pkgs;
-toPythonApplication mallard-ducktype
+{ python3Packages }: with python3Packages; toPythonApplication mallard-ducktype

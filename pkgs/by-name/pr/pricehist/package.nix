@@ -1,1 +1,1 @@
-{ python3Packages }: python3Packages.toPythonApplication python3Packages.pricehist
+{ python3Packages }: with python3Packages; toPythonApplication pricehist

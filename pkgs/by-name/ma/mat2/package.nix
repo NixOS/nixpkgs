@@ -1,6 +1,1 @@
-{
-  python3Packages,
-}:
-
-with python3Packages;
-toPythonApplication mat2
+{ python3Packages }: with python3Packages; toPythonApplication mat2

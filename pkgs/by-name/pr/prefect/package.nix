@@ -1,1 +1,1 @@
-{ python3Packages }: python3Packages.toPythonApplication python3Packages.prefect
+{ python3Packages }: with python3Packages; toPythonApplication prefect

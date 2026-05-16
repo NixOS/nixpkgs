@@ -1,3 +1,1 @@
-{ python3Packages }:
-
-python3Packages.toPythonApplication python3Packages.gitingest
+{ python3Packages }: with python3Packages; toPythonApplication gitingest

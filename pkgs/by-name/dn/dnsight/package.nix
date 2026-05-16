@@ -1,5 +1,5 @@
 { python3Packages }:
-
-(python3Packages.toPythonApplication python3Packages.dnsight).overrideAttrs {
+with python3Packages;
+(toPythonApplication dnsight).overrideAttrs {
   __structuredAttrs = true;
 }
