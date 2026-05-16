@@ -6,18 +6,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clock-rs";
-  version = "0.2.0";
+  version = "0.2.1";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Oughie";
     repo = "clock-rs";
-    tag = finalAttrs.version;
-    hash = "sha256-mC7jZ0ZCSfjpF+p2TtNjt7oRowYkOujSkbuFzChYJ3U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+seec4U4huHOavrzPrweir2pHJ+K/i/xoxpgKHqr008=";
   };
 
-  cargoHash = "sha256-K5AdTjRz1GEWmbqW/D/7faYABUo71tpiyyOrCjHd1GM=";
+  cargoHash = "sha256-N8WDaVqgm3naLmC6VcJJ3X05u0sGUsvCfzIssSHNC3w=";
 
   meta = {
     description = "Modern, digital clock that effortlessly runs in your terminal";
