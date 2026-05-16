@@ -291,6 +291,7 @@ let
             inherit debug;
             fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
           };
+          meta.license = lib.licenses.mit;
         } ../hooks/qmake-hook.sh
       ) { };
 
@@ -307,6 +308,7 @@ let
             makeBinaryWrapper
           ]
           ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
+          meta.license = lib.licenses.mit;
         } ../hooks/wrap-qt-apps-hook.sh
       ) { };
     }
