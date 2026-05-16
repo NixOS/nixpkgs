@@ -2199,7 +2199,6 @@ rec {
   */
   cmakeBool =
     condition: flag:
-    assert (lib.isString condition);
     assert (lib.isBool flag);
     cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
 
@@ -2233,11 +2232,7 @@ rec {
 
     :::
   */
-  cmakeFeature =
-    feature: value:
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    cmakeOptionType "string" feature value;
+  cmakeFeature = feature: value: cmakeOptionType "string" feature value;
 
   /**
     Create a `"-D<feature>=<value>"` string that can be passed to typical Meson
@@ -2307,7 +2302,6 @@ rec {
   */
   mesonBool =
     condition: flag:
-    assert (lib.isString condition);
     assert (lib.isBool flag);
     mesonOption condition (lib.boolToString flag);
 
@@ -2344,7 +2338,6 @@ rec {
   */
   mesonEnable =
     feature: flag:
-    assert (lib.isString feature);
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
