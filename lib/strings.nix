@@ -2200,7 +2200,7 @@ rec {
   cmakeBool =
     condition: flag:
     assert (lib.isBool flag);
-    cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
+    cmakeOptionType "bool" condition (if flag then "TRUE" else "FALSE");
 
   /**
     Create a `"-D<feature>:STRING=<value>"` string that can be passed to typical
