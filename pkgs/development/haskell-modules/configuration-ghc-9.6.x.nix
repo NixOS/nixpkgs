@@ -76,6 +76,11 @@ in
   ghc-toolchain = null;
   ghc-platform = null;
 
+  # Become core packages in GHC >= 9.12
+  file-io = doDistribute self.file-io_0_2_0;
+  haddock-api = doDistribute self.haddock-api_2_29_1;
+  haddock-library = doJailbreak (doDistribute self.haddock-library_1_11_0);
+
   # Needs base-orphans for GHC < 9.8 / base < 4.19
   some = addBuildDepend self.base-orphans super.some;
 
@@ -208,7 +213,6 @@ in
   ghc-lib = doDistribute self.ghc-lib_9_8_5_20250214;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
-  haddock-library = doJailbreak super.haddock-library;
   inherit
     (
       let

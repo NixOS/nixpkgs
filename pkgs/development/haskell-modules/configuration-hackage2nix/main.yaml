@@ -40,6 +40,7 @@ default-package-overrides:
   - hiedb < 0.8.0
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
+  # Note: When removing this, also remove hnix-store-core from maintainers/scripts/haskell/update-stackage.sh
   - hnix-store-core < 0.7
   - hnix-store-remote < 0.7
   # 2025-08-03: need to match stackage version of hosc
@@ -89,7 +90,7 @@ extra-packages:
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
   - ghc-exactprint == 1.7.*             # 2025-03-09: needed for GHC == 9.6
   - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
-  - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
+  - ghc-exactprint == 1.10.*            # 2024-08-27: needed for GHC == 9.10
   - ghc-exactprint == 1.12.*            # 2025-10-15: needed for GHC == 9.12
   - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.4
   - ghc-lib == 9.8.*                    # 2025-12-11: preserve for GHC 9.6, 9.8
@@ -100,7 +101,6 @@ extra-packages:
   - ghc-lib-parser-ex == 9.8.*         # 2024-12-26: preserve for GHC 9.6, 9.8
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
-  - ghc-typelits-natnormalise < 0.8     # 2025-09-15: Stackage is stuck at 0.7.10
   - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
   - hashable < 1.5                      # 2025-07-30: hashable >= 1.5 requires GHC >= 9.6
   - hasql < 1.7                         # 2025-01-19: Needed for building postgrest

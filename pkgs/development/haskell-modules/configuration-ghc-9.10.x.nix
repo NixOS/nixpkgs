@@ -65,6 +65,11 @@ in
   xhtml = null;
   Win32 = null;
 
+  # Become core packages in GHC >= 9.12
+  file-io = doDistribute self.file-io_0_2_0;
+  haddock-api = doDistribute self.haddock-api_2_29_1;
+  haddock-library = doJailbreak (doDistribute self.haddock-library_1_11_0);
+
   # “Unfortunately we are unable to support GHC 9.10.”
   apply-refact = dontDistribute (markBroken super.apply-refact);
 
@@ -124,10 +129,6 @@ in
   # Jailbreaks
   #
   floskell = doJailbreak super.floskell; # base <4.20
-  # 2025-04-09: filepath <1.5
-  haddock-library =
-    assert super.haddock-library.version == "1.11.0";
-    doJailbreak super.haddock-library;
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
 
   #

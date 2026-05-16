@@ -73,7 +73,6 @@ with haskellLib;
   #
 
   extensions = doDistribute self.extensions_0_1_1_0;
-  ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
 
   #
   # Jailbreaks
