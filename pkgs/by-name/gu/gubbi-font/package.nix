@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Kannada font";
+    maintainers = with lib.maintainers; [ pancaek ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
