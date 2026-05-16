@@ -112,6 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   patches = [
     ./skills-in-store.patch
+    ./remove-update-available-dialog.patch
   ];
 
   meta = {

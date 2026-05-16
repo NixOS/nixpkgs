@@ -1,0 +1,39 @@
+diff --git a/ui/src/ui/app-render.ts b/ui/src/ui/app-render.ts
+index e99624ab96..43989c6660 100644
+--- a/ui/src/ui/app-render.ts
++++ b/ui/src/ui/app-render.ts
+@@ -1595,33 +1595,7 @@ export function renderApp(state: AppViewState) {
+               ${state.updateStatusBanner.text}
+             </div>`
+           : nothing}
+-        ${state.updateAvailable &&
+-        state.updateAvailable.latestVersion !== state.updateAvailable.currentVersion &&
+-        !isUpdateBannerDismissed(state.updateAvailable)
+-          ? html`<div class="update-banner callout danger" role="alert">
+-              <strong>${t("chat.updateAvailable")}</strong> v${state.updateAvailable.latestVersion}
+-              (${t("chat.runningVersion", { version: state.updateAvailable.currentVersion })}).
+-              <button
+-                class="btn btn--sm update-banner__btn"
+-                ?disabled=${state.updateRunning || !state.connected}
+-                @click=${() => runUpdate(state)}
+-              >
+-                ${state.updateRunning ? t("chat.updating") : t("chat.updateNow")}
+-              </button>
+-              <button
+-                class="update-banner__close"
+-                type="button"
+-                title=${t("common.dismiss")}
+-                aria-label=${t("chat.dismissUpdateBanner")}
+-                @click=${() => {
+-                  dismissUpdateBanner(state.updateAvailable);
+-                  state.updateAvailable = null;
+-                }}
+-              >
+-                ${icons.x}
+-              </button>
+-            </div>`
+-          : nothing}
++        ${nothing}
+         ${state.tab === "config"
+           ? nothing
+           : html`<section
