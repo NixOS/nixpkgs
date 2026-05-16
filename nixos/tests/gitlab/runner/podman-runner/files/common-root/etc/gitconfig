@@ -1,0 +1,23 @@
+[core]
+    ignorecase = false
+    autocrlf = false
+    symlinks = true
+    longpaths = true
+    abbrev = 10
+    fsmonitor = false
+[filter "lfs"]
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+[user]
+    name = "CI"
+    email = "ci@datascience.ch"
+[init]
+    defaultBranch = main
+[push]
+    autoSetupRemote = true
+[safe]
+	directory = *
+[status]
+    showUntrackedFiles = all
