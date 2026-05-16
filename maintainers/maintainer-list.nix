@@ -233,6 +233,12 @@
     github = "3JlOy-PYCCKUi";
     githubId = 46464602;
   };
+  _3nln = {
+    email = "javohirtech@gmail.com";
+    github = "3nln";
+    githubId = 73842170;
+    name = "Javokhir Gulomjonov";
+  };
   _3noch = {
     email = "eacameron@gmail.com";
     github = "3noch";
