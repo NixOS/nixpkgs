@@ -363,7 +363,6 @@ dockerTools.buildLayeredImageWithNixDb {
 
   extraCommands = ''
     rm -rf nix-support
-    ln -s /nix/var/nix/profiles nix/var/nix/gcroots/profiles
   '';
   fakeRootCommands = ''
     chmod 1777 tmp

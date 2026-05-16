@@ -18,6 +18,7 @@
 #      bash -c "export CI_PIPELINE_ID=123456 && gitlab-runner-pre-build-script; echo hello"
 #   ```
 {
+  config,
   lib,
   pkgs,
   ...
@@ -46,45 +47,21 @@ let
     no-prune = "true";
   };
 
-  # This derivation will contain a folder `/etc`
-  files = pkgs.callPackage ./files { };
-  preBuildScript = pkgs.callPackage ./scripts/prebuild.nix { };
+  # Some scripts we use.
+  updateNixStoreVolume = pkgs.callPackage ./scripts/copy-to-nix-store.nix {
+    image = nixDaemonImage.imageName + ":" + nixDaemonImage.imageTag;
+    imageDrv = nixDaemonImage;
+  };
 
-  # These derivations are Linked into the job images root dir.
-  bootstrapPkgs = [
-    pkgs.nix
-    # Runtime dependencies of nix.
-    pkgs.gnutar
-    pkgs.gzip
-    pkgs.openssh
-    pkgs.xz
-    pkgs.cacert
-
-    # Other stuff.
-    (lib.hiPrio pkgs.coreutils)
-    (lib.hiPrio pkgs.findutils)
-    pkgs.openssh
-    pkgs.bashInteractive
-    (lib.hiPrio pkgs.git)
-    pkgs.cachix
-
-    pkgs.just
-    pkgs.podman # For nested containers.
-
-    preBuildScript
-
-    files.containers
-    files.nixConfig
-  ];
-
-  # All these packages are added to the Nix daemon.
-  nixStorePkgs = bootstrapPkgs ++ [
-    # These files
-    files.basicRoot
-    files.fakeNixpkgs
-  ];
-
-  toEnvList = envs: lib.mapAttrsToList (k: v: "${k}=${v}") envs;
+  # These derivations are symlinked into the job images root dir.
+  jobImgs = import ./job-images.nix {
+    inherit
+      lib
+      pkgs
+      noPruneLabels
+      imageNames
+      ;
+  };
 
   # This is the Nix base image used for the Nix Daemon.
   # The build script for the nixos/nix image is vendored due to Hydra limitations.
@@ -98,49 +75,57 @@ let
         (pkgs.fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "2.32.4";
+          rev = "2.34.7";
           hash = "sha256-8QYnRyGOTm3h/Dp8I6HCmQzlO7C009Odqyp28pTWgcY=";
         })
         + "/docker.nix"
       );
 
-  nixImageBase =
-    nixConf:
-    pkgs.callPackage nixImageBaseFn {
-      name = "local/nix-base";
-      tag = "latest";
+  nixDaemonImageBase = pkgs.callPackage nixImageBaseFn {
+    name = "local/nix-base";
+    tag = "latest";
 
-      bundleNixpkgs = false;
-      maxLayers = 2;
+    bundleNixpkgs = false;
+    maxLayers = 2;
 
-      # You can add here a user with uid,gid,uname,gname etc.
-      # We are using root.
+    nixConf = {
+      cores = "0";
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
 
-      extraPkgs = nixStorePkgs;
+      # TODO: Make here a signing key.
+      # secret-key-files = [ config.sops.secrets.nix-store-signing-key.path ];
 
-      nixConf = {
-        cores = "0";
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
-      }
-      // nixConf;
+      min-free = "1G"; # Triggers garbage collection.
+      max-free = "100G"; # Stops garbage collection at 100G free space.
+
+      # Reduce disk usage by discarding old derivations/outputs
+      # keep-derivations = false;
+      # keep-outputs = false;
     };
+  };
 
   # This is the daemon image which provides the store
   # as volumes.
   nixDaemonImage = pkgs.dockerTools.buildLayeredImage {
-    fromImage = nixImageBase {
-      min-free = "1G"; # Triggers garbage collection.
-      max-free = "10G"; # Stops garbage collection at 10G free space.
-
-      # Reduce disk usage by discarding old derivations/outputs
-      keep-derivations = false;
-      keep-outputs = false;
-    };
+    fromImage = nixDaemonImageBase;
     name = "local/nix-daemon";
     tag = "latest";
+
+    fakeRootCommands =
+      # bash
+      ''
+        # Add all store paths and make them GC roots, so we dont loose them.
+        # NOTE: Cannot add it to `extraPkgs` cause of the profile
+        #       which uses `buildEnv` which collides.
+         mkdir -p nix/var/nix/gcroots/additional-pkgs
+         ${lib.concatMapStringsSep "\n" (pkg: ''
+           echo "Adding package '${pkg}'"
+           ln -fs "${pkg}" "nix/var/nix/gcroots/additional-pkgs/"
+         '') jobImgs.allStoreDrv}
+      '';
 
     config = {
       Volumes = {
@@ -180,120 +165,6 @@ let
       };
     };
 
-  jobImages =
-    let
-      extraCommands = ''
-        set -eu
-        # Set missing Nix directories.
-        mkdir -p -m 0755 nix/var/log/nix/drvs
-        mkdir -p -m 0755 nix/var/nix/{gcroots,profiles,temproots,userpool}
-        mkdir -p -m 1777 nix/var/nix/{gcroots,profiles}/per-user
-        mkdir -p -m 0755 nix/var/nix/profiles/per-user/root
-
-        # Need a HOME.
-        mkdir -vp root
-        mkdir -p -m 0700 root/.nix-defexpr
-      '';
-    in
-    {
-      # The Nix image.
-      # Similar to https://github.com/nix-community/docker-nixpkgs/blob/main/images/nix/default.nix.
-      nix = pkgs.dockerTools.buildLayeredImage {
-        name = imageNames.nix;
-        tag = "latest";
-
-        extraCommands = extraCommands + ''
-          set -eu
-          # For `/usr/bin/env`.
-          mkdir -p usr && ln -s ../bin usr/bin
-        '';
-
-        contents = bootstrapPkgs ++ [ files.basicRoot ];
-        # No store paths are copied into. We provide them by mounting the
-        # /nix/store.
-        includeStorePaths = false;
-
-        config = {
-          Labels = noPruneLabels;
-          Env = toEnvList envs.nix;
-        };
-        maxLayers = 2;
-      };
-
-      # This is the analog image to `local/nix` but Alpine based.
-      alpine =
-        let
-          # Update with:
-          # ```shell
-          # nix run "github:nixos/nixpkgs/nixos-unstable#nix-prefetch-docker" -- --image-name alpine --image-tag latest
-          # ```
-          alpineBase = pkgs.dockerTools.pullImage {
-            imageName = "alpine";
-            imageDigest = "sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d";
-            sha256 = "0gf7wbjp37zbni3pz8vdgq1mss6mz69wynms0gqhq7lsxfmg9xj9";
-            finalImageName = "alpine";
-            finalImageTag = "latest";
-          };
-        in
-        (pkgs.dockerTools.buildLayeredImage {
-          fromImage = alpineBase;
-          name = imageNames.alpine;
-          tag = "latest";
-
-          inherit extraCommands;
-
-          contents = bootstrapPkgs;
-          # No store paths are copied into. We provide them by mounting the
-          # /nix/store.
-          includeStorePaths = false;
-
-          config = {
-            Labels = noPruneLabels;
-            Env = toEnvList envs.nix;
-          };
-
-          # Only if `build buildLayeredImage`.
-          maxLayers = 3;
-        });
-
-      # This is the analog image to `local/nix` but Ubuntu based.
-      ubuntu =
-        let
-          # Update with:
-          # ```shell
-          # nix run "github:nixos/nixpkgs/nixos-unstable#nix-prefetch-docker" -- \
-          #   --image-name ubuntu --image-tag latest
-          # ```
-          ubuntuBase = pkgs.dockerTools.pullImage {
-            imageName = "ubuntu";
-            imageDigest = "sha256:1e622c5f073b4f6bfad6632f2616c7f59ef256e96fe78bf6a595d1dc4376ac02";
-            hash = "sha256-aC8SgxdcMSaaU89YMr/uwE022Yqey2frmeZqr+L1xEU=";
-            finalImageName = "ubuntu";
-            finalImageTag = "latest";
-          };
-        in
-        (pkgs.dockerTools.buildLayeredImage {
-          fromImage = ubuntuBase;
-          name = imageNames.ubuntu;
-          tag = "latest";
-
-          inherit extraCommands;
-
-          contents = bootstrapPkgs;
-          # No store paths are copied into. We provide them by mounting the
-          # /nix/store.
-          includeStorePaths = false;
-
-          config = {
-            Labels = noPruneLabels;
-            Env = toEnvList envs.ubuntu;
-          };
-
-          # Only if `build buildLayeredImage`.
-          maxLayers = 3;
-        });
-    };
-
   nixDaemonContainer = {
     imageFile = nixDaemonImage;
     image = "local/nix-daemon:latest";
@@ -302,6 +173,8 @@ let
       "nix-daemon-store:/nix/store"
       "nix-daemon-db:/nix/var/nix/db"
       "nix-daemon-socket:/nix/var/nix/daemon-socket"
+      # TODO: Add signing key.
+      # "${config.sops.secrets.nix-store-signing-key.path}:${config.sops.secrets.nix-store-signing-key.path}:ro"
     ];
     cmd = [
       "nix"
@@ -330,42 +203,6 @@ let
     ];
   };
 
-  # Environment variables for all job containers.
-  envs = rec {
-    common = {
-      # Access to the nix daemon.
-      NIX_REMOTE = "daemon";
-      # Access to podman.
-      CONTAINER_HOST = "unix:///run/podman/podman.sock";
-
-      USER = "root";
-      PATH = "/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/bin:/sbin:/usr/bin:/usr/sbin";
-
-      SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-      NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-
-      # For shells, source this file.
-      ENV = "${pkgs.nix}/etc/profile.d/nix-daemon.sh";
-      BASH_ENV = "${pkgs.nix}/etc/profile.d/nix-daemon.sh";
-
-      # Make a fake nixpkgs which throws when using
-      # `nix repl -f <nixpkgs>` for example.
-      NIX_PATH = "nixpkgs=${files.fakeNixpkgs}";
-    };
-
-    nix = common // {
-      IMAGE_OS_DIST = "nix";
-    };
-
-    alpine = common // {
-      IMAGE_OS_DIST = "alpine";
-    };
-
-    ubuntu = common // {
-      IMAGE_OS_DIST = "ubuntu";
-    };
-  };
-
   registrationFlags = [
     "--docker-volumes"
     "gitlab-runner-scratch:/scratch"
@@ -386,34 +223,61 @@ let
     "unix:///var/run/podman/podman.sock"
 
     "--docker-network-mode"
-    "host"
+    "bridge"
   ];
 
+  # Define the containers for the jobs.
+  # This is a trick to add the job images to the registry.
+  # TODO: Can this be done better?
+  # On `nix` also make the scratch directory world readable.
+  jobContainers = (
+    lib.concatMapAttrs (name: image: {
+      "${name}-container" = {
+        imageFile = jobImgs.images.${name};
+        image = "${imageNames.${name}}:latest";
+
+        extraOptions = [
+          "--volumes-from"
+          "nix-daemon-container:ro"
+        ];
+
+        dependsOn = [ "nix-daemon-container" ];
+        cmd = [ "true" ];
+      }
+      // (lib.optionalAttrs (name == "nix") {
+        volumes = [ "gitlab-runner-scratch:/scratch" ];
+        cmd = [
+          "chmod"
+          "777"
+          "/scratch"
+        ];
+      });
+    }) jobImgs.images
+  );
+
+  # Do not restart systemd service for the job images.
+  # Otherwise they get readded always.
+  modifiedJobServices = lib.concatMapAttrs (
+    name: image:
+    let
+      serviceName = config.virtualisation.oci-containers.containers."${name}-container".serviceName;
+    in
+    {
+      "${serviceName}".serviceConfig = {
+        Restart = lib.mkForce "no";
+      };
+    }
+  ) jobImgs.images;
 in
 {
   imports = [ ./virtualization.nix ];
 
   virtualisation.oci-containers = {
     backend = "podman";
-
-    containers = {
+    containers = jobContainers // {
       nix-daemon-container = nixDaemonContainer;
       podman-daemon-container = podmanDaemonContainer;
-    }
-    //
-      # Workaround to add the job images to the registry.
-      (lib.concatMapAttrs (name: image: {
-        "${name}-container" = {
-          imageFile = jobImages.${name};
-          image = "${imageNames.${name}}:latest";
-          extraOptions = [
-            "--volumes-from"
-            "nix-daemon-container:ro"
-          ];
-          dependsOn = [ "nix-daemon-container" ];
-          cmd = [ "true" ];
-        };
-      }) jobImages);
+    };
   };
 
   # Define the Gitlab Runner.
@@ -430,6 +294,43 @@ in
     dockerPrivileged = false;
     requestConcurrency = 4;
 
-    preBuildScript = "${preBuildScript}/bin/gitlab-runner-pre-build-script";
+    preBuildScript = "${lib.getExe jobImgs.preBuildScript}";
+  };
+
+  systemd.services = modifiedJobServices // {
+    # Update Nix store in the daemon service.
+    # The job images do not contain any actual store paths and are very small.
+    # We add `allStoreDrvs` to the nix store volume `nix-daemon-store` of the
+    # `nixDaemonImageBase` to make everything available on the job images
+    # (they mount `nix-daemon-store`).
+    # But when you delete the volume for cleanup or space reasons, this
+    # service initializes the store correctly again.
+    # Note: Podman, when starting the `nix-daemon-container`, copies all `/nix/store` paths
+    # from the image to the `nix-daemon-store` volume before running it.
+    update-nix-daemon-store = {
+      description = "update-nix-daemon-store";
+      restartIfChanged = true;
+      wantedBy = [ "multi-user.target" ];
+
+      # Ensure that the bootstrap is restarted when `nix-daemon-container` is.
+      partOf = [ "podman-nix-daemon-container.service" ];
+
+      script = ''
+        ${lib.getExe updateNixStoreVolume}
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+        SupplementaryGroups = "podman";
+        User = "root";
+        StandardOutput = "journal";
+        StandardError = "journal";
+      };
+    };
+
+    # Start 'nix-daemon-container' after the update of the volume.
+    podman-nix-daemon-container.after = [ "update-nix-daemon-store.service" ];
+    # Start Runner after nix-daemon-container.
+    gitlab-runner.after = [ "podman-nix-daemon-container.service" ];
   };
 }
