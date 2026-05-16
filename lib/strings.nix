@@ -904,6 +904,9 @@ rec {
   */
   hasInfix =
     infix:
+    let
+      escapedInfix = escapeRegex infix;
+    in
     if isPath infix then
       # Before 23.05, paths would be copied to the store before converting them
       # to strings and comparing. This was surprising and confusing.
@@ -912,7 +915,7 @@ rec {
             There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
             This function also copies the path to the Nix store, which may not be what you want.''
     else
-      content: builtins.match ".*${escapeRegex infix}.*" "${content}" != null;
+      content: builtins.match ".*${escapedInfix}.*" "${content}" != null;
 
   /**
     Convert a string `s` to a list of characters (i.e. singleton strings).
