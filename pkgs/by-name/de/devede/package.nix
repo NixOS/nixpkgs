@@ -73,6 +73,7 @@ buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "DVD Creator for Linux";
+    mainProgram = "devede_ng";
     homepage = "https://www.rastersoft.com/programas/devede.html";
     license = lib.licenses.gpl3;
     maintainers = [
