@@ -101,7 +101,7 @@ in
     enable =
       lib.mkEnableOption "the generation of RFC-0125 bootspec in $system/boot.json, e.g. /run/current-system/boot.json"
       // {
-        default = true;
+        default = !config.boot.isContainer;
         internal = true;
       };
     enableValidation = lib.mkEnableOption ''
@@ -143,5 +143,12 @@ in
       internal = true;
       default = schemas.v1.filename;
     };
+  };
+
+  config = lib.mkIf cfg.enable {
+    system.systemBuilderCommands = ''
+      ${cfg.writer}
+      ${lib.optionalString cfg.enableValidation ''${cfg.validator} "$out/${cfg.filename}"''}
+    '';
   };
 }
