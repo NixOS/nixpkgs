@@ -8516,9 +8516,9 @@
     email = "evysgarden@protonmail.com";
   };
   ewok = {
-    email = "ewok@ewok.ru";
-    github = "ewok-old";
-    githubId = 454695;
+    email = "github@in.ewok.email";
+    github = "ewok";
+    githubId = 125148819;
     name = "Artur Taranchiev";
   };
   ewuuwe = {
@@ -13122,6 +13122,13 @@
     github = "Johny-LPM";
     githubId = 168684553;
     name = "João Marques";
+  };
+  joibel = {
+    email = "alan@clucas.org";
+    github = "Joibel";
+    githubId = 1827156;
+    name = "Alan Clucas";
+    keys = [ { fingerprint = "EBE6 85B9 4904 22E1 EC94  7B17 79C7 9CBD BAF6 4C13"; } ];
   };
   joinemm = {
     email = "joonas@rautiola.co";

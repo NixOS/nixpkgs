@@ -10089,10 +10089,6 @@ with pkgs;
     })
   );
 
-  sxiv = callPackage ../applications/graphics/sxiv {
-    imlib2 = imlib2Full;
-  };
-
   dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };

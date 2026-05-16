@@ -64,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       soyouzpanda
       ma27
     ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

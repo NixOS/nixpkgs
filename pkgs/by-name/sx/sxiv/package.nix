@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libxft,
-  imlib2,
+  imlib2Full,
   giflib,
   libexif,
   conf ? null,
@@ -13,11 +13,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sxiv";
   version = "26";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "sxiv";
-    rev = "v${finalAttrs.version}";
-    sha256 = "0xaawlfdy7b277m38mgg4423kd7p1ffn0dq4hciqs6ivbb3q9c4f";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jrCEx1o7Go0jgwQ3YJ0L97Q5BCHvVTTqOWId3xzlSnU=";
   };
 
   configFile = lib.optionalString (conf != null) (builtins.toFile "config.def.h" conf);
@@ -25,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxft
-    imlib2
+    imlib2Full
     giflib
     libexif
   ];

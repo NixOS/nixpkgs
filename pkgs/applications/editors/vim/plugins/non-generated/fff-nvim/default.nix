@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.6.4";
+  version = "0.8.0";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
     tag = "v${version}";
-    hash = "sha256-vu5yqOvVAPXHMi8sZFQuH9rNsFDffh3Ja74Be0Cs64c=";
+    hash = "sha256-JbV2dTQhTyZgDZYvFoR1mz9CeM2IPv59Qmp2iiJC8a0=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-w6KwiE0rAT00fiRa1rT8uthVgcMB7EFGoG3+M5MYEBo=";
+    cargoHash = "sha256-L/Ens/wzw/jKaa1T3A2pLIBKs09saPEk/0bRhgRezPQ=";
 
     cargoBuildFlags = [
       "-p"
@@ -45,7 +45,13 @@ let
       perl
       rustPlatform.bindgenHook
       writableTmpDirAsHomeHook
+      zig
     ];
+
+    dontUseZigConfigure = true;
+    dontUseZigBuild = true;
+    dontUseZigCheck = true;
+    dontUseZigInstall = true;
 
     # Some tests need git
     nativeCheckInputs = [ gitMinimal ];
@@ -69,8 +75,6 @@ let
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
       RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
-
-      ZIG = lib.getExe zig; # zlob requires zig
     };
   };
 in
