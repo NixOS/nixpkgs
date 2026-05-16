@@ -219,6 +219,20 @@ Read `xzar.sh` and extract the list of attribute names passed to `nix-build -A`.
 
 (Re-derive the list from the script each run — don't hardcode it; the user updates `xzar.sh`.)
 
+### Free disk space before building
+
+Big builds (`cudatoolkit`, `lmstudio`, `unsloth`, `ollama-cuda`, `ollama-rocm`) can easily exceed 30 GiB combined. Before kicking off the build phase, check disk space and prune old store paths if needed:
+
+```bash
+df -h /
+# If free space is tight (< ~25 GiB), free it:
+nix-collect-garbage --delete-old
+```
+
+`--delete-old` removes prior profile generations and any store paths no longer referenced by a gcroot. It does **not** touch derivations kept alive by current `/tmp/result-*` symlinks, so in-progress build results are safe. Expect to recover 10–30 GiB on a stale tree.
+
+Run this at the start of step 5, and again between builds if you see "No space left on device" or `df` drops below ~5 GiB.
+
 For each attribute, build with `--out-link` and then verify the binary runs:
 
 ```bash
