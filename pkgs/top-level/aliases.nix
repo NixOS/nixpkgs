@@ -1959,6 +1959,7 @@ mapAliases {
   spark2014 = throw "'spark2014' has been renamed to/replaced by 'gnatprove'"; # Converted to throw 2025-10-27
   spectrojack = throw "'spectrojack' was remove due to lack of upstream maintenance and relying on gtk2"; # Added 2025-12-02
   speed_dreams = speed-dreams; # Added 2026-01-19
+  speedify = throw "'speedify' was remove due to beeing broken and unmaintained"; # Added 2026-05-16
   spidermonkey_91 = throw "'spidermonkey_91 is EOL since 2022/09"; # Added 2025-08-26
   spoof = throw "'spoof' has been removed, as it is broken with the latest MacOS versions and is unmaintained upstream"; # Added 2025-11-14
   spotify-unwrapped = throw "'spotify-unwrapped' has been renamed to/replaced by 'spotify'"; # Converted to throw 2025-10-27
