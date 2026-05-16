@@ -1,0 +1,43 @@
+name: "CLA Assistant"
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+  issue_comment:
+    types: [created]
+
+jobs:
+  CLA-pr:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_target'
+    steps:
+      - name: "CLA Assistant"
+        uses: contributor-assistant/cla-assistant-action@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.CLA_ACCESS_TOKEN }}
+        with:
+          path-to-document: ./CLA.md
+          allow-list: ""
+          corporate: false
+
+  CLA-sign:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, 'sign cla')
+    steps:
+      - name: "CLA Assistant"
+        uses: contributor-assistant/cla-assistant-action@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.CLA_ACCESS_TOKEN }}
+        with:
+          path-to-document: ./CLA.md
+          allow-list: ""
+          corporate: false
+
+# -----------------------------------------------------------
+# NOTE: For this to work:
+# 1. Install CLA Assistant GitHub App: https://github.com/apps/cla-assistant
+# 2. Create a CLA_ACCESS_TOKEN secret with "repo:status" scope
+#    in your repo or organization settings.
+# -----------------------------------------------------------
