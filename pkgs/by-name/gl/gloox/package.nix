@@ -26,9 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # needed since gcc12
   postPatch = ''
-    sed '1i#include <ctime>' -i \
-      src/tests/{tag/tag_perf.cpp,zlib/zlib_perf.cpp} \
-      src/examples/*.cpp
+    substituteInPlace \
+      src/tests/tag/tag_perf.cpp \
+      src/tests/zlib/zlib_perf.cpp \
+      --replace-fail \
+        "#include <sys/time.h>" \
+        $'#include <ctime>\n#include <sys/time.h>'
+
+    substituteInPlace src/examples/*.cpp \
+      --replace-fail \
+        "#include <stdio.h>" \
+        $'#include <ctime>\n#include <stdio.h>'
   '';
 
   buildInputs =
