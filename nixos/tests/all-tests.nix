@@ -364,6 +364,7 @@ in
   };
   cloud-init = runTest ./cloud-init.nix;
   cloud-init-hostname = runTest ./cloud-init-hostname.nix;
+  cloudcompare = import ./cloudcompare.nix { inherit pkgs runTest; };
   cloudlog = runTest ./cloudlog.nix;
   cntr = import ./cntr.nix {
     inherit (pkgs) lib;
