@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
         $'#include <ctime>\n#include <stdio.h>'
   '';
 
-  buildInputs =
-    [ ]
-    ++ lib.optional zlibSupport zlib
-    ++ lib.optional sslSupport openssl
-    ++ lib.optional idnSupport libidn;
+  buildInputs = lib.flatten [
+    (lib.optional zlibSupport zlib)
+    (lib.optional sslSupport openssl)
+    (lib.optional idnSupport libidn)
+  ];
 
   meta = {
     description = "Portable high-level Jabber/XMPP library for C++";
