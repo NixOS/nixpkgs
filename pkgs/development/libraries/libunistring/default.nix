@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libunistring";
   version = "1.4.2";
 
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "mirror://gnu/libunistring/libunistring-${finalAttrs.version}.tar.gz";
     hash = "sha256-6CZksXAGTmIzGWISayWdRS1Tsie7SpOrIAQNhG/sAdg=";
