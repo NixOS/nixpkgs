@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       _360ied
       lilacious
+      philocalyst
     ];
     platforms = lib.platforms.linux; # Maybe other non-darwin Unix
   };
