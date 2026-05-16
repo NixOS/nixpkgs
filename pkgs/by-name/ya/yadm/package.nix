@@ -43,6 +43,9 @@ resholve.mkDerivation (finalAttrs: {
   pname = "yadm";
   version = "3.5.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ installShellFiles ];
 
   src = fetchFromGitHub {
