@@ -8,7 +8,6 @@
 {
   lib,
   stdenv,
-  llvmPackages_19,
   llvmPackages_21,
   fetchFromGitHub,
   fetchpatch,
@@ -23,6 +22,7 @@
   findutils,
   libiconv,
   removeReferencesTo,
+  zstd,
   rustSupport ? true,
   rustc,
   cargo,
@@ -31,7 +31,7 @@
   versionCheckHook,
 }:
 let
-  llvmPackages = if lib.versionAtLeast version "26" then llvmPackages_21 else llvmPackages_19;
+  llvmPackages = llvmPackages_21;
   llvmStdenv = llvmPackages.stdenv;
 in
 llvmStdenv.mkDerivation (finalAttrs: {
@@ -44,8 +44,9 @@ llvmStdenv.mkDerivation (finalAttrs: {
     repo = "ClickHouse";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    name = "clickhouse-${tag}.tar.gz";
+    name = "clickhouse-${tag}.tar.zst";
     inherit hash;
+    nativeBuildInputs = [ zstd ];
     postFetch = ''
       # Delete files that make the source too big
       rm -rf $out/contrib/arrow/docs/
@@ -80,7 +81,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
       # Compress to not exceed the 2GB output limit
       echo "Creating deterministic source tarball..."
 
-      tar -I 'gzip -n' \
+      tar -I 'zstd --no-progress' \
         --sort=name \
         --mtime=1970-01-01 \
         --owner=0 --group=0 \
@@ -102,14 +103,18 @@ llvmStdenv.mkDerivation (finalAttrs: {
     python3
     perl
     llvmPackages.lld
+    # Provides llvm-ar/llvm-objcopy.
+    # Required by cmake/strip_rust_symbols.sh to match the LLVM toolchain
+    # Otherwise it corrupts .eh_frame in the Rust staticlibs
+    llvmPackages.bintools
     removeReferencesTo
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
     yasm
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.bintools
     findutils
     darwin.bootstrap_cmds
   ]
@@ -122,26 +127,6 @@ llvmStdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dontCargoSetupPostUnpack = true;
-
-  patches =
-    lib.optional (lib.versions.majorMinor version == "25.8") (fetchpatch {
-      # Disable building WASM lexer
-      url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
-      hash = "sha256-7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
-    })
-    ++
-
-      lib.optional (lib.versions.majorMinor version == "25.8" && stdenv.hostPlatform.isDarwin)
-        (fetchpatch {
-          # Do not intercept memalign on darwin
-          url = "https://github.com/ClickHouse/ClickHouse/commit/0cfd2dbe981727fb650f3b9935f5e7e7e843180f.patch";
-          hash = "sha256-1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
-        })
-    ++ lib.optional (!lib.versionAtLeast version "25.11" && stdenv.hostPlatform.isDarwin) (fetchpatch {
-      # Remove flaky macOS SDK version detection
-      url = "https://github.com/ClickHouse/ClickHouse/commit/11e172a37bd0507d595d27007170090127273b33.patch";
-      hash = "sha256-oI7MrjMgJpIPTsci2IqEOs05dUGEMnjI/WqGp2N+rps=";
-    });
 
   postPatch = ''
     patchShebangs src/ utils/

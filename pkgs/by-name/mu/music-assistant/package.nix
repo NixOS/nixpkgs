@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   ffmpeg_7-headless,
@@ -214,6 +215,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
