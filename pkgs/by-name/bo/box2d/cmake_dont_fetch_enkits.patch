@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8c1390e..791d3b7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,10 +83,7 @@ if(PROJECT_IS_TOP_LEVEL)
+ 		# Used in tests and samples
+ 		FetchContent_Declare(
+ 			enkits
+-			GIT_REPOSITORY https://github.com/dougbinks/enkiTS.git
+-			GIT_TAG master
+-			GIT_SHALLOW TRUE
+-			GIT_PROGRESS TRUE
++			URL @enkits_src@
+ 		)
+ 		FetchContent_MakeAvailable(enkits)
+ 	endif()

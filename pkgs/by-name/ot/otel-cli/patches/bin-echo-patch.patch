@@ -1,0 +1,21 @@
+diff --git a/data_for_test.go b/data_for_test.go
+index c0b8980..691e270 100644
+--- a/data_for_test.go
++++ b/data_for_test.go
+@@ -555,14 +555,14 @@ var suites = []FixtureSuite{
+ 					"--endpoint", "{{endpoint}}",
+ 					"--verbose", "--fail",
+ 					"--attrs", "zy=ab", // ensure CLI args still propagate
+-					"--", "/bin/echo", "a", "z",
++					"--", "echo", "a", "z",
+ 				},
+ 			},
+ 			Expect: Results{
+ 				SpanCount: 1,
+ 				CliOutput: "a z\n",
+ 				SpanData: map[string]string{
+-					"attributes": "/^process.command=/bin/echo,process.command_args=/bin/echo,a,z,process.owner=\\w+,process.parent_pid=\\d+,process.pid=\\d+,zy=ab/",
++					"attributes": "/^process.command=echo,process.command_args=echo,a,z,process.owner=\\w+,process.parent_pid=\\d+,process.pid=\\d+,zy=ab/",
+ 				},
+ 			},
+ 		},

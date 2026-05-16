@@ -1,0 +1,15 @@
+diff --git a/gui/keymap.cc b/gui/keymap.cc
+index 3426b6b..7bf76d8 100644
+--- a/gui/keymap.cc
++++ b/gui/keymap.cc
+@@ -30,6 +30,10 @@
+ #include "gui.h"
+ #include "keymap.h"
+
++#if defined(__APPLE__)
++#include <libgen.h>
++#endif
++
+ // Table of bochs "BX_KEY_*" symbols
+ // the table must be in BX_KEY_* order
+ const char *bx_key_symbol[BX_KEY_NBKEYS] = {

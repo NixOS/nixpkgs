@@ -1,0 +1,279 @@
+From 1a617220a286c23ecac1ad7bd6aca0d2c68bd1f3 Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Fri, 19 Sep 2025 08:43:18 +0200
+Subject: [PATCH 1/6] CMake: allow system vcglib
+
+---
+ src/CMakeLists.txt | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0398e8566..839a515be 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -75,7 +75,12 @@ endif()
+ ### Enter subdirectories
+ 
+ # VCGLib -- required
+-if (VCGDIR) # VCGDIR exists - using custom user vcglib path
++find_package(vcglib CONFIG)
++if(TARGET vcglib::vcglib)
++	message(STATUS "- VCGLib - using system provided library")
++	add_library(vcglib ALIAS vcglib::vcglib)
++	get_target_property(VCGDIR vcglib::vcglib INTERFACE_INCLUDE_DIRECTORIES)
++elseif (VCGDIR) # VCGDIR exists - using custom user vcglib path
+ 	if(EXISTS ${VCGDIR})
+ 		add_subdirectory(${VCGDIR} {CMAKE_CURRENT_BINARY_DIR}/vcglib)
+ 		message(STATUS "- VCGLib - using custom VCGDIR path library")
+
+From 73debae9b9ca14554c25fa58480969bc7c3f61d1 Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Tue, 16 Sep 2025 12:44:12 +0200
+Subject: [PATCH 2/6] CMake: MESHLAB_ALLOW_SYSTEM_LEVMAR
+
+---
+ src/external/levmar.cmake | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/src/external/levmar.cmake b/src/external/levmar.cmake
+index cc639f09e..882b631db 100644
+--- a/src/external/levmar.cmake
++++ b/src/external/levmar.cmake
+@@ -3,8 +3,25 @@
+ # SPDX-License-Identifier: BSL-1.0
+ 
+ option(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LEVMAR "Allow download and use of levmar source" ON)
++option(MESHLAB_ALLOW_SYSTEM_LEVMAR "Allow use of system-provided levmar" ON)
+ 
+-if(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LEVMAR)
++find_path(levmar_INCLUDE_DIR NAMES levmar.h PATHS ${levmar_PREFIX})
++find_library(levmar_LIBRARY NAMES levmar PATHS ${levmar_PREFIX})
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(
++	levmar
++	DEFAULT_MSG
++	levmar_LIBRARY
++	levmar_INCLUDE_DIR
++)
++mark_as_advanced(levmar_INCLUDE_DIR levmar_LIBRARY)
++
++if(MESHLAB_ALLOW_SYSTEM_LEVMAR AND levmar_FOUND)
++	message(STATUS "- levmar - using system-provided library")
++	add_library(external-levmar INTERFACE)
++	target_link_libraries(external-levmar INTERFACE ${levmar_LIBRARY})
++	target_include_directories(external-levmar INTERFACE ${levmar_INCLUDE_DIR})
++elseif(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LEVMAR)
+ 	set(LEVMAR_VERSION "2.6.1")
+ 
+ 	set(LEVMAR_DIR "${MESHLAB_EXTERNAL_DOWNLOAD_DIR}/levmar-${LEVMAR_VERSION}")
+
+From 161d5dabad4cfdc3ec08d9e5dd2ee6c94b057c5c Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Tue, 16 Sep 2025 15:15:11 +0200
+Subject: [PATCH 3/6] CMake: MESHLAB_ALLOW_SYSTEM_LIB3MF
+
+---
+ src/external/lib3mf.cmake | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/external/lib3mf.cmake b/src/external/lib3mf.cmake
+index 1cd1b5dfa..f64a63aa5 100644
+--- a/src/external/lib3mf.cmake
++++ b/src/external/lib3mf.cmake
+@@ -22,8 +22,15 @@
+ #############################################################################
+ 
+ option(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LIB3MF "Allow download and use of lib3MF source" ON)
++option(MESHLAB_ALLOW_SYSTEM_LIB3MF "Allow use of system-provided lib3MF" ON)
+ 
+-if(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LIB3MF)
++find_package(lib3mf)
++
++if(MESHLAB_ALLOW_SYSTEM_LIB3MF AND TARGET lib3mf::lib3mf)
++  message(STATUS "- Lib3MF - using system-provided library")
++  add_library(external-lib3mf INTERFACE)
++  target_link_libraries(external-lib3mf INTERFACE lib3mf::lib3mf)
++elseif(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LIB3MF)
+   set(LIB3MF_VERSION "2.4.1")
+ 
+   set(LIB3MF_DIR ${MESHLAB_EXTERNAL_DOWNLOAD_DIR}/lib3mf-${LIB3MF_VERSION})
+
+From c6662d486c1f8e5c9c89389abd630d8218b0fcb9 Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Tue, 16 Sep 2025 15:42:59 +0200
+Subject: [PATCH 4/6] CMake: MESHLAB_ALLOW_SYSTEM_LIBIGL
+
+---
+ src/external/libigl.cmake | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/external/libigl.cmake b/src/external/libigl.cmake
+index 3666f375d..8f84fea4f 100644
+--- a/src/external/libigl.cmake
++++ b/src/external/libigl.cmake
+@@ -3,10 +3,17 @@
+ # SPDX-License-Identifier: BSL-1.0
+ 
+ option(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LIBIGL "Allow download and use of LibIGL source" ON)
++option(MESHLAB_ALLOW_SYSTEM_LIBIGL "Allow use of system-provided LibIGL" ON)
+ 
+ set(LIBIGL_VER 2.4.0)
+ 
+-if(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LIBIGL)
++find_path(libigl_INCLUDE_DIR NAMES igl_inline.h PATH_SUFFIXES igl PATHS ${libigl_PREFIX})
++
++if(MESHLAB_ALLOW_SYSTEM_LIBIGL AND libigl_INCLUDE_DIR)
++	message(STATUS "- LibIGL - using system-provided library")
++	add_library(external-libigl INTERFACE)
++	target_include_directories(external-libigl INTERFACE ${libigl_INCLUDE_DIR})
++elseif(MESHLAB_ALLOW_DOWNLOAD_SOURCE_LIBIGL)
+ 	set(LIBIGL_DIR "${MESHLAB_EXTERNAL_DOWNLOAD_DIR}/libigl-${LIBIGL_VER}")
+ 	set(LIBIGL_CHECK "${LIBIGL_DIR}/include/igl/igl_inline.h")
+ 
+
+From a26427e32af672d2554d662376f3f258c64941ca Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Fri, 19 Sep 2025 08:58:16 +0200
+Subject: [PATCH 5/6] CMake: MESHLAB_ALLOW_SYSTEM_NEXUS
+
+---
+ src/external/nexus.cmake | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/external/nexus.cmake b/src/external/nexus.cmake
+index 9fc92f714..1139d11e7 100644
+--- a/src/external/nexus.cmake
++++ b/src/external/nexus.cmake
+@@ -3,11 +3,18 @@
+ # SPDX-License-Identifier: BSL-1.0
+ 
+ option(MESHLAB_ALLOW_DOWNLOAD_SOURCE_NEXUS "Allow download and use of nexus source" ON)
++option(MESHLAB_ALLOW_SYSTEM_NEXUS "Allow use of system-provided nexus and corto" ON)
+ 
+ set(CORTO_VER 2025.07)
+ set(NEXUS_VER 2025.05)
+ 
+-if(MESHLAB_ALLOW_DOWNLOAD_SOURCE_NEXUS)
++find_package(nexus CONFIG)
++
++if(MESHLAB_ALLOW_SYSTEM_NEXUS AND TARGET nexus::nexus)
++	message(STATUS "- nexus - using system-provided library")
++	add_library(external-nexus INTERFACE)
++	target_link_libraries(external-nexus INTERFACE nexus::nexus)
++elseif(MESHLAB_ALLOW_DOWNLOAD_SOURCE_NEXUS)
+ 	set(NEXUS_DIR "${MESHLAB_EXTERNAL_DOWNLOAD_DIR}/nexus-${NEXUS_VER}")
+ 	set(NEXUS_CHECK "${NEXUS_DIR}/CMakeLists.txt")
+ 	set(CORTO_DIR "${NEXUS_DIR}/src/corto")
+
+From 32be737316181bd84d8beac7cb6b74379965d2fe Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Fri, 19 Sep 2025 11:26:36 +0200
+Subject: [PATCH 6/6] CMake: install exports
+
+---
+ src/CMakeLists.txt                        | 21 +++++++++++++++++++++
+ src/Config.cmake.in                       |  9 +++++++++
+ src/common/CMakeLists.txt                 | 18 ++++++++++++++----
+ src/meshlabplugins/io_base/CMakeLists.txt |  2 +-
+ 4 files changed, 45 insertions(+), 5 deletions(-)
+ create mode 100644 src/Config.cmake.in
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 839a515be..c490ea960 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -229,6 +229,27 @@ endforeach()
+ set(COPIED_FILES)
+ 
+ if (NOT MESHLAB_BUILD_ONLY_LIBRARIES)
++	# headers
++	install(DIRECTORY common DESTINATION include FILES_MATCHING PATTERN "*.h")
++	# CMake exports
++	install(EXPORT meshlabTargets
++		DESTINATION lib/cmake/meshlab
++		NAMESPACE meshlab::
++		FILE meshlabTargets.cmake
++	)
++	include(CMakePackageConfigHelpers)
++	# generate the config file that includes the exports
++	configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
++		"${CMAKE_CURRENT_BINARY_DIR}/meshlabConfig.cmake"
++		INSTALL_DESTINATION lib/cmake/vcglib
++		NO_SET_AND_CHECK_MACRO
++		NO_CHECK_REQUIRED_COMPONENTS_MACRO
++	)
++	install(FILES
++		"${CMAKE_CURRENT_BINARY_DIR}/meshlabConfig.cmake"
++		DESTINATION lib/cmake/meshlab
++	)
++
+ 	# shaders
+ 	set(SHADER_BASE_DIR "${MESHLAB_RESOURCES_DIR}/shaders")
+ 	file(
+diff --git a/src/Config.cmake.in b/src/Config.cmake.in
+new file mode 100644
+index 000000000..63ba0ce97
+--- /dev/null
++++ b/src/Config.cmake.in
+@@ -0,0 +1,9 @@
++@PACKAGE_INIT@
++
++include(CMakeFindDependencyMacro)
++find_dependency(GLEW)
++find_dependency(OpenGL)
++find_dependency(Qt5 COMPONENTS OpenGL Xml Network)
++find_dependency(vcglib)
++
++include ( "${CMAKE_CURRENT_LIST_DIR}/meshlabTargets.cmake" )
+diff --git a/src/common/CMakeLists.txt b/src/common/CMakeLists.txt
+index 0e640fdd4..c74bd579b 100644
+--- a/src/common/CMakeLists.txt
++++ b/src/common/CMakeLists.txt
+@@ -198,7 +198,8 @@ endif()
+ 
+ target_include_directories(meshlab-common
+ 	PUBLIC
+-		${CMAKE_CURRENT_SOURCE_DIR}/..)
++		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
++		$<INSTALL_INTERFACE:include>)
+ 
+ target_link_libraries(
+ 	meshlab-common
+@@ -208,10 +209,19 @@ target_link_libraries(
+ 		Qt5::Widgets
+ 		Qt5::Xml
+ 		Qt5::Network
+-		vcglib
+-		external-glew
++	PRIVATE
+ 		external-easyexif
+ )
++if(TARGET vcglib::vcglib)
++	target_link_libraries(meshlab-common PUBLIC vcglib::vcglib)
++else()
++	target_link_libraries(meshlab-common PUBLIC vcglib)
++endif()
++if(TARGET GLEW::GLEW)
++	target_link_libraries(meshlab-common PUBLIC GLEW::GLEW)
++else()
++	target_link_libraries(meshlab-common PUBLIC external-glew)
++endif()
+ 
+ set_property(TARGET meshlab-common PROPERTY FOLDER Core)
+ 
+@@ -234,4 +244,4 @@ endif()
+ set_target_properties(meshlab-common PROPERTIES
+ 	INSTALL_RPATH "$ORIGIN")
+ 
+-install(TARGETS meshlab-common DESTINATION ${MESHLAB_LIB_INSTALL_DIR})
++install(TARGETS meshlab-common EXPORT meshlabTargets DESTINATION ${MESHLAB_LIB_INSTALL_DIR})
+diff --git a/src/meshlabplugins/io_base/CMakeLists.txt b/src/meshlabplugins/io_base/CMakeLists.txt
+index 7a3137e63..64504d56d 100644
+--- a/src/meshlabplugins/io_base/CMakeLists.txt
++++ b/src/meshlabplugins/io_base/CMakeLists.txt
+@@ -27,4 +27,4 @@ set(SOURCES
+ 
+ add_meshlab_plugin(io_base ${SOURCES} ${HEADERS})
+ 
+-target_link_libraries(io_base PRIVATE OpenGL::GLU)
++target_link_libraries(io_base PRIVATE OpenGL::GLU external-easyexif)

@@ -1,0 +1,21 @@
+diff --git a/src/sage/lfunctions/sympow.py b/src/sage/lfunctions/sympow.py
+index 92cb01fd73..b123e6accc 100644
+--- a/src/sage/lfunctions/sympow.py
++++ b/src/sage/lfunctions/sympow.py
+@@ -50,6 +50,7 @@ from __future__ import print_function, absolute_import
+ 
+ import os
+ 
++from sage.env import DOT_SAGE
+ from sage.structure.sage_object import SageObject
+ from sage.misc.all import pager
+ from sage.misc.verbose import verbose
+@@ -78,7 +79,7 @@ class Sympow(SageObject):
+         """
+         Used to call sympow with given args
+         """
+-        cmd = 'sympow %s' % args
++        cmd = 'env SYMPOW_CACHEDIR="%s/sympow///" sympow %s' % (DOT_SAGE, args)
+         with os.popen(cmd) as f:
+             v = f.read().strip()
+         verbose(v, level=2)

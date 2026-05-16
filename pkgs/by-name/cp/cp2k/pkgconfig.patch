@@ -1,0 +1,14 @@
+diff --git a/cmake/libcp2k.pc.in b/cmake/libcp2k.pc.in
+index 618af55e28..8d08a51a0c 100644
+--- a/cmake/libcp2k.pc.in
++++ b/cmake/libcp2k.pc.in
+@@ -1,7 +1,7 @@
+ prefix="@CMAKE_INSTALL_PREFIX@"
+ exec_prefix="${prefix}"
+-libdir="${prefix}/@CMAKE_INSTALL_LIBDIR@"
+-includedir="${prefix}/@CMAKE_INSTALL_INCLUDEDIR@"
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@"
++includedir="@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+
+ Name: @PROJECT_NAME@
+ Description: @CMAKE_PROJECT_DESCRIPTION@

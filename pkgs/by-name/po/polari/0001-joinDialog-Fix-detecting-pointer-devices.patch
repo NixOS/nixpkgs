@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ball=C3=B3=20Gy=C3=B6rgy?= <ballogyor@gmail.com>
+Date: Fri, 30 Aug 2024 16:44:15 +0000
+Subject: [PATCH] joinDialog: Fix detecting pointer devices
+
+Gtk.get_current_event_device() is not available in GTK4.
+
+Closes: https://gitlab.gnome.org/GNOME/polari/-/issues/209
+---
+ src/serverRoomManager.js | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/src/serverRoomManager.js b/src/serverRoomManager.js
+index 88753648388d..3122a09500d9 100644
+--- a/src/serverRoomManager.js
++++ b/src/serverRoomManager.js
+@@ -3,7 +3,6 @@
+ //
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+-import Gdk from 'gi://Gdk';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+@@ -179,15 +178,23 @@ class ServerRoomList extends Gtk.Box {
+                 this._toggleChecked(this._list.model.get_path(iter));
+         });
+ 
++        let pointerDeviceEvent = false;
++        const clickController = new Gtk.GestureClick();
++        clickController.connect('pressed', (_controller, _nPress, _x, _y) => {
++            pointerDeviceEvent = true;
++        });
++        this._list.add_controller(clickController);
++
+         this._list.connect('row-activated', (view, path, _column) => {
+             this._toggleChecked(path);
++            pointerDeviceEvent = false;
+         });
+ 
+         this._toggleRenderer.connect('toggled', (cell, pathStr) => {
+             // For pointer devices, ::row-activated is emitted as well
+-            const dev = Gtk.get_current_event_device();
+-            if (dev && dev.input_source === Gdk.InputSource.KEYBOARD)
++            if (!pointerDeviceEvent)
+                 this._toggleChecked(Gtk.TreePath.new_from_string(pathStr));
++            pointerDeviceEvent = false;
+         });
+ 
+         this._manager = ServerRoomManager.getDefault();

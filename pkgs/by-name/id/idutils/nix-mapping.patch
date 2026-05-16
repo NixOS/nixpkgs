@@ -1,0 +1,12 @@
+Recognize `.nix' files as text files.
+
+--- idutils-4.5/libidu/id-lang.map	2009-05-17 16:38:42.000000000 +0200
++++ idutils-4.5/libidu/id-lang.map	2010-07-04 15:52:48.000000000 +0200
+@@ -88,6 +88,7 @@ GNUmakefile		make
+ *.doc			text
+ *.txt			text
+ *.org			text
++*.nix			text
+ 
+ *.m4			m4
+ *.ac			m4
