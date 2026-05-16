@@ -17,8 +17,9 @@
 
   testScript = ''
     def verify_user_activation_run_count(n):
-        machine.succeed(
-            '[[ "$(find /home/alice/ -name user-activation-ran.\\* | wc -l)" == %s ]]' % n
+        t.assertEqual(
+            n,
+            int(machine.succeed('find /home/alice/ -name user-activation-ran.\\* | wc -l').rstrip())
         )
 
 
