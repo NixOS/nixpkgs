@@ -31,17 +31,7 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  preCheck = "set -x";
-  checkFlags =
-    let
-      # Skip tests that require network access
-      skippedTests = [
-        "TestHTTPHandlerProxiesWebSocketUpgrade"
-        "TestHTTPConnCtxForwardsConnectionState"
-        "TestHTTPConnCtxConnectionStatePlainTCP"
-      ];
-    in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+  checkFlags = [ "-skip=^netstack2/http_handler_test$" ];
 
   passthru.updateScript = nix-update-script { };
 
