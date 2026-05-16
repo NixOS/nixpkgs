@@ -26,6 +26,6 @@ buildGoModule (finalAttrs: {
     description = "Database client every command line junkie deserves";
     homepage = "https://github.com/danvergara/dblab";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

@@ -10,17 +10,17 @@
 }:
 let
   pname = "proton-pass";
-  version = "1.36.0";
+  version = "1.36.1";
 
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://proton.me/download/pass/linux/x64/proton-pass_${version}_amd64.deb";
-        hash = "sha256-bJgPY0iSRyxsvQ9S9ZL4HyvO8iNY+W4g3ya6L30WIm0=";
+        hash = "sha256-w6q1UWADVxUu8TGVCqzBJvoUlSnJGckvTFs2GKY/WeA=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://proton.me/download/pass/macos/ProtonPass_${version}.dmg";
-        hash = "sha256-PVj629W6n7weKkAJW8xqOAzAlc9jJbsvGL23Yuzc+AQ=";
+        hash = "sha256-JKm5DhIZLj2XXuxWKo48VY4onRypouIJUVV9IK/wJGE=";
       };
       "x86_64-darwin" = passthru.sources."aarch64-darwin";
     };

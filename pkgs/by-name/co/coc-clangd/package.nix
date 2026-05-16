@@ -7,16 +7,16 @@
 
 buildNpmPackage {
   pname = "coc-clangd";
-  version = "0-unstable-2026-05-01";
+  version = "0-unstable-2026-05-11";
 
   src = fetchFromGitHub {
     owner = "clangd";
     repo = "coc-clangd";
-    rev = "1a9f68c7266621fd8cb5aa5863ec63927232fbfc";
-    hash = "sha256-FhJzJAf5jcdYCpPAKlJUNcVb0U8mkAiS5MoCTQpj/mM=";
+    rev = "66f32d29cf40417978514550db1c9a144c5d9f4f";
+    hash = "sha256-rJ6e7xX8H3aN17PzG77W4iNh7xbQdn6Xz+D+4y57FLE=";
   };
 
-  npmDepsHash = "sha256-jPgvi+Wz39d56d0YQSF99HqZ3rYi97kfGv7r0IY5WbY=";
+  npmDepsHash = "sha256-Ypda0+PSYHPg8FK5sJYQkQbHEK1WTn9BoCjaJEGv6cQ=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
