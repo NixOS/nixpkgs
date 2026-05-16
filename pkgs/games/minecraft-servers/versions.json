@@ -1,4 +1,10 @@
 {
+  "26.1": {
+    "sha1": "97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51",
+    "url": "https://piston-data.mojang.com/v1/objects/97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51/server.jar",
+    "version": "26.1.2",
+    "javaVersion": 25
+  },
   "1.21": {
     "sha1": "64bb6d763bed0a9f1d632ec347938594144943ed",
     "url": "https://piston-data.mojang.com/v1/objects/64bb6d763bed0a9f1d632ec347938594144943ed/server.jar",
