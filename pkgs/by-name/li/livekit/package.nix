@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "livekit";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9YWZIZXXphsyYXaBFSUHNyulcBmob7vExkI+LM4DeFY=";
+    hash = "sha256-9G/YEF3sf4e8oat0M38ahO10fVO2UF/nAbrj+edpYCM=";
   };
 
-  vendorHash = "sha256-Fa2GHoXP8jm5aiPXLz9newQR/KAoUgJ3Pv/Bw2IYsrA=";
+  vendorHash = "sha256-unjrXLxtbLZ9kfStCEUcFj8wVJBnpcdvgiPk/bmP1x4=";
 
   subPackages = [ "cmd/server" ];
 
