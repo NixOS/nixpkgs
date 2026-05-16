@@ -592,7 +592,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
-          path = optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
+          path = [ pkgs.shadow ] ++ optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
 
           serviceConfig = {
             ExecStart = "${getExe client.wrapper} service run";
