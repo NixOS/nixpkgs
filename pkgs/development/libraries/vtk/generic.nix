@@ -219,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     gl2ps
   ]
-  # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
+  # create meta package providing dist-info for python3Packages.vtk that common cmake build does not do
   ++ lib.optionals pythonSupport [
     (python3Packages.mkPythonMetaPackage {
       inherit (finalAttrs) pname version meta;
