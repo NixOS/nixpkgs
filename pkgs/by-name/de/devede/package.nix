@@ -33,7 +33,7 @@ buildPythonApplication (finalAttrs: {
   src = fetchFromGitLab {
     owner = "rastersoft";
     repo = "devedeng";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-81H063PpBF/+JDsRgBLwfAevb11yNkDtH4KdtOAL/Fg=";
   };
 
