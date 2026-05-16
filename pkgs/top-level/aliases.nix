@@ -838,6 +838,7 @@ mapAliases {
   gfortran12 = throw "gfortran12 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
   gg = throw "'gg' has been renamed to/replaced by 'go-graft'"; # Converted to throw 2025-10-27
   ggobi = throw "'ggobi' has been removed from Nixpkgs, as it is unmaintained and broken"; # Added 2025-05-18
+  gh-cherry-pick = warnAlias "'gh-cherry-pick' has been renamed to 'ghcherry'" ghcherry; # Added 2026-05-17
   gh-copilot = throw "'gh-copilot' has been removed since it has been deprecated and archived upstream. Consider using 'github-copilot-cli' instead"; # Added 2026-01-20
   gImageReader = gimagereader; # Added 2026-02-08
   gImageReader-qt = gimagereader-qt; # Added 2026-02-08

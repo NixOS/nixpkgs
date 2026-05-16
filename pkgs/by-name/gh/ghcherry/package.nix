@@ -4,15 +4,16 @@
   fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
-  pname = "gh-cherry-pick";
-  version = "1.5.0";
+  pname = "ghcherry";
+  version = "1.6.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PerchunPak";
-    repo = "gh-cherry-pick";
+    repo = "ghcherry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a2vhQ9upJYc+t4Juq+eukNc7dzq6MafNxDUULPZs9sQ=";
+    hash = "sha256-yUsYf0v5IZh4yxkG+nu8cG4L/WcJTFDefc//l4v36sY=";
   };
 
   build-system = with python3Packages; [
@@ -39,13 +40,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "gh_cherry_pick" ];
+  pythonImportsCheck = [ "ghcherry" ];
 
   meta = {
     description = "Cherry-pick commits across GitHub repositories using only the GitHub API";
-    homepage = "https://github.com/PerchunPak/gh-cherry-pick";
-    license = lib.licenses.mit;
+    homepage = "https://github.com/PerchunPak/ghcherry";
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.PerchunPak ];
-    mainProgram = "gh-cherry-pick";
+    mainProgram = "ghcherry";
   };
 })
