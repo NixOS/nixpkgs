@@ -6,6 +6,8 @@
   cmake,
   pkg-config,
   makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
   SDL2,
   glew,
   openal,
@@ -63,6 +65,24 @@ let
     # Not packaged to this date (needed on Darwin)
     "mojoal"
   ];
+
+  desktopItem = makeDesktopItem {
+    name = "supertuxkart";
+    exec = "supertuxkart";
+    icon = "supertuxkart";
+    desktopName = "SuperTuxKart";
+    comment = "3D open-source arcade racer";
+    genericName = "Arcade Racer";
+    categories = [
+      "Game"
+      "ArcadeGame"
+    ];
+    keywords = [
+      "tux"
+      "kart"
+      "race"
+    ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
 
@@ -90,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -132,19 +155,35 @@ stdenv.mkDerivation (finalAttrs: {
     "-include stdexcept"
   ];
 
-  # Extract binary from built app bundle
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/bin
-    mv $out/{supertuxkart.app/Contents/MacOS,bin}/supertuxkart
-    rm -rf $out/supertuxkart.app
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/bin $out/Applications
+      mv $out/supertuxkart.app $out/Applications/SuperTuxKart.app
+      cp $out/Applications/SuperTuxKart.app/Contents/MacOS/supertuxkart \
+        $out/bin/supertuxkart
+      ln -sfn $out/share/supertuxkart/data \
+        $out/Applications/SuperTuxKart.app/Contents/Resources/data
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      for res in 16 32 48 64 128 256 512 1024; do
+        install -Dm644 data/supertuxkart_''${res}.png \
+          $out/share/icons/hicolor/''${res}x''${res}/apps/supertuxkart.png
+      done
+    '';
 
-  # Obtain the assets directly from the fetched store path, to avoid duplicating assets across multiple engine builds
+  # Obtain the assets directly from the fetched store path, to avoid duplicating assets across multiple engine builds.
+  # On Darwin, also patch the copy inside the app bundle so launching via Finder works.
   preFixup = ''
     wrapProgram $out/bin/supertuxkart \
       --set-default SUPERTUXKART_ASSETS_DIR "${assets}" \
       --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp $out/bin/supertuxkart \
+      $out/Applications/SuperTuxKart.app/Contents/MacOS/supertuxkart
   '';
+
+  desktopItems = lib.optional stdenv.hostPlatform.isLinux desktopItem;
 
   meta = {
     description = "3D open-source arcade racer";
