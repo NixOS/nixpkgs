@@ -15,6 +15,7 @@
   stdenv,
   webkitgtk_4_1,
   wirelesstools,
+  wrapGAppsHook3,
   xdg-utils,
 }:
 
@@ -31,13 +32,18 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     dpkg
     makeWrapper
+    wrapGAppsHook3
   ];
 
-  # Only libraries needed for autoPatchelfHook (the desktop binary links against these)
   buildInputs = [
+    glib-networking
     libayatana-appindicator
     webkitgtk_4_1
   ];
+
+  # We wrap wifiman-desktop manually below so we can merge gappsWrapperArgs
+  # with our own PATH/LD_LIBRARY_PATH prefixes in a single wrapProgram call.
+  dontWrapGApps = true;
 
   installPhase =
     let
@@ -113,8 +119,12 @@ ENDSCRIPT
         --replace-warn "@@DAEMONPATH@@" "${daemonPath}"
       chmod +x $out/bin/wifiman-desktopd
 
-      # Wrap the desktop GUI binary
+      # Wrap the desktop GUI binary. gappsWrapperArgs (from wrapGAppsHook3)
+      # contribute XDG_DATA_DIRS, GSETTINGS_SCHEMA_DIR, GI_TYPELIB_PATH, and
+      # GIO_EXTRA_MODULES so the WebKitGTK view finds gschemas/typelibs/TLS
+      # on minimal sessions that don't already populate them globally.
       wrapProgram $out/bin/wifiman-desktop \
+        "''${gappsWrapperArgs[@]}" \
         --prefix PATH : ${
           lib.makeBinPath [
             desktop-file-utils
@@ -125,8 +135,7 @@ ENDSCRIPT
           lib.makeLibraryPath [
             libayatana-appindicator
           ]
-        } \
-        --set GIO_EXTRA_MODULES "${glib-networking}/lib/gio/modules"
+        }
 
       runHook postInstall
     '';
