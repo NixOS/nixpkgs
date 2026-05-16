@@ -903,6 +903,8 @@ rec {
     or (throw "system string '${lib.concatStringsSep "-" l}' has invalid number of hyphen-separated components");
 
   # This should revert the job done by config.guess from the gcc compiler.
+  # Note: this does _not_ verify that the system is valid
+  # `mkSystemFromString` is recommended for external use
   mkSystemFromSkeleton =
     let
       getCpu = name: cpuTypes.${name} or (throw "Unknown CPU type: ${name}");
@@ -960,9 +962,9 @@ rec {
       };
 
     in
-    mkSystem parsed;
+    parsed;
 
-  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s));
+  mkSystemFromString = s: mkSystem (mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s)));
 
   kernelName =
     kernel: if kernel ? version then kernel.name + toString kernel.version else kernel.name;
