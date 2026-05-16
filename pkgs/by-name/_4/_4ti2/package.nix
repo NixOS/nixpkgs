@@ -5,6 +5,7 @@
   autoreconfHook,
   glpk,
   gmp,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +18,12 @@ stdenv.mkDerivation rec {
     rev = "Release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-gbYG55LfVhjJJFJu0L8AWIAnFDViHIW2N1qtS8xOFAc=";
   };
+
+  postPatch = ''
+    substituteInPlace src/{groebner/script.template.in,zsolve/{graver,hilbert}.template} \
+      --replace-fail 'SCRIPT=$(realpath $(which "$0"))' \
+                     'SCRIPT=$(realpath $(${lib.getExe which} "$0"))'
+  '';
 
   nativeBuildInputs = [
     autoreconfHook

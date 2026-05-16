@@ -39190,10 +39190,10 @@ with self;
 
   YAMLSyck = buildPerlPackage {
     pname = "YAML-Syck";
-    version = "1.36";
+    version = "1.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.36.tar.gz";
-      hash = "sha256-Tc2dmzsM48ZaL/K5tMb/+LZJ/fJDv9fhiJVDvs25GlI=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.45.tar.gz";
+      hash = "sha256-8t4a+08MVsNubVJgqgvSyPGOTYUAnc9YQiBOoqf7w98=";
     };
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
