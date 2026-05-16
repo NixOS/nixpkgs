@@ -1,13 +1,13 @@
 diff --git a/renpy/exports/__init__.py b/renpy/exports/__init__.py
-index 7265f1b32..dc0d0acc1 100644
+index f95c8d0ad..e312c99c5 100644
 --- a/renpy/exports/__init__.py
 +++ b/renpy/exports/__init__.py
-@@ -573,6 +573,7 @@ from renpy.exports.scriptexports import (
-     load_language,
-     load_module,
-     load_string,
-+    loaded_modules,
-     munged_filename,
+@@ -578,6 +578,7 @@ from renpy.exports.scriptexports import (
+     load_language as load_language,
+     load_module as load_module,
+     load_string as load_string,
++    loaded_modules as loaded_modules,
+     munged_filename as munged_filename,
  )
  
 diff --git a/renpy/main.py b/renpy/main.py

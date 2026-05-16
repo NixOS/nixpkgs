@@ -3,6 +3,11 @@
 
 set -euo pipefail
 
+# so that update bot doesn't try to update renpyMinimal
+if [[ -n "${UPDATE_NIX_ATTR_PATH:-}" ]] && [[ "${UPDATE_NIX_ATTR_PATH:-}" != renpy ]];
+  exit
+fi
+
 attr() {
   nix-instantiate --eval -A renpy.$1 | tr -d '"'
 }
