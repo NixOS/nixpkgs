@@ -147,7 +147,6 @@ with haskellLib;
     self.extra
     self.ghc-paths
     self.silently
-    self.syb
     self.HUnit
   ] super.ghc-exactprint_1_14_0_0;
 

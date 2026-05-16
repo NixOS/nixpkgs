@@ -87,15 +87,6 @@ with haskellLib;
     '';
   }) super.cpphs;
   cabal-install-parsers = doJailbreak super.cabal-install-parsers; # base, Cabal-syntax, etc.
-  ghc-exactprint_1_12_0_0 = addBuildDepends [
-    # cabal2nix drops conditional block: impl (ghc >= 9.12)
-    self.Diff
-    self.extra
-    self.ghc-paths
-    self.silently
-    self.syb
-    self.HUnit
-  ] super.ghc-exactprint_1_12_0_0;
   timezone-series = doJailbreak super.timezone-series; # time <1.14
   timezone-olson = doJailbreak super.timezone-olson; # time <1.14
   cabal-plan = doJailbreak super.cabal-plan; # base <4.21

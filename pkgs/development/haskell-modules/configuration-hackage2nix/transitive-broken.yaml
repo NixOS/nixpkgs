@@ -649,7 +649,6 @@ dont-distribute-packages:
  - darcswatch
  - darkplaces-demo
  - darkplaces-rcon-util
- - dash-haskell
  - data-basic
  - data-cycle
  - data-default-extra
@@ -1262,7 +1261,6 @@ dont-distribute-packages:
  - hackage2twitter
  - hackmanager
  - haddock
- - haddocset
  - hadoop-tools
  - haggis
  - hails-bin
@@ -1326,7 +1324,6 @@ dont-distribute-packages:
  - haskell-aliyun
  - haskell-bitmex-client
  - haskell-debugger
- - haskell-docs
  - haskell-eigen-util
  - haskell-ftp
  - haskell-lsp
@@ -1435,7 +1432,6 @@ dont-distribute-packages:
  - hdbi-tests
  - hdiff
  - hdirect
- - hdocs
  - hdph
  - heart-app
  - heatitup
