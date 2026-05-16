@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gloox-config";
     homepage = "http://camaya.net/gloox";
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.philocalyst ];
     platforms = lib.platforms.unix;
   };
 })
