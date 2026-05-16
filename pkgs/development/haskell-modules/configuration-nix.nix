@@ -1272,6 +1272,8 @@ builtins.intersectAttrs super {
           ln -sf git-annex git-remote-tor-annex
           PATH+=":$PWD"
 
+          checkFlagsArray+=("-J$NIX_BUILD_CORES")
+
           echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
 
           # Doesn't use Cabal's test mechanism
