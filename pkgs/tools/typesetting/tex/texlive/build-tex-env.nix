@@ -40,8 +40,8 @@ lib.fix (
     finalAttrs:
 
     let
-      withDocs = finalAttrs.passthru.withDocs or false;
-      withSources = finalAttrs.passthru.withSources or false;
+      withDocs = finalAttrs.withDocs or false;
+      withSources = finalAttrs.withSources or false;
 
       # if necessary, convert old style { pkgs = [ ... ]; } packages to attribute sets
       isOldPkgList = p: !p.outputSpecified or false && p ? pkgs && builtins.all (p: p ? tlType) p.pkgs;
@@ -317,8 +317,6 @@ lib.fix (
           let
             # arguments of buildTeXEnv before deprecation of __overrideTeXConfig
             prevArgs = {
-              withDocs = finalAttrs.passthru.withDocs or false;
-              withSources = finalAttrs.passthru.withSources or false;
               inherit (finalAttrs)
                 __combine
                 ;
@@ -328,22 +326,27 @@ lib.fix (
                 __extraVersion
                 __fromCombineWrapper
                 ;
-            };
+            }
+            // lib.optionalAttrs (finalAttrs ? withDocs) { inherit (finalAttrs) withDocs; }
+            // lib.optionalAttrs (finalAttrs ? withSources) { inherit (finalAttrs) withSources; };
             appliedArgs = prevArgs // (if builtins.isFunction newArgs then newArgs prevArgs else newArgs);
           in
-          finalAttrs.finalPackage.overrideAttrs (prevAttrs: {
-            passthru = prevAttrs.passthru // {
-              inherit (appliedArgs)
-                withDocs
-                withSources
-                requiredTeXPackages
-                __extraName
-                __extraVersion
-                ;
-              __fromCombineWrapper = false;
-            };
-            inherit (appliedArgs) __combine;
-          })
+          finalAttrs.finalPackage.overrideAttrs (
+            prevAttrs:
+            {
+              passthru = prevAttrs.passthru // {
+                inherit (appliedArgs)
+                  requiredTeXPackages
+                  __extraName
+                  __extraVersion
+                  ;
+                __fromCombineWrapper = false;
+              };
+              inherit (appliedArgs) __combine;
+            }
+            // lib.optionalAttrs (appliedArgs ? withDocs) { inherit (appliedArgs) withDocs; }
+            // lib.optionalAttrs (appliedArgs ? withSources) { inherit (appliedArgs) withSources; }
+          )
         );
         withPackages =
           reqs:

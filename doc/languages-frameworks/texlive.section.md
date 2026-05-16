@@ -42,13 +42,11 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   ```
   Note that the packages in `texlive.pkgs` are only provided for search purposes and must not be used directly.
 
-- **Experimental and subject to change without notice:** to add the documentation for all packages in the environment, use
+- To add the documentation for all packages in the environment, use
   ```nix
-  texliveSmall.__overrideTeXConfig { withDocs = true; }
+  texliveSmall.overrideAttrs { withDocs = true; }
   ```
-  This can be applied before or after calling `withPackages`.
-
-  The function currently supports the parameters `withDocs`, `withSources`, and `requireTeXPackages`.
+  This can be applied before or after calling `withPackages`. The parameter `withSources` adds all source containers.
 
 ## User's guide {#sec-language-texlive-user-guide}
 
