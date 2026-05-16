@@ -66,14 +66,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.72.0";
+  version = "2.73.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HlpaKDX/w6g6q8nOB8G83q4/ffgymk/XyTpwYVpbd2U=";
+    hash = "sha256-0xdz4pxyiXYgIe3+Rb+prgVMjWHQnTSFn504mdMD3Xg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/sdks/python";
