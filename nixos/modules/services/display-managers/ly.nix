@@ -62,9 +62,9 @@ let
     let
       origCfgFile = iniFmt.generate "config.ini" { globalSection = finalConfig; };
     in
-    pkgs.runCommand "validated-config.ini" ''
+    pkgs.runCommand "validated-config.ini" { } ''
       cat ${origCfgFile} > $out
-      ${lib.getExe ly} validate $out
+      ${lib.getExe ly} --validate-config $out
     '';
 in
 {
