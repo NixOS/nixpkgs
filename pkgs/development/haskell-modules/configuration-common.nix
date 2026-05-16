@@ -3344,35 +3344,3 @@ with haskellLib;
     ];
   }
 )
-
-# 2026-04-01: IHP packages need hasql >= 1.10 (via hasql-mapping).
-# The scope renames hasql-stack attrs to the 1.10 line and unmarks
-# hasql-mapping, which only builds against hasql >= 1.10 and so stays
-# broken at the top level. dontCheck for tests that need a live
-# PostgreSQL lives in configuration-nix.nix on the versioned attrs.
-// (
-  let
-    ihpHasqlScope = self: super: {
-      hasql-mapping = doDistribute (unmarkBroken super.hasql-mapping);
-      postgresql-simple-postgresql-types = doDistribute (
-        unmarkBroken super.postgresql-simple-postgresql-types
-      );
-    };
-
-    ihpPackages = [
-      "ihp"
-      "ihp-datasync"
-      "ihp-graphql"
-      "ihp-hspec"
-      "ihp-ide"
-      "ihp-job-dashboard"
-      "ihp-migrate"
-      "ihp-pglistener"
-      "ihp-ssc"
-      "ihp-typed-sql"
-    ];
-  in
-  lib.genAttrs ihpPackages (
-    name: haskellLib.doDistribute (haskellLib.unmarkBroken (super.${name}.overrideScope ihpHasqlScope))
-  )
-)

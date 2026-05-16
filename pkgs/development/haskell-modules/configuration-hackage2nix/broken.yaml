@@ -2627,7 +2627,6 @@ broken-packages:
   - hasql-explain-tests # failure in job https://hydra.nixos.org/build/233247034 at 2023-09-02
   - hasql-generate # failure in job https://hydra.nixos.org/build/324107360 at 2026-03-15
   - hasql-generic # failure in job https://hydra.nixos.org/build/233204654 at 2023-09-02
-  - hasql-mapping # failure in job https://hydra.nixos.org/build/324107379 at 2026-03-15
   - hasql-migration # failure in job https://hydra.nixos.org/build/295094132 at 2025-04-22
   - hasql-mover # failure in job https://hydra.nixos.org/build/295094128 at 2025-04-22
   - hasql-pipes # failure in job https://hydra.nixos.org/build/295094119 at 2025-04-22
@@ -3295,7 +3294,6 @@ broken-packages:
   - ihaskell-parsec # failure in job https://hydra.nixos.org/build/233244271 at 2023-09-02
   - ihaskell-plot # failure in job https://hydra.nixos.org/build/233255936 at 2023-09-02
   - ihaskell-widgets # failure in job https://hydra.nixos.org/build/265955663 at 2024-07-14
-  - ihp-pglistener # failure in job https://hydra.nixos.org/build/325267877 at 2026-04-12
   - illuminate # failure in job https://hydra.nixos.org/build/233219478 at 2023-09-02
   - image-type # failure in job https://hydra.nixos.org/build/233251466 at 2023-09-02
   - imagemagick # failure in job https://hydra.nixos.org/build/233598237 at 2023-09-02
@@ -4978,7 +4976,6 @@ broken-packages:
   - postgresql-simple-interval # failure in job https://hydra.nixos.org/build/307611243 at 2025-09-19
   - postgresql-simple-named # failure in job https://hydra.nixos.org/build/233202481 at 2023-09-02
   - postgresql-simple-opts # failure in job https://hydra.nixos.org/build/252718901 at 2024-03-16
-  - postgresql-simple-postgresql-types # failure in job https://hydra.nixos.org/build/327522032 at 2026-04-30
   - postgresql-simple-sop # failure in job https://hydra.nixos.org/build/233249757 at 2023-09-02
   - postgresql-simple-url # failure in job https://hydra.nixos.org/build/295096191 at 2025-04-22
   - postgresql-tx # failure in job https://hydra.nixos.org/build/252717914 at 2024-03-16

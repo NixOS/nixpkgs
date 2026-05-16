@@ -1422,7 +1422,6 @@ dont-distribute-packages:
  - hasloGUI
  - hasql-postgres
  - hasql-postgres-options
- - hasql-postgresql-types
  - hasql-queue
  - hasql-streams-core
  - hasql-streams-example
