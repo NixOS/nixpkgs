@@ -207,7 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       ttuegel
-      lnl7
     ];
     platforms = lib.platforms.all;
     mainProgram = "cmake";

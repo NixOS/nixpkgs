@@ -139,6 +139,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/python/mypy";
     license = lib.licenses.mit;
     mainProgram = "mypy";
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
   };
 }

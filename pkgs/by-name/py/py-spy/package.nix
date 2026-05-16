@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/benfred/py-spy";
     changelog = "https://github.com/benfred/py-spy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # https://github.com/benfred/py-spy/pull/330
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
