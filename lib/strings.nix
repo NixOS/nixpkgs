@@ -1742,9 +1742,7 @@ rec {
   splitString =
     sep: s:
     let
-      splits = builtins.filter builtins.isString (
-        builtins.split (escapeRegex (toString sep)) (toString s)
-      );
+      splits = filter isString (split (escapeRegex (toString sep)) (toString s));
     in
     map (addContextFrom s) splits;
 
