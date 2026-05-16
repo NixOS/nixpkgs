@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "scrot";
   version = "1.12.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "scrot";
