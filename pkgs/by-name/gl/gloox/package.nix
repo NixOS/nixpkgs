@@ -19,6 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-WRvRLCSe3gtQoe9rmawN6O+cG6T9Lhhvl6dAIVzFlmw=";
   };
 
+  patches = [
+    # Clang rejects `{ 0 }` as SSL_export_keying_material's context pointer
+    # argument. Use a plain `0` rather than `nullptr`: gloox's ./configure
+    # unconditionally adds `-ansi` (C++98) on all non-Windows platforms, and
+    # while Clang tolerates `nullptr` there as an extension, GCC hard-errors
+    # on it as an undeclared identifier.
+    ./tls-openssl-clang.patch
+  ];
+
   # needed since gcc12
   postPatch = ''
     sed '1i#include <ctime>' -i \
@@ -39,7 +48,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    # The last successful Darwin Hydra build was in 2023
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
