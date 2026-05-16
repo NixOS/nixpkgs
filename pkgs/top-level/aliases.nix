@@ -1848,6 +1848,7 @@ mapAliases {
   rofi-emoji-wayland = throw "'rofi-emoji-wayland' has been merged into `rofi-emoji as 'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
   rofi-wayland = throw "'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
   rofi-wayland-unwrapped = throw "'rofi-wayland-unwrapped' has been merged into 'rofi-unwrapped'"; # Added 2025-09-06
+  roon-bridge = throw "'roon-bridge' has been removed from nixpkgs due to lack of maintenance"; # Added 2026-05-16
   root5 = throw "root5 has been removed from nixpkgs because it's a legacy version"; # Added 2025-07-17
   rote = throw "rote has been removed due to lack of upstream maintenance"; # Added 2025-09-10
   rott = throw "'rott' has been dropped in favor of its maintained fork 'taradino'"; # Added 2026-01-25
