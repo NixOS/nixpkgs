@@ -704,13 +704,6 @@ with haskellLib;
           --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
                          'InstallDesktopFile git-annex'
       '';
-
-      # Work around race condition in test suite exposed by tasty-1.5.4
-      # TODO(@sternenseemann): make testFlags arg usable with git-annex
-      preCheck = ''
-        ${drv.preCheck or ""}
-        appendToVar checkFlags -j1
-      '';
     }))
   ];
 
