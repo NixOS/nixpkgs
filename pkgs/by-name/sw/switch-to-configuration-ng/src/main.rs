@@ -169,6 +169,15 @@ impl UnitScope {
         })
     }
 
+    /// Absolute path to the currently-active unit directory for units installed via
+    /// `systemd.packages`.
+    fn units_from_pkgs_dir(&self) -> &'static Path {
+        Path::new(match self {
+            UnitScope::System => "/run/current-system/sw/share/systemd/system",
+            UnitScope::User => "/run/current-system/sw/share/systemd/user",
+        })
+    }
+
     /// Directory where unit action lists are persisted for
     /// resume-after-interrupt. The user scope uses XDG_RUNTIME_DIR so the
     /// unprivileged child can write to it.
@@ -1350,6 +1359,10 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         .current_dir()
         .to_str()
         .expect("scope dir is valid UTF-8");
+    let fragment_prefix_packages = scope
+        .units_from_pkgs_dir()
+        .to_str()
+        .expect("units_from_pkgs_dir is valid UTF-8");
 
     // Units that are currently running from a non-/etc location (typically
     // ~/.config/systemd/user, i.e. home-manager) but that the new NixOS
@@ -1363,7 +1376,9 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             !unit_state
                 .proxy
                 .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-                .map(|p: String| p.starts_with(fragment_prefix))
+                .map(|p: String| {
+                    p.starts_with(fragment_prefix) || p.starts_with(fragment_prefix_packages)
+                })
                 .unwrap_or(false)
         })
         .map(|(unit, _)| unit.clone())
