@@ -39,27 +39,27 @@ let
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "3f17b2af6784bfa2c5aa5dbb8e0e74a607dd8b3b";
-    hash = "sha256-MCQ+i9ymjnxRZP/Agk7rOGdHcB4p67jT4J4athWUlcI=";
+    rev = "babee77020ff82b571d723ce2c0262e2ec0ee3f1";
+    hash = "sha256-GWcNNw08XoKaZs/BTW9nPAEMHL8wqbhbUm56PUtEan4=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "13b59bf1d84054b8ccd29cdc6b1303f69e8f9e77";
-    hash = "sha256-k/mTHiLbZdnslC24fjcrzqsZYMyVaAADGEqngqJcC2c=";
+    rev = "4c1ae3cd6f9076271cd64acde8cbef1d1287f27f";
+    hash = "sha256-x7OXe0q9ml8PIxWyTEx3j3tvSgIPp8kg5HwlLWIzNuk=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amber";
-  version = "0-unstable-2025-02-03";
+  version = "0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "amber";
-    rev = "3f078e41d86ca1a5881560f00e26198f59bb8ac0";
-    hash = "sha256-pAotVFmtEGp9GKmDD0vrbfbO+Xt2URmM8gYCjl0LEnk=";
+    rev = "fc02f9bad7ddaf5ca685ad01c3a0668d19910fbf";
+    hash = "sha256-en+q6pLBTiVRg5XdP2qmPfkPnywYqEOsm2/er3m75Jw=";
   };
 
   buildInputs = [
