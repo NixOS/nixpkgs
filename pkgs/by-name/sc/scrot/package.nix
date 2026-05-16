@@ -12,6 +12,7 @@
   libxinerama,
   pkg-config,
   libbsd,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libbsd
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
