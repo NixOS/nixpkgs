@@ -14219,6 +14219,8 @@ self: super: with self; {
 
   pulumiverse-talos = pkgs.pulumiPackages.pulumiverse-talos.sdks.python;
 
+  punq = callPackage ../development/python-modules/punq { };
+
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
   pure-eval = callPackage ../development/python-modules/pure-eval { };
