@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "scrot";
-    rev = finalAttrs.version;
-    sha256 = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
+    tag = finalAttrs.version;
+    hash = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
   };
 
   nativeBuildInputs = [
