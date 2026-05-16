@@ -5,22 +5,35 @@
   coreutils,
   makeWrapper,
   gitUpdater,
+  ant-bootstrap,
+  jdk,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "ant";
   version = "1.10.17";
 
-  nativeBuildInputs = [ makeWrapper ];
-
   src = fetchurl {
-    url = "mirror://apache/ant/binaries/apache-ant-${finalAttrs.version}-bin.tar.bz2";
-    hash = "sha256-UhD8nXfpa/X0Y5KH8pgm2oXlSlQuCkCUY7FkK8PKruc=";
+    url = "mirror://apache/ant/source/apache-ant-${finalAttrs.version}-src.tar.bz2";
+    hash = "sha256-WPU+khKoAFW/FOknicf1BCBqs1uLw5dfo7cocg2A79c=";
   };
 
+  nativeBuildInputs = [
+    makeWrapper
+    ant-bootstrap
+    jdk
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    ant dist -Djavadoc.notrequired=true
+    runHook postBuild
+  '';
+
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share/ant
-    mv * $out/share/ant/
+    # ant dist puts the distribution in apache-ant-${finalAttrs.version}/ directory
+    cp -r apache-ant-${finalAttrs.version}/* $out/share/ant/
 
     # Get rid of the manual (35 MiB).  Maybe we should put this in a
     # separate output.  Keep the antRun script since it's vanilla sh
@@ -77,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     chmod +x $out/bin/ant
+    runHook postInstall
   '';
 
   passthru = {
@@ -113,7 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
       by an object that implements a particular Task interface.
     '';
 
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [
+      # Ant source comes with prebuilt JUnit jars
+      binaryBytecode
+    ];
     license = lib.licenses.asl20;
     teams = [ lib.teams.java ];
     platforms = lib.platforms.all;
