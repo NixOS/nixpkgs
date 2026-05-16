@@ -21,7 +21,7 @@
 /ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
-/.editorconfig @Mic92 @zowoq
+/.editorconfig @Mic92
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
@@ -219,10 +219,10 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/development/r-modules         @jbedo
 
 # Rust
-/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt
-/pkgs/build-support/rust @zowoq @winterqt
+/pkgs/development/compilers/rust @alyssais @Mic92 @winterqt
+/pkgs/build-support/rust @winterqt
 /pkgs/build-support/rust/fetch-cargo-vendor* @TomaSajt
-/doc/languages-frameworks/rust.section.md @zowoq @winterqt
+/doc/languages-frameworks/rust.section.md @winterqt
 
 # Tcl
 /pkgs/development/interpreters/tcl  @fgaz
