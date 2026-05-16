@@ -112,7 +112,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   patches = [
     ./skills-in-store.patch
-    ./0001-show-request-origin.patch
   ];
 
   meta = {
