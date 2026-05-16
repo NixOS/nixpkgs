@@ -40,9 +40,6 @@ lib.fix (
     finalAttrs:
 
     let
-      withDocs = finalAttrs.withDocs or false;
-      withSources = finalAttrs.withSources or false;
-
       # if necessary, convert old style { pkgs = [ ... ]; } packages to attribute sets
       isOldPkgList = p: !p.outputSpecified or false && p ? pkgs && builtins.all (p: p ? tlType) p.pkgs;
       ensurePkgSets =
@@ -133,13 +130,13 @@ lib.fix (
                 lib.concatMap (
                   p:
                   lib.optional (p ? tex) p.tex
-                  ++ lib.optional ((withDocs || p ? man) && p ? texdoc) p.texdoc
-                  ++ lib.optional (withSources && p ? texsource) p.texsource
+                  ++ lib.optional ((finalAttrs.withDocs || p ? man) && p ? texdoc) p.texdoc
+                  ++ lib.optional (finalAttrs.withSources && p ? texsource) p.texsource
                 ) specified.wrong
               else
                 otherOutputs.tex or [ ]
-                ++ lib.optionals withDocs (otherOutputs.texdoc or [ ])
-                ++ lib.optionals withSources (otherOutputs.texsource or [ ])
+                ++ lib.optionals finalAttrs.withDocs (otherOutputs.texdoc or [ ])
+                ++ lib.optionals finalAttrs.withSources (otherOutputs.texsource or [ ])
             )
             ++ specifiedOutputs.tex or [ ]
             ++ specifiedOutputs.texdoc or [ ]
@@ -260,9 +257,9 @@ lib.fix (
       meta = {
         description =
           "TeX Live environment"
-          + lib.optionalString withDocs " with documentation"
-          + lib.optionalString (withDocs && withSources) " and"
-          + lib.optionalString withSources " with sources";
+          + lib.optionalString finalAttrs.withDocs " with documentation"
+          + lib.optionalString (finalAttrs.withDocs && finalAttrs.withSources) " and"
+          + lib.optionalString finalAttrs.withSources " with sources";
         platforms = lib.platforms.all;
         longDescription =
           "Contains the following packages and their transitive dependencies:\n - "
@@ -508,6 +505,10 @@ lib.fix (
         languageLua = assembleConfigLines langLuaLines pkgList.sortedHyphenPatterns;
 
         postactionScripts = builtins.catAttrs "postactionScript" pkgList.tlpkg;
+
+        # whethe to include doc, source containers
+        withDocs = false;
+        withSources = false;
 
         allowSubstitutes = true;
         preferLocalBuild = false;
