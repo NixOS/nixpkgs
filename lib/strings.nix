@@ -1596,7 +1596,7 @@ rec {
           firstChar = substring 0 1 str;
           rest = substring 1 (-1) str; # -1 takes till the end of the string
         in
-        addContextFrom str (toUpper firstChar + toLower rest)
+        toUpper firstChar + toLower rest
       );
 
   /**
@@ -1653,7 +1653,7 @@ rec {
         first = if length parts > 0 then toLower (head parts) else "";
         rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
       in
-      concatStrings (map (addContextFrom str) ([ first ] ++ rest))
+      concatStrings ([ first ] ++ rest)
     );
 
   /**
