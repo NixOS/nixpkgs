@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pynput";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pynput";
     tag = "v${version}";
-    hash = "sha256-rOkUyreS3JqEyubQUdNLJf5lDuFassDKrQrUXKrKlgI=";
+    hash = "sha256-LoolcMYzurJrR7HR1qDO+dvLwP1l9P3+QOzI7uwLdso=";
   };
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
