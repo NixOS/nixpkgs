@@ -48,13 +48,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "26.0.1";
+  version = "26.1.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u9sipDwTBhhvcyEcdBUZjtg70a76g2e4ub+vPKzOKg8=";
+    hash = "sha256-0bdomxjx+Qwvxu6NWUTYbLvoKwCvM0e5I3qwhKLEecM=";
     fetchSubmodules = true;
   };
 
