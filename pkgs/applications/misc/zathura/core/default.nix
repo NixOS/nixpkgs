@@ -28,11 +28,15 @@
   librsvg,
   gtk-mac-integration,
   webp-pixbuf-loader,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
   version = "2026.02.09";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pwmt";
@@ -101,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = gitUpdater { };
 
