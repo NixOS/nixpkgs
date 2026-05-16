@@ -84,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ok = callPackage ./tests/ok.nix { };
     fail = callPackage ./tests/fail.nix { };
     fail-emptyDirectory = callPackage ./tests/fail-emptyDirectory.nix { };
+    fail-rootRelative = callPackage ./tests/fail-rootRelative.nix { };
     network = testers.runNixOSTest ./tests/network.nix;
   };
 
