@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   attrs,
   pillow,
   toml,
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "clickgen";
   version = "2.2.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ful1e5";
@@ -24,7 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-yFEkE1VyeHBuebpsumc6CTvv2kpAw7XAWlyUlXibqz0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     attrs
     numpy
     pillow
