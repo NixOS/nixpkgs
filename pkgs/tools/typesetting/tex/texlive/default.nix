@@ -231,7 +231,7 @@ let
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
-    inherit bin tl;
+    inherit tl;
     inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
@@ -242,9 +242,7 @@ let
       makeWrapper
       runCommand
       writeShellScript
-      writeText
       toTLPkgSets
-      bash
       perl
       coreutils
       gawk
