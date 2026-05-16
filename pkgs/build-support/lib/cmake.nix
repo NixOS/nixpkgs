@@ -1,22 +1,20 @@
 { stdenv, lib }:
 
 let
-  inherit (lib)
-    findFirst
-    isString
-    optional
-    optionals
-    ;
+  inherit (lib) optionals;
+  systemName =
+    platform:
+    with platform;
+    if isCygwin then
+      "CYGWIN"
+    else if isRedox then
+      "Generic"
+    else
+      uname.system;
 
   cmakeFlags' = optionals (stdenv.hostPlatform != stdenv.buildPlatform) (
     [
-      "-DCMAKE_SYSTEM_NAME=${
-        findFirst isString "Generic" (
-          # uname -s is CYGWIN_NT[...] on cygwin, but cmake expects CYGWIN
-          optional (stdenv.hostPlatform.isCygwin) "CYGWIN"
-          ++ optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system
-        )
-      }"
+      "-DCMAKE_SYSTEM_NAME=${systemName stdenv.hostPlatform}"
     ]
     ++ optionals (stdenv.hostPlatform.uname.processor != null) [
       "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
