@@ -45,6 +45,8 @@ stdenv.mkDerivation {
     )
   '';
 
+  NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildPhase = ''
     runHook preBuild
     for makefile in "''${makeFiles[@]}"; do

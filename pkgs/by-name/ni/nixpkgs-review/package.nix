@@ -26,6 +26,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "3.8.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";

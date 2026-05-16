@@ -3,7 +3,7 @@
 let
   inherit (lib)
     any
-    foldl
+    foldl'
     hasInfix
     isAttrs
     isList
@@ -692,7 +692,7 @@ let
       };
     in
     assert final.useAndroidPrebuilt -> final.isAndroid;
-    assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true (
+    assert foldl' (pass: { assertion, message }: if assertion final then pass else throw message) true (
       final.parsed.abi.assertions or [ ]
     );
     final;
