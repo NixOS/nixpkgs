@@ -64,7 +64,10 @@ let
     in
     pkgs.runCommand "validated-config.ini" { } ''
       cat ${origCfgFile} > $out
-      ${lib.getExe ly} --validate-config $out
+      if ! ${lib.getExe ly} --validate-config $out; then
+        echo "Your generated configuration is invalid blah blah"
+        exit 1
+      fi
     '';
 in
 {
