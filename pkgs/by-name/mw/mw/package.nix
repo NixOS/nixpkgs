@@ -32,6 +32,6 @@ buildNpmPackage rec {
       Markwhen is an interactive text-to-timeline tool. Write markdown-ish text and it gets converted into a nice looking cascading timeline.
     '';
     mainProgram = "mw";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 }

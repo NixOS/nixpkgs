@@ -252,7 +252,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://windmill.dev";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      dit7ya
       happysalada
     ];
     mainProgram = "windmill";

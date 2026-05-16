@@ -101,8 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/woelper/oculante/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "oculante";
-    maintainers = with lib.maintainers; [
-      dit7ya
+    maintainers = [
     ];
   };
 })

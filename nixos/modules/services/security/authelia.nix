@@ -490,7 +490,6 @@ in
 
   meta.maintainers = with lib.maintainers; [
     jk
-    dit7ya
     nicomem
     connor-grady
   ];
