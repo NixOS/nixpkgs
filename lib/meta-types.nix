@@ -1,6 +1,7 @@
 { lib }:
 # Simple internal type checks for meta.
-# This file is not a stable interface and may be changed arbitrarily.
+# This file is only intended for internal nixpkgs use.
+# It is not a stable interface and may be changed arbitrarily.
 #
 # TODO: add a method to the module system types
 #       see https://github.com/NixOS/nixpkgs/pull/273935#issuecomment-1854173100
