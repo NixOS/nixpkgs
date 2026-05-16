@@ -13059,6 +13059,8 @@ self: super: with self; {
 
   propka = callPackage ../development/python-modules/propka { };
 
+  prosemble = callPackage ../development/python-modules/prosemble { };
+
   prosemirror = callPackage ../development/python-modules/prosemirror { };
 
   protego = callPackage ../development/python-modules/protego { };

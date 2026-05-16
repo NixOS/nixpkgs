@@ -19116,6 +19116,12 @@
     github = "Naora";
     githubId = 2221163;
   };
+  naotoo1 = {
+    name = "Nana Abeka Otoo";
+    email = "nanaabekaotoo@gmail.com";
+    github = "naotoo1";
+    githubId = 82911284;
+  };
   naphta = {
     github = "naphta";
     githubId = 6709831;
