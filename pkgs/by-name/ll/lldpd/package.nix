@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchurl,
+  fetchpatch,
   lib,
   libevent,
   net-snmp,
@@ -18,6 +19,15 @@ stdenv.mkDerivation rec {
     url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
     hash = "sha256-YbjLItSHnmj3glovuOHpKrtKukdzl3zwJYvDLtn1VFA=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/lldpd/lldpd/security/advisories/GHSA-2g8p-2h3j-63m3
+      name = "CVE-2026-46433.patch";
+      url = "https://github.com/lldpd/lldpd/commit/ca931be63a9cae0fcd8e9b6ae4e916d49f141cd6.patch";
+      hash = "sha256-Zy0vp3OnFjb6f8BUsd3p+SNI2jGPr60OJviLDf/F9mU=";
+    })
+  ];
 
   configureFlags = [
     "--localstatedir=/var"
