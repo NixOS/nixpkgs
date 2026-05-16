@@ -9547,7 +9547,7 @@ with pkgs;
 
   okteta = kdePackages.callPackage ../applications/editors/okteta { };
 
-  klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+  klayout = qt6Packages.callPackage ../applications/misc/klayout { };
 
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
@@ -10201,8 +10201,6 @@ with pkgs;
       {
         stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
       };
-
-  termdown = python3Packages.callPackage ../applications/misc/termdown { };
 
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;
 
@@ -11482,8 +11480,6 @@ with pkgs;
   faissWithCuda = faiss.override {
     cudaSupport = true;
   };
-
-  gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
 
   megam = callPackage ../applications/science/misc/megam {
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;

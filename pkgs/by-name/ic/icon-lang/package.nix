@@ -3,22 +3,24 @@
   stdenv,
   fetchFromGitHub,
   libx11,
+  libxpm,
   libxt,
   withGraphics ? true,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icon-lang";
-  version = "unstable-2020-02-05";
+  version = "9.5.25a";
   src = fetchFromGitHub {
     owner = "gtownsend";
     repo = "icon";
-    rev = "829cff33de4a21546fb269de3ef5acd7b4f0c0c7";
-    sha256 = "1lj2f13pbaajcy4v3744bz46rghhw5sv4dwwfnzhsllbj5gnjsv2";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-COXB03j5keTaRP/ggOU4065NFk3bmK5NTSet4CBGFSM=";
   };
 
   buildInputs = lib.optionals withGraphics [
     libx11
+    libxpm
     libxt
   ];
 
@@ -57,4 +59,4 @@ stdenv.mkDerivation {
     license = lib.licenses.publicDomain;
     homepage = "https://www.cs.arizona.edu/icon/";
   };
-}
+})

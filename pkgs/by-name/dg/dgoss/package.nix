@@ -8,7 +8,7 @@
   which,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "dgoss";
   version = goss.version;
   src = goss.src;
@@ -37,8 +37,8 @@ resholve.mkDerivation rec {
   };
 
   meta = {
-    homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
-    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
+    homepage = "https://github.com/goss-org/goss/blob/v${finalAttrs.version}/extras/dgoss/README.md";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${finalAttrs.version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
@@ -48,4 +48,4 @@ resholve.mkDerivation rec {
     ];
     mainProgram = "dgoss";
   };
-}
+})
