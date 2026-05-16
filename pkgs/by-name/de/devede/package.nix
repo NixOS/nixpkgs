@@ -69,6 +69,13 @@ buildPythonApplication (finalAttrs: {
       --replace "/usr/local/share" "$out/share"
   '';
 
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = {
