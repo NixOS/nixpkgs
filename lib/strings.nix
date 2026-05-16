@@ -1594,7 +1594,7 @@ rec {
       (
         let
           firstChar = substring 0 1 str;
-          rest = substring 1 (stringLength str) str;
+          rest = substring 1 (-1) str; # -1 takes till the end of the string
         in
         addContextFrom str (toUpper firstChar + toLower rest)
       );
