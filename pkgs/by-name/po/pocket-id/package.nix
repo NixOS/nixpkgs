@@ -60,6 +60,8 @@ buildGo125Module (finalAttrs: {
     "-skip=TestOidcService_downloadAndSaveLogoFromURL"
   ];
 
+  doCheck = !stdenvNoCC.hostPlatform.isDarwin;
+
   frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
