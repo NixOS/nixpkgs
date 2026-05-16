@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rhvoice";
-  version = "1.16.5";
+  version = "1.18.4";
 
   src = fetchFromGitHub {
     owner = "RHVoice";
