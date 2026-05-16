@@ -37,10 +37,18 @@ dfhack_files=(
   libdfhooks.so
   dfhack-config/default
   dfhack-config/init
+  dfhooks_*.ini
   hack/*
   stonesense/*
   *.init *.init-example
 )
+
+# May be stale top-level libdfhooks_*.so symlinks in $NIXPKGS_DF_HOME, fix them
+shopt -s nullglob
+for stale in "$NIXPKGS_DF_HOME"/libdfhooks_*.so; do
+  dfhack_files+=( "${stale##*/}" )
+done
+shopt -u nullglob
 
 if [ "${NIXPKGS_DF_EXE##*/}" == dfhack ]; then
   for i in "${dfhack_files[@]}"; do
