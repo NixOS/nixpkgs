@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     #     - PKG_CONFIG_PATH, to find available (sound) libraries
     #     - RPATH, to link to the newly built libraries
     ./honor_nix_environment.patch
+    ./cstdint.patch
   ];
 
   nativeBuildInputs = [
