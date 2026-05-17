@@ -92,6 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
       extraPrefix = "subprojects/wlroots/";
       hash = "sha256-q2zekWNn111lX8N938y8HjREvlNMtdCLJ4RveX9z8u8=";
     })
+
+    # Pending upstream patch to support stb_image_resize2.h
+    # See: https://github.com/ValveSoftware/gamescope/pull/2130
+    (fetchpatch {
+      url = "https://github.com/ValveSoftware/gamescope/commit/d49a2aded261030e649fee42ad295f1ef56b736b.diff";
+      hash = "sha256-Uh08ZRaV912ZOsl1DMpbVLxIgh4jEXevgihQf2W9KFk=";
+    })
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,

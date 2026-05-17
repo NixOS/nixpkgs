@@ -82,7 +82,7 @@ let
   ];
 in
 rec {
-  module1 = resholve.mkDerivation {
+  module1 = resholve.mkDerivation (finalAttrs: {
     pname = "testmod1";
     version = "unreleased";
 
@@ -111,8 +111,9 @@ rec {
       };
     };
 
-    is_it_okay_with_arbitrary_envs = "shonuff";
-  };
+    # finalAttrs proof-of-life
+    passthru.version = finalAttrs.version;
+  });
   module2 = resholve.mkDerivation {
     pname = "testmod2";
     version = "unreleased";
@@ -335,7 +336,9 @@ rec {
   inherit msmtp;
   inherit nix-direnv;
   inherit pdf2odt;
-  inherit pdfmm;
+  # TODO: re-enable when safe; disabled may 9 2026 due
+  # to build failure down in pdfmm > zenity > appstream
+  # inherit pdfmm;
   inherit shunit2;
   inherit xdg-utils;
   inherit yadm;

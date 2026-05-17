@@ -8,7 +8,7 @@
 }:
 
 let
-  tag = "0.3.18";
+  tag = "0.3.20";
 in
 stdenv.mkDerivation {
   pname = "apfs";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
     tag = "v${tag}";
-    hash = "sha256-cyjaWNND8FIH6NOmLNxk/mYkYgQc4/SMpwXUVFGPe3c=";
+    hash = "sha256-sT84qK5rpPwxKVrtaIPpAUBvzFqNgTHaDHgKXWYCkV4=";
   };
 
   hardeningDisable = [ "pic" ];

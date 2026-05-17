@@ -9,6 +9,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dix";
   version = "1.4.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "faukah";
     repo = "dix";

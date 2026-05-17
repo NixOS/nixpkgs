@@ -28,7 +28,7 @@
   yadm,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "yadm";
   version = "3.5.0";
 
@@ -37,7 +37,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "yadm-dev";
     repo = "yadm";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hDo6zs70apNhKmuvR+eD51FzuTLj3SL/wHQXqLMD9QE=";
   };
 
@@ -118,7 +118,7 @@ resholve.mkDerivation rec {
   };
 
   passthru.tests = {
-    minimal = runCommand "${pname}-test" { } ''
+    minimal = runCommand "${finalAttrs.pname}-test" { } ''
       export HOME=$out
       ${yadm}/bin/yadm init
     '';
@@ -133,10 +133,10 @@ resholve.mkDerivation rec {
       * Provides a way to use alternate files on a specific OS or host.
       * Supplies a method of encrypting confidential data so it can safely be stored in your repository.
     '';
-    changelog = "https://github.com/yadm-dev/yadm/blob/${version}/CHANGES";
+    changelog = "https://github.com/yadm-dev/yadm/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ abathur ];
     platforms = lib.platforms.unix;
     mainProgram = "yadm";
   };
-}
+})

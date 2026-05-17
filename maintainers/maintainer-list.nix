@@ -8523,9 +8523,9 @@
     email = "evysgarden@protonmail.com";
   };
   ewok = {
-    email = "ewok@ewok.ru";
-    github = "ewok-old";
-    githubId = 454695;
+    email = "github@in.ewok.email";
+    github = "ewok";
+    githubId = 125148819;
     name = "Artur Taranchiev";
   };
   ewuuwe = {
@@ -13129,6 +13129,13 @@
     github = "Johny-LPM";
     githubId = 168684553;
     name = "João Marques";
+  };
+  joibel = {
+    email = "alan@clucas.org";
+    github = "Joibel";
+    githubId = 1827156;
+    name = "Alan Clucas";
+    keys = [ { fingerprint = "EBE6 85B9 4904 22E1 EC94  7B17 79C7 9CBD BAF6 4C13"; } ];
   };
   joinemm = {
     email = "joonas@rautiola.co";
@@ -19065,12 +19072,6 @@
     github = "nagymathev";
     githubId = 49335802;
   };
-  naho = {
-    github = "trueNAHO";
-    githubId = 90870942;
-    name = "Noah Pierre Biewesch";
-    keys = [ { fingerprint = "5FC6 088A FB1A 609D 4532  F919 0C1C 177B 3B64 68E0"; } ];
-  };
   nalbyuites = {
     email = "ashijit007@gmail.com";
     github = "nalbyuites";
@@ -19891,6 +19892,13 @@
     github = "Noah765";
     githubId = 99338019;
   };
+  noahbiewesch = {
+    github = "trueNAHO";
+    githubId = 90870942;
+    name = "Noah Biewesch";
+    email = "nix@noahbiewesch.com";
+    keys = [ { fingerprint = "5FC6 088A FB1A 609D 4532  F919 0C1C 177B 3B64 68E0"; } ];
+  };
   noahfraiture = {
     name = "Noahcode";
     email = "pro@noahcode.dev";
@@ -20225,11 +20233,13 @@
     github = "numinit";
     githubId = 369111;
     keys = [
-      # >=2025, stays in one place
+      # SSH
+      { fingerprint = "XX/0lMz82MpucPqf0KG+5EJoozzNRi8i/t59byD2kNo"; }
+      # GPG, >=2025, stays in one place
       { fingerprint = "FD28 F9C9 81C5 D78E 56E8  8311 5C3E B94D 198F 1491"; }
-      # >=2025, travels with me
+      # GPG, >=2025, travels with me
       { fingerprint = "C48F 475F 30A9 B192 3213  D5D5 C6E2 4809 77B2 F2F4"; }
-      # <=2024
+      # GPG, <=2024
       { fingerprint = "190B DA97 F616 DE35 6899  ED17 F819 F1AF 2FC1 C1FF"; }
     ];
   };
@@ -20497,7 +20507,7 @@
     name = "Erik Timan";
   };
   olduser101 = {
-    email = "nathan.j.gill@outlook.com";
+    email = "n@ngill.net";
     github = "OldUser101";
     githubId = 64069240;
     matrix = "@olduser101:matrix.org";
@@ -30871,6 +30881,13 @@
     github = "znewman01";
     githubId = 873857;
     name = "Zack Newman";
+  };
+  Zocker1999NET = {
+    github = "Zocker1999NET";
+    githubId = 1645646;
+    name = "Felix Stupp";
+    email = "felix.stupp@banananet.work";
+    keys = [ { fingerprint = "73D0 9948 B239 2D68 8A45  DC83 93E1 BD26 F6B0 2FB7"; } ];
   };
   zodman = {
     github = "zodman";

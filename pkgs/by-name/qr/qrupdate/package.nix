@@ -7,6 +7,7 @@
   which,
   gfortran,
   blas,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,16 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-DBLA_VENDOR=Generic"
     ];
 
-  patches =
-    # https://github.com/mpimd-csc/qrupdate-ng/issues/4
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      ./disable-zch1dn-test.patch
-    ]
-    # https://github.com/mpimd-csc/qrupdate-ng/issues/7
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      ./disable-aarch64-single-precision-tests.patch
-    ];
-
   postPatch = ''
     sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i ./CMakeLists.txt
   '';
@@ -63,10 +54,25 @@ stdenv.mkDerivation (finalAttrs: {
     which
     gfortran
   ];
+
   buildInputs = [
     blas
     lapack
   ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+      # https://github.com/mpimd-csc/qrupdate-ng/issues/7
+      "test_tchshx"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
+      # https://github.com/mpimd-csc/qrupdate-ng/issues/4
+      "test_tch1dn"
+    ];
 
   meta = {
     description = "Library for fast updating of qr and cholesky decompositions";
