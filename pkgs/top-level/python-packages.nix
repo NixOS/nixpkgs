@@ -2978,6 +2978,8 @@ self: super: with self; {
 
   cocotb-bus = callPackage ../development/python-modules/cocotb-bus { };
 
+  codecarbon = callPackage ../development/python-modules/codecarbon { };
+
   codepy = callPackage ../development/python-modules/codepy { };
 
   coffea = callPackage ../development/python-modules/coffea { };
