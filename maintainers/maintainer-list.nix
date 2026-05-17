@@ -15422,6 +15422,11 @@
     matrix = "@mattleon:matrix.org";
     name = "Matt Leon";
   };
+  leopepe = {
+    github = "leopepe";
+    githubId = 446756;
+    name = "Leonardo Pepe";
+  };
   leshainc = {
     email = "leshainc@fomalhaut.me";
     github = "LeshaInc";
