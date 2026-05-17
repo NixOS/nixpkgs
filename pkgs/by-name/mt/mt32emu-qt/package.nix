@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
+  nix,
+  writeShellApplication,
+  _experimental-update-script-combinators,
   alsa-lib,
   cmake,
   libpulseaudio,
@@ -69,6 +73,58 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/mt32emu-qt.app $out/Applications/
     ln -s $out/{Applications/mt32emu-qt.app/Contents/MacOS,bin}/mt32emu-qt
   '';
+
+  passthru = {
+    # Otherwise x.y.z in version != x_y_z in tag, and bump to same version is attempted
+    unfixVersionScript = writeShellApplication {
+      name = "unfix-mt32emu-qt-version";
+
+      runtimeInputs = [
+        nix
+      ];
+
+      text = ''
+        export UPDATE_NIX_ATTR_PATH="''${UPDATE_NIX_ATTR_PATH:-mt32emu-qt}"
+
+        preUpdateScriptVersion="$(nix-instantiate . --eval --strict -A "$UPDATE_NIX_ATTR_PATH.version" | cut -d'"' -f2)"
+        unfixedVersion="''${preUpdateScriptVersion//\./_}"
+
+        pkgFile="$(nix-instantiate --eval -E "with import ./. {}; (builtins.unsafeGetAttrPos \"version\" $UPDATE_NIX_ATTR_PATH).file" | cut -d'"' -f2)"
+
+        sed -i -e "s/version = \"$preUpdateScriptVersion\"/version = \"$unfixedVersion\"/g" "$pkgFile"
+      '';
+    };
+
+    updateTagScript = gitUpdater {
+      rev-prefix = "mt32emu_qt_";
+    };
+
+    # gitUpdater lacks an option for modifying new tag
+    fixVersionScript = writeShellApplication {
+      name = "fix-mt32emu-qt-version";
+
+      runtimeInputs = [
+        nix
+      ];
+
+      text = ''
+        export UPDATE_NIX_ATTR_PATH="''${UPDATE_NIX_ATTR_PATH:-mt32emu-qt}"
+
+        postUpdateScriptVersion="$(nix-instantiate . --eval --strict -A "$UPDATE_NIX_ATTR_PATH.version" | cut -d'"' -f2)"
+        fixedVersion="''${postUpdateScriptVersion//_/.}"
+
+        pkgFile="$(nix-instantiate --eval -E "with import ./. {}; (builtins.unsafeGetAttrPos \"version\" $UPDATE_NIX_ATTR_PATH).file" | cut -d'"' -f2)"
+
+        sed -i -e "s/version = \"$postUpdateScriptVersion\"/version = \"$fixedVersion\"/g" "$pkgFile"
+      '';
+    };
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (lib.getExe finalAttrs.passthru.unfixVersionScript)
+      (finalAttrs.passthru.updateTagScript.command)
+      (lib.getExe finalAttrs.passthru.fixVersionScript)
+    ];
+  };
 
   meta = {
     homepage = "https://munt.sourceforge.net/";
