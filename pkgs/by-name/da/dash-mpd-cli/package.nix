@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-MmZwiH1Qzb5MiwhEYsCVo4xD5YmJ+mObpkgc6J0sfuw=";
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     makeWrapper
     protobuf
