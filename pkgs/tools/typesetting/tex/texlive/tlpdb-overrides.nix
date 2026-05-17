@@ -627,6 +627,4 @@ lib.recursiveUpdate orig rec {
       fi
     '';
   };
-
-  texcount.mainProgram = "texcount";
 }
