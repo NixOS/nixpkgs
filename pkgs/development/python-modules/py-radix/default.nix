@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-radix";
-  version = "1.1.0";
+  version = "ersion/1.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjschultz";
     repo = "py-radix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-++QuZEwOHKjOsIbwLmDy30PvyG0Xe29l45PvOF+YWYw=";
+    hash = "sha256-+ub8wPjQVMc1fw57dF0ACVU0PPyMKtypbALydcXtEmc=";
   };
 
   pythonImportsCheck = [ "radix" ];
