@@ -105,7 +105,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
   // These should go to staging-nixos instead of master,
   // but release-xx.xx (not staging-xx.xx) when backported
   let isExemptKernelUpdate = false
-  if (prInfo.changed_files === 1 && base.startsWith('release-')) {
+  if (prInfo.changed_files === 1) {
     const changedFiles = (
       await github.rest.pulls.listFiles({
         ...context.repo,
@@ -114,8 +114,11 @@ async function checkTargetBranch({ github, context, core, dry }) {
     ).data
     isExemptKernelUpdate =
       changedFiles.length === 1 &&
-      changedFiles[0].filename ===
-        'pkgs/os-specific/linux/kernel/kernels-org.json'
+      (changedFiles[0].filename ===
+        'pkgs/os-specific/linux/kernel/xanmod-kernels.nix' ||
+        (base.startsWith('release-') &&
+          changedFiles[0].filename ===
+            'pkgs/os-specific/linux/kernel/kernels-org.json'))
   }
 
   // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
