@@ -273,6 +273,21 @@ let
         off
       '';
 
+  autorandrChangeScript = pkgs.writeShellScript "autorandr-change" ''
+    ${pkgs.autorandr}/bin/autorandr \
+      --batch \
+      --change \
+      --default ${cfg.defaultTarget} \
+      ${lib.optionalString cfg.ignoreLid "--ignore-lid"} \
+      ${lib.optionalString cfg.matchEdid "--match-edid"}
+  '';
+
+  autorandrLidListenerScript = pkgs.writeShellScript "autorandr-lid-listener" ''
+    stdbuf -oL ${pkgs.libinput}/bin/libinput debug-events | \
+      grep -E --line-buffered '^[[:space:]-]+event[0-9]+[[:space:]]+SWITCH_TOGGLE[[:space:]]' | \
+      while read line; do ${autorandrChangeScript}; done
+  '';
+
 in
 {
 
@@ -295,6 +310,12 @@ in
         default = false;
         type = lib.types.bool;
         description = "Treat outputs as connected even if their lids are closed";
+      };
+
+      enableLidListener = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = "Whether to run the autorandr-lid-listener service";
       };
 
       matchEdid = lib.mkOption {
@@ -389,20 +410,25 @@ in
       startLimitIntervalSec = 5;
       startLimitBurst = 1;
       serviceConfig = {
-        ExecStart = ''
-          ${pkgs.autorandr}/bin/autorandr \
-            --batch \
-            --change \
-            --default ${cfg.defaultTarget} \
-            ${lib.optionalString cfg.ignoreLid "--ignore-lid"} \
-            ${lib.optionalString cfg.matchEdid "--match-edid"}
-        '';
+        ExecStart = autorandrChangeScript;
         Type = "oneshot";
         RemainAfterExit = false;
         KillMode = "process";
       };
     };
 
+    systemd.services.autorandr-lid-listener = lib.mkIf cfg.enableLidListener {
+      wantedBy = [ "multi-user.target" ];
+      description = "Runs autorandr whenever the lid state changes";
+
+      serviceConfig = {
+        ExecStart = autorandrLidListenerScript;
+        Type = "simple";
+        Restart = "always";
+        RestartSec = 30;
+        SyslogIdentifier = "autorandr";
+      };
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ alexnortung ];
