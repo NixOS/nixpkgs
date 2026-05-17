@@ -70,6 +70,8 @@ in
   haddock-api = doDistribute self.haddock-api_2_29_1;
   haddock-library = doJailbreak (doDistribute self.haddock-library_1_11_0);
 
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_10_0_0;
+
   # “Unfortunately we are unable to support GHC 9.10.”
   apply-refact = dontDistribute (markBroken super.apply-refact);
 
