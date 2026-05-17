@@ -2,6 +2,7 @@
   rustPlatform,
   testers,
   hwdata,
+  pkg-config,
   libdrm,
   coolercontrol,
   runtimeShell,
@@ -22,11 +23,15 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-rFwbHsGkKLD9UgkdTbxMIjARmU0Ewal1NIwlbzRL/vc=";
+  cargoHash = "sha256-f0SsTwriUo2rD97L+Z/bq7UahOSLjYjH8bbXg/Hx5qE=";
 
-  buildInputs = [ libdrm ];
+  buildInputs = [
+    hwdata
+    libdrm
+  ];
 
   nativeBuildInputs = [
+    pkg-config
     protobuf
     addDriverRunpath
     python3Packages.wrapPython
@@ -42,10 +47,6 @@ rustPlatform.buildRustPackage {
     # Hardcode a shell
     substituteInPlace daemon/src/repositories/utils.rs \
       --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
-
-    # This is supposed to be a "nix-compatible file path", but there is nothing that actually does the substitution
-    substituteInPlace daemon/src/repositories/hwmon/pci_ids.rs \
-      --replace-fail '@hwdata@' '${hwdata}'
   '';
 
   postInstall = ''

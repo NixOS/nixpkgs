@@ -5,18 +5,9 @@ let
 in
 {
   mir = common {
-    version = "2.25.2";
-    hash = "sha256-+nahWuAcGWgxBM6/a2HWwDw5DkQpUt5i/CEGzTLwNQw=";
-    cargoHash = "sha256-fVD+RGU/2UGVihIktKg2+eDWmlWomDOAcrY6k2XwF1c=";
-    patches = [
-      # Fix leftover boost_system references when linking miracle-wm (library no longer exists)
-      # https://github.com/canonical/mir/pull/4721
-      (fetchpatch {
-        name = "mir-tests-mirtest.pc.in-Drop-remaining-references-to-boost_system.patch";
-        url = "https://github.com/canonical/mir/commit/14d396ecef4611e9182d78890a2d908439478799.patch";
-        hash = "sha256-IpX/7lkuYwoITzOz/gF5q7TAFUg4YH0IY2fWkorIEiM=";
-      })
-    ];
+    version = "2.26.0";
+    hash = "sha256-gADqNNkaYj8KQ67wWzUWT4LuTQh1S+w/qLhVDKdBH4Q=";
+    cargoHash = "sha256-bG2p5Gz34yQJLI1Wuejq6o+jXLn6O2eZE1XGddvxkV4=";
   };
 
   mir_2_15 = common {

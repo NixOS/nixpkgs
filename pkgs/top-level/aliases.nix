@@ -797,6 +797,7 @@ mapAliases {
   freeimage = throw "freeimage was removed due to numerous vulnerabilities"; # Added 2025-10-23
   freerdp3 = throw "'freerdp3' has been renamed to/replaced by 'freerdp'"; # Converted to throw 2025-10-27
   freerdpUnstable = throw "'freerdpUnstable' has been renamed to/replaced by 'freerdp'"; # Converted to throw 2025-10-27
+  frozen-bubble = throw "'frozen-bubble' has been removed because it is broken and unmaintained"; # Added 2026-05-17
   frugal = throw "'frugal' was removed because upstream has been pulled"; # Added 2025-12-20
   fusee-launcher = throw "'fusee-launcher' was removed as upstream removed the original source repository fearing legal repercussions"; # Added 2025-07-05
   fusionInventory = warnAlias "'fusionInventory' has been renamed to 'fusioninventory-agent'" fusioninventory-agent; # Added 2026-02-08
