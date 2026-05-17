@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ratpoison";
-  version = "1.4.9";
+  version = "1.4.9-unstable-2021-05-27";
 
   src = fetchgit {
     url = "https://git.savannah.nongnu.org/git/ratpoison.git";
