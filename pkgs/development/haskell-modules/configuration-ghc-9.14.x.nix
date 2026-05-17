@@ -81,13 +81,7 @@ with haskellLib;
   #
 
   ghc-exactprint = doDistribute self.ghc-exactprint_1_14_0_0;
-  hedgehog = doDistribute self.hedgehog_1_7;
   hie-bios = doDistribute (dontCheck self.hie-bios_0_19_0); # Tests access homeless-shelter.
-  lifted-async = doDistribute self.lifted-async_0_11_0;
-  parallel = doDistribute self.parallel_3_3_0_0;
-  tagged = doDistribute self.tagged_0_8_10;
-  unordered-containers = doDistribute self.unordered-containers_0_2_21;
-  HTTP = doDistribute self.HTTP_4000_5_0;
 
   #
   # Jailbreaks
