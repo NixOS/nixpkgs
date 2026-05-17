@@ -30,9 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_10
     python3 # required for sqlite3 bindings
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
-    cctools.libtool
-  ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;

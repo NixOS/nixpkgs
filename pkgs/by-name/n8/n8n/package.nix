@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     dart-sass
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild
   ];
