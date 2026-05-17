@@ -28,13 +28,13 @@ stdenv.mkDerivation (
   in
   {
     pname = "pghero";
-    version = "3.6.1";
+    version = "3.6.2";
 
     src = fetchFromGitHub {
       owner = "pghero";
       repo = "pghero";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-kABdQRwV5Y/jB9P8kYVmwmntOK0CF/JJYmaINNv26fA=";
+      hash = "sha256-ySdcqSmZAW0yhJYWrTaatHhqQdUz2hJRuk3Aw2DWmcY=";
     };
 
     strictDeps = true;
