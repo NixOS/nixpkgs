@@ -177,7 +177,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
     ]
     ++ lib.concatAttrValues optional-dependencies
-    ++ (map (provider: providerPackages.${provider} python.pkgs) [
+    ++ (lib.concatMap (provider: providerPackages.${provider} python.pkgs) [
       "audible"
       "dlna"
       "jellyfin"
