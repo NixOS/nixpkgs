@@ -64,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./numpy-header.patch
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = toString [
+    (lib.optionals stdenv.cc.isClang "-Wno-unused-command-line-argument")
+    "-std=gnu17"
+  ];
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
   env.GAG_CPP = if stdenv.hostPlatform.isDarwin then "${gfortran.outPath}/bin/cpp" else "cpp";

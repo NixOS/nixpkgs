@@ -9,7 +9,7 @@ built on top of the ledger plain-text-accounting tool.
 
 ## Usage {#module-services-paisa-usage}
 
-Paisa needs to have one of the following cli tools availabe in the PATH at
+Paisa needs to have one of the following cli tools available in the PATH at
 runtime:
 
 - ledger
