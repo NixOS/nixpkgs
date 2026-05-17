@@ -12,13 +12,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ghostfolio";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "ghostfolio";
     repo = "ghostfolio";
     tag = finalAttrs.version;
-    hash = "sha256-KmjGHiuPbXxJ9IkTA8PtjeNfhSyZnqdEp5yn8ypdM2g=";
+    hash = "sha256-74CqCDyLrn3//FiTfo6xR5jLyo4jU+daBF9ES/uQE3E=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
     '';
   };
 
-  npmDepsHash = "sha256-YLS1tT15bj9WF9xzOn9UhXIA7Qe0FcQgfOQFSntPYm4=";
+  npmDepsHash = "sha256-klWmB6LYf6h1WPi3AasDrdVdaPCyb5ePWuO9zqMcXys=";
 
   postPatch = ''
     substituteInPlace replace.build.mjs \
@@ -37,6 +37,8 @@ buildNpmPackage (finalAttrs: {
     substituteInPlace prisma/seed.mts \
       --replace-fail "import { PrismaClient } from '@prisma/client';" \
         "import prismaClientPkg from '@prisma/client'; const { PrismaClient } = prismaClientPkg;"
+    # storybook output is not used, skip it
+    substituteInPlace package.json --replace-fail "nx run ui:build-storybook" "true"
   '';
 
   nativeBuildInputs = [
