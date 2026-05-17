@@ -141,6 +141,11 @@ buildPythonPackage (finalAttrs: {
     "test_valid_events"
     "test_invalid_events"
     "test_user_group_roles"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Server connection times out under load on Darwin
+    "test_server_token_role"
+    "test_share_flow_full"
   ];
 
   disabledTestPaths = [

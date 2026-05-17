@@ -87,24 +87,42 @@ let
   # Pre-generate keys for all directory authorities
   daKeysets = lib.genAttrs daNames mkDAKeys;
 
-  # Read a fingerprint text file from a derivation output
-  readFP = keys: file: builtins.readFile "${keys}/${file}";
+  # Script that writes /run/tor/dirauth.conf by reading the DA fingerprints
+  # from the pre-generated key derivations at runtime. The ${daKeysets.<name>}
+  # interpolations resolve to store-path strings at evaluation time (the
+  # derivations become build dependencies of the node closure), but their
+  # contents are only read when the script runs on the VM, so no
+  # import-from-derivation is required.
+  #
+  # Written into /run/tor (tor's RuntimeDirectory, which systemd bind-mounts
+  # into the service's chroot at RootDirectory=/run/tor/root) so that tor
+  # can read the file despite ProtectSystem=strict.
+  torDirAuthExecStartPre = pkgs.writeShellScript "tor-dirauth-conf" ''
+    set -eu
+    {
+    ${lib.concatMapStringsSep "\n" (name: ''
+      printf 'DirAuthority %s orport=9001 ipv6=[%s]:9001 v3ident=%s %s:80 %s\n' \
+        ${name} \
+        '${nodeIPv6 name}' \
+        "$(tr -d '\n' < ${daKeysets.${name}}/v3ident)" \
+        '${nodeIP name}' \
+        "$(tr -d '\n' < ${daKeysets.${name}}/relay-fingerprint)"
+    '') daNames}
+    } > /run/tor/dirauth.conf
+    chown tor:tor /run/tor/dirauth.conf
+    chmod 0400 /run/tor/dirauth.conf
+  '';
 
-  # Build DirAuthority lines from the pre-generated keys.
-  # Format: nickname orport=PORT v3ident=V3IDENT ip:dirport RELAY_FINGERPRINT
-  dirAuthorityLines = lib.mapAttrsToList (
-    name: keys:
-    "${name} orport=9001 ipv6=[${nodeIPv6 name}]:9001 v3ident=${readFP keys "v3ident"} ${nodeIP name}:80 ${readFP keys "relay-fingerprint"}"
-  ) daKeysets;
-
-  # Tor settings shared by all node types
+  # Tor settings shared by all node types. DirAuthority lines are loaded
+  # from /run/tor/dirauth.conf, written by torDirAuthExecStartPre before
+  # tor starts.
   commonTorSettings = {
     TestingTorNetwork = true;
     AssumeReachable = true;
     AssumeReachableIPv6 = true;
     ControlPort = 9051;
     CookieAuthentication = true;
-    DirAuthority = dirAuthorityLines;
+    "%include" = "/run/tor/dirauth.conf";
   };
 
   # Tor settings shared by non-DA nodes (relays and exits)
@@ -277,8 +295,10 @@ let
     };
   };
 
-  # Arti configuration
-  artiConfig = (pkgs.formats.toml { }).generate "arti.toml" {
+  # Arti configuration - static parts only. The tor_network section
+  # embeds fingerprints from the DA key derivations, so it is generated
+  # at service startup instead (see artiNetworkConfigScript) to avoid IFD.
+  artiStaticConfig = (pkgs.formats.toml { }).generate "arti.toml" {
     proxy.socks_listen = 9150;
 
     storage = {
@@ -308,33 +328,35 @@ let
       guard-min-filtered-sample-size = 2;
       guard-n-primary-guards-to-use = 2;
     };
-
-    tor_network = {
-      authorities = {
-        v3idents = lib.mapAttrsToList (_: keys: readFP keys "v3ident") daKeysets;
-        uploads = lib.mapAttrsToList (name: _: [
-          "${nodeIP name}:80"
-          "[${nodeIPv6 name}]:80"
-        ]) daKeysets;
-        downloads = lib.mapAttrsToList (name: _: [
-          "${nodeIP name}:80"
-          "[${nodeIPv6 name}]:80"
-        ]) daKeysets;
-        votes = lib.mapAttrsToList (name: _: [
-          "${nodeIP name}:80"
-          "[${nodeIPv6 name}]:80"
-        ]) daKeysets;
-      };
-      fallback_caches = lib.mapAttrsToList (name: keys: {
-        rsa_identity = readFP keys "relay-fingerprint";
-        ed_identity = readFP keys "ed25519-identity";
-        orports = [
-          "${nodeIP name}:9001"
-          "[${nodeIPv6 name}]:9001"
-        ];
-      }) daKeysets;
-    };
   };
+
+  # Emit the tor_network section of the arti config at service startup,
+  # reading fingerprints from the DA key derivations at runtime. The
+  # ${daKeysets.<name>} interpolations resolve to store paths at
+  # evaluation time (build dependencies), but their contents are only
+  # read by the shell when the script runs - no import-from-derivation.
+  artiNetworkConfigScript = pkgs.writeShellScript "arti-network-config" ''
+    set -eu
+    out=/run/arti/network.toml
+    daIpPorts='[["${nodeIP "da1"}:80", "[${nodeIPv6 "da1"}]:80"], ["${nodeIP "da2"}:80", "[${nodeIPv6 "da2"}]:80"], ["${nodeIP "da3"}:80", "[${nodeIPv6 "da3"}]:80"]]'
+    {
+      echo '[tor_network.authorities]'
+      printf 'v3idents = ["%s", "%s", "%s"]\n' \
+        "$(tr -d '\n' < ${daKeysets.da1}/v3ident)" \
+        "$(tr -d '\n' < ${daKeysets.da2}/v3ident)" \
+        "$(tr -d '\n' < ${daKeysets.da3}/v3ident)"
+      echo "uploads = $daIpPorts"
+      echo "downloads = $daIpPorts"
+      echo "votes = $daIpPorts"
+    ${lib.concatMapStringsSep "\n" (name: ''
+      echo
+      echo '[[tor_network.fallback_caches]]'
+      printf 'rsa_identity = "%s"\n' "$(tr -d '\n' < ${daKeysets.${name}}/relay-fingerprint)"
+      printf 'ed_identity = "%s"\n'  "$(tr -d '\n' < ${daKeysets.${name}}/ed25519-identity)"
+      echo 'orports = ["${nodeIP name}:9001", "[${nodeIPv6 name}]:9001"]'
+    '') daNames}
+    } > "$out"
+  '';
 
   # Arti client node
   mkArtiClientNode = {
@@ -347,7 +369,9 @@ let
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.arti} proxy -c ${artiConfig}";
+        RuntimeDirectory = "arti";
+        ExecStartPre = artiNetworkConfigScript;
+        ExecStart = "${lib.getExe pkgs.arti} proxy -c ${artiStaticConfig} -c /run/arti/network.toml";
         DynamicUser = true;
         StateDirectory = "arti";
         CacheDirectory = "arti";
@@ -358,6 +382,18 @@ in
 {
   name = "tor";
   meta.maintainers = with lib.maintainers; [ jpds ];
+
+  defaults =
+    { config, ... }:
+    lib.mkIf config.services.tor.enable {
+      # Generate /run/tor/dirauth.conf before tor's own `--verify-config`
+      # ExecStartPre runs. The `+` prefix makes this run as root in the
+      # full system context so it can write into tor's RuntimeDirectory
+      # and chown the file to tor:tor.
+      systemd.services.tor.serviceConfig.ExecStartPre = lib.mkBefore [
+        "+${torDirAuthExecStartPre}"
+      ];
+    };
 
   nodes =
     lib.genAttrs daNames mkDANode

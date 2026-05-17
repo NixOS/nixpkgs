@@ -285,6 +285,13 @@ in
             tmpMetadataMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
             mount --type erofs --options ro,nodev,nosuid ${config.system.build.etcMetadataImage} "$tmpMetadataMount"
 
+            ${lib.optionalString config.system.etc.overlay.mutable ''
+              # Clear stale opaque markers from the upperdir so that lowerdir
+              # entries added by the new generation are not hidden.
+              # See https://github.com/NixOS/nixpkgs/issues/505475
+              ${config.system.nixos-init.package}/bin/clear-etc-opaque "$tmpMetadataMount" /.rw-etc/upper
+            ''}
+
             # There was no previous /etc mounted. This happens when we're called
             # directly without an initrd, like with nixos-enter.
             if ! mountpoint -q /etc; then

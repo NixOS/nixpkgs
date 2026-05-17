@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "close-and-restore-tab.yazi";
-  version = "0-unstable-2026-04-22";
+  version = "0-unstable-2025-05-29";
 
   src = fetchFromGitHub {
     owner = "MasouShizuka";

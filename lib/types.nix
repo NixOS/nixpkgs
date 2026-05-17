@@ -501,8 +501,8 @@ rec {
       };
       u8 = unsign 8 256;
       u16 = unsign 16 65536;
-      # the biggest int Nix accepts is 2^63 - 1 (9223372036854775808)
-      # the smallest int Nix accepts is -2^63 (-9223372036854775807)
+      # the biggest int Nix accepts is 2^63 - 1 (9223372036854775807)
+      # the smallest int Nix accepts is -2^63 (-9223372036854775808)
       u32 = unsign 32 4294967296;
       # u64 = unsign 64 18446744073709551616;
 

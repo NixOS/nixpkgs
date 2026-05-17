@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "bypass.yazi";
-  version = "25.3.2-unstable-2025-06-01";
+  version = "0-unstable-2025-06-01";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";

@@ -7,40 +7,41 @@
   python3,
   python3Packages,
   ruby,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qttools,
-  qtxmlpatterns,
-  qmake,
   which,
   perl,
   libgit2,
   libpng,
   expat,
   curl,
+  zlib,
+  wrapQtAppsHook,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qt5compat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "klayout";
-  version = "0.30.7";
+  version = "0.30.8";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W8ry1+wxVOUxg4hXMd0OpcaWcVr6wUBC3eGgDney2Xc=";
+    hash = "sha256-RjMH6hrc0jyCLgG1D6cztBp5Fb3W5HgTxVTfI2bxgCs=";
   };
 
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace src/klayout.pri --replace "-Wno-reserved-user-defined-literal" ""
-    patchShebangs .
+    patchShebangs --build .
   '';
 
   dontUseQmakeConfigure = true;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     (python3.withPackages (ps: [ ps.tomli ]))
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtmultimedia
     qtsvg
     qttools
-    qtxmlpatterns
+    qt5compat
   ];
 
   buildInputs = [
@@ -62,11 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtmultimedia
     qtsvg
     qttools
-    qtxmlpatterns
+    qt5compat
     libgit2
     libpng
     expat
     curl
+    zlib
   ];
 
   buildPhase = ''
@@ -107,7 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp "$out/Applications/klayout.app/Contents/MacOS/klayout"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  };
 
   # Installation is handled manually in buildPhase/postBuild via build.sh -prefix
   dontInstall = true;

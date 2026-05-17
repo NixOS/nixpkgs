@@ -44,6 +44,7 @@ let
             pname = namePrefix + pluginName;
 
             strictDeps = true;
+            __structuredAttrs = true;
 
             inherit
               pluginName
@@ -378,6 +379,13 @@ in
       repo = "tmux-gruvbox";
       tag = "v${version}";
       hash = "sha256-TuWPw6sk61k7GnHwN2zH6x6mGurTHiA9f0E6NJfMa6g=";
+    };
+    meta = {
+      homepage = "https://github.com/egel/tmux-gruvbox";
+      description = "Gruvbox colorscheme for Tmux";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ viena ];
     };
   };
 

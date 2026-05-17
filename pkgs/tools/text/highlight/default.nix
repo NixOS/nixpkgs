@@ -15,13 +15,13 @@
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.18";
+    version = "4.19";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      hash = "sha256-QYW6kj5cp+TVLXwj7kxbgj0kpN0n5qXYU3xZ5UW66vc=";
+      hash = "sha256-4sPjTLgC4W77alpE/uZHOrnWKVXrWxeCtK70A6G87s8=";
     };
 
     enableParallelBuilding = true;

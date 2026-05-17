@@ -41,7 +41,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/pocketbase/pocketbase";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dit7ya
       thilobillerbeck
     ];
     mainProgram = "pocketbase";

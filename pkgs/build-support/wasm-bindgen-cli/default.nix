@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage {
 
   inherit version src cargoDeps;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [

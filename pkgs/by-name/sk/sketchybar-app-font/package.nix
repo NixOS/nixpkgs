@@ -59,6 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       A ligature-based symbol font and a mapping function for sketchybar, inspired by simple-bar's usage of community-contributed minimalistic app icons.
     '';
     homepage = "https://github.com/kvndrsslr/sketchybar-app-font";
+    changelog = "https://github.com/kvndrsslr/sketchybar-app-font/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.all;

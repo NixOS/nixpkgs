@@ -135,7 +135,6 @@ let
     dontPatchELF = true;
 
     passthru.updateScript = ./update.sh;
-    passthru.tests.startwindow = callPackage ./test.nix { };
     passthru.tests.nixos-module = nixosTests.zoom-us;
 
     meta = {
@@ -179,7 +178,6 @@ let
       pkgs.libxi
       pkgs.libxkbcommon
       pkgs.libxslt
-      pkgs.mesa
       pkgs.mesa-demos
       pkgs.nspr
       pkgs.nss

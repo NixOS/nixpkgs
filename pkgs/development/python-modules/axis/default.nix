@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "axis";
-  version = "70";
+  version = "71";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kane610";
     repo = "axis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LfWnqYtmQLh1ZhSnLrx40ZfilhUoi9qbd0TgWpehlAg=";
+    hash = "sha256-2CMfKpXd2u2cNTyCc4xxHcjYhR9oBRiccT7dcfY4DcA=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python library for communicating with devices from Axis Communications";
     homepage = "https://github.com/Kane610/axis";
-    changelog = "https://github.com/Kane610/axis/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/Kane610/axis/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "axis";

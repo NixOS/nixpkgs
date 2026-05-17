@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "sfz";
   };
 })

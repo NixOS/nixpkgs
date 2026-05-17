@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config

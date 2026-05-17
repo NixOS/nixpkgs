@@ -3,58 +3,62 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  bzip2,
   libxkbcommon,
-  sqlite,
   vulkan-loader,
   zstd,
   stdenv,
   wayland,
   nix-update-script,
   versionCheckHook,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brush-splat";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ArthurBrussee";
     repo = "brush";
-    tag = finalAttrs.version;
-    hash = "sha256-IvsHYCM/M2hHozzKwovgXpcW1b7MSEGneU62y1k8U9U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xVYZrQUgHxaefAMmSXG/rrVlCr0H5lRmyyXtRmOtbTU=";
   };
 
-  cargoHash = "sha256-7cJj5L8ggkBP9SDaYMtY9xIAHVAhi8cTD/0pncUaHbI=";
-
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client & libxkbcommon, which is dlopen()ed based on the
-  # winit backend.
-  env.NIX_LDFLAGS = toString [
-    "--no-as-needed"
-    "-lvulkan"
-    "-lwayland-client"
-    "-lxkbcommon"
-  ];
+  cargoHash = "sha256-KBgE0fiaUEsGuAYGhBjqMX7ftj5JnGggH86brxq6280=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    bzip2
-    libxkbcommon
-    sqlite
-    vulkan-loader
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+    libxcursor
+    libxi
+    libxkbcommon
+    libxrandr
+    vulkan-loader
     wayland
   ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        vulkan-loader
+        wayland
+        libxkbcommon
+      ]
+    }" $out/bin/brush_app
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

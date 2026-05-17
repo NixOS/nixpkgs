@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/waycrate/wayshot";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      dit7ya
       id3v1669
       Subserial
     ];

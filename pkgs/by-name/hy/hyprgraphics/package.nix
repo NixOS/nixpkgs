@@ -65,6 +65,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprgraphics";
+    changelog = "https://github.com/hyprwm/hyprgraphics/releases/tag/${finalAttrs.src.tag}";
     description = "Cpp graphics library for Hypr* ecosystem";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;

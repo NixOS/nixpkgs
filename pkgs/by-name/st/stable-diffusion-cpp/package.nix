@@ -121,7 +121,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
-      dit7ya
       adriangl
     ];
     platforms = lib.platforms.unix;

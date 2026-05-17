@@ -143,6 +143,8 @@ let
     "final.target"
     "kexec.target"
     "systemd-kexec.service"
+    "soft-reboot.target"
+    "systemd-soft-reboot.service"
   ]
   ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service"
   ++ [

@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "mediainfo.yazi";
-  version = "26.1.22-unstable-2026-04-10";
+  version = "0-unstable-2026-04-10";
 
   src = fetchFromGitHub {
     owner = "boydaihungst";

@@ -37,10 +37,10 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.09.3";
-  rev = "3890e12c9e48c028c3f12aa58cb64bd9f8895e30";
+  version = "25.09.4";
+  rev = "d52ca669f6deac5966b1c5035bc2dc77c78d3260";
 
-  srcHash = "sha256-vpAWrZAXqm775sn1I5unPb8L9cqaRqPrVEc4A8SxPOk=";
+  srcHash = "sha256-brwJjsqjiCd+QDZoB9Pv3TJxTTAfDm8KtYFvJhJpELk=";
   cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
   yarnHash = "sha256-wi8e9B0EtRMoyH6KhRBNDHM/ffJ+/0Y4f4AZ7eUcXmA=";
   pythonDeps =

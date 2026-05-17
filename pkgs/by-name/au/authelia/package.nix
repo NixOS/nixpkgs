@@ -118,7 +118,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
-      dit7ya
       nicomem
     ];
     mainProgram = "authelia";

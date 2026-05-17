@@ -3598,10 +3598,6 @@ with pkgs;
     egg2nix
     ;
 
-  cdb = callPackage ../development/tools/database/cdb {
-    stdenv = gccStdenv;
-  };
-
   libclang = llvmPackages.libclang;
   clang-manpages = llvmPackages.clang-manpages;
 
@@ -8698,6 +8694,7 @@ with pkgs;
     ubootRaspberryPi4_32bit
     ubootRaspberryPi4_64bit
     ubootRaspberryPiZero
+    ubootRock3C
     ubootRock4CPlus
     ubootRock5ModelB
     ubootRock64
@@ -9543,7 +9540,7 @@ with pkgs;
 
   okteta = kdePackages.callPackage ../applications/editors/okteta { };
 
-  klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+  klayout = qt6Packages.callPackage ../applications/misc/klayout { };
 
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
@@ -10085,10 +10082,6 @@ with pkgs;
     })
   );
 
-  sxiv = callPackage ../applications/graphics/sxiv {
-    imlib2 = imlib2Full;
-  };
-
   dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
@@ -10197,8 +10190,6 @@ with pkgs;
       {
         stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
       };
-
-  termdown = python3Packages.callPackage ../applications/misc/termdown { };
 
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;
 
@@ -10960,8 +10951,6 @@ with pkgs;
     ];
   };
 
-  tibia = pkgsi686Linux.callPackage ../games/tibia { };
-
   ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
 
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
@@ -11478,8 +11467,6 @@ with pkgs;
   faissWithCuda = faiss.override {
     cudaSupport = true;
   };
-
-  gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
 
   megam = callPackage ../applications/science/misc/megam {
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;

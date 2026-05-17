@@ -178,6 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
       "InstantMessaging"
       "Chat"
     ];
+    mimeTypes = [
+      "x-scheme-handler/discord"
+    ];
   });
 
   passthru = {

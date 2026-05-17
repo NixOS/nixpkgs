@@ -41,7 +41,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/terramate-io/terramate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       asininemonkey
     ];
   };

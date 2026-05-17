@@ -9,6 +9,7 @@
   protobuf,
   installShellFiles,
   makeBinaryWrapper,
+  versionCheckHook,
   librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
@@ -237,12 +238,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString canExecute ''
-    runHook preInstallCheck
-    $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = ./update.sh;
@@ -283,6 +279,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ofalvai
       mynacol
     ];
+    maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/redis/hiredis-py";
     changelog = "https://github.com/redis/hiredis-py/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

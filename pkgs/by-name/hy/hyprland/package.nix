@@ -83,14 +83,14 @@ let
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.55.0";
+  version = "0.55.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfsIYDDOjeAU8MxMyUitBAZgCgYAm1T8rTGbe8ujC/I=";
+    hash = "sha256-tjoO+3kzYCAJKJCzmh7R4Hzz7zBQKYoCrSSHMeKXxsA=";
   };
 
   postPatch = ''
@@ -217,6 +217,7 @@ customStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/Hyprland";
+    changelog = "https://github.com/hyprwm/Hyprland/releases/tag/${finalAttrs.src.tag}";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];

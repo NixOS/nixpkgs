@@ -65,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
   version = "2.63.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";

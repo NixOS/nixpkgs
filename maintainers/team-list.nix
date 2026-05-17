@@ -358,7 +358,6 @@ with lib.maintainers;
   home-assistant = {
     members = [
       dotlambda
-      fab
       hexa
     ];
     scope = "Maintain the Home Assistant ecosystem";

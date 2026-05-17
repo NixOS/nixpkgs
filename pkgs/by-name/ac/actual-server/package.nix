@@ -14,13 +14,13 @@
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.4.0";
+  version = "26.5.2";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-Gc2klYxGv+vd1Yc2ftj25B4Kea0GKkpjYcVDN9HvLPk=";
+    hash = "sha256-bcQAlG9acxTSqOQiSr1pmk4A6yjDWD/QH3AeYtqgAdo=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -28,8 +28,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "14c3f5e7ed4e47dedab8cebeaf5e2170cfa5f9d0";
-    hash = "sha256-+4hENE9unsta1YoIDE7shcjy1AlWfnPczvm4jYnw5Dw=";
+    rev = "1713f1230b8643c39aece866de755976707a4060";
+    hash = "sha256-79WpnFsGkpkWA7qm19YQ41TYu5qxXCcecYHNvx3KGQ4=";
   };
 
 in
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-7Vlc9hPv7Sr2ZUw7fasl3xf7ZYU31oS4tWW46UBJ1F0=";
+    hash = "sha256-yHvnahriFO4Yuuf+NrfHWQhH35T2eHmVOGw8SqP856Y=";
   };
 
   pname = "actual-server";
@@ -130,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn workspaces focus @actual-app/sync-server --production
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
+    cp -r ./packages/crdt $out/lib/actual/packages/crdt
 
     makeBinaryWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \

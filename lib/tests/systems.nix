@@ -266,6 +266,22 @@ lib.runTests (
         }).parsed.cpu.arch;
       expected = "i686";
     };
+    test_equals_reelaborate_overridden_platform = {
+      expr =
+        let
+          base = lib.systems.elaborate "x86_64-linux";
+        in
+        lib.systems.equals base (
+          lib.systems.elaborate (
+            base
+            // {
+              useLLVM = true;
+              linker = "lld";
+            }
+          )
+        );
+      expected = false;
+    };
   }
   // {
     # equals.functionNames must list exactly the function-valued attrs of an

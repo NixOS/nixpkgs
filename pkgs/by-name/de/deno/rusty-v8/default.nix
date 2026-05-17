@@ -190,6 +190,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/denoland/rusty_v8";
     license = lib.licenses.mit;
     maintainers = deno.meta.maintainers;
+    maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = deno.meta.platforms;
   };
 })

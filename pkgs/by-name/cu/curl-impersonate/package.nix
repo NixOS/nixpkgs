@@ -27,7 +27,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate";
-  version = "1.5.5";
+  version = "1.5.6";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "lexiforest";
     repo = "curl-impersonate";
     tag = "v${version}";
-    hash = "sha256-iKtNdBjAflg9evd/CmKJd8pXGPUM5sMBJEgJAbJ6vws=";
+    hash = "sha256-t4fdTp/pb00dcuelvvZyN7ZdgLoQt3nbYXU9sW9jlS8=";
   };
 
   # Disable blanket -Werror to fix build on `gcc-13` related to minor
