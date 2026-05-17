@@ -5,13 +5,13 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   nodejs_22,
   makeWrapper,
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.5.7",
+  version ? "2026.5.12",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
@@ -21,14 +21,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ICkq6YfMJVvRC93sM+7/q2JI82wUhjaYAI3pRzmTHYc=";
+    hash = "sha256-URuoljISNcDLuWUwOpZoFjPNVOmbThC9r00uShPR4Co=";
   };
 
-  pnpmDepsHash = "sha256-LXaRfZ0WY8VDpDc2zFr+Oel6AuYo6SiTrp37yokT1VU=";
+  pnpmDepsHash = "sha256-WNRROY5b5eaL+fSk2GO0xn2PnGhrGlve/DT1XWbxt8s=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_11;
     fetcherVersion = 3;
     hash = finalAttrs.pnpmDepsHash;
   };
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_11
     nodejs_22
     makeWrapper
     installShellFiles
