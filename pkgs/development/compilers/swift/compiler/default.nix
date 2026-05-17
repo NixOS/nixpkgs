@@ -823,5 +823,6 @@ stdenv.mkDerivation {
     # Swift doesn't support 32-bit Linux, unknown on other platforms.
     badPlatforms = lib.platforms.i686;
     timeout = 86400; # 24 hours.
+    mainProgram = "swiftc";
   };
 }
