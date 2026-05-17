@@ -2796,6 +2796,12 @@
     github = "aware70";
     githubId = 7832566;
   };
+  awildleon = {
+    name = "Leon Hubrich";
+    github = "AWildLeon";
+    githubId = 114652332;
+    email = "git@leon-hubrich.de";
+  };
   axertheaxe = {
     email = "axertheaxe@proton.me";
     github = "AxerTheAxe";
@@ -11276,6 +11282,12 @@
     github = "wavewave";
     githubId = 1031119;
     name = "Ian-Woo Kim";
+  };
+  ibbem = {
+    name = "ibbem";
+    github = "ibbem";
+    githubId = 61984399;
+    email = "ibbem@ibbem.net";
   };
   ibizaman = {
     email = "ibizapeanut@gmail.com";
