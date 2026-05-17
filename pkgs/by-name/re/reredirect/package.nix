@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,6 +15,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-RHRamDo7afnJ4DlOVAqM8lQAC60YESGSMKa8Io2vcX0=";
   };
+
+  patches = [
+    # Fixes gcc-15 build.
+    (fetchpatch2 {
+      url = "https://github.com/jerome-pouiller/reredirect/commit/b85df395e18d09b54e1fb73dfe344f8f04224a83.patch";
+      hash = "sha256-RTzJrgiJGmUf0iVaSvXw/NLwWRTch1aLdDdLp50sAD8=";
+    })
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

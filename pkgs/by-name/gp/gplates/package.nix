@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   doxygen,
   graphviz,
@@ -17,9 +16,7 @@
   mpfr,
   proj,
   python3,
-  qtxmlpatterns,
-  qwt,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 let
@@ -38,28 +35,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gplates";
-  version = "2.5";
+  version = "2.5.0-dev3";
 
   src = fetchFromGitHub {
     owner = "GPlates";
     repo = "GPlates";
-    rev = "GPlates-${finalAttrs.version}";
-    hash = "sha256-3fEwm5EKK9RcRbnyUejgwfjdsXaujjZjoMbq/BbVMeM=";
+    rev = "e3ec5a4ee58147d21d8b42050c4c7e78f861f21c";
+    hash = "sha256-/y+fozK6DvoVuS1I1ZdWtRwy+M/XRFyLDWHcUFu2++M=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "qwt-6.3-compile-error-fix.patch";
-      url = "https://github.com/GPlates/GPlates/commit/c4680ebe54f4535909085feacecd66410a91ff98.patch";
-      hash = "sha256-mw5+GLayMrmcSDd1ai+0JTuY3iedHT9u2kx5Dd2wMjg=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -74,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     proj
     python
-    qtxmlpatterns
-    qwt
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qwt
   ];
 
   meta = {

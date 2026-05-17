@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nixosTests,
   python3,
-  stdenv,
 }:
 let
   version = "1.15.0";
@@ -21,7 +20,7 @@ let
     changelog = "https://github.com/suitenumerique/meet/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 
   mail = callPackage ./mail.nix { inherit src version meta; };
@@ -48,16 +47,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
-  ''
-  # Otherwise fails with:
-  # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace impress/settings.py \
-      --replace-fail \
-        "gethostname()" \
-        "gethostname() + '.local'"
-  '');
-  __darwinAllowLocalNetworking = true;
+  '';
 
   build-system = with python.pkgs; [ uv-build ];
 

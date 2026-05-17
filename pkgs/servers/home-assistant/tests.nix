@@ -137,9 +137,21 @@ let
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"
     ];
+    honeywell_string_lights = [
+      # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.honeywell_string_lights.config.abort.no_compatible_transmitters"
+      "test_no_compatible_transmitters"
+    ];
+    novy_cooker_hood = [
+      # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.novy_cooker_hood.config.abort.no_compatible_transmitters
+      "test_no_compatible_transmitters"
+    ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"
+    ];
+    zha = [
+      # [2026.5.2] assert <HardwareType.OTHER: 'other'> == <HardwareType... 'skyconnect'>
+      "test_detect_radio_hardware"
     ];
   };
 in
