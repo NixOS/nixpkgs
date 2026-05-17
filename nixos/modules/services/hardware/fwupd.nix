@@ -31,8 +31,11 @@ let
   originalEtc =
     let
       mkEtcFile = n: lib.nameValuePair n { source = "${cfg.package}/etc/${n}"; };
+      etcFiles = lib.filter (
+        f: cfg.enableGrubHook || f != "grub.d/35_fwupd"
+      ) cfg.package.filesInstalledToEtc;
     in
-    lib.listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
+    lib.listToAttrs (map mkEtcFile etcFiles);
   extraTrustedKeys =
     let
       mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
@@ -92,6 +95,19 @@ in
         example = [ "lvfs-testing" ];
         description = ''
           Enables extra remotes in fwupd. See `/etc/fwupd/remotes.d`.
+        '';
+      };
+
+      enableGrubHook = lib.mkOption {
+        type = lib.types.bool;
+        default = config.boot.loader.grub.enable;
+        defaultText = lib.literalExpression "config.boot.loader.grub.enable";
+        description = ''
+          Whether to install the `/etc/grub.d/35_fwupd` script that adds a
+          "Linux Firmware Updater" entry to the GRUB menu on the next
+          `grub-mkconfig` run. The script is shipped by upstream fwupd but
+          only meaningful when GRUB is the active bootloader; it is dead
+          weight under systemd-boot, rEFInd, Limine, etc.
         '';
       };
 
