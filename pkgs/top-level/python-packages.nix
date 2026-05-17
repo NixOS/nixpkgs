@@ -14388,6 +14388,8 @@ self: super: with self; {
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
+  pymatgen-core = callPackage ../development/python-modules/pymatgen-core { };
+
   pymatreader = callPackage ../development/python-modules/pymatreader { };
 
   pymatting = callPackage ../development/python-modules/pymatting { };
