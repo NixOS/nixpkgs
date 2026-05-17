@@ -12,7 +12,6 @@
   meson,
   ninja,
   cmake,
-  cmocka,
   iproute2,
   makeWrapper,
   lib,
