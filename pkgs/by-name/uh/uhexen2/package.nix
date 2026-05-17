@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     )
   '';
 
-  NIX_CFLAGS_COMPILE = "-std=gnu17";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   buildPhase = ''
     runHook preBuild

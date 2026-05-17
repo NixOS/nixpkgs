@@ -85,11 +85,12 @@ let
     let
       allArgs = systemToAttrs systemOrArgs;
 
-      # Those two will always be derived from "config", if given, so they should NOT
-      # be overridden further down with "// args".
+      # These attributes are derived from other inputs, so they should NOT be
+      # overridden further down with "// args".
       args = removeAttrs allArgs [
         "parsed"
         "system"
+        "_withoutFunctions"
       ];
 
       # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.

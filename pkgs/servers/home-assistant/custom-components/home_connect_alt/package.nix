@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "ekutner";
   domain = "home_connect_alt";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "ekutner";
     repo = "home-connect-hass";
     tag = version;
-    hash = "sha256-y4IzSRJrqOeKAZN1kibmsV/l23hjSQIuOoeEdYmbmBo=";
+    hash = "sha256-zrLDV5rO+i0nAXGnPuuPbQKbB8TAjNL0eOcvDuLiOF0=";
   };
 
   dependencies = [ home-connect-async ];

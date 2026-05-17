@@ -11,8 +11,8 @@ mkYaziPlugin {
   src = fetchFromGitHub {
     owner = "terrakok";
     repo = "split-tabs.yazi";
-    rev = "ca95efc94a3a62e6e58c741f60801c1a0ddba1a6";
-    hash = "sha256-ic09opWZcoJ874bU2HN+5Y9mbnZEnvds+abqRQYuiYE=";
+    rev = "6da6089a0943bf5b9ee18942a890c294d4f227bc";
+    hash = "sha256-vIJNXmkIp5mjWuS/madKI/m9N8D4d6HaIyzeantrkig=";
   };
 
   meta = {

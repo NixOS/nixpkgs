@@ -12,6 +12,7 @@
   jq,
   nixosTests,
 
+  latestVersionInfo ? null,
   versionInfo ? {
     # ESR releases only. Note: if NixOS would release with an ESR that goes out
     # of support during the lifetime of the NixOS release, it is acceptable
@@ -23,11 +24,11 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(11\\.[67]\\.[0-9]+)$";
-    version = "11.6.1";
-    srcHash = "sha256-0TUh5qKi64jt3YhgCTceoizOGzqyt70Rh8VH+bSfS5o=";
-    vendorHash = "sha256-bWl1rdVRTOJzS2HKKsSRhzVcH1sPgEAlRLjrc+/o0lo=";
-    npmDepsHash = "sha256-30xwoizNh6fAWS0YdEheXtcO6I9MjoFdCekvLnnoBMc=";
+    regex = "^v(11\\.7\\.[0-9]+)$";
+    version = "11.7.0";
+    srcHash = "sha256-oH9bLN2BPvRSWl5m3VNHBNMBXfdmkwaE9tzL7pcD1mg=";
+    vendorHash = "sha256-PmwwiXNaDarc1H7z1G4zstgs7tvmZ/d7V5eGqMh1VX4=";
+    npmDepsHash = "sha256-C3vfWW2hMOMnrPn1538kT+ma09T9VswrmADV/KPkrPc=";
   },
   ...
 }:
@@ -87,16 +88,27 @@ let
         };
     in
     finalPassthru.withoutTests;
+
+  versionInfo' =
+    if
+      latestVersionInfo != null && lib.versionAtLeast latestVersionInfo.version versionInfo.version
+    then
+      # Prefer the latest if we're building mattermostLatest
+      latestVersionInfo
+    else
+      # Prefer the one we have
+      assert versionInfo != null;
+      versionInfo;
 in
 buildMattermost rec {
   pname = "mattermost";
-  inherit (versionInfo) version;
+  inherit (versionInfo') version;
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     tag = "v${version}";
-    hash = versionInfo.srcHash;
+    hash = versionInfo'.srcHash;
     postFetch = ''
       cd $out/webapp
 
@@ -107,13 +119,13 @@ buildMattermost rec {
       ' < package-lock.json > package-lock.fixed.json
 
       # Run the lockfile overlay, if present.
-      ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
+      ${lib.optionalString (versionInfo'.lockfileOverlay or null != null) ''
         ${lib.getExe jq} ${lib.escapeShellArg ''
           # Unlock a dependency and let npm-lockfile-fix relock it.
           def unlock(root; dependency; path):
             root | .packages[path] |= del(.resolved, .integrity)
                  | .packages[path].version = root.packages.channels.dependencies[dependency];
-          ${versionInfo.lockfileOverlay}
+          ${versionInfo'.lockfileOverlay}
         ''} < package-lock.fixed.json > package-lock.overlaid.json
         mv package-lock.overlaid.json package-lock.fixed.json
       ''}
@@ -130,20 +142,24 @@ buildMattermost rec {
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
   overrideModAttrs = _: {
     buildPhase = ''
+      runHook preBuild
+
       make setup-go-work
       go work vendor -e -v
+
+      runHook postBuild
     '';
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/webapp";
-    hash = versionInfo.npmDepsHash;
+    hash = versionInfo'.npmDepsHash;
     makeCacheWritable = true;
     forceGitDeps = true;
   };
 
-  inherit (versionInfo) vendorHash;
+  inherit (versionInfo') vendorHash;
 
   modRoot = "./server";
   preBuild = ''
@@ -188,9 +204,14 @@ buildMattermost rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     for subPackage in $subPackages; do
+      echo "Checking version for: $subPackage" >&2
       "$out/bin/$(basename -- "$subPackage")" version | grep "$version"
     done
+
+    runHook postInstallCheck
   '';
 
   passthru = {
@@ -198,11 +219,11 @@ buildMattermost rec {
       extraArgs = [
         "--use-github-releases"
         "--version-regex"
-        versionInfo.regex
+        versionInfo'.regex
       ]
-      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+      ++ lib.optionals (versionInfo'.autoUpdate or null != null) [
         "--override-filename"
-        versionInfo.autoUpdate
+        versionInfo'.autoUpdate
       ];
     };
     tests.mattermost = nixosTests.mattermost;
@@ -235,7 +256,9 @@ buildMattermost rec {
         runHook preBuild
 
         for ws in platform/{types,client,components,shared} channels; do
-          npm run build --workspace="$ws"
+          if [ -d "$ws" ]; then
+            npm run build --workspace="$ws"
+          fi
         done
 
         runHook postBuild

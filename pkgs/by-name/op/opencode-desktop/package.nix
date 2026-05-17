@@ -54,6 +54,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     OPENCODE_CHANNEL = "prod";
     MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
     OPENCODE_DISABLE_MODELS_FETCH = true;
+  }
+  # Disable code signing on macOS. Public build hosts don't have Apple Developer
+  # certificates, so electron-builder's `security find-identity` spawns produce
+  # EPERM inside the nix sandbox.
+  // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
+    CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
   postPatch = ''
@@ -71,6 +77,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patchShebangs packages/*/node_modules
 
     runHook postConfigure
+  '';
+
+  preBuild = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    # Patch electron-builder to skip code signing on macOS.
+    # The nix sandbox on public Darwin builders cannot spawn
+    # `security find-identity` — trying gives spawn EPERM.
+    # We patch the compiled JS to make getValidIdentities a no-op.
+    for f in $(find node_modules -path "*/app-builder-lib/out/codeSign/macCodeSign.js" -type f 2>/dev/null); do
+      substituteInPlace "$f" \
+        --replace-fail "async function getValidIdentities" \
+        "async function getValidIdentities() { return []; }; async function getValidIdentities_DISABLED"
+    done
   '';
 
   buildPhase = ''
@@ -98,7 +116,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --config=electron-builder.config.ts \
       --config.electronDist="$HOME/.electron-dist" \
       --config.electronVersion=${electron.version} \
-      --config.asarUnpack='**/*.node'
+      --config.asarUnpack='**/*.node' \
+      ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "--config.mac.identity=null"}
 
     cd ../..
 

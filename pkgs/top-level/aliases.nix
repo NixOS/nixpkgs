@@ -701,6 +701,7 @@ mapAliases {
   faustPhysicalModeling = warnAlias "'faustPhysicalModeling' has been renamed to 'faust-physicalmodeling'" faust-physicalmodeling; # Added 2026-02-08
   faustStk = throw "'faustStk' has been renamed to/replaced by 'faustPhysicalModeling'"; # Converted to throw 2025-10-27
   fbjni = throw "fbjni has been removed, as it was broken"; # Added 2025-08-25
+  fbpanel = throw "'fbpanel' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-16
   fcitx5-catppuccin = throw "'fcitx5-catppuccin' has been renamed to/replaced by 'catppuccin-fcitx5'"; # Converted to throw 2025-10-27
   fcitx5-chinese-addons = throw "'fcitx5-chinese-addons' has been renamed to/replaced by 'qt6Packages.fcitx5-chinese-addons'"; # Converted to throw 2025-10-27
   fcitx5-configtool = throw "'fcitx5-configtool' has been renamed to/replaced by 'qt6Packages.fcitx5-configtool'"; # Converted to throw 2025-10-27
@@ -1104,6 +1105,7 @@ mapAliases {
   libgadu = throw "'libgadu' has been removed as upstream is unmaintained and has no dependents or maintainers in Nixpkgs"; # Added 2025-05-17
   libgda = throw "'libgda' has been renamed to/replaced by 'libgda5'"; # Converted to throw 2025-10-27
   libGDSII = libgdsii; # Added 2026-02-08
+  libgestures = throw "'libgestures' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-09
   libgme = throw "'libgme' has been renamed to/replaced by 'game-music-emu'"; # Converted to throw 2025-10-27
   libgnome-keyring3 = throw "'libgnome-keyring3' has been renamed to/replaced by 'libgnome-keyring'"; # Converted to throw 2025-10-27
   libheimdal = throw "'libheimdal' has been renamed to/replaced by 'heimdal'"; # Converted to throw 2025-10-27
@@ -2077,6 +2079,7 @@ mapAliases {
   thrust = throw "'thrust' has been removed due to lack of maintenance"; # Added 2025-08-21
   thunderbird-128 = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30
   thunderbird-128-unwrapped = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30
+  tibia = throw "'tibia' has been removed from nixpkgs due to being broken and unmaintained"; # Added 2026-05-16
   ticpp = throw "'ticpp' has been removed due to being unmaintained"; # Added 2025-09-10
   tidb = throw "TiDB has been removed because of hard dependency on TiKV which is challenging to package"; # Added 2026-05-03
   timescaledb = throw "'timescaledb' has been removed. Use 'postgresqlPackages.timescaledb' instead."; # Added 2025-07-19
@@ -2252,6 +2255,7 @@ mapAliases {
     use the reference implementation 'xdg-terminal-exec' instead.
   " xdg-terminal-exec; # Added 2026-01-14
   xdragon = throw "'xdragon' has been renamed to/replaced by 'dragon-drop'"; # Converted to throw 2025-10-27
+  xf86-input-cmt = throw "'xf86-input-cmt' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-09
   xf86_input_cmt = xf86-input-cmt; # Added 2025-12-12
   xf86_input_wacom = xf86-input-wacom; # Added 2025-12-12
   xf86_video_nested = xf86-video-nested; # added 2026-01-13

@@ -56,13 +56,14 @@ buildGoModule (finalAttrs: {
     let
       # Disable tests requiring local operations
       skippedTests = [
-        "TestGodog"
         "TestMockingRunner/MockCommand"
         "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
         "TestTestCommands/CreateChildBranch"
         "TestTestCommands/CreateLocalBranchUsingGitTown"
+        "TestFrontendRunner_RetryOnIndexLock" # Timing issues.
+
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

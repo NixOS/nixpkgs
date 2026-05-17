@@ -26,6 +26,8 @@ mkDerivation rec {
     hash = "sha256-Z+SwUlBbtWtnbjTe0IghR3gIKS43ZziN0amYtmXy7HE=";
   };
 
+  NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     cmake
   ];
