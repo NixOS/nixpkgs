@@ -9460,6 +9460,12 @@
     githubId = 4717341;
     name = "Brenton Horne";
   };
+  futile = {
+    name = "Felix Rath";
+    email = "felixm.rath@gmail.com";
+    github = "futile";
+    githubId = 1130337;
+  };
   fuuzetsu = {
     email = "fuuzetsu@fuuzetsu.co.uk";
     github = "Fuuzetsu";
