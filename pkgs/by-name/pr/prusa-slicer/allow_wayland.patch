@@ -1,0 +1,54 @@
+commit c9282b73f3d09daff23a2603addd94605596ebe7
+Author: Robert Schiele <rschiele@gmail.com>
+Date:   Thu May 8 19:16:46 2025 +0200
+
+    remove forcing GDK_BACKEND to x11
+    
+    It seems the problems on Wayland from the past are removed meanwhile.
+
+diff --git a/src/CLI/GuiParams.cpp b/src/CLI/GuiParams.cpp
+index f44b91651f..41b42ff368 100644
+--- a/src/CLI/GuiParams.cpp
++++ b/src/CLI/GuiParams.cpp
+@@ -107,9 +107,8 @@ int start_gui_with_params(GUI::GUI_InitParams& params)
+ #if !defined(_WIN32) && !defined(__APPLE__)
+     // likely some linux / unix system
+     const char* display = boost::nowide::getenv("DISPLAY");
+-    // const char *wayland_display = boost::nowide::getenv("WAYLAND_DISPLAY");
+-    //if (! ((display && *display) || (wayland_display && *wayland_display))) {
+-    if (!(display && *display)) {
++    const char *wayland_display = boost::nowide::getenv("WAYLAND_DISPLAY");
++    if (! ((display && *display) || (wayland_display && *wayland_display))) {
+         // DISPLAY not set.
+         boost::nowide::cerr << "DISPLAY not set, GUI mode not available." << std::endl << std::endl;
+         print_help(false);
+@@ -141,4 +140,4 @@ int start_as_gcode_viewer(GUI::GUI_InitParams& gui_params)
+ }
+ #else // SLIC3R_GUI
+     // If there is no GUI, we shall ignore the parameters. Remove them from the list.
+-#endif // SLIC3R_GUI
+\ No newline at end of file
++#endif // SLIC3R_GUI
+diff --git a/src/CLI/Setup.cpp b/src/CLI/Setup.cpp
+index 82e03d466d..95acdf3477 100644
+--- a/src/CLI/Setup.cpp
++++ b/src/CLI/Setup.cpp
+@@ -212,11 +212,6 @@ static bool setup_common()
+     save_main_thread_id();
+ 
+ #ifdef __WXGTK__
+-    // On Linux, wxGTK has no support for Wayland, and the app crashes on
+-    // startup if gtk3 is used. This env var has to be set explicitly to
+-    // instruct the window manager to fall back to X server mode.
+-    ::setenv("GDK_BACKEND", "x11", /* replace */ true);
+-
+     // https://github.com/prusa3d/PrusaSlicer/issues/12969
+     ::setenv("WEBKIT_DISABLE_COMPOSITING_MODE", "1", /* replace */ false);
+     ::setenv("WEBKIT_DISABLE_DMABUF_RENDERER", "1", /* replace */ false);
+@@ -338,4 +333,4 @@ bool setup(Data& cli, int argc, char** argv)
+     return true;
+ }
+ 
+-}
+\ No newline at end of file
++}

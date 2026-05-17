@@ -1,0 +1,15 @@
+diff --git a/src/lsp-server.ts b/src/lsp-server.ts
+index ef5907d..9494430 100644
+--- a/src/lsp-server.ts
++++ b/src/lsp-server.ts
+@@ -323,6 +323,10 @@ export class LspServer {
+             }
+         }
+
++        if (!fallbackTsserverPath) {
++            fallbackTsserverPath = "@typescript@";
++        }
++
+         const fallbackVersionProvider = new TypeScriptVersionProvider(fallbackTsserverPath, this.logger);
+         const fallbackSettingVersion = fallbackVersionProvider.getUserSettingVersion();
+         if (fallbackSettingVersion) {

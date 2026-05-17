@@ -1,0 +1,17 @@
+---
+ UEFITool/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/UEFITool/CMakeLists.txt b/UEFITool/CMakeLists.txt
+index aef60d0..98723ac 100644
+--- a/UEFITool/CMakeLists.txt
++++ b/UEFITool/CMakeLists.txt
+@@ -143,4 +143,4 @@ IF(UNIX AND (NOT APPLE) AND (NOT CYGWIN))
+  INSTALL(FILES uefitool.desktop DESTINATION share/applications)
+ ENDIF()
+ 
+-INSTALL(TARGETS UEFITool BUNDLE DESTINATION "/Applications" )
++INSTALL(TARGETS UEFITool BUNDLE DESTINATION "Applications" )
+-- 
+2.40.1
+

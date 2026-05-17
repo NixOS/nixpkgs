@@ -1,0 +1,15 @@
+--- a/usr.bin/rpcgen/rpc_scan.c
++++ b/usr.bin/rpcgen/rpc_scan.c
+@@ -43,8 +43,12 @@ __FBSDID("$FreeBSD$");
+  */
+ 
+ #include <sys/types.h>
+ 
++// glibc + compat is broken from silly indirect header guard
++#define _SYS_WAIT_H
++# include <bits/waitflags.h>
++#undef _SYS_WAIT_H
+ #include <sys/wait.h>
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <string.h>

@@ -1,0 +1,24 @@
+diff --git a/libsrc/core/python_ngcore.hpp b/libsrc/core/python_ngcore.hpp
+index 2ce84481..4fc8aa4e 100644
+--- a/libsrc/core/python_ngcore.hpp
++++ b/libsrc/core/python_ngcore.hpp
+@@ -2,6 +2,7 @@
+ #define NETGEN_CORE_PYTHON_NGCORE_HPP
+ 
+ #include "ngcore_api.hpp" // for operator new
++#include <pybind11/embed.h>
+ #include <pybind11/pybind11.h>
+ #include <pybind11/operators.h>
+ #include <pybind11/numpy.h>
+diff --git a/ng/ngappinit.cpp b/ng/ngappinit.cpp
+index f6b4be0a..e21937b5 100644
+--- a/ng/ngappinit.cpp
++++ b/ng/ngappinit.cpp
+@@ -256,6 +256,7 @@ int main(int argc, char ** argv)
+       Tk_MainLoop();
+       Tcl_DeleteInterp (myinterp); 
+ #ifdef NETGEN_PYTHON
++      py::scoped_interpreter guard{};
+       py::gil_scoped_acquire ensure_gil;
+ #endif
+ 

@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rouge (3.28.0)
+    xcpretty (0.4.1)
+      rouge (~> 3.28.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  xcpretty
+
+BUNDLED WITH
+   2.6.2

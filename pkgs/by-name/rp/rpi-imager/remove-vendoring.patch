@@ -1,0 +1,52 @@
+diff --git i/src/CMakeLists.txt w/src/CMakeLists.txt
+index de474c4d..36b6cf2c 100644
+--- i/src/CMakeLists.txt
++++ w/src/CMakeLists.txt
+@@ -129,26 +129,37 @@ set(BUILD_SHARED_LIBS OFF)
+ include(FetchContent)
+ 
+ # Bundled liblzma
++find_package(LibLZMA)
++if(NOT LIBLZMA_FOUND)
+ include(dependencies/xz.cmake)
++endif()
+ 
+ # Bundled zstd
++find_package(zstd ${ZSTD_VERSION})
++if(NOT zstd_FOUND)
+ include(dependencies/zstd.cmake)
++endif()
+ 
+ # Remote nghttp2
+-include(dependencies/nghttp2.cmake)
+ 
+ # Bundled yescrypt
+ include(dependencies/yescrypt.cmake)
+ 
+ 
+ # Bundled zlib
++find_package(ZLIB)
++if(NOT ZLIB_FOUND)
+ include(dependencies/zlib.cmake)
++endif()
+ 
+ # Bundled libarchive
++find_package(LibArchive)
++if(NOT LibArchive_FOUND)
+ include(dependencies/libarchive.cmake)
++endif()
+ 
+ # libcurl
+-if(APPLE)
++if(APPLE OR TRUE)
+     # In version 8.15.0, libcurl dropped support for Secure Transport, because it
+     # does not implement TLS 1.3. Unfortunately, there was no replacement Network.framework implementation,
+     # so on macOS we're forced to use the macOS SDK version of libcurl, including libcurl's own OpenSSL-analogue.
+@@ -506,7 +517,6 @@ else()
+     include(linux/PlatformPackaging.cmake)
+ endif()
+ 
+-add_dependencies(${PROJECT_NAME} zlibstatic yescrypt)
+ include_directories(${CURL_INCLUDE_DIR} ${LibArchive_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIR} ${YESCRYPT_INCLUDE_DIR})
+ 
+ # Link different Qt components based on build type
