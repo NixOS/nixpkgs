@@ -5,6 +5,7 @@
   aioresponses,
   aiounittest,
   buildPythonPackage,
+  pythonOlder,
   ciso8601,
   fetchFromGitHub,
   freenub,
@@ -63,6 +64,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "yalexs" ];
+
+  # aiounittest doesn't work with python 3.14
+  # https://github.com/Yale-Libs/yalexs/issues/335
+  doCheck = pythonOlder "3.14";
 
   meta = {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
