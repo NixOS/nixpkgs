@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "2.7.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodiscover";
     tag = "v${version}";
-    hash = "sha256-q0HXANSfoDPlGdokfiQcsMHkt9ZmD604JRL/SDQx2hw=";
+    hash = "sha256-O5aQ2yCcy6ZtDviH8Jie3BrgS4kPhSDHBVhbXco5oqM=";
   };
 
   build-system = [ poetry-core ];
