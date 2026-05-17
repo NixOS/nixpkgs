@@ -4472,6 +4472,7 @@ with pkgs;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
   rust_1_94 = callPackage ../development/compilers/rust/1_94.nix { };
+  rust_1_95 = callPackage ../development/compilers/rust/1_95.nix { };
   rust = rust_1_94;
 
   mrustc = callPackage ../development/compilers/mrustc { };
@@ -4479,6 +4480,7 @@ with pkgs;
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
   rustPackages_1_94 = rust_1_94.packages.stable;
+  rustPackages_1_95 = rust_1_95.packages.stable;
   rustPackages = rustPackages_1_94;
 
   inherit (rustPackages)
