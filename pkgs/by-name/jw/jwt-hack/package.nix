@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   meta = {
     description = "JSON Web Token Hack Toolkit";

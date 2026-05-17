@@ -1170,9 +1170,7 @@ in
       substituteInPlace ''${rockspecFilename} \
         --replace-fail '"ltreesitter == 0.1.0",' '"ltreesitter >= 0.2.0",' \
         --replace-fail '"luv == 1.51.0",' '"luv >= 1.51.0",' \
-        --replace-fail '"tree-sitter-cli == 0.24.7",' "" \
-        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",' \
-        --replace-fail '"tree-sitter-teal == 0.0.34",' '"tree-sitter-teal >= 0.0.34",'
+        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",'
     '';
   });
 
