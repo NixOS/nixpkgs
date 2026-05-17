@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pydbus
     pyudev
     evdev
+    tkinter
   ];
 
   # build the GNOME Shell extension zip before the Python build
