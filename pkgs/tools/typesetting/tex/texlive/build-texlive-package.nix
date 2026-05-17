@@ -76,6 +76,7 @@ let
     # without any appreciable benefit (as the combined packages already
     # cause them all to be built and cached anyway).
     hydraPlatforms = [ ];
+    maintainers = with lib.maintainers; [ xworld21 ];
   }
   // lib.optionalAttrs (args ? shortdesc) {
     description = args.shortdesc;
