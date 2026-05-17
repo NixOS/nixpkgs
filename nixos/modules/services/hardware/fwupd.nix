@@ -31,8 +31,11 @@ let
   originalEtc =
     let
       mkEtcFile = n: lib.nameValuePair n { source = "${cfg.package}/etc/${n}"; };
+      etcFiles = lib.filter (
+        f: config.boot.loader.grub.enable || f != "grub.d/35_fwupd"
+      ) cfg.package.filesInstalledToEtc;
     in
-    lib.listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
+    lib.listToAttrs (map mkEtcFile etcFiles);
   extraTrustedKeys =
     let
       mkName = p: "pki/fwupd/${baseNameOf p}";
