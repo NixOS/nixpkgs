@@ -17,17 +17,21 @@
 
 buildGoModule rec {
   inherit pname;
-  version = "2.12.3";
+  version = "2.13.6";
   tags = lib.optionals enableGateway [ "gateway" ];
 
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
-    tag = version;
-    hash = "sha256-C/q3fCcMMnqjXeoO/t/YOKHLq8HDNfF+x75nCcjwwvE=";
+    tag = "v${version}";
+    hash = "sha256-oA6yN369Ndkm4+B15RnFXPGRFVFhKwGRunMGHZ1DZKo=";
   };
 
-  vendorHash = "sha256-KgZYKopW+FOdwBIGxa2RLiEbefZ/1vAhcsWtcYhgdFs=";
+  vendorHash = "sha256-f8FBx4ODzJHk7CwRCZ7Ot/YUEGrLQVx/a22X1vWj3kQ=";
+
+  postPatch = ''
+    substituteInPlace go.mod --replace-fail "go 1.26.3" "go 1.26.2"
+  '';
 
   # no test files
   doCheck = false;
@@ -55,14 +59,14 @@ buildGoModule rec {
 
   ldflags =
     let
-      prefix = "github.com/kumahq/kuma/pkg/version";
+      prefix = "github.com/kumahq/kuma/v2/pkg/version";
     in
     [
       "-s"
       "-w"
       "-X ${prefix}.version=${version}"
-      "-X ${prefix}.gitTag=${version}"
-      "-X ${prefix}.gitCommit=${version}"
+      "-X ${prefix}.gitTag=v${version}"
+      "-X ${prefix}.gitCommit=v${version}"
       "-X ${prefix}.buildDate=${version}"
     ];
 
