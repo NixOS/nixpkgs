@@ -5,13 +5,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "plandex";
-  version = "2.1.2";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "plandex-ai";
     repo = "plandex";
     rev = "cli/v${finalAttrs.version}";
-    hash = "sha256-mNNL1K+gNhYDuKpGt3FP/L4JxO/bHyebhABOpFjLLLI=";
+    hash = "sha256-JfmKuney9VLoh3XQ9TNydUmiFne+SHWhoNKB15GPVPM=";
   };
 
   ldflags = [
@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/app/cli";
 
-  vendorHash = "sha256-0wYlCxg0CPPizdhJ1VfZEEcauy2rJeeTqPiiqsExBu8=";
+  vendorHash = "sha256-K6KzOxiXZY9cuCh6mTYZ/QNh+yV4y5cQk2xjL3YMLQo=";
 
   meta = {
     mainProgram = "plandex";
