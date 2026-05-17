@@ -11,6 +11,7 @@
   bash-completion,
   meson,
   ninja,
+  cmake,
   cmocka,
   iproute2,
   makeWrapper,
@@ -24,10 +25,6 @@ let
       netifaces
       dbus-python
       rich
-      pyflakes
-      pycodestyle
-      pytest
-      coverage
       cffi
       setuptools
     ]
@@ -44,13 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JbwBnv+vaSyeFd8FKAgLeYNBELAsloUIPwd1ed2ogaI=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
+    pythonenv
     pkg-config
-    glib
     pandoc
     meson
     ninja
-    cmocka
+    cmake
     makeWrapper
   ];
 
@@ -69,10 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   postPatch = ''
-    substituteInPlace meson.build \
-      --replace-fail "python3-coverage" "coverage" \
-      --replace-fail "pyflakes3" "pyflakes" \
-      --replace-fail "pytest3" "pytest"
+    for mesonBooleanOption in "testing" "unit_testing"; do
+      substituteInPlace meson_options.txt --replace-fail \
+        "option('$mesonBooleanOption', type: 'boolean', value: true)" \
+        "option('$mesonBooleanOption', type: 'boolean', value: false)"
+    done
     substituteInPlace netplan-configure.service \
       --replace-fail "/usr/libexec/netplan/" "${placeholder "out"}/libexec/netplan/"
     substituteInPlace netplan_cli/cli/utils.py \
@@ -84,9 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/netplan \
       --prefix PYTHONPATH : "$out/${pythonenv.sitePackages}:${pythonenv}/${pythonenv.sitePackages}" \
-      --prefix LD_LIBRARY_PATH : "$out/lib"
-    mv $out/lib/systemd/system-generators/netplan $out/lib/systemd/system-generators/.netplan-wrapped
-    makeWrapper $out/lib/systemd/system-generators/.netplan-wrapped $out/lib/systemd/system-generators/netplan \
+      --prefix LD_LIBRARY_PATH : "$out/lib" \
+      --inherit-argv0
+    wrapProgram $out/lib/systemd/system-generators/netplan \
       --argv0 /etc/systemd/system-generators/netplan
   '';
 
