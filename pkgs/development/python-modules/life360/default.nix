@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "life360";
   version = "7.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pnbruckner";
     repo = "life360";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D7ZtC9WrGTuU7cOs37P+y9zqOrOlfa919FVicejy6n4=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Life360";
     homepage = "https://github.com/pnbruckner/life360";
-    changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
+    changelog = "https://github.com/pnbruckner/life360/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
