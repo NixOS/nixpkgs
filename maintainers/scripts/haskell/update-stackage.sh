@@ -33,7 +33,7 @@ fi
 
 # Stackage solver to use, LTS or Nightly
 # (should be capitalized like the display name)
-SOLVER=LTS
+SOLVER=Nightly
 # Stackage solver verson, if any. Use latest if empty
 VERSION=
 TMP_TEMPLATE=update-stackage.XXXXXXX
@@ -105,6 +105,7 @@ sed -r \
     -e '/ hledger-ui /d' \
     -e '/ hledger-web /d' \
     -e '/ spacecookie /d' \
+    -e '/ hnix-store-core /d' \
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.

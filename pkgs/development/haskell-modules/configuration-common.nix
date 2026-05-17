@@ -287,6 +287,8 @@ with haskellLib;
   }) (doJailbreak super.language-haskell-extract);
 
   vector = overrideCabal (old: {
+    # 2026-05-16: allow QuickCheck 2.16
+    jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
     testTargets = [
       "vector-tests-O0"
@@ -405,14 +407,6 @@ with haskellLib;
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
-  # fpr-calc test suite depends on random >= 1.3
-  # see https://github.com/IntersectMBO/lsm-tree/issues/797
-  bloomfilter-blocked =
-    lib.warnIf (lib.versionAtLeast self.random.version "1.3")
-      "haskellPackages.bloomfilter-blocked: dontCheck can potentially be removed"
-      dontCheck
-      super.bloomfilter-blocked;
-
   # Missing files necessary for test suite compilation
   # https://github.com/brandonchinn178/kdl-hs/issues/33
   kdl-hs = dontCheck super.kdl-hs;
@@ -516,9 +510,11 @@ with haskellLib;
   # 2025-02-14: Too strict bounds on attoparsec < 0.14
   attoparsec-varword = doJailbreak (dontCheck super.attoparsec-varword);
 
-  # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
-  # https://github.com/haskell/attoparsec/issues/232
   attoparsec = overrideCabal (drv: {
+    # 2025-05-17: allow QuickCheck 2.16
+    jailbreak = true;
+    # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
+    # https://github.com/haskell/attoparsec/issues/232
     testFlags = drv.testFlags or [ ] ++ [
       "-p"
       "$0!=\"tests.buf.t_iter\""
@@ -861,12 +857,6 @@ with haskellLib;
   xmlgen = dontCheck super.xmlgen;
   wai-cors = dontCheck super.wai-cors;
 
-  # Needs QuickCheck >= 2.16, but Stackage is currently on 2.15
-  integer-logarithms =
-    lib.warnIf (lib.versionAtLeast super.QuickCheck.version "2.16")
-      "override for haskellPackages.integer-logarithms may no longer be needed"
-      (dontCheck super.integer-logarithms);
-
   # Apply patch fixing an incorrect QuickCheck property which occasionally causes false negatives
   # https://github.com/Philonous/xml-picklers/issues/5
   xml-picklers = appendPatch (pkgs.fetchpatch {
@@ -878,18 +868,6 @@ with haskellLib;
   pandoc-crossref = lib.pipe super.pandoc-crossref [
     # https://github.com/lierdakil/pandoc-crossref/issues/492
     doJailbreak
-    # We are still using pandoc == 3.7.*
-    (appendPatch (
-      lib.warnIf (lib.versionAtLeast self.pandoc.version "3.8")
-        "haskellPackages.pandoc-crossref: remove revert of pandoc-3.8 patch"
-        pkgs.fetchpatch
-        {
-          name = "pandoc-crossref-revert-pandoc-3.8-highlight.patch";
-          url = "https://github.com/lierdakil/pandoc-crossref/commit/b0c35a59d5a802f6525407bfeb31699ffd0b4671.patch";
-          hash = "sha256-MIITL9Qr3+1fKf1sTwHzXPcYTt3YC+vr9CpMgqsBXlc=";
-          revert = true;
-        }
-    ))
   ];
 
   pandoc = overrideCabal (drv: {
@@ -1572,14 +1550,8 @@ with haskellLib;
   # Break infinite recursion via optparse-applicative (alternatively, dontCheck syb)
   prettyprinter-ansi-terminal = dontCheck super.prettyprinter-ansi-terminal;
 
-  # Released version prohibits QuickCheck >= 2.15 at the moment
-  optparse-applicative = appendPatches [
-    (pkgs.fetchpatch2 {
-      name = "optparse-applicative-0.18.1-allow-QuickCheck-2.15.patch";
-      url = "https://github.com/pcapriotti/optparse-applicative/commit/2c2a39ed53e6339d8dc717efeb7d44f4c2b69cab.patch";
-      hash = "sha256-198TfBUR3ygPpvKPvtH69UmbMmoRagmzr9UURPr6Kj4=";
-    })
-  ] super.optparse-applicative;
+  # 2026-05-16: allow QuickCheck 2.16
+  optparse-applicative = doJailbreak super.optparse-applicative;
 
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
@@ -1809,12 +1781,6 @@ with haskellLib;
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
-
-  # Allow granite >= 0.4
-  dataframe = lib.pipe super.dataframe [
-    (warnAfterVersion "0.5.0.1")
-    doJailbreak
-  ];
 
   # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
   dataframe-persistent = lib.pipe super.dataframe-persistent [
@@ -2461,22 +2427,6 @@ with haskellLib;
     })
   ] super.heist;
 
-  # 2025-09-03: Disable tests until this is solved:
-  # https://github.com/clash-lang/ghc-typelits-extra/issues/60
-  ghc-typelits-extra = lib.pipe super.ghc-typelits-extra [
-    (warnAfterVersion "0.4.8")
-    dontCheck
-  ];
-
-  # 2025-09-16: 0.5 adds support for GHC 9.12 and doesn't actually seem to contain a
-  # breaking change, so we can upgrade beyond Stackage.
-  # https://github.com/clash-lang/ghc-tcplugins-extra/pull/29#issuecomment-3299008674
-  # https://github.com/clash-lang/ghc-tcplugins-extra/compare/702dda2095c66c4f5148a749c8b7dbcc8a09f5c...v0.5.0
-  ghc-tcplugins-extra = doDistribute self.ghc-tcplugins-extra_0_5;
-  # 2025-09-11: Tests have been fixed in 0.7.12, but it requests ghc-tcplugins-extra >= 0.5
-  # which Stackage LTS won't update to, but we can.
-  ghc-typelits-natnormalise = doDistribute self.ghc-typelits-natnormalise_0_7_12;
-
   # calls ghc in tests
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
@@ -2774,7 +2724,6 @@ with haskellLib;
       ]
     ) super)
     what4
-    what4_1_7_3
     ;
 
   copilot-theorem = lib.pipe super.copilot-theorem [
@@ -2842,15 +2791,7 @@ with haskellLib;
       (doJailbreak super.monad-bayes);
 
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
-  crucible = doJailbreak (
-    super.crucible.override {
-      what4 = self.what4_1_7_3;
-    }
-  );
-
-  crucible-llvm = super.crucible-llvm.override {
-    what4 = self.what4_1_7_3;
-  };
+  crucible = doJailbreak super.crucible;
 
   # Test suite invokes cabal-install in a way incompatible with our generic builder
   # (i.e. tries to re-use the ghc package db / environment from dist-newstyle).
@@ -3402,43 +3343,4 @@ with haskellLib;
       )
     ];
   }
-)
-
-# 2026-04-01: IHP packages need hasql >= 1.10 (via hasql-mapping).
-# The scope renames hasql-stack attrs to the 1.10 line and unmarks
-# hasql-mapping, which only builds against hasql >= 1.10 and so stays
-# broken at the top level. dontCheck for tests that need a live
-# PostgreSQL lives in configuration-nix.nix on the versioned attrs.
-// (
-  let
-    ihpHasqlScope = self: super: {
-      hasql = doDistribute super.hasql_1_10_3;
-      hasql-dynamic-statements = doDistribute super.hasql-dynamic-statements_0_5_1;
-      hasql-notifications = doDistribute super.hasql-notifications_0_2_5_0;
-      hasql-pool = doDistribute super.hasql-pool_1_4_2;
-      hasql-transaction = doDistribute super.hasql-transaction_1_2_2;
-      postgresql-binary = doDistribute super.postgresql-binary_0_15_0_1;
-      text-builder = doDistribute super.text-builder_1_0_0_5;
-      hasql-mapping = doDistribute (unmarkBroken super.hasql-mapping);
-      postgresql-simple-postgresql-types = doDistribute (
-        unmarkBroken super.postgresql-simple-postgresql-types
-      );
-    };
-
-    ihpPackages = [
-      "ihp"
-      "ihp-datasync"
-      "ihp-graphql"
-      "ihp-hspec"
-      "ihp-ide"
-      "ihp-job-dashboard"
-      "ihp-migrate"
-      "ihp-pglistener"
-      "ihp-ssc"
-      "ihp-typed-sql"
-    ];
-  in
-  lib.genAttrs ihpPackages (
-    name: haskellLib.doDistribute (haskellLib.unmarkBroken (super.${name}.overrideScope ihpHasqlScope))
-  )
 )
