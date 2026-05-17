@@ -4,12 +4,44 @@ let
   inherit (types)
     attrsOf
     nestedAttrsOf
+    nullOr
     raw
     submodule
     ;
   # `or` fallbacks allow the docs build sandbox to evaluate this module:
   # the sandbox passes a fake `config` via `specialArgs` that lacks these attributes.
   contractDefinitions = config.contractDefinitions or lib.contracts;
+
+  # A provider *reference* (`{ module, contract? }`) like `raw`, but mergeable:
+  # multiple definitions are allowed as long as they all agree on
+  # `module.loc` (the only field routing reads -- `routedName` matches a
+  # reference to a provider by its `module.loc`). `raw`'s `mergeOneOption`
+  # throws on any second definition; `mergeEqualOption` cannot help because two
+  # references to the same provider differ in `module.value` (a thunk/function,
+  # never `==`). Comparing only `module.loc` lets the legitimate duplicates a
+  # node can accumulate -- e.g. a host that co-locates several apps, each of
+  # whose routing modules sets the same node-wide `defaultProvider` -- collapse
+  # to one, while still rejecting a genuine conflict (two different providers).
+  providerRefType = lib.mkOptionType {
+    name = "providerRef";
+    description = "contract provider reference";
+    # Same permissive check as `raw`: a reference is an opaque `{ module; ... }`.
+    check = lib.types.raw.check;
+    merge =
+      loc: defs:
+      let
+        locOf = def: def.value.module.loc or null;
+        first = lib.head defs;
+        firstLoc = locOf first;
+        allAgree = lib.all (def: locOf def == firstLoc) defs;
+      in
+      if allAgree then
+        first.value
+      else
+        throw "The option `${lib.showOption loc}' has conflicting provider references (different `module.loc`) from: ${
+          lib.concatMapStringsSep ", " (def: def.file) defs
+        }.";
+  };
 in
 {
   options = {
@@ -233,17 +265,36 @@ in
                     reference at the matching path.
 
                     For an easier way to pick a single provider for every
-                    instance, consider `defaultProviderName` / `defaultProvider`.
+                    instance, consider `defaultProvider`.
                   '';
                   type = attrsOf raw;
+                };
+                defaultProvider = mkOption {
+                  description = ''
+                    The default provider for the `${contractName}` contract, alongside its configuration.
+                    Like `providers.<name>`, this is conventionally
+                    `{ module, contract? }` (with `module.value`/`module.loc`),
+                    not the resolved config value directly.
+
+                    Setting this for a contract means you no longer need to set providers for individual `instances`:
+
+                    ```nix
+                    contracts.${contractName}.defaultProvider = config.contracts.${contractName}.providers."<provider>";
+                    ```
+                  '';
+                  type = nullOr providerRefType;
+                  default = null;
+                  example = lib.literalExpression ''
+                    config.contracts.fileSecrets.providers.hardcoded-secret
+                  '';
                 };
                 instances = mkOption {
                   description = ''
                     Instances of the `${contractName}` contract.
                     By default extracts the contract instances from
                     `defaultProvider.module.value` (using `defaultProvider.contract`,
-                    defaulting to `[ "${contractName}" ]`), if set (potentially
-                    by `defaultProviderName`), but may be overridden per instance.
+                    defaulting to `[ "${contractName}" ]`), if set, but may be
+                    overridden per instance.
 
                     Each leaf is a provider reference `{ module, contract? }`
                     (same shape as `providers.<name>`); the option's `apply`
@@ -260,7 +311,7 @@ in
                     override at a sibling path.
 
                     ```nix
-                    contracts.${contractName}.defaultProviderName = "<default>";
+                    contracts.${contractName}.defaultProvider = config.contracts.${contractName}.providers."<default>";
                     contracts.${contractName}.instances."<consumer>"."<instance>" =
                       config.contracts.${contractName}.providers."<other>";
                     ```
@@ -376,7 +427,12 @@ in
                     ```
                   '';
                   type = nestedAttrsOf raw;
-                  default = lib.mapNestedAttrs' wantType (v: v.result) contract.config.instances;
+                  default =
+                    if contract.config.defaultProvider == null && contract.config.want == { } then
+                      # No consumers and no provider (e.g. docs sandbox) -- safe empty.
+                      { }
+                    else
+                      lib.mapNestedAttrs' wantType (v: v.result) contract.config.instances;
                   defaultText = lib.literalExpression ''
                     lib.mapNestedAttrs' wantType
                       (v: v.result)
@@ -385,6 +441,66 @@ in
                   readOnly = true;
                 };
               };
+              # Provide the asserting default for `instances` via config rather
+              # than on the option itself: the docs build sandbox evaluates option
+              # defaults but does not evaluate submodule config blocks.
+              #
+              # `defaultProvider` is conventionally a provider reference
+              # `{ module, contract? }` (apply resolves it path-aware) but
+              # may also be a raw `nestedAttrsOf` tree of pre-resolved
+              # instances. Either way: walk each `want`-leaf path and set a
+              # `mkOptionDefault`-priority value at that path - either the
+              # whole providerRef (apply will pick the per-path slice) or
+              # the tree's value at that path. Wrapping each leaf
+              # individually (rather than the whole tree) lets per-leaf
+              # overrides from other modules compose against the default
+              # via `nestedAttrsOf`'s leaf-level priority handling.
+              config.instances =
+                let
+                  provider = contract.config.defaultProvider;
+                  # Walk `want` with explicit recursion (vs.
+                  # `concatMapNestedAttrs'` whose `mergeAttrs` fold loses
+                  # sibling leaves at depth > 1) to produce a tree mirroring
+                  # `want` with `mkOptionDefault`-wrapped leaves - `instances`'s
+                  # `apply` then resolves each leaf path-aware.
+                  #
+                  # Each leaf's `mkOptionDefault` carries the `defaultProvider`
+                  # reference, so a leaf left unset falls back to the default
+                  # provider. When there is no `defaultProvider`, the leaf's
+                  # default is instead an "unrouted" marker: a per-instance
+                  # `instances` override (normal priority) at that leaf wins and
+                  # replaces it, so instances-only routing is allowed; a leaf
+                  # routed by neither a default nor an override stays unrouted.
+                  # This is per-leaf, so the unrouted state never affects leaves
+                  # that *are* routed by an override -- unlike a single
+                  # whole-tree `assert want == {}`, which rejected any `want` the
+                  # moment `defaultProvider` was unset.
+                  #
+                  # The marker is shaped like a provider reference (`{ module = {
+                  # loc; value; }; }`) so it is a leaf to `resolveInstanceTree`
+                  # (`v ? module`) without forcing anything: `routedName` forces
+                  # only `module.loc` (a sentinel matching no provider, so the
+                  # leaf is absent from every `providerRequests` -- routedness is
+                  # safe to read), while `resolvedInstances`/`results` force
+                  # `module.value` and surface the error -- only when a result
+                  # for the unrouted leaf is actually demanded.
+                  leafDefault =
+                    if provider != null then
+                      assert lib.assertMsg (
+                        provider ? module
+                      ) "contracts.${contractName}.defaultProvider must be a provider reference `{ module, contract? }`.";
+                      lib.mkOptionDefault provider
+                    else
+                      lib.mkOptionDefault {
+                        module = {
+                          loc = [ "<contracts.${contractName}: unrouted>" ];
+                          value = throw "contracts.${contractName}: an instance is `want`ed but routed to no provider. Set `contracts.${contractName}.defaultProvider`/`defaultProviderName`, or route this instance via `contracts.${contractName}.instances`.";
+                        };
+                      };
+                  buildDefaultTree =
+                    subWant: if subWant ? request then leafDefault else lib.mapAttrs (_: buildDefaultTree) subWant;
+                in
+                buildDefaultTree contract.config.want;
             });
           }
         ) contractDefinitions;
