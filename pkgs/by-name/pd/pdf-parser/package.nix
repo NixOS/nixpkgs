@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
     license = lib.licenses.publicDomain;
-    maintainers = [ lib.maintainers.lightdiscord ];
+    maintainers = with lib.maintainers; [ cbrxyz ];
     platforms = lib.platforms.all;
     mainProgram = "pdf-parser.py";
   };
