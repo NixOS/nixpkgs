@@ -155,11 +155,11 @@
     "vendorHash": "sha256-SO3CX7pZ+q7ytz/55cxTPlW7ByY1zKhxkQxMiqAvm8o="
   },
   "checkly_checkly": {
-    "hash": "sha256-S83+rMPCN3Bt5kftmViYS2yUTsZsFtdiAE14WrBu+XA=",
+    "hash": "sha256-v9px/k2b6zUza8ZvoOfxQLNyofcIKOLYVmGAmkyA3TQ=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
     "owner": "checkly",
     "repo": "terraform-provider-checkly",
-    "rev": "v1.22.0",
+    "rev": "v1.23.0",
     "spdx": null,
     "vendorHash": "sha256-fY1oLzNYYNmUvOVNCWZlo2pvn2SgGjc4JnMORZdt/ss="
   },
@@ -616,13 +616,13 @@
     "vendorHash": "sha256-TvtStKCI11frbi1C1d4/f60XXJPUQBzSJIAkjN6LfBQ="
   },
   "hashicorp_local": {
-    "hash": "sha256-VYzy+/BniYU++pw9koLWotEJzsIzOjpLX4aRSRupV58=",
+    "hash": "sha256-qntV0gfxEVV24gqiVOvUai+pai4vvU+KtLmLBqOBQbY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/local",
     "owner": "hashicorp",
     "repo": "terraform-provider-local",
-    "rev": "v2.8.0",
+    "rev": "v2.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-3qnfKHionSfT2efCl0TcHWFFgrh1bPE6Maqg4MCRq0g="
+    "vendorHash": "sha256-qvJSzqGUHw1/Lu4XO7LWssA+TN8pCyTbzh6t1bz+y1g="
   },
   "hashicorp_nomad": {
     "hash": "sha256-O3dtOB+irsUeDq1yXxfqDSyz2jfPXS1UgiL+B4RFsW4=",
