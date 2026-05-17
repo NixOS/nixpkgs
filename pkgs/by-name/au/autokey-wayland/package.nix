@@ -20,6 +20,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.97.4";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "dlk3";
     repo = "autokey-wayland";
