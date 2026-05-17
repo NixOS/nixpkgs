@@ -104,4 +104,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ raphaelr ];
   };
+
+  __structuredAttrs = true;
 }
