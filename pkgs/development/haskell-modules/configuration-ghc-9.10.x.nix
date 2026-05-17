@@ -111,7 +111,7 @@ in
               ];
           in
           {
-            pantry = upgradeCabal ssuper.pantry_0_11_2;
+            pantry = upgradeCabal ssuper.pantry;
             rio-prettyprint = upgradeCabal ssuper.rio-prettyprint;
             hackage-security = upgradeCabal ssuper.hackage-security;
             hpack = upgradeCabal sself.hpack_0_39_1;
