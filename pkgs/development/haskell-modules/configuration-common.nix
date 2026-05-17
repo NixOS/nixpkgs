@@ -765,13 +765,6 @@ with haskellLib;
     })
   ] super.turtle;
 
-  # Allow inspection-testing >= 0.6 in test suite
-  algebraic-graphs = appendPatch (pkgs.fetchpatch2 {
-    name = "algebraic-graphs-0.7-allow-inspection-testing-0.6.patch";
-    url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
-    hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
-  }) super.algebraic-graphs;
-
   inspection-testing = overrideCabal (drv: {
     broken =
       with pkgs.stdenv.hostPlatform;
