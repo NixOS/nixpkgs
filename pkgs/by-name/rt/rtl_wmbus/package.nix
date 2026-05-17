@@ -7,14 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  release_tag = "d2be82c";
   pname = "rtl-wmbus";
-  version = "0-${release_tag}";
-
+  version = "0-${src.tag}";
   src = fetchFromGitHub {
     owner = "xaelsouth";
     repo = "rtl-wmbus";
-    tag = release_tag;
+    tag = "d2be82c";
     hash = "sha256-TbNOvEyG0vNG68UpKRwJYDcUiDWTujneSD0Vx/4eFrA=";
 
     # need to fetch revision from git
