@@ -86,7 +86,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
   # unstable version drops dependency on insecure package ecdsa
-  version = "8.5.2.26010301-unstable-2026-03-27";
+  version = "8.5.3.26051504";
 
   src = fetchFromGitHub {
     owner = "renpy";
@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
-    version_name = "In Good Health"
+    version_name = "We Can Go to the Moon"
     EOF
   '';
 
@@ -261,12 +261,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     binSrc = fetchzip {
       url = "https://www.renpy.org/dl/${finalAttrs.passthru.semver}/renpy-${finalAttrs.passthru.semver}-sdk.tar.bz2";
-      hash = "sha256-wF6Z/lA8CyaCEZg1IqpZ4mG8CF8JgNHBf5KjKIOoKVI=";
+      hash = "sha256-l91zD0n/c5E80YfgZ/m5AbIj/RKL5OFosfwz7RHu7aQ=";
     };
 
     binSrcArm = fetchzip {
       url = "https://www.renpy.org/dl/${finalAttrs.passthru.semver}/renpy-${finalAttrs.passthru.semver}-sdkarm.tar.bz2";
-      hash = "sha256-DKXghs1XIRrtAGTifMx+7XAbxiqH7qYQiaKhBaO7PBA=";
+      hash = "sha256-51+swtUfDK0on9wVVXOyzJKxHtV6m4u9X1wvpp85stI=";
     };
 
     distributedRenpy =
