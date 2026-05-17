@@ -195,7 +195,9 @@ lib.extendMkDerivation {
           builtins.attrValues pubspecLockData.dependencySources;
 
       preConfigure = args.preConfigure or "" + ''
-        ln -sf "$pubspecLockFilePath" pubspec.lock
+        if [[ -n "$pubspecLockFilePath" ]]; then
+          ln -sf "$pubspecLockFilePath" pubspec.lock;
+        fi
       '';
 
       # When stripping, it seems some ELF information is lost and the dart VM cli
