@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/FactusConsulting/whisper-dictate";
     changelog = "https://github.com/FactusConsulting/whisper-dictate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ larswa ];
+    platforms = lib.platforms.linux;
     mainProgram = "whisper-dictate";
   };
 })
