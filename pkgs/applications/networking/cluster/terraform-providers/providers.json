@@ -128,13 +128,13 @@
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
   "buildkite_buildkite": {
-    "hash": "sha256-/Bg9Dym8mdcsjnTzlBs8iw6z4JpGBRvDo2kJeFJQ2MY=",
+    "hash": "sha256-R9jG7ww2iEU1qif6NeV0lpgG6Nv5rsh5h+IVhSscuKI=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v1.32.0",
+    "rev": "v1.33.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-CdaYWCQQ0L1LprQ5G/aXoA5GCQWCxOkkiDbMd20r7rs="
+    "vendorHash": "sha256-n6+8mufcH3rNe4yLkc+7NkV7UwNwyIVzDFStSC7iqE4="
   },
   "camptocamp_pass": {
     "hash": "sha256-GQ2g7VyK+eeBqW3LMR4U0gMYsvQnG3y+KEKKkvnmfsk=",
@@ -598,13 +598,13 @@
     "vendorHash": "sha256-qzwm0R51jvElo+T8ypkHrlQy/MH8c/o+NWIS+YrQ4uw="
   },
   "hashicorp_http": {
-    "hash": "sha256-IXqKZ9RQP0kZVxc9OfaWglF8GeycSAl5DATdqc8n35g=",
+    "hash": "sha256-5zZSKmlhSuIaIiXUZhmTCFwfJ/3QxdDOg4RVooY7qcA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/http",
     "owner": "hashicorp",
     "repo": "terraform-provider-http",
-    "rev": "v3.5.0",
+    "rev": "v3.6.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-SsEWNIBkgcdTlSrB4hIvRmhMv2eJ2qQaPUmiN09A+NM="
+    "vendorHash": "sha256-hh0tOG9HY0cWTda5vjpGwCGntD7I/wCJf6B92EMKRrQ="
   },
   "hashicorp_kubernetes": {
     "hash": "sha256-P9ChE8AZa6LqDMOyjAx2COMGmzhCpIsiUJ9uXbTUPwo=",
@@ -1481,13 +1481,13 @@
     "vendorHash": "sha256-rUYHapEVqRupLOPVbcAH8YP0cuXclMmYTQUkqeOwCN0="
   },
   "vultr_vultr": {
-    "hash": "sha256-IKXby/v1oNjxwgzbFTSDQYEEWbV8v8qzB4ZC9ISEf5o=",
+    "hash": "sha256-TMja+5jeYxIjY/MvJwCR/2rsbHuF7RcPReQSzkksk7Q=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.31.1",
+    "rev": "v2.31.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-XQcxOSvZKXyq+k8N5n1lMM1ThbWfDXBm1Hc+Rmagu7I="
+    "vendorHash": "sha256-OASLdReS245N4y0SQ4WY7kPNPpGTHptQgXlNqPlb3nM="
   },
   "wgebis_mailgun": {
     "hash": "sha256-Li4eyqZ6huO5Q+XTcQ+HQCg8IOjhxGU9Z4Uw3TbMdAc=",

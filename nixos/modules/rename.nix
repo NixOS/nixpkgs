@@ -390,6 +390,10 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
+      The services.xserver.windowManager.ragnarwm module has been removed
+      because the corresponding package was removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [
       "services"
       "xmr-stak"
@@ -513,6 +517,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "xtreemfs" ] ''
       services.xtreemfs has been removed as it was broken and unmaintained upstream
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
+      services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
     # Do NOT add any option renames here, see top of the file
   ];
