@@ -7079,12 +7079,17 @@ with self;
 
   CryptDSA = buildPerlPackage {
     pname = "Crypt-DSA";
-    version = "1.17";
+    version = "1.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/Crypt-DSA-1.17.tar.gz";
-      hash = "sha256-0bhYX2v3RvduXcXaNkHTJe1la8Ll80S1RRS1XDEAmgM=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-DSA-1.20.tar.gz";
+      hash = "sha256-5emOyFc3M5oogbmjN0RjmxvME12xNbyalrUupE0hjk0=";
     };
     propagatedBuildInputs = [
+      ConvertASN1
+      ConvertPEM
+      CryptDES_EDE3
+      CryptSysRandom
+      CryptURandom
       DataBuffer
       DigestSHA1
       FileWhich
