@@ -277,8 +277,11 @@ in
         # Guix uses Avahi (through guile-avahi) both for the auto-discovering and
         # advertising substitute servers in the local network.
         services.avahi.enable = lib.mkDefault true;
-        services.avahi.publish.enable = lib.mkDefault true;
-        services.avahi.publish.userServices = lib.mkDefault true;
+        services.avahi.settings.publish = {
+          "disable-publishing" = lib.mkDefault false;
+          "disable-user-service-publishing" = lib.mkDefault false;
+          "publish-addresses" = lib.mkDefault true;
+        };
 
         # It's similar to Nix daemon so there's no question whether or not this
         # should be sandboxed.

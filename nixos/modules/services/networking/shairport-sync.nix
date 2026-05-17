@@ -124,8 +124,11 @@ in
     ];
 
     services.avahi.enable = true;
-    services.avahi.publish.enable = true;
-    services.avahi.publish.userServices = true;
+    services.avahi.settings.publish = {
+      "disable-publishing" = false;
+      "disable-user-service-publishing" = false;
+      "publish-addresses" = true;
+    };
 
     services.shairport-sync.settings = {
       general.output_backend = lib.mkDefault "pulseaudio";

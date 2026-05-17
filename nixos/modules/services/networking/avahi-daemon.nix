@@ -15,10 +15,19 @@ let
     listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
   };
 
+  settings =
+    let
+      filteredSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
+    in
+    filteredSettings
+    // {
+      server = lib.removeAttrs (filteredSettings.server or { }) (
+        lib.optional ((filteredSettings.server."host-name" or null) == "") "host-name"
+      );
+    };
+
   avahiDaemonConf = pkgs.concatText "avahi-daemon.conf" [
-    (settingsFormat.generate "avahi-daemon.conf" (
-      lib.filterAttrsRecursive (_: v: v != null) cfg.settings
-    ))
+    (settingsFormat.generate "avahi-daemon.conf" settings)
     (pkgs.writeText "avahi-daemon-extra.conf" cfg.extraConfig)
   ];
 in
@@ -26,9 +35,165 @@ in
   imports = [
     (lib.mkRenamedOptionModule
       [ "services" "avahi" "interfaces" ]
-      [ "services" "avahi" "allowInterfaces" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "allow-interfaces"
+      ]
     )
     (lib.mkRenamedOptionModule [ "services" "avahi" "nssmdns" ] [ "services" "avahi" "nssmdns4" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "hostName" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "host-name"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "domainName" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "domain-name"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "browseDomains" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "browse-domains"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "ipv4" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "use-ipv4"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "ipv6" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "use-ipv6"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "allowInterfaces" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "allow-interfaces"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "denyInterfaces" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "deny-interfaces"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "allowPointToPoint" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "allow-point-to-point"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "wideArea" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "wide-area"
+        "enable-wide-area"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "reflector" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "reflector"
+        "enable-reflector"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "cacheEntriesMax" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "server"
+        "cache-entries-max"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "publish" "addresses" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "publish"
+        "publish-addresses"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "publish" "hinfo" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "publish"
+        "publish-hinfo"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "publish" "workstation" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "publish"
+        "publish-workstation"
+      ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "avahi" "publish" "domain" ]
+      [
+        "services"
+        "avahi"
+        "settings"
+        "publish"
+        "publish-domain"
+      ]
+    )
   ];
 
   options.services.avahi = {
@@ -62,7 +227,7 @@ in
 
             "domain-name" = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
+              default = "local";
               description = "Domain name for all advertisements.";
             };
 
@@ -192,70 +357,6 @@ in
       '';
     };
 
-    hostName = lib.mkOption {
-      type = lib.types.str;
-      default = config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.hostName";
-      description = ''
-        Host name advertised on the LAN. If not set, avahi will use the value
-        of {option}`config.networking.hostName`.
-      '';
-    };
-
-    domainName = lib.mkOption {
-      type = lib.types.str;
-      default = "local";
-      description = ''
-        Domain name for all advertisements.
-      '';
-    };
-
-    browseDomains = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ];
-      example = [
-        "0pointer.de"
-        "zeroconf.org"
-      ];
-      description = ''
-        List of non-local DNS domains to be browsed.
-      '';
-    };
-
-    ipv4 = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Whether to use IPv4.";
-    };
-
-    ipv6 = lib.mkOption {
-      type = lib.types.bool;
-      default = config.networking.enableIPv6;
-      defaultText = lib.literalExpression "config.networking.enableIPv6";
-      description = "Whether to use IPv6.";
-    };
-
-    allowInterfaces = lib.mkOption {
-      type = lib.types.nullOr (lib.types.listOf lib.types.str);
-      default = null;
-      description = ''
-        List of network interfaces that should be used by the {command}`avahi-daemon`.
-        Other interfaces will be ignored. If `null`, all local interfaces
-        except loopback and point-to-point will be used.
-      '';
-    };
-
-    denyInterfaces = lib.mkOption {
-      type = lib.types.nullOr (lib.types.listOf lib.types.str);
-      default = null;
-      description = ''
-        List of network interfaces that should be ignored by the
-        {command}`avahi-daemon`. Other unspecified interfaces will be used,
-        unless {option}`allowInterfaces` is set. This option takes precedence
-        over {option}`allowInterfaces`.
-      '';
-    };
-
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -263,32 +364,6 @@ in
         Whether to open the firewall for UDP port 5353.
         Disabling this setting also disables discovering of network devices.
       '';
-    };
-
-    allowPointToPoint = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
-        latencies with such links and opens a potential security hole by allowing mDNS access from Internet
-        connections.
-      '';
-    };
-
-    wideArea = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Whether to enable wide-area service discovery.
-
-        It is recommended to keep this options disabled as it exposes the system to `CVE-2024-52615`/`GHSA-x6vp-f33h-h32g`.
-      '';
-    };
-
-    reflector = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Reflect incoming mDNS requests to all allowed network interfaces.";
     };
 
     extraServiceFiles = lib.mkOption {
@@ -318,44 +393,17 @@ in
 
     publish = {
       enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+        type = lib.types.nullOr lib.types.bool;
+        default = null;
+        visible = false;
         description = "Whether to allow publishing in general.";
       };
 
       userServices = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+        type = lib.types.nullOr lib.types.bool;
+        default = null;
+        visible = false;
         description = "Whether to publish user services. Will set `addresses=true`.";
-      };
-
-      addresses = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to register mDNS address records for all local IP addresses.";
-      };
-
-      hinfo = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to register a mDNS HINFO record which contains information about the
-          local operating system and CPU.
-        '';
-      };
-
-      workstation = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to register a service of type "_workstation._tcp" on the local LAN.
-        '';
-      };
-
-      domain = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to announce the locally used domain name for browsing by other hosts.";
       };
     };
 
@@ -384,15 +432,6 @@ in
       '';
     };
 
-    cacheEntriesMax = lib.mkOption {
-      type = lib.types.nullOr lib.types.int;
-      default = null;
-      description = ''
-        Number of resource records to be cached per interface. Use 0 to
-        disable caching. Avahi daemon defaults to 4096 if not set.
-      '';
-    };
-
     extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";
@@ -406,45 +445,31 @@ in
 
   config = lib.mkMerge [
     {
-    warnings = [
+      warnings = [
       (lib.mkIf cfg.wideArea "Enabling `services.avahi.wideArea` exposes this system to `CVE-2024-52615`.")
-    ];
-  }
-    {
+    ]
+        lib.optional (cfg.publish.enable != null) ''
+          The option `services.avahi.publish.enable` is obsolete. Use
+          `services.avahi.settings.publish."disable-publishing" = false;` instead.
+        ''
+        ++ lib.optional (cfg.publish.userServices != null) ''
+          The option `services.avahi.publish.userServices` is obsolete. Use
+          `services.avahi.settings.publish."disable-user-service-publishing" = false;`
+          and `services.avahi.settings.publish."publish-addresses" = true;` instead.
+        '';
+
       services.avahi.settings = lib.mkMerge [
-        {
-          server = {
-            "browse-domains" = lib.mkDefault cfg.browseDomains;
-            "use-ipv4" = lib.mkDefault cfg.ipv4;
-            "use-ipv6" = lib.mkDefault cfg.ipv6;
-            "domain-name" = lib.mkDefault cfg.domainName;
-            "allow-point-to-point" = lib.mkDefault cfg.allowPointToPoint;
-          };
-
-          "wide-area"."enable-wide-area" = lib.mkDefault cfg.wideArea;
-
-          publish = {
-            "disable-publishing" = lib.mkDefault (!cfg.publish.enable);
-            "disable-user-service-publishing" = lib.mkDefault (!cfg.publish.userServices);
-            "publish-addresses" = lib.mkDefault (cfg.publish.userServices || cfg.publish.addresses);
-            "publish-hinfo" = lib.mkDefault cfg.publish.hinfo;
-            "publish-workstation" = lib.mkDefault cfg.publish.workstation;
-            "publish-domain" = lib.mkDefault cfg.publish.domain;
-          };
-
-          reflector."enable-reflector" = lib.mkDefault cfg.reflector;
-        }
-        (lib.mkIf (cfg.hostName != "") {
-          server."host-name" = lib.mkDefault cfg.hostName;
+        (lib.mkIf (config.networking.hostName != "") {
+          server."host-name" = lib.mkDefault config.networking.hostName;
         })
-        (lib.mkIf (cfg.allowInterfaces != null) {
-          server."allow-interfaces" = lib.mkDefault cfg.allowInterfaces;
+        (lib.mkIf (cfg.publish.enable != null) {
+          publish."disable-publishing" = lib.mkDefault (!cfg.publish.enable);
         })
-        (lib.mkIf (cfg.denyInterfaces != null) {
-          server."deny-interfaces" = lib.mkDefault cfg.denyInterfaces;
+        (lib.mkIf (cfg.publish.userServices != null) {
+          publish."disable-user-service-publishing" = lib.mkDefault (!cfg.publish.userServices);
         })
-        (lib.mkIf (cfg.cacheEntriesMax != null) {
-          server."cache-entries-max" = lib.mkDefault cfg.cacheEntriesMax;
+        (lib.mkIf (cfg.publish.userServices == true) {
+          publish."publish-addresses" = lib.mkDefault true;
         })
       ];
     }
@@ -488,7 +513,6 @@ in
             ${if lib.types.path.check v then "source" else "text"} = v;
           }
         ) cfg.extraServiceFiles
->>>>>>> tntkqmnr 191d347d "nixos/avahi: migrate settings to rfc42" (rebased revision)
       );
 
       systemd.sockets.avahi-daemon = {
