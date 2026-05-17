@@ -84,7 +84,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://devin.ai/";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      nhshah15
+    ];
     mainProgram = "devin";
   };
 })
