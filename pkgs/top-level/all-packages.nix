@@ -6746,8 +6746,12 @@ with pkgs;
     )
       haskellPackages.matterhorn;
 
-  mbedtls = callPackage ../development/libraries/mbedtls/3.nix { };
-  mbedtls_4 = callPackage ../development/libraries/mbedtls/4.nix { };
+  inherit
+    ({
+      mbedtls_4 = callPackage ../by-name/mb/mbedtls/4.nix { };
+    })
+    mbedtls_4
+    ;
 
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
 
