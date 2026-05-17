@@ -603,6 +603,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         python3-bootstrap = super.python3.override {
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
+          zstd = null; # Avoid infinite recursion due to zstd depending on libiconv, which depends on Python via Meson.
           enableLTO = false;
         };
 
