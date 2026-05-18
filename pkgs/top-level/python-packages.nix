@@ -3567,6 +3567,8 @@ self: super: with self; {
 
   dagster-shared = callPackage ../development/python-modules/dagster-shared { };
 
+  dagster-webserver = callPackage ../development/python-modules/dagster-webserver { };
+
   dahlia = callPackage ../development/python-modules/dahlia { };
 
   daiquiri = callPackage ../development/python-modules/daiquiri { };
