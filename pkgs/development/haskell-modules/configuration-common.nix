@@ -2692,6 +2692,10 @@ with haskellLib;
   # 2025-04-09: jailbreak to allow hedgehog >= 1.5
   hw-int = warnAfterVersion "0.0.2.0" (doJailbreak super.hw-int);
 
+  # 2026-05-17: allow hedgehog 1.6
+  # https://github.com/hedgehogqa/haskell-hedgehog-classes/pull/65
+  hedgehog-classes = doJailbreak super.hedgehog-classes;
+
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
