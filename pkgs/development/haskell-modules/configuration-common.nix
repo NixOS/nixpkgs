@@ -1550,6 +1550,10 @@ with haskellLib;
   # https://github.com/haskellari/binary-instances/pull/34/changes#r3257818178
   binary-instances = doJailbreak super.binary-instances;
 
+  # 2026-05-18: allow QuickCheck 2.16
+  # https://github.com/haskell/os-string/pull/42
+  os-string_2_0_10 = doJailbreak super.os-string_2_0_10;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
