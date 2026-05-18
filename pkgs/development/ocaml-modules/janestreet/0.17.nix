@@ -6,6 +6,7 @@
   lib,
   openssl,
   zstd,
+  replaceVars,
 }:
 
 let
@@ -524,11 +525,16 @@ with self;
       timezone
       spawn
     ];
+    patches = [
+      (import ./insert_version_core_unix {
+        inherit replaceVars;
+        version = "0.17";
+      })
+    ];
     postPatch = ''
       patchShebangs unix_pseudo_terminal/src/discover.sh
     '';
     doCheck = false; # command_validate_parsing.exe is not specified in test build deps
-
   };
 
   csvfields = janePackage {
