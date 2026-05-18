@@ -1,0 +1,45 @@
+From 5ba3e746ad452536878df0f2a33738510da2bec3 Mon Sep 17 00:00:00 2001
+From: LazyStability <LazilyStable@proton.me>
+Date: Sat, 16 May 2026 19:44:29 +0200
+Subject: [PATCH] patch
+
+---
+ Makefile              | 4 ++--
+ src/password-store.sh | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 67be79a..01cae2a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -44,12 +44,12 @@ install: install-common
+ 	@install -v -d "$(DESTDIR)$(LIBDIR)/passage" && install -m 0644 -v "$(PLATFORMFILE)" "$(DESTDIR)$(LIBDIR)/passage/platform.sh"
+ 	@install -v -d "$(DESTDIR)$(LIBDIR)/passage/extensions"
+ 	@install -v -d "$(DESTDIR)$(BINDIR)/"
+-	@trap 'rm -f src/.passage' EXIT; sed 's:.*PLATFORM_FUNCTION_FILE.*:source "$(LIBDIR)/passage/platform.sh":;s:^SYSTEM_EXTENSION_DIR=.*:SYSTEM_EXTENSION_DIR="$(LIBDIR)/passage/extensions":' src/password-store.sh > src/.passage && \
++	@trap 'rm -f src/.passage' EXIT; sed 's:.*PLATFORM_FUNCTION_FILE.*:source "$(LIBDIR)/passage/platform.sh":;' src/password-store.sh > src/.passage && \
+ 	install -v -d "$(DESTDIR)$(BINDIR)/" && install -m 0755 -v src/.passage "$(DESTDIR)$(BINDIR)/passage"
+ else
+ install: install-common
+ 	@install -v -d "$(DESTDIR)$(LIBDIR)/passage/extensions"
+-	@trap 'rm -f src/.passage' EXIT; sed '/PLATFORM_FUNCTION_FILE/d;s:^SYSTEM_EXTENSION_DIR=.*:SYSTEM_EXTENSION_DIR="$(LIBDIR)/passage/extensions":' src/password-store.sh > src/.passage && \
++	@trap 'rm -f src/.passage' EXIT; sed '/PLATFORM_FUNCTION_FILE/d;' src/password-store.sh > src/.passage && \
+ 	install -v -d "$(DESTDIR)$(BINDIR)/" && install -m 0755 -v src/.passage "$(DESTDIR)$(BINDIR)/passage"
+ endif
+ 
+diff --git a/src/password-store.sh b/src/password-store.sh
+index 02d3fb0..03e7fc3 100755
+--- a/src/password-store.sh
++++ b/src/password-store.sh
+@@ -607,7 +607,7 @@ cmd_extension_or_show() {
+ 	fi
+ }
+ 
+-SYSTEM_EXTENSION_DIR=""
++SYSTEM_EXTENSION_DIR="${SYSTEM_EXTENSION_DIR:-@out@/lib/passage/extensions}"
+ cmd_extension() {
+ 	check_sneaky_paths "$1"
+ 	local user_extension system_extension extension
+-- 
+2.53.0
+
