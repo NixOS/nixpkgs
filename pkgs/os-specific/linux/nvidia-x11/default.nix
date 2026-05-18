@@ -101,11 +101,11 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "595.44.06";
+    version = "595.44.08";
     persistencedVersion = "595.45.04";
     settingsVersion = "595.45.04";
-    sha256_64bit = "sha256-Gq7peoXLeYVuVHBx+2EIx3/bZIVl56c35qS/30Q7208=";
-    openSha256 = "sha256-RSlpdGhYTxxywMQ+0tBkpJG5ohnmJYh8pzedin1sBBs=";
+    sha256_64bit = "sha256-slPOKXeI3Y2ebiytS20c8bbwWbUdn2dFkwJih9Mbmyc=";
+    openSha256 = "sha256-PpfrDfBkrzszROLDfgeBUISIZm3BimmXTRhkL/X4+p8=";
     settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
     persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";

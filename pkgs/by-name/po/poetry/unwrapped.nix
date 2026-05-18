@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.3.4";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-2qREmUJpoOPh8QHQErLwn9M5TuEzjoruHJ8qmwlEjyI=";
+    hash = "sha256-B3owfzchG2nlUvsIOrI7cLMH9EI0DmTQI7D9ses7DAc=";
   };
 
   build-system = [

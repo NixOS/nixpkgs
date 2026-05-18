@@ -1010,12 +1010,11 @@ in
         {
           User = cfg.user;
           Group = cfg.group;
-          Type = "simple";
+          Type = "notify-reload";
           RuntimeDirectory = "prosody";
           PIDFile = "/run/prosody/prosody.pid";
           Environment = "PROSODY_CONFIG=/run/prosody/prosody.cfg.lua";
           ExecStart = "${lib.getExe cfg.package} -F";
-          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-abnormal";
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
