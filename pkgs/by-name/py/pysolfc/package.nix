@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   python3Packages,
   desktop-file-utils,
   freecell-solver,
@@ -13,12 +13,15 @@
 python3Packages.buildPythonApplication rec {
   pname = "pysolfc";
   version = "3.4.1";
+  src = fetchFromGitHub {
+    owner = "shlomif";
+    repo = "PySolFC";
+    tag = "pysolfc-${finalAttrs.version}";
+    hash = "sha256-Ky5lyr2dxP/gai/DPZXAtoJSYp0I2TM/rWUNFG1yNyU=";
+  };
+
   format = "setuptools";
 
-  src = fetchzip {
-    url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
-    hash = "sha256-jijrrWhj80n/XFKMFLptDZCsclIhdJHiTrX6CGjVju8=";
-  };
 
   cardsets = stdenv.mkDerivation rec {
     pname = "pysol-cardsets";
