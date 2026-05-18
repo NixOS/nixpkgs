@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_SYSTEM_LUA=ON"
+    (lib.cmakeBool "ENABLE_SYSTEM_LUA" true)
     "-DBINARY_SUFFIX=${suffix}"
   ];
 
@@ -111,13 +111,15 @@ stdenv.mkDerivation (finalAttrs: {
     echo "APPL????" > "$app_contents/PkgInfo"
     mv $out/bin "$app_contents/MacOS"
     mv $out/share/wesnoth "$app_contents/Resources"
+
     pushd ../projectfiles/Xcode
-    substitute Info.plist "$app_contents/Info.plist" \
-      --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth${suffix} \
-      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth${suffix} \
-      --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
-    cp -r Resources/SDLMain.nib "$app_contents/Resources/"
-    install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
+      substitute Info.plist "$app_contents/Info.plist" \
+        --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth${suffix} \
+        --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth${suffix} \
+        --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
+
+      cp -r Resources/SDLMain.nib "$app_contents/Resources/"
+      install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
     popd
 
     # Make the game and dedicated server binary available for shell users
@@ -152,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
       reclaim the throne of Wesnoth, or take hand in any number of other
       adventures.
     '';
-
     homepage = "https://www.wesnoth.org/";
     changelog = "https://github.com/wesnoth/wesnoth/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Plus;
