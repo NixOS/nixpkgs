@@ -56,11 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     for game in ball putt; do
       pushd macosx/xcode/''${game}_items/
-      substituteInPlace Info.plist --replace-fail '1.5.3' "$version"
-      iconv -f UTF-16LE -t UTF-8 English.lproj/InfoPlist.strings > English.lproj/InfoPlist.strings.tmp
-      substituteInPlace English.lproj/InfoPlist.strings.tmp --replace-fail '1.5.3' "$version" --replace-fail '2002-2009' '2002-2014'
-      iconv -f UTF-8 -t UTF-16LE English.lproj/InfoPlist.strings.tmp > English.lproj/InfoPlist.strings
-      rm English.lproj/InfoPlist.strings.tmp
+        substituteInPlace Info.plist --replace-fail '1.5.3' "$version"
+        iconv -f UTF-16LE -t UTF-8 English.lproj/InfoPlist.strings > English.lproj/InfoPlist.strings.tmp
+
+        substituteInPlace English.lproj/InfoPlist.strings.tmp --replace-fail '1.5.3' "$version"
+        iconv -f UTF-8 -t UTF-16LE English.lproj/InfoPlist.strings.tmp > English.lproj/InfoPlist.strings
+
+        rm English.lproj/InfoPlist.strings.tmp
       popd
     done
   '';
