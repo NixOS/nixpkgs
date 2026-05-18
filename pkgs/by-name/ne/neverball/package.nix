@@ -11,8 +11,10 @@
   libvorbis,
   gettext,
   physfs,
+  curl,
   iconv,
   makeBinaryWrapper,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,10 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-C6zXAQEjaiuo3v/ihvyXnJhK0kTPzC0sxLOgY9bFdgk=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    iconv
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      iconv
+      makeBinaryWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ];
+
   buildInputs = [
     libpng
     SDL2
@@ -39,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     gettext
     physfs
+    curl
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libx11
