@@ -47,14 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   dontPatchELF = true;
 
   postPatch = ''
-    sed -i -e 's@\./data@'$out/share/neverball/data@ share/base_config.h Makefile
-    sed -i -e 's@\./locale@'$out/share/neverball/locale@ share/base_config.h Makefile
-    sed -i -e 's@-lvorbisfile@-lvorbisfile${
-      lib.optionalString (!stdenv.hostPlatform.isDarwin) " -lX11"
-      + lib.optionalString stdenv.cc.isGNU " -lgcc_s"
-    }@' Makefile
+    substituteInPlace share/base_config.h Makefile \
+      --replace-fail './data' "$out/share/neverball/data" \
+      --replace-fail './locale' "$out/share/neverball/locale"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile --replace-fail '-lvorbisfile' '-lvorbisfile -liconv'
+
     for game in ball putt; do
       pushd macosx/xcode/''${game}_items/
       substituteInPlace Info.plist --replace-fail '1.5.3' "$version"
