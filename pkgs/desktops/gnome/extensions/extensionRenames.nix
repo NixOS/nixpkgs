@@ -13,9 +13,7 @@
   "system-monitor@gnome-shell-extensions.gcampax.github.com" = "system-monitor";
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
   "system-monitor@axet.github.com" = "system-monitor-3";
-
-  "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
-  "FuzzyClock@johngoetz" = "fuzzy-clock";
+  "sysmonitor@talhasiddique7" = "system-monitor-4";
 
   "battery-time@eetumos.github.com" = "battery-time-3";
   "batterytime@typeof.pw" = "battery-time-2";
@@ -23,12 +21,6 @@
 
   "nepali-date@biplab" = "nepali-calendar";
   "nepali-calendar-gs-extension@subashghimire.info.np" = "nepali-calendar-2";
-
-  "mousefollowsfocus@matthes.biz" = "mouse-follows-focus";
-  "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
-
-  "eur-usd-gshell@vezza.github.com" = "eur-usd";
-  "usd-mxn-gshell@kinduff.github.com" = "usd-mxn";
 
   "lockkeys@febueldo.test" = "lock-keys";
   "lockkeys@vaina.lt" = "lock-keys-2";
@@ -42,11 +34,17 @@
   "night-light-toggle@egoistpizza.github.com" = "night-light-toggle";
   "nightlighttoggle@sam" = "night-light-toggle-2";
 
-  "activitywatch-status@cweiske.de" = "activitywatch-status";
-  "aw-status@brayo.dev" = "aw-status";
-
   "autoselectheadset@josephlbarnett.github.com" = "auto-select-headset";
   "autoselectheadset@Anduril97.github.com" = "auto-select-headset-2";
+
+  "InternetSpeedMeter@alshakib.dev" = "internet-speed-meter";
+  "speed-meter@mojahid.lunecode.com" = "internet-speed-meter-2";
+
+  "public-ip-address@fire-man-x" = "public-ip-address";
+  "public-ip-address@theophilediot.github.io" = "public-ip-address-2";
+
+  "tailscale-gnome-qs@tailscale-qs.github.io" = "tailscale-qs";
+  "tailscale@joaophi.github.com" = "tailscale-qs-2";
 
   # ############################################################################
   # These extensions no longer collide. We preserve the old attribute name for backwards compatibility.
@@ -56,6 +54,8 @@
   "openweather-extension@penguin-teal.github.io" = "openweather-refined";
   "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
   "power-profile@fthx" = "power-profile-indicator-2";
+  "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
+  "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

@@ -18,44 +18,46 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [
-    attrs
-    beautifulsoup4
-    brotli
-    cachetools
-    certifi
-    cffi
-    click
-    cryptography
-    cssutils
-    defusedxml
-    flask
-    h11
-    httpcore
-    httpx
-    httpx.optional-dependencies.http2
-    httpx.optional-dependencies.socks
-    idna
-    itsdangerous
-    jinja2
-    markupsafe
-    more-itertools
-    packaging
-    pluggy
-    pycodestyle
-    pycparser
-    pyopenssl
-    pyparsing
-    pytest
-    python-dateutil
-    python-dotenv
-    soupsieve
-    stem
-    validators
-    waitress
-    wcwidth
-    werkzeug
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      attrs
+      beautifulsoup4
+      brotli
+      cachetools
+      certifi
+      cffi
+      click
+      cryptography
+      cssutils
+      defusedxml
+      flask
+      h11
+      httpcore
+      httpx
+      idna
+      itsdangerous
+      jinja2
+      markupsafe
+      more-itertools
+      packaging
+      pluggy
+      pycodestyle
+      pycparser
+      pyopenssl
+      pyparsing
+      pytest
+      python-dateutil
+      python-dotenv
+      soupsieve
+      stem
+      validators
+      waitress
+      wcwidth
+      werkzeug
+    ]
+    ++ httpx.optional-dependencies.http2
+    ++ httpx.optional-dependencies.socks;
 
   postInstall = ''
     # This creates renamed versions of the static files for cache busting,

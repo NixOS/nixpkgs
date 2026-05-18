@@ -11052,6 +11052,7 @@ with pkgs;
     gnome47Extensions
     gnome48Extensions
     gnome49Extensions
+    gnome50Extensions
     ;
 
   gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };

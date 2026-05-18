@@ -52,6 +52,7 @@ let
     unique
     unsafeDiscardStringContext
     unsafeGetAttrPos
+    warn
     warnIf
     zipAttrsWith
     ;
@@ -482,7 +483,12 @@ let
             if isSingularDependency dep then
               index + 1
             else if isList dep then
-              seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1)
+              warn
+                ''
+                  Dependency of package '${attrs.name or attrs.pname}' uses a nested list in attribute '${name}'.
+                  This is deprecated as of Nixpkgs release 26.05, and support will
+                  be removed in a future nixpkgs release.''
+                (seq (checkDependencyList' ([ index ] ++ positions) name dep) (index + 1))
             else
               throw "Dependency is not of a valid type: ${
                 concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
