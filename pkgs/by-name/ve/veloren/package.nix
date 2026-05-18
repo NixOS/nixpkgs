@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       rnhmjoj
+      philocalyst
       tomodachi94
     ];
   };
