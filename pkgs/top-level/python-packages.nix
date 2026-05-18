@@ -3551,6 +3551,8 @@ self: super: with self; {
 
   dagster-pipes = callPackage ../development/python-modules/dagster-pipes { };
 
+  dagster-shared = callPackage ../development/python-modules/dagster-shared { };
+
   dahlia = callPackage ../development/python-modules/dahlia { };
 
   daiquiri = callPackage ../development/python-modules/daiquiri { };
