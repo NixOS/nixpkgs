@@ -59,6 +59,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygobject3
     python-zbar
     qrcode
+    typing-extensions
   ];
 
   # Wrapping this manually for SVG recognition
