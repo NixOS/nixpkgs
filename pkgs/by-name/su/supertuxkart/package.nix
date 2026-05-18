@@ -27,10 +27,10 @@
   libsamplerate,
   libsquish,
   shaderc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-
   pname = "supertuxkart";
   version = "1.5";
 
@@ -44,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Deletes all bundled libs in stk-code/lib except those
     # That couldn't be replaced with system packages
-    find lib -maxdepth 1 -type d | egrep -v "^lib$|${(lib.concatStringsSep "|" bundledLibraries)}" | xargs -n1 -L1 -r -I{} rm -rf {}
+    find lib -mindepth 1 -maxdepth 1 -type d \
+      ${
+        lib.concatMapStringsSep " " (name: "-not -name '${name}'") finalAttrs.passthru.bundledLibraries
+      } \
+      -exec rm -rf {} +
 
     # Allow building with system-installed wiiuse on Darwin
     substituteInPlace CMakeLists.txt \
@@ -97,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.CXXFLAGS = toString [
     # GCC 13: error: 'snprintf' was not declared in this scope
     "-include cstdio"
+
     # GCC 13: error: 'runtime_error' is not a member of 'std'
     "-include stdexcept"
   ];
@@ -121,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   # On Darwin, also patch the copy inside the app bundle so launching via Finder works.
   preFixup = ''
     wrapProgram $out/bin/supertuxkart \
-      --set-default SUPERTUXKART_ASSETS_DIR "${assets}" \
+      --set-default SUPERTUXKART_ASSETS_DIR "${finalAttrs.passthru.assets}" \
       --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -148,6 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
   });
 
   passthru = {
+    updateScript = nix-update-script { };
+
     assets = fetchsvn {
       url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
       rev = "18621";
@@ -208,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
       philocalyst
       SchweGELBin
     ];
-    platforms = with lib.platforms; unix;
+    platforms = lib.platforms.all;
     changelog = "https://github.com/supertuxkart/stk-code/blob/${finalAttrs.version}/CHANGELOG.md";
   };
 })
