@@ -63,5 +63,6 @@ appimageTools.wrapType2 {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree;
     mainProgram = "capacities";
+    maintainers = [ lib.maintainers.keysmashes ];
   };
 }
