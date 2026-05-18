@@ -26,7 +26,6 @@ appimageTools.wrapType2 rec {
     downloadPage = "https://github.com/unknownskl/greenlight/releases";
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ foxtrottt ];
     platforms = [ "x86_64-linux" ];
     mainProgram = pname;
   };
