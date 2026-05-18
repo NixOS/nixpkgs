@@ -26,13 +26,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.19.4";
+  version = "7.22.2";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = finalAttrs.version;
-    hash = "sha256-MkLJi+rMHhLjZ1huappvdxziYCNlKkoWTjjmvSPznFg=";
+    hash = "sha256-MRhJ5l+G97mBBRQzir2s5TQhgzuIeGnOIFszVK1po3w=";
     fetchSubmodules = true;
   };
 
@@ -57,9 +57,9 @@ buildDotnetModule (finalAttrs: {
 
   dotnetBuildFlags = [ "-p:PublishReadyToRun=false" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   executables = [ "v2rayN" ];
 
