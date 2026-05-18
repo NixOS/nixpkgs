@@ -588,6 +588,21 @@ Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always
 
 See also the section about [`passthru.tests`](#var-passthru-tests).
 
+### Attribute position information {#sec-attribute-position-information}
+
+Since `mkDerivation` modifies various attributes passed to it, a naive `builtins.unsafeGetAttrPos` call on any of its output attributes would be useless.
+As such, an `attributePositionInformation` attribute is passed along with the derivation attrs, containing information about original locations of attributes.
+This is intended for CI and tooling like [nixpkgs-vet](https://github.com/nixos/nixpkgs-vet).
+
+The structure of the attribute mirrors the structure of `mkDerivation` arguments, except each argument becomes and attrset containing a `__pos` argument, the format of which matches the output of `builtins.unsafeGetAttrPos`.
+Arguments which were originally attrsets (e.g. `meta`, `passthru`) are recursed into according to the algorithm above.
+
+For example:
+
+* `package.attributePositionInformation.patches.__pos` contains the position where the `patches` were originally defined
+* `package.attributePositionInformation.meta.__pos` contains the position where the `meta` was originally defined
+* `package.attributePositionInformation.meta.maintainers.__pos` contains the position where `meta.maintianers` was originally defined.
+
 ## Phases {#sec-stdenv-phases}
 
 `stdenv.mkDerivation` sets the Nix [derivation](https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
