@@ -494,6 +494,7 @@ module.exports = async ({ github, context, core, dry }) => {
           owners,
           getUser,
           getTeam,
+          getTeamMembers,
         })
       }
     }
