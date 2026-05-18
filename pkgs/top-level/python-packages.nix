@@ -3561,6 +3561,8 @@ self: super: with self; {
 
   dagster-pipes = callPackage ../development/python-modules/dagster-pipes { };
 
+  dagster-postgres = callPackage ../development/python-modules/dagster-postgres { };
+
   dagster-rest-resources = callPackage ../development/python-modules/dagster-rest-resources { };
 
   dagster-shared = callPackage ../development/python-modules/dagster-shared { };
