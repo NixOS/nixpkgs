@@ -25,6 +25,7 @@
   libopenglrecorder,
   sqlite,
   libsamplerate,
+  libsquish,
   shaderc,
 }:
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     wiiuse
     angelscript
     sqlite
+    libsquish
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libx11
   ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
