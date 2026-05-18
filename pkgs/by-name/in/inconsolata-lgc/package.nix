@@ -5,7 +5,7 @@
   fontforge,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inconsolata-lgc";
   version = "1.3";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
     find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
-    install -m444 -Dt $out/share/doc/${pname}-${version} LICENSE README
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} LICENSE README
   '';
 
   meta = {
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
       avnik
     ];
   };
-}
+})
