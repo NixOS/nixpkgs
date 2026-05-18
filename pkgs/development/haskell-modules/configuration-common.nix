@@ -1524,6 +1524,10 @@ with haskellLib;
   # https://github.com/jaspervdj/psqueues/issues/67
   psqueues = doJailbreak super.psqueues;
 
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/fizruk/http-api-data/issues/157
+  http-api-data = doJailbreak super.http-api-data;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
