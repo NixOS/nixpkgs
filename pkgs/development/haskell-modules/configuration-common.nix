@@ -445,10 +445,6 @@ with haskellLib;
   # https://github.com/sol/ghc-bench/issues/81
   ghc-bench = dontCheck super.ghc-bench;
 
-  # Needs QuickCheck >= 2.16
-  # https://github.com/input-output-hk/io-sim/issues/248
-  io-sim = dontCheck super.io-sim;
-
   # Test suites broken by hakyll 4.16, but lib is still okay
   # https://github.com/LaurentRDC/hakyll-images/issues/14
   hakyll-images = dontCheck super.hakyll-images;
