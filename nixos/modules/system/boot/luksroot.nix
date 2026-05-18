@@ -1114,7 +1114,6 @@ in
           -> all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (attrValues luks.devices);
         message = "boot.initrd.luks.devices.<name>.preOpenCommands and postOpenCommands is not supported by systemd stage 1. Please bind a service to cryptsetup.target or cryptsetup-pre.target instead.";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
         message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.gpgSupport";
@@ -1123,7 +1122,6 @@ in
         assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
         message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.fido2Support";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
         message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.yubikeySupport";
