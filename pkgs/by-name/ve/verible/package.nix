@@ -64,7 +64,6 @@ buildBazelPackage {
       {
         aarch64-linux = "sha256-gO1VBsgzDlGPPrEPM0ATJj6kpvCngwhANWbjTNMrRJQ=";
         x86_64-linux = "sha256-BW0oechYY3v+dZgST1i0U65D1vcpIcBEEH86tp/nljI=";
-        aarch64-darwin = lib.fakeHash; # "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
