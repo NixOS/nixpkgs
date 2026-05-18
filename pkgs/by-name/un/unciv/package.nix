@@ -71,6 +71,10 @@ stdenv.mkDerivation rec {
     description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
+    maintainers = with lib.maintainers; [
+      iedame
+      philocalyst
+    ];
     maintainers = with lib.maintainers; [ iedame ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.mpl20;
