@@ -135,6 +135,29 @@ checkExpression() {
   }
 }
 
+checkConfigWarning() {
+    local warningContains=$1
+    local err=""
+    shift
+    if ! err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
+        logStartFailure
+        echo "ACTUAL: non-zero exit code, stderr:"
+        echo "$err"
+        echo "EXPECTED: exit code 0 with warning matching '$warningContains'"
+        logFailure
+        logEndFailure
+    elif echo "$err" | grep -E --silent "$warningContains" ; then
+        ((++pass))
+    else
+        logStartFailure
+        echo "ACTUAL stderr:"
+        echo "$err"
+        echo "EXPECTED: warning matching '$warningContains'"
+        logFailure
+        logEndFailure
+    fi
+}
+
 checkConfigError() {
     local errorContains=$1
     local err=""
@@ -906,6 +929,16 @@ checkConfigError 'is not of type.*signed integer' config.contracts.arithmetic.re
 
 # contracts: submodule-typed request options survive the want -> requests -> results round-trip
 checkConfigOutput '^"postgresql://db.example.com:5432"$' config.contracts.connection.results.myapp.db.url ./contracts-submodule-request.nix
+
+# contracts: using a renamed contract name emits a deprecation warning in config.warnings
+checkConfigOutput 'oldName.*renamed.*newName' config.result ./contracts-contract-rename.nix
+# contracts: using a renamed contract name still produces the correct result
+checkConfigOutput '^6$' config.contracts.oldName.results.consumer.instance.value ./contracts-contract-rename.nix
+
+# contracts: using a renamed request option still forwards the value correctly
+checkConfigOutput '^6$' config.contracts.versioned.results.consumer.instance.value ./contracts-rename-warning.nix
+# contracts: using a renamed request option emits a deprecation warning on stderr
+checkConfigWarning 'request\.oldValue.*renamed.*request\.newValue' config.contracts.versioned.results.consumer.instance.value ./contracts-rename-warning.nix
 
 cat <<EOF
 ====== module tests ======
