@@ -45,6 +45,8 @@ buildPythonPackage rec {
     "test_remote_inheritance"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "jfx_bridge" ];
 
   meta = {
