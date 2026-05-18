@@ -32,7 +32,6 @@ let
   timestamp = "1769191511";
   rev = "1d12f35edd6cdbfc1fb921c167cdd7beeeffe248";
 in
-
 rustPlatform.buildRustPackage {
   pname = "veloren";
   inherit version;
@@ -52,14 +51,16 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     # Force vek to build in unstable mode
-    cat <<'EOF' | tee "$cargoDepsCopy"/*/vek-*/build.rs
+    tee "$cargoDepsCopy"/*/vek-*/build.rs > /dev/null <<'EOF'
     fn main() {
       println!("cargo:rustc-check-cfg=cfg(nightly)");
       println!("cargo:rustc-cfg=nightly");
     }
     EOF
+
     # Fix assets path
     substituteAllInPlace common/assets/src/lib.rs
+
     # Do not use mold, it produces broken binaries
     substituteInPlace .cargo/config.toml --replace-fail mold gold
   '';
@@ -127,6 +128,7 @@ rustPlatform.buildRustPackage {
     install -Dm644 assets/voxygen/net.veloren.veloren.desktop -t "$out/share/applications"
     install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/icons/hicolor/256x256/apps"
     install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml -t "$out/share/metainfo"
+
     # Assets directory
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
   '';
