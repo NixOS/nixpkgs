@@ -347,15 +347,6 @@ with haskellLib;
     '';
   }) super.streamly-core;
 
-  # Work around tasty >= 1.5.4 parallelism breaking the test suite
-  criterion = appendPatches [
-    (pkgs.fetchpatch {
-      name = "criterion-tasty-1.5.4.patch";
-      url = "https://github.com/haskell/criterion/commit/d555422d1779434432489efbc19d75011226c3e6.patch";
-      hash = "sha256-VRSfdzT/mzdRSMQmmIeycuChvRN/VDhYsHJQb0bRMaA=";
-    })
-  ] super.criterion;
-
   # Avoid rebinding to the same port with tasty >= 1.5.4 parallelism
   # https://github.com/lpeterse/haskell-socket/pull/73
   socket = appendPatches [
