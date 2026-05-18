@@ -14,13 +14,13 @@
 }:
 buildPythonPackage rec {
   pname = "kubernetes-validate";
-  version = "1.35.0";
+  version = "1.36.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "kubernetes_validate";
     inherit version;
-    hash = "sha256-UKnkbaLARxwoK7MTjH14XSkjH28be8LmimEatBsigyY=";
+    hash = "sha256-7b/S256ItXECmqFqsRFsZQKtK5YotnON051jkyP4RxU=";
   };
 
   build-system = [
