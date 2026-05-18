@@ -16775,6 +16775,8 @@ self: super: with self; {
 
   readchar = callPackage ../development/python-modules/readchar { };
 
+  readerwriterlock = callPackage ../development/python-modules/readerwriterlock { };
+
   readlike = callPackage ../development/python-modules/readlike { };
 
   readmdict = callPackage ../development/python-modules/readmdict { };
