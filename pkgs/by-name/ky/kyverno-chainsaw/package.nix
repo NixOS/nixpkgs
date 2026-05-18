@@ -10,18 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kyverno-chainsaw";
-  version = "0.2.14";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wHwjcpcum3ByBGYUxJ38Qi0RliQUmAIBYmE7t3gEonI=";
+    hash = "sha256-BULaac8UBF6pX7EWDKY3MFJjEEk1e5fJzTAahp/IRjs=";
   };
 
-  patches = [ ./go-1.26-testdeps-modulepath.patch ];
-
-  vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
+  vendorHash = "sha256-DTFtbinBKWmtkbCr9+j3md00tCR9Dh2i+15NvxHjuEw=";
 
   subPackages = [ "." ];
 
