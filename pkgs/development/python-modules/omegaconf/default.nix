@@ -5,7 +5,7 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   jre_minimal,
   pydevd,
   pytest-mock,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   nativeBuildInputs = [ jre_minimal ];
 
