@@ -2771,7 +2771,6 @@ broken-packages:
   - hGelf # failure in job https://hydra.nixos.org/build/233203909 at 2023-09-02
   - hgeometric # failure in job https://hydra.nixos.org/build/233197856 at 2023-09-02
   - hgis # failure in job https://hydra.nixos.org/build/233200418 at 2023-09-02
-  - hgmp # failure in job https://hydra.nixos.org/build/307519217 at 2025-09-19
   - hgom # failure in job https://hydra.nixos.org/build/233255569 at 2023-09-02
   - hgopher # failure in job https://hydra.nixos.org/build/233222066 at 2023-09-02
   - HGraphStorage # failure in job https://hydra.nixos.org/build/233217988 at 2023-09-02

@@ -288,6 +288,7 @@ with haskellLib;
 
   vector = overrideCabal (old: {
     # 2026-05-16: allow QuickCheck 2.16
+    # https://github.com/haskell/vector/issues/562
     jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
     testTargets = [
@@ -444,10 +445,6 @@ with haskellLib;
   # https://github.com/sol/ghc-bench/issues/81
   ghc-bench = dontCheck super.ghc-bench;
 
-  # Needs QuickCheck >= 2.16
-  # https://github.com/input-output-hk/io-sim/issues/248
-  io-sim = dontCheck super.io-sim;
-
   # Test suites broken by hakyll 4.16, but lib is still okay
   # https://github.com/LaurentRDC/hakyll-images/issues/14
   hakyll-images = dontCheck super.hakyll-images;
@@ -503,6 +500,7 @@ with haskellLib;
 
   attoparsec = overrideCabal (drv: {
     # 2025-05-17: allow QuickCheck 2.16
+    # https://github.com/haskell/attoparsec/issues/236
     jailbreak = true;
     # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
     # https://github.com/haskell/attoparsec/issues/232
@@ -1042,9 +1040,6 @@ with haskellLib;
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
-  # Avoid "QuickCheck >=2.3 && <2.10" dependency we cannot fulfill in lts-11.x.
-  test-framework = dontCheck super.test-framework;
-
   # Test suite won't compile against tasty-hunit 0.10.x.
   binary-parsers = dontCheck super.binary-parsers;
 
@@ -1160,9 +1155,6 @@ with haskellLib;
 
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
-
-  # Too strict bound on QuickCheck <2.15
-  hgmp = doJailbreak super.hgmp;
 
   # Z3 removed aliases for boolean types in 4.12
   inherit
@@ -1328,8 +1320,8 @@ with haskellLib;
     '';
   }) (addExtraLibrary self.QuickCheck super.Chart-tests);
 
-  # 2026-01-17: too strict bounds on QuickCheck < 2.15
-  # https://github.com/hasufell/lzma-static/pull/15
+  # 2026-05-18: too strict bounds on QuickCheck < 2.16
+  # https://github.com/hasufell/lzma-static/issues/16
   xz = doJailbreak super.xz;
 
   ghcup =
@@ -1514,17 +1506,60 @@ with haskellLib;
   # Break infinite recursion via optparse-applicative (alternatively, dontCheck syb)
   prettyprinter-ansi-terminal = dontCheck super.prettyprinter-ansi-terminal;
 
+  # 2026-05-18: allow QuickCheck 2.16
+  # Already updated upstream, but not released on hackage, yet.
+  finite-typelits = warnAfterVersion "0.2.1.0" (doJailbreak super.finite-typelits);
+
   # 2026-05-16: allow QuickCheck 2.16
+  # https://github.com/pcapriotti/optparse-applicative/issues/516
   optparse-applicative = doJailbreak super.optparse-applicative;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/jaspervdj/psqueues/issues/67
+  psqueues = doJailbreak super.psqueues;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/fizruk/http-api-data/issues/157
+  http-api-data = doJailbreak super.http-api-data;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/Gabriella439/Haskell-Nix-Derivation-Library/issues/30
+  nix-derivation = doJailbreak super.nix-derivation;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/haskell-hvr/uuid/issues/101
+  uuid = doJailbreak super.uuid;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/haskell/fgl/issues/119
+  fgl = doJailbreak super.fgl;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # Sent Claude an email on 2026-05-18.
+  bitwise = doJailbreak super.bitwise;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/haskell-hvr/lzma/issues/45
+  lzma = doJailbreak super.lzma;
+
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/snowleopard/alga/issues/324
+  algebraic-graphs = doJailbreak super.algebraic-graphs;
+
+  # 2026-05-18: allow QuickCheck 2.16
+  # https://github.com/haskellari/binary-instances/pull/34/changes#r3257818178
+  binary-instances = doJailbreak super.binary-instances;
+
+  # 2026-05-18: allow QuickCheck 2.16
+  # https://github.com/haskell/os-string/pull/42
+  os-string_2_0_10 = doJailbreak super.os-string_2_0_10;
 
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
   gnuidn = dontCheck super.gnuidn;
 
-  # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
-  # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
-  # So let's not go there and just disable the tests altogether.
+  # Avoids infinite recursion
   hspec-core = dontCheck super.hspec-core;
 
   update-nix-fetchgit =
@@ -1876,8 +1911,7 @@ with haskellLib;
   hadolint = doJailbreak super.hadolint;
 
   # Too strict bounds on
-  # QuickCheck (<2.15): https://github.com/kapralVV/Unique/issues/12
-  # hashable (<1.5): https://github.com/kapralVV/Unique/issues/11#issuecomment-3088832168
+  # extra <= 1.8
   Unique = doJailbreak super.Unique;
 
   # Too strict bound on tasty-quickcheck (<0.11)
@@ -2076,7 +2110,7 @@ with haskellLib;
   # https://github.com/haskell-works/hw-string-parse/issues/43
   hw-string-parse = doJailbreak super.hw-string-parse;
 
-  # 2025-09-03: allow QuickCheck 2.15
+  # 2026-05-18: allow QuickCheck 2.16
   # https://github.com/haskell-works/hw-prim/issues/150
   hw-prim = lib.pipe super.hw-prim [
     (warnAfterVersion "0.6.3.2")
@@ -2560,7 +2594,7 @@ with haskellLib;
     + (drv.postPatch or "");
   }) super.pdftotext;
 
-  # QuickCheck <2.15
+  # Allow QuickCheck 2.16
   # https://github.com/google/proto-lens/issues/403
   proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
 
@@ -2656,6 +2690,10 @@ with haskellLib;
 
   # 2025-04-09: jailbreak to allow hedgehog >= 1.5
   hw-int = warnAfterVersion "0.0.2.0" (doJailbreak super.hw-int);
+
+  # 2026-05-17: allow hedgehog 1.6
+  # https://github.com/hedgehogqa/haskell-hedgehog-classes/pull/65
+  hedgehog-classes = doJailbreak super.hedgehog-classes;
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
