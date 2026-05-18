@@ -3,14 +3,14 @@
 {
   "kicad" = {
     kicadVersion = {
-      version = "10.0.2";
+      version = "10.0.3";
       src = {
         rev = "94c02dfc4a778a094cd8ad7b1d2348a96f024123";
         sha256 = "0bk86javsfm1mwlksnv8p7pws5ii3zag6aah13gn5zlc31z295yh";
       };
     };
     libVersion = {
-      version = "10.0.2";
+      version = "10.0.3";
       libSources = {
         symbols.rev = "f31042c9759771f10754f02e54344dee750692b1";
         symbols.sha256 = "05h8dbygch2kp4s5ikspxngwv999j7jwsiwm4pzwwcrir7dqzdfl";
