@@ -113,10 +113,10 @@ python3.pkgs.buildPythonApplication rec {
       sqlalchemy
       emoji
       httpx
-      httpx.optional-dependencies.socks
       h2
       truststore
     ]
+    ++ httpx.optional-dependencies.socks
     ++ lib.optionals enableE2E [
       pycrypto
       python-gnupg

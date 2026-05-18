@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdwatch";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "vimlinuz";
     repo = "mdwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-snmyfhOkCTnRsBcKcTTij5caA2NmSA1Csp3+D6BJcw4=";
+    hash = "sha256-Oz0vBg+jfB24WT3n5v/7clCk37YaRBPnpfNQth0kxio=";
   };
 
-  cargoHash = "sha256-CAXHIOC0K062zXNnAD1IW2Sb5Mnpc91A1Lamhc3+NLQ=";
+  cargoHash = "sha256-dMZpDuyKtheKRcBvVsHjVpJEnQRf92E2fb6JRH2fXO4=";
 
   passthru.updateScript = nix-update-script { };
 

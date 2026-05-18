@@ -237,7 +237,7 @@ PostgreSQL's versioning policy is described [here](https://www.postgresql.org/su
 
 - Each major version is supported for 5 years.
 - Every three months there will be a new minor release, containing bug and security fixes.
-- For criticial/security fixes there could be more minor releases inbetween. This happens *very* infrequently.
+- For critical/security fixes there could be more minor releases in between. This happens *very* infrequently.
 - After five years, a final minor version is released. This usually happens in early November.
 - After that a version is considered end-of-life (EOL).
 - Around February each year is the first time an EOL-release will not have received regular updates anymore.
