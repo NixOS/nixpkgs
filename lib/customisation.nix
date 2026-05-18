@@ -497,7 +497,7 @@ rec {
 
        A function that takes an attribute set `attrs` and returns what ends up as `callPackage` in the output.
 
-       Typical values are `callPackageWith` or the output attribute `newScope`.
+       Typical values are `callPackageWith`, for a basic scope, or another scope's `newScope` function, to extend that scope.
 
     2. `f` (`AttrSet -> AttrSet`)
 
@@ -517,6 +517,7 @@ rec {
     scope :: {
       callPackage :: ((AttrSet -> a) | Path) -> AttrSet -> a
       newScope = AttrSet -> scope
+      prevScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
       overrideScope = (scope -> scope -> AttrSet) -> scope
       packages :: AttrSet -> AttrSet
     }
@@ -536,7 +537,12 @@ rec {
 
     - `newScope` (`AttrSet -> scope`)
 
-      Takes an attribute set `attrs` and returns a scope that extends the original scope.
+      Constructs a new scope by extending this scope with the additional attribute set `attrs`.
+
+    - `prevScope` (`AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a`)
+
+      The value of the argument `newScope` to this `makeScope` call.
+      This can be used to access the "outer" scope, particularly when there is a name clash with attributes in this scope.
 
     - `overrideScope` (`(scope -> scope -> AttrSet) -> scope`)
 
@@ -576,6 +582,7 @@ rec {
     {
       callPackage = «lambda»;
       newScope = «lambda»;
+      prevScope = «lambda»;
       overrideScope = «lambda»;
       packages = «lambda»;
       foo = «derivation»;
@@ -620,6 +627,7 @@ rec {
       // f self
       // {
         newScope = scope: newScope (self // scope);
+        prevScope = newScope;
         overrideScope = g: makeScope newScope (extends g f);
         packages = f;
       };
