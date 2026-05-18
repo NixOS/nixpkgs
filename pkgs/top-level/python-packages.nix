@@ -18563,6 +18563,8 @@ self: super: with self; {
 
   splunk-sdk = callPackage ../development/python-modules/splunk-sdk { };
 
+  spotapi = callPackage ../development/python-modules/spotapi { };
+
   spotifyaio = callPackage ../development/python-modules/spotifyaio { };
 
   spotipy = callPackage ../development/python-modules/spotipy { };
