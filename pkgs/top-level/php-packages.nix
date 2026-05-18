@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch,
   config,
   callPackages,
   lib,
@@ -30,7 +29,6 @@
   nix-update-script,
   oniguruma,
   openldap,
-  openssl_1_1,
   openssl,
   pam,
   pcre2,
