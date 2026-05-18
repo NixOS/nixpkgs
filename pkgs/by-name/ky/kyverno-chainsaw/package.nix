@@ -59,6 +59,8 @@ buildGoModule (finalAttrs: {
       * Asserting operators react (or not) the way they should
     '';
     mainProgram = "chainsaw";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      LorenzBischof
+    ];
   };
 })
