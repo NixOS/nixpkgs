@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,6 +8,7 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_net,
+  makeBinaryWrapper,
   SDL2_ttf,
   pango,
   gettext,
@@ -55,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
   buildInputs = [
     SDL2
@@ -122,13 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Make the game and dedicated server binary available for shell users
     mkdir -p "$out/bin"
     ln -s "$app_contents/MacOS/wesnothd${suffix}" "$out/bin/wesnothd${suffix}"
+
     # Symlinking the game binary is unsifficient as it would be unable to
     # find the bundle resources
-    cat << EOF > "$out/bin/wesnoth${suffix}"
-    #!${stdenvNoCC.shell}
-    open -na "$app_bundle" --args "\$@"
-    EOF
-    chmod +x "$out/bin/wesnoth${suffix}"
+    makeBinaryWrapper "$app_bundle/Contents/MacOS/wesnoth${suffix}" "$out/bin/wesnoth${suffix}"
   '';
 
   passthru.updateScript = nix-update-script {
