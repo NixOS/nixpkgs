@@ -36,16 +36,23 @@ in
 
     i18n = {
       glibcLocales = lib.mkOption {
-        type = lib.types.path;
-        default = pkgs.glibcLocales.override {
-          allLocales = lib.elem "all" cfg.supportedLocales;
-          locales = cfg.supportedLocales;
-        };
+        type = lib.types.nullOr lib.types.path;
+        default =
+          if pkgs.glibcLocales != null then
+            pkgs.glibcLocales.override {
+              allLocales = lib.elem "all" cfg.supportedLocales;
+              locales = cfg.supportedLocales;
+            }
+          else
+            null;
         defaultText = lib.literalExpression ''
-          pkgs.glibcLocales.override {
-            allLocales = lib.elem "all" config.i18n.supportedLocales;
-            locales = config.i18n.supportedLocales;
-          }
+          if pkgs.glibcLocales != null then
+            pkgs.glibcLocales.override {
+              allLocales = lib.elem "all" config.i18n.supportedLocales;
+              locales = config.i18n.supportedLocales;
+            }
+          else
+            null
         '';
         example = lib.literalExpression "pkgs.glibcLocales";
         description = ''
@@ -186,7 +193,9 @@ in
 
     environment.systemPackages =
       # We increase the priority a little, so that plain glibc in systemPackages can't win.
-      lib.optional (cfg.supportedLocales != [ ]) (lib.setPrio (-1) cfg.glibcLocales);
+      lib.optional (cfg.glibcLocales != null && cfg.supportedLocales != [ ]) (
+        lib.setPrio (-1) cfg.glibcLocales
+      );
 
     environment.sessionVariables = {
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
@@ -200,7 +209,7 @@ in
       // cfg.extraLocaleSettings
     );
 
-    systemd.globalEnvironment = lib.mkIf (cfg.supportedLocales != [ ]) {
+    systemd.globalEnvironment = lib.mkIf (cfg.glibcLocales != null && cfg.supportedLocales != [ ]) {
       LOCALE_ARCHIVE = "${cfg.glibcLocales}/lib/locale/locale-archive";
     };
 

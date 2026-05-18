@@ -353,7 +353,6 @@ in
       # Legacy environment variables. These were used by the activation script,
       # but some other script might still depend on them, although unlikely.
       installBootLoader = config.system.build.installBootLoader;
-      localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
       distroId = config.system.nixos.distroId;
       perl = pkgs.perl.withPackages (
         p: with p; [
@@ -375,6 +374,9 @@ in
       # to the system closure, which defeats the purpose of the `system.checks`
       # option, as opposed to `system.extraDependencies`.
       passedChecks = concatStringsSep " " config.system.checks;
+    }
+    // lib.optionalAttrs (config.i18n.glibcLocales != null) {
+      localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
     }
     // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != [ ]) {
       closureInfo = pkgs.closureInfo {

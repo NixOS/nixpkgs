@@ -26,7 +26,7 @@
   zip,
 
   boost190,
-  electron_39,
+  electron_41,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -45,7 +45,7 @@
 }:
 
 let
-  electron = electron_39;
+  electron = electron_41;
   boost = boost190;
 
   mathJaxSrc = fetchzip {
@@ -201,6 +201,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Partly taken from https://github.com/rstudio/rstudio/pull/17470
+    ./electron-41.patch
+
     # Hack RStudio to only use the input R and provided libclang.
     (replaceVars ./r-location.patch {
       R = lib.getBin R;
@@ -249,9 +252,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     name = "rstudio-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-lO+wJk0HWYrKO1Rqz8laVpZK5RUfA9ijYvtPEtVf1r4=";
+    hash = "sha256-MuTY+vjtbgbk73dm6bsCUmi34z/HCDnB5/RLkZ/rrVo=";
   };
 
   preConfigure = ''
