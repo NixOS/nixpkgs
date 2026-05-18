@@ -1902,8 +1902,7 @@ with haskellLib;
   hadolint = doJailbreak super.hadolint;
 
   # Too strict bounds on
-  # QuickCheck (<2.15): https://github.com/kapralVV/Unique/issues/12
-  # hashable (<1.5): https://github.com/kapralVV/Unique/issues/11#issuecomment-3088832168
+  # extra <= 1.8
   Unique = doJailbreak super.Unique;
 
   # Too strict bound on tasty-quickcheck (<0.11)
