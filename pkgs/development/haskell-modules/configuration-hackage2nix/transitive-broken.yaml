@@ -1570,7 +1570,6 @@ dont-distribute-packages:
  - hmeap-utils
  - hmep
  - HMock
- - hMPC
  - hmt-diagrams
  - hnix-store-db
  - HNM
