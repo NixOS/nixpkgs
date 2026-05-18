@@ -1366,6 +1366,7 @@
   ./services/networking/rdnssd.nix
   ./services/networking/realm.nix
   ./services/networking/redsocks.nix
+  ./services/networking/reframe.nix
   ./services/networking/resilio.nix
   ./services/networking/robustirc-bridge.nix
   ./services/networking/rosenpass.nix
