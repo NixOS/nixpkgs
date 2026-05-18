@@ -62,8 +62,10 @@ runCommand name (
   removeAttrs attrs [
     "name"
     "data"
+    "dontFixup"
   ]
   // {
+    inherit dontFixup;
     passthru = (attrs.passthru or { }) // {
       data = writeText "deps.json" (builtins.toJSON data);
     };
