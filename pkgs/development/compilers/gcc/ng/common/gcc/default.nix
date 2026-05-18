@@ -16,6 +16,7 @@
   langObjCpp ? stdenv.targetPlatform.isDarwin,
   langRust ? false,
   langCobol ? false,
+  langAlgol68 ? false,
   langJit ? false,
   enablePlugin ? lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform,
   runCommand,
@@ -214,6 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
           ++ lib.optional langObjCpp "obj-c++"
           ++ lib.optional langRust "rust"
           ++ lib.optional langCobol "cobol"
+          ++ lib.optional langAlgol68 "algol68"
           ++ lib.optional langJit "jit"
         )
       )
@@ -257,6 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
       langGo
       langRust
       langCobol
+      langAlgol68
       ;
     isGNU = true;
   };

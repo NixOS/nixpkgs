@@ -591,6 +591,10 @@ stdenvNoCC.mkDerivation {
 
   + optionalString cc.langCobol or false ''
     wrap ${targetPrefix}gcobol $wrapper $ccPath/${targetPrefix}gcobol
+  ''
+
+  + optionalString cc.langAlgol68 or false ''
+    wrap ${targetPrefix}ga68 $wrapper $ccPath/${targetPrefix}ga68
   '';
 
   strictDeps = true;
