@@ -25,19 +25,12 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flint";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "https://flintlib.org/download/flint-${finalAttrs.version}.tar.gz";
-    hash = "sha256-lJdnmATerZJuOv/rjUxYc50cdoTWDCwSgnVQ0o5FSjM=";
+    hash = "sha256-OYLzhfAGEKlE4BUusKKYk7I2b6ZA6PXzB2xHVkz34qY=";
   };
-
-  patches = [
-    # Remove once/if https://github.com/flintlib/flint/pull/2411 is merged
-    # Required or else during the check phase the build fails while
-    # linking a test due to duplicate symbol errors
-    ./checkPhase.patch
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [

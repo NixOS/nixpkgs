@@ -1,6 +1,6 @@
 module.exports = async ({ github, context, core, dry }) => {
   const path = require('node:path')
-  const { DefaultArtifactClient } = require('@actions/artifact')
+  const { DefaultArtifactClient } = await import('@actions/artifact')
   const { readFile, writeFile } = require('node:fs/promises')
   const withRateLimit = require('./withRateLimit.js')
   const { classify } = require('../supportedBranches.js')
@@ -483,6 +483,7 @@ module.exports = async ({ github, context, core, dry }) => {
           dry,
           pull_request,
           reviews,
+          events,
           // TODO: Use maintainer map instead of the artifact.
           user_maintainers: Object.keys(
             JSON.parse(

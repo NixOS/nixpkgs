@@ -188,7 +188,7 @@ effectiveBuildPythonApplication rec {
     xxhash
     systemd
   ]
-  ++ lib.optional withNvenc [
+  ++ lib.optionals withNvenc [
     nvencHeaders
     nvjpegHeaders
   ];

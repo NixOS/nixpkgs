@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       urllib3
       ydiff
     ])
-    ++ lib.attrVals extras finalAttrs.passthru.optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras finalAttrs.passthru.optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     aws = [ boto3 ];

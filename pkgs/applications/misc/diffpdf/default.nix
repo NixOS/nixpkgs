@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
         install -Dpm755 -D diffpdf $out/bin/diffpdf
         install -Dpm644 -D diffpdf.1 $out/share/man/man1/diffpdf.1
 
-        install -dpm755 $out/share/doc/${pname}-${version} $out/share/licenses/${pname}-${version} $out/share/icons $out/share/pixmaps $out/share/applications
+        install -dpm755 $out/share/doc/${pname}-${version} $out/share/licenses/${pname}-${version} $out/share/icons $out/share/applications
         install -Dpm644 CHANGES README help.html $out/share/doc/${pname}-${version}/
         install -Dpm644 gpl-2.0.txt $out/share/licenses/${pname}-${version}/
         install -Dpm644 images/icon.png $out/share/icons/hicolor/64x64/apps/diffpdf.png
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
         Name=diffpdf
         Icon=diffpdf
         Comment=PDF diffing tool
-        Exec=$out/bin/diffpdf
+        Exec=diffpdf
         Terminal=false
         EOF
       '';

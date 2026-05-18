@@ -43,10 +43,10 @@ stdenv.mkDerivation {
     [
       abseil-cpp
       boost
-      libllvm.all
-      libclang.all
       legacy-cgi
     ]
+    ++ libllvm.all
+    ++ libclang.all
     ++ [
       jedi
       jedi-language-server

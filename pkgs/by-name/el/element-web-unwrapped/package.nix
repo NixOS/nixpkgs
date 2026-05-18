@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-web";
-  version = "1.12.14";
+  version = "1.12.18";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yy7CfMOMT1DBXHDHaDyAaOgp3s2KQIKA1A6zUhVOUhM=";
+    hash = "sha256-G2HEOv1fHVgbT79bo8ibp9VmtQ8o5vA6/i6Q5TUKqdw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-0yqWObZtRntsH7gk+OB8pMuWsrvCQ4L9173Qv0o5abk=";
+    hash = "sha256-0iGzjwT+99tvRuxYD+1+SrYrCYAI1dcjhXT3x6E/wHg=";
   };
 
   nativeBuildInputs = [
