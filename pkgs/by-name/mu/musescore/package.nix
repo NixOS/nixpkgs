@@ -10,7 +10,6 @@
   alsa-plugins,
   freetype,
   libjack2,
-  lame,
   libogg,
   libpulseaudio,
   libsndfile,
@@ -93,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libjack2
     freetype
-    lame
     libogg
     libpulseaudio
     libsndfile
