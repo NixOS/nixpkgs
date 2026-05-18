@@ -1540,6 +1540,10 @@ with haskellLib;
   # https://github.com/haskell/fgl/issues/119
   fgl = doJailbreak super.fgl;
 
+  # 2026-05-17: allow QuickCheck 2.16
+  # Sent Claude an email on 2026-05-18.
+  bitwise = doJailbreak super.bitwise;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
