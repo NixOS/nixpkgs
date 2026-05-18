@@ -3232,6 +3232,8 @@ self: super: with self; {
 
   copier-template-tester = callPackage ../development/python-modules/copier-template-tester { };
 
+  copr = callPackage ../development/python-modules/copr { };
+
   copykitten = callPackage ../development/python-modules/copykitten { };
 
   coq-tools = callPackage ../development/python-modules/coq-tools { };
@@ -8373,6 +8375,8 @@ self: super: with self; {
   knowit = callPackage ../development/python-modules/knowit { };
 
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
+
+  koji = callPackage ../development/python-modules/koji { };
 
   kokoro = callPackage ../development/python-modules/kokoro { };
 
