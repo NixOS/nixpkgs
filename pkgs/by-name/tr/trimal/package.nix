@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     echo Source root reset to ''${sourceRoot}
   '';
 
+  makeFlags = lib.optionals stdenv.isDarwin [
+    "CC=c++"
+    "CXX=c++"
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp -a trimal readal statal $out/bin
@@ -28,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tool for the automated removal of spurious sequences or poorly aligned regions from a multiple sequence alignment";
     license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "http://trimal.cgenomics.org";
     maintainers = [ lib.maintainers.bzizou ];
   };
