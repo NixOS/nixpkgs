@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "avea";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "k0rventen";
     repo = "avea";
     tag = "v${version}";
-    hash = "sha256-IfD74nsuHYBrwXebpRE9tzPIwp+i3jdZjh49gz8NRz4=";
+    hash = "sha256-cBYS8Q70K5MXZ63uI6OGkUsskJ7rkgTBPjlAsxmtmVA=";
   };
 
   build-system = [ setuptools ];
