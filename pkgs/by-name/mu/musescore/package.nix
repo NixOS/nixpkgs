@@ -42,23 +42,26 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DMUSE_APP_BUILD_MODE=release"
+    (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
-    "-DMUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT=OFF"
-    # Use our versions of system libraries
-    "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_HARFBUZZ=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
-    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
-    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
+    (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
-    "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    (lib.cmakeBool "MUE_COMPILE_INSTALL_QTQML_FILES" false)
     # Don't build unit tests unless we are going to run them.
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+  ]
+  # Use our versions of system libraries, see:
+  # https://github.com/musescore/MuseScore/issues/11572
+  ++ map (l: lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_${l}" true) [
+    "FREETYPE"
+    "HARFBUZZ"
+    "TINYXML"
+    # Implies also OPUS
+    "OPUSENC"
+    "FLAC"
   ];
 
   qtWrapperArgs = [
