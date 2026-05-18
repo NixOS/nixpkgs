@@ -483,7 +483,6 @@ module.exports = async ({ github, context, core, dry }) => {
           dry,
           pull_request,
           reviews,
-          events,
           // TODO: Use maintainer map instead of the artifact.
           user_maintainers: Object.keys(
             JSON.parse(
