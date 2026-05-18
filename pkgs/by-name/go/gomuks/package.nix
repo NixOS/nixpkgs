@@ -1,68 +1,84 @@
 {
   lib,
-  stdenv,
-  buildGoModule,
   fetchFromGitHub,
-  makeDesktopItem,
-  makeWrapper,
-  libnotify,
-  olm,
-  pulseaudio,
-  sound-theme-freedesktop,
+  fetchNpmDeps,
+  buildGoModule,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  libheif,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomuks";
-  version = "0.3.1";
+  version = "26.04";
 
   src = fetchFromGitHub {
-    owner = "tulir";
+    owner = "gomuks";
     repo = "gomuks";
-    rev = "v${version}";
-    sha256 = "sha256-bDJXo8d9K5UO599HDaABpfwc9/dJJy+9d24KMVZHyvI=";
+    tag = "v0.${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.0";
+    hash = "sha256-IysL++H3ncAU1xqNWKy2Z9RKkF1hriVmIDdQu0SkDbQ=";
   };
 
-  vendorHash = "sha256-0my58bVKLWbdTwhAnXMruNjujd07NXFn4bkRe1cUYpE=";
+  proxyVendor = true;
+  vendorHash = "sha256-Ev6nmmOzLPjXp8XYj+7MRPElfGAv8fUcXJ5fXP8LCvs=";
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    libheif
+  ];
+
+  env = {
+    npmRoot = "web";
+    npmDeps = fetchNpmDeps {
+      src = "${finalAttrs.src}/web";
+      hash = "sha256-NeQzz2+Vdi1OtVN7ZF8I33nFCO7OpccD1AjpPl7tML4=";
+    };
+  };
+
+  postPatch = ''
+    substituteInPlace ./web/build-wasm.sh \
+      --replace-fail 'go.mau.fi/gomuks/version.Tag=$(git describe --exact-match --tags 2>/dev/null)' "go.mau.fi/gomuks/version.Tag=${finalAttrs.src.tag}" \
+      --replace-fail 'go.mau.fi/gomuks/version.Commit=$(git rev-parse HEAD)' "go.mau.fi/gomuks/version.Commit=unknown"
+  '';
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ olm ];
+  tags = [
+    "goolm"
+    "libheif"
+  ];
 
-  postInstall = ''
-    cp -r ${
-      makeDesktopItem {
-        name = "net.maunium.gomuks.desktop";
-        exec = "@out@/bin/gomuks";
-        terminal = true;
-        desktopName = "Gomuks";
-        genericName = "Matrix client";
-        categories = [
-          "Network"
-          "Chat"
-        ];
-        comment = meta.description;
-      }
-    }/* $out/
-    substituteAllInPlace $out/share/applications/*
-    wrapProgram $out/bin/gomuks \
-      --prefix PATH : "${
-        lib.makeBinPath (
-          lib.optionals stdenv.hostPlatform.isLinux [
-            libnotify
-            pulseaudio
-          ]
-        )
-      }" \
-      --set-default GOMUKS_SOUND_NORMAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message-new-instant.oga" \
-      --set-default GOMUKS_SOUND_CRITICAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga"
+  ldflags = [
+    "-X 'go.mau.fi/gomuks/version.Tag=${finalAttrs.src.tag}'"
+    "-X 'go.mau.fi/gomuks/version.Commit=unknown'"
+    "-X \"go.mau.fi/gomuks/version.BuildTime=$(date -Iseconds)\""
+    "-X \"maunium.net/go/mautrix.GoModVersion=$(cat go.mod | grep 'maunium.net/go/mautrix ' | head -n1 | awk '{ print $2 })\""
+  ];
+
+  subPackages = [
+    "cmd/gomuks"
+    "cmd/gomuks-terminal"
+    "cmd/archivemuks"
+  ];
+
+  preBuild = ''
+    CGO_ENABLED=0 go generate ./web
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    homepage = "https://maunium.net/go/gomuks/";
-    description = "Terminal based Matrix client written in Go";
-    mainProgram = "gomuks";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ chvp ];
+    mainProgram = "gomuks-web";
+    description = "Matrix client written in Go";
+    homepage = "https://github.com/tulir/gomuks";
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.zaphyra ];
+    platforms = lib.platforms.unix;
   };
-}
+})
