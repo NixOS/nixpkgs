@@ -3549,6 +3549,8 @@ self: super: with self; {
 
   daff = callPackage ../development/python-modules/daff { };
 
+  dagster = callPackage ../development/python-modules/dagster { };
+
   dagster-pipes = callPackage ../development/python-modules/dagster-pipes { };
 
   dagster-shared = callPackage ../development/python-modules/dagster-shared { };
