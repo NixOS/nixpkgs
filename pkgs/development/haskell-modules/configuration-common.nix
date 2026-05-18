@@ -2101,7 +2101,7 @@ with haskellLib;
   # https://github.com/haskell-works/hw-string-parse/issues/43
   hw-string-parse = doJailbreak super.hw-string-parse;
 
-  # 2025-09-03: allow QuickCheck 2.15
+  # 2026-05-18: allow QuickCheck 2.16
   # https://github.com/haskell-works/hw-prim/issues/150
   hw-prim = lib.pipe super.hw-prim [
     (warnAfterVersion "0.6.3.2")
