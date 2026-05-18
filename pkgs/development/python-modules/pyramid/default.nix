@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
+  fetchFromGitHub,
   webtest,
   zope-component,
   hupper,
@@ -10,7 +9,7 @@
   plaster,
   plaster-pastedeploy,
   repoze-lru,
-  setuptools,
+  setuptools_80,
   translationstring,
   venusian,
   webob,
@@ -19,25 +18,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyramid";
-  version = "2.0.2";
+  version = "2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NyE4pzjkIWU1zHbczm7d1aGqypUTDyNU+4NCZMBvGN4=";
+  src = fetchFromGitHub {
+    owner = "Pylons";
+    repo = "pyramid";
+    tag = finalAttrs.version;
+    hash = "sha256-N0zH0BpS9ImSTWeADBOBSgLYI062sdLxTzwBENAawFc=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "python-3.13-compat.patch";
-      url = "https://github.com/Pylons/pyramid/commit/1079613eb07e2a67454378e1fc28815dfd64bb82.patch";
-      hash = "sha256-/jxbA2q0kAeXDvIwhNkO8h4KbKtdquWXAH7/0lV8MXc=";
-    })
-  ];
-
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     hupper
@@ -45,7 +38,6 @@ buildPythonPackage rec {
     plaster
     plaster-pastedeploy
     repoze-lru
-    setuptools # for pkg_resources
     translationstring
     venusian
     webob
@@ -64,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python web framework";
     homepage = "https://trypyramid.com/";
-    changelog = "https://github.com/Pylons/pyramid/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/Pylons/pyramid/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})
