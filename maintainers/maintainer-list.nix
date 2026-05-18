@@ -8306,6 +8306,11 @@
     githubId = 5427394;
     name = "Ersin Akinci";
   };
+  es-sai-fi = {
+    name = "es-sai-fi";
+    github = "es-sai-fi";
+    githubId = 96452903;
+  };
   esau79p = {
     github = "EsAu79p";
     githubId = 21313906;
