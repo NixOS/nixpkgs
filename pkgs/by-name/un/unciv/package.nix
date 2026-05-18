@@ -11,8 +11,6 @@
   libxxf86vm,
   nix-update-script,
 }:
-let
-  version = "4.19.15";
 
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -38,7 +36,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  inherit version;
+  version = "4.20.7";
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
