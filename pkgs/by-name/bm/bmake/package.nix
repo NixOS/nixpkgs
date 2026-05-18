@@ -93,7 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./boot-strap --prefix=$out -o . op=install
+    # `boot-strap op=install` runs the built bmake, which breaks cross builds.
+    install -Dm755 bmake $out/bin/bmake
+    install -Dm644 bmake.1 $man/share/man/man1/bmake.1
+    mkdir -p $out/share
+    cp -r mk $out/share
 
     runHook postInstall
   '';
