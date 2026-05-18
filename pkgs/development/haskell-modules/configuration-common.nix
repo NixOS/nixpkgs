@@ -1544,6 +1544,10 @@ with haskellLib;
   # Sent Claude an email on 2026-05-18.
   bitwise = doJailbreak super.bitwise;
 
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/haskell-hvr/lzma/issues/45
+  lzma = doJailbreak super.lzma;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
