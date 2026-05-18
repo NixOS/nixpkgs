@@ -10,7 +10,6 @@
   src,
   version,
   vendorHash,
-  meta,
   ...
 }@args:
 
