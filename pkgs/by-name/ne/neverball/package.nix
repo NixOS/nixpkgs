@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   SDL2,
   libGL,
   libpng,
@@ -18,9 +18,12 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "neverball";
   version = "1.7.0-alpha.3";
-  src = fetchurl {
-    url = "https://neverball.org/neverball-${finalAttrs.version}.tar.gz";
-    sha256 = "184gm36c6p6vaa6gwrfzmfh86klhnb03pl40ahsjsvprlk667zkk";
+
+  src = fetchFromGitHub {
+    owner = "Neverball";
+    repo = "neverball";
+    tag = finalAttrs.version;
+    hash = "sha256-C6zXAQEjaiuo3v/ihvyXnJhK0kTPzC0sxLOgY9bFdgk=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
