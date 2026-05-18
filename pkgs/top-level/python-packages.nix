@@ -15357,6 +15357,8 @@ self: super: with self; {
 
   pytankerkoenig = callPackage ../development/python-modules/pytankerkoenig { };
 
+  pytanque = callPackage ../development/python-modules/pytanque { };
+
   pytap2 = callPackage ../development/python-modules/pytap2 { };
 
   pytapo = callPackage ../development/python-modules/pytapo { };
