@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   SDL2,
   libGL,
   libpng,
@@ -18,20 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neverball";
-  version = "1.6.0";
+  version = "1.7.0-alpha.3";
   src = fetchurl {
     url = "https://neverball.org/neverball-${finalAttrs.version}.tar.gz";
     sha256 = "184gm36c6p6vaa6gwrfzmfh86klhnb03pl40ahsjsvprlk667zkk";
   };
-  patches = [
-    # Pull upstream fix for -fno-common toolchains
-    #   https://github.com/Neverball/neverball/pull/198
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/Neverball/neverball/commit/a42492b8db06934c7a794630db92e3ff6ebaadaa.patch";
-      sha256 = "0sqyxfwpl4xxra8iz87j5rxzwani16xra2xl4l5z61shvq30308h";
-    })
-  ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     iconv
