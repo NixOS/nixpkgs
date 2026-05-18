@@ -25,7 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-3WyjvHxr+6kG+cLSCEZkHoA70mSoT66ubmp0W9g2yJM=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
     substituteInPlace tests/executors/test_output_executor_regression_issue_98.py \
       --replace-fail "timeout=15," "timeout=60,"
   '';
