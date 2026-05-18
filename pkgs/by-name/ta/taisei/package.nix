@@ -109,5 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
       philocalyst
     ];
     platforms = lib.platforms.all;
+    changelog = "https://github.com/taisei-project/taisei/releases/tag/${finalAttrs.src.tag}";
   };
 })
