@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "matter-python-client";
-  version = "0.6.8";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matter-js";
     repo = "matterjs-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EfngXyT802jG6zjCpOIUwKZG4MUJ/DLIsIHDEwwQ+XI=";
+    hash = "sha256-t53DeMfSSt9lyz1etfrojRHqGkjEUK/oZoCNbpyDvsk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python_client";
@@ -61,6 +61,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
+    changelog = "https://github.com/matter-js/matterjs-server/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python Client for the OHF Matter Server";
     homepage = "https://github.com/matter-js/matterjs-server/tree/main/python_client";
     license = lib.licenses.asl20;
