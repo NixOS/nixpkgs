@@ -67,6 +67,26 @@ let
       version,
       ...
     }:
+    let
+      # Filter out components that don't support the current host platform
+      # BEFORE converting to an attribute set to prevent cross-OS overwrites.
+      isSupported =
+        component:
+        let
+          architectures = builtins.filter (arch: builtins.elem arch allArches) (
+            lib.attrByPath [ "platform" "architectures" ] allArches component
+          );
+          operating_systems = builtins.filter (os: builtins.elem os (builtins.attrNames oses)) (
+            lib.attrByPath [ "platform" "operating_systems" ] (builtins.attrNames oses) component
+          );
+          platforms =
+            if !(lib.hasAttr "platform" component) || component.platform == { } then
+              lib.platforms.all
+            else
+              builtins.concatMap (arch: map (os: toNixPlatform arch os) operating_systems) architectures;
+        in
+        lib.meta.availableOn stdenv.hostPlatform { meta = { inherit platforms; }; };
+    in
     lib.fix (
       self:
       builtins.listToAttrs (
@@ -80,7 +100,7 @@ let
               version
               ;
           };
-        }) components
+        }) (builtins.filter isSupported components)
       )
     );
 
@@ -92,9 +112,8 @@ let
     # This component's snapshot
     {
       component,
-      revision,
       schema_version,
-      version,
+      ...
     }@attrs:
     let
       baseUrl = dirOf schema_version.url;
@@ -159,6 +178,9 @@ let
         # If there is a source, unpack it
         if [ ! -z "$src" ]; then
           tar -xf $src -C $out/google-cloud-sdk/
+
+        # Fix permissions because dontUnpack = true bypasses Nix's standard chmod
+          chmod -R u+rwX $out/google-cloud-sdk/
 
           # If the source has binaries, link them to `$out/bin`
           if [ -d "$out/google-cloud-sdk/bin" ]; then
