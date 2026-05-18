@@ -27,7 +27,6 @@
   pulseaudio,
   withDiscordRPC ? true,
 }:
-
 let
   # fork of pypresence, to be reverted if/when there's an upstream release
   lynxpresence = python3Packages.buildPythonPackage rec {
@@ -48,14 +47,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "9.1.3";
+  version = "10.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-Z/+8UCtwvY9000b1Y+HaTIehK8axzyR+eeeBPhllS4U=";
+    hash = "sha256-atLyNePy3pc3xJFliy5hITC5R0VU6jfHYqfq8RxqGoM=";
   };
 
   postUnpack = ''
