@@ -8,9 +8,7 @@
   versionCheckHook,
   makeWrapper,
   enableCmount ? true,
-  fuse,
   fuse3,
-  macfuse-stubs,
   librclone,
   nix-update-script,
 }:
@@ -40,11 +38,9 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optional enableCmount (
-    if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse
-  );
+  buildInputs = lib.optional enableCmount fuse3;
 
-  tags = lib.optionals enableCmount [ "cmount" ];
+  tags = [ "fuse3" ] ++ lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [
     "-s"
@@ -54,7 +50,7 @@ buildGoModule (finalAttrs: {
 
   postConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace vendor/github.com/winfsp/cgofuse/fuse/host_cgo.go \
-        --replace-fail '"libfuse.so.2"' '"${lib.getLib fuse}/lib/libfuse.so.2"'
+        --replace-fail "fuse.h" "fuse3/fuse.h"
   '';
 
   postInstall =
