@@ -3,10 +3,12 @@
   rustPlatform,
   fetchFromGitLab,
   pkg-config,
+  stdenv,
+
+  # Linux-only
   vulkan-loader,
   alsa-lib,
   udev,
-  shaderc,
   libxcb,
   libxkbcommon,
   autoPatchelfHook,
@@ -15,7 +17,12 @@
   libxcursor,
   libxrandr,
   wayland,
-  stdenv,
+
+  # Both platforms
+  shaderc,
+
+  # macOS-only
+  desktopToDarwinBundle,
 }:
 
 let
@@ -58,16 +65,23 @@ rustPlatform.buildRustPackage {
   '';
 
   nativeBuildInputs = [
-    autoPatchelfHook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
 
   buildInputs = [
+    shaderc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     udev
     libxcb
     libxkbcommon
-    shaderc
     stdenv.cc.cc # libgcc_s.so.1
   ];
 
@@ -92,7 +106,7 @@ rustPlatform.buildRustPackage {
   # Some tests require internet access
   doCheck = false;
 
-  appendRunpaths = [
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.makeLibraryPath (
       [
         libx11
@@ -122,7 +136,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://www.veloren.net";
     license = lib.licenses.gpl3Only;
     mainProgram = "veloren-voxygen";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       rnhmjoj
       tomodachi94
