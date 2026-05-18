@@ -16408,6 +16408,12 @@
     githubId = 115777584;
     name = "Lutz Berger";
   };
+  luuumine = {
+    email = "nix@luuumine.com";
+    github = "luuumine";
+    githubId = 55056797;
+    name = "Romain Delhommais";
+  };
   lux = {
     email = "lux@lux.name";
     github = "luxzeitlos";
