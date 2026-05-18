@@ -3557,6 +3557,8 @@ self: super: with self; {
 
   dagster-dg-core = callPackage ../development/python-modules/dagster-dg-core { };
 
+  dagster-graphql = callPackage ../development/python-modules/dagster-graphql { };
+
   dagster-pipes = callPackage ../development/python-modules/dagster-pipes { };
 
   dagster-rest-resources = callPackage ../development/python-modules/dagster-rest-resources { };
