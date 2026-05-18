@@ -70,13 +70,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "6.9.13-38";
+  version = "6.9.13-48";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
     rev = finalAttrs.version;
-    sha256 = "sha256-49o1jFFs7GrQMBvkoUvTmlI5TDnS1mVycghuaOfDrIc=";
+    sha256 = "sha256-c1u7eMq97eXhCZAXoDNrd6ix+wv4DSza7yu7KaG5fyg=";
   };
 
   outputs = [
@@ -134,7 +134,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libXtSupport libXt
   ++ lib.optional libwebpSupport libwebp;
 
-  doCheck = false; # fails 2 out of 76 tests
+  doCheck = true;
+
+  # One of the demo tests fail, but we don't want to disable all of
+  # the test suite.
+  postPatch = ''
+    substituteInPlace Makefile.in --replace "Magick++/demo/demos.tap" ""
+  '';
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -167,30 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     license = lib.licenses.asl20;
     knownVulnerabilities = [
-      "CVE-2019-13136"
-      "CVE-2019-17547"
-      "CVE-2020-25663"
-      "CVE-2020-27768"
-      "CVE-2020-27769"
-      "CVE-2020-27829"
-      "CVE-2021-20243"
-      "CVE-2021-20244"
-      "CVE-2021-20310"
-      "CVE-2021-20311"
-      "CVE-2021-20312"
-      "CVE-2021-20313"
-      "CVE-2021-3596"
-      "CVE-2022-0284"
-      "CVE-2022-2719"
-      "CVE-2023-1289"
-      "CVE-2023-2157"
-      "CVE-2023-34151"
+      # This is only an issue with --enable-pipes. Upstream has
+      # rejected this as a security issue:
+      # https://github.com/ImageMagick/ImageMagick/issues/6339#issuecomment-1559698800
       "CVE-2023-34152"
-      "CVE-2023-34153"
-      "CVE-2023-3428"
-      "CVE-2023-34474"
-      "CVE-2023-34475"
-      "CVE-2023-5341"
     ];
   };
 })
