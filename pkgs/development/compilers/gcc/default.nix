@@ -14,6 +14,7 @@
   langGo ? false,
   langRust ? false,
   langCobol ? false,
+  langAlgol68 ? false,
   reproducibleBuild ? true,
   profiledCompiler ? false,
   langJit ? false,
@@ -85,6 +86,7 @@ let
   majorVersion = versions.major version;
   atLeast14 = lib.versionAtLeast version "14";
   atLeast15 = lib.versionAtLeast version "15";
+  atLeast16 = lib.versionAtLeast version "16";
   is13 = majorVersion == "13";
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
@@ -153,6 +155,7 @@ let
       gnused
       isl
       langAda
+      langAlgol68
       langC
       langCC
       langCobol
@@ -197,9 +200,10 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
 
-# Rust and Cobol support requires libstdc++
+# Rust, Cobol and Algol68 support requires libstdc++
 assert langRust -> atLeast14 && langCC;
 assert langCobol -> atLeast15 && langCC;
+assert langAlgol68 -> atLeast16 && langCC;
 
 # threadsCross is just for MinGW
 assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
@@ -400,6 +404,7 @@ pipe
           langGo
           langRust
           langCobol
+          langAlgol68
           version
           ;
         isGNU = true;
