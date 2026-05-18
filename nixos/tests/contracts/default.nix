@@ -10,4 +10,5 @@
 
        <contract name>-<provider name> = runTest ./<contract name>/<provider name>.nix
   */
+  fileBackup-restic = runTest ./fileBackup/restic.nix;
 }
