@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libaom";
-  version = "3.12.1";
+  version = "3.14.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-AAS6wfq4rZ4frm6+gwKoIS3+NVzPhhfW428WXJQ2tQ8=";
+    hash = "sha256-vBHd4CROJEnel6oqXY1qvGlx+CBuEaxQGh84Mt5M9wQ=";
     stripRoot = false;
   };
 
