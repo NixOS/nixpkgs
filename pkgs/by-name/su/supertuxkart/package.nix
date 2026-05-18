@@ -27,63 +27,7 @@
   libsamplerate,
   shaderc,
 }:
-let
-  assets = fetchsvn {
-    url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
-    rev = "18621";
-    sha256 = "sha256-iqQSezGu0tecA53qhrtYA77SLj28WUUCcL4ZCJbK5C8=";
-    name = "stk-assets";
-  };
 
-  # List of bundled libraries in stk-code/lib to keep
-  # Those are the libraries that cannot be replaced
-  # with system packages.
-  bundledLibraries = [
-    # Bullet 2.87 is incompatible (bullet 2.79 needed whereas 2.87 is packaged)
-    # The api changed in a lot of classes, too much work to adapt
-    "bullet"
-    # Upstream Libenet doesn't yet support IPv6,
-    # So we will use the bundled libenet which
-    # has been fixed to support it.
-    "enet"
-    # Internal library of STK, nothing to do about it
-    "graphics_engine"
-    # Internal library of STK, nothing to do about it
-    "graphics_utils"
-    # Internal library.
-    "simd_wrapper"
-    # This irrlicht is bundled with cmake
-    # whereas upstream irrlicht still uses
-    # archaic Makefiles, too complicated to switch to.
-    "irrlicht"
-    # Not packaged to this date
-    "libsquish"
-    # Not packaged to this date
-    "sheenbidi"
-    # Not packaged to this date
-    "tinygettext"
-    # Not packaged to this date (needed on Darwin)
-    "mojoal"
-  ];
-
-  desktopItem = makeDesktopItem {
-    name = "supertuxkart";
-    exec = "supertuxkart";
-    icon = "supertuxkart";
-    desktopName = "SuperTuxKart";
-    comment = "3D open-source arcade racer";
-    genericName = "Arcade Racer";
-    categories = [
-      "Game"
-      "ArcadeGame"
-    ];
-    keywords = [
-      "tux"
-      "kart"
-      "race"
-    ];
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "supertuxkart";
@@ -183,7 +127,69 @@ stdenv.mkDerivation (finalAttrs: {
       $out/Applications/SuperTuxKart.app/Contents/MacOS/supertuxkart
   '';
 
-  desktopItems = lib.optional stdenv.hostPlatform.isLinux desktopItem;
+  desktopItems = lib.optional stdenv.hostPlatform.isLinux (makeDesktopItem {
+    name = "supertuxkart";
+    exec = "supertuxkart";
+    icon = "supertuxkart";
+    desktopName = "SuperTuxKart";
+    comment = "3D open-source arcade racer";
+    genericName = "Arcade Racer";
+    categories = [
+      "Game"
+      "ArcadeGame"
+    ];
+    keywords = [
+      "tux"
+      "kart"
+      "race"
+    ];
+  });
+
+  passthru = {
+    assets = fetchsvn {
+      url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
+      rev = "18621";
+      sha256 = "sha256-iqQSezGu0tecA53qhrtYA77SLj28WUUCcL4ZCJbK5C8=";
+      name = "stk-assets";
+    };
+
+    # List of bundled libraries in stk-code/lib to keep
+    # Those are the libraries that cannot be replaced
+    # with system packages.
+    bundledLibraries = [
+      # Bullet 2.87 is incompatible (bullet 2.79 needed whereas 2.87 is packaged)
+      # The api changed in a lot of classes, too much work to adapt
+      "bullet"
+
+      # Upstream Libenet doesn't yet support IPv6,
+      # So we will use the bundled libenet which
+      # has been fixed to support it.
+      "enet"
+
+      # Internal library of STK, nothing to do about it
+      "graphics_engine"
+
+      # Internal library of STK, nothing to do about it
+      "graphics_utils"
+
+      # Internal library.
+      "simd_wrapper"
+
+      # This irrlicht is bundled with cmake
+      # whereas upstream irrlicht still uses
+      # archaic Makefiles, too complicated to switch to.
+      "irrlicht"
+
+      # No USE_SYSTEM_SHEENBIDI flag upstream
+      "sheenbidi"
+
+      # No USE_SYSTEM_TINYGETTEXT flag upstream
+      "tinygettext"
+
+      # Used on Darwin as a static OpenAL replacement (USE_MOJOAL=ON by default on Apple)
+      "mojoal"
+    ];
+  };
 
   meta = {
     description = "3D open-source arcade racer";
