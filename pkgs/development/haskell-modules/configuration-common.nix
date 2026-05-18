@@ -1520,6 +1520,10 @@ with haskellLib;
   # https://github.com/pcapriotti/optparse-applicative/issues/516
   optparse-applicative = doJailbreak super.optparse-applicative;
 
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/jaspervdj/psqueues/issues/67
+  psqueues = doJailbreak super.psqueues;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
