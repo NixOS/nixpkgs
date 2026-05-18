@@ -2084,8 +2084,8 @@ let
         mktplcRef = {
           name = "vscode-graphql-syntax";
           publisher = "GraphQL";
-          version = "1.3.8";
-          hash = "sha256-10x2kX9Gc7O/tGRDPZfy1cKdCIvGTCXcD2bDokIz7TU=";
+          version = "1.3.10";
+          hash = "sha256-EY6BHl5ICcs3FuuenoadDXLLPSe8+2VAAydqo/YrtaE=";
         };
         meta = {
           description = "Adds full GraphQL syntax highlighting and language support such as bracket matching";
@@ -5200,8 +5200,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.2.8";
-          hash = "sha256-lbTE5UP4JSpqoXHzS6HPBX2pOQjeBSmHhxqy0thawfc=";
+          version = "3.2.9";
+          hash = "sha256-LkoytGAAZwjm3Mm3EixCHjnh1dkxB0lKMv5KJVYSwGY=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
