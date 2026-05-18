@@ -12,6 +12,7 @@ async function handleReviewers({
   owners,
   getUser,
   getTeam,
+  getTeamMembers,
 }) {
   const pull_number = pull_request.number
 
@@ -158,6 +159,25 @@ async function handleReviewers({
   )
   log('reviewers - teams_not_yet_reached', teams_not_yet_reached.join(', '))
 
+  // Also keep members of teams_to_reach: GitHub's per-team code-review-assignment
+  // can turn a team request into individual bot-attributed adds.
+  const team_member_logins = new Set(
+    (
+      await Promise.all(
+        Array.from(teams_to_reach, async (slug) => {
+          const ms = await getTeamMembers(slug)
+          return ms.map(({ login }) => login.toLowerCase())
+        }),
+      )
+    ).flat(),
+  )
+  log(
+    'reviewers - team_member_logins',
+    Array.from(team_member_logins).join(', '),
+  )
+
+  const users_to_keep = users_to_reach.union(team_member_logins)
+
   // The usernames of bots that make review requests we may auto-revoke.
   const revokable_requesters = ['github-actions[bot]', 'nixpkgs-ci[bot]']
 
@@ -183,7 +203,7 @@ async function handleReviewers({
   // Pending requests no longer in the to_reach set, excluding the engaged
   // and anything not requested by our own bot.
   const users_to_remove = Array.from(
-    pending_users.difference(users_to_reach).difference(users_engaged),
+    pending_users.difference(users_to_keep).difference(users_engaged),
   ).filter((login) =>
     revokable_requesters.includes(last_request_actor_for_user.get(login)),
   )
