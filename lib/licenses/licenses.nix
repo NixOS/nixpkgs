@@ -475,6 +475,11 @@ lib.mapAttrs mkLicense (
       fullName = "CeCILL-C Free Software License Agreement";
     };
 
+    cfitsio = {
+      spdxId = "CFITSIO";
+      fullName = "CFITSIO License";
+    };
+
     classpathException20 = {
       spdxId = "Classpath-exception-2.0";
       fullName = "Classpath exception 2.0";
