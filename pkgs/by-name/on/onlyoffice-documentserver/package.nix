@@ -27,6 +27,14 @@ let
     tag = "v9.3.1.1";
     hash = "sha256-uN1L/4I7wrg0BqAAu3zdn8LqtdfJDAHnAMbCvzQnOvI=";
   };
+  # This is required but not included in the submodules for some reason.
+  # https://github.com/ONLYOFFICE/server/blob/34adaeeb4cc1e032a5cf188924880a25546dc67c/Makefile#L81-L83
+  document-templates-src = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "document-templates";
+    tag = "v9.3.1.1";
+    hash = "sha256-+52+MK/8DARJrQRbIpN5nk3j3J9cy6Wd1FDMnCVZKRE=";
+  };
   common = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-server-Common";
     src = server-src;
@@ -180,6 +188,8 @@ let
 
       mkdir -p $out/var/www/onlyoffice/documentserver/server/schema
       cp -r ${server-src}/schema/* $out/var/www/onlyoffice/documentserver/server/schema
+
+      ln -s ${document-templates-src} $out/var/www/onlyoffice/documentserver/document-templates
 
       ## required for bwrap --bind
       chmod u+w $out/var
