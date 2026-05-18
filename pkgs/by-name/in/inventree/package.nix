@@ -208,24 +208,24 @@ python3Packages.buildPythonApplication rec {
       # Don't need to bother with a non-maintained library from ages ago
       substituteInPlace src/backend/InvenTree/InvenTree/settings.py --replace-fail "django_slowtests.testrunner.DiscoverSlowestTestsRunner" "django.test.runner.DiscoverRunner"
 
-      mkdir -p $out/lib/${pname}/src/backend/InvenTree/web/
-      cp -r src $out/lib/${pname}
-      ln -s ${frontend}/static $out/lib/${pname}/src/backend/InvenTree/web
+      mkdir -p $out/lib/inventree/src/backend/InvenTree/web/
+      cp -r src $out/lib/inventree
+      ln -s ${frontend}/static $out/lib/inventree/src/backend/InvenTree/web
 
-      chmod +x $out/lib/${pname}/src/backend/InvenTree/manage.py
+      chmod +x $out/lib/inventree/src/backend/InvenTree/manage.py
 
-      makeWrapper $out/lib/${pname}/src/backend/InvenTree/manage.py $out/bin/${pname} \
-        --prefix PYTHONPATH : "${pythonPath}:$out/lib/${pname}/src/backend/InvenTree" \
+      makeWrapper $out/lib/inventree/src/backend/InvenTree/manage.py $out/bin/inventree \
+        --prefix PYTHONPATH : "${pythonPath}:$out/lib/inventree/src/backend/InvenTree" \
         --set INVENTREE_COMMIT_HASH abcdef \
         --set INVENTREE_COMMIT_DATE 1970-01-01
 
       makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/gunicorn \
-        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}":"${pythonPath}:$out/lib/${pname}/src/backend/InvenTree" \
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}":"${pythonPath}:$out/lib/inventree/src/backend/InvenTree" \
         --set INVENTREE_COMMIT_HASH abcdef \
         --set INVENTREE_COMMIT_DATE 1970-01-01
 
       # Generate static assets
-      pushd $out/lib/${pname}/src/backend/InvenTree &>/dev/null
+      pushd $out/lib/inventree/src/backend/InvenTree &>/dev/null
       export INVENTREE_STATIC_ROOT=$out/lib/inventree/static
       export INVENTREE_MEDIA_ROOT=$(mktemp -d)
       export INVENTREE_BACKUP_DIR=$(mktemp -d)
