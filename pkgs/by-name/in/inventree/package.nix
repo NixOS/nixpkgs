@@ -283,7 +283,6 @@ python3Packages.buildPythonApplication rec {
     pytest-django
     pytest-env
     invoke
-    coverage
     pdfminer-six
     tblib
     pytest
