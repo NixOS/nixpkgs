@@ -69,13 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libjpeg
     libpng
-    libx11
     harfbuzz
     mcpp
     wiiuse
     angelscript
     sqlite
   ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libx11
   ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
   ++ lib.optional stdenv.hostPlatform.isLinux openal
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
