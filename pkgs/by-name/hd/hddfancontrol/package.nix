@@ -69,5 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       philipwilk
     ];
     mainProgram = "hddfancontrol";
+    platforms = lib.platforms.linux;
   };
 })
