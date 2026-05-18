@@ -442,16 +442,6 @@
       "source": "hosted",
       "version": "1.0.2"
     },
-    "cupertino_icons": {
-      "dependency": "direct main",
-      "description": {
-        "name": "cupertino_icons",
-        "sha256": "41e005c33bd814be4d3096aff55b1908d419fde52ca656c8c47719ec745873cd",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.0.9"
-    },
     "dart_style": {
       "dependency": "transitive",
       "description": {
@@ -657,12 +647,13 @@
     "file_picker": {
       "dependency": "direct main",
       "description": {
-        "name": "file_picker",
-        "sha256": "1d4afa261268e59863af47b9f9dd9a230502d4c702b9d9183353646fe6d5b6e1",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "dev",
+        "resolved-ref": "8cf6cfa7078aa69c2c7b08d9ad636a1040456852",
+        "url": "https://github.com/bggRGjQaUbCoE/flutter_file_picker.git"
       },
-      "source": "hosted",
-      "version": "12.0.0-beta.1"
+      "source": "git",
+      "version": "12.0.0-beta.3"
     },
     "file_selector_linux": {
       "dependency": "transitive",
@@ -943,11 +934,11 @@
       "dependency": "direct main",
       "description": {
         "name": "flutter_svg",
-        "sha256": "1ded017b39c8e15c8948ea855070a5ff8ff8b3d5e83f3446e02d6bb12add7ad9",
+        "sha256": "35882981abcbfb8c15b286f0cd690ff25bac12d95eff3e25ee207f37d4c42e7f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.4"
+      "version": "2.3.0"
     },
     "flutter_test": {
       "dependency": "direct dev",
@@ -984,11 +975,12 @@
     "font_awesome_flutter": {
       "dependency": "direct main",
       "description": {
-        "name": "font_awesome_flutter",
-        "sha256": "f50ce90dbe26d977415b9540400d6778bef00894aced6358ae578abd92b14b10",
-        "url": "https://pub.dev"
+        "path": ".",
+        "ref": "v10.9.0",
+        "resolved-ref": "cf4a19ece5cb296d73d90f0d73106f779c85fa26",
+        "url": "https://github.com/bggRGjQaUbCoE/font_awesome_flutter.git"
       },
-      "source": "hosted",
+      "source": "git",
       "version": "10.9.0"
     },
     "get": {
@@ -1036,11 +1028,11 @@
       "dependency": "transitive",
       "description": {
         "name": "gtk",
-        "sha256": "e8ce9ca4b1df106e4d72dad201d345ea1a036cc12c360f1a7d5a758f78ffa42c",
+        "sha256": "4ff85b2a16724029dd9e5bbb5a94b6918f9973f74ba571c949d2002801879cf5",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.0"
+      "version": "2.2.0"
     },
     "hive_ce": {
       "dependency": "direct main",
@@ -1417,7 +1409,7 @@
       "description": {
         "path": ".",
         "ref": "const",
-        "resolved-ref": "c11f18c031f1045900dc3e817f7519eb863c2550",
+        "resolved-ref": "2bb68d1de3c7bb8c6117fce54d43da65a2387163",
         "url": "https://github.com/bggRGjQaUbCoE/material_design_icons_flutter.git"
       },
       "source": "git",
@@ -1916,32 +1908,32 @@
       "description": {
         "path": "screen_brightness_android",
         "ref": "dev",
-        "resolved-ref": "0696d1f3665511496bfeb842f02deada5cd57ff9",
+        "resolved-ref": "9823a66d9a0af8d9f5d0d9e98f87bb17e399235e",
         "url": "https://github.com/bggRGjQaUbCoE/screen_brightness.git"
       },
       "source": "git",
-      "version": "2.1.3"
+      "version": "2.1.4"
     },
     "screen_brightness_ios": {
       "dependency": "direct overridden",
       "description": {
         "name": "screen_brightness_ios",
-        "sha256": "2493953340ecfe8f4f13f61db50ce72533a55b0bbd58ba1402893feecf3727f5",
+        "sha256": "0792d8f98852558f831b4b75241c46047b884598b3f4d982b37dc2dd43e2b2e1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.2"
+      "version": "2.1.3"
     },
     "screen_brightness_platform_interface": {
       "dependency": "direct main",
       "description": {
         "path": "screen_brightness_platform_interface",
         "ref": "dev",
-        "resolved-ref": "0696d1f3665511496bfeb842f02deada5cd57ff9",
+        "resolved-ref": "9823a66d9a0af8d9f5d0d9e98f87bb17e399235e",
         "url": "https://github.com/bggRGjQaUbCoE/screen_brightness.git"
       },
       "source": "git",
-      "version": "2.1.0"
+      "version": "2.1.1"
     },
     "screen_retriever": {
       "dependency": "direct main",
@@ -1997,11 +1989,11 @@
       "dependency": "transitive",
       "description": {
         "name": "sentry",
-        "sha256": "1f78300740739ff4b4920802687879231554350eab73eb229778f463aabda440",
+        "sha256": "f04095a25ff02b202a914174c73ec309570aa93d61098cb4a0a9e715b4aaa465",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "9.19.0"
+      "version": "9.20.0"
     },
     "share_plus": {
       "dependency": "direct main",
@@ -2163,11 +2155,11 @@
       "dependency": "transitive",
       "description": {
         "name": "sqflite_common",
-        "sha256": "5e8377564d95166761a968ed96104e0569b6b6cc611faac92a36ab8a169112c3",
+        "sha256": "f8a08a13fb8f0f8c590df89d745000bed44a673ed94bac846739e1a016875c21",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.5.6+1"
+      "version": "2.5.7"
     },
     "sqflite_darwin": {
       "dependency": "transitive",
@@ -2384,11 +2376,11 @@
       "dependency": "transitive",
       "description": {
         "name": "url_launcher_web",
-        "sha256": "d0412fcf4c6b31ecfdb7762359b7206ffba3bbffd396c6d9f9c4616ece476c1f",
+        "sha256": "85c81589622fbc87c1c683aaea164d3604a7777495a79d91e39ffcdec39ddb34",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.4.2"
+      "version": "2.4.3"
     },
     "url_launcher_windows": {
       "dependency": "transitive",
@@ -2414,11 +2406,11 @@
       "dependency": "transitive",
       "description": {
         "name": "vector_graphics",
-        "sha256": "6409a25046024f0f8c5d8a59fec314081e81f9d436b66ca4015a8b49772bf445",
+        "sha256": "4d35a36400983c3457c289d4d553b5308f506ea84f7e51c7a564651b5525209a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.2.0"
+      "version": "1.2.1"
     },
     "vector_graphics_codec": {
       "dependency": "transitive",
@@ -2434,11 +2426,11 @@
       "dependency": "transitive",
       "description": {
         "name": "vector_graphics_compiler",
-        "sha256": "5a88dd14c0954a5398af544651c7fb51b457a2a556949bfb25369b210ef73a74",
+        "sha256": "98e7e94de127b46a86ef46197fff84ff99f3d3b80a708390d717ad731efef598",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.2.0"
+      "version": "1.2.2"
     },
     "vector_math": {
       "dependency": "direct main",
@@ -2484,11 +2476,11 @@
       "dependency": "transitive",
       "description": {
         "name": "wakelock_plus_platform_interface",
-        "sha256": "14b2e5b9e35c2631e656913c47adecdd71633ae92896a27a64c8f1fcfabc21cc",
+        "sha256": "b13f99e992e7ae6a152e16c5559d3c07ff445b13330192662494e614ca3e7d7b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.0"
+      "version": "1.5.1"
     },
     "watcher": {
       "dependency": "transitive",
@@ -2555,11 +2547,11 @@
       "dependency": "transitive",
       "description": {
         "name": "win32",
-        "sha256": "ba7d5750e3441caa1bbe31d9e516348fcf8dfcb32aa29ef87a844a59f4d1f1d0",
+        "sha256": "a1fc9eb9248baa05dfc12ed5b66e377b3e23f095eec078e0371622b9033810d9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.1.0"
+      "version": "6.2.0"
     },
     "win32_registry": {
       "dependency": "transitive",
