@@ -2585,7 +2585,7 @@ with haskellLib;
     + (drv.postPatch or "");
   }) super.pdftotext;
 
-  # QuickCheck <2.15
+  # Allow QuickCheck 2.16
   # https://github.com/google/proto-lens/issues/403
   proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
 
