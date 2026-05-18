@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://neverball.org/";
     description = "Tilt the floor to roll a ball";
+    changelog = "https://github.com/Neverball/neverball/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2Plus
       ijg
@@ -107,5 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
       philocalyst
     ];
     platforms = with lib.platforms; linux ++ darwin;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })
