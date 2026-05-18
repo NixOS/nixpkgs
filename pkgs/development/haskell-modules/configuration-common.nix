@@ -1040,9 +1040,6 @@ with haskellLib;
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
-  # Avoid "QuickCheck >=2.3 && <2.10" dependency we cannot fulfill in lts-11.x.
-  test-framework = dontCheck super.test-framework;
-
   # Test suite won't compile against tasty-hunit 0.10.x.
   binary-parsers = dontCheck super.binary-parsers;
 
