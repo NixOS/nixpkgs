@@ -18569,6 +18569,8 @@ self: super: with self; {
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
+  spotipyfree = callPackage ../development/python-modules/spotipyfree { };
+
   spsdk = callPackage ../development/python-modules/spsdk { };
 
   spsdk-mcu-link = callPackage ../development/python-modules/spsdk-mcu-link { };
