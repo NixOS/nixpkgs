@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fontforge,
+  installFonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,12 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0dqjj3mlc28s8ljnph6l086b4j9r5dly4fldq59crycwys72zzai";
   };
 
-  nativeBuildInputs = [ fontforge ];
+  nativeBuildInputs = [
+    fontforge
+    installFonts
+  ];
 
   installPhase = ''
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
-    find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
+    runHook preInstall
     install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} LICENSE README
+    runHook postInstall
   '';
 
   meta = {
