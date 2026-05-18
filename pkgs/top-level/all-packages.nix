@@ -1554,10 +1554,6 @@ with pkgs;
 
   apprise = with python3Packages; toPythonApplication apprise;
 
-  avahi-compat = callPackage ../by-name/av/avahi/package.nix {
-    withLibdnssdCompat = true;
-  };
-
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
@@ -6748,8 +6744,12 @@ with pkgs;
     )
       haskellPackages.matterhorn;
 
-  mbedtls = callPackage ../development/libraries/mbedtls/3.nix { };
-  mbedtls_4 = callPackage ../development/libraries/mbedtls/4.nix { };
+  inherit
+    ({
+      mbedtls_4 = callPackage ../by-name/mb/mbedtls/4.nix { };
+    })
+    mbedtls_4
+    ;
 
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
 

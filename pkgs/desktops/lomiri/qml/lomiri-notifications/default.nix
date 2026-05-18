@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   cmake,
   dbus,
@@ -23,13 +24,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rGs+MTt/Z+Gk3jSxU7tfNAUdypG/HJ4pDqvC+U722Eg=";
   };
 
+  patches = [
+    # Remove when version > 1.3.2
+    (fetchpatch {
+      name = "0001-lomiri-notifications-support-qt6-and-newer-lomiri-api.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-notifications/-/commit/55e9b61d2214edb31613d67fa66284acfa171dc5.patch";
+      excludes = [
+        "debian/*"
+      ];
+      hash = "sha256-BURficKpFd15RyNFWyZ+hqxFHnIbv4krFpTARQ86Ykw=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    # Need to replace prefix to not try to install into lomiri-api prefix
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  # Need to replace prefix to not try to install into lomiri-api prefix
+  + ''
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail '--variable=plugindir' '--define-variable=prefix=''${CMAKE_INSTALL_PREFIX} --variable=plugindir'
+      --replace-fail \
+        '--variable=plugindir lomiri-shell-api' \
+        '--define-variable=libdir=''${CMAKE_INSTALL_LIBDIR} --variable=plugindir lomiri-shell-api'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \

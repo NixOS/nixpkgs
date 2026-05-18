@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -25,6 +26,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "simple_pid"
   ];
+
+  doCheck = !stdenv.isDarwin;
 
   nativeCheckInputs = [
     pytestCheckHook

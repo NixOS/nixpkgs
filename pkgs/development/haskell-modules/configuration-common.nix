@@ -1284,7 +1284,7 @@ with haskellLib;
   # 2025-02-10: Too strict bounds on aeson < 1.5
   json-alt = doJailbreak super.json-alt;
 
-  gargoyle-postgresql-nix = addBuildTool [ pkgs.postgresql ] super.gargoyle-postgresql-nix;
+  gargoyle-postgresql-nix = addBuildTool pkgs.postgresql super.gargoyle-postgresql-nix;
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860

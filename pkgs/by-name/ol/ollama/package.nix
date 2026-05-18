@@ -168,10 +168,12 @@ goBuild (finalAttrs: {
     cmake
     gitMinimal
   ]
-  ++ lib.optionals enableRocm [
-    rocmPackages.llvm.bintools
+  ++ lib.optionals enableRocm (
     rocmLibs
-  ]
+    ++ [
+      rocmPackages.llvm.bintools
+    ]
+  )
   ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals (enableRocm || enableCuda) [
     makeBinaryWrapper

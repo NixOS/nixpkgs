@@ -62,8 +62,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    anthropic = [
-      anthropic.optional-dependencies.bedrock
+    anthropic = anthropic.optional-dependencies.bedrock ++ [
       langchain-anthropic
     ];
   };

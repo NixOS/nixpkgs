@@ -9,24 +9,24 @@
 
 let
   pname = "caido-desktop";
-  version = "0.55.3";
+  version = "0.56.0";
 
   sources = {
     x86_64-linux = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-      hash = "sha256-pGRmFYE7uO5Ka94Kfjl9LR5PAwZ5dCxHqCqJKhtLPco=";
+      hash = "sha256-UA4MPEEnFiiR0ueYoE3H1Z5f7J56NYNahTbWyAImmfQ=";
     };
     aarch64-linux = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-aarch64.AppImage";
-      hash = "sha256-s99+HXf7Ada2wiPUZ/5M/p09JiadFn5GnKrzqo9yNPQ=";
+      hash = "sha256-HTegv6UlWe0gID5sGLlUTFc0z6giF7BCIwbCHb/rLjc=";
     };
     x86_64-darwin = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-mac-x86_64.dmg";
-      hash = "sha256-V33bRaTwhxozBR/wV83bU89TZluenKpFc8GU0KaaO8w=";
+      hash = "sha256-ZnN8DK3OuzZ0rKE+1czFhn2rH8QHJvlgvjc9k3DrV/Q=";
     };
     aarch64-darwin = {
       url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-mac-aarch64.dmg";
-      hash = "sha256-fEzPN84zoSvlIgUBYVmPta7SUmTDRQghoJMTZXW7eI4=";
+      hash = "sha256-XbcmecB4DKPp0WlqBBnc2TvorXEMsDSR5oW/VeUBcVs=";
     };
   };
 

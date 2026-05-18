@@ -67,6 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "mediathek";
     maintainers = with lib.maintainers; [ makefu ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

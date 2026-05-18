@@ -6,10 +6,11 @@
 
 let
   getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+  inherit (lib) concatMap;
 
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    alexa = map getComponentDeps [
+    alexa = concatMap getComponentDeps [
       "cloud"
       "frontend"
       "stream"
@@ -50,7 +51,7 @@ let
       pychromecast
     ];
     lutron_caseta = getComponentDeps "frontend";
-    mastodon = map getComponentDeps [
+    mastodon = concatMap getComponentDeps [
       "stream"
     ];
     miele = getComponentDeps "cloud";
