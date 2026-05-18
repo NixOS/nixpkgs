@@ -11372,6 +11372,12 @@
     githubId = 12570166;
     name = "Igor Ramazanov";
   };
+  igorcafe = {
+    email = "igoracmelo@protonmail.com";
+    github = "igorcafe";
+    githubId = 85039990;
+    name = "Igor Melo";
+  };
   igsha = {
     email = "igor.sharonov@gmail.com";
     github = "igsha";
