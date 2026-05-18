@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
     pkg-config
   ]
-  ++ lib.optional vulkanSupport [
+  ++ lib.optionals vulkanSupport [
     shaderc
     vulkan-headers
     vulkan-loader

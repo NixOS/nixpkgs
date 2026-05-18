@@ -91,7 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpmConfigHook
     pnpm_10
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
     xcbuild
   ];

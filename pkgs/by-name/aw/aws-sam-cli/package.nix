@@ -67,22 +67,25 @@ python3.pkgs.buildPythonApplication rec {
       tzlocal
       watchdog
     ]
-    ++ (with python3.pkgs.boto3-stubs.optional-dependencies; [
-      apigateway
-      cloudformation
-      ecr
-      iam
-      kinesis
-      lambda
-      s3
-      schemas
-      secretsmanager
-      signer
-      sqs
-      stepfunctions
-      sts
-      xray
-    ]);
+    ++ (
+      with python3.pkgs.boto3-stubs.optional-dependencies;
+      lib.concatLists [
+        apigateway
+        cloudformation
+        ecr
+        iam
+        kinesis
+        lambda
+        s3
+        schemas
+        secretsmanager
+        signer
+        sqs
+        stepfunctions
+        sts
+        xray
+      ]
+    );
 
   patches = [
     # Remove after aws-sam-cli > 1.154.0

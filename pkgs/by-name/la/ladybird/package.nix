@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu78
     simdjson
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
   ];

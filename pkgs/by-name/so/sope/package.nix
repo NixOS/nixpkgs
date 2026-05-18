@@ -23,7 +23,7 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-0G28qDXygDe/TJ2znNE+NVQry3bkqUO59jqtJm/t2S4=";
   };
 
-  nativeBuildInputs = lib.optional (libpq != null) [ libpq.pg_config ];
+  nativeBuildInputs = lib.optional (libpq != null) libpq.pg_config;
   buildInputs = [
     gnustep-base
     libxml2
