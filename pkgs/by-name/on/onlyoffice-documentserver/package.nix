@@ -35,6 +35,12 @@ let
     tag = "v9.3.1.1";
     hash = "sha256-+52+MK/8DARJrQRbIpN5nk3j3J9cy6Wd1FDMnCVZKRE=";
   };
+  document-formats-src = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "document-formats";
+    tag = "v9.3.1.1";
+    hash = "sha256-HpGhV+PGbQ5hHH6mPQTAdFpBT3nUni4VtDxTExJypAc=";
+  };
   common = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-server-Common";
     src = server-src;
@@ -190,6 +196,7 @@ let
       cp -r ${server-src}/schema/* $out/var/www/onlyoffice/documentserver/server/schema
 
       ln -s ${document-templates-src} $out/var/www/onlyoffice/documentserver/document-templates
+      ln -s ${document-formats-src} $out/var/www/onlyoffice/documentserver/document-formats
 
       ## required for bwrap --bind
       chmod u+w $out/var
