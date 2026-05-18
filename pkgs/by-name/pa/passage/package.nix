@@ -59,7 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Using $0 is bad, it causes --help to mention ".passage-wrapped".
   postInstall = ''
-    substituteInPlace $out/bin/passage --replace 'PROGRAM="''${0##*/}"' 'PROGRAM=passage'
+    substituteInPlace $out/bin/passage \
+              --replace-fail 'PROGRAM="''${0##*/}"' 'PROGRAM=passage' \
+              --replace-fail 'AGE="''${PASSAGE_AGE:-age}"' 'AGE=''${PASSAGE_AGE-${lib.getExe age}}'
     wrapProgram $out/bin/passage --prefix PATH : $extraPath --argv0 $pname
   '';
 
