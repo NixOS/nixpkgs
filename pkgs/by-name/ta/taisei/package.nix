@@ -106,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lambda-11235
       Gliczy
+      philocalyst
     ];
     platforms = lib.platforms.all;
   };
