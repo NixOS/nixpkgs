@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   oniguruma,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,8 +34,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  # thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: invalid option '--test-threads''
+  # Compatibility tests run against different regex implementations.
+  # Some can be run by providing `jdk*_headless` and `python3` `nativeCheckInputs`,
+  # while some cannot, i.e. `deno`-based requires network access and `dotnet-script` is not packaged,
+  # and they cannot be disabled partially.
   doCheck = false;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Portable, modern regular expression language";
