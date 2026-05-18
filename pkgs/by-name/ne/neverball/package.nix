@@ -79,26 +79,41 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = "export HOME=$TMPDIR";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/neverball
     cp -R data locale $out/share/neverball
-    ${
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          mkdir -p $out/Applications/Never{ball,putt}.app/Contents/{MacOS,Resources}
-          for game in ball putt; do
-            cp never$game $out/Applications/Never$game.app/Contents/MacOS/Never$game
-            makeWrapper $out/Applications/Never$game.app/Contents/MacOS/Never$game $out/bin/never$game
-            cp macosx/xcode/''${game}_items/Info.plist $out/Applications/Never$game.app/Contents/Info.plist
-            cp -r macosx/icons/never$game.icns macosx/xcode/''${game}_items/English.lproj $out/Applications/Never$game.app/Contents/Resources/
-          done
-        ''
-      else
-        ''
-          cp neverball $out/bin
-          cp neverputt $out/bin
-        ''
-    }
-    cp mapc $out/bin
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications/Never{ball,putt}.app/Contents/{MacOS,Resources}
+
+      for game in ball putt; do
+        cp never$game $out/Applications/Never$game.app/Contents/MacOS/Never$game
+        makeWrapper $out/Applications/Never$game.app/Contents/MacOS/Never$game $out/bin/never$game
+        cp macosx/xcode/''${game}_items/Info.plist $out/Applications/Never$game.app/Contents/Info.plist
+        cp -r macosx/icons/never$game.icns macosx/xcode/''${game}_items/English.lproj $out/Applications/Never$game.app/Contents/Resources/
+      done
+    ''}
+
+    cp mapc $out/bin;
+
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 dist/neverball.desktop.in $out/share/applications/neverball.desktop
+      install -Dm644 dist/neverputt.desktop.in $out/share/applications/neverputt.desktop
+
+      for size in 16 24 32 48 64 128 256 512; do
+          install -Dm644 dist/neverputt_''${size}.png \
+            $out/share/icons/hicolor/''${size}x''${size}/apps/neverputt.png
+      done
+
+      install -Dm644 dist/neverball.appdata.xml $out/share/metainfo/neverball.metainfo.xml
+    ''}
+
+    install -Dm644 dist/neverball.6 $out/share/man/man6/neverball.6
+    install -Dm644 dist/neverputt.6 $out/share/man/man6/neverputt.6
+    install -Dm644 dist/mapc.1 $out/share/man/man1/mapc.1
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
