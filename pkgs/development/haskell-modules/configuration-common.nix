@@ -1536,6 +1536,10 @@ with haskellLib;
   # https://github.com/haskell-hvr/uuid/issues/101
   uuid = doJailbreak super.uuid;
 
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/haskell/fgl/issues/119
+  fgl = doJailbreak super.fgl;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
