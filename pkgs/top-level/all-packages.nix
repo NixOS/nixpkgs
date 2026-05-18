@@ -9141,7 +9141,6 @@ with pkgs;
 
   inherit (callPackage ../applications/virtualization/docker { })
     docker_25
-    docker_28
     docker_29
     ;
 

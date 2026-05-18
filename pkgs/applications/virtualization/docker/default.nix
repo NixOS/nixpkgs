@@ -418,24 +418,6 @@ in
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };
 
-  docker_28 =
-    let
-      version = "28.5.2";
-    in
-    callPackage dockerGen {
-      inherit version;
-      cliRev = "v${version}";
-      cliHash = "sha256-11wbqvenTJooAzqOEp0UivPxhvWwSl1thCAzDMx0i/o=";
-      mobyRev = "v${version}";
-      mobyHash = "sha256-T5zz1lSLVdMR646CfhWAiVU4/VPAY1CRU+jIdjEWycs=";
-      runcRev = "v1.3.3";
-      runcHash = "sha256-Ci/2otySB7FaFoutmzWeVaTU+tO/lnluQfneFSQM1RE=";
-      containerdRev = "v1.7.28";
-      containerdHash = "sha256-vz7RFJkFkMk2gp7bIMx1kbkDFUMS9s0iH0VoyD9A21s=";
-      tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
-      tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
-    };
-
   docker_29 =
     let
       version = "29.4.3";
