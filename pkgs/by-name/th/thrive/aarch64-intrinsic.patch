@@ -1,14 +1,12 @@
-diff --git a/src/native/Include.h.in b/src/native/Include.h.in
-index 1111111..2222222 100644
 --- a/src/native/Include.h.in
 +++ b/src/native/Include.h.in
-@@ -81,7 +81,11 @@
- #endif // ARM
+@@ -1,4 +1,8 @@
  #else
+-#define HYPER_THREAD_YIELD __builtin_ia32_pause()
 +#if defined(__aarch64__)
 +#define HYPER_THREAD_YIELD __asm__ ( "isb SY;" );
 +#else
- #define HYPER_THREAD_YIELD __builtin_ia32_pause()
++#define HYPER_THREAD_YIELD __builtin_ia32_pause()
 +#endif
  #endif // __apple_build_version__
  #endif
