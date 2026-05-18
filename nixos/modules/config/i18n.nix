@@ -31,16 +31,23 @@ in
 
     i18n = {
       glibcLocales = lib.mkOption {
-        type = lib.types.path;
-        default = pkgs.glibcLocales.override {
-          allLocales = lib.elem "all" config.i18n.supportedLocales;
-          locales = config.i18n.supportedLocales;
-        };
+        type = lib.types.nullOr lib.types.path;
+        default =
+          if pkgs.glibcLocales != null then
+            pkgs.glibcLocales.override {
+              allLocales = lib.elem "all" config.i18n.supportedLocales;
+              locales = config.i18n.supportedLocales;
+            }
+          else
+            null;
         defaultText = lib.literalExpression ''
-          pkgs.glibcLocales.override {
-            allLocales = lib.elem "all" config.i18n.supportedLocales;
-            locales = config.i18n.supportedLocales;
-          }
+          if pkgs.glibcLocales != null then
+            pkgs.glibcLocales.override {
+              allLocales = lib.elem "all" config.i18n.supportedLocales;
+              locales = config.i18n.supportedLocales;
+            }
+          else
+            null
         '';
         example = lib.literalExpression "pkgs.glibcLocales";
         description = ''
@@ -171,7 +178,9 @@ in
 
     environment.systemPackages =
       # We increase the priority a little, so that plain glibc in systemPackages can't win.
-      lib.optional (config.i18n.supportedLocales != [ ]) (lib.setPrio (-1) config.i18n.glibcLocales);
+      lib.optional (config.i18n.glibcLocales != null && config.i18n.supportedLocales != [ ]) (
+        lib.setPrio (-1) config.i18n.glibcLocales
+      );
 
     environment.sessionVariables = {
       LANG = config.i18n.defaultLocale;
@@ -179,9 +188,11 @@ in
     }
     // config.i18n.extraLocaleSettings;
 
-    systemd.globalEnvironment = lib.mkIf (config.i18n.supportedLocales != [ ]) {
-      LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
-    };
+    systemd.globalEnvironment =
+      lib.mkIf (config.i18n.glibcLocales != null && config.i18n.supportedLocales != [ ])
+        {
+          LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
+        };
 
     # ‘/etc/locale.conf’ is used by systemd.
     environment.etc."locale.conf".source = pkgs.writeText "locale.conf" ''
