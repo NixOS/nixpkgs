@@ -7,13 +7,9 @@
 let
   mkBasePackage =
     {
-      pname,
       src,
-      version,
-      vendorHash,
       cmd,
       extraLdflags,
-      env,
       ...
     }@args:
     buildGoModule (
