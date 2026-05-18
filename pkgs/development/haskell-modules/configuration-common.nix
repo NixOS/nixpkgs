@@ -1509,6 +1509,10 @@ with haskellLib;
   # Break infinite recursion via optparse-applicative (alternatively, dontCheck syb)
   prettyprinter-ansi-terminal = dontCheck super.prettyprinter-ansi-terminal;
 
+  # 2026-05-18: allow QuickCheck 2.16
+  # Already updated upstream, but not released on hackage, yet.
+  finite-typelits = warnAfterVersion "0.2.1.0" (doJailbreak super.finite-typelits);
+
   # 2026-05-16: allow QuickCheck 2.16
   # https://github.com/pcapriotti/optparse-applicative/issues/516
   optparse-applicative = doJailbreak super.optparse-applicative;
