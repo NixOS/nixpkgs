@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,13 +16,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-M/duhgqxXZJq5su9FrsGjZdm+wtO5B5meoDomde+GwY=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.otf -t $out/share/fonts
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Aurulent Sans";
