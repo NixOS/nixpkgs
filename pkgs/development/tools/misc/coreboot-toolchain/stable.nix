@@ -43,6 +43,76 @@
     };
   }
   {
+    name = "lld-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "1lbkcgvypl459inq2ixgcachiawh1lm089rcz4m0ll2jx5g4qlnr";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/lld-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "llvm-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "08fy0xbidf74zwva12w2v3g08iqllx4nazmjyqam18a0vgd2s0nr";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/llvm-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "clang-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "0qma8vjqvdf8q157232ypfnh2vgc1rys90s4v36h7l106zrf7430";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/clang-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "cmake-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "1sadfjmlwqxpql60ar9vx4h58iqqf0k0rfwsl2qfr0cczlh5yww5";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/cmake-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "compiler-rt-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "0adjrk9ny4i17ggaghqsncbd06k0zzmm2ns4b6n0yy71mqhswm6x";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/compiler-rt-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "clang-tools-extra-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "0ac8qb3ajxh9xnlyk71ar599qvbbf0y8lbif2chvi6ph3drpxnvd";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/clang-tools-extra-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "libunwind-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "1g3cqgjh10valgcgq8nna7azglbhxa34ijgdr9ynbpmxqg3avs03";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/libunwind-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "runtimes-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "1f1dfi440035fgzzc79yp4g86xkzi2w0y48xmzjcw6pwrlsrv65n";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/runtimes-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "third-party-21.1.8.src.tar.xz";
+    archive = fetchurl {
+      sha256 = "19zil44f4vs2kq8gq0rchp8iyicbzffwrjgfzagm5sja70j99sbz";
+      url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/third-party-21.1.8.src.tar.xz";
+    };
+  }
+  {
+    name = "cmake-4.0.3.tar.gz";
+    archive = fetchurl {
+      sha256 = "1yrzkwkr2nxl8hcjkk333l9ycbw9prkg363k4km609kknyvkfdcd";
+      url = "https://cmake.org/files/v4.0/cmake-4.0.3.tar.gz";
+    };
+  }
+  {
     name = "nasm-2.16.03.tar.bz2";
     archive = fetchurl {
       sha256 = "0mwynbnn7c4ay4rpcsyp99j49sa6j3p8gk5pigwssqfdkcaxxwxy";
