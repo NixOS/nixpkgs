@@ -205,6 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
+      philocalyst
       SchweGELBin
     ];
     platforms = with lib.platforms; unix;
