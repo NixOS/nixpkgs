@@ -6,7 +6,7 @@
   # build
   cython,
   setuptools-scm,
-  setuptools,
+  setuptools_80,
 
   # propagates
   defcon,
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 
