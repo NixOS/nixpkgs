@@ -3774,6 +3774,22 @@ with pkgs;
     }
   );
 
+  # Currently the algol68 frontend is only supported on gcc16+
+  # When gcc16 becomes the default gcc version, replace with a gcc.cc.override
+  # like above
+  ga68 = ga68_16;
+
+  ga68_16 = wrapCC (
+    gcc16.cc.override {
+      name = "ga68";
+      langC = true;
+      langCC = true;
+      langJit = true;
+      langAlgol68 = true;
+      profiledCompiler = false;
+    }
+  );
+
   ghdl-mcode = ghdl.override { backend = "mcode"; };
 
   ghdl-gcc = ghdl.override { backend = "gcc"; };
