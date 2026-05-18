@@ -12,7 +12,6 @@ appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    # 1. Create the target directories in your package output
     mkdir -p $out/share/applications
     mkdir -p $out/share/icons/hicolor/512x512/apps
     cp ${appimageContents}/greenlight-desktop.desktop $out/share/applications/${pname}.desktop
@@ -22,7 +21,7 @@ appimageTools.wrapType2 rec {
       --replace-fail 'Icon=greenlight-desktop' 'Icon=${pname}'
   '';
   meta = {
-    description = "Viewer for electronic invoices";
+    description = "Greenlight is an open-source client for xCloud and Xbox home streaming made in Typescript. ";
     homepage = "https://github.com/unknownskl/greenlight";
     downloadPage = "https://github.com/unknownskl/greenlight/releases";
     license = lib.licenses.mit;
