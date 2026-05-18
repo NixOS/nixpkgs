@@ -288,6 +288,7 @@ with haskellLib;
 
   vector = overrideCabal (old: {
     # 2026-05-16: allow QuickCheck 2.16
+    # https://github.com/haskell/vector/issues/562
     jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
     testTargets = [
@@ -503,6 +504,7 @@ with haskellLib;
 
   attoparsec = overrideCabal (drv: {
     # 2025-05-17: allow QuickCheck 2.16
+    # https://github.com/haskell/attoparsec/issues/236
     jailbreak = true;
     # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
     # https://github.com/haskell/attoparsec/issues/232
@@ -1515,6 +1517,7 @@ with haskellLib;
   prettyprinter-ansi-terminal = dontCheck super.prettyprinter-ansi-terminal;
 
   # 2026-05-16: allow QuickCheck 2.16
+  # https://github.com/pcapriotti/optparse-applicative/issues/516
   optparse-applicative = doJailbreak super.optparse-applicative;
 
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
