@@ -1323,8 +1323,8 @@ with haskellLib;
     '';
   }) (addExtraLibrary self.QuickCheck super.Chart-tests);
 
-  # 2026-01-17: too strict bounds on QuickCheck < 2.15
-  # https://github.com/hasufell/lzma-static/pull/15
+  # 2026-05-18: too strict bounds on QuickCheck < 2.16
+  # https://github.com/hasufell/lzma-static/issues/16
   xz = doJailbreak super.xz;
 
   ghcup =
