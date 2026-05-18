@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   python,
+  pythonAtLeast,
   setuptools,
 }:
 
@@ -38,6 +39,10 @@ buildPythonPackage rec {
     "test_nonreturn_marker_local"
     # the mechanisms that hook into the python import machinery seem broken on newer python
     "TestBridgeHookImport"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # __classdictcell__ on the bridged class dict is rejected by 3.14's type()
+    "test_remote_inheritance"
   ];
 
   pythonImportsCheck = [ "jfx_bridge" ];
