@@ -1,11 +1,15 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
   wrapGAppsHook3,
   pkg-config,
   ninja,
+
+  # buildInputs
   alsa-lib,
   alsa-plugins,
   freetype,
@@ -21,6 +25,8 @@
   libopus,
   tinyxml-2,
   kdePackages,
+
+  # passthru tests
   nixosTests,
 }:
 
