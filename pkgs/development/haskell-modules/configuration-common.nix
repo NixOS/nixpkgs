@@ -1532,6 +1532,10 @@ with haskellLib;
   # https://github.com/Gabriella439/Haskell-Nix-Derivation-Library/issues/30
   nix-derivation = doJailbreak super.nix-derivation;
 
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/haskell-hvr/uuid/issues/101
+  uuid = doJailbreak super.uuid;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
