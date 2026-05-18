@@ -9,7 +9,7 @@
   ninja,
   lit,
   z3,
-  sv-lang,
+  sv-lang_9, # update sv-lang version here according to upstream requirements
   fmt,
   boost,
   mimalloc,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     fmt
     mimalloc
-    sv-lang
+    sv-lang_9
   ];
 
   cmakeFlags = [

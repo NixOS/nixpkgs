@@ -13,14 +13,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sv-lang";
-  version = "11.0";
+  version = "9.1";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-popHzwX0qwv2POAl7/qX3e//OwJRXGtSl9xogpSn2LI=";
+    hash = "sha256-IfRh6F6vA+nFa+diPKD2aMv9kRbvVIY80IqX0d+d5JA=";
   };
+
+  postPatch = ''
+    substituteInPlace external/CMakeLists.txt --replace-fail \
+      'set(mimalloc_min_version "2.2")' \
+      'set(mimalloc_min_version "${lib.versions.majorMinor mimalloc.version}")'
+  '';
 
   cmakeFlags = [
     # fix for https://github.com/NixOS/nixpkgs/issues/144170
