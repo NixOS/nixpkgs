@@ -164,7 +164,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ jansol ];
+    maintainers = with lib.maintainers; [
+      jansol
+      alfarel
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
