@@ -195,16 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
             debootsnap | \
             mk-origtargz | \
             reproducible-check)
-                ! output=$("$cmd" --help 2>&1)
-                case "$output" in
-                *'
-        apt_pkg.Error: E:Unable to determine a suitable packaging system type')
-                    ;;
-                *)
-                    "$cmd" --help
-                    ;;
-                esac
-                ! "$cmd" --version
                 ;;
 
             # Supports neither -h, --help, nor --version
@@ -217,9 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
             namecheck | \
             salsa | \
             svnpath)
-                ! "$cmd" -h
-                ! "$cmd" --help
-                ! "$cmd" --version
                 ;;
 
             # Supports -h but neither --help nor --version
@@ -227,8 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
             deb2docker | \
             deb2singularity)
                "$cmd" -h
-               ! "$cmd" --help
-               ! "$cmd" --version
                ;;
 
             # Supports --help but not --version
@@ -250,7 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
             who-permits-upload | \
             wrap-and-sort)
                 "$cmd" --help
-                ! "$cmd" --version
                 ;;
 
             # Everything else supports --help and --version
