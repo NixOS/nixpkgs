@@ -6,12 +6,12 @@
   unzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ccsymbols";
   version = "2020-04-19";
 
   src = fetchurl {
-    url = "https://www.ctrl.blog/file/${version}_cc-symbols.zip";
+    url = "https://www.ctrl.blog/file/${finalAttrs.version}_cc-symbols.zip";
     hash = "sha256-hkARhb8T6VgGAybYkVuPuebjhuk1dwiBJ1bZMwvYpMY=";
   };
 
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
     unzip
   ];
 
-  passthru = { inherit pname version; };
+  passthru = { inherit (finalAttrs) pname version; };
 
   meta = {
     description = "Creative Commons symbol font";
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.all;
   };
-}
+})
