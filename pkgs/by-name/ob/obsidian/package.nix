@@ -3,7 +3,7 @@
   fetchurl,
   lib,
   makeWrapper,
-  electron_39, # as in upstream bundle, see https://github.com/NixOS/nixpkgs/pull/510075
+  electron_40, # see https://github.com/NixOS/nixpkgs/pull/521495
   makeDesktopItem,
   imagemagick,
   writeScript,
@@ -78,7 +78,7 @@ let
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-      makeWrapper ${electron_39}/bin/electron $out/bin/obsidian \
+      makeWrapper ${electron_40}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
