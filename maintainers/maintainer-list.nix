@@ -28673,6 +28673,12 @@
     github = "usrfriendly";
     githubId = 2502060;
   };
+  usu171 = {
+    email = "usu171@proton.me";
+    github = "Usu171";
+    githubId = "52230991";
+    name = "Usu171";
+  };
   utdemir = {
     email = "me@utdemir.com";
     github = "utdemir";
