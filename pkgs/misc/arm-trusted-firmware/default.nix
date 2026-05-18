@@ -68,8 +68,6 @@ let
         # https://github.com/ARM-software/arm-trusted-firmware/blob/1d5aa939bc8d3d892e2ed9945fa50e36a1a924cc/make_helpers/toolchains/rk3399-m0.mk#L22
         rk3399-m0-oc-parameter = "rk3399-m0-oc-default";
 
-        buildInputs = [ openssl ];
-
         makeFlags = [
           "HOSTCC=$(CC_FOR_BUILD)"
           "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
