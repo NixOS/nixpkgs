@@ -5,14 +5,14 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "aurulent-sans";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "deepfire";
     repo = "hartke-aurulent-sans";
-    rev = "${pname}-${version}";
+    tag = "aurulent-sans-${finalAttrs.version}";
     hash = "sha256-M/duhgqxXZJq5su9FrsGjZdm+wtO5B5meoDomde+GwY=";
   };
 
@@ -26,4 +26,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})
