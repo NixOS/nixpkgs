@@ -61,6 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "${patchSource}/include_stdlib.patch";
       hash = "sha256-W+NgGBuy/UmzVbPTSqR8FRUlyN/9dl9l9e9rxKklmIc=";
     })
+    # Fix build with pybind11 3.x.
+    (fetchpatch2 {
+      url = "https://github.com/NGSolve/netgen/commit/ceacae3844ed2f0c48c8b6a3a82904b16c594f41.patch?full_index=1";
+      hash = "sha256-uSlkKxuOoUt4n601vadEZogSF47zdWNOIk1Nr9Ra3AU=";
+    })
     ./ensure_python_before_getting_gil.patch
     ./macos_use_tk_default_color_map.patch
   ];
