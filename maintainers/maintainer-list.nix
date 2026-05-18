@@ -7370,12 +7370,6 @@
     github = "DSeeLP";
     githubId = 46624152;
   };
-  dsferruzza = {
-    email = "david.sferruzza@gmail.com";
-    github = "dsferruzza";
-    githubId = 1931963;
-    name = "David Sferruzza";
-  };
   dsluijk = {
     name = "Dany Sluijk";
     email = "nix@dany.dev";
