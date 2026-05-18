@@ -1528,6 +1528,10 @@ with haskellLib;
   # https://github.com/fizruk/http-api-data/issues/157
   http-api-data = doJailbreak super.http-api-data;
 
+  # 2026-05-17: allow QuickCheck 2.16
+  # https://github.com/Gabriella439/Haskell-Nix-Derivation-Library/issues/30
+  nix-derivation = doJailbreak super.nix-derivation;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
