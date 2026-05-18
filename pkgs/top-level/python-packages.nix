@@ -3549,6 +3549,8 @@ self: super: with self; {
 
   daff = callPackage ../development/python-modules/daff { };
 
+  dagster-pipes = callPackage ../development/python-modules/dagster-pipes { };
+
   dahlia = callPackage ../development/python-modules/dahlia { };
 
   daiquiri = callPackage ../development/python-modules/daiquiri { };
