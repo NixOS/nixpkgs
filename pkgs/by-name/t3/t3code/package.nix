@@ -18,6 +18,23 @@
   writableTmpDirAsHomeHook,
   writeDarwinBundle,
   xcbuild,
+  enableAzureDevOps ? false,
+  azure-cli,
+  azure-cli-extensions,
+  enableBitbucket ? false,
+  bitbucket-cli,
+  enableClaude ? false,
+  claude-code,
+  enableCodex ? true,
+  codex,
+  enableGitHub ? true,
+  gh,
+  enableGit ? true,
+  git,
+  enableGitLab ? false,
+  glab,
+  enableJujutsu ? false,
+  jujutsu,
 }:
 
 stdenv.mkDerivation (
@@ -30,6 +47,22 @@ stdenv.mkDerivation (
         "assets/prod/black-macos-1024.png"
       else
         "assets/prod/black-universal-1024.png";
+    runtimePackages =
+      lib.optionals enableAzureDevOps [
+        azure-cli.withExtensions
+        [ azure-cli-extensions.azure-devops ]
+      ]
+      ++ lib.optionals enableBitbucket [ bitbucket-cli ]
+      ++ lib.optionals enableClaude [ claude-code ]
+      ++ lib.optionals enableCodex [ codex ]
+      ++ lib.optionals enableGitHub [ gh ]
+      ++ lib.optionals enableGit [ git ]
+      ++ lib.optionals enableGitLab [ glab ]
+      ++ lib.optionals enableJujutsu [ jujutsu ];
+    runtimePathWrapperArgs = lib.optionalString (runtimePackages != [ ]) ''
+      \
+        --prefix PATH : ${lib.makeBinPath runtimePackages}
+    '';
     nodeModules = stdenvNoCC.mkDerivation {
       pname = "${finalAttrs.pname}-node_modules";
       inherit (finalAttrs) src version strictDeps;
@@ -166,11 +199,11 @@ stdenv.mkDerivation (
       find "$out"/libexec/t3code -xtype l -delete
 
       makeWrapper ${lib.getExe nodejs} "$out"/bin/t3code \
-        --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs
+        --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs ${runtimePathWrapperArgs}
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop/dist-electron/main.cjs \
-        --inherit-argv0
+        --inherit-argv0 ${runtimePathWrapperArgs}
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir --parents "$out/Applications/${appName}.app/Contents/"{MacOS,Resources}
