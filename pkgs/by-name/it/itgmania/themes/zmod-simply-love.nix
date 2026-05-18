@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmod-simply-love";
-  version = "5.8.1-april";
+  version = "5.8.1-march";
 
   src = fetchFromGitHub {
     owner = "zarzob";
     repo = "Simply-Love-SM5";
     tag = finalAttrs.version;
-    hash = "sha256-4EkCR9M8xip2b8ddWyUIom2HM72Ba8KdVodIyc5h4p8=";
+    hash = "sha256-v5UP6qQMCdkc+mZkLyZDd+VUMtNmQg5CokzTm0vsBpM=";
   };
 
   postInstall = ''
