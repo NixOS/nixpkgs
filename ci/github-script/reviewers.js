@@ -6,6 +6,7 @@ async function handleReviewers({
   dry,
   pull_request,
   reviews,
+  events,
   user_maintainers,
   team_maintainers,
   owners,
@@ -14,20 +15,28 @@ async function handleReviewers({
 }) {
   const pull_number = pull_request.number
 
-  // Users that the PR has already reached, e.g. they've left a review or have been requested for one
-  const users_reached = new Set([
-    ...pull_request.requested_reviewers.map(({ login }) => login.toLowerCase()),
-    ...reviews.map(({ user }) => user.login.toLowerCase()),
-  ])
+  // Users currently requested for review (pending).
+  const pending_users = new Set(
+    pull_request.requested_reviewers.map(({ login }) => login.toLowerCase()),
+  )
+  // Users who actually submitted a review in this PR (any state, including DISMISSED).
+  const users_engaged = new Set(
+    reviews.map(({ user }) => user.login.toLowerCase()),
+  )
+  // Users the PR has already reached: pending OR engaged.
+  const users_reached = pending_users.union(users_engaged)
   log('reviewers - users_reached', Array.from(users_reached).join(', '))
 
-  // Same for teams
-  const teams_reached = new Set([
-    ...pull_request.requested_teams.map(({ slug }) => slug.toLowerCase()),
-    ...reviews.flatMap(({ onBehalfOf }) =>
+  // Same for teams. A team is engaged only via `onBehalfOf` reviews.
+  const pending_teams = new Set(
+    pull_request.requested_teams.map(({ slug }) => slug.toLowerCase()),
+  )
+  const teams_engaged = new Set(
+    reviews.flatMap(({ onBehalfOf }) =>
       onBehalfOf.nodes.map(({ slug }) => slug.toLowerCase()),
     ),
-  ])
+  )
+  const teams_reached = pending_teams.union(teams_engaged)
   log('reviewers - teams_reached', Array.from(teams_reached).join(', '))
 
   // Early sanity check, before we start making any API requests. The list of maintainers
@@ -149,37 +158,101 @@ async function handleReviewers({
   )
   log('reviewers - teams_not_yet_reached', teams_not_yet_reached.join(', '))
 
-  if (
-    users_not_yet_reached.length === 0 &&
-    teams_not_yet_reached.length === 0
-  ) {
+  // The usernames of bots that make review requests we may auto-revoke.
+  const revokable_requesters = ['github-actions[bot]', 'nixpkgs-ci[bot]']
+
+  // Find latest `review_requested` actor per reviewer / team.
+  const last_request_actor_for_user = new Map()
+  const last_request_actor_for_team = new Map()
+  for (const ev of events) {
+    if (ev.event !== 'review_requested') continue
+    if (ev.requested_reviewer?.login) {
+      last_request_actor_for_user.set(
+        ev.requested_reviewer.login.toLowerCase(),
+        ev.actor?.login ?? '',
+      )
+    }
+    if (ev.requested_team?.slug) {
+      last_request_actor_for_team.set(
+        ev.requested_team.slug.toLowerCase(),
+        ev.actor?.login ?? '',
+      )
+    }
+  }
+
+  // Pending requests no longer in the to_reach set, excluding the engaged
+  // and anything not requested by our own bot.
+  const users_to_remove = Array.from(
+    pending_users.difference(users_to_reach).difference(users_engaged),
+  ).filter((login) =>
+    revokable_requesters.includes(last_request_actor_for_user.get(login)),
+  )
+  log('reviewers - users_to_remove', users_to_remove.join(', '))
+
+  // Same for teams.
+  const teams_to_remove = Array.from(
+    pending_teams.difference(teams_to_reach).difference(teams_engaged),
+  ).filter((slug) =>
+    revokable_requesters.includes(last_request_actor_for_team.get(slug)),
+  )
+  log('reviewers - teams_to_remove', teams_to_remove.join(', '))
+
+  const has_adds =
+    users_not_yet_reached.length > 0 || teams_not_yet_reached.length > 0
+  const has_removals = users_to_remove.length > 0 || teams_to_remove.length > 0
+
+  if (!has_adds && !has_removals) {
     log('Has reviewer changes', 'false (skipped)')
   } else if (dry) {
-    core.info(
-      `Requesting user reviewers for #${pull_number}: ${users_not_yet_reached.join(', ')} (dry)`,
-    )
-    core.info(
-      `Requesting team reviewers for #${pull_number}: ${teams_not_yet_reached.join(', ')} (dry)`,
-    )
+    if (has_adds) {
+      core.info(
+        `Requesting user reviewers for #${pull_number}: ${users_not_yet_reached.join(', ')} (dry)`,
+      )
+      core.info(
+        `Requesting team reviewers for #${pull_number}: ${teams_not_yet_reached.join(', ')} (dry)`,
+      )
+    }
+    if (has_removals) {
+      core.info(
+        `Revoking stale reviewers for #${pull_number}: users=[${users_to_remove.join(', ')}], teams=[${teams_to_remove.join(', ')}] (dry)`,
+      )
+    }
   } else {
     // We had tried the "request all reviewers at once" thing in the past, but it didn't work out:
     //   https://github.com/NixOS/nixpkgs/commit/034613f860fcd339bd2c20c8f6bc259a2f9dc034
     // If we're hitting API errors here again, we'll need to investigate - and possibly reverse
     // course.
-    await github.rest.pulls.requestReviewers({
-      ...context.repo,
-      pull_number,
-      reviewers: users_not_yet_reached,
-      team_reviewers: teams_not_yet_reached,
-    })
+    // Add and remove sets are disjoint by construction. Parallel is safe.
+    await Promise.all(
+      [
+        has_adds &&
+          github.rest.pulls.requestReviewers({
+            ...context.repo,
+            pull_number,
+            reviewers: users_not_yet_reached,
+            team_reviewers: teams_not_yet_reached,
+          }),
+        has_removals &&
+          github.rest.pulls.removeRequestedReviewers({
+            ...context.repo,
+            pull_number,
+            reviewers: users_to_remove,
+            team_reviewers: teams_to_remove,
+          }),
+      ].filter(Boolean),
+    )
   }
+
+  // Subtract the just-revoked so revoking the last pending reviewer flips the label.
+  const users_still_reached = users_reached.difference(new Set(users_to_remove))
+  const teams_still_reached = teams_reached.difference(new Set(teams_to_remove))
 
   // Return a boolean on whether the "needs: reviewers" label should be set.
   return (
     users_not_yet_reached.length === 0 &&
     teams_not_yet_reached.length === 0 &&
-    users_reached.size === 0 &&
-    teams_reached.size === 0
+    users_still_reached.size === 0 &&
+    teams_still_reached.size === 0
   )
 }
 
