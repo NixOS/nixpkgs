@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
   unzip,
 }:
 
@@ -16,15 +17,15 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 CCSymbols.* -t $out/share/fonts/ccsymbols
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    installFonts
+    unzip
+  ];
 
   passthru = { inherit pname version; };
 
