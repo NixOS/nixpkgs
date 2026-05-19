@@ -5144,6 +5144,12 @@ assertNoAdditions {
     };
   });
 
+  vim-emoji = super.vim-emoji.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-endwise = super.vim-endwise.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
