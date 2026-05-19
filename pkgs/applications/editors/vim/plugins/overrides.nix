@@ -2599,6 +2599,12 @@ assertNoAdditions {
     ];
   };
 
+  moonscript-vim = super.moonscript-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   mru = super.mru.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
