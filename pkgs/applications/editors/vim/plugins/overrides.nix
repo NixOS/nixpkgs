@@ -2293,6 +2293,12 @@ assertNoAdditions {
     };
   });
 
+  litee-nvim = super.litee-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   litee-symboltree-nvim = super.litee-symboltree-nvim.overrideAttrs (old: {
     dependencies = [ self.litee-nvim ];
     meta = old.meta // {
