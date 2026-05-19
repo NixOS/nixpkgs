@@ -18,15 +18,15 @@
   z3,
   python3,
   certifyBooks ? true,
-}@args:
+}:
 
 let
   # Disable immobile space so we don't run out of memory on large books, and
   # supply 2GB of dynamic space to avoid exhausting the heap while building the
   # ACL2 system itself; see
   # https://www.cs.utexas.edu/users/moore/acl2/current/HTML/installation/requirements.html#Obtaining-SBCL
-  sbcl' = args.sbcl.overrideAttrs { disableImmobileSpace = true; };
-  sbcl = runCommandLocal args.sbcl.name { nativeBuildInputs = [ makeWrapper ]; } ''
+  sbcl' = sbcl.overrideAttrs { disableImmobileSpace = true; };
+  sbclWrapped = runCommandLocal sbcl.name { nativeBuildInputs = [ makeWrapper ]; } ''
     makeWrapper ${sbcl'}/bin/sbcl $out/bin/sbcl \
       --add-flags "--dynamic-space-size 2000"
   '';
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # ACL2 itself only needs a Common Lisp compiler/interpreter:
-    sbcl
+    sbclWrapped
   ]
   ++ lib.optionals certifyBooks [
     # To build community books, we need Perl and a couple of utilities:
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "mkdir -p $HOME";
   makeFlags = [
-    "LISP=${sbcl}/bin/sbcl"
+    "LISP=${sbclWrapped}/bin/sbcl"
     "ACL2_MAKE_LOG=NONE"
   ];
 
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    ln -s $out/share/${pname}/saved_acl2           $out/bin/${pname}
+    ln -s $out/share/${pname}/saved_acl2            $out/bin/${pname}
   ''
   + lib.optionalString certifyBooks ''
     ln -s $out/share/${pname}/books/build/cert.pl  $out/bin/${pname}-cert
