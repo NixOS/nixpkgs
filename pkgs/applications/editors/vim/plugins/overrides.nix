@@ -3971,6 +3971,12 @@ assertNoAdditions {
     };
   });
 
+  quickfixstatus = super.quickfixstatus.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs (old: {
     nvimSkipModules = [
       # rainbow-delimiters.types.lua
