@@ -68,8 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
+    longDescription = ''
+      Endless Sky is a sandbox-style space exploration game. You start as the captain
+      of a tiny spaceship and can choose what to do from there. The game includes a
+      major plot line and many minor missions, but you can play as a merchant, bounty
+      hunter, or explorer entirely at your own discretion. Trade goods between star
+      systems, upgrade your ship, recruit a fleet, and uncover alien civilisations
+      beyond the boundaries of human space.
+    '';
     mainProgram = "endless-sky";
     homepage = "https://endless-sky.github.io/";
+    changelog = "https://github.com/endless-sky/endless-sky/blob/v${finalAttrs.version}/changelog";
     license = with lib.licenses; [
       gpl3Plus
       cc-by-sa-30
@@ -81,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
       lilacious
       philocalyst
     ];
-    platforms = lib.platforms.linux; # Maybe other non-darwin Unix
+    platforms = lib.platforms.all;
   };
 })
