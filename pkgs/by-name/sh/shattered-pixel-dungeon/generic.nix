@@ -160,7 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode # deps
     ];
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      philocalyst
+    ];
     platforms = lib.platforms.all;
     mainProgram = pname;
   } meta;
