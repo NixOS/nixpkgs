@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpgme";
-  version = "2.0.1";
+  version = "2.1.0";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/gpgme-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ghqwaVyELqtRdSqBmAySsEEMfq3QQQP3kdXSpSZ4SWY=";
+    hash = "sha256-hBxepT/CYln0+/DovemC3qG4ocoMt35oHIKwUFZr+Ss=";
   };
 
   postPatch = ''
