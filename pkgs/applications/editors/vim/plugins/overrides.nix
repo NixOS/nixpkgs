@@ -1629,6 +1629,12 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  gitv = super.gitv.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   go-nvim = super.go-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-treesitter
