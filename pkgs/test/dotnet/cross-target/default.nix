@@ -59,7 +59,8 @@ let
 
       installPhase = ''
         runHook preInstall
-        dotnet run > $out
+        dotnet run
+        touch "$out"
         runHook postInstall
       '';
     };
