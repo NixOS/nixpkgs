@@ -5909,7 +5909,7 @@ assertNoAdditions {
     };
   });
 
-  vimproc-vim = super.vimproc-vim.overrideAttrs {
+  vimproc-vim = super.vimproc-vim.overrideAttrs (old: {
     buildInputs = [ which ];
 
     # TODO: revisit
@@ -5920,7 +5920,11 @@ assertNoAdditions {
         --replace-fail vimproc_linux32.so vimproc_unix.so
       make -f make_unix.mak
     '';
-  };
+
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vimsence = super.vimsence.overrideAttrs (old: {
     meta = old.meta // {
