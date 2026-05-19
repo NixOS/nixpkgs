@@ -5089,6 +5089,12 @@ assertNoAdditions {
     };
   });
 
+  vim-diminactive = super.vim-diminactive.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   vim-dirvish = super.vim-dirvish.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.gpl3Plus;
