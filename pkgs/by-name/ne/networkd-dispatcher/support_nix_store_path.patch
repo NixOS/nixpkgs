@@ -1,0 +1,13 @@
+diff --git a/networkd-dispatcher b/networkd-dispatcher
+index ef877ce..8c341f2 100755
+--- a/networkd-dispatcher
++++ b/networkd-dispatcher
+@@ -171,6 +171,8 @@ def check_perms(path, mode=0o755, uid=0, gid=0):
+ 
+     if not os.path.exists(path):
+         raise FileNotFoundError
++    if re.search('^/nix/store/.*', str(path)):
++        return True
+     st = os.stat(path, follow_symlinks=False)
+     st_mode = st.st_mode & 0x00FFF
+     if st.st_uid == uid and st.st_gid == gid and st_mode == mode:

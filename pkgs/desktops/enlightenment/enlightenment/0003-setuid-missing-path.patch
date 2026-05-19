@@ -1,0 +1,25 @@
+From b7ef2a0d3f31db55a12b2b8c2e1c60ba62b971c8 Mon Sep 17 00:00:00 2001
+From: Matt Bagnara <mbagnara@fastmail.com>
+Date: Wed, 1 Jul 2020 15:30:40 -0500
+Subject: [PATCH] add nixos path
+
+---
+ src/bin/e_util_suid.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/bin/e_util_suid.h b/src/bin/e_util_suid.h
+index b01ff792b..88c2a0f17 100644
+--- a/src/bin/e_util_suid.h
++++ b/src/bin/e_util_suid.h
+@@ -246,7 +246,7 @@ e_setuid_setup(uid_t *caller_uid, gid_t *caller_gid, char **caller_user, char **
+ # endif
+ #endif
+    // pass 3 - set path and ifs to minimal defaults
+-   putenv("PATH=/bin:/usr/bin:/sbin:/usr/sbin");
++   putenv("PATH=/bin:/usr/bin:/sbin:/usr/sbin:/run/current-system/sw/bin");
+    putenv("IFS= \t\n");
+    return 0;
+ }
+-- 
+2.27.0
+

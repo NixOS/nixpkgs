@@ -1,0 +1,55 @@
+From a3461f69222ef23b2edd411c5fc8daefea556a2c Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Wed, 20 Oct 2021 20:55:29 +0200
+Subject: [PATCH] pkg-config: Declare header dependencies as public
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The headers include libsoup and libxml2 headers but those libraries are only
+listed in Requires.private. This does not matter for upstream pkg-config
+because it uses Cflags from libraries in Requires.private as well but as our
+pkg-config is patched to only use Requires.private for static linking.
+
+Let’s add libsoup-2.4 and libxml-2.0 to Requires rather than Requires.private
+to make the reverse dependencies correctly find their headers.
+---
+ libgupnp/meson.build | 2 +-
+ meson.build          | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/libgupnp/meson.build b/libgupnp/meson.build
+index cb8a102..5fda9d8 100644
+--- a/libgupnp/meson.build
++++ b/libgupnp/meson.build
+@@ -129,7 +129,7 @@ pkg.generate(
+     libgupnp,
+     subdirs: 'gupnp-1.2',
+     name : 'gupnp-1.2',
+-    requires : ['glib-2.0', 'gio-2.0', 'gssdp-1.2'],
++    requires : ['glib-2.0', 'gio-2.0', 'gssdp-1.2', 'libsoup-2.4 >= ' + libsoup_version, 'libxml-2.0'],
+     description : 'GObject-based UPnP library',
+     version : meson.project_version(),
+     filebase : 'gupnp-1.2'
+diff --git a/meson.build b/meson.build
+index 3790bcf..c96a983 100644
+--- a/meson.build
++++ b/meson.build
+@@ -25,12 +25,13 @@ gssdp_dep = dependency('gssdp-1.2', version : '>= 1.3.0', default_options: ['sni
+ 
+ gio_unix = dependency('gio-unix-2.0', version: '>= 2.44', required: host_machine.system() != 'windows')
+ 
++libsoup_version = '2.48.0'
+ dependencies = [
+     dependency('glib-2.0', version : '>= ' + glib_version),
+     dependency('gio-2.0', version : '>= ' + glib_version),
+     dependency('gmodule-2.0', version : '>= ' + glib_version),
+     dependency('gobject-2.0', version : '>= ' + glib_version),
+-    dependency('libsoup-2.4', version : '>= 2.48.0'),
++    dependency('libsoup-2.4', version : '>= ' + libsoup_version),
+     gssdp_dep,
+     dependency('libxml-2.0'),
+ ]
+-- 
+2.33.0
+

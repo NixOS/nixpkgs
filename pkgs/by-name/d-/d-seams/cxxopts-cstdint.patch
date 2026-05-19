@@ -1,0 +1,11 @@
+diff --git a/src/include/external/cxxopts.hpp b/src/include/external/cxxopts.hpp
+--- a/src/include/external/cxxopts.hpp
++++ b/src/include/external/cxxopts.hpp
+@@ -26,6 +26,7 @@ THE SOFTWARE.
+ #define CXXOPTS_HPP_INCLUDED
+
+ #include <cctype>
++#include <cstdint>
+ #include <cstring>
+ #include <exception>
+ #include <iostream>

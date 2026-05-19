@@ -1,0 +1,13 @@
+diff --git a/runtime/Cpp/runtime/CMakeLists.txt b/runtime/Cpp/runtime/CMakeLists.txt
+index be0d8bf03..09f825642 100644
+--- a/runtime/Cpp/runtime/CMakeLists.txt
++++ b/runtime/Cpp/runtime/CMakeLists.txt
+@@ -7,7 +7,7 @@ if (NOT ANTLR_BUILD_SHARED AND NOT ANTLR_BUILD_STATIC)
+   message(FATAL_ERROR "Options ANTLR_BUILD_SHARED and ANTLR_BUILD_STATIC can't both be OFF")
+ endif()
+ 
+-set(libantlrcpp_INCLUDE_INSTALL_DIR "include/antlr4-runtime")
++set(libantlrcpp_INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}/antlr4-runtime")
+ 
+ set(libantlrcpp_INCLUDE_DIRS
+   ${PROJECT_SOURCE_DIR}/runtime/src

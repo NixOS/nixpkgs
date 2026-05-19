@@ -1,0 +1,223 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/diskdev_cmds/blob/main/diskdev_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('diskdev_cmds', 'c', 'objc', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+apfs = dependency('appleframeworks', modules : 'APFS')
+removefile = cc.find_library('removefile')
+
+
+# Static Libraries
+libdisk = declare_dependency(
+    include_directories : 'disklib',
+    link_with : static_library(
+        'disk',
+        include_directories : 'disklib',
+        sources : [
+            'disklib/dkcksum.c',
+            'disklib/dkdisklabel.c',
+            'disklib/dkopen.c',
+            'disklib/dksecsize.c',
+            'disklib/fskit_support.m',
+            'disklib/preen.c',
+            'disklib/vfslist.c',
+        ],
+    ),
+)
+
+# Binaries
+# Note: newfs_fskit and fsck_fskit require private entitlements. They are not built.
+
+executable(
+    'dev_mkdb',
+    install : true,
+    sources : [ 'dev_mkdb.tproj/dev_mkdb.c' ],
+)
+install_man('dev_mkdb.tproj/dev_mkdb.8')
+
+executable(
+    'dirs_cleaner',
+    dependencies : [ removefile ],
+    install : true,
+    install_dir : get_option('libexecdir'),
+    sources : [ 'dirs_cleaner/dirs_cleaner.c' ],
+)
+install_man('dirs_cleaner/dirs_cleaner.8')
+
+executable(
+    'edquota',
+    dependencies : [ libdisk ],
+    install : true,
+    sources : [ 'edquota.tproj/edquota.c' ],
+)
+install_man('edquota.tproj/edquota.8')
+
+executable(
+    'fdisk',
+    install : true,
+    sources : [
+        'fdisk.tproj/auto.c',
+        'fdisk.tproj/cmd.c',
+        'fdisk.tproj/disk.c',
+        'fdisk.tproj/fdisk.c',
+        'fdisk.tproj/getrawpartition.c',
+        'fdisk.tproj/mbr.c',
+        'fdisk.tproj/misc.c',
+        'fdisk.tproj/opendev.c',
+        'fdisk.tproj/part.c',
+        'fdisk.tproj/user.c',
+    ],
+)
+install_man('fdisk.tproj/fdisk.8')
+
+executable(
+    'fsck',
+    include_directories : [ 'edt_fstab', 'fsck.tproj' ],
+    install : true,
+    sources : [
+        'edt_fstab/edt_fstab.c',
+        'fsck.tproj/fsck.c',
+    ],
+)
+install_man('fsck.tproj/fsck.8')
+
+foreach fstyp : [ 'fstyp', 'fstyp_msdos', 'fstyp_ntfs', 'fstyp_udf' ]
+    executable(
+        f'@fstyp@',
+        install : true,
+        sources : [ f'fstyp.tproj/@fstyp@.c' ],
+    )
+    install_man(f'fstyp.tproj/@fstyp@.8')
+endforeach
+
+install_man('fuser.tproj/fuser.1')
+
+executable(
+    'mount',
+    c_args : [
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L107
+        '-DMNT_EXT_ROOT_DATA_VOL=0x00000001',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L108
+        '-DMNT_EXT_FSKIT=0x00000002',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L337
+        '-DMNT_NOFOLLOW=0x08000000',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L340
+        '-DMNT_STRICTATIME=0x80000000',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/attr.h#L300
+        '-DVOL_CAP_FMT_SEALED=0x02000000',
+    ],
+    dependencies : [ apfs, libdisk ],
+    include_directories : [ 'edt_fstab', 'fsck.tproj', 'mount_flags_dir' ],
+    install : true,
+    link_args : host_machine.cpu_family() == 'x86_64' ? [ '-Wl,-undefined,dynamic_lookup' ] : [ ],
+    sources : [
+        'edt_fstab/edt_fstab.c',
+        'mount.tproj/mount.c',
+        'mount.tproj/mount_tmpfs.c',
+        'mount_flags_dir/mount_flags.c',
+    ],
+)
+install_man(
+    'mount.tproj/fstab.5',
+    'mount.tproj/mount.8',
+)
+
+# executable(
+#     'mount_devfs',
+#     install : true,
+#     sources : [ 'mount_devfs.tproj/mount_devfs.c' ],
+# )
+
+# executable(
+#     'mount_fdesc',
+#     install : true,
+#     sources : [ 'mount_fdesc.tproj/mount_fdesc.c' ],
+# )
+# install_man('mount_fdesc.tproj/mount_fdesc.8')
+
+executable(
+    'quota',
+    install : true,
+    sources : [ 'quota.tproj/quota.c' ],
+)
+install_man('quota.tproj/quota.1')
+
+executable(
+    'quotacheck',
+    dependencies : [ libdisk ],
+    install : true,
+    sources : [
+        'quotacheck.tproj/hfs_quotacheck.c',
+        'quotacheck.tproj/quotacheck.c',
+    ],
+)
+install_man('quotacheck.tproj/quotacheck.8')
+
+executable(
+    'quotaon',
+    install : true,
+    sources : [ 'quotaon.tproj/quotaon.c' ],
+)
+install_man('quotaon.tproj/quotaon.8')
+install_symlink(
+    'quotaoff',
+    install_dir : get_option('bindir'),
+    pointing_to : 'quotaon',
+)
+
+executable(
+    'repquota',
+    install : true,
+    sources :  [ 'repquota.tproj/repquota.c' ],
+)
+install_man('repquota.tproj/repquota.8')
+
+executable(
+    'setclass',
+    install : true,
+    sources : [ 'setclass.tproj/setclass.c' ],
+)
+install_man('setclass.tproj/setclass.8')
+
+# tmp_cleaner
+install_man('tmp_cleaner/tmp_cleaner.8')
+
+executable(
+    'umount',
+    dependencies : [ libdisk ],
+    include_directories : 'edt_fstab',
+    install : true,
+    sources : [
+        'edt_fstab/edt_fstab.c',
+        'umount.tproj/umount.c',
+    ],
+)
+install_man('umount.tproj/umount.8')
+
+executable(
+    'vsdbutil',
+    c_args : [
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L107
+        '-DMNT_EXT_ROOT_DATA_VOL=0x00000001',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L108
+        '-DMNT_EXT_FSKIT=0x00000002',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L337
+        '-DMNT_NOFOLLOW=0x08000000',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/mount.h#L340
+        '-DMNT_STRICTATIME=0x80000000',
+        # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/attr.h#L300
+        '-DVOL_CAP_FMT_SEALED=0x02000000',
+    ],
+    dependencies : [ apfs ],
+    install : true,
+    sources : [
+        'mount_flags_dir/mount_flags.c',
+        'vsdbutil.tproj/vsdbutil_main.c',
+    ],
+)
+install_man('vsdbutil.tproj/vsdbutil.8')

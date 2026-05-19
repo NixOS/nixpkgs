@@ -1,0 +1,13 @@
+diff --git a/postfix-install b/postfix/postfix-install
+index 1662c3d..0f20ec0 100644
+--- a/postfix-install
++++ b/postfix-install
+@@ -336,7 +336,7 @@ compare_or_symlink() {
+ 	# 2) we cannot use mv to replace a symlink-to-directory;
+ 	# 3) "ln -n" is not in POSIX, therefore it's not portable.
+ 	# rm+ln is less atomic but this affects compatibility symlinks only.
+-	rm -f $2 && ln -sf $link $2 || exit 1
++	rm -f $2 && ln -rsf $link $2 || exit 1
+     }
+ }
+ 

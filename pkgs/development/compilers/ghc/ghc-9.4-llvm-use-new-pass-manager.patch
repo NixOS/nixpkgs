@@ -1,0 +1,87 @@
+From 857d84f43f288019d6b926ac562f0d3eff30bc1e Mon Sep 17 00:00:00 2001
+From: Ben Gamari <ben@smart-cactus.org>
+Date: Wed, 31 Jan 2024 08:58:58 -0500
+Subject: [PATCH] llvmGen: Adapt to allow use of new pass manager.
+
+We now must use `-passes` in place of `-O<n>` due to #21936.
+
+Closes #21936.
+
+(cherry picked from commit 77db84aba1ba00f6d146e9107b24c6203798e796)
+---
+ compiler/GHC/Driver/Flags.hs            | 2 --
+ compiler/GHC/Driver/Pipeline/Execute.hs | 3 +--
+ compiler/GHC/Driver/Session.hs          | 2 --
+ llvm-passes                             | 6 +++---
+ 4 files changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/compiler/GHC/Driver/Flags.hs b/compiler/GHC/Driver/Flags.hs
+index 8f6c37d5a7..2e5189f42f 100644
+--- a/compiler/GHC/Driver/Flags.hs
++++ b/compiler/GHC/Driver/Flags.hs
+@@ -213,7 +213,6 @@ data GeneralFlag
+    | Opt_RegsGraph                      -- do graph coloring register allocation
+    | Opt_RegsIterative                  -- do iterative coalescing graph coloring register allocation
+    | Opt_PedanticBottoms                -- Be picky about how we treat bottom
+-   | Opt_LlvmTBAA                       -- Use LLVM TBAA infrastructure for improving AA (hidden flag)
+    | Opt_LlvmFillUndefWithGarbage       -- Testing for undef bugs (hidden flag)
+    | Opt_IrrefutableTuples
+    | Opt_CmmSink
+@@ -446,7 +445,6 @@ optimisationFlags = EnumSet.fromList
+    , Opt_RegsGraph
+    , Opt_RegsIterative
+    , Opt_PedanticBottoms
+-   , Opt_LlvmTBAA
+    , Opt_LlvmFillUndefWithGarbage
+    , Opt_IrrefutableTuples
+    , Opt_CmmSink
+diff --git a/compiler/GHC/Driver/Pipeline/Execute.hs b/compiler/GHC/Driver/Pipeline/Execute.hs
+index b78ed19160..8c752f5546 100644
+--- a/compiler/GHC/Driver/Pipeline/Execute.hs
++++ b/compiler/GHC/Driver/Pipeline/Execute.hs
+@@ -882,8 +882,7 @@ getOutputFilename logger tmpfs stop_phase output basename dflags next_phase mayb
+ llvmOptions :: DynFlags
+             -> [(String, String)]  -- ^ pairs of (opt, llc) arguments
+ llvmOptions dflags =
+-       [("-enable-tbaa -tbaa",  "-enable-tbaa") | gopt Opt_LlvmTBAA dflags ]
+-    ++ [("-relocation-model=" ++ rmodel
++       [("-relocation-model=" ++ rmodel
+         ,"-relocation-model=" ++ rmodel) | not (null rmodel)]
+ 
+     -- Additional llc flags
+diff --git a/compiler/GHC/Driver/Session.hs b/compiler/GHC/Driver/Session.hs
+index 51d27cd0f8..ae8566ffb2 100644
+--- a/compiler/GHC/Driver/Session.hs
++++ b/compiler/GHC/Driver/Session.hs
+@@ -3457,7 +3457,6 @@ fFlagsDeps = [
+   flagSpec "late-dmd-anal"                    Opt_LateDmdAnal,
+   flagSpec "late-specialise"                  Opt_LateSpecialise,
+   flagSpec "liberate-case"                    Opt_LiberateCase,
+-  flagHiddenSpec "llvm-tbaa"                  Opt_LlvmTBAA,
+   flagHiddenSpec "llvm-fill-undef-with-garbage" Opt_LlvmFillUndefWithGarbage,
+   flagSpec "loopification"                    Opt_Loopification,
+   flagSpec "block-layout-cfg"                 Opt_CfgBlocklayout,
+@@ -3992,7 +3991,6 @@ optLevelFlags :: [([Int], GeneralFlag)]
+ optLevelFlags -- see Note [Documenting optimisation flags]
+   = [ ([0,1,2], Opt_DoLambdaEtaExpansion)
+     , ([0,1,2], Opt_DoEtaReduction)       -- See Note [Eta-reduction in -O0]
+-    , ([0,1,2], Opt_LlvmTBAA)
+     , ([0,1,2], Opt_ProfManualCcs )
+     , ([2], Opt_DictsStrict)
+ 
+diff --git a/llvm-passes b/llvm-passes
+index 52d203e745..0ee2889d32 100644
+--- a/llvm-passes
++++ b/llvm-passes
+@@ -1,5 +1,5 @@
+ [
+-(0, "-enable-new-pm=0 -mem2reg -globalopt -lower-expect"),
+-(1, "-enable-new-pm=0 -O1 -globalopt"),
+-(2, "-enable-new-pm=0 -O2")
++(0, "-passes=function(require<tbaa>),function(mem2reg),globalopt,function(lower-expect)"),
++(1, "-passes=default<O1>"),
++(2, "-passes=default<O2>")
+ ]
+-- 
+2.50.1
+
