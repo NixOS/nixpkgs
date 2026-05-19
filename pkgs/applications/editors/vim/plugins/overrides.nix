@@ -2628,6 +2628,12 @@ assertNoAdditions {
     dependencies = [ self.nvim-yarp ];
   };
 
+  ncm2-dictionary = super.ncm2-dictionary.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   ncm2-jedi = super.ncm2-jedi.overrideAttrs {
     dependencies = with self; [
       nvim-yarp
