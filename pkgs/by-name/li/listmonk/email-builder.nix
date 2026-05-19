@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/email-builder/yarn.lock";
-    hash = "sha256-glt7tMfP3x0Mr/hFG1t6TfwVJ+yZ551jeZK2UPIKI8g=";
+    hash = "sha256-sFRmnMPStNp45hxcF+Iq1WhH6LtVFtgq2regq6MPzcc=";
   };
 
   nativeBuildInputs = [

@@ -4,10 +4,9 @@
   fetchFromGitHub,
   bundlerEnv,
   nixosTests,
-  ruby_3_4,
+  ruby_4_0,
   pdfium-binaries,
   makeWrapper,
-  bundler,
   fetchYarnDeps,
   yarn,
   yarnConfigHook,
@@ -16,23 +15,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.4.4";
-
-  bundler = bundler.override { ruby = ruby_3_4; };
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-GjWR0jxVRTs5KNbFDEcgCbG/HTJlJGYpbKf8+0YBSmk=";
+    hash = "sha256-9fDEj9gOBZrn4dNWf+QRCZs3gUv3Mx/YZLRx55ShS7E=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
 
   rubyEnv = bundlerEnv {
     name = "docuseal-gems";
-    ruby = ruby_3_4;
-    inherit (finalAttrs) bundler;
+    ruby = ruby_4_0;
     gemdir = ./.;
   };
 

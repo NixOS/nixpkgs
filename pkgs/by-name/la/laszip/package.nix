@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   fixDarwinDylibNames,
 }:
@@ -16,6 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-xZ8IFnqrGt47lN+C6/ibgbIWqpObDf4RHPaGMXw0WZ4=";
   };
+
+  patches = [
+    # Fix aarch64-darwin build.
+    (fetchpatch {
+      url = "https://github.com/LASzip/LASzip/commit/2274e52076c5f4cbe2d826d690c21713ddd842b4.patch";
+      hash = "sha256-C6AOJSY8JJCNNA5Fuz3OiQpzSFO/PwI6Wj+WBUW948k=";
+    })
+  ];
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
 
