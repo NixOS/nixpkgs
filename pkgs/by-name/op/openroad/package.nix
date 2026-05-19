@@ -161,6 +161,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
 
+  # The automatic Qt wrapper scan segfaults on Darwin; wrap executables explicitly.
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapQtApp "$out/bin/sta"
+    wrapQtApp "$out/bin/openroad"
+  '';
+
   # Some tests are unstable on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
