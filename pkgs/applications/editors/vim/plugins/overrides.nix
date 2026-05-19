@@ -445,6 +445,12 @@ assertNoAdditions {
     nvimSkipModules = [ "bufferline.commands" ];
   };
 
+  BufOnly-vim = super.BufOnly-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   bufresize-nvim = super.bufresize-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
