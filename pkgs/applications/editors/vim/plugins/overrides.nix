@@ -3801,6 +3801,12 @@ assertNoAdditions {
     nvimSkipModules = "pywal.feline";
   };
 
+  QFEnter = super.QFEnter.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   qmk-nvim = super.qmk-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
