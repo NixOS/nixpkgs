@@ -4303,6 +4303,12 @@ assertNoAdditions {
     };
   });
 
+  starrynight = super.starrynight.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   startup-nvim = super.startup-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
