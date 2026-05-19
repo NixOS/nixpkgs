@@ -4398,6 +4398,12 @@ assertNoAdditions {
     };
   });
 
+  tabpagebuffer-vim = super.tabpagebuffer-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   tabular = super.tabular.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.bsd3;
