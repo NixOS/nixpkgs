@@ -5759,6 +5759,12 @@ assertNoAdditions {
     nvimSkipModules = "tpipeline.main";
   };
 
+  vim-twiggy = super.vim-twiggy.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-ultest = super.vim-ultest.overrideAttrs {
     # NOTE: vim-ultest is no longer maintained.
     # If using Neovim, you can switch to using neotest (https://github.com/nvim-neotest/neotest) instead.
