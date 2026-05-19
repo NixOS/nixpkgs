@@ -57,7 +57,6 @@ let
         # THIRD PARTY
         inherit
           cmark
-          gpgme
           taglib
           wayland
           wayland-protocols
