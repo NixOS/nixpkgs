@@ -7,24 +7,21 @@
   pydicom,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyorthanc";
   version = "1.23.0";
-
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gacou54";
     repo = "pyorthanc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-L1vIU6oDZ95lFt2w/TYFpHdmHmDE2XPn10XdEUIlxRQ=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "pydicom"
-  ];
+  pythonRelaxDeps = [ "pydicom" ];
 
   dependencies = [
     httpx
@@ -38,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library that wraps the Orthanc REST API";
     homepage = "https://github.com/gacou54/pyorthanc";
-    changelog = "https://github.com/gacou54/pyorthanc/releases/tag/${src.tag}";
+    changelog = "https://github.com/gacou54/pyorthanc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})
