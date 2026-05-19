@@ -10,24 +10,27 @@
   pandas,
   poetry-core,
   prometheus-api-client,
-  pydantic,
+  pydantic_1,
   requests,
+  zipp,
 }:
 
 buildPythonPackage {
   pname = "prometrix";
-  version = "0.1.18-unstable-2024-04-30";
+  version = "0.2.9-unstable-2026-03-01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robusta-dev";
     repo = "prometrix";
     # https://github.com/robusta-dev/prometrix/issues/19
-    rev = "35128847d46016b88455e0a98f0eeec08d042107";
-    hash = "sha256-g8ZqgL9ETVwpKLMQS7s7A4GpSGfaFEDLOr8JBvFl2C4=";
+    rev = "498c0010d961454af63d2898bdbe98bd0089a087";
+    hash = "sha256-bdYoCePUfTrz915kkXyM0k7vW+yXy8ZqKMEET39o2E8=";
   };
 
   pythonRelaxDeps = [
+    "pillow"
+    "prometheus-api-client"
     "pydantic"
     "urllib3"
   ];
@@ -42,8 +45,9 @@ buildPythonPackage {
     numpy
     pandas
     prometheus-api-client
-    pydantic
+    pydantic_1
     requests
+    zipp
   ];
 
   # Fixture is missing
@@ -61,8 +65,5 @@ buildPythonPackage {
     homepage = "https://github.com/robusta-dev/prometrix";
     license = lib.licenses.mit;
     maintainers = [ ];
-    # prometheus-api-client 0.5.5 is not working
-    # https://github.com/robusta-dev/prometrix/issues/14
-    broken = lib.versionAtLeast prometheus-api-client.version "0.5.3";
   };
 }
