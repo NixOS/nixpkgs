@@ -6170,6 +6170,12 @@ assertNoAdditions {
     ];
   };
 
+  zoomwintab-vim = super.zoomwintab-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   zotcite = super.zotcite.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
