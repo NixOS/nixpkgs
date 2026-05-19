@@ -4675,6 +4675,12 @@ assertNoAdditions {
     ];
   };
 
+  todo-txt-vim = super.todo-txt-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   tokyonight-nvim = super.tokyonight-nvim.overrideAttrs {
     checkInputs = [ self.fzf-lua ];
     nvimSkipModules = [
