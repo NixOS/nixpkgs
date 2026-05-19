@@ -4832,6 +4832,12 @@ assertNoAdditions {
     };
   });
 
+  verilog_systemverilog-vim = super.verilog_systemverilog-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-abolish = super.vim-abolish.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
