@@ -2,22 +2,18 @@
   stdenv,
   lib,
   fetchzip,
-  fetchpatch,
-  autoconf,
-  automake,
-  docbook_xml_dtd_42,
-  docbook_xml_dtd_43,
   docbook_xsl,
   gtk-doc,
-  libtool,
   pkg-config,
-  libxslt,
   xz,
   zstd,
-  elf-header,
   withDevdoc ? stdenv.hostPlatform == stdenv.buildPlatform,
   withStatic ? stdenv.hostPlatform.isStatic,
   gitUpdater,
+  scdoc,
+  meson,
+  ninja,
+  zlib,
 }:
 
 let
@@ -26,21 +22,16 @@ let
     "/run/current-system/kernel-modules"
     ""
   ];
-  modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
+  modulesDirs = lib.concatMapStringsSep "," (x: "${x}/lib/modules") systems;
 
 in
 stdenv.mkDerivation rec {
   pname = "kmod";
-  version = "31";
+  version = "34.2";
 
-  # autogen.sh is missing from the release tarball,
-  # and we need to run it to regenerate gtk_doc.make,
-  # because the version in the release tarball is broken.
-  # Possibly this will be fixed in kmod 30?
-  # https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/commit/.gitignore?id=61a93a043aa52ad62a11ba940d4ba93cb3254e78
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${version}.tar.gz";
-    hash = "sha256-FNR015/AoYBbi7Eb1M2TXH3yxUuddKICCu+ot10CdeQ=";
+    hash = "sha256-+fSM9ver+Yg9YbKuqiheKbqkLaZBPRuu0dey6gXQHyE=";
   };
 
   outputs = [
@@ -53,69 +44,108 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoconf
-    automake
+    meson
+    ninja
     docbook_xsl
-    libtool
-    libxslt
     pkg-config
 
-    docbook_xml_dtd_42 # for the man pages
+    scdoc # for the man pages
   ]
   ++ lib.optionals withDevdoc [
-    docbook_xml_dtd_43
     gtk-doc
   ];
   buildInputs = [
     xz
     zstd
-  ]
-  # gtk-doc is looked for with pkg-config
-  ++ lib.optionals withDevdoc [ gtk-doc ];
+    zlib
+  ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--with-xz"
-    "--with-zstd"
-    "--with-modulesdirs=${modulesDirs}"
-    (lib.enableFeature withDevdoc "gtk-doc")
+  mesonFlags = [
+    (lib.mesonOption "sysconfdir" "/etc")
+    (lib.mesonEnable "xz" true)
+    (lib.mesonEnable "zstd" true)
+    (lib.mesonEnable "openssl" false)
+    (lib.mesonOption "modulesdirs" modulesDirs)
+    (lib.mesonBool "docs" withDevdoc)
+    (lib.mesonBool "manpages" true)
+    (lib.mesonBool "build-tests" doCheck)
   ]
-  ++ lib.optional withStatic "--enable-static";
+  ++ lib.optional withStatic (lib.mesonOption "default_library" "static");
 
   patches = [
     # Accept multiple default kernel module dirs at build-time, instead
-    # of hardcoding a single /lib/modules, and adjust module search logic
+    # of hardcoding a single (MODULE_DIRECTORY), and adjust module search logic
     # accordingly (to account for multiple default directories)
     ./module-dir.patch
-
-    # Use portable implementation for basename API
-    #
-    # musl has removed the non-prototype declaration of basename from string.h
-    # which now results in build errors with clang-17+ compiler
-    #
-    # Implement GNU basename behavior using strchr which is portable across libcs
-    #
-    # Fixes "call to undeclared function 'basename'" error on clang+musl
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/patch/?id=11eb9bc67c319900ab00523997323a97d2d08ad2";
-      hash = "sha256-CYG615elMWces6QGQRg2H/NL7W4XsG9Zvz5H+xsdFFo=";
-    })
+    # Don't create empty confdirs at install time
+    ./dont-create-empty-confdirs.patch
   ]
-  # Force configure.ac to accept --enable-static (no other changes necessary)
+  # Force meson.build to support static builds
+  # based on the patch from
+  # https://github.com/bottlerocket-os/bottlerocket-core-kit/commit/81edc05400b05080941faed66f8ae9d5babb7ab1
   ++ lib.optional withStatic ./enable-static.patch;
 
-  postInstall = ''
-    for prog in rmmod insmod lsmod modinfo modprobe depmod; do
-      ln -sv $out/bin/kmod $out/bin/$prog
+  postPatch = ''
+    patchShebangs scripts/
+  '';
+
+  doCheck = true;
+
+  # The upstream Meson suite mixes pure unit tests with checks that need a
+  # fake module playground and kernel-style filesystem state. Run the
+  # self-contained unit tests directly instead of the full Meson suite.
+  checkPhase = ''
+    runHook preCheck
+
+    ninja \
+      testsuite/test-array \
+      testsuite/test-blacklist \
+      testsuite/test-dependencies \
+      testsuite/test-depmod \
+      testsuite/test-hash \
+      testsuite/test-init \
+      testsuite/test-initstate \
+      testsuite/test-list \
+      testsuite/test-loaded \
+      testsuite/test-modinfo \
+      testsuite/test-modprobe \
+      testsuite/test-new-module \
+      testsuite/test-strbuf \
+      testsuite/test-util \
+      testsuite/test-weakdep
+
+    ./testsuite/test-array
+    ./testsuite/test-hash
+    ./testsuite/test-list
+    ./testsuite/test-strbuf
+
+    for testName in \
+      test_strchr_replace \
+      test_underscores \
+      test_path_ends_with_kmod_ext \
+      test_uadd32_overflow \
+      test_uadd64_overflow \
+      test_umul32_overflow \
+      test_umul64_overflow \
+      test_backoff_time
+    do
+      ./testsuite/test-util -n "$testName"
     done
 
-    # Backwards compatibility
-    ln -s bin $out/sbin
+    # The rest of the tests are disabled because they require extra setup
+    # ./testsuite/test-blacklist
+    # ./testsuite/test-dependencies
+    # ./testsuite/test-depmod
+    # ./testsuite/test-init
+    # ./testsuite/test-initstate
+    # ./testsuite/test-loaded
+    # ./testsuite/test-modinfo
+    # ./testsuite/test-modprobe
+    # ./testsuite/test-new-module
+    # ./testsuite/test-util
+    # ./testsuite/test-weakdep
+
+    runHook postCheck
   '';
 
   passthru.updateScript = gitUpdater {
