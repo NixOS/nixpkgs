@@ -487,6 +487,12 @@ assertNoAdditions {
     ];
   };
 
+  caw-vim = super.caw-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
+
   ccc-nvim = super.ccc-nvim.overrideAttrs {
     # ccc auto-discover requires all pass
     # but there's a bootstrap module that hangs forever if we dont stop on first success
