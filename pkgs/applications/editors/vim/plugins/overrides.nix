@@ -922,6 +922,12 @@ assertNoAdditions {
     ];
   };
 
+  colorizer = super.colorizer.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   Colour-Sampler-Pack = super.Colour-Sampler-Pack.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.publicDomain;
