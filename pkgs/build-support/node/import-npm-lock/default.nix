@@ -185,6 +185,7 @@ lib.fix (self: {
       packageLock ? importJSON (npmRoot + "/package-lock.json"),
       nodejs,
       derivationArgs ? { },
+      importNpmLockArgs ? { },
     }:
     let
       # Backwards compatibility: if derivationArgs contains passAsFile,
@@ -198,9 +199,12 @@ lib.fix (self: {
 
         dontUnpack = true;
 
-        npmDeps = self.importNpmLock {
-          inherit npmRoot package packageLock;
-        };
+        npmDeps = self.importNpmLock (
+          importNpmLockArgs
+          // {
+            inherit npmRoot package packageLock;
+          }
+        );
 
         package = toJSON package;
         packageLock = toJSON packageLock;
