@@ -5965,6 +5965,12 @@ assertNoAdditions {
     };
   });
 
+  vissort-vim = super.vissort-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
     checkInputs = [
       # Optional telescope integration
