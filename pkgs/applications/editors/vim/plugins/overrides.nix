@@ -5212,6 +5212,12 @@ assertNoAdditions {
     };
   });
 
+  vim-fold-cycle = super.vim-fold-cycle.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   vim-fugitive = super.vim-fugitive.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
