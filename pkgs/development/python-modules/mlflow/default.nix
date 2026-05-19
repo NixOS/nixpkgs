@@ -96,6 +96,7 @@ buildPythonPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       GaetanLepage
+      gquetel
     ];
   };
 })
