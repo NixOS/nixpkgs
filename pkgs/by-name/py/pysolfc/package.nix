@@ -114,5 +114,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://pysolfc.sourceforge.io";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    maintainers = with lib.maintainers; [ philocalyst ];
   };
 }
