@@ -5,10 +5,11 @@
   makeWrapper,
   stdenv,
   desktopToDarwinBundle,
+  nix-update-script,
 }:
 
 let
-  common = import ./common.nix { inherit lib; };
+  common = import ./common.nix { inherit lib nix-update-script; };
 in
 buildEnv {
   pname = "flare";

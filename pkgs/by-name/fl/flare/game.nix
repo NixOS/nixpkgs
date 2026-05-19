@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 let
@@ -19,8 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IsVfP8wmrublAqoVix7gOA4u8CRmXdyNzagnaXyFsxc=";
   };
 
-
   nativeBuildInputs = [ cmake ];
+
+  passthru = {
+    inherit (common) updateScript;
+  };
 
   meta = {
     description = "Fantasy action RPG using the FLARE engine";

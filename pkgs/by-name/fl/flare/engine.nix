@@ -7,6 +7,7 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
+  nix-update-script,
 }:
 
 let
@@ -32,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_mixer
     SDL2_ttf
   ];
+
+  passthru = {
+    inherit (common) updateScript;
+  };
 
   meta = {
     description = "Free/Libre Action Roleplaying Engine";
