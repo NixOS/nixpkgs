@@ -5490,12 +5490,15 @@ assertNoAdditions {
     };
   });
 
-  vim-snipmate = super.vim-snipmate.overrideAttrs {
+  vim-snipmate = super.vim-snipmate.overrideAttrs (old: {
     dependencies = with self; [
       vim-addon-mw-utils
       tlib_vim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-speeddating = super.vim-speeddating.overrideAttrs (old: {
     dependencies = [ self.vim-repeat ];
