@@ -33,6 +33,12 @@ in
     lib.mkIf cfg.enable {
       users.groups."${config.programs.ydotool.group}" = { };
 
+      # ydotoold opens /dev/uinput at startup but has ProtectKernelModules=true,
+      # so it cannot autoload the uinput module itself. Load it at boot so the
+      # device node exists when the service starts. Same pattern as
+      # hardware.steam-hardware (#70499).
+      boot.kernelModules = [ "uinput" ];
+
       systemd.services.ydotoold = {
         description = "ydotoold - backend for ydotool";
         wantedBy = [ "multi-user.target" ];
