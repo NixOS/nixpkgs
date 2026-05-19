@@ -7247,7 +7247,7 @@ with pkgs;
     };
   };
 
-  SDL = SDL_compat;
+  SDL = sdl12-compat;
   SDL2 = sdl2-compat;
 
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
