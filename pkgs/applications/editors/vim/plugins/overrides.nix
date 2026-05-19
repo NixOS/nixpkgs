@@ -3898,6 +3898,12 @@ assertNoAdditions {
     ];
   };
 
+  Rename = super.Rename.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   renamer-nvim = super.renamer-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
