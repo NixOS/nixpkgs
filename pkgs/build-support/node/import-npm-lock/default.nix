@@ -52,17 +52,19 @@ let
                 }
                 // fetcherOpts
               ))
-            else if lib.hasPrefix "git" module.resolved then
+            else if lib.strings.hasPrefix "git" module.resolved then
               let
+                # `fetchGit` will add the `git+` prefix back.
+                schemeWithoutPrefix = lib.strings.removePrefix "git+" scheme;
                 url = elemAt mUrl 1;
-                urlParts = lib.splitString "#" url;
+                urlParts = lib.strings.splitString "#" url;
                 commit = if builtins.length urlParts == 2 then elemAt urlParts 1 else null;
               in
               (fetchGit (
                 {
-                  url = "${scheme}://${elemAt urlParts 0}";
+                  url = "${schemeWithoutPrefix}://${elemAt urlParts 0}";
                 }
-                // lib.optionalAttrs (commit != null) {
+                // lib.attrsets.optionalAttrs (commit != null) {
                   rev = commit;
                 }
                 // fetcherOpts
@@ -185,6 +187,9 @@ lib.fix (self: {
       packageLock ? importJSON (npmRoot + "/package-lock.json"),
       nodejs,
       derivationArgs ? { },
+      # The following arguments are just forwarded to `importNpmLock`
+      fetcherOpts ? { },
+      packageSourceOverrides ? { },
     }:
     let
       # Backwards compatibility: if derivationArgs contains passAsFile,
@@ -199,7 +204,13 @@ lib.fix (self: {
         dontUnpack = true;
 
         npmDeps = self.importNpmLock {
-          inherit npmRoot package packageLock;
+          inherit
+            npmRoot
+            package
+            packageLock
+            fetcherOpts
+            packageSourceOverrides
+            ;
         };
 
         package = toJSON package;
