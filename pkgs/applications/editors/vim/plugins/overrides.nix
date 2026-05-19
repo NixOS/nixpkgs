@@ -5219,6 +5219,12 @@ assertNoAdditions {
     };
   });
 
+  vim-ft-diff_fold = super.vim-ft-diff_fold.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.zlib;
+    };
+  });
+
   vim-fugitive = super.vim-fugitive.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
