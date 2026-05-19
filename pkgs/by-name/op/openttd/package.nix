@@ -59,9 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
   version = "15.3";
 
-  src = fetchzip {
-    url = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/openttd-${finalAttrs.version}-source.tar.xz";
-    hash = "sha256-xDpDEeWdAWMyA/I+ioQR98vwrL9WXYd5AjswJ4NuVMY=";
+  src = fetchFromGitHub {
+    owner = "OpenTTD";
+    repo = "OpenTTD";
+    tag = finalAttrs.version;
+    hash = "sha256-KVOCFZaSmdmG270YEcJpGe6AjqAKpYNhkv9IjXxmrM8=";
   };
 
   nativeBuildInputs = [
