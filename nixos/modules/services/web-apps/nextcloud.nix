@@ -1188,6 +1188,41 @@ in
     };
 
     imaginary.enable = lib.mkEnableOption "Imaginary";
+
+    fileBackupContract.input = {
+      user = lib.mkOption {
+        description = ''
+          As which user the backup should run.
+        '';
+        type = lib.types.str;
+        default = "nextcloud";
+      };
+
+      sourceDirectories = lib.mkOption {
+        description = ''
+          Directories to backup.
+        '';
+        type = lib.types.nonEmptyListOf lib.types.str;
+        default = [
+          cfg.home
+          datadir
+        ];
+        defaultText = [
+          "config.services.nextcloud.home"
+          "config.services.nextcloud.datadir"
+        ];
+      };
+
+      excludePatterns = lib.mkOption {
+        description = ''
+          File patterns to exclude.
+        '';
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "*.rnd"
+        ];
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (
