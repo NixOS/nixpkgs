@@ -5419,6 +5419,12 @@ assertNoAdditions {
     };
   });
 
+  vim-lion = super.vim-lion.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-llvm = super.vim-llvm.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
