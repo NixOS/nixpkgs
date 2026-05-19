@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Poker game ${target}";
     mainProgram = "pokerth";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ obadz ];
+    maintainers = with lib.maintainers; [
+      obadz
+      philocalyst
+    ];
     platforms = lib.platforms.all;
   };
 })
