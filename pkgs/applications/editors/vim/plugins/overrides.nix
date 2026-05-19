@@ -5354,6 +5354,12 @@ assertNoAdditions {
     buildInputs = [ vim ];
   };
 
+  vim-hybrid = super.vim-hybrid.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-hypr-nav = super.vim-hypr-nav.overrideAttrs {
     runtimeDeps = [ jq ];
   };
