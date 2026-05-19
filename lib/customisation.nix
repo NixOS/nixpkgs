@@ -406,7 +406,7 @@ rec {
         outputName:
         commonAttrs
         // {
-          inherit (drv.${outputName}) type outputName;
+          inherit (drv.${outputName}) outputName;
           outputSpecified = true;
           drvPath =
             assert condition;
