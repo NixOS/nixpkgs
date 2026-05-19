@@ -4004,6 +4004,12 @@ assertNoAdditions {
     };
   });
 
+  readline-vim = super.readline-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   Recover-vim = super.Recover-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
