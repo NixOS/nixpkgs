@@ -910,6 +910,12 @@ assertNoAdditions {
     ];
   };
 
+  Colour-Sampler-Pack = super.Colour-Sampler-Pack.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
       getconf
