@@ -5557,6 +5557,12 @@ assertNoAdditions {
     };
   });
 
+  VimOrganizer = super.VimOrganizer.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vimoutliner = super.vimoutliner.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.gpl3Only;
