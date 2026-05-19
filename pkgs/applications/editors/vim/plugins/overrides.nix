@@ -6005,6 +6005,12 @@ assertNoAdditions {
     ];
   };
 
+  whitespace-nvim = super.whitespace-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   wiki-vim = super.wiki-vim.overrideAttrs {
     checkInputs = [
       # Optional picker integration
