@@ -14,6 +14,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-eS/gXAlURDOppOpUgPrNvsLabSgFgnW16QBqHyjFZGU=";
   };
 
+  # error: call to undeclared library function 'snprintf'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include stdio.h";
+
   nativeBuildInputs = [ flex ];
 
   enableParallelBuilding = true;
