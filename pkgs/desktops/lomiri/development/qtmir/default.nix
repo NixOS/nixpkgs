@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  nixosTests,
   testers,
   cmake,
   cmake-extras,
@@ -125,7 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests currently unavailable when building with Mir2
   doCheck = false;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = nixosTests.lomiri // {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "QPA plugin to make Qt a Mir server";
