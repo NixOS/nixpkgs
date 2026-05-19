@@ -460,6 +460,15 @@ lib.recursiveUpdate orig rec {
     substituteInPlace "$out"/bin/latexindent --replace-fail 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
   '';
 
+  # l3build ignores the TEXMFCNF variable to prevent user customisations from affecting the build
+  # but we rely on TEXMFCNF to find the system texmf.cnf, so we must inject its path into l3build
+  # WARNING: this relies on the system texmf.cnf being in $TEXMFSYSVAR/web2c
+  l3build.postUnpack = ''
+    if [[ -f "$out"/scripts/l3build/l3build-aux.lua ]] ; then
+      substituteInPlace "$out"/scripts/l3build/l3build-aux.lua --replace-fail '" TEXMFCNF=."' '" TEXMFCNF=." .. os_pathsep .. kpse.var_value("TEXMFSYSVAR") .. "/web2c"'
+    fi
+  '';
+
   # find files in script directory, not in binary directory
   minted.postFixup = ''
     substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
