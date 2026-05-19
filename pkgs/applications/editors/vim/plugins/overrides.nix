@@ -2954,8 +2954,11 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
-  };
+  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
     meta = old.meta // {
