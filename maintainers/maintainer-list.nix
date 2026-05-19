@@ -25670,6 +25670,11 @@
     github = "skohtv";
     githubId = 101289702;
   };
+  skonotopov = {
+    name = "Sergey Konotopov";
+    github = "kinkou";
+    githubId = 931329;
+  };
   skovati = {
     github = "skovati";
     githubId = 49844593;
