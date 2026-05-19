@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       aanderse
       McSinyx
+      philocalyst
     ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
