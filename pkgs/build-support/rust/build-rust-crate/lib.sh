@@ -6,6 +6,20 @@ echo_build_heading() {
   fi
 }
 
+# Append a test-target manifest entry. Each row maps an output binary
+# under target/{lib,bin}/ back to the cargo target it was compiled from
+# so downstream consumers (test runners, coverage tooling) don't have
+# to reverse-engineer the buildRustCrate naming scheme. Lines are
+# assembled into $out/tests/.target-manifest.json by install-crate.nix.
+# Args: kind (lib|bin|test), target name, binary basename, source file.
+record_test_target() {
+  mkdir -p target
+  jq -n -c \
+    --arg kind "$1" --arg target "$2" --arg bin "$3" --arg src "$4" \
+    '{kind: $kind, target: $target, bin: $bin, src: $src}' \
+    >> target/test-targets.jsonl
+}
+
 build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
@@ -72,12 +86,21 @@ build_bin() {
 build_lib_test() {
     local file="$1"
     EXTRA_RUSTC_FLAGS="--test $EXTRA_RUSTC_FLAGS" build_lib "$1" "$2"
+    # rustc with `--test -C extra-filename=-$metadata` writes the
+    # harness to target/lib/$CRATE_NAME-$metadata.
+    record_test_target lib "$CRATE_NAME" "$CRATE_NAME-$metadata" "$file"
 }
 
 build_bin_test() {
     local crate="$1"
     local file="$2"
+    # 3rd arg is the manifest kind so build_bin_test_file can mark its
+    # harnesses as `test` while crateBin / src/bin/* stay `bin`.
+    local kind="${3:-bin}"
     EXTRA_RUSTC_FLAGS="--test $EXTRA_RUSTC_FLAGS" build_bin "$1" "$2"
+    # build_bin renames the rustc output back to $crate, so the binary
+    # on disk has the same basename as the cargo target name.
+    record_test_target "$kind" "$crate" "$crate" "$file"
 }
 
 build_bin_test_file() {
@@ -94,7 +117,7 @@ build_bin_test_file() {
     if [[ "$file" == */main.rs ]]; then
         derived_crate_name="${derived_crate_name%_main}"
     fi
-    build_bin_test "$derived_crate_name" "$file"
+    build_bin_test "$derived_crate_name" "$file" test
 }
 
 # Add additional link options that were provided by the build script.
