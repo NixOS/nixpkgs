@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cedric-star";
     repo = "ap-visual-sorting";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DEIN-HASH-HIER=";
+    hash = "sha256-SPUfhQD4i04W3Om/qhcDGSs0/0qzv5EyijU43EovyZo="; 
   };
 
   __structuredAttrs = true; # NPV-166
