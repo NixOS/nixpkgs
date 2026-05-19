@@ -18349,6 +18349,11 @@
     githubId = 2597803;
     name = "Matthias Meschede";
   };
+  mmichie = {
+    github = "mmichie";
+    githubId = 12953;
+    name = "Matt Michie";
+  };
   mmilata = {
     email = "martin@martinmilata.cz";
     github = "mmilata";
