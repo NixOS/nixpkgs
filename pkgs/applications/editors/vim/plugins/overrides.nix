@@ -5536,6 +5536,12 @@ assertNoAdditions {
     dependencies = [ self.denops-vim ];
   };
 
+  vim-pony = super.vim-pony.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-projectionist = super.vim-projectionist.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
