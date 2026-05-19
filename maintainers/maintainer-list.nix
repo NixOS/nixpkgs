@@ -10136,6 +10136,12 @@
     githubId = 6893840;
     name = "Yacine Hmito";
   };
+  gquetel = {
+    email = "gregor.quetel@telecom-paris.fr";
+    github = "gquetel";
+    githubId = 48437427;
+    name = "Grégor Quetel";
+  };
   gracicot = {
     email = "dev@gracicot.com";
     matrix = "@gracicot-59e8f173d73408ce4f7ac803:gitter.im";
