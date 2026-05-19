@@ -58,7 +58,10 @@ in
             internal_hostname = "localhost";
           };
           gerbil.base_endpoint = cfg.dashboardDomain;
-          flags.enable_integration_api = false;
+          flags = {
+            disable_signup_without_invite = true;
+            enable_integration_api = false;
+          };
         };
         defaultText = lib.literalExpression ''
           {
@@ -77,7 +80,10 @@ in
               internal_hostname = "localhost";
             };
             gerbil.base_endpoint = config.services.pangolin.dashboardDomain;
-            flags.disable_signup_without_invite = true;
+            flags = {
+              disable_signup_without_invite = true;
+              enable_integration_api = false;
+            };
           }
         '';
         description = ''
