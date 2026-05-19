@@ -127,7 +127,7 @@ in
 {
   # EOL 2027-03-16
   vinyl-cache_9 = generic {
-    version = "9.0.0";
-    hash = "sha256-l0DCEMKndifVD9CtbHWdw8oJT8tOZVW6VfynHPSDvRc=";
+    version = "9.0.1";
+    hash = "sha256-Lo7GfNIT6mhkx2OTnWSRICVVc0L60qX/2mx8W1m96xc=";
   };
 }
