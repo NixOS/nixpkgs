@@ -5498,6 +5498,12 @@ assertNoAdditions {
     };
   });
 
+  vim-operator-user = super.vim-operator-user.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-orgmode = super.vim-orgmode.overrideAttrs (old: {
     meta = old.meta // {
       # Source is AGPL-3.0-only; bundled docs are GFDL-1.3-or-later.
