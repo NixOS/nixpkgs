@@ -23,6 +23,7 @@
   icu74,
   lcms,
   libavif,
+  libbacktrace,
   libdrm,
   libepoxy,
   libevent,
@@ -120,8 +121,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-BVIZxnnfhBvI737ojRZ+yUX8mcbQ6WOlNdYJ9t4R5yY=";
-          aarch64-linux = "sha256-t9kqUdyOgDXroKp7LWQsaiaRGZVZN3ZdfYLahl5GW2E=";
+          x86_64-linux = "sha256-hefWMElsTGTkPvSnovwR8P0kunnPLUGDR5Hvoa31SMM=";
+          aarch64-linux = "sha256-4leXyoebeqWPHxO9D2MomnVqza/9IEcJEuiRCf3/eUc=";
         }
         .${system} or throwSystem;
     };
@@ -149,6 +150,7 @@ let
       icu74
       lcms
       libavif
+      libbacktrace
       libdrm
       libepoxy
       libevent
@@ -193,8 +195,8 @@ let
     inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-NjuRZrYzraE1FrPAmyMcQFAS2zWZXYe8cBQVbSU6zFw=";
-        aarch64-darwin = "sha256-9g7YHg+TQNmAE07K6jKSSRUJ7IENUQMp2q54Mk2BbaY=";
+        x86_64-darwin = "sha256-D9iZitRG3lPWQ/Zu/HAjx2gEehr/xr0d+j2jo7yjnoQ=";
+        aarch64-darwin = "sha256-383PHqwW+QoXL4qxXEE3ytbQVQ4rg2YDK+B+XvIfBmY=";
       }
       .${system} or throwSystem;
   };
