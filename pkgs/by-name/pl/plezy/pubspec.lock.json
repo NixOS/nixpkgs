@@ -108,8 +108,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "1f42690",
-        "resolved-ref": "1f426908b0d9e1083de35b3dd353c3434ad32ef2",
+        "ref": "4c965996210e408465e3c8b66e63ab4a659a62f9",
+        "resolved-ref": "4c965996210e408465e3c8b66e63ab4a659a62f9",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
@@ -629,6 +629,16 @@
       "source": "hosted",
       "version": "2.1.3"
     },
+    "globbing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "globbing",
+        "sha256": "4f89cfaf6fa74c9c1740a96259da06bd45411ede56744e28017cc534a12b6e2d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.0"
+    },
     "graphs": {
       "dependency": "transitive",
       "description": {
@@ -708,6 +718,16 @@
       },
       "source": "hosted",
       "version": "0.1.0"
+    },
+    "injector": {
+      "dependency": "transitive",
+      "description": {
+        "name": "injector",
+        "sha256": "ed389bed5b48a699d5b9561c985023d0d5cc88dd5ff2237aadcce5a5ab433e4e",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.0"
     },
     "intl": {
       "dependency": "direct main",
@@ -1101,6 +1121,16 @@
       "source": "hosted",
       "version": "5.0.5"
     },
+    "properties": {
+      "dependency": "transitive",
+      "description": {
+        "name": "properties",
+        "sha256": "333f427dd4ed07bdbe8c75b9ff864a1e70b5d7a8426a2e8bdd457b65ae5ac598",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.1"
+    },
     "provider": {
       "dependency": "direct main",
       "description": {
@@ -1260,6 +1290,16 @@
       },
       "source": "hosted",
       "version": "9.16.0"
+    },
+    "sentry_dart_plugin": {
+      "dependency": "direct dev",
+      "description": {
+        "name": "sentry_dart_plugin",
+        "sha256": "2c5f263f8d5aea3cf387a7e03f77e355d35c71bd9a429474d633fbc085b86ceb",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.3.0"
     },
     "sentry_flutter": {
       "dependency": "direct main",
@@ -1506,6 +1546,26 @@
       },
       "source": "hosted",
       "version": "1.4.1"
+    },
+    "string_similarity": {
+      "dependency": "direct main",
+      "description": {
+        "name": "string_similarity",
+        "sha256": "3ee1fc76e0c800aeb3dce197e28ed8541b622224d09b10c34a022803066a7c50",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.2.0"
+    },
+    "system_info2": {
+      "dependency": "transitive",
+      "description": {
+        "name": "system_info2",
+        "sha256": "b937736ecfa63c45b10dde1ceb6bb30e5c0c340e14c441df024150679d65ac43",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "4.1.0"
     },
     "term_glyph": {
       "dependency": "transitive",
@@ -1799,7 +1859,7 @@
       "version": "1.1.0"
     },
     "xml": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "xml",
         "sha256": "971043b3a0d3da28727e40ed3e0b5d18b742fa5a68665cca88e74b7876d5e025",
