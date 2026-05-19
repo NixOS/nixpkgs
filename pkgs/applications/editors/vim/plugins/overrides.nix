@@ -5187,6 +5187,12 @@ assertNoAdditions {
     };
   });
 
+  vim-figlet = super.vim-figlet.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-fireplace = super.vim-fireplace.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
