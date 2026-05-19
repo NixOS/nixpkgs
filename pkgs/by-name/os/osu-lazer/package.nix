@@ -104,6 +104,7 @@ buildDotnetModule rec {
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
+    changelog = "https://osu.ppy.sh/home/changelog/lazer/${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       cc-by-nc-40
