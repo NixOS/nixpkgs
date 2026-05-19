@@ -28,6 +28,7 @@
   libdrm,
   makeWrapper,
   libgbm,
+  libGL,
   noto-fonts-cjk-sans,
   nspr,
   nss,
@@ -78,11 +79,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "9.1.0";
+    version = "9.4.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-D36E7hYCTJ9Lw9XnB8nxMGMJDJRhM+K+bviuM9uuzhk=";
+      hash = "sha256-QnFDToG+QrFVn9mJ0kv21BNILyeNxqXjKCAqT8Ghhkk=";
     };
 
     nativeBuildInputs = [
@@ -180,6 +181,7 @@ buildFHSEnv {
     curl
     derivation
     noto-fonts-cjk-sans
+    libGL
   ];
 
   runScript = "/bin/onlyoffice-desktopeditors";
