@@ -5790,6 +5790,12 @@ assertNoAdditions {
     };
   });
 
+  vim-visualstar = super.vim-visualstar.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.zlib;
+    };
+  });
+
   vim-waikiki = super.vim-waikiki.overrideAttrs (old: {
     meta = old.meta // {
       # README-only CC-BY-SA-4.0 notice; GitHub detection missed it.
