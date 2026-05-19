@@ -34,6 +34,10 @@ python3Packages.buildPythonApplication rec {
         name = "rcu-${version}-source.tar.gz";
         hash = "sha256-9YhhsLqAcevjJmENWVWfA1ursPz3mgFz8mzLLSNlXVM=";
         url = "https://www.davisr.me/projects/rcu/";
+        meta = {
+          # `requireFile` sets `lib.licenses.unfree` by default
+          inherit (meta) license;
+        };
       };
     in
     runCommand "${src-tarball.name}-unpacked" { } ''
