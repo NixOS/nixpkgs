@@ -7,7 +7,7 @@
   name = "music-assistant";
   meta.maintainers = with lib.maintainers; [ hexa ];
 
-  nodes.machine = {
+  containers.machine = {
     services.music-assistant = {
       enable = true;
     };

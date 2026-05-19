@@ -55,7 +55,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/psi-4ward/psitransfer";
     changelog = "https://github.com/psi-4ward/psitransfer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ hyshka ];
+    maintainers = [ ];
     mainProgram = "psitransfer";
   };
 })
