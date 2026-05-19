@@ -2344,6 +2344,12 @@ assertNoAdditions {
     };
   });
 
+  lsp-rooter-nvim = super.lsp-rooter-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   lsp_extensions-nvim = super.lsp_extensions-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
