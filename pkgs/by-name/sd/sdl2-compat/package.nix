@@ -17,7 +17,7 @@
   SDL2_sound,
   SDL2_mixer,
   SDL2_image,
-  SDL_compat,
+  sdl12-compat,
   ffmpeg,
   qemu,
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
       inherit
-        SDL_compat
+        sdl12-compat
         SDL2_ttf
         SDL2_net
         SDL2_gfx
