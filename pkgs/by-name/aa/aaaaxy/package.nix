@@ -173,6 +173,7 @@ buildGoModule (finalAttrs: {
     description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
     mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
+    changelog = "https://github.com/divVerent/aaaaxy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       Luflosi
