@@ -198,6 +198,13 @@ lib.makeOverridable
       # Rust build dependencies, i.e. other libraries that were built
       # with buildRustCrate and are used by a build script.
       buildDependencies,
+      # Rust dev-dependencies, i.e. other libraries that were built
+      # with buildRustCrate and are linked only when `buildTests = true`.
+      # Mirrors Cargo's `[dev-dependencies]`: ignored for the regular
+      # lib/bin build, appended to `dependencies` for the test build.
+      #
+      # Default: []
+      devDependencies,
       # Specify the "extern" name of a library if it differs from the library target.
       # See above for an extended explanation.
       #
@@ -323,6 +330,7 @@ lib.makeOverridable
       crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: { }) crateOverrides crate_);
       dependencies_ = dependencies;
       buildDependencies_ = buildDependencies;
+      devDependencies_ = devDependencies;
       processedAttrs = [
         "src"
         "propagatedBuildInputs"
@@ -334,6 +342,7 @@ lib.makeOverridable
         "libPath"
         "buildDependencies"
         "dependencies"
+        "devDependencies"
         "features"
         "crateRenames"
         "crateName"
@@ -421,7 +430,10 @@ lib.makeOverridable
           ++ (crate.buildInputs or [ ])
           ++ buildInputs_
           ++ completePropagatedBuildInputs;
-        dependencies = map lib.getLib dependencies_;
+        # Dev-dependencies are only linked when building tests, mirroring
+        # Cargo. When buildTests is false this is a no-op, so the metadata
+        # hash and store path of normal lib/bin builds are unchanged.
+        dependencies = map lib.getLib (dependencies_ ++ lib.optionals buildTests_ devDependencies_);
         buildDependencies = map lib.getLib buildDependencies_;
 
         completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
@@ -617,6 +629,7 @@ lib.makeOverridable
     postInstall = crate_.postInstall or "";
     dependencies = crate_.dependencies or [ ];
     buildDependencies = crate_.buildDependencies or [ ];
+    devDependencies = crate_.devDependencies or [ ];
     crateRenames = crate_.crateRenames or { };
     buildTests = crate_.buildTests or false;
   }

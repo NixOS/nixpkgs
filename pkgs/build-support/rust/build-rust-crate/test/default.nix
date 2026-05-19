@@ -404,6 +404,27 @@ rec {
             "test something ... ok"
           ];
         };
+        rustLibTestsWithDevDependency =
+          let
+            devDep = mkHostCrate {
+              crateName = "dev-dep";
+              src = mkLib "src/lib.rs";
+            };
+          in
+          {
+            src = mkFile "src/lib.rs" ''
+              #[cfg(test)]
+              mod tests {
+                  #[test]
+                  fn uses_dev_dep() {
+                      assert_eq!(dev_dep::test(), 23);
+                  }
+              }
+            '';
+            devDependencies = [ devDep ];
+            buildTests = true;
+            expectedTestOutputs = [ "test tests::uses_dev_dep ... ok" ];
+          };
         rustBinTestsCombined = {
           src = symlinkJoin {
             name = "rust-bin-tests-combined";
