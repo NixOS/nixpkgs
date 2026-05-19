@@ -5548,6 +5548,12 @@ assertNoAdditions {
     };
   });
 
+  vim-printer = super.vim-printer.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-projectionist = super.vim-projectionist.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
