@@ -1,0 +1,16 @@
+diff --git a/meson.build b/meson.build
+index de85f05..c79b5af 100644
+--- a/meson.build
++++ b/meson.build
+@@ -245,11 +245,6 @@ endforeach
+ 
+ add_project_arguments('-DMODULESDIRS=' + modulesdirs_define, language : 'c')
+ 
+-foreach confdir : [sysconfdir, distconfdir]
+-  install_emptydir(confdir / 'depmod.d')
+-  install_emptydir(confdir / 'modprobe.d')
+-endforeach
+-
+ _completiondirs = [
+   ['bash', 'bash-completion', 'bash-completion' / 'completions', '@0@'],
+   ['fish', 'fish',            'fish' / 'vendor_functions.d',     '@0@.fish'],
