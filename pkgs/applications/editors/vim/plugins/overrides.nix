@@ -5701,6 +5701,12 @@ assertNoAdditions {
   vim-tabby = super.vim-tabby.overrideAttrs {
   };
 
+  vim-tabpagecd = super.vim-tabpagecd.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-tbone = super.vim-tbone.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
