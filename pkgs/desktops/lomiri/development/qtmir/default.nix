@@ -50,19 +50,24 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch = ''
-    # 10s timeout for Mir startup is too tight for VM tests on weaker hardwre (aarch64)
-    substituteInPlace src/platforms/mirserver/qmirserver_p.cpp \
-      --replace-fail 'const int timeout = RUNNING_ON_VALGRIND ? 100 : 10' 'const int timeout = RUNNING_ON_VALGRIND ? 900 : 90' \
-      --replace-fail 'const int timeout = 10' 'const int timeout = 90'
-
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms" \
-
-    substituteInPlace data/xwayland.qtmir.desktop \
-      --replace-fail '/usr/bin/Xwayland' 'Xwayland'
-  '';
+  postPatch =
+    # 10s timeout for Mir startup is too tight for VM tests on weaker hardware (aarch64)
+    ''
+      substituteInPlace src/platforms/mirserver/qmirserver_p.cpp \
+        --replace-fail 'const int timeout = RUNNING_ON_VALGRIND ? 100 : 10' 'const int timeout = RUNNING_ON_VALGRIND ? 900 : 90' \
+        --replace-fail 'const int timeout = 10' 'const int timeout = 90'
+    ''
+    # Fix where Qt plugins & QML modules should be installed to. We don't use "qt5" for Qt5.
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
+        --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms"
+    ''
+    # Look up Xwayland in environment
+    + ''
+      substituteInPlace data/xwayland.qtmir.desktop \
+        --replace-fail '/usr/bin/Xwayland' 'Xwayland'
+    '';
 
   strictDeps = true;
 
