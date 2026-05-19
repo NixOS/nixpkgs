@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "backports-zstd";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm -r "$out/src/c/zstd"
     '';
-    hash = "sha256-dOzaenKu3sf1qaTWZfJ6W1l3KV4BYklUardpiPnSQWU=";
+    hash = "sha256-0FGYh6o26oeovZ23VYKmmY2nNzDHXIKU8/lBqUxuGQw=";
   };
 
   postPatch = ''
