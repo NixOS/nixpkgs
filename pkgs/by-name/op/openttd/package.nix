@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       jcumming
       fpletz
+      philocalyst
     ];
   };
 })
