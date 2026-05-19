@@ -29332,6 +29332,11 @@
     githubId = 115360611;
     name = "Wölfchen";
   };
+  w1lldu = {
+    name = "William Du";
+    github = "w1lldu";
+    githubId = 70287641;
+  };
   waelwindows = {
     email = "waelwindows9922@gmail.com";
     github = "Waelwindows";
