@@ -6204,6 +6204,11 @@ self: super: with self; {
 
   geoarrow-pyarrow = callPackage ../development/python-modules/geoarrow-pyarrow { };
 
+  inherit (callPackage ../development/python-modules/geoarrow-rust { })
+    geoarrow-rust-core
+    geoarrow-rust-io
+    ;
+
   geoarrow-types = callPackage ../development/python-modules/geoarrow-types { };
 
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
