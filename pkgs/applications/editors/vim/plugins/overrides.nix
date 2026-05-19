@@ -1920,6 +1920,12 @@ assertNoAdditions {
     dependencies = [ self.nvim-treesitter-legacy ];
   };
 
+  jdaddy-vim = super.jdaddy-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   jdd-nvim = super.jdd-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
