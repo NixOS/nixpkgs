@@ -39,20 +39,9 @@
 }:
 
 let
-  opengfx = fetchzip {
-    url = "https://cdn.openttd.org/opengfx-releases/8.0/opengfx-8.0-all.zip";
-    hash = "sha256-aqLEZ3EptxBZrYQd1IG6B1rSRJJTGIijKu2NIqpAYRA=";
-  };
-
-  opensfx = fetchzip {
-    url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
-    hash = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
-  };
-
-  openmsx = fetchzip {
-    url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
-    hash = "sha256-ysNFIvo7iaLN8XoaeZuZQFLpBZlYUDLDg7rH6TabaHY=";
-  };
+  opengfx = callPackage ./opengfx.nix { };
+  opensfx = callPackage ./opensfx.nix { };
+  openmsx = callPackage ./openmsx.nix { };
 
   # OpenTTD builds and uses some of its own tools during the build and we need those to be available for cross-compilation.
   # Build the tools for buildPlatform with minimal dependencies, using the "OPTION_TOOLS_ONLY" flag.
