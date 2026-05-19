@@ -9,8 +9,12 @@ import pytest
 import nixpkgs_plugin_update as update
 from helpers import (
     GITHUB_REPO_URL,
+    GITHUB_TAGS_ATOM_URL,
     BinaryResponse,
     JsonResponse,
+    graphql_tags,
+    atom_feed,
+    git_ls_remote_tags,
 )
 
 
@@ -262,10 +266,12 @@ def test_github_get_latest_tag_raises_on_bad_auth(
 
 def test_github_recent_tags_parses_atom_feed(monkeypatch: pytest.MonkeyPatch) -> None:
     repo = update.RepoGitHub("owner", "repo", "")
-    urlopen = Mock(return_value=BinaryResponse(atom_feed("nightly", "v1.2.3")))
+    urlopen = Mock(
+        return_value=BinaryResponse(atom_feed("nightly", "v1.2.3", "release/1.2.3"))
+    )
     monkeypatch.setattr(update.urllib.request, "urlopen", urlopen)
 
-    assert repo._get_recent_tags_from_atom() == ["nightly", "v1.2.3"]
+    assert repo._get_recent_tags_from_atom() == ["nightly", "v1.2.3", "release/1.2.3"]
     request = urlopen.call_args.args[0]
     assert isinstance(request, urllib.request.Request)
     assert request.full_url == GITHUB_TAGS_ATOM_URL
