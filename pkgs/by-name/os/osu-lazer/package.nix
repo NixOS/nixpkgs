@@ -116,6 +116,7 @@ buildDotnetModule rec {
       gepbird
       thiagokokada
       Guanran928
+      philocalyst
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
