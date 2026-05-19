@@ -5641,6 +5641,12 @@ assertNoAdditions {
     };
   });
 
+  vim-smalls = super.vim-smalls.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.cc-by-30;
+    };
+  });
+
   vim-snipmate = super.vim-snipmate.overrideAttrs (old: {
     dependencies = with self; [
       vim-addon-mw-utils
