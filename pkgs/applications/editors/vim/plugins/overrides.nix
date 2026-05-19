@@ -2981,13 +2981,16 @@ assertNoAdditions {
     ];
   };
 
-  neotest-testthat = super.neotest-testthat.overrideAttrs {
+  neotest-testthat = super.neotest-testthat.overrideAttrs (old: {
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   neotest-vitest = super.neotest-vitest.overrideAttrs {
     dependencies = with self; [
