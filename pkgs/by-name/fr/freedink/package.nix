@@ -1,6 +1,7 @@
 {
   cxxtest,
   fetchurl,
+  fetchgit,
   fontconfig,
   glm,
   help2man,
@@ -24,10 +25,6 @@ let
     pname = "freedink-data";
     version = "1.08.20190120";
 
-    src = fetchurl {
-      url = "mirror://gnu/freedink/freedink-data-${finalAttrs.version}.tar.gz";
-      hash = "sha256-cV9EdzsFtzqeybYrDhUvPygb4aFRL7qqOGF22pTP+50=";
-    };
 
     prePatch = "substituteInPlace Makefile --replace-fail /usr/local $out";
   });
@@ -38,11 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "freedink";
   version = "109.6";
 
-  src = fetchurl {
-    url = "mirror://gnu/freedink/freedink-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Xgs1rI9G17uH5lbv1fnHwqwabFGakI/FtYHlJleYEAI=";
+  src = fetchgit {
+    url = "https://git.savannah.gnu.org/git/freedink.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D+/Reg0+K9J1WcOpe3xdnIv90Cl0GCmB/2M1XU/3eOg=";
   };
 
+  passthru = {
+      src = fetchgit {
+        url = "https://git.savannah.gnu.org/git/freedink/freedink-data.git";
+        tag = "v${final.version}";
+        hash = "sha256-8/yKy/oAPQkvNNQPWYCaHREHly7vJE63956ky0KVYI0=";
+      };
   nativeBuildInputs = [
     cxxtest
     help2man
