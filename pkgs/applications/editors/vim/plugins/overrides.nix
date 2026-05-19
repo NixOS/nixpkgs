@@ -1910,6 +1910,12 @@ assertNoAdditions {
     };
   });
 
+  iosvkem = super.iosvkem.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   iswap-nvim = super.iswap-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter-legacy ];
   };
