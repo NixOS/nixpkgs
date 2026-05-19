@@ -9457,8 +9457,6 @@ with pkgs;
 
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
   
-  helium = callPackage ../applications/networking/browsers/helium { };
-
   hydrogen-web-unwrapped =
     callPackage ../applications/networking/instant-messengers/hydrogen-web/unwrapped.nix
       { };
