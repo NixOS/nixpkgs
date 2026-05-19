@@ -143,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kragniz
       fpletz
+      philocalyst
     ];
     platforms = lib.platforms.linux;
   };
