@@ -2900,13 +2900,16 @@ assertNoAdditions {
     ];
   };
 
-  neotest-mocha = super.neotest-mocha.overrideAttrs {
+  neotest-mocha = super.neotest-mocha.overrideAttrs (old: {
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   neotest-pest = super.neotest-pest.overrideAttrs {
     dependencies = with self; [
