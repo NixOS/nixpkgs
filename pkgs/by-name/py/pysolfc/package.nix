@@ -110,10 +110,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Collection of more than 1000 solitaire card games";
-    mainProgram = "pysol.py";
+    mainProgram = "pysolfc";
     homepage = "https://pysolfc.sourceforge.io";
-    license = lib.licenses.gpl3;
-    maintainers = [ ];
+    changelog = "https://github.com/shlomif/PySolFC/releases/tag/pysolfc-${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ philocalyst ];
+    platforms = lib.platforms.all;
   };
 }
