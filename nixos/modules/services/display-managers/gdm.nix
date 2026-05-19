@@ -44,10 +44,6 @@ let
   defaultSessionName = config.services.displayManager.defaultSession;
 
   setSessionScript = pkgs.callPackage ../x11/display-managers/account-service-util.nix { };
-
-  greeterEnvFile = pkgs.writeText "gdm-greeter-env" ''
-    DCONF_PROFILE=gdm
-  '';
 in
 
 {
@@ -455,12 +451,6 @@ in
               modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
               settings.conffile = "/etc/pam/environment";
               settings.readenv = 0;
-            }
-            {
-              name = "env-greeter";
-              control = "required";
-              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
-              settings.envfile = greeterEnvFile;
             }
             {
               name = "systemd";
