@@ -191,17 +191,7 @@ in
           )
         );
       netfilterQueuesSorted = builtins.sort (a: b: a < b) cfg.netfilterQueues;
-      listIsSequential =
-        l:
-        if lists.length l < 2 then
-          true
-        else
-          let
-            first = lists.head l;
-            # using tail recursively is slow
-            second = lists.head (lists.tail l);
-          in
-          second == first + 1 && listIsSequential (lists.tail l);
+      listIsConsecutive = l: l == lib.genList (lib.add (lib.head l)) (lib.length l);
     in
     mkIf cfg.enable {
       assertions = [
@@ -209,12 +199,11 @@ in
           assertion = lib.xor ((builtins.length captureInterfaces) > 0) (
             (builtins.length netfilterQueuesSorted) > 0
           );
-          message = "services.suricata.netfilterQueues is mutually exclusive with other capture modes (e.g. af-packet).";
-        }
-        {
-          assertion = (builtins.length captureInterfaces) > 0 || (builtins.length netfilterQueuesSorted) > 0;
           message = ''
-            At least one layer 2 capture interface must be configured, or `services.suricata.netfilterQueues` must be nonempty.
+            At least one layer 2 capture interface must be configured, or
+            `services.suricata.netfilterQueues` must be nonempty. Netfilter
+            capture mode is mutually exclusive with layer 2 capture modes.
+
             Layer 2 capture interfaces:
             - `services.suricata.settings.af-packet`
             - `services.suricata.settings.af-xdp`
@@ -223,8 +212,7 @@ in
           '';
         }
         {
-          assertion =
-            if builtins.length captureInterfaces == 0 then listIsSequential netfilterQueuesSorted else true;
+          assertion = builtins.length captureInterfaces == 0 -> listIsConsecutive netfilterQueuesSorted;
           message = "`services.suricata.netfilterQueues` must be consecutive (e.g. [ 5 6 7 8 ]).";
         }
       ];
