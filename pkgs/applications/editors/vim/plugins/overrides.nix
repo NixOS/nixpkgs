@@ -5972,6 +5972,12 @@ assertNoAdditions {
     };
   });
 
+  vivify-vim = super.vivify-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3;
+    };
+  });
+
   vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
     checkInputs = [
       # Optional telescope integration
