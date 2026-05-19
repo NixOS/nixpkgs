@@ -4,24 +4,31 @@
   stdenvNoCC,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   buildNpmPackage,
+  nodejs,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
   jq,
   nixosTests,
 
+  latestVersionInfo ? null,
   versionInfo ? {
-    # ESR releases only.
-    # See https://docs.mattermost.com/upgrade/extended-support-release.html
+    # ESR releases only. Note: if NixOS would release with an ESR that goes out
+    # of support during the lifetime of the NixOS release, it is acceptable
+    # to put the latest non-ESR release here if we change it to an ESR shortly after
+    # the NixOS release.
+    #
+    # See <https://docs.mattermost.com/upgrade/extended-support-release.html>.
     # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.15";
-    srcHash = "sha256-b/hXZHYULl9nNJZT4GtKsaOfX8BEzz/v3Uy3EEbzN8U=";
-    vendorHash = "sha256-Z94d1eCIkuMG72Mlvk5su/99+4kJoaeHxaeZuk96Hlc=";
+    version = "10.11.17";
+    srcHash = "sha256-RS/Q3Q2UJjUuQQ8PaaLkVe00ixhZML2jBHeAq0/n/aA=";
+    vendorHash = "sha256-zngDxO3UCuB53PMpaE+ga8v2FL5l78BD2NmJsu+zZ00=";
     npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
@@ -85,16 +92,27 @@ let
         };
     in
     finalPassthru.withoutTests;
+
+  versionInfo' =
+    if
+      latestVersionInfo != null && lib.versionAtLeast latestVersionInfo.version versionInfo.version
+    then
+      # Prefer the latest if we're building mattermostLatest
+      latestVersionInfo
+    else
+      # Prefer the one we have
+      assert versionInfo != null;
+      versionInfo;
 in
 buildMattermost rec {
   pname = "mattermost";
-  inherit (versionInfo) version;
+  inherit (versionInfo') version;
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     tag = "v${version}";
-    hash = versionInfo.srcHash;
+    hash = versionInfo'.srcHash;
     postFetch = ''
       cd $out/webapp
 
@@ -105,13 +123,13 @@ buildMattermost rec {
       ' < package-lock.json > package-lock.fixed.json
 
       # Run the lockfile overlay, if present.
-      ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
+      ${lib.optionalString (versionInfo'.lockfileOverlay or null != null) ''
         ${lib.getExe jq} ${lib.escapeShellArg ''
           # Unlock a dependency and let npm-lockfile-fix relock it.
           def unlock(root; dependency; path):
             root | .packages[path] |= del(.resolved, .integrity)
                  | .packages[path].version = root.packages.channels.dependencies[dependency];
-          ${versionInfo.lockfileOverlay}
+          ${versionInfo'.lockfileOverlay}
         ''} < package-lock.fixed.json > package-lock.overlaid.json
         mv package-lock.overlaid.json package-lock.fixed.json
       ''}
@@ -128,20 +146,42 @@ buildMattermost rec {
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
   overrideModAttrs = _: {
     buildPhase = ''
+      runHook preBuild
+
       make setup-go-work
       go work vendor -e -v
+
+      runHook postBuild
     '';
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/webapp";
-    hash = versionInfo.npmDepsHash;
+    hash = versionInfo'.npmDepsHash;
     makeCacheWritable = true;
     forceGitDeps = true;
   };
 
-  inherit (versionInfo) vendorHash;
+  inherit (versionInfo') vendorHash;
+
+  patches = lib.optionals (lib.versionOlder version "11.0") [
+    # https://github.com/mattermost/mattermost/issues/36594
+    # Prevents upgrading to next ESR in NixOS 26.05.
+    (fetchpatch {
+      name = "revert-out-of-order-migrations.patch";
+      url = "https://github.com/mattermost/mattermost/commit/9408b98025d7364d7dfe7cdb28fcd109b1b595a6.patch";
+      hash = "sha256-YI2aFKNsQt69mecK85A6izsjf1I2cPfp4NBq5Majz/g=";
+      revert = true;
+    })
+  ];
+
+  postPatch = ''
+    if [ "$version" == 10.11.17 ]; then
+      # 25.11 only: tagged and released as 10.11.17 but prints the wrong version
+      substituteInPlace server/public/model/version.go --replace-fail "10.11.16" "10.11.17"
+    fi
+  '';
 
   modRoot = "./server";
   preBuild = ''
@@ -186,9 +226,14 @@ buildMattermost rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     for subPackage in $subPackages; do
+      echo "Checking version for: $subPackage" >&2
       "$out/bin/$(basename -- "$subPackage")" version | grep "$version"
     done
+
+    runHook postInstallCheck
   '';
 
   passthru = {
@@ -196,11 +241,11 @@ buildMattermost rec {
       extraArgs = [
         "--use-github-releases"
         "--version-regex"
-        versionInfo.regex
+        versionInfo'.regex
       ]
-      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+      ++ lib.optionals (versionInfo'.autoUpdate or null != null) [
         "--override-filename"
-        versionInfo.autoUpdate
+        versionInfo'.autoUpdate
       ];
     };
     tests.mattermost = nixosTests.mattermost;
@@ -222,6 +267,7 @@ buildMattermost rec {
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
 
+      inherit nodejs;
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
       forceGitDeps = true;
@@ -231,10 +277,11 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        npm run build --workspace=platform/types
-        npm run build --workspace=platform/client
-        npm run build --workspace=platform/components
-        npm run build --workspace=channels
+        for ws in platform/{types,client,components,shared} channels; do
+          if [ -d "$ws" ]; then
+            npm run build --workspace="$ws"
+          fi
+        done
 
         runHook postBuild
       '';
@@ -260,7 +307,6 @@ buildMattermost rec {
     maintainers = with lib.maintainers; [
       ryantm
       numinit
-      kranzes
       mgdelacroix
     ];
     platforms = lib.platforms.linux;
