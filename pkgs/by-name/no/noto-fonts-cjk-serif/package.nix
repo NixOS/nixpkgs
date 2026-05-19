@@ -17,13 +17,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     repo = "noto-cjk";
     tag = "Serif${finalAttrs.version}";
     hash = "sha256-Bwuu64TAnOnqUgLlBsUw/jnv9emngqFBmVn6zEqySlc=";
-    sparseCheckout = [
-      "Serif/OTC"
-      "Serif/Variable/OTC"
-    ];
+    rootDir = if static then "Serif/OTC" else "Serif/Variable/OTC";
   };
-
-  sourceRoot = "source/${if static then "Serif/OTC" else "Serif/Variable/OTC"}";
 
   nativeBuildInputs = [ installFonts ];
 
