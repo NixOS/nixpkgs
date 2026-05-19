@@ -19,6 +19,21 @@
 }:
 
 let
+  # Vinyl Cache has very strong opinions and very complicated code around handling
+  # the stateDir. After a lot of back and forth, we decided that we
+  # a) do not want a configurable option here, as most of the handling depends
+  # on the version and the compile time options.
+  # b) Vinyl Cache prefers RAM backed stateDirs due to shared memory usage.
+  # /var/run (RAM backed) is a very good fit as long as it is *not* mounted as
+  # `noexec`, which is currently not the case in NixOS but in other distros.
+  # https://code.vinyl-cache.org/vinyl-cache/vinyl-cache/issues/4477
+  # c) need to explicitly specify this at compile-time as upstream even changed
+  # defaults in a patch release.
+  # To handle potential version-dependent differences, the path is exposed to a
+  # module using the package via passthru.
+  stateDirPrefix = "/run";
+  # the actual subdirectory is created by vinyld itself within the prefix at runtime
+  stateDir = "${stateDirPrefix}/vinyld";
   generic =
     {
       version,
@@ -60,10 +75,12 @@ let
         "ac_cv_have_tcp_fastopen=yes"
         "ac_cv_have_tcp_keep=yes"
         "ac_cv_have_working_close_range=yes"
+
         "PYTHON=${buildPackages.python3.interpreter}"
+        "--with-statedir=${stateDirPrefix}"
       ];
 
-      buildFlags = [ "localstatedir=/var/run" ];
+      patches = [ ./0001-Makefile-do-not-create-VINYL_STATE_DIR.patch ];
 
       postPatch = ''
         substituteInPlace bin/vinyltest/vtest2/src/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
@@ -109,6 +126,8 @@ let
       passthru = {
         python = python3;
         tests = nixosTests."vinyl-cache_${lib.versions.major version}";
+        # pass-thru compile-time value for usage in module
+        inherit stateDir;
       };
 
       meta = {
