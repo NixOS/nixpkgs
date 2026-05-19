@@ -38,12 +38,12 @@ let
     in
 
     stdenv.mkDerivation {
-      name = "dotnet-cross-target-${dotnet-sdk_target.version}-from-${dotnet-sdk.version}-test";
+      name = "dotnet-cross-target-${runtime.version}-from-${dotnet-sdk.version}-test";
 
       nativeBuildInputs = [
         (dotnetCorePackages.combinePackages [
           dotnet-sdk
-          dotnet-sdk_target
+          runtime
         ])
       ]
       ++ dotnet-sdk_target.packages;
@@ -66,5 +66,14 @@ let
 
 in
 lib.optionalAttrs (!dotnet-sdk.hasCrossTargetBug) (
-  lib.recurseIntoAttrs (lib.mapAttrs (_: mkTest) sdks)
+  lib.recurseIntoAttrs (
+    lib.mapAttrs (_: mkTest) (
+      lib.filterAttrs (
+        _: target:
+        lib.versionOlder (lib.versions.major target.runtime.version) (
+          lib.versions.major dotnet-sdk.runtime.version
+        )
+      ) sdks
+    )
+  )
 )
