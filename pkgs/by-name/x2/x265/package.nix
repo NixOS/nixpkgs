@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     # fix compilation with gcc15
     # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
     ./gcc15-fixes.patch
+    # fix i686-linux build
+    # https://bitbucket.org/multicoreware/x265_git/issues/1030
+    ./fix-plt-rel.patch
   ]
   # TODO: remove after update to version 4.2
   ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
