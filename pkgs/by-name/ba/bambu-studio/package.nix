@@ -192,7 +192,15 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
     changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.agpl3Plus;
+    license = with lib.licenses; [
+      agpl3Plus
+      # Bambu Studio downloads and dlopens a proprietary networking library
+      # at first launch whose corresponding source is not provided. SFC ruled
+      # this an ongoing AGPLv3 violation; see:
+      # https://github.com/NixOS/nixpkgs/issues/415821
+      # https://sfconservancy.org/news/2026/may/18/bambu-studio-3d-printer-agpl-violation-response/
+      unfree
+    ];
     maintainers = with lib.maintainers; [
       zhaofengli
       dsluijk
