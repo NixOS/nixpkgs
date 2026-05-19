@@ -5344,6 +5344,7 @@ assertNoAdditions {
       '';
 
     meta = old.meta // {
+      license = lib.licenses.vim;
       platforms = lib.platforms.all;
     };
   });
