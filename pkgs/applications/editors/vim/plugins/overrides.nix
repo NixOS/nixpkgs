@@ -5169,6 +5169,12 @@ assertNoAdditions {
     };
   });
 
+  vim-erlang-runtime = super.vim-erlang-runtime.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-erlang-tags = super.vim-erlang-tags.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.asl20;
