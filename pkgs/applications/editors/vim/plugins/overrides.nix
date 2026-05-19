@@ -3285,12 +3285,6 @@ assertNoAdditions {
     ];
   };
 
-  nvim-sioyek-highlights = super.nvim-sioyek-highlights.overrideAttrs (old: {
-    meta = old.meta // {
-      license = lib.licenses.mit;
-    };
-  });
-
   nvim-snippets = super.nvim-snippets.overrideAttrs {
     checkInputs = [
       # Optional cmp integration

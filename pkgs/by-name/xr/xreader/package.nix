@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xreader";
-  version = "4.6.3";
+  version = "4.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
     rev = finalAttrs.version;
-    hash = "sha256-lVJFNOiayAai/Lg4tl8lNaK5fdTlZ0ptzstUzciH1mA=";
+    hash = "sha256-upX2+Hwdss7OfIWFg5MALoF9LIw5mk6+NYR+NEbcDX4=";
   };
 
   nativeBuildInputs = [
