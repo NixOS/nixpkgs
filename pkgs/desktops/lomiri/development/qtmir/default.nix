@@ -36,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Not regular qtmir, experimental support for Mir 2.x
   # Currently following https://gitlab.com/ubports/development/core/qtmir/-/tree/personal/sunweaver/debian-upstream
   pname = "qtmir-debian-upstream";
-  version = "0.8.0-unstable-2025-05-20";
+  version = "0.8.0-unstable-2026-03-11";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qtmir";
-    rev = "b35762f5198873560138a810b387ae9401615c02";
-    hash = "sha256-v5mdu3XLK4F5O56GDItyeCFsFMey4JaNWwXRlgjKFMA=";
+    rev = "57d9e9763933a5d6ca696676ebdde934529a71fe";
+    hash = "sha256-xlMxBnEru4YK0BxUOd/jni9OTb6lZlw6nyHLNqdfY20=";
   };
 
   outputs = [
