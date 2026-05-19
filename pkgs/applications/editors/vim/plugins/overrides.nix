@@ -5447,6 +5447,12 @@ assertNoAdditions {
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
 
+  vim-merginal = super.vim-merginal.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-metamath = super.vim-metamath.overrideAttrs {
     preInstall = "cd vim";
   };
