@@ -5156,6 +5156,12 @@ assertNoAdditions {
     };
   });
 
+  vim-erlang-compiler = super.vim-erlang-compiler.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-erlang-omnicomplete = super.vim-erlang-omnicomplete.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
