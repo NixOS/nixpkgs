@@ -5,13 +5,13 @@
   fetchurl,
   fetchpatch,
   buildPackages,
-}@args:
+}:
 
 let
-  stdenv = if args.stdenv.cc.isGNU then gcc14Stdenv else args.stdenv;
+  effectiveStdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
 in
 
-stdenv.mkDerivation (finalAttrs: {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "procmail";
   version = "3.24";
 
@@ -45,20 +45,24 @@ stdenv.mkDerivation (finalAttrs: {
     .PHONY: install
     " -i Makefile
   ''
-  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  + lib.optionalString (!effectiveStdenv.buildPlatform.canExecute effectiveStdenv.hostPlatform) ''
     substituteInPlace src/Makefile.0 \
-      --replace-fail '@./_autotst' '@${stdenv.hostPlatform.emulator buildPackages} ./_autotst'
+      --replace-fail '@./_autotst' '@${effectiveStdenv.hostPlatform.emulator buildPackages} ./_autotst'
     sed -e '3i\
-    _autotst() { ${stdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
-    _locktst() { ${stdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
+    _autotst() { ${effectiveStdenv.hostPlatform.emulator buildPackages} ./_autotst "$@"; } \
+    _locktst() { ${effectiveStdenv.hostPlatform.emulator buildPackages} ./_locktst "$@"; } \
     ' -i src/autoconf
   '';
 
   # default target is binaries + manpages; manpages don't cross compile without more work.
-  makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "bins" ];
-  installTargets = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "install.bin"
+  makeFlags = lib.optionals (!effectiveStdenv.buildPlatform.canExecute effectiveStdenv.hostPlatform) [
+    "bins"
   ];
+  installTargets =
+    lib.optionals (!effectiveStdenv.buildPlatform.canExecute effectiveStdenv.hostPlatform)
+      [
+        "install.bin"
+      ];
 
   meta = {
     description = "Mail processing and filtering utility";
