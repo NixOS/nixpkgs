@@ -5475,6 +5475,12 @@ assertNoAdditions {
     };
   });
 
+  vim-opencl = super.vim-opencl.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3;
+    };
+  });
+
   vim-openscad = super.vim-openscad.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.publicDomain;
