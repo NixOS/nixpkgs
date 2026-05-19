@@ -43,8 +43,8 @@ let
 in
 {
   mypy-boto3-accessanalyzer =
-    buildMypyBoto3Package "accessanalyzer" "1.43.0"
-      "sha256-BwX8ieQDuKQ+ZXvGD+INPX6pS6qvqewhj8Ttfi1Rs8Q=";
+    buildMypyBoto3Package "accessanalyzer" "1.43.10"
+      "sha256-oB2v3DdKFxhtwJ974/vq5UIJ9UVWCPMCAJaDNl2xTtM=";
 
   mypy-boto3-account =
     buildMypyBoto3Package "account" "1.43.0"
@@ -335,8 +335,8 @@ in
       "sha256-kPG0jzeHlRm8dNKCrxJY2Jw/N06PL+C/34gB9qhz2BY=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.7"
-      "sha256-XvHyT7+6/Uf2YdIeI6sL32TJGQ5Yy/VXjon70HDyGvY=";
+    buildMypyBoto3Package "connect" "1.43.10"
+      "sha256-SuUSGDyoWoz8Ddr1+LTuVQ350HFrW4pXe7zR4Ye5aiw=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.43.0"
@@ -443,8 +443,8 @@ in
       "sha256-dXNkOcMonYrBh4yzeubd+v3mW42s9XpmpfvgbtgoJgY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.7"
-      "sha256-OO7+5yKwPCacPZWT8HmG8SMBSs+xDeWofTrEXCY8vgs=";
+    buildMypyBoto3Package "ec2" "1.43.10"
+      "sha256-fuLTYcz1oNGgN8zoTNJ8QPkdv0Jl5fjmputRuY9svo8=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
@@ -459,8 +459,8 @@ in
       "sha256-02BUkAFhr9sT8ohkJJFPYNni0O9/UI/G0GUee/Kx5Dw=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.43.0"
-      "sha256-r2UhnI0quhdur/l/5LxlaVSwgDYQGdR1KdwadfvuR2c=";
+    buildMypyBoto3Package "ecs" "1.43.10"
+      "sha256-/ROYkmhRUy4YCcdRJPyR+GZ5kl+2L3pz04Kc1ZZPfU4=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.43.0"
@@ -694,8 +694,8 @@ in
       "sha256-CAn84uzip9Cd8Xr33gxAx6+iQ9hRYPO0u718BtYCr84=";
 
   mypy-boto3-ivs =
-    buildMypyBoto3Package "ivs" "1.43.0"
-      "sha256-wGqp7Kw0TuAOd9RiOzEFUujuWnPTfEdWcjtNZkT/VJU=";
+    buildMypyBoto3Package "ivs" "1.43.10"
+      "sha256-2Q3yLbuHE/x96RtF1ZW8fBTvQfmujLC9ZxXGmc5lJCg=";
 
   mypy-boto3-ivs-realtime =
     buildMypyBoto3Package "ivs-realtime" "1.43.0"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.43.7"
-      "sha256-lRhSTB6e+ZikBAKlMumS7ggBeGuneDKiUtzcVHvJDVM=";
+    buildMypyBoto3Package "quicksight" "1.43.10"
+      "sha256-I+J24XB8hRjuklH5dlYAyTfOI6f7cN+EhKMI2UYFHQw=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.43.0"
