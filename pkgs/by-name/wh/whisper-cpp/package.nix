@@ -100,7 +100,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
       if ! grep -q -F 'install('; then
         echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
-        ${lib.optionalString stdenv.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
       fi
     done
   '';
@@ -202,7 +202,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      dit7ya
       hughobrien
       aviallon
     ];

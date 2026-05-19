@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "starboard";
-  version = "0.15.33";
+  version = "0.15.37";
 
   __darwinAllowLocalNetworking = true; # for tests
 
@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "aquasecurity";
     repo = "starboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wVjwDb7VKjZSPHROTpjpR8rJvgqXJmXKJbJJXHYYxzY=";
+    hash = "sha256-WIgXKw+PWS1A+npYL99t0Du7BJESTvrUckWtCzq1VS4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # Remove test that requires networking
     rm pkg/plugin/aqua/client/client_integration_test.go
-    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
       # Remove "[It] should make a request to fetch registries" test that fails on x86_64-darwin
       rm pkg/plugin/aqua/client/client_test.go
     ''}

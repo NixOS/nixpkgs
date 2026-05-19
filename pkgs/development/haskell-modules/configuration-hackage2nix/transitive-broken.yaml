@@ -1204,7 +1204,6 @@ dont-distribute-packages:
  - graphicstools
  - graphtype
  - greencard-lib
- - grid-proto
  - gridbounds
  - gridland
  - gross
@@ -3250,7 +3249,6 @@ dont-distribute-packages:
  - source-code-server
  - SourceGraph
  - SpacePrivateers
- - spade
  - sparkle
  - sparrow
  - sparsebit

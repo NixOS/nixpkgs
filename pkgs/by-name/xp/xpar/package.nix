@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpar";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "iczelia";
     repo = "xpar";
     rev = finalAttrs.version;
-    hash = "sha256-FCYZl8tllGvgoIE/u9lpQJANOfB7phyOegXk82EOzzM=";
+    hash = "sha256-uY+MAFJdjf6i2LlPqdEkUdTB+9OmV1MaVAIS8GbGKEI=";
   };
 
   nativeBuildInputs = [

@@ -44,6 +44,7 @@ let
             pname = namePrefix + pluginName;
 
             strictDeps = true;
+            __structuredAttrs = true;
 
             inherit
               pluginName
@@ -378,6 +379,13 @@ in
       repo = "tmux-gruvbox";
       tag = "v${version}";
       hash = "sha256-TuWPw6sk61k7GnHwN2zH6x6mGurTHiA9f0E6NJfMa6g=";
+    };
+    meta = {
+      homepage = "https://github.com/egel/tmux-gruvbox";
+      description = "Gruvbox colorscheme for Tmux";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ viena ];
     };
   };
 
@@ -1188,12 +1196,12 @@ in
   tmux-toggle-popup = mkTmuxPlugin rec {
     pluginName = "tmux-toggle-popup";
     rtpFilePath = "toggle-popup.tmux";
-    version = "0.4.4";
+    version = "0.5.1";
     src = fetchFromGitHub {
       owner = "loichyan";
       repo = "tmux-toggle-popup";
       tag = "v${version}";
-      hash = "sha256-tiiM5ETSrceyAyqhYRXjG1qCbjzZ0NJL5GWWbWX7Cbo=";
+      hash = "sha256-daUCkt1Np8ZYvLc3Bx0HvhnI988q7lIayJju/GB6Klw=";
     };
     meta = {
       homepage = "https://github.com/loichyan/tmux-toggle-popup";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   ffmpeg_7-headless,
@@ -38,14 +39,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.8.6";
+  version = "2.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-//SR7UhaDgT6zNBZ6/B0tBQ88fWkHtrr9Ds0KwH6xzs=";
+    hash = "sha256-m91q/8XYoZ5Azu79fKD0euRCuf29w3vj5cxdFheDsmI=";
   };
 
   patches = [
@@ -176,12 +177,15 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
     ]
     ++ lib.concatAttrValues optional-dependencies
-    ++ (providerPackages.audible python.pkgs)
-    ++ (providerPackages.dlna python.pkgs)
-    ++ (providerPackages.jellyfin python.pkgs)
-    ++ (providerPackages.opensubsonic python.pkgs)
-    ++ (providerPackages.sendspin python.pkgs)
-    ++ (providerPackages.tidal python.pkgs);
+    ++ (lib.concatMap (provider: providerPackages.${provider} python.pkgs) [
+      "audible"
+      "dlna"
+      "jellyfin"
+      "opensubsonic"
+      "sendspin"
+      "snapcast"
+      "tidal"
+    ]);
 
   disabledTestPaths = [
     # no multicast support in build sandbox:
@@ -211,6 +215,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''

@@ -1,6 +1,7 @@
 {
   coq,
   mkCoqDerivation,
+  mathcomp,
   mathcomp-analysis,
   mathcomp-analysis-stdlib,
   mathcomp-algebra-tactics,
@@ -71,6 +72,10 @@
   (o: {
     propagatedBuildInputs =
       o.propagatedBuildInputs
-      ++ lib.optional (lib.versions.isGe "0.6.1" o.version || o.version == "dev") mathcomp-algebra-tactics
+      ++ lib.optional (
+        mathcomp.version != "dev"
+        && lib.versions.isLe "2.5" mathcomp.version
+        && (lib.versions.isGe "0.6.1" o.version || o.version == "dev")
+      ) mathcomp-algebra-tactics
       ++ lib.optional (lib.versions.isGe "0.7.2" o.version || o.version == "dev") interval;
   })

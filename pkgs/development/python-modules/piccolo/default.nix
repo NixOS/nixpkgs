@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "piccolo";
-  version = "1.33.0";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "piccolo-orm";
     repo = "piccolo";
     tag = finalAttrs.version;
-    hash = "sha256-QXh8L0LuIHCyt6XFYPuTqdRp3XItt+P8q02f7ZFoMWk=";
+    hash = "sha256-SN+P3P2V/S8Dt+HBS3xPfjnFLECeVw9DNCyN+Yzklg8=";
   };
 
   build-system = [ setuptools ];

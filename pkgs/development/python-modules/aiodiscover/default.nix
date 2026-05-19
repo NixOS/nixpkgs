@@ -13,16 +13,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiodiscover";
-  version = "2.7.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodiscover";
-    tag = "v${version}";
-    hash = "sha256-q0HXANSfoDPlGdokfiQcsMHkt9ZmD604JRL/SDQx2hw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O5aQ2yCcy6ZtDviH8Jie3BrgS4kPhSDHBVhbXco5oqM=";
   };
 
   build-system = [ poetry-core ];
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to discover hosts via ARP and PTR lookup";
     homepage = "https://github.com/bdraco/aiodiscover";
-    changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/bdraco/aiodiscover/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchPypi,
+  fetchpatch,
   nixosTests,
 }:
 
@@ -16,6 +17,15 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-GmbIqO+03LgbUxJ1nTStXrYN3t2MfvzbeYRAipfTW1o=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "security-fix.patch";
+      url = "https://gitlab.com/mailman/postorius/-/commit/c4706abd05ba6bcf472fc674b160d3a9d6a4868b.patch";
+      excludes = [ "src/postorius/doc/news.rst" ];
+      hash = "sha256-M8C7mO/KoVhl1YtZ5x3wqL+aBkepJ/7NoIRUmd0JpiM=";
+    })
+  ];
 
   propagatedBuildInputs = [
     django-mailman3

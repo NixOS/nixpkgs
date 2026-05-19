@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-oauth-toolkit";
     changelog = "https://github.com/jazzband/django-oauth-toolkit/django-filer/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

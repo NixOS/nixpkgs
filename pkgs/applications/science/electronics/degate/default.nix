@@ -34,6 +34,13 @@ stdenv.mkDerivation rec {
       includes = [ "tests/catch2/catch.hpp" ];
       hash = "sha256-SbSA813QI8RRVy1lvAOGMGAC2KUQKjwYR2imqX40pvU=";
     })
+
+    (fetchpatch {
+      name = "memorymap-macos.patch";
+      url = "https://github.com/DegateCommunity/Degate/commit/04685b088f485b3b73c55b7bfb989d2f0c88e4ca.patch";
+      includes = [ "src/Core/Utils/MemoryMap.h" ];
+      hash = "sha256-5UfVLc4OoMBaDa0qwOCRpd+dOtdDh4kxHNVfTA50lPg=";
+    })
   ];
 
   postPatch = ''

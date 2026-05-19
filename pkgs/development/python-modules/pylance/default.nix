@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "4.0.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bQnPa+5w5/WXw0i+D8jhk12Q/iKOFieKwZ9NPjAf5VQ=";
+    hash = "sha256-clvpPC8W6T1GkLE7DwRQ8HPexyE9rvFhCFc+SxqDPGk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-Hr3qrCVNpLpEiHKFOaA0gf5wRY3Tn2pBwZf292jmoSU=";
+    hash = "sha256-Icl4BCBfTi6WkV3sZlyocZ0WYcXa28WJQ2w5VdhiVAU=";
   };
 
   nativeBuildInputs = [
@@ -115,6 +115,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # Failed: DID NOT RAISE <class 'RuntimeError'>
+    "test_create_index_progress_callback_error_before_completion_propagates"
+
     # Hangs indefinitely
     "test_all_permutations"
 

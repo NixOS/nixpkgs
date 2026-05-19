@@ -33,8 +33,8 @@ buildGoModule (finalAttrs: {
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs') pname version src;
       pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-8eQhR/fuDFNL8W529Ev7piCaseVaFahgZJQk3AJA3ng=";
+      fetcherVersion = 3;
+      hash = "sha256-z/Y9q/SE2c/KYzIOAfATlprjr6NjmmUHQB+ZbO39OK4=";
     };
 
     buildPhase = ''

@@ -14,7 +14,6 @@
   libayatana-appindicator,
   wayland,
   libxkbcommon,
-  mesa,
   libxcb,
   leptonica,
   glib,
@@ -24,6 +23,7 @@
   libxfixes,
   tesseract4,
   perl,
+  apprise,
 }:
 {
   pname,
@@ -100,7 +100,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.66.01";
+  version = "2.74.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -112,16 +112,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
   ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc.lib
     gtk3
     libayatana-appindicator
     wayland
     libxkbcommon
     libxcb
-    mesa
     tesseract4
     leptonica
     glib
@@ -129,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxfixes
+    apprise
   ];
 
   postPatch = ''
@@ -159,6 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
+    # Remove musl-only prebuilt Node addons on glibc systems.
+    # autoPatchelf scans all ELF files in $out and fails if musl libc is missing.
+    ${lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) ''
+      find $out/share/${pname} -type f -name '*.musl.node' -delete
+    ''}
+
     makeWrapper $out/share/${pname}/${componentName} $out/bin/${pname} ${commonWrapperArgs}
     makeWrapper $out/share/${pname}/${componentTrayName} $out/bin/${pname}-tray ${commonWrapperArgs}
   ''
@@ -174,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + "";
 
-  desktopItems = lib.optionals stdenv.isLinux [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       desktopName = "Tdarr ${componentUpper} Tray";
       name = "Tdarr ${componentUpper} Tray";

@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "toast";
     homepage = "https://github.com/stepchowfun/toast";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

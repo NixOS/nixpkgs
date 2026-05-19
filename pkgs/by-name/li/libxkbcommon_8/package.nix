@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     doxygen
   ]
-  ++ lib.optional stdenv.isLinux xvfb
+  ++ lib.optional stdenv.hostPlatform.isLinux xvfb
   ++ lib.optional withWaylandTools wayland-scanner;
 
   buildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
-  doCheck = stdenv.isLinux; # TODO: disable just a part of the tests
+  doCheck = stdenv.hostPlatform.isLinux; # TODO: disable just a part of the tests
   preCheck = ''
     patchShebangs ../test/
   '';

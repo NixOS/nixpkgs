@@ -31,6 +31,8 @@ buildPythonPackage {
   doCheck = false;
 
   meta = {
+    # dylib import fails with no LC_RPATH's found
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86;
     description = "Phonemization libary used by Piper text to speech system";
     inherit (piper-phonemize-native.meta) homepage license maintainers;
   };

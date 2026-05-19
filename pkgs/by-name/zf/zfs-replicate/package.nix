@@ -8,14 +8,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zfs_replicate";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alunduil";
     repo = "zfs-replicate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VajMSoFZ4SQXpuF1Lo6S9IhxvspCfUwpNw5zg16uA3M=";
+    hash = "sha256-7UoFx2XtadsQqavR5BTwbylaDksWSRxy5o+2hCOzfBw=";
   };
 
   # For compression to work, both local and remote systems must have lz4 installed.
@@ -41,8 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-cov-stub
     pytestCheckHook
   ];
-
-  doCheck = true;
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Expected SystemExit or FileNotFoundError

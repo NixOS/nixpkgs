@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "honeycomb-refinery";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "honeycombio";
     repo = "refinery";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8UzFoIxi9Vvf5/67rFsED/XTOz1pGeyxyuvLlTO7mVc=";
+    hash = "sha256-2avpxXlphqCNLeuTwskZKML/Dp5igm/qexq44lk8ne8=";
   };
 
   env.NO_REDIS_TEST = true;
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     "-X main.BuildID=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-nzz4SdJnISM6/yCgwelg2w7wlPBInQU1YizT5Ds2z5Y=";
+  vendorHash = "sha256-PBNL6oL3X+zaom2vbPJ0WuH9syZqWw4WXWbUqu/mtH0=";
 
   doCheck = true;
 

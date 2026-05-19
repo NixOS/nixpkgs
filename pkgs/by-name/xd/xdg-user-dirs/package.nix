@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-liconv";
   };
 

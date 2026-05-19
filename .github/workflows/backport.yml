@@ -11,7 +11,7 @@ on:
 
 permissions:
   contents: read
-  issues: write # adding the 'has: port to stable' label
+  issues: write # adding the 'has: port to stable' and 'has: backport failed' label
   pull-requests: write # creating backport pull requests
 
 defaults:
@@ -27,7 +27,7 @@ jobs:
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
@@ -49,7 +49,7 @@ jobs:
 
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@7c3f6cd5843cac11bc59a04a1b7699af93261670 # v4.5.0
+        uses: korthout/backport-action@66065406958f46e82238fd59546f5a99e69e22aa # v4.5.2
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           add_author_as_reviewer: true
@@ -81,4 +81,17 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
               labels: [ '8.has: port to stable' ]
+            })
+
+      - name: "Add 'has: failed backport' label"
+        if: steps.backport.outputs.was_successful == 'false'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [ '8.has: failed backport' ]
             })

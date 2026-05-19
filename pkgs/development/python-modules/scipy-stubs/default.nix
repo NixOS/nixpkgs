@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.0,<0.10.0" "uv_build"
+      --replace-fail "uv_build>=0.9.25,<0.10.0" "uv_build"
   '';
 
   build-system = [

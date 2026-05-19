@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/romkatv/powerlevel10k/releases/tag/v${finalAttrs.version}";
     description = "Fast reimplementation of Powerlevel9k ZSH theme";
     longDescription = ''
       To make use of this derivation, use

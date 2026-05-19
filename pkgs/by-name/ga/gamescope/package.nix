@@ -42,7 +42,7 @@
   glslang,
   hwdata,
   stb,
-  wlroots_0_18,
+  wlroots_0_19,
   libdecor,
   lcms,
   lib,
@@ -83,6 +83,21 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://github.com/ValveSoftware/gamescope/commit/4ce1a91fb219f570b0871071a2ec8ac97d90c0bc.diff";
       hash = "sha256-O358ScIIndfkc1S0A8g2jKvFWoCzcXB/g6lRJamqOI4=";
+    })
+
+    # Backport upstream patch for wlroots fixing build with libinput 1.31
+    (fetchpatch {
+      url = "https://github.com/misyltoad/wlroots/compare/54e844748029d4874e14d0c086d50092c04c8899...c08d99437ec8bb56a703f04ad1ef199502c62d10.diff";
+      stripLen = 1;
+      extraPrefix = "subprojects/wlroots/";
+      hash = "sha256-q2zekWNn111lX8N938y8HjREvlNMtdCLJ4RveX9z8u8=";
+    })
+
+    # Pending upstream patch to support stb_image_resize2.h
+    # See: https://github.com/ValveSoftware/gamescope/pull/2130
+    (fetchpatch {
+      url = "https://github.com/ValveSoftware/gamescope/commit/d49a2aded261030e649fee42ad295f1ef56b736b.diff";
+      hash = "sha256-Uh08ZRaV912ZOsl1DMpbVLxIgh4jEXevgihQf2W9KFk=";
     })
   ];
 
@@ -151,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ]
   ++ lib.optionals enableExecutable (
-    wlroots_0_18.buildInputs
+    wlroots_0_19.buildInputs
     ++ [
       # gamescope uses a custom wlroots branch
       libxcomposite

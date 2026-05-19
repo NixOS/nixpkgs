@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxcrypt-legacy
     (lib.getLib stdenv.cc.cc)
   ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r _internal $out/lib/pgsql-tools/
 
     makeBinaryWrapper $out/lib/pgsql-tools/ossdbtoolsservice_main $out/bin/ossdbtoolsservice_main \
-      ${lib.optionalString stdenv.isLinux ''--prefix LD_LIBRARY_PATH : "${
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           libxcrypt-legacy
           (lib.getLib stdenv.cc.cc)

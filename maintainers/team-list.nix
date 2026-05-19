@@ -358,7 +358,6 @@ with lib.maintainers;
   home-assistant = {
     members = [
       dotlambda
-      fab
       hexa
     ];
     scope = "Maintain the Home Assistant ecosystem";
@@ -436,6 +435,7 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+      igorcafe
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";

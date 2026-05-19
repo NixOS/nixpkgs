@@ -314,7 +314,7 @@ assertNoAdditions {
     };
   });
 
-  barbar-nvim = super.barbar-nvim.overrideAttrs {
+  barbar-nvim = super.barbar-nvim.overrideAttrs (old: {
     # Optional integrations
     checkInputs = with self; [
       bufferline-nvim
@@ -322,7 +322,11 @@ assertNoAdditions {
     ];
     # E5108: Error executing lua ...implugin-barbar.nvim-2025-04-28/lua/bufferline/utils.lua:10: module 'barbar.utils.hl' not found:
     nvimSkipModules = [ "bufferline.utils" ];
-  };
+
+    meta = old.meta // {
+      license = lib.licenses.json;
+    };
+  });
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [
@@ -1348,6 +1352,7 @@ assertNoAdditions {
       # Pickers, can use telescope, fzf-lua, or snacks
       fzf-lua
       telescope-nvim
+      neotest
     ];
   };
 
@@ -3892,7 +3897,7 @@ assertNoAdditions {
     };
   });
 
-  run-nvim = super.run-nvim.overrideAttrs {
+  run-nvim = super.run-nvim.overrideAttrs (old: {
     dependencies = [
       self.telescope-nvim
     ];
@@ -3902,7 +3907,11 @@ assertNoAdditions {
       # Issue: https://github.com/NixOS/nixpkgs/issues/394939
       self.plenary-nvim
     ];
-  };
+
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
 
   rust-tools-nvim = super.rust-tools-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
@@ -4946,10 +4955,13 @@ assertNoAdditions {
     };
   });
 
-  vim-flog = super.vim-flog.overrideAttrs {
+  vim-flog = super.vim-flog.overrideAttrs (old: {
     # Not intended to be required, used by vim plugin
     nvimSkipModules = "flog.graph_bin";
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-fugitive = super.vim-fugitive.overrideAttrs (old: {
     meta = old.meta // {
@@ -5721,6 +5733,12 @@ assertNoAdditions {
       "randombones_dark"
     ];
   };
+
+  zenburn = super.zenburn.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.gpl3Only;
+    };
+  });
 
   zig-vim = super.zig-vim.overrideAttrs (old: {
     meta = old.meta // {

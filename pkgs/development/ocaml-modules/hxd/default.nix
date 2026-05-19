@@ -8,14 +8,14 @@
   withLwt ? true,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "hxd";
   version = "0.4.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-${version}.tbz";
+    url = "https://github.com/dinosaure/hxd/releases/download/v${finalAttrs.version}/hxd-${finalAttrs.version}.tbz";
     sha256 = "sha256-EAMLciahdQRHGAmtWvwMIAchJkxcbdPVldJIBApxgFg=";
   };
 
@@ -39,4 +39,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "hxd.xxd";
   };
-}
+})

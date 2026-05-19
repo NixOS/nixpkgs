@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.30.1";
+  version = "2.34.4";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-S579+kK+bj0cI0BA2ccBPLMWuqZ1yIHcWiYEDPy0gxw=";
+      hash = "sha256-w20nrn3wo9Dvv3BILYBzuJTTLXqcWaRAF7SiPtryhwk=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v16.0.9";
-      hash = "sha256-N6C9OY0ZV36KXdlPXQ+UW8AKdzg+0xMip9uPnsKAcH0=";
+      tag = "v16.0.11";
+      hash = "sha256-ema1jTNMHs3pUituVb1NPllc6cA8eYJHtDOjuEzIDWM=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v16.0.22";
-      hash = "sha256-3ymwHSNqCdMIgzPYIYUIHMjJHSxdcGK11DF8qPM6nMs=";
+      tag = "v16.0.24";
+      hash = "sha256-aTcwfQt2WdOA44jfHdD7x7oxt8emSDexgZnI7MPVqvU=";
     })
   ];
 

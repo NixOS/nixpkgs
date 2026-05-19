@@ -181,6 +181,10 @@ let
             // lib.optionalAttrs docSupport {
               # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
               NROFF = "${groff}/bin/nroff";
+            }
+            // lib.optionalAttrs (docSupport && ver.majMin == "4.0") {
+              # RDoc parses referenced source files with the locale encoding.
+              LANG = "C.UTF-8";
             };
 
           enableParallelBuilding = true;
@@ -411,8 +415,8 @@ in
   };
 
   ruby_4_0 = generic {
-    version = rubyVersion "4" "0" "3" "";
-    hash = "sha256-d5ZKzDcNXIN1uVAuW6bBPAPvkaueufUhyE+0K5yaaw8=";
+    version = rubyVersion "4" "0" "4" "";
+    hash = "sha256-819u36Pauz9yP50M8ZBsZRKud/TkEqseaMxukdIw+oA=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

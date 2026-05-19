@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  gitMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
   nix-update-script,
@@ -10,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildkite-cli";
-  version = "3.32.2";
+  version = "3.42.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7jBYi9KGkeB6Pu4VDR8QSTG3U4QFFVih3MUp2Sldpqo=";
+    hash = "sha256-dk/25ujJ83+FlactIoDXOmLpyOlE0eEnruV4hGWVfwc=";
   };
 
-  vendorHash = "sha256-yi77gGlBIGEQQbYVVsQP74IVFuZo5GAPOdgYmaDnBAs=";
+  vendorHash = "sha256-GGIjZ3Fc40JN6STP9h+0AER5PcTL4zf/SYa22vqrj6k=";
 
   ldflags = [
     "-s"
@@ -27,6 +28,7 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    gitMinimal
     writableTmpDirAsHomeHook
   ];
 
@@ -38,6 +40,8 @@ buildGoModule (finalAttrs: {
 
         # Requires a git repository (which is removed by nix after fetching the source)
         "TestResolvePipelinesFromPath"
+        "TestPreflightCmd_Run"
+        "TestSnapshotContext_CancelsPush"
       ]
       ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
         # Expected timeout error but got none

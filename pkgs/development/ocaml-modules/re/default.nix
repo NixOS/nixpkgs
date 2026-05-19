@@ -27,20 +27,20 @@ let
       };
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "re";
   version = version_sha.version;
 
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/ocaml/ocaml-re/releases/download/${version}/re-${version}.tbz";
+    url = "https://github.com/ocaml/ocaml-re/releases/download/${finalAttrs.version}/re-${finalAttrs.version}.tbz";
     inherit (version_sha) hash;
   };
 
   propagatedBuildInputs = [ seq ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ (if lib.versionAtLeast version "1.12" then ounit2 else ounit) ];
+  checkInputs = [ (if lib.versionAtLeast finalAttrs.version "1.12" then ounit2 else ounit) ];
 
   meta = {
     homepage = "https://github.com/ocaml/ocaml-re";
@@ -48,4 +48,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

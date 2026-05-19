@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/irccloud/irccat";
-    changelog = "https://github.com/irccloud/irccat/releases/tag/v${finalAttrs.version}0.4.11";
+    changelog = "https://github.com/irccloud/irccat/releases/tag/v${finalAttrs.version}";
     description = "Send events to IRC channels from scripts and other applications";
     mainProgram = "irccat";
     maintainers = with lib.maintainers; [ qyliss ];

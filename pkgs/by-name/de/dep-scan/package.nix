@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dep-scan";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Drp9DIu4ORNDMqYnCU7CJYpD65RW0da1g4bUIXlPfBA=";
+    hash = "sha256-pMqEzJhGVmLhy4HJE6O/doYGMPiys7KqM5jW5pJI6sU=";
   };
 
   build-system = with python3Packages; [ setuptools ];

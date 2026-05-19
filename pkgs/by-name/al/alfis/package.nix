@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alfis";
-  version = "0.8.10";
+  version = "0.8.11";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gYy4Jyq4tkAPPfi2GGUf0ucVPlTgr0PkZYdOmqUMBvU=";
+    hash = "sha256-zZ8xltFgdPAfx+jtnnyLzzoC4r/L4oVjt59YemoDtgE=";
   };
 
-  cargoHash = "sha256-yRJSgFIheWLWK0gN9VNmgMhQGdv902zx2T3X6CA8YEQ=";
+  cargoHash = "sha256-zqeWNf1fOGJFvRFU8ABm4s2QCfo4loNCPC1Zj19XE1U=";
 
   nativeBuildInputs = [
     pkg-config

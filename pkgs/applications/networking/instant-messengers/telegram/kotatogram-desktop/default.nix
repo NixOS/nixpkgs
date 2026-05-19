@@ -17,6 +17,10 @@ let
     inherit stdenv;
     # N/A on Qt5
     kimageformats = null;
+    unwrapped = libsForQt5.callPackage ../telegram-desktop/unwrapped.nix {
+      inherit stdenv;
+      kcoreaddons = null;
+    };
   };
   version = "1.4.9";
   tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {

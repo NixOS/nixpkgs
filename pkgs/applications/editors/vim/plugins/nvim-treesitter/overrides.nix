@@ -37,8 +37,8 @@ let
         }
         ''
           mkdir -p "$out/queries"
-          if [ -d "${super.nvim-treesitter.src}/runtime/queries/${language}" ]; then
-            ln -s "${super.nvim-treesitter.src}/runtime/queries/${language}" "$out/queries/${language}"
+          if [ -d "${self.nvim-treesitter}/runtime/queries/${language}" ]; then
+            ln -s "${self.nvim-treesitter}/runtime/queries/${language}" "$out/queries/${language}"
           else
             echo "Error: there are no queries for ${language}."
             exit 1

@@ -73,6 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -vp $out/bin
     ln -vs $out/share/material-maker/material-maker $out/bin/material-maker
 
+    mkdir -vp $out/share/applications
+    cp -v material_maker/misc/linux/io.github.RodZill4.Material-Maker.desktop $out/share/applications
+
+    mkdir -vp $out/share/metainfo
+    cp -v material_maker/misc/linux/io.github.RodZill4.Material-Maker.appdata.xml $out/share/metainfo
+
+    mkdir -vp $out/share/icons/hicolor/256x256/apps
+    cp -v icon.png $out/share/icons/hicolor/256x256/apps/material-maker.png
+
     runHook postInstall
   '';
 

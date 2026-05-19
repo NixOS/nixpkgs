@@ -204,8 +204,8 @@ lib.mapAttrs mkLicense (
     };
 
     bola11 = {
-      url = "https://blitiri.com.ar/p/bola/";
-      fullName = "Buena Onda License Agreement 1.1";
+      spdxId = "BOLA-1.1";
+      fullName = "Buena Onda License Agreement v1.1";
     };
 
     boost = {
@@ -326,8 +326,8 @@ lib.mapAttrs mkLicense (
     };
 
     capec = {
-      fullName = "Common Attack Pattern Enumeration and Classification";
-      url = "https://capec.mitre.org/about/termsofuse.html";
+      fullName = "Common Attack Pattern Enumeration and Classification License";
+      spdxId = "CAPEC-tou";
     };
 
     clArtistic = {
@@ -475,6 +475,11 @@ lib.mapAttrs mkLicense (
       fullName = "CeCILL-C Free Software License Agreement";
     };
 
+    cfitsio = {
+      spdxId = "CFITSIO";
+      fullName = "CFITSIO License";
+    };
+
     classpathException20 = {
       spdxId = "Classpath-exception-2.0";
       fullName = "Classpath exception 2.0";
@@ -525,6 +530,11 @@ lib.mapAttrs mkLicense (
     doc = {
       spdxId = "DOC";
       fullName = "DOC License";
+    };
+
+    docBookDtd = {
+      spdxId = "DocBook-DTD";
+      fullName = "DocBook DTD License";
     };
 
     drl10 = {
@@ -755,14 +765,7 @@ lib.mapAttrs mkLicense (
 
     hpndSellVariantSafetyClause = {
       fullName = "HPND - sell variant with safety critical systems clause";
-      url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-voodoo/-/blob/68a5b6d98ae34749cca889f4373b4043d00bfe6a/src/voodoo_dga.c#L12-33";
-      # TODO: if the license gets accepted to spdx then
-      #   add spdxId
-      # else
-      #   remove license
-      #   && replace reference with whatever this license is supposed to be then
-      # https://github.com/spdx/license-list-XML/issues/2922
-      # spdxId = "HPND-sell-variant-safety-clause";
+      spdxId = "HPND-sell-variant-critical-systems";
     };
 
     hpndDec = {
@@ -863,6 +866,12 @@ lib.mapAttrs mkLicense (
     isc = {
       spdxId = "ISC";
       fullName = "ISC License";
+    };
+
+    json = {
+      spdxId = "JSON";
+      fullName = "JSON License";
+      free = false;
     };
 
     databricks = {
@@ -1246,8 +1255,8 @@ lib.mapAttrs mkLicense (
     };
 
     paratype = {
-      fullName = "ParaType Free Font Licensing Agreement";
-      url = "https://web.archive.org/web/20161209023955/http://www.paratype.ru/public/pt_openlicense_eng.asp";
+      spdxId = "ParaType-Free-Font-1.3";
+      fullName = "ParaType Free Font Licensing Agreement v1.3";
     };
 
     parity70 = {
@@ -1326,7 +1335,8 @@ lib.mapAttrs mkLicense (
     # Gentoo seems to treat it as a license:
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/licenses/SGMLUG?id=7d999af4a47bf55e53e54713d98d145f935935c1
     sgmlug = {
-      fullName = "SGML UG SGML Parser Materials license";
+      spdxId = "SGMLUG-PM";
+      fullName = "SGMLUG Parser Materials License";
     };
 
     sissl11 = {
@@ -1423,11 +1433,8 @@ lib.mapAttrs mkLicense (
     };
 
     tekHvcLicense = {
+      spdxId = "TekHVC";
       fullName = "TekHVC License";
-      url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/7f8305c779ac6948d7261764f5ffb8ae9aa975b1/COPYING#L138-171";
-      # TODO: add spdxId when it gets accepted to spdx
-      # https://tools.spdx.org/app/license_requests/458
-      # https://github.com/spdx/license-list-XML/issues/2757
     };
 
     torque11 = {
@@ -1448,8 +1455,8 @@ lib.mapAttrs mkLicense (
     };
 
     tost = {
+      spdxId = "Pixar";
       fullName = "Tomorrow Open Source Technology License 1.0";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
     };
 
     ubdlException = {
@@ -1558,6 +1565,11 @@ lib.mapAttrs mkLicense (
     w3c = {
       spdxId = "W3C";
       fullName = "W3C Software Notice and License";
+    };
+
+    w3c-19980720 = {
+      spdxId = "W3C-19980720";
+      fullName = "W3C Software Notice and License (1998-07-20)";
     };
 
     wadalab = {

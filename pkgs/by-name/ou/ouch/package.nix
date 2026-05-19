@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  cmake,
   pkg-config,
   bzip2,
   bzip3,
@@ -18,18 +19,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ouch";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = "ouch";
     rev = finalAttrs.version;
-    hash = "sha256-vNeOJOyQsjDUzScA1a/W+SI1Z67HTLiHjwWZZpr1Paw=";
+    hash = "sha256-XT2CWYZiY5UskTmHKl9EVWBIJoOiR9rOCQUoN8U9o40=";
   };
 
-  cargoHash = "sha256-mMoYJ3dLpb1Y3Ocdyxg1brE7xYeZBbtUg0J/2HTK0hE=";
+  cargoHash = "sha256-ckqzptKk6aituDMTA5JGzMWoXiVuOoK3N29KNUJnmgw=";
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     pkg-config
     rustPlatform.bindgenHook
@@ -51,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [
     "use_zlib"
     "use_zstd_thin"
-    # "bzip3" will be optional in the next version
+    "bzip3"
     "zstd/pkg-config"
   ]
   ++ lib.optionals enableUnfree [
@@ -60,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installManPage artifacts/*.1
-    installShellCompletion artifacts/ouch.{bash,fish} --zsh artifacts/_ouch
+    installShellCompletion artifacts/ouch.{bash,fish} --zsh artifacts/_ouch --nushell artifacts/ouch.nu
   '';
 
   env.OUCH_ARTIFACTS_FOLDER = "artifacts";
@@ -73,7 +75,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       psibi
       krovuxdev
+      philocalyst
     ];
+    platforms = lib.platforms.all;
     mainProgram = "ouch";
   };
 })

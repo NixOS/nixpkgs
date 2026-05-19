@@ -77,7 +77,7 @@ buildPythonPackage {
   passthru.updateScript = ./update.py;
 
   meta = {
-    broken = stdenv.isDarwin; # elftools.common.exceptions.ELFError: Magic number does not match
+    broken = stdenv.hostPlatform.isDarwin; # elftools.common.exceptions.ELFError: Magic number does not match
     changelog = "https://github.com/google-ai-edge/LiteRT/releases/tag/v${release.version}";
     description = "LiteRT is for mobile and embedded devices";
     downloadPage = "https://github.com/google-ai-edge/LiteRT";

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ssh-vault";
-  version = "1.2.7";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "ssh-vault";
     repo = "ssh-vault";
     tag = finalAttrs.version;
-    hash = "sha256-BC10Nir/MUxhD6QSF8p7cDdlrscC72Eoot/u8RAwM8g=";
+    hash = "sha256-kJscLetdP4D6DzzERfohezdsJqGcm/dmYTC+ZxjvRvo=";
   };
 
-  cargoHash = "sha256-NRFmCeL8ZhJ1Y29VPWK3Yqg6losB/9+QE/8GqpUeJTs=";
+  cargoHash = "sha256-XFKqEwWDg8FUeObhI6oOIXNh8c7gsWgSWy3YThExuU4=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -5,6 +5,7 @@
   writeShellScriptBin,
   fetchurl,
   vscode,
+  buildPackages,
   unzip,
   makeSetupHook,
   writeScript,
@@ -15,7 +16,7 @@ let
   unpackVsixSetupHook = makeSetupHook {
     name = "unpack-vsix-setup-hook";
     substitutions = {
-      unzip = "${unzip}/bin/unzip";
+      unzip = "${buildPackages.unzip}/bin/unzip";
     };
   } ./unpack-vsix-setup-hook.sh;
   buildVscodeExtension = lib.extendMkDerivation {

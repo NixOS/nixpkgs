@@ -7,19 +7,20 @@
   writableTmpDirAsHomeHook,
   ripgrep,
   makeBinaryWrapper,
+  stdenvNoCC,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "0.70.5";
+  version = "0.75.3";
 
   src = fetchFromGitHub {
-    owner = "badlogic";
-    repo = "pi-mono";
+    owner = "earendil-works";
+    repo = "pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jn+hvS/DIwbwAff+UovdIVnmrb4o8gsC4IR24MnwF1I=";
+    hash = "sha256-c/+cxkp/EZ2PLERxTENN5edXHEs7M2oqzNepjRA4TIE=";
   };
 
-  npmDepsHash = "sha256-MZgcHJdGFGSNgQ26/24iA12FdmO7S5vWv4crSNFhHi0=";
+  npmDepsHash = "sha256-/mWjrZFzRmtkbWYMJOXKnLPxFITFndq5hgdY0DnPfAg=";
 
   npmWorkspace = "packages/coding-agent";
 
@@ -52,9 +53,9 @@ buildNpmPackage (finalAttrs: {
     local nm="$out/lib/node_modules/pi-monorepo/node_modules"
 
     # Replace workspace deps needed at runtime with real copies
-    for ws in @mariozechner/pi-ai:packages/ai \
-              @mariozechner/pi-agent-core:packages/agent \
-              @mariozechner/pi-tui:packages/tui; do
+    for ws in @earendil-works/pi-ai:packages/ai \
+              @earendil-works/pi-agent-core:packages/agent \
+              @earendil-works/pi-tui:packages/tui; do
       IFS=: read -r pkg src <<< "$ws"
       rm "$nm/$pkg"
       cp -r "$src" "$nm/$pkg"
@@ -65,7 +66,17 @@ buildNpmPackage (finalAttrs: {
 
     # Clean up now-dangling .bin symlinks
     find "$nm/.bin" -xtype l -delete
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    # Remove foreign Linux binaries that make audit-tmpdir try to inspect ELF
+    # RPATHs with patchelf
+    find "$nm/koffi/build/koffi" -mindepth 1 -maxdepth 1 -type d \
+      ! -name 'darwin_*' -exec rm -r {} +
+    rm -rf \
+      "$nm/@anthropic-ai/sandbox-runtime/dist/vendor/seccomp" \
+      "$nm/@anthropic-ai/sandbox-runtime/vendor/seccomp"
   '';
+
   postFixup = "wrapProgram $out/bin/pi --prefix PATH : ${lib.makeBinPath [ ripgrep ]}";
 
   doInstallCheck = true;
@@ -81,9 +92,9 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Coding agent CLI with read, bash, edit, write tools and session management";
-    homepage = "https://shittycodingagent.ai/";
-    downloadPage = "https://www.npmjs.com/package/@mariozechner/pi-coding-agent";
-    changelog = "https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/CHANGELOG.md";
+    homepage = "https://pi.dev/";
+    downloadPage = "https://www.npmjs.com/package/@earendil-works/pi-coding-agent";
+    changelog = "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ munksgaard ];
     mainProgram = "pi";

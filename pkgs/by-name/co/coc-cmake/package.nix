@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     pnpm = pnpm_8;
-    fetcherVersion = 2;
-    hash = "sha256-wQ9dcqY7BVXc7wpsHlYNpc7utL1+MkdTCu77Wh8+QWc=";
+    fetcherVersion = 3;
+    hash = "sha256-h/ND/665MpcPaDIR1Bb5iPrHmoNysr9vuFk1I0fFP34=";
   };
 
   pnpmWorkspaces = [ "coc-cmake" ];

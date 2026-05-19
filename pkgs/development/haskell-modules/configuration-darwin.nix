@@ -134,8 +134,6 @@ self: super:
       + (oldAttrs.preCompileBuildDriver or "");
     }) super.llvm-hs;
 
-    sym = markBroken super.sym;
-
     yesod-core = super.yesod-core.overrideAttrs (drv: {
       # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
       # run tests that access localhost.

@@ -3,7 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   wails,
@@ -12,16 +12,18 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
     tag = "v${version}";
-    hash = "sha256-n1eGgvIxbWMugCaB/YX1chPgt97autDDJzomIgntz6M=";
+    hash = "sha256-VgLlMlCPLT8lu2tn+lrkqVCp2eoYhtyNnrWGGqesMd0=";
   };
 
   patches = [
@@ -58,6 +60,7 @@ buildGoModule rec {
         pname
         version
         src
+        pnpm
         ;
       sourceRoot = "${src.name}/frontend";
       fetcherVersion = 3;

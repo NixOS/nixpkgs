@@ -14,25 +14,26 @@
   cctools,
   nix-update-script,
   versionCheckHook,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q3MtMRdvuL0olnqvqK8uWeFCT7UpKjZN4zz9ZFlyGd4=";
+    hash = "sha256-pyL2QhvycaGBYgelsHK5Ces195Z1aY2XZyecsPXO/X4=";
   };
 
-  cargoHash = "sha256-FV4ZKR6lq8b5PMj+mZ+/RBWLmoGc6WuAXw00+PGJUi8=";
+  cargoHash = "sha256-gvG6+strULIewJgFdGg3fJ2mjUVjgi9/Q7pDredYuiU=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-OA7T8dTWEb8QiiRBx1A/R8H2Bu/xv3RFr8K9IVU3674=";
+    hash = "sha256-FevzqirT/GyT8urQ79AtJi+q1zcwn73AyiJTf/B9cG0=";
   };
 
   npmRoot = "frontend";
@@ -51,6 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
     zstd
   ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -74,23 +77,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preBuild =
     let
-      rustTarget = stdenv.hostPlatform.rust.rustcTarget;
-      rustTargetUnderscore = builtins.replaceStrings [ "-" ] [ "_" ] rustTarget;
+      buildTarget = stdenv.buildPlatform.rust.rustcTarget;
+      buildTargetUnderscore = lib.replaceString "-" "_" buildTarget;
     in
     ''
       make -C policies
       (cd "$npmRoot" && npm run build)
 
-      # Fix aws-lc-sys cross-compilation:
-      # The cc crate looks for "aarch64-linux-gnu-gcc")
-      # when CC is unset and TARGET != HOST, but Nix's cross-compiler is
-      # named "aarch64-unknown-linux-gnu-gcc" (with vendor).
-      # We set the target-specific CC_<target> variable so the cc crate
-      # and aws-lc-sys find the correct cross-compiler, then unset the
-      # generic CC so aws-lc-sys doesn't misassign it.
-      export CC_${rustTargetUnderscore}=$CC
-      export CXX_${rustTargetUnderscore}=$CXX
-      unset CC CXX
+      # Fix aws-lc-sys cross-compilation
+      export CC_${buildTargetUnderscore}=$CC_FOR_BUILD
+      export CXX_${buildTargetUnderscore}=$CXX_FOR_BUILD
     '';
 
   # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84

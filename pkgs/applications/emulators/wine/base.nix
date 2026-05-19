@@ -59,7 +59,7 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? stdenv.hostPlatform.isDarwin,
+  mingwSupport ? stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64,
   waylandSupport ? false,
   x11Support ? false,
   ffmpegSupport ? false,

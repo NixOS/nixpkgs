@@ -23,10 +23,12 @@ let
       '';
 
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
-  vconsoleConf = pkgs.writeText "vconsole.conf" ''
-    KEYMAP=${cfg.keyMap}
-    ${lib.optionalString (cfg.font != null) "FONT=${cfg.font}"}
-  '';
+  vconsoleConf =
+    withFont:
+    pkgs.writeText "vconsole.conf" ''
+      KEYMAP=${cfg.keyMap}
+      ${lib.optionalString (withFont && cfg.font != null) "FONT=${cfg.font}"}
+    '';
 
   consoleEnv =
     kbd:
@@ -163,7 +165,7 @@ in
 
           # Let systemd-vconsole-setup.service do the work of setting up the
           # virtual consoles.
-          environment.etc."vconsole.conf".source = vconsoleConf;
+          environment.etc."vconsole.conf".source = vconsoleConf true;
           # Provide kbd with additional packages.
           environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
@@ -180,7 +182,7 @@ in
           );
 
           boot.initrd.systemd.contents = {
-            "/etc/vconsole.conf".source = vconsoleConf;
+            "/etc/vconsole.conf".source = vconsoleConf cfg.earlySetup;
             # Add everything if we want full console setup...
             "/etc/kbd" = lib.mkIf cfg.earlySetup {
               source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share";
@@ -198,7 +200,7 @@ in
             "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
             "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
           ]
-          ++ lib.optionals (cfg.font != null && lib.hasPrefix builtins.storeDir cfg.font) [
+          ++ lib.optionals (cfg.font != null && cfg.earlySetup && lib.hasPrefix builtins.storeDir cfg.font) [
             "${cfg.font}"
           ]
           ++ lib.optionals (lib.hasPrefix builtins.storeDir cfg.keyMap) [
@@ -213,7 +215,7 @@ in
             description = "Reset console on configuration changes";
             wantedBy = [ "multi-user.target" ];
             restartTriggers = [
-              vconsoleConf
+              (config.environment.etc."vconsole.conf".source)
               (consoleEnv pkgs.kbd)
             ];
             reloadIfChanged = true;

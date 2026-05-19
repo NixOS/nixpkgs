@@ -3,9 +3,7 @@
 let
   inherit (lib)
     any
-    attrNames
-    filter
-    foldl
+    foldl'
     hasInfix
     isAttrs
     isList
@@ -35,17 +33,31 @@ let
     compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
     or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
 
-    Hence a custom equality test.
+    To solve this, the elaborated systems also store a version of their data
+    without any functions to be compared.
 
     Note that this does not canonicalize the systems, so you'll want to make sure
     both arguments have been `elaborate`-d.
   */
-  equals =
-    let
-      # System attrs are never __functor-style attrsets, so builtins.isFunction suffices.
-      removeFunctions = a: removeAttrs a (filter (n: builtins.isFunction a.${n}) (attrNames a));
-    in
-    a: b: removeFunctions a == removeFunctions b;
+  equals = a: b: a._withoutFunctions == b._withoutFunctions;
+
+  /**
+    The attribute names within an elaborated system that store functions.
+
+    Due to object identity semantics, `systems.equals` needs a way to compare
+    all non-function attributes. It does this by storing a version of itself
+    without any functions under the attribute name `_withoutFunctions`. The
+    attribute names that contain functions are exposed for regression testing.
+  */
+  functionNames = [
+    "canExecute"
+    "emulator"
+    "emulatorAvailable"
+    "staticEmulatorAvailable"
+  ];
+
+  # Avoiding infrec
+  ignoredNames = functionNames ++ [ "_withoutFunctions" ];
 
   /**
     List of all Nix system doubles the nixpkgs flake will expose the package set
@@ -73,11 +85,12 @@ let
     let
       allArgs = systemToAttrs systemOrArgs;
 
-      # Those two will always be derived from "config", if given, so they should NOT
-      # be overridden further down with "// args".
+      # These attributes are derived from other inputs, so they should NOT be
+      # overridden further down with "// args".
       args = removeAttrs allArgs [
         "parsed"
         "system"
+        "_withoutFunctions"
       ];
 
       # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
@@ -107,6 +120,7 @@ let
           null;
 
       final = {
+        _withoutFunctions = removeAttrs final ignoredNames;
         # Prefer to parse `config` as it is strictly more informative.
         parsed = parse.mkSystemFromString (args.config or allArgs.system);
         # This can be losslessly-extracted from `parsed` iff parsing succeeds.
@@ -131,9 +145,6 @@ let
               )
           );
 
-        isCompatible =
-          _:
-          throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
         # Derived meta-data
         useLLVM = final.isFreeBSD || final.isOpenBSD;
 
@@ -621,10 +632,68 @@ let
             else
               null;
         };
+
+        nim = {
+          # See these locations for a known list of cpu/os idntifeiers:
+          # - https://nim-lang.org/docs/system.html#hostCPU
+          # - https://nim-lang.org/docs/system.html#hostOS
+          cpu =
+            if final.isAarch32 then
+              "arm"
+            else if final.isAarch64 then
+              "arm64"
+            else if final.isAlpha then
+              "alpha"
+            else if final.isAvr then
+              "avr"
+            else if final.isMips && final.is32Bit then
+              "mips"
+            else if final.isMips && final.is64Bit then
+              "mips64"
+            else if final.isMsp430 then
+              "msp430"
+            else if final.isPower && final.is32bit then
+              "powerpc"
+            else if final.isPower && final.is64bit then
+              "powerpc64"
+            else if final.isRiscV && final.is64bit then
+              "riscv64"
+            else if final.isSparc then
+              "sparc"
+            else if final.isx86_32 then
+              "i386"
+            else if final.isx86_64 then
+              "amd64"
+            else
+              null;
+          os =
+            if final.isAndroid then
+              "Android"
+            else if final.isDarwin then
+              "MacOSX"
+            else if final.isFreeBSD then
+              "FreeBSD"
+            else if final.isGenode then
+              "Genode"
+            else if final.isLinux then
+              "Linux"
+            else if final.isNetBSD then
+              "NetBSD"
+            else if final.isNone then
+              "Standalone"
+            else if final.isOpenBSD then
+              "OpenBSD"
+            else if final.isWindows then
+              "Windows"
+            else if final.isiOS then
+              "iOS"
+            else
+              null;
+        };
       };
     in
     assert final.useAndroidPrebuilt -> final.isAndroid;
-    assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true (
+    assert foldl' (pass: { assertion, message }: if assertion final then pass else throw message) true (
       final.parsed.abi.assertions or [ ]
     );
     final;
@@ -640,6 +709,7 @@ in
     equals
     examples
     flakeExposed
+    functionNames
     inspect
     parse
     platforms

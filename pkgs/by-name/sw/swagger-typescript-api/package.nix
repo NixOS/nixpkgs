@@ -9,10 +9,10 @@
 }:
 let
   pname = "swagger-typescript-api";
-  version = "13.7.2";
+  version = "13.9.1";
 
   node-modules-hash = {
-    "x86_64-linux" = "sha256-1Wy9RWNvMmxSY72Qcam/jCVwurGk4ms9PTR5tt6t03I=";
+    "x86_64-linux" = "sha256-QxnqTaV5oN5WoYvLzTckWrYAZVAUxTSLYHVTmmqhmgM=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "acacode";
     repo = "swagger-typescript-api";
     rev = "v${version}";
-    hash = "sha256-2sAE3wD/vUjaxvlhfrBRSErB3PsjQfi4UAcc4tU0le4=";
+    hash = "sha256-PnQ2aTj8oVUqoqM9voupfBqPu7MZSVflUtuGrXznifo=";
   };
 
   node_modules = stdenv.mkDerivation {

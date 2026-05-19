@@ -10,7 +10,7 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-r";
   version = "0.6.0";
 
@@ -20,8 +20,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "pveber";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ocaml-r";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jPyVMxjeh9+xu0dD1gelAxcOhxouKczyvzVoKZ5oSrs=";
   };
 
@@ -48,9 +48,9 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml bindings for the R interpreter";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.bcdarwin ];
   };
 
-}
+})

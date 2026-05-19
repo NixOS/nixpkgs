@@ -3,7 +3,7 @@
   fetchFromGitHub,
   python3,
 }:
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pywalfox-native";
   version = "2.9.0";
   pyproject = true;
@@ -11,8 +11,8 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "Frewacom";
     repo = "pywalfox-native";
-    rev = "7ecbbb193e6a7dab424bf3128adfa7e2d0fa6ff9";
-    hash = "sha256-i1DgdYmNVvG+mZiFiBmVHsQnFvfDFOFTGf0GEy81lpE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8qMDwK4TgMqtGVGUnH3hyoyVlR3cQv28i7O4de+iuqU=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -26,4 +26,4 @@ python3.pkgs.buildPythonApplication {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ tsandrini ];
   };
-}
+})

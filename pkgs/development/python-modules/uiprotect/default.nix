@@ -38,21 +38,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
-  version = "10.2.6";
+  version = "10.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6QU+K5TGmZ0Me2QWVyECGhHYZ0d1t4h+kZfTsKlHV5s=";
+    hash = "sha256-J9SVsExFQMxUQSONsB6G8rb0nIu3sNKtHmiMdy6jpqk=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRemoveDeps = [
-    "aioshutil"
-    "async-timeout"
+  pythonRelaxDeps = [
+    "platformdirs"
+    "pydantic"
   ];
 
   dependencies = [

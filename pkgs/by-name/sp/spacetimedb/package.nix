@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "clockworklabs";
     repo = "spacetimedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wSJ1co0IpnNva6G9u5oZAjLIw5/bNxOvng2zp/YUFus=";
+    hash = "sha256-KlMkgxfsUoLJ4h05td62eKfqWl9fYQ61FTsA1COkQrQ=";
   };
 
-  cargoHash = "sha256-O1Uug4Xny6AQnybQ978chz+2auY99MUI0o66r44gezI=";
+  cargoHash = "sha256-csiDZKGLcorwVemK0g8Vi0+/Zq+b2UtC047ROrC/nOI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=codegen"
     "--skip=publish"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flakes on darwin in nix build sandbox, timing out waiting for listen addr
     "--skip=cli_can_ping_spacetimedb_on_disk"
     "--skip=cli_can_publish_spacetimedb_on_disk"

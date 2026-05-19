@@ -7,16 +7,16 @@
 
 buildNpmPackage {
   pname = "coc-markdownlint";
-  version = "0-unstable-2026-04-01";
+  version = "0-unstable-2026-05-01";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-markdownlint";
-    rev = "9a92eef6adbd6ba7b1afe50bd9a3c82b94902c51";
-    hash = "sha256-5pfsaZFA1OYwREB3FqyUQY4D47dKH22pQV8dBgPiipo=";
+    rev = "91345f973c7fde3e72f95bc7648043c35e23e007";
+    hash = "sha256-Uj+PKaihRaWybWvt82Aenmt1/seTsJwgb4LSF+gIAc0=";
   };
 
-  npmDepsHash = "sha256-J6gYA3eP2PWK3kesJDL5tqHOY/j2PoC+uhVxpeYVnsk=";
+  npmDepsHash = "sha256-J5LHaKrtQeYiIU06rargZrQX5P4ABP0cP0wuPHIRzjw=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

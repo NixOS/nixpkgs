@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.23.1";
+  version = "0.23.5";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-/vxEJPPgDdrtSHSWhJY1HjtQv7B+4gNzPQmu/tbhX0k=";
+    hash = "sha256-jiHcOSkqvQj6/BFyDFUcTvknATAYqeVco0KecCXBWD0=";
   };
 
   build-system = [
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     # required by test_xonsh_activator
     virtualenv
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # required by test_man_completion
     man
     util-linux
@@ -82,9 +82,7 @@ buildPythonPackage rec {
   disabledTests = [
     # fails on sandbox
     "test_colorize_file"
-    "test_repath_HOME_PATH_itself"
-    "test_repath_HOME_PATH_var"
-    "test_repath_HOME_PATH_var_brace"
+    "test_complete_path_tilde_subdir_trailing_sep"
 
     # flaky tests in test_integrations.py
     "test_script"
@@ -112,7 +110,7 @@ buildPythonPackage rec {
     "test_vc_get_branch"
     "test_dirty_working_directory"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on Darwin
     "test_bash_and_is_alias_is_only_functional_alias"
     "test_complete_command"
@@ -135,7 +133,7 @@ buildPythonPackage rec {
     sed -i -e 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
     sed -i -e 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/xintegration/test_integrations.py
 
-    for script in tests/xintegration/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
+    for script in conftest.py tests/xintegration/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
       sed -i -e 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
     done
     patchShebangs .

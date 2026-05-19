@@ -36,6 +36,8 @@ clangStdenv.mkDerivation rec {
       url = "https://github.com/d-SEAMS/seams-core/commit/f6156057e43d0aa1a0df9de67d8859da9c30302d.patch";
       hash = "sha256-PLbT1lqdw+69lIHH96MPcGRjfIeZyb88vc875QLYyqw=";
     })
+    # Add missing <cstdint> include for uint8_t in vendored cxxopts.
+    ./cxxopts-cstdint.patch
   ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \

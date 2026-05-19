@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "fava-dashboards";
-  version = "2.0.0b7";
+  version = "2.0.0b8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andreasgerstmayr";
     repo = "fava-dashboards";
     tag = "v${version}";
-    hash = "sha256-DtytD8LA/DoyBwXjpSHaEzwf7YJscV0yvMn9EpL6eh8=";
+    hash = "sha256-OK7gMppM71ah7BfzpFbv2bhfqLrx5tv1zIH+InjKCgM=";
   };
 
   build-system = [

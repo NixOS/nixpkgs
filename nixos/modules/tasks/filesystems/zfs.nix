@@ -204,11 +204,11 @@ let
             poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
           fi
           if poolImported "${pool}"; then
-          ${lib.optionalString config.boot.initrd.clevis.enable (
-            lib.concatMapStringsSep "\n" (
-              elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key -L prompt ${elem} || true "
-            ) (lib.filter (p: (lib.elemAt (lib.splitString "/" p) 0) == pool) clevisDatasets)
-          )}
+            ${lib.optionalString config.boot.initrd.clevis.enable (
+              lib.concatMapStringsSep "\n" (
+                elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key -L prompt ${elem} || true "
+              ) (lib.filter (p: (lib.elemAt (lib.splitString "/" p) 0) == pool) clevisDatasets)
+            )}
 
 
             ${lib.optionalString keyLocations.hasKeys ''

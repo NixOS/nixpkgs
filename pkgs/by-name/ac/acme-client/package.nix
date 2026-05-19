@@ -9,11 +9,11 @@
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "acme-client";
-  version = "1.3.3";
+  version = "1.3.7";
 
   src = fetchurl {
-    url = "https://data.wolfsden.cz/sources/acme-client-${finalAttrs.version}.tar.gz";
-    hash = "sha256-HJOk2vlDD7ADrLdf/eLEp+teu9XN0KrghEe6y4FIDoI=";
+    url = "https://files.wolfsden.cz/releases/acme-client/acme-client-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Mq+6epLcgEnlQ0JAPYCxGQu7EM0VS0Y32PYuvEuliAE=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +29,17 @@ gccStdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Secure ACME/Let's Encrypt client";
     homepage = "https://git.wolfsden.cz/acme-client-portable";
     platforms = lib.platforms.unix;
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ pmahoney ];
+    maintainers = with lib.maintainers; [
+      pmahoney
+      kybe236
+    ];
     mainProgram = "acme-client";
   };
 })

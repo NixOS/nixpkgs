@@ -72,8 +72,8 @@
         specialisation.with-plugins.configuration = {
           services.caddy = {
             package = pkgs.caddy.withPlugins {
-              plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20241211194404-3865845790a7" ];
-              hash = "sha256-Quib7+jFf2ElS4yvrJhuLiedX3lBNwxpEDskxxyVu+8=";
+              plugins = [ "github.com/caddyserver/replace-response@v0.0.0-20250618171559-80962887e4c6" ];
+              hash = "sha256-kKWXpxEAn23yud8tcgw7FFOaxLjoodZ/cuM1239TRoY=";
             };
             configFile = pkgs.writeText "Caddyfile" ''
               {

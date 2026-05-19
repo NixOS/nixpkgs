@@ -14,17 +14,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.14.5";
+  version = "0.15.11";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2d+PaHaUdCEYjYkAG33DxX3rMbVpL/CcngczFeOvy8M=";
+    hash = "sha256-6ArEbnJOAKexoSy7Epis5OC8XYmmQpZPILtUEv4E0k4=";
   };
 
   npmDepsFetcherVersion = 3;
-  npmDepsHash = "sha256-7o3ap0+eyCxga18V4qoG+a6b2EM45MkMLjXdY8J/eGg=";
+  npmDepsHash = "sha256-J/dvHeC38uiZKgB6mGAnlCbAKXdai/mMzdP1E1Pa6Yg=";
 
   # npm 11 incompatible with fetchNpmDeps
   # https://github.com/NixOS/nixpkgs/issues/474535

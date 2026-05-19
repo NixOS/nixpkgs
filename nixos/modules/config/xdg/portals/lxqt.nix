@@ -29,7 +29,6 @@ in
         [
           pkgs.libsForQt5.qtstyleplugin-kvantum
           pkgs.breeze-qt5
-          pkgs.qtcurve
         ];
       '';
       description = ''

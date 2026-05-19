@@ -319,14 +319,12 @@ let
       IPV6_MROUTE = yes;
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2 = yes;
-      IPV6_FOU_TUNNEL = yes;
       IPV6_SEG6_LWTUNNEL = yes;
       IPV6_SEG6_HMAC = yes;
       IPV6_SEG6_BPF = yes;
       NET_CLS_ACT = yes;
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
-      NET_FOU = yes;
       NET_SCHED = yes;
       NET_SCH_BPF = whenAtLeast "6.16" (whenPlatformHasEBPFJit yes);
       L2TP_V3 = yes;
@@ -1372,6 +1370,10 @@ let
 
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
+
+        # Allos PCIe devices report errors with Advanced Error Reporting (AER).
+        PCIEAER = yes;
+        ACPI_APEI_PCIEAER = yes;
 
         # Enable all available thermal governors
         THERMAL_GOV_BANG_BANG = yes;

@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-stack";
-  version = "0.0.2";
+  version = "0.0.3";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-stack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2mtQKrUvYkRQbxSaTCPt05Ld5jzdSrjckEiJlxalIUI=";
+    hash = "sha256-CwUDoLLcEsA+dlPDLqQnBLqdtNQwDW6ghmTkyXMpM4M=";
   };
 
-  vendorHash = "sha256-s85Lz6yfY1TiIFPolU1qESDyw8XoBORyuOMdiHj6Grc=";
+  vendorHash = "sha256-JnuqORtdW+xz8pAGAFXdjRey8jCEj+miJiyfY7gzRSU=";
 
   ldflags = [
     "-s"

@@ -20,25 +20,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedistar";
-  version = "1.11.3";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "fedistar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q2j6K4ys/z77+n3kdGJ15rWbFlbbIHBWB9hOARsgg2A=";
+    hash = "sha256-Q2IfWeMV6yvmCmKBc/iufO28DyIIlj50wp9A7LbQcIY=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
+  cargoHash = "sha256-eYPvG07V0DKPQfs6g+oayDcF3Xn74Aq52ZA+psyoSnY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-IznO8PJZCr6MR3mShD+Uqk2ACx8mrxTVWRTbk81zFEc=";
+    hash = "sha256-GnVBCrBCnS0Tl9jZu3poIZZJO2SRdlS8jOYUE9G+BFM=";
   };
 
   nativeBuildInputs = [
@@ -62,12 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = false; # This version's tests do not pass
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "fedistar-frontend"
-    ];
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Multi-column Fediverse client application for desktop";

@@ -116,7 +116,7 @@ in
         # config file.  starship appears to use a hardcoded config location
         # rather than one inside an XDG folder:
         # https://github.com/starship/starship/blob/686bda1706e5b409129e6694639477a0f8a3f01b/src/configure.rs#L651
-        if [[ ! -f "$HOME/.config/starship.toml" ]]; then
+        if [[ ! -f "$${STARSHIP_CONFIG:-$HOME/.config/starship.toml}" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
         eval "$(${cfg.package}/bin/starship init bash --print-full-init)"
@@ -129,7 +129,8 @@ in
         # config file.  starship appears to use a hardcoded config location
         # rather than one inside an XDG folder:
         # https://github.com/starship/starship/blob/686bda1706e5b409129e6694639477a0f8a3f01b/src/configure.rs#L651
-        if not test -f "$HOME/.config/starship.toml";
+        set -q STARSHIP_CONFIG; or set STARSHIP_CONFIG "$HOME/.config/starship.toml"
+        if not test -f "$STARSHIP_CONFIG"
           set -x STARSHIP_CONFIG ${settingsFile}
         end
         ${lib.optionalString (!isNull cfg.transientPrompt.left) ''
@@ -153,7 +154,7 @@ in
         # config file.  starship appears to use a hardcoded config location
         # rather than one inside an XDG folder:
         # https://github.com/starship/starship/blob/686bda1706e5b409129e6694639477a0f8a3f01b/src/configure.rs#L651
-        if [[ ! -f "$HOME/.config/starship.toml" ]]; then
+        if [[ ! -f "$${STARSHIP_CONFIG:-$HOME/.config/starship.toml}" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
         eval "$(${cfg.package}/bin/starship init zsh)"
@@ -167,8 +168,11 @@ in
         # config file.  starship appears to use a hardcoded config location
         # rather than one inside an XDG folder:
         # https://github.com/starship/starship/blob/686bda1706e5b409129e6694639477a0f8a3f01b/src/configure.rs#L651
-        if not `$HOME/.config/starship.toml`:
+        import os as _os
+        _sc = _os.environ.get('STARSHIP_CONFIG', _os.path.join(_os.environ['HOME'], '.config/starship.toml'))
+        if not _os.path.isfile(_sc):
           $STARSHIP_CONFIG = ('${settingsFile}')
+        del _os, _sc
         execx($(${cfg.package}/bin/starship init xonsh))
     '';
   };

@@ -51,16 +51,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voxtype";
-  version = "0.6.6";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "peteonrails";
     repo = "voxtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D0CgT0Avb7il6/GU8CtxWUGlMHhYZIPbHX952L4orDM=";
+    hash = "sha256-CpG/5ws9VX8ZQjwtJMxyUF0L90u+j0veHHLHGqTvoIw=";
   };
 
-  cargoHash = "sha256-h0b3H+79v8G28XNBDdCOZ+Vo+6wpfzckPCsDbRzp1m4=";
+  cargoHash = "sha256-gHnYssFZixWt7F8oa1yYyfqThCrRsv0U7ezgZUcq1nk=";
 
   buildFeatures =
     [ ]
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
     pkg-config
   ]
-  ++ lib.optional vulkanSupport [
+  ++ lib.optionals vulkanSupport [
     shaderc
     vulkan-headers
     vulkan-loader

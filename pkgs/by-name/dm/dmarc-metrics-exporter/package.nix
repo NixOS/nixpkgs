@@ -12,7 +12,7 @@ in
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dmarc-metrics-exporter";
-  version = "1.3.0";
+  version = "1.3.1";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B2a/F0Ebz6zpe4apVRl7+lX0IS099EmuWOatW2HZdVM=";
+    hash = "sha256-Mp4gQi+cLAoVKVSmGbgruPYPVJV6vxwzVOnx+CZhxS8=";
   };
 
   pythonRelaxDeps = true;

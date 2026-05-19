@@ -2,12 +2,14 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  buildPackages,
   coreutils,
   darwin,
   glibcLocales,
   gnused,
   gnugrep,
   gawk,
+  fish,
   man-db,
   ninja,
   getent,
@@ -148,13 +150,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.6.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-lhixotjhD8+xb8Hw6Mu1uJPtCq0zlQsBAXpHRzT+moI=";
+    hash = "sha256-u0mBdWkxP4zI6NUhJ0LJrEDrbAAfTDi8IapsWWC9yWc=";
   };
 
   env = {
@@ -167,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-zua2O3eGi7dXh4w0IoUGL2RxvGIW0O3WpVg/tT8942Q=";
+    hash = "sha256-d4YA9fnDQyfyK675nP+tiTqJ1o2jqjwPHU1trXd8MCA=";
   };
 
   patches = [
@@ -238,7 +240,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace share/functions/grep.fish \
       --replace-fail "command grep" "command ${lib.getExe gnugrep}"
 
-    substituteInPlace share/completions/{sudo.fish,doas.fish} \
+    substituteInPlace share/completions/doas.fish \
+      share/functions/__fish_complete_sudo.fish \
       --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
   ''
   + lib.optionalString usePython ''
@@ -280,12 +283,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
-    (python3.withPackages (ps: [
+    (buildPackages.python3.withPackages (ps: [
       ps.pexpect
       ps.sphinx
     ]))
     # Avoid warnings when building the manpages about HOME not being writable
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # Building the docs ends up wanting to run fish_indent at build
+    # time, which obviously can't use a cross compiled fish_indent
+    # from this derivation. Pull in the build platform's fish to
+    # provide it.
+    fish
   ];
 
   buildInputs = [

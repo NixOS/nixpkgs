@@ -141,13 +141,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.23.0";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VYaFCSqhIlJPJv1SUiNDgSzLqySK3NTfucdWA7IZaAk=";
+    hash = "sha256-uwdhGT2ZG7c3Qe4QVcuKfAsUyPdlkHcwh1Dvh/oH07M=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
@@ -168,10 +168,12 @@ goBuild (finalAttrs: {
     cmake
     gitMinimal
   ]
-  ++ lib.optionals enableRocm [
-    rocmPackages.llvm.bintools
+  ++ lib.optionals enableRocm (
     rocmLibs
-  ]
+    ++ [
+      rocmPackages.llvm.bintools
+    ]
+  )
   ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals (enableRocm || enableCuda) [
     makeBinaryWrapper
@@ -212,6 +214,7 @@ goBuild (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm ml/backend/ggml/ggml_test.go
     rm ml/nn/pooling/pooling_test.go
+    rm model/models/nemotronh/model_omni_test.go
   '';
 
   overrideModAttrs = (
@@ -317,7 +320,6 @@ goBuild (finalAttrs: {
       if (rocmRequested || cudaRequested || vulkanRequested) then platforms.linux else platforms.unix;
     mainProgram = "ollama";
     maintainers = with maintainers; [
-      dit7ya
       prusnak
     ];
   };

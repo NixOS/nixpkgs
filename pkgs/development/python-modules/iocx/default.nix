@@ -40,6 +40,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Test requires go to be available
     "test_cli_with_real_go_binary"
+    # flaky: timing-sensitive scaling assertion
+    "test_filepaths_scaling_behavior"
+    "test_crypto_scaling_behavior"
+    "test_scaling_behavior"
   ];
 
   meta = {

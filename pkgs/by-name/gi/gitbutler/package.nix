@@ -19,7 +19,7 @@
   pkg-config,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   rust,
   rustPlatform,
   turbo,
@@ -27,7 +27,9 @@
   wrapGAppsHook4,
   dart-sass,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
   version = "0.19.7";
@@ -58,8 +60,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-0WLgtidG8hqTkXY3heu+m3VoqQD/kGMlTmLb0qAS8sQ=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-eRiFA5lXpPHQwlyFmKMx1zmHH2zLCHB+3s708g6srg4=";
   };
 
   nativeBuildInputs = [

@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "gvfs.yazi";
-  version = "25.5.31-unstable-2026-03-29";
+  version = "0-unstable-2026-03-29";
 
   src = fetchFromGitHub {
     owner = "boydaihungst";

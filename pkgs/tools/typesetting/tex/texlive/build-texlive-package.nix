@@ -82,6 +82,9 @@ let
   }
   // lib.optionalAttrs hasCatalogue {
     homepage = "https://ctan.org/pkg/${catalogue}";
+  }
+  // lib.optionalAttrs (args ? mainProgram) {
+    inherit (args) mainProgram;
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];

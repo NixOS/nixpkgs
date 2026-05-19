@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/webpack/webpack-cli/blob/webpack-cli%2540${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/webpack/webpack-cli/blob/webpack-cli%40${finalAttrs.version}/CHANGELOG.md";
     description = "Webpack's Command Line Interface";
     homepage = "https://webpack.js.org/api/cli/";
     license = lib.licenses.mit;

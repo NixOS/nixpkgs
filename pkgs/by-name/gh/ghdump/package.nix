@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghdump";
-  version = "0.1.2";
+  version = "0.2.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "drupol";
     repo = "ghdump";
     tag = finalAttrs.version;
-    hash = "sha256-XOLXrffbymuPv544g66kwo1IKkEaK5/MBA1gsg+Cj2c=";
+    hash = "sha256-UNIG/AT5RGPeNfZ7S3TdhfN+s8VXRPygcTBV7Fulilg=";
   };
 
-  cargoHash = "sha256-kuXtBrMk1s5mDjMVL/BKV+8qRlJ/g0Svv07IQepcQE8=";
+  cargoHash = "sha256-gyNMtS6h2ct9IkvfhRWyMv9JVPtVEILsmYUcPETFEWQ=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

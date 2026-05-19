@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conan";
-  version = "2.26.2";
+  version = "2.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     tag = finalAttrs.version;
-    hash = "sha256-8XurC7H2JSMOYRfGCilUzuTDr7y1W8N+a2Hc3dtAdzQ=";
+    hash = "sha256-S/IEk3fSoCzoVfyo9oaId9VGR8YTjzoCIWoZ3xYVVBc=";
   };
 
   pythonRelaxDeps = [
@@ -85,9 +85,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_build"
     "test_conan_new"
     "test_conan_new_compiles"
-    # 'cmake' tool version '3.27' is not available
-    "test_metabuild"
-    "test_new_template_and_different_folder"
+    # 'clang' tool chains
+    "test_detect_clang_gcc_toolchain"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Rejects paths containing nix
@@ -116,7 +115,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test/functional/toolchains/"
     "test/functional/tools/scm/test_git.py"
     "test/functional/tools/system/package_manager_test.py"
-    "test/functional/sbom/test_cyclonedx.py"
     "test/functional/workspace/test_workspace.py"
     "test/functional/tools_versions_test.py"
     "test/functional/util/test_cmd_args_to_string.py"

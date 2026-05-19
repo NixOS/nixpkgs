@@ -8,24 +8,25 @@
   rustPlatform,
   curl,
   pcre2,
+  valgrind,
   libiconv,
 }:
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "1.16.0";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-o9g0PT/EbBlB9h2FGyYJsKoNUcJIhGR0hv3owztcvcw=";
+    hash = "sha256-pfhoj5a+kUVOuMnAHgL2s05Pcc6uhlTcp2t5aj1eJ0E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-vcM+iLpJiIxMqw/Xgq4E3hbY77+H1T1UkdJpUOO6dmo=";
+    hash = "sha256-Onkkea1xntfSKVr2aoCy1Z9wGIdv/L7HRh7LGxv738M=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-O2";
@@ -47,6 +48,9 @@ buildPecl rec {
   buildInputs = [
     curl
     pcre2
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    valgrind
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

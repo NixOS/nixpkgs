@@ -467,6 +467,7 @@ in
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
   docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
+  docker-autoprune = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-autoprune.nix;
   docker-registry = runTest ./docker-registry.nix;
   docker-rootless = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-rootless.nix;
   docker-tools = runTestOn [ "x86_64-linux" ] ./docker-tools.nix;
@@ -726,6 +727,7 @@ in
     imports = [ ./hbase.nix ];
     _module.args.getPackage = pkgs: pkgs.hbase_2_5;
   };
+  headplane = runTest ./headplane.nix;
   headscale = runTest ./headscale.nix;
   healthchecks = runTest ./web-apps/healthchecks.nix;
   hedgedoc = runTest ./hedgedoc.nix;
@@ -815,8 +817,12 @@ in
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = import ./rancher {
-    inherit pkgs runTest;
+    inherit pkgs;
     inherit (pkgs) lib;
+    runTest = runTestOn [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     rancherDistro = "k3s";
   };
   kafka = handleTest ./kafka { };
@@ -1173,15 +1179,27 @@ in
   octoprint = runTest ./octoprint.nix;
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix { };
   odoo17 = runTest {
-    imports = [ ./odoo.nix ];
+    imports = [ ./odoo/single-process.nix ];
+    _module.args.package = pkgs.odoo17;
+  };
+  odoo17-multiprocess = runTest {
+    imports = [ ./odoo/multi-process.nix ];
     _module.args.package = pkgs.odoo17;
   };
   odoo18 = runTest {
-    imports = [ ./odoo.nix ];
+    imports = [ ./odoo/single-process.nix ];
+    _module.args.package = pkgs.odoo18;
+  };
+  odoo18-multiprocess = runTest {
+    imports = [ ./odoo/multi-process.nix ];
     _module.args.package = pkgs.odoo18;
   };
   odoo19 = runTest {
-    imports = [ ./odoo.nix ];
+    imports = [ ./odoo/single-process.nix ];
+    _module.args.package = pkgs.odoo19;
+  };
+  odoo19-multiprocess = runTest {
+    imports = [ ./odoo/multi-process.nix ];
     _module.args.package = pkgs.odoo19;
   };
   oh-my-zsh = runTest ./oh-my-zsh.nix;
@@ -1369,7 +1387,7 @@ in
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pykms = runTest ./pykms.nix;
   qbittorrent = runTest ./qbittorrent.nix;
-  qboot = handleTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix { };
+  qboot = runTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix;
   qemu-vm-credentials-fwcfg = runTest {
     imports = [ ./qemu-vm-credentials.nix ];
     _module.args.mechanism = "fw_cfg";
@@ -1397,7 +1415,6 @@ in
   radicale = runTest ./radicale.nix;
   radicle = runTest ./radicle.nix;
   radicle-ci-broker = runTest ./radicle-ci-broker.nix;
-  ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
   rauc = runTest ./rauc.nix;
@@ -1453,6 +1470,7 @@ in
   rtkit = runTest ./rtkit.nix;
   rtorrent = runTest ./rtorrent.nix;
   rush = runTest ./rush.nix;
+  rustical = runTest ./web-apps/rustical.nix;
   rustls-libssl = runTest ./rustls-libssl.nix;
   rxe = runTest ./rxe.nix;
   sabnzbd = runTest ./sabnzbd.nix;
@@ -1750,6 +1768,7 @@ in
   vector = import ./vector { inherit runTest; };
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
+  veroroute = runTest ./veroroute.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
   victoriatraces = import ./victoriatraces { inherit runTest; };

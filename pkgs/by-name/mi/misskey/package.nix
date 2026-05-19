@@ -59,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-GVzU5YQe7GHn2ddpaGPyLLmhOv5Fy33RL+gBLl3Oyis=";
+    fetcherVersion = 3;
+    hash = "sha256-iMS+sFDnGShOQfFQjGtj4+7McqMQvfE8KK1MV/jPC2s=";
   };
 
   buildPhase = ''

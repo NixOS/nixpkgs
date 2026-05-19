@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ glib ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Doesn't build on Darwin with -std=gnu23.
     NIX_CFLAGS_COMPILE = "-std=gnu17";
   };

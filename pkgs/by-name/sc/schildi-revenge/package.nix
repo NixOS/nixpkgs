@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.04.04";
+  version = "26.05.05";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B3UOCcEWPt+kejK6mJZkYnVoSfzx1m28DM+Oco6iFJ8=";
+    hash = "sha256-B12OcryErrrFyKFweCFQWnbt/L8HvceAhBI51TlT3pg=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-1BUBOBOsQ+I3bKUMnzwtqCd/uh/gEWW9THhjaDXWWeg=";
+    hash = "sha256-8HI7UtuO2eg3/Zb2PhX0jvTDaIOpCCY0EHkrsdzSEkc=";
   };
 
   nativeBuildInputs = [

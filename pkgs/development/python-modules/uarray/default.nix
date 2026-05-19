@@ -9,7 +9,6 @@
   ninja,
   matchpy,
   numpy,
-  astunparse,
   typing-extensions,
   nix-update-script,
   pytestCheckHook,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [
-    astunparse
     matchpy
     numpy
     typing-extensions

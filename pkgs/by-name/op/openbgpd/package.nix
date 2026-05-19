@@ -12,7 +12,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   version = "9.1";
 
   src = fetchurl {
-    url = "https://cdn.openbsd.org/pub/OpenBSD/OpenBGPD/openbgpd-${finalAttrs.version}.tar.gz";
+    url = "mirror://openbsd/OpenBGPD/openbgpd-${finalAttrs.version}.tar.gz";
     hash = "sha256-GUUYWBGdRplN/4zyfQYzMpzULyi6Oou1pfz0Zexem8M=";
   };
 

@@ -1,42 +1,42 @@
 {
   buildPythonPackage,
-  click,
+  cacert,
   fetchFromGitHub,
-  httpx,
   lib,
   loguru,
+  pyreqwest,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   respx,
   setuptools,
+  typer,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "prowlpy";
-  version = "1.1.4";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OMEGARAZER";
     repo = "prowlpy";
     tag = "v${version}";
-    hash = "sha256-vtLj0Rxl8XM6JigM5kWQWiEaE8dDQ40zsZGRPfJ+aiY=";
+    hash = "sha256-S+hhZndOb5O9okrrnXGt7D0N4VRIThbMN1LYVPGzFy8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    httpx
+    pyreqwest
     xmltodict
-  ]
-  ++ httpx.optional-dependencies.http2;
+  ];
 
   optional-dependencies = {
     cli = [
-      click
       loguru
+      typer
     ];
   };
 
@@ -49,6 +49,12 @@ buildPythonPackage rec {
     respx
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  preCheck = ''
+    # Without this pyreqwest fails with
+    #     unexpected error: No CA certificates were loaded from the system
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+  '';
 
   # tests fail without this
   pytestFlags = [ "-v" ];

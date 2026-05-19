@@ -9,14 +9,14 @@
   camlp-streams,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "3.1.5";
   pname = "lablgtk3";
 
   minimalOCamlVersion = "4.06";
 
   src = fetchurl {
-    url = "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";
+    url = "https://github.com/garrigue/lablgtk/releases/download/${finalAttrs.version}/lablgtk3-${finalAttrs.version}.tbz";
     hash = "sha256-1IIc2+zzrjdPIDF9Y+Q/5YAww7qWV7UaLoPmUhl+jqw=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

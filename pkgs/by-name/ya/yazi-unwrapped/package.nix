@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
     homepage = "https://github.com/sxyazi/yazi";
+    changelog = "https://github.com/sxyazi/yazi/blob/${finalAttrs.passthru.srcs.code_src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       eljamm

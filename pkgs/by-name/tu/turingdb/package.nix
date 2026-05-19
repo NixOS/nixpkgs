@@ -4,11 +4,13 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  python3,
   gitMinimal,
   bison,
   flex,
   inih,
   minio-cpp,
+  arrow-cpp,
   curl,
   curlpp,
   nlohmann_json,
@@ -22,22 +24,23 @@
 }:
 
 let
-  turingstdenv = if stdenv.isDarwin then llvmPackages_20.stdenv else stdenv;
+  turingstdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_20.stdenv else stdenv;
 in
 turingstdenv.mkDerivation (finalAttrs: {
   pname = "turingdb";
-  version = "1.30";
+  version = "1.31";
 
   src = fetchFromGitHub {
     owner = "turing-db";
     repo = "turingdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dYggkkuTC+amR/Alz+B1YCNo5kHgmrt/dNLRW5EgaZY=";
+    hash = "sha256-dorRoDWylZo/QRJbqEZOUf+JNHSKCIi/s8wxZ2HwZsI=";
 
     fetchSubmodules = true;
 
     leaveDotGit = true;
     postFetch = ''
+      git -C $out log -1 --format=%H > $out/HEAD_COMMIT_HASH
       git -C $out log -1 --format=%ct > $out/HEAD_COMMIT_TIMESTAMP
       rm -rf $out/.git
     '';
@@ -46,6 +49,20 @@ turingstdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace storage/dump/DumpConfig.h \
       --replace-fail HEAD_COMMIT_TIMESTAMP "$(cat $src/HEAD_COMMIT_TIMESTAMP)"
+
+    substituteInPlace io/parquet/CMakeLists.txt \
+      --replace-fail "Parquet::parquet_static" "Parquet::parquet_shared"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'COMMAND git rev-parse HEAD' 'COMMAND cat HEAD_COMMIT_HASH' \
+      --replace-fail 'COMMAND git show --no-patch --format=%at' 'COMMAND cat HEAD_COMMIT_TIMESTAMP'
+
+    substituteInPlace tools/turingdb/TuringDBTool.cpp \
+      --replace-fail '"turingdb", "1.0"' '"turingdb", "${finalAttrs.version}"'
+
+    for dir in test samples regress fuzz examples; do
+      substituteInPlace CMakeLists.txt --replace-fail "add_subdirectory($dir)" ""
+    done
   '';
 
   strictDeps = true;
@@ -56,9 +73,11 @@ turingstdenv.mkDerivation (finalAttrs: {
     flex
     gitMinimal
     pkg-config
+    python3
   ];
 
   buildInputs = [
+    arrow-cpp
     curl
     curlpp
     faiss
@@ -71,7 +90,7 @@ turingstdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals turingstdenv.isDarwin [ llvmPackages_20.openmp ]
-  ++ lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
 
   cmakeFlags = [
     (lib.cmakeBool "NIX_BUILD" true)
@@ -80,7 +99,7 @@ turingstdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-lgomp")
     (lib.cmakeFeature "FLEX_INCLUDE_DIR" "${lib.getDev flex}/include")
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "OpenMP_CXX_FLAGS" "-fopenmp")
     (lib.cmakeFeature "OpenMP_CXX_LIB_NAMES" "omp")
     (lib.cmakeFeature "OpenMP_omp_LIBRARY" "${lib.getLib llvmPackages_20.openmp}/lib/libomp.dylib")

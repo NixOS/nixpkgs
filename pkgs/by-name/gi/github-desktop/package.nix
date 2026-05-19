@@ -202,6 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "github-desktop";
     maintainers = with lib.maintainers; [ dtomvan ];
-    inherit (electron.meta) platforms;
+    platforms = lib.lists.intersectLists electron.meta.platforms lib.platforms.linux;
   };
 })

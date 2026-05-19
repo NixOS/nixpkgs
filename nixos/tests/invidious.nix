@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "invidious";
 
@@ -24,7 +24,7 @@
         networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
       };
     machine =
-      { lib, pkgs, ... }:
+      { pkgs, ... }:
       {
         services.invidious = {
           enable = true;
@@ -142,7 +142,7 @@
       # invidious does connect to the sig helper though and crashes when the sig helper is not available
       machine.wait_for_open_port(80)
       curl_assert_status_code("http://invidious.example.com/search", 200)
-      machine.succeed("journalctl -eu invidious.service | grep -o \"SigHelper: Using helper at 'tcp://127.0.0.1:2999'\"")
+      machine.succeed("journalctl -eu invidious.service | grep -o \"WARNING: Invidious companion is required to view and playback videos\"")
 
       postgres_tcp.wait_for_unit("postgresql.target")
       activate_specialisation("postgres-tcp")

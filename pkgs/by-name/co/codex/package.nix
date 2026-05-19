@@ -25,18 +25,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.128.0";
+  version = "0.130.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-v2W0eslPOPHxHX76+bnkE/f4y+MnQuopeOoAC5X16TA=";
+    hash = "sha256-YeUeYbzUMUx0lhIKdtPa8vUYK2Cj1hmbLb68Y80r71o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-3NQ4UCfBpANhyoJJatd8m31cEugsd42Ye2BXuzlKC0c=";
+  cargoHash = "sha256-cpkj7H/jkKGbfJ92Ty9peqfxibFw2aWWG64tmgeG+2o=";
 
   # Match upstream's release build for the codex binary only.
   cargoBuildFlags = [
@@ -55,12 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # to use the shared library instead
     substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-
-  ''
-  # Keep upstream's release profile on Darwin. Without LTO/codegen-units=1,
-  # the aarch64-darwin binary grows enough for ld64 to hit ARM64 branch range
-  # limits while linking codex-cli.
-  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "fat"' "" \
       --replace-fail 'codegen-units = 1' ""

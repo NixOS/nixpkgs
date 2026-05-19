@@ -66,7 +66,7 @@ let
 
   meta = {
     description = "Source-built JAX backend. JAX is Autograd and XLA, brought together for high-performance machine learning research";
-    homepage = "https://github.com/google/jax";
+    homepage = "https://github.com/jax-ml/jax";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
 

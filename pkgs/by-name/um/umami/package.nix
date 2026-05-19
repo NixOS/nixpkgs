@@ -9,7 +9,7 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   prisma_7,
   prisma-engines_7,
   openssl,
@@ -20,6 +20,8 @@
   basePath ? "",
 }:
 let
+  pnpm = pnpm_10;
+
   sources = lib.importJSON ./sources.json;
 
   geocities = stdenvNoCC.mkDerivation {
@@ -107,6 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version
       src
       ;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-QNWmCsVFh8xpsO4ZPTaKGszwuRaxTrWLMVh/6VV5oIw=";
   };

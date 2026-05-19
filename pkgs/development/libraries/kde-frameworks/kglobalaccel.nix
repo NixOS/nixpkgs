@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kconfig,
   kcoreaddons,
@@ -15,7 +16,10 @@
 
 mkDerivation {
   pname = "kglobalaccel";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     kconfig
     kcoreaddons

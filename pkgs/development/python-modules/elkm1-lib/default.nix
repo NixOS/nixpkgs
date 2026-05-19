@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "elkm1-lib";
-  version = "2.2.14";
+  version = "2.2.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gwww";
     repo = "elkm1";
     tag = finalAttrs.version;
-    hash = "sha256-lejeRHteVMO7qz8qMPCG5d8V/rj550FL+WuogM/Lcbw=";
+    hash = "sha256-LDzc/njgPGjc9uhNMHG4NOn9P2Sy3lFHgwV9oJJLl2o=";
   };
 
   build-system = [ hatchling ];

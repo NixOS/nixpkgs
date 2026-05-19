@@ -82,7 +82,7 @@ else
       ''
         # Install XDG Desktop file and its icon
         install -Dm444 ${appimageContents}/insomnia.desktop -t $out/share/applications
-        install -Dm444 ${appimageContents}/insomnia.png -t $out/share/pixmaps
+        install -Dm444 ${appimageContents}/insomnia.png -t $out/share/icons/
         # Replace wrong exec statement in XDG Desktop file
         substituteInPlace $out/share/applications/insomnia.desktop \
             --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=insomnia'

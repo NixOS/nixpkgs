@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # FIXME: we don't support dtrace probe generation on macOS until we have a dtrace build: https://github.com/NixOS/nixpkgs/pull/392918
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./no-dtrace-macos.patch
   ];
 

@@ -3,12 +3,13 @@
   buildNpmPackage,
   fetchFromGitHub,
   pnpm_10,
-  pnpm ? pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildNpmPackage (finalAttrs: {
   pname = "zashboard";
   version = "3.5.1";

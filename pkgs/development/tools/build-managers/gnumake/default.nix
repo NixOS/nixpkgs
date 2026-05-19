@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     # gettext gets pulled in via autoreconfHook because strictDeps is not set,
     # and is linked against. Without this, it doesn't end up in HOST_PATH.
     # TODO: enable strictDeps, and either make this dependency explicit, or remove it
-    ++ lib.optional stdenv.isCygwin gettext;
+    ++ lib.optional stdenv.hostPlatform.isCygwin gettext;
 
   configureFlags =
     lib.optional guileEnabled "--with-guile"

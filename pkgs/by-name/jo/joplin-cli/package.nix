@@ -28,11 +28,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NNtdY6ajMfcMWj/AIo+b2nhylBCqyOIwCepYx/ZNCBY=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/laurent22/joplin/blob/dev/package.json#L103
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes postPatch;
-    hash = "sha256-EGP/nnz4u6I0efTQu41lgmk0tuHpiavVKHRdiSYdEUs=";
+    inherit (finalAttrs)
+      src
+      missingHashes
+      patches
+      postPatch
+      ;
+    hash = "sha256-qTDrNoOnlrceIJZ/VGAYnMozQsURbCdtAA4ZV3NQYmc=";
   };
 
   nativeBuildInputs = [

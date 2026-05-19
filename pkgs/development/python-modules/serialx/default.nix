@@ -1,9 +1,11 @@
 {
+  aioesphomeapi,
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
   lib,
   psutil,
+  pythonAtLeast,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
@@ -18,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "serialx";
-  version = "1.6.0";
+  version = "1.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "puddly";
     repo = "serialx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6yTYR66MzcXv9e0l+my5UunD493a7c3bPYwvDKMH3gI=";
+    hash = "sha256-KZeKH0sy5GZESwbwWOr/j51UtQjwm98E1Phu0D+Ailo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -49,6 +51,10 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
+  optional-dependencies.esphome = lib.optionals (pythonAtLeast "3.14") [
+    aioesphomeapi
+  ];
+
   pythonImportsCheck = [ "serialx" ];
 
   nativeCheckInputs = [
@@ -59,11 +65,16 @@ buildPythonPackage (finalAttrs: {
     socat
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     # tries to access /sys/class/tty in sandbox
     "test_compat_tools_module"
     # connects to 192.0.2.1
     "test_async_socket_connect_timeout"
+    # racy
+    "test_sync_readexactly_total_timeout"
+    "test_sync_read_until_total_timeout"
   ];
 
   meta = {

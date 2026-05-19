@@ -43,19 +43,15 @@ stdenv.mkDerivation (
       dontConfigure = true;
       dontFixup = true;
 
-      postPatch = ''
-        for packageJson in \
-          packages/{contracts,shared}/package.json
-        do
-          substituteInPlace "$packageJson" \
-            --replace-fail '"prepare": "effect-language-service patch",' '"prepare": "true",'
-        done
-      '';
-
       buildPhase = ''
         runHook preBuild
 
+        # Use hoisted linker: Bun's default/isolated layout can race and omit
+        # cyclic peer dependency bin links (e.g. update-browserslist-db →
+        # browserslist). A manual .bin/browserslist symlink under .bun did not
+        # reliably fix builds; see https://github.com/oven-sh/bun/pull/29014.
         bun install \
+          --linker=hoisted \
           --cpu="*" \
           --ignore-scripts \
           --no-progress \
@@ -70,18 +66,17 @@ stdenv.mkDerivation (
 
         mkdir --parents $out
         cp --recursive node_modules $out
-        find apps packages -type d -name node_modules -exec cp --recursive --parents {} $out \;
 
         runHook postInstall
       '';
 
-      outputHash = "sha256-MuP+L8PwV9gKbeiJXYtUpgyIAYPmq4G1FolP7uB9J3w=";
+      outputHash = "sha256-0wA39cSxybKPbZ1xXf+mcI4QSXJhLcNQ6x+o2xvLuq8=";
       outputHashMode = "recursive";
     };
   in
   {
     pname = "t3code";
-    version = "0.0.21";
+    version = "0.0.24";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -89,7 +84,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-e0U9DkEh20w1xq4P9Fri3bx2ifCiDK4G/vVPHDP+lXs=";
+      hash = "sha256-7mqRuWft9h9MAEVzuwC6K1aj2UUAcjheWrwncXhpbro=";
     };
 
     postPatch = ''
@@ -123,9 +118,13 @@ stdenv.mkDerivation (
       chmod --recursive u+rwX node_modules
       patchShebangs node_modules
 
-      # Compile node-pty's native addon from the vendored bun store.
+      # Upstream bumps package.json versions after tagging releases, then applies
+      # the same bump in the release workflow before building artifacts.
+      bun scripts/update-release-package-versions.ts ${finalAttrs.version}
+
+      # Compile node-pty's native addon (hoisted into node_modules).
       export npm_config_nodedir=${nodejs}
-      cd node_modules/.bun/node-pty@*/node_modules/node-pty
+      cd node_modules/node-pty
       node-gyp rebuild
       node scripts/post-install.js
       cd -
@@ -157,8 +156,8 @@ stdenv.mkDerivation (
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop "$out"/libexec/t3code/apps/server
       cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
-      cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
-      cp --recursive --no-preserve=mode apps/desktop/{node_modules,dist-electron} "$out"/libexec/t3code/apps/desktop
+      cp --recursive --no-preserve=mode apps/server/dist "$out"/libexec/t3code/apps/server
+      cp --recursive --no-preserve=mode apps/desktop/dist-electron "$out"/libexec/t3code/apps/desktop
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
       install --mode=444 ${desktopIcon} \
@@ -178,7 +177,11 @@ stdenv.mkDerivation (
       png2icns \
         "$out/Applications/${appName}.app/Contents/Resources/t3code.icns" \
         ${desktopIcon}
-      write-darwin-bundle "$out" "${appName}" t3code-desktop t3code
+
+      # writeDarwinBundle is a shebangless bash script; run it explicitly via
+      # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
+      ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
+        "$out" "${appName}" t3code-desktop t3code
     ''
     + ''
       mkdir --parents \

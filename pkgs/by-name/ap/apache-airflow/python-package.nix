@@ -7,7 +7,7 @@
   # javascript
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
 
   # python
@@ -97,6 +97,8 @@ let
     hash = "sha256-qFgI65wAttERPCHn7ezSdNGB0sclEV7zYIBqaC0Gs4A=";
   };
 
+  pnpm = pnpm_10;
+
   airflowUi = stdenv.mkDerivation rec {
     pname = "airflow-ui-assets";
     inherit src version;
@@ -110,7 +112,12 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "airflow-ui";
-      inherit sourceRoot src version;
+      inherit
+        sourceRoot
+        src
+        version
+        pnpm
+        ;
       fetcherVersion = 3;
       hash = "sha256-zPIql9rP4EkE0Y3ihP4MkWTTYCIDr8d1LpE6vePiNdU=";
     };

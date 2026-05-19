@@ -4,6 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  wrapGAppsHook3,
   gtk3,
   librsvg,
   libusb1,
@@ -11,18 +12,19 @@
 
 stdenv.mkDerivation {
   pname = "inklingreader";
-  version = "unstable-2017-09-07";
+  version = "0.8-unstable-2026-05-06";
 
   src = fetchFromGitHub {
     owner = "roelj";
     repo = "inklingreader";
-    rev = "90f9d0d7f5353657f4d25fd75635e29c10c08d2e";
-    sha256 = "sha256-852m8g61r+NQhCYz9ghSbCG0sjao2E8B9GS06NG4GyY=";
+    rev = "44026d82e494b8068ebd8be377516053487cc2c6";
+    hash = "sha256-NfjLzgFxo3h3gpPeQ+un5f8n1kIxUBQLLRV2CptuxzA=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk3

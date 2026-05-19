@@ -226,8 +226,29 @@ in
     enableSystemdStage1 = true;
   };
 
-  installerBoot = (import ./installer.nix { inherit system; }).separateBootZfs;
-  installer = (import ./installer.nix { inherit system; }).zfsroot;
+  installerBoot =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).separateBootZfs;
+
+  installer =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).zfsroot;
+
+  installerBootWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).separateBootZfs;
+
+  installerWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).zfsroot;
 
   expand-partitions = makeTest {
     name = "multi-disk-zfs";

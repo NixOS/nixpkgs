@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mistralai";
-  version = "1.1.2";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${version}";
-    hash = "sha256-vCYdBBN9vU8gWedCxKXnzLzZ5C7pYl3KyECBNAQggto=";
+    hash = "sha256-52qgkr9oem4jFGNWvoC3wb0WR2z9yhglqA8sJHIhtbs=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mistralai";

@@ -2416,8 +2416,8 @@ with self;
     };
 
     preConfigure = ''
-      echo "LIB = ${pkgs.db.out}/lib" > config.in
-      echo "INCLUDE = ${pkgs.db.dev}/include" >> config.in
+      echo "LIB = ${pkgs.db4.out}/lib" > config.in
+      echo "INCLUDE = ${pkgs.db4.dev}/include" >> config.in
     '';
     meta = {
       description = "Perl extension for Berkeley DB version 2, 3, 4, 5 or 6";
@@ -2656,6 +2656,34 @@ with self;
       # Fix out of memory error on Perl 5.19.4 and later.
       ../development/perl-modules/boost-geometry-utils-fix-oom.patch
     ];
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Clang on Darwin defaults to a newer C++ mode where the old bundled Boost
+      # headers no longer compile.
+      substituteInPlace Build.PL \
+        --replace-fail "extra_compiler_flags => [qw(-DHAS_BOOL)]" \
+          "extra_compiler_flags => [qw(-DHAS_BOOL -std=c++14)]"
+
+      # Avoid Boost.MPL enum wrappers that modern Clang rejects as out-of-range
+      # enum constant expressions.
+      substituteInPlace src/boost/numeric/conversion/detail/int_float_mixture.hpp \
+        --replace-fail '#include "boost/mpl/integral_c.hpp"' "" \
+        --replace-fail "mpl::integral_c<int_float_mixture_enum, integral_to_integral>" "int_float_mixture_constant<integral_to_integral>" \
+        --replace-fail "mpl::integral_c<int_float_mixture_enum, integral_to_float>" "int_float_mixture_constant<integral_to_float>" \
+        --replace-fail "mpl::integral_c<int_float_mixture_enum, float_to_integral>" "int_float_mixture_constant<float_to_integral>" \
+        --replace-fail "mpl::integral_c<int_float_mixture_enum, float_to_float>" "int_float_mixture_constant<float_to_float>"
+      perl -i -pe 'if ($. == 22) { $_ .= "  template<int_float_mixture_enum v> struct int_float_mixture_constant { static const int_float_mixture_enum value = v; typedef int_float_mixture_constant type; typedef int_float_mixture_enum value_type; operator int_float_mixture_enum() const { return value; } };\n" }' \
+        src/boost/numeric/conversion/detail/int_float_mixture.hpp
+
+      # Same workaround for the user-defined-type/builtin-type conversion enum.
+      substituteInPlace src/boost/numeric/conversion/detail/udt_builtin_mixture.hpp \
+        --replace-fail '#include "boost/mpl/integral_c.hpp"' "" \
+        --replace-fail "mpl::integral_c<udt_builtin_mixture_enum, builtin_to_builtin>" "udt_builtin_mixture_constant<builtin_to_builtin>" \
+        --replace-fail "mpl::integral_c<udt_builtin_mixture_enum, builtin_to_udt>" "udt_builtin_mixture_constant<builtin_to_udt>" \
+        --replace-fail "mpl::integral_c<udt_builtin_mixture_enum, udt_to_builtin>" "udt_builtin_mixture_constant<udt_to_builtin>" \
+        --replace-fail "mpl::integral_c<udt_builtin_mixture_enum, udt_to_udt>" "udt_builtin_mixture_constant<udt_to_udt>"
+      perl -i -pe 'if ($. == 21) { $_ .= "  template<udt_builtin_mixture_enum v> struct udt_builtin_mixture_constant { static const udt_builtin_mixture_enum value = v; typedef udt_builtin_mixture_constant type; typedef udt_builtin_mixture_enum value_type; operator udt_builtin_mixture_enum() const { return value; } };\n" }' \
+        src/boost/numeric/conversion/detail/udt_builtin_mixture.hpp
+    '';
     buildInputs = [
       ExtUtilsCppGuess
       ExtUtilsTypemapsDefault
@@ -3921,10 +3949,10 @@ with self;
 
   CatalystPluginSession = buildPerlPackage {
     pname = "Catalyst-Plugin-Session";
-    version = "0.43";
+    version = "0.44";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-Session-0.43.tar.gz";
-      hash = "sha256-Xn180rlbH8IkS8buuPRPg11gPqB/WjkRCIHbYJKLFMQ=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-Session-0.44.tar.gz";
+      hash = "sha256-CSyNgOA1D5Jdx2XycsDuKPmSMAsU9bhphBIgTmyFfEI=";
     };
     buildInputs = [
       TestDeep
@@ -3933,6 +3961,7 @@ with self;
     ];
     propagatedBuildInputs = [
       CatalystRuntime
+      CryptSysRandom
       ObjectSignature
     ];
     meta = {
@@ -7581,6 +7610,9 @@ with self;
     ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    # Needed on Darwin so Crypt::OpenSSL::Guess does not pick /usr/bin/openssl and mix
+    # system libcrypto with the Nix one (perl aborts: "loading libcrypto in an unsafe way").
+    env.OPENSSL_PREFIX = pkgs.openssl;
     meta = {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with lib.licenses; [
@@ -18617,6 +18649,8 @@ with self;
       hash = "sha256-BGSH8ITBL6HIIq/8X33lbv7ZtIkFpCbmMaa5ScEU2Gw=";
     };
     outputs = [ "out" ];
+    # Keep generated XS code stable across rebuilds.
+    env.PERL_HASH_SEED = "0";
     buildInputs = [
       pkgs.apacheHttpd
       pkgs.apr
@@ -18625,6 +18659,8 @@ with self;
       ExtUtilsXSBuilder
     ];
     propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
+    # Avoid libtool misdetecting gcc as the linker.
+    configureFlags = [ "LD=ld" ];
     makeMakerFlags = [
       "--with-apache2-src=${pkgs.apacheHttpd.dev}"
       "--with-apache2-apxs=${pkgs.apacheHttpd.dev}/bin/apxs"
@@ -18634,10 +18670,10 @@ with self;
     ];
     preConfigure = ''
       # override broken prereq check
-      substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
+      substituteInPlace configure --replace-fail "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
     '';
     preBuild = ''
-      substituteInPlace apreq2-config --replace "dirname" "${pkgs.coreutils}/bin/dirname"
+      substituteInPlace apreq2-config --replace-fail "dirname" "${pkgs.coreutils}/bin/dirname"
     '';
     installPhase = ''
       mkdir $out
@@ -18666,6 +18702,8 @@ with self;
       rm -r $out/nix
     '';
     doCheck = false; # test would need to start apache httpd
+    # Apache::Test resolves localhost while generating glue/perl (Makefile.PL / t/TEST).
+    __darwinAllowLocalNetworking = true;
     meta = {
       description = "Wrapper for libapreq2's module/handle API";
       license = with lib.licenses; [ asl20 ];
@@ -20925,13 +20963,16 @@ with self;
     # Workaround build failure on -fno-common toolchains:
     #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
     #   `overflow'; Pari.o:(.bss+0x80): first defined here
-    env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=implicit-int -Wno-error=implicit-function-declaration";
+    env.NIX_CFLAGS_COMPILE = "-std=gnu17 -fcommon -Wno-error=implicit-int -Wno-error=implicit-function-declaration";
     preConfigure = "cp ${pari_tgz} pari-${pariversion}.tar.gz";
     makeMakerFlags = [ "pari_tgz=pari-${pariversion}.tar.gz" ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030528.tar.gz";
       hash = "sha256-Z/dNIWxpY1qxxuo+J84ZdQqUorVgrnKIuy1s9xT85sg=";
     };
+    patches = lib.optionals stdenv.hostPlatform.isDarwin [
+      ../development/perl-modules/Math-Pari-darwin-callback-abi.patch
+    ];
     meta = {
       description = "Perl interface to PARI";
       license = with lib.licenses; [
@@ -25313,10 +25354,10 @@ with self;
 
   NetCIDRLite = buildPerlPackage {
     pname = "Net-CIDR-Lite";
-    version = "0.23";
+    version = "0.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/ST/STIGTSP/Net-CIDR-Lite-0.23.tar.gz";
-      hash = "sha256-mlgnjkmgjN65vsAc7N06lb5zbQ59TQXRP5COOj/hDTI=";
+      url = "mirror://cpan/authors/id/S/ST/STIGTSP/Net-CIDR-Lite-0.24.tar.gz";
+      hash = "sha256-+rBqxO5gqYFhxmwQUPofJPa5lwmtD0sO3chOxxynrRc=";
     };
     meta = {
       description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
@@ -25905,10 +25946,10 @@ with self;
 
   NetPatricia = buildPerlPackage {
     pname = "Net-Patricia";
-    version = "1.22";
+    version = "1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GRUBER/Net-Patricia-1.22.tar.gz";
-      hash = "sha256-cINakm4cWo0DJMcv/+6C7rfsbBQd7gT9RGggtk9xxVI=";
+      url = "mirror://cpan/authors/id/G/GR/GRUBER/Net-Patricia-1.24.tar.gz";
+      hash = "sha256-2U9SCATiVBsc0g5zNmcgqXPK9d0tJiODj8jWOYr9fts=";
     };
     propagatedBuildInputs = [
       NetCIDRLite
@@ -25927,6 +25968,11 @@ with self;
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.75.tar.gz";
       hash = "sha256-tH3zz9lpLM0Aca05/nRxjrwy9ZcBVWpgT9FaCfCeDXQ=";
     };
+    preCheck = ''
+      # On Linux these are skipped early ("no echo port"); on Darwin they proceed and
+      # hit external DNS (www.about.com), which fails in the sandbox.
+      rm -f t/400_ping_syn.t t/410_syn_host.t
+    '';
     meta = {
       description = "Check a remote host for reachability";
       license = with lib.licenses; [
@@ -30428,51 +30474,6 @@ with self;
     };
   };
 
-  SDL = buildPerlModule {
-    pname = "SDL";
-    version = "2.548";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
-      hash = "sha256-JSoZK/qcIHCkiDcH0TnDpF2cRRjM1moeaZtbeVm9T7U=";
-    };
-    patches = [
-      # https://github.com/PerlGameDev/SDL/pull/304
-      ../development/perl-modules/sdl-modern-perl.patch
-      # sdl-compat correctly reports the bit depth of the test image,
-      # while SDL_classic rounded to the next byte
-      ../development/perl-modules/sdl-compat-bit-depth.patch
-      (fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
-        hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
-      })
-    ];
-    preCheck = "rm t/core_audiospec.t";
-    buildInputs = [
-      pkgs.SDL
-      pkgs.SDL_gfx
-      pkgs.SDL_mixer
-      pkgs.SDL_image
-      pkgs.SDL_ttf
-      pkgs.SDL_Pango
-      pkgs.SDL_net
-      AlienSDL
-      CaptureTiny
-      TestDeep
-      TestDifferences
-      TestException
-      TestMost
-      TestWarn
-    ];
-    propagatedBuildInputs = [
-      FileShareDir
-      TieSimple
-    ];
-    meta = {
-      description = "SDL bindings to Perl";
-      license = with lib.licenses; [ lgpl21Plus ];
-    };
-  };
-
   SeleniumRemoteDriver = buildPerlPackage {
     pname = "Selenium-Remote-Driver";
     version = "1.49";
@@ -30862,6 +30863,7 @@ with self;
         artistic1
         gpl1Plus
       ];
+      platforms = lib.platforms.linux; # configure probes PF_NETLINK; unavailable on Darwin
     };
   };
 
@@ -39298,10 +39300,10 @@ with self;
 
   YAMLSyck = buildPerlPackage {
     pname = "YAML-Syck";
-    version = "1.36";
+    version = "1.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.36.tar.gz";
-      hash = "sha256-Tc2dmzsM48ZaL/K5tMb/+LZJ/fJDv9fhiJVDvs25GlI=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.45.tar.gz";
+      hash = "sha256-8t4a+08MVsNubVJgqgvSyPGOTYUAnc9YQiBOoqf7w98=";
     };
     env.NIX_CFLAGS_COMPILE = "-std=gnu11";
     meta = {
@@ -39699,4 +39701,5 @@ with self;
   MongoDB = throw "MongoDB has been removed"; # 2025-09-12
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
   HTTPHeaderParserXS = throw "HTTPHeaderParserXS has been removed"; # Added 2025-11-08
+  SDL = throw "'SDL' has been removed as it was broken and unused"; # Added 2026-05-17
 }

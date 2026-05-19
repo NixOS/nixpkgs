@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-code-runner";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "markdown-code-runner";
     tag = finalAttrs.version;
-    hash = "sha256-IMI9hjZDjgzReLIuNOISIkiLlPmnX+DWlrylP108wDc=";
+    hash = "sha256-GcPMkwXwLyHoVljOpfnhmysDYIFXSyvNL5P3f6q/KJw=";
   };
 
-  cargoHash = "sha256-aUbavxCObgZlhlv5DyoC/yAq79UM4tR77jwTsVqN4yU=";
+  cargoHash = "sha256-ul5cl6FDYkW02HGtQmLHkOsSaTIn2lCaTpKjCUzdcjM=";
 
   dontUseCargoParallelTests = true;
 

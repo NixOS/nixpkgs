@@ -31,25 +31,18 @@ assert
 assert (lineEditingLibrary == "readline") -> readlineSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "rc";
-  version = "unstable-2023-06-14";
+  version = "unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "rakitzis";
     repo = "rc";
-    rev = "4aaba1a9cb9fdbb8660696a87850836ffdb09599";
-    hash = "sha256-Yql3mt7hTO2W7wTfPje+X2zBGTHiNXGGXYORJewJIM8=";
+    rev = "2bab312ea11cb77d2654a731357842971c0b5d18";
+    hash = "sha256-ViyO3i7P2RU5HZvbenANOT1WTF7JCLexeqeHPUT8PCQ=";
   };
 
   outputs = [
     "out"
     "man"
-  ];
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/rakitzis/rc/commit/2bab312ea11cb77d2654a731357842971c0b5d18.patch";
-      hash = "sha256-LpnrsvJH/0CRS0bCgoZT2Dkac6AZH8DZIPU4MQ5MP0I=";
-    })
   ];
 
   # TODO: think on a less ugly fixup
