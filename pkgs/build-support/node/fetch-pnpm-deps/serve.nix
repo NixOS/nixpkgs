@@ -2,6 +2,7 @@
   writeShellApplication,
   pnpm,
   pnpmDeps,
+  sqlite,
   zstd,
   lib,
 }:
@@ -11,6 +12,7 @@ writeShellApplication {
 
   runtimeInputs = [
     pnpm
+    sqlite
     zstd
   ];
 
@@ -34,6 +36,12 @@ writeShellApplication {
     fi
 
     chmod -R +w "$storePath"
+
+    # Reconstruct the SQLite database from the SQL dump if needed.
+    if [ -f "$storePath/v11/index.db.sql" ] && [ ! -f "$storePath/v11/index.db" ]; then
+      sqlite3 "$storePath/v11/index.db" < "$storePath/v11/index.db.sql"
+      rm "$storePath/v11/index.db.sql"
+    fi
 
     echo "Run 'pnpm install --store-dir \"$storePath\"' to install packages from this store."
 

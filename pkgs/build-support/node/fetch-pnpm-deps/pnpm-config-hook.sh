@@ -55,6 +55,14 @@ pnpmConfigHook() {
 
     chmod -R +w "$STORE_PATH"
 
+    # Reconstruct the SQLite database from the SQL dump if needed.
+    # The fetch phase stores a text SQL dump instead of the binary db
+    # to ensure reproducibility across platforms.
+    if [ -f "$STORE_PATH/v11/index.db.sql" ] && [ ! -f "$STORE_PATH/v11/index.db" ]; then
+      sqlite3 "$STORE_PATH/v11/index.db" < "$STORE_PATH/v11/index.db.sql"
+      rm "$STORE_PATH/v11/index.db.sql"
+    fi
+
     pnpm config set store-dir "$STORE_PATH"
 
     # Prevent hard linking on file systems without clone support.

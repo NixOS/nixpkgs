@@ -8,6 +8,7 @@
   makeSetupHook,
   pnpm,
   pnpm-fixup-state-db,
+  sqlite,
   writableTmpDirAsHomeHook,
   yq,
   zstd,
@@ -87,6 +88,7 @@ in
               moreutils
               pnpm # from args
               pnpm-fixup-state-db'
+              sqlite
               writableTmpDirAsHomeHook
               yq
               zstd
@@ -128,9 +130,9 @@ in
                 export pnpm_config_pm_on_fail=ignore
 
                 # Some packages produce platform dependent outputs. We do not want to cache those in the global store
-                export pnpm_config_side_effects_cache false
+                export pnpm_config_side_effects_cache=false
 
-                export pnpm_config_update_notifier false
+                export pnpm_config_update_notifier=false
               else
                 pnpm config set manage-package-manager-versions false
                 pnpm config set side-effects-cache false
@@ -172,6 +174,11 @@ in
 
               if [ -f "$storePath/v11/index.db" ]; then
                 pnpm-fixup-state-db "$storePath/v11";
+                # Dump the SQLite database to a SQL text file for reproducibility.
+                # SQLite's binary format is non-deterministic (page ordering, free lists),
+                # so we store the logical contents as SQL statements and reconstruct during build.
+                sqlite3 "$storePath/v11/index.db" .dump > "$storePath/v11/index.db.sql"
+                rm "$storePath/v11/index.db"
               fi
 
               # This folder contains symlinks to /build/source which we don't need
@@ -231,6 +238,7 @@ in
   pnpmConfigHook = makeSetupHook {
     name = "pnpm-config-hook";
     propagatedBuildInputs = [
+      sqlite
       writableTmpDirAsHomeHook
       zstd
     ];
