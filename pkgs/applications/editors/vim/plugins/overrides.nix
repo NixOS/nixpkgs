@@ -5830,12 +5830,15 @@ assertNoAdditions {
     buildInputs = [ xkb-switch ];
   };
 
-  vim-yapf = super.vim-yapf.overrideAttrs {
+  vim-yapf = super.vim-yapf.overrideAttrs (old: {
     buildPhase = ''
       substituteInPlace ftplugin/python_yapf.vim \
         --replace-fail '"yapf"' '"${python3.pkgs.yapf}/bin/yapf"'
     '';
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vim-zettel = super.vim-zettel.overrideAttrs {
     dependencies = with self; [
