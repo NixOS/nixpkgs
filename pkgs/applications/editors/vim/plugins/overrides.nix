@@ -1801,6 +1801,12 @@ assertNoAdditions {
     ];
   };
 
+  hoon-vim = super.hoon-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   hop-nvim = super.hop-nvim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.bsd3;
