@@ -84,14 +84,58 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 desktop/build/libs/desktop-*.jar $out/share/${pname}.jar
     mkdir $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libGL
-          libpulseaudio
-        ]
-      } \
-      --add-flags "-jar $out/share/${pname}.jar"
+
+    # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      app="$out/Applications/${builtins.replaceStrings [ "/" ] [ ":" ] desktopName}.app"
+      mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources" "$app/Contents/Java"
+
+      cp ios/Info.plist "$app/Contents/Info.plist"
+      substituteInPlace "$app/Contents/Info.plist" \
+        --replace-fail '${"$"}{appName}' "${desktopName}" \
+        --replace-fail '${"$"}{appExecutable}' "launcher.sh" \
+        --replace-fail '${"$"}{appApplePackageName}' "com.shatteredpixel.${pname}" \
+        --replace-fail '${"$"}{appShortVersionName}' "${version}" \
+        --replace-fail '${"$"}{appVersionName}' "${version}" \
+        --replace-fail '${"$"}{appVersionCode}' "${version}"
+
+      # Insert additional plist keys before the closing </dict> tag
+      awk '/<\/dict>/{
+        print "    <key>CFBundleIconFile</key>"
+        print "    <string>mac.icns</string>"
+        print "    <key>LSMinimumSystemVersion</key>"
+        print "    <string>10.9.0</string>"
+        print "    <key>LSApplicationCategoryType</key>"
+        print "    <string>public.app-category.role-playing-games</string>"
+        print "    <key>NSHighResolutionCapable</key>"
+        print "    <true/>"
+        print "    <key>NSHumanReadableCopyright</key>"
+        print "    <string>Copyright Evan Debenham</string>"
+      } { print }' "$app/Contents/Info.plist" > "$app/Contents/Info.plist.tmp"
+      mv "$app/Contents/Info.plist.tmp" "$app/Contents/Info.plist"
+
+      ln -s "$out/share/${pname}.jar" "$app/Contents/Java/${pname}.jar"
+
+      cp desktop/src/main/assets/icons/mac.icns "$app/Contents/Resources/mac.icns"
+
+      makeWrapper ${lib.getExe jre} "$app/Contents/MacOS/launcher.sh" \
+        --add-flag "-XstartOnFirstThread" \
+        --add-flag "-jar" \
+        --add-flag "$app/Contents/Java/${pname}.jar"
+
+      ln -s "$app/Contents/MacOS/launcher.sh" "$out/bin/${pname}"
+    ''}
+
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      makeWrapper ${lib.getExe jre} $out/bin/${pname} \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            libGL
+            libpulseaudio
+          ]
+        } \
+        --add-flags "-jar $out/share/${pname}.jar"
+    ''}
 
     for s in 16 32 48 64 128 256; do
       # Some forks only have some icons and/or name them slightly differently
