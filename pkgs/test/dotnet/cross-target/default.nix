@@ -3,6 +3,7 @@
   dotnet-sdk,
   dotnetCorePackages,
   stdenv,
+  writeText,
 }:
 
 let
@@ -16,6 +17,25 @@ let
 
   mkTest =
     dotnet-sdk_target:
+
+    let
+      runtime = dotnet-sdk_target.runtime;
+
+      targetFramework = "net${lib.versions.majorMinor runtime.version}";
+
+      props = writeText "framework.props" ''
+        <Project>
+          <ItemGroup>
+            <KnownFrameworkReference Update="@(KnownFrameworkReference)">
+              <TargetingPackVersion Condition="'%(TargetFramework)' == '${targetFramework}'">${runtime.version}</TargetingPackVersion>
+            </KnownFrameworkReference>
+            <KnownAppHostPack Update="@(KnownAppHostPack)">
+              <AppHostPackVersion Condition="'%(TargetFramework)' == '${targetFramework}'">${runtime.version}</AppHostPackVersion>
+            </KnownAppHostPack>
+          </ItemGroup>
+        </Project>
+      '';
+    in
 
     stdenv.mkDerivation {
       name = "dotnet-cross-target-${dotnet-sdk_target.version}-from-${dotnet-sdk.version}-test";
@@ -32,6 +52,7 @@ let
         runHook preUnpack
         mkdir test
         cd test
+        cp ${props} Directory.Build.props
         ${dotnet-sdk_target}/bin/dotnet new console --no-restore
         runHook postUnpack
       '';
