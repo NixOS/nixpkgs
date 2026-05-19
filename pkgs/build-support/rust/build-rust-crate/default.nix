@@ -12,6 +12,7 @@
   pkgsBuildBuild,
   rustc,
   cargo,
+  clippy,
   jq,
   libiconv,
   # Controls codegen parallelization for all crates.
@@ -163,6 +164,31 @@ lib.makeOverridable
       #
       # Default: pkgs.cargo
       cargo ? cargo,
+      # Whether to compile the crate's library, binary, and test targets with
+      # `clippy-driver` instead of `rustc`. Build scripts (`build.rs`) keep
+      # plain `rustc` — they are typically auto-generated and clippy findings
+      # there are not actionable.
+      #
+      # `clippy-driver` wraps `rustc_driver` with extra lint passes and emits
+      # link-compatible `.rlib`/`.rmeta`, so dependency crates built with plain
+      # `rustc` are still usable; only the crate being linted needs this flag.
+      #
+      # Note that the default `capLints` of `"allow"` suppresses ALL lints,
+      # including clippy's. Set `capLints = "warn"` (or `"forbid"`) or supply
+      # a `lints` table — otherwise `useClippy` is a silent no-op. Lint flags
+      # such as `-D warnings` or `-W clippy::pedantic` go through the regular
+      # `extraRustcOpts` (clippy-driver forwards rustc flags unchanged).
+      #
+      # Example: true
+      # Default: false
+      useClippy,
+      # The clippy package providing `clippy-driver`. Only consulted when
+      # `useClippy = true`. Override this together with `rust` when using a
+      # toolchain (rust-overlay, Fenix) that bundles its own `clippy-driver`,
+      # so the sysroot matches.
+      #
+      # Default: pkgs.clippy
+      clippy ? clippy,
       # Whether to build a release version (`true`) or a debug
       # version (`false`). Debug versions are faster to build
       # but might be much slower at runtime.
@@ -412,6 +438,7 @@ lib.makeOverridable
           cargo
           jq
         ]
+        ++ lib.optional useClippy clippy
         ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
         ++ (crate.nativeBuildInputs or [ ])
@@ -559,6 +586,7 @@ lib.makeOverridable
             buildTests
             codegenUnits
             capLints
+            useClippy
             ;
         };
         dontStrip = !release;
@@ -594,6 +622,8 @@ lib.makeOverridable
   {
     rust = crate_.rust or rustc;
     cargo = crate_.cargo or cargo;
+    useClippy = crate_.useClippy or false;
+    clippy = crate_.clippy or clippy;
     release = crate_.release or true;
     verbose = crate_.verbose or true;
     extraRustcOpts = [ ];

@@ -1042,6 +1042,75 @@ rec {
           touch $out
         '';
 
+      # `useClippy = true` plus a denied clippy lint should fail the build,
+      # proving clippy-driver (not plain rustc) compiled the crate. The
+      # `clippy::` prefix in the diagnostic is the fingerprint: rustc has no
+      # such lint group.
+      useClippyDenyFails =
+        let
+          crate = mkHostCrate {
+            crateName = "useClippyDenyFails";
+            useClippy = true;
+            lints.clippy.eq_op = "deny";
+            src = mkFile "src/lib.rs" ''
+              pub fn check() -> bool {
+                1 == 1
+              }
+            '';
+          };
+          failed = testers.testBuildFailure crate;
+        in
+        runCommand "assert-useClippyDenyFails" { inherit failed; } ''
+          grep -q 'clippy::eq.op' "$failed/testBuildFailure.log"
+          grep -q 'equal expressions' "$failed/testBuildFailure.log"
+          touch $out
+        '';
+
+      # `useClippy = true` with the default `capLints` (which resolves to
+      # `"allow"` when `lints` is empty) must still build: the cap silences
+      # clippy lints just like rustc lints. Same source as the failing test
+      # above — only the `lints` table differs.
+      useClippyDefaultCapAllows = mkHostCrate {
+        crateName = "useClippyDefaultCapAllows";
+        useClippy = true;
+        src = mkFile "src/lib.rs" ''
+          pub fn check() -> bool {
+            1 == 1
+          }
+        '';
+      };
+
+      # A library compiled by clippy-driver must produce an `.rlib` that a
+      # plain-rustc dependent can link against and run. This is the property
+      # that makes `useClippy` safe to flip per-crate.
+      useClippyRlibLinkCompat =
+        let
+          libCrate = mkHostCrate {
+            crateName = "clippylib";
+            useClippy = true;
+            src = mkFile "src/lib.rs" ''
+              pub fn test() -> i32 {
+                23
+              }
+            '';
+          };
+          binCrate = mkHostCrate {
+            crateName = "clippybin";
+            dependencies = [ libCrate ];
+            src = mkBinExtern "src/main.rs" "clippylib";
+          };
+        in
+        runCommand "run-useClippyRlibLinkCompat" { nativeBuildInputs = [ binCrate ]; } (
+          if stdenv.hostPlatform == stdenv.buildPlatform then
+            ''
+              ${binCrate}/bin/clippybin && touch $out
+            ''
+          else
+            ''
+              test -x '${binCrate}/bin/clippybin' && touch $out
+            ''
+        );
+
       rcgenTest =
         let
           pkg = rcgenCrates.rootCrate.build;
