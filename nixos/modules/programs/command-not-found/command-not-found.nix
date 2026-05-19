@@ -33,7 +33,10 @@ in
 
     enable = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = builtins.pathExists config.programs.command-not-found.dbPath;
+      defaultText = lib.literalExpression ''
+        builtins.pathExists config.programs.command-not-found.dbPath
+      '';
       description = ''
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
@@ -62,34 +65,26 @@ in
     };
   };
 
-  config = lib.mkMerge [
-    {
-      programs.command-not-found = {
-        enable = lib.mkDefault (builtins.pathExists cfg.dbPath);
-      };
-    }
+  config = lib.mkIf cfg.enable {
+    programs.bash.interactiveShellInit = ''
+      command_not_found_handle() {
+        '${commandNotFound}/bin/command-not-found' "$@"
+      }
+    '';
 
-    (lib.mkIf cfg.enable {
-      programs.bash.interactiveShellInit = ''
-        command_not_found_handle() {
-          '${commandNotFound}/bin/command-not-found' "$@"
-        }
-      '';
+    programs.zsh.interactiveShellInit = ''
+      command_not_found_handler() {
+        '${commandNotFound}/bin/command-not-found' "$@"
+      }
+    '';
 
-      programs.zsh.interactiveShellInit = ''
-        command_not_found_handler() {
-          '${commandNotFound}/bin/command-not-found' "$@"
-        }
-      '';
+    # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
+    programs.fish.interactiveShellInit = ''
+      function fish_command_not_found
+         "${commandNotFound}/bin/command-not-found" $argv
+      end
+    '';
 
-      # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
-      programs.fish.interactiveShellInit = ''
-        function fish_command_not_found
-           "${commandNotFound}/bin/command-not-found" $argv
-        end
-      '';
-
-      environment.systemPackages = [ commandNotFound ];
-    })
-  ];
+    environment.systemPackages = [ commandNotFound ];
+  };
 }
