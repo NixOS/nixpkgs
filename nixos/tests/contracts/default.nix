@@ -11,5 +11,6 @@
        <contract name>-<provider name> = runTest ./<contract name>/<provider name>.nix
   */
   fileBackup-borgbackup = runTest ./fileBackup/borgbackup.nix;
+  fileBackup-demo = runTest ./fileBackup/demo.nix;
   fileBackup-restic = runTest ./fileBackup/restic.nix;
 }
