@@ -5560,6 +5560,12 @@ assertNoAdditions {
     };
   });
 
+  vim-prosession = super.vim-prosession.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-ps1 = super.vim-ps1.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.asl20;
