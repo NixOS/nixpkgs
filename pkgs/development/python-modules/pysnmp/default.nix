@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "7.1.22";
+  version = "7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
     tag = "v${version}";
-    hash = "sha256-uEOhOVXaz4g1Ciun8x2AT8pRBkKR6uEfu4KJ1XSwouY=";
+    hash = "sha256-HnTjIGY2a1wqyHQ1QWyg1n1pVFp9CABoTMc6k/PCU6s=";
   };
 
   build-system = [ flit-core ];
