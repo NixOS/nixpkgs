@@ -3,6 +3,7 @@
   stdenv,
   llvmPackages,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   flatbuffers,
   libffi,
@@ -36,6 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-A5EnZgXc9+L+bzWHftaL74nHmP8Jf0rnT5KJAAWvKis=";
   };
+
+  patches = [
+    # Backport: properly initialize bf16 inputs in simd_op_check.
+    (fetchpatch2 {
+      url = "https://github.com/halide/Halide/commit/acb58504f0ce02e07b8b9008668c8779d3561ec8.patch?full_index=1";
+      hash = "sha256-n9avTYe8JFYQKeJQBQQV9xoOoYp0imXD2GQgifRym/A=";
+    })
+    # Backport: add Zen4/Zen5/AVXVNNI feature flags to simd_op_check's can_run_code.
+    (fetchpatch2 {
+      url = "https://github.com/halide/Halide/commit/1b9be55dfaa162fad6a3ed3c6e8d83f966ce8af1.patch?full_index=1";
+      hash = "sha256-5f6Q2Q1pvimlFV3lCcMzIHMIze6A8TmnMjVpQ8/ceyg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/runtime/CMakeLists.txt --replace-fail \
