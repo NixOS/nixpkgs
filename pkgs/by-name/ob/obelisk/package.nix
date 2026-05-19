@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   ocamlPackages,
-  menhir,
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -17,7 +16,7 @@ ocamlPackages.buildDunePackage rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ menhir ];
+  nativeBuildInputs = with ocamlPackages; [ menhir ];
   buildInputs = with ocamlPackages; [ re ];
 
   meta = {
