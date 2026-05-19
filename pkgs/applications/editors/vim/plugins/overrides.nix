@@ -363,6 +363,12 @@ assertNoAdditions {
     };
   });
 
+  bclose-vim = super.bclose-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.cc-by-sa-30;
+    };
+  });
+
   bitbake = super.bitbake.overrideAttrs (old: {
     sourceRoot = "source/contrib/vim";
     meta = old.meta // {
