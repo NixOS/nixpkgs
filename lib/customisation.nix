@@ -423,13 +423,10 @@ rec {
         };
       commonAttrs =
         if !drv ? outputs || drv.outputs == defaultOutputs then
-          let
-            out = mkOutput "out";
-          in
           drv
           // {
-            inherit out;
-            all = [ out ];
+            out = mkOutput "out";
+            all = [ (mkOutput "out") ]; # all is almost never accessed, so we prefer to recompute
             drvPath =
               assert condition;
               drv.drvPath;
