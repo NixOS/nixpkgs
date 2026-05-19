@@ -1868,6 +1868,12 @@ assertNoAdditions {
     };
   });
 
+  incsearch-easymotion-vim = super.incsearch-easymotion-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
     # Meta file
     nvimSkipModules = "ibl.config.types";
