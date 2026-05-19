@@ -5487,6 +5487,12 @@ assertNoAdditions {
     };
   });
 
+  vim-operator-replace = super.vim-operator-replace.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-operator-surround = super.vim-operator-surround.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
