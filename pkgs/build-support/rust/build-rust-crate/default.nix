@@ -295,6 +295,18 @@ lib.makeOverridable
       # Use true to enable.
       # Default: false
       buildTests,
+      # Whether to build the crate's API documentation with rustdoc instead
+      # of compiling it with rustc. Output is placed in `$out/share/doc/`.
+      #
+      # Mutually exclusive with `buildTests`.
+      #
+      # The crate's build script (if any) is still compiled and run with the
+      # real `rustc`, since rustdoc needs the `OUT_DIR` artifacts it produces
+      # to resolve `include!` and `#[path]` attributes.
+      #
+      # Only library targets are documented. Binary targets are skipped.
+      # Default: false
+      buildDocs,
       # Passed to stdenv.mkDerivation.
       preUnpack,
       # Passed to stdenv.mkDerivation.
@@ -318,6 +330,10 @@ lib.makeOverridable
       # Passed to stdenv.mkDerivation.
       postInstall,
     }:
+
+    assert lib.assertMsg (
+      !(buildTests && buildDocs)
+    ) "buildRustCrate: buildTests and buildDocs are mutually exclusive";
 
     let
       crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: { }) crateOverrides crate_);
@@ -343,6 +359,7 @@ lib.makeOverridable
         "colors"
         "edition"
         "buildTests"
+        "buildDocs"
         "codegenUnits"
         "links"
         "capLints"
@@ -354,6 +371,7 @@ lib.makeOverridable
       extraRustcOpts_ = extraRustcOpts;
       extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
       buildTests_ = buildTests;
+      buildDocs_ = buildDocs;
       resolvedLints = crate.lints or lints;
       lintFlags = lintsToRustcFlags resolvedLints;
       resolvedCapLints =
@@ -401,10 +419,11 @@ lib.makeOverridable
           preInstall
           postInstall
           buildTests
+          buildDocs
           ;
 
         src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
-        name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
+        name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}${lib.optionalString buildDocs_ "-doc"}";
         version = crate.version;
         depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
         nativeBuildInputs = [
@@ -557,6 +576,7 @@ lib.makeOverridable
             colors
             extraRustcOpts
             buildTests
+            buildDocs
             codegenUnits
             capLints
             ;
@@ -566,19 +586,19 @@ lib.makeOverridable
         # We need to preserve metadata in .rlib, which might get stripped on macOS. See https://github.com/NixOS/nixpkgs/issues/218712
         stripExclude = [ "*.rlib" ];
 
-        installPhase = installCrate crateName metadata buildTests;
+        installPhase = installCrate crateName metadata buildTests buildDocs;
 
-        # depending on the test setting we are either producing something with bins
-        # and libs or just test binaries
+        # depending on the test/doc setting we are either producing something
+        # with bins and libs, just test binaries, or just rustdoc HTML
         outputs =
-          if buildTests then
+          if buildTests || buildDocs then
             [ "out" ]
           else
             [
               "out"
               "lib"
             ];
-        outputDev = if buildTests then [ "out" ] else [ "lib" ];
+        outputDev = if buildTests || buildDocs then [ "out" ] else [ "lib" ];
 
         meta = {
           mainProgram = crateName;
@@ -619,4 +639,5 @@ lib.makeOverridable
     buildDependencies = crate_.buildDependencies or [ ];
     crateRenames = crate_.crateRenames or { };
     buildTests = crate_.buildTests or false;
+    buildDocs = crate_.buildDocs or false;
   }

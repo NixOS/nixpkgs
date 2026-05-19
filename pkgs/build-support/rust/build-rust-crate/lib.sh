@@ -32,6 +32,32 @@ build_lib() {
   fi
 }
 
+# Like build_lib, but invoke rustdoc instead of rustc to produce HTML
+# documentation under target/doc/. Drops the link-arg variables (rustdoc
+# does not link) and the EXTRA_LIB side-effect (no rlib is produced for
+# downstream bins to --extern). Keeps $BUILD_OUT_DIR / $EXTRA_BUILD /
+# $EXTRA_FEATURES so build-script outputs (OUT_DIR, cargo:rustc-cfg=,
+# cargo:rustc-flags=-l/-L) reach rustdoc.
+build_lib_doc() {
+  lib_src=$1
+  echo_build_heading $lib_src ${libName}
+
+  mkdir -p target/doc
+  noisily env "${CARGO_BIN_EXE_ENV[@]}" rustdoc \
+    --crate-name $CRATE_NAME \
+    $lib_src \
+    --out-dir target/doc \
+    -L dependency=target/deps \
+    --cap-lints $CAP_LINTS \
+    $LINK \
+    $LIB_RUSTDOC_OPTS \
+    $BUILD_OUT_DIR \
+    $EXTRA_BUILD \
+    $EXTRA_FEATURES \
+    $EXTRA_RUSTC_FLAGS \
+    --color $colors
+}
+
 build_bin() {
   local crate_name=$1
   local crate_name_=$(echo $crate_name | tr '-' '_')

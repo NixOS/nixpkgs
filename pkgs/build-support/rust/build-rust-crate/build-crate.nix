@@ -23,6 +23,7 @@
   verbose,
   colors,
   buildTests,
+  buildDocs,
   codegenUnits,
   capLints,
 }:
@@ -69,7 +70,29 @@ let
 
   binRustcOpts = lib.concatStringsSep " " baseRustcOpts;
 
+  # rustdoc does not accept --crate-type or -C metadata/extra-filename, and
+  # the codegen / linker / path-remap flags are irrelevant for HTML output.
+  # Keep dependency/feature plumbing, cross --target, --edition (carried in
+  # extraRustcOpts), and the proc_macro prelude.
+  docRustcOpts = lib.concatStringsSep " " (
+    [
+      (mkRustcDepArgs dependencies crateRenames)
+      (mkRustcFeatureArgs crateFeatures)
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--target"
+      stdenv.hostPlatform.rust.rustcTargetSpec
+    ]
+    ++ lib.optionals (needUnstableCLI dependencies) [
+      "-Z"
+      "unstable-options"
+    ]
+    ++ extraRustcOpts
+    ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
+  );
+
   build_bin = if buildTests then "build_bin_test" else "build_bin";
+  build_lib = if buildDocs then "build_lib_doc" else "build_lib";
 
   # Shell snippet that builds a binary target to target/cargo-bin-exe/
   # so integration tests can exec it via CARGO_BIN_EXE_<name>.
@@ -95,6 +118,7 @@ in
 
   # configure & source common build functions
   LIB_RUSTC_OPTS="${libRustcOpts}"
+  LIB_RUSTDOC_OPTS="${docRustcOpts}"
   BIN_RUSTC_OPTS="${binRustcOpts}"
   LIB_EXT="${stdenv.hostPlatform.extensions.library}"
   LIB_PATH="${libPath}"
@@ -106,9 +130,9 @@ in
   setup_link_paths
 
   if [[ -e "$LIB_PATH" ]]; then
-     build_lib "$LIB_PATH"
+     ${build_lib} "$LIB_PATH"
   elif [[ -e src/lib.rs ]]; then
-     build_lib src/lib.rs
+     ${build_lib} src/lib.rs
   fi
 
   ${
@@ -162,7 +186,7 @@ in
     fi
   ''}
 
-  ${lib.optionalString (lib.length crateBin > 0) (
+  ${lib.optionalString (lib.length crateBin > 0 && !buildDocs) (
     lib.concatMapStringsSep "\n" (
       bin:
       let
@@ -219,7 +243,7 @@ in
 
   # If crateBin is empty and hasCrateBin is not set then we must try to
   # detect some kind of bin target based on some files that might exist.
-  ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
+  ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin && !buildDocs) ''
     if [[ -e src/main.rs ]]; then
       mkdir -p target/bin
       ${build_bin} ${crateName} src/main.rs
