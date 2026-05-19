@@ -23,38 +23,6 @@ python3Packages.buildPythonApplication rec {
   format = "setuptools";
 
 
-  cardsets = stdenv.mkDerivation rec {
-    pname = "pysol-cardsets";
-    version = "3.1";
-
-    src = fetchzip {
-      url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-${version}.tar.bz2";
-      hash = "sha256-NyCnMlMZ6d5+IiyG4cVn/zlDlArLJSs0dIqZiD7Nv4M=";
-    };
-
-    installPhase = ''
-      runHook preInstall
-      cp -r $src $out
-      runHook postInstall
-    '';
-  };
-
-  music = stdenv.mkDerivation rec {
-    pname = "pysol-music";
-    version = "4.50";
-
-    src = fetchzip {
-      url = "mirror://sourceforge/pysolfc/pysol-music-${version}.tar.xz";
-      hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
-    };
-
-    installPhase = ''
-      runHook preInstall
-      cp -r $src $out
-      runHook postInstall
-    '';
-  };
-
   propagatedBuildInputs = with python3Packages; [
     tkinter
     six
@@ -83,23 +51,62 @@ python3Packages.buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  passthru.updateScript = _experimental-update-script-combinators.sequence (
-    # Needed in order to work around requirement that only one updater with features enabled is in sequence
-    map (updater: updater.command) [
-      (gitUpdater {
-        url = "https://github.com/shlomif/PySolFC.git";
-        rev-prefix = "pysolfc-";
-      })
-      (gitUpdater {
-        url = "https://github.com/shlomif/PySolFC-CardSets.git";
-        attrPath = "pysolfc.cardsets";
-      })
-      (gitUpdater {
-        url = "https://github.com/shlomif/pysol-music.git";
-        attrPath = "pysolfc.music";
-      })
-    ]
-  );
+  passthru = {
+    cardsets = stdenv.mkDerivation (cardsetsAttrs: {
+      pname = "pysol-cardsets";
+      version = "3.1";
+
+      src = fetchFromGitHub {
+        owner = "shlomif";
+        repo = "PySolFC-CardSets";
+        tag = cardsetsAttrs.version;
+        hash = "sha256-agbfeM19BCdbk73KZpvoRR0fCOSR7cpqlt7T1/MlM9g=";
+      };
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p "$out"
+        cp -r . "$out"
+        runHook postInstall
+      '';
+    });
+
+    music = stdenv.mkDerivation (musicAttrs: {
+      pname = "pysol-music";
+      version = "4.50";
+
+      src = fetchFromGitHub {
+        owner = "shlomif";
+        repo = "pysol-music";
+        tag = musicAttrs.version;
+        hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
+      };
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p "$out"
+        cp -r . "$out"
+        runHook postInstall
+      '';
+    });
+
+    updateScript = _experimental-update-script-combinators.sequence (
+      map (updater: updater.command) [
+        (gitUpdater {
+          url = "https://github.com/shlomif/PySolFC.git";
+          rev-prefix = "pysolfc-";
+        })
+        (gitUpdater {
+          url = "https://github.com/shlomif/PySolFC-CardSets.git";
+          attrPath = "pysolfc.cardsets";
+        })
+        (gitUpdater {
+          url = "https://github.com/shlomif/pysol-music.git";
+          attrPath = "pysolfc.music";
+        })
+      ]
+    );
+  };
 
   meta = {
     description = "Collection of more than 1000 solitaire card games";
