@@ -119,7 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gnu.org/software/freedink/"; # Formerly http://www.freedink.org
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = with lib.maintainers; [
+      iedame
+      philocalyst
+    ];
     platforms = lib.platforms.all;
     mainProgram = "freedink";
   };
