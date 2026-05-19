@@ -42,7 +42,7 @@ let
 
     ${config.system.systemBuilderCommands}
 
-    printf "%s" "$extraDependencies" > "$out/extra-dependencies"
+    printf "%s " "''${extraDependencies[@]}" > "$out/extra-dependencies"
 
     ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
       ${config.boot.bootspec.writer}
