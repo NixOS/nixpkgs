@@ -117,6 +117,7 @@ buildDotnetModule (finalAttrs: {
       gepbird
       thiagokokada
       Guanran928
+      philocalyst
     ];
     platforms = [
       "aarch64-linux"
