@@ -45,9 +45,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "textile" ];
 
   meta = {
-    description = "MOdule for generating web text";
+    description = "Module for generating web text";
     homepage = "https://github.com/textile/python-textile";
-    changelog = "https://github.com/textile/python-textile/blob/${finalAttrs.version}/CHANGELOG.textile";
+    changelog = "https://github.com/textile/python-textile/blob/${finalAttrs.src.tag}/CHANGELOG.textile";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytextile";
