@@ -2421,6 +2421,12 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  mark-radar-nvim = super.mark-radar-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   markdoc-nvim = super.markdoc-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-treesitter-parsers.markdown
