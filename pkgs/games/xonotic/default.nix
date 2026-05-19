@@ -64,6 +64,7 @@ let
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       zalakain
+      philocalyst
     ];
     platforms = lib.platforms.linux;
   };
