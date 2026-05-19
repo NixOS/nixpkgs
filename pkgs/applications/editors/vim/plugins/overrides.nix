@@ -5726,6 +5726,12 @@ assertNoAdditions {
     };
   });
 
+  vim-textobj-function = super.vim-textobj-function.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-textobj-line = super.vim-textobj-line.overrideAttrs (old: {
     dependencies = [ self.vim-textobj-user ];
     meta = old.meta // {
