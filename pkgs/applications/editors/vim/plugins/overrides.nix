@@ -4644,6 +4644,12 @@ assertNoAdditions {
     dependencies = [ self.nvzone-volt ];
   };
 
+  timestamp-vim = super.timestamp-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   tinted-vim = super.tinted-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
