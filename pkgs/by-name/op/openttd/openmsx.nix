@@ -26,6 +26,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    patchShebangs scripts
     substituteInPlace scripts/md5list.py \
       --replace-fail "md5call = [\"md5\", \"-r\"]" "md5call = [\"md5sum\"]"
   '';

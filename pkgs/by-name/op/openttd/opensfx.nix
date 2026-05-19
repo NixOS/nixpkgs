@@ -32,6 +32,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    patchShebangs scripts
     substituteInPlace Makefile.in \
       --replace-fail \
         'ifneq ("$(shell which $(MD5SUM) 2>/dev/null)","")' \
