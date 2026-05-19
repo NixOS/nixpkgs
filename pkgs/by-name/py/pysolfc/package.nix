@@ -4,15 +4,20 @@
   fetchFromGitHub,
   python3Packages,
   desktop-file-utils,
+  wrapGAppsHook3,
   freecell-solver,
   black-hole-solver,
-  _experimental-update-script-combinators,
   gitUpdater,
+  _experimental-update-script-combinators,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pysolfc";
   version = "3.4.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "shlomif";
     repo = "PySolFC";
@@ -22,6 +27,10 @@ python3Packages.buildPythonApplication rec {
 
   format = "setuptools";
 
+  nativeBuildInputs = [
+    desktop-file-utils
+    wrapGAppsHook3
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     tkinter
@@ -31,8 +40,7 @@ python3Packages.buildPythonApplication rec {
     pysol-cards
     attrs
     pycotap
-    # optional :
-    pygame
+    pygame-ce
     freecell-solver
     black-hole-solver
     pillow
@@ -40,12 +48,59 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./pysolfc-datadir.patch ];
 
-  nativeBuildInputs = [ desktop-file-utils ];
+  # wrapGAppsHook wraps every executable under $out/bin, including the hidden
+  # .pysolfc-wrapped script left by wrapPythonPrograms. Which produces a broken
+  # Mach-O wrapper chain on Darwin.
+  dontWrapGApps = stdenv.hostPlatform.isDarwin;
+
+  postPatch = ''
+    mv pysol.py pysol
+    substituteInPlace setup.py data/pysol.desktop \
+      --replace-fail "pysol.py" "pysol"
+  '';
+
+  # html/ is generated at release time (see upstream Makefile and macos-package.yml).
+  preBuild = ''
+    export PYTHONPATH="$PWD''${PYTHONPATH:+:}$PYTHONPATH"
+    (cd html-src && ${python3Packages.python}/bin/python3 ./gen-html.py)
+
+    cp -r html-src/images html-src/html
+    rm -rf data/html
+    mv html-src/html data
+  '';
 
   postInstall = ''
-    mkdir $out/share/PySolFC/cardsets
-    cp -r $cardsets/* $out/share/PySolFC/cardsets
-    cp -r $music/data/music $out/share/PySolFC
+    mkdir -p "$out/share/PySolFC/cardsets"
+    cp -r ${finalAttrs.passthru.cardsets}/* "$out/share/PySolFC/cardsets/"
+    cp -r ${finalAttrs.passthru.music}/data/music "$out/share/PySolFC/"
+
+    install -Dm644 "$src/data/pysol.desktop" "$out/share/applications/pysolfc.desktop"
+    substituteInPlace "$out/share/applications/pysolfc.desktop" \
+      --replace-fail "Exec=pysol" "Exec=pysolfc"
+
+    for size in 16 32 48 128 512; do
+      install -Dm644 "$out/share/PySolFC/images/icons/''${size}x''${size}/pysol.png" \
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/pysolfc.png"
+    done
+
+    mv "$out/bin/pysol" "$out/bin/pysolfc"
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    app="$out/Applications/PySolFC.app"
+    launcher="$out/bin/pysolfc"
+
+    mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+    install -Dm644 ${./Info.plist} "$app/Contents/Info.plist"
+    substituteInPlace "$app/Contents/Info.plist" \
+      --replace-fail '@VERSION@' "${finalAttrs.version}"
+
+    cp "$src/data/PySol.icns" "$app/Contents/Resources/PySol.icns"
+
+    # One gapps wrap on the setuptools launcher only (not .pysolfc-wrapped).
+    wrapGApp "$launcher"
+    install -Dm755 "$launcher" "$app/Contents/MacOS/pysolfc"
+    ln -sfn "$app/Contents/MacOS/pysolfc" "$out/bin/pysolfc"
   '';
 
   # No tests in archive
@@ -117,4 +172,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ philocalyst ];
     platforms = lib.platforms.all;
   };
-}
+})
