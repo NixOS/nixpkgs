@@ -5934,9 +5934,12 @@ assertNoAdditions {
     };
   });
 
-  vimshell-vim = super.vimshell-vim.overrideAttrs {
+  vimshell-vim = super.vimshell-vim.overrideAttrs (old: {
     dependencies = [ self.vimproc-vim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   vimtex = super.vimtex.overrideAttrs {
     checkInputs = with self; [
