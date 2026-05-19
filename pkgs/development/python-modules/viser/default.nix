@@ -55,14 +55,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "viser";
-  version = "1.0.27";
+  version = "1.0.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "viser-project";
     repo = "viser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qE9V6KjniKm3vBtf5ger6UHob4go0wTaJnmYtvYqvMc=";
+    hash = "sha256-M9zLL3CGvEErcWj2V0iRIlBV+HtfhWQAK4Dd8V118h0=";
   };
 
   postPatch = ''
