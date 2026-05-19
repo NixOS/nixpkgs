@@ -159,6 +159,12 @@ rec {
     pyproject = true;
     build-system = [ python3Packages.poetry-core ];
 
+    patches = [
+      # Backport desktop-notifier 6 / rubicon-objc 0.5 support.
+      # https://github.com/ActivityWatch/aw-notify/pull/10
+      ./aw-notify-desktop-notifier-6.patch
+    ];
+
     dependencies = with python3Packages; [
       aw-client
       desktop-notifier
