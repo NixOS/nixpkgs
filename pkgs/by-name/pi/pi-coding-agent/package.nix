@@ -86,7 +86,6 @@ buildNpmPackage (finalAttrs: {
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgram = "${placeholder "out"}/bin/pi";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

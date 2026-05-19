@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/vcmiclient";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [
     "XDG_CACHE_HOME"
     "XDG_CONFIG_HOME"

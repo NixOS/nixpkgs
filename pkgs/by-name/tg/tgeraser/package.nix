@@ -30,8 +30,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Tool to delete all your messages from Telegram";
     longDescription = ''

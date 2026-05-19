@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ rust-jemalloc-sys ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   patches = [

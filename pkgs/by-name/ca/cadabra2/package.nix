@@ -117,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   #doInstallCheck = !enableBuildAsCppLibrary;
   doInstallCheck = false; # FIXME: remove this line and uncomment the above after next release
 

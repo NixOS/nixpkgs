@@ -42,7 +42,6 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # plugin test is flaky, see https://github.com/FiloSottile/age/issues/517

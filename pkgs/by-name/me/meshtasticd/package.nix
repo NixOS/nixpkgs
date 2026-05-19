@@ -134,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     udevCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   preVersionCheck = ''
     version="${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version}.${lib.versions.patch finalAttrs.version}"
   '';

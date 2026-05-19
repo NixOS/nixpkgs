@@ -160,7 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongo";
-  versionCheckProgramArg = "--version";
 
   installTargets = "install-devcore";
 

@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook

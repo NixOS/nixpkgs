@@ -133,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/firtool";
-  versionCheckProgramArg = "--version";
 
   outputs = [
     "out"

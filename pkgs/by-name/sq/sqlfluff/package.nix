@@ -47,8 +47,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   disabledTestPaths = [
     # Don't run the plugin related tests
     "plugins/sqlfluff-plugin-example/test/rules/rule_test_cases_test.py"

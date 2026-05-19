@@ -25,8 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
-
   meta = {
     description = "Manage IP ranges";
     homepage = "https://github.com/firehol/iprange";

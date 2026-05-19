@@ -118,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = [ "${placeholder "out"}/bin/drbdadm" ];
-  versionCheckProgramArg = "--version";
 
   passthru.tests.drbd = nixosTests.drbd;
 
