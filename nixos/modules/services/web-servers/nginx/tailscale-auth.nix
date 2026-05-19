@@ -72,6 +72,10 @@ in
 
           proxy_pass http://unix:${cfgAuth.socketPath};
           proxy_pass_request_body off;
+          # Upstream does not unset Content-Length, but nginx documentation says to do this when discarding the request body,
+          # and failure to do this may cause requests with request bodies to hang.
+          # https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/#configuring-nginx-and-nginx-plus
+          proxy_set_header Content-Length "";
 
           # Upstream uses $http_host here, but we are using gixy to check nginx configurations
           # gixy wants us to use $host: https://github.com/yandex/gixy/blob/master/docs/en/plugins/hostspoofing.md
