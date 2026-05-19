@@ -46,6 +46,9 @@ stdenv.mkDerivation {
   pname = "tokenizers-cpp";
   inherit version src;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   patches = [ ./use-system-libs.patch ];
 
   nativeBuildInputs = [
@@ -60,7 +63,7 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DTOKENIZERS_RUST_LIB_PATH=${tokenizers-c}/lib/libtokenizers_c.a"
+    (lib.cmakeFeature "TOKENIZERS_RUST_LIB_PATH" "${lib.getLib tokenizers-c}/lib/libtokenizers_c.a")
   ];
 
   installPhase = ''

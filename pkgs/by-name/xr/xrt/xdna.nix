@@ -34,9 +34,9 @@ let
     src = fetchFromGitHub {
       owner = "amd";
       repo = "xdna-driver";
-      rev = xrt.version;
-      hash = "sha256-bBiI42bwap6O59MQdIylX7uz+fLUF75RTyNWTJfAFds=";
+      tagv = xrt.version;
       fetchSubmodules = true;
+      hash = "sha256-bBiI42bwap6O59MQdIylX7uz+fLUF75RTyNWTJfAFds=";
     };
 
     nativeBuildInputs = [
@@ -67,26 +67,26 @@ let
 
     env.LDFLAGS = "-Wl,--copy-dt-needed-entries";
 
+    # Create fake os-release for build scripts
     preConfigure = ''
-      # Create fake os-release for build scripts
       mkdir -p $TMPDIR/etc
       echo 'ID=nixos' > $TMPDIR/etc/os-release
       export NIX_REDIRECTS=/etc/os-release=$TMPDIR/etc/os-release
     '';
 
     cmakeFlags = [
-      "-DSKIP_KMOD=1"
+      (lib.cmakeBool "SKIP_KMOD" true)
     ];
 
+    # Fix hardcoded /bins path
     preInstall = ''
-      # Fix hardcoded /bins path
       find . -name cmake_install.cmake -exec sed -i \
         -e 's|/bins/|'"$out"'/bins/|g' \
         {} \;
     '';
 
+    # Flatten nested paths from bins/
     postInstall = ''
-      # Flatten nested paths from bins/
       if [ -d "$out/bins$out" ]; then
         cp -rn "$out/bins$out"/* "$out/" || true
         rm -rf "$out/bins"

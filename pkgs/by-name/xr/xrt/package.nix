@@ -25,11 +25,14 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrt";
   version = "2.21.75";
+  
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Xilinx";
     repo = "XRT";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-sujiSRZuIelhvUew7yeCfApAmp/Pf2+F38KO9cxI2HE=";
     fetchSubmodules = true;
   };
@@ -72,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DXRT_NATIVE_BUILD=yes"
-    "-DXRT_SKIP_SUBMODULE_UPDATE=yes"
+    (lib.cmakeBool "XRT_NATIVE_BUILD" true)
+    (lib.cmakeBool "XRT_SKIP_SUBMODULE_UPDATE" true)
   ];
 
   preBuild = ''
