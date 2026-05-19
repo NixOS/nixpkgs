@@ -45,6 +45,11 @@ in
     };
 
     dbPath = lib.mkOption {
+      type = lib.types.path;
+      default = pkgs.path + "/programs.sqlite";
+      defaultText = lib.literalExpression ''
+        pkgs.path + "/programs.sqlite"
+      '';
       description = ''
         Absolute path to `programs.sqlite`, which contains mappings from binary names to package names.
 
@@ -54,7 +59,6 @@ in
         `/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite`.
         If you do so, you can update it with `sudo nix-channels --update`.
       '';
-      type = lib.types.path;
     };
   };
 
@@ -62,7 +66,6 @@ in
     {
       programs.command-not-found = {
         enable = lib.mkDefault (builtins.pathExists cfg.dbPath);
-        dbPath = lib.mkDefault (pkgs.path + "/programs.sqlite");
       };
     }
 
