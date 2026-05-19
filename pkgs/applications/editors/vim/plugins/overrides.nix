@@ -5722,6 +5722,7 @@ assertNoAdditions {
     dependencies = [ self.vim-textobj-user ];
     meta = old.meta // {
       maintainers = with lib.maintainers; [ workflow ];
+      license = lib.licenses.mit;
     };
   });
 
