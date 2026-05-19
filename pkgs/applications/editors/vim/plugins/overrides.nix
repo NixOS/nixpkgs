@@ -3752,6 +3752,12 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  PreserveNoEOL = super.PreserveNoEOL.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   Preview-nvim = super.Preview-nvim.overrideAttrs {
     runtimeDeps = [
       md-tui
