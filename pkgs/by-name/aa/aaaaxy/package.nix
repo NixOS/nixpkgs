@@ -133,7 +133,10 @@ buildGoModule (finalAttrs: {
     mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ Luflosi ];
+    maintainers = with lib.maintainers; [
+      Luflosi
+      philocalyst
+    ];
     platforms = lib.platforms.linux;
   };
 })
