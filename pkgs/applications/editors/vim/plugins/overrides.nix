@@ -3866,6 +3866,12 @@ assertNoAdditions {
     ];
   };
 
+  pgsql-vim = super.pgsql-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   plantuml-nvim = super.plantuml-nvim.overrideAttrs {
     dependencies = [ self.LibDeflate-nvim ];
   };
