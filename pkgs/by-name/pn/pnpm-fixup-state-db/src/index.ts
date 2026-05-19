@@ -5,9 +5,28 @@ interface FileMetadata {
     checkedAt: number;
 }
 
+interface SideEffectDiff {
+    added?: Map<string, FileMetadata>;
+    deleted?: string[];
+}
+
 interface Metadata {
     files: Map<string, FileMetadata>;
+    sideEffects?: Map<string, SideEffectDiff>;
 }
+
+const zeroCheckedAt = (files: Map<string, FileMetadata>): Map<string, FileMetadata> => {
+    const out = new Map<string, FileMetadata>();
+    for (const [path, metadata] of files.entries()) {
+        out.set(path, { ...metadata, checkedAt: 0 });
+    }
+    return out;
+};
+
+const scrubSideEffect = (diff: SideEffectDiff): SideEffectDiff => ({
+    ...diff,
+    ...(diff.added instanceof Map ? { added: zeroCheckedAt(diff.added) } : {}),
+});
 
 function validateMetadata(data: unknown): data is Metadata {
     return (data as Metadata).files instanceof Map;
@@ -34,18 +53,20 @@ const main = () => {
         console.debug(`Data of ${key}:`, data);
         throw new Error(`Failed to read data for ${key}`);
     }
-    const newFiles = new Map<string, FileMetadata>();
-    for (const [path, metadata] of data.files.entries()) {
-        newFiles.set(path, {
-            ...metadata,
-            checkedAt: 0,
-        });
+    const newFiles = zeroCheckedAt(data.files);
+    let newSideEffects: Metadata["sideEffects"];
+    if (data.sideEffects instanceof Map) {
+        newSideEffects = new Map<string, SideEffectDiff>();
+        for (const [sideEffectKey, diff] of data.sideEffects.entries()) {
+            newSideEffects.set(sideEffectKey, scrubSideEffect(diff));
+        }
     }
     newEntries.push({
         key,
         buffer: packToShared({
             ...data,
             files: newFiles,
+            ...(newSideEffects ? { sideEffects: newSideEffects } : {}),
         } as Metadata)
     });
   }
