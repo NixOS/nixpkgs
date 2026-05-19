@@ -17,13 +17,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     repo = "noto-cjk";
     tag = "Sans${finalAttrs.version}";
     hash = "sha256-i3ZKoSy2SVs46IViha+Sg8atH4n3ywgrunHPLtVT4Pk=";
-    sparseCheckout = [
-      "Sans/OTC"
-      "Sans/Variable/OTC"
-    ];
+    rootDir = if static then "Sans/OTC" else "Sans/Variable/OTC";
   };
-
-  sourceRoot = "source/${if static then "Sans/OTC" else "Sans/Variable/OTC"}";
 
   nativeBuildInputs = [ installFonts ];
 
