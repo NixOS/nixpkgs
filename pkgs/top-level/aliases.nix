@@ -1445,6 +1445,7 @@ mapAliases {
   moralerspace-hwnf = throw "moralerspace-hwnf has been removed, use moralerspace-hw instead."; # Added 2025-08-30
   moralerspace-nf = throw "moralerspace-nf has been removed, use moralerspace instead."; # Added 2025-08-30
   morty = throw "morty has been removed, as searxng removed support for it and it was unmaintained."; # Added 2025-09-26
+  move-mount-beneath = throw "move-mount-beneath has been removed, it is now superseded by util-linux's mount"; # Added 2026-05-19
   moz-phab = throw "'moz-phab' has been renamed to/replaced by 'mozphab'"; # Converted to throw 2025-10-27
   mp3splt = throw "'mp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   mpage = throw "'mpage' has been removed due to being unmaintained and broken"; # Added 2026-05-05
@@ -1699,6 +1700,8 @@ mapAliases {
   pingvin-share = throw "'pingvin-share' has been removed as it was broken and archived upstream"; # Added 2025-11-08
   pipecontrol = throw "'pipecontrol' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
+  plandex = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
+  plandex-server = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plant-it = throw "plant-it backend was discontinued in september 2025"; # Added 2026-01-30
   plant-it-frontend = throw "plant-it-frontend has been presented as being Android-only since the server-side was discontinued in september 2025"; # Added 2026-01-30
   plasma-applet-volumewin7mixer = throw "'plasma-applet-volumewin7mixer' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
