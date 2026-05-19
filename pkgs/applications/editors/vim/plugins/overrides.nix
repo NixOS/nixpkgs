@@ -4393,6 +4393,12 @@ assertNoAdditions {
     ];
   };
 
+  tabmerge = super.tabmerge.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   tabular = super.tabular.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.bsd3;
