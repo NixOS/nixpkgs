@@ -20,7 +20,7 @@
   solders,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iocsearcher";
   version = "2.8.3";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "malicialab";
     repo = "iocsearcher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jNITY4X6ywlkjzS5Udpd46JG7PoycXyy0uJ7+UqjuF4=";
   };
 
@@ -61,9 +61,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library and command line tool for extracting indicators of compromise (IOCs)";
     homepage = "https://github.com/malicialab/iocsearcher";
-    changelog = "https://github.com/malicialab/iocsearcher/releases/tag/v${version}";
+    changelog = "https://github.com/malicialab/iocsearcher/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "iocsearcher";
   };
-}
+})
