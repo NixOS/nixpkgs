@@ -2220,9 +2220,12 @@ assertNoAdditions {
     dependencies = [ self.toggleterm-nvim ];
   };
 
-  lf-vim = super.lf-vim.overrideAttrs {
+  lf-vim = super.lf-vim.overrideAttrs (old: {
     dependencies = [ self.vim-floaterm ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   lh-brackets = super.lh-brackets.overrideAttrs (old: {
     meta = old.meta // {
