@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   alsa-lib,
+  icnsify,
   libGL,
   libx11,
   libxcursor,
@@ -16,6 +18,8 @@
   zip,
   advancecomp,
   makeWrapper,
+  installShellFiles,
+  imagemagick,
   nixosTests,
   strip-nondeterminism,
 }:
@@ -35,8 +39,10 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-H64Gc8L8Wqsil7atQ+xE5VAkykFQOH/xyGLTxpMBTdU=";
 
   buildInputs = [
-    alsa-lib
     libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     libx11
     libxcursor
     libxext
@@ -53,6 +59,11 @@ buildGoModule (finalAttrs: {
     advancecomp
     makeWrapper
     strip-nondeterminism
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    icnsify
   ];
 
   outputs = [
@@ -66,26 +77,30 @@ buildGoModule (finalAttrs: {
     substituteInPlace scripts/build-licenses.sh --replace-fail \
       '$GO run ''${GO_FLAGS} github.com/google/go-licenses' 'go-licenses'
 
-    patchShebangs scripts/
+    patchShebangs scripts/ # also handles the plist.sh
     substituteInPlace scripts/regression-test-demo.sh \
       --replace-fail 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
 
-    substituteInPlace Makefile --replace-fail \
-      'CPPFLAGS ?= -DNDEBUG' \
-      'CPPFLAGS ?= -DNDEBUG -D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so\" -D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so\"'
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace Makefile --replace-fail \
+        'CPPFLAGS ?= -DNDEBUG' \
+        'CPPFLAGS ?= -DNDEBUG -D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so\" -D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so\"'
+    ''}
   '';
 
-  overrideModAttrs = (
-    _: {
+  overrideModAttrs =
+    old:
+    lib.optionalAttrs stdenv.hostPlatform.isLinux {
       # We can't patch in the path to libGL directly because
       # this is a fixed output derivation and when the path to libGL
       # changes, the hash would change.
       # To work around this, use environment variables.
-      postBuild = ''
+      postBuild = (old.postBuild or "") + ''
         substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
           --replace-fail \
           'import (' \
-          'import ("os"' \
+          'import (
+          "os"' \
           --replace-fail \
           '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
           '{os.Getenv("EBITENGINE_LIBGL")}' \
@@ -93,33 +108,52 @@ buildGoModule (finalAttrs: {
           '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
           '{os.Getenv("EBITENGINE_LIBGLESv2")}'
       '';
-    }
-  );
+    };
 
   makeFlags = [
-    "BUILDTYPE=release"
+    "BUILDTYPE=${if stdenv.isDarwin then "ziprelease" else "release"}"
   ];
 
   buildPhase = ''
     runHook preBuild
-    AAAAXY_BUILD_USE_VERSION_FILE=true make $makeFlags
+    make $makeFlags
     runHook postBuild
   '';
 
+  env.AAAAXY_BUILD_USE_VERSION_FILE = true;
+
   postInstall = ''
-    install -Dm755 'aaaaxy' -t "$out/bin/"
-    install -Dm444 'aaaaxy.svg' -t "$out/share/icons/hicolor/scalable/apps/"
-    install -Dm644 'aaaaxy.png' -t "$out/share/icons/hicolor/128x128/apps/"
-    install -Dm644 'aaaaxy.desktop' -t "$out/share/applications/"
-    install -Dm644 'io.github.divverent.aaaaxy.metainfo.xml' -t "$out/share/metainfo/"
+    install -Dm755 aaaaxy -t "$out/bin/"
+    install -Dm644 aaaaxy.desktop -t "$out/share/applications/"
+    install -Dm644 io.github.divverent.aaaaxy.metainfo.xml -t "$out/share/metainfo/"
 
-    wrapProgram $out/bin/aaaaxy \
-      --set EBITENGINE_LIBGL     '${lib.getLib libGL}/lib/libGL.so' \
-      --set EBITENGINE_LIBGLESv2 '${lib.getLib libGL}/lib/libGLESv2.so'
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm444 aaaaxy.svg -t "$out/share/icons/hicolor/scalable/apps/"
+      install -Dm644 aaaaxy.png -t "$out/share/icons/hicolor/128x128/apps/"
 
-    install -Dm755 'scripts/run-timedemo.sh' -t "$testing_infra/scripts/"
-    install -Dm755 'scripts/regression-test-demo.sh' -t "$testing_infra/scripts/"
-    install -Dm644 'assets/demos/benchmark.dem' -t "$testing_infra/assets/demos/"
+      # Linux-specific wrappers
+      wrapProgram $out/bin/aaaaxy \
+        --set EBITENGINE_LIBGL      '${lib.getLib libGL}/lib/libGL.so' \
+        --set EBITENGINE_LIBGLESv2  '${lib.getLib libGL}/lib/libGLESv2.so'
+    ''}
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # macOS app bundle creation
+      app_dir="$out/Applications/aaaaxy.app/Contents"
+      mkdir -p "$app_dir/"{MacOS,Resources}
+
+      mv "$out/bin/aaaaxy" "$app_dir/MacOS/aaaaxy"
+      mv aaaaxy.{dat,png} "$app_dir/Resources/"
+
+      magick assets/sprites/riser_small_up_0.png -filter Point -resize 1024x1024 temp_highres.png
+      icnsify temp_highres.png -o "$app_dir/Resources/icon.icns"
+
+      ./scripts/Info.plist.sh "${finalAttrs.version}" "$out/Applications/aaaaxy.app"
+    ''}
+
+    # Testing infrastructure
+    install -Dm755 scripts/{run-timedemo,regression-test-demo}.sh -t "$testing_infra/scripts/"
+    install -Dm644 assets/demos/benchmark.dem -t "$testing_infra/assets/demos/"
   '';
 
   passthru.tests = {
@@ -137,6 +171,6 @@ buildGoModule (finalAttrs: {
       Luflosi
       philocalyst
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
