@@ -70,6 +70,9 @@ let
       owner = "pandas-dev";
       repo = "pandas";
       tag = "v${version}";
+      postFetch = ''
+        sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pandas/_version.py
+      '';
       hash = "sha256-G+pWdmft/kcxv97ySa+0ZFEgvMKuNaK33DseZQ8R1z8=";
     };
 
