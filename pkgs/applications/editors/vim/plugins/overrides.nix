@@ -5462,6 +5462,12 @@ assertNoAdditions {
     };
   });
 
+  vim-niceblock = super.vim-niceblock.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   vim-obsession = super.vim-obsession.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
