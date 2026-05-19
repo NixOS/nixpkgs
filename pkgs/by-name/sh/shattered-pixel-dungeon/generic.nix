@@ -16,7 +16,6 @@
   stdenv,
   makeWrapper,
   gradle_8,
-  perl,
   jre,
   libGL,
   libpulseaudio,
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gradle_8
-    perl
     makeWrapper
     copyDesktopItems
   ]
@@ -72,9 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # disable gradle plugins with native code and their targets
-    perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
-    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar|robovm|git-version)/ ... /^}/" build.gradle
+    # Disable gradle plugins with native code and their targets
+    sed -i -E "s#^(\s*id '.+' version '.+')$#// \1#" build.gradle
+    # Comment out build blocks incompatible with this build (platform-specific packaging, etc.)
+    sed -i -E '/^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar|robovm|git-version)/,/^\}/{s/.*/\/\/ &/}' build.gradle
     # Remove unbuildable Android/iOS stuff
     rm -f android/build.gradle ios/build.gradle
   ''
