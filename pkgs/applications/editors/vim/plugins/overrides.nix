@@ -2286,9 +2286,12 @@ assertNoAdditions {
     };
   });
 
-  litee-filetree-nvim = super.litee-filetree-nvim.overrideAttrs {
+  litee-filetree-nvim = super.litee-filetree-nvim.overrideAttrs (old: {
     dependencies = [ self.litee-nvim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   litee-symboltree-nvim = super.litee-symboltree-nvim.overrideAttrs {
     dependencies = [ self.litee-nvim ];
