@@ -1707,6 +1707,12 @@ assertNoAdditions {
     };
   });
 
+  gv-vim = super.gv-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   gx-nvim = super.gx-nvim.overrideAttrs {
     runtimeDeps = [
       xdg-utils
