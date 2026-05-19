@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "numericalunits";
-  version = "1.26";
+  version = "1.28";
   pyproject = true;
 
   # AttributeError: module 'ast' has no attribute 'Num'
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "sbyrnes321";
     repo = "numericalunits";
     tag = "numericalunits-${finalAttrs.version}";
-    hash = "sha256-vPB1r+j+p9n+YLnBjHuk2t+QSr+adEOjyC45QSbeb4M=";
+    hash = "sha256-ep+lkVFdaHxaMeBJimjI55KFsE3OUgrcvXHl//glG70=";
   };
 
   build-system = [
