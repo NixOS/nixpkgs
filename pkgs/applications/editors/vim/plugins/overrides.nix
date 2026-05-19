@@ -2293,9 +2293,12 @@ assertNoAdditions {
     };
   });
 
-  litee-symboltree-nvim = super.litee-symboltree-nvim.overrideAttrs {
+  litee-symboltree-nvim = super.litee-symboltree-nvim.overrideAttrs (old: {
     dependencies = [ self.litee-nvim ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   live-preview-nvim = super.live-preview-nvim.overrideAttrs (old: {
     checkInputs = with self; [
