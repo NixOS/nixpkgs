@@ -1943,6 +1943,12 @@ assertNoAdditions {
     dependencies = [ self.lush-nvim ];
   };
 
+  jellybeans-vim = super.jellybeans-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   jinja-vim = super.jinja-vim.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
