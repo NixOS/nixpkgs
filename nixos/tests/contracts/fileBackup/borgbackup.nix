@@ -19,12 +19,9 @@ genericTest {
     (
       { config, ... }:
       {
-        # systemd.tmpfiles.rules = [
-        #   "d /opt/repos/mytest 0750 ${config.test.input.user} root - -"
-        # ];
-
         services.borgbackup.jobs.mytest = {
           doInit = true;
+          encryption.mode = "repokey";
           encryption.passphrase = "${pkgs.writeText "passphrase" "mypassphrase"}";
           repo = "/opt/repos/mytest";
         };
