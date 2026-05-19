@@ -17,6 +17,7 @@
   SDL2_ttf,
   ffmpeg,
   sqlite,
+  fetchpatch,
   zlib,
   libx11,
   libGLU,
@@ -36,12 +37,13 @@ let
     sqlite
     lua
     zlib
+    ffmpeg
+  ]
+  ++ lib.optionals stdenv.isLinux [
     libx11
     libGLU
     libGL
-    ffmpeg
   ];
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
@@ -54,25 +56,52 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/FT5UP+Usd1vyAyRnXOBs5iT76sqdiSBhoyC4bGKmEw=";
   };
 
+  patches = [
+    # FPC 3.2.4 Darwin: USkins.pas <-> UIni.pas form a circular implementation-uses dependency
+    (fetchpatch {
+      url = "https://github.com/UltraStar-Deluxe/USDX/commit/7b3be9b7a64bd7274eb562ebcdcd8aa83a8db188.patch";
+      hash = "sha256-xCTE01c1RhA35rex4AH5BTpLFHD8KN8XpBbb09aXwFA=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
+
   buildInputs = [
     fpc
     libpng
   ]
   ++ sharedLibs;
 
-  preBuild =
-    let
-      items = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
-    in
-    ''
-      export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
-    '';
+  env = {
+    NIX_LDFLAGS = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
+  }
+  // lib.optionalAttrs stdenv.isDarwin {
+    MACOSX_DEPLOYMENT_TARGET = "10.13";
+  };
 
-  # dlopened libgcc requires the rpath not to be shrinked
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.isDarwin ''
+    make macos-app
+    mkdir -p "$out/Applications" "$out/bin"
+    cp -R UltraStarDeluxe.app "$out/Applications/"
+    ln -s "$out/Applications/UltraStarDeluxe.app/Contents/MacOS/ultrastardx" \
+          "$out/bin/ultrastardx"
+  ''
+  + lib.optionalString stdenv.isLinux ''
+    make install
+    install -Dm644 dists/ultrastardx.desktop \
+      "$out/share/applications/ultrastardx.desktop"
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  # dlopened libgcc requires the rpath not to be shrunk
   dontPatchELF = true;
 
   meta = {
@@ -82,7 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       diogotcorreia
+      philocalyst
     ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
   };
 })
