@@ -2687,6 +2687,12 @@ assertNoAdditions {
     ];
   };
 
+  neocomplete-vim = super.neocomplete-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   neoconf-nvim = super.neoconf-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
 
