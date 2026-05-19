@@ -84,9 +84,14 @@ let
   // lib.optionalAttrs hasCatalogue {
     homepage = "https://ctan.org/pkg/${catalogue}";
   }
-  // lib.optionalAttrs (args ? mainProgram) {
-    inherit (args) mainProgram;
+  // lib.optionalAttrs (mainProgram != null) {
+    inherit mainProgram;
   };
+
+  # if binfiles contains exactly one entry, use it as mainProgram, but allow overrides via args.mainProgram
+  mainProgram =
+    args.mainProgram
+      or (if builtins.length (args.binfiles or [ ]) == 1 then builtins.head args.binfiles else null);
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
   hasDocfiles = sha512 ? doc;
