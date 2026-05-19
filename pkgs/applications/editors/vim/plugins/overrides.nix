@@ -5313,6 +5313,12 @@ assertNoAdditions {
     };
   });
 
+  vim-habamax = super.vim-habamax.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   vim-hcl = super.vim-hcl.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
