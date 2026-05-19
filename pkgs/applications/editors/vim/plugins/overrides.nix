@@ -2210,6 +2210,12 @@ assertNoAdditions {
     };
   });
 
+  lexima-vim = super.lexima-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   lf-nvim = super.lf-nvim.overrideAttrs {
     dependencies = [ self.toggleterm-nvim ];
   };
