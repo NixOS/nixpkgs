@@ -1826,6 +1826,12 @@ assertNoAdditions {
     doInstallCheck = true;
   };
 
+  Improved-AnsiEsc = super.Improved-AnsiEsc.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
+
   indent-blankline-nvim = super.indent-blankline-nvim.overrideAttrs {
     # Meta file
     nvimSkipModules = "ibl.config.types";
