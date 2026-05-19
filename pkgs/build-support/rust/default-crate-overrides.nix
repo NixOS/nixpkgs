@@ -220,6 +220,7 @@
   };
 
   libsqlite3-sys = attrs: {
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ sqlite ];
   };
