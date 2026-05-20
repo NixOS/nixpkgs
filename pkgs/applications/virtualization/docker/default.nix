@@ -438,14 +438,14 @@ in
 
   docker_29 =
     let
-      version = "29.4.3";
+      version = "29.5.1";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-jGD+Z3koM0a2Te7cq2HdKFizZj39djvTQUmn815Mn4o=";
+      cliHash = "sha256-oobGr0UaeJL800hHx3K0tQs50HZbOn559WcLnSRiRhU=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-YWmxJZwjxh0gwqjHHJDpzZy1K1jS82Twmzb+uWtnejk=";
+      mobyHash = "sha256-ghYEOWr5RUDm0YLyupaDSpLd+8gFqxp3VjCt+3lztcA=";
       runcRev = "v1.3.5";
       runcHash = "sha256-Swphxbu/OLkUrfRjLMZIVGwYb7AN0xHdyxm0ysAVam0=";
       containerdRev = "v2.2.3";
