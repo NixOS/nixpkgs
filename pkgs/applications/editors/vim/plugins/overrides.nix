@@ -2051,6 +2051,12 @@ assertNoAdditions {
     };
   });
 
+  last256 = super.last256.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   lazy-lsp-nvim = super.lazy-lsp-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
