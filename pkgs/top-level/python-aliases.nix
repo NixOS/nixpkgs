@@ -210,6 +210,8 @@ mapAliases {
   fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
   filebrowser_safe = throw "'filebrowser_safe' has been renamed to/replaced by 'filebrowser-safe'"; # Converted to throw 2025-10-29
   filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
+  fusepy = throw "'fusepy has been removed, since it is unmaintained and depends on fuse2. Consider using 'mfusepy' instead'"; # Added 2026-05-20
+
   flake8-future-import = throw "'flake8-future-import' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   flask-security-too = throw "'flask-security-too' has been renamed to/replaced by 'flask-security'"; # Converted to throw 2025-10-29
   flask-silk = throw "flask-silk was removed, as it is unmaintained since 2018."; # added 2025-05-25
