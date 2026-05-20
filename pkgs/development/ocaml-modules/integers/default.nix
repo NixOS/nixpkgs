@@ -7,13 +7,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "integers";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "ocamllabs";
     repo = "ocaml-integers";
     rev = finalAttrs.version;
-    sha256 = "sha256-zuUgP1jOiVT0q6GisGpkqx7nybWbARgnAcU8NYqvCzA=";
+    sha256 = "sha256-pHbCXVE5J7rNbFIddqlWk7k5gagY87cgD/DQTM9ENw0=";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];
