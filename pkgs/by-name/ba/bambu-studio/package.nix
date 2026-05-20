@@ -8,6 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   boost183,
+  cacert,
   cereal,
   cgal_5,
   curl,
@@ -15,7 +16,6 @@
   eigen,
   expat,
   ffmpeg,
-  gcc-unwrapped,
   glew,
   glfw,
   glib,
@@ -26,7 +26,10 @@
   gtk3,
   hicolor-icon-theme,
   libpng,
+  libsecret,
+  makeFontsConf,
   mpfr,
+  nanum,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
@@ -39,6 +42,9 @@
   wxwidgets_3_1,
   libx11,
   withSystemd ? stdenv.hostPlatform.isLinux,
+  # 3D viewport blank on NVIDIA proprietary GL; routes through Mesa + zink.
+  # https://github.com/NixOS/nixpkgs/issues/498311
+  withNvidiaGLWorkaround ? false,
 }:
 let
   wxGTK' =
@@ -48,11 +54,17 @@ let
       withWebKit = true;
     }).overrideAttrs
       (old: {
+        buildInputs = old.buildInputs ++ [ libsecret ];
         configureFlags = old.configureFlags ++ [
           # Disable noisy debug dialogs
           "--enable-debug=no"
+          "--enable-secretstore"
         ];
       });
+
+  fontsConf = makeFontsConf { fontDirectories = [ nanum ]; };
+
+  caBundle = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
@@ -82,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     expat
     ffmpeg
-    gcc-unwrapped
     glew
     glfw
     glib
@@ -95,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     hicolor-icon-theme
     libpng
+    libsecret
     mpfr
     nlopt
     opencascade-occt_7_6
@@ -178,6 +190,25 @@ stdenv.mkDerivation (finalAttrs: {
       # Fixes intermittent crash
       # The upstream setup links in glew statically
       --prefix LD_PRELOAD : "${glew.out}/lib/libGLEW.so"
+
+      # plugin libcurl + main HTTPS need explicit CA bundle.
+      # https://github.com/NixOS/nixpkgs/issues/498307
+      --set-default SSL_CERT_FILE ${caBundle}
+      --set-default CURL_CA_BUNDLE ${caBundle}
+
+      # WebKit OAuth callback fails with DMA-BUF compositing.
+      # https://github.com/NixOS/nixpkgs/issues/498307
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+
+      --set FONTCONFIG_FILE "${fontsConf}"
+
+      ${lib.optionalString withNvidiaGLWorkaround ''
+        --set __GLX_VENDOR_LIBRARY_NAME mesa
+        --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
+        --set MESA_LOADER_DRIVER_OVERRIDE zink
+        --set GALLIUM_DRIVER zink
+      ''}
     )
   '';
 
