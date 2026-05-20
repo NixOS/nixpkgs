@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.34.1";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZBlkp6nhTKEAWxCPDq9NIoOullwWartpU3eL0QIGFpw=";
+    hash = "sha256-huOy04wY7xP1gZ5azsZYnMXLZ4MwMkLGujlgXTtjLy4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
