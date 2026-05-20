@@ -6,5 +6,6 @@ let
 in
 {
   module = ./module.nix;
+  definitionType = callLibs ./definition-type.nix;
 }
 // callLibs ./helpers.nix
