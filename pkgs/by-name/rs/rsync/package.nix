@@ -1,12 +1,11 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
 
   updateAutotoolsGnuConfigScriptsHook,
   perl,
-
+  python3,
   libiconv,
   zlib,
   popt,
@@ -29,23 +28,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsync";
-  version = "3.4.1";
+  version = "3.4.3";
 
   src = fetchurl {
     # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KSS8s6Hti1UfwQH3QLnw/gogKxFQJ2R89phQ1l/YjFI=";
+    hash = "sha256-xy5jyjAhy8gLqG7DAQJ3P0xWMfvEkrUudzs5WPgqU9M=";
   };
 
-  patches = [
-    # See: <https://github.com/RsyncProject/rsync/pull/790>
-    ./fix-tests-in-darwin-sandbox.patch
-    # fix compilation with gcc15
-    (fetchpatch {
-      url = "https://github.com/RsyncProject/rsync/commit/a4b926dcdce96b0f2cc0dc7744e95747b233500a.patch";
-      hash = "sha256-UiEQJ+p2gtIDYNJqnxx4qKgItKIZzCpkHnvsgoxBmSE=";
-    })
-  ];
+  preBuild = ''
+    patchShebangs ./runtests.py
+  '';
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
@@ -85,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
+
+  nativeCheckInputs = [
+    python3
+  ];
 
   # Test fails when built in a chroot store
   preCheck = ''
