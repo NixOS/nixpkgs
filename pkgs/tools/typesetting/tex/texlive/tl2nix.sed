@@ -169,16 +169,16 @@ $a}
     }
 
     # extract script extensions
-    / texmf-dist\/scripts\/.*\.(jar|lua|py|rb|sno|tcl|texlua|tlu) /{
+    / texmf-dist\/scripts\/[^ ]*\.(jar|lua|py|rb|sno|tcl|texlua|tlu) /{
       i\  scriptExts = [
-        / texmf-dist\/scripts\/.*\.jar /i\    "jar"
-        / texmf-dist\/scripts\/.*\.lua /i\    "lua"
-        / texmf-dist\/scripts\/.*\.py /i\    "py"
-        / texmf-dist\/scripts\/.*\.rb /i\    "rb"
-        / texmf-dist\/scripts\/.*\.sno /i\    "sno"
-        / texmf-dist\/scripts\/.*\.tcl /i\    "tcl"
-        / texmf-dist\/scripts\/.*\.texlua /i\    "texlua"
-        / texmf-dist\/scripts\/.*\.tlu /i\    "tlu"
+        / texmf-dist\/scripts\/[^ ]*\.jar /i\    "jar"
+        / texmf-dist\/scripts\/[^ ]*\.lua /i\    "lua"
+        / texmf-dist\/scripts\/[^ ]*\.py /i\    "py"
+        / texmf-dist\/scripts\/[^ ]*\.rb /i\    "rb"
+        / texmf-dist\/scripts\/[^ ]*\.sno /i\    "sno"
+        / texmf-dist\/scripts\/[^ ]*\.tcl /i\    "tcl"
+        / texmf-dist\/scripts\/[^ ]*\.texlua /i\    "texlua"
+        / texmf-dist\/scripts\/[^ ]*\.tlu /i\    "tlu"
       i\  ];
     }
 

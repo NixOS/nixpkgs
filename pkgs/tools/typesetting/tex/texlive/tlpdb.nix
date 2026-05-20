@@ -23530,9 +23530,6 @@
     shortdesc = "Engraving Gregorian Chant scores";
     sha512.doc = "acfa4975c8936132f6cfb0f1af75c35fddfc030e74f01bcf88cededf66d67b6840477847d332db66c4a1645c4ac2b152070496786b4f2232a8d2392c31e8754a";
     sha512.source = "2bd9d16ac9b11b8ecdcaf0864f007ce10be9ae29662edbca81611fa0d3b7697fe12eea871a1e016880172dd629ae08774e9a6722aea564519ebb4919bd7d3238";
-    scriptExts = [
-      "lua"
-    ];
     license = [ "gpl3Only" ];
     version = "6.1.0";
     sha512.run = "0d15d49278efb0b4dcc6ff714bd7e5c97407a567c0a7f6f189d328839b727e4d3f6f6f8769c5f9ece3227a14d38b52875a2139484f5ddd3f8962f611e96c7d5a";
@@ -48449,10 +48446,6 @@
     shortdesc = "Convert (La)TeX to HTML/XML";
     sha512.doc = "3a932fda55762263ae1ae1ab3695dbcef2a7e6d4995028bfcc0a9ca15de04998aefbad56110b7853489fe038eddeb1f2057a65ea28d2b78caea30ae1b69a7e1a";
     sha512.source = "a2a6022a828a7b55a78ca72514e681951731e4ab451b54e0683e0daad6f07d243b52b056e376a6a0fa3b91652396598e819a8a8d14fdfcef65f5a8cd93e30a0f";
-    scriptExts = [
-      "jar"
-      "lua"
-    ];
     license = [ "lppl13c" ];
     sha512.run = "760a199f6fde826739c94eee51bbb6424df4b4b8bc67e2f225884d7d42985d2a64560bca9623e5d71724caff484cd9a68854de80d8a6632efb5b81e645200d57";
   };
@@ -48764,7 +48757,6 @@
     hasManpages = true;
     scriptExts = [
       "lua"
-      "tcl"
     ];
     hasCatalogue = false;
     sha512.run = "7b3365e054384d1acd91eb50d34c43dbd7d7ea7bcc98eee91ccc62c6ede11b32c1bdebfa34593eda672b13918059e895e3aa969948d988b578a1482e2712efbb";
