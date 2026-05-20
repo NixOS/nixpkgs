@@ -17,11 +17,13 @@
   protobuf,
   gsl,
   libxml2,
-  libxslt,
   fftw,
   fftwFloat,
-  sqlite,
+  blas,
+  lapack,
+  libxslt,
   openssl,
+  sqlite,
   mpi,
   mpiSupport ? false,
 }:
@@ -63,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     #   error: call to implicitly-deleted copy constructor of 'std::unique_ptr<vi::VisibilityIterator2>'
     #   error: object of type 'std::unique_ptr<vi::VisibilityIterator2>' cannot be assigned because its copy assignment operator is implicitly deleted
     ./Fix-Vi2DataProvider-move-semantics.patch
+
+    # fix missing LAPACK symbols
+    #   ld: symbol(s) not found, dgetrf_ dgetri_ dposv_ dpotri_
+    ./Link-synthesis-target-with-LAPACK-BLAS-libraries.patch
   ];
 
   postPatch = ''
@@ -88,9 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional mpiSupport mpi;
 
   buildInputs = [
+    blas
     libxslt
-    sqlite
     openssl
+    sqlite
+    lapack
   ];
 
   propagatedBuildInputs = [
