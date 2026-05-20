@@ -9840,6 +9840,7 @@ with pkgs;
     rke2_1_33
     rke2_1_34
     rke2_1_35
+    rke2_1_36
     rke2_stable
     rke2_latest
     ;
