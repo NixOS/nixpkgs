@@ -52,7 +52,12 @@ gem 'curses'
 gem 'daemons'
 gem 'dep-selector-libgecode'
 gem 'digest-sha3'
-gem 'dip'
+# Because standard dependency resolution depends on dip = 8.1.0
+#   and Nixpkgs checks depend on dip >= 8.2.5,
+#   an unpinned dip cannot be used.
+# So, because Gemfile depends on preventing version regressions,
+#   explicit minimum bounds are required.
+gem 'dip', '>= 8.2.5'
 gem 'domain_name'
 gem 'do_sqlite3'
 gem 'erb-formatter'
@@ -95,6 +100,12 @@ gem 'jekyll-favicon'
 gem 'jekyll-spaceship'
 gem 'jekyll-webmention_io'
 gem 'jmespath'
+# Because standard dependency resolution depends on json-schema = 5.1.0
+#   and Nixpkgs checks depend on json-schema >= 5.2.2,
+#   an unpinned json-schema cannot be used.
+# So, because Gemfile depends on preventing version regressions,
+#   explicit minimum bounds are required.
+gem 'json-schema', '>= 5.2.2'
 gem 'jwt'
 gem 'kramdown-rfc2629'
 gem 'libxml-ruby'
