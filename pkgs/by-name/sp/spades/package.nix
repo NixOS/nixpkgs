@@ -25,8 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Add missing <cstdint> for uint{8,64}_t to fix build with gcc 15.
     (fetchpatch2 {
       url = "https://github.com/ablab/spades/commit/10b6af96ead72fdb19e8e524aa24bdcff9986e76.patch?full_index=1";
-      stripLen = 2;
-      extraPrefix = "";
+      relative = "src";
       hash = "sha256-yAQVqE6DwPe+GZ4VR1cGytaO8NmHz6TUG7EdtbxIuTU=";
     })
   ];
