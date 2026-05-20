@@ -37,7 +37,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xf79PFhBguJQlLcdNhh3oSQ4w5EHrXZomnniiM99WZ4=";
+    hash = "sha256-hbsOA+8tOoFuwiz2KLdcJsbrn/sYec8vqzvh6mKgX08=";
   };
 
   build-system = with python3Packages; [
