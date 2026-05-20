@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeekstd";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "rorosen";
     repo = "zeekstd";
     tag = "v${finalAttrs.version}-cli";
-    hash = "sha256-E8xOcc3gDCRSZUrnrAPOJGnx0YSK/1FxZZOgusESpeE=";
+    hash = "sha256-ZoV2F74Lsxd2YKsf2Y07Ky1d18dgxod+DfVfKVhhESw=";
   };
 
-  cargoHash = "sha256-0wqRDhopbSfILABEpjuTLfOuwIH+5jzTVl9av7+7098=";
+  cargoHash = "sha256-PpfNNRh+K61jfWtBYtWSx3cWXZ2v7tS52Ny1T1XSYVw=";
 
   passthru.updateScript = writeShellScript "update-zeekstd" ''
     latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/rorosen/zeekstd/releases/latest | ${lib.getExe jq} --raw-output .tag_name | sed -E 's/^v([0-9.]+)-cli$/\1/')
