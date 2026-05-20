@@ -21,6 +21,8 @@ lib.extendMkDerivation {
     {
       inherit auditable pname;
 
+      __structuredAttrs = true;
+
       src = fetchFromGitHub {
         owner = "rust-secure-code";
         repo = "cargo-auditable";
