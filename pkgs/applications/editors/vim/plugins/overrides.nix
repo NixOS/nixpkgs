@@ -2829,13 +2829,19 @@ assertNoAdditions {
     ];
   };
 
-  neotest-foundry = super.neotest-foundry.overrideAttrs {
+  neotest-foundry = super.neotest-foundry.overrideAttrs (old: {
     dependencies = with self; [
       neotest
       nvim-nio
       plenary-nvim
     ];
-  };
+    meta = old.meta // {
+      license = with lib.licenses; [
+        asl20
+        mit
+      ];
+    };
+  });
 
   neotest-go = super.neotest-go.overrideAttrs {
     dependencies = with self; [
