@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "multiregex";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantco";
     repo = "multiregex";
     tag = version;
-    hash = "sha256-S10FJwtFNK4CarE2YAcUM38hRYTDL0Vp4B8NqGvJs5M=";
+    hash = "sha256-BWADzarhnzcz2ZvD33XcQpQIIJ0hmhUT33HyUbB1wH0=";
   };
 
   build-system = [
