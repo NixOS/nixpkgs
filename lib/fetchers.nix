@@ -3,7 +3,7 @@
 let
   commonH = hashTypes: rec {
     hashNames = [ "hash" ] ++ hashTypes;
-    hashSet = lib.genAttrs hashNames (lib.const { });
+    hashSet = genAttrs hashNames (const { });
   };
 
   fakeH = {
@@ -21,11 +21,12 @@ let
   inherit (lib.attrsets)
     attrsToList
     intersectAttrs
+    genAttrs
     removeAttrs
     optionalAttrs
     ;
 
-  inherit (lib.trivial) functionArgs setFunctionArgs;
+  inherit (lib.trivial) const functionArgs setFunctionArgs;
 in
 rec {
 
