@@ -1,17 +1,21 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    base64 (0.2.0)
-    bigdecimal (3.1.9)
-    date (3.4.1)
-    drb (2.2.1)
-    mail (2.8.1)
+    base64 (0.3.0)
+    bigdecimal (4.0.1)
+    date (3.5.1)
+    drb (2.2.3)
+    io-console (0.8.2)
+    logger (1.7.0)
+    mail (2.9.0)
+      logger
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
       net-smtp
     mini_mime (1.1.5)
-    net-imap (0.5.6)
+    mize (0.6.1)
+    net-imap (0.6.3)
       date
       net-protocol
     net-pop (0.1.2)
@@ -20,17 +24,24 @@ GEM
       timeout
     net-smtp (0.5.1)
       net-protocol
+    readline (0.0.4)
+      reline
+    reline (0.6.3)
+      io-console (~> 0.5)
     sync (0.5.0)
-    taskjuggler (3.8.1)
+    taskjuggler (3.8.4)
       mail (~> 2.7, >= 2.7.1)
       term-ansicolor (~> 1.7, >= 1.7.1)
-    term-ansicolor (1.11.2)
-      tins (~> 1.0)
-    timeout (0.4.3)
-    tins (1.38.0)
+      webrick (~> 1.9, >= 1.9.1)
+    term-ansicolor (1.11.3)
+      tins (~> 1)
+    timeout (0.6.0)
+    tins (1.51.1)
       bigdecimal
+      mize (~> 0.6)
+      readline
       sync
-    webrick (1.9.1)
+    webrick (1.9.2)
 
 PLATFORMS
   ruby
@@ -42,4 +53,4 @@ DEPENDENCIES
   webrick
 
 BUNDLED WITH
-   2.5.22
+   2.7.2
