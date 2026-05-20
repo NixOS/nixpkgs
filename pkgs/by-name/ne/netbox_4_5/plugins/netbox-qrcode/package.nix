@@ -15,6 +15,8 @@
   django,
   netaddr,
   netbox,
+
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -48,6 +50,13 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "netbox_qrcode" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "Netbox plugin for generate QR codes for objects: Rack, Device, Cable";
