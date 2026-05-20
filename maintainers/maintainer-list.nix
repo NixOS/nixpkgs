@@ -19557,6 +19557,11 @@
     githubId = 10180857;
     name = "Anmol Sethi";
   };
+  nhshah15 = {
+    github = "nhshah15";
+    githubId = 31825306;
+    name = "Neil Shah";
+  };
   ni5arga = {
     email = "hello@ni5arga.com";
     github = "ni5arga";
