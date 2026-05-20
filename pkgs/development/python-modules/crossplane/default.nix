@@ -3,12 +3,13 @@
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "crossplane";
   version = "0.5.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nginxinc";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-DfIF+JvjIREi7zd5ZQ7Co/CIKC5iUeOgR/VLDPmrtTQ=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
