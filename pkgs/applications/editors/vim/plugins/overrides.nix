@@ -5120,6 +5120,12 @@ assertNoAdditions {
     };
   });
 
+  vim-dirdiff = super.vim-dirdiff.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
+
   vim-dirvish = super.vim-dirvish.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.gpl3Plus;
