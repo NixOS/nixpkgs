@@ -72,7 +72,8 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # AssertionError: assert {'google_maps...s': None, ...} == {'google_maps...a'...
-    "tests/unit_tests/test_chat_models.py::test_response_to_result_grounding_metadata[raw_response0-expected_grounding_metadata0]"
+    # https://github.com/langchain-ai/langchain-google/issues/1791
+    "tests/unit_tests/test_chat_models.py::test_response_to_result_grounding_metadata"
   ];
 
   pythonImportsCheck = [ "langchain_google_genai" ];
