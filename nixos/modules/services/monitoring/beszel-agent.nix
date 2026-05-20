@@ -176,7 +176,7 @@ in
 
         LockPersonality = true;
         NoNewPrivileges = !cfg.smartmon.enable;
-        PrivateDevices = !cfg.smartmon.enable;
+        PrivateDevices = false;
         PrivateTmp = true;
         PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD;
         ProtectClock = true;
