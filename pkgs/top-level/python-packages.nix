@@ -11439,6 +11439,8 @@ self: super: with self; {
 
   nvdlib = callPackage ../development/python-modules/nvdlib { };
 
+  nvidia-cutlass = callPackage ../development/python-modules/nvidia-cutlass { };
+
   nvidia-dlprof-pytorch-nvtx =
     callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
       { };
@@ -19741,6 +19743,8 @@ self: super: with self; {
   torch-bin = callPackage ../development/python-modules/torch/bin { triton = self.triton-bin; };
 
   torch-c-dlpack-ext = callPackage ../development/python-modules/torch-c-dlpack-ext { };
+
+  torch-cluster = callPackage ../development/python-modules/torch-cluster { };
 
   torch-einops-utils = callPackage ../development/python-modules/torch-einops-utils { };
 
