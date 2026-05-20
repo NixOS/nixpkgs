@@ -5067,6 +5067,13 @@ assertNoAdditions {
     };
   });
 
+  vim-CtrlXA = super.vim-CtrlXA.overrideAttrs (old: {
+    meta = old.meta // {
+      # This plugin is under the license "Rien à Branler", which is a French translation of the WTFPL license.
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   vim-dadbod = super.vim-dadbod.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
