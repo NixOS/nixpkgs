@@ -16,6 +16,8 @@ let
     sha512 = lib.fakeSha512;
   };
 
+  defaultHashTypes = [ "sha256" ];
+
   inherit (lib)
     concatMapStringsSep
     head
@@ -110,7 +112,7 @@ rec {
   */
   normalizeHash =
     {
-      hashTypes ? [ "sha256" ],
+      hashTypes ? defaultHashTypes,
       required ? true,
     }:
     let
@@ -198,7 +200,7 @@ rec {
   */
   withNormalizedHash =
     {
-      hashTypes ? [ "sha256" ],
+      hashTypes ? defaultHashTypes,
     }:
     fetcher:
     let
