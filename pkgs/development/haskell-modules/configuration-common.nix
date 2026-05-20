@@ -1572,7 +1572,7 @@ with haskellLib;
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
-  gargoyle-postgresql-nix = addBuildTool [ pkgs.postgresql ] super.gargoyle-postgresql-nix;
+  gargoyle-postgresql-nix = addBuildTool pkgs.postgresql super.gargoyle-postgresql-nix;
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
@@ -3351,6 +3351,22 @@ with haskellLib;
   stripe-concepts = doJailbreak super.stripe-concepts;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
+
+  # 2026-05-10: Remove again, when hackage bump is recent enough
+  botan-low = overrideCabal {
+    version = "0.2.0.1";
+    sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
+    revision = null;
+    editedCabalFile = null;
+  } (warnAfterVersion "0.2.0.1" super.botan-low);
+
+  # 2026-05-10: Remove again, when hackage bump is recent enough
+  botan-bindings = overrideCabal {
+    version = "0.3.0.0";
+    sha256 = "sha256-tsarIc3LcUKPgSWZ+xcGPWGO2f9OF6SWHB6nmX/vJYw=";
+    revision = null;
+    editedCabalFile = null;
+  } (warnAfterVersion "0.3.0.0" super.botan-bindings);
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

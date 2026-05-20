@@ -868,10 +868,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0ar4nmvk1sk7drjigqyh9nnps3mxg625b8chfk42557p8i6jdrlz";
+      sha256 = "1ncmbdjf2bwmk0jf5cxywns9zbxyfiy4h4p3pzi7yddyjhv81qrq";
       type = "gem";
     };
-    version = "6.0.2";
+    version = "6.0.4";
   };
   erb_lint = {
     dependencies = [
@@ -1208,10 +1208,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "10i5826zgvk04jsn6yg7w72s1l5xghrapm6anay4g8w8l32jzqvq";
+      sha256 = "0ma1rv2hc51hlji4d3xflx610pq4222bw51sax434b7fayhh55fz";
       type = "gem";
     };
-    version = "1.6.0";
+    version = "1.7.0";
   };
   i18n = {
     dependencies = [ "concurrent-ruby" ];
@@ -1592,10 +1592,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1bgjhb65r1bl52wdym6wpbb0r3j7va8s44grggp0jvarfvw7bawv";
+      sha256 = "0ax0f0r97jm83q462vsrcbdxprs894fyyc44v62c48ihgb39hmcs";
       type = "gem";
     };
-    version = "0.6.3";
+    version = "0.6.4";
   };
   net-pop = {
     dependencies = [ "net-protocol" ];
@@ -1662,10 +1662,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0mhp90nf3g3yy5vgjnwd34czi6rbi0p7057vgngfmmdkknsxiz9q";
+      sha256 = "1s30b7h7qpyim30m8060xs415mbr3ci7i5hdg09chh1aqfx2qcbq";
       type = "gem";
     };
-    version = "1.19.2";
+    version = "1.19.3";
   };
   numo-narray-alt = {
     groups = [ "default" ];

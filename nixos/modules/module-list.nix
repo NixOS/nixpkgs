@@ -1366,6 +1366,7 @@
   ./services/networking/rdnssd.nix
   ./services/networking/realm.nix
   ./services/networking/redsocks.nix
+  ./services/networking/reframe.nix
   ./services/networking/resilio.nix
   ./services/networking/robustirc-bridge.nix
   ./services/networking/rosenpass.nix
@@ -1856,7 +1857,6 @@
   ./services/x11/display-managers/xpra.nix
   ./services/x11/extra-layouts.nix
   ./services/x11/fractalart.nix
-  ./services/x11/hardware/cmt.nix
   ./services/x11/hardware/digimend.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
@@ -1897,6 +1897,7 @@
   ./system/activation/switchable-system.nix
   ./system/activation/top-level.nix
   ./system/boot/binfmt.nix
+  ./system/boot/clevis-luks-askpass.nix
   ./system/boot/clevis.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/grow-partition.nix

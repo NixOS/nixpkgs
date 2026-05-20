@@ -7,7 +7,7 @@
   nix-update-script,
   nixosTests,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   typescript,
@@ -16,12 +16,12 @@
 
 let
   pname = "autobrr";
-  version = "1.77.1";
+  version = "1.79.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-XNTQmW8JUxe8bffe1eGvxoRQ3rKdoH0QQKDn/wY6L3o=";
+    hash = "sha256-grwXIDN+dYuWaArB76N3xJEVwYlrzopYZJQ+eXRwOY4=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -31,7 +31,7 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_10
+      pnpm_11
       typescript
     ];
 
@@ -44,9 +44,9 @@ let
         src
         sourceRoot
         ;
-      pnpm = pnpm_10;
+      pnpm = pnpm_11;
       fetcherVersion = 3;
-      hash = "sha256-StLGK3Oezv+M5tuFd1rZyLpG0g1xFxWPJ5lm39Sy0FQ=";
+      hash = "sha256-zyY54pqlQnYdOyrNZA/WiALzdf4ZGwMLnwm6Mpb0S5k=";
     };
 
     postBuild = ''
@@ -65,7 +65,7 @@ buildGoModule (finalAttrs: {
     src
     ;
 
-  vendorHash = "sha256-POqFXcLtc18EzEQ2SRb2+D+3E8KexaAOelgOSvCwoWI=";
+  vendorHash = "sha256-9lvzU0tCuiYr0GsLtgG58pxNxoiyj0sT2R8UmYuRD8Y=";
 
   preBuild = ''
     cp -r ${finalAttrs.passthru.autobrr-web}/* web/dist

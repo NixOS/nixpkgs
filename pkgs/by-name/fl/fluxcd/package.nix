@@ -9,10 +9,10 @@
 }:
 
 let
-  version = "2.8.6";
-  srcHash = "sha256-pKP4g2pTMYtx/B/Y3ow7tvDdhCSuwbszzeLVXB0W7Bo=";
-  vendorHash = "sha256-VBafft9/AuXaHWvZymy7P9gaSuO8D6IZHfK68Ixp3mI=";
-  manifestsHash = "sha256-h/HR/rJwPWXiuoj9T+LajdsdT4Jo8/EuN+O1I7e9sjI=";
+  version = "2.8.7";
+  srcHash = "sha256-aA4DA/uG/YZ/9cUWAhhVZJme8Cj7OWFWqXce8n5InfM=";
+  vendorHash = "sha256-kn0S5tycL6tpgy/0YrHSFM0WpUluugSy87rh1FArnO8=";
+  manifestsHash = "sha256-pYz+UNYnBYSIFdWbK9bcckJhgCMGm8EZDC/DXtXNwDE=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";

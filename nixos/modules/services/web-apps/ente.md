@@ -117,10 +117,10 @@ with your admin user to modify the storage limit.
 
 ## iOS background sync {#module-services-ente-ios-background-sync}
 
-On iOS, background sync is achived via a silent notification sent by the server
+On iOS, background sync is achieved via a silent notification sent by the server
 every 30 minutes that allows the phone to sync for about 30 seconds, enough for
 all but the largest videos to be synced on background (if the app is brought to
-foreground though, sync will resume as normal). To achive this however, a
+foreground though, sync will resume as normal). To achieve this however, a
 Firebase account is needed. In the settings option, configure credentials-dir
 to point towards the directory where the JSON containing the Firebase
 credentials are stored.

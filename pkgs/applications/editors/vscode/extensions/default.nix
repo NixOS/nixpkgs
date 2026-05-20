@@ -156,7 +156,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=adzero.vscode-sievehighlight";
           homepage = "https://github.com/adzero/vscode-sievehighlight";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.sebtm ];
+          maintainers = [ ];
         };
       };
 
@@ -413,8 +413,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.18.24";
-          hash = "sha256-oqsqcB2i8zS2pBElTFHh/diffTLFE9IRDjcQv/IcMgU=";
+          version = "1.19.0";
+          hash = "sha256-PTuOqbvhN2lutShMn76uxune/gd5sTc5KSfA2xLhmH8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -797,7 +797,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=BrandonKirbyson.solarized-palenight";
           homepage = "https://github.com/BrandonKirbyson/Solarized-Palenight";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.sebtm ];
+          maintainers = [ ];
         };
       };
 
@@ -1145,8 +1145,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.4.5";
-          hash = "sha256-CViXcQ8k4eTd5adFvSK4cCFJDRov09wK80QBveziom4=";
+          version = "8.4.6";
+          hash = "sha256-GBz0hS75VgfuGuHY/K/VHxp5sFptUCJaz/CXrm6wFPc=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.17.36";
-          hash = "sha256-7+Ja5/zeGq+W1aCIzZu0x+CU1ERwZhwvOaZKaGSWK4c=";
+          version = "3.20.6";
+          hash = "sha256-QDs+zi2Kb2APYxZOzvBnrEZqlmhzNFmQ3bpSfIaPjlc=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1226,8 +1226,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.10.6";
-          hash = "sha256-6D8QRH8x2LCZehkkaKf3s3yKzmAkiBg9gFaUCIzGJB4=";
+          version = "2.10.7";
+          hash = "sha256-ODAUmYiomllLMGbncU4T+8SfLZnhULggFB6Mfw7vn1o=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -1760,8 +1760,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.40.3";
-          hash = "sha256-NGC6uW1biseqQ04fD3K4mK4D4rcGVqt0LBlGFC1Exu8=";
+          version = "0.40.4";
+          hash = "sha256-WqFIWt3c3XtdsXys+V4tQWxzDMefYOQ88MzTSPDHOKE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -2068,8 +2068,8 @@ let
         mktplcRef = {
           name = "vscode-graphql";
           publisher = "GraphQL";
-          version = "0.13.2";
-          hash = "sha256-9G6iIYjZE6s5EGRTc0Y6gUN1cK9Gm2ohnl3oYqBWGqs=";
+          version = "0.13.4";
+          hash = "sha256-zPc+jNbXfuXMWXxbKhaOpjgDu96jg5C+CCQ3HXEQ7fw=";
         };
         meta = {
           description = "GraphQL extension for VSCode built with the aim to tightly integrate the GraphQL Ecosystem with VSCode for an awesome developer experience";
@@ -2084,8 +2084,8 @@ let
         mktplcRef = {
           name = "vscode-graphql-syntax";
           publisher = "GraphQL";
-          version = "1.3.8";
-          hash = "sha256-10x2kX9Gc7O/tGRDPZfy1cKdCIvGTCXcD2bDokIz7TU=";
+          version = "1.3.10";
+          hash = "sha256-EY6BHl5ICcs3FuuenoadDXLLPSe8+2VAAydqo/YrtaE=";
         };
         meta = {
           description = "Adds full GraphQL syntax highlighting and language support such as bracket matching";
@@ -3239,6 +3239,8 @@ let
 
       ms-python.vscode-pylance = callPackage ./ms-python.vscode-pylance { };
 
+      ms-python.vscode-python-envs = callPackage ./ms-python.vscode-python-envs { };
+
       ms-toolsai.datawrangler = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "datawrangler";
@@ -4220,8 +4222,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.25";
-          hash = "sha256-0yOtvHL24eJizmzXAC956Tx9eNJaWDPl/OAhmFv2KJk=";
+          version = "0.8.26";
+          hash = "sha256-OZMUHqc8l8BrpLONlOIeImnsJVa0TLN1R51ulQ5n8h4=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -4865,8 +4867,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.68";
-          hash = "sha256-5qzMT7aue8PO4mpMsoBc/18J7yhxrmKwA+KE+LeK0mU=";
+          version = "0.0.69";
+          hash = "sha256-wP2Mw4K0Fh4xKaffzl1OwrWnWu6npZ2PyVDaT5LUeeY=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -5108,8 +5110,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.27.2";
-          hash = "sha256-1ix/MtZ801uX0Q1/t+S6AG3sSkILDugouecOq9BO1IQ=";
+          version = "0.27.3";
+          hash = "sha256-8ZkdAZLplf9RI5sFGqsjVMlsletck/qXJ6D1Dxz9AuI=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5198,8 +5200,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.2.8";
-          hash = "sha256-lbTE5UP4JSpqoXHzS6HPBX2pOQjeBSmHhxqy0thawfc=";
+          version = "3.2.9";
+          hash = "sha256-LkoytGAAZwjm3Mm3EixCHjnh1dkxB0lKMv5KJVYSwGY=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";

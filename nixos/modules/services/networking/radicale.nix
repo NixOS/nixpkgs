@@ -108,6 +108,18 @@ in
       default = [ ];
       description = "Extra arguments passed to the Radicale daemon.";
     };
+
+    user = mkOption {
+      type = types.str;
+      default = "radicale";
+      description = "User account under which Radicale runs.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "radicale";
+      description = "Group under which Radicale runs.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -155,12 +167,16 @@ in
 
     environment.systemPackages = [ pkg ];
 
-    users.users.radicale = {
-      isSystemUser = true;
-      group = "radicale";
+    users.users = mkIf (cfg.user == "radicale") {
+      radicale = {
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
-    users.groups.radicale = { };
+    users.groups = mkIf (cfg.group == "radicale") {
+      radicale = { };
+    };
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
@@ -176,8 +192,8 @@ in
           ]
           ++ (map escapeShellArg cfg.extraArgs)
         );
-        User = "radicale";
-        Group = "radicale";
+        User = cfg.user;
+        Group = cfg.group;
         StateDirectory = "radicale/collections";
         StateDirectoryMode = "0750";
         # Hardening

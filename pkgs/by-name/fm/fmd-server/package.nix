@@ -35,6 +35,10 @@ buildGoModule (
 
     vendorHash = "sha256-cFIg9mOSQbrYHW4kg4aTeTaF+gy1jNpAlg8qepb81Jc=";
 
+    preBuild = ''
+      cp -r ${ui}/${ui.distRoot} web/
+    '';
+
     nativeInstallCheckInputs = [ versionCheckHook ];
     versionCheckProgramArg = "version";
 
@@ -73,10 +77,6 @@ buildGoModule (
         runHook postInstall
       '';
     };
-
-    postUnpack = ''
-      cp -r ${ui}/${ui.distRoot} /build/source/web/
-    '';
 
     meta = {
       description = "Server to communicate with the FindMyDevice app and save the latest (encrypted) location";

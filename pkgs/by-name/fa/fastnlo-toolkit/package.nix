@@ -48,13 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withPython python
   ++ lib.optional (withPython && python.isPy3k) ncurses;
 
-  propagatedNativeBuildInputs = lib.optional withPython [ swig ];
+  propagatedNativeBuildInputs = lib.optional withPython swig;
   propagatedBuildInputs = [
     zlib
   ]
-  ++ lib.optional withPython [
-    python.pkgs.distutils
-  ];
+  ++ lib.optional withPython python.pkgs.distutils;
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.5.1";
+  version = "2026.5.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -1424,8 +1424,7 @@
       ];
     "duco" =
       ps: with ps; [
-        python-duco-client
-      ];
+      ]; # missing inputs: python-duco-connectivity
     "dunehd" =
       ps: with ps; [
         pdunehd
@@ -7653,7 +7652,6 @@
     "dsmr"
     "dsmr_reader"
     "duckdns"
-    "duco"
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"

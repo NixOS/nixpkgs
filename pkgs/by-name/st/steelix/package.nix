@@ -4,6 +4,7 @@
   installShellFiles,
   lib,
   rustPlatform,
+  makeBinaryWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,9 +20,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-6bu8sIM4So3AbnHHYbh8uu+rEB4IjMQjDgh7/AkLQs0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
-  # Don't use cargo xtask steel since it needs network access
   cargoBuildFlags = [
     "--package"
     "helix-term"
@@ -30,9 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # Disable fetching and building of tree-sitter grammars in the helix-term build.rs
     HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
-    # Use tree-sitter grammars and runtime from the helix package
     HELIX_DEFAULT_RUNTIME = helix.runtime;
   };
 
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
     cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
+    wrapProgram $out/bin/hx --set HELIX_RUNTIME "${helix.runtime}"
   '';
 
   passthru.updateScript = ./update.sh;
@@ -48,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Helix editor with Steel (Scheme) scripting support";
     longDescription = ''
-      Steelix is a fork of the Helix text editor with Steel (Scheme) scripting support.
+      Steelix is a fork of the Helix editor with Steel (Scheme) scripting support.
     '';
     homepage = "https://github.com/mattwparas/helix";
     changelog = "https://github.com/mattwparas/helix/blob/${finalAttrs.src.rev}/CHANGELOG.md";

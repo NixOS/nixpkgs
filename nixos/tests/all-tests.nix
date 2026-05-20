@@ -1415,7 +1415,6 @@ in
   radicale = runTest ./radicale.nix;
   radicle = runTest ./radicle.nix;
   radicle-ci-broker = runTest ./radicle-ci-broker.nix;
-  ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
   rauc = runTest ./rauc.nix;
@@ -1769,6 +1768,7 @@ in
   vector = import ./vector { inherit runTest; };
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
+  veroroute = runTest ./veroroute.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
   victoriatraces = import ./victoriatraces { inherit runTest; };

@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3-mixer";
-  version = "3.2.0";
+  version = "3.2.2";
   __structuredAttrs = true;
 
   outputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL_mixer";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-+kOxmBX/zPCTq51F9ysSGsZdJSb21uM56U50mEgprbo=";
+    hash = "sha256-J4qyb5zeeDowile8p2qJzBWP0lnBR8nYSF0fuZUshiM=";
   };
 
   strictDeps = true;

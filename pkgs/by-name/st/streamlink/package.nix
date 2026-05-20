@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       websocket-client
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     decompress = urllib3.optional-dependencies.brotli ++ urllib3.optional-dependencies.zstd;

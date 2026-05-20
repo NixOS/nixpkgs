@@ -2978,6 +2978,8 @@ self: super: with self; {
 
   cocotb-bus = callPackage ../development/python-modules/cocotb-bus { };
 
+  codecarbon = callPackage ../development/python-modules/codecarbon { };
+
   codepy = callPackage ../development/python-modules/codepy { };
 
   coffea = callPackage ../development/python-modules/coffea { };
@@ -3475,6 +3477,8 @@ self: super: with self; {
   cwl-utils = callPackage ../development/python-modules/cwl-utils { };
 
   cwlformat = callPackage ../development/python-modules/cwlformat { };
+
+  cwsandbox = callPackage ../development/python-modules/cwsandbox { };
 
   cx-freeze = callPackage ../development/python-modules/cx-freeze { };
 
@@ -4285,8 +4289,6 @@ self: super: with self; {
   django-markup = callPackage ../development/python-modules/django-markup { };
 
   django-mcp-server = callPackage ../development/python-modules/django-mcp-server { };
-
-  django-mdeditor = callPackage ../development/python-modules/django-mdeditor { };
 
   django-mfa3 = callPackage ../development/python-modules/django-mfa3 { };
 
@@ -5421,6 +5423,8 @@ self: super: with self; {
 
   fastapi-mcp = callPackage ../development/python-modules/fastapi-mcp { };
 
+  fastapi-pagination = callPackage ../development/python-modules/fastapi-pagination { };
+
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
   fastapi-versionizer = callPackage ../development/python-modules/fastapi-versionizer { };
@@ -6199,6 +6203,11 @@ self: super: with self; {
   geoarrow-pandas = callPackage ../development/python-modules/geoarrow-pandas { };
 
   geoarrow-pyarrow = callPackage ../development/python-modules/geoarrow-pyarrow { };
+
+  inherit (callPackage ../development/python-modules/geoarrow-rust { })
+    geoarrow-rust-core
+    geoarrow-rust-io
+    ;
 
   geoarrow-types = callPackage ../development/python-modules/geoarrow-types { };
 
@@ -8875,6 +8884,8 @@ self: super: with self; {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
 
+  libpulse = callPackage ../development/python-modules/libpulse { };
+
   libpurecool = callPackage ../development/python-modules/libpurecool { };
 
   libpwquality = lib.pipe pkgs.libpwquality [
@@ -9161,6 +9172,10 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-embeddings-openai
       { };
 
+  llama-index-embeddings-openai-like =
+    callPackage ../development/python-modules/llama-index-embeddings-openai-like
+      { };
+
   llama-index-graph-stores-nebula =
     callPackage ../development/python-modules/llama-index-graph-stores-nebula
       { };
@@ -9217,6 +9232,10 @@ self: super: with self; {
 
   llama-index-vector-stores-chroma =
     callPackage ../development/python-modules/llama-index-vector-stores-chroma
+      { };
+
+  llama-index-vector-stores-faiss =
+    callPackage ../development/python-modules/llama-index-vector-stores-faiss
       { };
 
   llama-index-vector-stores-google =
@@ -10153,6 +10172,10 @@ self: super: with self; {
 
   mlflow = callPackage ../development/python-modules/mlflow { };
 
+  mlflow-skinny = callPackage ../development/python-modules/mlflow-skinny { };
+
+  mlflow-tracing = callPackage ../development/python-modules/mlflow-tracing { };
+
   mlrose = callPackage ../development/python-modules/mlrose { };
 
   mlt = toPythonModule (
@@ -11054,37 +11077,49 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
-  netbox-attachments = callPackage ../development/python-modules/netbox-attachments { };
+  netbox-attachments =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-attachments/package.nix
+      { };
 
-  netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
+  netbox-bgp = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-bgp/package.nix { };
 
-  netbox-contextmenus = callPackage ../development/python-modules/netbox-contextmenus { };
+  netbox-contextmenus =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contextmenus/package.nix
+      { };
 
-  netbox-contract = callPackage ../development/python-modules/netbox-contract { };
+  netbox-contract = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contract/package.nix { };
 
-  netbox-dns = callPackage ../development/python-modules/netbox-dns { };
+  netbox-dns = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-dns/package.nix { };
 
-  netbox-documents = callPackage ../development/python-modules/netbox-documents { };
+  netbox-documents = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-documents/package.nix { };
 
-  netbox-floorplan-plugin = callPackage ../development/python-modules/netbox-floorplan-plugin { };
+  netbox-floorplan-plugin =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-floorplan-plugin/package.nix
+      { };
 
   netbox-interface-synchronization =
-    callPackage ../development/python-modules/netbox-interface-synchronization
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-interface-synchronization/package.nix
       { };
 
-  netbox-napalm-plugin = callPackage ../development/python-modules/netbox-napalm-plugin { };
+  netbox-napalm-plugin =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-napalm-plugin/package.nix
+      { };
 
   netbox-plugin-prometheus-sd =
-    callPackage ../development/python-modules/netbox-plugin-prometheus-sd
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-plugin-prometheus-sd/package.nix
       { };
 
-  netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
+  netbox-qrcode = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-qrcode/package.nix { };
 
-  netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
+  netbox-reorder-rack =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-reorder-rack/package.nix
+      { };
 
-  netbox-routing = callPackage ../development/python-modules/netbox-routing { };
+  netbox-routing = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-routing/package.nix { };
 
-  netbox-topology-views = callPackage ../development/python-modules/netbox-topology-views { };
+  netbox-topology-views =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-topology-views/package.nix
+      { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
@@ -12044,6 +12079,8 @@ self: super: with self; {
   osprofiler = callPackage ../development/python-modules/osprofiler { };
 
   osqp = callPackage ../development/python-modules/osqp { };
+
+  osrf-pycommon = callPackage ../development/python-modules/osrf-pycommon { };
 
   osrparse = callPackage ../development/python-modules/osrparse { };
 
@@ -14984,6 +15021,8 @@ self: super: with self; {
 
   pyrepetierng = callPackage ../development/python-modules/pyrepetierng { };
 
+  pyreqwest = callPackage ../development/python-modules/pyreqwest { };
+
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
   pyrfc3339 = callPackage ../development/python-modules/pyrfc3339 { };
@@ -16969,6 +17008,8 @@ self: super: with self; {
 
   reretry = callPackage ../development/python-modules/reretry { };
 
+  rerun-notebook = callPackage ../development/python-modules/rerun-notebook { };
+
   rerun-sdk = callPackage ../development/python-modules/rerun-sdk { };
 
   resampy = callPackage ../development/python-modules/resampy { };
@@ -17448,6 +17489,8 @@ self: super: with self; {
 
   scales = callPackage ../development/python-modules/scales { };
 
+  scalib = callPackage ../development/python-modules/scalib { };
+
   scancode-toolkit = callPackage ../development/python-modules/scancode-toolkit { };
 
   scanpy = callPackage ../development/python-modules/scanpy { };
@@ -17870,6 +17913,8 @@ self: super: with self; {
   simple-di = callPackage ../development/python-modules/simple-di { };
 
   simple-parsing = callPackage ../development/python-modules/simple-parsing { };
+
+  simple-pid = callPackage ../development/python-modules/simple-pid { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
@@ -18299,6 +18344,8 @@ self: super: with self; {
 
   sparse = callPackage ../development/python-modules/sparse { };
 
+  sparsediffpy = callPackage ../development/python-modules/sparsediffpy { };
+
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 
   spatialmath-python = callPackage ../development/python-modules/spatialmath-python { };
@@ -18536,6 +18583,8 @@ self: super: with self; {
   spidev = callPackage ../development/python-modules/spidev { };
 
   spinners = callPackage ../development/python-modules/spinners { };
+
+  splines = callPackage ../development/python-modules/splines { };
 
   splinter = callPackage ../development/python-modules/splinter { };
 
@@ -19174,8 +19223,6 @@ self: super: with self; {
   taxi = callPackage ../development/python-modules/taxi { };
 
   taxii2-client = callPackage ../development/python-modules/taxii2-client { };
-
-  tbats = callPackage ../development/python-modules/tbats { };
 
   tblib = callPackage ../development/python-modules/tblib { };
 
@@ -21768,8 +21815,6 @@ self: super: with self; {
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
-
-  zebrafy = callPackage ../development/python-modules/zebrafy { };
 
   zeek = (toPythonModule (pkgs.zeek.broker.override { python3 = python; })).py;
 

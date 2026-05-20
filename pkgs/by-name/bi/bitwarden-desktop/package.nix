@@ -33,13 +33,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2026.2.1";
+  version = "2026.3.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-BiL9ugimdDKIzIoehGqdBfJkTOjbOMl8XV+0g/aGS/k=";
+    hash = "sha256-ecaCHk04N9h0RP8gK0o+MLgYS6Linsqi7AaC86hwQ3U=";
   };
 
   patches = [
@@ -55,6 +55,10 @@ buildNpmPackage' rec {
   ];
 
   postPatch = ''
+    # https://github.com/bitwarden/clients/pull/20480
+    substituteInPlace package-lock.json apps/desktop/desktop_native/napi/package.json \
+      --replace-fail '"@napi-rs/cli": "3.5.1"' '"@napi-rs/cli": "3.2.0"'
+
     # remove code under unfree license
     rm -r bitwarden_license
 
@@ -79,12 +83,9 @@ buildNpmPackage' rec {
     "--legacy-peer-deps"
   ];
 
-  npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    "--ignore-scripts"
-  ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-S34Lxr9dH9wjBmpDYA530z2/HiY4D4b/3rswWDqsrFU=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-1t4CSd1NDC1medTTFHSzX9ZkgHqPG2L//yjaloH47z0=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -94,7 +95,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-qK7cwrTzGKgHdaxaGcpR6bKJP/Tai2F+KFLu/PI6qqA=";
+    hash = "sha256-d9Iv7OekHOteH1lyAuyj/EzfU/KSCW6ATx83foOW3IE=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -165,7 +166,11 @@ buildNpmPackage' rec {
   ];
 
   checkFlags = [
+    # fails in zbus
     "--skip=password::password::tests::test"
+    # requires some debug feature to be enabled
+    "--skip=storage::serialization::tests::test_keydata_from_corrupted_bytes"
+    "--skip=storage::serialization::tests::test_keydata_from_empty_bytes"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=clipboard::tests::test_write_read"

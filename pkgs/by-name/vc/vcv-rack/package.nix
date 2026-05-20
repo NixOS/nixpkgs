@@ -123,7 +123,7 @@ let
       libjack2
       libpulseaudio
     ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ apple-sdk_14 ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
 
     cmakeFlags = [
       (lib.cmakeBool "RTAUDIO_API_ALSA" stdenv.hostPlatform.isLinux)

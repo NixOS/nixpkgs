@@ -23,6 +23,7 @@
   flint,
   frobby,
   gdbm,
+  getconf,
   gfortran,
   gfan,
   givaro,
@@ -53,10 +54,11 @@
   readline,
   singular,
   texinfo,
-  time,
+  runtimeShell,
   topcom,
   which,
   xz,
+  llvmPackages,
 
   downloadDocs ? true,
 }:
@@ -87,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     flint
     frobby
     gdbm
+    getconf
     givaro
     glpk
     gtest
@@ -111,6 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     singular
     xz
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   nativeBuildInputs = [
@@ -119,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     emacs-nox
     flex
     gdbm
+    getconf
     gfortran
     makeWrapper
     pkg-config
@@ -145,6 +152,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
+    substituteInPlace Macaulay2/packages/DeterminantalRepresentations.m2 \
+      --replace-fail "eps = 1e-15" "eps = 1e-14"
+  ''
+  # ForeignFunctions.m2 uses `brew --prefix` to discover potential library paths,
+  # which fails when Homebrew is not installed.
+  # We patch it to return an empty path instead, which should be harmless
+  + ''
+    substituteInPlace Macaulay2/packages/ForeignFunctions.m2 \
+      --replace-fail 'get "!brew --prefix"' 'try get "!brew --prefix" else ""'
   '';
 
   preConfigure = ''
@@ -179,8 +195,17 @@ stdenv.mkDerivation (finalAttrs: {
     "MakeDocumentation=false"
   ];
 
+  env.LDFLAGS = lib.concatStringsSep " " (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-lblas"
+    ]
+  );
+
   postInstall = ''
-    wrapProgram "$out/bin/M2" \
+    substituteInPlace "$out/bin/M2" \
+      --replace-fail "/bin/sh" "${runtimeShell}"
+
+    wrapProgram "$out/bin/M2-binary" \
       --prefix PATH : ${
         lib.makeBinPath [
           _4ti2
@@ -196,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
           topcom
         ]
       } \
-      --prefix LD_LIBRARY_PATH : ${
+      --prefix ${if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${
         lib.makeLibraryPath [
           cddlib
           flint

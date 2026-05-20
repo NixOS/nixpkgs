@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
     ];
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
     teams = [ lib.teams.gnome ];
   };
 })

@@ -223,7 +223,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               buildInputs = [
                 zlib
               ]
-              ++ lib.optional stdenv.hostPlatform.isDarwin [
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
                 swiftPackages.swift
                 darwin.ICU
               ];

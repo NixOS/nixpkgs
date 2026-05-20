@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -13,13 +14,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-EzUNKuDNHr0NIXiqX09w99wtz1r2pZurR/izdgzTcAs=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.ttf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Japanese font package with Mincho and Gothic fonts";

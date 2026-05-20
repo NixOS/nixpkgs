@@ -15,25 +15,14 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
-  version = "0.34.7";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "corepack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mAiYRDQ9nh4FN8nY0FKC38b1fKRVq0D4dojcAynezas=";
+    hash = "sha256-VgiQ4k6HiRxemtizItL0zkTDpgTnL0ScfSOfgjMpokI=";
   };
-
-  patches = [
-    # The build fails with better-sqlite3, needed for installCheck phase.
-    # We can use the built-in SQLite module instead (and skip the installCheck phase on version of
-    # Node.js that do not have built-in SQLite support).
-    ./use-builtin-sqlite.patch
-
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/nodejs/corepack/blob/main/package.json#L19
-    ./yarn-4.14-support.patch
-  ];
 
   nativeBuildInputs = [
     nodejs
@@ -49,10 +38,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit nodejs;
     inherit (finalAttrs)
       missingHashes
-      patches
       src
       ;
-    hash = "sha256-WIXXaam6OoIQrAUiLtF/Fst3vYTFj3mqBr7UxhUcXMI=";
+    hash = "sha256-Q7vUJrFUr8ZbDdaMZq8fnJFfIgEFYkHQiUoo2xILaKo=";
   };
 
   postPatch = ''
@@ -98,7 +86,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     cacert
     versionCheckHook
-    (writeScriptBin "corepack" "") # Some tests expect to find a `corepack` in the PATH
   ];
   # Built-in SQLite support is only available in Node.js 22+, and required to run the tests.
   preInstallCheck = lib.optional (lib.versionAtLeast nodejs.version "22") ''

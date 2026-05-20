@@ -202,7 +202,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      dit7ya
       hughobrien
       aviallon
     ];
