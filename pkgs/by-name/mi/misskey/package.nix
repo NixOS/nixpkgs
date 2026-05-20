@@ -14,7 +14,6 @@
   jemalloc,
   ffmpeg-headless,
   writeShellScript,
-  xcbuild,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
@@ -48,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_9
     makeWrapper
     python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = fetchPnpmDeps {

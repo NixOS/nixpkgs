@@ -1,8 +1,8 @@
 diff --git a/src/addressbook/libebook/e-book-client.c b/src/addressbook/libebook/e-book-client.c
-index c31f3ef..9ebb5f2 100644
+index 12fc59c..3fc80a5 100644
 --- a/src/addressbook/libebook/e-book-client.c
 +++ b/src/addressbook/libebook/e-book-client.c
-@@ -1926,7 +1926,18 @@ e_book_client_get_self (ESourceRegistry *registry,
+@@ -1944,7 +1944,18 @@ e_book_client_get_self (ESourceRegistry *registry,
  
  	*out_client = book_client;
  
@@ -22,7 +22,7 @@ index c31f3ef..9ebb5f2 100644
  	uid = g_settings_get_string (settings, SELF_UID_KEY);
  	g_object_unref (settings);
  
-@@ -1994,7 +2005,18 @@ e_book_client_set_self (EBookClient *client,
+@@ -2012,7 +2023,18 @@ e_book_client_set_self (EBookClient *client,
  	g_return_val_if_fail (
  		e_contact_get_const (contact, E_CONTACT_UID) != NULL, FALSE);
  
@@ -42,7 +42,7 @@ index c31f3ef..9ebb5f2 100644
  	g_settings_set_string (
  		settings, SELF_UID_KEY,
  		e_contact_get_const (contact, E_CONTACT_UID));
-@@ -2030,8 +2052,20 @@ e_book_client_is_self (EContact *contact)
+@@ -2048,8 +2070,20 @@ e_book_client_is_self (EContact *contact)
  	 * unfortunately the API doesn't allow that.
  	 */
  	g_mutex_lock (&mutex);
@@ -130,7 +130,7 @@ index 9d986d2..d63902a 100644
  	g_object_unref (settings);
  
 diff --git a/src/addressbook/libedata-book/e-book-meta-backend.c b/src/addressbook/libedata-book/e-book-meta-backend.c
-index 2a95a75..950f430 100644
+index 60ff97f..8535dec 100644
 --- a/src/addressbook/libedata-book/e-book-meta-backend.c
 +++ b/src/addressbook/libedata-book/e-book-meta-backend.c
 @@ -148,7 +148,18 @@ ebmb_is_power_saver_enabled (void)
@@ -154,10 +154,10 @@ index 2a95a75..950f430 100644
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
 diff --git a/src/calendar/backends/contacts/e-cal-backend-contacts.c b/src/calendar/backends/contacts/e-cal-backend-contacts.c
-index 9f8646a..079aba9 100644
+index b16756f..f3d2d6b 100644
 --- a/src/calendar/backends/contacts/e-cal-backend-contacts.c
 +++ b/src/calendar/backends/contacts/e-cal-backend-contacts.c
-@@ -1338,7 +1338,18 @@ e_cal_backend_contacts_init (ECalBackendContacts *cbc)
+@@ -1433,7 +1433,18 @@ e_cal_backend_contacts_init (ECalBackendContacts *cbc)
  		(GDestroyNotify) g_free,
  		(GDestroyNotify) contact_record_free);
  
@@ -178,7 +178,7 @@ index 9f8646a..079aba9 100644
  	cbc->priv->update_alarms_id = 0;
  	cbc->priv->alarm_enabled = FALSE;
 diff --git a/src/calendar/backends/file/e-cal-backend-file.c b/src/calendar/backends/file/e-cal-backend-file.c
-index 6318854..6b7a88c 100644
+index 2e2dd0b..b5f99ab 100644
 --- a/src/calendar/backends/file/e-cal-backend-file.c
 +++ b/src/calendar/backends/file/e-cal-backend-file.c
 @@ -3701,7 +3701,20 @@ e_cal_backend_file_receive_objects (ECalBackendSync *backend,
@@ -244,7 +244,7 @@ index 92d68e2..d1e1fa4 100644
  		g_signal_connect_object (
  			watcher->priv->desktop_settings,
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
-index 371f9bb..b0a661e 100644
+index 866afd1..e57d877 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
 +++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
 @@ -160,7 +160,18 @@ ecmb_is_power_saver_enabled (void)
@@ -267,7 +267,7 @@ index 371f9bb..b0a661e 100644
  
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
-@@ -2652,7 +2663,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
+@@ -2617,7 +2628,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
  			if (is_declined) {
  				GSettings *settings;
  
@@ -290,10 +290,10 @@ index 371f9bb..b0a661e 100644
  				g_clear_object (&settings);
  			}
 diff --git a/src/camel/camel-cipher-context.c b/src/camel/camel-cipher-context.c
-index 03b5129..3f4256a 100644
+index a830f89..b9abaa2 100644
 --- a/src/camel/camel-cipher-context.c
 +++ b/src/camel/camel-cipher-context.c
-@@ -1637,7 +1637,18 @@ camel_cipher_can_load_photos (void)
+@@ -1638,7 +1638,18 @@ camel_cipher_can_load_photos (void)
  	GSettings *settings;
  	gboolean load_photos;
  
@@ -314,7 +314,7 @@ index 03b5129..3f4256a 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index c5ac40f..fb8ae19 100644
+index 94f0769..8de758b 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
 @@ -748,7 +748,18 @@ gpg_ctx_get_executable_name (void)
@@ -363,10 +363,10 @@ index 2c0b6ef..b354332 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index c3c2d7d..e1370db 100644
+index e605049..9961fea 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
-@@ -5671,7 +5671,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
+@@ -5666,7 +5666,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
  	if (do_old_flags_update) {
  		GSettings *eds_settings;
  
@@ -507,7 +507,7 @@ index 3738359..f9ce2d9 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index db775f9..fb524db 100644
+index c999d4d..e9cf7c5 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -93,7 +93,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
@@ -531,10 +531,10 @@ index db775f9..fb524db 100644
  	g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-source-registry.c b/src/libedataserver/e-source-registry.c
-index bd9822d..3e021dd 100644
+index bcc2df7..42489da 100644
 --- a/src/libedataserver/e-source-registry.c
 +++ b/src/libedataserver/e-source-registry.c
-@@ -1781,7 +1781,19 @@ e_source_registry_init (ESourceRegistry *registry)
+@@ -1751,7 +1751,19 @@ e_source_registry_init (ESourceRegistry *registry)
  
  	g_mutex_init (&registry->priv->sources_lock);
  
@@ -556,10 +556,10 @@ index bd9822d..3e021dd 100644
  	g_signal_connect (
  		registry->priv->settings, "changed",
 diff --git a/src/libedataserverui/e-reminders-widget.c b/src/libedataserverui/e-reminders-widget.c
-index 980ceb1..02d9551 100644
+index 302aacf..ed4a7fa 100644
 --- a/src/libedataserverui/e-reminders-widget.c
 +++ b/src/libedataserverui/e-reminders-widget.c
-@@ -2132,7 +2132,19 @@ static void
+@@ -2133,7 +2133,19 @@ static void
  e_reminders_widget_init (ERemindersWidget *reminders)
  {
  	reminders->priv = e_reminders_widget_get_instance_private (reminders);
@@ -628,27 +628,3 @@ index d531cb9..c96f1d5 100644
  
  	switch (g_settings_get_int (settings, "proxy-type")) {
  		case 1:
-diff --git a/src/services/evolution-source-registry/evolution-source-registry.c b/src/services/evolution-source-registry/evolution-source-registry.c
-index 1c0a113..6b41423 100644
---- a/src/services/evolution-source-registry/evolution-source-registry.c
-+++ b/src/services/evolution-source-registry/evolution-source-registry.c
-@@ -181,7 +181,18 @@ main (gint argc,
- 
- reload:
- 
--	settings = g_settings_new ("org.gnome.evolution-data-server");
-+	{
-+		g_autoptr(GSettingsSchemaSource) schema_source;
-+		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
-+									    g_settings_schema_source_get_default(),
-+									    TRUE,
-+									    NULL);
-+		schema = g_settings_schema_source_lookup(schema_source,
-+							 "org.gnome.evolution-data-server",
-+							 FALSE);
-+		settings = g_settings_new_full(schema, NULL, NULL);
-+	}
- 
- 	if (!opt_disable_migration && !g_settings_get_boolean (settings, "migrated")) {
- 		g_settings_set_boolean (settings, "migrated", TRUE);

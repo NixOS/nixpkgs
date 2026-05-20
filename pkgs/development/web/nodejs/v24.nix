@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "24.14.1";
-  sha256 = "7822507713f202cf2a551899d250259643f477b671706db421a6fb55c4aa0991";
+  version = "24.15.0";
+  sha256 = "a4f653d79ed140aaad921e8c22a3b585ca85cfdab80d4030f6309e4663a8a1c8";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -56,17 +56,19 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-
-      # TODO: remove this when included in a next release
+      # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+      # OpenSSL reports different errors
+      # https://github.com/nodejs/node/pull/62629
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
-        hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
-        includes = [ "test/*" ];
+        url = "https://github.com/nodejs/node/commit/dd25d8f29d3ddadcf5a5ebfdf98ece55f9df96c6.patch?full_index=1";
+        hash = "sha256-6cxRN7TyWmJgUZt3jp2YXbVIjrDb2BNep5LxBOtT3Q0=";
       })
+
+      # Patch for nghttp2 1.69 support
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/59a522af24173b244cb86829de145d46b143a45c.patch?full_index=1";
-        hash = "sha256-mjxl4rIio8lgjvxqfKrVwdhOUHUUDH2PMh0n8BowXIQ=";
-        includes = [ "src/*" ];
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
       })
     ]
     ++ gypPatches
@@ -81,10 +83,5 @@ buildNodejs {
     ++ lib.optionals stdenv.hostPlatform.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # TODO: remove once included in an future upstream release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/f13d7bf69a7f1642fb5b1b624eff1a50ceb71849.patch?full_index=1";
-        hash = "sha256-4PZq1gG/K+FwAM06VIXYoSNJeOYe37kfKW0jqczeXbc=";
-      })
     ];
 }
