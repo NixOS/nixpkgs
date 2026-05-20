@@ -10,20 +10,20 @@
   microsoft-kiota-http,
   microsoft-kiota-serialization-json,
   azure-identity,
+  pytest-asyncio,
   pytestCheckHook,
-  responses,
 }:
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "1.3.8";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
     tag = "v${version}";
-    hash = "sha256-6M1C2Y0jYec/yKjigtbaaZiEL23csQAFtuUVMTlaiXk=";
+    hash = "sha256-1fgLW6tpaDMOIaAU92ty9JYx/bZxDs4VjNPDCPIze/A=";
   };
 
   build-system = [ setuptools ];
@@ -39,17 +39,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     azure-identity
     microsoft-kiota-serialization-json
+    pytest-asyncio
     pytestCheckHook
     python-dotenv
-    responses
   ];
 
   pythonImportsCheck = [ "msgraph_core" ];
-
-  disabledTestPaths = [
-    # client_id should be the id of a Microsoft Entra application
-    "tests/tasks/test_page_iterator.py"
-  ];
 
   meta = {
     description = "Core component of the Microsoft Graph Python SDK";
