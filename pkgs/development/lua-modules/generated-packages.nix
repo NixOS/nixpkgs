@@ -5065,6 +5065,41 @@ final: prev: {
     }
   ) { };
 
+  osenv = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "osenv";
+      version = "1.1.2-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/osenv-1.1.2-1.rockspec";
+          sha256 = "1sss100xvwzxlblsbyhqxszgy9b1q1j07cvykd4khiy31pdsa1c1";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/BirdeeHub/lua-osenv/archive/v1.1.2.zip";
+        sha256 = "0rd795hplg52wllx39iykg3hjyrg48kfx4dvcc4zzna912qzsbca";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/BirdeeHub/lua-osenv";
+        license.fullName = "MIT";
+        maintainers = [ lib.maintainers.birdee ];
+        description = "Manage lua process environment, vim.env polyfill with extra features";
+        longDescription = ''
+          os.getenv gets values from the process environment.
+          But how do you set them?
+          require('osenv').MY_VAR = "MY_VALUE"'';
+      };
+    }
+  ) { };
+
   papis-nvim = callPackage (
     {
       buildLuarocksPackage,

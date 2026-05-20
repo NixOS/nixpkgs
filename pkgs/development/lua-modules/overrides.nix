@@ -1010,6 +1010,19 @@ in
     '';
   };
 
+  osenv = prev.osenv.overrideAttrs (old: {
+    # compiled C module needs to be built before checks can be ran
+    checkPhase = ''
+      runHook preCheck
+      runHook postCheck
+    '';
+    installCheckPhase = ''
+      runHook preInstallCheck
+      luarocks test
+      runHook postInstallCheck
+    '';
+  });
+
   plenary-nvim = prev.plenary-nvim.overrideAttrs {
     postPatch = ''
       sed -Ei lua/plenary/curl.lua \
