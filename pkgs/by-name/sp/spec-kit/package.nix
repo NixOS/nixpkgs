@@ -2,18 +2,19 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spec-kit";
-  version = "0.0.90";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "spec-kit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ulAii6//DT9uqLxYk6qmX6dwWWjhuARbBmjH5u1YGGM=";
+    hash = "sha256-jQ2Mp6Ya1Bs/SYbmSEK3LoNtqjeHtJCgn3a7RMmokW8=";
   };
 
   pyproject = true;
@@ -31,12 +32,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
       platformdirs
       readchar
       truststore
+      json5
+      pyyaml
+      packaging
+      pathspec
     ]
     ++ httpx.optional-dependencies.socks;
 
   pythonImportsCheck = [
     "specify_cli"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
