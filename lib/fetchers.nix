@@ -113,7 +113,7 @@ rec {
       inherit (commonH hashTypes) hashNames hashSet;
     in
     args:
-    if args ? "outputHash" then
+    if args ? outputHash then
       args
     else
       let
