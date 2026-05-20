@@ -2,12 +2,13 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "csv2md";
   version = "1.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lzakharov";
@@ -15,6 +16,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-51MCeM/zfjYMhB8Ryt1RMevEwszAzgYrJsyViEIOYVY=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "csv2md" ];
 
