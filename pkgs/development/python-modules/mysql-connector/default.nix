@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "9.6.0";
+  version = "9.7.0";
   format = "setuptools";
 
   setupPyBuildFlags = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "mysql";
     repo = "mysql-connector-python";
     tag = version;
-    hash = "sha256-EwdJpiyplck26Tc9SiczxGieJ3GcTGMQva/fDzhzWn4=";
+    hash = "sha256-D4aAkdIfAcsQumjROA6/+KB6CcjVYcq7yo4FeVUZtX0=";
   };
 
   sourceRoot = "${src.name}/mysql-connector-python";
