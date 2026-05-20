@@ -4857,9 +4857,12 @@ assertNoAdditions {
     ];
   };
 
-  vim-addon-async = super.vim-addon-async.overrideAttrs {
+  vim-addon-async = super.vim-addon-async.overrideAttrs (old: {
     dependencies = [ self.vim-addon-signs ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.vim;
+    };
+  });
 
   vim-addon-background-cmd = super.vim-addon-background-cmd.overrideAttrs {
     dependencies = [ self.vim-addon-mw-utils ];
