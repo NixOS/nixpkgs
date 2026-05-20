@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cozempic";
-  version = "1.8.14";
+  version = "1.8.16";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nJg6+szDefUFpMDXASUBtaWhD5LA+deFzq0Fg2ANPf4=";
+    hash = "sha256-zx/4XZLWYFIdtWehHt5mra4mGcr76raivopBk3G0NL8=";
   };
 
   build-system = [ python3Packages.setuptools ];
