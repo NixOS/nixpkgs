@@ -703,6 +703,7 @@
     license = [ "bsd3" ];
     version = "0.5.1";
     sha512.run = "e43861305fb612100621b74079c43f554b85d2af958778ea47e2cdf01996d9e08f0ae2cbd576e14ef0dd90d5919571db537cea058200dd6b45e9165fcba8c9a1";
+    hasJar = true;
   };
   albatross.binfiles = [
     "albatross"
@@ -1600,6 +1601,7 @@
     license = [ "bsd3" ];
     version = "7.2.0";
     sha512.run = "340c6b8ff750e684955d07e167cfb77f4b60131166a38e6fcfa0d3498e9281ca51e954a492fdcafaf01ce103441d87cc0330b849d000a0a788812cee8d6bc365";
+    hasJar = true;
   };
   arara.binfiles = [
     "arara"
@@ -4155,6 +4157,7 @@
     license = [ "gpl3Plus" ];
     version = "4.7";
     sha512.run = "09c58acec980741552e643eff132be3f9b93408b5094c5ce40f7850ccb47cc6b4f1fdbd79ae7212b4df70bae68115328d118bd632eb8c55a1afac000c4bb9792";
+    hasJar = true;
   };
   bib2gls.binfiles = [
     "bib2gls"
@@ -28607,6 +28610,7 @@
     license = [ "gpl3Plus" ];
     version = "20191225.0";
     sha512.run = "da33a0bdc989fcb6f4521d23e5d44bae70d608ed8ac10f05d6962a252e99bbd80380afa2cbe9e02b9c652b044dfff79218f951144da6ce55f8a53033c11ff346";
+    hasJar = true;
   };
   ketcindy.binfiles = [
     "ketcindy"
@@ -29980,6 +29984,7 @@
     license = [ "gpl3Only" ];
     version = "1.1.3";
     sha512.run = "2824e5ac81f37b52b45686927add1c73d9e8a6b3972f144178c312cb6c11b0d40d356ce06153d620d64ca735ccac7f97adcec8e59fe31527d1cc1e53e1551fef";
+    hasJar = true;
   };
   latex2nemeth.binfiles = [
     "latex2nemeth"
@@ -38442,6 +38447,7 @@
       "gpl1Only"
     ];
     sha512.run = "71a2c105a7d593ca432a50a68fbcd16d876c8a28ce25be99326f323bcdba997b000158514328542378384f55a0ceadd9d34b71840980346b0b5c1c63843f7c1b";
+    hasJar = true;
   };
   pax.binfiles = [
     "pdfannotextractor"
@@ -48448,6 +48454,7 @@
     sha512.source = "a2a6022a828a7b55a78ca72514e681951731e4ab451b54e0683e0daad6f07d243b52b056e376a6a0fa3b91652396598e819a8a8d14fdfcef65f5a8cd93e30a0f";
     license = [ "lppl13c" ];
     sha512.run = "760a199f6fde826739c94eee51bbb6424df4b4b8bc67e2f225884d7d42985d2a64560bca9623e5d71724caff484cd9a68854de80d8a6632efb5b81e645200d57";
+    hasJar = true;
   };
   tex4ht.binfiles = [
     "ht"
@@ -48937,6 +48944,7 @@
     license = [ "lppl13c" ];
     version = "1.7";
     sha512.run = "fbd239be879748a38a7fe3544081b2e5ef230176e7f3a6513f1d2a11fb9d537a8c882d6af36f4226776faf84a23fea6c040246f1c7403fa018d2c6da801b5654";
+    hasJar = true;
   };
   texosquery.binfiles = [
     "texosquery"
@@ -48954,6 +48962,7 @@
     license = [ "bsd3" ];
     version = "1.0.6";
     sha512.run = "c70f7e8e637a72c18b74e2c5e1832c911a32e7ac4f9b2fa538fb11b85c9c026c62373e0af52b6114180cbaed2d2c6222923ff400a0beff2db1adc16b499a64cd";
+    hasJar = true;
   };
   texplate.binfiles = [
     "texplate"
@@ -50544,6 +50553,7 @@
     license = [ "gpl3Plus" ];
     version = "1.2";
     sha512.run = "50817d4c68d4e302cf0f4075ff9321bde2fd26336923efd2fb39bf097090b617a2a67ce75d1a14d562939514acb17b2a356bc388f72049dbe52a868ff3d63ffd";
+    hasJar = true;
   };
   tlcockpit.binfiles = [
     "tlcockpit"

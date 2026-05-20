@@ -167,6 +167,10 @@ $a}
       # flag existence of tlpkg files in hold space
       x ; s/$/\n  hasTlpkg = true;/ ; x
     }
+    / [^ ]*\.jar /{
+      # flag existence of java bytecode in hold space
+      x ; s/$/\n  hasJar = true;/ ; x
+    }
 
     # extract script extensions
     / texmf-dist\/scripts\/[^ ]*\.(jar|lua|py|rb|sno|tcl|texlua|tlu) /{

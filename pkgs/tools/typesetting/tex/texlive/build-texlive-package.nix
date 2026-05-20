@@ -54,6 +54,7 @@
   hasRunfiles ? (sha512 ? run),
   hasTlpkg ? false,
   hasCatalogue ? true,
+  hasJar ? false,
   catalogue ? pname,
   extraNativeBuildInputs ? [ ],
   ...
@@ -86,6 +87,9 @@ let
   }
   // lib.optionalAttrs (mainProgram != null) {
     inherit mainProgram;
+  }
+  // lib.optionalAttrs hasJar {
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 
   # if binfiles contains exactly one entry, use it as mainProgram, but allow overrides via args.mainProgram
