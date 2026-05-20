@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/SL-RU/mmtui/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/SL-RU/mmtui/releases/tag/mmt-v${finalAttrs.version}";
     description = "TUI disk mount manager for TUI file managers";
     homepage = "https://github.com/SL-RU/mmtui";
     license = lib.licenses.mit;
