@@ -250,6 +250,7 @@ mapAliases {
 
   # Various to preserve
   autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
+  elasticsearch7 = throw "'elasticsearch7' has been removed; nixpkgs now ships only elasticsearch 9.x. See release notes."; # Added 2026-05-09
   elasticsearch7Plugins = elasticsearchPlugins; # preserve, reason: until v8
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve, reason: common typo
   fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
@@ -337,6 +338,7 @@ mapAliases {
   atlassian-cli = appfire-cli; # Added 2025-09-29
   ats = throw "'ats' has been removed as it is unmaintained for 10 years and broken"; # Added 2025-05-17
   audio-recorder = throw "'audio-recorder' has been removed, as it is unmaintained upstream and broken. Consider using 'gnome-sound-recorder' or 'reco' instead"; # Added 2026-01-02
+  auditbeat7 = throw "'auditbeat7' has been removed; nixpkgs now ships only beats 9.x. See release notes."; # Added 2026-05-09
   august = throw "'august' has been removed, as it has been unmaintained since august 2023"; # Added 2025-12-25
   AusweisApp2 = throw "'AusweisApp2' has been renamed to/replaced by 'ausweisapp'"; # Converted to throw 2025-10-27
   autobase = throw "'autobase' is a Node library, use buildNpmPackage for that"; # Added 2025-09-26
@@ -717,6 +719,7 @@ mapAliases {
   fennel = throw "'fennel' has been renamed to/replaced by 'luaPackages.fennel'"; # Converted to throw 2025-10-27
   fetchbower = throw "fetchbower has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   FIL-plugins = throw "'FIL-plugins' has been renamed to/replaced by 'fil-plugins'"; # Converted to throw 2025-10-27
+  filebeat7 = throw "'filebeat7' has been removed; nixpkgs now ships only beats 9.x. See release notes."; # Added 2026-05-09
   filesender = throw "'filesender' has been removed because of its simplesamlphp dependency"; # Added 2025-10-17
   finger_bsd = throw "'finger_bsd' has been renamed to/replaced by 'bsd-finger'"; # Converted to throw 2025-10-27
   fingerd_bsd = throw "'fingerd_bsd' has been renamed to/replaced by 'bsd-fingerd'"; # Converted to throw 2025-10-27
@@ -940,6 +943,7 @@ mapAliases {
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
   haxe_4_0 = throw "'haxe_4_0' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   haxe_4_1 = throw "'haxe_4_1' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
+  heartbeat7 = throw "'heartbeat7' has been removed; nixpkgs now ships only beats 9.x. See release notes."; # Added 2026-05-09
   helix-gpt = throw "helix-gpt was deprecated in January 2026 and has been since removed"; # Added 2026-02-05
   helvum = throw "'helvum' has been removed as it was unmaintained upstream and relied on a vulnerable dependency. Consider using 'crosspipe' instead."; # Added 2026-03-04
   HentaiAtHome = throw "'HentaiAtHome' has been renamed to/replaced by 'hentai-at-home'"; # Converted to throw 2025-10-27
@@ -1017,6 +1021,7 @@ mapAliases {
   jikespg = throw "'jikespg' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
   jing = jing-trang; # Added 2025-09-18
   joplin = joplin-cli; # Added 2025-11-03
+  journalbeat = throw "'journalbeat' has been removed; it was deprecated upstream in 7.15 and replaced by filebeat's journald input."; # Added 2026-05-09
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
   jsduck = throw "jsduck has been removed, as it was broken and and unmaintained upstream."; # Added 2025-12-02
   julia_19 = throw "Julia 1.9 has reached its end of life and 'julia_19' has been removed. Please use a supported version."; # Added 2025-10-29
@@ -1329,6 +1334,8 @@ mapAliases {
   log4j-vuln-scanner = throw "'log4j-vuln-scanner' has been removed, as it was unmaintained upstream and no longer relevant given that the Log4Shell vulnerability has been fixed."; # Added 2025-11-15
   log4jcheck = throw "'log4jcheck' has been removed, as it was unmaintained upstream and no longer relevant given that the Log4Shell vulnerability has been fixed."; # Added 2025-11-15
   log4shell-detector = throw "'log4shell-detector' has been removed, as it was unmaintained upstream and no longer relevant given that the Log4Shell vulnerability has been fixed."; # Added 2025-11-15
+  logstash7 = throw "'logstash7' has been removed; nixpkgs now ships only logstash 9.x. See release notes."; # Added 2026-05-09
+  logstash7-oss = throw "'logstash7-oss' has been removed; nixpkgs now ships only logstash 9.x (unfree). See release notes."; # Added 2026-05-09
   lowPrio = warnAlias "'lowPrio' has been removed from pkgs, use `lib.lowPrio` instead" lib.lowPrio; # Added 2025-10-30
   LPCNet = throw "'LPCNet' has been renamed to/replaced by 'lpcnet'"; # Converted to throw 2025-10-27
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
@@ -1410,6 +1417,7 @@ mapAliases {
   metaBuildEnv = throw "'metaBuildEnv' has been removed, due to it being ancient unmaintained software"; # Added 2026-02-11
   meteo = throw "'meteo' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
   metersLv2 = warnAlias "'metersLv2' has been renamed to 'meters-lv2'" meters-lv2; # Added 2026-02-08
+  metricbeat7 = throw "'metricbeat7' has been removed; nixpkgs now ships only beats 9.x. See release notes."; # Added 2026-05-09
   microcodeAmd = throw "'microcodeAmd' has been renamed to/replaced by 'microcode-amd'"; # Converted to throw 2025-10-27
   microcodeIntel = throw "'microcodeIntel' has been renamed to/replaced by 'microcode-intel'"; # Converted to throw 2025-10-27
   microsoft_gsl = throw "'microsoft_gsl' has been renamed to/replaced by 'microsoft-gsl'"; # Converted to throw 2025-10-27
@@ -1635,6 +1643,7 @@ mapAliases {
   ossec-server = throw "'ossec-server' has been removed due to lack of maintenance"; # Added 2025-11-08
   overrideLibcxx = throw "overrideLibcxx has been removed, as it was no longer used and Darwin now uses libc++ from the latest SDK; see the Nixpkgs 25.11 release notes for details"; # Added 2025-09-15
   overrideSDK = throw "overrideSDK has been removed as it was a legacy compatibility stub. See <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks-overrides> for migration instructions"; # Added 2025-08-04
+  packetbeat7 = throw "'packetbeat7' has been removed; nixpkgs now ships only beats 9.x. See release notes."; # Added 2026-05-09
   pactorio = throw "'pactorio' has been removed, as it has been unmaintained upstream since February 2024"; # Added 2026-01-01
   pacup = throw "'pacup' has been renamed to/replaced by 'perlPackages.pacup'"; # Converted to throw 2025-10-27
   PageEdit = throw "'PageEdit' has been renamed to/replaced by 'pageedit'"; # Converted to throw 2025-10-27

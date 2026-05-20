@@ -29,7 +29,7 @@ in
       enable = mkEnableOption "filebeat";
 
       package = mkPackageOption pkgs "filebeat" {
-        example = "filebeat7";
+        example = "filebeat9";
       };
 
       inputs = mkOption {
@@ -72,7 +72,7 @@ in
         );
         example = literalExpression ''
           {
-            journald.id = "everything";  # Only for filebeat7
+            journald.id = "everything";
             log = {
               enabled = true;
               paths = [

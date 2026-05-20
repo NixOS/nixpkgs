@@ -1560,19 +1560,19 @@ with pkgs;
 
   beautysh = with python3.pkgs; toPythonApplication beautysh;
 
-  inherit (callPackages ../misc/logging/beats/7.x.nix { })
-    auditbeat7
-    filebeat7
-    heartbeat7
-    metricbeat7
-    packetbeat7
+  inherit (callPackages ../misc/logging/beats/9.x.nix { })
+    auditbeat9
+    filebeat9
+    heartbeat9
+    metricbeat9
+    packetbeat9
     ;
 
-  auditbeat = auditbeat7;
-  filebeat = filebeat7;
-  heartbeat = heartbeat7;
-  metricbeat = metricbeat7;
-  packetbeat = packetbeat7;
+  auditbeat = auditbeat9;
+  filebeat = filebeat9;
+  heartbeat = heartbeat9;
+  metricbeat = metricbeat9;
+  packetbeat = packetbeat9;
 
   biliass = with python3.pkgs; toPythonApplication biliass;
 
@@ -2215,15 +2215,7 @@ with pkgs;
     mkDerivation = buildEmscriptenPackage;
   };
 
-  # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
-  # When updating make sure to update all plugins or they will break!
-  elk7Version = "7.17.27";
-
-  elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
-    util-linux = util-linuxMinimal;
-    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-  elasticsearch = elasticsearch7;
+  elasticsearch = elasticsearch9;
 
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
@@ -2616,16 +2608,7 @@ with pkgs;
 
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
-  logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
-    # https://www.elastic.co/support/matrix#logstash-and-jvm
-    jre = jdk11_headless;
-  };
-  logstash7-oss = callPackage ../tools/misc/logstash/7.x.nix {
-    enableUnfree = false;
-    # https://www.elastic.co/support/matrix#logstash-and-jvm
-    jre = jdk11_headless;
-  };
-  logstash = logstash7;
+  logstash = logstash9;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
