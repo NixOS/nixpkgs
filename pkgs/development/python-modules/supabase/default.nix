@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "supabase";
-  version = "2.29.0";
+  version = "2.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LaSlAYFvx/HHdfmc9J+KScVQ9JFGS98Yfihzn8F7t3g=";
+    hash = "sha256-ZGzLveygJPgUzVdj/Gr/S7E1clMAnMFnCPvg+xalPCI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/supabase";
