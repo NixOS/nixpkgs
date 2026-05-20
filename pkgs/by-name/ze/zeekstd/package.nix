@@ -1,7 +1,10 @@
 {
   fetchFromGitHub,
+  jq,
   lib,
+  nix-update,
   rustPlatform,
+  writeShellScript,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeekstd";
@@ -15,6 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-0wqRDhopbSfILABEpjuTLfOuwIH+5jzTVl9av7+7098=";
+
+  passthru.updateScript = writeShellScript "update-zeekstd" ''
+    latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/rorosen/zeekstd/releases/latest | ${lib.getExe jq} --raw-output .tag_name | sed -E 's/^v([0-9.]+)-cli$/\1/')
+    ${lib.getExe nix-update} zeekstd --version $latestVersion
+  '';
 
   meta = {
     description = "CLI tool that works with the zstd seekable format";
