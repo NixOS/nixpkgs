@@ -188,7 +188,7 @@ symlinkJoin {
         src
         cargoHash
         ;
-      updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+      updateScript = [ ./update.sh ];
       tests = exports;
     }
     // exports;
