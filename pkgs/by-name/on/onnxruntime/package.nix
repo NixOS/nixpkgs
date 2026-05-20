@@ -25,6 +25,7 @@
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
   rocmSupport ? config.rocmSupport,
+  coremlSupport ? stdenv.hostPlatform.isDarwin,
   withFullProtobuf ? false,
   cudaPackages ? { },
   rocmPackages,
@@ -78,6 +79,30 @@ let
     repo = "dlpack";
     rev = "5c210da409e7f1e51ddf445134a4376fdbd70d7d";
     hash = "sha256-YqgzCyNywixebpHGx16tUuczmFS5pjCz5WjR89mv9eI=";
+  };
+
+  coremltools-src = fetchFromGitHub {
+    name = "coremltools-src";
+    owner = "apple";
+    repo = "coremltools";
+    tag = "7.1";
+    hash = "sha256-kajQFHpl+4UK6fp+rM8TP0GiqIFYXPVFc2x1p19rBSw=";
+  };
+
+  fp16-src = fetchFromGitHub {
+    name = "fp16-src";
+    owner = "Maratyszcza";
+    repo = "FP16";
+    rev = "0a92994d729ff76a58f692d3028ca1b64b145d91";
+    hash = "sha256-m2d9bqZoGWzuUPGkd29MsrdscnJRtuIkLIMp3fMmtRY=";
+  };
+
+  psimd-src = fetchFromGitHub {
+    name = "psimd-src";
+    owner = "Maratyszcza";
+    repo = "psimd";
+    rev = "072586a71b55b7f8c584153d223e95687148a900";
+    hash = "sha256-lV+VZi2b4SQlRYrhKx9Dxc6HlDEFz3newvcBjTekupo=";
   };
 
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
@@ -263,6 +288,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
+    (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
   ]
   ++ lib.optionals pythonSupport [
@@ -284,6 +310,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Incompatible with packaged version, far too slow to build vendored version
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL" false)
     (lib.cmakeBool "onnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE" false)
+  ]
+  ++ lib.optionals coremlSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_COREMLTOOLS" "${coremltools-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FP16" "${fp16-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PSIMD" "${psimd-src}")
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") # needed for psimd
   ];
 
   env =
@@ -314,6 +346,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     !(
       cudaSupport
       || rocmSupport
+      || coremlSupport
       # cross-compiled test binaries can't execute on the build platform
       || (effectiveStdenv.hostPlatform != effectiveStdenv.buildPlatform)
       || builtins.elem effectiveStdenv.buildPlatform.system [
@@ -337,7 +370,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     install -m644 -Dt $out/include \
       ../include/onnxruntime/core/framework/provider_options.h \
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
-      ../include/onnxruntime/core/session/onnxruntime_*.h
+      ../include/onnxruntime/core/session/onnxruntime_*.h \
+      ../include/onnxruntime/core/providers/coreml/coreml_provider_factory.h
   '';
 
   # See comments in `cudaPackages.nccl`
