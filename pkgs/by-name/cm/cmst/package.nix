@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     repo = "cmst";
     owner = "andrew-bibb";
-    tag = "${finalAttrs.pname}-${finalAttrs.version}";
+    tag = "cmst-${finalAttrs.version}";
     hash = "sha256-yTqPxywPbtxTy1PPG+Mq64u8MrB27fEdmt1B0pn0BVk=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = gitUpdater {
-    rev-prefix = "${finalAttrs.pname}-";
+    rev-prefix = "cmst-";
   };
 
   meta = {

@@ -69,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/bin
     cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
-    mkdir -p $out/share/${finalAttrs.pname}-${finalAttrs.version}/samples
-    cp pjsip-apps/bin/samples/*/* $out/share/${finalAttrs.pname}-${finalAttrs.version}/samples
+    mkdir -p $out/share/pjsip-${finalAttrs.version}/samples
+    cp pjsip-apps/bin/samples/*/* $out/share/pjsip-${finalAttrs.version}/samples
   ''
   + lib.optionalString pythonSupport ''
     (cd pjsip-apps/src/swig/python && \

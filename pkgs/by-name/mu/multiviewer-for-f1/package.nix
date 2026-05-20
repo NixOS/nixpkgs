@@ -118,7 +118,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       # Update ID and version in source
       sed -i "s/id = \"[0-9]*\"/id = \"$id\"/" ${__curPos.file}
-      update-source-version ${finalAttrs.pname} "$version" "$hash" --system=x86_64-linux
+      update-source-version multiviewer-for-f1 "$version" "$hash" --system=x86_64-linux
     fi
   '';
 

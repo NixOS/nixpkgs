@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   ivyDeps = stdenv.mkDerivation {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-ivy-deps";
+    name = "jedit-${finalAttrs.version}-ivy-deps";
     inherit (finalAttrs) src;
 
     nativeBuildInputs = [

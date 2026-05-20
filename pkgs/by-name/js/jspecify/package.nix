@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 ${finalAttrs.src.jar} $out/share/java/${finalAttrs.pname}-${finalAttrs.version}.jar
+    install -Dm444 ${finalAttrs.src.jar} $out/share/java/jspecify-${finalAttrs.version}.jar
 
     runHook postInstall
   '';

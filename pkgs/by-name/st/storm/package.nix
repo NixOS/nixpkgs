@@ -15,7 +15,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-storm";
   version = "2.8.3";
-  name = "${finalAttrs.pname}-${finalAttrs.version}";
+  name = "apache-storm-${finalAttrs.version}";
 
   src = fetchurl {
     url = "mirror://apache/storm/${finalAttrs.name}/${finalAttrs.name}.tar.gz";

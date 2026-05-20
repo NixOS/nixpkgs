@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript =
       let
         script = writeShellApplication {
-          name = "${finalAttrs.pname}-updateScript";
+          name = "mongodb-ce-updateScript";
 
           runtimeInputs = [
             common-updater-scripts

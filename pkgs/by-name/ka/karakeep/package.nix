@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {
-      name = "${finalAttrs.pname}-patched-source";
+      name = "karakeep-patched-source";
       inherit (finalAttrs) src patches;
       installPhase = ''
         cp -pr --reflink=auto -- . $out

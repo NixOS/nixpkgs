@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X github.com/${finalAttrs.src.owner}/${finalAttrs.pname}/v4/version.Version=${finalAttrs.version}"
+    "-X github.com/${finalAttrs.src.owner}/gomplate/v4/version.Version=${finalAttrs.version}"
   ];
 
   preCheck = ''

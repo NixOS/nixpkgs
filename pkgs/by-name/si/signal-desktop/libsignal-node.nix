@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-npm-deps";
+    name = "libsignal-node-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
     hash = "sha256-BV5E898u07LLoUVMVRJCHKhp4OJJl2fc5973n16T51k=";

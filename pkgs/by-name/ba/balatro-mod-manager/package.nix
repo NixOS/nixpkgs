@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nodeModules = stdenv.mkDerivation {
-    pname = "${finalAttrs.pname}-node_modules";
+    pname = "balatro-mod-manager-node_modules";
     inherit (finalAttrs) version src;
 
     nativeBuildInputs = [

@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru.tests.load-plugin =
-    runCommand "${finalAttrs.pname}-test-load"
+    runCommand "weechat-matrix-rs-test-load"
       {
         nativeBuildInputs = [ weechat ];
       }

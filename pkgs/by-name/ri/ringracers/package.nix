@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   assets = fetchzip {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-assets";
+    name = "ringracers-${finalAttrs.version}-assets";
     url = "https://github.com/KartKrewDev/RingRacers/releases/download/v${finalAttrs.version}/Dr.Robotnik.s-Ring-Racers-v${finalAttrs.version}-Assets.zip";
     hash = "sha256-vL3Ceu6/tIOl/+TJFjntCksDdjpgLc1aNHvSx6x8/90=";
     stripRoot = false;

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.8";
 
   src = fetchurl {
-    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://savannah/nmh/nmh-${finalAttrs.version}.tar.gz";
     hash = "sha256-Nmzgzj+URzAvVWcAkmnIuziC2AjzPu+shbo2fodchhU=";
   };
 

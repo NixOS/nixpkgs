@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.18.1";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/tensorflow/versions/${finalAttrs.version}/${finalAttrs.pname}-linux-x86_64.tar.gz";
+    url = "https://storage.googleapis.com/tensorflow/versions/${finalAttrs.version}/libtensorflow-gpu-linux-x86_64.tar.gz";
     hash = "sha256-9k7DA53E/hh9zzMhX0D6BZOZWwOoiNEi/tdYHONIFeU=";
   };
 

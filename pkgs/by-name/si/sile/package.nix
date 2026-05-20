@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
-      runCommand "${finalAttrs.pname}-test"
+      runCommand "sile-test"
         {
           nativeBuildInputs = [
             poppler-utils

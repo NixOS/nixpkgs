@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.1";
 
   src = fetchurl {
-    url = "mirror://gnu/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://gnu/guile-ncurses/guile-ncurses-${finalAttrs.version}.tar.gz";
     hash = "sha256-7onozq/Kud0O8/wazJsQ9NIbpLJW0ynYQtYYPmP41zM=";
   };
 

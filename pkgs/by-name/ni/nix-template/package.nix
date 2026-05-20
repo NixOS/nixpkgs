@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.4.1";
 
   src = fetchFromGitHub {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-src";
+    name = "nix-template-${finalAttrs.version}-src";
     owner = "jonringer";
     repo = "nix-template";
     rev = "v${finalAttrs.version}";

@@ -48,7 +48,7 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/bin $out/share/xcodegen
-    cp "$(swiftpmBinPath)/${finalAttrs.pname}" $out/bin/
+    cp "$(swiftpmBinPath)/xcodegen" $out/bin/
     cp -r SettingPresets $out/share/xcodegen/SettingPresets
   '';
 

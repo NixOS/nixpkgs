@@ -264,7 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       for program in ''${demos[@]}; do
         wrapProgram $dev/bin/$program \
-          --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
+          --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/gtk+3-${finalAttrs.version}"
       done
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   kernel = buildGoModule {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
+    name = "siyuan-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
     vendorHash = "sha256-WXlzUtiaphaSngWd6aXQuOHiBb3a3bCNgIHypMP4YXo=";

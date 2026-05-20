@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
         See the following URL for terms of using this software:
         ${mkBaseUrl ovftoolId}
 
-        Use `${finalAttrs.pname}.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
+        Use `ovftool.override { acceptBroadcomEula = true; }` if you accept Broadcom's terms
         and would like to use this package.
       '';
 

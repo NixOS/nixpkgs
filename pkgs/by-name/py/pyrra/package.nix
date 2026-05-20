@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
   ui = buildNpmPackage {
     inherit (finalAttrs) version;
 
-    pname = "${finalAttrs.pname}-ui";
+    pname = "pyrra-ui";
     src = "${finalAttrs.src}/ui";
 
     npmDepsHash = "sha256-jQez9MWqt+NK4Ot6/sA3ROlPe6Jq6Z63DXXzRP+ymxs=";

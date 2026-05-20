@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (
   finalAttrs:
   let
     warpgate-web = buildNpmPackage {
-      pname = "${finalAttrs.pname}-web";
+      pname = "warpgate-web";
       version = finalAttrs.version;
 
       src = finalAttrs.src;

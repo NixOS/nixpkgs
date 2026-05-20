@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "update-${finalAttrs.pname}";
+    name = "update-hdr10plus_tool";
     runtimeInputs = [
       nixVersions.latest
       nix-update
@@ -43,8 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
 
     text = ''
-      nix-update ${finalAttrs.pname}
-      src="$(nix eval -f . --raw ${finalAttrs.pname}.src)"
+      nix-update hdr10plus_tool
+      src="$(nix eval -f . --raw hdr10plus_tool.src)"
       libver="$(tq -f "$src/hdr10plus/Cargo.toml" package.version)"
       nix-update ${hdr10plus.pname} --version "$libver"
     '';

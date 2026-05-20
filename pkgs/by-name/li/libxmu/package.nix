@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-libxmu" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
       version="$(list-directory-versions --pname libXmu \
         --url https://xorg.freedesktop.org/releases/individual/lib/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version libxmu "$version"
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };

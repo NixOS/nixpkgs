@@ -24,14 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/${finalAttrs.pname}
-    cp -r . $out/lib/${finalAttrs.pname}/
+    mkdir -p $out/lib/Nuget
+    cp -r . $out/lib/Nuget/
 
     mkdir -p $out/bin
     makeWrapper \
       "${mono}/bin/mono" \
       "$out/bin/nuget" \
-      --add-flags "$out/lib/${finalAttrs.pname}/nuget.exe"
+      --add-flags "$out/lib/Nuget/nuget.exe"
 
     runHook postInstall
   '';

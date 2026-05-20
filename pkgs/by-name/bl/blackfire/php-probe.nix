@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = writeShellScript "update-${finalAttrs.pname}" ''
+    updateScript = writeShellScript "update-php-blackfire" ''
       set -o errexit
       export PATH="${
         lib.makeBinPath [

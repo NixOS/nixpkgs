@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # Make it impossible to add to an environment. You should use the appropriate NixOS option.
     # Also leave some breadcrumbs in the file.
-    echo "${finalAttrs.pname} should not be installed into environments. Please use programs.steam.extraCompatPackages instead." > $out
+    echo "proton-ge-bin should not be installed into environments. Please use programs.steam.extraCompatPackages instead." > $out
 
     mkdir $steamcompattool
     ln -s $src/* $steamcompattool

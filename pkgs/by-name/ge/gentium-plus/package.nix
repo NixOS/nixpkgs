@@ -17,8 +17,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
-    cp -r documentation $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/gentium-plus-${finalAttrs.version}
+    cp -r documentation $out/share/doc/gentium-plus-${finalAttrs.version}
 
     runHook postInstall
   '';

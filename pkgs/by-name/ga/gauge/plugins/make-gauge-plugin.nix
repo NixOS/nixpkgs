@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation (
 
     passthru = {
       tests.loadPlugin = testGaugePlugins { plugins = [ finalAttrs.finalPackage ]; };
-      updateScript = writeScript "update-${finalAttrs.pname}" ''
+      updateScript = writeScript "update-gauge-plugin-${pname}" ''
         #!/usr/bin/env nix-shell
         #!nix-shell -i bash -p curl nix-prefetch yq-go
 

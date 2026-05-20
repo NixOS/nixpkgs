@@ -50,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-libxi" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
       version="$(list-directory-versions --pname libXi \
         --url https://xorg.freedesktop.org/releases/individual/lib/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version libxi "$version"
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
