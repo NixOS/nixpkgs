@@ -85,7 +85,7 @@ in
         `nixos/modules/contracts/default.nix` for the reference implementation.
       '';
       # types are in `lib` as the docs build's sandbox has no `config`.
-      type = attrsOf raw;
+      type = attrsOf lib.contract.definitionType;
     };
     contracts = mkOption {
       description = ''

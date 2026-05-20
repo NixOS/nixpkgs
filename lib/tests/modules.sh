@@ -871,6 +871,9 @@ checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is 
 # contracts: basic want -> instances -> results round-trip (no mkContract or mkProviderType)
 checkConfigOutput '^6$' config.contracts.basic.results.consumer.x.value ./contracts-basic.nix
 
+# contracts: mkContract propagates request option defaults via extendSubmodule
+checkConfigOutput '^42$' config.result ./contracts-mkcontract.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
