@@ -108,11 +108,11 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "AI agent that brings the power of Gemini directly into your terminal";
+    description = "(deprecated) AI agent that brings the power of Gemini directly into your terminal";
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    knownVulnerabilities = [ "gemini-cli will be deprecated and removed in a future release." ];
+    knownVulnerabilities = [ "gemini-cli is deprecated as of 2026-06-18" ];
     maintainers = with lib.maintainers; [
       brantes
       xiaoxiangmoe
