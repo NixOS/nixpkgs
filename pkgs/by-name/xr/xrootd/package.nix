@@ -109,6 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p "$out/lib/systemd/system"
     install -m 644 -t "$out/lib/systemd/system" ../systemd/*.service ../systemd/*.socket
+  ''
+  # Install missing private headers needed by Python bindings
+  + ''
+    mkdir -p $dev/include/xrootd/private/XrdCks
+    cp ../src/XrdCks/XrdCksXAttr.hh $dev/include/xrootd/private/XrdCks/
+    mkdir -p $dev/include/xrootd/private/XrdOuc
+    cp ../src/XrdOuc/XrdOucXAttr.hh $dev/include/xrootd/private/XrdOuc/
   '';
 
   cmakeFlags = [
