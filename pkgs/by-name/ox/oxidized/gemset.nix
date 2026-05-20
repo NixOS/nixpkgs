@@ -241,10 +241,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0g2a60bwpjidwkksai6l2ndnq3qbvqj33jv53c800m7m4hgr5r0n";
+      sha256 = "0apg5psqdkc0h71qpgiq52qnifr41g57agvgyxiq10335gh6c2v0";
       type = "gem";
     };
-    version = "0.36.0";
+    version = "0.37.0";
   };
   oxidized-script = {
     dependencies = [
