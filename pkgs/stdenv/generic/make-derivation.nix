@@ -32,6 +32,7 @@ let
     isBool
     isDerivation
     isInt
+    isFunction
     isList
     isPath
     isString
@@ -46,7 +47,6 @@ let
     seq
     splitString
     subtractLists
-    toExtension
     toFunction
     typeOf
     unique
@@ -112,7 +112,21 @@ let
           final:
           let
             prev = rattrs final;
-            thisOverlay = toExtension f0 final prev;
+            # inlined version of toExtension
+            thisOverlay =
+              if isFunction f0 then
+                let
+                  fPrev = f0 prev;
+                in
+                if isFunction fPrev then
+                  # f is (final: prev: { ... })
+                  f0 final prev
+                else
+                  # f is (prev: { ... })
+                  fPrev
+              else
+                # f is not a function; probably { ... }
+                f0;
             pos = unsafeGetAttrPos "version" thisOverlay;
           in
           warnIf
