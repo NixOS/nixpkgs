@@ -12,12 +12,12 @@
 }:
 buildPythonApplication rec {
   pname = "hyperglot";
-  version = "0.7.3";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Pd9Yxmv9a1T2xV03q2U1m1laHE3WifHwmnGBfTTCSxM=";
+    hash = "sha256-Y2TPW1NabBbOMcFoaHYksLoFMWT9xHaY+7v/kfUOkmM=";
   };
 
   dependencies = [
