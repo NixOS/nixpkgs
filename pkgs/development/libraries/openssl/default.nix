@@ -103,6 +103,11 @@ let
           ''
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
         rm test/recipes/01-test_symbol_presence.t
+      ''
+      # https://github.com/openssl/openssl/issues/29552
+      + lib.optionalString (lib.versionAtLeast version "3.3.0") ''
+        substituteInPlace exporters/build.info \
+          --replace-fail 'include' '${placeholder "dev"}/include'
       '';
 
       outputs = [
@@ -361,20 +366,14 @@ let
 
       allowedImpureDLLs = [ "CRYPT32.dll" ];
 
-      postFixup =
-        lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-          # Check to make sure the main output and the static runtime dependencies
-          # don't depend on perl
-          if grep -r '${buildPackages.perl}' $out $etc; then
-            echo "Found an erroneous dependency on perl ^^^" >&2
-            exit 1
-          fi
-        ''
-        + lib.optionalString (lib.versionAtLeast version "3.3.0") ''
-          # cleanup cmake helpers for now (for OpenSSL >= 3.3), only rely on pkg-config.
-          # pkg-config gets its paths fixed correctly
-          rm -rf $dev/lib/cmake
-        '';
+      postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+        # Check to make sure the main output and the static runtime dependencies
+        # don't depend on perl
+        if grep -r '${buildPackages.perl}' $out $etc; then
+          echo "Found an erroneous dependency on perl ^^^" >&2
+          exit 1
+        fi
+      '';
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
