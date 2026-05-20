@@ -58,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     # leaving it empty, and remove hardcoded absolute cmake build paths from
     # Cflags (which would embed /nix/store paths from the build environment).
     ./casacpp-pkgconfig.patch
+
+    # TODO: remove this once the upstream resolves this issue
+    #   error: call to implicitly-deleted copy constructor of 'std::unique_ptr<vi::VisibilityIterator2>'
+    #   error: object of type 'std::unique_ptr<vi::VisibilityIterator2>' cannot be assigned because its copy assignment operator is implicitly deleted
+    ./Fix-Vi2DataProvider-move-semantics.patch
   ];
 
   postPatch = ''
