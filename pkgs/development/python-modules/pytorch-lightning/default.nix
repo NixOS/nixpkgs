@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     tag = finalAttrs.version;
-    hash = "sha256-zOSV2X3yZy0uh1lJ2yNl/hHBvfIDcIrATHtiRwThsQA=";
+    hash = "sha256-Qysnr76OCO9eZzhQW5EoGT2hUAYGw/qY+j6dF8XCXC4=";
   };
 
   env.PACKAGE_NAME = "pytorch";
