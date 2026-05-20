@@ -11,6 +11,19 @@ let
     sha256 = lib.fakeSha256;
     sha512 = lib.fakeSha512;
   };
+
+  inherit (lib)
+    concatMapStringsSep
+    head
+    tail
+    throwIf
+    ;
+  inherit (lib.attrsets)
+    attrsToList
+    intersectAttrs
+    removeAttrs
+    optionalAttrs
+    ;
 in
 rec {
 
@@ -94,19 +107,6 @@ rec {
       required ? true,
     }:
     let
-      inherit (lib)
-        concatMapStringsSep
-        head
-        tail
-        throwIf
-        ;
-      inherit (lib.attrsets)
-        attrsToList
-        intersectAttrs
-        removeAttrs
-        optionalAttrs
-        ;
-
       inherit (commonH hashTypes) hashNames hashSet;
     in
     args:
