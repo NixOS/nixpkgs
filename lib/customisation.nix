@@ -30,7 +30,6 @@ let
     flatten
     deepSeq
     extends
-    toFunction
     id
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
@@ -842,14 +841,6 @@ rec {
     :::
   */
   extendMkDerivation =
-    let
-      extendsWithExclusion =
-        excludedNames: g: f: final:
-        let
-          previous = f final;
-        in
-        removeAttrs previous excludedNames // g final previous;
-    in
     {
       constructDrv,
       excludeDrvArgNames ? [ ],
@@ -861,10 +852,15 @@ rec {
     {
       # Adds the fixed-point style support
       __functor =
-        self:
-        fpargs:
+        self: fpargs:
         transformDrv (
-          constructDrv (extendsWithExclusion excludeDrvArgNames extendDrvArgs (toFunction fpargs))
+          constructDrv (
+            final:
+            let
+              previous = if isFunction fpargs then fpargs final else fpargs;
+            in
+            removeAttrs previous excludeDrvArgNames // extendDrvArgs final previous
+          )
         );
 
       __functionArgs = removeAttrs (
