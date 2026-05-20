@@ -168,19 +168,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DSLIC3R_STATIC=0"
-    "-DSLIC3R_FHS=1"
-    "-DSLIC3R_GTK=3"
+    (lib.cmakeBool "SLIC3R_STATIC" false)
+    (lib.cmakeBool "SLIC3R_FHS" true)
+    (lib.cmakeFeature "SLIC3R_GTK" "3")
 
     # Skips installing ffmpeg, since we BYO.
-    "-DFLATPAK=1"
+    (lib.cmakeBool "FLATPAK" true)
 
-    # BambuStudio-specific
-    "-DBBL_RELEASE_TO_PUBLIC=1"
-    "-DBBL_INTERNAL_TESTING=0"
-    "-DDEP_WX_GTK3=ON"
-    "-DSLIC3R_BUILD_TESTS=0"
-    "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
+    # Substituted into `#define BBL_x @value@`; must be integer literals.
+    (lib.cmakeFeature "BBL_RELEASE_TO_PUBLIC" "1")
+    (lib.cmakeFeature "BBL_INTERNAL_TESTING" "0")
+    (lib.cmakeBool "DEP_WX_GTK3" true)
+    (lib.cmakeBool "SLIC3R_BUILD_TESTS" false)
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_LOG_DYN_LINK")
   ];
 
   preFixup = ''
