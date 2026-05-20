@@ -555,6 +555,13 @@ lib.recursiveUpdate orig rec {
 
   #### misc
 
+  # replace tex4ht.jar with our rebuilt version
+  tex4ht.deps = (orig.tex4ht.deps or [ ]) ++ [ "tex4htJar" ];
+  tex4ht.postUnpack = ''
+    [[ ! -d "$out"/tex4ht/bin ]] || rm -fr "$out"/tex4ht/bin
+  '';
+  tex4ht.hasJar = false;
+
   # Use top-level git-latexdiff's version and src. NOTE that this derivation is
   # still different from top-level's `git-latexdiff`, due to __structuredAttrs
   # enabled unconditionally. Still though this derivation produces a funcitonal
