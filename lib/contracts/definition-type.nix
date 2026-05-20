@@ -126,6 +126,118 @@ submodule (contract: {
           ) (lib.getAttrs [ "request" "result" ] interface);
         });
     };
+    mkProviderType = mkOption {
+      description = ''
+        Create a `nestedAttrsOf` type for provider instances with automatic result computation.
+
+        Reduces provider boilerplate by combining request/result option declarations
+        and optional result derivation into a single type constructor.
+
+        `<contract>.mkProviderType :: { providerOptions?, overrides?, fulfill?, fulfill'? } -> optionType`
+
+        **Inputs:**
+
+        `overrides`
+
+        : 1\. Overrides for `{ request, result }` submodule types (to e.g. add defaults)
+
+        `providerOptions`
+
+        : 2\. Additional option declarations of the provider outside of the contract's request/result.
+
+        `fulfill`
+
+        : 3\. Optional function `request -> result` that derives result values
+        from request values. Applied with `mkDefault` priority so explicit
+        result settings take precedence. Use `fulfill'` if the result also
+        needs the instance `name`.
+
+        `fulfill'`
+
+        : 4\. Optional function `{ request, name, instance } -> result`. Lower-level
+        variant of `fulfill` exposing the instance `name` and the full submodule
+        `instance` (including provider-specific options). At most one of
+        `fulfill` / `fulfill'` may be set.
+
+        **Example:**
+
+        ```nix
+        { lib, config, options, ... }:
+        let
+          inherit (config.contractDefinitions.arithmetic) mkProviderType;
+        in
+        {
+          imports = [
+            # simple dummy contract with request/result both shaped `{ value: int }`
+            <nixpkgs/nixos/tests/contracts/arithmetic-contract.nix>
+          ];
+          options.services.increment.arithmetic = lib.mkOption {
+            default = config.contracts.arithmetic.requests;
+            type = mkProviderType {
+              fulfill = request: {
+                value = request.value + 1;
+              };
+            };
+          };
+          config = {
+            contracts.arithmetic.providers.increment.module = options.services.increment.arithmetic;
+          };
+        }
+        ```
+      '';
+      type = functionTo optionType;
+      readOnly = true;
+      default =
+        {
+          providerOptions ? { },
+          overrides ? { },
+          fulfill ? null,
+          fulfill' ? null,
+        }:
+        assert lib.assertMsg (
+          fulfill == null || fulfill' == null
+        ) "mkProviderType: at most one of `fulfill` and `fulfill'` may be set.";
+        let
+          fulfill'' = if fulfill != null then ({ request, ... }: fulfill request) else fulfill';
+          inherit (contract.config) interface;
+          mkExtended =
+            k:
+            lib.extendSubmodule (overrides.${k} or { }) (submodule {
+              imports = interface.extraImports.${k};
+              options = interface.${k};
+            });
+        in
+        types.nestedAttrsOf (
+          types.submodule (
+            [
+              {
+                options = {
+                  request = mkOption {
+                    description = "Request of the contract instance.";
+                    type = mkExtended "request";
+                  };
+                  result = mkOption {
+                    description = "Result of the contract instance.";
+                    default = { };
+                    type = mkExtended "result";
+                  };
+                }
+                // providerOptions;
+              }
+            ]
+            ++ lib.optional (fulfill'' != null) (
+              { config, name, ... }:
+              {
+                config.result = lib.mkDefault (fulfill'' {
+                  inherit (config) request;
+                  inherit name;
+                  instance = config;
+                });
+              }
+            )
+          )
+        );
+    };
     behaviorTest = mkOption {
       description = ''
         Test used to ensure all `providers` of the contract behave the same way.

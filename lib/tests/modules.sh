@@ -871,8 +871,37 @@ checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is 
 # contracts: basic want -> instances -> results round-trip (no mkContract or mkProviderType)
 checkConfigOutput '^6$' config.contracts.basic.results.consumer.x.value ./contracts-basic.nix
 
+# contracts: provider selection mechanisms
+# byRef: non-overridden instance falls back to defaultProvider (increment: 5 + 1 = 6)
+checkConfigOutput '^6$' config.result.default ./contracts-provider-selection.nix
+# byRef: per-instance override (double: 5 * 2 = 10)
+checkConfigOutput '^10$' config.result.override ./contracts-provider-selection.nix
+# instances-only routing: a leaf routed via an `instances` override resolves
+# even with no defaultProvider (increment: 5 + 1 = 6)
+checkConfigOutput '^6$' config.result.instancesOnly ./contracts-provider-selection.nix
+# unrouted leaf (no default, no override): accessing its result errors clearly
+checkConfigError 'contracts\.noProvider: an instance is .want.ed but routed to no provider' config.contracts.noProvider.results.consumer.unrouted.value ./contracts-provider-selection.nix
+
 # contracts: mkContract propagates request option defaults via extendSubmodule
 checkConfigOutput '^42$' config.result ./contracts-mkcontract.nix
+
+# contracts: varying nesting depths in want (flat, grouped, deeply nested)
+checkConfigOutput '^2$' config.contracts.arithmetic.results.myapp.simple.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^11$' config.contracts.arithmetic.results.myapp.db.primary.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^21$' config.contracts.arithmetic.results.myapp.db.replica.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^101$' config.contracts.arithmetic.results.myapp.caches.region-a.fast.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^201$' config.contracts.arithmetic.results.myapp.caches.region-b.fast.value ./contracts-nesting-consumer.nix
+
+# contracts: providers' contract option may live at any nesting depth
+checkConfigOutput '^6$' config.contracts.depth0.results.consumer.instance.value ./contracts-nesting-provider.nix
+checkConfigOutput '^15$' config.contracts.depth1.results.consumer.instance.value ./contracts-nesting-provider.nix
+checkConfigOutput '^105$' config.contracts.depth2.results.consumer.instance.value ./contracts-nesting-provider.nix
+
+# contracts: request values are type-checked (string where int expected)
+checkConfigError 'is not of type.*signed integer' config.contracts.arithmetic.results.consumer.instance.value ./contracts-request-typecheck.nix
+
+# contracts: submodule-typed request options survive the want -> requests -> results round-trip
+checkConfigOutput '^"postgresql://db.example.com:5432"$' config.contracts.connection.results.myapp.db.url ./contracts-submodule-request.nix
 
 cat <<EOF
 ====== module tests ======
