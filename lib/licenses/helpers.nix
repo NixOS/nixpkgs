@@ -1,6 +1,7 @@
 { lib }:
 
 let
+  inherit (lib) all any elem;
   handleComplexProperty =
     evaluateSubProperty: AND: OR: license:
     if license.licenseType == "compound" then
@@ -41,8 +42,8 @@ rec {
   evaluateProperty =
     predicate: permissive:
     let
-      OR = if permissive then lib.any else lib.all;
-      AND = if permissive then lib.all else lib.any;
+      OR = if permissive then any else all;
+      AND = if permissive then all else any;
       evaluateComplexProperty = handleComplexProperty (evaluateProperty predicate permissive) AND OR;
     in
     license:
@@ -72,8 +73,8 @@ rec {
   evaluateNamedProperty =
     name: permissive:
     let
-      OR = if permissive then lib.any else lib.all;
-      AND = if permissive then lib.all else lib.any;
+      OR = if permissive then any else all;
+      AND = if permissive then all else any;
       evaluateComplexProperty = handleComplexProperty (evaluateNamedProperty name permissive) AND OR;
     in
     license:
@@ -144,7 +145,7 @@ rec {
     - [licenses] List of licenses to look
     - [license] License expression to check
   */
-  containsLicenses = licenses: evaluateProperty (x: lib.lists.elem x licenses) false;
+  containsLicenses = licenses: evaluateProperty (x: elem x licenses) false;
 
   /**
     Convert a license expression to an SPDX license expression string.
