@@ -1,0 +1,39 @@
+From 348c60b99c284557a522baaf47db69322a0a8b67 Mon Sep 17 00:00:00 2001
+From: Deniz Alp <denizalpd@ogr.iu.edu.tr>
+Date: Fri, 22 Oct 2021 09:03:37 +0300
+Subject: [PATCH] Update cpp-options to fix the build
+
+This builds on
+https://github.com/gtk2hs/svgcairo/pull/10/commits/df6c6172b52ecbd32007529d86ba9913ba001306.
+Patching svgcairo on nixpkgs with this commit fixed the linux build but removing
+one of the flags broke it for darwin.
+
+This adds a conditional for darwin and adds the `-D__attribute__(A)=` flag back.
+---
+ svgcairo.cabal | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/svgcairo.cabal b/svgcairo.cabal
+index 9eac4bb9..fd55376e 100644
+--- a/svgcairo.cabal
++++ b/svgcairo.cabal
+@@ -32,7 +32,7 @@ Source-Repository head
+ 
+ custom-setup
+   setup-depends: base >= 4.6,
+-                 Cabal >= 1.24 && < 3.1,
++                 Cabal >= 1.24 && < 3.3,
+                  gtk2hs-buildtools >= 0.13.2.0 && < 0.14
+ 
+ Library
+@@ -40,7 +40,9 @@ Library
+                         glib  >=0.13.0.0 && <0.14,
+                         cairo >=0.13.0.0 && <0.14
+ 
+-        cpp-options:    -U__BLOCKS__ -D__attribute__(A)= -D_Nullable= -D_Nonnull=
++        cpp-options:    -DGLIB_DISABLE_DEPRECATION_WARNINGS -D_Nullable= -D_Nonnull= -D_Noreturn=
++        if os(darwin)
++          cpp-options:    -DGLIB_DISABLE_DEPRECATION_WARNINGS -D__attribute__(A)= -D_Nullable= -D_Nonnull= -D_Noreturn=
+         exposed-modules:
+           Graphics.Rendering.Cairo.SVG
+ 
