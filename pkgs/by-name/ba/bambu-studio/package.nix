@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  binutils,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -35,7 +34,6 @@
   openvdb,
   openexr,
   opencv,
-  pcre,
   systemd,
   onetbb,
   webkitgtk_4_1,
@@ -85,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    binutils
     boost183
     cereal
     cgal_5
@@ -112,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     opencascade-occt_7_6
     openexr
     openvdb
-    pcre
     onetbb
     webkitgtk_4_1
     wxGTK'
