@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  fetchpatch,
   fetchzip,
   replaceVars,
 
@@ -19,7 +20,6 @@
   onnxruntime,
   tqdm,
 
-  pytestCheckHook,
   requests,
 }:
 let
@@ -60,6 +60,12 @@ buildPythonPackage {
   patches = [
     (replaceVars ./setup-py-override-version-checking.patch {
       inherit version;
+    })
+    # Fix type error in Immich which is caused by passing null to Path() when model_root_dir is the default null
+    (fetchpatch {
+      url = "https://github.com/RapidAI/RapidOCR/commit/57dfac08d8de63c4c00d21a1ab14a4a3b5c01975.patch";
+      stripLen = 1;
+      hash = "sha256-G49mTvBOm20BFOll4Pc0X397ZABT1tWMXd8nlDjBr7E=";
     })
   ];
 
