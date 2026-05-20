@@ -128,9 +128,9 @@ in
                 export pnpm_config_pm_on_fail=ignore
 
                 # Some packages produce platform dependent outputs. We do not want to cache those in the global store
-                export pnpm_config_side_effects_cache false
+                export pnpm_config_side_effects_cache=false
 
-                export pnpm_config_update_notifier false
+                export pnpm_config_update_notifier=false
               else
                 pnpm config set manage-package-manager-versions false
                 pnpm config set side-effects-cache false

@@ -11,12 +11,12 @@
 
 ndpi.overrideAttrs (
   finalAttrs: prevAttrs: {
-    version = "4.0";
+    version = "4.14";
 
     src = fetchFromGitHub {
       inherit (prevAttrs.src) owner repo;
       tag = finalAttrs.version;
-      hash = "sha256-vWx6IVyxPJBgOkXpHdnvstvDGJbAtndFPtowpjLd32o=";
+      hash = "sha256-W8ZBWMQH6bRHl+fXmG3XLO37UxEnSgCVCgzfwy8N+OM=";
     };
 
     configureScript = "./autogen.sh";
