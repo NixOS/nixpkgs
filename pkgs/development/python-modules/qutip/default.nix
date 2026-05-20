@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qutip";
-  version = "5.2.3";
+  version = "5.2.3.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y3yQf6rCjK0342WnUBieBmCLOWXjBAkxPe+G7TzZKio=";
+    hash = "sha256-9OcRV3BmRdDOCmov2cK3eoFutQI3Bf6w2QRPpFTZKCU=";
   };
 
   build-system = [

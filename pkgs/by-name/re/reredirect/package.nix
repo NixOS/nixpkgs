@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reredirect";
-  version = "0.3";
+  version = "unstable-2026-02-15";
 
   src = fetchFromGitHub {
     owner = "jerome-pouiller";
     repo = "reredirect";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-RHRamDo7afnJ4DlOVAqM8lQAC60YESGSMKa8Io2vcX0=";
+    rev = "b85df395e18d09b54e1fb73dfe344f8f04224a83";
+    sha256 = "sha256-lLhF8taK6PqWo4u6pMZDN2PZavnWwsz4NbEUT7EtULo=";
   };
 
   patches = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace ${placeholder "out"}/bin/relink \
-      --replace "reredirect" "${placeholder "out"}/bin/reredirect"
+      --replace-fail "reredirect" "${placeholder "out"}/bin/reredirect"
   '';
 
   meta = {

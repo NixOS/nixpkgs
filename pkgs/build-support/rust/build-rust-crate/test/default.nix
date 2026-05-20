@@ -836,6 +836,32 @@ rec {
             ];
           };
         };
+        # Default (null) inherits extraRustcOpts for proc-macros.
+        procMacroExtraOptsInherit = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(not(target_only))]
+            compile_error!("extraRustcOpts not inherited by proc-macro");
+            use proc_macro as _;
+          '';
+        };
+        # When set, extraRustcOptsForProcMacro replaces extraRustcOpts
+        # for proc-macro crates.
+        procMacroExtraOptsOverride = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          extraRustcOptsForProcMacro = [ "--cfg=host_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(target_only)]
+            compile_error!("extraRustcOpts leaked into proc-macro");
+            #[cfg(not(host_only))]
+            compile_error!("extraRustcOptsForProcMacro not applied");
+            use proc_macro as _;
+          '';
+        };
         # The `lints` attr mirrors Cargo.toml's `[lints]` table and is
         # translated to rustc `-A`/`-W`/`-D`/`-F` flags. Lower-priority
         # entries are emitted first so that higher-priority specific lints

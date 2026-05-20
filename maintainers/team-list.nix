@@ -435,6 +435,7 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+      igorcafe
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
