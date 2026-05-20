@@ -14,11 +14,15 @@ let
     packageOverrides = self: super: {
       jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
         version = "0.10.0";
-        src = fetchPypi {
-          pname = "jmespath";
-          inherit version;
-          sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
-        } // { tag = version; };
+        src =
+          fetchPypi {
+            pname = "jmespath";
+            inherit version;
+            sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
+          }
+          // {
+            tag = version;
+          };
         doCheck = false;
       });
     };
