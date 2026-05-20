@@ -2353,6 +2353,8 @@ self: super: with self; {
 
   bsuite = callPackage ../development/python-modules/bsuite { };
 
+  bt-decode = callPackage ../development/python-modules/bt-decode { };
+
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };
 
   btchip-python = callPackage ../development/python-modules/btchip-python { };
