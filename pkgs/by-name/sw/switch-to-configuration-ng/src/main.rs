@@ -1395,26 +1395,79 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
     let current_active_units = get_active_units(&systemd)?;
 
+    let old_unit_dir = old_toplevel.join(scope.etc_dir());
     let new_unit_dir = toplevel.join(scope.etc_dir());
-    let fragment_prefix = scope
-        .current_dir()
-        .to_str()
-        .expect("scope dir is valid UTF-8");
+    let fragment_dir = scope.current_dir();
 
-    // Units that are currently running from a non-/etc location (typically
-    // ~/.config/systemd/user, i.e. home-manager) but that the new NixOS
-    // configuration also defines. Pass 1 will skip these because of the
-    // FragmentPath filter; if the per-user activation (sd-switch) later drops
-    // its copy, we need a second pass to bring the NixOS-owned definition up.
+    // Determine $XDG_CONFIG_HOME/systemd/user from the user manager's own
+    // environment (we are spawned with env_clear()).
+    let user_config_unit_dir: Option<PathBuf> = match systemd.environment() {
+        Err(err) => {
+            log::debug!("Failed to read user manager environment: {err}");
+            None
+        }
+        Ok(env) => {
+            let lookup = |key: &str| {
+                env.iter().find_map(|kv| {
+                    kv.strip_prefix(key)
+                        .and_then(|rest| rest.strip_prefix('='))
+                        .filter(|v| Path::new(v).is_absolute())
+                        .map(PathBuf::from)
+                })
+            };
+            let config_home =
+                lookup("XDG_CONFIG_HOME").or_else(|| lookup("HOME").map(|h| h.join(".config")));
+            if config_home.is_none() {
+                log::debug!(
+                    "Neither $XDG_CONFIG_HOME nor $HOME is set in the user manager's environment"
+                );
+            }
+            config_home.map(|config_home| config_home.join("systemd/user"))
+        }
+    };
+
+    if user_config_unit_dir.is_none() {
+        log::debug!(
+            "Could not determine $XDG_CONFIG_HOME/systemd/user; \
+             units shadowed by ~/.config will not be considered for migration"
+        );
+    }
+
+    // Units active from a non-/etc location that the new generation defines
+    // in /etc/systemd/user. Pass 1 skips these (FragmentPath filter); pass 2
+    // brings the /etc definition into effect once /etc has won. Two cases:
+    //   * ~/.config/systemd/user (home-manager): shadows /etc, so wait for
+    //     the per-user activation (sd-switch) to remove its copy.
+    //   * anywhere else outside /etc ($XDG_DATA_HOME, $XDG_DATA_DIRS, ...):
+    //     /etc outranks these, so only act when /etc is gaining the unit;
+    //     if the previous generation already had it, leave it alone.
+    // Pass 2's `now_etc` check verifies /etc actually won before acting.
     let migration_candidates: Vec<String> = current_active_units
         .iter()
         .filter(|(unit, _)| new_unit_dir.join(unit).exists())
-        .filter(|(_, unit_state)| {
-            !unit_state
+        .filter(|(unit, unit_state)| {
+            let Ok(fragment_path) = unit_state
                 .proxy
-                .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-                .map(|p: String| p.starts_with(fragment_prefix))
-                .unwrap_or(false)
+                .get::<String>("org.freedesktop.systemd1.Unit", "FragmentPath")
+            else {
+                return false;
+            };
+            let fragment_parent = Path::new(&fragment_path).parent();
+
+            // Already in /etc: handled by pass 1.
+            if fragment_parent == Some(fragment_dir) {
+                return false;
+            }
+
+            // Loaded from ~/.config/systemd/user, which shadows /etc.
+            if let Some(dir) = &user_config_unit_dir {
+                if fragment_parent == Some(dir.as_path()) {
+                    return true;
+                }
+            }
+
+            // Elsewhere: only act if /etc is gaining the unit this switch.
+            !old_unit_dir.join(unit).exists()
         })
         .map(|(unit, _)| unit.clone())
         .collect();
@@ -1422,7 +1475,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     collect_unit_changes(
         &toplevel,
         scope,
-        &old_toplevel.join(scope.etc_dir()),
+        &old_unit_dir,
         &new_unit_dir,
         &current_active_units,
         &mut units_to_stop,
@@ -1577,7 +1630,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                     let now_etc = unit_state
                         .proxy
                         .get("org.freedesktop.systemd1.Unit", "FragmentPath")
-                        .map(|p: String| p.starts_with(fragment_prefix))
+                        .map(|p: String| Path::new(&p).parent() == Some(fragment_dir))
                         .unwrap_or(false);
                     if !now_etc {
                         // Still shadowed (or read error); leave it alone.
