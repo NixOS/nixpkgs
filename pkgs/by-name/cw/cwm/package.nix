@@ -13,13 +13,13 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "cwm";
-  version = "7.4";
+  version = "7.9";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "cwm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-L3u4mH2UH2pTHhSPVr5dUi94b9DheslkIWL6EgQ05yA=";
+    hash = "sha256-YC+x4YSPAgZ47PFMbzICv9ixfDxA1PG3ncLiMahSoUc=";
   };
 
   strictDeps = true;
