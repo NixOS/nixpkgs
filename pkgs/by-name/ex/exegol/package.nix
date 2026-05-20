@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "requests"
     "rich"
     "supabase"
+    "cryptography"
   ];
 
   dependencies =
