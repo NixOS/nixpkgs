@@ -8,8 +8,6 @@
 lib.makeScope pkgs.newScope (
   self: with self; {
 
-    #### PLATFORM
-
     libIDL = callPackage ./platform/libIDL {
       gettext = if stdenv.hostPlatform.isDarwin then pkgs.gettext else null;
     };
@@ -30,10 +28,6 @@ lib.makeScope pkgs.newScope (
     gnome_mime_data = callPackage ./platform/gnome-mime-data { };
 
     gtkglext = callPackage ./platform/gtkglext { };
-
-    #### DESKTOP
-
-    gtksourceview = callPackage ./desktop/gtksourceview { };
 
   }
 )
@@ -56,6 +50,7 @@ lib.makeScope pkgs.newScope (
   gtk = throw "gnome2.gtk has been removed, please use top-level gtk2";
   gtkmm = throw "gnome2.gtkmm has been removed, please use top-level gtkmm2";
   gtkdoc = throw "gnome2.gtkdoc has been removed, please use top-level gtk-doc";
+  gtksourceview = throw "gnome2.gtksourceview has been removed, please use top-level gtksourceview";
   startup_notification = throw "gnome2.startup_notification has been removed, please use top-level libstartup_notification";
   startupnotification = throw "gnome2.startupnotification has been removed, please use top-level libstartup_notification";
   gnomedocutils = throw "gnome2.gnomedocutils has been removed, please use top-level gnome-doc-utils";

@@ -11,7 +11,6 @@
   freetype,
   fontconfig,
   libxml2,
-  gnome2,
 }:
 
 let
@@ -29,7 +28,6 @@ let
       freetype
       fontconfig
       libxml2
-      gnome2.gtksourceview
     ]
     + ":${lib.getLib stdenv.cc.cc}/lib64:$out/libexec";
 

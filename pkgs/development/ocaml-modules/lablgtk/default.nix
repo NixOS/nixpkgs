@@ -9,7 +9,6 @@
   pkg-config,
   gtk2,
   libgnomecanvas,
-  gtksourceview,
   camlp-streams,
 }:
 
@@ -67,7 +66,6 @@ stdenv.mkDerivation {
   buildInputs = [
     gtk2
     libgnomecanvas
-    gtksourceview
   ]
   ++ param.buildInputs or [ ];
 
