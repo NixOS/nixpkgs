@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "karmor";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xOI6meI88GB5w19T9eSn+8dTnhrUxUCKHUBk/1EaDVI=";
+    hash = "sha256-hohzVj2mlch6rSdjsCl+VcTnX9zvYnRrRM97LwbNeNw=";
   };
 
-  vendorHash = "sha256-FL5WL44dsM0uPYXMNfYKRd37umId21rMGvj84rYTU3A=";
+  vendorHash = "sha256-DrrLromAT0xSr3SUqWTM78oGXTy73VCD2DJlMwSEGEs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
