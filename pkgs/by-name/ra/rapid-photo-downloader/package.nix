@@ -133,7 +133,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Photo and video importer for cameras, phones, and memory cards";
     mainProgram = "rapid-photo-downloader";
-    homepage = "https://www.damonlynch.net/rapid/";
+    homepage = "https://damonlynch.net/rapid/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ philipdb ];

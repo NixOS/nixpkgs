@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
-    rev = "refs/tags/${version}";
-    hash = "sha256-eQYGOLV9P7zrqXB8dW8/CatBUT3xpl5h1TChKbY369g=";
+    tag = version;
+    hash = "sha256-OtJzCcaqcy2a46iNRcpknORgdTbzMtILocs5c6Akzrc=";
   };
 
   nativeBuildInputs = [

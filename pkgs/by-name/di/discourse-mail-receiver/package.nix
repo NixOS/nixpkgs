@@ -4,7 +4,7 @@
   fetchFromGitHub,
   ruby,
   makeWrapper,
-  replace,
+  sd,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    replace
     makeWrapper
+    sd
   ];
   buildInputs = [ ruby ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
 
-    replace-literal -f -r -e /etc/postfix /run/discourse-mail-receiver .
+    find . -type f -exec sd '/etc/postfix' '/run/discourse-mail-receiver' {} +
 
     cp -r receive-mail discourse-smtp-fast-rejection $out/bin/
     cp -r lib $out/
