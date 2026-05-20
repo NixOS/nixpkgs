@@ -858,24 +858,22 @@ rec {
       inheritFunctionArgs ? true,
       transformDrv ? id,
     }:
-    setFunctionArgs
+    {
       # Adds the fixed-point style support
-      (
+      __functor =
+        self:
         fpargs:
         transformDrv (
           constructDrv (extendsWithExclusion excludeDrvArgNames extendDrvArgs (toFunction fpargs))
-        )
-      )
-      # Add __functionArgs
-      (
-        removeAttrs (
-          # Inherit the __functionArgs from the base build helper
-          optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
-          # Recover the __functionArgs from the derived build helper
-          // functionArgs (extendDrvArgs { })
-        ) excludeFunctionArgNames
-      )
-    // {
+        );
+
+      __functionArgs = removeAttrs (
+        # Inherit the __functionArgs from the base build helper
+        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
+        # Recover the __functionArgs from the derived build helper
+        // functionArgs (extendDrvArgs { })
+      ) excludeFunctionArgNames;
+
       inherit
         # Expose to the result build helper.
         constructDrv
