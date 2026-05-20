@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "whichllm" ];
 
   meta = {
-    description = "Find the local LLM that actually runs and performs best on your hardware. Ranked by real, recency-aware benchmarks, not parameter count. One command, run it instantly";
+    description = "Find the local LLM that actually runs and performs best on your hardware";
     homepage = "https://github.com/Andyyyy64/whichllm";
     changelog = "https://github.com/Andyyyy64/whichllm/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
