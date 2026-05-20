@@ -53,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--topless"
   ];
 
+  # Classic 'incompatible pointer type'
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   enableParallelBuilding = true;
 
   postInstall = ''
