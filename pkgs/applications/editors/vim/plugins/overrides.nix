@@ -5642,6 +5642,13 @@ assertNoAdditions {
     };
   });
 
+  vim-sentence-chopper = super.vim-sentence-chopper.overrideAttrs (old: {
+    meta = old.meta // {
+      # This plugin is under the license "Rien à Branler", which is a French translation of the WTFPL license.
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   vim-sexp-mappings-for-regular-people =
     super.vim-sexp-mappings-for-regular-people.overrideAttrs
       (old: {
