@@ -3926,6 +3926,15 @@ assertNoAdditions {
     ];
   };
 
+  psc-ide-vim = super.psc-ide-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = with lib.licenses; [
+        mit
+        wtfpl
+      ];
+    };
+  });
+
   python-mode = super.python-mode.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
       # NOTE: Fix broken symlink - the pytoolconfig directory was moved to src/
