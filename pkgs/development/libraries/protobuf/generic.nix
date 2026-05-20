@@ -28,6 +28,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "protobuf";
   inherit version;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
