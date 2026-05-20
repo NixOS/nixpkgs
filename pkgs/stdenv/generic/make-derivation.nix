@@ -237,6 +237,10 @@ let
     ./default-builder.sh
   ];
 
+  doCheckByDefault = config.doCheckByDefault or false;
+  structuredAttrsByDefault = config.structuredAttrsByDefault or false;
+  inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
+
   inherit (stdenv)
     hostPlatform
     buildPlatform
@@ -400,16 +404,16 @@ let
 
       # TODO(@Ericson2314): Make unconditional / resolve #33599
       # Check phase
-      doCheck ? config.doCheckByDefault or false,
+      doCheck ? doCheckByDefault,
 
       # TODO(@Ericson2314): Make unconditional / resolve #33599
       # InstallCheck phase
-      doInstallCheck ? config.doCheckByDefault or false,
+      doInstallCheck ? doCheckByDefault,
 
       # TODO(@Ericson2314): Make always true and remove / resolve #178468
       strictDeps ? defaultStrictDeps,
 
-      enableParallelBuilding ? config.enableParallelBuildingByDefault,
+      enableParallelBuilding ? enableParallelBuildingByDefault,
 
       separateDebugInfo ? false,
       outputs ? [ "out" ],
@@ -428,11 +432,11 @@ let
 
       __contentAddressed ?
         (!attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-        && config.contentAddressedByDefault,
+        && contentAddressedByDefault,
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
-      __structuredAttrs ? config.structuredAttrsByDefault or false,
+      __structuredAttrs ? structuredAttrsByDefault,
 
       ...
     }@attrs:
@@ -918,7 +922,7 @@ let
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
-      __structuredAttrs ? config.structuredAttrsByDefault or false,
+      __structuredAttrs ? structuredAttrsByDefault,
 
       env ? { },
 
