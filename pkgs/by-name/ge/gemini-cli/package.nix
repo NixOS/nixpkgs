@@ -112,6 +112,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/google-gemini/gemini-cli";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    knownVulnerabilities = [ "gemini-cli will be deprecated and removed in a future release." ];
     maintainers = with lib.maintainers; [
       brantes
       xiaoxiangmoe
