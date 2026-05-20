@@ -1,10 +1,14 @@
 # snippets that can be shared by multiple fetchers (pkgs/build-support)
 { lib }:
 let
-  commonH = hashTypes: rec {
-    hashNames = [ "hash" ] ++ hashTypes;
-    hashSet = genAttrs hashNames (const { });
-  };
+  commonH =
+    let
+      defaultHashNames = [ "hash" ];
+    in
+    hashTypes: rec {
+      hashNames = defaultHashNames ++ hashTypes;
+      hashSet = genAttrs hashNames (const { });
+    };
 
   fakeH = {
     hash = lib.fakeHash;
