@@ -7081,10 +7081,11 @@ with pkgs;
 
   # this version should align with the static protobuf version linked into python3.pkgs.tensorflow
   # $ nix-shell -I nixpkgs=$(git rev-parse --show-toplevel) -p python3.pkgs.tensorflow --run "python3 -c 'import google.protobuf; print(google.protobuf.__version__)'"
-  protobuf = protobuf_34;
+  protobuf = protobuf_35;
 
   inherit
     ({
+      protobuf_35 = callPackage ../development/libraries/protobuf/35.nix { };
       protobuf_34 = callPackage ../development/libraries/protobuf/34.nix { };
       protobuf_33 = callPackage ../development/libraries/protobuf/33.nix { };
       protobuf_32 = callPackage ../development/libraries/protobuf/32.nix { };
@@ -7103,6 +7104,7 @@ with pkgs;
         abseil-cpp = abseil-cpp_202103;
       };
     })
+    protobuf_35
     protobuf_34
     protobuf_33
     protobuf_32
