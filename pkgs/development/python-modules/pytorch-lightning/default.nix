@@ -26,6 +26,7 @@ buildPythonPackage (finalAttrs: {
   pname = "pytorch-lightning";
   version = "2.6.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
