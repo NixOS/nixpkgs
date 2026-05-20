@@ -117,47 +117,55 @@ in
 
       environment.systemPackages =
         let
-          replyToEmail = pkgs.writeScriptBin "reply-to-email" ''
-            #!${pkgs.python3.interpreter}
-            import imaplib
-            import smtplib
-            import ssl
-            import email.header
-            from email import message_from_bytes
-            from email.message import EmailMessage
+          replyToEmail =
+            pkgs.writeScriptBin "reply-to-email"
+              # python
+              ''
+                #!${pkgs.python3.interpreter}
+                import imaplib
+                import smtplib
+                import ssl
+                import email.header
+                import sys
+                from email import message_from_bytes
+                from email.message import EmailMessage
 
-            with imaplib.IMAP4('localhost') as imap:
-                imap.login('alice', 'foobar')
-                imap.select()
-                status, data = imap.search(None, 'ALL')
-                assert status == 'OK'
+                with imaplib.IMAP4('localhost') as imap:
+                    imap.login('alice', 'foobar')
+                    imap.select()
+                    status, data = imap.search(None, 'ALL')
+                    assert status == 'OK'
 
-                nums = data[0].split()
-                assert len(nums) == 1
+                    nums = data[0].split()
+                    try:
+                      assert len(nums) == 1
+                    except AssertionError:
+                      print("No mail in IMAP mailbox yet...", file=sys.stderr)
+                      sys.exit(1)
 
-                status, msg_data = imap.fetch(nums[0], '(RFC822)')
-                assert status == 'OK'
+                    status, msg_data = imap.fetch(nums[0], '(RFC822)')
+                    assert status == 'OK'
 
-            msg = email.message_from_bytes(msg_data[0][1])
-            subject = str(email.header.make_header(email.header.decode_header(msg['Subject'])))
-            reply_to = email.header.decode_header(msg['Reply-To'])[0][0]
-            message_id = email.header.decode_header(msg['Message-ID'])[0][0]
-            date = email.header.decode_header(msg['Date'])[0][0]
+                msg = email.message_from_bytes(msg_data[0][1])
+                subject = str(email.header.make_header(email.header.decode_header(msg['Subject'])))
+                reply_to = email.header.decode_header(msg['Reply-To'])[0][0]
+                message_id = email.header.decode_header(msg['Message-ID'])[0][0]
+                date = email.header.decode_header(msg['Date'])[0][0]
 
-            ctx = ssl.create_default_context()
-            with smtplib.SMTP_SSL(host='${discourseDomain}', context=ctx) as smtp:
-                reply = EmailMessage()
-                reply['Subject'] = 'Re: ' + subject
-                reply['To'] = reply_to
-                reply['From'] = 'alice@${clientDomain}'
-                reply['In-Reply-To'] = message_id
-                reply['References'] = message_id
-                reply['Date'] = date
-                reply.set_content("Test reply.")
+                ctx = ssl.create_default_context()
+                with smtplib.SMTP_SSL(host='${discourseDomain}', context=ctx) as smtp:
+                    reply = EmailMessage()
+                    reply['Subject'] = 'Re: ' + subject
+                    reply['To'] = reply_to
+                    reply['From'] = 'alice@${clientDomain}'
+                    reply['In-Reply-To'] = message_id
+                    reply['References'] = message_id
+                    reply['Date'] = date
+                    reply.set_content("Test reply.")
 
-                smtp.send_message(reply)
-                smtp.quit()
-          '';
+                    smtp.send_message(reply)
+                    smtp.quit()
+              '';
         in
         [ replyToEmail ];
 

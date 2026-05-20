@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.333.1";
+  version = "2.334.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5hSnveIebRQhvIHZc8sN9/8e9W1rlfITIB2uNMsQM6k=";
+    hash = "sha256-KSfzWwIf8Vpc8H0XM1tIqdZhdY/noZCeYLBvdWjqmLA=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -182,13 +182,21 @@ buildDotnetModule (finalAttrs: {
     "TestSelfUpdateAsync_ValidateHash"
     "TestSelfUpdateAsync"
   ]
+  # Includes an `ActionDownloadInfo` that fails with sandboxed networking
   ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
+    "BatchesResolutionAcrossCompositeActions"
     "CompositeActionWithActionfile_CompositeContainerNested"
     "CompositeActionWithActionfile_CompositePrestepNested"
     "CompositeActionWithActionfile_MaxLimit"
     "CompositeActionWithActionfile_Node"
+    "DeduplicatesResolutionAcrossDepthLevels"
     "DownloadActionFromGraph"
+    "DownloadsNextLevelActionsBeforeRecursing"
+    "MultipleTopLevelActions_BatchesResolution"
+    "NestedCompositeContainers_BatchedResolution"
     "NotPullOrBuildImagesMultipleTimes"
+    "ParallelDownloadsAtSameDepth"
+    "ParallelDownloads_MultipleUniqueActions"
     "RepositoryActionWithActionYamlFile_DockerHubImage"
     "RepositoryActionWithActionfileAndDockerfile"
     "RepositoryActionWithActionfile_DockerHubImage"
