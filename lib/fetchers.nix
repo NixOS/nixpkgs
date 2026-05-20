@@ -15,7 +15,7 @@ let
   inherit (lib)
     concatMapStringsSep
     head
-    tail
+    length
     throwIf
     ;
   inherit (lib.attrsets)
@@ -125,7 +125,7 @@ rec {
           in
           if hashesAsNVPairs == [ ] then
             throwIf required "fetcher called without `hash`" null
-          else if tail hashesAsNVPairs != [ ] then
+          else if length hashesAsNVPairs != 1 then
             throw "fetcher called with mutually-incompatible arguments: ${
               concatMapStringsSep ", " (a: a.name) hashesAsNVPairs
             }"
