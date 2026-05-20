@@ -127,7 +127,6 @@ let
               else
                 # f is not a function; probably { ... }
                 f0;
-            pos = unsafeGetAttrPos "version" thisOverlay;
           in
           warnIf
             (
@@ -140,26 +139,31 @@ let
               && !(thisOverlay ? src)
               && !(thisOverlay.__intentionallyOverridingVersion or false)
             )
-            ''
-              ${
-                args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
-              } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                toString pos.line or "<unknown line>"
-              }:${toString pos.column or "<unknown column>"}.
+            (
+              let
+                pos = unsafeGetAttrPos "version" thisOverlay;
+              in
+              ''
+                ${
+                  args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
+                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                  toString pos.line or "<unknown line>"
+                }:${toString pos.column or "<unknown column>"}.
 
-              This is most likely not what you want. In order to properly change the version of a package, override
-              both the `version` and `src` attributes:
+                This is most likely not what you want. In order to properly change the version of a package, override
+                both the `version` and `src` attributes:
 
-              hello.overrideAttrs (oldAttrs: rec {
-                version = "1.0.0";
-                src = pkgs.fetchurl {
-                  url = "mirror://gnu/hello/hello-''${version}.tar.gz";
-                  hash = "...";
-                };
-              })
+                hello.overrideAttrs (oldAttrs: rec {
+                  version = "1.0.0";
+                  src = pkgs.fetchurl {
+                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                    hash = "...";
+                  };
+                })
 
-              (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-            ''
+                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+              ''
+            )
             (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
         );
 
