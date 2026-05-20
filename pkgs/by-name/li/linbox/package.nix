@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-blas-libs=-lblas"
     "--without-archnative"
+    "LIBS=-lblas"
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
