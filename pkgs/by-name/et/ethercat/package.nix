@@ -35,8 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     description = "IgH EtherCAT Master for Linux";
     homepage = "https://etherlab.org/ethercat";
     changelog = "https://gitlab.com/etherlab.org/ethercat/-/blob/${finalAttrs.version}/NEWS";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ stv0g ];
+    license = with lib.licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
+    maintainers = with lib.maintainers; [
+      ninelore
+      stv0g
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })
