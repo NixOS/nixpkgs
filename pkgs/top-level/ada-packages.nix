@@ -21,9 +21,14 @@ makeScopeWithSplicing' {
 
       xmlada = self.callPackage ../development/ada-modules/xmlada { };
 
-      gnatprove = self.callPackage ../development/ada-modules/gnatprove {
-        ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
-      };
+      gnatprove =
+        # They haven't released a version of gnatprove for gnat16 yet
+        if lib.versionOlder gnat.version "16" then
+          self.callPackage ../development/ada-modules/gnatprove {
+            ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
+          }
+        else
+          null;
 
       gnatcoll-core = self.callPackage ../development/ada-modules/gnatcoll/core.nix { };
 

@@ -367,6 +367,7 @@ rec {
         veprbl
         raskin
         jwiegley
+        xworld21
       ];
       platforms = lib.platforms.all;
     };

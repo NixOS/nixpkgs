@@ -8,7 +8,7 @@
   fixup-yarn-lock,
   go,
   makeWrapper,
-  nodejs_22,
+  nodejs,
   nix-update-script,
   patchelf,
   removeReferencesTo,
@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktn-cli";
-  version = "0.22.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "open-constructs";
     repo = "cdk-terrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yBCLxp7w/M2y7vDEI1ceAAJbyYpPT4mN4hZ3FKpaiJ0=";
+    hash = "sha256-qBpdeIa4V5hfVbkwa+5gHszSwqXJej0k0BdVImTdwt8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-c5WQXZLbOuvy6Jj6TchV00HThFIePMdsGW1rWAUKnvo=";
+    hash = "sha256-H8UnrCZx9yjKn7YxRqv+uJ73fw/ngPFI6zdayUizo1k=";
   };
 
   hcl2json-go-modules =
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     go
     makeWrapper
-    nodejs_22
+    nodejs
     patchelf
     removeReferencesTo
     yarn
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib/node_modules/cdktn-cli"
     cp -rL node_modules packages/cdktn-cli/bundle packages/cdktn-cli/package.json "$out/lib/node_modules/cdktn-cli/"
 
-    makeWrapper "${lib.getExe nodejs_22}" "$out/bin/cdktn" \
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/cdktn" \
       --add-flags "--no-warnings=DEP0040" \
       --add-flags "$out/lib/node_modules/cdktn-cli/bundle/bin/cdktn.js"
 
@@ -151,7 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
   # even with writableTmpDirAsHomeHook and CHECKPOINT_DISABLE=1
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # Skip pre-releases
+    extraArgs = [
+      "--version-regex"
+      "^v([\\d.]+)$"
+    ];
+  };
 
   meta = {
     description = "CDK for Terraform CLI";
@@ -161,7 +167,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cdktn";
     maintainers = with lib.maintainers; [ deejayem ];
     platforms = lib.platforms.unix;
-    # Uses @cdktf/node-pty-prebuilt-multiarch which is not yet available for node 22 on aarch64-linux
-    broken = stdenv.hostPlatform.system == "aarch64-linux";
   };
 })

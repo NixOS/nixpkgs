@@ -12,16 +12,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "copacetic";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FTldgBYOmJt3VIC3vwp415oPNRCAiR1cxEF8lJr5TSU=";
+    hash = "sha256-LuJn6DGINUMI7KVSCMMVBZyvNYWEk+DOQJqfciJ0n8E=";
   };
 
-  vendorHash = "sha256-nkVAHqe61AR0GBK5upsk650kl8UDp1ppFWhyi3erpr4=";
+  vendorHash = "sha256-RKqaIwGDZj91lfbEJHcnG8RhIrixtR0VtieCfZD/rns=";
+
+  excludedPackages = [
+    "integration/..."
+    "test/..."
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

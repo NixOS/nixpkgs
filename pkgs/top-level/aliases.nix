@@ -170,6 +170,7 @@ let
     "plasma-dialer"
     "plasma-disks"
     "plasma-firewall"
+    "plasma-pass"
     "plasma-phonebook"
     "plasma-remotecontrollers"
     "plasma-sdk"
@@ -611,6 +612,7 @@ mapAliases {
   dfilemanager = throw "'dfilemanager' has been dropped as it was unmaintained"; # Added 2025-06-03
   discord-screenaudio = throw "discord-screenaudio has been removed because it was archived upstream. Use vesktop instead."; # added 2025-11-29
   DisnixWebService = warnAlias "'DisnixWebService' has been renamed to 'disnix-web-service'" disnix-web-service; # Added 2026-01-14
+  djmount = throw "'djmount' has been removed as it is no longer maintained"; # Added 2026-05-19
   dleyna-connector-dbus = throw "'dleyna-connector-dbus' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-core = throw "'dleyna-core' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-renderer = throw "'dleyna-renderer' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
@@ -975,6 +977,10 @@ mapAliases {
   inotifyTools = throw "'inotifyTools' has been renamed to/replaced by 'inotify-tools'"; # Converted to throw 2025-10-27
   insync-emblem-icons = throw "'insync-emblem-icons' has been removed, use 'insync-nautilus' instead"; # Added 2025-05-14
   intel2200BGFirmware = warnAlias "'intel2200BGFirmware' has been renamed to 'ipw2200-firmware'" ipw2200-firmware; # Added 2026-02-08
+  intel-oneapi = {
+    base = warnAlias "'intel-oneapi.base' and 'intel-oneapi.hpc' have been merged upstream into a single package. Please switch to 'intel-oneapi-toolkit'" intel-oneapi-toolkit;
+    hpc = warnAlias "'intel-oneapi.base' and 'intel-oneapi.hpc' have been merged upstream into a single package. Please switch to 'intel-oneapi-toolkit'" intel-oneapi-toolkit;
+  }; # Added 2026-05-04
   invalidateFetcherByDrvHash = throw "'invalidateFetcherByDrvHash' has been renamed to/replaced by 'testers.invalidateFetcherByDrvHash'"; # Converted to throw 2025-10-27
   ioccheck = throw "ioccheck was dropped since it was unmaintained."; # Added 2025-07-06
   ion3 = throw "ion3 was dropped since it was unmaintained."; # Added 2026-02-18
@@ -1442,6 +1448,7 @@ mapAliases {
   moralerspace-hwnf = throw "moralerspace-hwnf has been removed, use moralerspace-hw instead."; # Added 2025-08-30
   moralerspace-nf = throw "moralerspace-nf has been removed, use moralerspace instead."; # Added 2025-08-30
   morty = throw "morty has been removed, as searxng removed support for it and it was unmaintained."; # Added 2025-09-26
+  move-mount-beneath = throw "move-mount-beneath has been removed, it is now superseded by util-linux's mount"; # Added 2026-05-19
   moz-phab = throw "'moz-phab' has been renamed to/replaced by 'mozphab'"; # Converted to throw 2025-10-27
   mp3splt = throw "'mp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   mpage = throw "'mpage' has been removed due to being unmaintained and broken"; # Added 2026-05-05
@@ -1698,10 +1705,11 @@ mapAliases {
   pingvin-share = throw "'pingvin-share' has been removed as it was broken and archived upstream"; # Added 2025-11-08
   pipecontrol = throw "'pipecontrol' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
+  plandex = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
+  plandex-server = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plant-it = throw "plant-it backend was discontinued in september 2025"; # Added 2026-01-30
   plant-it-frontend = throw "plant-it-frontend has been presented as being Android-only since the server-side was discontinued in september 2025"; # Added 2026-01-30
   plasma-applet-volumewin7mixer = throw "'plasma-applet-volumewin7mixer' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
-  plasma-pass = throw "'plasma-pass' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   plasma-theme-switcher = throw "'plasma-theme-switcher' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   platformioPackages.platformio-chrootenv = platformio-chrootenv; # Added 2025-09-04
   platformioPackages.platformio-core = platformio-core; # Added 2025-09-04
