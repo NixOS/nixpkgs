@@ -46,31 +46,14 @@ let
       };
     };
     libxml2 = callPackage ./common.nix {
-      version = "2.15.1";
+      version = "2.15.2";
       src = fetchFromGitLab {
         domain = "gitlab.gnome.org";
         owner = "GNOME";
         repo = "libxml2";
         tag = "v${packages.libxml2.version}";
-        hash = "sha256-FUfYMq5xT2i88JdIw9OtSofraUL3yjsyOVund+mfJKQ=";
+        hash = "sha256-k5dZ75D/BOouYAjrof9Jm2lY29XZhOqS1kudDGmGY9Q=";
       };
-      extraPatches = [
-        (fetchpatch {
-          name = "CVE-2026-0990.patch";
-          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/1961208e958ca22f80a0b4e4c9d71cfa050aa982.patch";
-          hash = "sha256-Df2WLCTsP/ItSzgnVkNjRpLKkBP4xUOXEfCUV9o/Yks=";
-        })
-        (fetchpatch {
-          name = "CVE-2026-0992.patch";
-          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/f75abfcaa419a740a3191e56c60400f3ff18988d.patch";
-          hash = "sha256-an/PpmsncNwim/pe/zsDx9P6jbuCqvr4QSgTokyDvzw=";
-        })
-        (fetchpatch {
-          name = "CVE-2026-0989.patch";
-          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/19549c61590c1873468c53e0026a2fbffae428ef.patch";
-          hash = "sha256-YOF5cYdoFQuvsbcAezamglh/RKv8Zq6rm1nfo2/CLzo=";
-        })
-      ];
       extraMeta = {
         maintainers = with lib.maintainers; [
           jtojnar

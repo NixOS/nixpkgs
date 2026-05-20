@@ -62,11 +62,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.12";
+  version = "3.8.13";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-p7NBQhv9RZrPejdMpK87ngZgjc1715Kyv0cL6gErjlE=";
+    hash = "sha256-/+2Owb8JwkJtTxSq43feR1O1PlN9aF5gTpmosWypyX4=";
   };
 
   outputs = [
@@ -85,11 +85,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-ssl-cert-file.patch
-
-    # Fixes test-float failure on ppc64 with C23
-    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
-    # Multiple upstream commits squashed with adjustments, see header
-    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
   ];
 
   # Skip some tests:
@@ -117,13 +112,6 @@ stdenv.mkDerivation rec {
   # https://gitlab.com/gnutls/gnutls/-/issues/1721
   + ''
     sed '2iexit 77' -i tests/system-override-compress-cert.sh
-  ''
-  # Upstream packaging bug: stamp_error_codes is missing from EXTRA_DIST in
-  # the release tarball, causing the build to try regenerating it by compiling
-  # and running `errcodes` — which fails when cross-compiling since the binary
-  # is for the target architecture. https://gitlab.com/gnutls/gnutls/-/issues/1797
-  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    touch doc/stamp_error_codes
   '';
 
   preConfigure = "patchShebangs .";
@@ -141,6 +129,10 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-ktls"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # https://lists.gnu.org/archive/html/bug-gnulib/2026-05/msg00061.html
+      "gl_cv_func_free_preserves_errno=yes"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
       "--disable-doc"

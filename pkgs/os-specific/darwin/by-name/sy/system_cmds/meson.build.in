@@ -186,10 +186,7 @@ executable(
     build_by_default : false,
     install : false,
     sources : [
-        'gcore/convert.c',
         'gcore/corefile.c',
-        'gcore/dyld.c',
-        'gcore/dyld_shared_cache.c',
         'gcore/gcore_framework.m',
         'gcore/main.c',
         'gcore/notes.c',

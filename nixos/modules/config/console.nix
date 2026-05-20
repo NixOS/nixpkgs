@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.console;
+  i18nCfg = config.i18n;
 
   makeColor = i: lib.concatMapStringsSep "," (x: "0x" + lib.substring (2 * i) 2 x);
 
@@ -164,8 +165,10 @@ in
           environment.systemPackages = [ pkgs.kbd ];
 
           # Let systemd-vconsole-setup.service do the work of setting up the
-          # virtual consoles.
-          environment.etc."vconsole.conf".source = vconsoleConf true;
+          # virtual consoles. Skip when imperative so localectl can manage it.
+          environment.etc."vconsole.conf" = lib.mkIf (!i18nCfg.imperativeLocale) {
+            source = vconsoleConf true;
+          };
           # Provide kbd with additional packages.
           environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
@@ -211,13 +214,22 @@ in
             "systemd-vconsole-setup.service"
           ];
 
+          # When imperative, seed /etc/vconsole.conf on first boot from declared
+          # defaults so the keymap isn't lost before localectl is ever used
+          systemd.tmpfiles.rules = lib.mkIf i18nCfg.imperativeLocale [
+            "C /etc/vconsole.conf - - - - ${vconsoleConf}"
+          ];
+
           systemd.services.reload-systemd-vconsole-setup = {
             description = "Reset console on configuration changes";
             wantedBy = [ "multi-user.target" ];
-            restartTriggers = [
-              (config.environment.etc."vconsole.conf".source)
-              (consoleEnv pkgs.kbd)
-            ];
+            restartTriggers =
+              lib.optionals (!i18nCfg.imperativeLocale) [
+                (config.environment.etc."vconsole.conf".source)
+              ]
+              ++ [
+                (consoleEnv pkgs.kbd)
+              ];
             reloadIfChanged = true;
             serviceConfig = {
               RemainAfterExit = true;

@@ -3,25 +3,13 @@
   mkAppleDerivation,
   pkg-config,
   shell_cmds,
-  pkgs,
+  sourceRelease,
   stdenvNoCC,
   zlib,
 }:
 
 let
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  bootstrapSourceRelease = f pkgs pkgs;
-  xnu = bootstrapSourceRelease "xnu";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "doc_cmds-deps-private-headers";

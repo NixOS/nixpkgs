@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "48.3";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-y8hEJ7Kt6pQDUCoSXzZrnyiIE/cugb9rGRVGBvFZ3Tk=";
+    hash = "sha256-gyXKSx+nU3XPiVHmL4Z/pqhCgiwt1aRqmHc2CBizAhI=";
   };
 
   nativeBuildInputs = [

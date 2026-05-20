@@ -1,5 +1,6 @@
 {
   lib,
+  apple-sdk_26,
   bzip2,
   copyfile,
   less,
@@ -7,33 +8,22 @@
   libutil,
   libxo,
   mkAppleDerivation,
+  ncurses,
   pkg-config,
   removefile,
   shell_cmds,
-  pkgs,
+  sourceRelease,
   stdenvNoCC,
   xz,
   zlib,
 }:
 
 let
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  bootstrapSourceRelease = f pkgs pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  Libc = bootstrapSourceRelease "Libc";
-  Libinfo = bootstrapSourceRelease "Libinfo";
-  CommonCrypto = bootstrapSourceRelease "CommonCrypto";
-  libplatform = bootstrapSourceRelease "libplatform";
-  xnu = bootstrapSourceRelease "xnu";
+  Libc = sourceRelease "Libc";
+  Libinfo = sourceRelease "Libinfo";
+  CommonCrypto = sourceRelease "CommonCrypto";
+  libplatform = sourceRelease "libplatform";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "file_cmds-deps-private-headers";
@@ -103,13 +93,12 @@ mkAppleDerivation {
     "xattr"
   ];
 
-  xcodeHash = "sha256-KEZYuaDxLdprF+wGiszUdTXPQBfLNj0xP9Y0uarNjSs=";
+  xcodeHash = "sha256-O1eJGFrSVIZbZvBSonKkG4MeYZQ8W6izpYEcHIE+/DM=";
 
   patches = [
-    # Fixes build of ls
-    ./patches/0001-Add-missing-extern-unix2003_compat-to-ls.patch
-    # Add missing conditional to avoid using private APFS APIs that we lack headers for using.
-    ./patches/0002-Add-missing-ifdef-for-private-APFS-APIs.patch
+    # `O_RESOLVE_BENEATH` was added in macOS 26, but our default deployment target is older than that.
+    # Make its usage conditional.
+    ./patches/0001-Conditionalize-O_RESOLVE_BENEATH-usage.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -117,11 +106,13 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = [
+    apple-sdk_26 # For `O_RESOLVE_BENEATH` and `AT_RESOLVE_BENEATH`
     bzip2
     copyfile
     libmd
     libutil
     libxo
+    ncurses
     removefile
     xz
     zlib

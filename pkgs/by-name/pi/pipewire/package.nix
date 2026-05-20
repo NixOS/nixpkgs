@@ -4,6 +4,7 @@
   testers,
   buildPackages,
   fetchFromGitLab,
+  fetchpatch,
   python3,
   meson,
   ninja,
@@ -89,7 +90,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.6.3";
+  version = "1.6.5";
 
   outputs = [
     "out"
@@ -105,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-zD0PYtZsiU+tZUpVBKofjGVQyO/68eIZP7DqBQHUGJk=";
+    hash = "sha256-ui5VTbSiobHmPUHW4jLguoeMWaKT4f2eTqdo3ZGgvNI=";
   };
 
   patches = [
@@ -113,10 +114,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./0060-libjack-path.patch
     # Move installed tests into their own output.
     ./0070-installed-tests-path.patch
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/49ce385c44f4c2882ef0aeac0312e6ae9bc85f8a.patch";
+      hash = "sha256-u8DLe6smodalVn3GwhI9RaDZTw4qZs8+Ylg9lxunMF0=";
+    })
   ];
 
   strictDeps = true;
   __structuredAttrs = true;
+  separateDebugInfo = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [

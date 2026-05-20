@@ -2652,7 +2652,7 @@ with pkgs;
   };
 
   medfile = callPackage ../development/libraries/medfile {
-    hdf5 = hdf5.override { usev110Api = true; };
+    hdf5 = hdf5.override { apiVersion = "v110"; };
   };
 
   mhonarc = perlPackages.MHonArc;
@@ -2704,12 +2704,12 @@ with pkgs;
   nodejs_24 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_24; };
   corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs-slim_24; };
 
-  nodejs-slim_25 = callPackage ../development/web/nodejs/v25.nix { };
-  nodejs_25 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_25; };
+  nodejs-slim_26 = callPackage ../development/web/nodejs/v26.nix { };
+  nodejs_26 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_26; };
 
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_25;
-  nodejs-slim_latest = nodejs-slim_25;
+  nodejs_latest = nodejs_26;
+  nodejs-slim_latest = nodejs-slim_26;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -2856,7 +2856,7 @@ with pkgs;
   maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
 
   netcdf-mpi = netcdf.override {
-    hdf5 = hdf5-mpi.override { usev110Api = true; };
+    hdf5 = hdf5-mpi.override { apiVersion = "v110"; };
   };
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
@@ -4513,15 +4513,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_94 = callPackage ../development/compilers/rust/1_94.nix { };
-  rust = rust_1_94;
+  rust_1_95 = callPackage ../development/compilers/rust/1_95.nix { };
+  rust = rust_1_95;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_94 = rust_1_94.packages.stable;
-  rustPackages = rustPackages_1_94;
+  rustPackages_1_95 = rust_1_95.packages.stable;
+  rustPackages = rustPackages_1_95;
 
   inherit (rustPackages)
     cargo
@@ -5647,8 +5647,6 @@ with pkgs;
 
   m4 = gnum4;
 
-  gnumake = callPackage ../development/tools/build-managers/gnumake { };
-
   gradle-packages = callPackage ../development/tools/build-managers/gradle { };
 
   gradle_7-unwrapped = gradle-packages.gradle_7;
@@ -6230,6 +6228,8 @@ with pkgs;
         stdenv = gccStdenv; # doesn't compile without gcc
       }
   );
+
+  jsoncppSecureMemory = jsoncpp.override { secureMemory = true; };
 
   mtrace = callPackage ../development/libraries/glibc/mtrace.nix { };
 
@@ -7391,7 +7391,7 @@ with pkgs;
   };
 
   vigra = callPackage ../development/libraries/vigra {
-    hdf5 = hdf5.override { usev110Api = true; };
+    hdf5 = hdf5.override { apiVersion = "v110"; };
   };
 
   vte-gtk4 = vte.override {
@@ -7654,14 +7654,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_1 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.1"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_3 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.3"; };
 
@@ -7671,7 +7663,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_3;
+  sbcl_2_6_4 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.4"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_4;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -7996,9 +7996,7 @@ with pkgs;
 
   lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix { };
 
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
-    nodejs = nodejs_20;
-  };
+  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
 
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
@@ -8623,11 +8621,6 @@ with pkgs;
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
-    # provide a super minimal gnupg used for systemd-machined
-    gnupg = gnupg.override {
-      enableMinimal = true;
-      guiSupport = false;
-    };
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
@@ -11112,6 +11105,7 @@ with pkgs;
     gnome47Extensions
     gnome48Extensions
     gnome49Extensions
+    gnome50Extensions
     ;
 
   gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };

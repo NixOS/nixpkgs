@@ -36,6 +36,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
+  disabledTests = [
+    # https://github.com/authlib/joserfc/issues/94
+    "test_ECDH_ES_with_EC_key"
+    "test_import_p512_key"
+    "test_ec_incorrect_curve"
+    "test_ES512"
+  ];
+
   pythonImportsCheck = [ "joserfc" ];
 
   meta = {

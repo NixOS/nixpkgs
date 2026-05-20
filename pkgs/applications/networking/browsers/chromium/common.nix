@@ -611,17 +611,11 @@ let
         hash = "sha256-WZsN2qm6lX121bDf7SoN75flXtCTmPPpwtHK0ayjkPc=";
       })
     ]
-    ++ lib.optionals (versionRange "146" "147") [
-      # Backport CL 7594600 from M147 to fix the following error:
-      #  error[E0277]: the trait bound `LaneCount<N>: SupportedLaneCount` is not satisfied
-      #  --> ../../third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/pod.rs:152:40
-      (fetchpatch {
-        name = "chromium-146-backport-Remove-now-obsolete-invalid-patch-on-bytemuck-v1.patch";
-        # https://chromium-review.googlesource.com/c/chromium/src/+/7594600
-        url = "https://chromium.googlesource.com/chromium/src/+/90b77efcecb262823fadb67b0ce218846cd9e756^!?format=TEXT";
-        decode = "base64 -d";
-        hash = "sha256-iDhDdVscy0tinQCRKXOghrn4ZRwlc8YjPZ0xPv0UMEU=";
-      })
+    ++ lib.optionals (!versionRange "146" "147") [
+      # Fix building with stable Rust 1.95 (https://issues.chromium.org/issues/480176523):
+      #  error[E0425]: cannot find type `LaneCount` in module `core::simd`
+      #  --> ../../third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/zeroable.rs:234:15
+      ./patches/chromium-142-bytemuck-rust-1.95.patch
     ]
     ++ lib.optionals (chromiumVersionAtLeast "147" && lib.versionOlder llvmVersion "23") [
       # clang++: error: unknown argument: '-fno-lifetime-dse'

@@ -138,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "evince";
+      # 49.alpha bumps API and breaks sushi.
+      freeze = true;
     };
   };
 
