@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-eY4HMfL01CV2fLEqOtlmvyi13nelZRZiBhu0pmvujzU=";
+    hash = "sha256-wsWhpf1qitUbG5noBoXNBMAGsOKcrPTCSxuopEDqjU0=";
   };
 
   build-system = [ setuptools ];
