@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tuya-device-handlers";
-  version = "0.0.18";
+  version = "0.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "tuya-device-handlers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZzK6IV6AF+5+oOW9ADM/zgwFTmKNT2CzaEuXXK2hyVo=";
+    hash = "sha256-GGhDFmzMc0KqjaDEJijldwN6te29qhFEnz7jD4XWDQM=";
   };
 
   build-system = [ poetry-core ];
