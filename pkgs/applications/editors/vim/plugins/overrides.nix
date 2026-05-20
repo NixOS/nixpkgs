@@ -1434,6 +1434,13 @@ assertNoAdditions {
     dependencies = [ self.nui-nvim ];
   };
 
+  fastfold = super.fastfold.overrideAttrs (old: {
+    meta = old.meta // {
+      # This plugin is under the license "Rien à Branler", which is a French translation of the WTFPL license.
+      license = lib.licenses.wtfpl;
+    };
+  });
+
   faust-nvim = super.faust-nvim.overrideAttrs {
     dependencies = with self; [
       luasnip
