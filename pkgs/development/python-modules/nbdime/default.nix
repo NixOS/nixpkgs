@@ -14,7 +14,6 @@
   gitpython,
   jinja2,
   jupyter-server,
-  jupyter-server-mathjax,
   nbformat,
   pygments,
   requests,
@@ -22,19 +21,18 @@
 
   # tests
   gitMinimal,
-  pytest-tornado,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "4.0.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YqtQp1goJSPEUBFEufMUIh27rtBAPBL9cPak/MUy7CQ=";
+    hash = "sha256-jNJez+61EF1WMjfX9k60dIBY+6m7qas4kqH/YeF3zhY=";
   };
 
   build-system = [
@@ -48,7 +46,6 @@ buildPythonPackage rec {
     gitpython
     jinja2
     jupyter-server
-    jupyter-server-mathjax
     nbformat
     pygments
     requests
@@ -57,7 +54,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     gitMinimal
-    pytest-tornado
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
@@ -91,7 +87,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jupyter/nbdime";
-    changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/nbdime/blob/v${version}/CHANGELOG.md";
     description = "Tools for diffing and merging of Jupyter notebooks";
     license = lib.licenses.bsd3;
     maintainers = [ ];

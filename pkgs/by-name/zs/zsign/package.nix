@@ -4,9 +4,7 @@
   stdenv,
   openssl,
   pkg-config,
-  minizip,
   nix-update-script,
-  zlib,
   versionCheckHook,
 }:
 let
@@ -14,33 +12,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsign";
-  version = "0.9.6";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "zhlynn";
     repo = "zsign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e4k3W+FkdydqPy3DuhH6MbC+IilLZfqOb7FAbIiv/kM=";
+    hash = "sha256-NuwV8s+rzsXBha/vqnemvUo6Etm70ZVYL/CZKBJ1szA=";
   };
-
-  postPatch = ''
-    substituteInPlace ../../src/common/archive.cpp \
-      --replace-fail "#include <zip.h>" "#include <minizip/zip.h>" \
-      --replace-fail "#include <unzip.h>" "#include <minizip/unzip.h>"
-  '';
 
   sourceRoot = "${finalAttrs.src.name}/build/${platformName}";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-    minizip
-    zlib
-  ];
+  buildInputs = [ openssl ];
 
   makeFlags = [
     "BINDIR=bin/"
     "CXX=${stdenv.cc.targetPrefix}c++"
+    "VERSION=${finalAttrs.version}"
   ];
 
   installPhase = ''
