@@ -19158,9 +19158,7 @@ self: super: with self; {
 
   systembridgemodels = callPackage ../development/python-modules/systembridgemodels { };
 
-  systemd-python = callPackage ../development/python-modules/systemd-python {
-    inherit (pkgs) systemd;
-  };
+  systemd-python = callPackage ../development/python-modules/systemd-python { };
 
   systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
 

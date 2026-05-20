@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   libredirect,
-  systemd,
+  systemdLibs,
   pkg-config,
   pytest,
   python,
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ systemd ];
+  buildInputs = [ systemdLibs ];
 
   nativeCheckInputs = [
     libredirect.hook
