@@ -43,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
   ];
 
+  # `typedef int bool;` in src/types.h collides with C23's bool keyword.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   configureScript = "./build.sh";
   configureFlags = [
     "--configure-only"
