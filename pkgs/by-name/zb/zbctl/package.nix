@@ -6,18 +6,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zbctl";
-  version = "8.4.19";
+  version = "8.5.25";
 
   src =
     if stdenvNoCC.hostPlatform.system == "x86_64-darwin" then
       fetchurl {
         url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl.darwin";
-        hash = "sha256-RuZX9TWuXBxxegLw0La0l9/6zh96V/2trJvZUoCvTKk=";
+        hash = "sha256-MMal+M7cJSeysr5j3LVSc3CoByHUoq5h6XzJSKknCWE=";
       }
     else if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl";
-        hash = "sha256-NTJqmcOzpOzHjrtOHBU2J3u0f7sESBeZMbb8kx3zR38=";
+        hash = "sha256-EzPIKBgs0zkoLbGQPxKIeRbNCQvfiVthb3IKBZZItlQ=";
       }
     else
       throw "Unsupported platform ${stdenvNoCC.hostPlatform.system}";
