@@ -5593,6 +5593,12 @@ assertNoAdditions {
     };
   });
 
+  vim-protobuf = super.vim-protobuf.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.bsd3;
+    };
+  });
+
   vim-ps1 = super.vim-ps1.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.asl20;
