@@ -6115,6 +6115,12 @@ assertNoAdditions {
     };
   });
 
+  zeavim-vim = super.zeavim-vim.overrideAttrs (old: {
+    meta = old.meta // {
+      license = lib.licenses.publicDomain;
+    };
+  });
+
   zenbones-nvim = super.zenbones-nvim.overrideAttrs {
     checkInputs = with self; [
       # Optional lush-nvim integration
