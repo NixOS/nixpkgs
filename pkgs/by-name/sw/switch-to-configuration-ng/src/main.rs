@@ -688,12 +688,7 @@ fn handle_modified_unit(
     let reload_list = scope.reload_list_file();
     let use_restart_as_stop_and_start = new_unit_info.is_none();
 
-    if matches!(
-        unit,
-        "sysinit.target" | "basic.target" | "multi-user.target" | "graphical.target"
-    ) || unit.ends_with(".unit")
-        || unit.ends_with(".slice")
-    {
+    if cannot_be_restarted_directly(unit) {
         // Do nothing.  These cannot be restarted directly.
 
         // Slices and Paths don't have to be restarted since properties (resource limits and
@@ -940,6 +935,17 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
     (filesystems, swaps)
 }
 
+/// Whether a unit cannot be (re)started directly. Special targets are pulled
+/// in by their dependents; slices and paths get their properties applied on
+/// daemon-reload.
+fn cannot_be_restarted_directly(unit: &str) -> bool {
+    matches!(
+        unit,
+        "sysinit.target" | "basic.target" | "multi-user.target" | "graphical.target"
+    ) || unit.ends_with(".path")
+        || unit.ends_with(".slice")
+}
+
 // Returns a HashMap containing the same contents as the passed in `units`, minus the units in
 // `units_to_filter`.
 fn filter_units(
@@ -955,6 +961,50 @@ fn filter_units(
     }
 
     res
+}
+
+/// Action to take on a unit that migrated to NixOS ownership during the
+/// post-activation pass. Honours the same X-* directives as
+/// `handle_modified_unit`.
+#[derive(Debug, PartialEq)]
+enum MigrationAction {
+    Skip,
+    Reload,
+    Restart,
+    Start,
+}
+
+impl MigrationAction {
+    /// Action to take on a migrated unit that is still active.
+    fn for_active_unit(unit: &str, new_unit_info: &UnitInfo) -> Self {
+        if cannot_be_restarted_directly(unit) {
+            return Self::Skip;
+        }
+
+        if parse_systemd_bool(Some(new_unit_info), "Service", "X-ReloadIfChanged", false) {
+            return Self::Reload;
+        }
+
+        if !parse_systemd_bool(Some(new_unit_info), "Service", "X-RestartIfChanged", true)
+            || parse_systemd_bool(Some(new_unit_info), "Unit", "RefuseManualStop", false)
+            || parse_systemd_bool(Some(new_unit_info), "Unit", "X-OnlyManualStart", false)
+        {
+            return Self::Skip;
+        }
+
+        Self::Restart
+    }
+
+    /// Action to take on a migrated unit that the previous owner stopped.
+    fn for_stopped_unit(new_unit_info: &UnitInfo) -> Self {
+        if parse_systemd_bool(Some(new_unit_info), "Unit", "RefuseManualStart", false)
+            || parse_systemd_bool(Some(new_unit_info), "Unit", "X-OnlyManualStart", false)
+        {
+            return Self::Skip;
+        }
+
+        Self::Start
+    }
 }
 
 fn unit_is_active(conn: &LocalConnection, unit: &str) -> Result<bool> {
@@ -1510,29 +1560,40 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
         let active_after = get_active_units(&systemd)?;
 
+        let mut to_reload = HashMap::new();
         let mut to_restart = HashMap::new();
         let mut to_start = HashMap::new();
+        let mut to_skip = HashMap::new();
 
         for unit in &migration_candidates {
-            match active_after.get(unit) {
+            // Honour X-* directives so reloadIfChanged/restartIfChanged hold.
+            let new_unit_file = new_unit_dir.join(unit);
+            let new_unit_info = parse_unit(&new_unit_file, &new_unit_file)?;
+
+            let action = match active_after.get(unit) {
                 Some(unit_state) => {
+                    // Only act if /etc now wins (i.e. the higher-priority
+                    // copy is gone). Read errors are treated as "leave alone".
                     let now_etc = unit_state
                         .proxy
                         .get("org.freedesktop.systemd1.Unit", "FragmentPath")
                         .map(|p: String| p.starts_with(fragment_prefix))
                         .unwrap_or(false);
-                    if now_etc {
-                        // Still running with the previous manager's binary;
-                        // restart so the /etc definition takes effect.
-                        to_restart.insert(unit.clone(), ());
+                    if !now_etc {
+                        // Still shadowed (or read error); leave it alone.
+                        continue;
                     }
-                    // else: still shadowed by ~/.config, leave it alone.
+                    MigrationAction::for_active_unit(unit, &new_unit_info)
                 }
-                None => {
-                    // Stopped by the previous manager; start the /etc copy.
-                    to_start.insert(unit.clone(), ());
-                }
-            }
+                // Stopped by the previous manager; start the /etc copy.
+                None => MigrationAction::for_stopped_unit(&new_unit_info),
+            };
+            match action {
+                MigrationAction::Skip => to_skip.insert(unit.clone(), ()),
+                MigrationAction::Reload => to_reload.insert(unit.clone(), ()),
+                MigrationAction::Restart => to_restart.insert(unit.clone(), ()),
+                MigrationAction::Start => to_start.insert(unit.clone(), ()),
+            };
         }
 
         // Re-start active targets so any other newly-unmasked dependencies are
@@ -1542,6 +1603,24 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 to_start.insert(unit.clone(), ());
             }
         }
+
+        if !to_skip.is_empty() {
+            print_units("NOT restarting (post-activation)", &to_skip);
+        }
+
+        print_units("reloading (post-activation)", &to_reload);
+        for unit in to_reload.keys() {
+            match systemd.reload_unit(unit, "replace") {
+                Ok(job_path) => {
+                    submitted_jobs.borrow_mut().insert(job_path, Job::Reload);
+                }
+                Err(err) => {
+                    eprintln!("Failed to reload user unit {unit}: {err}");
+                    exit_code = 4;
+                }
+            }
+        }
+        block_on_jobs(&dbus_conn, &submitted_jobs);
 
         print_units("restarting (post-activation)", &to_restart);
         for unit in to_restart.keys() {
@@ -2862,5 +2941,108 @@ After=dev-disk-by\x2dlabel-root.device
                 "dev-disk-by\\x2dlabel-root.device"
             );
         }
+    }
+
+    fn unit_info(
+        sections: &[(&str, &[(&str, &str)])],
+    ) -> HashMap<String, HashMap<String, Vec<String>>> {
+        sections
+            .iter()
+            .map(|(section, kvs)| {
+                (
+                    section.to_string(),
+                    kvs.iter()
+                        .map(|(k, v)| (k.to_string(), vec![v.to_string()]))
+                        .collect(),
+                )
+            })
+            .collect()
+    }
+
+    #[test]
+    fn migration_action_for_active_unit() {
+        use super::MigrationAction;
+
+        // Plain service: restart.
+        assert_eq!(
+            MigrationAction::for_active_unit("foo.service", &unit_info(&[])),
+            MigrationAction::Restart
+        );
+
+        // reloadIfChanged must reload, not restart.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Service", &[("X-ReloadIfChanged", "true")])])
+            ),
+            MigrationAction::Reload
+        );
+
+        // X-RestartIfChanged=false (restartIfChanged = false) must skip.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Service", &[("X-RestartIfChanged", "false")])])
+            ),
+            MigrationAction::Skip
+        );
+
+        // RefuseManualStop must skip.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Unit", &[("RefuseManualStop", "yes")])])
+            ),
+            MigrationAction::Skip
+        );
+
+        // X-OnlyManualStart must skip.
+        assert_eq!(
+            MigrationAction::for_active_unit(
+                "foo.service",
+                &unit_info(&[("Unit", &[("X-OnlyManualStart", "yes")])])
+            ),
+            MigrationAction::Skip
+        );
+
+        // Units that cannot be restarted directly must skip.
+        for unit in [
+            "sysinit.target",
+            "basic.target",
+            "multi-user.target",
+            "graphical.target",
+            "foo.path",
+            "bar.slice",
+        ] {
+            assert_eq!(
+                MigrationAction::for_active_unit(unit, &unit_info(&[])),
+                MigrationAction::Skip,
+                "{unit}"
+            );
+        }
+    }
+
+    #[test]
+    fn migration_action_for_stopped_unit() {
+        use super::MigrationAction;
+
+        assert_eq!(
+            MigrationAction::for_stopped_unit(&unit_info(&[])),
+            MigrationAction::Start
+        );
+        assert_eq!(
+            MigrationAction::for_stopped_unit(&unit_info(&[(
+                "Unit",
+                &[("RefuseManualStart", "true")]
+            )])),
+            MigrationAction::Skip
+        );
+        assert_eq!(
+            MigrationAction::for_stopped_unit(&unit_info(&[(
+                "Unit",
+                &[("X-OnlyManualStart", "true")]
+            )])),
+            MigrationAction::Skip
+        );
     }
 }
