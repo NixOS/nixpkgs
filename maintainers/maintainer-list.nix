@@ -30498,6 +30498,12 @@
     githubId = 7040031;
     name = "Yannik Sander";
   };
+  ysnt-yes = {
+    name = "Yes";
+    github = "ysnt-yes";
+    githubId = 85800291;
+    email = "yes@ysnt.live";
+  };
   yuannan = {
     email = "brandon@emergence.ltd";
     github = "yuannan";
