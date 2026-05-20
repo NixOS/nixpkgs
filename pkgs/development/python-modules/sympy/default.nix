@@ -56,7 +56,9 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/sympy/sympy";
     changelog = "https://github.com/sympy/sympy/wiki/Release-Notes-for-${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
     teams = [ lib.teams.sage ];
   };
 })
