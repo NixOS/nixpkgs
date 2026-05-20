@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chardet";
   version = "6.0.0.post1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chardet";
     repo = "chardet";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7G998L4VRvNiGBBNAxPJB27lI2DtL1lTteowUH2NBDk=";
   };
 
@@ -42,11 +42,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "chardet" ];
 
   meta = {
-    changelog = "https://github.com/chardet/chardet/releases/tag/${src.tag}";
+    changelog = "https://github.com/chardet/chardet/releases/tag/${finalAttrs.src.tag}";
     description = "Universal encoding detector";
     mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})
