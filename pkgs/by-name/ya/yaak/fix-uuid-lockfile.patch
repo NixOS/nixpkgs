@@ -1,0 +1,60 @@
+Fix missing resolved/integrity for packages in lockfile
+
+diff --git a/package-lock.json b/package-lock.json
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -15701,7 +15701,9 @@
+       "license": "MIT",
+       "dependencies": {
+         "undici-types": "~7.16.0"
+-      }
++      },
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.10.4.tgz",
++      "integrity": "sha512-vnDVpYPMzs4wunl27jHrfmwojOGKya0xyM3sH+UE5iv5uPS6vX7UIoh6m+vQc5LGBq52HBKPIn/zcSZVzeDEZg=="
+     },
+     "plugins-external/faker": {
+       "name": "@yaak/faker",
+@@ -15986,7 +15988,9 @@
+       "license": "MIT",
+       "bin": {
+         "uuid": "dist/esm/bin/uuid"
+-      }
++      },
++      "resolved": "https://registry.npmjs.org/uuid/-/uuid-11.1.0.tgz",
++      "integrity": "sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A=="
+     },
+     "plugins/template-function-xml": {
+       "name": "@yaak/template-function-xml",
+@@ -16102,7 +16106,9 @@
+       "license": "MIT",
+       "dependencies": {
+         "undici-types": "~7.16.0"
+-      }
++      },
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.10.4.tgz",
++      "integrity": "sha512-vnDVpYPMzs4wunl27jHrfmwojOGKya0xyM3sH+UE5iv5uPS6vX7UIoh6m+vQc5LGBq52HBKPIn/zcSZVzeDEZg=="
+     },
+     "src-web/node_modules/nanoid": {
+       "version": "5.1.6",
+@@ -16118,7 +16124,9 @@
+       },
+       "engines": {
+         "node": "^18 || >=20"
+-      }
++      },
++      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-5.1.6.tgz",
++      "integrity": "sha512-c7+7RQ+dMB5dPwwCp4ee1/iV/q2P6aK1mTZcfr1BTuVlyW9hJYiMPybJCcnBlQtuSmTIWNeazm/zqNoZSSElBg=="
+     },
+     "src-web/node_modules/uuid": {
+       "version": "11.1.0",
+@@ -16129,7 +16137,9 @@
+       "license": "MIT",
+       "bin": {
+         "uuid": "dist/esm/bin/uuid"
+-      }
++      },
++      "resolved": "https://registry.npmjs.org/uuid/-/uuid-11.1.0.tgz",
++      "integrity": "sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A=="
+     }
+   }
+ }

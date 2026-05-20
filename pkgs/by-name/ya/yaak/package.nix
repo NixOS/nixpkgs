@@ -31,23 +31,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaak";
-  version = "2025.6.1";
+  version = "2026.3.1";
 
   src = fetchFromGitHub {
     owner = "mountain-loop";
     repo = "yaak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3sEq7VpzaIMbkvHQTQLf3NRbAJjtpOJpirdcA7y2FIE=";
+    hash = "sha256-n4hWkEIlrrSognWTdFP1EbG40oTKCNs9Ht9sn12ku48=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-zz9wlJ3yQ3oTyCFrAV7vD1xENLW+vmf2Pzly4yYas/g=";
+    hash = "sha256-9yxT7FVb13myc7r2pjUz3iweC6R01QAJCyAFlLAkRe4=";
+    fetcherVersion = 2;
+    makeCacheWritable = true;
+    patches = [ ./fix-uuid-lockfile.patch ];
   };
 
-  cargoHash = "sha256-CMx7vTSGeQMXpXeH4LIOKEb29CfKXQV+r8tSYdmW5U4=";
+  cargoHash = "sha256-MDcyEUgvj/qBVBwXcdeO5s8UFhwrc//dY62fC308Iko=";
 
-  cargoRoot = "src-tauri";
+  cargoRoot = "crates-tauri/yaak-app";
+
+  depsExtraArgs = {
+    preBuild = ''
+      cp Cargo.lock ''${cargoRoot-}/Cargo.lock
+    '';
+  };
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -87,16 +96,39 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace package.json \
       --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
 
-    substituteInPlace src-tauri/tauri.conf.json \
+    substituteInPlace crates-tauri/yaak-app/tauri.conf.json \
       --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
 
-    substituteInPlace src-tauri/tauri.commercial.conf.json \
-      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
+    substituteInPlace crates-tauri/yaak-app/tauri.release.conf.json \
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
 
     substituteInPlace package.json \
-      --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
-      --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
+      --replace-fail '"vendor:vendor-node": "node scripts/vendor-node.cjs"' '"vendor:vendor-node": ":"' \
+      --replace-fail '"vendor:vendor-protoc": "node scripts/vendor-protoc.cjs"' '"vendor:vendor-protoc": ":"' \
+      --replace-fail '"vendor:vendor-plugins": "node scripts/vendor-plugins.cjs"' '"vendor:vendor-plugins": ":"' \
+      --replace-fail '"bootstrap:install-wasm-pack": "node scripts/install-wasm-pack.cjs"' '"bootstrap:install-wasm-pack": ":"'
+
+    # yaakcli binary not available on aarch64-linux, replace build commands
+    find plugins plugins-external packages -name 'package.json' -exec \
+      sed -i 's|"yaakcli build"|":"|g; s|"yaakcli dev"|":"|g' {} +
+
+    # Fix lockfile to match what was cached by fetchNpmDeps
+    patch -p1 < ${./fix-uuid-lockfile.patch}
+
+    # Cargo.lock is at repo root, copy to cargoRoot so cargoSetupPostPatchHook can find it
+    cp Cargo.lock crates-tauri/yaak-app/Cargo.lock
+
+    # Create vendored plugins directory structure (vendor-plugins was skipped)
+    mkdir -p crates-tauri/yaak-app/vendored/plugins
+    for plugin in plugins/*/; do
+      name=$(basename "$plugin")
+      if [ -d "plugins-external/$name" ]; then
+        continue
+      fi
+      mkdir -p "crates-tauri/yaak-app/vendored/plugins/$name/build"
+      cp "$plugin/package.json" "crates-tauri/yaak-app/vendored/plugins/$name/"
+    done
   '';
 
   preBuild =
@@ -111,32 +143,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
         .${stdenv.hostPlatform.system};
     in
     ''
-      mkdir -p src-tauri/vendored/node
-      ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-${archPlatforms}
-      mkdir -p src-tauri/vendored/protoc
-      ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-${archPlatforms}
-      ln -s ${protobuf}/include src-tauri/vendored/protoc/include
+      mkdir -p crates-tauri/yaak-app/vendored/node
+      ln -s ${nodejs}/bin/node crates-tauri/yaak-app/vendored/node/yaaknode-${archPlatforms}
+      mkdir -p crates-tauri/yaak-app/vendored/protoc
+      ln -s ${protobuf}/bin/protoc crates-tauri/yaak-app/vendored/protoc/yaakprotoc-${archPlatforms}
+      ln -s ${protobuf}/include crates-tauri/yaak-app/vendored/protoc/include
     '';
 
   tauriBuildFlags = [
     "--config"
-    "./src-tauri/tauri.commercial.conf.json"
+    "./crates-tauri/yaak-app/tauri.release.conf.json"
   ];
 
   # Permission denied (os error 13)
-  # write to src-tauri/vendored/protoc/include
+  # write to crates-tauri/yaak-app/vendored/protoc/include
   doCheck = false;
 
-  preInstall = "pushd src-tauri";
-
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/bin
-      makeWrapper $out/Applications/Yaak.app/Contents/MacOS/yaak-app $out/bin/yaak-app
-    ''
-    + ''
-      popd
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/bin
+    makeWrapper $out/Applications/Yaak.app/Contents/MacOS/yaak-app $out/bin/yaak-app
+  '';
 
   passthru.updateScript = nix-update-script { };
 
