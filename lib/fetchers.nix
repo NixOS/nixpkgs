@@ -199,6 +199,12 @@ rec {
     and is implemented somewhat more efficiently.
   */
   withNormalizedHash =
+    let
+      removedAttributes = [
+        "outputHash"
+        "outputHashAlgo"
+      ];
+    in
     {
       hashTypes ? defaultHashTypes,
     }:
@@ -219,10 +225,7 @@ rec {
     assert intersectAttrs fArgs hashSet == { };
 
     setFunctionArgs (args: fetcher (normalize args)) (
-      removeAttrs fArgs [
-        "outputHash"
-        "outputHashAlgo"
-      ]
+      removeAttrs fArgs removedAttributes
       // {
         hash = fArgs.outputHash;
       }
