@@ -5838,6 +5838,13 @@ assertNoAdditions {
     '';
   };
 
+  vim-watchdogs = super.vim-watchdogs.overrideAttrs (old: {
+    meta = old.meta // {
+      # Plugin file licenses it under Perl terms (artistic1).
+      license = lib.licenses.artistic1;
+    };
+  });
+
   vim-wordy = super.vim-wordy.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
