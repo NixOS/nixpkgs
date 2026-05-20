@@ -5958,6 +5958,8 @@ self: super: with self; {
 
   fpdf2 = callPackage ../development/python-modules/fpdf2 { };
 
+  fpsample = callPackage ../development/python-modules/fpsample { };
+
   fpylll = callPackage ../development/python-modules/fpylll { };
 
   fpyutils = callPackage ../development/python-modules/fpyutils { };
