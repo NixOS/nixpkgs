@@ -826,6 +826,15 @@ in
         RemainAfterExit=true
         ExecStart=${pkgs.runtimeShell} -c 'echo home > %t/migrated-owner'
       '';
+
+      # Unit file placed in ~/.local/share/systemd/user (lower priority than
+      # /etc) to simulate a package-shipped unit.
+      dataMigratedUnit = pkgs.writeText "migrated.service" ''
+        [Service]
+        Type=oneshot
+        RemainAfterExit=true
+        ExecStart=${pkgs.runtimeShell} -c 'echo data > %t/migrated-owner'
+      '';
     in
     # python
     ''
@@ -1856,6 +1865,36 @@ in
           user_systemctl("is-active migrated.service")
           out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
           assert_contains(out, "home")
+
+          # Migration from a lower-priority search-path entry ($XDG_DATA_HOME
+          # here, standing in for ~/.nix-profile/share etc.). /etc outranks
+          # these, so pass 2 must restart onto the /etc definition.
+          switch_to_specialisation("${machine}", "")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active migrated.service")
+          machine.succeed(
+              "sudo -u usertest mkdir -p ~usertest/.local/share/systemd/user",
+              "sudo -u usertest cp ${dataMigratedUnit} ~usertest/.local/share/systemd/user/migrated.service",
+          )
+          user_systemctl("daemon-reload")
+          user_systemctl("start migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "data")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/.local/share/systemd/user/migrated.service")
+          out = switch_to_specialisation("${machine}", "userServiceMigratedShadowed")
+          assert_contains(out, "restarting (post-activation) the following user units: migrated.service")
+          user_systemctl("is-active migrated.service")
+          out = user_systemctl("show -p FragmentPath migrated.service")
+          assert_contains(out, "/etc/systemd/user/migrated.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/migrated-owner")
+          assert_contains(out, "nixos")
+          # Switching again must NOT touch it: /etc already had it, so it is
+          # not a candidate even though the lower-priority copy is still there.
+          out = switch_to_specialisation("${machine}", "userServiceMigratedShadowed")
+          assert_lacks(out, "migrated.service")
+          machine.succeed("sudo -u usertest rm -rf ~usertest/.local/share/systemd")
+          user_systemctl("daemon-reload")
 
           # Units that remain shadowed by ~/.config must be left alone in both
           # passes even though /etc now also defines them.
