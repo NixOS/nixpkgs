@@ -5680,6 +5680,16 @@ assertNoAdditions {
         };
       });
 
+  vim-sile = super.vim-sile.overrideAttrs (old: {
+    meta = old.meta // {
+      license = with lib.licenses; [
+        bsd0
+        cc0
+        gpl2Plus
+      ];
+    };
+  });
+
   vim-sleuth = super.vim-sleuth.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.vim;
