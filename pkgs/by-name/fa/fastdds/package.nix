@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       protocol, which provides publisher-subscriber communications over unreliable transports
       such as UDP, as defined and maintained by the Object Management Group (OMG) consortium.
     '';
+    maintainers = with lib.maintainers; [
+      panicgh
+    ];
     platforms = lib.platforms.linux;
   };
 })
