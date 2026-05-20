@@ -194,6 +194,10 @@ buildGoModule (finalAttrs: {
       })
       ./update-inlang-plugins.sh
     ];
+    services.default = {
+      imports = [ (lib.modules.importApply ./service.nix { }) ];
+      backrest.package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
