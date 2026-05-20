@@ -1073,7 +1073,7 @@ let
               mapAttrs (
                 name: value:
                 {
-                  __pos = builtins.unsafeGetAttrPos name a;
+                  __pos = unsafeGetAttrPos name a;
                 }
                 // optionalAttrs (isAttrs value) (value.attributePositionInformation or (process value))
               ) a;
