@@ -3520,6 +3520,8 @@ self: super: with self; {
 
   cyrtranslit = callPackage ../development/python-modules/cyrtranslit { };
 
+  cyscale = callPackage ../development/python-modules/cyscale { };
+
   cysignals = callPackage ../development/python-modules/cysignals { };
 
   cython = callPackage ../development/python-modules/cython { };
