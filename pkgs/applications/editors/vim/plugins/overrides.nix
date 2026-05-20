@@ -2667,9 +2667,12 @@ assertNoAdditions {
     dependencies = [ self.neco-syntax ];
   };
 
-  ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs {
+  ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs (old: {
     dependencies = [ self.ultisnips ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
 
   neco-ghc = super.neco-ghc.overrideAttrs (old: {
     meta = old.meta // {
