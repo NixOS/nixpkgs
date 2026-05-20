@@ -51,6 +51,7 @@
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
+  testers,
   rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
@@ -591,6 +592,13 @@ stdenv.mkDerivation (finalAttrs: {
         doInstallCheck = true;
       });
       buildbot-integration = nixosTests.buildbot;
+    }
+    // lib.optionalAttrs svnSupport {
+      git-svn-version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "git svn --version";
+        version = "git-svn version ${version}";
+      };
     }
     // tests.fetchgit;
     updateScript = ./update.sh;
