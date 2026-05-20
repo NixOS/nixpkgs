@@ -202,9 +202,11 @@ rec {
     {
       hashTypes ? defaultHashTypes,
     }:
-    fetcher:
     let
       inherit (commonH hashTypes) hashSet;
+    in
+    fetcher:
+    let
       fArgs = functionArgs fetcher;
 
       normalize = normalizeHash {
