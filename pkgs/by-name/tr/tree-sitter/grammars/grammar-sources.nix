@@ -1149,10 +1149,10 @@
   };
 
   htmldjango = {
-    version = "1.0.0-unstable-2025-04-16";
+    version = "0-unstable-2026-05-17";
     url = "github:interdependence/tree-sitter-htmldjango";
-    rev = "3a643167ad9afac5d61e092f08ff5b054576fadf";
-    hash = "sha256-sQV7olTaQ68wixzvKV44myVvDUXXjBZh9N3jvDFUSvE=";
+    rev = "a10318892603d9a0b925df7cc7771a840304b997";
+    hash = "sha256-tFcdc2fd+oEVtB2ccKRHppMkxf1bPorKWRgfn5xZoaw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
