@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-kernel=no"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "IgH EtherCAT Master for Linux";
