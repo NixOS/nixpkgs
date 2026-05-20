@@ -195,7 +195,8 @@ buildPythonPackage rec {
     openpyxl
     xlrd
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  # datasette is transitively broken by asgi-csrf
+  ++ lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "datasette" ]);
 
   disabledTestPaths = [
     # Requires optional dependencies that have not been packaged (commented out above)
