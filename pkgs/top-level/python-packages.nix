@@ -6204,6 +6204,11 @@ self: super: with self; {
 
   geoarrow-pyarrow = callPackage ../development/python-modules/geoarrow-pyarrow { };
 
+  inherit (callPackage ../development/python-modules/geoarrow-rust { })
+    geoarrow-rust-core
+    geoarrow-rust-io
+    ;
+
   geoarrow-types = callPackage ../development/python-modules/geoarrow-types { };
 
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
@@ -8879,6 +8884,8 @@ self: super: with self; {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
 
+  libpulse = callPackage ../development/python-modules/libpulse { };
+
   libpurecool = callPackage ../development/python-modules/libpurecool { };
 
   libpwquality = lib.pipe pkgs.libpwquality [
@@ -11070,37 +11077,49 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
-  netbox-attachments = callPackage ../development/python-modules/netbox-attachments { };
+  netbox-attachments =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-attachments/package.nix
+      { };
 
-  netbox-bgp = callPackage ../development/python-modules/netbox-bgp { };
+  netbox-bgp = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-bgp/package.nix { };
 
-  netbox-contextmenus = callPackage ../development/python-modules/netbox-contextmenus { };
+  netbox-contextmenus =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contextmenus/package.nix
+      { };
 
-  netbox-contract = callPackage ../development/python-modules/netbox-contract { };
+  netbox-contract = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contract/package.nix { };
 
-  netbox-dns = callPackage ../development/python-modules/netbox-dns { };
+  netbox-dns = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-dns/package.nix { };
 
-  netbox-documents = callPackage ../development/python-modules/netbox-documents { };
+  netbox-documents = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-documents/package.nix { };
 
-  netbox-floorplan-plugin = callPackage ../development/python-modules/netbox-floorplan-plugin { };
+  netbox-floorplan-plugin =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-floorplan-plugin/package.nix
+      { };
 
   netbox-interface-synchronization =
-    callPackage ../development/python-modules/netbox-interface-synchronization
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-interface-synchronization/package.nix
       { };
 
-  netbox-napalm-plugin = callPackage ../development/python-modules/netbox-napalm-plugin { };
+  netbox-napalm-plugin =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-napalm-plugin/package.nix
+      { };
 
   netbox-plugin-prometheus-sd =
-    callPackage ../development/python-modules/netbox-plugin-prometheus-sd
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-plugin-prometheus-sd/package.nix
       { };
 
-  netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
+  netbox-qrcode = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-qrcode/package.nix { };
 
-  netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
+  netbox-reorder-rack =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-reorder-rack/package.nix
+      { };
 
-  netbox-routing = callPackage ../development/python-modules/netbox-routing { };
+  netbox-routing = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-routing/package.nix { };
 
-  netbox-topology-views = callPackage ../development/python-modules/netbox-topology-views { };
+  netbox-topology-views =
+    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-topology-views/package.nix
+      { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
