@@ -90,9 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_BENCH" false)
     (lib.cmakeBool "WITH_ZMQ" true)
-    (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
-    (lib.cmakeBool "ENABLE_WALLET" (!withWallet))
-    (lib.cmakeBool "BUILD_GUI" (!withGui))
+    (lib.cmakeBool "WITH_USDT" stdenv.hostPlatform.isLinux)
+  ]
+  ++ lib.optionals (!withWallet) [
     (lib.cmakeBool "ENABLE_WALLET" false)
   ]
   ++ lib.optionals withGui [
