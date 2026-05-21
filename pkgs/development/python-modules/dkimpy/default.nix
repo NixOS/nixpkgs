@@ -10,13 +10,13 @@
   authres,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dkimpy";
   version = "1.1.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tfYPtHu/XY12LxNLzqDDiOumtJg0KmgqIfFoZUUJS3c=";
   };
 
@@ -29,10 +29,12 @@ buildPythonPackage rec {
     authres
   ];
 
-  patchPhase = ''
-    substituteInPlace dkim/dknewkey.py --replace \
-      /usr/bin/openssl ${openssl}/bin/openssl
+  postPatch = ''
+    substituteInPlace dkim/dknewkey.py --replace-fail \
+      /usr/bin/openssl ${lib.getExe openssl}
   '';
+
+  pythonImportsCheck = [ "dkim" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -48,4 +50,4 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/dkimpy";
     license = lib.licenses.bsd3;
   };
-}
+})
