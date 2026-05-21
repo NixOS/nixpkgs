@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "maximhq";
     repo = "bifrost";
     tag = "transports/v${version}";
-    hash = "sha256-5hZoTEoKrt1cjkHxTjKUs44wXn1fpqL9LoxbfF5Q4NE=";
+    hash = "sha256-nLMkJ57cU9P/p1INrDX5NAEk3n0s3L3tgpaI1aN5znc=";
   };
 
   ui = buildNpmPackage {
@@ -25,7 +25,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/ui";
 
-    npmDepsHash = "sha256-6DmtaiLUjYbhldYGEig0sx3e6PUuQVjA2FLU95fqQ+Y=";
+    npmDepsHash = "sha256-YniwFXRYyS8PpfabAAK0csyQLGrwUjONLTGXF7HINaI=";
 
     # `next/font/google` fetches fonts at build time; the Nix sandbox has no
     # network access, so replace the layout with an offline-friendly version.
@@ -66,7 +66,7 @@ in
 
   modRoot = "transports";
   subPackages = [ "bifrost-http" ];
-  vendorHash = "sha256-l/+CPu7kKOjki5hLKK/ltHxZM7SNcI3/e/FLoV0ScS0=";
+  vendorHash = "sha256-TYaUcXJTzaP99CQfmpKV+etS4NdY4R9p9NNHISJajSo=";
 
   doCheck = false;
 
