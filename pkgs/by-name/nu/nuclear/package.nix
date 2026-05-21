@@ -46,20 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "packages/player/src-tauri";
 
-  preBuild = lib.optionals stdenv.hostPlatform.isDarwin ''
-    mkdir -p $TMPDIR/mock_bin
-
-    # Create a fake `xattr` that simply exits with 0 (success)
-    cat << 'EOF' > $TMPDIR/mock_bin/xattr
-    #!/usr/bin/env bash
-    exit 0
-    EOF
-
-    chmod +x $TMPDIR/mock_bin/xattr
-
-    export PATH="$TMPDIR/mock_bin:$PATH"
-  '';
-
   postPatch =
     let
       tauriConfJson = "${finalAttrs.cargoRoot}/tauri.conf.json";
