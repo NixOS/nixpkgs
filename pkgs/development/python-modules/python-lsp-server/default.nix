@@ -40,6 +40,17 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
+let
+  jedi-0_19_2 = jedi.overridePythonAttrs (old: rec {
+    version = "0.19.2";
+    src = fetchFromGitHub {
+      inherit (old.src) owner repo fetchSubmodules;
+      tag = "v${version}";
+      hash = "sha256-2nDQJS6LIaq91PG3Av85OMFfs1ZwId00K/kvog3PGXE=";
+    };
+    disabledTests = old.disabledTests ++ [ "test_import" ];
+  });
+in
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
@@ -67,7 +78,7 @@ buildPythonPackage rec {
   dependencies = [
     black
     docstring-to-markdown
-    jedi
+    jedi-0_19_2
     pluggy
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
