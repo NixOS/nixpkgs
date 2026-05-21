@@ -32,6 +32,7 @@ buildPythonPackage (finalAttrs: {
   pname = "mlflow";
   version = "3.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
