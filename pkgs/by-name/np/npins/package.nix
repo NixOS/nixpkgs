@@ -42,6 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "npins";
     homepage = "https://github.com/andir/npins";
     license = lib.licenses.eupl12;
-    maintainers = with lib.maintainers; [ piegames ];
+    maintainers = with lib.maintainers; [
+      piegames
+      coca
+    ];
   };
 })
