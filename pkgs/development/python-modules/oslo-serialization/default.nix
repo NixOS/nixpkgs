@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-serialization";
-  version = "5.9.1";
+  version = "5.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_serialization";
     inherit version;
-    hash = "sha256-CGq3ihXzPwLmR72zyjZjJIDZTPZhzx+xGK3r3u5dS+c=";
+    hash = "sha256-eacc3iZRr9XcfwZaVuShAKTUEn7xsX95im0JzqJJdrY=";
   };
 
   build-system = [
