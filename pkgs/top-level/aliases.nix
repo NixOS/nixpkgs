@@ -2,7 +2,6 @@ lib: self: super:
 
 ### Deprecated aliases - for backward compatibility
 ### Please maintain this list in ASCIIbetical ordering.
-### Hint: the "sections" are delimited by ### <letter> ###
 
 # These aliases should not be used within nixpkgs, but exist to improve
 # backward compatibility in projects outside of nixpkgs. See the
