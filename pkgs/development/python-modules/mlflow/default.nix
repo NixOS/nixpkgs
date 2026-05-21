@@ -47,6 +47,9 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
   dependencies = [
     aiohttp
     alembic
