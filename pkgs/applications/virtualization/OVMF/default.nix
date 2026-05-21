@@ -14,6 +14,7 @@
   qemu,
   dosfstools,
   mtools,
+
   fdSize2MB ? false,
   fdSize4MB ? secureBoot,
   secureBoot ? false,
@@ -38,6 +39,7 @@
   # Usually, this option is broken, do not use it except if you know what you are
   # doing.
   sourceDebug ? false,
+
   projectDscPath ?
     {
       x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
@@ -56,11 +58,22 @@
     }
     .${stdenv.hostPlatform.parsed.cpu.name}
       or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}"),
+
+  metaDescription ? "Sample UEFI firmware for QEMU and KVM",
   metaPlatforms ? lib.subtractLists lib.platforms.i686 edk2.meta.platforms,
+  metaMaintainers ? (
+    with lib.maintainers;
+    [
+      adamcstephens
+      mjoerg
+      raitobezarius
+      sigmasquadron
+    ]
+  ),
+  metaTeams ? [ ],
 }:
 
 let
-
   platformSpecific = {
     x86_64.msVarsArgs = {
       flavor = "OVMF_4M";
@@ -96,7 +109,6 @@ let
   };
 
   buildPrefix = "Build/*/*";
-
 in
 
 assert msVarsTemplate -> fdSize4MB;
@@ -129,7 +141,9 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     dosfstools
     mtools
   ];
+
   strictDeps = true;
+  __structuredAttrs = true;
 
   hardeningDisable = [
     "format"
@@ -264,15 +278,11 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     };
 
   meta = {
-    description = "Sample UEFI firmware for QEMU and KVM";
+    description = metaDescription;
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
     platforms = metaPlatforms;
-    maintainers = with lib.maintainers; [
-      adamcstephens
-      raitobezarius
-      mjoerg
-      sigmasquadron
-    ];
+    teams = metaTeams;
+    maintainers = metaMaintainers;
   };
 })
