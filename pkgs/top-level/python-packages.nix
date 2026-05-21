@@ -5928,6 +5928,8 @@ self: super: with self; {
     }
   );
 
+  fontforge-ref-sel-util = callPackage ../development/python-modules/fontforge-ref-sel-util { };
+
   fontmake = callPackage ../development/python-modules/fontmake { };
 
   fontmath = callPackage ../development/python-modules/fontmath { };
