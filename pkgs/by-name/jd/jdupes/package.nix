@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-no_uuid";
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     # don't link with ../libjodycode
