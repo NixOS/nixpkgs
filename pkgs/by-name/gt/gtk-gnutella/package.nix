@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-gnutella";
-  version = "1.2.2";
+  version = "1.3.1";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gtk-gnutella";
     repo = "gtk-gnutella";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LbSUdU+a9G8qL7gCZVJQ6UQMATpOMtktY6FeOkUuaYI=";
+    hash = "sha256-xVVmPcXIc5RN1j9PYqHaqllKp+8UQ8S2LU0z23QngFs=";
   };
 
   nativeBuildInputs = [
