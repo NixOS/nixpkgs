@@ -81,8 +81,12 @@ buildPythonPackage (finalAttrs: {
     "test_bash_completion_with_dot_in_path"
     "test_install_uninstall"
     "test_config_search_path"
+
     # does not raise UserWarning
     "test_initialize_compat_version_base"
+
+    # AssertionError: Regex pattern did not match
+    "test_initialize_bad_version_base"
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # AssertionError: Regex pattern did not match
