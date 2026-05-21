@@ -543,7 +543,7 @@ assertNoAdditions {
     ];
   };
 
-  clang_complete = super.clang_complete.overrideAttrs {
+  clang_complete = super.clang_complete.overrideAttrs (old: {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
     # These usually implicitly set by cc-wrapper around clang (pkgs/build-support/cc-wrapper).
@@ -559,7 +559,14 @@ assertNoAdditions {
             substituteInPlace "$out"/plugin/libclang.py \
               --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
     '';
-  };
+    meta = old.meta // {
+      # Docs say bsd3, except some LLVM project files under ncsa.
+      license = with lib.licenses; [
+        bsd3
+        ncsa
+      ];
+    };
+  });
 
   clangd_extensions-nvim = super.clangd_extensions-nvim.overrideAttrs (old: {
     meta = old.meta // {
