@@ -18196,6 +18196,10 @@ self: super: with self; {
     callPackage ../development/python-modules/snakemake-storage-plugin-fs
       { };
 
+  snakemake-storage-plugin-http =
+    callPackage ../development/python-modules/snakemake-storage-plugin-http
+      { };
+
   snakemake-storage-plugin-s3 =
     callPackage ../development/python-modules/snakemake-storage-plugin-s3
       { };
