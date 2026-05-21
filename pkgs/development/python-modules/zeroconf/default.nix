@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.148.0";
+  version = "0.149.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     tag = version;
-    hash = "sha256-odjuJrUXQXn3WeF/oS8DLO937p2nHpSk9QGO4Tgsd8o=";
+    hash = "sha256-FhGe4TE0fl7b2VhGoqK2/3DEpOAwfZaAjPuHzeFaH8M=";
   };
 
   build-system = [
