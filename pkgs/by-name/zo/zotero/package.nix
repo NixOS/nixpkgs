@@ -193,6 +193,7 @@ buildNpmPackage (finalAttrs: {
     ./js-build-fixes.patch
     ./avoid-xulrunner-fetch.patch
     ./build-fixes.patch
+    ./fix-x86_64-darwin.patch
   ];
 
   postPatch = ''
