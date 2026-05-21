@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "lunarclient";
-  version = "3.6.10";
+  version = "3.6.11";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}-ow.AppImage";
-    hash = "sha512-qdr6CcCtZa++KLzfmpA8ChdHXO3N+syn06pTXH7EQY0uI10ZI0w4os+hZ6SNoh0+YOcMY90gv4k4zpI9jWKPVg==";
+    hash = "sha512-WHjeAA+vS/gC8ZI2jUWpiJasvT+AgEWB14/ZnJGIOJPi4PUxtBNseM6HR8Aql8a8JGzobyZS9ISqYtFJEiYQ+A==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
