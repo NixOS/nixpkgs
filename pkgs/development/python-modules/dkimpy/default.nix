@@ -4,11 +4,10 @@
   openssl,
   buildPythonPackage,
   setuptools,
-  pytest,
+  pytestCheckHook,
   dnspython,
   pynacl,
   authres,
-  python,
 }:
 
 buildPythonPackage rec {
@@ -20,8 +19,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-tfYPtHu/XY12LxNLzqDDiOumtJg0KmgqIfFoZUUJS3c=";
   };
-
-  nativeCheckInputs = [ pytest ];
 
   build-system = [ setuptools ];
 
@@ -37,9 +34,7 @@ buildPythonPackage rec {
       /usr/bin/openssl ${openssl}/bin/openssl
   '';
 
-  checkPhase = ''
-    ${python.interpreter} ./test.py
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "DKIM + ARC email signing/verification tools + Python module";
