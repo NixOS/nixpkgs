@@ -160,7 +160,7 @@ let
     '';
   };
 
-  ## BEGIN Functions (Kept exactly as your original logic)
+  ## BEGIN Functions
   # Usage example
   # gen_v4_records {Proteus-Desktop = [{ipv4 = "100.89.227.22";} {ipv4 = "10.0.0.3";}]; Proteus-NUC = [{ipv4 = "100.64.161.20"; } {ipv4 = "10.0.0.2";}];}
   # => ''
@@ -644,6 +644,9 @@ in
       checkConfig = lib.mkOption {
         type = lib.types.bool;
         default = lib.any (domain: !domain.mutable) (builtins.attrValues cfg.domains);
+        defaultText = lib.literalExpression ''
+          lib.any (domain: !domain.mutable) (builtins.attrValues config.services.bind.domains)
+        '';
         description = ''
           Check configuration.
 
