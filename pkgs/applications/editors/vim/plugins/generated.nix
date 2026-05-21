@@ -3902,6 +3902,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  conflict-nvim = buildVimPlugin {
+    pname = "conflict.nvim";
+    version = "0-unstable-2026-04-25";
+    src = fetchFromGitHub {
+      owner = "niekdomi";
+      repo = "conflict.nvim";
+      rev = "fdc879c34c528aab90e1b90c5d408d141f31fef8";
+      hash = "sha256-hXww2PNTU5LX5egngKwMxOjvQl5CMgzBbDesRswPD2g=";
+    };
+    meta.homepage = "https://github.com/niekdomi/conflict.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   conform-nvim = buildVimPlugin {
     pname = "conform.nvim";
     version = "9.1.0-unstable-2026-05-15";
