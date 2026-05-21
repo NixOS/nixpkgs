@@ -152,6 +152,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "pytest-xdist"
   ];
   pythonRelaxDeps = [
+    "mpmath"
     "scikit-learn"
     "torchao"
   ];
