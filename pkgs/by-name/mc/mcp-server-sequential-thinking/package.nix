@@ -39,7 +39,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/modelcontextprotocol/servers";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
-    mainProgram = "mcp-server-memory";
+    mainProgram = "mcp-server-sequential-thinking";
     platforms = lib.platforms.all;
   };
 })
