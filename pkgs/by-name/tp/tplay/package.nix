@@ -9,25 +9,28 @@
   alsa-lib,
   opencv,
   makeWrapper,
+  mpv,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tplay";
-  version = "0.6.3";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JVkezG2bs99IFOTONeZZRljjbi0EhFf+DMxcfiWI4p4=";
+    hash = "sha256-wAvO3iEyP7REojDo2vEjLxFXmf66vlOon5wfHTcYbXI=";
   };
 
-  cargoHash = "sha256-LHRTmjAwDPMOP6YQfL01leEzqRKtteU1cnUqL6UeWKk=";
+  cargoHash = "sha256-8WQsHRY3bEZ/24uU93iuMs2t+i4z13C0X90Ey1WGosU=";
   checkFlags = [
     # requires network access
     "--skip=pipeline::image_pipeline::tests::test_process"
     "--skip=pipeline::image_pipeline::tests::test_to_ascii"
     "--skip=pipeline::image_pipeline::tests::test_to_ascii_ext"
     "--skip=pipeline::runner::tests::test_time_to_send_next_frame"
+    "--skip=pipeline::runner::tests::test_playback_speed_affects_frame_duration"
+    "--skip=pipeline::runner::tests::test_playback_speed_clamping"
   ];
 
   nativeBuildInputs = [
@@ -35,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     clang
     makeWrapper
+    ffmpeg_6-headless
   ];
 
   buildInputs = [
@@ -42,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib.dev
     ffmpeg_6-headless.dev
     opencv
+    mpv
   ];
 
   postFixup = ''
