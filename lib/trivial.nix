@@ -7,7 +7,6 @@ let
     functionArgs
     pathExists
     release
-    setFunctionArgs
     toBaseDigits
     version
     versionSuffix
@@ -1177,7 +1176,10 @@ in
     let
       fArgs = functionArgs f;
     in
-    g: setFunctionArgs g fArgs;
+    g: {
+      __functor = self: g;
+      __functionArgs = fArgs;
+    };
 
   /**
     Turns any non-callable values into constant functions.
