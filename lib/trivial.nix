@@ -13,7 +13,9 @@ let
     warn
     ;
   inherit (lib)
+    fromJSON
     isString
+    readFile
     ;
 in
 {
@@ -788,7 +790,7 @@ in
     importJSON :: Path -> Any
     ```
   */
-  importJSON = path: builtins.fromJSON (builtins.readFile path);
+  importJSON = path: fromJSON (readFile path);
 
   /**
     Reads a TOML file.
@@ -835,7 +837,7 @@ in
     importTOML :: Path -> Any
     ```
   */
-  importTOML = path: fromTOML (builtins.readFile path);
+  importTOML = path: fromTOML (readFile path);
 
   /**
     `warn` *`message`* *`value`*
