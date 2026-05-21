@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "prowlpy";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OMEGARAZER";
     repo = "prowlpy";
     tag = "v${version}";
-    hash = "sha256-S+hhZndOb5O9okrrnXGt7D0N4VRIThbMN1LYVPGzFy8=";
+    hash = "sha256-92r1E/dsXLRzaLXQdahXAPCmSG4T1Ihh/eDFDG3GlmY=";
   };
 
   build-system = [ setuptools ];
