@@ -2,7 +2,7 @@
   buildNpmPackage,
   lib,
   nodejs,
-  pnpm,
+  pnpm_11,
   tests,
 }:
 buildNpmPackage {
@@ -21,7 +21,7 @@ buildNpmPackage {
   '';
 
   passthru.tests = {
-    inherit (tests) pnpm;
+    inherit (tests) pnpm_11;
   };
 
   __structuredAttrs = true;
@@ -29,6 +29,6 @@ buildNpmPackage {
   meta = {
     license = lib.licenses.mit;
     mainProgram = "pnpm-fixup-state-db";
-    inherit (pnpm.meta) maintainers;
+    inherit (pnpm_11.meta) maintainers;
   };
 }

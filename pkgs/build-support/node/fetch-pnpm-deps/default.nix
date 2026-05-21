@@ -6,15 +6,13 @@
   moreutils,
   cacert,
   makeSetupHook,
-  pnpm,
+  pnpm_11,
   pnpm-fixup-state-db,
   writableTmpDirAsHomeHook,
   yq,
   zstd,
 }:
 let
-  pnpmLatest = pnpm;
-
   supportedFetcherVersions = [
     1 # First version. Here to preserve backwards compatibility
     2 # Ensure consistent permissions. See https://github.com/NixOS/nixpkgs/pull/422975
@@ -26,7 +24,7 @@ in
     {
       hash ? "",
       pname,
-      pnpm ? pnpmLatest,
+      pnpm ? pnpm_11,
       pnpmWorkspaces ? [ ],
       prePnpmInstall ? "",
       pnpmInstallFlags ? [ ],
