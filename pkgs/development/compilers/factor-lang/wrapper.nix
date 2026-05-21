@@ -2,6 +2,8 @@
   lib,
   stdenv,
   makeWrapper,
+  runCommandLocal,
+  buildFactorApplication,
   buildEnv,
   copyDesktopItems,
   makeDesktopItem,
@@ -220,6 +222,11 @@ stdenv.mkDerivation (finalAttrs: {
       extraVocabs
       vocabTree
       ;
+    tests = {
+      hello-world = import ./test/hello-world {
+        inherit lib runCommandLocal buildFactorApplication;
+      };
+    };
   };
 
   meta = factor-unwrapped.meta // {

@@ -20,15 +20,20 @@ let
 
       inherit factor-unwrapped;
 
-      factor-lang = callPackage ../development/compilers/factor-lang/wrapper.nix { };
+      factor-lang = callPackage ../development/compilers/factor-lang/wrapper.nix {
+        inherit (self) buildFactorApplication;
+      };
       factor-no-gui = callPackage ../development/compilers/factor-lang/wrapper.nix {
+        inherit (self) buildFactorApplication;
         guiSupport = false;
       };
       factor-minimal = callPackage ../development/compilers/factor-lang/wrapper.nix {
+        inherit (self) buildFactorApplication;
         enableDefaults = false;
         guiSupport = false;
       };
       factor-minimal-gui = callPackage ../development/compilers/factor-lang/wrapper.nix {
+        inherit (self) buildFactorApplication;
         enableDefaults = false;
       };
 
