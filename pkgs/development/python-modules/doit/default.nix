@@ -10,6 +10,7 @@
   cloudpickle,
   pyinotify,
   macfsevents,
+  setuptools,
   toml,
   doit-py,
   pyflakes,
@@ -21,7 +22,7 @@ let
   doit = buildPythonPackage rec {
     pname = "doit";
     version = "0.36.0";
-    format = "setuptools";
+    pyproject = true;
 
     disabled = !isPy3k;
 
@@ -30,7 +31,9 @@ let
       hash = "sha256-cdB8zJUUyyL+WdmJmVd2ZeqrV+FvZE0EM2rgtLriNLw=";
     };
 
-    propagatedBuildInputs = [
+    build-system = [ setuptools ];
+
+    dependencies = [
       cloudpickle
       importlib-metadata
       toml
