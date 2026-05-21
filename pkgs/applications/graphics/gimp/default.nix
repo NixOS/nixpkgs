@@ -339,7 +339,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
     donationPage = "https://www.gimp.org/donating/";
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [
+      jtojnar
+      bddvlpr
+    ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
