@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uiprotect";
-  version = "10.4.1";
+  version = "10.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J9SVsExFQMxUQSONsB6G8rb0nIu3sNKtHmiMdy6jpqk=";
+    hash = "sha256-JbIMa98Q7ZmyZHGXslH35aU5xbvBqgfpfDAAsQZJ63A=";
   };
 
   build-system = [ poetry-core ];
