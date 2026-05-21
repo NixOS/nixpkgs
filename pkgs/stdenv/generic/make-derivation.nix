@@ -32,6 +32,7 @@ let
     isBool
     isDerivation
     isInt
+    isFunction
     isList
     isPath
     isString
@@ -46,7 +47,6 @@ let
     seq
     splitString
     subtractLists
-    toExtension
     toFunction
     typeOf
     unique
@@ -112,8 +112,21 @@ let
           final:
           let
             prev = rattrs final;
-            thisOverlay = toExtension f0 final prev;
-            pos = unsafeGetAttrPos "version" thisOverlay;
+            # inlined version of toExtension
+            thisOverlay =
+              if isFunction f0 then
+                let
+                  fPrev = f0 prev;
+                in
+                if isFunction fPrev then
+                  # f is (final: prev: { ... })
+                  f0 final prev
+                else
+                  # f is (prev: { ... })
+                  fPrev
+              else
+                # f is not a function; probably { ... }
+                f0;
           in
           warnIf
             (
@@ -126,26 +139,31 @@ let
               && !(thisOverlay ? src)
               && !(thisOverlay.__intentionallyOverridingVersion or false)
             )
-            ''
-              ${
-                args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
-              } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                toString pos.line or "<unknown line>"
-              }:${toString pos.column or "<unknown column>"}.
+            (
+              let
+                pos = unsafeGetAttrPos "version" thisOverlay;
+              in
+              ''
+                ${
+                  args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
+                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                  toString pos.line or "<unknown line>"
+                }:${toString pos.column or "<unknown column>"}.
 
-              This is most likely not what you want. In order to properly change the version of a package, override
-              both the `version` and `src` attributes:
+                This is most likely not what you want. In order to properly change the version of a package, override
+                both the `version` and `src` attributes:
 
-              hello.overrideAttrs (oldAttrs: rec {
-                version = "1.0.0";
-                src = pkgs.fetchurl {
-                  url = "mirror://gnu/hello/hello-''${version}.tar.gz";
-                  hash = "...";
-                };
-              })
+                hello.overrideAttrs (oldAttrs: rec {
+                  version = "1.0.0";
+                  src = pkgs.fetchurl {
+                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                    hash = "...";
+                  };
+                })
 
-              (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-            ''
+                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+              ''
+            )
             (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
         );
 
