@@ -3,6 +3,7 @@
   python,
   buildPythonPackage,
   cmake,
+  msgpack-c,
   ninja,
   libmamba,
   pybind11,
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     bzip2
     spdlog
     fmt
+    msgpack-c
     tl-expected
     nlohmann_json
     yaml-cpp

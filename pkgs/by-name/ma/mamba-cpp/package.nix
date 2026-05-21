@@ -4,6 +4,7 @@
   bzip2,
   cmake,
   cli11,
+  msgpack-c,
   yaml-cpp,
   nlohmann_json,
   zstd,
@@ -29,6 +30,7 @@ stdenv.mkDerivation {
     zstd
     bzip2
     cli11
+    msgpack-c
     yaml-cpp
     libmamba
   ];

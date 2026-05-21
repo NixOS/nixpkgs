@@ -12,6 +12,7 @@
   reproc,
   libsolv,
   curl,
+  msgpack-c,
   libarchive,
   zstd,
   nix-update-script,
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmamba";
-  version = "2.4.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     tag = finalAttrs.version;
-    hash = "sha256-ojcAS5NYAhklACrBkmSHRPNiVLjUR/umll0vhoFnFBs=";
+    hash = "sha256-qvUo2OD+vh5oXF/ckz9vJyiQ9wpEbTrC+C4oYXOGFAU=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     reproc
     libsolv
     curl
+    msgpack-c
     libarchive
     zstd
     bzip2
@@ -52,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_LIBMAMBA" true)
+    (lib.cmakeBool "BUILD_LIBMAMBA_SPDLOG" true)
     (lib.cmakeBool "BUILD_SHARED" true)
   ];
 
