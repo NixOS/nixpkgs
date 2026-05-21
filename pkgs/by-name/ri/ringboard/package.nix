@@ -26,16 +26,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # release version needs nightly, so we use a custom tree, see:
   # https://github.com/SUPERCILEX/clipboard-history/issues/22#issuecomment-3676256971
-  version = "0.14.0-unstable-2026-01-19";
+  version = "0.16.2-unstable-2026-05-10";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "clipboard-history";
-    rev = "cb2e94add2388a68a8f015b77f9b082b1658b3b7";
-    hash = "sha256-r2632XJ/2Er1TuHCDNm6uItvdhqJ87i9p+h9M2MwKwk=";
+    rev = "0719d4398034efa32c3f093e06a2fdb033afbc22";
+    hash = "sha256-/LDxZ3bsuVwMiRzLTuLIs6y7jAS/84sXhTRhovXV8zM=";
   };
 
-  cargoHash = "sha256-c5Zdvz2xHsGh4VnOED2JiitNWwNTSkygaMFHPPLANqw=";
+  cargoHash = "sha256-ARSvWjeVWXksZ27lRJn67wXpgr8epagflOAULKmYaQ8=";
 
   nativeBuildInputs = [
     makeWrapper

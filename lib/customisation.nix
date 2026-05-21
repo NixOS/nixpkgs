@@ -30,7 +30,6 @@ let
     flatten
     deepSeq
     extends
-    toFunction
     id
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
@@ -842,14 +841,6 @@ rec {
     :::
   */
   extendMkDerivation =
-    let
-      extendsWithExclusion =
-        excludedNames: g: f: final:
-        let
-          previous = f final;
-        in
-        removeAttrs previous excludedNames // g final previous;
-    in
     {
       constructDrv,
       excludeDrvArgNames ? [ ],
@@ -858,24 +849,27 @@ rec {
       inheritFunctionArgs ? true,
       transformDrv ? id,
     }:
-    setFunctionArgs
+    {
       # Adds the fixed-point style support
-      (
-        fpargs:
+      __functor =
+        self: fpargs:
         transformDrv (
-          constructDrv (extendsWithExclusion excludeDrvArgNames extendDrvArgs (toFunction fpargs))
-        )
-      )
-      # Add __functionArgs
-      (
-        removeAttrs (
-          # Inherit the __functionArgs from the base build helper
-          optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
-          # Recover the __functionArgs from the derived build helper
-          // functionArgs (extendDrvArgs { })
-        ) excludeFunctionArgNames
-      )
-    // {
+          constructDrv (
+            final:
+            let
+              previous = if isFunction fpargs then fpargs final else fpargs;
+            in
+            removeAttrs previous excludeDrvArgNames // extendDrvArgs final previous
+          )
+        );
+
+      __functionArgs = removeAttrs (
+        # Inherit the __functionArgs from the base build helper
+        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
+        # Recover the __functionArgs from the derived build helper
+        // functionArgs (extendDrvArgs { })
+      ) excludeFunctionArgNames;
+
       inherit
         # Expose to the result build helper.
         constructDrv

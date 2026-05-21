@@ -13292,6 +13292,8 @@ self: super: with self; {
 
   py-aosmith = callPackage ../development/python-modules/py-aosmith { };
 
+  py-arwen = callPackage ../development/python-modules/py-arwen { };
+
   py-bip39-bindings = callPackage ../development/python-modules/py-bip39-bindings { };
 
   py-canary = callPackage ../development/python-modules/py-canary { };
