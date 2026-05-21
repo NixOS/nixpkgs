@@ -20,12 +20,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-nettool";
   version = "42.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nettool/${lib.versions.major version}/gnome-nettool-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-nettool/${lib.versions.major finalAttrs.version}/gnome-nettool-${finalAttrs.version}.tar.xz";
     hash = "sha256-pU8p7vIDiu5pVRyLGcpPdY5eueIJCkvGtWM9/wGIdR8=";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

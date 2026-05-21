@@ -4,17 +4,17 @@
   cmake,
   fetchFromGitHub,
   openssl,
-  xxHash,
+  xxhash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xva-img";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "eriklax";
     repo = "xva-img";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YyWfN6VcEABmzHkkoA/kRehLum1UxsNJ58XBs1pl+c8=";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
-    xxHash
+    xxhash
   ];
 
   postPatch = ''
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "xva-img";
   };
-}
+})

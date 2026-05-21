@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "docbook-xml-ebnf";
   version = "1.2b1";
 
   dtd = fetchurl {
-    url = "https://docbook.org/xml/ebnf/${version}/dbebnf.dtd";
+    url = "https://docbook.org/xml/ebnf/${finalAttrs.version}/dbebnf.dtd";
     sha256 = "0min5dsc53my13b94g2yd65q1nkjcf4x1dak00bsc4ckf86mrx95";
   };
   catalog = ./docbook-ebnf.cat;
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = lib.platforms.unix;
   };
-}
+})

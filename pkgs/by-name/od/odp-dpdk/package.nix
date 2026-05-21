@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   pkg-config,
   dpdk,
+  intel-ipsec-mb,
   libbpf,
   libconfig,
   libpcap,
@@ -18,19 +20,24 @@
   libnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odp-dpdk";
   version = "1.46.0.0_DPDK_22.11";
 
   src = fetchFromGitHub {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
   };
 
   patches = [
     ./odp-dpdk_25.03.patch
+    # Fix gcc 15 -Wunterminated-string-initialization errors in test code.
+    (fetchpatch2 {
+      url = "https://github.com/OpenDataPlane/odp-dpdk/commit/56c6bdbe8fe9db4c0441162ec269ef4e1ebd1a6a.patch";
+      hash = "sha256-aj4HuGb0BUxsKtFS3X3gXqBoRVRnKEBNxa/4heWhBlE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -44,6 +51,7 @@ stdenv.mkDerivation rec {
         ./dpdk_25.03.patch
       ];
     })
+    intel-ipsec-mb
     libconfig
     libpcap
     numactl
@@ -69,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.abuibrahim ];
   };
-}
+})

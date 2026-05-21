@@ -4,7 +4,7 @@
   fetchurl,
   python3,
   bdftopcf,
-  xorg,
+  mkfontscale,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     python3
     bdftopcf
-    xorg.mkfontscale
+    mkfontscale
   ];
 
   strictDeps = true;

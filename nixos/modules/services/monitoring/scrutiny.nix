@@ -236,6 +236,44 @@ in
           RuntimeDirectoryMode = "0700";
           StateDirectory = "scrutiny";
           StateDirectoryMode = "0750";
+
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          MemoryDenyWriteExecute = true;
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@resources"
+          ];
+          SystemCallArchitectures = "native";
+          LockPersonality = true;
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          PrivateTmp = true;
+          PrivateMounts = true;
+          PrivateDevices = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = "strict";
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictAddressFamilies = [
+            "AF_NETLINK"
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          SocketBindDeny = "any";
+          SocketBindAllow = [
+            "tcp:${toString cfg.settings.web.listen.port}"
+          ];
         };
       };
     })

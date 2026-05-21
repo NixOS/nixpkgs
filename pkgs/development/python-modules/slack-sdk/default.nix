@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   aiodns,
   aiohttp,
   aiosqlite,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.39.0";
+  version = "3.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     tag = "v${version}";
-    hash = "sha256-c9MPcamxXPxWnj5OpJNME/PTHssOxOJP6zjSLu5cW7Y=";
+    hash = "sha256-TH4wWQ1rCmlWgDtqX04FJKL95YgOKc543yJN/FLtKeA=";
   };
 
   build-system = [ setuptools ];
@@ -57,6 +58,10 @@ buildPythonPackage rec {
     "test_issue_690_oauth_v2_access"
     "test_error_response"
     "test_issue_1441_mixing_user_and_bot_installations"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+    # ConnectionResetError in webhook test server
+    "test_send_dict"
   ];
 
   disabledTestPaths = [

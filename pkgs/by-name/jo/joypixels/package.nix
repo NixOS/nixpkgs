@@ -47,14 +47,13 @@ let
     unfree licenses.
 
     configuration.nix:
-      nixpkgs.config.allowUnfreePredicate = pkg:
-        builtins.elem (lib.getName pkg) [
-          "joypixels"
-        ];
+      nixpkgs.config.allowUnfreePackages = [
+        "joypixels"
+      ];
       nixpkgs.config.joypixels.acceptLicense = true;
 
     config.nix:
-      allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+      allowUnfreePackages = [
         "joypixels"
       ];
       joypixels.acceptLicense = true;

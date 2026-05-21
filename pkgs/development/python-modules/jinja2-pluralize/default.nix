@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jinja2-pluralize";
   version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "jinja2_pluralize";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-31wtUBe5tUwKZst5DMqfwIlFg3w9v8MjWJID8f+3PBw=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dzabraev ];
   };
-}
+})

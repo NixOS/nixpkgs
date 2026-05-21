@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -15,19 +15,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "6.15.0";
+  version = "6.17.0";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rSz8lBlKIBVIEhFZayeFweMSzR4QtH+JxI1ltzIzB8M=";
+    hash = "sha256-A9LeitceqDGictQbB7OYOI/pggrW9u8A7TUMblK/LHM=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_29_2
     copyDesktopItems
     imagemagick
     makeWrapper
@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-2sDJazY9VB87cKUwfVyhk/muoWxmcPlzJdepbJ83Rrk=";
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 3;
+    hash = "sha256-0iTvrIe5PVj99ePWt8rn+laikdJ5TaNQ8GZGHyUTTQI=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

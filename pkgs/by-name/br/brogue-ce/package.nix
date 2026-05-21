@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brogue-ce";
-  version = "1.14.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "tmewett";
     repo = "BrogueCE";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-habmfq1jZa70eggLOgsPT6j1OGmmQ6qmWcCwRN2G4Fo=";
+    hash = "sha256-a+gzaBhQq9xgEVM20X+pbu7xzUcKzylxYk9qu9GQOAw=";
   };
 
   postPatch = ''
@@ -46,10 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     "DATADIR=$(out)/opt/brogue-ce"
     "TERMINAL=${if terminal then "YES" else "NO"}"
     "GRAPHICS=${if graphics then "YES" else "NO"}"
-    "MAC_APP=${if stdenv.isDarwin then "YES" else "NO"}"
+    "MAC_APP=${if stdenv.hostPlatform.isDarwin then "YES" else "NO"}"
   ];
 
-  postBuild = lib.optionalString (stdenv.isDarwin && graphics) ''
+  postBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && graphics) ''
     make Brogue.app $makeFlags
   '';
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString (stdenv.isDarwin && graphics) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin && graphics) ''
     mkdir -p $out/Applications
     mv Brogue.app "$out/Applications/Brogue CE.app"
   '';

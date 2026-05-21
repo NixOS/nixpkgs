@@ -3,6 +3,7 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   hatchling,
   lib,
   mashumaro,
@@ -10,19 +11,20 @@
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
+  tenacity,
   yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyportainer";
-  version = "1.0.23";
+  version = "1.0.40";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bPVAqL25kJ5EsnM7bUA+sqn0Q5uTOuFuKzneviK6078=";
+    hash = "sha256-pwyGy2pVwY4vfjEpEYLK+9kh+HxLjfQE+JfvPzsLt5k=";
   };
 
   build-system = [ hatchling ];
@@ -31,6 +33,7 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     mashumaro
     orjson
+    tenacity
     yarl
   ];
 
@@ -38,6 +41,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     aresponses
+    freezegun
     pytest-cov-stub
     pytestCheckHook
     syrupy

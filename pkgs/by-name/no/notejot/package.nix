@@ -16,14 +16,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notejot";
   version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = "notejot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-p5F0OITgfZyvHwndI5r5BE524+nft7A2XfR3BJZFamU=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "io.github.lainsce.Notejot";
   };
-}
+})

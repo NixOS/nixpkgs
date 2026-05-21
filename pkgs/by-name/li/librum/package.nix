@@ -12,14 +12,14 @@
 let
   mupdf-cxx = mupdf.override { enableCxx = true; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librum";
   version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "Librum-Reader";
     repo = "Librum";
-    tag = "v.${version}";
+    tag = "v.${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-Iwcbcz8LrznFP8rfW6mg9p7klAtTx4daFxylTeFKrH0=";
   };
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       completely open source.
     '';
     homepage = "https://librumreader.com";
-    changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
+    changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "librum";
     maintainers = with lib.maintainers; [
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,14 +5,14 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rails-new";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "rails";
     repo = "rails-new";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7hEdLu9Koi2K2EFIl530yA+BGZmATFCcBMe3htYb0rs=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rails-new";
     maintainers = with lib.maintainers; [ coat ];
   };
-}
+})

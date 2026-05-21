@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sift";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "svent";
     repo = "sift";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IZ4Hwg5NzdSXtrIDNxtkzquuiHQOmLV1HSx8gpwE/i0=";
   };
 
@@ -45,4 +45,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ viraptor ];
     license = lib.licenses.gpl3;
   };
-}
+})

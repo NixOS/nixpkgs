@@ -685,12 +685,14 @@ struct(GrubState => {
     efi => '$',
     devices => '$',
     efiMountPoint => '$',
+    grub => '$',
+    grubEfi => '$',
     extraGrubInstallArgs => '@',
 });
 # If you add something to the state file, only add it to the end
 # because it is read line-by-line.
 sub readGrubState {
-    my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "", extraGrubInstallArgs => () );
+    my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "", grub => "", grubEfi => "", extraGrubInstallArgs => () );
     open my $fh, "<", "$bootPath/grub/state" or return $defaultGrubState;
     local $/ = "\n";
     my $name = <$fh>;
@@ -721,8 +723,10 @@ sub readGrubState {
     }
     my %jsonState = %{decode_json($jsonStateLine)};
     my @extraGrubInstallArgs = exists($jsonState{'extraGrubInstallArgs'}) ? @{$jsonState{'extraGrubInstallArgs'}} : ();
+    my $grubValue = exists($jsonState{'grub'}) ? $jsonState{'grub'} : "";
+    my $grubEfiValue = exists($jsonState{'grubEfi'}) ? $jsonState{'grubEfi'} : "";
     close $fh;
-    my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint, extraGrubInstallArgs => \@extraGrubInstallArgs );
+    my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint, extraGrubInstallArgs => \@extraGrubInstallArgs, grub => $grubValue, grubEfi => $grubEfiValue );
     return $grubState
 }
 
@@ -734,15 +738,16 @@ my @prevExtraGrubInstallArgs = @{$prevGrubState->extraGrubInstallArgs};
 
 my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
 my $extraGrubInstallArgsDiffer = scalar (List::Compare->new( '-u', '-a', \@extraGrubInstallArgs, \@prevExtraGrubInstallArgs)->get_symmetric_difference());
-my $nameDiffer = get("fullName") ne $prevGrubState->name;
-my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
 my $efiDiffer = $efiTarget ne $prevGrubState->efi;
 my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
+# re-installing grub once the package store path changes is necessary, because
+# introducing patches or adjusting builds does not always bump the version number
+my $grubStorePathsDiffer = ($grub ne $prevGrubState->grub) || ($grubEfi ne $prevGrubState->grubEfi);
 if (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1") {
     warn "NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER";
     $ENV{'NIXOS_INSTALL_BOOTLOADER'} = "1";
 }
-my $requireNewInstall = $devicesDiffer || $extraGrubInstallArgsDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_BOOTLOADER'} // "") eq "1");
+my $requireNewInstall = $devicesDiffer || $extraGrubInstallArgsDiffer || $efiDiffer || $efiMountPointDiffer || $grubStorePathsDiffer || (($ENV{'NIXOS_INSTALL_BOOTLOADER'} // "") eq "1");
 
 # install a symlink so that grub can detect the boot drive
 my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space: $!";
@@ -795,7 +800,9 @@ if ($requireNewInstall != 0) {
     print $fh join( ",", @deviceTargets ), "\n" or die;
     print $fh $efiSysMountPoint, "\n" or die;
     my %jsonState = (
-        extraGrubInstallArgs => \@extraGrubInstallArgs
+        extraGrubInstallArgs => \@extraGrubInstallArgs,
+        grub => $grub,
+        grubEfi => $grubEfi
     );
     my $jsonStateLine = encode_json(\%jsonState);
     print $fh $jsonStateLine, "\n" or die;

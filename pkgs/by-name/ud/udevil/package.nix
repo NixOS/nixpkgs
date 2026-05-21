@@ -10,14 +10,14 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "udevil";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "udevil";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TTW2gPa4ND6ILq4yxKEL07AQpSqfiEo66S72lVEmpFk=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

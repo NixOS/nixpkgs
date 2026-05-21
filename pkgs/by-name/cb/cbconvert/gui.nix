@@ -7,7 +7,7 @@
   wrapGAppsHook3,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cbconvert-gui";
 
   inherit (cbconvert)
@@ -29,7 +29,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.appVersion=${version}"
+    "-X main.appVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -46,4 +46,4 @@ buildGoModule rec {
   meta = cbconvert.meta // {
     mainProgram = "cbconvert-gui";
   };
-}
+})

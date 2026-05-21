@@ -34,8 +34,8 @@ let
         src
         ;
       pnpm = pnpm_9;
-      fetcherVersion = 1;
-      hash = "sha256-+yLpSbDzr1OV/bmUUg6drOvK1ok3cBd+RRV7Qrrlp+Q=";
+      fetcherVersion = 3;
+      hash = "sha256-FBZk7qeYNi7JX99Sk1qe52YUE8GUYINJKid0mEBXMjU=";
     };
 
     nativeBuildInputs = [

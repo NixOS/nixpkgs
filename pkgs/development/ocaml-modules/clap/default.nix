@@ -4,7 +4,7 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "clap";
   version = "0.3.0";
 
@@ -12,8 +12,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "rbardou";
-    repo = pname;
-    rev = version;
+    repo = "clap";
+    rev = finalAttrs.version;
     hash = "sha256-IEol27AVYs55ntvNprBxOk3/EsBKAdPkF3Td3w9qOJg=";
   };
 
@@ -21,4 +21,4 @@ buildDunePackage rec {
     description = "Command-Line Argument Parsing, imperative style with a consumption mechanism";
     license = lib.licenses.mit;
   };
-}
+})

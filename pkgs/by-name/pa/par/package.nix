@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "par";
   version = "1.53.0";
 
   src = fetchurl {
-    url = "http://www.nicemice.net/par/Par-${version}.tar.gz";
+    url = "http://www.nicemice.net/par/Par-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-yAnGIOuCtYlVOsVLmJjI2lUZbSYjOdE8BG8r5ErEeAQ=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     # See https://fedoraproject.org/wiki/Licensing/Par for license details
     license = lib.licenses.free;
   };
-}
+})

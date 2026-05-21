@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "apprun-cli";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fujiwara";
     repo = "apprun-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3M+kRXTQ0yaxQc9E5T9UThqEda2S1F77SJzX7burZlU=";
   };
 
@@ -35,9 +35,9 @@ buildGoModule rec {
   meta = {
     description = "CLI for sakura AppRun";
     homepage = "https://github.com/fujiwara/apprun-cli";
-    changelog = "https://github.com/fujiwara/apprun-cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/fujiwara/apprun-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "apprun-cli";
   };
-}
+})

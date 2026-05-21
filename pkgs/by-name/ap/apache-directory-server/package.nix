@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apache-directory-server";
   version = "2.0.0.AM26";
 
   src = fetchzip {
-    url = "mirror://apache/directory/apacheds/dist/${version}/apacheds-${version}.zip";
+    url = "mirror://apache/directory/apacheds/dist/${finalAttrs.version}/apacheds-${finalAttrs.version}.zip";
     sha256 = "sha256-36kDvfSy5rt/3+nivEFTepnIKf6sX0NTgPRm28M+1v4=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.ners ];
   };
-}
+})

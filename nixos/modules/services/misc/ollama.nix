@@ -354,7 +354,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    abysssol
     onny
   ];
 }

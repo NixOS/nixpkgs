@@ -8,21 +8,27 @@
   setuptools,
 
   # dependencies
-  av,
   ctranslate2,
   faster-whisper,
+  huggingface-hub,
   nltk,
   numpy,
+  omegaconf,
   pandas,
   pyannote-audio,
   torch,
   torchaudio,
+  torchcodec,
+  torchvision,
   transformers,
   triton,
 
   # native packages
   ffmpeg,
   ctranslate2-cpp, # alias for `pkgs.ctranslate2`, required due to colliding with the `ctranslate2` Python module.
+
+  # tests
+  versionCheckHook,
 
   # enable GPU support
   cudaSupport ? torch.cudaSupport,
@@ -36,16 +42,16 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whisperx";
-  version = "3.7.4";
+  version = "3.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-bain";
     repo = "whisperX";
-    tag = "v${version}";
-    hash = "sha256-wmCGHRx1JaOs5+7fp2jeh8PIR5dlmOl8hKrIw2550Bk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dFjB0X7JUqv7r64QLbsQwJNRWti+xGUOWKkhOxJE1tg=";
   };
 
   # As `makeWrapperArgs` does not apply to the module, and whisperx depends on `ffmpeg`,
@@ -60,45 +66,42 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
-    "av"
-    "numpy"
-    "pandas"
-    "pyannote-audio"
+    "huggingface-hub"
     "torch"
     "torchaudio"
   ];
   dependencies = [
-    av
     ctranslate
     faster-whisper
+    huggingface-hub
     nltk
     numpy
+    omegaconf
     pandas
     pyannote-audio
     torch
     torchaudio
+    torchcodec
+    torchvision
     transformers
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
   ];
 
-  # Import check fails due on `aarch64-linux` ONLY in the sandbox due to onnxruntime
-  # not finding its default logger, which then promptly segfaults.
-  # Simply run the import check on every other platform instead.
-  pythonImportsCheck = lib.optionals (
-    !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
-  ) [ "whisperx" ];
+  # No python tests in repository
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
-  # No tests in repository
-  doCheck = false;
+  pythonImportsCheck = [ "whisperx" ];
 
   meta = {
     mainProgram = "whisperx";
     description = "Automatic Speech Recognition with Word-level Timestamps (& Diarization)";
     homepage = "https://github.com/m-bain/whisperX";
-    changelog = "https://github.com/m-bain/whisperX/releases/tag/${src.tag}";
+    changelog = "https://github.com/m-bain/whisperX/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];
   };
-}
+})

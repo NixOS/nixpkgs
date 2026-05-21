@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "codeowners";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "hmarr";
     repo = "codeowners";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PMT3ihxCD4TNgTZOD4KB9Od1djIhnlMa8zuD6t1OieU=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yorickvp ];
   };
-}
+})

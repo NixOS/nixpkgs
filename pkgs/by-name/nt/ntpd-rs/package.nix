@@ -11,22 +11,35 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ntpd-rs";
-  version = "1.6.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
-    tag = "v${version}";
-    hash = "sha256-X8nmfG7ZhtB4P6N0ku0Gc9xHOGJFeGTnB1WizZ2X1fk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JeOgXIvn5kVy+KjCpjkR+7di1SYD3hi0dEoVpm5vxDg=";
   };
 
-  cargoHash = "sha256-p3ryAggKR6ylCvaQ8M30OmLyGCL4bOYR/YwqNfAzcAg=";
+  cargoHash = "sha256-rQdLNYa9nyiA7xgi57aDjeSQpa4D7BDW32SVEduSm2U=";
 
   nativeBuildInputs = [
     pandoc
     installShellFiles
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  # These fail based on timestamp issues with bundled certificates
+  # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
+  checkFlags = [
+    "--skip=daemon::keyexchange::tests::key_exchange_connection_limiter"
+    "--skip=daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
+    "--skip=daemon::ntp_source::tests::test_deny_stops_poll"
+    "--skip=daemon::ntp_source::tests::test_timeroundtrip"
+    "--skip=daemon::server::tests::test_server_serves"
+    "--skip=daemon::spawn::nts::tests::allow_srv_direct_name_resolution"
   ];
 
   postPatch = ''
@@ -53,7 +66,7 @@ rustPlatform.buildRustPackage rec {
       nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.ntpd-rs;
       version = testers.testVersion {
         package = ntpd-rs;
-        inherit version;
+        inherit (finalAttrs) version;
       };
     };
 
@@ -63,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Full-featured implementation of the Network Time Protocol";
     homepage = "https://tweedegolf.nl/en/pendulum";
-    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
@@ -76,4 +89,4 @@ rustPlatform.buildRustPackage rec {
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
-}
+})

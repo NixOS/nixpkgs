@@ -8,9 +8,6 @@ let
 in
 {
   name = "rabbitmq";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ offline ];
-  };
 
   nodes.machine = {
     services.rabbitmq = {

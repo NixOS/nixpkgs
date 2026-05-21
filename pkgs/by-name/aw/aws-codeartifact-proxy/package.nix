@@ -4,17 +4,17 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-codeartifact-proxy";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "sktan";
     repo = "aws-codeartifact-proxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dcUJ2r0VBUNk8kKY1fPkUHoJi1fhAQbd2K+9MC/ddGE=";
   };
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   vendorHash = "sha256-5D/aKNU7ZtDMJW+KImBwN4bhpSexsldtCtA3IIHJrQU=";
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lafrenierejm ];
     mainProgram = "aws-codeartifact-proxy";
   };
-}
+})

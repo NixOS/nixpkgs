@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dupe-krill";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "dupe-krill";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Udj5Uc1P/c/wiF42m/qPrTtSvMpNsXjqP0LR08zslNI=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ urbas ];
     mainProgram = "dupe-krill";
   };
-}
+})

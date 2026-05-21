@@ -25,7 +25,7 @@
 
 let
   pname = "sparrow";
-  version = "2.2.3";
+  version = "2.4.2";
 
   openjdk = zulu25.override { enableJavaFX = true; };
 
@@ -36,13 +36,12 @@ let
     }
     ."${stdenvNoCC.hostPlatform.system}";
 
-  # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
     hash =
       {
-        x86_64-linux = "sha256-MsERgfJGpxRkQm4Ww30Tc95kThjlgI+nO4bq2zNGdeU=";
-        aarch64-linux = "sha256-31x4Ck/+Fa6CvBb6o9ncVH99Zeh0DUVv/hqVN31ysHk=";
+        x86_64-linux = "sha256-BvtQZ+b+Hj+9eBdLg/KfYUeRQth0LWwwbZUQMfyTayE=";
+        aarch64-linux = "sha256-SMVO07kuTo1Yfj+8QfPOvkLR4551tQadJPoIMdT9GFE=";
       }
       ."${stdenvNoCC.hostPlatform.system}";
 
@@ -73,12 +72,12 @@ let
 
   manifest = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
-    hash = "sha256-qPIllqFqe84BSIcYYYa+rKJvSpN/QnomHnsOoTxlyl4=";
+    hash = "sha256-cv/bkUZArASgWjgEphdWc6p8R9uOOkT+Idc53sjEOQ0=";
   };
 
   manifestSignature = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
-    hash = "sha256-PpruG9l7MhI30b6dd96KAkkQvyMNuh36GtmEdYaRgac=";
+    hash = "sha256-lIamtUX45HVTrUJKbiGsFkRanM17KaZS0NwlTAoptEE=";
   };
 
   publicKey = ./publickey.asc;
@@ -177,6 +176,8 @@ let
       # Delete unneeded native libs.
 
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-x86-64
+      rm -fR com.sparrowwallet.merged.module/com/sun/jna/dragonflybsd-x86-64
+      rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-aarch64
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/freebsd-x86
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-arm
       rm -fR com.sparrowwallet.merged.module/com/sun/jna/linux-armel
@@ -291,6 +292,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = {
+      command = [
+        ./update.sh
+        ./.
+      ];
+      supportedFeatures = [ "commit" ];
+    };
+  };
 
   meta = {
     description = "Modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability";

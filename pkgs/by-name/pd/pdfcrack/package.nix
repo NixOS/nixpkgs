@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdfcrack";
   version = "0.21";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pdfcrack/pdfcrack/pdfcrack-${version}.tar.gz";
+    url = "mirror://sourceforge/pdfcrack/pdfcrack/pdfcrack-${finalAttrs.version}.tar.gz";
     hash = "sha256-JvANSvy3C1g5BHvG9i5CUwc6xDe9tSbwHowEsiDpd2I=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ qoelet ];
   };
-}
+})

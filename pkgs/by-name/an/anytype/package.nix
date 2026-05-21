@@ -17,23 +17,23 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.53.1";
+  version = "0.54.11";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GDx40UA+Grc/xvlfwqtN1WNonm9c0dci1rereWpfhjs=";
+    hash = "sha256-HF7bP3Ry3djNQnFDl0v6x9hzMpSLMXyI6UBItgGT+DI=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "f9dc9286757c2544fe801a1e31067cbe708cc6f1";
-    hash = "sha256-/rZCpeKGtPttYbuJbhbOV4P1sXSvIYve0WO/SL20isw=";
+    rev = "afa12aeb0cea6c77ce38c3e3bfd082d532948a1c";
+    hash = "sha256-YpOkmm7vW97t19twfLNExRHQvLVcrC+oDtHjwJL9dx8=";
   };
 
-  npmDepsHash = "sha256-hJJK/RJnSm8QpjGcnxUsemrAsRNYCHSGSH8iUZZYXJI=";
+  npmDepsHash = "sha256-/QWHJ2grw34LOEIDn93WDTEpQH001vVtuQgncR2SRYQ=";
 
   # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
   nodejs = nodejs_22;
@@ -57,6 +57,7 @@ buildNpmPackage (finalAttrs: {
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
     ./0002-remove-grpc-devtools.patch
+    ./0003-remove-desktop-entry.patch
   ];
 
   buildPhase = ''
@@ -130,15 +131,14 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
-    changelog = "https://community.anytype.io/t/anytype-desktop-${
-      builtins.replaceStrings [ "." ] [ "-" ] (lib.versions.majorMinor finalAttrs.version)
-    }-0-released";
+    changelog = "https://github.com/anyproto/anytype-ts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
       autrimpo
       adda
       kira-bruneau
+      xmnlz
     ];
     platforms = [
       "x86_64-linux"

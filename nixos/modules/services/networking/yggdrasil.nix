@@ -49,10 +49,7 @@ let
   cleanSettings = lib.filterAttrs (n: v: v != null) baseSettings;
 
   # Generate configuration file from user settings
-  configFile = pkgs.writeTextFile {
-    name = "yggdrasil.conf";
-    text = builtins.toJSON cleanSettings;
-  };
+  configFile = pkgs.writers.writeJSON "yggdrasil.conf" cleanSettings;
 in
 {
   imports = [

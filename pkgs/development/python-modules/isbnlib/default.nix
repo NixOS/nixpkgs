@@ -2,20 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # tests
   pytestCheckHook,
   pytest-cov-stub,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "isbnlib";
   version = "3.10.14";
   pyproject = true;
 
+  # Several tests fail and suggest that the package is incompatible with python >= 3.14
+  disabled = pythonAtLeast "3.14";
+
   src = fetchFromGitHub {
     owner = "xlcnd";
     repo = "isbnlib";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d6p0wv7kj+NOZJRE2rzQgb7PXv+E3tASIibYCjzCdx8=";
   };
 
@@ -32,8 +40,8 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "isbnlib/test/" ];
 
-  # All disabled tests require a network connection
   disabledTests = [
+    # Require a network connection
     "test_cache"
     "test_editions_any"
     "test_editions_merge"
@@ -66,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extract, clean, transform, hyphenate and metadata for ISBNs";
     homepage = "https://github.com/xlcnd/isbnlib";
-    changelog = "https://github.com/xlcnd/isbnlib/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/xlcnd/isbnlib/blob/${finalAttrs.src.tag}/CHANGES.txt";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

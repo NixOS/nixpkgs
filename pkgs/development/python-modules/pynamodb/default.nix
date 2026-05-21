@@ -8,9 +8,7 @@
   pytest-env,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +25,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ botocore ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  dependencies = [ botocore ];
 
   optional-dependencies = {
     signal = [ blinker ];

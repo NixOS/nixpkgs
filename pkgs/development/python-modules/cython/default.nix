@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "cython";
-  version = "3.1.6";
+  version = "3.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
     tag = version;
-    hash = "sha256-OB9DsGabbn5pE+8Ru29D3Jp9Wu+gwlHYYy79x+M+HPI=";
+    hash = "sha256-8J5EcaQXexWEA+se5rCR06CwlEYao2XK5TnVNgFGHYQ=";
   };
 
   build-system = [
@@ -117,7 +117,7 @@ buildPythonPackage rec {
       attributes. This allows the compiler to generate very efficient C code
       from Cython code.
     '';
-    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/cython/cython/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
     maintainers = [ ];

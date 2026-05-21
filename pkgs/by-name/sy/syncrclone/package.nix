@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "syncrclone";
   version = "0-unstable-2023-03-23";
   pyproject = true;
@@ -25,10 +25,10 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Bidirectional sync tool for rclone";
     homepage = "https://github.com/Jwink3101/syncrclone";
-    changelog = "https://github.com/Jwink3101/syncrclone/blob/${src.rev}/docs/changelog.md";
+    changelog = "https://github.com/Jwink3101/syncrclone/blob/${finalAttrs.src.rev}/docs/changelog.md";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prominentretail ];
     mainProgram = "syncrclone";
   };
-}
+})

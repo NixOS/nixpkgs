@@ -11,14 +11,14 @@
   withTimestamp ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doas";
   version = "6.8.2";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "9uOQ2Ta5HzEpbCz2vbqZEEksPuIjL8lvmfmynfqxMeM=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ cole-h ];
   };
-}
+})

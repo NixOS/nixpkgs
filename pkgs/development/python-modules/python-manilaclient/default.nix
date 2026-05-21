@@ -1,34 +1,33 @@
 {
   lib,
   buildPythonPackage,
+  callPackage,
+  debtcollector,
   fetchPypi,
-  pbr,
+  keystoneauth1,
   openstackdocstheme,
+  osc-lib,
   oslo-config,
   oslo-log,
   oslo-serialization,
   oslo-utils,
+  pbr,
   prettytable,
   requests,
   setuptools,
   sphinxHook,
   sphinxcontrib-programoutput,
-  babel,
-  osc-lib,
-  python-keystoneclient,
-  debtcollector,
-  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "5.7.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_manilaclient";
     inherit version;
-    hash = "sha256-BdFUVnvSX7yitHSlP/GzD2jzvF8vh9B4QVVQrqYwW9Q=";
+    hash = "sha256-EQwsbwZzFXE+KKDH2SxlC6G8oFvdXo2bK4bJKJZfrVw=";
   };
 
   build-system = [
@@ -41,17 +40,16 @@ buildPythonPackage rec {
   sphinxBuilders = [ "man" ];
 
   dependencies = [
-    pbr
+    debtcollector
+    keystoneauth1
+    osc-lib
     oslo-config
     oslo-log
     oslo-serialization
     oslo-utils
+    pbr
     prettytable
     requests
-    babel
-    osc-lib
-    python-keystoneclient
-    debtcollector
   ];
 
   # Checks moved to 'passthru.tests' to workaround infinite recursion

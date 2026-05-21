@@ -1,16 +1,16 @@
 diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
-index dfccc661..85233f3b 100644
+index dc545d4b62..4dd8ade86e 100644
 --- a/src/dist/component/package.rs
 +++ b/src/dist/component/package.rs
-@@ -113,6 +113,7 @@ impl Package for DirectoryPackage {
+@@ -130,6 +130,7 @@
                      } else {
                          builder.move_file(path.clone(), &src_path)?
                      }
 +                    nix_patchelf_if_needed(&target.prefix().path().join(path.clone()))
                  }
-                 "dir" => {
+                 ComponentPartKind::Dir => {
                      if self.copy {
-@@ -135,6 +136,176 @@ impl Package for DirectoryPackage {
+@@ -152,6 +153,176 @@
      }
  }
  
@@ -31,7 +31,7 @@ index dfccc661..85233f3b 100644
 +        .parent()
 +        .ok_or(anyhow!("failed to get parent directory"))?
 +        .with_file_name("nix-support");
-+    let mut file = std::fs::File::create(dest_lld_path)?;
++    let mut file = fs::File::create(dest_lld_path)?;
 +    ld_wrapper_path.push("ld-wrapper.sh");
 +
 +    let wrapped_script = format!(
@@ -184,6 +184,6 @@ index dfccc661..85233f3b 100644
 +    }
 +}
 +
- #[derive(Debug)]
- pub(crate) struct TarPackage<'a>(DirectoryPackage, temp::Dir<'a>);
- 
+ /// Handle the async result of io operations
+ /// Replaces op.result with Ok(())
+ fn filter_result(op: &mut CompletedIo) -> io::Result<()> {

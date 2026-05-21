@@ -18,13 +18,18 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.76.0";
+  version = "1.80.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e+eDiNbaGiXA1exQZSPbWLGL4i2cN9jToywIvkmHvXM=";
+    hash = "sha256-KayhXt0GiMIroB18wBywANcrIDP0o8cqgaGbVv0UMlc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail cython==3.1.1 cython
+  '';
 
   outputs = [
     "out"
@@ -59,10 +64,12 @@ buildPythonPackage rec {
     unset AR
   '';
 
-  GRPC_BUILD_WITH_BORING_SSL_ASM = "";
-  GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  env = {
+    GRPC_BUILD_WITH_BORING_SSL_ASM = "";
+    GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  };
 
   # does not contain any tests
   doCheck = false;

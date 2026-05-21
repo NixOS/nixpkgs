@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rmscene";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ricklupton";
     repo = "rmscene";
     tag = "v${version}";
-    hash = "sha256-LaUzWEptzCGir6ZOgyMfP3Uf+jERT+cTb7Wx/eean1I=";
+    hash = "sha256-AejIkrvNIgUoNtDJwqPvMMToa12dnZQDKWvNztOgAvc=";
   };
 
   build-system = [

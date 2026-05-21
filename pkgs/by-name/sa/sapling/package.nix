@@ -159,16 +159,18 @@ python312Packages.buildPythonApplication {
     libiconv
   ];
 
-  HGNAME = "sl";
-  LIBCLANG_PATH = "${lib.getLib libclang}/lib";
-  SAPLING_OSS_BUILD = "true";
-  SAPLING_VERSION = version;
-  SAPLING_VERSION_HASH =
-    let
-      sha1Hash = builtins.hashString "sha1" version;
-      hexSubstring = builtins.substring 0 16 sha1Hash;
-    in
-    lib.trivial.fromHexString hexSubstring;
+  env = {
+    HGNAME = "sl";
+    LIBCLANG_PATH = "${lib.getLib libclang}/lib";
+    SAPLING_OSS_BUILD = "true";
+    SAPLING_VERSION = version;
+    SAPLING_VERSION_HASH =
+      let
+        sha1Hash = builtins.hashString "sha1" version;
+        hexSubstring = builtins.substring 0 16 sha1Hash;
+      in
+      lib.trivial.fromHexString hexSubstring;
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook

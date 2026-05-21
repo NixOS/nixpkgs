@@ -18,7 +18,7 @@
   pkg-config,
   libGL,
   libvorbis,
-  libX11,
+  libx11,
   libzip,
   nlohmann_json,
   SDL2,
@@ -124,13 +124,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
-  version = "0.9.9.1-unstable-2025-12-23";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "SpaghettiKart";
-    rev = "b0582b5c32914a815fe6a2ffc41f3eb9c24a3a2b";
-    hash = "sha256-TTsW49jo8yNxuL5GFStiQRWOBw/X8Pt2hMKmDZPpEVI=";
+    tag = finalAttrs.version;
+    hash = "sha256-XEsOtt2Xg/HyYw07YGXTIBOCtIDbh3hmaBEQpbFVFYc=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Recent builds enabled LTO which won't build with nix
-  NIX_CFLAGS_COMPILE = "-fno-lto";
+  env.NIX_CFLAGS_COMPILE = "-fno-lto";
 
   nativeBuildInputs = [
     cmake
@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libvorbis
-    libX11
+    libx11
     libzip
     nlohmann_json
     SDL2
@@ -252,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../yamls $out/share/spaghettikart/
     cp -r ../meta $out/share/spaghettikart/
     install -Dm644 -t $out/share/spaghettikart {spaghetti.o2r,config.yml,gamecontrollerdb.txt}
-    install -Dm644 ../icon.png $out/share/pixmaps/spaghettikart.png
+    install -Dm644 ../icon.png $out/share/icons/hicolor/256x256/apps/spaghettikart.png
     install -Dm644 -t $out/share/licenses/spaghettikart/libgfxd ${libgfxd}/LICENSE
     install -Dm644 -t $out/share/licenses/spaghettikart/libultraship ../libultraship/LICENSE
     install -Dm644 -t $out/share/licenses/spaghettikart/thread_pool ${thread_pool}/LICENSE.txt
@@ -279,7 +279,6 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "spaghettikart";
       exec = "Spaghettify";
       comment = finalAttrs.meta.description;
-      genericName = "spaghettikart";
       desktopName = "spaghettikart";
       categories = [ "Game" ];
     })

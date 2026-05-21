@@ -6,7 +6,9 @@
   pandoc,
   installShellFiles,
   perl,
-  xorg,
+  libxext,
+  libx11,
+  x11perf,
   libGLX,
   coreutils,
   unixtools,
@@ -17,16 +19,15 @@
   withGL ? true,
   withX11perf ? true,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unixbench";
-  version = "unstable-2023-02-27";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "kdlucas";
     repo = "byte-unixbench";
-    rev = "a07fcc03264915c624f0e4818993c5b4df3fa703";
-    hash = "sha256-gmRWAqE9/HBb0S9rK0DXoaCoiGbtat0gmdeozhbv0NI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GQYejkIf7g2abHafJJQTl0nWqRGsg9VDtYQgyBY/jOg=";
   };
 
   patches = [
@@ -35,11 +36,14 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p2" ];
 
-  sourceRoot = "${src.name}/UnixBench";
+  sourceRoot = "${finalAttrs.src.name}/UnixBench";
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "-Wa,-q" ""
+      --replace-fail "-Wa,-q" ""
+
+    substituteInPlace src/syscall.c \
+      --replace-fail @coreutils@ "${coreutils}"
   '';
 
   nativeBuildInputs = [
@@ -52,8 +56,8 @@ stdenv.mkDerivation rec {
     perl
   ]
   ++ lib.optionals withGL [
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     libGLX
   ];
 
@@ -66,7 +70,7 @@ stdenv.mkDerivation rec {
     gawk
   ]
   ++ lib.optionals withX11perf [
-    xorg.x11perf
+    x11perf
   ];
 
   makeFlags = [
@@ -75,6 +79,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withGL [
     "GRAPHIC_TESTS=defined"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   installPhase = ''
     runHook preInstall
@@ -87,22 +93,22 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace USAGE \
-      --replace 'Run"' 'ubench"' \
-      --replace './Run' 'ubench' \
-      --replace 'Run ' 'ubench '
+      --replace-fail 'Run"' 'ubench"' \
+      --replace-fail './Run' 'ubench' \
+      --replace-fail 'Run ' 'ubench '
     pandoc -f rst -t man USAGE -o ubench.1
     installManPage ubench.1
   '';
 
   preFixup = ''
     substituteInPlace $out/libexec/pgms/multi.sh \
-      --replace '/bin/sh "$' '${runtimeShell} "$'
+      --replace-fail '/bin/sh "$' '${runtimeShell} "$'
 
     substituteInPlace $out/bin/ubench \
       --subst-var out
 
     wrapProgram $out/bin/ubench \
-      --prefix PATH : ${lib.makeBinPath runtimeDependencies}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDependencies}
   '';
 
   meta = {
@@ -113,4 +119,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

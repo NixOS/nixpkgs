@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vendir";
-  version = "0.45.0";
+  version = "0.45.3";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-vendir";
-    rev = "v${version}";
-    sha256 = "sha256-UURZta+iEMlHf2vnosGrmuic5WrIZ4kf0qFILPwkH2Q=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-pGChtADYje6tGM0qYTwSrGQkUu6P1N8AZiXLJDWoYjA=";
   };
 
   vendorHash = null;
@@ -20,7 +20,7 @@ buildGoModule rec {
   subPackages = [ "cmd/vendir" ];
 
   ldflags = [
-    "-X carvel.dev/vendir/pkg/vendir/version.Version=${version}"
+    "-X carvel.dev/vendir/pkg/vendir/version.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ russell ];
   };
-}
+})

@@ -8,11 +8,12 @@
   scrcpy,
   android-tools,
   ffmpeg,
+  imagemagick,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtscrcpy";
   version = "3.3.3";
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
       owner = "barry-ran";
       repo = "QtScrcpy";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-UZgAFptVC67IXYdxTEmB18fJlFdaOrYrQY4JmdGEJXE=";
       fetchSubmodules = true;
     }).overrideAttrs
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     pkg-config
     libsForQt5.wrapQtAppsHook
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [
@@ -86,7 +88,8 @@ stdenv.mkDerivation rec {
       install -Dm644 sndcpy.apk -t $out/share/qtscrcpy
     popd
 
-    install -Dm644 ../QtScrcpy/res/image/tray/logo.png $out/share/pixmaps/qtscrcpy.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick ../QtScrcpy/res/image/tray/logo.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/qtscrcpy.png
 
     runHook postInstall
   '';
@@ -132,4 +135,4 @@ stdenv.mkDerivation rec {
       binaryBytecode
     ];
   };
-}
+})

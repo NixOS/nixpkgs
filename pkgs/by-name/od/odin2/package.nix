@@ -8,11 +8,11 @@
   freetype,
   libjack2,
   lv2,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libGL,
   gcc-unwrapped,
   copyDesktopItems,
@@ -43,24 +43,22 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libjack2
     lv2
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libGL
   ];
 
   # JUCE dlopen's these at runtime, crashes without them
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+  ];
 
   # JUCE wants to write to $HOME/.{lv2,vst3}
   preConfigure = ''

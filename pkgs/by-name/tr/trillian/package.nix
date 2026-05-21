@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "trillian";
-  version = "1.7.2";
-  vendorHash = "sha256-5SG9CVugHIkDcpjGuZb5wekYzCj5fKyC/YxzmeptkR4=";
+  version = "1.7.3";
+  vendorHash = "sha256-PomzPYtLEDx0mjTTidfp9dlvnW4mcVIka5AekPNYU2g=";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "trillian";
-    rev = "v${version}";
-    sha256 = "sha256-DFSG67MMpGzTlvQlW9DttLqqDkS8d8wMkeOlLQuElxU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-QOR98Xpf2iwGpqzEuB58gMsbYITiksMX4JmfqiKjeVw=";
   };
 
   subPackages = [
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = [ lib.licenses.asl20 ];
     maintainers = [ ];
   };
-}
+})

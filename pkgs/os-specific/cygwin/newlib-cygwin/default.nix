@@ -142,15 +142,20 @@
           "target"
         ];
 
+        preConfigure =
+          lib.optionalString (!lib.systems.equals stdenvNoLibc.hostPlatform stdenvNoLibc.buildPlatform)
+            ''
+              configureFlagsArray+=(ac_cv_prog_CC=$CC_FOR_BUILD)
+            '';
+
         configureFlags = [
           "--disable-shared"
           "--disable-doc"
           "--enable-static"
           "--disable-dumper"
           "--with-cross-bootstrap"
-        ]
-        ++ lib.optional (stdenvNoLibc.hostPlatform != stdenvNoLibc.buildPlatform) [
-          "ac_cv_prog_CC=gcc"
+          # if gm4 or gnum4 are in PATH, they would be be preferred to nixpkgs m4
+          "M4=m4"
         ];
 
         allowedImpureDLLs = [

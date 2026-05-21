@@ -85,7 +85,10 @@ let
       fi
     '';
   provisionConfDir =
-    pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; }
+    pkgs.runCommand "grafana-provisioning"
+      {
+        nativeBuildInputs = [ pkgs.lndir ];
+      }
       ''
         mkdir -p $out/{alerting,datasources,dashboards,plugins}
         ${ln {
@@ -873,14 +876,21 @@ in
 
             secret_key = mkOption {
               description = ''
-                Secret key used for signing. Please note that the contents of this option
+                Secret key used for signing data source settings like secrets and passwords.
+                Set this to a unique, random string in production, generated for example by running `openssl rand -hex 32`.
+
+                If you change this later you will need to update data source settings to re-encode them.
+
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key>
+
+                Please note that the contents of this option
                 will end up in a world-readable Nix store. Use the file provider
                 pointing at a reasonably secured file in the local filesystem
                 to work around that. Look at the documentation for details:
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
-              default = "SW2YcwTIb9zpOOhoPsMm";
-              type = types.str;
+              type = types.nullOr types.str;
+              default = null;
             };
 
             disable_gravatar = mkOption {
@@ -2051,6 +2061,22 @@ in
           || cfg.provision.alerting.muteTimings.path == null;
         message = "Cannot set both mute timings settings and mute timings path";
       }
+      {
+        assertion = cfg.settings.security.secret_key != null;
+        message = ''
+          Grafana's secret key (services.grafana.settings.security.secret_key) doesn't have a default
+          value anymore. Please generate your own and use a file-provider on this option! See also
+          https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key
+          for more information.
+
+          See https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/#re-encrypt-secrets on how to re-encrypt.
+
+          As stated in the NixOS changelog for 26.05, there's no official way to rotate.
+          Either hard-code the old key ("SW2YcwTIb9zpOOhoPsMm") if your setup doesn't have any secrets in the DB that need
+          special protection or perform a rotation with a 3rd-party tool
+          (https://github.com/erooke/grafana-secretkey-rotation-tool/tree/d9dc788902fa5185e15cb15ce6129f7237ab6138).
+        '';
+      }
     ];
 
     systemd.services.grafana = {
@@ -2065,7 +2091,7 @@ in
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
-        exec ${cfg.package}/bin/grafana server -homepath ${cfg.dataDir} -config ${configFile}
+        exec ${lib.getExe cfg.package} server -homepath ${cfg.dataDir} -config ${configFile}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;

@@ -7,14 +7,14 @@
   xsettingsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "font-config-info";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "derat";
     repo = "font-config-info";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "14z7hg9c7q8wliyqv68kp080mmk2rh6kpww6pn87hy7lwq20l2b7";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "font-config-info";
   };
-}
+})

@@ -41,7 +41,7 @@ let
 in
 {
   name = "ucarp";
-  meta.maintainers = with lib.maintainers; [ oxzi ];
+  meta.maintainers = [ ];
 
   nodes = {
     hostA = mkUcarpHost addrHostA;

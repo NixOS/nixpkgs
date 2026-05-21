@@ -20,35 +20,33 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rclone-ui";
-  version = "3.2.2";
+  version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "rclone-ui";
     repo = "rclone-ui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CQnjwbmVpCTvt9FSmQhYmU+0y+jSsR7bFBbeoZu16a4=";
+    hash = "sha256-VnMNKBtZu5mdsvW7ljl+RNNj44bK+s5QrdGFaYvS2o0=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     forceGitDeps = true;
-    hash = "sha256-zGgW/WikSVBE1goJ3zTf0ijBUghb+MlzMI+OxiLvzfY=";
+    hash = "sha256-cBPJgaPHjgn+SByZFZ/SCOZG/YY4OQWUUlX844YHyUU=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-nQhZuG3CxoLZwBSbA8I/Ft6HRkdb/5CRrpF6423lsFo=";
+  cargoHash = "sha256-r4orImEIUC+wQgnvkiO8/apXSgQ18LxJFoWgweYGgks=";
 
   # Disable tauri bundle updater, can be removed when #389107 is merged
   patches = [ ./remove_updater.patch ];
-  # Remove duplicate tao-macros dependency causing fetchCargoVendor failure.
-  cargoPatches = [ ./remove_duplicate_dependency.patch ];
 
   postPatch = ''
     substituteInPlace src-tauri/tauri.conf.json \
-      --replace-fail '"mainBinaryName": "Rclone UI"' '"mainBinaryName": "${finalAttrs.pname}"'
+      --replace-fail '"mainBinaryName": "Rclone UI"' '"mainBinaryName": "${finalAttrs.meta.mainProgram}"'
     substituteInPlace src-tauri/Cargo.toml \
        --replace-fail 'name = "app"' 'name = "${finalAttrs.pname}"'
   '';

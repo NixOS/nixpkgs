@@ -4,9 +4,9 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch,
   applyPatches,
   autoAddDriverRunpath,
+  android-tools,
   avahi,
   boost,
   cli11,
@@ -29,12 +29,11 @@
   libpulseaudio,
   librsvg,
   libva,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   makeDesktopItem,
   nix-update-script,
   nlohmann_json,
-  onnxruntime,
   opencomposite,
   openxr-loader,
   ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
@@ -42,8 +41,8 @@
   pkg-config,
   python3,
   qt6,
+  sdl2-compat,
   shaderc,
-  spdlog,
   systemd,
   udev,
   vulkan-headers,
@@ -56,13 +55,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "25.12";
+  version = "26.2.3";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gadfW3/PXi9SEztaHbi4U29Vj7ik/ia8BVDTy8P5aJE=";
+    hash = "sha256-pU7FYPp5wa0MK0ut/BfFlnUai8yMcylpWC0CoAExAio=";
   };
 
   monado = applyPatches {
@@ -70,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "20e0dacbdd2de863923790326beec76e848b056a";
-      hash = "sha256-wiXdMgp3bKW17KqLnSn6HHhz7xbQtjp4c3aU7qp+2BE=";
+      rev = "723652b545a79609f9f04cb89fcbf807d9d6451a";
+      hash = "sha256-wGqvTI/X22apc8XCN3GCGQClHfBW5xk73mZnwWvHtyI=";
     };
 
     postPatch = ''
@@ -110,13 +109,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    android-tools
     eigen
     freetype
     glm
     harfbuzz
     libGL
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     openxr-loader
     shaderc
     systemd
@@ -181,8 +181,16 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   preFixup = lib.optional (!clientLibOnly) ''
+    wrapProgram "$out/bin/wivrn-server" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          sdl2-compat
+          udev
+        ]
+      }
     wrapQtApp "$out/bin/wivrn-dashboard" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]} \
+      --prefix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
   desktopItems = lib.optionals (!clientLibOnly) [

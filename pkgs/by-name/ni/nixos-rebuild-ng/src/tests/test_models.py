@@ -5,19 +5,57 @@ from unittest.mock import Mock, patch
 from pytest import MonkeyPatch
 
 import nixos_rebuild.models as m
+import nixos_rebuild.nix as n
 
 from .helpers import get_qualified_name
 
 
-def test_build_attr_from_arg() -> None:
-    assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
-    assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
-        Path("default.nix"), "attr"
-    )
+def test_build_attr_from_arg(tmp_path: Path) -> None:
     assert m.BuildAttr.from_arg("attr", "file.nix") == m.BuildAttr(
         Path("file.nix"), "attr"
     )
-    assert m.BuildAttr.from_arg(None, "file.nix") == m.BuildAttr(Path("file.nix"), None)
+
+    with patch(
+        # system.nix exists
+        "pathlib.Path.exists",
+        autospec=True,
+        side_effect=[True],
+    ):
+        assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
+            Path("system.nix"), "attr"
+        )
+
+    with patch(
+        # <nixos-system> is defined
+        get_qualified_name(n.find_file),
+        autospec=True,
+        return_value=Path("/some/file.nix"),
+    ):
+        assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
+            "<nixos-system>", "attr"
+        )
+
+    with (
+        # <nixos-system> not defined
+        patch(get_qualified_name(n.find_file), autospec=True, return_value=None),
+        # system.nix does not exist, but /etc/nixos/system.nix does
+        patch(
+            "pathlib.Path.exists",
+            autospec=True,
+            side_effect=[True],
+        ),
+    ):
+        assert m.BuildAttr.from_arg(None, None) == m.BuildAttr(
+            Path("/etc/nixos/system.nix"), None
+        )
+
+    with patch(
+        # <nixos-system> not defined
+        get_qualified_name(n.find_file),
+        autospec=True,
+        return_value=None,
+    ):
+        assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
 
 
 def test_build_attr_to_attr() -> None:
@@ -43,7 +81,7 @@ def test_flake_parse(mock_node: Mock, tmpdir: Path, monkeypatch: MonkeyPatch) ->
         autospec=True,
         return_value=subprocess.CompletedProcess([], 0, stdout="remote\n"),
     ):
-        target_host = m.Remote("target@remote", [], None)
+        target_host = m.Remote("target@remote", [], None, "ssh")
         assert m.Flake.parse("/path/to/flake", target_host) == m.Flake(
             "/path/to/flake", 'nixosConfigurations."remote"'
         )
@@ -162,9 +200,9 @@ def test_flake_from_arg(
             return_value=subprocess.CompletedProcess([], 0, "remote-hostname\n"),
         ),
     ):
-        assert m.Flake.from_arg("/path/to", m.Remote("user@host", [], None)) == m.Flake(
-            "/path/to", 'nixosConfigurations."remote-hostname"'
-        )
+        assert m.Flake.from_arg(
+            "/path/to", m.Remote("user@host", [], None, "ssh")
+        ) == m.Flake("/path/to", 'nixosConfigurations."remote-hostname"')
 
 
 @patch("pathlib.Path.mkdir", autospec=True)
@@ -180,3 +218,46 @@ def test_profile_from_arg(mock_mkdir: Mock) -> None:
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )
     mock_mkdir.assert_called_once()
+
+
+def test_grouped_nix_args_flake_build_flags() -> None:
+    """Test that flake_build_flags excludes evaluation-only flags."""
+    from argparse import Namespace
+
+    args_groups = {
+        "common_flags": Namespace(v=0, quiet=0, max_jobs=None, cores=None),
+        "common_build_flags": Namespace(builders=None, include=None),
+        "flake_common_flags": Namespace(offline=True, no_net=False),
+        "flake_eval_flags": Namespace(
+            override_input=[["nixpkgs", "/local"]],
+            impure=True,
+            refresh=True,
+            accept_flake_config=False,
+            recreate_lock_file=False,
+            no_update_lock_file=False,
+            no_write_lock_file=False,
+            no_registries=False,
+            commit_lock_file=False,
+            update_input=None,
+        ),
+        "classic_build_flags": Namespace(no_build_output=False),
+        "copy_flags": Namespace(s=False),
+    }
+
+    grouped = m.GroupedNixArgs.from_parsed_args_groups(args_groups)
+
+    # flake_eval_flags should contain ONLY eval-only flags
+    assert "override_input" in grouped.flake_eval_flags
+    assert "impure" in grouped.flake_eval_flags
+    assert "refresh" in grouped.flake_eval_flags
+    # flake_eval_flags should NOT contain common/build flags
+    assert "offline" not in grouped.flake_eval_flags
+
+    # flake_build_flags should NOT contain eval-only flags
+    assert "override_input" not in grouped.flake_build_flags
+    assert "impure" not in grouped.flake_build_flags
+    assert "refresh" not in grouped.flake_build_flags
+
+    # But flake_build_flags should still have common flags
+    assert "offline" in grouped.flake_build_flags
+    assert grouped.flake_build_flags["offline"] is True

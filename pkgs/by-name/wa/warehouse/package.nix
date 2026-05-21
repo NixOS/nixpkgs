@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "warehouse";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "flattool";
     repo = "warehouse";
     tag = finalAttrs.version;
-    hash = "sha256-3xtC6pcZo6MTypeILy+cNMBaPK+PlshIXaeJW6KGyV0=";
+    hash = "sha256-71nFtOLHVfJn8YW8HihoRnywn3fVr7JCO8ohEI3/Mgo=";
   };
 
   nativeBuildInputs = [

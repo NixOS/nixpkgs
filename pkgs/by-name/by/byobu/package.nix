@@ -69,6 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
       # scripts points to the filename and byobu matches against this to know
       # which backend to start with
       bname="$(basename $file)"
+
+      # Don't wrap byobu-launch to fix failing automatic byobu launches
+      # See: https://github.com/NixOS/nixpkgs/issues/131353
+      if [ $bname == "byobu-launch" ]; then
+        continue
+      fi
+
       mv "$file" "$out/bin/.$bname"
       makeWrapper "$out/bin/.$bname" "$out/bin/$bname" \
         --argv0 $bname \

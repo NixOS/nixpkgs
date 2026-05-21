@@ -6,18 +6,18 @@
   ghr,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghr";
-  version = "0.17.0";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "tcnksm";
     repo = "ghr";
-    rev = "v${version}";
-    sha256 = "sha256-Is0D8tElv86s++NV6upu8RXvce65uPWQGIOl0Ftxf/M=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-6PWvqNQfaExvO5oAhCQSEPF85hMBPWalzVrG3imtdnU=";
   };
 
-  vendorHash = "sha256-gVDZgV7EF4LrCDX25tGpECecLi8IgstpzCOGfJ5+rhA=";
+  vendorHash = "sha256-ZjIwmmwybkQn+GBqtYI+saU+xuWYn4Moq9zmwRQsaSA=";
 
   # Tests require a Github API token, and networking
   doCheck = false;
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = ghr;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "ghr";
   };
-}
+})

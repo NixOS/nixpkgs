@@ -12,7 +12,6 @@
   aws-lc,
   libressl,
   openssl,
-  wolfssl,
   lua5_4,
   pcre2,
 }:
@@ -21,7 +20,6 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
   "aws-lc"
   "libressl"
   "openssl"
-  "wolfssl"
 ];
 let
   sslPkgs = {
@@ -30,20 +28,16 @@ let
       libressl
       openssl
       ;
-    wolfssl = wolfssl.override {
-      variant = "haproxy";
-      extraConfigureFlags = [ "--enable-quic" ];
-    };
   };
   sslPkg = sslPkgs.${sslLibrary};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.3.1";
+  version = "3.3.9";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-t3rNrop2ANuVdvx0kpJ0LBCRZ2SABVEwNd6nZ+RaAN8=";
+    hash = "sha256-8x6OaNsHfMCVb07T/3oexjeqXjSMbRxc0hY+ev6xueY=";
   };
 
   buildInputs = [
@@ -84,9 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (sslLibrary == "openssl" && lib.versionOlder openssl.version "3.5.2") [
     "USE_QUIC_OPENSSL_COMPAT=yes"
-  ]
-  ++ lib.optionals (sslLibrary == "wolfssl") [
-    "USE_OPENSSL_WOLFSSL=yes"
   ]
   ++ lib.optionals usePcre [
     "USE_PCRE2=yes"

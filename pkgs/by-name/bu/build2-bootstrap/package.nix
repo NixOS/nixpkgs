@@ -4,20 +4,27 @@
   fetchurl,
   buildPackages,
   fixDarwinDylibNames,
+  fetchpatch,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "build2-bootstrap";
   version = "0.17.0";
   src = fetchurl {
-    url = "https://download.build2.org/${version}/build2-toolchain-${version}.tar.xz";
+    url = "https://download.build2.org/${finalAttrs.version}/build2-toolchain-${finalAttrs.version}.tar.xz";
     hash = "sha256-NyKonqht90JTnQ+Ru0Qp/Ua79mhVOjUHgKY0EbZIv10=";
   };
   patches = [
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
+    # Fix build on newer clang/libcpp
+    (fetchpatch {
+      name = "new-libcpp-fix.patch";
+      url = "https://github.com/build2/build2/commit/7cf9cece1d88cd1be283ab309f9a851bd02b43d0.patch";
+      hash = "sha256-PTo1C6Aa1L9fvjiJ08KtGgVqHMw2ZlW5LSKoripL22g=";
+    })
   ];
 
-  sourceRoot = "build2-toolchain-${version}/build2";
+  sourceRoot = "build2-toolchain-${finalAttrs.version}/build2";
   makefile = "bootstrap.gmake";
   enableParallelBuilding = true;
 
@@ -75,4 +82,4 @@ stdenv.mkDerivation rec {
       r-burns
     ];
   };
-}
+})

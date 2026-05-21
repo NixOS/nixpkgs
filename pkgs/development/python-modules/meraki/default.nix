@@ -3,38 +3,29 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  jinja2,
-  poetry-core,
-  pytest,
+  hatchling,
   requests,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "2.0.3";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = version;
-    hash = "sha256-dAy295DB213TotVkVGvLYIzzHk1M9PycMNgyX+wD7ms=";
+    hash = "sha256-XP0wvq9CoUpjGsIKmzgLrAmxhJ0F2mHDXJZdeU+AEkE=";
   };
 
-  pythonRelaxDeps = [
-    "pytest"
-    "setuptools"
-  ];
+  pythonRelaxDeps = [ "aiohttp" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
-    jinja2
-    pytest
     requests
-    setuptools
   ];
 
   # All tests require an API key

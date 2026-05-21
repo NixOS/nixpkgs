@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "upiano";
   version = "0.1.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eliasdorneles";
     repo = "upiano";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5WhflvUCjzW4ZJ+PLUTMbKcUnQa3ChkDjl0R5YvjBWk=";
     forceFetchGit = true;
     fetchLFS = true;
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "upiano";
   };
-}
+})

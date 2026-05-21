@@ -6,11 +6,11 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsdvd";
   version = "0.17";
   src = fetchurl {
-    url = "mirror://sourceforge/lsdvd/lsdvd-${version}.tar.gz";
+    url = "mirror://sourceforge/lsdvd/lsdvd-${finalAttrs.version}.tar.gz";
     sha256 = "1274d54jgca1prx106iyir7200aflr70bnb1kawndlmcckcmnb3x";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "lsdvd";
   };
-}
+})

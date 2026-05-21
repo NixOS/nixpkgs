@@ -20,10 +20,7 @@ assert stdenv.hostPlatform.libc == "musl" -> useMusl;
 let
   configParser = ''
     function parseconfig {
-        while read LINE; do
-            NAME=`echo "$LINE" | cut -d \  -f 1`
-            OPTION=`echo "$LINE" | cut -d \  -f 2`
-
+        while IFS=" " read NAME OPTION; do
             if ! [[ "$NAME" =~ ^CONFIG_ ]]; then continue; fi
 
             echo "parseconfig: removing $NAME"
@@ -80,6 +77,31 @@ stdenv.mkDerivation rec {
     # Fix aarch64 build failure: sha1_process_block64_shaNI is x86-specific
     # https://lists.busybox.net/pipermail/busybox/2024-September/090943.html
     ./fix-aarch64-sha1.patch
+    # archival: disallow path traversals (CVE-2023-39810)
+    (fetchpatch {
+      name = "CVE-2023-39810.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=9a8796436b9b0641e13480811902ea2ac57881d3";
+      hash = "sha256-pOARbCwiucrkNITBoOMpLF3GniYvJiyBeBi2/Aw2JY8=";
+    })
+    # tar: strip unsafe hardlink components - GNU tar does the same
+    (fetchpatch {
+      name = "CVE-2026-26157_CVE-2026-26158.patch";
+      url = "https://git.busybox.net/busybox/patch/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb";
+      excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
+      hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
+    })
+    # syslogd: fix writing to local log file
+    # https://lists.busybox.net/pipermail/busybox/2024-October/090969.html
+    (fetchpatch {
+      url = "https://hg.slitaz.org/wok/raw-file/1cba565dc2a9/busybox/stuff/busybox-1.37-fix-syslogd.patch";
+      hash = "sha256-NZRctLv1CpTfnR6+CA890YY8ljBQLGkkselyP5/TnsQ=";
+    })
+    # https://lists.busybox.net/pipermail/busybox/2026-March/092010.html
+    ./build-system-buffer-overflow.patch
+
+    # [PATCH v2 1/1] wget: don't allow control characters or spaces in the URL
+    # https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
+    ./CVE-2025-60876.patch
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
@@ -155,6 +177,7 @@ stdenv.mkDerivation rec {
     1 a busybox() { '$out'/bin/busybox "$@"; }\
     logger() { '$out'/bin/logger "$@"; }\
     ' ${debianDispatcherScript} > ${outDispatchPath}
+    sed -i 's|/sbin/resolvconf|"$(busybox which resolvconf)"|g' ${outDispatchPath}
     chmod 555 ${outDispatchPath}
     HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
   '';
@@ -183,7 +206,9 @@ stdenv.mkDerivation rec {
       TethysSvensson
       qyliss
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;
   };
 }

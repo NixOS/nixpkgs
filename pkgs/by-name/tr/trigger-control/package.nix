@@ -6,7 +6,7 @@
   makeWrapper,
   pkg-config,
   SDL2,
-  libX11,
+  libx11,
   dbus,
   libdecor,
   libnotify,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
     dbus
     libnotify
   ]

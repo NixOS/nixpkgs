@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rofi-mpd";
   version = "2.2.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "Rofi_MPD";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0jabyn6gqh8ychn2a06xws3avz0lqdnx3qvqkavfd2xr6sp2q7lg";
   };
 
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ jakestanger ];
     platforms = lib.platforms.all;
   };
-}
+})

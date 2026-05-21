@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
@@ -11,23 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "7.0.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipfort";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-s/VOaU5IKZYH0Vhtjl/UZTrnpLsJ7zWFTvAJY2x3AcA=";
+    hash = "sha256-XaB4jauCN41tgD1YHHA2td/yckwfMBemBe/iL0SCxQo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "hipfort-fix-cmake-4.patch";
-      url = "https://github.com/ROCm/hipfort/commit/75552c7ec48e3bd6a914c57c9475ec573ccb37d9.patch";
-      hash = "sha256-S9r1V6cUo9QbKbu/NK4wIvXMV6BFv7+/n9mjCScVk40=";
-      includes = [ "bin/*" ];
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -60,11 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/bin/ln" "ln"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Fortran interfaces for ROCm libraries";

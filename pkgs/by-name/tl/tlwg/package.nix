@@ -7,14 +7,14 @@
   fontforge,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlwg";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "tlwg";
     repo = "fonts-tlwg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "hWiH5KJnYTdcrm+Kzn9HUQry8ry3SKzjA6/0536kCLQ=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.yrashk ];
   };
-}
+})

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-mermaid";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = "mdbook-mermaid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9aiu3mQaRgVVhtX/v2hMPzclnVQIhUz4gVy0Xc84zO8=";
   };
 
@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
     description = "Preprocessor for mdbook to add mermaid.js support";
     mainProgram = "mdbook-mermaid";
     homepage = "https://github.com/badboy/mdbook-mermaid";
-    changelog = "https://github.com/badboy/mdbook-mermaid/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/badboy/mdbook-mermaid/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       xrelkd
       matthiasbeyer
     ];
   };
-}
+})

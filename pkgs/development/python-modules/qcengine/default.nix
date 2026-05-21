@@ -16,19 +16,24 @@
   qcelemental,
   scipy,
   setuptools,
+  setuptools-scm,
+  pydantic-settings,
 }:
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.34.0";
+  version = "0.50.0rc2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VKULy45bYn5TmxU7TbOVK98r0pRMWAwissmgx0Ee/8w=";
+    hash = "sha256-XIxHFemTXXsqCLAHizzrEt0tVdfp6vY0Pl4CHv+EzDM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     msgpack
@@ -38,6 +43,7 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     qcelemental
+    pydantic-settings
   ];
 
   optional-dependencies = {
@@ -55,12 +61,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcengine" ];
 
+  # These tests require network access
+  disabledTestPaths = [
+    "qcengine/tests/test_harness_canonical.py"
+  ];
+
   meta = {
     description = "Quantum chemistry program executor and IO standardizer (QCSchema) for quantum chemistry";
     homepage = "https://molssi.github.io/QCElemental/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sheepforce ];
     mainProgram = "qcengine";
-    broken = pythonAtLeast "3.14"; # https://github.com/MolSSI/QCEngine/issues/481
   };
 }

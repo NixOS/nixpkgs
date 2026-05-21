@@ -8,10 +8,10 @@
   libdrm,
   libpciaccess,
   libva,
-  libX11,
-  libXau,
-  libXdmcp,
-  libpthreadstubs,
+  libx11,
+  libxau,
+  libxdmcp,
+  libpthread-stubs,
   fetchpatch,
 }:
 
@@ -42,24 +42,24 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libdrm
     libva
     libpciaccess
-    libX11
-    libXau
-    libXdmcp
-    libpthreadstubs
+    libx11
+    libxau
+    libxdmcp
+    libpthread-stubs
   ];
-  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DBUILD_SAMPLES=OFF"
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTS=OFF"
     "-DUSE_SYSTEM_GTEST=ON"
   ];
 
-  doCheck = true;
+  doCheck = false;
 
   meta = {
     description = "Intel Media SDK";

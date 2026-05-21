@@ -29,10 +29,10 @@ let
           done
 
           if test -d ${pkg}/share/xsessions; then
-            ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+            ${pkgs.buildPackages.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
           fi
           if test -d ${pkg}/share/wayland-sessions; then
-            ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+            ${pkgs.buildPackages.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
           fi
         '') cfg.sessionPackages}
       '';

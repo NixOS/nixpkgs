@@ -7,15 +7,16 @@
   jupyter-collaboration,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-docprovider";
-  version = "2.2.0";
+  version = "2.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_docprovider";
-    inherit version;
-    hash = "sha256-UZwPhBJsb7qWIOUYm+9t8GfX14nRJt69czAapLiN/Qw=";
+    inherit (finalAttrs) version;
+    hash = "sha256-e5AfudgAWZ4qtoVX/WORECpoiIRShsT3y7brK7owlOA=";
   };
 
   postPatch = ''
@@ -41,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

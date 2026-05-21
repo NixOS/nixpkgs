@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   autoreconfHook,
   bash,
   perl,
   perlPackages,
-  libHX,
+  libhx,
   nix-update-script,
 }:
 
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hxtools";
   version = "20251011";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     tag = "rel-${finalAttrs.version}";
     owner = "jengelh";
     repo = "hxtools";
@@ -32,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Perl and Bash are pulled to make patchShebangs work.
     perl
     bash
-    libHX
+    libhx
   ]
   ++ (with perlPackages; [ TextCSV_XS ]);
 

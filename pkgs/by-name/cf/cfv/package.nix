@@ -5,7 +5,7 @@
   pkgs,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cfv";
   version = "3.2.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cfv-project";
     repo = "cfv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-vKlnW6Z0Rg2bptU5fxIKDaOY2b+WY/fgaYZQu5tBU44=";
   };
 
@@ -36,9 +36,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Utility to verify and create a wide range of checksums";
     homepage = "https://github.com/cfv-project/cfv";
-    changelog = "https://github.com/cfv-project/cfv/releases/tag/v${version}";
+    changelog = "https://github.com/cfv-project/cfv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jjtt ];
     mainProgram = "cfv";
   };
-}
+})

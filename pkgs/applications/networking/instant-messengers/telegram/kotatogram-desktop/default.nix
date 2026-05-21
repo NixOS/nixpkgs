@@ -17,6 +17,10 @@ let
     inherit stdenv;
     # N/A on Qt5
     kimageformats = null;
+    unwrapped = libsForQt5.callPackage ../telegram-desktop/unwrapped.nix {
+      inherit stdenv;
+      kcoreaddons = null;
+    };
   };
   version = "1.4.9";
   tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {
@@ -31,6 +35,9 @@ let
     };
 
     patches = [
+      # fix build with latest glibc
+      # upstream PR: https://github.com/desktop-app/tg_owt/pull/172
+      ./cstring-includes.patch
       (fetchpatch {
         url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
         decode = "base64 -d";

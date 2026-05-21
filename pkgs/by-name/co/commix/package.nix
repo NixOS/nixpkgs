@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "commix";
   version = "4.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = "commix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X2AJIE/Uk6w5bcgCELfmy9+Nzoma96yBva9Aj+sKE3k=";
   };
 
@@ -38,8 +38,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Automated Command Injection Exploitation Tool";
     mainProgram = "commix";
     homepage = "https://github.com/commixproject/commix";
-    changelog = "https://github.com/commixproject/commix/releases/tag/v${version}";
+    changelog = "https://github.com/commixproject/commix/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

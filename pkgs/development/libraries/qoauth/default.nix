@@ -31,8 +31,10 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ qmake ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
-  NIX_LDFLAGS = "-lqca-qt5";
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
+    NIX_LDFLAGS = "-lqca-qt5";
+  };
 
   dontWrapQtApps = true;
 

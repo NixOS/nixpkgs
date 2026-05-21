@@ -16,14 +16,14 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arduino-ci";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "arduino-ci";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9RbBxgwsSQ7oGGKr1Vsn9Ug9AsacoRgvQgd9jbRQ034=";
   };
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "CI for Arduino Libraries";
     mainProgram = "arduino-ci";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = lib.platforms.unix;
   };
-}
+})

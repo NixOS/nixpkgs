@@ -7,14 +7,14 @@
   file,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "holo-build";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "holocm";
     repo = "holo-build";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0lypbgf96bcc4m3968xa4il1zwprsdyc0pw6pl9mqq7djxabikd0";
   };
 
@@ -37,18 +37,18 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/holocm/holo-build/src/holo-build/common.version=${version}"
+    "-X github.com/holocm/holo-build/src/holo-build/common.version=${finalAttrs.version}"
   ];
 
   postBuild = ''
-    make build/man/holo-build.8 VERSION=${version}
+    make build/man/holo-build.8 VERSION=${finalAttrs.version}
   '';
 
   nativeCheckInputs = [ file ];
 
   checkPhase = ''
     ln -s ../../go/bin/holo-build build/holo-build
-    go build -ldflags "-s -w -X github.com/holocm/holo-build/src/holo-build/common.version=${version}" -o build/dump-package ./src/dump-package
+    go build -ldflags "-s -w -X github.com/holocm/holo-build/src/holo-build/common.version=${finalAttrs.version}" -o build/dump-package ./src/dump-package
     bash test/compiler/run_tests.sh
     bash test/interface/run_tests.sh
   '';
@@ -71,4 +71,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "holo-build";
   };
-}
+})

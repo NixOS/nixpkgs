@@ -8,7 +8,7 @@
 }:
 
 let
-  ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3.overrideScope (
     self: super: {
       ppxlib = super.ppxlib.override { version = "0.34.0"; };
     }
@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow";
-  version = "0.295.0";
+  version = "0.314.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mqx07dJAYIesp09RmKr74rLKRkG46nHQERhuQ7AyAiM=";
+    hash = "sha256-98rtymAYp8MoPtgnuoMVKc8ss4JK2cQ/4dWVN1TGJsA=";
   };
 
   patches = [
@@ -82,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/facebook/flow/blob/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with lib.maintainers; [ puffnfresh ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      miniharinn
+    ];
   };
 })

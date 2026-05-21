@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spedread";
-  version = "2.6.2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Darazaki";
     repo = "Spedread";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZGIW0FmrVgjoUKjbF6wTxihVu3QMD7BpfZY6YOyfXlg=";
+    hash = "sha256-IZhvKZ4kllL6ItUn47+EnUwVPKXC0mz2Mvsg/7CT5Qw=";
   };
 
   postPatch = ''

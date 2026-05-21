@@ -1,30 +1,23 @@
 {
   lib,
-  fetchurl,
-  fetchFromGitea,
-  buildGo124Module,
+  buildGo125Module,
+  fetchFromCodeberg,
+  fetchYarnDeps,
+  nodejs,
+  yarn,
+  yarnConfigHook,
   nixosTests,
+  nix-update-script,
 }:
-let
-  domain = "codeberg.org";
-  owner = "superseriousbusiness";
-  repo = "gotosocial";
+buildGo125Module (finalAttrs: {
+  pname = "gotosocial";
+  version = "0.21.2";
 
-  version = "0.20.3";
-
-  web-assets = fetchurl {
-    url = "https://${domain}/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-Xh4SgzBG2Cm4SaMb9lebW/gBv94HuVXNSjd8L+bowUg=";
-  };
-in
-buildGo124Module rec {
-  inherit version;
-  pname = repo;
-
-  src = fetchFromGitea {
-    inherit domain owner repo;
-    tag = "v${version}";
-    hash = "sha256-tWICsPN9r3mJqcs0EHE1+QFhQCzI1pD1eXZXSi2Peo4=";
+  src = fetchFromCodeberg {
+    owner = "superseriousbusiness";
+    repo = "gotosocial";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z3j5/pXnNTHgBmPEfFgjOJuL03LsPtvAwbuoL9wb5bk=";
   };
 
   vendorHash = null;
@@ -32,17 +25,46 @@ buildGo124Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   tags = [
     "kvformat"
   ];
 
+  nativeBuildInputs = [
+    nodejs
+    yarn
+    yarnConfigHook
+  ];
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${finalAttrs.src}/web/source/yarn.lock";
+    hash = "sha256-rfZxslIEoOTufENIvk8Eq5wzdD3rUpUP3wrMjmLH44k=";
+  };
+
+  # manually calling yarnConfigHook in sub-directory
+  dontYarnInstallDeps = true;
+
+  postConfigure = ''
+    pushd ./web/source
+    runHook yarnConfigHook
+    popd
+  '';
+
+  # preparing assets
+  # https://codeberg.org/superseriousbusiness/gotosocial/src/branch/main/.goreleaser.yml#L12
+  preBuild = ''
+    go run ./vendor/github.com/go-swagger/go-swagger/cmd/swagger generate spec --scan-models --exclude-deps -o web/assets/swagger.yaml
+    substituteInPlace web/assets/swagger.yaml --replace-fail "REPLACE_ME" "${finalAttrs.version}"
+    yarn --offline --cwd ./web/source ts-patch install
+    yarn --offline --cwd ./web/source build
+    ./scripts/bundle_licenses.sh
+  '';
+
   postInstall = ''
-    tar xf ${web-assets}
-    mkdir -p $out/share/gotosocial
-    mv web $out/share/gotosocial/
+    mkdir -p $out/share/gotosocial/web
+    mv web/{assets,template} $out/share/gotosocial/web
   '';
 
   # tests are working only on x86_64-linux
@@ -61,10 +83,11 @@ buildGo124Module rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.gotosocial = nixosTests.gotosocial;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gotosocial.org";
-    changelog = "https://codeberg.org/superseriousbusiness/gotosocial/releases/tag/v${version}";
+    changelog = "https://codeberg.org/superseriousbusiness/gotosocial/releases/tag/v${finalAttrs.version}";
     description = "Fast, fun, ActivityPub server, powered by Go";
     longDescription = ''
       ActivityPub social network server, written in Golang.
@@ -79,4 +102,4 @@ buildGo124Module rec {
     ];
     license = lib.licenses.agpl3Only;
   };
-}
+})

@@ -1,6 +1,6 @@
 {
   fetchzip,
-  libX11,
+  libx11,
   libGLU,
   libGL,
   makeWrapper,
@@ -14,7 +14,7 @@ let
     libGLU
     libGL
     stdenv.cc.cc
-    libX11
+    libx11
   ];
 
   inidir = "\\\${XDG_CONFIG_HOME:-\\$HOME/.config}/kisslicer";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libGL
-    libX11
+    libx11
   ];
 
   installPhase = ''

@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zvm";
-  version = "0.8.11";
+  version = "0.8.14";
 
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
-    tag = "v${version}";
-    hash = "sha256-RMXF69zqqNK3tifbeDM7dxkiHMws7n+PeeHvCUK7/OU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MAE7zs60DFIicYRtMhstzsOiS2flVv+dyPJVmcyAEio=";
   };
 
-  vendorHash = "sha256-dM9FiUucSBkk8L93HfzoHQ1EyyRmAZjfedvOyRBDFBA=";
+  vendorHash = "sha256-29hFuQnLPdLkAG4x5QWqXqBIGtppi/rj3OuTfMBgTAI=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -27,11 +27,11 @@ buildGoModule rec {
   meta = {
     homepage = "https://www.zvm.app/";
     downloadPage = "https://github.com/tristanisham/zvm";
-    changelog = "https://github.com/tristanisham/zvm/releases/tag/v${version}";
+    changelog = "https://github.com/tristanisham/zvm/releases/tag/v${finalAttrs.version}";
     description = "Tool to manage and use different Zig versions";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.unix;
     mainProgram = "zvm";
   };
-}
+})

@@ -4,7 +4,6 @@
   cargo,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
   unicodecsv,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "jellyfish";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jamesturk";

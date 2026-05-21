@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "3.0.3";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
     tag = "v${version}";
-    hash = "sha256-yxCdcE5N/ZMRAkb0R8TT1jocMre0xv3EzpBXJ6Erkvg=";
+    hash = "sha256-wQujnvIvq15k7GGIc5FSQFk90kcaxvXbpo4DZAESX58=";
   };
 
   build-system = [ setuptools ];

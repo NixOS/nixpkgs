@@ -5,7 +5,7 @@
   gettext,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ibus-theme-tools";
   version = "4.2.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "IBus-Theme-Tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0i8vwnikwd1bfpv4xlgzc51gn6s18q58nqhvcdiyjzcmy3z344c2";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/openSUSE/IBus-Theme-Tools";
     mainProgram = "ibus-theme-tools";
   };
-}
+})

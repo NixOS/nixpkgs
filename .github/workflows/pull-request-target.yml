@@ -10,6 +10,12 @@ on:
     secrets:
       NIXPKGS_CI_APP_PRIVATE_KEY:
         required: true
+      NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY:
+        required: true
+      NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY:
+        required: true
+      NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -21,8 +27,7 @@ jobs:
   prepare:
     runs-on: ubuntu-slim
     permissions:
-      # wrong branch review comment
-      pull-requests: write
+      pull-requests: write # submitting 'wrong branch' reviews
     outputs:
       baseBranch: ${{ steps.prepare.outputs.base }}
       headBranch: ${{ steps.prepare.outputs.head }}
@@ -31,15 +36,27 @@ jobs:
       systems: ${{ steps.prepare.outputs.systems }}
       touched: ${{ steps.prepare.outputs.touched }}
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           sparse-checkout-cone-mode: true # default, for clarity
           sparse-checkout: |
             ci/github-script
-      - id: prepare
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+
+      # It's fine to reuse this app in the 'eval / compare' job,
+      # because this job has to run before that one.
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        if: vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID && github.actor != 'dependabot[bot]'
+        id: app-token
         with:
+          client-id: ${{ vars.NIXPKGS_BRANCH_CHECK_CLIENT_ID }}
+          private-key: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
+
+      - id: prepare
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ steps.app-token.outputs.token || github.token }}
           retries: 10
           # The default for this includes code 422, which happens regularly for us when comparing commits:
           #   422 - Server Error: Sorry, this diff is taking too long to generate.
@@ -61,6 +78,9 @@ jobs:
     permissions:
       # cherry-picks
       pull-requests: write
+    secrets:
+      NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY }}
+      NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
@@ -83,6 +103,8 @@ jobs:
       # compare
       pull-requests: write
       statuses: write
+    secrets:
+      NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
@@ -127,7 +149,7 @@ jobs:
     permissions:
       statuses: write
     steps:
-      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           RESULTS: ${{ toJSON(needs.*.result) }}
         with:

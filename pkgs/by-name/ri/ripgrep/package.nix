@@ -15,14 +15,14 @@ let
   canRunRg = stdenv.hostPlatform.emulatorAvailable buildPackages;
   rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg${stdenv.hostPlatform.extensions.executable}";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "15.1.0";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0gjwYMUlXYnmIWQS1SVzF1yQw1lpveRLw5qp049lc3I=";
   };
 
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${version}";
+    changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       unlicense # or
       mit
@@ -74,4 +74,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rg";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,13 +4,13 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protoc-gen-rust-grpc";
   version = "0.8.3";
 
   src = fetchCrate {
     pname = "grpc-compiler";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-gt+Qa68N5EkqhCAvU2ISvVPT9vYPXMySad4DCyTVHkQ=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lucperkins ];
     mainProgram = "protoc-gen-rust-grpc";
   };
-}
+})

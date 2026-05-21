@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "enpass-cli";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "HazCod";
     repo = "enpass-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SloFiV+tmdjiHjeS/SsDMLZ9gjNB/EOmgexMXpu253I=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ deej-io ];
     platforms = lib.platforms.unix;
   };
-}
+})

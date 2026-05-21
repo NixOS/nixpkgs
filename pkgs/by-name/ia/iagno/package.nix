@@ -20,12 +20,12 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iagno";
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor version}/iagno-${version}.tar.xz";
+    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor finalAttrs.version}/iagno-${finalAttrs.version}.tar.xz";
     hash = "sha256-hLnzLOA4l1iiHWPH6xwifbcRa1HTFJqg6uNQkWjg7SQ=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

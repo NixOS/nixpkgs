@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "onmetal-image";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "onmetal";
     repo = "onmetal-image";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KvOBvAIE9V2bj5prdcc8G5ifHsvybHBCYWrI4fWtdvE=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "onmetal-image";
   };
-}
+})

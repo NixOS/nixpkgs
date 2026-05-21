@@ -7,24 +7,23 @@
   stdenvNoCC,
   nodejs,
   nix-update-script,
-  fetchpatch,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sketchybar-app-font";
-  version = "2.0.51";
+  version = "2.0.60";
 
   src = fetchFromGitHub {
     owner = "kvndrsslr";
     repo = "sketchybar-app-font";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5HJ5dusFyWIljT6V2/hizwbkdBfFeMHrSJ1cyT+Xtno=";
+    hash = "sha256-6fi3v+h3i5J1j4xDP1QUlGfrY8o9kiXtMCWmYZ9zgng=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-43VIPcLNPCUMxDmWnt3fRuriOKFp7w5rzxVHdjEz3lU=";
+    fetcherVersion = 3;
+    hash = "sha256-/nYH3ZgfNv9krvH/ZjCJ2F3aanLZzlkNwOizgTRtqXE=";
   };
 
   nativeBuildInputs = [
@@ -52,15 +51,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  patches = [
-    # TODO: remove on next release
-    (fetchpatch {
-      name = "lua-regression-patch";
-      url = "https://github.com/kvndrsslr/sketchybar-app-font/commit/f6735ef0acacc700b84b31b2cc3f430bf0f01f6e.patch";
-      hash = "sha256-Fj3oqRdEvRcM0Bz6E97lN02H+nRx5vonW1p2jcSig7s=";
-    })
-  ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -69,6 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       A ligature-based symbol font and a mapping function for sketchybar, inspired by simple-bar's usage of community-contributed minimalistic app icons.
     '';
     homepage = "https://github.com/kvndrsslr/sketchybar-app-font";
+    changelog = "https://github.com/kvndrsslr/sketchybar-app-font/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.all;

@@ -3,7 +3,7 @@
   fetchFromGitHub,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vermin";
   version = "1.8.0";
   pyproject = true;
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "netromdk";
     repo = "vermin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UJAIwxCnI8gcEPgLep5sKHxcDtJFB65S7OA043VN5S8=";
   };
 
@@ -32,9 +32,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     mainProgram = "vermin";
     homepage = "https://github.com/netromdk/vermin";
-    changelog = "https://github.com/netromdk/vermin/releases/tag/v${version}";
+    changelog = "https://github.com/netromdk/vermin/releases/tag/v${finalAttrs.version}";
     description = "Concurrently detect the minimum Python versions needed to run code";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.fidgetingbits ];
   };
-}
+})

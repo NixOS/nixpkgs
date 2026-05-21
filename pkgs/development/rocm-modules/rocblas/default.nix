@@ -40,14 +40,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "7.0.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocBLAS";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-528jAdhWtZbbw76dfUgpMr5px0T7q4Oj76jp0z0lh3A=";
+    sparseCheckout = [
+      "projects/rocblas"
+      "shared"
+    ];
+    hash = "sha256-wrjcr2ASSF+bk5atjvKfIYSbg+vevo/a2W2ca9Nft/4=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocblas";
 
   outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
 
@@ -92,7 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.CXXFLAGS = "-fopenmp -I${lib.getDev boost}/include -I${hipblas-common}/include -I${roctracer}/include";
   # Fails to link tests with undefined symbol: cblas_*
-  env.LDFLAGS = lib.optionalString (buildTests || buildBenchmarks) "-Wl,--as-needed -lcblas";
+  env.LDFLAGS =
+    "-Wl,--as-needed -lzstd" + lib.optionalString (buildTests || buildBenchmarks) " -lcblas";
   env.TENSILE_ROCM_ASSEMBLER_PATH = "${stdenv.cc}/bin/clang++";
 
   cmakeFlags = [
@@ -136,9 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (fetchpatch {
       name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
-      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/2850f22f80f90c9e498f520608a82989a4932ec3.patch";
-      hash = "sha256-SPsdEwGe+r8bQudkChRzBDAgu3tPQWFweZCgzh+4nOE=";
-      stripLen = 2;
+      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/49f21f3cfe7eb4b8ac724eef81fa2cae97a3c22e.patch";
+      hash = "sha256-vAVVpTwt49lGHu2YopR1X68v5LwFOjUYuSC4ucBpFGg=";
+      relative = "projects/rocblas";
     })
   ];
 
@@ -186,11 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     amdgpu_targets = gpuTargets';
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
   };
 
   enableParallelBuilding = true;
@@ -198,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "BLAS implementation for ROCm platform";
-    homepage = "https://github.com/ROCm/rocBLAS";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocblas";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

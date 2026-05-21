@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/endrazine/wcc/commit/4bea2dac8b49d82e4f72e42027d74fc654380f7b.patch?full_index=1";
       hash = "sha256-RK0ue8hdK/G+njwGmWpaewclRHprO8aBdZ9vBGQIQOc=";
     })
+    # Fix build with gcc 15: function pointer requires explicit arguments
+    (fetchpatch2 {
+      url = "https://github.com/endrazine/wcc/commit/3dfd28cb53b4766032e1113cf508bf2f5dce87d5.patch?full_index=1";
+      hash = "sha256-7RsU3XJvJ2gvNsB1O/pvOrmd+3/wNfoOZj0JVlgJA8o=";
+    })
   ];
 
   postPatch = ''

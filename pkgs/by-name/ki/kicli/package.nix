@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kicli";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "anned20";
     repo = "kicli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NXKo+zK5HnuMXRsi29lEhoo7RCagwvZdXXPNfp4pHtc=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     platforms = lib.platforms.all;
     mainProgram = "kicli";
   };
-}
+})

@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Update only together with voicevox and voicevox-engine
   # nixpkgs-update: no auto update
   version = "0.16.2";
-  passthru.modelVersion = "0.16.3";
+  passthru.modelVersion = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r --no-preserve=all ${openjtalk-src} ./openjtalk
     substitute ${./openjtalk.patch} ./openjtalk.patch \
       --replace-fail "@openjtalk_src@" "$(pwd)/openjtalk"
-    patch -d $cargoDepsCopy/open_jtalk-sys-* -p1 < ./openjtalk.patch
+    patch -d $cargoDepsCopy/*/open_jtalk-sys-* -p1 < ./openjtalk.patch
   '';
 
   cargoBuildFlags = [ "-p voicevox_core_c_api" ];
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "VOICEVOX";
       repo = "voicevox_vvm";
       tag = finalAttrs.passthru.modelVersion;
-      hash = "sha256-VqSNEHJV/g9R+4XknRGi/s4C7/uXEGCK5/NC2XwiPcI=";
+      hash = "sha256-/NU9CZcb+gHXHeno3NLF0EgPLw+6f8XyiAE2b9XJmuE=";
     };
 
     nativeBuildInputs = [ python3 ];

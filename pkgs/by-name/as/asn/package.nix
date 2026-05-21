@@ -14,15 +14,15 @@
   aha,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "asn";
-  version = "0.80.0";
+  version = "0.81.0";
 
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
-    tag = "v${version}";
-    hash = "sha256-GHzlYLBiWkayYvbkc/n1HLhL7RN1Q/AEjj+IDQBDTek=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HPLdi5Eok06jnToWPn1bGnnAGirGV8zGFoDsKsMvrI8=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
       lookup API server / Web traceroute server
     '';
     homepage = "https://github.com/nitefood/asn";
-    changelog = "https://github.com/nitefood/asn/releases/tag/v${version}";
+    changelog = "https://github.com/nitefood/asn/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "asn";
   };
-}
+})

@@ -47,7 +47,7 @@ in
 
 python3.pkgs.buildPythonApplication {
   inherit version src;
-  name = "tribler";
+  pname = "tribler";
   pyproject = true;
 
   build-system = with python3.pkgs; [

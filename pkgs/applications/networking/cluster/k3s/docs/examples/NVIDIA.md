@@ -17,7 +17,7 @@ services.xserver = {
   videoDrivers = [ "nvidia" ];
 };
 
-nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+nixpkgs.config.allowUnfreePackages = [
   "nvidia-x11"
   "nvidia-settings"
 ];
@@ -58,7 +58,7 @@ Additionally, `lspci -k` can be used to ensure the driver has been assigned to t
 
 ## Configure k3s
 
-You now need to create a new file in `/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl` with the following
+You now need to create a new file in `/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl` with the following:
 
 ```
 {{ template "base" . }}

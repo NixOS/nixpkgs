@@ -10,12 +10,12 @@
   libical,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obexd";
   version = "0.48";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/obexd-${version}.tar.bz2";
+    url = "mirror://kernel/linux/bluetooth/obexd-${finalAttrs.version}.tar.bz2";
     sha256 = "1i20dnibvnq9lnkkhajr5xx3kxlwf9q5c4jm19kyb0q1klzgzlb8";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
   };
-}
+})

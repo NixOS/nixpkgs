@@ -5,20 +5,20 @@
   libglut,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
+  libx11,
+  libxext,
+  libxi,
+  libxmu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glui";
   version = "2.37";
 
   src = fetchFromGitHub {
     owner = "libglui";
     repo = "glui";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0qg2y8w95s03zay1qsqs8pqxxlg6l9kwm7rrs1qmx0h22sxb360i";
   };
 
@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     libglut
     libGLU
     libGL
-    libXmu
-    libXext
-    libX11
-    libXi
+    libxmu
+    libxext
+    libx11
+    libxi
   ];
 
   installPhase = ''
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

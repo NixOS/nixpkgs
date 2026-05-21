@@ -7,14 +7,14 @@
   openwsman,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wsmancli";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Openwsman";
     repo = "wsmancli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pTA5p5+Fuiw2lQaaSKnp/29HMy8NZNTFwP5K/+sJ9OU=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
       platforms
       ;
   };
-}
+})

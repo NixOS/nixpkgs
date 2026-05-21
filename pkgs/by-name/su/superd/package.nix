@@ -6,14 +6,14 @@
   scdoc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "superd";
   version = "0.7.1";
 
   src = fetchFromSourcehut {
     owner = "~craftyguy";
     repo = "superd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5g9Y1Lpxp9cUe0sNvU5CdsTGcN+j00gIKPO9pD5j8uM=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
       wentam
     ];
   };
-}
+})

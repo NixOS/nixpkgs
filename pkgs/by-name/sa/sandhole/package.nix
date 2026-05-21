@@ -2,22 +2,24 @@
   cmake,
   fetchFromGitHub,
   lib,
+  lld,
   perl,
   rustPlatform,
+  stdenv,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandhole";
-  version = "0.8.7";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "EpicEric";
     repo = "sandhole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C6LJj8bQAe23uLEdQ3b90wanTfZvEM6o8svoOg99K2g=";
+    hash = "sha256-nACjMd1GGfopXTqkkJP3zOnFGqB4TeuJCoQWZXSnBiA=";
   };
 
-  cargoHash = "sha256-HzSytIh/oMEXsd+sqR9jxi03FvbRs3WBmmscZydHL/k=";
+  cargoHash = "sha256-n3VoLQP6jmYJvo/6GRXaB/u9XfewlOOt/zKD9YbCQzU=";
 
   # All integration tests require networking.
   postPatch = ''
@@ -27,7 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     perl
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
   strictDeps = true;
 
   useNextest = true;

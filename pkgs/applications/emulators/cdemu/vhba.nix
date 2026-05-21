@@ -6,12 +6,12 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vhba";
   version = "20250329";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/vhba-module-${version}.tar.xz";
+    url = "mirror://sourceforge/cdemu/vhba-module-${finalAttrs.version}.tar.xz";
     hash = "sha256-piog1yDd8M/lpTIo9FE9SY2JwurZ6a8LG2lZ/4EmB14=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-}
+})

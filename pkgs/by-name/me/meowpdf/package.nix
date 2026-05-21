@@ -27,10 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "PDF viewer for the Kitty terminal with GUI-like usage and Vim-like keybindings written in Rust";
     homepage = "https://github.com/monoamine11231/meowpdf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      cafkafk
-    ];
+    maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "meowpdf";
     platforms = lib.platforms.linux;
   };

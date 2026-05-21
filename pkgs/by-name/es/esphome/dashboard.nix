@@ -11,21 +11,21 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "esphome-dashboard";
-  version = "20260110.0";
+  version = "20260408.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard";
-    tag = version;
-    hash = "sha256-h8g/MRfOBkiCKNTOM4I6OimsE5ljgsIMQLl1eZLfP3U=";
+    tag = finalAttrs.version;
+    hash = "sha256-OY7s/b0rWmjI9QfmEwj3VxbTFrj99fyf9x1tPl24RbI=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    hash = "sha256-DkK2WG7oWHvwYflNdwOMfE0OVP2ICEGAhhTH2rix9zc=";
+    inherit (finalAttrs) src;
+    hash = "sha256-L6tKhijTFAvQwhBBl5Wk6xzI2dtDI6IYfCkiKX75Pvc=";
   };
 
   build-system = [ setuptools ];
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

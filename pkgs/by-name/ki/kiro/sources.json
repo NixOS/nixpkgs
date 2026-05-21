@@ -1,14 +1,14 @@
 {
   "x86_64-linux": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/stable/linux-x64/signed/0.8.140/tar/kiro-ide-0.8.140-stable-linux-x64.tar.gz",
-    "hash": "sha256-nF4i7hSRMEvDCQ9b4rfU5X2M5x76kU6tEfxbo36vBFY="
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/linux-x64/signed/0.12.200/tar/kiro-ide-0.12.200-stable-linux-x64.tar.gz",
+    "hash": "sha256-9OEMZ7FojIyJuHBwEPPYCbg6pjtDjAo5R6sFJ6P8Sbo="
   },
   "x86_64-darwin": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-x64/signed/0.8.140/kiro-ide-0.8.140-stable-darwin-x64.dmg",
-    "hash": "sha256-1Pqos729ShVUop1BjYzYOxo3v5Qyige896qMulWmpqE="
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-x64/signed/0.12.200/kiro-ide-0.12.200-stable-darwin-x64.dmg",
+    "hash": "sha256-gRwyFF3IgzQ1e1T7k08YF+0q2KnJZ+Ns1o+po6mc2Bc="
   },
   "aarch64-darwin": {
-    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-arm64/signed/0.8.140/kiro-ide-0.8.140-stable-darwin-arm64.dmg",
-    "hash": "sha256-kDcyVJIezj4ZfID2lsnMzZgfb+J8b6u0egAu6lPaiP8="
+    "url": "https://prod.download.desktop.kiro.dev/releases/stable/darwin-arm64/signed/0.12.200/kiro-ide-0.12.200-stable-darwin-arm64.dmg",
+    "hash": "sha256-SpCHOXhR/OdMpJQe+IvtLXri6T4ecBTO7LyA8WzNzbc="
   }
 }

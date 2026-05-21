@@ -1,18 +1,16 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchgit,
   boost,
   cmake,
   cmark,
   cryptopp,
-  extra-cmake-modules,
   immer,
   kdePackages,
   lager,
   libkazv,
   nlohmann_json,
-  olm,
   pkg-config,
   qt6,
   zug,
@@ -20,14 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kazv";
-  version = "0.5.0";
+  version = "0.6.0";
 
-  src = fetchFromGitLab {
-    domain = "lily-is.land";
-    owner = "kazv";
-    repo = "kazv";
+  # Heavily mirrored. Click "Clone" at https://iron.lily-is.land/diffusion/K/ to see all mirrors
+  src = fetchgit {
+    url = "https://iron.lily-is.land/diffusion/K/kazv.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WBS7TJJw0t57V4+NxsG8V8q4UKQXB8kRpWocvNy1Eto=";
+    hash = "sha256-7o6xUt/cryOg71/R33VBGpubskqlm9eYGSTyoGderDA=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     lager
     libkazv
     nlohmann_json
-    olm
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtmultimedia

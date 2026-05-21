@@ -10,12 +10,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnupg-pkcs11-scd";
   version = "0.11.0";
 
   src = fetchurl {
-    url = "https://github.com/alonbl/gnupg-pkcs11-scd/releases/download/gnupg-pkcs11-scd-${version}/gnupg-pkcs11-scd-${version}.tar.bz2";
+    url = "https://github.com/alonbl/gnupg-pkcs11-scd/releases/download/gnupg-pkcs11-scd-${finalAttrs.version}/gnupg-pkcs11-scd-${finalAttrs.version}.tar.bz2";
     hash = "sha256-lUeH5WLys9kpQhLDLdDYGizTesolDmaFAC0ok7uVkIc=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    changelog = "https://github.com/alonbl/gnupg-pkcs11-scd/blob/gnupg-pkcs11-scd-${version}/ChangeLog";
+    changelog = "https://github.com/alonbl/gnupg-pkcs11-scd/blob/gnupg-pkcs11-scd-${finalAttrs.version}/ChangeLog";
     description = "Smart-card daemon to enable the use of PKCS#11 tokens with GnuPG";
     mainProgram = "gnupg-pkcs11-scd";
     longDescription = ''
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

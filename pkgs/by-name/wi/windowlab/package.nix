@@ -3,9 +3,9 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
-  libXext,
-  libXft,
+  libx11,
+  libxext,
+  libxft,
 }:
 
 let
@@ -22,9 +22,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
-    libXext
-    libXft
+    libx11
+    libxext
+    libxft
   ];
 
   postPatch = ''

@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   buildInputs = [
-    libX11
-    libXpm
+    libx11
+    libxpm
   ];
 
   makeFlags = [

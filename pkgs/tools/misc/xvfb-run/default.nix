@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
-  xorg,
+  xvfb,
   getopt,
   xauth,
   util-linux,
@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation {
       --prefix PATH : ${
         lib.makeBinPath [
           getopt
-          xorg.xvfb
+          xvfb
           xauth
           which
           util-linux
@@ -78,7 +78,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Convenience script to run a virtualized X-Server";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.artturin ];
     mainProgram = "xvfb-run";

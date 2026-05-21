@@ -46,14 +46,14 @@ let
 
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
-  # What should lib be linked to: lib32 or lib64?
+  # What should $out/usr/lib be linked to: lib32 or lib64?
   defaultLib =
-    {
-      "i686-linux" = "lib32";
-      "x86_64-linux" = "lib64";
-      "aarch64-linux" = "lib64";
-    }
-    .${stdenv.system} or (throw "Please expand list of system with defaultLib for '${stdenv.system}'");
+    if stdenv.hostPlatform.is64bit then
+      "lib64"
+    else if stdenv.hostPlatform.is32bit then
+      "lib32"
+    else
+      throw "buildFHSEnvBubblewrap: defaultLib cannot handle system ${stdenv.hostPlatform.system} (expected 64bit or 32bit)";
 
   # list of packages (usually programs) which match the host's architecture
   # (which includes stuff from multiPkgs)
@@ -125,15 +125,16 @@ let
       unset NIX_ENFORCE_PURITY
       export NIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
       export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
-      export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
-      export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'
-      export NIX_LDFLAGS='-L/usr/lib -L/usr/lib32'
-      export PKG_CONFIG_PATH=/usr/lib/pkgconfig
-      export ACLOCAL_PATH=/usr/share/aclocal
+      export NIX_CFLAGS_COMPILE="-idirafter /usr/include"''${NIX_CFLAGS_COMPILE:+" $NIX_CFLAGS_COMPILE"}
+      export NIX_CFLAGS_LINK="-L/usr/lib -L/usr/lib32"''${NIX_CFLAGS_LINK:+" $NIX_CFLAGS_LINK"}
+      export NIX_LDFLAGS="-L/usr/lib -L/usr/lib32"''${NIX_LDFLAGS:+" $NIX_LDFLAGS"}
+      export PKG_CONFIG_PATH=/usr/lib/pkgconfig''${PKG_CONFIG_PATH:+":$PKG_CONFIG_PATH"}
+      export ACLOCAL_PATH=/usr/share/aclocal''${ACLOCAL_PATH:+":$ACLOCAL_PATH"}
 
       # GStreamer searches for plugins relative to its real binary's location
       # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bd97973ce0f2c5495bcda5cccd4f7ef7dcb7febc
-      export GST_PLUGIN_SYSTEM_PATH_1_0=/usr/lib/gstreamer-1.0:/usr/lib32/gstreamer-1.0
+      export GST_PLUGIN_SYSTEM_PATH_1_0=/usr/lib/gstreamer-1.0:/usr/lib32/gstreamer-1.0''${GST_PLUGIN_SYSTEM_PATH_1_0:+":$GST_PLUGIN_SYSTEM_PATH_1_0"}
+
 
       ${profile}
     '';

@@ -3,21 +3,20 @@
   fetchFromGitHub,
   davfs2,
   cmake,
-  extra-cmake-modules,
   stdenv,
   pkg-config,
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tail-tray";
-  version = "0.2.28";
+  version = "0.2.32";
 
   src = fetchFromGitHub {
     owner = "SneWs";
     repo = "tail-tray";
-    tag = "v${version}";
-    hash = "sha256-UhJyrlY9S3CRK3TgFf7nUGF6drj4Zx/yirZ0z4jpqtE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e8xo+4k3bdEZ7RHPLvkEWTddIwkwd5GQ3c+rFfq5kAw=";
   };
 
   nativeBuildInputs = with kdePackages; [
@@ -42,10 +41,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tray icon to manage Tailscale";
     homepage = "https://github.com/SneWs/tail-tray";
-    changelog = "https://github.com/SneWs/tail-tray/releases/tag/${src.tag}";
+    changelog = "https://github.com/SneWs/tail-tray/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "tail-tray";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Svenum ];
     platforms = lib.platforms.linux;
   };
-}
+})

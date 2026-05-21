@@ -7,7 +7,7 @@
   pytestCheckHook,
   matplotlib,
   quantities,
-  texlive,
+  texliveSmall,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +35,12 @@ buildPythonPackage rec {
     pytestCheckHook
     matplotlib
     quantities
-    (texlive.combine { inherit (texlive) scheme-small lastpage collection-fontsrecommended; })
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        lastpage
+        collection-fontsrecommended
+      ]
+    ))
   ];
 
   meta = {

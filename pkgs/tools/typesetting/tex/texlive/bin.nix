@@ -2,24 +2,24 @@
   lib,
   stdenv,
   fetchurl,
-  fetchzip,
   fetchFromGitHub,
   fetchpatch,
+  unzip,
   buildPackages,
   texlive,
   zlib,
   libiconv,
   libpng,
-  libX11,
+  libx11,
   freetype,
   ttfautohint,
   gd,
-  libXaw,
+  libxaw,
   icu,
-  ghostscript,
-  libXpm,
-  libXmu,
-  libXext,
+  ghostscript_headless,
+  libxpm,
+  libxmu,
+  libxext,
   perl,
   perlPackages,
   python3Packages,
@@ -29,7 +29,7 @@
   libpaper,
   graphite2,
   zziplib,
-  harfbuzz,
+  harfbuzzFull,
   potrace,
   gmp,
   mpfr,
@@ -37,17 +37,19 @@
   brotli,
   cairo,
   pixman,
-  xorg,
+  libxi,
+  libxfixes,
   clisp,
   biber,
   woff2,
-  xxHash,
+  xxhash,
   makeWrapper,
-  useFixedHashes,
+  useFixedHashes ? true,
   asymptote,
   biber-ms,
   tlpdb,
   luajit,
+  ...
 }@args:
 
 # Useful resource covering build options:
@@ -137,12 +139,19 @@ let
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
+    # initial TeX Live 2025 release
+    # src = fetchurl {
+    #   urls = [
+    #     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #     "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+    #   ];
+    #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+    # };
+
+    # 2025.2 update
     src = fetchurl {
-      urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-        "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-      ];
-      hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
+      url = "https://github.com/TeX-Live/texlive-source/archive/refs/tags/svn74917.tar.gz";
+      hash = "sha256-QgUN5LOFeD6Jt0ENF6Uwi516D8PH+TXZ+MCO8bCTHqE=";
     };
 
     prePatch = ''
@@ -356,9 +365,9 @@ rec {
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
         veprbl
-        lovek323
         raskin
         jwiegley
+        xworld21
       ];
       platforms = lib.platforms.all;
     };
@@ -411,10 +420,10 @@ rec {
     buildInputs = core.buildInputs ++ [
       core
       cairo
-      harfbuzz
+      harfbuzzFull
       icu
       graphite2
-      libX11
+      libx11
       potrace
     ];
 
@@ -536,25 +545,21 @@ rec {
   # https://github.com/gucci-on-fleek/context-packaging
   context =
     let
-      # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
-      # https://github.com/gucci-on-fleek/context-packaging
-      context_packaging_release = "2025-06-12-14-21-B";
+      version = "2.11.08";
+      level = "20260217";
     in
     stdenv.mkDerivation {
       pname = "luametatex";
-      version = "2.11.07";
+      version = "${version}-${level}";
 
-      src = fetchzip {
-        name = "luametatex.src.zip";
-        url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
-        hash = "sha256-9TLTIUSqA3g8QP9EF+tQ4VfLLLQwMrbeXPPy58uFWDo=";
-        stripRoot = false;
-      };
+      src = texlive.pkgs.context.texsource + "/source/context/base/luametatex-${level}.src.zip";
+      sourceRoot = ".";
 
       enableParallelBuilding = true;
       nativeBuildInputs = [
         cmake
         ninja
+        unzip
       ];
 
       meta = {
@@ -570,31 +575,19 @@ rec {
 
   dvisvgm = stdenv.mkDerivation rec {
     pname = "dvisvgm";
-    version = "3.2.2";
+    version = "3.6";
 
     src =
       assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version)
         "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm";
       fetchurl {
         url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-        hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
+        hash = "sha256-JkRrs7EHOf8JJcnkFrdtLSIgdcnV3Pr+biFGCdBy7Ro=";
       };
 
     configureFlags = [
       "--disable-manpage" # man pages are provided by the doc container
       "--with-ttfautohint"
-    ];
-
-    # GCC15 compataiblity patches
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/mgieseki/dvisvgm/commit/ebf66e3f59edf89e9d2b4fb7973b859e185eb034.patch";
-        hash = "sha256-5dppK9saWOuIH4Pmv7Zk9vrRc81oK8qKZqkwCuOQhaY=";
-      })
-      (fetchpatch {
-        url = "https://github.com/mgieseki/dvisvgm/commit/dcb5940dff7ca3084330119a4ff1472cd52ef6de.patch";
-        hash = "sha256-rGTFeeLaWIon4O16x1wFxb3Wr020HdUR3BgrqB5r864=";
-      })
     ];
 
     # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
@@ -607,13 +600,13 @@ rec {
     buildInputs = [
       core
       brotli
-      ghostscript
+      ghostscript_headless
       zlib
       freetype
       ttfautohint
       woff2
       potrace
-      xxHash
+      xxhash
       mupdf-headless
     ];
 
@@ -637,7 +630,7 @@ rec {
       libpng
       freetype
       gd
-      ghostscript
+      ghostscript_headless
     ];
 
     preConfigure = ''
@@ -651,7 +644,7 @@ rec {
       "--disable-debug"
     ];
 
-    GS = "${ghostscript}/bin/gs";
+    GS = lib.getExe ghostscript_headless;
 
     enableParallelBuilding = true;
   };
@@ -696,24 +689,32 @@ rec {
     };
   };
 
-  asymptote = args.asymptote.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = texlive.pkgs.asymptote.version;
+  asymptote =
+    let
+      version = "3.09";
+    in
+    args.asymptote.overrideAttrs (
+      finalAttrs: prevAttrs: {
+        version =
+          assert lib.assertMsg (version == texlive.pkgs.asymptote.version)
+            "asymptote: TeX Live version (${texlive.pkgs.asymptote.version}) different from source in bin.nix (${version}), please update it";
+          version;
 
-      # keep local src and patches even if duplicated in the top level asymptote
-      # so that top level updates do not break texlive
-      src = fetchurl {
-        url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
-      };
+        # keep local src and patches even if duplicated in the top level asymptote
+        # so that top level updates do not break texlive
+        src = fetchurl {
+          url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
+          hash = "sha256-unM6mfyq8MCajo8wtG/ksr4E6mQNK/A03gGIa9Fxeuc=";
+        };
 
-      texContainer = texlive.pkgs.asymptote.tex;
-      texdocContainer = texlive.pkgs.asymptote.texdoc;
+        texContainer = texlive.pkgs.asymptote.tex;
+        texdocContainer = texlive.pkgs.asymptote.texdoc;
 
-      # build issue with asymptote 2.95 has been fixed
-      postConfigure = "";
-    }
-  );
+        preConfigure = prevAttrs.preConfigure + ''
+          substituteInPlace Makefile.in --replace-fail '/bin/ls' 'ls'
+        '';
+      }
+    );
 
   inherit biber;
   inherit biber-ms;
@@ -750,18 +751,16 @@ rec {
     buildInputs = [
       core # kpathsea
       freetype
-      ghostscript
-    ]
-    ++ (with xorg; [
-      libX11
-      libXaw
-      libXi
-      libXpm
-      libXmu
-      libXaw
-      libXext
-      libXfixes
-    ]);
+      ghostscript_headless
+      libx11
+      libxaw
+      libxi
+      libxpm
+      libxmu
+      libxaw
+      libxext
+      libxfixes
+    ];
 
     preConfigure = "cd texk/xdvik";
 
@@ -785,7 +784,7 @@ rec {
 
     inherit (common) src;
 
-    buildInputs = [ libX11 ];
+    buildInputs = [ libx11 ];
 
     preConfigure = "cd utils/xpdfopen";
 

@@ -15,12 +15,12 @@
   apple-sdk,
   fmt,
   nlohmann_json,
-  pybind11,
   # linux-only
   openblas,
 
   # tests
   numpy,
+  psutil,
   pytestCheckHook,
   python,
   runCommand,
@@ -34,6 +34,7 @@ let
   gguf-tools = fetchFromGitHub {
     owner = "antirez";
     repo = "gguf-tools";
+    # Tag from https://github.com/ml-explore/mlx/blob/v0.31.1/mlx/io/CMakeLists.txt#L14
     rev = "8fa6eb65236618e28fd7710a0fba565f7faa1848";
     hash = "sha256-15FvyPOFqTOr5vdWQoPnZz+mYH919++EtghjozDlnSA=";
   };
@@ -41,19 +42,21 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.3";
+  version = "0.31.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y4RTkGcDCZ9HLyflN0qYhPt/oVOsBhF1mHnKM4n1/ys=";
+    hash = "sha256-0Oxacz61WGWZrpWw+fMQjEQfwOx1l1L2d0kWl54/LrQ=";
   };
 
   patches = [
-    # Use system nanobind instead of fetching its sources
+    # Use nix packages instead of fetching their sources
     ./dont-fetch-nanobind.patch
+    ./dont-fetch-json.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./darwin-build-fixes.patch {
@@ -80,19 +83,24 @@ buildPythonPackage (finalAttrs: {
 
   env = {
     PYPI_RELEASE = 1;
-    CMAKE_ARGS = toString [
-      # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
-      # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
-      # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
-      # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
-      (lib.cmakeBool "MLX_BUILD_METAL" false)
-      (lib.cmakeBool "USE_SYSTEM_FMT" true)
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
+    CMAKE_ARGS = toString (
+      [
+        # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
+        # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
+        # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
+        # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
+        (lib.cmakeBool "MLX_BUILD_METAL" false)
+        (lib.cmakeBool "USE_SYSTEM_FMT" true)
+        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
+        (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
 
-      # Cmake cannot find nanobind-config.cmake by itself
-      (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
-    ];
+        # Cmake cannot find nanobind-config.cmake by itself
+        (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+        (lib.cmakeBool "MLX_ENABLE_X64_MAC" true)
+      ]
+    );
   };
 
   build-system = [
@@ -103,9 +111,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     fmt
-    gguf-tools
     nlohmann_json
-    pybind11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openblas
@@ -116,6 +122,7 @@ buildPythonPackage (finalAttrs: {
   # Run the mlx Python test suite.
   nativeCheckInputs = [
     numpy
+    psutil
     pytestCheckHook
   ];
 
@@ -123,7 +130,11 @@ buildPythonPackage (finalAttrs: {
     "python/tests/"
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+  disabledTests = [
+    # brittle memory leak test, see: https://github.com/ml-explore/mlx/pull/3088
+    "test_siblings_without_eval"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # Segmentation fault
     "test_lapack"
     "test_multivariate_normal"
@@ -175,14 +186,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Gabriella439
       booxter
       cameronyule
       viraptor
-    ];
-    badPlatforms = [
-      # Building for x86_64 on macOS is not supported
-      "x86_64-darwin"
     ];
   };
 })

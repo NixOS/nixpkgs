@@ -10,7 +10,7 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minicom";
   version = "2.10";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "minicom-team";
     repo = "minicom";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-wC6VlMRwuhV1zQ26wNx7gijuze8E2CvnzpqOSIPzq2s=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
   };
-}
+})

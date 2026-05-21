@@ -20,14 +20,14 @@ in
 
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ffsend";
   version = "0.2.77";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qq1nLNe4ddcsFJZaGfNQbNtqchz6tPh1kpEH/oDW3jk=";
   };
 
@@ -78,4 +78,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "ffsend";
   };
-}
+})

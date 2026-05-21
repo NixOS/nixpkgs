@@ -14,25 +14,25 @@ let
     # TODO: there are also FreeBSD and Windows versions
     x86_64-linux = {
       arch = "linuxx86";
-      sha256 = "sha256-cAae50xvBoXfg+tiJM4i8+eRnheyM0dseE5EDWDia/E=";
+      hash = "sha256-cAae50xvBoXfg+tiJM4i8+eRnheyM0dseE5EDWDia/E=";
       runtime = "lx86cl64";
       kernel = "linuxx8664";
     };
     i686-linux = {
       arch = "linuxx86";
-      sha256 = x86_64-linux.sha256;
+      hash = x86_64-linux.hash;
       runtime = "lx86cl";
       kernel = "linuxx8632";
     };
     armv7l-linux = {
       arch = "linuxarm";
-      sha256 = "sha256-iyUMTDuHbyfEAxAAhjXANjh6HhpLkWG5+diXI6aFUUc=";
+      hash = "sha256-iyUMTDuHbyfEAxAAhjXANjh6HhpLkWG5+diXI6aFUUc=";
       runtime = "armcl";
       kernel = "linuxarm";
     };
     x86_64-darwin = {
       arch = "darwinx86";
-      sha256 = "sha256-r+OhkU0b+QDgoZpZb0Xpc3V0yRq8GBKcNLt2IzeOSdE=";
+      hash = "sha256-r+OhkU0b+QDgoZpZb0Xpc3V0yRq8GBKcNLt2IzeOSdE=";
       runtime = "dx86cl64";
       kernel = "darwinx8664";
     };
@@ -43,13 +43,13 @@ let
       or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccl";
   version = "1.13";
 
   src = fetchurl {
-    url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
-    sha256 = cfg.sha256;
+    url = "https://github.com/Clozure/ccl/releases/download/v${finalAttrs.version}/ccl-${finalAttrs.version}-${cfg.arch}.tar.gz";
+    hash = cfg.hash;
   };
 
   buildInputs =
@@ -64,13 +64,15 @@ stdenv.mkDerivation rec {
         m4
       ];
 
-  CCL_RUNTIME = cfg.runtime;
-  CCL_KERNEL = cfg.kernel;
+  env = {
+    CCL_RUNTIME = cfg.runtime;
+    CCL_KERNEL = cfg.kernel;
+  };
 
   postPatch =
     if stdenv.hostPlatform.isDarwin then
       ''
-        substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+        substituteInPlace lisp-kernel/${finalAttrs.env.CCL_KERNEL}/Makefile \
           --replace "M4 = gm4"   "M4 = m4" \
           --replace "dtrace"     "/usr/sbin/dtrace" \
           --replace "/bin/rm"    "${coreutils}/bin/rm" \
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
       ''
     else
       ''
-        substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+        substituteInPlace lisp-kernel/${finalAttrs.env.CCL_KERNEL}/Makefile \
           --replace "/bin/rm"    "${coreutils}/bin/rm" \
           --replace "/bin/echo"  "${coreutils}/bin/echo"
 
@@ -90,10 +92,10 @@ stdenv.mkDerivation rec {
       '';
 
   buildPhase = ''
-    make -C lisp-kernel/${CCL_KERNEL} clean
-    make -C lisp-kernel/${CCL_KERNEL} all
+    make -C lisp-kernel/${finalAttrs.env.CCL_KERNEL} clean
+    make -C lisp-kernel/${finalAttrs.env.CCL_KERNEL} all
 
-    ./${CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl :full t)' -e '(ccl:quit)'
+    ./${finalAttrs.env.CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl :full t)' -e '(ccl:quit)'
   '';
 
   installPhase = ''
@@ -101,9 +103,9 @@ stdenv.mkDerivation rec {
     cp -r .  "$out/share/ccl-installation"
 
     mkdir -p "$out/bin"
-    echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
-    chmod a+x "$out"/bin/"${CCL_RUNTIME}"
-    ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
+    echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${finalAttrs.env.CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${finalAttrs.env.CCL_RUNTIME}"
+    chmod a+x "$out"/bin/"${finalAttrs.env.CCL_RUNTIME}"
+    ln -s "$out"/bin/"${finalAttrs.env.CCL_RUNTIME}" "$out"/bin/ccl
   '';
 
   hardeningDisable = [ "format" ];
@@ -118,4 +120,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.lisp ];
     platforms = lib.attrNames options;
   };
-}
+})

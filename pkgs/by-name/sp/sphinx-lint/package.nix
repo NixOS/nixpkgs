@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sphinx-lint";
   version = "1.0.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "sphinx-lint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Cg/14asXB1ivKSoGuLghne7kmQiXuimYTUqmdVqba6M=";
   };
 
@@ -38,4 +38,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sphinx-lint";
   };
-}
+})

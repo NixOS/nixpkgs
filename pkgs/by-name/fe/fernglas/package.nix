@@ -11,14 +11,14 @@
   nodejs-slim,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fernglas";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "wobcom";
     repo = "fernglas";
-    rev = "fernglas-${version}";
+    rev = "fernglas-${finalAttrs.version}";
     hash = "sha256-0wj5AS8RLVr+S/QWWxCsMvmVjmXUWGfR9kPaZimJEss=";
   };
 
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-aY5/dIplV8yWaQ2IdWxxC7T1DoKeRjsN5eT+UxsaA1E=";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/frontend/yarn.lock";
+    yarnLock = finalAttrs.src + "/frontend/yarn.lock";
     hash = "sha256-/ubCAs4C5nG8xNC77jTH+cJVNgddSxqGGPEVLDH/Cdo=";
   };
 
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
-    FERNGLAS_VERSION=${version} FERNGLAS_COMMIT=${src.rev} node_modules/.bin/webpack
+    FERNGLAS_VERSION=${finalAttrs.version} FERNGLAS_COMMIT=${finalAttrs.src.rev} node_modules/.bin/webpack
     cp -r dist/ ../static
 
     popd
@@ -74,10 +74,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Looking glass for your network using BGP and BMP as data source";
     homepage = "https://wobcom.github.io/fernglas/";
-    changelog = "https://github.com/wobcom/fernglas/releases/tag/fernglas-${version}";
+    changelog = "https://github.com/wobcom/fernglas/releases/tag/fernglas-${finalAttrs.version}";
     license = lib.licenses.eupl12;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ yureka-wdz ];
     mainProgram = "fernglas";
   };
-}
+})

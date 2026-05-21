@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ympd";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "notandy";
     repo = "ympd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1nvb19jd556v2h2bi7w4dcl507p3p8xvjkqfzrcsy7ccy3502brq";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ympd";
   };
-}
+})

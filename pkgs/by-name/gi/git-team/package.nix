@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-team";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "hekmekk";
     repo = "git-team";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+j5d1tImVHaTx63uzLdh2YNCFa1ErAVv4OMwxOutBQ4=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lockejan ];
     mainProgram = "git-team";
   };
-}
+})

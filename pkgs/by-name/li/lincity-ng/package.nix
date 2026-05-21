@@ -10,7 +10,7 @@
   lib,
   libwebp,
   libtiff,
-  libX11,
+  libx11,
   libxml2,
   libxmlxx5,
   libxslt,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-    libX11
+    libx11
     libwebp
     libtiff
     libxmlxx5

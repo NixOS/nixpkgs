@@ -10,14 +10,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libetpan";
   version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "dinhviethoa";
     repo = "libetpan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lukeWURNsRPTuFk2q2XVnwkKz5Y+PRiPba5GPQCw6jw=";
   };
 
@@ -104,13 +104,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   configureScript = "./autogen.sh";
 
   meta = {
     description = "Mail Framework for the C Language";
     homepage = "https://www.etpan.org/libetpan.html";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

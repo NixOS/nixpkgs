@@ -5,7 +5,12 @@
   version,
   autoPatchelfHook,
   fontconfig,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
 }:
 
 stdenv.mkDerivation {
@@ -19,12 +24,12 @@ stdenv.mkDerivation {
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
     fontconfig
-    xorg.libXrandr
-    xorg.libXfixes
-    xorg.libXcursor
-    xorg.libSM
-    xorg.libICE
-    xorg.libX11
+    libxrandr
+    libxfixes
+    libxcursor
+    libsm
+    libice
+    libx11
   ];
 
   dontConfigure = true;

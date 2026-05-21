@@ -6,101 +6,120 @@
   buildGoModule,
   buildNpmPackage,
   systemd,
-  grafana-alloy,
+  installShellFiles,
+  versionCheckHook,
   nixosTests,
   nix-update-script,
-  installShellFiles,
-  testers,
   lld,
   useLLD ? stdenv.hostPlatform.isArmv7,
 }:
 
-buildGoModule (finalAttrs: rec {
+let
+  beylaVersion = "v3.9.5";
+in
+
+buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
-  version = "1.12.2";
+  version = "1.16.0";
+
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C/yqsUjEwKnGRkxMOQkKfGdeERbvO/e7D7c3CyJ+cVY=";
+    hash = "sha256-q5R2noxBZ3OPyZqmB+bx3iJKWFxC2WIprcgh9RwjLzk=";
   };
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/internal/web/ui";
-    hash = "sha256-3J1Slka5bi+72NUaHBmDTtG1faJWRkOlkClKnUyiUsk=";
+    hash = "sha256-vResNUT4auDsK9ngnJYfMUUOYr/ikPhrvakqCjGq2Q8=";
   };
 
   frontend = buildNpmPackage {
     pname = "alloy-frontend";
-    inherit version src;
+    inherit (finalAttrs) version src;
 
-    inherit npmDeps;
-    sourceRoot = "${src.name}/internal/web/ui";
+    sourceRoot = "${finalAttrs.src.name}/internal/web/ui";
+
+    inherit (finalAttrs) npmDeps;
 
     installPhase = ''
       runHook preInstall
 
-      mkdir $out
+      mkdir -p $out
       cp -av dist $out/share
 
       runHook postInstall
     '';
   };
 
+  patchPhase = ''
+    cp -av ${finalAttrs.frontend}/share internal/web/ui/dist
+
+    goSumBeylaVersion="$(grep beyla go.sum | head -1 | cut -d ' ' -f2)"
+    if [[ "$goSumBeylaVersion" != "${beylaVersion}" ]];then
+      echo "beyla version in go.sum ($goSumBeylaVersion) doesn't match the one set in the expression (${beylaVersion}), needs updating."
+      exit 1
+    fi
+  '';
+
+  modRoot = "collector";
+
   proxyVendor = true;
-  vendorHash = "sha256-Bq/6ld2LldSDhksNqGMHXZAeNHh74D07o2ETpQqMcP4=";
+  vendorHash = "sha256-uTIdurwLfxh27fb1CPCHbHmENk3S6VYNBaGT/5yh3Sc=";
+
+  subPackages = [ "." ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/grafana/alloy/internal/build.Version=${finalAttrs.version}"
+    "-X github.com/grafana/alloy/internal/build.Branch=v${finalAttrs.version}"
+    "-X github.com/grafana/alloy/internal/build.Revision=v${finalAttrs.version}"
+    "-X github.com/grafana/alloy/internal/build.BuildUser=nix@nixpkgs"
+    "-X github.com/grafana/alloy/internal/build.BuildDate=1970-01-01T00:00:00Z"
+    "-X github.com/grafana/beyla/pkg/buildinfo=${beylaVersion}"
+  ];
+
+  tags = [
+    "embedalloyui"
+    "gore2regex"
+    "netgo"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "promtail_journal_enabled"
+  ];
+
+  env =
+    lib.optionalAttrs useLLD {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
+      # Uses go-systemd, which uses libsystemd headers.
+      # https://github.com/coreos/go-systemd/issues/351
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemd}/include";
+    };
 
   nativeBuildInputs = [
     installShellFiles
   ]
   ++ lib.optionals useLLD [ lld ];
 
-  env = lib.optionalAttrs useLLD { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
+  postInstall =
+    "mv -v $out/bin/otel_engine $out/bin/alloy"
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
 
-  ldflags =
-    let
-      prefix = "github.com/grafana/alloy/internal/build";
-    in
-    [
-      "-s"
-      "-w"
-      # https://github.com/grafana/alloy/blob/3201389252d2c011bee15ace0c9f4cdbcb978f9f/Makefile#L110
-      "-X ${prefix}.Branch=v${finalAttrs.version}"
-      "-X ${prefix}.Version=${finalAttrs.version}"
-      "-X ${prefix}.Revision=v${finalAttrs.version}"
-      "-X ${prefix}.BuildUser=nix"
-      "-X ${prefix}.BuildDate=1970-01-01T00:00:00Z"
-    ];
+      installShellCompletion --cmd alloy \
+        --bash <($out/bin/alloy completion bash) \
+        --fish <($out/bin/alloy completion fish) \
+        --zsh <($out/bin/alloy completion zsh)
+    '';
 
-  tags = [
-    "netgo"
-    "builtinassets"
-    "promtail_journal_enabled"
-  ];
-
-  patchPhase = ''
-    # Copy frontend build in
-    cp -va "${frontend}/share" "internal/web/ui/dist"
-  '';
-
-  subPackages = [
-    "."
-  ];
-
-  # uses go-systemd, which uses libsystemd headers
-  # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [
-    "-I${lib.getDev systemd}/include"
-  ];
-
-  checkFlags = [
-    "-tags nonetwork" # disable network tests
-    "-tags nodocker" # disable docker tests
-  ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
-  # runtime.
-  # Add to RUNPATH so it can be found.
+  # runtime. Add to RPATH so it can be found.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${
@@ -109,20 +128,9 @@ buildGoModule (finalAttrs: rec {
       $out/bin/alloy
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd alloy \
-      --bash <($out/bin/alloy completion bash) \
-      --fish <($out/bin/alloy completion fish) \
-      --zsh <($out/bin/alloy completion zsh)
-  '';
-
   passthru = {
     tests = {
       inherit (nixosTests) alloy;
-      version = testers.testVersion {
-        version = "v${finalAttrs.version}";
-        package = grafana-alloy;
-      };
     };
     updateScript = nix-update-script {
       extraArgs = [
@@ -130,21 +138,26 @@ buildGoModule (finalAttrs: rec {
         "v(.+)"
       ];
     };
-    # for nix-update to be able to find and update the hash
-    inherit npmDeps;
+    # For nix-update to be able to find and update the hash.
+    inherit (finalAttrs) npmDeps;
   };
 
   meta = {
-    description = "Open source OpenTelemetry Collector distribution with built-in Prometheus pipelines and support for metrics, logs, traces, and profiles";
-    mainProgram = "alloy";
-    license = lib.licenses.asl20;
+    description = "OpenTelemetry Collector distribution with programmable pipelines";
+    longDescription = ''
+      Grafana Alloy is an open source OpenTelemetry Collector distribution with
+      built-in Prometheus pipelines and support for metrics, logs, traces, and
+      profiles.
+    '';
     homepage = "https://grafana.com/oss/alloy";
     changelog = "https://github.com/grafana/alloy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       azahi
       flokli
       hbjydev
     ];
-    platforms = lib.platforms.unix;
+    mainProgram = "alloy";
   };
 })

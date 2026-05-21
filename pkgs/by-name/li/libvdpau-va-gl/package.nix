@@ -4,11 +4,11 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
-  libpthreadstubs,
-  libXau,
-  libXdmcp,
-  libXext,
+  libx11,
+  libpthread-stubs,
+  libxau,
+  libxdmcp,
+  libxext,
   libvdpau,
   glib,
   libva,
@@ -32,11 +32,11 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
-    libpthreadstubs
-    libXau
-    libXdmcp
-    libXext
+    libx11
+    libpthread-stubs
+    libxau
+    libxdmcp
+    libxext
     libvdpau
     glib
     libva

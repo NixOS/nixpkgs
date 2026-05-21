@@ -8,9 +8,9 @@
   yq,
   protobuf,
   installShellFiles,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
+  makeBinaryWrapper,
+  versionCheckHook,
+  librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
   lld,
@@ -22,6 +22,9 @@
   git,
   python3,
   esbuild,
+
+  # self for passthru
+  deno,
 }:
 
 let
@@ -29,17 +32,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.6.5";
+  version = "2.7.14";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-oNZXPBW61IQdA3MFS1gxNoInSCt6mUitedAXx+tuFaw=";
+    hash = "sha256-tkZc89JOhXCdMVSAOQYGR6HDe7KmCI5/haLH1RP2p7I=";
   };
 
-  cargoHash = "sha256-H1vX/aiB5inK6Fo0l3sEZnvqgRImTpjkxRZHLBPgz0U=";
+  cargoHash = "sha256-bFQLsAF4hFBRw04VaL+sxvxIZ9p7nXOLSr2BIZKcwiI=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -67,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by deno_kv crate
     protobuf
     installShellFiles
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
@@ -89,13 +93,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
 
-  # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
-  # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
-  # these four arch+platform combinations.
-  doCheck =
-    stdenv.hostPlatform.isDarwin
-    || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
-
+  # Don't run checks on hydra as they've been observed to be flakey for us and
+  # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
+  # We haven't reproduced it on local machines, could be related to doing other
+  # builds simultaneously.
+  # A build with tests (+ librusty_v8 tests) is included in `deno.passhtru.tests`
+  doCheck = false;
+  # check related config is left in the main package so if someone uses
+  # `overrideAttrs` to always build with tests, it'll all work.
   preCheck =
     # Provide esbuild binary at `./third_party/prebuilt/` just like upstream:
     # https://github.com/denoland/deno_third_party/tree/master/prebuilt
@@ -128,7 +133,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # unit tests
-    "--test=integration_tests"
+    "--test=integration_test"
     # Test targets not included here:
     # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
     # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
@@ -177,6 +182,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
     "--skip=sqlite_extension_test"
+
+    # Needs deno in $PATH
+    "--skip=tests::test_rebuild_async_stubs"
+
+    # Causes SIGTRAP
+    "--skip=external::tests::test_external_deref_after_take"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
@@ -215,6 +226,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
+
+    # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
+    makeBinaryWrapper $out/bin/deno $out/bin/dx --add-flags "x"
   ''
   + lib.optionalString canExecute ''
     installShellCompletion --cmd deno \
@@ -224,21 +238,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString canExecute ''
-    runHook preInstallCheck
-    $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    updateScript = ./update/update.ts;
-    tests = callPackage ./tests { };
+    updateScript = ./update.sh;
+    tests = (callPackage ./tests { }) // {
+      build-with-unit-tests = deno.overrideAttrs (fa: {
+        # The tools test suite requires building the test server
+        dontBuild = false;
+        # Many tests depend on prebuilt binaries being present at `./third_party/prebuilt`.
+        # We provide nixpkgs binaries for these for all platforms, but the test runner itself only handles
+        # these four arch+platform combinations.
+        doCheck =
+          stdenv.hostPlatform.isDarwin
+          || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
+      });
+      # Also include librusty_v8 tests
+      librusty_v8-tests = librusty_v8.passthru.tests;
+    };
     inherit librusty_v8;
   };
 
   meta = {
-    homepage = "https://deno.land/";
+    homepage = "https://deno.com/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
     longDescription = ''
@@ -255,7 +277,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       jk
       ofalvai
+      mynacol
     ];
+    maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -5,14 +5,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libversion";
   version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "repology";
     repo = "libversion";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-USgSwAdRHEepq9ZTDHVWkPsZjljfh9sEWOZRfu0H7Go=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = lib.platforms.unix;
   };
-}
+})

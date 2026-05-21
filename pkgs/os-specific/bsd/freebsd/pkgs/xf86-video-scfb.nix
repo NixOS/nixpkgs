@@ -1,7 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
-  xorg,
+  xorg-server,
   pkg-config,
 }:
 stdenv.mkDerivation rec {
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     sed -E -i -e "/xf86DisableRandR/d" src/scfb_driver.c
   '';
 
-  buildInputs = [ xorg.xorgserver ];
+  buildInputs = [ xorg-server ];
   nativeBuildInputs = [ pkg-config ];
 }

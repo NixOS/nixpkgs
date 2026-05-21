@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     head CMakeLists.txt
   '';
 
-  CLANG_INSTALL_DIR = llvmPackages.libclang.out;
+  env.CLANG_INSTALL_DIR = llvmPackages.libclang.out;
 
   nativeBuildInputs = [
     cmake

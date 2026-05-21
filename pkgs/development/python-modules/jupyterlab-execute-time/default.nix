@@ -1,35 +1,64 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+  hatch-jupyter-builder,
+
+  # build inputs
   jupyterlab,
+  nodejs,
+  writableTmpDirAsHomeHook,
+  yarn-berry_3,
+
+  # dependencies
   jupyter-packaging,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-execute-time";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "jupyterlab_execute_time";
-    inherit version;
-    hash = "sha256-mxO2XCwTm/q7P2/xcGxNM+1aViA6idApdggzThW8nAs=";
+  src = fetchFromGitHub {
+    owner = "deshaw";
+    repo = "jupyterlab-execute-time";
+    rev = "v${version}";
+    hash = "sha256-1eNv6yTyorg64PXQm68eqp56Ig0eUbhPWluI/s4oijE=";
   };
 
-  # jupyterlab is required to build from source but we use the pre-build package
+  # Fix version requirements and replace jupyterlab's pinned yarn (jlpm) with yarn
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"jupyterlab~=4.0.0"' ""
+      --replace-fail "jupyterlab~=4.0.0" "jupyterlab"
+    substituteInPlace pyproject.toml package.json \
+      --replace-fail 'jlpm' 'yarn'
   '';
+
+  build-system = [
+    hatchling
+    hatch-jupyter-builder
+  ];
+
+  nativeBuildInputs = [
+    jupyterlab
+    nodejs
+    writableTmpDirAsHomeHook
+    yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-aCuw+4FqA0JPMr++AgE4WI+KmXda1IosaU2yk/vE7vw=";
+  };
 
   dependencies = [
     jupyterlab
     jupyter-packaging
   ];
-
-  # has no tests
-  doCheck = false;
 
   pythonImportsCheck = [ "jupyterlab_execute_time" ];
 

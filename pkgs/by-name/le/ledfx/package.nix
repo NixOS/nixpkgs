@@ -4,16 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ledfx";
-  version = "2.1.0";
+  version = "2.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedFx";
     repo = "LedFx";
-    tag = "v${version}";
-    hash = "sha256-N9EHK0GVohFCjEKsm3g4h+4XWfzZO1tzdd2z5IN1YjI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-le3SEGI9uis7wx9+SFpn0BJbpCybSecXEcxxAkC910U=";
   };
 
   postPatch = ''
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     # not packaged
     "rpi-ws281x"
+    "xled"
   ];
 
   build-system = with python3.pkgs; [
@@ -41,7 +42,8 @@ python3.pkgs.buildPythonApplication rec {
     cffi
     aiohttp
     aiohttp-cors
-    aubio
+    aubio-ledfx
+    cython
     certifi
     multidict
     openrgb-python
@@ -54,38 +56,50 @@ python3.pkgs.buildPythonApplication rec {
     sacn
     sentry-sdk
     sounddevice
-    samplerate
     icmplib
     voluptuous
     zeroconf
     pillow
     flux-led
+    lifx-async
     python-osc
     pybase64
     mss
     uvloop
     stupidartnet
     python-dotenv
-    vnoise
+    pyfastnoiselite
     netifaces2
     packaging
+    samplerate-ledfx
+    audio-hotplug
+    aiosendspin
+    pyflac
   ];
 
   optional-dependencies = {
-    hue = with pyproject.pkgs; [ python-mbedtls ];
+    hue = with python3.pkgs; [ python-mbedtls ];
   };
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    lifx-emulator-core
     pytest-asyncio
+    pytest-order
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # requires internet
+    "TestURLDownloadWithExternalURL"
   ];
 
   meta = {
     description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
-    changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/LedFx/LedFx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ledfx";
   };
-}
+})

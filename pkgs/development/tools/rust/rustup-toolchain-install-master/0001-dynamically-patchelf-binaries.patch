@@ -1,61 +1,66 @@
 diff --git a/src/main.rs b/src/main.rs
-index 3cb6896..7f070e0 100644
+index d8b46b5..55b8cba 100644
 --- a/src/main.rs
 +++ b/src/main.rs
-@@ -275,7 +275,9 @@ fn install_single_toolchain(
-
-     // install
-     if maybe_dry_client.is_some() {
--        rename(&toolchain.dest, toolchain_path)?;
-+        rename(&toolchain.dest, toolchain_path.clone())?;
-+        nix_patchelf(toolchain_path)
-+            .expect("failed to patch toolchain for NixOS");
-         eprintln!(
-             "toolchain `{}` is successfully installed!",
-             toolchain.dest.display()
-@@ -291,6 +293,45 @@ fn install_single_toolchain(
-     Ok(())
+@@ -360,7 +360,9 @@ impl<'a> Installer<'a> {
+ 
+         // install
+         if self.actually_install {
+-            rename(&toolchain.dest, toolchain_path)?;
++            rename(&toolchain.dest, toolchain_path.clone())?;
++            nix_patchelf(toolchain_path, toolchain.host_target)
++                .expect("failed to patch toolchain for NixOS");
+             eprintln!(
+                 "toolchain `{}` is successfully installed!",
+                 toolchain.dest.display()
+@@ -377,6 +379,50 @@ impl<'a> Installer<'a> {
+     }
  }
-
-+fn nix_patchelf(mut toolchain_path: PathBuf) -> Result<(), Error> {
-+    toolchain_path.push("bin");
+ 
++fn nix_patchelf(toolchain_path: PathBuf, host_target: &str) -> Result<(), Error> {
++    for toolchain_path in [
++        &toolchain_path.join("bin"),
++        &toolchain_path.join("lib"),
++        &toolchain_path
++            .join("lib")
++            .join("rustlib")
++            .join(host_target)
++            .join("bin"),
++        &toolchain_path
++            .join("lib")
++            .join("rustlib")
++            .join(host_target)
++            .join("bin")
++            .join("gcc-ld"),
++        &toolchain_path
++            .join("lib")
++            .join("rustlib")
++            .join(host_target)
++            .join("lib"),
++    ] {
++        for entry in toolchain_path.read_dir()? {
++            let entry = entry?;
++            eprintln!(
++                "info: you seem to be running NixOS. Attempting to patch {}",
++                entry.path().to_str().unwrap()
++            );
 +
-+    for entry in toolchain_path.read_dir()? {
-+        let entry = entry?;
-+        if !entry.file_type()?.is_file() {
-+            continue;
++            let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++                .arg("--set-interpreter")
++                .arg("@dynamicLinker@")
++                .arg(entry.path())
++                .output();
++            let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++                .arg("--set-rpath")
++                .arg("@libPath@")
++                .arg(entry.path())
++                .output();
 +        }
-+
-+        eprintln!("info: you seem to be running NixOS. Attempting to patch {}",
-+                  entry.path().to_str().unwrap());
-+        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
-+            .arg("--set-interpreter")
-+            .arg("@dynamicLinker@")
-+            .arg(entry.path())
-+            .output();
-+    }
-+
-+    toolchain_path.pop();
-+    toolchain_path.push("lib");
-+
-+    for entry in toolchain_path.read_dir()? {
-+        let entry = entry?;
-+        if !entry.file_type()?.is_file() {
-+            continue;
-+        }
-+
-+        eprintln!("info: you seem to be running NixOS. Attempting to patch {}",
-+                  entry.path().to_str().unwrap());
-+        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
-+            .arg("--set-rpath")
-+            .arg("@libPath@")
-+            .arg(entry.path())
-+            .output();
 +    }
 +
 +    Ok(())
 +}
 +
  fn fetch_master_commit(client: &Client, github_token: Option<&str>) -> Result<String, Error> {
-     eprintln!("fetching master commit hash... ");
+     eprintln!("fetching HEAD commit hash... ");
      fetch_master_commit_via_git()

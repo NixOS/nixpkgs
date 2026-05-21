@@ -21,10 +21,10 @@ patch it to also consider `-idirafter` and `-isystem` as added by cc-wrapper.
 +  llvm::append_range(includeDirs,
 +                     DriverArgs.getAllArgValues(
 +                         clang::driver::options::OPT_idirafter));
-+  // Nix adds the C++ stdlib include path using `-isystem`.
++  // Nix adds the C++ stdlib include path using `-cxx-isystem`.
 +  llvm::append_range(includeDirs,
 +                     DriverArgs.getAllArgValues(
-+                         clang::driver::options::OPT_isystem));
++                         clang::driver::options::OPT_cxx_isystem));
  
    for (const auto &includeDir : includeDirs) {
      Path dir(includeDir);

@@ -402,6 +402,29 @@ rec {
         done
       '';
 
+  # verify that l3build works correctly
+  l3build =
+    runCommand "texlive-test-l3build"
+      {
+        nativeBuildInputs = [ (texliveSmall.withPackages (ps: [ ps.l3build ])) ];
+      }
+      ''
+        cat >>build.lua <<EOF
+        module = "texlive-test-l3build"
+        typesetfiles = {"*.tex"}
+        EOF
+
+        cat >>test-l3build.tex <<EOF
+        \documentclass{article}
+        \begin{document}
+        l3build ran successfully.
+        \end{document}
+        EOF
+
+        l3build doc
+        l3build install --full --texmfhome "$out"
+      '';
+
   # verify that the restricted mode gets enabled when
   # needed (detected by checking if it disallows --gscmd)
   repstopdf =
@@ -461,6 +484,7 @@ rec {
         "bundledoc"
         "cachepic"
         "checklistings"
+        "dtxgen"
         "dvipos"
         "extractres"
         "fig4latex"
@@ -659,14 +683,17 @@ rec {
         # requires kpsewhich
         "memoize-extract.pl"
         "memoize-extract.py"
+        "git-latexdiff"
 
         # require other texlive binaries in PATH
         "allcm"
         "allec"
         "chkweb"
+        "dtxgen"
         "explcheck"
         "extractbb"
         "fontinst"
+        "git-latexdiff"
         "ht*"
         "installfont-tl"
         "kanji-config-updmap-sys"
@@ -679,9 +706,9 @@ rec {
         "pdftex-quiet"
         "pslatex"
         "rumakeindex"
+        "runtexfile"
         "texconfig"
         "texconfig-sys"
-        "texexec"
         "texlinks"
         "texmfstart"
         "typeoutfileinfo"
@@ -702,6 +729,7 @@ rec {
         "luatools"
         "make4ht"
         "pmxchords"
+        "runtexfile"
         "tex4ebook"
         "texblend"
         "texdoc"

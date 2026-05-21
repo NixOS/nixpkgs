@@ -13,6 +13,7 @@
   libpulseaudio,
   mpv-unwrapped,
   mimalloc,
+  imagemagick,
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
@@ -56,13 +57,13 @@ let
     };
   });
 
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-4EieR+Wys7vK+0/pWF5MkA71EeChThVGJ8J5x/8k8nA=";
+    hash = "sha256-kVg6lqJF8kT2TgwiK8aKUWW6yEdQUrJKzw2h4DHN+iw=";
   };
 in
 flutter338.buildFlutterApplication {
@@ -129,6 +130,7 @@ flutter338.buildFlutterApplication {
   nativeBuildInputs = [
     autoPatchelfHook
     desktop-file-utils
+    imagemagick
   ];
 
   buildInputs = [
@@ -141,8 +143,9 @@ flutter338.buildFlutterApplication {
   ];
 
   postInstall = ''
+    mkdir -p $out/share/icons/hicolor/128x128/apps
     ln --symbolic --no-dereference --force ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/oneanime/lib/libmpv.so.2
-    install -D --mode=0644 assets/images/logo/logo_android_2.png  $out/share/pixmaps/oneanime.png
+    magick assets/images/logo/logo_android_2.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/oneanime.png
     desktop-file-edit oneAnime.desktop \
       --set-key="Icon" --set-value="oneanime"
     install -D --mode=0644 oneAnime.desktop --target-directory $out/share/applications

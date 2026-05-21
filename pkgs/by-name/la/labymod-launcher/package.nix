@@ -21,7 +21,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/labymodlauncher.desktop $out/share/applications/labymod-launcher.desktop
-    install -Dm444 ${appimageContents}/resources/icons/icon.png $out/share/pixmaps/labymod-launcher.png
+    install -Dm444 ${appimageContents}/resources/icons/icon.png $out/share/icons/hicolor/512x512/apps/labymod-launcher.png
     substituteInPlace $out/share/applications/labymod-launcher.desktop \
       --replace-fail 'Exec=labymodlauncher' 'Exec=labymod-launcher' \
       --replace-fail 'Icon=labymodlauncher' 'Icon=labymod-launcher'

@@ -254,7 +254,7 @@ in
       description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
-        change user preferences or prevent the end user from modifiying specific
+        change user preferences or prevent the end user from modifying specific
         preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
       '';
     };
@@ -265,10 +265,10 @@ in
       description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
-        change user preferences or prevent the end user from modifiying specific
+        change user preferences or prevent the end user from modifying specific
         preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
 
-        Files are concated and autoConfig is appended.
+        Files are concatenated and autoConfig is appended.
       '';
     };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sphinx-extensions2";
-    repo = pname;
+    repo = "sphinx-tippy";
     tag = "v${version}";
     hash = "sha256-+EXvj8Q6eMu51Gh4hLD6h8I7PDZaeVH+2pZuQUMVH+4=";
   };

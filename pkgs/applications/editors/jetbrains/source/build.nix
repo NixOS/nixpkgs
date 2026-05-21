@@ -22,7 +22,7 @@
   maven,
   p7zip,
   pkg-config,
-  xorg,
+  libx11,
 }:
 {
   version,
@@ -45,7 +45,7 @@ let
     };
   });
 
-  jbr = jetbrains.jdk-no-jcef;
+  jbr = jetbrains.jdk-no-jcef-21;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -97,7 +97,7 @@ let
     ];
     buildInputs = [
       glib
-      xorg.libX11
+      libx11
       libdbusmenu
     ];
     inherit src;
@@ -231,10 +231,10 @@ let
   };
 
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "${buildType}-oss";
   inherit version buildNumber;
-  name = "${pname}-${version}.tar.gz";
+  name = "${finalAttrs.pname}-${version}.tar.gz";
   inherit src;
   nativeBuildInputs = [
     p7zip
@@ -321,4 +321,4 @@ stdenvNoCC.mkDerivation rec {
       jps-bootstrap
       ;
   };
-}
+})

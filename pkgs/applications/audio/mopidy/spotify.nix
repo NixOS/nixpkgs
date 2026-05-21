@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-spotify";
   version = "5.0.0a3";
   pyproject = true;
@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pM+kqeWYiPXv9DZDBTgwiEwC6Sbqv6uz5vJ5odcixOw=";
   };
 
@@ -40,8 +40,8 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "Mopidy extension for playing music from Spotify";
     homepage = "https://github.com/mopidy/mopidy-spotify";
-    changelog = "https://github.com/mopidy/mopidy-spotify/releases/tag/v${version}";
+    changelog = "https://github.com/mopidy/mopidy-spotify/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

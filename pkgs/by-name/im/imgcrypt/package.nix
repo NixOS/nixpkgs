@@ -4,21 +4,21 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "imgcrypt";
   version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "imgcrypt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-81jfoWHYYenGQFcQI9kk8uPnv6FcyOtcJjpo1ykdtOI=";
   };
 
   vendorHash = null;
 
   ldflags = [
-    "-X github.com/containerd/containerd/version.Version=${version}"
+    "-X github.com/containerd/containerd/version.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -37,4 +37,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mikroskeem ];
   };
-}
+})

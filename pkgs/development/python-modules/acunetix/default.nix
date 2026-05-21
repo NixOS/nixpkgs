@@ -4,12 +4,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "acunetix";
   version = "0.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hikariatama";
@@ -19,7 +20,9 @@ buildPythonPackage {
     hash = "sha256-ycdCz8CNSP0USxv657jf6Vz4iF//reCeO2tG+und86A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     requests
   ];
@@ -35,4 +38,4 @@ buildPythonPackage {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

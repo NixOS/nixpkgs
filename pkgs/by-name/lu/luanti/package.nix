@@ -21,7 +21,8 @@
   doxygen,
   ncurses,
   graphviz,
-  xorg,
+  libxi,
+  libx11,
   gmp,
   libspatialindex,
   leveldb,
@@ -42,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.15.0";
+  version = "5.16.1";
 
   src = fetchFromGitHub {
     owner = "luanti-org";
     repo = "luanti";
     tag = finalAttrs.version;
-    hash = "sha256-ooZyyVFbf8OreYYs3XZlTht10cpdzsRgbOUWyaqX4jw=";
+    hash = "sha256-EzLjLkN/3BdcpWJ92QnrdhxKmY6Bz2JkOC0oX0TrUtI=";
   };
 
   patches = [
@@ -113,8 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     (if useSdl3 then sdl3 else SDL2)
   ]
   ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
-    xorg.libX11
-    xorg.libXi
+    libx11
+    libxi
   ]
   ++ lib.optionals buildServer [
     leveldb

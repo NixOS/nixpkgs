@@ -15,14 +15,14 @@ let
     else
       false;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k3d";
   version = "5.8.3";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UBiDDZf/UtgPGRV9WUnoC32wc64nthBpBheEYOTp6Hk=";
   };
 
@@ -38,12 +38,12 @@ buildGoModule rec {
 
   ldflags =
     let
-      t = "github.com/k3d-io/k3d/v${lib.versions.major version}/version";
+      t = "github.com/k3d-io/k3d/v${lib.versions.major finalAttrs.version}/version";
     in
     [
       "-s"
       "-w"
-      "-X ${t}.Version=v${version}"
+      "-X ${t}.Version=v${finalAttrs.version}"
     ]
     ++ lib.optionals k3sVersionSet [ "-X ${t}.K3sVersion=v${k3sVersion}" ];
 
@@ -64,7 +64,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/k3d --help
-    $out/bin/k3d --version | grep -e "k3d version v${version}" ${lib.optionalString k3sVersionSet "-e \"k3s version v${k3sVersion}\""}
+    $out/bin/k3d --version | grep -e "k3d version v${finalAttrs.version}" ${lib.optionalString k3sVersionSet "-e \"k3s version v${k3sVersion}\""}
     runHook postInstallCheck
   '';
 
@@ -72,7 +72,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/k3d-io/k3d/";
-    changelog = "https://github.com/k3d-io/k3d/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/k3d-io/k3d/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
     mainProgram = "k3d";
     longDescription = ''
@@ -91,4 +91,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

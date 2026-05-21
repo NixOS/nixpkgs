@@ -26,7 +26,7 @@ let
     Option "TapButton2" "0"
     Option "TapButton3" "0"
   '';
-  pkg = pkgs.xorg.xf86inputsynaptics;
+  pkg = pkgs.xf86-input-synaptics;
   etcFile = "X11/xorg.conf.d/70-synaptics.conf";
 in
 {

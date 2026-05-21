@@ -20,12 +20,12 @@ let
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "net-snmp";
   version = "5.9.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/net-snmp/net-snmp-${finalAttrs.version}.tar.gz";
     hash = "sha256-FnB3GfgzGEpLcoNdrDWa4YgSOwa15CgXwAeQ19wThL8=";
   };
 
@@ -47,6 +47,13 @@ stdenv.mkDerivation rec {
     "--without-perl-modules"
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # https://github.com/net-snmp/net-snmp/pull/1053
+      "-Wno-declaration-after-statement"
+    ]
+  );
 
   postPatch = ''
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace-fail "/bin/netstat" "${net-tools}/bin/netstat"
@@ -85,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.net-snmp.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/net-snmp/net-snmp/blob/v${version}/NEWS";
+    changelog = "https://github.com/net-snmp/net-snmp/blob/v${finalAttrs.version}/NEWS";
   };
-}
+})

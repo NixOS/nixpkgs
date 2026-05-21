@@ -13,7 +13,7 @@ Maintaining our own documentation rendering framework may appear extreme but has
 - The amount of code involved is minimal because it's single-purpose
 
 Several alternatives to `nixos-render-docs` were discussed in the past.
-A detailed analysis can be found in a [table comparing documentation rendering framework](https://ethercalc.net/dc4vcnnl8zv0).
+A detailed analysis can be found in a [table comparing documentation rendering frameworks](https://ethercalc.net/dc4vcnnl8zv0).
 
 ## Redirects system
 
@@ -78,7 +78,7 @@ In case this identifier is renamed, the mapping would change into:
 
 ## Rendering multiple pages
 
-The `include` directive accepts an argument `into-file` to specify the file into which the imported markdown should be rendered to. We can use this argument to set up multipage rendering of the manuals.
+The `include` directive accepts an argument `into-file` to specify the file into which the imported markdown should be rendered. We can use this argument to set up multipage rendering of the manuals.
 
 For example
 

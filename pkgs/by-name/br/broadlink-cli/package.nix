@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "broadlink-cli";
   version = "0.19.0";
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mjg59";
     repo = "python-broadlink";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-fqhi4K8Ceh8Rs0ExteCfAuVfEamFjMCjCFm6DRAJDmI=";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (python3Packages.broadlink.meta) homepage license;
   };
-}
+})

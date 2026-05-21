@@ -12,18 +12,18 @@
   libpaper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "a2ps";
   version = "4.15.7";
 
   src = fetchurl {
-    url = "mirror://gnu/a2ps/a2ps-${version}.tar.gz";
+    url = "mirror://gnu/a2ps/a2ps-${finalAttrs.version}.tar.gz";
     hash = "sha256-cV84Zwr9lQtMpxwB9Gj+760mXKUtPxEpNMY8Cov7uK8=";
   };
 
   postPatch = ''
-    substituteInPlace afm/make_fonts_map.sh --replace "/bin/rm" "rm"
-    substituteInPlace tests/defs.in --replace "/bin/rm" "rm"
+    substituteInPlace afm/make_fonts_map.sh --replace-fail "/bin/rm" "rm"
+    substituteInPlace tests/defs.in --replace-fail "/bin/rm" "rm"
   '';
 
   nativeBuildInputs = [
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bennofs ];
     platforms = lib.platforms.unix;
   };
-}
+})

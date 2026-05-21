@@ -14,7 +14,7 @@ let
     }
   );
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "fdroidserver";
   version = "2.4.3";
 
@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9gRMjqxYKB/OSu1vn3jtNy1hROCpm8yJptlhkTt2hZw=";
   };
 
@@ -106,7 +106,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.com/fdroid/fdroidserver";
-    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
@@ -115,4 +115,4 @@ pythonPackages.buildPythonApplication rec {
     ];
     mainProgram = "fdroid";
   };
-}
+})

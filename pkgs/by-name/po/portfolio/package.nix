@@ -11,6 +11,7 @@
   stdenvNoCC,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  imagemagick,
   gitUpdater,
 }:
 let
@@ -34,16 +35,17 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.81.2";
+  version = "0.83.2";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-e0ONaZ2nk+LMxwPO3PQSke0wP2bit+dTPsmRdnOli4o=";
+    hash = "sha256-WJqkas9zSnSVvJmuOqdRuNYOu9RLTkvJBLITNrKz7Pk=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook3
+    imagemagick
   ];
 
   dontConfigure = true;
@@ -94,8 +96,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Create desktop item
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $out/portfolio/icon.xpm $out/share/icons/hicolor/256x256/apps/portfolio.png
 
     runHook postInstall
   '';

@@ -38,7 +38,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [

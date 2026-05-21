@@ -38,6 +38,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Html language server extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

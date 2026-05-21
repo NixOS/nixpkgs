@@ -51,6 +51,11 @@ buildPythonPackage rec {
     hash = "sha256-JVvrfbyKillkx6fOx4DEbHZoHIPxF1Gn3HzkxyJc66o=";
   };
 
+  patches = [
+    # "Cannot use both [tool.pytest] (native TOML types) and [tool.pytest.ini_options] (string-based INI format) simultaneously"
+    ./0001-fix-pytest-pyproject-collision.patch
+  ];
+
   build-system = [ hatchling ];
 
   dependencies = [

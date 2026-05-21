@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ical2orgpy";
   version = "0.5";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ical2org-py";
     repo = "ical2org.py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vBi1WYXMuDFS/PnwFQ/fqN5+gIvtylXidfZklyd6LcI=";
   };
 
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "ical2orgpy" ];
 
   meta = {
-    changelog = "https://github.com/ical2org-py/ical2org.py/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/ical2org-py/ical2org.py/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Converting ICAL file into org-mode format";
     homepage = "https://github.com/ical2org-py/ical2org.py";
     license = lib.licenses.gpl3Only;
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "ical2orgpy";
   };
 
-}
+})

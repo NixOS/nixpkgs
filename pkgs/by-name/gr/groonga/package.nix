@@ -9,7 +9,7 @@
   pkg-config,
   rapidjson,
   testers,
-  xxHash,
+  xxhash,
   zstd,
   postgresqlPackages,
   suggestSupport ? false,
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "15.1.7";
+  version = "15.2.3";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iZpBSgY291aNGhGEX+PddbcB9yEGp6JvMLyVCvWHZhY=";
+    hash = "sha256-DwLNXhq/adrajX2HX0Cpr6UBT8yMDWRfa/sYDnGOpnI=";
   };
 
   patches = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     rapidjson
-    xxHash
+    xxhash
     zstd
     mecab
     kytea
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals lz4Support [
     lz4
   ]
-  ++ lib.optional zlibSupport [
+  ++ lib.optionals zlibSupport [
     zlib
   ]
   ++ lib.optionals suggestSupport [

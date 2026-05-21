@@ -1,21 +1,20 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   findutils,
-  go,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "tsgolint";
-  version = "0.11.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s+rXbUrP/mJiqUruFUlzz8gxG4LDfvFRLKmlUIOcFho=";
+    hash = "sha256-lwOjdc+q7u1zVHynYpnyUXMDQxlfSxey/Jnry02VWYM=";
     fetchSubmodules = true;
   };
 
@@ -25,35 +24,26 @@ buildGoModule (finalAttrs: {
     pushd typescript-go
   '';
 
-  # These patches are applied to the typescript-go submodule in justfile's "init" target upstream.
+  # These patches are applied to the typescript-go submodule in upstream justfile's "init" target.
   patches = [
-    (finalAttrs.src + "/patches/0001-Parallel-readDirectory-visitor.patch")
-    (finalAttrs.src + "/patches/0002-Adapt-project-service-for-single-run-mode.patch")
-    (finalAttrs.src + "/patches/0003-patch-expose-more-functions-via-the-shim-with-type-f.patch")
-    (finalAttrs.src + "/patches/0004-feat-improve-panic-message-for-extracting-TS-extensi.patch")
-    (finalAttrs.src + "/patches/0005-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
+    (finalAttrs.src + "/patches/0001-Adapt-project-service-for-single-run-mode.patch")
+    (finalAttrs.src + "/patches/0002-patch-expose-more-functions-via-the-shim-with-type-f.patch")
+    (finalAttrs.src + "/patches/0003-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
+    (finalAttrs.src + "/patches/0004-fix-collections-avoid-internal-json-import-in-ordere.patch")
+    (finalAttrs.src + "/patches/0005-perf-vfs-cache-ReadFile-results-in-cachedvfs.patch")
   ];
 
   postPatch =
-    # We don't want to build with go.work, so we add the replacement to
-    # the local module to the go.mod instead.
+    # From upstream justfile's "init" target.
     ''
       popd
-      ${lib.getExe go} mod edit --replace=github.com/microsoft/typescript-go=./typescript-go
-    ''
-    +
-    # From justfile's "init" target upstream.
-    ''
-      rm go.work{,.sum}
       mkdir -p internal/collections && find ./typescript-go/internal/collections -type f ! -name '*_test.go' -exec cp {} internal/collections/ \;
     '';
 
   proxyVendor = true;
-  vendorHash = "sha256-CGgLQKNGMKqIjfBnR7Uv6TwOfukfLX3hpLmSNHAZRv8=";
+  vendorHash = "sha256-k16zfFZNCGMg9n8btdWAy11wzg7CVntKgsSPujIJRtE=";
 
   subPackages = [ "cmd/tsgolint" ];
-
-  env.GOEXPERIMENT = "greenteagc";
 
   passthru = {
     updateScript = nix-update-script { };

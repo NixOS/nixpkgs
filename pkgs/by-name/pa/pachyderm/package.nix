@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pachyderm";
   version = "2.12.2";
 
   src = fetchFromGitHub {
     owner = "pachyderm";
     repo = "pachyderm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-S3om62ibp/hbpoY6seJ7RaRQeAzDNsThqfGDFC0SEQM=";
   };
 
@@ -22,14 +22,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/pachyderm/pachyderm/v${lib.versions.major version}/src/version.AppVersion=${version}"
+    "-X github.com/pachyderm/pachyderm/v${lib.versions.major finalAttrs.version}/src/version.AppVersion=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Containerized Data Analytics";
     homepage = "https://www.pachyderm.com/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     mainProgram = "pachctl";
   };
-}
+})

@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "helvetica-neue-lt-std";
+  pname = "helvetica-neue-lt-std";
   version = "2014.08.16"; # date of most recent file in distribution
 
   src = fetchzip {

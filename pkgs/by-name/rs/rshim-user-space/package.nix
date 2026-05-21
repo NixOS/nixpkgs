@@ -23,25 +23,16 @@
   withBfbInstall ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rshim-user-space";
-  version = "2.5.7";
+  version = "2.6.6";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = "rshim-user-space";
-    rev = "rshim-${version}";
-    hash = "sha256-dXrReU6Wx8t6ObrrF3MeUWdFBSfn6tyQqQdGBAZsvDg=";
+    rev = "rshim-${finalAttrs.version}";
+    hash = "sha256-OdrJnOm0QegQ2ex1hFSWPfwYuBnXpGeMJ2YfvNyIwTU=";
   };
-
-  # came up shortly after 2.5.7 release, remove with next update
-  patches = [
-    (fetchpatch2 {
-      name = "rshim-fix-bfb-install.patch";
-      url = "https://github.com/Mellanox/rshim-user-space/commit/0b2b17eeb04d80b7efb20aa2a9dc24759680aaea.patch";
-      hash = "sha256-JqnCGWM6Wjg+WFQhqHv6h4VbawyCf75L4wfd7L+n7po=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -107,8 +98,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       thillux
     ];
-    # Requires https://github.com/Mellanox/rshim-user-space/pull/276 for glibc-2.42,
-    # patch appears broken though.
-    broken = true;
   };
-}
+})

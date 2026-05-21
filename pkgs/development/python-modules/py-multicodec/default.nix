@@ -2,36 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  morphys,
   pytestCheckHook,
-  six,
+  setuptools,
   varint,
 }:
 
 buildPythonPackage rec {
   pname = "py-multicodec";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = "py-multicodec";
     tag = "v${version}";
-    hash = "sha256-2aK+bfhqCMqSO+mtrHIfNQmQpQHpwd7yHseI/3O7Sp4=";
+    hash = "sha256-0s2ICkPkfF+D7HRrnPS2IRm380UhdVg5NCS7VFTP1P4=";
   };
 
-  # Error when not substituting:
-  # Failed: [pytest] section in setup.cfg files is no longer supported, change to [tool:pytest] instead.
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "[pytest]" "[tool:pytest]"
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    morphys
-    six
+  dependencies = [
     varint
   ];
 

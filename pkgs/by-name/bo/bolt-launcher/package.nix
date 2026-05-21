@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   makeWrapper,
   cmake,
   ninja,
@@ -9,7 +9,12 @@
   libz,
   cef-binary,
   luajit,
-  xorg,
+  libxxf86vm,
+  libxi,
+  libxext,
+  libx11,
+  libsm,
+  libxcb,
   libgbm,
   glib,
   jdk17,
@@ -24,27 +29,27 @@
 }:
 let
   cef = cef-binary.override {
-    version = "126.2.18";
-    gitRevision = "3647d39";
-    chromiumVersion = "126.0.6478.183";
+    version = "141.0.7";
+    gitRevision = "a5714cc";
+    chromiumVersion = "141.0.7390.108";
 
     srcHashes = {
-      aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
-      x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
+      aarch64-linux = "sha256-2A0hVzUVMBemhjnFE/CrKs4CU96Qkxy8S/SieaEJjwE=";
+      x86_64-linux = "sha256-tZzUxeXxbYP8YfIQLbiSyihPcjZM9cd2Ad8gGCSvdGk=";
     };
   };
 in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.20.0";
+    version = "0.21.1";
 
-    src = fetchFromGitHub {
+    src = fetchFromCodeberg {
       owner = "AdamCake";
-      repo = "bolt";
+      repo = "Bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-Gh1xaYAysZshEGzljnEYJuK8Mv4cwSWH1W4rEu2F/0s=";
+      hash = "sha256-yrfTKrzwglCkPveKEiT1WRBLAVxiFsHaj6984QY2ZJ8=";
     };
 
     nativeBuildInputs = [
@@ -58,8 +63,8 @@ let
 
     buildInputs = [
       libgbm
-      xorg.libX11
-      xorg.libxcb
+      libx11
+      libxcb
       libarchive
       libz
       cef
@@ -110,11 +115,11 @@ buildFHSEnv {
     pkgs:
     [ bolt ]
     ++ (with pkgs; [
-      xorg.libSM
-      xorg.libXxf86vm
-      xorg.libX11
-      xorg.libXi
-      xorg.libXext
+      libsm
+      libxxf86vm
+      libx11
+      libxi
+      libxext
       glib
       pango
       cairo
@@ -147,7 +152,8 @@ buildFHSEnv {
   runScript = "${bolt.name}";
 
   meta = {
-    homepage = "https://github.com/Adamcake/Bolt";
+    homepage = "https://codeberg.org/Adamcake/Bolt";
+    changelog = "https://codeberg.org/Adamcake/Bolt/releases/tag/${bolt.version}";
     description = "Alternative launcher for RuneScape";
     longDescription = ''
       Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).
@@ -159,6 +165,6 @@ buildFHSEnv {
       iedame
     ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "bolt-launcher";
   };
 }

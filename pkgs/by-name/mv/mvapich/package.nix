@@ -30,12 +30,12 @@ assert builtins.elem network [
   "ofi"
 ];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mvapich";
   version = "4.1";
 
   src = fetchurl {
-    url = "https://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich-${version}.tar.gz";
+    url = "https://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-JaU9NyW2aeLGSBWPt8n8WxOIlT86L5SXSFhsRH0OQ+4=";
   };
 
@@ -123,4 +123,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
-}
+})

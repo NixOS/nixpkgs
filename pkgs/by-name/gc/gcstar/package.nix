@@ -6,14 +6,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcstar";
   version = "1.8.0";
 
   src = fetchFromGitLab {
     owner = "Kerenoc";
     repo = "GCstar";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dasj19 ];
     platforms = lib.platforms.all;
   };
-}
+})

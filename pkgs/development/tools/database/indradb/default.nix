@@ -35,7 +35,7 @@ in
 
     buildAndTestSubdir = "server";
 
-    PROTOC = "${protobuf}/bin/protoc";
+    env.PROTOC = "${protobuf}/bin/protoc";
 
     nativeBuildInputs = [
       rustfmt
@@ -54,7 +54,7 @@ in
 
     cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
 
-    PROTOC = "${protobuf}/bin/protoc";
+    env.PROTOC = "${protobuf}/bin/protoc";
 
     nativeBuildInputs = [
       rustfmt

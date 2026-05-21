@@ -7,20 +7,20 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "userborn";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "userborn";
-    rev = version;
-    hash = "sha256-Zh2u7we/MAIM7varuJA4AmEWeSMuA/C+0NSIUJN7zTs=";
+    rev = finalAttrs.version;
+    hash = "sha256-mXXakR75Iz6AFf/TYgIHE8SxOri2HyReYUYTT3lCEPA=";
   };
 
-  sourceRoot = "${src.name}/rust/userborn";
+  sourceRoot = "${finalAttrs.src.name}/rust/userborn";
 
-  cargoHash = "sha256-oLw/I8PEv75tz+KxbIJrwl8Wr0I/RzDh1SDZ6mRQpL8=";
+  cargoHash = "sha256-uAid5GsM9lasVQAYfeo9jwp4xg1MrXdJqtD0l6ME6OQ=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
@@ -45,10 +45,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/nikstur/userborn";
     description = "Declaratively bear (manage) Linux users and groups";
-    changelog = "https://github.com/nikstur/userborn/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/nikstur/userborn/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "userborn";
   };
-}
+})

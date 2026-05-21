@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viddy";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "viddy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZdDe0ymPkj0ZGiPLo1Y0qMDk2SsUcPsSStay+Tuf4p0=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "viddy";
   };
-}
+})

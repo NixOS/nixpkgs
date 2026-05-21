@@ -11,6 +11,7 @@
   freezegun,
   hatchling,
   paho-mqtt,
+  protobuf,
   pycryptodome,
   pycryptodomex,
   pyrate-limiter,
@@ -21,19 +22,22 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "4.2.1";
+  version = "5.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
-    tag = "v${version}";
-    hash = "sha256-DdygXq2AZz/W1NoM0wjqJ+ftrvM+D1PnQc+nzpWicxE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2ShXt2mtMhMugzqOHhY1GT7cQ0K78k/4/bPmmP/uheI=";
   };
 
-  pythonRelaxDeps = [ "pycryptodome" ];
+  pythonRelaxDeps = [
+    "protobuf"
+    "pycryptodome"
+  ];
 
   build-system = [ hatchling ];
 
@@ -43,6 +47,7 @@ buildPythonPackage rec {
     click
     construct
     paho-mqtt
+    protobuf
     pycryptodome
     pyrate-limiter
     vacuum-map-parser-roborock
@@ -65,9 +70,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library & console tool for controlling Roborock vacuum";
     homepage = "https://github.com/Python-roborock/python-roborock";
-    changelog = "https://github.com/Python-roborock/python-roborock/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Python-roborock/python-roborock/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "roborock";
   };
-}
+})

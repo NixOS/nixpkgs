@@ -6,13 +6,13 @@
 
 buildFishPlugin {
   pname = "hydro";
-  version = "0-unstable-2024-11-02";
+  version = "0-unstable-2025-12-31";
 
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "hydro";
-    rev = "9c93b89573bd722f766f2190a862ae55e728f6ba";
-    hash = "sha256-QYq4sU41/iKvDUczWLYRGqDQpVASF/+6brJJ8IxypjE=";
+    rev = "24bb2375e3cb29c71ab790c8cfe98b9069de80c3";
+    hash = "sha256-8ixve1ws80q5jNdKoooL25Lk7qopVitCMVTucW490fU=";
   };
 
   meta = {

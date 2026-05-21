@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koji";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "cococonscious";
     repo = "koji";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8z7lx0aVmA2gbydeJOBDVM2s6rwZpDLRaw1yqErwhJ4=";
+    hash = "sha256-qKC4ayaNPSUh4wSElBWxk/P+Y2dFgCIFiMkI0/QztDY=";
   };
 
-  cargoHash = "sha256-dnidKrH/HSUpm8sU51G4e74NgyyO3v2sTK4eDKSJujA=";
+  cargoHash = "sha256-vdELHNH1GqR0LPY3SSNgSR3krZZ85Tsx6aTHve0Vhe8=";
 
   env.OPENSSL_NO_VENDOR = 1;
 

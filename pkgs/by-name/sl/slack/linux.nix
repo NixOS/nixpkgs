@@ -40,7 +40,19 @@
   systemd,
   wayland,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
 }:
 stdenv.mkDerivation rec {
   inherit
@@ -83,19 +95,19 @@ stdenv.mkDerivation rec {
       stdenv.cc.cc
       systemd
       wayland
-      xorg.libX11
-      xorg.libXScrnSaver
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libxkbfile
-      xorg.libxshmfence
+      libx11
+      libxscrnsaver
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxtst
+      libxkbfile
+      libxshmfence
     ]
     + ":${lib.getLib stdenv.cc.cc}/lib64";
 
@@ -138,6 +150,10 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
+
+    # Move the icon to a spec-compliant location
+    mkdir -p $out/share/icons/hicolor/512x512
+    mv $out/share/{pixmaps,icons/hicolor/512x512/apps}
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \

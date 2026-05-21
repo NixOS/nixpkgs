@@ -21,7 +21,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "audiofile";
   version = "0.3.6";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://audiofile.68k.org/audiofile-${version}.tar.gz";
+    url = "https://audiofile.68k.org/audiofile-${finalAttrs.version}.tar.gz";
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
 
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     description = "Library for reading and writing audio files in various formats";
     homepage = "http://www.68k.org/~michael/audiofile/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

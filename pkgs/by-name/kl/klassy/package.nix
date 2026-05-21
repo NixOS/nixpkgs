@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "klassy";
-  version = "6.4.breeze6.4.0";
+  version = "6.5.3";
 
   src = fetchFromGitHub {
     owner = "paulmcauley";
     repo = "klassy";
-    tag = finalAttrs.version;
-    hash = "sha256-+bYS2Upr84BS0IdA0HlCK0FF05yIMVbRvB8jlN5EOUM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2M1SGmYSEnZ1AlsOvhrM25oQi8mz/H8df4pzyFYybN8=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_QT5" false)
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Highly customizable binary Window Decoration, Application Style and Global Theme plugin for recent versions of the KDE Plasma desktop";

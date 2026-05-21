@@ -11,14 +11,14 @@
   imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "augustus";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Keriew";
     repo = "augustus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UWJmxirRJJqvL4ZSjBvFepeKVvL77+WMp4YdZuFNEkg=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
       matteopacini
     ];
   };
-}
+})

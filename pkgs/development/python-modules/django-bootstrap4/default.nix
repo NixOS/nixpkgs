@@ -29,6 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-g66JJVPB+YQjN5IHSu/jqKVu5gS8Llb+mALJ9f5H2ds=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [ beautifulsoup4 ];

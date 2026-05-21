@@ -10,7 +10,7 @@
   copyDesktopItems,
   desktopToDarwinBundle,
   jdk,
-  jdk17,
+  jdk25,
   hmclJdk ? jdk.override {
     # Required by jar file
     enableJavaFX = true;
@@ -21,12 +21,20 @@
   },
   minecraftJdks ? [
     hmclJdk
-    jdk17
+    jdk25
   ],
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxrandr,
+  libxext,
+  libxcursor,
+  libxkbcommon,
+  libx11,
+  xrandr,
   glib,
   libGL,
-  glfw,
+  glfw3,
+  glfw3-minecraft,
   openal,
   libglvnd,
   alsa-lib,
@@ -35,17 +43,20 @@
   libpulseaudio,
   gobject-introspection,
   callPackage,
+  gtk3,
 }:
-
+let
+  glfw3' = if stdenv.hostPlatform.isLinux then glfw3-minecraft else glfw3;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.9.2";
+  version = "3.14.1";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-/thuAsPadixV2vkez3w9yhkDdpJra54WkhFYaeKH0GU=";
+    hash = "sha256-j8+PIbNySlwELKKdsYQe53++w9zunKaN9TRqZq+LpYI=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -57,38 +68,38 @@ stdenv.mkDerivation (finalAttrs: {
   #   Terracotta downloads, package them into a patch jar that overrides
   #   the original classes, and have it load the original jar. This preserves
   #   the original jar’s integrity check and avoids modifying the upstream jar.
-  terracottaNativeJava = fetchurl {
-    name = "hmcl-terracotta-native-java-${finalAttrs.version}";
-    url = "https://raw.githubusercontent.com/HMCL-dev/HMCL/v${finalAttrs.version}/${finalAttrs.terracottaNativeJavaPath}";
-    hash = "sha256-sg8gBOMNdITmHeYByYriYp05ja1vtWPF/wuqdGmkgiA=";
+  terracottaBundleJava = fetchurl {
+    name = "hmcl-terracotta-bundle-java-${finalAttrs.version}";
+    url = "https://raw.githubusercontent.com/HMCL-dev/HMCL/v${finalAttrs.version}/${finalAttrs.terracottaBundleJavaPath}";
+    hash = "sha256-05U4/TUYECPgrzZbLiSPUwo5XtIm2w+T8gCdtqpsRVs=";
   };
   macOSProviderJava = fetchurl {
     name = "hmcl-macos-provider-java-${finalAttrs.version}";
     url = "https://raw.githubusercontent.com/HMCL-dev/HMCL/v${finalAttrs.version}/${finalAttrs.macOSProviderJavaPath}";
-    hash = "sha256-V8FNPPkq6/P3/HKcqKkAy6Ya1kUI3oEMfjEc8XdExgo=";
+    hash = "sha256-+Zji2B8ksT7P+IObyrM9q7vHPJVl5ZtH+v/J8Mfr0Q4=";
   };
-  terracottaNativeJavaPath = "HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaNative.java";
+  terracottaBundleJavaPath = "HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaBundle.java";
   macOSProviderJavaPath = "HMCL/src/main/java/org/jackhuang/hmcl/terracotta/provider/MacOSProvider.java";
 
   dontUnpack = true;
 
   prePatch = ''
-    install -Dm644 $terracottaNativeJava $terracottaNativeJavaPath
+    install -Dm644 $terracottaBundleJava $terracottaBundleJavaPath
     install -Dm644 $macOSProviderJava $macOSProviderJavaPath
   '';
 
   patches = [
-    (replaceVars ./0002-nix-use-terracotta-from-nix.patch {
+    (replaceVars ./0001-nix-use-terracotta-from-nix.patch {
       TERRACOTTA_BIN = lib.getExe terracotta;
     })
-    ./0003-nix-skip-terracotta-existence-check-on-darwin.patch
+    ./0002-nix-skip-terracotta-existence-check-on-darwin.patch
   ];
 
   buildPhase = ''
     runHook preBuild
 
     # Build only classes we modified
-    javac -cp $src -d out $terracottaNativeJavaPath $macOSProviderJavaPath
+    javac -cp $src -d out $terracottaBundleJavaPath $macOSProviderJavaPath
 
     # Extract MANIFEST.MF from original jar
     # We need Main-Class, Add-Opens, etc
@@ -131,22 +142,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDeps = [
     libGL
-    glfw
+    glfw3'
     glib
     openal
     libglvnd
     vulkan-loader
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXxf86vm
-    xorg.libXext
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxxf86vm
+    libxext
+    libxcursor
+    libxkbcommon
+    libxrandr
+    libxtst
     libpulseaudio
     wayland
     alsa-lib
+    gtk3
   ];
 
   installPhase = ''
@@ -175,9 +188,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeShellWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
       --add-flags "-jar $out/lib/hmcl/hmcl-terracotta-patch.jar" \
+      --add-flags "-Djdk.gtk.version=3" \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath finalAttrs.runtimeDeps} \
       --prefix PATH : "${
-        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xorg.xrandr)
+        lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xrandr)
       }" \
       --run 'cd $HOME' \
       ''${gappsWrapperArgs[@]}
@@ -199,6 +213,15 @@ stdenv.mkDerivation (finalAttrs: {
       Hello Minecraft! Launcher (HMCL) is a free, open-source, and cross-platform Minecraft launcher.
       It provides comprehensive support for managing multiple game versions and mod loaders,
       including Forge, NeoForge, Fabric, Quilt, LiteLoader, and OptiFine.
+
+      Starting with Minecraft 26.1, Wayland support can be enabled
+      by adding the JDK arguments -DMC_DEBUG_ENABLED and
+      -DMC_DEBUG_PREFER_WAYLAND. If needed, configure them in
+      HMCL -> Advanced Settings -> JVM Options -> JVM Arguments.
+
+      Users who are still on an older version and want to use Wayland should
+      enable HMCL -> Advanced Settings -> Workaround -> Use System GLFW.
+      Otherwise, keep it disabled.
     '';
     maintainers = with lib.maintainers; [
       daru-san

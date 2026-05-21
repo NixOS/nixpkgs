@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3Packages,
   testers,
   zabbix-cli,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zabbix-cli";
   version = "3.6.2";
   pyproject = true;
@@ -15,9 +16,18 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "unioslo";
     repo = "zabbix-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Y4IR/le+7X3MYmrVnZMr+Gu59LkCB5UfMJ2s9ovSjLM=";
   };
+
+  patches = [
+    # Fix MarkupMode import with Typer >= 0.20.1
+    # https://github.com/unioslo/zabbix-cli/pull/333
+    (fetchpatch {
+      url = "https://github.com/unioslo/zabbix-cli/commit/b68f672f557ccb06fef3fd5a2d724633f1eb3c68.patch";
+      hash = "sha256-wc59c28aT8IsI4nvEH+CxfdvPAsN2R1uoLgN8tx+mBE=";
+    })
+  ];
 
   build-system = with python3Packages; [
     hatchling
@@ -83,4 +93,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "zabbix-cli";
     maintainers = [ lib.maintainers.anthonyroussel ];
   };
-}
+})

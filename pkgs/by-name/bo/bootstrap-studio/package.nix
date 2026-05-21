@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
     description = "Drag-and-drop designer for bootstrap";
     homepage = "https://bootstrapstudio.io/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ khushraj ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -10,14 +10,14 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fomp";
   version = "1.2.4";
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "fomp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8rkAV+RJS9vQV+9+swclAP0QBjBDT2tKeLWHxwpUrlk=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

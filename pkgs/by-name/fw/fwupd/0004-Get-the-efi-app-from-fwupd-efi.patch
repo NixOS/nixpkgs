@@ -8,10 +8,10 @@ Subject: [PATCH] Get the efi app from fwupd-efi
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/meson.build b/meson.build
-index 16c7cad40..81804bf3b 100644
+index f1f51e841..aaefe55d9 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -657,7 +657,7 @@ endif
+@@ -646,7 +646,7 @@ endif
  
  # EFI
  if build_standalone

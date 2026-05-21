@@ -66,7 +66,6 @@ buildGoModule (finalAttrs: {
     homepage = "http://www.openshift.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      offline
       moretea
       stehessel
     ];

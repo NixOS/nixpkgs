@@ -17,7 +17,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn-service";
-  version = "3.15.0";
+  version = "3.15.6";
 
   buildInputs = [ wirelesstools ];
   nativeBuildInputs = [ makeWrapper ];
@@ -26,11 +26,15 @@ buildGoModule (finalAttrs: {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
+    hash = "sha256-C24klcr10i0lki74eNfJ4bappdIttp3S4FGg1wkAGcY=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   modRoot = "daemon";
-  vendorHash = "sha256-DVKSCcEeE7vI8aOYuEwk22n0wtF7MMDOyAgYoXYadwI=";
+  subPackages = [ "." ];
+  vendorHash = "sha256-YDvZVmResoieSBIp/yuZDvI9GSz3M6Bi5KksHOljuR0=";
 
   proxyVendor = true; # .c file
 
@@ -98,7 +102,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      blenderfreaky
+      kilyanni
     ];
     mainProgram = "ivpn-service";
   };

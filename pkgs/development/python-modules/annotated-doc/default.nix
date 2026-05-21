@@ -2,25 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  uv-build,
+  pdm-backend,
   pytestCheckHook,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "annotated-doc";
-  version = "0.0.3";
+  version = "0.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "annotated-doc";
     tag = version;
-    hash = "sha256-PFB+GqFRe5vF8xoWJPsXligSpzkUIt8TOqsmrKlfwyc=";
+    hash = "sha256-O7kobzzFfHelYsxTflifEcoEWsUmPzlDz3siFTAq0I0=";
   };
 
   build-system = [
-    uv-build
+    pdm-backend
   ];
 
   nativeCheckInputs = [

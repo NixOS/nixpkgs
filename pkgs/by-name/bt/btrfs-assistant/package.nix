@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI management tool to make managing a Btrfs filesystem easier";
     homepage = "https://gitlab.com/btrfs-assistant/btrfs-assistant";
+    changelog = "https://gitlab.com/btrfs-assistant/btrfs-assistant/-/blob/${finalAttrs.version}/changelog";
     license = lib.licenses.gpl3Only;
     mainProgram = "btrfs-assistant-bin";
     maintainers = with lib.maintainers; [ khaneliman ];

@@ -4,24 +4,24 @@
   fetchurl,
   libGLU,
   libGL,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glfw";
   version = "2.7.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glfw/glfw-${version}.tar.bz2";
+    url = "mirror://sourceforge/glfw/glfw-${finalAttrs.version}.tar.bz2";
     sha256 = "17c2msdcb7pn3p8f83805h1c216bmdqnbn9hgzr1j8wnwjcpxx6i";
   };
 
   buildInputs = [
     libGLU
     libGL
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   buildPhase = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "https://glfw.sourceforge.net/";
     license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

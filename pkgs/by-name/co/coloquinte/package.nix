@@ -19,6 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BQg2rVYe1wJOX7YnvgDVpmN6hwBJZKH0fxm+8HC8bvY=";
   };
 
+  # boost 1.89 removed the boost_system stub library
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'FIND_PACKAGE(Boost REQUIRED COMPONENTS system filesystem iostreams program_options unit_test_framework)' \
+      'FIND_PACKAGE(Boost REQUIRED COMPONENTS filesystem iostreams program_options unit_test_framework)'
+  '';
+
   nativeBuildInputs = [
     cmake
   ];

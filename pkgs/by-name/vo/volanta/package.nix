@@ -9,11 +9,11 @@
 }:
 let
   pname = "volanta";
-  version = "1.15.0";
-  build = "1240645b";
+  version = "1.17.5";
+  build = "e5b83597";
   src = fetchurl {
     url = "https://cdn.volanta.app/software/volanta-app/${version}-${build}/volanta-${version}.AppImage";
-    hash = "sha256-6QF9o5BFeGZBjpusFMYrWlnYhAdItfxg+gS0Xf2q7io=";
+    hash = "sha256-hCHPpY/zU7gPHbCq8peOaaTzH93K14ZRIvGSihP0k3w=";
   };
   appImageContents = appimageTools.extract { inherit pname version src; };
 in
@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appImageContents}/volanta.desktop $out/share/applications/volanta.desktop
     install -m 444 -D ${appImageContents}/volanta.png \
-      $out/share/icons/hicolor/1024x1024/apps/volanta.png
+      $out/share/icons/volanta.png
     substituteInPlace $out/share/applications/volanta.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=env APPIMAGE=true volanta'
     wrapProgram $out/bin/volanta \

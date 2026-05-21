@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   perl,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
   libjpeg,
   libpng,
   libtiff,
@@ -13,8 +13,8 @@
   librsvg,
   glib,
   gtk3,
-  libXext,
-  libXxf86vm,
+  libxext,
+  libxxf86vm,
   poppler,
   vlc,
   ghostscript,
@@ -57,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     perl
-    libX11
-    libXinerama
+    libx11
+    libxinerama
     libjpeg
     libpng
     libtiff
@@ -66,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     glib
     gtk3
-    libXxf86vm
-    libXext
+    libxxf86vm
+    libxext
     poppler
     vlc
     ghostscript

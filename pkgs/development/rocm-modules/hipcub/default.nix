@@ -11,13 +11,13 @@
   gbenchmark,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
-  version = "7.0.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -31,10 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "hipCUB";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Vx9h/DTZo7RfQrflVwXOCKiA7rt6dQQw/P/bllgtq8w=";
+    sparseCheckout = [
+      "projects/hipcub"
+      "shared"
+    ];
+    hash = "sha256-geO6LS1osKAlmVRtiZ6keqFHsJccyB7pRZdWPEkue2M=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/hipcub";
 
   nativeBuildInputs = [
     cmake
@@ -83,15 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Thin wrapper library on top of rocPRIM or CUB";
-    homepage = "https://github.com/ROCm/hipCUB";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipcub";
     license = with lib.licenses; [ bsd3 ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

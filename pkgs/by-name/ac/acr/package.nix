@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acr";
-  version = "2.2.4";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "acr";
     rev = finalAttrs.version;
-    hash = "sha256-ASdXxkHqrxs4xVKB9LJDU5Y12+1Gv+NgFHC+tEC5p+E=";
+    hash = "sha256-fV4aBc/PZD1Grtq/KugTuzYAu/nsOntgDwsnFuAvHMc=";
   };
 
   preConfigure = ''

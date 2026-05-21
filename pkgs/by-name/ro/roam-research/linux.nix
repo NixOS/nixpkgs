@@ -12,17 +12,17 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libpulseaudio,
   libxcb,
@@ -48,13 +48,13 @@ let
     gdk-pixbuf
     glib
     gtk3
-    libX11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
     libdrm
     libxcb
     libxkbcommon
@@ -64,10 +64,10 @@ let
     nss
     pango
     stdenv.cc.cc
-    libXScrnSaver
-    libXcursor
-    libXrender
-    libXtst
+    libxscrnsaver
+    libxcursor
+    libxrender
+    libxtst
     libpulseaudio
     udev
   ];

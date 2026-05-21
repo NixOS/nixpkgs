@@ -7,16 +7,16 @@
   glib,
   gtkmm3,
   harfbuzz,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxcb,
   makeWrapper,
   pcre2,
   pkg-config,
-  xcbutilcursor,
-  xcbutilkeysyms,
-  xcbutilwm,
-  xcbutil,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-wm,
+  libxcb-util,
   xmodmap,
 }:
 
@@ -46,14 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtkmm3
     harfbuzz
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxcb
     pcre2
-    xcbutilcursor
-    xcbutilkeysyms
-    xcbutilwm
-    xcbutil
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-wm
+    libxcb-util
   ];
 
   # src/ewmh/ewmh.cpp:67:28: error: non-constant-expression cannot be narrowed from type 'int' to 'uint32_t' (aka 'unsigned int') in initializer list
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiling X11 window manager written in modern C++";
     license = lib.licenses.bsd3;
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
     mainProgram = "Hypr";
   };
 })

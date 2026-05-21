@@ -1,0 +1,24 @@
+From b18ae56b1bee86808d40f89900f999e835a7e1e9 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 13 Feb 2026 19:05:02 -0500
+Subject: [PATCH] fix-build-with-gcc
+
+---
+ emit.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/emit.h b/emit.h
+index 340f314..a8a6d3b 100644
+--- a/emit.h
++++ b/emit.h
+@@ -6,6 +6,7 @@
+ #include <memory>
+ #include <arpa/inet.h>
+ #include <cmath>
++#include <cstdint>
+ 
+ namespace SigTool {
+ 
+-- 
+2.51.2
+

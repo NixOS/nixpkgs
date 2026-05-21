@@ -17,24 +17,19 @@
   pytestCheckHook,
   safetensors,
   transformers,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "1.1.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skorch-dev";
     repo = "skorch";
     tag = "v${version}";
-    sha256 = "sha256-f0g/kn3HhvYfGDgLpA7gAnYocJrYqHUq680KrGuoPCQ=";
+    sha256 = "sha256-il3S5cfW47tKvMQGr/BfbEjMEMVzBF4gSrQhR1uKxks=";
   };
-
-  # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
-  # https://github.com/skorch-dev/skorch/issues/1080
-  disabled = pythonAtLeast "3.13";
 
   build-system = [ setuptools ];
 

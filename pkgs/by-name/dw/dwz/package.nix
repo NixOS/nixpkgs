@@ -3,17 +3,17 @@
   stdenv,
   fetchurl,
   elfutils,
-  xxHash,
+  xxhash,
   dejagnu,
   gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dwz";
   version = "0.16";
 
   src = fetchurl {
-    url = "https://www.sourceware.org/ftp/dwz/releases/dwz-${version}.tar.gz";
+    url = "https://www.sourceware.org/ftp/dwz/releases/dwz-${finalAttrs.version}.tar.gz";
     hash = "sha256-R1hT4bSebtjMLQqQnHpPwcxXHrzPxmJ4/UM0Lb4n1Q4=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ elfutils ];
 
   buildInputs = [
-    xxHash
+    xxhash
     elfutils
   ];
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jbcrail ];
     platforms = [ lib.systems.inspect.patterns.isElf ];
   };
-}
+})

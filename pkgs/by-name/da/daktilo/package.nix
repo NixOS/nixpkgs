@@ -6,17 +6,19 @@
   unixtools,
   pkg-config,
   alsa-lib,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "daktilo";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "daktilo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gIBWonJGX6IpxyBeMulcfQEExsG1GrBVQLZbBBA1ruc=";
   };
 
@@ -29,9 +31,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     alsa-lib
-    xorg.libX11
-    xorg.libXi
-    xorg.libXtst
+    libx11
+    libxi
+    libxtst
   ];
 
   nativeCheckInputs = [
@@ -55,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Turn your keyboard into a typewriter";
     homepage = "https://github.com/orhun/daktilo";
-    changelog = "https://github.com/orhun/daktilo/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/daktilo/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -63,4 +65,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ orhun ];
     mainProgram = "daktilo";
   };
-}
+})

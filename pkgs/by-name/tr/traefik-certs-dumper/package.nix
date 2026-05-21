@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "traefik-certs-dumper";
-  version = "2.11.0";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "ldez";
     repo = "traefik-certs-dumper";
-    rev = "v${version}";
-    sha256 = "sha256-rjD0zt5kJ7A4TLn3jQBLGvzvHthszP9AvmcILVo5lzk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-4s4IN/aDGP/9mFEf3Sl8/R9GtQlYSSXjxPrSA2CYuWE=";
   };
 
-  vendorHash = "sha256-hGmcE8vEJI4nZOVFbDGWpnfTyupFydwGj09gMb2Mctc=";
+  vendorHash = "sha256-VKtYOc1PbR0UZ9mJZ5houzVEPN+j+OnTw42eFr1aQgg=";
   excludedPackages = "integrationtest";
 
   meta = {
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "traefik-certs-dumper";
   };
-}
+})

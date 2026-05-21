@@ -15,16 +15,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-workstations";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_workstations";
     inherit (finalAttrs) version;
-    hash = "sha256-poGhvPGpD+qOFacXsSqwaki5EZaTMQpAoXh7X0kqUsc=";
+    hash = "sha256-wuFFlOxCyTK0n39LB3XGwvoQ7FCSjUDJa3n6uElvSEQ=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

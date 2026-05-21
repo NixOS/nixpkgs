@@ -20,11 +20,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "binutils-static";
-  version = "2.45.1";
+  version = "2.46.0";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-${version}.tar.xz";
-    hash = "sha256-X+EB5v6dGP3slZYtge1nD97l834/SPC++Hvd+GJROqU=";
+    hash = "sha256-11qU9Nc+ekCG91E+Z+Q56Pzcu3Jv/mP0ZhdE5iVrLPI=";
   };
 
   patches = [
@@ -40,6 +40,7 @@ let
     "--host=${hostPlatform.config}"
 
     "--disable-dependency-tracking"
+    "--disable-nls"
 
     "--with-sysroot=/"
     "--enable-deterministic-archives"
@@ -100,4 +101,8 @@ bash.runCommand "${pname}-${version}"
     # Install
     # strip to remove build dependency store path references
     make -j $NIX_BUILD_CORES install-strip
+
+    # gprof/addr2line/elfedit + man pages are unused downstream.
+    rm -f $out/bin/gprof $out/bin/addr2line $out/bin/elfedit
+    rm -rf $out/share/info $out/share/man
   ''

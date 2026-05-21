@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo124Module,
+  buildGo125Module,
   fetchFromGitLab,
 }:
 
-buildGo124Module rec {
+buildGo125Module rec {
   pname = "gitlab-container-registry";
-  version = "4.34.0";
+  version = "4.39.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -14,10 +14,14 @@ buildGo124Module rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-KGw9kVsAePhEQ+kINgcMhGw7pSioOnqNWFnjQKu/XmY=";
+    hash = "sha256-7dGKV2Pc3OPdM4OZqYjp3B9/s6DHtPvrqcWnWb3wHYw=";
   };
 
-  vendorHash = "sha256-g4h1m7b7dkdTcSfwTZH4Z5P9RBKme441Ucg4aPIqLSY=";
+  vendorHash = "sha256-s08LsgYZTRJm0sWkbEUsmTYGkfb/5PJl9o9ozY1KOms=";
+
+  excludedPackages = [
+    "devvm/*"
+  ];
 
   checkFlags =
     let

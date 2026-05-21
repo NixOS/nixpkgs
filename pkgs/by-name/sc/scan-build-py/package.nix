@@ -6,7 +6,7 @@
 let
   inherit (llvmPackages) clang-unwrapped;
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "scan-build-py";
   inherit (clang-unwrapped) version;
 
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "intercepts the build process to generate a compilation database";
-    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${version}/clang/tools/scan-build-py/";
+    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${finalAttrs.version}/clang/tools/scan-build-py/";
     mainProgram = "scan-build-py";
     license = with lib.licenses; [
       asl20
@@ -43,4 +43,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ RossSmyth ];
     platforms = lib.intersectLists python3.meta.platforms clang-unwrapped.meta.platforms;
   };
-}
+})

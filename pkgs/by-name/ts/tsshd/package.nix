@@ -2,27 +2,45 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  stdenv,
   versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "tsshd";
-  version = "0.1.6";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "trzsz";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B5PTiz9luBxkDA9UMSkGYTcPbnXdL43rkFvbOUS5F6w=";
+    hash = "sha256-YqSSJA/jP8WRbfwC5fxFE4su01ZEPQNmiNRr96pDE1g=";
   };
 
-  vendorHash = "sha256-dW05EoAVLqmiPRRG0R4KwKsSijZuxSe15iHkyCImtZY=";
+  vendorHash = "sha256-HJWxphZuBh3gXPoEqL/EVGtwdWyW+cMSQhKyfSymKG0=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  # Enable for upstream KCP and QUIC tests which require UDP binding on localhost
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        # `quic.DialAddr` of `quic-go` invokes UDP writing with `sendmsg` from address `[::]`,
+        # causing these tests to fail even with the `__darwinAllowLocalNetworking` flag enabled.
+        "TestQUIC_InitialPacketSize"
+        "TestQUIC_RespectMTU"
+        "TestQUIC_CertValidation"
+      ];
+    in
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+    ];
 
   doInstallCheck = true;
   nativeCheckInputs = [

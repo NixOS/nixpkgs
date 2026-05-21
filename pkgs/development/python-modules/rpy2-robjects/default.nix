@@ -53,6 +53,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pytestFlags = [
+    # https://github.com/rpy2/rpy2/issues/1218
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
   meta = {
     homepage = "https://rpy2.github.io/";
     description = "Python interface to R";

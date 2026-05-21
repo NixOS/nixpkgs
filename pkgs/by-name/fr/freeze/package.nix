@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "freeze";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "optiv";
     repo = "Freeze";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BE5MvCU+NfEccauOdWNty/FwMiWwLttPh7eE9+UzEMY=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

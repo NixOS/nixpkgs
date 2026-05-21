@@ -8,11 +8,11 @@
   glm,
   libGLU,
   libGL,
-  libX11,
-  libXext,
-  libXrender,
+  libx11,
+  libxext,
+  libxrender,
   icu74,
-  libSM,
+  libsm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     libGLU
     libGL
-    libX11
-    libXext
-    libXrender
+    libx11
+    libxext
+    libxrender
     icu74
-    libSM
+    libsm
   ];
 
   meta = {

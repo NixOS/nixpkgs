@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   passthru.updateScript = nix-update-script { };
 
@@ -46,6 +46,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Stylelint extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-stylelint";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

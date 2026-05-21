@@ -19,12 +19,12 @@
   gcr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcryptui";
   version = "3.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libcryptui/${lib.versions.majorMinor version}/libcryptui-${version}.tar.xz";
+    url = "mirror://gnome/sources/libcryptui/${lib.versions.majorMinor finalAttrs.version}/libcryptui-${finalAttrs.version}.tar.xz";
     sha256 = "0rh8wa5k2iwbwppyvij2jdxmnlfjbna7kbh2a5n7zw4nnjkx3ski";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     # cannot open shared object file: No such file or directory
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

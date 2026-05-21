@@ -11,7 +11,7 @@
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flye";
   version = "2.9.6";
   pyproject = true;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fenderglass";
     repo = "flye";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZdrAxPKY3+HJ388tGCdpDcvW70mJ5wd4uOUkuufyqK8=";
   };
 
@@ -61,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "flye";
     maintainers = with lib.maintainers; [ assistant ];
   };
-}
+})

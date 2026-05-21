@@ -12,7 +12,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "marqo";
+  pname = "marqo";
   version = "3.12.0";
   pyproject = true;
 

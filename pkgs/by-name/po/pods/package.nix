@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  applyPatches,
-  fetchpatch2,
+  blueprint-compiler,
   cargo,
   desktop-file-utils,
   glib,
@@ -24,29 +23,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pods";
-  version = "2.2.0";
+  version = "2.3.0";
 
-  src = applyPatches {
-    name = "pods-patched";
-    src = fetchFromGitHub {
-      owner = "marhkb";
-      repo = "pods";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-m+0XjxY0nDAJbVX3r/Jfg+G+RU8Q51e0ZXxkdH69SiQ=";
-    };
-
-    # Based on upstream PR: https://github.com/marhkb/pods/pull/895
-    # which cannot be merged into 2.2.0 because dependencies were bumped since its release.
-    # Hopefully 2.2.1 will be released soon
-    patches = [ ./cve-2025-62516.patch ];
+  src = fetchFromGitHub {
+    owner = "marhkb";
+    repo = "pods";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JWOxp3J+7k0ikdFJ8SDFcspuM5SO5rQm5/21G4FAAag=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-GBWaGCNXYCiT/favrIYB30VGMMoQQk1iUh4GTNPerK8=";
+    hash = "sha256-UkXBlqFmODlJEm2NBHdKoO5Yc086NAHjo9HOuWb3Jq0=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     glib
     gtk4
@@ -70,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Podman desktop application";

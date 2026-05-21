@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "skate";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "skate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ihzcto41ltV5LQjLP9AF5XGl5b6QDbgZ/q4BMzfrDC8=";
   };
 
@@ -21,15 +21,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Personal multi-machine syncable key value store";
     homepage = "https://github.com/charmbracelet/skate";
-    changelog = "https://github.com/charmbracelet/skate/releases/tag/${src.rev}";
+    changelog = "https://github.com/charmbracelet/skate/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "skate";
   };
-}
+})

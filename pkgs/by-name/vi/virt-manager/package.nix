@@ -18,6 +18,7 @@
   libosinfo,
   adwaita-icon-theme,
   gtksourceview4,
+  libayatana-appindicator,
   xorriso,
   spiceSupport ? true,
   spice-gtk ? null,
@@ -32,14 +33,14 @@ let
     requests
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virt-manager";
   version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "virt-manager";
     repo = "virt-manager";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nMWLDo2pfWcqsVuEk0JbzLZ1a0lViTohsZ8gEXGhBuI=";
   };
 
@@ -70,6 +71,9 @@ stdenv.mkDerivation rec {
     libosinfo
     gtksourceview4
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libayatana-appindicator
+  ]
   ++ lib.optionals spiceSupport [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -86,7 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    glib-compile-schemas $out/share/gsettings-schemas/virt-manager-${version}/glib-2.0/schemas
+    glib-compile-schemas $out/share/gsettings-schemas/virt-manager-${finalAttrs.version}/glib-2.0/schemas
 
     gappsWrapperArgs+=(--set PYTHONPATH "${python3.pkgs.makePythonPath pythonDependencies}")
     # these are called from virt-install in installerinject.py
@@ -110,4 +114,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

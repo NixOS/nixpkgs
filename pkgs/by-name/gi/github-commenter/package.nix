@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "github-commenter";
   version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = "github-commenter";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZQEiDY+gOnUMxolgreDWkm9Uuc72WxcysAkT5DK/XLc=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     homepage = "https://github.com/cloudposse/github-commenter";
     maintainers = [ lib.maintainers.mmahut ];
   };
-}
+})

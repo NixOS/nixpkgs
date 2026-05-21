@@ -7,9 +7,9 @@
   gtk3,
   jdk17,
   lib,
-  libX11,
-  libXrender,
-  libXtst,
+  libx11,
+  libxrender,
+  libxtst,
   makeDesktopItem,
   makeWrapper,
   shared-mime-info,
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   version = pVersion;
 
   src = fetchurl {
-    url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
+    url = "https://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
     sha256 = "sha256-icmo5zdK0XaH32kXwZUVaQ0VPSGEgvlLr7v7PtdbmCg=";
   };
 
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         freetype
         fontconfig
-        libX11
-        libXrender
+        libx11
+        libxrender
         zlib
       ]
     } $libCairo
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           glib
           gtk3
-          libXtst
+          libxtst
           webkitgtk_4_1
         ]
       } \
@@ -103,9 +103,9 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     jdk
-    libX11
-    libXrender
-    libXtst
+    libx11
+    libxrender
+    libxtst
     zlib
     shared-mime-info
     webkitgtk_4_1

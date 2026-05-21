@@ -17,7 +17,11 @@
   libjpeg,
   libopus,
   nasm,
-  xorg,
+  xorg-server,
+  libxrandr,
+  libxfixes,
+  libx11,
+  xauth,
   lame,
   pixman,
   libjpeg_turbo,
@@ -29,13 +33,13 @@
 let
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
-    version = "0.10.4";
+    version = "0.10.5";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      hash = "sha256-TuzUerfOn8+3YfueG00IBP9sMpvy2deyL16mWQ8cRHg=";
+      hash = "sha256-P7mgdHIq7/Vkk5CR4mUYtQ0xBjh3J2QrYAobKbw1KXM=";
     };
 
     nativeBuildInputs = [
@@ -48,7 +52,7 @@ let
     ];
 
     buildInputs = [
-      xorg.xorgserver
+      xorg-server
       libdrm
     ];
 
@@ -74,7 +78,7 @@ let
 
   xrdp = stdenv.mkDerivation rec {
     pname = "xrdp";
-    version = "0.10.4.1";
+    version = "0.10.6";
 
     src = applyPatches {
       inherit version;
@@ -85,7 +89,7 @@ let
         repo = "xrdp";
         rev = "v${version}";
         fetchSubmodules = true;
-        hash = "sha256-ula1B9/eriJ+0r6d9r2LAzh7J3s6/uvAiTKeRzLuVL0=";
+        hash = "sha256-BoIpWafUWznRHN8BaZmld8vVbZtywaGiooGPnDtDCjM=";
       };
     };
 
@@ -109,13 +113,13 @@ let
       pam
       pixman
       systemd
-      xorg.libX11
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxfixes
+      libxrandr
     ];
 
     postPatch = ''
-      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xauth}/bin/xauth -q"
 
       substituteInPlace configure.ac --replace /usr/include/ ""
     '';
@@ -163,9 +167,9 @@ let
       cat >> $out/etc/xrdp/sesman.ini <<EOF
 
       [Xorg]
-      param=${xorg.xorgserver}/bin/Xorg
+      param=${xorg-server}/bin/Xorg
       param=-modulepath
-      param=${xorgxrdp}/lib/xorg/modules,${xorg.xorgserver}/lib/xorg/modules
+      param=${xorgxrdp}/lib/xorg/modules,${xorg-server}/lib/xorg/modules
       param=-config
       param=${xorgxrdp}/etc/X11/xrdp/xorg.conf
       param=-noreset

@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   exiv2,
   graphicsmagick,
   libarchive,
@@ -15,18 +15,18 @@
   zxing-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "photoqt";
-  version = "5.1";
+  version = "5.3";
 
   src = fetchurl {
-    url = "https://photoqt.org/downloads/source/photoqt-${version}.tar.gz";
-    hash = "sha256-GQT0JDuhrtQh9u5R2DBIlYWEHsSJ8cvDp3+0s6I0iHY=";
+    url = "https://photoqt.org/downloads/source/photoqt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-NuZET8uS7sxRXvpJGKiOulUvb/y5/O6LYXyr0RBln+4=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     qt6.qttools
     qt6.wrapQtAppsHook
   ];
@@ -76,5 +76,7 @@ stdenv.mkDerivation rec {
     mainProgram = "photoqt";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+    # cplusplus/singletons/scripts/pqc_scriptsimages.cpp:1740:19: error: no matching function for call to 'setxattr'
+    badPlatforms = lib.platforms.darwin;
   };
-}
+})

@@ -6,18 +6,19 @@
   requests,
   segno,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fritzconnection";
-  version = "1.15.0";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kbr";
     repo = "fritzconnection";
-    tag = version;
-    hash = "sha256-ulY+nh9CSnxrktTlFSXAWJALkS4GwP/3dRIG07jQCWs=";
+    tag = finalAttrs.version;
+    hash = "sha256-J07zAXZxQc3TCfsjYcBhQdxsYwHabE9vdj3eMkWua54=";
   };
 
   build-system = [ setuptools ];
@@ -28,11 +29,10 @@ buildPythonPackage rec {
     qr = [ segno ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TEMP
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "fritzconnection" ];
 
@@ -44,11 +44,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to communicate with the AVM Fritz!Box";
     homepage = "https://github.com/kbr/fritzconnection";
-    changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/version_history.html";
+    changelog = "https://fritzconnection.readthedocs.io/en/${finalAttrs.src.tag}/sources/version_history.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dotlambda
       valodim
     ];
   };
-}
+})

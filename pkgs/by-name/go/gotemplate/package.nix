@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
 
   pname = "gotemplate";
   version = "3.12.0";
@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "gotemplate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XcSlQ0Gw+EW2sJK+M2Sp9pcSSy2wsdRZ3MeFewhx7nw=";
   };
 
@@ -19,14 +19,14 @@ buildGoModule rec {
 
   # This is the value reported when running `gotemplate --version`,
   # see https://github.com/coveooss/gotemplate/issues/262
-  ldflags = [ "-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${finalAttrs.version}" ];
 
   meta = {
     description = "CLI for go text/template";
     mainProgram = "gotemplate";
-    changelog = "https://github.com/coveooss/gotemplate/releases/tag/v${version}";
+    changelog = "https://github.com/coveooss/gotemplate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.giorgiga ];
   };
 
-}
+})

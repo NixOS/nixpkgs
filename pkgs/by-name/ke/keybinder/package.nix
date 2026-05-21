@@ -15,14 +15,14 @@
 let
   lua = lua5_1;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keybinder";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "engla";
     repo = "keybinder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-elL6DZtzCwAtoyGZYP0jAma6tHPks2KAtrziWtBENGU=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

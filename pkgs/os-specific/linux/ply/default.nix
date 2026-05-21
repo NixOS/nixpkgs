@@ -8,11 +8,13 @@
   flex,
   p7zip,
   rsync,
+  nix-update-script,
+  fetchpatch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ply";
-  version = "2.1.1-${lib.substring 0 7 src.rev}";
+  version = "2.4.0";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -25,9 +27,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "ply";
-    rev = "e25c9134b856cc7ffe9f562ff95caf9487d16b59";
-    sha256 = "1178z7vvnjwnlxc98g2962v16878dy7bd0b2njsgn4vqgrnia7i5";
+    tag = finalAttrs.version;
+    sha256 = "sha256-PJaCEiM1BRUEtInd93bK+xZNJzO9EZy+JXkp9cdPrgs=";
   };
+
+  patches = [
+    # Fix union member initialization for GCC 15.
+    (fetchpatch2 {
+      url = "https://github.com/iovisor/ply/commit/5e78db85a625cff64e5714afcf3163c882a0435a.patch?full_index=1";
+      hash = "sha256-mKPHPIZy0KztyVgHuM/kzyLytKghv8c8XvKt3pYUYDU=";
+    })
+  ];
 
   preAutoreconf = ''
     # If kernel sources are a folder (i.e. fetched from git), we just copy them in
@@ -46,6 +56,8 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix=$out
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Dynamic tracing in Linux";
     mainProgram = "ply";
@@ -54,7 +66,8 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       mic92
       mbbx6spp
+      snu
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

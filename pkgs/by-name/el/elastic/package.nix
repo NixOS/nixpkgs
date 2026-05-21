@@ -17,16 +17,16 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elastic";
-  version = "0.1.9";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
-    rev = version;
-    hash = "sha256-jK9RcZ5U1Dwkpu1mlfq/l4347eRCd3Y/KDYYIIkGytk=";
+    rev = finalAttrs.version;
+    hash = "sha256-zOqOAUbPjyVl/96oVBhsjBrSMGt+NEbraznNGu374dM=";
   };
 
   nativeBuildInputs = [
@@ -54,10 +54,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Design spring animations";
     homepage = "https://gitlab.gnome.org/World/elastic/";
+    changelog = "https://gitlab.gnome.org/World/elastic/-/releases/${finalAttrs.version}";
     mainProgram = "app.drey.Elastic";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ _0xMRTT ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

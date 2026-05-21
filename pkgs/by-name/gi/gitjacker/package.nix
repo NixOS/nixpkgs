@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitjacker";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "gitjacker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rEn9FpcRfEt2yGepIPEAO9m8JeVb+nMhYMBWhC/barc=";
   };
 
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = with lib.licenses; [ unlicense ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

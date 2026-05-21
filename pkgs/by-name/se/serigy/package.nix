@@ -12,22 +12,17 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "serigy";
-  version = "1.1";
+  version = "2.1.1";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "Serigy";
-    tag = version;
-    hash = "sha256-1PlGR7aX7Ekrbe7+Qm0E1h6yl6CzdIcV2R3MSIIeH6o=";
+    tag = finalAttrs.version;
+    hash = "sha256-WOourIlF2Z1YP34d9VCuX7kysJxeMBz2enOaGu73r8o=";
   };
-
-  postPatch = ''
-    substituteInPlace src/setup_dialog.py \
-      --replace-fail "flatpak run io.github.cleomenezesjr.Serigy" "serigy"
-  '';
 
   nativeBuildInputs = [
     meson
@@ -62,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

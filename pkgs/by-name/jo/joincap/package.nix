@@ -5,14 +5,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "joincap";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "assafmo";
     repo = "joincap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HvqtAno26ZSggiXbQpkw5ghxCrmmLb5uDdeSQ2QVeq0=";
   };
 
@@ -28,9 +28,9 @@ buildGoModule rec {
   meta = {
     description = "Merge multiple pcap files together, gracefully";
     homepage = "https://github.com/assafmo/joincap";
-    changelog = "https://github.com/assafmo/joincap/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/assafmo/joincap/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "joincap";
   };
-}
+})

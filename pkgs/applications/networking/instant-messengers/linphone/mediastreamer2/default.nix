@@ -5,11 +5,11 @@
   glew,
   gsm,
   lib,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libopus,
   libpulseaudio,
-  libsForQt5,
+  qt6Packages,
   libv4l,
   libvpx,
   mkLinphoneDerivation,
@@ -35,8 +35,8 @@ mkLinphoneDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-    libsForQt5.qtbase
-    libsForQt5.qtdeclarative
+    qt6Packages.qtbase
+    qt6Packages.qtdeclarative
   ];
 
   propagatedBuildInputs = [
@@ -47,8 +47,8 @@ mkLinphoneDerivation (finalAttrs: {
 
     ffmpeg_4
     glew
-    libX11
-    libXext
+    libx11
+    libxext
     libpulseaudio
     libv4l
     speex
@@ -70,7 +70,7 @@ mkLinphoneDerivation (finalAttrs: {
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
   ];
 
-  NIX_LDFLAGS = "-lXext";
+  env.NIX_LDFLAGS = "-lXext";
 
   meta = {
     description = "Powerful and lightweight streaming engine specialized for voice/video telephony applications. Part of the Linphone project";

@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/globocom/m3u8";
     changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
   };
 }

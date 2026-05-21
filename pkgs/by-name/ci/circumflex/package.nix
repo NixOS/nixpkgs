@@ -7,18 +7,18 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "circumflex";
-  version = "3.9";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "circumflex";
-    tag = version;
-    hash = "sha256-Wv0CSLXM6zMkK0FFAoe0oPpfD3Fq743jz+69qWh0njs=";
+    tag = finalAttrs.version;
+    hash = "sha256-JJgLRRE0Fh/oaZLZo0hLCfwUHJXBvXXfTNdmQMNUM7A=";
   };
 
-  vendorHash = "sha256-SlXTLL/6OElR5yJ86K2voq6Ui9Z+9CvXVjG0im92CTk=";
+  vendorHash = "sha256-in6yPiT/SqRaw6hFF2gCmBwGcJ315Qej3HuM7TF5MaE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mktip ];
     mainProgram = "clx";
   };
-}
+})

@@ -11,7 +11,7 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cairomm";
   version = "1.14.5";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.cairographics.org/releases/cairomm-${version}.tar.xz";
+    url = "https://www.cairographics.org/releases/cairomm-${finalAttrs.version}.tar.xz";
     sha256 = "cBNiA1QMiE6Jzhye37Y2m5lTk39s1ZbZfHjJdYpdSNs=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

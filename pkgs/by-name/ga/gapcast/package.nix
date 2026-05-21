@@ -4,17 +4,17 @@
   buildGoModule,
   fetchFromGitHub,
   libpcap,
-  xorg,
+  libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gapcast";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "ANDRVV";
     repo = "gapcast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ei5XfcnbUoegB8lNEEQ3PrCzNJGaVeVd2lfrMWYoODw=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   buildInputs = [
     libpcap
-    xorg.libX11
+    libx11
   ];
 
   ldflags = [
@@ -33,10 +33,10 @@ buildGoModule rec {
   meta = {
     description = "802.11 broadcast analyzer & injector";
     homepage = "https://github.com/ANDRVV/gapcast";
-    changelog = "https://github.com/ANDRVV/gapcast/releases/tag/v${version}";
+    changelog = "https://github.com/ANDRVV/gapcast/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gapcast";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

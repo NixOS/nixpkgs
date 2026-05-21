@@ -14,7 +14,7 @@ let
     }
   );
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "systemd-language-server";
   version = "0.3.5";
   pyproject = true;
@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "psacawa";
     repo = "systemd-language-server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QRd2mV4qRh4OfVJ2/5cOm3Wh8ydsLTG9Twp346DHjs0=";
   };
 
@@ -55,9 +55,9 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "Language Server for Systemd unit files";
     homepage = "https://github.com/psacawa/systemd-language-server";
-    changelog = "https://github.com/psacawa/systemd-language-server/releases/tag/${version}";
+    changelog = "https://github.com/psacawa/systemd-language-server/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "systemd-language-server";
   };
-}
+})

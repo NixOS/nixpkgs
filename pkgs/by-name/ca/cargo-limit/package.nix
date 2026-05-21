@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-limit";
   version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "alopatindev";
     repo = "cargo-limit";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-joWDB9fhCsYVZFZdr+Gfm4JaRlm5kj+CHp34Sx5iQYk=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

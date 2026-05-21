@@ -3,29 +3,68 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchPnpmDeps,
   testers,
   installShellFiles,
+  pkg-config,
+  openssl,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
+  python3,
 }:
 
+let
+  pnpm = pnpm_10;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
-  version = "0.20.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cZWxXcU5yn1ShLWVMZznVNBmhx5npUGc3lJuuchb/FA=";
+    hash = "sha256-tq88qWrm243Go64LpH7kU89ryq2xm9nkIJI+ZeQU7IU=";
   };
 
-  cargoHash = "sha256-4ezcHKXmEmnkRG6/Pt0ENUlkga7SesMfI52txEH9ph0=";
+  cargoHash = "sha256-Qxx+BrioVBX5Yy6YVJAnYdNEZVqiZUJTnWNgc74sI44=";
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/ui";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-9ifyIKFQiWKM0hzToibU4zuA64PmznqtpFWILFsFvGQ=";
+  };
+  pnpmRoot = "ui";
+
+  buildInputs = [ openssl ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    nodejs
+    pnpmConfigHook
+    pnpm
+    python3
+  ];
+
+  env = {
+    CXXFLAGS = "-std=c++20";
+    OPENSSL_NO_VENDOR = true;
+  };
+
+  preBuild = ''
+    pushd ui
+    pnpm build
+    popd
+  '';
 
   checkFlags = [
     # Skip tests requiring network
     "--skip=test_cli_interface"
   ];
-
-  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \

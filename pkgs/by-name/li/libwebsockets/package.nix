@@ -11,14 +11,14 @@
   withExternalPoll ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwebsockets";
   version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Xvcnfvm9UCNXm3G3tVe7jExE3fwpzYuz8wllvINymeI=";
   };
 
@@ -69,6 +69,13 @@ stdenv.mkDerivation rec {
       ]
   );
 
+  # Remove after https://github.com/warmcat/libwebsockets/pull/3567 has been merged or otherwise addressed
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace "cmake/libwebsockets-config.cmake.in" --replace-fail \
+      "set(LIBWEBSOCKETS_LIBRARIES websockets websockets_shared)" \
+      "set(LIBWEBSOCKETS_LIBRARIES websockets)"
+  '';
+
   postInstall = ''
     # Fix path that will be incorrect on move to "dev" output.
     substituteInPlace "$out/lib/cmake/libwebsockets/LibwebsocketsTargets-release.cmake" \
@@ -102,4 +109,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mindavi ];
     platforms = lib.platforms.all;
   };
-}
+})

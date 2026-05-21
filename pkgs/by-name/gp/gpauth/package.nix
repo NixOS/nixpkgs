@@ -10,21 +10,21 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpauth";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
-    tag = "v${version}";
-    hash = "sha256-dxRqf5iOlgJegeAqtTwoVqNHXU3eOse5eMYFknhAh2M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rux2rToqs5GZEDTryPAkm62yGdhWfEqapTMQOGyqCRI=";
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "apps/gpauth";
 
-  cargoHash = "sha256-VkDq98Y6uBSal7m4V9vjW1XermOPOWulo3Jo34QFRsA=";
+  cargoHash = "sha256-xza7AfuOcSUkDyliGHUx9bEd+M94d23xVrVVvZo2nas=";
 
   nativeBuildInputs = [
     perl
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/changelog.md";
+    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/changelog.md";
     description = "CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO authentication method";
     longDescription = ''
       A CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       The CLI version is always free and open source in this repo. It has almost
       the same features as the GUI version.
     '';
-    homepage = "https://github.com/${src.owner}/${src.repo}";
+    homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       binary-eater
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

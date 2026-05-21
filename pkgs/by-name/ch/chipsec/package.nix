@@ -9,23 +9,25 @@
   withDriver ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "chipsec";
-  version = "1.13.19";
+  version = "1.13.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    tag = version;
-    hash = "sha256-QJDoUnmZhKimgVnKCarc70b1OZAF3uIKqefuXjD7dOg=";
+    tag = finalAttrs.version;
+    hash = "sha256-TSw/1NdPGefWXRMleXTeLWDgRw/m+luIQ0lF8UlgfLs=";
   };
 
   patches = [
     ./log-path.diff
   ];
 
-  KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  env = lib.optionalAttrs withDriver {
+    KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  };
 
   nativeBuildInputs = [
     nasm
@@ -84,8 +86,6 @@ python3.pkgs.buildPythonApplication rec {
       staslyakhov
     ];
     platforms = if withDriver then [ "x86_64-linux" ] else with lib.platforms; linux ++ darwin;
-    # https://github.com/chipsec/chipsec/issues/1793
-    broken = withDriver && kernel.kernelOlder "5.4" && kernel.isHardened;
     mainProgram = "chipsec_main";
   };
-}
+})

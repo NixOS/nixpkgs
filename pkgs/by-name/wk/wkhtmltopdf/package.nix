@@ -13,7 +13,8 @@
   fontconfig,
   stdenv,
   xar,
-  xorg,
+  libxrender,
+  libxext,
 }:
 
 let
@@ -50,8 +51,8 @@ let
     ];
 
     buildInputs = [
-      xorg.libXext
-      xorg.libXrender
+      libxext
+      libxrender
 
       freetype
       openssl
@@ -93,6 +94,8 @@ in
 stdenv.mkDerivation (
   {
     pname = "wkhtmltopdf";
+    # required to fix eval when it's not overridden by platform below
+    version = "none";
 
     dontStrip = true;
 

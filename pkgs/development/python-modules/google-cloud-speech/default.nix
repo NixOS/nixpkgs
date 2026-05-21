@@ -14,16 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.34.0";
+  version = "2.38.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_speech";
     inherit version;
-    hash = "sha256-Knv/2E8TS5twyfEcu1CIxTT5K+FJ1x2Qc9C53TpDGs8=";
+    hash = "sha256-GFS1HLt5Vyc7a6YfSmz0neyNCexFCZFYeJflAmfqylE=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

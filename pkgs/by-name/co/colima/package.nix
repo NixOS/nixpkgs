@@ -5,7 +5,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  lima,
+  krunkit,
+  lima-full,
   makeWrapper,
   procps,
   qemu,
@@ -13,15 +14,15 @@
   colima,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "colima";
-  version = "0.9.1";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = "colima";
-    tag = "v${version}";
-    hash = "sha256-oRhpABYyP4T6kfmvJ4llPXcXWrSbxU7uUfvXQhm2huc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WYwHqMPHRF17j7EfZzxHAMV0JPGZKLfJCn0axpuh5sc=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -36,7 +37,7 @@ buildGoModule rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  vendorHash = "sha256-ZwgzKCOEhgKK2LNRLjnWP6qHI4f6OGORvt3CREJf55I=";
+  vendorHash = "sha256-UAnQZyZ4EcIZz55jXUjkJDjq3s0uLPBnwUPyNcBV6aE=";
 
   # disable flaky Test_extractZones
   # https://hydra.nixos.org/build/212378003/log
@@ -53,20 +54,21 @@ buildGoModule rec {
   '';
 
   preConfigure = ''
-    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
+    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${finalAttrs.version} \
     -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
 
   postInstall = ''
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
-        lib.makeBinPath [
-          # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
-          (lima.override {
-            withAdditionalGuestAgents = true;
-          })
-          qemu
-        ]
+        lib.makeBinPath (
+          [
+            # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
+            lima-full
+            qemu
+          ]
+          ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        )
       }
 
     installShellCompletion --cmd colima \
@@ -90,4 +92,4 @@ buildGoModule rec {
     ];
     mainProgram = "colima";
   };
-}
+})

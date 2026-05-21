@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   fontconfig,
-  libXft,
-  libXrender,
+  libxft,
+  libxrender,
 }:
 
 stdenv.mkDerivation {
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
+    libx11
     fontconfig
-    libXft
-    libXrender
+    libxft
+    libxrender
   ];
 
   makeFlags = [

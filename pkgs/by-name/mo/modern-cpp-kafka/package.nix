@@ -10,14 +10,14 @@
   rapidjson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "modern-cpp-kafka";
   version = "2023.03.07";
 
   src = fetchFromGitHub {
     repo = "modern-cpp-kafka";
     owner = "morganstanley";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7hkwM1YbveQpDRqwMZ3MXM88LTwlAT7uB8NL0t409To=";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ditsuke ];
     platforms = lib.platforms.unix;
   };
-}
+})

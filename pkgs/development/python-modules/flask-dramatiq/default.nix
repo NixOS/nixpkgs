@@ -38,6 +38,8 @@ buildPythonPackage {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "dramatiq" ];
+
   dependencies = [ dramatiq ];
 
   nativeCheckInputs = [

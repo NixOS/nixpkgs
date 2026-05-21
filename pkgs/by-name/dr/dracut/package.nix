@@ -27,14 +27,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dracut";
   version = "059";
 
   src = fetchFromGitHub {
     owner = "dracutdevs";
     repo = "dracut";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zSyC2SnSQkmS/mDpBXG2DtVVanRRI9COKQJqYZZCPJM=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     substituteInPlace lsinitrd.sh \
       --replace 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
 
-    echo 'DRACUT_VERSION=${version}' >dracut-version.sh
+    echo 'DRACUT_VERSION=${finalAttrs.version}' >dracut-version.sh
   '';
 
   postFixup = ''
@@ -116,4 +116,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

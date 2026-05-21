@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail-modeladmin";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail-nest";
     repo = "wagtail-modeladmin";
     tag = "v${version}";
-    hash = "sha256-P75jrH4fMODZHht+RAOd0/MutxsWtmui5Kxk8F/Ew0Q=";
+    hash = "sha256-JA5Me7EcdfCPMhGKgydExV/hkzisFMg7KQWnuVrfzD4=";
   };
 
   # Fail with `AssertionError`

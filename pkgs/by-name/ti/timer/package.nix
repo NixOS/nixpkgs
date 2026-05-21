@@ -6,14 +6,14 @@
   timer,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "timer";
   version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "timer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y4goNURzWl3DGeR14jEB87IJSNhSRqoF+/7zjGQ+19E=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion { package = timer; };
@@ -37,4 +37,4 @@ buildGoModule rec {
     ];
     mainProgram = "timer";
   };
-}
+})

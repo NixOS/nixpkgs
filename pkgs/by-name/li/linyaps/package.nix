@@ -24,6 +24,7 @@
   uncrustify,
   xz,
   yaml-cpp,
+  versionCheckHook,
   bash,
   binutils,
   coreutils,
@@ -38,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.11.0";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-qPHDAwEQVnHLWGioEfgz11ZWhlEBJynap3a0hgfL050=";
+    hash = "sha256-AbiUHoNRaz2yL6pV5D1R0kmDGcV8+nmEa+EDDK6soe0=";
   };
 
   patches = [
@@ -98,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "CPM_LOCAL_PACKAGES_ONLY" true)
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postInstall = ''
     # move to the right location for systemd.packages option

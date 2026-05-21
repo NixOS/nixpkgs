@@ -6,11 +6,11 @@
   ghostscript_headless, # for ps2pdf binary
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccal";
   version = "2.5.3";
   src = fetchurl {
-    url = "https://ccal.chinesebay.com/ccal-${version}.tar.gz";
+    url = "https://ccal.chinesebay.com/ccal-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-PUy9yfkFzgKrSEBB+79/C3oxmuajUMbBbWNuGlpQ35Y=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sharzy ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,28 +4,36 @@
   fetchPypi,
   setuptools,
   pytestCheckHook,
-  urllib3,
   certifi,
+  cryptography,
+  lazy-imports,
+  pydantic,
   python-dateutil,
   six,
+  typing-extensions,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "kalshi-python";
-  version = "2.0.0";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "kalshi_python";
-    hash = "sha256-ybO7O+rxS3rSo6GN/FZC/BhSnlfH5/+TpJkSxhRBYYw=";
+    hash = "sha256-FsHRuqfmdF31l5E/L08/eVhWkN7JhgJkFSUzMrYNuOY=";
   };
 
   dependencies = [
-    urllib3
     certifi
+    cryptography
+    lazy-imports
+    pydantic
     python-dateutil
     six
+    typing-extensions
+    urllib3
   ];
 
   build-system = [ setuptools ];

@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 2db7493..675c64b 100644
+index 04dd613..7374d25 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -4,93 +4,133 @@
+@@ -4,94 +4,134 @@
  cmake_minimum_required(VERSION 3.26)
  project(piper LANGUAGES C CXX)
  
@@ -16,9 +16,7 @@ index 2db7493..675c64b 100644
 -# Install location for espeak-ng
 -set(ESPEAKNG_BUILD_DIR ${CMAKE_BINARY_DIR}/espeak_ng)
 -set(ESPEAKNG_INSTALL_DIR ${CMAKE_BINARY_DIR}/espeak_ng-install)
-+# Try to find espeak-ng using pkg-config, if available
-+find_package(PkgConfig QUIET)
- 
+-
 -if(WIN32)
 -    # Special handling for Windows
 -    set(ESPEAKNG_STATIC_LIB ${ESPEAKNG_INSTALL_DIR}/lib/espeak-ng.lib)
@@ -26,10 +24,8 @@ index 2db7493..675c64b 100644
 -else()
 -    set(ESPEAKNG_STATIC_LIB ${ESPEAKNG_INSTALL_DIR}/lib/libespeak-ng.a)
 -    set(UCD_STATIC_LIB ${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external-build/src/ucd-tools/libucd.a)
-+if (PKG_CONFIG_FOUND)
-+    pkg_check_modules(ESPEAKNG QUIET espeak-ng)
- endif()
- 
+-endif()
+-
 -ExternalProject_Add(espeak_ng_external
 -    GIT_REPOSITORY https://github.com/espeak-ng/espeak-ng.git
 -    GIT_TAG 212928b394a96e8fd2096616bfd54e17845c48f6  # 2025-Mar-22
@@ -48,6 +44,7 @@ index 2db7493..675c64b 100644
 -        -DEXTRA_ru:BOOL=ON
 -        # Need to explicitly add ucd include directory for CI
 -        "-DCMAKE_C_FLAGS=-D_FILE_OFFSET_BITS=64 -I${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external/src/ucd-tools/src/include"
+-        "-DCMAKE_CXX_FLAGS=-D_FILE_OFFSET_BITS=64 -I${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external/src/ucd-tools/src/include"
 -    BUILD_BYPRODUCTS
 -        ${ESPEAKNG_STATIC_LIB}
 -        ${UCD_STATIC_LIB}
@@ -78,8 +75,14 @@ index 2db7493..675c64b 100644
 -if(WIN32)
 -    # Fix dll thunk issue (__imp_SYMBOL not found)
 -    target_compile_definitions(espeakbridge PRIVATE LIBESPEAK_NG_EXPORT)
- 
--    # Fix .dll suffix
++# Try to find espeak-ng using pkg-config, if available
++find_package(PkgConfig QUIET)
++
++if (PKG_CONFIG_FOUND)
++    pkg_check_modules(ESPEAKNG QUIET espeak-ng)
++endif()
++
++
 +if (ESPEAKNG_FOUND)
 +    message(STATUS "Found system espeak-ng via pkg-config")
 +
@@ -93,7 +96,8 @@ index 2db7493..675c64b 100644
 +        ${ESPEAKNG_LIBRARIES}
 +        ${UCD_STATIC_LIB}
 +    )
-+
+ 
+-    # Fix .dll suffix
      set_target_properties(espeakbridge PROPERTIES
          PREFIX ""
 -        SUFFIX ".pyd"
@@ -107,6 +111,7 @@ index 2db7493..675c64b 100644
  else()
 -    set_target_properties(espeakbridge PROPERTIES
 -        PREFIX ""
++
 +    # Install location for espeak-ng
 +    set(ESPEAKNG_BUILD_DIR ${CMAKE_BINARY_DIR}/espeak_ng)
 +    set(ESPEAKNG_INSTALL_DIR ${CMAKE_BINARY_DIR}/espeak_ng-install)
@@ -138,6 +143,7 @@ index 2db7493..675c64b 100644
 +            -DEXTRA_ru:BOOL=ON
 +            # Need to explicitly add ucd include directory for CI
 +            "-DCMAKE_C_FLAGS=-D_FILE_OFFSET_BITS=64 -I${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external/src/ucd-tools/src/include"
++            "-DCMAKE_CXX_FLAGS=-D_FILE_OFFSET_BITS=64 -I${ESPEAKNG_BUILD_DIR}/src/espeak_ng_external/src/ucd-tools/src/include"
 +        BUILD_BYPRODUCTS
 +            ${ESPEAKNG_STATIC_LIB}
 +            ${UCD_STATIC_LIB}
@@ -154,10 +160,9 @@ index 2db7493..675c64b 100644
 +    )
 +
 +    add_dependencies(espeakbridge espeak_ng_external)
-+    target_link_libraries(espeakbridge
++    target_link_libraries(espeakbridge PRIVATE
 +        ${ESPEAKNG_STATIC_LIB}
 +        ${UCD_STATIC_LIB}
-+        Python::SABIModule
 +    )
 +    target_include_directories(espeakbridge PRIVATE
 +        ${ESPEAKNG_INSTALL_DIR}/include

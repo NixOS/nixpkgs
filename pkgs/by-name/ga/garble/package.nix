@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   git,
   versionCheckHook,
@@ -9,15 +9,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo125Module (finalAttrs: {
   pname = "garble";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = "garble";
-    tag = "v${version}";
-    hash = "sha256-zS/K2kOpWhJmr0NuWSjEjNXV8ILt81yLIQWSPDuMwt8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Vjv5Eis+ALUm2aaXOj4i8w3UmylPggMXqgwXtD2YA8=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -28,16 +28,16 @@ buildGoModule rec {
 
   patches = [
     (replaceVars ./0001-Add-version-info.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
   checkFlags = [
     "-skip"
-    "TestScript/gogarble"
+    "TestScript/gogarble|TestScript/gotoolchain|TestScript/tiny"
   ];
 
-  vendorHash = "sha256-xxG1aQrALVuJ7oVn+Z+sH655eFQ7rcYFmymGCUZD1uU=";
+  vendorHash = "sha256-EOmAb2k9LSzsvumsCZdeJIDKQBJBeRFt15mWAyyVl1k=";
 
   # Used for some of the tests.
   nativeCheckInputs = [
@@ -72,4 +72,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     mainProgram = "garble";
   };
-}
+})

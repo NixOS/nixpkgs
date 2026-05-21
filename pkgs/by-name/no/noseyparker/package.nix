@@ -12,14 +12,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noseyparker";
   version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6GxkIxLEgbIgg4nSHvmRedm8PAPBwVxLQUnQzh3NonA=";
   };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # Fix error: failed to run custom build command for `vectorscan-rs-sys v0.0.5`
   # Failed to get C++ compiler version: Os { code: 2, kind: NotFound, message: "No such file or directory" }
   postPatch = ''
-    substituteInPlace $(find ../noseyparker-${version}-vendor -name "vectorscan-rs-sys*")/build.rs \
+    substituteInPlace $(find ../noseyparker-${finalAttrs.version}-vendor -name "vectorscan-rs-sys*")/build.rs \
       --replace-fail 'Command::new("c++")' 'Command::new("${stdenv.cc.targetPrefix}c++")'
   '';
 
@@ -86,8 +86,8 @@ rustPlatform.buildRustPackage rec {
     description = "Find secrets and sensitive information in textual data";
     mainProgram = "noseyparker";
     homepage = "https://github.com/praetorian-inc/noseyparker";
-    changelog = "https://github.com/praetorian-inc/noseyparker/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/praetorian-inc/noseyparker/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ _0x4A6F ];
   };
-}
+})

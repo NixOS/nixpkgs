@@ -19,13 +19,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-console";
-  version = "49.2";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-J7As6OiQ/49TyoXbeGsa41kD8LYyeBLwIk3AtUsQiNs=";
+    url = "mirror://gnome/sources/gnome-console/${lib.versions.major finalAttrs.version}/gnome-console-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5JUCB/BUfmpsDxjuv89uGhBGHqsPL64KrlErEETHrG4=";
   };
 
   nativeBuildInputs = [
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "kgx";
   };
-}
+})

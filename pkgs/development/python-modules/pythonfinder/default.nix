@@ -10,21 +10,21 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pythonfinder";
-  version = "3.0.0";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "pythonfinder";
-    tag = version;
-    hash = "sha256-Qym/t+IejBMFHvBfIm+G5+J3GBC9O3RFrwSqHLuxwcg=";
+    tag = finalAttrs.version;
+    hash = "sha256-p+r/0MjxhMcc0n5gPEbdGjC2M+yGqGT/YvxlyU8xTtA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     cli = [ click ];
@@ -35,16 +35,16 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "pythonfinder" ];
 
   meta = {
     description = "Cross platform search tool for finding Python";
-    mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
-    changelog = "https://github.com/sarugaku/pythonfinder/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/sarugaku/pythonfinder/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+    mainProgram = "pyfinder";
   };
-}
+})

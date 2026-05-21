@@ -6,7 +6,7 @@
   pkg-config,
   gtkmm3,
   libsigcxx,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   buildInputs = [
     gtkmm3
     libsigcxx
-    xorg.libX11
+    libx11
   ];
 
   meta = {

@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://firehol.org/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

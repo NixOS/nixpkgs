@@ -14,14 +14,14 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SonyHeadphonesClient";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Plutoberth";
     repo = "SonyHeadphonesClient";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vhI97KheKzr87exCh4xNN7NDefcagdMu1tWSt67vLiU=";
     fetchSubmodules = true;
   };
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     imgui
   ];
 
-  sourceRoot = "${src.name}/Client";
+  sourceRoot = "${finalAttrs.src.name}/Client";
 
   cmakeFlags = [ "-Wno-dev" ];
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "SonyHeadphonesClient";
   };
-}
+})

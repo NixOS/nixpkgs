@@ -1,9 +1,10 @@
-{ pkgs }:
+{ pkgs, stdenv }:
 rec {
   inherit (pkgs) eggDerivation fetchegg;
 
   base64 = eggDerivation {
-    name = "base64-3.3.1";
+    pname = "base64";
+    version = "3.3.1";
 
     src = fetchegg {
       name = "base64";
@@ -17,12 +18,13 @@ rec {
   };
 
   defstruct = eggDerivation {
-    name = "defstruct-1.6";
+    pname = "defstruct";
+    version = "1.7";
 
     src = fetchegg {
       name = "defstruct";
-      version = "1.6";
-      sha256 = "0lsgl32nmb5hxqiii4r3292cx5vqh50kp6v062nfiyid9lhrj0li";
+      version = "1.7";
+      sha256 = "1rkqk9jxd6vnlvkwzqg8mc7bsw050fgmxfj84y66lf0a14n5r5dg";
     };
 
     buildInputs = [
@@ -31,7 +33,8 @@ rec {
   };
 
   http-client = eggDerivation {
-    name = "http-client-0.18";
+    pname = "http-client";
+    version = "0.18";
 
     src = fetchegg {
       name = "http-client";
@@ -48,12 +51,13 @@ rec {
   };
 
   intarweb = eggDerivation {
-    name = "intarweb-1.7";
+    pname = "intarweb";
+    version = "1.7.1";
 
     src = fetchegg {
       name = "intarweb";
-      version = "1.7";
-      sha256 = "1arjgn5g4jfdzj3nlrhxk235qwf6k6jxr14yhnncnfbgdb820xp8";
+      version = "1.7.1";
+      sha256 = "0pqgwgy4jynlsr3l52qsiwm75qgs7n86kwssaawzp9y34y80awpg";
     };
 
     buildInputs = [
@@ -64,7 +68,8 @@ rec {
   };
 
   matchable = eggDerivation {
-    name = "matchable-3.7";
+    pname = "matchable";
+    version = "3.7";
 
     src = fetchegg {
       name = "matchable";
@@ -78,12 +83,13 @@ rec {
   };
 
   sendfile = eggDerivation {
-    name = "sendfile-1.8.3";
+    pname = "sendfile";
+    version = "1.11";
 
     src = fetchegg {
       name = "sendfile";
-      version = "1.8.3";
-      sha256 = "036x4xdndx7qly94afnag5b9idd1yymdm8d832w2cy054y7lxqsi";
+      version = "1.11";
+      sha256 = "15gm380asvj87f3bqb7rz4mz6znnk6r00rdy3njx9ay0qkxi3q9y";
     };
 
     buildInputs = [
@@ -92,7 +98,8 @@ rec {
   };
 
   simple-md5 = eggDerivation {
-    name = "simple-md5-0.0.1";
+    pname = "simple-md5";
+    version = "0.0.1";
 
     src = fetchegg {
       name = "simple-md5";
@@ -106,7 +113,8 @@ rec {
   };
 
   uri-common = eggDerivation {
-    name = "uri-common-1.4";
+    pname = "uri-common";
+    version = "1.4";
 
     src = fetchegg {
       name = "uri-common";
@@ -122,7 +130,8 @@ rec {
   };
 
   uri-generic = eggDerivation {
-    name = "uri-generic-2.46";
+    pname = "uri-generic";
+    version = "2.46";
 
     src = fetchegg {
       name = "uri-generic";

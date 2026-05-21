@@ -8,14 +8,14 @@
   testers,
   libetebase,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libetebase";
   version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "libetebase";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B+MfnYbxIbgMHFWWOYhap1MEbV3/NNYuR9goJDTNn9A=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ laalsaas ];
     pkgConfigModules = [ "etebase" ];
   };
-}
+})

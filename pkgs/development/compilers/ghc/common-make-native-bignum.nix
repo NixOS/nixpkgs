@@ -305,6 +305,9 @@ stdenv.mkDerivation (
       # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129 krank:ignore-line
       ./docs-sphinx-7.patch
 
+      # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
+      ./ghc-9.4-docs-sphinx-9.patch
+
       # Correctly record libnuma's library and include directories in the
       # package db. This fixes linking whenever stdenv and propagation won't
       # quite pass the correct -L flags to the linker, e.g. when using GHC
@@ -498,6 +501,11 @@ stdenv.mkDerivation (
     configureFlags = [
       "--datadir=$doc/share/doc/ghc"
     ]
+    # ghc 9.10 and later use c17 by default. we use gnu17 on darwin for older
+    # ghc versions to match this and fix build issues with newer clang.
+    ++ lib.optionals (hostPlatform.isDarwin && lib.versionOlder version "9.10") [
+      "CFLAGS=-std=gnu17"
+    ]
     ++ lib.optionals enableTerminfo [
       "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
       "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"
@@ -536,6 +544,8 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals enableUnregisterised [
       "--enable-unregisterised"
+      # The C backend generates code incompatible with gnu23
+      "CONF_CC_OPTS_STAGE2=-std=gnu17"
     ];
 
     # Make sure we never relax`$PATH` and hooks support for compatibility.

@@ -7,14 +7,14 @@
   mpv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "invidtui";
   version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = "invidtui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C465lzbZIh8LYDUHNa5u66nFteFsKAffilvy1Danfpg=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ rettetdemdativ ];
     mainProgram = "invidtui";
   };
-}
+})

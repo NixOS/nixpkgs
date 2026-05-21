@@ -2,7 +2,7 @@
   lib,
   guile,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   bash,
   makeWrapper,
@@ -12,8 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "guile-lsp-server";
   version = "0.4.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "rgherdt";
     repo = "scheme-lsp-server";
     tag = finalAttrs.version;

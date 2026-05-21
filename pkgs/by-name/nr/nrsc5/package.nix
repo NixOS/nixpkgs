@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nrsc5";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "theori-io";
     repo = "nrsc5";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-chLoCXbEQaIrSHLQAm0++NGNYuQNCseSCR37qjXwW04=";
+    hash = "sha256-xfgTUIaXt/nb5hNiwi4ws7pzeVGOW72LDSIXg+yLwkw=";
   };
 
   postUnpack = ''

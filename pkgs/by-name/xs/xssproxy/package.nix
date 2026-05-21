@@ -4,26 +4,27 @@
   fetchFromGitHub,
   glib,
   pkg-config,
-  xorg,
+  libxscrnsaver,
+  libx11,
   dbus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xssproxy";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "vincentbernat";
     repo = "xssproxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6M82gQZcgjqZBGw4YszAF0DmS+JXgFp6hl2gOF1RWAs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib
-    xorg.libX11
-    xorg.libXScrnSaver
+    libx11
+    libxscrnsaver
     dbus
   ];
 
@@ -40,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ benley ];
     platforms = lib.platforms.unix;
   };
-}
+})

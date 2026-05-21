@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "25.11";
+  version = "26.04";
 
   src = fetchFromGitHub {
-    owner = "YaLTeR";
+    owner = "niri-wm";
     repo = "niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FC9eYtSmplgxllCX4/3hJq5J3sXWKLSc7at8ZUxycVw=";
+    hash = "sha256-ehSMsSpE+0k8r+2Vseu8kangsYxToZv3vinynsDp9zs=";
   };
 
   outputs = [
@@ -44,10 +44,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     patchShebangs resources/niri-session
     substituteInPlace resources/niri.service \
-      --replace-fail '/usr/bin' "$out/bin"
+      --replace-fail 'niri' "$out/bin/niri"
   '';
 
-  cargoHash = "sha256-X28M0jyhUtVtMQAYdxIPQF9mJ5a77v8jw1LKaXSjy7E=";
+  cargoHash = "sha256-gfnalA3qI3a9h3PvsxgQLCrzapfjLLkxhTMJpwRh+ro=";
 
   strictDeps = true;
 
@@ -101,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd $pname \
       --bash <($out/bin/niri completions bash) \
       --fish <($out/bin/niri completions fish) \
+      --nushell <($out/bin/niri completions nushell) \
       --zsh <($out/bin/niri completions zsh)
   '';
 
@@ -118,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Upstream recommends setting the commit hash manually when in a
     # build environment where the Git repository is unavailable.
-    # See https://github.com/YaLTeR/niri/wiki/Packaging-niri#version-string
+    # See https://github.com/niri-wm/niri/wiki/Packaging-niri#version-string
     NIRI_BUILD_COMMIT = "Nixpkgs";
   };
 
@@ -133,12 +134,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Scrollable-tiling Wayland compositor";
-    homepage = "https://github.com/YaLTeR/niri";
-    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/niri-wm/niri";
+    changelog = "https://github.com/niri-wm/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       sodiboo
       getchoo
+      zimward
     ];
     mainProgram = "niri";
     platforms = lib.platforms.linux;

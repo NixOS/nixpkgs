@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "celery-redbeat";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "django-celery-beat";
     tag = "v${version}";
-    hash = "sha256-pakOpch5r2ug0UDSqEU34qr4Tz1/mkuFiHW+IOUuGcc=";
+    hash = "sha256-UGKMSXB+Hg865sAk5ePc/noO3eNTr7b3pp7tvNvn1T8=";
   };
 
   postPatch = ''

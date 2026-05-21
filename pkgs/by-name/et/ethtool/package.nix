@@ -7,13 +7,13 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ethtool";
-  version = "6.15";
+  version = "7.0";
 
   src = fetchurl {
-    url = "mirror://kernel/software/network/ethtool/ethtool-${version}.tar.xz";
-    hash = "sha256-lHfDZRFNkQEgquxTNqHRYZbIM9hIb3xtpnvt71eICt4=";
+    url = "mirror://kernel/software/network/ethtool/ethtool-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Zgv5clp4cTQ6DSMgaKdjT7z7abbC+O/0VYJ/rvsM0WI=";
   };
 
   nativeBuildInputs = [
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "ethtool";
   };
-}
+})

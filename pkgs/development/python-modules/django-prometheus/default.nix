@@ -28,6 +28,10 @@ buildPythonPackage rec {
       --replace-fail '"pytest-runner"' ""
   '';
 
+  pythonRelaxDeps = [
+    "django"
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [ prometheus-client ];

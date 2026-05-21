@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "run";
   version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "TekWizely";
     repo = "run";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-an5AuRJJEM18IssdLLZC/zzPpsVCCtawRQXK/AfzMN0=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
       rawkode
     ];
   };
-}
+})

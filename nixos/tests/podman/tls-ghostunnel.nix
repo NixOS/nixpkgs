@@ -83,6 +83,7 @@ import ../make-test-python.nix (
     };
 
     testScript = ''
+      import os
       import shlex
 
 

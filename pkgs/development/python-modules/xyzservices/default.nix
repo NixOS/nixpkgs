@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "xyzservices";
-  version = "2025.4.0";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b+dkcTZI+sU0UPvGGjw2bLauUzWhsq4MN5a0ld43Cdg=";
+    hash = "sha256-0iaGal2On+8zcDTY2jeoKY8KHZ0UibQBjmlXnrMh/qQ=";
   };
 
   nativeBuildInputs = [

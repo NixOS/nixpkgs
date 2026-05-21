@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   callPackage,
   fetchFromGitHub,
   nixosTests,
@@ -11,7 +11,7 @@
   versionCheckHook,
 }:
 let
-  version = "2.10.2";
+  version = "2.11.3";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -19,7 +19,7 @@ let
     hash = "sha256-D1qI7TDJpSvtgpo1FsPZk6mpqRvRharFZ8soI7Mn3RE=";
   };
 in
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "caddy";
   inherit version;
 
@@ -27,10 +27,10 @@ buildGo125Module (finalAttrs: {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KvikafRYPFZ0xCXqDdji1rxlkThEDEOHycK8GP5e8vk=";
+    hash = "sha256-7Hgmo7ldDtbwl/acEY/4RNhSGnK/NNcXn+eIm1I8HKg=";
   };
 
-  vendorHash = "sha256-wjcmWKVmLBAybILUi8tKEDnFbhtybf042ODH7jEq6r8=";
+  vendorHash = "sha256-QiZZxYsYFUneZ52TfFKQWJ42lmBofvUTZrHmDBuN2O4=";
 
   ldflags = [
     "-s"

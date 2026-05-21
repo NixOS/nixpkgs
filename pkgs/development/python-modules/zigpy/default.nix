@@ -4,7 +4,6 @@
   aiohttp,
   aioresponses,
   aiosqlite,
-  async-timeout,
   attrs,
   buildPythonPackage,
   crccheck,
@@ -14,11 +13,10 @@
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio-fast,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  serialx,
   setuptools,
   typing-extensions,
   voluptuous,
@@ -26,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.90.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-HTQ9azIXnNkNM+s7w0oerDf9+RcCO8DF9+kL9Uzevyk=";
+    hash = "sha256-9e+n4C2ViCAHFw2Ed+NxPSAbcVX5KJl7biIIsYr8E4c=";
   };
 
   postPatch = ''
@@ -52,17 +50,16 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio-fast
+    serialx
     typing-extensions
     voluptuous
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     aioresponses
     filelock
     freezegun
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];

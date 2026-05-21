@@ -13,15 +13,15 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wvkbd";
-  version = "0.19";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = "wvkbd";
-    tag = "v${version}";
-    hash = "sha256-oaySfijJBzD+tsaNMmXQ168un9Z0IMwN+7sxAmVr3xs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aQA5xY3jDSLsANxNX3mGu+LElyOn6lPjxEaqS1v2JaI=";
   };
 
   nativeBuildInputs = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     mainProgram = "wvkbd-mobintl";
     maintainers = with lib.maintainers; [ colinsane ];
   };
-}
+})

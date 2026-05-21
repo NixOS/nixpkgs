@@ -9,15 +9,15 @@
   gitMinimal,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scorecard";
-  version = "5.2.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = "scorecard";
-    tag = "v${version}";
-    hash = "sha256-7py6qkal1tNQ2NAi/SiYIEe03NV7INAQRPZ9z5LsusI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RfOunjr4QeMFlMHkOOhHB8vb5XDNLNEmdDe9KSL/kP8=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -33,9 +33,9 @@ buildGoModule rec {
   };
   vendorHash =
     if stdenv.hostPlatform.isLinux then
-      "sha256-h78551OfEJTB3Fghc1nIHcfiHp7ygtZgHXpwp1OaFgY="
+      "sha256-hzOGN6l7cxP+m4UWtrHV0Oihx3QIwZ09WR/Vi2HGwIg="
     else
-      "sha256-MTB5ejc4/ivbkp9ytCF+wGvvt+njTkMb1ijVsh5uLps=";
+      "sha256-y9URHMmKm4JnTHb7RkrL5LaCrcp6b7DOMwNnVrO1rvo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,7 +44,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -84,19 +84,19 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/scorecard --help
-    $out/bin/scorecard version 2>&1 | grep "v${version}"
+    $out/bin/scorecard version 2>&1 | grep "v${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
   passthru.tests.version = testers.testVersion {
     package = scorecard;
     command = "scorecard version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     homepage = "https://github.com/ossf/scorecard";
-    changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
+    changelog = "https://github.com/ossf/scorecard/releases/tag/v${finalAttrs.version}";
     description = "Security health metrics for Open Source";
     mainProgram = "scorecard";
     license = lib.licenses.asl20;
@@ -105,4 +105,4 @@ buildGoModule rec {
       developer-guy
     ];
   };
-}
+})

@@ -5,19 +5,14 @@
     "hash": "sha256-v7ZoEFZyhF8VcRZj1uim4HNiRsG+XdJ4x/dwPBIWUz8="
   },
   {
-    "pname": "coverlet.collector",
-    "version": "6.0.0",
-    "hash": "sha256-IEmweTMapcPhFHpmJsPXfmMhravYOrWupgjeOvMmQ4o="
-  },
-  {
     "pname": "Dapper",
     "version": "2.1.28",
     "hash": "sha256-qCbqEwIB/j6HToEPpDEdQGGIPGQNmrULrCHnEGZSd5c="
   },
   {
     "pname": "FCastSenderSDKDotnet",
-    "version": "0.0.5",
-    "hash": "sha256-UTCgJ1M0n7PcVoU/7slh5sFitJ+t7ZdgkdUDZ5CVvGk="
+    "version": "0.0.7",
+    "hash": "sha256-/eHsYJd+7cqDVMW+XiKBPBrjR+eVLUpYazb96Bh3fac="
   },
   {
     "pname": "Fizzler",
@@ -95,11 +90,6 @@
     "hash": "sha256-APxmbKMNQKWuFQMJjkVr2zIqv/bLUTMm5NRGVLegBbg="
   },
   {
-    "pname": "Microsoft.CodeCoverage",
-    "version": "17.6.0",
-    "hash": "sha256-sYk+9Gj1M1HI6yEB8ZJQ4fiqGjYos+orebV8blFDSQs="
-  },
-  {
     "pname": "Microsoft.CSharp",
     "version": "4.0.1",
     "hash": "sha256-0huoqR2CJ3Z9Q2peaKD09TV3E6saYSqDGZ290K8CrH8="
@@ -125,11 +115,6 @@
     "hash": "sha256-1fZ/rrSbuyYUfvwyA3otFQdL0Y/H48goAVyhiLs1oF4="
   },
   {
-    "pname": "Microsoft.NET.Test.Sdk",
-    "version": "17.6.0",
-    "hash": "sha256-pogseJyMGIikTZORsDXKwyAhRPTkxiOAAV+ceR6/3K4="
-  },
-  {
     "pname": "Microsoft.NETCore.Platforms",
     "version": "1.1.0",
     "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
@@ -145,19 +130,9 @@
     "hash": "sha256-wdLQSEjvFjApEKU82Ev+y1kHVxeIlrjkuj3wNktGQy8="
   },
   {
-    "pname": "Microsoft.TestPlatform.ObjectModel",
-    "version": "17.6.0",
-    "hash": "sha256-weQPisiWSuM5VEeZco4S0QHEXd2bZZwlbyHoaCET4uc="
-  },
-  {
     "pname": "Microsoft.TestPlatform.TestHost",
     "version": "17.3.2",
     "hash": "sha256-ySBqawHGZ/Dwoj2UnAzk1Ezxt4qR1AuEY73U/buqNiE="
-  },
-  {
-    "pname": "Microsoft.TestPlatform.TestHost",
-    "version": "17.6.0",
-    "hash": "sha256-Ee2SKz5/571l1aYP0b/Gfamsz+v6cjzyu2sKTC6Ld5s="
   },
   {
     "pname": "Microsoft.Win32.Primitives",
@@ -170,19 +145,9 @@
     "hash": "sha256-xpt9NDMDkoV/SzTWLgpKbqMOnhbUKZlBrdFwMGwpzHA="
   },
   {
-    "pname": "MSTest.TestAdapter",
-    "version": "3.0.4",
-    "hash": "sha256-cxynZ6I681YIclJeGtv1OiAxMOdx7FDyVIzNOg10Tgo="
-  },
-  {
     "pname": "MSTest.TestFramework",
     "version": "2.2.10",
     "hash": "sha256-PEoY4N5F+xhQa6wXiX8SaVHAxw9C7fN+zSNfoModt0g="
-  },
-  {
-    "pname": "MSTest.TestFramework",
-    "version": "3.0.4",
-    "hash": "sha256-aJqGvGfM2fl2dG05PFgPth/1qMhVpDRBMWuNu4yt4Dc="
   },
   {
     "pname": "NETStandard.Library",

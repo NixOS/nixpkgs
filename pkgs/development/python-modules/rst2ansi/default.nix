@@ -1,18 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   docutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rst2ansi";
-  version = "0.1.5";
+  version = "0.1.5-unstable-2025-02-12";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Gxf7mmKNQPV5M60aOqlSNGREvgaUaVCOc+lQYNoz/m8=";
+  src = fetchFromGitHub {
+    owner = "Snaipe";
+    repo = "python-rst2ansi";
+    rev = "3728e16f8b8b1dc338e5df90ba2c4a93ee054b3f";
+    hash = "sha256-V7tl/YJcPvEgBfH334t6CU7OXKQqBqRo/zZPiOlyCmE=";
   };
 
   propagatedBuildInputs = [ docutils ];

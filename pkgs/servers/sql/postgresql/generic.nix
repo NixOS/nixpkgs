@@ -6,10 +6,8 @@ let
       stdenv,
       fetchFromGitHub,
       fetchurl,
-      fetchpatch2,
       lib,
       replaceVars,
-      writeShellScriptBin,
 
       # source specification
       hash,
@@ -45,9 +43,7 @@ let
       buildPackages,
       newScope,
       nixosTests,
-      postgresqlTestHook,
       self,
-      stdenvNoCC,
       testers,
 
       # Block size
@@ -87,7 +83,7 @@ let
         # Building with JIT in pkgsStatic fails like this:
         #   fatal error: 'stdio.h' file not found
         && !stdenv.hostPlatform.isStatic,
-      llvmPackages_20,
+      llvmPackages,
       nukeReferences,
       overrideCC,
 
@@ -162,14 +158,6 @@ let
       zstdEnabled = atLeast "15";
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
-
-      # Pin LLVM 20 until upstream has fully resolved:
-      # https://www.postgresql.org/message-id/flat/d25e6e4a-d1b4-84d3-2f8a-6c45b975f53d%40applied-asynchrony.com
-      # Currently still a problem on aarch64.
-      # TODO: Remove with next minor releases
-      llvmPackages = lib.warnIf (
-        version == "17.8"
-      ) "PostgreSQL: Is the pin for LLVM 20 still needed?" llvmPackages_20;
 
       stdenv' =
         if !stdenv.cc.isClang then
@@ -663,8 +651,17 @@ let
     f:
     let
       installedExtensions = f postgresql.pkgs;
+      recurse = postgresqlWithPackages {
+        inherit
+          buildEnv
+          lib
+          makeBinaryWrapper
+          postgresql
+          ;
+      };
       finalPackage = buildEnv {
-        name = "${postgresql.pname}-and-plugins-${postgresql.version}";
+        pname = "${postgresql.pname}-and-plugins";
+        inherit (postgresql) version;
         paths = installedExtensions ++ [
           # consider keeping in-sync with `postBuild` below
           postgresql
@@ -694,7 +691,6 @@ let
           inherit (postgresql)
             pkgs
             psqlSchema
-            version
             ;
 
           pg_config = postgresql.pg_config.override {
@@ -704,33 +700,10 @@ let
             };
           };
 
-          withJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: installedExtensions ++ [ postgresql.jit ]);
-          withoutJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: lib.remove postgresql.jit installedExtensions);
+          withJIT = recurse (_: installedExtensions ++ [ postgresql.jit ]);
+          withoutJIT = recurse (_: lib.remove postgresql.jit installedExtensions);
 
-          withPackages =
-            f':
-            postgresqlWithPackages {
-              inherit
-                buildEnv
-                lib
-                makeBinaryWrapper
-                postgresql
-                ;
-            } (ps: installedExtensions ++ f' ps);
+          withPackages = f': recurse (ps: installedExtensions ++ f' ps);
         };
       };
     in

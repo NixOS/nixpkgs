@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caligula";
-  version = "0.4.10";
+  version = "0.4.11";
 
   src = fetchFromGitHub {
     owner = "ifd3f";
     repo = "caligula";
-    rev = "v${version}";
-    hash = "sha256-oaSt6wzMzaGHPyuJ5NVcAJLblHQcHJA5a7o2wkJgZkU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2KCP7Utb785yIn8w/Ls19UPS9ylg1PtLRki87+BD+xw=";
   };
 
-  cargoHash = "sha256-B09aKzNNhgXKg3PCYmlMz3/oOeeh1FQAL7+tywg/81Q=";
+  cargoHash = "sha256-C86wu2Pc9O7YM1TnnfotzzOQlnJXJe2zmsX04JyJsjA=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "caligula";
   };
-}
+})

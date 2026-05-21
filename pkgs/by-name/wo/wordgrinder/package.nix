@@ -5,21 +5,21 @@
   pkg-config,
   makeWrapper,
   lua52Packages,
-  libXft,
+  libxft,
   ncurses,
   ninja,
   readline,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wordgrinder";
   version = "0.8";
 
   src = fetchFromGitHub {
     repo = "wordgrinder";
     owner = "davidgiven";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "124d1bnn2aqs6ik8pdazzni6a0583prz9lfdjrbwyb97ipqga9pm";
   };
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXft
+    libxft
   ];
 
   # To be able to find <Xft.h>
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-I${libXft.dev}/include/X11";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-I${libxft.dev}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
   postInstall = ''
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

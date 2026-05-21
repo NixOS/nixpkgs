@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -17,13 +18,14 @@ let
   iniFmt = pkgs.formats.iniWithGlobalSection { };
 
   inherit (lib)
-    concatMapStrings
     attrNames
+    concatMapStrings
     getAttr
     mkIf
     mkOption
     mkEnableOption
     mkPackageOption
+    optionalAttrs
     ;
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
@@ -42,11 +44,16 @@ let
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
     waylandsessions = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
-    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
+    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
     setup_cmd = dmcfg.sessionData.wrapper;
     brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
     brightness_down_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s 10%-";
+  }
+  // optionalAttrs dmcfg.autoLogin.enable {
+    auto_login_service = "ly-autologin";
+    auto_login_session = dmcfg.sessionData.autologinSession;
+    auto_login_user = dmcfg.autoLogin.user;
   };
 
   finalConfig = defaultConfig // cfg.settings;
@@ -84,17 +91,73 @@ in
 
     assertions = [
       {
-        assertion = !dmcfg.autoLogin.enable;
+        assertion = dmcfg.autoLogin.enable -> dmcfg.sessionData.autologinSession != null;
         message = ''
-          ly doesn't support auto login.
+          ly auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
     ];
 
-    security.pam.services.ly = {
-      startSession = true;
-      unixAuth = true;
-      enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+    security.pam.services = {
+      ly = {
+        startSession = true;
+        unixAuth = true;
+        enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+      };
+    }
+    // optionalAttrs dmcfg.autoLogin.enable {
+      ly-autologin = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "nologin";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
+            }
+            {
+              name = "ly-normal-user";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+              settings.quiet = true;
+              args = lib.mkBefore [
+                "uid"
+                ">="
+                "1000"
+              ];
+            }
+            {
+              name = "permit";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+            }
+          ];
+
+          account = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
+
+          password = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
+
+          session = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
+        };
+      };
     };
 
     environment = {
@@ -145,5 +208,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ vonfry ];
+  meta.maintainers = with lib.maintainers; [
+    vonfry
+    zacharyarnaise
+  ];
 }

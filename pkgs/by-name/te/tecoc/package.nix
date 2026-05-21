@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KTOGsTtxJh2sneU2VoDNUHcL3m8zt+3rBZTDvK1n02A=";
   };
 
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
   buildInputs = [ ncurses ];
 
   makefile =

@@ -89,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       raskin
-      offline
     ];
     platforms = lib.platforms.unix;
     mainProgram = "gvnccapture";

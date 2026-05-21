@@ -7,14 +7,14 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gflags";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "gflags";
     repo = "gflags";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "147i3md3nxkjlrccqg4mq1kyzc7yrhvqv5902iibc7znkvzdvlp0";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "borb";
-  version = "2.1.25";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorisschellekens";
     repo = "borb";
     tag = "v${version}";
-    hash = "sha256-eVxpcYL3ZgwidkSt6tUav3Bkne4lo1QCshdUFqkA0wI=";
+    hash = "sha256-p9tVG2Pvqk5uDXdeB+7F71w3h4/zut+htlm4p+qqfWA=";
   };
 
   # ModuleNotFoundError: No module named '_decimal'
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for reading, creating and manipulating PDF files in Python";
     homepage = "https://borbpdf.com/";
-    changelog = "https://github.com/jorisschellekens/borb/releases/tag/v${version}";
+    changelog = "https://github.com/jorisschellekens/borb/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
   };

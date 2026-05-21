@@ -15,12 +15,12 @@
   SDL2,
   SDL2_mixer,
   libopenmpt,
-  libXrandr,
-  libXext,
-  libXfixes,
-  libXcursor,
-  libXi,
-  libXScrnSaver,
+  libxrandr,
+  libxext,
+  libxfixes,
+  libxcursor,
+  libxi,
+  libxscrnsaver,
   makeDesktopItem,
 }:
 
@@ -58,12 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_mixer
     libopenmpt
     SDL2
-    libXrandr
-    libXext
-    libXfixes
-    libXcursor
-    libXi
-    libXScrnSaver
+    libxrandr
+    libxext
+    libxfixes
+    libxcursor
+    libxi
+    libxscrnsaver
   ];
 
   strictDeps = true;

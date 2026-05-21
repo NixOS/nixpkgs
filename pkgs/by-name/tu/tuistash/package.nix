@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuistash";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "edmocosta";
     repo = "tuistash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pyLsm3y2MwLJvscugAdKnw/+/Q0A52tAJ9MxUI5br90=";
+    hash = "sha256-36IIQ0dA87tp+H2CKPvV5lWFz5o9J9b6ubQZFRAUMD0=";
   };
 
-  cargoHash = "sha256-VLcB7CjelyESnwcWgoC8AdwiGTkuro+KqL+prOtnkLM=";
+  cargoHash = "sha256-4qxV1sjzEWwVj1jCOcpBnqmWa+bVDUflfoQT1TL1FBQ=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -8,10 +8,10 @@
   wayland,
   wayland-protocols,
   libxkbcommon,
-  libX11,
-  libXrandr,
-  libXi,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxi,
+  libxcursor,
   udev,
   alsa-lib,
   stdenv,
@@ -36,10 +36,10 @@ let
         (lib.getLib stdenv.cc.cc)
         libxkbcommon
         libxcb
-        libX11
-        libXcursor
-        libXrandr
-        libXi
+        libx11
+        libxcursor
+        libxrandr
+        libxi
         vulkan-loader
         libGL
       ];
@@ -76,10 +76,10 @@ rustPlatform.buildRustPackage {
     wayland
     wayland-protocols
     libxkbcommon
-    libX11
-    libXrandr
-    libXi
-    libXcursor
+    libx11
+    libxrandr
+    libxi
+    libxcursor
   ];
   nativeBuildInputs = [
     cmake
@@ -105,10 +105,10 @@ rustPlatform.buildRustPackage {
         fontconfig
         freetype
         libxkbcommon
-        libX11
-        libXrandr
-        libXi
-        libXcursor
+        libx11
+        libxrandr
+        libxi
+        libxcursor
       ];
     in
     ''

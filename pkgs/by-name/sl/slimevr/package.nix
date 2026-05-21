@@ -20,15 +20,15 @@
   libayatana-appindicator,
   udevCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slimevr";
-  version = "18.1.0";
+  version = "18.2.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
-    tag = "v${version}";
-    hash = "sha256-vU/dcKRlNsixr3TaCrqNkCd2ewAb38fLymb+ZslAum4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7QU+xQ72t722DOhrurI1XXpILLNnk8lE0yrD1P5XJbA=";
     # solarxr
     fetchSubmodules = true;
   };
@@ -38,11 +38,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-X5IgWZlkvsstMN3YS4r+NJl6RVfREfZqKUrfsrUPQuU=";
 
   pnpmDeps = fetchPnpmDeps {
-    pname = "${pname}-pnpm-deps";
-    inherit version src;
+    pname = "${finalAttrs.pname}-pnpm-deps";
+    inherit (finalAttrs) version src;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-ExjEAr38GX2iZThVj3C3N/9mPgf0Bs7J5OAwtDdmn6I=";
+    fetcherVersion = 3;
+    hash = "sha256-deVfRZcMFkOVWXmNUiixmd5WBfIFKxG2Gw3CfshspYo=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Upstream code uses Git to find the program version.
     (replaceVars ./gui-no-git.patch {
-      version = src.tag;
+      version = finalAttrs.src.tag;
     })
     # By default, SlimeVR will give a big warning about our `JAVA_TOOL_OPTIONS` changes.
     ./no-java-tool-options-warning.patch
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
     substituteInPlace gui/src-tauri/src/tray.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -121,7 +121,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://slimevr.dev";
-    changelog = "https://github.com/SlimeVR/SlimeVR-Server/releases/tag/v${version}";
+    changelog = "https://github.com/SlimeVR/SlimeVR-Server/releases/tag/v${finalAttrs.version}";
     description = "App for facilitating full-body tracking in virtual reality";
     longDescription = ''
       App for SlimeVR ecosystem. It orchestrates communication between multiple sensors and integrations, like SteamVR.
@@ -153,4 +153,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "slimevr";
   };
-}
+})

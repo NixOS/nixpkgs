@@ -11,7 +11,7 @@
   libsoup_3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gssdp-tools";
   inherit (gssdp_1_6) version src;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # Allow building tools separately from the library.
     # This is needed to break the dependency cycle.
     (replaceVars ./standalone-tools.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     teams = gssdp_1_6.meta.teams;
     platforms = lib.platforms.all;
   };
-}
+})

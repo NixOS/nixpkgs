@@ -4,12 +4,12 @@ Currently `nixpkgs` builds most of its packages using bootstrap seed binaries (w
 
 - `bootstrap-tools`: an archive with the compiler toolchain and other helper tools enough to build the rest of the `nixpkgs`.
 - initial binaries needed to unpack `bootstrap-tools.*`.
-  On `linux` it's just `busybox`, on `darwin` and `freebsd` it is unpack.nar.xz which contains the binaries and script needed to unpack the tools.
+  On `linux` it's just `busybox`, on `darwin` and `freebsd` it is `unpack.nar.xz` which contains the binaries and script needed to unpack the tools.
   These binaries can be executed directly from the store.
 
 These are called "bootstrap files".
 
-Bootstrap files should always be fetched from hydra and uploaded to `tarballs.nixos.org` to guarantee that all the binaries were built from the code committed into `nixpkgs` repository.
+Bootstrap files should always be fetched from Hydra and uploaded to `tarballs.nixos.org` to guarantee that all the binaries were built from the code committed into `nixpkgs` repository.
 
 The uploads to `tarballs.nixos.org` are done by `@NixOS/infra` team members who have S3 write access.
 
@@ -93,7 +93,7 @@ To do that you will need the following:
 2. Add your new target to `pkgs/stdenv/linux/make-bootstrap-tools-cross.nix`.
    This will add a new hydra job to `nixpkgs:cross-trunk` jobset.
 
-3. Wait for a hydra to build your bootstrap tarballs.
+3. Wait for a Hydra to build your bootstrap tarballs.
 
 4. Add your new target to `maintainers/scripts/bootstrap-files/refresh-tarballs.bash` around `CROSS_TARGETS=()`.
 
@@ -103,15 +103,15 @@ To do that you will need the following:
 
 There are two types of bootstrap files:
 
-- natively built `stdenvBootstrapTools.build` hydra jobs in [`nixpkgs:trunk`](https://hydra.nixos.org/jobset/nixpkgs/trunk#tabs-jobs) jobset.
+- natively built `stdenvBootstrapTools.build` Hydra jobs in [`nixpkgs:trunk`](https://hydra.nixos.org/jobset/nixpkgs/trunk#tabs-jobs) jobset.
   Incomplete list of examples is:
 
   * `aarch64-unknown-linux-musl.nix`
   * `i686-unknown-linux-gnu.nix`
 
-  These are Tier 1 hydra platforms.
+  These are Tier 1 Hydra platforms.
 
-- cross-built by `bootstrapTools.build` hydra jobs in [`nixpkgs:cross-trunk`](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk#tabs-jobs) jobset.
+- cross-built by `bootstrapTools.build` Hydra jobs in [`nixpkgs:cross-trunk`](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk#tabs-jobs) jobset.
   Incomplete list of examples is:
 
   * `mips64el-unknown-linux-gnuabi64.nix`

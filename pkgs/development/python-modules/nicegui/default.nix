@@ -43,17 +43,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "3.6.1";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-umM2ffkiXWJVU2i17fbtnd+ghEt0uVzop9fNhaRTCWM=";
+    hash = "sha256-YSt4BoJZZwncPewk46VNHq0RR5sUpW0j055ryPYAdn4=";
   };
 
-  pythonRelaxDeps = [ "requests" ];
+  pythonRelaxDeps = [
+    "orjson"
+    "requests"
+  ];
 
   build-system = [
     poetry-core

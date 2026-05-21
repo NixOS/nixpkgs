@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mud";
   version = "1.0.14";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jasursadikov";
     repo = "mud";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nYmMz91ElYZDelyHGAF6FlEhXqORODRgdLbxha4sUb8=";
   };
 
@@ -35,8 +35,8 @@ python3Packages.buildPythonApplication rec {
     description = "Multi-directory git runner which allows you to run git commands in a multiple repositories";
     homepage = "https://github.com/jasursadikov/mud";
     license = lib.licenses.mit;
-    changelog = "https://github.com/jasursadikov/mud/releases/tag/${src.tag}";
+    changelog = "https://github.com/jasursadikov/mud/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "mud";
   };
-}
+})

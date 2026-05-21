@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "httpagentparser";
-  version = "1.9.5";
-  format = "setuptools";
+  version = "1.9.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U879nWWZD2/lnAN4ytjqG53493DS6L2dh2LtrgM76Ao=";
+    hash = "sha256-I7yvCTJbF692NCg8pk2iP0hcXYO5SB/22IQTp8W8bek=";
   };
+
+  build-system = [ setuptools ];
 
   # PyPi version does not include test directory
   doCheck = false;

@@ -42,25 +42,24 @@
   sqlite,
   tinyxml,
   util-linux,
-  wxGTK32,
-  xorg,
+  wxwidgets_3_2,
+  libxtst,
+  libxdmcp,
   xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.12.4";
+  version = "5.14.0";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-1JCb2aYyjaiUvtYkBFtEdlClmiMABN3a/Hts9V1sbgc=";
+    hash = "sha256-2yCVv1wRkmRJ2FBwg1CJ9xkXUPx0TPSkRHiNZXaMJZQ=";
   };
 
   patches = [
-    # https://github.com/OpenCPN/OpenCPN/pull/4900
-    ./fix-clang20.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -111,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     sqlite
     tinyxml
-    wxGTK32
+    wxwidgets_3_2
     xz
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -119,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     libsepol
     util-linux
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils

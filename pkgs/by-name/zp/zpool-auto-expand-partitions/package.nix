@@ -7,14 +7,14 @@
   util-linux,
   zfs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zpool-auto-expand-partitions";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "zpool-auto-expand-partitions";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-N1znZbJULEeNR4ABSrUtHHkmz08N+CZqX6Ni7jFzc4c=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.cole-h ];
     mainProgram = "zpool_part_disks";
   };
-}
+})

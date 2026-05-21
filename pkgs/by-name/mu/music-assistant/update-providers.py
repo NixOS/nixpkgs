@@ -222,7 +222,7 @@ async def resolve_providers(manifests) -> Set:
 
             version = await get_package_version(attr)
             if version not in requirement.specifier:
-                errors.append(f"{requirement} not satisifed by version {version}")
+                errors.append(f"{requirement} not satisfied by version {version}")
         providers.add(provider)
     if errors:
         print("\n - ", end="")

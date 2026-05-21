@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.35.0";
+  version = "0.36.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-eP/VEq7cPALi2oDKAZFQGQ3NExdmcBKyi6ddRZiYmbI=";
+    hash = "sha256-+XBFENCAKP8Z+5dviBervDXHOM2qY3lfDFsDKVjzMbM=";
   };
 
   patches = [
@@ -46,9 +46,9 @@ python3Packages.buildPythonApplication rec {
     })
 
     (fetchpatch {
-      name = "clang-21.patch";
-      url = "https://github.com/iovisor/bcc/commit/8c5c96ad3beeed2fa827017f451a952306826974.diff";
-      hash = "sha256-VOzhdeZ3mRstLlMhxHwEgqCa6L39eRpbFJuKZqFnBws=";
+      # https://github.com/iovisor/bcc/issues/5501
+      url = "https://github.com/iovisor/bcc/commit/c3f35ecca18b1ce926bd272f60f6d4465656a80b.patch";
+      hash = "sha256-Fr5SqDUpQzZj8yPST0V1QExNMCSoRbOXG5ZaChDXTZQ=";
     })
   ];
 
@@ -118,7 +118,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "bcc" ];
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/bcc/tools" "$out ''${pythonPath[*]}"
   '';
 
   outputs = [

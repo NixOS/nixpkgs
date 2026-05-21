@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "impala";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "impala";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kDXf+zrCfsYv+5P69BiZDBqaw9SM3JPCXV7KzpIEJn0=";
+    hash = "sha256-GQg/1asi+6hTyOK4cWkAvFJhnWTewFUOn7fAlL+tkUo=";
   };
 
-  cargoHash = "sha256-Zs3x7wWbO0LL1BjEAWb1UbztJJ6K6hXxgMBynHLri8A=";
+  cargoHash = "sha256-shIv6fjWAZhIeSzxcHfzxfg2brTP1G3MBAixdi0GoK4=";
 
   # fix for compilation of musl builds on aarch64
   # see https://github.com/NixOS/nixpkgs/issues/145726
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       nydragon
-      bridgesense
+      saadndm
     ];
     mainProgram = "impala";
   };

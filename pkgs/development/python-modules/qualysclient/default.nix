@@ -14,21 +14,21 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qualysclient";
-  version = "0.0.4.8.3";
+  version = "0.0.4.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "woodtechie1428";
     repo = "qualysclient";
-    tag = "v${version}";
-    hash = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2m/WHxkomHBudWpFpsgXHN8n+hfLU+lf9fvxhh/3HjA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version=__version__," 'version="${version}",'
+      --replace-fail "version=__version__," 'version="${finalAttrs.version}",'
   '';
 
   build-system = [ setuptools ];
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
-    changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/v${version}";
+    changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

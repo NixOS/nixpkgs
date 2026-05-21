@@ -35,7 +35,6 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [
       frogamic
-      sbruder
     ];
   };
 }

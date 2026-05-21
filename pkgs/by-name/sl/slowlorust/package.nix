@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slowlorust";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "MJVL";
     repo = "slowlorust";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-c4NWkQ/QvlUo1YoV2s7rWB6wQskAP5Qp1WVM23wvV3c=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # https://github.com/MJVL/slowlorust/issues/2
     substituteInPlace src/main.rs \
-      --replace-fail 'version = "1.0"' 'version = "${version}"'
+      --replace-fail 'version = "1.0"' 'version = "${finalAttrs.version}"'
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lightweight slowloris (HTTP DoS) tool";
     homepage = "https://github.com/MJVL/slowlorust";
-    changelog = "https://github.com/MJVL/slowlorust/releases/tag/${version}";
+    changelog = "https://github.com/MJVL/slowlorust/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "slowlorust";
   };
-}
+})

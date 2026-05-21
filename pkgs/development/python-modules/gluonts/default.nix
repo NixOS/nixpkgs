@@ -1,9 +1,10 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -20,7 +21,7 @@
   lightning,
   scipy,
 
-  # test
+  # tests
   pytestCheckHook,
   distutils,
   matplotlib,
@@ -30,7 +31,7 @@
   which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gluonts";
   version = "0.16.2";
   pyproject = true;
@@ -38,9 +39,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "gluonts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h0+RYgGMz0gPchiKGIu0/NGcWBky5AWNTJKzoupn/iQ=";
   };
+
+  # pydantic.v1.errors.ConfigError: unable to infer type for attribute "target"
+  disabled = pythonAtLeast "3.14";
 
   patches = [
     # Fixes _pickle.UnpicklingError: Weights only load failed.
@@ -100,11 +104,15 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
     which
   ]
-  ++ optional-dependencies.torch;
+  ++ finalAttrs.passthru.optional-dependencies.torch;
 
   disabledTestPaths = [
     # requires `cpflows`, not in Nixpkgs
     "test/torch/model"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5
+    "test/torch/test_torch_item_id_info.py"
   ];
 
   disabledTests = [
@@ -119,8 +127,8 @@ buildPythonPackage rec {
   meta = {
     description = "Probabilistic time series modeling in Python";
     homepage = "https://ts.gluon.ai";
-    changelog = "https://github.com/awslabs/gluonts/releases/tag/${src.tag}";
+    changelog = "https://github.com/awslabs/gluonts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

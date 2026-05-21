@@ -52,7 +52,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ fpc ];
   buildInputs = [ openssl ];
 
-  NIX_LDFLAGS = [ "-lcrypto" ];
+  env.NIX_LDFLAGS = toString [ "-lcrypto" ];
 
   patchPhase = ''
     patchShebangs \

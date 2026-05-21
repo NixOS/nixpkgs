@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pw-volume";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "smasher164";
     repo = "pw-volume";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-r/6AAZKZgPYUGic/Dag7OT5RtH+RKgEkJVWxsO5VGZ0=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Basic interface to PipeWire volume controls";
     homepage = "https://github.com/smasher164/pw-volume";
-    changelog = "https://github.com/smasher164/pw-volume/releases/tag/v${version}";
+    changelog = "https://github.com/smasher164/pw-volume/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       astro
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "pw-volume";
   };
-}
+})

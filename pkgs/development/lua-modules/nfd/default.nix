@@ -15,8 +15,8 @@ buildLuarocksPackage {
   src = fetchFromGitHub {
     owner = "Vexatos";
     repo = "nativefiledialog";
-    rev = "2f74a5758e8df9b27158d444953697bc13fe90d8";
-    sha256 = "1f52mb0s9zrpsqjp10bx92wzqmy1lq7fg1fk1nd6xmv57kc3b1qv";
+    rev = "bea4560b9269bdc142fef946ccd8682450748958";
+    hash = "sha256-veCLHTmZU4puZW0NHeWFZa80XKc6w6gxVLjyBmTrejg=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ buildLuarocksPackage {
   '';
 
   doInstallCheck = true;
-  installCheckInputs = [ lua.pkgs.busted ];
+  nativeInstallCheckInputs = [ lua.pkgs.busted ];
   installCheckPhase = ''
     busted lua/spec/
   '';

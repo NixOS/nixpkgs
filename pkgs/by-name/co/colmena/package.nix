@@ -12,14 +12,14 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colmena";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "colmena";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
   };
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ nix-eval-jobs ];
 
-  NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
+  env.NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
 
   patches = [
     # Fixes nix 2.24 compat: https://github.com/zhaofengli/colmena/pull/236
@@ -57,17 +57,17 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     # We guarantee CLI and Nix API stability for the same minor version
-    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
+    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion finalAttrs.version));
 
     tests.version = testers.testVersion { package = colmena; };
   };
 
   meta = {
     description = "Simple, stateless NixOS deployment tool";
-    homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
+    homepage = "https://colmena.cli.rs/${finalAttrs.passthru.apiVersion}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "colmena";
   };
-}
+})

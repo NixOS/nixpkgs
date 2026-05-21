@@ -10,23 +10,22 @@
   makeWrapper,
   makeDesktopItem,
 
-  electron_37,
-  nodejs_22,
+  electron_40,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_37;
+  electron = electron_40;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
-  version = "2.12.0";
+  version = "2.12.2";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
-    tag = "v${version}";
-    hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0hUm7BfjI4x22DsAPX/VZo+IKInSl6hhylTK0awPhYo=";
   };
 
   desktopItems = [
@@ -64,10 +63,7 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  # Npm 11 (nodejs 24) can't resolve all dependencies from the prefetched cache.
-  nodejs = nodejs_22;
-
-  npmDepsHash = "sha256-t6I8ch36Yh6N+qZy4/yr/gSyJ3qdyMWss5LbsagEFMQ=";
+  npmDepsHash = "sha256-iIymnYIAE8rFEa8I2nVt2JrMyRiZL5nBS+HfNoDN1Hk=";
 
   makeCacheWritable = true;
 
@@ -123,11 +119,11 @@ buildNpmPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Music software based on Electron and Vue";
     homepage = "https://github.com/lyswhut/lx-music-desktop";
-    changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
+    changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
     maintainers = with lib.maintainers; [ starryreverie ];
   };
-}
+})

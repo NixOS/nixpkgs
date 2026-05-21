@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "1.2.48";
+  version = "1.2.49";
   electronSrc = fetchFromGitHub {
     owner = "threema-ch";
     repo = "threema-web-electron";
     tag = version;
-    hash = "sha256-u1rzKFDrLxU/o7Oc2o/WBwbAncNWKJ9GAUBaNDPViZI=";
+    hash = "sha256-8Zy+LMxszqCT17FFz8sEMAtBSTXhU/F2Nz9MfEA82xw=";
   };
 
   threema-web = buildNpmPackage rec {
@@ -54,7 +54,7 @@ let
     inherit version;
     src = electronSrc;
     sourceRoot = "${src.name}/app";
-    npmDepsHash = "sha256-mafB7lC1YpIZ71R6IT3TnSzFDieK4AsAzIqpWcy9480=";
+    npmDepsHash = "sha256-Nn1WIyGRAG009GlJIedl0QUeKLalY+H3Mj8w4J1GE6I=";
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     dontNpmBuild = true;
     prePatch = ''
@@ -73,7 +73,7 @@ buildNpmPackage rec {
   inherit version;
   src = electronSrc;
 
-  npmDepsHash = "sha256-A7XvzURCCM0+ISlSLpnreFIxKku4FnVdWLsF2WxQfBY=";
+  npmDepsHash = "sha256-i37rIAIhoIU9tnioyhPFR1GWBfygMREZ0HCYE7ujXuE=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -111,8 +111,7 @@ buildNpmPackage rec {
       ln -s $out/opt/threema/$dir $out/opt/threema/dist/src/$dir
     done
 
-    mkdir -p $out/share/pixmaps
-    cp $out/opt/threema/assets/icons/svg/consumer.svg $out/share/pixmaps/threema.svg
+    install -Dm644 $out/opt/threema/assets/icons/svg/consumer.svg $out/share/icons/hicolor/scalable/threema.svg
 
     makeWrapper ${electron}/bin/electron $out/bin/threema \
       --add-flags $out/opt/threema/dist/src/main.js

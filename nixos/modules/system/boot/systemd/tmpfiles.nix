@@ -350,19 +350,11 @@ in
       "d  /var/db                            0755 root root - -"
       "L  /var/lock                          -    -    -    - ../run/lock"
     ]
-    ++ lib.optionals config.nix.enable [
-      "d  /nix/var                           0755 root root - -"
-      "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
-    ]
     # Boot-time cleanup
     ++ [
       "R! /etc/group.lock                    -    -    -    - -"
       "R! /etc/passwd.lock                   -    -    -    - -"
       "R! /etc/shadow.lock                   -    -    -    - -"
-    ]
-    ++ lib.optionals config.nix.enable [
-      "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
-      "R! /nix/var/nix/temproots             -    -    -    - -"
     ];
 
     boot.initrd.systemd = {

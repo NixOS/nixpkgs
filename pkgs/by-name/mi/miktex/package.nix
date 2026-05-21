@@ -135,6 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace Programs/TeXAndFriends/omega/otps/source/outocp.c \
       --replace-fail 'fprintf(stderr, s);' 'fprintf(stderr, "%s", s);'
+
+    # we use unsigned-char for all platform
+    substituteInPlace Programs/TeXAndFriends/Knuth/web/CMakeLists.txt \
+      --replace-fail '--using-namespace=MiKTeX::TeXAndFriends' '--using-namespace=MiKTeX::TeXAndFriends --chars-are-unsigned'
   '';
 
   strictDeps = true;
@@ -200,9 +204,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     LANG = "C.UTF-8";
     MIKTEX_REPOSITORY = "file://${miktexLocalRepository}/";
-    # force char to be unsigned on none x86 systems
+    # Force use of unsigned char for all platform
     # See https://github.com/MiKTeX/miktex/issues/1440
-    NIX_CFLAGS_COMPILE = "-fsigned-char";
+    NIX_CFLAGS_COMPILE = "-funsigned-char";
   };
 
   enableParallelBuilding = false;

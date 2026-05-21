@@ -25,14 +25,14 @@ let
     stripRoot = false;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpostal";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "openvenues";
     repo = "libpostal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7G/CjYdVzsrvUFXGODoXgXoRp8txkl5SddcPtgltrjY=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     mainProgram = "libpostal_data";
     platforms = lib.platforms.unix;
   };
-}
+})

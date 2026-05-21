@@ -6,7 +6,7 @@
   autoPatchelfHook,
 
   # buildInputs
-  oneDNN,
+  onednn,
   re2,
 
   # dependencies
@@ -53,7 +53,7 @@ buildPythonPackage {
 
   # Libraries are not linked correctly.
   buildInputs = [
-    oneDNN
+    onednn
     re2
     onnxruntime.protobuf
 

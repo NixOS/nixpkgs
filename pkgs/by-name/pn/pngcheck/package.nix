@@ -6,12 +6,12 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngcheck";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/png-mng/pngcheck-${version}.tar.gz";
+    url = "mirror://sourceforge/png-mng/pngcheck-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-DX4mLyQRb93yhHqM61yS2fXybvtC6f/2PsK7dnYTHKc=";
   };
 
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   '';
 
   makefile = "Makefile.unx";
-  makeFlags = [ "ZPATH=${zlib.static}/lib" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm555 -t $out/bin/ pngcheck
+    installBin pngcheck
     installManPage $pname.1
     runHook postInstall
   '';
@@ -44,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ starcraft66 ];
     mainProgram = "pngcheck";
   };
-}
+})

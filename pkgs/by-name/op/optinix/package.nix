@@ -6,14 +6,14 @@
   installShellFiles,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "optinix";
   version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "hmajid2301";
     repo = "optinix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cFzu88EFo27c6r7pqYDzMj9z1jPx4RxcylKYa4yxZXo=";
   };
 
@@ -38,7 +38,7 @@ buildGoModule rec {
       hmajid2301
       brianmcgillion
     ];
-    changelog = "https://gitlab.com/hmajid2301/optinix/-/releases/v${version}";
+    changelog = "https://gitlab.com/hmajid2301/optinix/-/releases/v${finalAttrs.version}";
     mainProgram = "optinix";
   };
-}
+})

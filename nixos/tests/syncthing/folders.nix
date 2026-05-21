@@ -26,6 +26,7 @@ in
           openDefaultPorts = true;
           cert = "${idA}/cert.pem";
           key = "${idA}/key.pem";
+          guiAddress = "unix:///run/syncthing/syncthing.sock";
           settings = {
             devices.b.id = lib.fileContents "${idB}/id";
             devices.c.id = lib.fileContents "${idC}/id";
@@ -49,6 +50,12 @@ in
                 "c"
               ];
               ignorePatterns = [ ];
+            };
+            folders."foo bar" = {
+              path = "/var/lib/syncthing/foo-bar";
+              devices = [
+                "b"
+              ];
             };
           };
         };
@@ -83,6 +90,16 @@ in
               devices = [
                 "a"
                 "c"
+              ];
+              ignorePatterns = [
+                "notB"
+              ];
+            };
+            # Test how we handle white spaces in folder IDs
+            folders."foo bar" = {
+              path = "/var/lib/syncthing/foo-bar";
+              devices = [
+                "a"
               ];
               ignorePatterns = [
                 "notB"
@@ -183,5 +200,20 @@ in
     # Check that files have been correctly ignored
     b.fail("cat /var/lib/syncthing/baz/notB")
     c.fail("cat /var/lib/syncthing/baz/notC")
+
+    # Test foo bar
+
+    a.wait_for_file("/var/lib/syncthing/foo-bar")
+    b.wait_for_file("/var/lib/syncthing/foo-bar")
+
+    a.succeed("echo a2b > /var/lib/syncthing/foo-bar/a2b")
+    a.succeed("echo a2b > /var/lib/syncthing/foo-bar/notB")
+    b.succeed("echo b2a > /var/lib/syncthing/foo-bar/b2a")
+
+    a.wait_for_file("/var/lib/syncthing/foo-bar/b2a")
+    b.wait_for_file("/var/lib/syncthing/foo-bar/a2b")
+
+    # Check that file has been correctly ignored
+    b.fail("cat /var/lib/syncthing/foo-bar/notB")
   '';
 }

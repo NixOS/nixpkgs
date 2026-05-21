@@ -22,9 +22,9 @@ let
     }
     ."${version}";
 in
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  inherit version;
+stdenv.mkDerivation (finallAttrs: {
+  name = "ocaml${ocaml.version}-${finallAttrs.pname}-${finallAttrs.version}";
+  inherit version pname;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
@@ -66,4 +66,4 @@ stdenv.mkDerivation {
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.03";
   };
-}
+})

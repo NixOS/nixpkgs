@@ -5,7 +5,7 @@
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "deeptools";
   version = "3.5.6";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dxXlOvOjF4KSc5YO+1A5hlp95sfeyPSbmp93tihm7Vo=";
   };
 
@@ -62,4 +62,4 @@ python3Packages.buildPythonApplication rec {
       bsd3
     ];
   };
-}
+})

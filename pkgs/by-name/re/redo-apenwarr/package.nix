@@ -10,7 +10,7 @@
   gnumake42,
   doCheck ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "redo-apenwarr";
   version = "0.42d";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
-    rev = "${repo}-${version}";
+    rev = "${repo}-${finalAttrs.version}";
     sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
@@ -66,11 +66,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     python3
-    (with python3.pkgs; [
-      beautifulsoup4
-      markdown
-    ])
     which
+    python3.pkgs.beautifulsoup4
+    python3.pkgs.markdown
     installShellFiles
     gnumake42 # fails with make 4.4
   ];
@@ -88,4 +86,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = python3.meta.platforms;
   };
-}
+})

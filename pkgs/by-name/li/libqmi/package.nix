@@ -5,8 +5,8 @@
   meson,
   ninja,
   pkg-config,
+  gi-docgen,
   gobject-introspection,
-  gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   help2man,
@@ -15,6 +15,7 @@
   mesonEmulatorHook,
   libgudev,
   bash-completion,
+  bashNonInteractive,
   libmbim,
   libqrtr-glib,
   buildPackages,
@@ -24,23 +25,26 @@
   withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libqmi";
-  version = "1.36.0";
+  version = "1.38.0";
 
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optional withIntrospection "devdoc";
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "libqmi";
-    rev = version;
-    hash = "sha256-cGNnw0vO/Hr9o/eIf6lLTsoGiEkTvZiArgO7tAc208U=";
+    rev = finalAttrs.version;
+    hash = "sha256-bJbNfnKVJuhy/6EJgu5b7t6vxNTex/5heTzMzTzVREw=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -52,8 +56,8 @@ stdenv.mkDerivation rec {
     help2man
   ]
   ++ lib.optionals withIntrospection [
+    gi-docgen
     gobject-introspection
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
   ]
@@ -63,6 +67,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash-completion
+    bashNonInteractive # otherwise $out/bin/qmi-network has impure #!/bin/sh shebang.
     libmbim
   ]
   ++ lib.optionals withIntrospection [
@@ -75,6 +80,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withIntrospection [
     libqrtr-glib
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
@@ -103,6 +110,6 @@ stdenv.mkDerivation rec {
       # Tools
       gpl2Plus
     ];
-    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${finalAttrs.version}/NEWS";
   };
-}
+})

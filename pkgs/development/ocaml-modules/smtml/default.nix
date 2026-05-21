@@ -5,11 +5,14 @@
   ocaml,
   fetchFromGitHub,
   menhir,
+  darwin,
+  bitwuzla-cxx,
   bos,
   cmdliner,
   dolmen_model,
   dolmen_type,
   dune-build-info,
+  dune-site,
   fpath,
   hc,
   menhirLib,
@@ -17,6 +20,7 @@
   # fix eval on legacy ocaml versions
   ocaml_intrinsics ? null,
   prelude,
+  ppx_enumerate,
   scfg,
   yojson,
   z3,
@@ -27,26 +31,31 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.19.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZS+SVmpmvUP2V3DTQ5+QNjFWgj3O3vFIST5c7CifIos=";
+    hash = "sha256-YyzrPs6ykpUzHHZ63y3c82LG9lv0Pf4i01w5GWadumU=";
   };
 
   minimalOCamlVersion = "4.14";
 
   nativeBuildInputs = [
     menhir
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
   buildInputs = [
     dune-build-info
+    dune-site
   ];
 
   propagatedBuildInputs = [
+    bitwuzla-cxx
     bos
     cmdliner
     dolmen_model
@@ -56,6 +65,7 @@ buildDunePackage (finalAttrs: {
     menhirLib
     mtime
     ocaml_intrinsics
+    ppx_enumerate
     prelude
     scfg
     yojson
@@ -73,7 +83,9 @@ buildDunePackage (finalAttrs: {
   ];
 
   doCheck =
-    !(
+    # Checks fail with cmdliner ≥ 2.0
+    false
+    && !(
       lib.versions.majorMinor ocaml.version == "5.0"
       || lib.versions.majorMinor ocaml.version == "5.4"
       || stdenv.hostPlatform.isDarwin
@@ -85,6 +97,7 @@ buildDunePackage (finalAttrs: {
     downloadPage = "https://github.com/formalsec/smtml";
     changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+    teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [
       ethancedwards8
       redianthus

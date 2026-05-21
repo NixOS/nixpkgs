@@ -8,13 +8,13 @@
 buildKodiAddon rec {
   pname = "sponsorblock";
   namespace = "script.service.sponsorblock";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "siku2";
     repo = namespace;
     rev = "v${version}";
-    hash = "sha256-IBgh2kdPgCy+HHrR7UZxTgjF1LR77ABGlUp3PgaobNM=";
+    hash = "sha256-9+0gIY12C+bZNsCRzla1IFmtVZiiGnS4TL3srkOBWsQ=";
   };
 
   propagatedBuildInputs = [

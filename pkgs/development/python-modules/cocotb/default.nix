@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
@@ -18,6 +19,11 @@ buildPythonPackage rec {
   pname = "cocotb";
   version = "2.0.1";
   format = "setuptools";
+
+  # RuntimeError: cocotb 2.0.1 only supports a maximum Python version of 3.13.
+  # You can suppress this error by defining the environment variable COCOTB_IGNORE_PYTHON_REQUIRES
+  # There is no guarantee this will work and no support will be provided.
+  disabled = pythonAtLeast "3.14";
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {

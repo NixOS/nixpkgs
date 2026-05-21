@@ -8,12 +8,12 @@
 }:
 
 let
-  version = "3.1.9";
+  version = "3.2.0";
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
     tag = "v${version}";
-    hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
+    hash = "sha256-T3e0qoVD98u2lgCmQvof2SOqV8WkBkZrhnccURlJqsA=";
     fetchSubmodules = true;
   };
 
@@ -39,15 +39,16 @@ let
     };
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit version src;
   pname = "gerbolyze";
   pyproject = true;
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ uv-build ];
 
   pythonRemoveDeps = [
     # we already provide svg-flatten through a binary on the PATH
+    "resvg-wasi"
     "svg-flatten-wasi"
   ];
 
@@ -58,19 +59,8 @@ python3Packages.buildPythonApplication rec {
     python-slugify
     lxml
     gerbonara
+    resvg
   ];
-
-  preConfigure = ''
-    # setup.py tries to execute a call to git in a subprocess, this avoids it.
-    substituteInPlace setup.py \
-      --replace-fail "version = get_version()," \
-                     "version = '${version}'," \
-
-    # setup.py tries to execute a call to git in a subprocess, this avoids it.
-    substituteInPlace setup.py \
-      --replace-fail "long_description=format_readme_for_pypi()," \
-                     "long_description='\n'.join(Path('README.rst').read_text().splitlines()),"
-  '';
 
   pythonImportsCheck = [ "gerbolyze" ];
 
@@ -88,6 +78,11 @@ python3Packages.buildPythonApplication rec {
       ]
     }"
   ];
+
+  preCheck = ''
+    substituteInPlace tests/test_integration.py \
+      --replace-fail "'gerbolyze'" "'${placeholder "out"}/bin/gerbolyze'"
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

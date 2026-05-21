@@ -8,6 +8,7 @@
   darwin,
   ninja,
   pkg-config,
+  python3,
   writableTmpDirAsHomeHook,
 
   # buildInputs
@@ -17,10 +18,10 @@
   fontconfig,
   freetype,
   libGL,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libepoxy,
   libjack2,
   libxkbcommon,
@@ -29,13 +30,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = finalAttrs.version;
-    hash = "sha256-ix3UcTs9CEJ2TCJLdpvZOaoB0wgNDrvSQhZzer8yMRw=";
+    hash = "sha256-H6j4e9V0Nf3kkm1ds9zSjLsHeDXU5PIHreJVRpjf/Ts=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +44,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    python3
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
@@ -57,34 +59,36 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     alsa-lib
     libGL
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libepoxy
     libjack2
     libxkbcommon
   ];
 
-  # JUCE dlopen's these at runtime, crashes without them
-  NIX_LDFLAGS = lib.optionalString clangStdenv.hostPlatform.isLinux (toString [
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-  ]);
+  env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {
+    # JUCE dlopen's these at runtime, crashes without them
+    NIX_LDFLAGS = toString [
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+    ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString clangStdenv.hostPlatform.isLinux (toString [
-    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
-    # a Link Time Optimization flag, and instructs the plugin compiled here to
-    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
-    # successful linking while still providing LTO benefits. If our build of
-    # `juce` was used as a dependency, we could have patched that `-flto` line
-    # in our juce's source, but that is not possible because it is used as a
-    # Git Submodule.
-    "-ffat-lto-objects"
-  ]);
+    NIX_CFLAGS_COMPILE = toString [
+      # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+      # a Link Time Optimization flag, and instructs the plugin compiled here to
+      # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+      # successful linking while still providing LTO benefits. If our build of
+      # `juce` was used as a dependency, we could have patched that `-flto` line
+      # in our juce's source, but that is not possible because it is used as a
+      # Git Submodule.
+      "-ffat-lto-objects"
+    ];
+  };
 
   cmakeFlags = [
     # see: https://github.com/ZL-Audio/ZLEqualizer#clone-and-build

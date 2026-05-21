@@ -1,20 +1,20 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   libpcap,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "dnsmonster";
-  version = "1.2.9";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
-    owner = "mosajjal";
+    owner = "FenkoHQ";
     repo = "dnsmonster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SDAD5OBactf0dynUmLgdrg+m0bZATh4wGW/NZ2gG+dI=";
+    hash = "sha256-Ae7SzImNHOOpaaVLFHdfLrwGhaHkvZBt+s/sRoHYwzk=";
   };
 
   vendorHash = "sha256-7rIBbaYr1dgC0ArcuwZelHKG5TLIQDV9JSBoYOcz+C0=";
@@ -29,8 +29,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Passive DNS Capture and Monitoring Toolkit";
-    homepage = "https://github.com/mosajjal/dnsmonster";
-    changelog = "https://github.com/mosajjal/dnsmonster/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/FenkoHQ/dnsmonster";
+    changelog = "https://github.com/FenkoHQ/dnsmonster/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;

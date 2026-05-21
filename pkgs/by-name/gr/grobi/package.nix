@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   version = "0.6.0";
   pname = "grobi";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "fd0";
     repo = "grobi";
     hash = "sha256-evgDY+OjfQ0ngf4j/D4yOeITHQXmBmw8KiJhLKjdVAw=";
@@ -33,4 +33,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "grobi";
   };
-}
+})

@@ -10,14 +10,14 @@ let
   mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stxxl";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "stxxl";
     repo = "stxxl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-U6DQ5mI83pyTmq5/ga5rI8v0h2/iEnNl8mxhIOpbF1I=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     mainProgram = "stxxl_tool";
     platforms = lib.platforms.all;
   };
-}
+})

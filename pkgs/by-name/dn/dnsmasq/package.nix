@@ -28,14 +28,19 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmasq";
-  version = "2.92";
+  version = "2.92rel2";
 
   src = fetchurl {
-    url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-S/UMLBAY+fvCYDffUbkOzqDLc9RhYoRnY7kt8NbDpFg=";
+    url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Q9crjBKb3zPRe6/tyYgj9j5GtQBRKAZr8NKkcqMs4Go=";
   };
+
+  patches = [
+    # https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=9ad74926d4f7f34ff902e1db5235535aa813c33f
+    ./CVE-2026-6507.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '1i#include <linux/sockios.h>' -i src/dhcp.c
@@ -119,4 +124,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

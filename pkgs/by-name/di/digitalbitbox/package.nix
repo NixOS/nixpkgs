@@ -84,12 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtmultimedia
   ];
 
-  LUPDATE = "${libsForQt5.qttools.dev}/bin/lupdate";
-  LRELEASE = "${libsForQt5.qttools.dev}/bin/lrelease";
-  MOC = "${libsForQt5.qtbase.dev}/bin/moc";
-  QTDIR = libsForQt5.qtbase.dev;
-  RCC = "${libsForQt5.qtbase.dev}/bin/rcc";
-  UIC = "${libsForQt5.qtbase.dev}/bin/uic";
+  env = {
+    LUPDATE = "${libsForQt5.qttools.dev}/bin/lupdate";
+    LRELEASE = "${libsForQt5.qttools.dev}/bin/lrelease";
+    MOC = "${libsForQt5.qtbase.dev}/bin/moc";
+    QTDIR = libsForQt5.qtbase.dev;
+    RCC = "${libsForQt5.qtbase.dev}/bin/rcc";
+    UIC = "${libsForQt5.qtbase.dev}/bin/uic";
+  };
 
   configureFlags = [
     "--enable-libusb"

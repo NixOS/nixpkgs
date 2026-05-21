@@ -1,43 +1,39 @@
-use std::env;
+use serde::Deserialize;
+use std::fs;
+use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
+use bootspec::BootJson;
 
+#[derive(Deserialize)]
 pub struct Config {
     pub firmware: String,
     pub modprobe_binary: String,
     pub nix_store_mount_opts: Vec<String>,
     pub env_binary: Option<String>,
     pub sh_binary: Option<String>,
+    pub etc_basedir: Option<String>,
+    pub etc_metadata_image: Option<String>,
 }
 
 impl Config {
-    /// Read the config from the environment.
-    ///
-    /// These options are provided by wrapping the binary when assembling the toplevel.
-    pub fn from_env() -> Result<Self> {
-        let nix_store_mount_opts = required("NIX_STORE_MOUNT_OPTS")?
-            .split(',')
-            .map(std::borrow::ToOwned::to_owned)
-            .collect();
+    /// Read the config from the metadata file in the toplevel directory.
+    pub fn from_toplevel(toplevel: impl AsRef<Path>, prefix: &str) -> Result<Self> {
+        let bootspec_path =
+            PathBuf::from(prefix).join(toplevel.as_ref().join("boot.json").strip_prefix("/")?);
 
-        Ok(Self {
-            firmware: required("FIRMWARE")?,
-            modprobe_binary: required("MODPROBE_BINARY")?,
-            nix_store_mount_opts,
-            env_binary: optional("ENV_BINARY"),
-            sh_binary: optional("SH_BINARY"),
-        })
+        let boot_json: BootJson = fs::read(bootspec_path)
+            .context("Failed to read bootspec file")
+            .and_then(|raw| serde_json::from_slice(&raw).context("Failed to read bootspec JSON"))?;
+
+        let config = boot_json
+            .extensions
+            .get("org.nixos.nixos-init.v1")
+            .context("Failed to extract nixos-init bootspec extension")
+            .and_then(|v| {
+                serde_json::from_value(v.clone()).context("Failed to deserialise config")
+            })?;
+
+        Ok(config)
     }
-}
-
-/// Read a required environment variable
-///
-/// Fail with useful context if the variable is not set in the environment.
-fn required(key: &str) -> Result<String> {
-    env::var(key).with_context(|| format!("Failed to read {key} from environment"))
-}
-
-/// Read an optional environment variable
-fn optional(key: &str) -> Option<String> {
-    env::var(key).ok()
 }

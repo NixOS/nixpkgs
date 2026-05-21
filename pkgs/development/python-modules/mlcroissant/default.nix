@@ -29,19 +29,20 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mlcroissant";
-  version = "1.0.22";
+  version = "1.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlcommons";
     repo = "croissant";
-    tag = "v${version}";
-    hash = "sha256-uJOxKNrK3eN2wyPFEQr2J4+vZeSK1KPyFDag2jcyWZw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IaRlmNQjOSIT3/b6AM68eRmweZEI5yjo6I9ievQIIsE=";
   };
 
-  sourceRoot = "${src.name}/python/mlcroissant";
+  sourceRoot = "${finalAttrs.src.name}/python/mlcroissant";
 
   build-system = [
     setuptools
@@ -91,10 +92,10 @@ buildPythonPackage rec {
   meta = {
     description = "High-level format for machine learning datasets that brings together four rich layers";
     homepage = "https://github.com/mlcommons/croissant";
-    changelog = "https://github.com/mlcommons/croissant/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlcommons/croissant/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.all;
     mainProgram = "mlcroissant";
   };
-}
+})

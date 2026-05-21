@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mpSmPZ306DedRi3Dcck/cDqoumgwFYpljiJtma+LZz4=";
+    hash = "sha256-laU2S7SPFCso/HzPSpbEM6hAE5/XYkNoBqFTT4PU8TU=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       felixsinger
       funkeleinhorn
+      jmbaur
     ];
     platforms = lib.platforms.all;
     mainProgram = "flashprog";

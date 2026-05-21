@@ -14,14 +14,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqld";
   version = "0.24.32";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "libsql";
-    tag = "libsql-server-v${version}";
+    tag = "libsql-server-v${finalAttrs.version}";
     hash = "sha256-CiTJ9jLANBrncz/O/0k2/UI/qGCTGWLZuLQdncunlX8";
   };
 
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
     description = "LibSQL with extended capabilities like HTTP protocol, replication, and more";
     homepage = "https://github.com/tursodatabase/libsql";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "sqld";
   };
-}
+})

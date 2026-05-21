@@ -3,7 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  libX11,
+  libx11,
   meson,
   ninja,
   pkg-config,
@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation {
   pname = "vulkan-hdr-layer-kwin6";
-  version = "0-unstable-2025-07-31";
+  version = "0-unstable-2026-03-25";
 
   depsBuildBuild = [ pkg-config ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [
     vulkan-headers
     vulkan-loader
-    libX11
+    libx11
     wayland
   ];
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Zamundaaa";
     repo = "VK_hdr_layer";
-    rev = "303e0c69e1d33acd95158d92b1fc652fb5b85399";
-    hash = "sha256-NsC44Ifl/fAHvFqP7NLrVZ71Y+x5mBEkv+r43HN5yn4=";
+    rev = "57b26b8927b133566be13a7702f74a62109bad15";
+    hash = "sha256-E1j3s6Ie8jLY5CFaNoOs/ffbUGloK0ZUC5vLwjwsrZw=";
     fetchSubmodules = true;
   };
 

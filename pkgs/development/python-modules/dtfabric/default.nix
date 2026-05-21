@@ -6,38 +6,39 @@
   pyyaml,
   setuptools,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "dtfabric";
-  version = "20251118";
+  version = "20260506";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v2qsZtqGb40p5/Q1IGhI+prMCkuruxFB0BTMORKzmX4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-n/z2OD3vZrEKoYC3eRVIx6XpgKwTbTaKqp2O2cg11fs=";
   };
+
+  pythonRemoveDeps = [ "pip" ];
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    pyyaml
-  ];
-
-  pythonRemoveDeps = [
-    "pip"
-  ];
+  dependencies = [ pyyaml ];
 
   checkPhase = ''
     runHook preCheck
+
     ${python.interpreter} run_tests.py
+
     runHook postCheck
   '';
 
+  pythonImportsCheck = [ "dtfabric" ];
+
   meta = {
-    changelog = "https://github.com/libyal/dtfabric/releases/tag/${version}";
     description = "Project to manage data types and structures, as used in the libyal projects";
+    changelog = "https://github.com/libyal/dtfabric/releases/tag/${finalAttrs.version}";
     downloadPage = "https://github.com/libyal/dtfabric/releases";
     homepage = "https://github.com/libyal/dtfabric";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.jayrovacsek ];
+    maintainers = with lib.maintainers; [ jayrovacsek ];
   };
-}
+})

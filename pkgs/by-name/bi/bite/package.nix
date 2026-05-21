@@ -19,14 +19,14 @@
   stdenv,
   wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bite";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "WINSDK";
     repo = "bite";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-gio4J+V8achSuR2vQa2dnvOR/u4Zbb5z0UE0xP0gGCU=";
   };
 
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/bite \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.runtimeDependencies}"
 
     mkdir -p $out/share/icons/hicolor/64x64/apps
     convert $src/assets/iconx64.png -background black -alpha remove -alpha off $out/share/icons/hicolor/64x64/apps/bite.png
@@ -75,10 +75,10 @@ rustPlatform.buildRustPackage rec {
   desktopItems = [
     (makeDesktopItem {
       name = "BiTE";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       icon = "bite";
       desktopName = "BiTE";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Development"
         "Utility"
@@ -93,4 +93,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "bite";
   };
-}
+})

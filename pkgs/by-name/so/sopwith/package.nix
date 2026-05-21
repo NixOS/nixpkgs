@@ -9,14 +9,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sopwith";
   version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
-    tag = "sdl-sopwith-${version}";
+    tag = "sdl-sopwith-${finalAttrs.version}";
     hash = "sha256-s7npLid3GYZArQmctSwOu8zeC+mSfTiiiOaOEa9dcrg=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ evilbulgarian ];
     platforms = lib.platforms.unix;
   };
-}
+})

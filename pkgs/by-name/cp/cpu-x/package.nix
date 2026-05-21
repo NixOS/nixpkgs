@@ -17,8 +17,7 @@
   vulkan-headers,
   vulkan-loader,
   glfw,
-  libXdmcp,
-  pcre,
+  libxdmcp,
   util-linux,
   libselinux,
   libsepol,
@@ -28,7 +27,7 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   gtkmm3,
 }:
 
@@ -69,8 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     glfw
     opencl-headers
     ocl-icd
-    libXdmcp
-    pcre
+    libxdmcp
     util-linux
     libselinux
     libsepol
@@ -80,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ];
 
   preFixup = ''

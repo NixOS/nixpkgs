@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "lap";
-  version = "0.5.12";
+  version = "0.5.13";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VwtBTqeubAS9SdDsjNrB3FY0c3dVeE1E43+fZourRP0=";
+    hash = "sha256-nv9xaePKRSmVrwSTzCDTVFLEv9BhIsNsBkVxGf+9QRs=";
   };
 
   build-system = [ setuptools ];

@@ -6,14 +6,14 @@
   systemd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qmk_hid";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "qmk_hid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wJi7FQrvMbdTwvbbjBnzmxupMbEuM8TeZ0JIK5ulQKI=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "qmk_hid";
   };
-}
+})

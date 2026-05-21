@@ -77,8 +77,6 @@ lib.makeOverridable (
 
     # for module compatibility
     isZen ? false,
-    isLibre ? false,
-    isHardened ? false,
 
     # Whether to utilize the controversial import-from-derivation feature to parse the config
     allowImportFromDerivation ? false,
@@ -376,7 +374,10 @@ lib.makeOverridable (
       cp vmlinux $dev/
 
       mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
+      # Installing from source dir instead of $buildRoot so as to omit intermediate artifacts.
       cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
+      # Installing `constants.py` from `$buildRoot` as it's generated.
+      cp scripts/gdb/linux/constants.py $dev/lib/modules/${modDirVersion}/build/scripts/gdb/linux
 
       if [ -z "''${dontStrip-}" ]; then
         installFlags+=("INSTALL_MOD_STRIP=1")
@@ -435,6 +436,9 @@ lib.makeOverridable (
 
       # Keep root and arch-specific Makefiles
       chmod u-w Makefile arch/*/Makefile*
+
+      # Keep rust Makefile
+      ${lib.optionalString withRust "chmod u-w rust/Makefile"}
 
       # Keep whole scripts dir
       chmod u-w -R scripts
@@ -504,6 +508,12 @@ lib.makeOverridable (
         export HOME=${installkernel}
       '';
 
+    preFixup = ''
+      if [ -z "''${dontStrip-}" -a -e $out/vmlinux ]; then
+        strip -v -S -p $out/vmlinux
+      fi
+    '';
+
     requiredSystemFeatures = [ "big-parallel" ];
 
     passthru = rec {
@@ -519,11 +529,8 @@ lib.makeOverridable (
         ;
       inherit
         isZen
-        isHardened
-        isLibre
         withRust
         ;
-      isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
       baseVersion = lib.head (lib.splitString "-rc" version);
       kernelOlder = lib.versionOlder baseVersion;
       kernelAtLeast = lib.versionAtLeast baseVersion;
@@ -569,7 +576,10 @@ lib.makeOverridable (
       license = lib.licenses.gpl2Only;
       homepage = "https://www.kernel.org/";
       maintainers = [ maintainers.thoughtpolice ];
-      teams = [ teams.linux-kernel ];
+      teams = [
+        teams.linux-kernel
+        teams.security-review
+      ];
       platforms = platforms.linux;
       badPlatforms =
         lib.optionals (lib.versionOlder version "4.15") [

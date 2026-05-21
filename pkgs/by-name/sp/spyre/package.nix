@@ -7,14 +7,14 @@
   yara,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "spyre";
   version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "spyre-project";
     repo = "spyre";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wlGZTMCJE6Ki5/6R6J9EJP06/S125BNNd/jNPYGwKNw=";
   };
 
@@ -50,4 +50,4 @@ buildGoModule rec {
     license = with lib.licenses; [ lgpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

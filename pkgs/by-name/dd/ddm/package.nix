@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   lib,
-  requireFile,
+  fetchItchIo,
   asar,
   copyDesktopItems,
   electron,
@@ -18,10 +18,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ddm";
   version = "4.1.0";
 
-  src = requireFile {
+  src = fetchItchIo {
     name = "DungeonDuelMonsters-linux-x64.zip";
     hash = "sha256-gq2nGwpaStqaVI1pL63xygxOI/z53o+zLwiKizG98Ks=";
-    url = "https://mikaygo.itch.io/ddm";
+    gameUrl = "https://mikaygo.itch.io/ddm";
+    upload = "13371354";
   };
 
   strictDeps = true;

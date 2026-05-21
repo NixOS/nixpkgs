@@ -9,7 +9,7 @@
 }:
 
 bundlerEnv rec {
-  name = "ronin";
+  pname = "ronin";
   version = "2.1.1";
   gemdir = ./.;
 
@@ -26,7 +26,7 @@ bundlerEnv rec {
 
   postBuild = ''
     shopt -s extglob
-    rm $out/bin/!(ronin*)
+    rm -f $out/bin/!(ronin*)
   '';
 
   passthru.updateScript = bundlerUpdateScript "ronin";

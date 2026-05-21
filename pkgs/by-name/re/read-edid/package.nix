@@ -6,12 +6,12 @@
   libx86,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "read-edid";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "http://www.polypux.org/projects/read-edid/${pname}-${version}.tar.gz";
+    url = "http://www.polypux.org/projects/read-edid/read-edid-${finalAttrs.version}.tar.gz";
     sha256 = "0vqqmwsgh2gchw7qmpqk6idgzcm5rqf2fab84y7gk42v1x2diin7";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Tool for reading and parsing EDID data from monitors";
     homepage = "http://www.polypux.org/projects/read-edid/";
     license = lib.licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

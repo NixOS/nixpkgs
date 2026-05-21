@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-two-factor-auth";
-  version = "1.17.0";
+  version = "1.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-two-factor-auth";
     tag = version;
-    hash = "sha256-gg5QpPQbYnQr7KkCXFZ9Gnz48Cf4Nm67uV6JuyxK18c=";
+    hash = "sha256-rhcEVmh5Am1TKO+01rb9VBKJdFVa8uRdTimEKq2pA7w=";
   };
 
   build-system = [ setuptools-scm ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = {
     description = "Complete Two-Factor Authentication for Django";
     homepage = "https://github.com/jazzband/django-two-factor-auth";
-    changelog = "https://github.com/jazzband/django-two-factor-auth/releases/tag/${version}";
+    changelog = "https://github.com/jazzband/django-two-factor-auth/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

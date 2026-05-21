@@ -15,8 +15,6 @@
 
   # tests
   pytestCheckHook,
-  pytest-subtests,
-  pytest-benchmark,
   numpy,
   matplotlib,
   uncertainties,
@@ -55,13 +53,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-subtests
-    pytest-benchmark
     matplotlib
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  disabledTestPaths = [
+    "pint/testsuite/benchmarks"
+  ];
 
   meta = {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";

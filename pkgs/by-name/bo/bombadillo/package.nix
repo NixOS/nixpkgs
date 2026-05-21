@@ -5,13 +5,13 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bombadillo";
   version = "2.4.0";
 
   src = fetchgit {
     url = "https://tildegit.org/sloum/bombadillo.git";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FjU9AyRAdGFr1bVpkmj5STkbzCXvpxOaOj7WNQJq7A0=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     homepage = "https://bombadillo.colorfield.space/";
     license = lib.licenses.gpl3;
   };
-}
+})

@@ -1,11 +1,13 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
   libGL,
-  libX11,
+  libx11,
   setuptools,
   glcontext,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-UpNqmMyy8uHW48sYUospGfaDHn4/kk54i1hzutzlEps=";
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     substituteInPlace _moderngl.py \
       --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
       --replace-fail '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
@@ -26,9 +28,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [
     libGL
-    libX11
+    libx11
   ];
 
   dependencies = [ glcontext ];
@@ -44,7 +46,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ c0deaddict ];
-    # should be mesa.meta.platforms, darwin build breaks.
-    platforms = lib.platforms.linux;
+    inherit (pkgs.mesa.meta) platforms;
   };
 }

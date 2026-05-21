@@ -60,9 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       isc
       unicode-dfs-2016
     ];
-    maintainers = with lib.maintainers; [
-      joachifm
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -6,22 +6,22 @@
   autoreconfHook,
   installShellFiles,
   pixman,
-  xcbutil,
-  xcbutilimage,
+  libxcb-util,
+  libxcb-image,
   libseccomp,
   libjpeg,
   libpng,
-  libXpm,
+  libxpm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xwallpaper";
   version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "stoeckmann";
     repo = "xwallpaper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8VRQFH00yXplvhCqBuMGrwvOB7bJhfe50Ii6h8kvDMM=";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     pixman
-    xcbutilimage
-    xcbutil
+    libxcb-image
+    libxcb-util
     libseccomp
     libjpeg
     libpng
-    libXpm
+    libxpm
   ];
 
   postInstall = ''
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xwallpaper";
   };
-}
+})

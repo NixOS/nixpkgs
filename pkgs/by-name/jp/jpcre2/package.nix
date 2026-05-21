@@ -5,15 +5,15 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jpcre2";
   version = "10.32.01";
-  rev = version;
+  rev = finalAttrs.version;
 
   src = fetchFromGitHub {
     owner = "jpcre2";
     repo = "jpcre2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CizjxAiajDLqajZKizMRAk5UEZA+jDeBSldPyIb6Ic8=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
   };
-}
+})

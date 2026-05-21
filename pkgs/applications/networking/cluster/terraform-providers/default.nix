@@ -108,6 +108,15 @@ let
       propagatedBuildInputs = [ cdrtools ];
     });
     aminueza_minio = automated-providers.aminueza_minio.override { spdx = "AGPL-3.0-only"; };
+    # proxyVendor is necessary because enabling CGO causes `go mod vendor` to include
+    # platform-specific files leading to vendorHash varying across platforms.
+    "1password_onepassword" =
+      (automated-providers."1password_onepassword".override { proxyVendor = true; }).overrideAttrs
+        (finalAttrs: {
+          env = finalAttrs.env // {
+            CGO_ENABLED = "1";
+          };
+        });
   };
 
   # Put all the providers we not longer support in this list.

@@ -9,7 +9,6 @@
   setuptools-scm,
 
   # dependencies
-  jaxtyping,
   linear-operator,
   mpmath,
   scikit-learn,
@@ -20,16 +19,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpytorch";
-  version = "1.14.3";
+  version = "1.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = "gpytorch";
-    tag = "v${version}";
-    hash = "sha256-AuWVNAduh2y/sLIJAXg/9YgpFa21d1sbRHlcdG5cpJ8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1CavS+qrV8YqnsT87GjmJV2LOtvExFYQE5YpYZEw9ts=";
   };
 
   build-system = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    jaxtyping
     linear-operator
     mpmath
     scikit-learn
@@ -59,6 +57,11 @@ buildPythonPackage rec {
     "test_optimization_optimal_error"
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_dtype_value_context"
+    "test_half"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
@@ -73,8 +76,8 @@ buildPythonPackage rec {
     description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
     downloadPage = "https://github.com/cornellius-gp/gpytorch";
-    changelog = "https://github.com/cornellius-gp/gpytorch/releases/tag/${src.tag}";
+    changelog = "https://github.com/cornellius-gp/gpytorch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

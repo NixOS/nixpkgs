@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "eks-node-viewer";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "eks-node-viewer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VCRwGxH7adwB6p+UCF1GmAa5f/7GgJlJ7GvRSFOlOto=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X=main.builtBy=nixpkgs"
-    "-X=main.commit=${src.rev}"
-    "-X=main.version=${version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [
@@ -36,9 +36,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to visualize dynamic node usage within a cluster";
     homepage = "https://github.com/awslabs/eks-node-viewer";
-    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${src.rev}";
+    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ivankovnatsky ];
     mainProgram = "eks-node-viewer";
   };
-}
+})

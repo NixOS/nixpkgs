@@ -8,7 +8,7 @@
   curl,
   dbus-glib,
   gtk3,
-  libXtst,
+  libxtst,
   libva,
   pciutils,
   pipewire,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   runtimeDependencies = [
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://blog.floorp.app/en/release/${finalAttrs.version}.html";
+    changelog = "https://blog.floorp.app/en/release/${finalAttrs.version}/";
     description = "Fork of Firefox that seeks balance between versatility, privacy and web openness";
     homepage = "https://floorp.app/";
     # https://github.com/Floorp-Projects/Floorp#-floorp-license-notices-

@@ -8,14 +8,14 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "z80e";
   version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "z80e";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-FQMYHxKxHEP+x98JbGyjaM0OL8QK/p3epsAWvQkv6bc=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
   };
-}
+})

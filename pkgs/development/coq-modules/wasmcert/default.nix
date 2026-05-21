@@ -30,7 +30,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (lib.versions.range "8.20" "9.0") (lib.versions.isGe "2.4") "2.2.0")
+        (case (lib.versions.range "8.20" "9.1") (lib.versions.isGe "2.4") "2.2.0")
       ]
       null;
 

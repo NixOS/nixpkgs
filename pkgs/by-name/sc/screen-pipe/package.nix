@@ -10,7 +10,7 @@
   sqlite,
   stdenv,
   alsa-lib,
-  xorg,
+  libxcb,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    xorg.libxcb
+    libxcb
   ];
 
   buildFeatures = lib.optional stdenv.hostPlatform.isDarwin "metal";
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
     description = "Personalized AI powered by what you've seen, said, or heard";
     homepage = "https://github.com/louis030195/screen-pipe";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "screen-pipe";
   };
 }

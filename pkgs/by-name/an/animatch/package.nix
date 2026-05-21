@@ -5,16 +5,16 @@
   fetchFromGitLab,
   libGL,
   stdenv,
-  xorg,
+  libx11,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "animatch";
   version = "1.0.3";
   src = fetchFromGitLab {
     owner = "HolyPangolin";
     repo = "animatch";
     fetchSubmodules = true;
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zBV45WMAXtCpPPbDpr04K/a9UtZ4KLP9nUauBlbhrFo=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     allegro5
     libGL
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ colinsane ];
   };
-}
+})

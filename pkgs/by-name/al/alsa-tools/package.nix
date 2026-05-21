@@ -4,7 +4,6 @@
   fetchurl,
   alsa-lib,
   fltk_1_3,
-  gtk2,
   gtk3,
   makeWrapper,
   pkg-config,
@@ -28,14 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     fltk_1_3
-    gtk2
     gtk3
     psmisc
   ];
 
   env.TOOLSET = lib.concatStringsSep " " [
     "as10k1"
-    "echomixer"
+    # "echomixer" # Requires gtk2
     "envy24control"
     "hda-verb"
     "hdajackretask"
@@ -48,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     # "qlo10k1" # needs Qt
     "mixartloader"
     "pcxhrloader"
-    "rmedigicontrol"
+    # "rmedigicontrol" # Requires gtk2
     "sb16_csp"
     # "seq" # mysterious configure error
     "sscape_ctl"

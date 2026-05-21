@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.54.5";
+  version = "3.56.2";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";
-    hash = "sha256-tmVvY0j1JFYGzxXqSMOEx/BRVsderSBsGyRsgKIvtYU=";
+    hash = "sha256-uBYJiWlUQIHenuztuUrWrFnHfk1XH+cFHxi+vOwHQxM=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -50,6 +50,12 @@ buildPythonPackage rec {
     pycairo
     gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
+
+  # Fixes https://github.com/NixOS/nixpkgs/issues/378447
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+    export PKG_CONFIG_PATH=${lib.getDev python}/lib/pkgconfig:$PKG_CONFIG_PATH
+    export PKG_CONFIG_PATH_FOR_BUILD=${lib.getDev python}/lib/pkgconfig:$PKG_CONFIG_PATH_FOR_BUILD
+  '';
 
   mesonFlags = [
     # This is only used for figuring out what version of Python is in

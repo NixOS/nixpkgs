@@ -7,14 +7,14 @@
   frei0r,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "frei0r";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-frei0r";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-eh/ymZO/3a1z6uvZdnXgma/7AU2NBVs2lddA+R/kuQA=";
   };
 
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

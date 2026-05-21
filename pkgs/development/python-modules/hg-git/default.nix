@@ -29,6 +29,11 @@ buildPythonPackage rec {
     mercurial
   ];
 
+  # the dulwich version we are using is ahead of the one used upstream by hg-git.
+  # the build was failing because it could not import 'ANNOTATED_TAG_SUFFIX' from
+  # 'dulwich.refs'.
+  patches = [ ./dulwich_ANNOTATED_TAG_SUFFIX_renamed.patch ];
+
   pythonRelaxDeps = [ "dulwich" ];
 
   pythonImportsCheck = [ "hggit" ];

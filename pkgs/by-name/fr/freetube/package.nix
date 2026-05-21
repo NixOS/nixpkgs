@@ -20,21 +20,21 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.23.13";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-vnqrl/2hxL0RQbLHkgRntyTRSWmhMM7hOi31r4pKCgs=";
+    hash = "sha256-4XyN7ENsDwLNB/dt7pp8z0sbdmHSNIyVEHlp5GXIues=";
   };
 
   # Darwin requires writable Electron dist
   postUnpack =
     if stdenvNoCC.hostPlatform.isDarwin then
       ''
-        cp -r ${electron.dist} electron-dist
-        chmod -R u+w electron-dist
+        cp -r ${electron.dist} source/electron-dist
+        chmod -R u+w source/electron-dist
       ''
     else
       ''
@@ -45,11 +45,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (replaceVars ./patch-build-script.patch {
       electron-version = electron.version;
     })
+    ./targets.patch
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-sM9CkDnATSEUf/uuUyT4JuRmjzwa1WzIyNYEw69MPtU=";
+    hash = "sha256-9rO/XYfOf1TEQOpb5clCfdTiuDeynpnk6L4WpcIIWGk=";
   };
 
   nativeBuildInputs = [
@@ -69,12 +70,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/freetube \
       --add-flags "$out/share/freetube/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D _icons/icon.svg $out/share/icons/hicolor/scalable/apps/freetube.svg
   ''
   + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
+    mkdir -p $out/Applications $out/bin
     cp -r build/mac*/FreeTube.app $out/Applications
     ln -s "$out/Applications/FreeTube.app/Contents/MacOS/FreeTube" $out/bin/freetube
   ''
@@ -109,11 +110,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ryand56
       sigmasquadron
       ddogfoodd
-    ];
-    badPlatforms = [
-      # output app is called "Electron.app" while derivation expects "FreeTube.app"
-      #see: https://github.com/NixOS/nixpkgs/pull/384596#issuecomment-2677141349
-      lib.systems.inspect.patterns.isDarwin
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

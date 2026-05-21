@@ -8,12 +8,12 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obexftp";
   version = "0.24.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openobex/obexftp-${version}-Source.tar.gz";
+    url = "mirror://sourceforge/openobex/obexftp-${finalAttrs.version}-Source.tar.gz";
     sha256 = "18w9r78z78ri5qc8fjym4nk1jfbrkyr789sq7rxrkshf1a7b83yl";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2Plus;
   };
-}
+})

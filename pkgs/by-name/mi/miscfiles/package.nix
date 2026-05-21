@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miscfiles";
   version = "1.5";
 
   src = fetchurl {
-    url = "mirror://gnu/miscfiles/miscfiles-${version}.tar.gz";
+    url = "mirror://gnu/miscfiles/miscfiles-${finalAttrs.version}.tar.gz";
     sha256 = "005588vfrwx8ghsdv9p7zczj9lbc9a3r4m5aphcaqv8gif4siaka";
   };
 
@@ -20,4 +20,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
   };
-}
+})

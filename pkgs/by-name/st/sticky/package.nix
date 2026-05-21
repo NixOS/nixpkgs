@@ -15,15 +15,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sticky";
-  version = "1.30";
+  version = "1.31";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "sticky";
-    rev = version;
-    hash = "sha256-8Y6PoQQHS8h1AT+4DMbExd9y7ScDMig0M9BJQjq09Uc=";
+    rev = finalAttrs.version;
+    hash = "sha256-OPn3SNHeHQ3rw71R3oqV3DHxRPq4Ta+qxwkYeegVxbU=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
       bobby285271
     ];
   };
-}
+})

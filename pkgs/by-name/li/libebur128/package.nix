@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.6";
   pname = "libebur128";
 
   src = fetchFromGitHub {
     owner = "jiixyj";
     repo = "libebur128";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of the EBU R128 loudness standard";
     homepage = "https://github.com/jiixyj/libebur128";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.andrewrk ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

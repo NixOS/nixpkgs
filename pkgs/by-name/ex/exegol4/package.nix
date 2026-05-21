@@ -2,23 +2,24 @@
   fetchPypi,
   lib,
   python3Packages,
-  xorg,
+  xhost,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exegol";
   version = "4.3.11";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+LnZSFRW7EvG+cPwMStgO6qD4AjOGkLzCarXBrW3Aak=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
 
   pythonRelaxDeps = [
-    "rich"
     "argcomplete"
+    "requests"
+    "rich"
   ];
 
   dependencies =
@@ -32,7 +33,7 @@ python3Packages.buildPythonApplication rec {
       argcomplete
       tzlocal
     ]
-    ++ [ xorg.xhost ];
+    ++ [ xhost ];
 
   doCheck = true;
 
@@ -49,7 +50,7 @@ python3Packages.buildPythonApplication rec {
       stylish macOS users and corporate Windows pros to UNIX-like power users.
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
-    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
+    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "exegol";
     maintainers = with lib.maintainers; [
@@ -57,4 +58,4 @@ python3Packages.buildPythonApplication rec {
       charB66
     ];
   };
-}
+})

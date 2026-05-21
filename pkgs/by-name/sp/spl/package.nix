@@ -4,7 +4,7 @@
   rustPlatform,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spl";
   version = "0.4.3";
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.tudbut.de/tudbut/spl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ckj50psQ2/r7Bw03J2VjHx0R1zY5xivJfvB9HNxnJLw=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tudbut ];
     mainProgram = "spl";
   };
-}
+})

@@ -65,10 +65,11 @@ mkCoqDerivation rec {
       mathcomp-boot
       mathcomp-fingroup
     ]
-    ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];
+    ++ lib.optionals (defaultVersion != null && lib.versions.isGe "4.2.0" defaultVersion) [
+      gnuplot_qt
+    ];
   useMelquiondRemake.logpath = "Interval";
   mlPlugin = true;
-  enableParallelBuilding = true;
 
   meta = {
     description = "Tactics for simplifying the proofs of inequalities on expressions of real numbers for the Coq proof assistant";

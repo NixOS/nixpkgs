@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "std-man-pages";
   version = "4.4.0";
 
   src = fetchurl {
-    url = "mirror://gcc/libstdc++/doxygen/libstdc++-man.${version}.tar.bz2";
+    url = "mirror://gcc/libstdc++/doxygen/libstdc++-man.${finalAttrs.version}.tar.bz2";
     sha256 = "0153py77ll759jacq41dp2z2ksr08pdcfic0rwjd6pr84dk89y9v";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ fdl13Plus ];
     platforms = lib.platforms.unix;
   };
-}
+})

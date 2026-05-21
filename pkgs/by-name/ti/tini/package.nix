@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.19.0";
   pname = "tini";
 
   src = fetchFromGitHub {
     owner = "krallin";
     repo = "tini";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1hnnvjydg7gi5gx6nibjjdnfipblh84qcpajc08nvr44rkzswck4";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "tini";
   };
-}
+})

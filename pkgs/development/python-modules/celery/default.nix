@@ -4,49 +4,62 @@
   azure-identity,
   azure-storage-blob,
   billiard,
+  boto3,
+  brotli,
+  brotlipy,
   buildPythonPackage,
+  cassandra-driver,
+  click,
   click-didyoumean,
   click-plugins,
   click-repl,
-  click,
   cryptography,
   exceptiongroup,
+  django,
+  elastic-transport,
+  elasticsearch,
+  ephem,
   fetchFromGitHub,
   gevent,
   google-cloud-firestore,
   google-cloud-storage,
+  grpcio,
+  isPyPy,
+  kazoo,
   kombu,
   moto,
-  msgpack,
-  pymongo,
-  redis,
   pydantic,
+  pydocumentdb,
+  pylibmc,
   pytest-celery,
   pytest-click,
-  pytest-subtests,
   pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pyyaml,
+  python-memcached,
+  pyzmq,
   setuptools,
   tzlocal,
+  sphinx-autobuild,
+  tblib,
+  urllib3,
   vine,
+  zstandard,
   # The AMQP REPL depends on click-repl, which is incompatible with our version
   # of click.
   withAmqpRepl ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "celery";
-  version = "5.6.2";
+  version = "5.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "celery";
-    tag = "v${version}";
-    hash = "sha256-S84hLGwVVgxnUB6wnqU58tN56t/tQ79ZUni/iP5sx94=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5YPM8/AnCSjeDDMQ30kTNjPr6QdlUiqzzBadtmjqoNg=";
   };
 
   patches = lib.optionals (!withAmqpRepl) [
@@ -71,33 +84,78 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    # Everything commented is not packaged
+    # see https://github.com/celery/celery/tree/main/requirements/extras
+    arangodb = [
+      # pyarango
+    ];
     auth = [ cryptography ];
     azureblockblob = [
       azure-identity
       azure-storage-blob
     ];
-    gevent = [ gevent ];
+    brotli = if isPyPy then [ brotlipy ] else [ brotli ];
+    cassandra = [ cassandra-driver ];
+    consul = [
+      # python-consul2
+    ];
+    cosmosdbsql = [ pydocumentdb ];
+    couchbase = [ ];
+    couchdb = [
+      # pycouchdb
+    ];
+    django = [ django ];
+    dynamodb = [ boto3 ];
+    elasticsearch = [
+      elasticsearch
+      elastic-transport
+    ];
+    eventlet = [ ];
     gcs = [
       google-cloud-firestore
       google-cloud-storage
+      grpcio
     ];
-    mongodb = [ pymongo ];
-    msgpack = [ msgpack ];
-    yaml = [ pyyaml ];
-    redis = [ redis ];
+    gevent = [ gevent ];
+    memcache = [ pylibmc ];
+    mongodb = kombu.optional-dependencies.mongodb;
+    msgpack = kombu.optional-dependencies.msgpack;
     pydantic = [ pydantic ];
+    pymemcache = [ python-memcached ];
+    pyro = [ ];
+    pytest = [
+      pytest-celery
+    ]
+    ++ pytest-celery.optional-dependencies.all;
+    redis = kombu.optional-dependencies.redis;
+    s3 = [ boto3 ];
+    slmq = [
+      # softlayer-messaging
+    ];
+    solar = lib.optionals isPyPy [ ephem ];
+    sphinxautobuild = [ sphinx-autobuild ];
+    sqlalchemy = kombu.optional-dependencies.sqlalchemy;
+    sqs = [
+      boto3
+      urllib3
+    ]
+    ++ kombu.optional-dependencies.sqs;
+    tblib = [ tblib ];
+    thread = [ ];
+    yaml = kombu.optional-dependencies.yaml;
+    zeromq = [ pyzmq ];
+    zookeeper = [ kazoo ];
+    zsdt = [ zstandard ];
   };
 
   nativeCheckInputs = [
     moto
     pytest-celery
     pytest-click
-    pytest-subtests
     pytest-timeout
-    pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -122,6 +180,10 @@ buildPythonPackage rec {
     "test_itercapture_limit"
     "test_stamping_headers_in_options"
     "test_stamping_with_replace"
+    # pymongo api compat
+    # TypeError: InvalidDocument.__init__() missing 1 required positional argumen...
+    "test_store_result"
+    "test_store_result_with_request"
 
     # Celery tries to look up group ID (e.g. 30000)
     # which does not reliably succeed in the sandbox on linux,
@@ -130,14 +192,24 @@ buildPythonPackage rec {
     "test_regression_worker_startup_info"
     "test_check_privileges"
 
+    # FileNotFoundError: [Errno 2] No such file or directory: 'test.db'
+    "test_forget"
+
     # Flaky: Unclosed temporary file handle under heavy load (as in nixpkgs-review)
     "test_check_privileges_without_c_force_root_and_no_group_entry"
+  ]
+  ++ lib.optionals (lib.versionAtLeast django.version "6.0") [
+    "test_is_pickled"
+    "test_cleanup"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Too many open files on hydra
     "test_cleanup"
     "test_with_autoscaler_file_descriptor_safety"
     "test_with_file_descriptor_safety"
+    # OverflowError: Python int too large to convert to C int
+    "test_fd_by_path"
+    "test_open"
   ];
 
   pythonImportsCheck = [ "celery" ];
@@ -145,9 +217,9 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
-    changelog = "https://github.com/celery/celery/blob/${src.tag}/Changelog.rst";
+    changelog = "https://github.com/celery/celery/blob/${finalAttrs.src.tag}/Changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "celery";
   };
-}
+})

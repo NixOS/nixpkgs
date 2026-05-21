@@ -3,7 +3,6 @@
   lib,
   stdenv,
   replaceVars,
-  fetchpatch,
   accountsservice,
   adwaita-icon-theme,
   blueprint-compiler,
@@ -69,19 +68,20 @@
   upower,
   wayland-scanner,
   libepoxy,
+  gmobile,
   gnome-user-share,
   gnome-remote-desktop,
   wrapGAppsHook4,
-  xorgserver,
+  xorg-server,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "49.3";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-z5PTcWT6LhC+bwjxXrkXsfHqf53Zusfen/3YEvqNnPw=";
+    hash = "sha256-64MkkdCI5PdCbopZKxBCikWlc2wL/+IQXFHExow6Ud0=";
   };
 
   patches = [
@@ -89,15 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
       gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
-    })
-
-    # Fix crash when switching to hands-free mode on a bluetooth headset
-    (fetchpatch {
-      name = "fix-bluetooth-handsfree-crash.patch";
-      url = "https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/merge_requests/31.patch";
-      hash = "sha256-jFbItlXT05nnp825R/HvsWDFxAMzL4z36CsxhQ2sEIY=";
-      stripLen = 1;
-      extraPrefix = "subprojects/gvc/";
     })
   ];
 
@@ -126,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gcr_4
+    gmobile
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
@@ -171,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3 # for test-networkmanager-service.py
     python3.pkgs.python-dbusmock
     setxkbmap
-    xorgserver # for Xvfb
+    xorg-server # for Xvfb
   ];
 
   doCheck = true;

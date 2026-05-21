@@ -16,7 +16,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-sharp";
   version = "2.12.45";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mono";
     repo = "gtk-sharp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1vy6yfwkfv6bb45bzf4g6dayiqkvqqvlr02rsnhd10793hlpqlgg";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    ./bootstrap-${lib.versions.majorMinor version}
+    ./bootstrap-${lib.versions.majorMinor finalAttrs.version}
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2;
   };
-}
+})

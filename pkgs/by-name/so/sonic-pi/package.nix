@@ -274,5 +274,6 @@ stdenv.mkDerivation (finalAttrs: {
       sohalt
     ];
     platforms = lib.platforms.linux;
+    broken = true;
   };
 })

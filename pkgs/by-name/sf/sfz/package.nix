@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sfz";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "weihanglo";
     repo = "sfz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mKH1vgk+3tZEnjJRkfa0dDR383VN1VLNd3HEzC7f8YI=";
   };
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "sfz";
   };
-}
+})

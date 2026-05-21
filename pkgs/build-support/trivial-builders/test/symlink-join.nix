@@ -55,6 +55,24 @@ in
     '';
   };
 
+  symlinkJoin-structured-attrs = testEqualContents {
+    assertion = "symlinkJoin-structured-attrs";
+    actual = symlinkJoin {
+      __structuredAttrs = true;
+      name = "symlinkJoin-structured-attrs";
+      paths = [
+        foo
+        bar
+        baz
+      ];
+    };
+    expected = runCommand "symlinkJoin-foo-bar-baz" { } ''
+      mkdir -p $out/{var/lib/arbitrary,etc/test.d}
+      ln -s {${foo},${bar}}/etc/test.d/* $out/etc/test.d
+      ln -s ${baz}/var/lib/arbitrary/baz $out/var/lib/arbitrary/
+    '';
+  };
+
   symlinkJoin-strip-paths = testEqualContents {
     assertion = "symlinkJoin-strip-paths";
     actual = symlinkJoin {

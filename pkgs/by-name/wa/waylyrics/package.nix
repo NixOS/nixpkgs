@@ -8,14 +8,14 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "waylyrics";
   version = "0.3.21";
 
   src = fetchFromGitHub {
     owner = "waylyrics";
     repo = "waylyrics";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uXAcoy5fnnkqtmGmaEC6Ceu+dwmZKDPOFzxC4COuDbk=";
   };
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::netease_lyric::get_netease_lyric" # Requires network access
   ];
 
-  WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
+  env.WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
 
   postInstall = ''
     # Install themes
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -22,24 +22,24 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "i686-linux" then
       (fetchurl {
         url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.x86-linux.tgz";
-        sha256 = "1kxjjmnw4xk2d9hpvz43w9dvyhb3025k4zvjx785c33nrwkrdn4j";
+        hash = "sha256-ktiWJ892DFbQ6XJ/MosAY0G/W+KD/H1hamJ2wm2Vss8=";
       })
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       (fetchurl {
         url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-linux.tgz";
-        sha256 = "0fyhwxb4nmpirjbjcvk9f6w67gmn2gkz7xcgz0xbfih9kc015ygn";
+        hash = "sha256-9vkSAJsJRrc6+I/18+cTtr5juHFpbiaXzPFWS1bn0Ds=";
       })
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       (fetchurl {
         url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-darwin.gmp-macports.tgz";
-        sha256 = "044wnh9hhg6if886xy805683k0as347xd37r0r1yi4x7qlxzzgx9";
+        hash = "sha256-qb//O8Wnk+hDBvmM1g8ZWoE5kCkA+W4QctE8CBO0nBA=";
       })
     else
       throw "Architecture not supported";
 
   codeSrc = fetchurl {
     url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}.src.tgz";
-    sha256 = "0v1x2hrh9hiqkvnbq11kf34v4i5a2x0ffxbzqaa8skyl26nmfn11";
+    hash = "sha256-IVhXrRHUT42Uwn9150AXqkSyyXAzBLzsnjjCBDMUPWw=";
   };
 
   srcs = [

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
+    description = "Color emoji SVGinOT font using Twitter Unicode 15 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for
       Everyone artwork with support for ZWJ, skin tone diversity and country

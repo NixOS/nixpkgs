@@ -6,15 +6,15 @@
   ppp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xl2tpd";
-  version = "1.3.19";
+  version = "1.3.20";
 
   src = fetchFromGitHub {
     owner = "xelerance";
     repo = "xl2tpd";
-    rev = "v${version}";
-    sha256 = "sha256-Oyy64b5xrKOYSkiCtWksh0vKGDXHsmUNlNgVTRXftOw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-T4oEMMLb/SPkXfJ55fxBx9ii98qZVZRxPoU/eXlKb4U=";
   };
 
   buildInputs = [ libpcap ];
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -std=gnu17";
 
   meta = {
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     description = "Layer 2 Tunnelling Protocol Daemon (RFC 2661)";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

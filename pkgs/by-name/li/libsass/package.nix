@@ -44,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C/C++ implementation of a Sass compiler";
     homepage = "https://github.com/sass/libsass";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      codyopel
-      offline
+    maintainers = [
     ];
     pkgConfigModules = [ "libsass" ];
     platforms = lib.platforms.unix;

@@ -4,14 +4,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symlinks";
   version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "brandt";
     repo = "symlinks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "EMWd7T/k4v1uvXe2QxhyPoQKUpKIUANE9AOwX461FgU=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "symlinks";
   };
-}
+})

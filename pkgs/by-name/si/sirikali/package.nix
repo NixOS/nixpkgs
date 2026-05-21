@@ -20,15 +20,15 @@
   withLibsecret ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sirikali";
-  version = "1.8.4";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "sirikali";
-    rev = version;
-    hash = "sha256-vrhHpQzTwiU0NGcXRBt9mtr5qbwL3LEtZYoYc+IkJHw=";
+    rev = finalAttrs.version;
+    hash = "sha256-x3YCnIAPAJ5mOUboo+8Wg8ePyPYKoO++aSh3nSOj00I=";
   };
 
   buildInputs = [
@@ -71,10 +71,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, securefs, fscrypt and encfs";
     homepage = "https://github.com/mhogomchungu/sirikali";
-    changelog = "https://github.com/mhogomchungu/sirikali/blob/${src.rev}/changelog";
+    changelog = "https://github.com/mhogomchungu/sirikali/blob/${finalAttrs.src.rev}/changelog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "sirikali";
     platforms = lib.platforms.all;
   };
-}
+})

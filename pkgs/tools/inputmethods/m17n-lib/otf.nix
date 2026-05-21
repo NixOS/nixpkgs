@@ -5,7 +5,7 @@
   fetchpatch,
   pkg-config,
   autoreconfHook,
-  xorg,
+  libxaw,
   freetype,
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXaw
+    libxaw
     freetype
   ];
 

@@ -19,14 +19,14 @@
 
   extraPackages ? [ ],
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ags";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Aylur";
     repo = "ags";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GLyNtU9A2VN22jNRHZ2OXuFfTJLh8uEVVt+ftsKUX0c=";
   };
 
@@ -62,7 +62,7 @@ buildGoModule rec {
       depsOf = pkg: [ (pkg.dev or pkg) ] ++ (map depsOf (pkg.propagatedBuildInputs or [ ]));
       girDirs = symlinkJoin {
         name = "gir-dirs";
-        paths = lib.flatten (map depsOf buildInputs);
+        paths = lib.flatten (map depsOf finalAttrs.buildInputs);
       };
     in
     ''
@@ -102,7 +102,7 @@ buildGoModule rec {
   meta = {
     description = "Scaffolding CLI for Astal widget system";
     homepage = "https://github.com/Aylur/ags";
-    changelog = "https://github.com/Aylur/ags/releases/tag/v${version}";
+    changelog = "https://github.com/Aylur/ags/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       PerchunPak
@@ -111,4 +111,4 @@ buildGoModule rec {
     mainProgram = "ags";
     platforms = lib.platforms.linux;
   };
-}
+})

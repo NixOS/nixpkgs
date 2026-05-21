@@ -29,7 +29,16 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   fribidi,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libsm,
+  libice,
   libepoxy,
   libxkbcommon,
   libxml2,
@@ -38,8 +47,8 @@
   sassc,
   trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform),
   tinysparql,
-  x11Support ? stdenv.hostPlatform.isLinux,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
+  x11Support ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD,
+  waylandSupport ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD,
   libGL,
   wayland,
   wayland-protocols,
@@ -62,7 +71,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.51";
+  version = "3.24.52";
 
   outputs = [
     "out"
@@ -82,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-      hash = "sha256-ABOHfGvSPC2+Qq18cKBT0ORJvmZzZXTjeGfEnF+QWk8=";
+      hash = "sha256-gJMfpHKne5oWT2dA48C0RPrGdwBUYy01p/+dZ55ee58=";
     };
 
   patches = [
@@ -161,20 +170,17 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gsettings-desktop-schemas
   ]
-  ++ lib.optionals x11Support (
-    with xorg;
-    [
-      libICE
-      libSM
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-    ]
-  )
+  ++ lib.optionals x11Support [
+    libice
+    libsm
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+  ]
   ++ [
     # TODO: Reorder me on `staging`.
     pango
@@ -185,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ]
   ++ lib.optionals xineramaSupport [
-    xorg.libXinerama
+    libxinerama
   ]
   ++ lib.optionals cupsSupport [
     cups

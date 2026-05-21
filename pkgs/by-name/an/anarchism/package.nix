@@ -5,7 +5,7 @@
   xdg-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "anarchism";
   version = "15.3-1";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "anarchism";
-    rev = "debian/${version}";
+    rev = "debian/${finalAttrs.version}";
     sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ davidak ];
     platforms = with lib.platforms; all;
   };
-}
+})

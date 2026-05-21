@@ -3,8 +3,9 @@
 # succeeds, and all other jobs have finished (they may fail).
 
 {
+  lib ? (import ../lib),
   nixpkgs ? {
-    outPath = (import ../lib).cleanSource ./..;
+    outPath = lib.cleanSource ./..;
     revCount = 56789;
     shortRev = "gfedcba";
   },
@@ -28,7 +29,7 @@ let
       if (set.type or "") == "derivation" then
         set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
-        pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
+        lib.mapAttrs (n: v: removeMaintainers v) set
     else
       set;
 
@@ -43,12 +44,12 @@ rec {
     }
   );
 
-  nixpkgs = removeAttrs (removeMaintainers (
+  nixpkgs = removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
     }
-  )) [ "unstable" ];
+  );
 
   tested =
     let
@@ -57,7 +58,7 @@ rec {
       onSystems =
         systems: x:
         map (system: "${x}.${system}") (
-          pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
+          lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
         );
     in
     pkgs.releaseTools.aggregate {
@@ -66,7 +67,7 @@ rec {
         description = "Release-critical builds for the NixOS channel";
         maintainers = [ ];
       };
-      constituents = pkgs.lib.concatLists [
+      constituents = lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
@@ -102,6 +103,24 @@ rec {
         (onFullSupported "nixos.tests.gnome")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
+        (onSystems [ "aarch64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleUefiSystemdBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSimple")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvolDefault")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvolEscape")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvols")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.luksroot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.lvm")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBootZfs")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBootFat")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleLabels")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleProvided")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleUefiSystemdBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simple")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.swraid")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.zfsroot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.nixos-rebuild-specialisations")
+        # Scripted stage 1 installer tests, remove in 26.11
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSimple")
         (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSubvolDefault")
@@ -165,6 +184,8 @@ rec {
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems [ "x86_64-linux" ] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
+        (onFullSupported "nixos.tests.systemd-initrd-networkd-ssh")
+        # Scripted stage 1 SSH test, remove in 26.11
         (onFullSupported "nixos.tests.initrd-network-ssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
@@ -190,6 +211,8 @@ rec {
         (onFullSupported "nixpkgs.jdk")
         (onSystems [ "x86_64-linux" ] "nixpkgs.mesa_i686") # i686 sanity check + useful
         [
+          # Include all release-critical jobs from nixpkgs-unstable channel
+          "nixpkgs.unstable"
           "nixpkgs.tarball"
           "nixpkgs.release-checks"
         ]

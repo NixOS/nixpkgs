@@ -8,14 +8,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diskscan";
   version = "0.21";
 
   src = fetchFromGitHub {
     owner = "baruch";
     repo = "diskscan";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-2y1ncPg9OKxqImBN5O5kXrTsuwZ/Cg/8exS7lWyZY1c=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     mainProgram = "diskscan";
   };
-}
+})

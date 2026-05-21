@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     homepage = "https://developer-old.gnome.org/ORBit2/";
     description = "CORBA 2.4-compliant Object Request Broker";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
 
     longDescription = ''
       ORBit2 is a CORBA 2.4-compliant Object Request Broker (ORB) featuring

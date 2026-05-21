@@ -7,7 +7,7 @@
 
   # for passthru.tests
   libfido2,
-  mysql80,
+  mysql84,
   openssh,
   systemd,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ cmocka ];
 
   passthru.tests = {
-    inherit libfido2 mysql80;
+    inherit libfido2 mysql84;
     openssh = (openssh.override { withFIDO = true; });
     systemd = (
       systemd.override {

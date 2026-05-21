@@ -6,7 +6,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terminal-colors";
   version = "3.0.2";
   outputs = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eikenb";
     repo = "terminal-colors";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KRoP/Reo5nDKJYG9zVTVpoYL7soAGMNk46vDoaLfnv4=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kaction ];
     mainProgram = "terminal-colors";
   };
-}
+})

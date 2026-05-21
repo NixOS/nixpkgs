@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-deadlinks";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "deadlinks";
     repo = "cargo-deadlinks";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0s5q9aghncsk9834azn5cgnn5ms3zzyjan2rq06kaqcgzhld4cjh";
   };
 
@@ -20,20 +20,21 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # uses internet
-    "--skip non_existent_http_link --skip working_http_check"
+    "--skip=non_existent_http_link"
+    "--skip=working_http_check"
     # makes assumption about HTML paths that changed in rust 1.82.0
-    "--skip simple_project::it_checks_okay_project_correctly"
-    "--skip cli_args::it_passes_arguments_through_to_cargo"
+    "--skip=simple_project::it_checks_okay_project_correctly"
+    "--skip=cli_args::it_passes_arguments_through_to_cargo"
   ]
-  ++
-    lib.optional (stdenv.hostPlatform.system != "x86_64-linux")
-      # assumes the target is x86_64-unknown-linux-gnu
-      "--skip simple_project::it_checks_okay_project_correctly";
+  ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+    # assumes the target is x86_64-unknown-linux-gnu
+    "--skip=simple_project::it_checks_okay_project_correctly"
+  ];
 
   meta = {
     description = "Cargo subcommand to check rust documentation for broken links";
     homepage = "https://github.com/deadlinks/cargo-deadlinks";
-    changelog = "https://github.com/deadlinks/cargo-deadlinks/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/deadlinks/cargo-deadlinks/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -43,4 +44,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

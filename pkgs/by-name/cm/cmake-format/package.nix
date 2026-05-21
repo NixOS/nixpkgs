@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cmake-format";
   version = "0.6.13";
   # The source distribution does not build because of missing files.
   format = "wheel";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     format = "wheel";
     pname = "cmakelang";
     sha256 = "0kmggnfbv6bba75l3zfzqwk0swi90brjka307m2kcz2w35kr8jvn";
@@ -35,4 +35,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ tobim ];
     mainProgram = "cmake-format";
   };
-}
+})

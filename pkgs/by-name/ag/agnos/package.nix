@@ -6,14 +6,14 @@
   openssl,
   pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agnos";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "krtab";
     repo = "agnos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wHzKHduxqG7PBsGK39lCRyzhf47mdjCXhn3W1pOXQO0=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
   };
 
   passthru.tests = nixosTests.agnos;
-}
+})

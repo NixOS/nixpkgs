@@ -4,17 +4,27 @@
   buildPythonPackage,
   postgresql,
   unittestCheckHook,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgsanity";
-  version = "0.2.9";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "de0bbd6fe4f98bf5139cb5f466eac2e2abaf5a7b050b9e4867b87bf360873173";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Po/DPQpk54w1gWOL9aArN6I8dmMb7uRYxuRMI6MIDKU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.19,<0.9.0" uv_build
+  '';
+
+  build-system = [
+    uv-build
+  ];
 
   nativeCheckInputs = [
     unittestCheckHook
@@ -41,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nalbyuites ];
   };
-}
+})

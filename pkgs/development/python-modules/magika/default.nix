@@ -26,7 +26,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "magika";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   # Use pypi tarball instead of GitHub source
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   # while GitHub source requires compiling magika-cli
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-MT+Mv83Jp+VcJChicyMKJzK4mCXlipPeK1dlMTk7g5g=";
+    hash = "sha256-jtkS2PFNBE9D/b0X1r0svdbouCRuib5J9s1UcFNjZnc=";
   };
 
   postPatch = ''

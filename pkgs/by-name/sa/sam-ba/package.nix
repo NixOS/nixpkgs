@@ -9,12 +9,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.5";
   pname = "sam-ba";
 
   src = fetchzip {
-    url = "https://ww1.microchip.com/downloads/en/DeviceDoc/sam-ba_${version}-linux_x86_64.tar.gz";
+    url = "https://ww1.microchip.com/downloads/en/DeviceDoc/sam-ba_${finalAttrs.version}-linux_x86_64.tar.gz";
     sha256 = "1k0nbgyc98z94nphm2q7s82b274clfnayf4a2kv93l5594rzdbp1";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

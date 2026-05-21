@@ -7,14 +7,14 @@
   kubectl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kubetail";
   version = "1.6.22";
 
   src = fetchFromGitHub {
     owner = "johanhaleby";
     repo = "kubetail";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-iCZoK9is3Zpew0q61ZpG/OK3RLU4Fb6XCh7eVaVrTEY=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

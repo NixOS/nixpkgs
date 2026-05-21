@@ -10,7 +10,7 @@
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.4" then
-      "1.24.0"
+      "1.25.0"
     else if lib.versionAtLeast ocaml.version "5.3" then
       "1.23.1"
     else if lib.versionAtLeast ocaml.version "5.2" then
@@ -28,6 +28,11 @@
 let
   params =
     {
+      "1.25.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-4xXSvvP4lwmtJXCEaSeZblT/ja/OJRGIgWq5fO8h8CA=";
+      };
       "1.24.0" = {
         name = "lsp";
         minimalOCamlVersion = "5.3";
@@ -82,7 +87,7 @@ let
     ."${version}";
 in
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "jsonrpc";
   inherit version;
   src = fetchurl {

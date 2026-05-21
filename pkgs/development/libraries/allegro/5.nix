@@ -14,22 +14,22 @@
   libGLU,
   libjpeg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libpulseaudio,
   libtheora,
   libvorbis,
   libwebp,
-  libX11,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXi,
-  libXpm,
-  libXt,
-  libXxf86dga,
-  libXxf86misc,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxi,
+  libxpm,
+  libxt,
+  libxxf86dga,
+  libxxf86misc,
+  libxxf86vm,
   openal,
   physfs,
   pkg-config,
@@ -46,22 +46,16 @@ assert useSDL -> sdl2-compat != null;
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version = "5.2.10.1";
+  version = "5.2.11.3";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "sha256-agE3K+6VhhG/LO52fiesCsOq1fNYVRhdW7aKdPCbTOo=";
+    hash = "sha256-Nyab9ytqMZT9no2MT0vDe9tDVxXc6dwScHZ1uMVh+nE=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "Bump-CMake-minimum-version-to-3.5";
-      url = "https://github.com/liballeg/allegro5/commit/6e93fcaabaafd81701f4cd1b74f4b69dd598bc9b.patch?full_index=1";
-      hash = "sha256-IEnn66bS2m6MVFCNf341yLtd7jTl2gflL5EFJFmbEt4=";
-    })
-  ];
+  patches = [ ];
 
   nativeBuildInputs = [
     cmake
@@ -90,19 +84,19 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libpthreadstubs
+    libpthread-stubs
     libpulseaudio
-    libX11
-    libXcursor
-    libXdmcp
-    libXext
-    libXfixes
-    libXi
-    libXpm
-    libXt
-    libXxf86dga
-    libXxf86misc
-    libXxf86vm
+    libx11
+    libxcursor
+    libxdmcp
+    libxext
+    libxfixes
+    libxi
+    libxpm
+    libxt
+    libxxf86dga
+    libxxf86misc
+    libxxf86vm
     xorgproto
   ]
   ++ lib.optionals useSDL [

@@ -17,17 +17,14 @@
 
 let
   inherit (lib) optionals versionOlder;
-
+in
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "vg";
   version = "0.9.5";
-  webpage = "https://erratique.ch/software/${pname}";
-in
-stdenv.mkDerivation {
-
-  name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchurl {
-    url = "${webpage}/releases/${pname}-${version}.tbz";
+    url = "https://erratique.ch/software/vg/releases/vg-${finalAttrs.version}.tbz";
     hash = "sha256-qcTtvIfSUwzpUZDspL+54UTNvWY6u3BTvfGWF6c0Jvw=";
   };
 
@@ -71,11 +68,11 @@ stdenv.mkDerivation {
       Renderers for PDF, SVG and the HTML canvas are distributed with the
       module. An API allows to implement new renderers.
     '';
-    homepage = webpage;
+    homepage = "https://erratique.ch/software/vg";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.jirkamarsik ];
     mainProgram = "vecho";
     inherit (ocaml.meta) platforms;
     broken = versionOlder ocaml.version "4.14";
   };
-}
+})

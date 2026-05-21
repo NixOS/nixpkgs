@@ -69,8 +69,7 @@ in
 
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = !(config.environment.etc ? "resolv.conf");
-        defaultText = lib.literalExpression ''!(config.environment.etc ? "resolv.conf")'';
+        default = true;
         description = ''
           Whether DNS configuration is managed by resolvconf.
         '';
@@ -170,6 +169,17 @@ in
     }
 
     (lib.mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = !(config.environment.etc ? "resolv.conf");
+          message = ''
+            networking.resolvconf.enable is true but environment.etc."resolv.conf"
+            is also set. Set networking.resolvconf.enable = false if another
+            service manages /etc/resolv.conf.
+          '';
+        }
+      ];
+
       users.groups.resolvconf = { };
 
       networking.resolvconf.subscriberFiles = [ "/etc/resolv.conf" ];

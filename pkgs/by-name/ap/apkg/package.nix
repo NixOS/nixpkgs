@@ -8,7 +8,7 @@
   fakeroot,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apkg";
   version = "1.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.nic.cz";
     owner = "packaging";
     repo = "apkg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UQHiG6clAt+pmc0MTCkO4NIzr8TZmJ6Yd/T0YTkBxv0=";
   };
 
@@ -71,4 +71,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "apkg";
   };
-}
+})

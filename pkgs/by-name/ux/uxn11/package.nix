@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    xorg.libX11
+    libx11
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     mainProgram = "uxn11";
     maintainers = with lib.maintainers; [ jleightcap ];
-    inherit (xorg.libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 }

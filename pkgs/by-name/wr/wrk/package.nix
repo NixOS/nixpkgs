@@ -7,14 +7,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wrk";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "wg";
     repo = "wrk";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-nCfA444p7krXOB3qRtDKWxWj9tsrDZsGf03ThtE1dXM=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "WITH_LUAJIT=${luajit}"
     "WITH_OPENSSL=${openssl.dev}"
-    "VER=${version}"
+    "VER=${finalAttrs.version}"
   ];
 
   preBuild = ''
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "wrk";
   };
-}
+})

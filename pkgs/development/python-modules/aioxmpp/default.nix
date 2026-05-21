@@ -5,7 +5,7 @@
   babel,
   buildPythonPackage,
   dnspython,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lxml,
   multidict,
   pyasn1-modules,
@@ -24,8 +24,7 @@ buildPythonPackage rec {
   version = "0.13.3";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jssfr";
     repo = "aioxmpp";
     tag = "v${version}";
@@ -92,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pure-python XMPP library for asyncio";
     homepage = "https://codeberg.org/jssfr/aioxmpp";
-    changelog = "https://codeberg.org/jssfr/aioxmpp/blob/${src.rev}/docs/api/changelog.rst";
+    changelog = "https://codeberg.org/jssfr/aioxmpp/src/tag/${src.tag}/docs/api/changelog.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

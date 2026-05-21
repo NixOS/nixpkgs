@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ppdeep";
-  version = "20251115";
+  version = "20260221";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xv21EXsO6/vpGhF7PIn03l0WGnoMGi0wI6BlpnZye3w=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-i+H0Fkt60vfEClGmZNMXZwHkCy+cG5bRju/68G3+/5Q=";
   };
 
   build-system = [ setuptools ];
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

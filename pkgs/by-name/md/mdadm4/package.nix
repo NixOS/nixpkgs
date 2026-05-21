@@ -13,13 +13,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mdadm";
   version = "4.4";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
-    tag = "mdadm-${version}";
+    tag = "mdadm-${finalAttrs.version}";
     hash = "sha256-jGmc8fkJM0V9J7V7tQPXSF/WD0kzyEAloBAwaAFenS0=";
   };
 
@@ -43,12 +43,17 @@ stdenv.mkDerivation rec {
     "INSTALL=install"
     "BINDIR=$(out)/sbin"
     "SYSTEMD_DIR=$(out)/lib/systemd/system"
-    "MANDIR=$(out)/share/man"
+    "MANDIR=$(man)/share/man"
     "RUN_DIR=/dev/.mdadm"
     "STRIP="
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   installFlags = [ "install-systemd" ];
@@ -98,4 +103,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mdadm";
     platforms = lib.platforms.linux;
   };
-}
+})

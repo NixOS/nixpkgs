@@ -2,8 +2,9 @@
   lib,
   organicmaps,
   fetchurl,
-  fetchFromGitea,
+  fetchFromCodeberg,
   boost,
+  expat,
   gtest,
   glm,
   gflags,
@@ -16,16 +17,16 @@
 }:
 let
   # https://codeberg.org/comaps/comaps/src/branch/main/data/countries.txt
-  mapRev = 250906;
+  mapRev = 260321;
 
   worldMap = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/World.mwm";
-    hash = "sha256-0LjCDVk3vShmn+yHc/SvfJzrj170pO52CqbdKWqTsI4=";
+    hash = "sha256-pMmzPcWbS9drQzJCfiac2dfSMihiHDfhFyG5ux0pG54=";
   };
 
   worldCoasts = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/WorldCoasts.mwm";
-    hash = "sha256-2BP6ET8DM3v0KMlzYx+lS0l26WSONQpb4fCMri8Aj2o=";
+    hash = "sha256-5LI6itC6LhprVfgGbT/HYy1lzZLZLUe2QoSil0/7kIc=";
   };
 
   pythonEnv = python3.withPackages (
@@ -36,19 +37,17 @@ let
 in
 organicmaps.overrideAttrs (oldAttrs: rec {
   pname = "comaps";
-  version = "2025.11.07-2";
+  version = "2026.03.23-5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "comaps";
     repo = "comaps";
     tag = "v${version}";
-    hash = "sha256-m1YOA24Avoia6YMXKcsuCdPwzxdn7Qc3kZLXGsWjTbs=";
+    hash = "sha256-1bD0QiEZu6nB7wwBpfpEf+WypqbOd9XuXbq7FDTL7bw=";
     fetchSubmodules = true;
   };
 
   patches = [
-    ./remove-lto.patch
     ./use-vendored-protobuf.patch
 
     # Include missing editor_tests_support.
@@ -60,8 +59,8 @@ organicmaps.overrideAttrs (oldAttrs: rec {
     substituteInPlace configure.sh \
       --replace-fail "git submodule update --init --recursive --depth 1" ""
 
-    patchShebangs tools/unix/generate_categories.sh
-    substituteInPlace tools/python/categories/json_to_txt.py \
+    patchShebangs tools/unix/*
+    substituteInPlace tools/python/{categories/json_to_txt.py,generate_desktop_ui_strings.py} \
       --replace-fail "/usr/bin/env python3" "${pythonEnv.interpreter}"
   '';
 
@@ -72,6 +71,7 @@ organicmaps.overrideAttrs (oldAttrs: rec {
 
   buildInputs = (oldAttrs.buildInputs or [ ]) ++ [
     boost
+    expat
     gtest
     gflags
     glm

@@ -8,14 +8,14 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.2p4";
   pname = "libow";
 
   src = fetchFromGitHub {
     owner = "owfs";
     repo = "owfs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0dln1ar7bxwhpi36sccmpwapy7iz4j097rbf02mgn42lw5vrcg3s";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ disserman ];
     platforms = lib.platforms.unix;
   };
-}
+})

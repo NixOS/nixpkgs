@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openapi-tui";
   version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "zaghaghi";
     repo = "openapi-tui";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-rC0lfWZpiiAAShyVDqr1gKTeWmWC+gVp4UmL96Y81mE=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "openapi-tui";
   };
-}
+})

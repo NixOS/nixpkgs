@@ -51,7 +51,8 @@
   deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
-  rustSupport ? false,
+  testers,
+  rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
 }:
@@ -61,7 +62,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.52.0";
+  version = "2.54.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -103,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-PNj+6G9pqUnLYQ/ujNkmTmhz0H+lhBH2Bgs9YnKe18U=";
+    hash = "sha256-9okWI2TBDeee+Jqo2/SHMesFfjTtu9IKylEM4BVGgaM=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -123,6 +124,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./git-sh-i18n.patch
     # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
+    # The 'total N' header from ls -l is unstable on ZFS and similar
+    # filesystems, causing spurious failures.
+    # https://github.com/NixOS/nixpkgs/issues/498789
+    (fetchurl {
+      name = "t7703-ignore-ls-total.patch";
+      url = "https://lore.kernel.org/git/20260504101429.340123-1-joerg@thalheim.io/raw";
+      hash = "sha256-44EPfEJ39LjPWjqjFb52EKNaJGzYxZzJaJOis8QnazU=";
+    })
     # Address test failure (new in 2.52.0) caused by `git-gui--askyesno` being
     # installed by `make install`.
     (fetchurl {
@@ -130,12 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
       hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
     })
-    # Fixes t8020 test on big-endian
-    (fetchurl {
-      name = "last-modified-fix-bug-caused-by-inproper-initialized-memory.patch";
-      url = "https://lore.kernel.org/git/20251128-toon-big-endian-ci-v1-1-80da0f629c1e@iotcl.com/raw";
-      hash = "sha256-WdewOwD7hMhnahhUUEYAlM58tT3MkxUlBa3n8IwrESU=";
-    })
+  ]
+  ++ lib.optionals rustSupport [
+    # The above patch doesn’t work with Rust support enabled.
+    ./osxkeychain-link-rust_lib.patch
   ]
   ++ lib.optionals withSsh [
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
@@ -159,6 +166,11 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace "$x" \
         --subst-var-by ssh "${openssh}/bin/ssh"
     done
+  ''
+  + lib.optionalString (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) ''
+    substituteInPlace Makefile \
+      --replace-fail "RUST_TARGET_DIR = target/" \
+                     "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.cargoShortTarget}/"
   '';
 
   nativeBuildInputs = [
@@ -200,10 +212,16 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
   ];
 
-  # required to support pthread_cancel()
-  env.NIX_LDFLAGS =
-    lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
-    + lib.optionalString (stdenv.hostPlatform.isFreeBSD) "-lthr";
+  env = {
+    # required to support pthread_cancel()
+    NIX_LDFLAGS =
+      lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
+      + lib.optionalString (stdenv.hostPlatform.isFreeBSD) "-lthr";
+  }
+  // lib.attrsets.optionalAttrs (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) {
+    # Rust cross-compilation
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+  };
 
   configureFlags = [
     "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"
@@ -277,7 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
     make -C contrib/diff-highlight "''${flagsArray[@]}"
   ''
   + lib.optionalString osxkeychainSupport ''
-    make -C contrib/credential/osxkeychain "''${flagsArray[@]}"
+    make -C contrib/credential/osxkeychain COMPUTE_HEADER_DEPENDENCIES=no "''${flagsArray[@]}"
   ''
   + lib.optionalString withLibsecret ''
     make -C contrib/credential/libsecret "''${flagsArray[@]}"
@@ -576,6 +594,13 @@ stdenv.mkDerivation (finalAttrs: {
       });
       buildbot-integration = nixosTests.buildbot;
     }
+    // lib.optionalAttrs svnSupport {
+      git-svn-version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "git svn --version";
+        version = "git-svn version ${version}";
+      };
+    }
     // tests.fetchgit;
     updateScript = ./update.sh;
   };
@@ -584,7 +609,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system";
     license = lib.licenses.gpl2;
-    changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.txt";
+    changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.adoc";
 
     longDescription = ''
       Git, a popular distributed version control system designed to
@@ -599,6 +624,8 @@ stdenv.mkDerivation (finalAttrs: {
       philiptaron
       zivarah
     ];
+    teams = [ lib.teams.security-review ];
     mainProgram = "git";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "git-scm" finalAttrs.version;
   };
 })

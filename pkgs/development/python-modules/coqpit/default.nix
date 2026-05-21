@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "coqpit-config";
-  version = "0.2.3";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-coqpit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WXzKXFnSGgt3aHY5yqPgNKd3ukJD7wZVNGddj981cDY=";
+    hash = "sha256-9tIx36wWC9JfbnSF8/TZtHRyiXn77ItNXLq9vDopdS4=";
   };
 
   build-system = [ hatchling ];

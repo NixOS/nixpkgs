@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   cmake,
   ninja,
@@ -25,7 +24,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unified-memory-framework";
-  version = "1.0.3";
+  version = "1.1.0";
 
   nativeBuildInputs = [
     cmake
@@ -44,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     level-zero
   ]
-  ++ lib.optionals useJemalloc [
-    hwloc
-  ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ]
@@ -56,20 +52,19 @@ stdenv.mkDerivation (finalAttrs: {
     gbenchmark
   ];
 
+  propagatedBuildInputs = [
+    hwloc
+  ];
+
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j7qQwBetICf1sTz+ssZQLm9P0SiH68lcEvtV1YLuW5s=";
+    hash = "sha256-1Z65rNsUNeaeSJmxwpEHPbiU4KEDvyrWL9LyAWFsR1c=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "gtest-use-find_package.patch";
-      url = "https://github.com/oneapi-src/unified-memory-framework/commit/503d302a72f719a3f11fce0e610f07a3793549d9.patch";
-      hash = "sha256-T29pJuWGcj/Kfw3VNW5lNBG5OrBsB1UAvwroQ+km4Vs=";
-    })
-  ];
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     # The CMake tries to find out the version via git.
@@ -81,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     # causing the package to link to /build
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${jemalloc_targ_BINARY_DIR}" "$out/jemalloc"
+
+    # $<BUILD_INTERFACE:hwloc> only links hwloc at build time, so the installed
+    # cmake targets omit it. Downstream static consumers (e.g. UR adapters in
+    # intel-llvm) then fail to link. Export hwloc unconditionally instead.
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse $<BUILD_INTERFACE:''${UMF_HWLOC_NAME}>)' \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse ''${UMF_HWLOC_NAME})'
   '';
 
   # If included, jemalloc needs to be vendored, as they don't support using a pre-built version
@@ -125,11 +128,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   dontUseNinjaCheck = true;
 
-  NIX_LDFLAGS = lib.optionalString finalAttrs.doCheck "-rpath ${
-    lib.makeLibraryPath [
-      onetbb
-    ]
-  }";
+  env = lib.optionalAttrs finalAttrs.doCheck {
+    NIX_LDFLAGS = "-rpath ${
+      lib.makeLibraryPath [
+        onetbb
+      ]
+    }";
+  };
 
   disabledTests = [
     # These tests try to access sysfs, which is unavailable in the sandbox
@@ -157,6 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.asl20
       lib.licenses.llvm-exception
     ];
-    maintainers = [ lib.maintainers.blenderfreaky ];
+    maintainers = [ lib.maintainers.kilyanni ];
   };
 })

@@ -206,7 +206,7 @@ For example, if you make a change to `texlive`, you probably would only check th
 
 #### Meets Nixpkgs contribution standards
 
-The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.md` file.
+The last two checkboxes are about whether it fits the guidelines in this `CONTRIBUTING.md` file.
 This document details our standards for commit messages, reviews, licensing of contributions, etc...
 Everyone should read and understand these standards before submitting a pull request.
 
@@ -329,11 +329,10 @@ You can invoke the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot mer
 The bot will verify the following conditions, refusing to merge otherwise:
 
 - the PR author should be @r-ryantm or a Nixpkgs committer;
-- the invoker should be among the package maintainers;
+- the invoker should be among the package maintainers on the targeted branch;
 - the package should reside in `pkgs/by-name`.
 
-Further, nixpkgs-merge-bot will ensure all CI checks and the ofborg builds for Linux have successfully completed before merging the pull request.
-Should the checks still be underway, the bot will wait for them to finish before attempting the merge again.
+Required status checks prevent PRs that fail them ("PR / ..." jobs) from being merged. Ofborg is not required by the checks.
 
 For other pull requests, please see [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
 
@@ -680,7 +679,7 @@ If you have any problems with formatting, please ping the [formatting team](http
   { buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null; }
   ```
 
-  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  As an exception, an explicit conditional expression with null can be used when fixing an important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
 - Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
@@ -865,7 +864,7 @@ If someone approved and didn't merge a few days later, they most likely just for
 Please see it as your responsibility to actively remind reviewers of your open PRs.
 
 The easiest way to do so is to notify them via GitHub.
-Github notifies people involved, whenever you add a comment or push to your PR or re-request their review.
+GitHub notifies people involved, whenever you add a comment or push to your PR or re-request their review.
 Doing any of that will get their attention again.
 Everyone deserves proper attention, and yes, that includes you!
 However, please be mindful that committers can sadly not always give everyone the attention they deserve.
@@ -889,3 +888,77 @@ As mentioned previously, it is unfortunately perfectly normal for a PR to sit ar
 
 Please don't blow up situations where progress is happening but is merely not going fast enough for your tastes.
 Honking in a traffic jam will not make you go any faster.
+
+# Automation/AI policy
+
+Every contribution to Nixpkgs and related development venues, including code, documentation, and communication on GitHub and Matrix, must have a **responsible person in the loop** who is accountable for that contribution and reviews it before submission, and must **transparently disclose** any non‐trivial use of automation to produce it, including but not limited to LLM‐based AI tools.
+
+The following sections give more detail.
+
+## Scope
+
+Any use of automated tools to generate non‐trivial amounts of output as part of a contribution, in whole or in part, verbatim or edited, is covered by this policy, except as listed in the Exemptions section.
+Both LLM‐based AI tools and hand‐written automation are covered.
+Contributions include code and documentation in commits, commit messages, pull request summaries and reviews, issue and vulnerability reports, GitHub comments, Matrix messages, and Discourse posts.
+The covered venues are the GitHub repositories for Nixpkgs and [related projects](https://github.com/orgs/NixOS/teams/nixpkgs-core/repositories) under the jurisdiction of the Nixpkgs core team, Matrix rooms that are focused on development of those projects, and Discourse topics about Nixpkgs development.
+
+## Accountability
+
+Everyone who submits a contribution to Nixpkgs is responsible for it, regardless of the use of automated tooling.
+Before submission, they must establish a reasonable level of understanding of the contribution and expectation of its correctness.
+A contributor submitting a contribution intended for inclusion in Nixpkgs is also responsible for ensuring that it is [appropriately licensed](https://github.com/NixOS/nixpkgs/blob/master/COPYING) and credited, and not encumbered by any incompatible copyright.
+
+When output from automated tooling is used in contributions, a contributor must establish confidence in that output.
+This can be achieved by establishing confidence in the correctness of the tooling’s logic, manual review of the included output, or using further automation to verify the output (e.g. programmatically checking whether a refactor avoids causing rebuilds).
+As the inner workings of LLM‐based AI tools cannot be sufficiently understood at present, only the latter two options are available when those are used; vibe coding without review is not permitted.
+When automation is used to verify output, the verification tooling itself must be disclosed and reviewed in line with this policy.
+
+This policy applies equally to any further discussion of a contribution.
+Comments and reviews must separately satisfy the same requirements of understanding, review, and disclosure.
+Contributors are expected to be able to answer questions about their contribution and respond to feedback appropriately, without simply forwarding messages back and forth to automated tools.
+
+It is not permitted to submit automated contributions without any manual review or intervention, outside of standard community automation.
+Automation without any manual review must not be used as the sole arbiter of whether to merge a change.
+
+## Transparency
+
+All covered use of automated tooling for a contribution must be disclosed as part of that contribution.
+
+In the case of LLM‐based AI tooling used for commits, this **must** be in the form of an `Assisted-by:` Git commit trailer, including at least the tool name and the primary model name and version used for the contribution.
+A `Co-authored-by:` trailer does not satisfy this policy.
+
+Any adequate form of disclosure is permitted for other kinds of tooling and contribution.
+Pull request summaries and review comments must be disclosed separately to commits.
+
+## Exemptions
+
+The following situations are fully or partially exempt:
+
+* Use of standard deterministic editor/IDE/formatter/text transformation tooling to produce changes that the author manually reviews and understands is exempt, including inline “auto‐completion” (even if LLM‐based) of short, rote snippets of text that do not contribute anything beyond boilerplate the author would have written anyway.
+
+* Use of standard community automation is exempt, such as `nix-update`, the official Nixpkgs CI bots, the @r-ryantm update bot, other maintainer‐approved bots that run update scripts, and the Nixpkgs security tracker bot.
+
+* Use of AI tools for research, testing, debugging, or private review is out of scope, if no substantial amount of their output is included in the resulting contribution.
+  However, if these tools had a significant technical influence on your contribution, you are still responsible for it per the Accountability section, and are expected to disclose this where relevant.
+
+* Use of machine translation is exempt from the requirement to understand the translated output.
+  However, the requirements of appropriate confidence in the original text, responsibility, and disclosure still apply, and you are encouraged to additionally include the original untranslated contribution.
+
+* Use of automation in a contribution clearly marked as not being ready for merge (e.g. a draft pull request) is exempt from the requirement for full self‐review, as long as some amount of review has been done and it is expected that the requirements will be met by the time it is marked as ready.
+  This does not waive any other requirement.
+
+* Use of automated tools to develop upstream software packaged inside Nixpkgs is not in scope.
+
+## Enforcement
+
+If you believe that someone is using automation without appropriate disclosure and review, you can politely ask them if that’s the case and point them to this policy as appropriate.
+Please assume good faith and remain civil; it’s not always possible to determine, and it is more likely that someone overlooked this policy than deliberately violated it.
+If you think someone is continuing to break the policy after this, please escalate to the [Nixpkgs core team](https://nixos.org/community/teams/nixpkgs-core/) rather than fighting over it.
+
+If a contribution is clearly in violation of the policy (e.g. the contributor admits it was not followed, or there are AI tool attributions that do not meet our required format), it can be closed or hidden, preferably after informing the contributor of the policy and giving them a chance to address the violations.
+Deliberate violations of this policy are considered to break the [Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) clause against “Wasting other people’s time with low quality contributions, including but not limited to LLM and bot spam”.
+Repeated violations are grounds for further moderation action.
+
+## Credits
+
+This policy takes inspiration from similar policies in [LLVM](https://llvm.org/docs/AIToolPolicy.html), [Mesa](https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.0-rc1/docs/submittingpatches.rst?ref_type=tags), [Fedora](https://docs.fedoraproject.org/en-US/council/policy/ai-contribution-policy/), and the [Linux kernel](https://docs.kernel.org/7.0/process/coding-assistants.html), along with [a proposal by the author of Anubis](https://xeiaso.net/notes/2025/assisted-by-footer/).

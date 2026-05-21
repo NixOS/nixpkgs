@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lokalise2-cli";
   version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "lokalise";
     repo = "lokalise-cli-2-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-weqYHKxu6HvdrFduzKtHtCVnJ0GVRGIPABLrsW4f0VA=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ timstott ];
     mainProgram = "lokalise2";
   };
-}
+})

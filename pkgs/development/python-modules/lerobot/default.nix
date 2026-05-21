@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -20,6 +21,7 @@
   huggingface-hub,
   imageio,
   jsonlines,
+  numpy,
   opencv-python-headless,
   packaging,
   pynput,
@@ -39,26 +41,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.4.2";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qBbXFvVQ+cESBrNy8NIoT6GR6dqzeLbRNe3JmcpiiTw=";
+    hash = "sha256-i4szKM8b766mAA0AxCHB4s1wEEZbGeBKGeGpLICVsrM=";
   };
-
-  # ValueError: mutable default <class 'lerobot.configs.types.PolicyFeature'> for field value is not allowed: use default_factory
-  postPatch = ''
-    substituteInPlace tests/processor/test_pipeline.py \
-      --replace-fail \
-        "from dataclasses import dataclass" \
-        "from dataclasses import dataclass, field" \
-      --replace-fail \
-        "value: PolicyFeature = PolicyFeature(type=FeatureType.STATE, shape=(1,))" \
-        "value: PolicyFeature = field(default_factory=lambda: PolicyFeature(type=FeatureType.STATE, shape=(1,)))"
-  '';
 
   build-system = [
     cmake
@@ -68,14 +59,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "av"
+    "diffusers"
     "draccus"
-    "gymnasium"
+    "numpy"
+    "opencv-python-headless"
     "rerun-sdk"
     "torch"
+    "torchcodec"
     "torchvision"
     "wandb"
   ];
-
   dependencies = [
     accelerate
     av
@@ -90,6 +83,7 @@ buildPythonPackage (finalAttrs: {
     huggingface-hub
     imageio
     jsonlines
+    numpy
     opencv-python-headless
     packaging
     pynput
@@ -101,9 +95,7 @@ buildPythonPackage (finalAttrs: {
     torchvision
     wandb
   ]
-  ++ imageio.optional-dependencies.ffmpeg
-  ++ huggingface-hub.optional-dependencies.hf_transfer
-  ++ huggingface-hub.optional-dependencies.cli;
+  ++ imageio.optional-dependencies.ffmpeg;
 
   pythonImportsCheck = [ "lerobot" ];
 
@@ -114,6 +106,17 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_add_frame"
+    "test_add_frame_state_numpy"
+    "test_data_consistency_across_episodes"
+    "test_delta_timestamps_query_returns_correct_values"
+    "test_episode_boundary_integrity"
+    "test_from_lerobot_dataset"
+    "test_statistics_metadata_validation"
+    "test_task_indexing_and_validation"
+    "test_to_lerobot_dataset"
+
     # RuntimeError: OpenCVCamera(/build/source/tests/artifacts/cameras/image_480x270.png) read failed
     "test_async_read"
     "test_fourcc_with_camer"
@@ -122,15 +125,25 @@ buildPythonPackage (finalAttrs: {
 
     # Require internet access
     "test_act_backbone_lr"
+    "test_all_items_have_subtask"
     "test_backward_compatibility"
+    "test_convert_image_to_video_dataset"
+    "test_convert_image_to_video_dataset_subset_episodes"
     "test_dataset_initialization"
     "test_factory"
     "test_from_pretrained_nonexistent_path"
+    "test_getitem_has_subtask_index"
+    "test_getitem_returns_subtask_string"
     "test_load_config_nonexistent_path_tries_hub"
     "test_make_env_from_hub_async"
     "test_make_env_from_hub_with_trust"
     "test_policy_defaults"
     "test_save_and_load_pretrained"
+    "test_subtask_dataset_loads"
+    "test_subtask_index_in_features"
+    "test_subtask_index_maps_to_valid_subtask"
+    "test_subtask_metadata_loaded"
+    "test_task_and_subtask_coexist"
 
     # TypeError: stack(): argument 'tensors' (position 1) must be tuple of Tensors, not Column
     "test_check_timestamps_sync_slightly_off"
@@ -157,6 +170,12 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: 'NoneType' object is not subscriptable
     "test_pi0_rtc_inference_with_prev_chunk"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_complementary_data_float_dtype_conversion"
+    "test_float_dtype_conversion"
+    "test_float_dtype_with_mixed_tensors"
   ];
 
   disabledTestPaths = [

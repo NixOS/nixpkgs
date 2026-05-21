@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spec-kit";
   version = "0.0.90";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "spec-kit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ulAii6//DT9uqLxYk6qmX6dwWWjhuARbBmjH5u1YGGM=";
   };
 
@@ -43,9 +43,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Bootstrap your projects for Spec-Driven Development (SDD)";
     homepage = "https://github.com/github/spec-kit";
-    changelog = "https://github.com/github/spec-kit/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/github/spec-kit/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luochen1990 ];
     mainProgram = "specify";
   };
-}
+})

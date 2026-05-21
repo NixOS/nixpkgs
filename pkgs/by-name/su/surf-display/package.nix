@@ -8,7 +8,8 @@
   matchbox,
   xdotool,
   unclutter,
-  xorg,
+  xmodmap,
+  xkbutils,
   pulseaudio,
   xprintidle-ng,
 }:
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
     pulseaudio
     xprintidle-ng
     xdotool
-    xorg.xmodmap
-    xorg.xkbutils
+    xmodmap
+    xkbutils
     unclutter
   ];
 

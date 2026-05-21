@@ -2,7 +2,7 @@
   stdenv,
   lib,
   gitUpdater,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fnott";
   version = "1.8.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "fnott";
     rev = finalAttrs.version;

@@ -35,6 +35,7 @@ When reviewing a modular service, you should check the following. Details and ra
 - [ ] `_class = "service"`
 - [ ] Modular services provided through `passthru.services` must override the default of the package option using `finalAttrs.finalPackage`
 - [ ] Is the modular services infrastructure sufficient for this service? If one or more features are not covered, comment in https://github.com/NixOS/nixpkgs/issues/428084
+- [ ] Has been added to `nixos/modules/misc/documentation/modular-services.nix`
 ```
 
 ## Details

@@ -1,10 +1,9 @@
 {
   lib,
-  fetchpatch,
   python3,
   fetchFromGitHub,
-  qt5,
   cups,
+  qt6,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,7 +23,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail ", 'lpr', " ", '${cups}/bin/lpr', "
   '';
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+
+  buildInputs = [ qt6.qtbase ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
@@ -37,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pyserial
     pycups
     qtconsole
-    pyqt5
+    pyqt6
   ];
 
   # QtApplication.instance() does not work during tests?

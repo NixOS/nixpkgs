@@ -259,6 +259,7 @@ let
 
     patches = [
       ./patches/llbuild-cmake-disable-rpath.patch
+      ./patches/llbuild-fix-missing-cstdint.patch
     ];
 
     postPatch = ''

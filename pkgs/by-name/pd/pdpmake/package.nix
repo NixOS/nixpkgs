@@ -3,14 +3,14 @@
   stdenv,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdpmake";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "rmyorston";
     repo = "pdpmake";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ivRXZxm9RAWSmNfiV7BhVzVFsBKuMMpKjub8ADinYyc=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     badPlatforms = lib.platforms.darwin; # Requires `uimensat`
   };
-}
+})

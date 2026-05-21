@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oh";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "michaelmacinnis";
     repo = "oh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ryIh6MRIOVZPm2USpJC69Z/upIXGUHgcd17eZBA9Edc=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
   passthru = {
     shellPath = "/bin/oh";
   };
-}
+})

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pandoc-katex";
   version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "xu-cheng";
     repo = "pandoc-katex";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2a3WJTNIMqWnTlHB+2U/6ifuoecbOlTP6e7YjD/UvPM=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pandoc-katex";
   };
-}
+})

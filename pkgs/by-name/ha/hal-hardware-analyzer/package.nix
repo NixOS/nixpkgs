@@ -19,14 +19,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.5.0";
   pname = "hal-hardware-analyzer";
 
   src = fetchFromGitHub {
     owner = "emsec";
     repo = "hal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4HLM/7JCDxWRWusGL4lUa8KXCn9pe3Vkr+lOxHOraNU=";
   };
 
@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = with lib.versions; [
-    "-DHAL_VERSION_RETURN=${version}"
-    "-DHAL_VERSION_MAJOR=${major version}"
-    "-DHAL_VERSION_MINOR=${minor version}"
-    "-DHAL_VERSION_PATCH=${patch version}"
+    "-DHAL_VERSION_RETURN=${finalAttrs.version}"
+    "-DHAL_VERSION_MAJOR=${major finalAttrs.version}"
+    "-DHAL_VERSION_MINOR=${minor finalAttrs.version}"
+    "-DHAL_VERSION_PATCH=${patch finalAttrs.version}"
     "-DHAL_VERSION_TWEAK=0"
     "-DHAL_VERSION_ADDITIONAL_COMMITS=0"
     "-DHAL_VERSION_DIRTY=false"
@@ -87,7 +87,9 @@ stdenv.mkDerivation rec {
   cmakeBuildType = "MinSizeRel";
 
   # https://github.com/emsec/hal/issues/598
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch64 "-flax-vector-conversions";
+  env = lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+    NIX_CFLAGS_COMPILE = "-flax-vector-conversions";
+  };
 
   # some plugins depend on other plugins and need to be able to load them
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -99,7 +101,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/emsec/hal/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/emsec/hal/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Comprehensive reverse engineering and manipulation framework for gate-level netlists";
     mainProgram = "hal";
     homepage = "https://github.com/emsec/hal";
@@ -107,7 +109,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       ris
-      shamilton
     ];
   };
-}
+})

@@ -10,14 +10,14 @@
 }:
 buildPythonPackage rec {
   pname = "skidl";
-  version = "2.0.1";
+  version = "2.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "devbisme";
     repo = "skidl";
-    tag = version;
-    sha256 = "sha256-EzKtXdQFB6kjaIuCYAsyFPlwmkefb5RJcnpFYCVHHb8=";
+    tag = "v${version}";
+    sha256 = "sha256-7rauFhaLXyZ5SGtEF7qoAbrj/VgP4qpl+BWUeERefb4=";
   };
 
   propagatedBuildInputs = [

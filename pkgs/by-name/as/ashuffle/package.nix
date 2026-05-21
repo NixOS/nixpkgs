@@ -10,15 +10,15 @@
   yaml-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ashuffle";
-  version = "3.14.9";
+  version = "3.14.10";
 
   src = fetchFromGitHub {
     owner = "joshkunz";
     repo = "ashuffle";
-    tag = "v${version}";
-    hash = "sha256-HQ4+vyTvX0mhfuRclbiC+MvllV3300ztAwL0IxrUiC8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nvmyup9hW/kI7Wwo5+1/FEoHd4kfMvYbttI8nJkLfVE=";
     fetchSubmodules = true;
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "ashuffle";
   };
-}
+})

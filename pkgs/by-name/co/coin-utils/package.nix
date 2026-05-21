@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.11.10";
   pname = "coinutils";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "CoinUtils";
-    rev = "releases/${version}";
+    rev = "releases/${finalAttrs.version}";
     hash = "sha256-Rbm45HRbRKQ6Cdup+gvKJ1xkK1HKG3irR5AIjhLer7g=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     description = "Collection of classes and helper functions that are generally useful to multiple COIN-OR projects";
     maintainers = with lib.maintainers; [ tmarkus ];
   };
-}
+})

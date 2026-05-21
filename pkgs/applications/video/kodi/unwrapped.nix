@@ -81,7 +81,7 @@
   harfbuzz,
   lcms2,
   libidn2,
-  libpthreadstubs,
+  libpthread-stubs,
   libtasn1,
   libplist,
   p11-kit,
@@ -92,17 +92,17 @@
   lirc,
   mesa-gl-headers,
   x11Support ? true,
-  libX11,
+  libx11,
   xorgproto,
-  libXt,
-  libXmu,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libXfixes,
+  libxt,
+  libxmu,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
+  libxfixes,
   xdpyinfo,
-  libXdmcp,
+  libxdmcp,
   dbusSupport ? true,
   dbus,
   joystickSupport ? true,
@@ -287,7 +287,6 @@ stdenv.mkDerivation (
       tinyxml-2
       taglib
       libssh
-      gtest
       ncurses
       spdlog
       alsa-lib
@@ -335,7 +334,7 @@ stdenv.mkDerivation (
       glib
       harfbuzz
       lcms2
-      libpthreadstubs
+      libpthread-stubs
       ffmpeg
       flatbuffers
       fstrcmp
@@ -350,16 +349,16 @@ stdenv.mkDerivation (
       zlib
     ]
     ++ lib.optionals x11Support [
-      libX11
+      libx11
       xorgproto
-      libXt
-      libXmu
-      libXext.dev
-      libXdmcp
-      libXinerama
-      libXrandr.dev
-      libXtst
-      libXfixes
+      libxt
+      libxmu
+      libxext.dev
+      libxdmcp
+      libxinerama
+      libxrandr.dev
+      libxtst
+      libxfixes
     ]
     ++ lib.optional dbusSupport dbus
     ++ lib.optional joystickSupport cwiid
@@ -405,6 +404,10 @@ stdenv.mkDerivation (
       waylandpp.bin
     ];
 
+    nativeCheckInputs = [
+      gtest
+    ];
+
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ];
@@ -445,9 +448,23 @@ stdenv.mkDerivation (
       "-DWITH_TEXTUREPACKER=${lib.getExe texturePacker}"
     ];
 
-    # 14 tests fail but the biggest issue is that every test takes 30 seconds -
-    # I'm guessing there is a thing waiting to time out
-    doCheck = false;
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    checkPhase = ''
+      runHook preCheck
+
+      make -j $NIX_BUILD_CORES kodi-test
+
+      ./kodi-test --gtest_filter=-${
+        lib.concatStringsSep ":" [
+          "TestCPUInfo.GetCPUFrequency"
+          "TestNetwork.PingHost"
+          "TestSystemInfo.GetOsName"
+          "TestSystemInfo.GetOsPrettyNameWithVersion"
+        ]
+      }
+
+      runHook postCheck
+    '';
 
     preConfigure = ''
       cmakeFlagsArray+=("-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}")

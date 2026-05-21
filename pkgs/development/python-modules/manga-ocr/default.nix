@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kha-white/manga-ocr";
     changelog = "https://github.com/kha-white/manga-ocr/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ laurent-f1z1 ];
+    maintainers = [ ];
   };
 }

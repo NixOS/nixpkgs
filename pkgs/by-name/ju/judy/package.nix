@@ -6,12 +6,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "judy";
   version = "1.0.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/judy/Judy-${version}.tar.gz";
+    url = "mirror://sourceforge/judy/Judy-${finalAttrs.version}.tar.gz";
     sha256 = "1sv3990vsx8hrza1mvq3bhvv9m6ff08y4yz7swn6znszz24l0w6j";
   };
 
@@ -29,10 +29,16 @@ stdenv.mkDerivation rec {
   # Let's wait for the upstream fix similar to https://sourceforge.net/p/judy/patches/4/
   enableParallelBuilding = false;
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
+
   meta = {
     homepage = "https://judy.sourceforge.net/";
     license = lib.licenses.lgpl21Plus;
     description = "State-of-the-art C library that implements a sparse dynamic array";
     platforms = lib.platforms.unix;
   };
-}
+})

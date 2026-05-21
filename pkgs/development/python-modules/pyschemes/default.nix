@@ -3,29 +3,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  fetchpatch,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "pyschemes";
-  version = "unstable-2017-11-08";
-  format = "setuptools";
+  version = "0-unstable-2022-09-12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spy16";
     repo = "pyschemes";
-    rev = "ca6483d13159ba65ba6fc2f77b90421c40f2bbf2";
-    hash = "sha256-PssucudvlE8mztwVme70+h+2hRW/ri9oV9IZayiZhdU=";
+    rev = "c8afdbc045c1ff2bd7cc5a963e7084fc096f5257";
+    hash = "sha256-jv6dlZlLuJlTqw2V21BUEhCIc/UGvyjbhggw82eGMz0=";
   };
 
-  patches = [
-    # Fix python 3.10 compatibility. Tracked upstream in
-    # https://github.com/spy16/pyschemes/pull/6
-    (fetchpatch {
-      url = "https://github.com/spy16/pyschemes/commit/23011128c6c22838d4fca9e00fd322a20bb566c4.patch";
-      hash = "sha256-vDaWxMrn2aC2wmd035EWRZ3cd/XME81z/BWG0f2T9jc=";
-    })
-  ];
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyschemes" ];

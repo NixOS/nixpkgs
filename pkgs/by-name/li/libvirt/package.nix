@@ -25,6 +25,7 @@
   nftables,
   ninja,
   openssh,
+  passt,
   perl,
   perlPackages,
   polkit,
@@ -33,11 +34,13 @@
   python3,
   readline,
   rpcsvc-proto,
+  runtimeShell,
   stdenv,
   replaceVars,
   xhtml1,
   json_c,
   writeScript,
+  writeShellApplication,
   nixosTests,
 
   # Linux
@@ -96,6 +99,7 @@ let
       numactl
       numad
       openssh
+      passt
       pmutils
       systemd
     ]
@@ -117,14 +121,14 @@ assert enableZfs -> isLinux;
 stdenv.mkDerivation rec {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "11.7.0";
+  version = "12.2.0";
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-BLPuqKvKW3wk4ij8ag4V4odgzZXGfn7692gkeJ03xZw=";
+    hash = "sha256-4F5cGEMg2TNyzt9Cmc3vLXdJnSEz4X5vPOsd0rHdpi0=";
   };
 
   patches = [
@@ -165,6 +169,7 @@ stdenv.mkDerivation rec {
     # Darwin doesn’t support -fsemantic-interposition, but the problem doesn’t seem to affect Mach-O.
     # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
     sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
+    sed -i '/qemucapabilitiestest/d' tests/meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
     sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
@@ -179,7 +184,23 @@ stdenv.mkDerivation rec {
     sed -i '/libxlxml2domconfigtest/d' tests/meson.build
     substituteInPlace src/libxl/libxl_capabilities.h \
      --replace-fail /usr/lib/xen ${xen}/libexec/xen
-  '';
+  ''
+  + lib.optionalString isLinux (
+    let
+      script = writeShellApplication {
+        name = "virt-secret-init-encryption-sh";
+        runtimeInputs = [
+          coreutils
+          systemd
+        ];
+        text = ''exec ${runtimeShell} "$@"'';
+      };
+    in
+    ''
+      substituteInPlace src/secret/virt-secret-init-encryption.service.in \
+        --replace-fail /usr/bin/sh ${lib.getExe script}
+    ''
+  );
 
   strictDeps = true;
 

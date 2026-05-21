@@ -11,7 +11,7 @@
   libusbmuxd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "idevicerestore";
   version = "1.0.0-unstable-2025-10-02";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   meta = {
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "idevicerestore";
   };
-}
+})

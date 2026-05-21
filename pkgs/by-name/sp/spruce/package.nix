@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "spruce";
-  version = "1.31.1";
+  version = "1.35.4";
 
   src = fetchFromGitHub {
     owner = "geofffranks";
     repo = "spruce";
-    rev = "v${version}";
-    hash = "sha256-wLxPHaCU0fciSIdK26dV4XOnJsp5EKKEXzgspWC1GvA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ulto2lYkCs/dGFDqnqU8RLxNhFY9vwl0b6E0HFeuX0I=";
   };
 
   vendorHash = null;
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ risson ];
   };
-}
+})

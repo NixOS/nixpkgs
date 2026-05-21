@@ -20,9 +20,9 @@
   boost,
   libGLU,
   libGL,
-  libX11,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxinerama,
+  libxrandr,
 }:
 
 stdenv.mkDerivation {
@@ -45,9 +45,9 @@ stdenv.mkDerivation {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXinerama
-      libXrandr
+      libx11
+      libxinerama
+      libxrandr
       libGLU
       libGL
     ]
@@ -78,7 +78,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  cmakeFlags = [ "-DBUILD_OSG_APPLICATIONS=OFF" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_OSG_APPLICATIONS" false)
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeFeature "OSG_WINDOWING_SYSTEM" "Cocoa");
 
   meta = {
     description = "3D graphics toolkit";

@@ -8,14 +8,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corrosion";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ppuDNObfKhneD9AlnPAvyCRHKW3BidXKglD1j/LE9CM=";
   };
 
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool for integrating Rust into an existing CMake project";
     homepage = "https://github.com/corrosion-rs/corrosion";
-    changelog = "https://github.com/corrosion-rs/corrosion/blob/${src.rev}/RELEASES.md";
+    changelog = "https://github.com/corrosion-rs/corrosion/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

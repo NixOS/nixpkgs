@@ -8,13 +8,13 @@
 }:
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "runapp";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "c4rlo";
     repo = "runapp";
     tag = finalAttrs.version;
-    hash = "sha256-+dIawnBTf8QU0dv93NQUCgW60BrlUXljaoNnRQjfJZQ=";
+    hash = "sha256-V9MYExbLIKpAB9sXDaBkiNgCiHJb+nDK7rvKHV/zsDE=";
   };
 
   strictDeps = true;

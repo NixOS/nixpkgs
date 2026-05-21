@@ -5,7 +5,6 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
-  fetchzip,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -14,10 +13,8 @@
   pkg-config,
   coreutils,
   gperf,
-  getent,
   glibcLocales,
   autoPatchelfHook,
-  fetchpatch,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -25,7 +22,6 @@
   python3Packages,
 
   # Mandatory dependencies
-  libcap,
   util-linux,
   kbd,
   kmod,
@@ -42,8 +38,6 @@
   libgpg-error,
   libidn2,
   curl,
-  gnutar,
-  gnupg,
   zlib,
   xz,
   zstd,
@@ -203,18 +197,31 @@ let
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1734643670";
+  releaseTimestamp = "1773777352";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258.3";
+  version = "260.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wpg/0z7xrB8ysPaa/zNp1mz+yYRCGyXz0ODZcKapovM=";
+    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
   };
+
+  # PATCH POLICY
+  #
+  # There are only two reasons we accept patches on systemd:
+  # 1. systemd functionality is fundamentally incompatible with how NixOS works
+  #    and workarounds are not possible.
+  # 2. Hotfixes that we want to apply before they have reached a systemd branch
+  #    we can use. If we come up with the fixes in Nixpkgs, they need to be
+  #    reported upstream and the upstream issue needs to be linked in the
+  #    commit message of the patch.
+  #
+  # Importantly, patches to improve usability, enable new features on NixOS or
+  # add entirely new features to systemd are not allowed.
 
   # On major changes, or when otherwise required, you *must* :
   # 1. reformat the patches,
@@ -225,66 +232,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
-    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
-    ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
-    ./0003-Fix-NixOS-containers.patch
-    ./0004-Add-some-NixOS-specific-unit-directories.patch
-    ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0009-add-rootprefix-to-lookup-dir-paths.patch
-    ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0013-inherit-systemd-environment-when-calling-generators.patch
-    ./0014-core-don-t-taint-on-unmerged-usr.patch
-    ./0015-tpm2_context_init-fix-driver-name-checking.patch
-    ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
-    ./0017-meson.build-do-not-create-systemdstatedir.patch
-
-    # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
-    # if the install prefix is not /usr, but that does not work for us
-    # because we include the config snippet manually
-    ./0018-meson-Don-t-link-ssh-dropins.patch
-
-    ./0019-install-unit_file_exists_full-follow-symlinks.patch
+    ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0003-add-rootprefix-to-lookup-dir-paths.patch
+    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0005-core-don-t-taint-on-unmerged-usr.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
-    # Patchset to build with musl by an upstream systemd contributor:
-    # https://github.com/systemd/systemd/pull/37788
-    # This is vendored here because of the lack of permanent patch urls for the unmerged PR
-    ./musl/0001-musl-meson-allow-to-choose-libc-implementation.patch
-    ./musl/0002-musl-meson-do-not-use-libcrypt-libxcrypt.patch
-    ./musl/0003-musl-meson-explicitly-link-with-libintl-when-necessa.patch
-    ./musl/0004-musl-meson-explicitly-set-_LARGEFILE64_SOURCE.patch
-    ./musl/0005-musl-meson-make-musl-not-define-wchar_t-in-their-hea.patch
-    ./musl/0006-musl-meson-check-existence-of-renameat2.patch
-    ./musl/0007-musl-meson-gracefully-disable-gshadow-idn-nss-and-ut.patch
-    ./musl/0008-musl-introduce-dummy-gshadow-header-file-for-userdb.patch
-    ./musl/0009-musl-add-fallback-parse_printf_format-implementation.patch
-    ./musl/0010-musl-introduce-GNU-specific-version-of-strerror_r.patch
-    ./musl/0011-musl-make-strptime-accept-z.patch
-    ./musl/0012-musl-make-strtoll-accept-strings-start-with-dot.patch
-    ./musl/0013-musl-introduce-strerrorname_np.patch
-    ./musl/0014-musl-introduce-dummy-functions-for-mallinfo-malloc_i.patch
-    ./musl/0015-musl-introduce-dummy-function-for-gnu_get_libc_versi.patch
-    ./musl/0016-musl-define-__THROW-when-not-defined.patch
-    ./musl/0017-musl-replace-sys-prctl.h-with-our-own-implementation.patch
-    ./musl/0018-musl-replace-netinet-if_ether.h-with-our-own-impleme.patch
-    ./musl/0019-musl-add-missing-FTW_CONTINUE-macro.patch
-    ./musl/0020-musl-add-several-missing-statx-macros.patch
-    ./musl/0021-musl-avoid-conflict-between-fcntl.h-and-our-forward..patch
-    ./musl/0022-musl-redefine-HOST_NAME_MAX-as-64.patch
-    ./musl/0023-musl-avoid-multiple-evaluations-in-CPU_ISSET_S-macro.patch
-    ./musl/0024-musl-core-there-is-one-less-usable-signal-when-built.patch
-    ./musl/0025-musl-build-path-fix-reading-DT_RUNPATH-or-DT_RPATH.patch
-    ./musl/0026-musl-format-util-use-llu-for-formatting-rlim_t.patch
-    ./musl/0027-musl-time-util-skip-tm.tm_wday-check.patch
-    ./musl/0028-musl-glob-util-filter-out-.-and-.-even-if-GLOB_ALTDI.patch
+    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ];
 
   postPatch = ''
@@ -353,7 +308,11 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
+      # pefile is only required to trigger a check in meson to actually build
+      # ukify. This module should never appear in the runtime closure of ukify.
+      # Instead the pefile from buildInputs should be used.
+      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
+      ++ lib.optional withUkify ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -366,7 +325,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcrypt
-    (if withPam then libcap else libcap.override { usePam = false; })
     libuuid
     linuxHeaders
   ]
@@ -434,6 +392,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
+    (lib.mesonOption "ntp-servers" "0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
@@ -469,10 +428,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "system-uid-max" "999")
     (lib.mesonOption "system-gid-max" "999")
 
-    # SysVinit
-    (lib.mesonOption "sysvinit-path" "")
-    (lib.mesonOption "sysvrcnd-path" "")
-
     # Login
     (lib.mesonOption "sulogin-path" "${lib.getOutput "login" util-linux}/bin/sulogin")
     (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
@@ -480,6 +435,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
     (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+
+    # Swap
+    (lib.mesonOption "swapon-path" "${lib.getOutput "swap" util-linux}/sbin/swapon")
+    (lib.mesonOption "swapoff-path" "${lib.getOutput "swap" util-linux}/sbin/swapoff")
 
     # SSH
     (lib.mesonOption "sshconfdir" "")
@@ -536,9 +495,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
     (lib.mesonEnable "libcurl" wantCurl)
-    (lib.mesonEnable "libidn" false)
     (lib.mesonEnable "libidn2" withLibidn2)
-    (lib.mesonEnable "libiptc" false)
     (lib.mesonEnable "repart" withRepart)
     (lib.mesonEnable "sysupdate" withSysupdate)
     (lib.mesonEnable "sysupdated" withSysupdate)
@@ -591,6 +548,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
     (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
   ]
+  ++ lib.optionals withKexectools [
+    (lib.mesonOption "kexec-path" "${kexec-tools}/bin/kexec")
+  ]
   ++ lib.optionals withKmod [
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ]
@@ -603,192 +563,34 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gshadow" false)
     (lib.mesonBool "idn" false)
   ];
-  preConfigure =
-    let
-      # A list of all the runtime binaries referenced by the source code (plus
-      # scripts and unit files) of systemd executables, tests and libraries.
-      # As soon as a dependency is lo longer required we should remove it from
-      # the list.
-      # The `where` attribute for each of the replacement patterns must be
-      # exhaustive. If another (unhandled) case is found in the source code the
-      # build fails with an error message.
-      binaryReplacements = [
-        {
-          search = "/sbin/mkswap";
-          replacement = "${lib.getBin util-linux}/sbin/mkswap";
-          where = [
-            "man/systemd-makefs@.service.xml"
-          ];
-        }
-        {
-          search = "/sbin/swapon";
-          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon";
-          where = [
-            "src/core/swap.c"
-            "src/basic/unit-def.h"
-          ];
-        }
-        {
-          search = "/sbin/swapoff";
-          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff";
-          where = [ "src/core/swap.c" ];
-        }
-        {
-          search = "/bin/echo";
-          replacement = "${coreutils}/bin/echo";
-          where = [
-            "man/systemd-analyze.xml"
-            "man/systemd.service.xml"
-            "man/systemd-run.xml"
-            "src/analyze/test-verify.c"
-            "src/test/test-env-file.c"
-            "src/test/test-fileio.c"
-            "src/test/test-load-fragment.c"
-          ];
-        }
-        {
-          search = "/bin/cat";
-          replacement = "${coreutils}/bin/cat";
-          where = [
-            "test/test-execute/exec-noexecpaths-simple.service"
-            "src/journal/cat.c"
-          ];
-        }
-        {
-          search = "/usr/lib/systemd/systemd-fsck";
-          replacement = "$out/lib/systemd/systemd-fsck";
-          where = [ "man/systemd-fsck@.service.xml" ];
-        }
-      ]
-      ++ lib.optionals withNspawn [
-        {
-          # we only need to patch getent when nspawn will actually be built/installed
-          # as of systemd 257.x, nspawn will not be installed on systemdLibs, so we don't need to patch it
-          # patching getent unconditionally here introduces infinite recursion on musl
-          search = "/usr/bin/getent";
-          replacement = "${getent}/bin/getent";
-          where = [ "src/nspawn/nspawn-setuid.c" ];
-        }
-      ]
-      ++ lib.optionals withImportd [
-        {
-          search = "\"gpg\"";
-          replacement = "\\\"${gnupg}/bin/gpg\\\"";
-          where = [ "src/import/pull-common.c" ];
-        }
-        {
-          search = "\"tar\"";
-          replacement = "\\\"${gnutar}/bin/tar\\\"";
-          where = [
-            "src/import/export-tar.c"
-            "src/import/import-common.c"
-            "src/import/import-tar.c"
-          ];
-          ignore = [
-            # occurrences here refer to the tar sub command
-            "src/sysupdate/sysupdate-resource.c"
-            "src/sysupdate/sysupdate-transfer.c"
-            "src/import/pull.c"
-            "src/import/export.c"
-            "src/import/import.c"
-            "src/import/importd.c"
-            # runs `tar` but also also creates a temporary directory with the string
-            "src/import/pull-tar.c"
-            # tar referenced as file suffix
-            "src/shared/import-util.c"
-          ];
-        }
-      ]
-      ++ lib.optionals withKmod [
-        {
-          search = "/sbin/modprobe";
-          replacement = "${lib.getBin kmod}/sbin/modprobe";
-          where = [ "units/modprobe@.service" ];
-        }
-      ];
-
-      # { replacement, search, where, ignore } -> List[str]
-      mkSubstitute =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted =
-        {
-          replacement,
-          search,
-          where,
-          ignore ? [ ],
-        }:
-        let
-          ignore' = lib.concatStringsSep "|" (
-            ignore
-            ++ [
-              "^test"
-              "NEWS"
-            ]
-          );
-        in
-        ''
-          set +e
-          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-          set -e
-          if [[ -n "$search" ]]; then
-            echo "Not all references to '${search}' have been replaced. Found the following matches:"
-            echo "$search"
-            exit 1
-          fi
-        '';
-    in
-    ''
-      mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-      export LC_ALL="en_US.UTF-8";
-
-      ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
-      ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
-
-      substituteInPlace src/libsystemd/sd-journal/catalog.c \
-        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-
-      substituteInPlace src/import/pull-tar.c \
-        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
-    '';
+  preConfigure = ''
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
+      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+  '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
   # warning messages
   postConfigure = ''
     substituteInPlace config.h \
-      --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
-      --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
+      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH" \
+      --replace-fail "SYSTEM_SLEEP_PATH" "_SYSTEM_SLEEP_PATH"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH"
-      "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENTS_PATH"
-      "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    # This path is not exposed via meson
+    "-USYSTEM_SHUTDOWN_PATH"
+    "-DSYSTEM_SHUTDOWN_PATH=\"/etc/systemd/system-shutdown\""
 
-      "-USYSTEMD_BINARY_PATH"
-      "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+    # This path is not exposed via meson
+    "-USYSTEM_SLEEP_PATH"
+    "-DSYSTEM_SLEEP_PATH=\"/etc/systemd/system-sleep\""
+  ];
 
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "-D__UAPI_DEF_ETHHDR=0"
-    ]
-  );
-
-  doCheck = true;
+  doCheck = false;
 
   # trigger the test -n "$DESTDIR" || mutate in upstreams build system
   preInstall = ''
@@ -816,12 +618,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       # For compatibility with dependents that use sbin instead of bin.
       ln -s bin "$out/sbin"
-
-      rm -rf $out/etc/rpm
-    ''
-    + lib.optionalString (!withKernelInstall) ''
-      # "kernel-install" shouldn't be used on NixOS.
-      find $out -name "*kernel-install*" -exec rm {} \;
     ''
     + lib.optionalString (!withDocumentation) ''
       rm -rf $out/share/doc
@@ -896,6 +692,7 @@ stdenv.mkDerivation (finalAttrs: {
       withImportd
       withKmod
       withLocaled
+      withLogind
       withMachined
       withNetworkd
       withNspawn
@@ -980,6 +777,7 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-nspawn-configfile
             systemd-oomd
             systemd-portabled
+            systemd-pstore
             systemd-resolved
             systemd-shutdown
             systemd-sysupdate
@@ -1045,7 +843,10 @@ stdenv.mkDerivation (finalAttrs: {
       ofl
       publicDomain
     ];
-    teams = [ lib.teams.systemd ];
+    teams = [
+      lib.teams.systemd
+      lib.teams.security-review
+    ];
     pkgConfigModules = [
       "libsystemd"
       "libudev"
@@ -1061,5 +862,6 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
       lib.systems.inspect.platformPatterns.isStatic
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version;
   };
 })

@@ -1,0 +1,20 @@
+diff --git a/tools/compiler_version.ml b/tools/compiler_version.ml
+index f675a20..c3e7912 100644
+--- a/tools/compiler_version.ml
++++ b/tools/compiler_version.ml
+@@ -81,6 +81,7 @@ let v4_13_1 = mk 4 13 1
+ let v4_14_0 = mk 4 14 0
+ let v4_14_1 = mk 4 14 1
+ let v4_14_2 = mk 4 14 2
++let v4_14_3 = mk 4 14 3
+ let v5_0_0 = mk 5 0 0
+ let v5_1_0 = mk 5 1 0
+ let v5_1_1 = mk 5 1 1
+@@ -127,6 +128,7 @@ let known_versions =
+   v4_14_0;
+   v4_14_1;
+   v4_14_2;
++  v4_14_3;
+   v5_0_0;
+   v5_1_0;
+   v5_1_1;

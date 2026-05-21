@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7dLoKxBbE98FjADTYjjwj6OafJdecAkOCMRcYUYuYV4=";
   };
 
+  # fixes https://github.com/NixOS/nixpkgs/issues/483585 aka https://gitlab.freedesktop.org/xorg/driver/xf86-video-amdgpu/-/issues/8
+  hardeningDisable = [ "bindnow" ];
+
   strictDeps = true;
 
   nativeBuildInputs = [

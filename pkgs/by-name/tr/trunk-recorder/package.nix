@@ -21,14 +21,14 @@
   sox,
   hackrfSupport ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trunk-recorder";
   version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "robotastic";
     repo = "trunk-recorder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2qy6krI5NglkC+bUFfJaEuHIcBoYJrxBRnFs8O0NcZA=";
   };
 
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Record calls from trunked radio systems";
     homepage = "https://trunkrecorder.com/";
-    changelog = "https://github.com/robotastic/trunk-recorder/releases/tag/v${version}";
+    changelog = "https://github.com/robotastic/trunk-recorder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ PapayaJackal ];
     mainProgram = "trunk-recorder";
   };
-}
+})

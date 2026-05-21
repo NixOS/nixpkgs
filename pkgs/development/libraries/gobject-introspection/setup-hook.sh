@@ -10,7 +10,17 @@ make_gobject_introspection_find_gir_files() {
     fi
 }
 
+export_gobject_introspection_fallback_path() {
+    # Newer multiple-output-optimized stdenv has a variable $outputLib,
+    # which in turn specifies another variable which then is used as
+    # the destination for the library contents (${!outputLib}/lib).
+    # We export this so it is available to subprocesses, such as giscanner,
+    # which we patch to prioritize this variable if available.
+    export NIX_GOBJECT_INTROSPECTION_DEFAULT_FALLBACK_LIBPATH=${!outputLib}
+}
+
 addEnvHooks "$targetOffset" make_gobject_introspection_find_gir_files
+addEnvHooks "$targetOffset" export_gobject_introspection_fallback_path
 
 giDiscoverSelf() {
     if [ -d "$prefix/lib/girepository-1.0" ]; then

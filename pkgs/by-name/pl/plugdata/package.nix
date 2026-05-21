@@ -9,14 +9,14 @@
   cmake,
   pkg-config,
   alsa-lib,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrender,
-  libXrandr,
-  libXdmcp,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrender,
+  libxrandr,
+  libxdmcp,
+  libxtst,
   xvfb,
   freetype,
   fontconfig,
@@ -35,13 +35,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plugdata";
-  version = "0.9.2";
+  version = "0.9.3-2";
 
   src = fetchFromGitHub {
     owner = "plugdata-team";
     repo = "plugdata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3ldLM6M54usqjsM9veEctXVa/G14shOdp7Yi9tQi70Y=";
+    hash = "sha256-V08xlc14JZZgmXb4Dernnt9vxWDd5l/GHMzolnmCK8Y=";
     fetchSubmodules = true;
   };
 
@@ -63,14 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libxkbcommon
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrender
-    libXrandr
-    libXdmcp
-    libXtst
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrender
+    libxrandr
+    libxdmcp
+    libxtst
     xvfb
     libjack2
     expat
@@ -92,18 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   patches = [
     # fiddle~.c prevents building with gcc15. Upstream puredata has fixed this issue,
@@ -133,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r Plugins/VST3/plugdata{,-fx}.vst3 $out/lib/vst3
     cp -r Plugins/LV2/plugdata{,-fx}.lv2   $out/lib/lv2
 
-    install -Dm444 $src/Resources/Icons/plugdata_logo_linux.png $out/share/pixmaps/plugdata_logo.png
+    install -Dm444 $src/Resources/Icons/plugdata_logo_linux.png $out/share/icons/hicolor/512x512/apps/plugdata_logo.png
 
     runHook postInstall
   '';

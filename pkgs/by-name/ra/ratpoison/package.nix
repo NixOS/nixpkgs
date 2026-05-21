@@ -5,13 +5,13 @@
   autoreconfHook,
   fontconfig,
   freetype,
-  libX11,
-  libXft,
-  libXi,
-  libXpm,
-  libXrandr,
-  libXt,
-  libXtst,
+  libx11,
+  libxft,
+  libxi,
+  libxpm,
+  libxrandr,
+  libxt,
+  libxtst,
   perl,
   pkg-config,
   readline,
@@ -37,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libX11
-    libXft
-    libXi
-    libXpm
-    libXrandr
-    libXt
-    libXtst
+    libx11
+    libxft
+    libxi
+    libxpm
+    libxrandr
+    libxt
+    libxtst
     perl
     readline
     xorgproto
@@ -58,6 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/getopt.h \
+      --replace-fail "extern int getopt ();" \
+                     "extern int getopt (int argc, char *const *argv, const char *shortopts);"
+  '';
 
   configureFlags = [
     # >=1.4.9 requires this even with readline in inputs
@@ -90,6 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ratpoison";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

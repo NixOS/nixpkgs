@@ -17,14 +17,14 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "showtime";
-  version = "49.1";
+  version = "50.0";
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/showtime/${lib.versions.major version}/showtime-${version}.tar.xz";
-    hash = "sha256-iu+7DiAJx6HNRKuAGwbKN19+loPwKaBS64b7Qzp4U5M=";
+    url = "mirror://gnome/sources/showtime/${lib.versions.major finalAttrs.version}/showtime-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Q5nJ+n9h5ZhCQuJ5rNFRm+7CRrmKZ21EpLKrlOnuywE=";
   };
 
   strictDeps = true;
@@ -90,4 +90,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome ];
     mainProgram = "showtime";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bore-cli";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ekzhang";
     repo = "bore";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Jr6jZKsMhSpWVNpmhozI5DLONbwfIpcXwSlcbC9lLRM=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ DieracDelta ];
     mainProgram = "bore";
   };
-}
+})

@@ -4,7 +4,7 @@
   lib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mnamer";
   version = "2.6.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-lu1DWbR7LkaRddeAAHBWM61cnEZG4KVZdQWWRsbghb8=";
   };
 
@@ -35,6 +35,8 @@ python3Packages.buildPythonApplication rec {
   patches = [
     # https://github.com/jkwill87/mnamer/pull/291
     ./cached_session_error.patch
+    # https://github.com/jkwill87/mnamer/pull/333
+    ./fix-requests-cache-version-check.patch
   ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
@@ -51,6 +53,6 @@ python3Packages.buildPythonApplication rec {
     description = "Intelligent and highly configurable media organization utility";
     mainProgram = "mnamer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urlordjames ];
+    maintainers = [ ];
   };
-}
+})

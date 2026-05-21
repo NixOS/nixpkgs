@@ -8,10 +8,11 @@
   patch-package,
   stdenv,
   versionCheckHook,
+  ripgrep,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "gitlab-duo";
-  version = "8.57.1";
+  version = "8.89.0";
 
   # DOCS https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp#node-version
   nodejs = nodejs_22;
@@ -21,7 +22,7 @@ buildNpmPackage (finalAttrs: {
     owner = "editor-extensions";
     repo = "gitlab-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IofCSh9ja3C8WEiksp0pFJ6LZOu86o4VHnwiIUHHgLI=";
+    hash = "sha256-AiC0xxk8d/2rvRGm31vWqRuJ7nzMrITTGabv7v1LpOA=";
   };
 
   patches = [
@@ -30,16 +31,9 @@ buildNpmPackage (finalAttrs: {
     ./missing-hashes.patch
   ];
 
-  # PATCH: Only build for the current platform, not all targets
-  postPatch = ''
-    substituteInPlace packages/cli/scripts/compile_executables.sh \
-      --replace-fail \
-        'SUPPORTED_TARGETS="bun-linux-x64 bun-linux-arm64 bun-windows-x64 bun-darwin-arm64 bun-darwin-x64"' \
-        "SUPPORTED_TARGETS=bun-$TARGET"
-  '';
-
   npmFlags = [ "--install-links" ];
-  npmDepsHash = "sha256-dj4TrKMdXgUZr7/0NLT7h8jT3VjobB9KFO8tl/+47rk=";
+  npmDepsHash = "sha256-U/dwfYZqy/1CM+Emz1w44mAzY24Z8vKWBXSzSqeVmnY=";
+  npmRebuildFlags = [ "--ignore-scripts" ];
   npmBuildScript = "build:binary";
   npmWorkspace = "@gitlab/duo-cli";
   nativeBuildInputs = [
@@ -51,6 +45,8 @@ buildNpmPackage (finalAttrs: {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "true";
   env.PUPPETEER_SKIP_DOWNLOAD = "true";
   env.TARGET = "${stdenv.targetPlatform.node.platform}-${stdenv.targetPlatform.node.arch}";
+  env.SUPPORTED_TARGETS = "bun-${stdenv.targetPlatform.node.platform}-${stdenv.targetPlatform.node.arch}";
+  env.SKIP_RIPGREP_BUNDLE = 1;
 
   postConfigure = ''
     patchShebangs --build ./packages/cli/scripts
@@ -62,6 +58,9 @@ buildNpmPackage (finalAttrs: {
 
     install -Dm755 packages/cli/bin/duo-$TARGET $out/bin/duo
 
+    wrapProgram $out/bin/duo \
+      --prefix PATH : ${lib.getExe ripgrep}
+
     runHook postInstall
   '';
 
@@ -72,13 +71,12 @@ buildNpmPackage (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp/-/blob/main/CHANGELOG.md";
     description = "CLI for GitLab AI assistant";
     downloadPage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp";
     homepage = "https://about.gitlab.com/gitlab-duo/";
     license = lib.licenses.mit;
     mainProgram = "duo";
-    maintainers = with lib.maintainers; [ yajo ];
+    maintainers = with lib.maintainers; [ afontaine ];
   };
 })

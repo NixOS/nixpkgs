@@ -1,17 +1,37 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   fetchurl,
   rustPlatform,
+  cmake,
   dbus,
-  xorg,
+  libxcb,
   pkg-config,
   protobuf,
   openssl,
+  cacert,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
   llvmPackages,
+  makeWrapper,
+  librusty_v8 ? callPackage ./librusty_v8.nix {
+    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+  },
+
+  # Extension(s) Dependencies
+  python3,
+  bash,
+  # X11
+  xdotool,
+  wmctrl,
+  xclip,
+  xwininfo,
+  # Wayland
+  wtype,
+  wl-clipboard,
 }:
 
 let
@@ -28,16 +48,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.19.1";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BgY3YDe6x46XvHyE0Ia6SxNGTyU0MegkYz5TbOZVrrQ=";
+    hash = "sha256-/1TtsnNiLoTkvyeFR282qSpo+Jt3pvFxduJ7lyzsTXI=";
   };
 
-  cargoHash = "sha256-2jjAqIBLd7awzLcowYKADHyluclrH+iELUSMvACRj30=";
+  cargoHash = "sha256-bhnbSjGqyWbQd5PjZ116JH91vjVy6R/+iBlNKL6debg=";
 
   cargoBuildFlags = [
     "--bin"
@@ -47,17 +67,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     protobuf
+    rustPlatform.bindgenHook
+    makeWrapper
   ];
 
   buildInputs = [
     dbus
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
-  env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+  env = {
+    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+    RUSTY_V8_ARCHIVE = librusty_v8;
+  };
 
   preBuild = ''
     mkdir -p tokenizer_files/Xenova--gpt-4o tokenizer_files/Xenova--claude-tokenizer
@@ -65,7 +91,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${claude-tokenizer} tokenizer_files/Xenova--claude-tokenizer/tokenizer.json
   '';
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  postFixup = ''
+    wrapProgram $out/bin/goose \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            bash
+            python3
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            # X11
+            xdotool
+            wmctrl
+            xclip
+            xwininfo
+            # Wayland
+            wtype
+            wl-clipboard
+          ]
+        )
+      }
+  '';
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    cacert
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -108,12 +159,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=context_mgmt::auto_compact::tests::test_auto_compact_respects_config"
     "--skip=scheduler::tests::test_scheduled_session_has_schedule_id"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Broken on aarch64-linux: request capture races across session_id_propagation_test cases
+    "--skip=test_session_id_matches_across_calls"
+    "--skip=test_session_id_propagation_to_llm"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=logging::tests::test_log_file_name_no_session"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_with_additional_sub_recipes"
     "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
+    "--skip=test_session_id_matches_across_calls"
+    "--skip=test_session_id_propagation_to_llm"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -126,6 +188,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       cloudripper
       thardin
       brittonr
+      miniharinn
+      caniko
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

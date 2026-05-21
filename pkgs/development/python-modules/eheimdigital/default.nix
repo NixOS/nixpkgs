@@ -1,7 +1,7 @@
 {
   aiohttp,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   hatchling,
   lib,
   yarl,
@@ -9,15 +9,14 @@
 
 buildPythonPackage rec {
   pname = "eheimdigital";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "autinerd";
     repo = "eheimdigital";
     tag = version;
-    hash = "sha256-+11TtI9+hEGghKs9UeJRUTUpwA40OUmCp0vnuIH+Wn4=";
+    hash = "sha256-BXezA2wFP3KeAVwnZC9WYIIXeADHUmSJHTRfZE6Rk48=";
   };
 
   build-system = [ hatchling ];

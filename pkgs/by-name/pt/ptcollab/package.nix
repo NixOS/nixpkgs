@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ptcollab";
-  version = "0.6.4.10";
+  version = "0.6.4.11";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8CllDcbbVXmDyD5jyKVoNq96wqWtfoPM2CEN13KYptQ=";
+    hash = "sha256-tjsSaKUvswp+/gyJeIJ/cnBrerNMAguzv2mFFLDPaoI=";
   };
 
   nativeBuildInputs = [

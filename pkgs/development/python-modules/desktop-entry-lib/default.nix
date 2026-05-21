@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  fetchFromGitea,
+  fetchFromCodeberg,
   setuptools,
 }:
 
@@ -12,8 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # We could use fetchPypi, but then the tests won't run
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "JakobDev";
     repo = "desktop-entry-lib";
     rev = version;

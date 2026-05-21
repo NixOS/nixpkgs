@@ -6,22 +6,24 @@
   arcanechat-tui,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "arcanechat-tui";
-  version = "0.11.1";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ArcaneChat";
     repo = "arcanechat-tui";
-    tag = "v${version}";
-    hash = "sha256-ARk0WkpJ2VhIdOHQzYmmsuherABNgqwjwnPWk92y9yA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-seoXvlDG2xxdM9mAKe4Yo4juDslgrniv1LOTdXbplp0=";
   };
 
   build-system = with python3.pythonOnBuildForHost.pkgs; [
     setuptools
     setuptools-scm
   ];
+
+  pythonRelaxDeps = true;
 
   dependencies = with python3.pkgs; [
     appdirs
@@ -48,4 +50,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "arcanechat-tui";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

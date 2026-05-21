@@ -1,10 +1,10 @@
 {
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   libglut,
   glew,
-  libXext,
+  libxext,
   linuxPackages,
   lib,
 }:
@@ -25,11 +25,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libglut
     glew
     libXNVCtrl
-    libXext
+    libxext
   ];
 
   installPhase = ''

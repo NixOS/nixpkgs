@@ -38,6 +38,7 @@ let
   userbornStaticFiles =
     pkgs.runCommand "static-userborn" { }
       "mkdir -p $out; ${lib.getExe cfg.package} ${userbornConfigJson} $out";
+  previousConfigPath = "/var/lib/userborn/previous-userborn.json";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
   # The filenames created by userborn.
@@ -155,6 +156,10 @@ in
         # This way we don't have to re-declare all the dependencies to other
         # services again.
         aliases = [ "systemd-sysusers.service" ];
+        environment = {
+          USERBORN_MUTABLE_USERS = lib.boolToString userCfg.mutableUsers;
+          USERBORN_PREVIOUS_CONFIG = lib.mkIf userCfg.mutableUsers previousConfigPath;
+        };
 
         unitConfig = {
           Description = "Manage Users and Groups";
@@ -165,6 +170,7 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           TimeoutSec = "90s";
+          StateDirectory = "userborn";
 
           ExecStart = "${lib.getExe cfg.package} ${userbornConfigJson} ${cfg.passwordFilesLocation}";
 
@@ -179,13 +185,18 @@ in
             ))
           ];
 
-          # Make the source files read-only after userborn has finished.
-          ExecStartPost = lib.mkIf (!userCfg.mutableUsers) (
-            lib.map (
-              file:
-              "${pkgs.util-linux}/bin/mount --bind -o ro ${cfg.passwordFilesLocation}/${file} ${cfg.passwordFilesLocation}/${file}"
-            ) passwordFiles
-          );
+          ExecStartPost =
+            if userCfg.mutableUsers then
+              # Store the config somewhere for the next invocation
+              [
+                "${pkgs.coreutils}/bin/ln -sf ${userbornConfigJson} ${previousConfigPath}"
+              ]
+            else
+              # Make the source files read-only after userborn has finished.
+              (lib.map (
+                file:
+                "${pkgs.util-linux}/bin/mount --bind -o ro ${cfg.passwordFilesLocation}/${file} ${cfg.passwordFilesLocation}/${file}"
+              ) passwordFiles);
         };
       };
     };

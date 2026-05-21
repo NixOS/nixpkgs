@@ -5,7 +5,7 @@
   wireshark-cli,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "hfinger";
   version = "0.2.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "hfinger";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gxwirAqtY4R3KDHyNmDIknABO+SFuoDua9nm1UyXbxA=";
   };
 
@@ -42,8 +42,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Fingerprinting tool for HTTP requests";
     mainProgram = "hfinger";
     homepage = "https://github.com/CERT-Polska/hfinger";
-    changelog = "https://github.com/CERT-Polska/hfinger/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/hfinger/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

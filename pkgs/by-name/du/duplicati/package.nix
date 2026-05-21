@@ -14,9 +14,9 @@
 
 let
   # for update.sh easy to handle
-  ngclientVersion = "0.0.163";
-  ngclientRev = "2546891ad116cb0a7a8df1c2bcf8a11fc17d58a4";
-  ngclientHash = "sha256-MQOJHr3JBceO7qZRQvCcR4NNxpc77oRRjBQkmMv9RUA=";
+  ngclientVersion = "0.0.218";
+  ngclientRev = "67e437adee2fefa9dc2a9464d3748a8512525f71";
+  ngclientHash = "sha256-1DT/WIaQ+di8vsnsAaA5qYinhvaKImEfGn2pyljXxjw=";
 
   # from Duplicati/Server/webroot/ngclient/package.json
   ngclient = buildNpmPackage {
@@ -30,7 +30,7 @@ let
       hash = ngclientHash;
     };
 
-    npmDepsHash = "sha256-HYKzf7JaoOYvYlVZgMZ0jvYHf96be6abTZNtefgy59Y=";
+    npmDepsHash = "sha256-yytz5qMhgd/yXr11szuVslTLTjV5XpfNPyLW3mmRM1E=";
 
     nativeBuildInputs = [ bun ];
 
@@ -58,24 +58,22 @@ let
 in
 buildDotnetModule rec {
   pname = "duplicati";
-  version = "2.2.0.1";
+  version = "2.3.0.1";
   channel = "stable";
-  buildDate = "2025-11-09";
+  buildDate = "2026-04-24";
 
   src = fetchFromGitHub {
     owner = "duplicati";
     repo = "duplicati";
     tag = "v${version}_${channel}_${buildDate}";
-    hash = "sha256-fARK2nAqE9aN2PQSC62yIcYr3e/kBT3BVTBxLwMqk24=";
+    hash = "sha256-r3Oumo2vrViTNvZDUaVoJyGMBf1/uHS6oAhn9Aegb3s=";
     stripRoot = true;
   };
 
-  patches = [ ./fix-unit-tests.patch ];
-
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   enableParallelBuilding = false;
 
@@ -113,6 +111,8 @@ buildDotnetModule rec {
   ];
 
   postPatch = ''
+    sed -i '/Duplicati.ShellExtension.csproj/d' Duplicati.slnx
+
     rm -rf Duplicati/Server/webroot/ngclient
     ln -s ${ngclient}/browser Duplicati/Server/webroot/ngclient
   '';

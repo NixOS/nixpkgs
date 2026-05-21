@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logrotate";
   version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "logrotate";
     repo = "logrotate";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-D7E2mpC7v2kbsb1EyhR6hLvGbnIvGB2MK1n1gptYyKI=";
   };
 
@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   preCheck = ''
     sed -i 's#/bin/date#${lib.getExe' coreutils "date"}#' test/*.sh
@@ -52,7 +57,9 @@ stdenv.mkDerivation rec {
     description = "Rotates and compresses system logs";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.tobim ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "logrotate";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "logrotate_project" finalAttrs.version;
   };
-}
+})

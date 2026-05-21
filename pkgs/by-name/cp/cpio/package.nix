@@ -11,12 +11,12 @@
   rpm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpio";
   version = "2.15";
 
   src = fetchurl {
-    url = "mirror://gnu/cpio/cpio-${version}.tar.bz2";
+    url = "mirror://gnu/cpio/cpio-${finalAttrs.version}.tar.bz2";
     hash = "sha256-k3YQuXwymh7JJoVT+3gAN7z/8Nz/6XJevE/ZwaqQdds=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     priority = 6; # resolves collision with gnutar's "libexec/rmt"
     mainProgram = "cpio";
   };
-}
+})

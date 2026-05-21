@@ -21,6 +21,7 @@
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
+  opentelemetry-instrumentation-threading,
   opentelemetry-sdk,
   mcp,
   packaging,
@@ -32,6 +33,7 @@
   requests,
   rich,
   ruamel-yaml,
+  semantic-version,
   tomli,
   tqdm,
   types-freezegun,
@@ -77,7 +79,7 @@ buildPythonPackage rec {
   # tell cli/setup.py to not copy semgrep-core into the result
   # this means we can share a copy of semgrep-core and avoid an issue where it
   # copies the binary but doesn't retain the executable bit
-  SEMGREP_SKIP_BIN = true;
+  env.SEMGREP_SKIP_BIN = true;
 
   pythonRelaxDeps = [
     "boltons"
@@ -94,6 +96,7 @@ buildPythonPackage rec {
     requests
     rich
     ruamel-yaml
+    semantic-version
     tqdm
     packaging
     jsonschema
@@ -109,6 +112,7 @@ buildPythonPackage rec {
     opentelemetry-sdk
     opentelemetry-exporter-otlp-proto-http
     opentelemetry-instrumentation-requests
+    opentelemetry-instrumentation-threading
   ];
 
   doCheck = true;

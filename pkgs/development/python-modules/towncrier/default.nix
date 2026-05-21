@@ -9,8 +9,6 @@
   jinja2,
   mock,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
   twisted,
 }:
 
@@ -30,8 +28,7 @@ buildPythonPackage rec {
     click
     incremental
     jinja2
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH

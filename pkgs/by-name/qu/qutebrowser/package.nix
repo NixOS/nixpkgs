@@ -24,28 +24,27 @@
 }:
 
 let
-  isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
-      version = "5.4.394";
+      version = "5.6.205";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-KMpSwF5MmoWdNoIUd4ZOwbJZZmjkid8wUoFKw7XjQFA=";
+      hash = "sha256-JMmxoT68PNJ/MmlMwVNYcHerorklLv5YY6C55xjn73w=";
       stripRoot = false;
     };
 
-  version = "3.6.3";
+  version = "3.7.0";
 in
 
 python3.pkgs.buildPythonApplication {
-  pname = "qutebrowser" + lib.optionalString (!isQt6) "-qt5";
+  pname = "qutebrowser";
   inherit version;
   pyproject = true;
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-bb4oieYevWMAOuQLMZ4egfMG6SToMWxnla5IhAIcL68=";
+    hash = "sha256-x/lYhOpeZnXlhAJb6lXP+VDEfXSa/39BX2jaA/zOD5I=";
   };
 
   # Needs tox
@@ -76,7 +75,7 @@ python3.pkgs.buildPythonApplication {
   dependencies = with python3.pkgs; [
     colorama
     pyyaml
-    (if isQt6 then pyqt6-webengine else pyqtwebengine)
+    pyqt6-webengine
     jinja2
     pygments
     # scripts and userscripts libs
@@ -138,7 +137,7 @@ python3.pkgs.buildPythonApplication {
     let
       libPath = lib.makeLibraryPath [ pipewire ];
       resourcesPath =
-        if (isQt6 && stdenv.hostPlatform.isDarwin) then
+        if stdenv.hostPlatform.isDarwin then
           "${qt6Packages.qtwebengine}/lib/QtWebEngineCore.framework/Resources"
         else
           "${qt6Packages.qtwebengine}/resources";

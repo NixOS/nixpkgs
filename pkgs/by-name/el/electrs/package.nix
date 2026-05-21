@@ -27,9 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  # link rocksdb dynamically
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  env = {
+    # link rocksdb dynamically
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
 
   passthru.updateScript = ./update.sh;
 

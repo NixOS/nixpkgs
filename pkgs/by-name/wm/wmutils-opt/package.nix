@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  xorg,
+  libxcb-util,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libxcb
-    xorg.xcbutil
+    libxcb-util
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

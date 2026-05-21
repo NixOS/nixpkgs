@@ -10,12 +10,12 @@
   gbenchmark,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "7.0.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -29,10 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocPRIM";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-uOlrN/FvEBBCHsPeJOWs9NNqVwrcxVExfs5wp03PH0U=";
+    sparseCheckout = [
+      "projects/rocprim"
+      "shared"
+    ];
+    hash = "sha256-e0mZ27OXyblcnXQGv2ex/CvWx9smw6nBbHZIijj7lP8=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocprim";
 
   nativeBuildInputs = [
     cmake
@@ -80,15 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm parallel primitives";
-    homepage = "https://github.com/ROCm/rocPRIM";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocprim";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

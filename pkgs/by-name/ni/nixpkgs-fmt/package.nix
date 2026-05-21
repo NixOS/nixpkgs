@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-fmt";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixpkgs-fmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6Ut4/ix915EoaPCewoG3KhKBA+OaggpDqnx2nvKxEpQ=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ zimbatm ];
     mainProgram = "nixpkgs-fmt";
   };
-}
+})

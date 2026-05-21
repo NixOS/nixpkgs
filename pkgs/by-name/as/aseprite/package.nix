@@ -8,7 +8,6 @@
   fontconfig,
   freetype,
   giflib,
-  gitUpdater,
   glib,
   harfbuzzFull,
   libicns,
@@ -17,13 +16,13 @@
   libjpeg,
   libpng,
   libwebp,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxxf86vm,
   libxcb,
-  libXrandr,
+  libxrandr,
   ninja,
   pcre2,
   pixman,
@@ -33,36 +32,29 @@
   zlib,
 }:
 
+let
+  asepriteStrings = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "strings";
+    rev = "0f49265d7e7aea4b862b7d1e670ed969e8a469b8";
+    hash = "sha256-S3YkWA5ECvyyqGvojDhIZci04CTjbJzTQiJ5FZsB4lU=";
+  };
+in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.16.1";
+  version = "1.3.17.2";
 
-  srcs = [
-    (fetchFromGitHub {
-      name = "aseprite-source";
-      owner = "aseprite";
-      repo = "aseprite";
-      tag = "v${finalAttrs.version}";
-      fetchSubmodules = true;
-      hash = "sha256-s2lWg5udg/8pXjOcj2nXDS2uE3urkg1iC0Div7wkxUY=";
-    })
-
-    # Translation strings
-    (fetchFromGitHub {
-      name = "aseprite-strings";
-      owner = "aseprite";
-      repo = "strings";
-      rev = "0f49265d7e7aea4b862b7d1e670ed969e8a469b8";
-      hash = "sha256-S3YkWA5ECvyyqGvojDhIZci04CTjbJzTQiJ5FZsB4lU=";
-    })
-  ];
-
-  # Sets the main build directory to "aseprite-source" since multiple sources are fetched.
-  sourceRoot = "aseprite-source";
+  src = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "aseprite";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-+rLrk/c3WLqNhXQ7J0eeqZ3h4PsbZad61Cxw0RubWgk=";
+  };
 
   # Translation files are copied without overwriting existing ones to preserve the potentially more up-to-date English file from the main source.
   postUnpack = ''
-    cp --no-clobber $PWD/aseprite-strings/* ./aseprite-source/data/strings
+    cp --no-clobber ${asepriteStrings}/* "$sourceRoot/data/strings"
   '';
 
   nativeBuildInputs = [
@@ -87,13 +79,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libwebp
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxxf86vm
     libxcb
-    libXrandr
+    libxrandr
     pcre2
     pixman
     skia-aseprite
@@ -182,8 +174,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     # Keep $out/bin clean on Darwin; the bundle lives under $out/Applications.
     rmdir "$out/bin" 2>/dev/null || true
   '';
-
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     homepage = "https://www.aseprite.org/";

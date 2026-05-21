@@ -12,7 +12,7 @@
   numpy,
 
   # optional-dependencies
-  pygame,
+  pygame-ce,
   pymunk,
   chess,
   rlcard,
@@ -31,16 +31,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pettingzoo";
-  version = "1.25.0";
+  version = "1.26.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "PettingZoo";
-    tag = version;
-    hash = "sha256-hQe/TMlLG//Bn8aaSo0/FPOUvOEyKfztuTIS7SMsUQ4=";
+    tag = finalAttrs.version;
+    hash = "sha256-WrfjkDnmir6bZvtMD7MVQKVoGvK+lutlOoNe9SNQ8jU=";
   };
 
   build-system = [
@@ -53,26 +54,25 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
     atari = [
       # multi-agent-ale-py
-      pygame
+      pygame-ce
     ];
     butterfly = [
-      pygame
+      pygame-ce
       pymunk
     ];
     classic = [
       chess
-      pygame
+      pygame-ce
       rlcard
       shimmy
     ];
-    mpe = [ pygame ];
+    mpe = [ pygame-ce ];
     other = [ pillow ];
     sisl = [
       pybox2d
-      pygame
+      pygame-ce
       pymunk
       scipy
     ];
@@ -91,7 +91,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     chess
-    pygame
+    pygame-ce
     pymunk
     pytest-markdown-docs
     pytest-xdist
@@ -118,8 +118,8 @@ buildPythonPackage rec {
   meta = {
     description = "API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
     homepage = "https://github.com/Farama-Foundation/PettingZoo";
-    changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${version}";
+    changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-protobuf";
   version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "protobuf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-AfyZ6xlqmrsVqtoKV1XMEo/Vba9Kpu1EgwfF6pPSZ64=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lewo ];
     license = lib.licenses.bsd3;
   };
-}
+})

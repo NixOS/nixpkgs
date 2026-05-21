@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyroma";
-  version = "4.2";
+  version = "5.0.1";
   pyproject = true;
 
   # https://github.com/regebro/pyroma/issues/104
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "regebro";
     repo = "pyroma";
-    rev = version;
-    sha256 = "sha256-ElSw+bY6fbHJPTX7O/9JZ4drttfbUQsU/fv3Cqqb/J4=";
+    tag = version;
+    sha256 = "sha256-J5+/1jc/Dvh7aPV9FgG/uhxWG4DbQISgx+kX4Ayd1cU=";
   };
 
   propagatedBuildInputs = [

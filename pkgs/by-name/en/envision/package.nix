@@ -35,11 +35,11 @@ buildFHSEnv {
           # Additional dependencies required by Monado when built using Envision
           libgbm
           shaderc
-          xorg.libX11
-          xorg.libxcb
-          xorg.libXrandr
-          xorg.libXrender
-          xorg.xorgproto
+          libx11
+          libxcb
+          libxrandr
+          libxrender
+          xorgproto
           SDL2
           wayland
           mesa-gl-headers

@@ -57,11 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/var/cache"
   ];
 
-  CFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
-    # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
-    # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
-    "-D__nonnull\\(params\\)="
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CFLAGS = toString [
+      # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
+      # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
+      "-D__nonnull\\(params\\)="
+    ];
+  };
 
   postInstall = ''
     moveToOutput bin/locate $locate
@@ -106,5 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "find";
     maintainers = [ lib.maintainers.mdaniels5757 ];
+    teams = [ lib.teams.security-review ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
 })

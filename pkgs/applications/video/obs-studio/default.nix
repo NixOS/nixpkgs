@@ -6,7 +6,6 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
-  fetchpatch2,
   fetchurl,
   addDriverRunpath,
   autoAddDriverRunpath,
@@ -17,8 +16,8 @@
   jansson,
   libjack2,
   libxkbcommon,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   qtbase,
   qtsvg,
   speex,
@@ -26,7 +25,7 @@
   x264,
   curl,
   wayland,
-  xorg,
+  libx11,
   pkg-config,
   libvlc,
   libGL,
@@ -63,7 +62,7 @@
   qrcodegencpp,
   simde,
   nix-update-script,
-  extra-cmake-modules,
+  kdePackages,
 }:
 
 let
@@ -99,13 +98,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "32.0.1";
+  version = "32.1.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-99VAVV3hEMDI2R30OrX/in/9KtesUxMGOPg6yT5e4oM=";
+    hash = "sha256-9i7wLHpKqbcYzPlzSMF4xEpsTINQnVDPtneLJaSM+/I=";
     fetchSubmodules = true;
   };
 
@@ -113,11 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-nix-plugin-path.patch
-    # Fix build with Qt 6.10 https://github.com/obsproject/obs-studio/pull/12328
-    (fetchpatch2 {
-      url = "https://github.com/obsproject/obs-studio/commit/26dfacbd4f5217258a2f1c5472a544c65a182d10.patch?full_index=1";
-      hash = "sha256-gEWDzZ+GPCR+rmytXcbiBcvzLg8VwZCveMKkvho3COI=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -127,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
   ]
   ++ optional scriptingSupport swig
   ++ optional cudaSupport autoAddDriverRunpath;
@@ -139,8 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libv4l
     libxkbcommon
-    libpthreadstubs
-    libXdmcp
+    libpthread-stubs
+    libxdmcp
     qtbase
     qtsvg
     speex
@@ -215,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       wrapperLibraries = [
-        xorg.libX11
+        libx11
         libvlc
         libGL
       ]

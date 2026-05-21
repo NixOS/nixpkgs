@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wagyu";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "AleoHQ";
     repo = "wagyu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5n8BmETv5jUvgu0rskAPYaBgYyNL2QU2t/iUb3hNMMw=";
   };
 
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
       mit
       asl20
     ];
-    maintainers = [ lib.maintainers.offline ];
+    maintainers = [ ];
     mainProgram = "wagyu";
   };
-}
+})

@@ -7,6 +7,9 @@
 
 let
   cfg = config.virtualisation.incus;
+
+  acmeHostDir = config.security.acme.certs."${cfg.useACMEHost}".directory;
+
   preseedFormat = pkgs.formats.yaml { };
 
   nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
@@ -36,8 +39,8 @@ let
       dnsmasq
       e2fsprogs
       findutils
-      getent
       gawk
+      getent
       gnugrep
       gnused
       gnutar
@@ -47,34 +50,28 @@ let
       iptables
       iw
       kmod
+      lego
       libxfs
       lvm2
-      lz4
       lxcfs
-      minio
-      minio-client
+      lz4
       nftables
       qemu-utils
       qemu_kvm
       rsync
+      skopeo
       squashfs-tools-ng
       squashfsTools
       sshfs
       swtpm
       systemd
       thin-provisioning-tools
+      umoci
       util-linux
       virtiofsd
       xdelta
       xz
       zstd
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
-      skopeo
-      umoci
-    ]
-    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
-      lego
     ]
     ++ lib.optionals config.security.apparmor.enable [
       apparmor-bin-utils
@@ -176,7 +173,7 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 
   options = {
@@ -292,6 +289,17 @@ in
 
         package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
+      useACMEHost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "incus.example.com";
+        description = ''
+          Host of an existing Let's Encrypt certificate to use for TLS.
+          *Note that this option does not create any certificates and it
+          doesn't add subdomains to existing ones – you will need to create
+          them manually using {option}`security.acme.certs`.*
+        '';
+      };
     };
   };
 
@@ -391,6 +399,10 @@ in
       '';
     };
 
+    security.acme.certs = lib.mkIf (cfg.useACMEHost != null) {
+      "${cfg.useACMEHost}".reloadServices = [ "incus.service" ];
+    };
+
     systemd.services.incus = {
       description = "Incus Container and Virtual Machine Management Daemon";
 
@@ -402,7 +414,8 @@ in
         "lxcfs.service"
         "incus.socket"
       ]
-      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ]
+      ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
 
       requires = [
         "lxcfs.service"
@@ -410,7 +423,10 @@ in
       ]
       ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
-      wants = [ "network-online.target" ];
+      wants = [
+        "network-online.target"
+      ]
+      ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
@@ -427,6 +443,11 @@ in
         Restart = "on-failure";
         TimeoutStartSec = "${cfg.startTimeout}s";
         TimeoutStopSec = "30s";
+
+        BindReadOnlyPaths = lib.mkIf (cfg.useACMEHost != null) [
+          "${acmeHostDir}/fullchain.pem:/var/lib/incus/server.crt"
+          "${acmeHostDir}/key.pem:/var/lib/incus/server.key"
+        ];
       };
     };
 
@@ -537,4 +558,10 @@ in
 
     virtualisation.lxc.lxcfs.enable = true;
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "virtualisation" "incus" "bucketSupport" ] ''
+      The option was only a temporary workaround to gate the insecure minio dependency until it could be dropped.
+    '')
+  ];
 }

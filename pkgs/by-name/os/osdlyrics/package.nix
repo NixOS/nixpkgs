@@ -18,15 +18,15 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osdlyrics";
-  version = "0.5.15";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "osdlyrics";
     repo = "osdlyrics";
-    rev = version;
-    hash = "sha256-4jEF1LdMwaLNF6zvzAuGW8Iu4dzhrFLutX69LwSjTAI=";
+    rev = finalAttrs.version;
+    hash = "sha256-GvvFtpiuWuHh1dxd7Hd9F9M0WyVOtN0LxZJzGGB0mVA=";
   };
 
   nativeBuildInputs = [
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pedrohlc ];
     platforms = lib.platforms.linux;
   };
-}
+})

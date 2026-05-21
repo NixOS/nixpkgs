@@ -9,14 +9,14 @@
   installShellFiles,
   libGLU,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   makeWrapper,
   openssl,
   pkg-config,
@@ -26,7 +26,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "godot3";
   version = "3.6.2";
   godotBuildDescription = "X11 tools";
@@ -34,7 +34,7 @@ stdenv.mkDerivation (self: {
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = "${self.version}-stable";
+    rev = "${finalAttrs.version}-stable";
     hash = "sha256-loNjE+NmHniZ827Eb9MHSNo27F2LrURhWURjUq4d8xw=";
   };
 
@@ -57,14 +57,14 @@ stdenv.mkDerivation (self: {
     freetype
     libGLU
     libpulseaudio
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     openssl
     udev
     yasm
@@ -90,34 +90,34 @@ stdenv.mkDerivation (self: {
   shouldBuildTools = true;
   godotBuildTarget = "release_debug";
 
-  lto = if self.godotBuildTarget == "release" then "full" else "none";
+  lto = if finalAttrs.godotBuildTarget == "release" then "full" else "none";
 
   sconsFlags = [
     "arch=${stdenv.hostPlatform.linuxArch}"
-    "platform=${self.godotBuildPlatform}"
-    "tools=${lib.boolToString self.shouldBuildTools}"
-    "target=${self.godotBuildTarget}"
+    "platform=${finalAttrs.godotBuildPlatform}"
+    "tools=${lib.boolToString finalAttrs.shouldBuildTools}"
+    "target=${finalAttrs.godotBuildTarget}"
     "bits=${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    "lto=${self.lto}"
+    "lto=${finalAttrs.lto}"
   ];
 
-  shouldWrapBinary = self.shouldBuildTools;
-  shouldInstallManual = self.shouldBuildTools;
-  shouldPatchBinary = self.shouldBuildTools;
-  shouldInstallHeaders = self.shouldBuildTools;
-  shouldInstallShortcut = self.shouldBuildTools && self.godotBuildPlatform != "server";
+  shouldWrapBinary = finalAttrs.shouldBuildTools;
+  shouldInstallManual = finalAttrs.shouldBuildTools;
+  shouldPatchBinary = finalAttrs.shouldBuildTools;
+  shouldInstallHeaders = finalAttrs.shouldBuildTools;
+  shouldInstallShortcut = finalAttrs.shouldBuildTools && finalAttrs.godotBuildPlatform != "server";
 
   outputs = [
     "out"
   ]
-  ++ lib.optional self.shouldInstallManual "man"
-  ++ lib.optional self.shouldBuildTools "dev";
+  ++ lib.optional finalAttrs.shouldInstallManual "man"
+  ++ lib.optional finalAttrs.shouldBuildTools "dev";
 
   builtGodotBinNamePattern =
-    if self.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
+    if finalAttrs.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
 
   godotBinInstallPath = "bin";
-  installedGodotBinName = self.pname;
+  installedGodotBinName = finalAttrs.pname;
   installedGodotShortcutFileName = "org.godotengine.Godot3.desktop";
   installedGodotShortcutDisplayName = "Godot Engine 3";
 
@@ -162,7 +162,7 @@ stdenv.mkDerivation (self: {
     runHook postInstall
   '';
 
-  runtimeDependencies = lib.optionals self.shouldPatchBinary (
+  runtimeDependencies = lib.optionals finalAttrs.shouldPatchBinary (
     map lib.getLib [
       alsa-lib
       libpulseaudio
@@ -172,7 +172,8 @@ stdenv.mkDerivation (self: {
 
   meta = {
     homepage = "https://godotengine.org";
-    description = "Free and Open Source 2D and 3D game engine (" + self.godotBuildDescription + ")";
+    description =
+      "Free and Open Source 2D and 3D game engine (" + finalAttrs.godotBuildDescription + ")";
     license = lib.licenses.mit;
     platforms = [
       "i686-linux"

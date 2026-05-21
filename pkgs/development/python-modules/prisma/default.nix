@@ -8,9 +8,7 @@
   nodeenv,
   pydantic,
   python-dotenv,
-  pythonOlder,
   setuptools,
-  strenum,
   tomlkit,
   typing-extensions,
 }:
@@ -38,8 +36,7 @@ buildPythonPackage rec {
     python-dotenv
     tomlkit
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ strenum ];
+  ];
 
   # Building the client requires network access
   doCheck = false;

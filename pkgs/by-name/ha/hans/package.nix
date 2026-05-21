@@ -5,13 +5,13 @@
   net-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hans";
   version = "1.1";
 
   src = fetchFromGitHub {
     sha256 = "sha256-r6IDs8Seys94LBNnedcfVX5aW8x//ZN0Yh/DGTg8niA=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "hans";
     owner = "friedrich";
   };
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "hans";
   };
-}
+})

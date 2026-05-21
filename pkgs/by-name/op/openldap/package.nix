@@ -20,13 +20,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openldap";
-  version = "2.6.9";
+  version = "2.6.13";
 
   src = fetchurl {
-    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-LLfcc+nINA3/DZk1f7qleKvzDMZhnwUhlyxVVoHmsv8=";
+    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${finalAttrs.version}.tgz";
+    hash = "sha256-1pO0lRekLvuFoaNkoxCu0WpT1CjRtGwNMe8/unj8tlY=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libtool
     openssl
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxcrypt # causes linking issues on *-darwin
   ]
   ++ lib.optionals withModules [
@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-crypt"
     "--enable-overlays"
+    "--enable-spasswd"
     (lib.enableFeature withModules "argon2")
     (lib.enableFeature withModules "modules")
   ]
@@ -166,4 +167,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

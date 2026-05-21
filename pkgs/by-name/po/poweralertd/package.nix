@@ -9,7 +9,7 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poweralertd";
   version = "0.3.0";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "poweralertd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WzqThv3Vu8R+g6Bn8EfesRk18rchCvw/UMPwbn9YC80=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thibautmarty ];
     mainProgram = "poweralertd";
   };
-}
+})

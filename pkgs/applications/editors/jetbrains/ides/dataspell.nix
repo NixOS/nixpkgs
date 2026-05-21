@@ -14,20 +14,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.1.tar.gz";
-      hash = "sha256-N/E0Js5PXYWdfbJG8jKMy61hrfNh1Dx4TLaTKvZkTCg=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.tar.gz";
+      hash = "sha256-FcbflBzHsSWvkXVtrlltvb3PjihP91s0gm3wmV3zuRA=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-QK/TjMcEzf8r6JufDWe9vLFpnXs3sl001E0tUu9qRtM=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1-aarch64.tar.gz";
+      hash = "sha256-JKAW0YtwNDjk3Un4e/cWipreAI8pJaJgLNvx7oOw4RQ=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.1.dmg";
-      hash = "sha256-OI2VbdYkNpehYsBix2sv7kCY9PNAW62wemnObffeYBc=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.dmg";
+      hash = "sha256-w/nFLddHi/l7VqQKngxhYm/LL49eiawXhK+xGBU6Ej0=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.1-aarch64.dmg";
-      hash = "sha256-/g2O8V5uNq8OpDYb1HTyBO5cMH75Cvjsgzl2odrlpaM=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1-aarch64.dmg";
+      hash = "sha256-/yZpE2aY07AedubVG6yarO4uObdaIZ4KCtKl9DaRU4c=";
     };
   };
   # update-script-end: urls
@@ -41,13 +41,15 @@ mkJetBrainsProduct {
   product = "DataSpell";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.157";
+  version = "2026.1";
+  buildNumber = "261.22158.332";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
-  buildInputs = [
+  # NOTE: This `lib.optionals` is only here because the old Darwin builder ignored `buildInputs`.
+  #       DataSpell may need these, even on Darwin!
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libgcc
     (runCommand "libR" { } ''
       mkdir -p $out/lib

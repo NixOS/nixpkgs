@@ -13,7 +13,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "a2jmidid";
   version = "12";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "gitea.ladish.org";
     owner = "LADI";
     repo = "a2jmidid";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-PZKGhHmPMf0AucPruOLB9DniM5A3BKdghFCrd5pTzeM=";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH
-    substituteInPlace $out/bin/a2j --replace "a2j_control" "$out/bin/a2j_control"
+    substituteInPlace $out/bin/a2j --replace-fail "a2j_control" "$out/bin/a2j_control"
   '';
 
   passthru.updateScript = gitUpdater { };
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

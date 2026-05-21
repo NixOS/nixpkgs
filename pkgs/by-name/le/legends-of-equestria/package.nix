@@ -27,7 +27,18 @@
   vulkan-loader,
   libasyncns,
   pango,
-  xorg,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdmcp,
+  libxcursor,
+  libxau,
+  libx11,
+  libxcb,
   wayland,
 }:
 
@@ -66,21 +77,19 @@ let
     libGL
     vulkan-loader
     libasyncns
-  ]
-  ++ (with xorg; [
-    libX11
+    libx11
     libxcb
-    libXau
-    libXdmcp
-    libXext
-    libXcursor
-    libXrender
-    libXfixes
-    libXinerama
-    libXi
-    libXrandr
-    libXScrnSaver
-  ]);
+    libxau
+    libxdmcp
+    libxext
+    libxcursor
+    libxrender
+    libxfixes
+    libxinerama
+    libxi
+    libxrandr
+    libxscrnsaver
+  ];
 in
 stdenv.mkDerivation {
   inherit pname version;

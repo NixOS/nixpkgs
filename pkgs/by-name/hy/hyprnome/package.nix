@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprnome";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "hyprnome";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GZn7qS1J6QSanWdy17sMBbwJ77iMij2jKRgPdrjt6tM=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "hyprnome";
   };
-}
+})

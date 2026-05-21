@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "embellish";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "getnf";
     repo = "embellish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2WPOXrEhnFP3NHE+MksREYlIoGN8AJE7Y2aw3ObVHeM=";
+    hash = "sha256-5aAeEFB2KCyHtOqBj2q1O7A8PXSQYcP92CCqVtUNIqU=";
   };
 
   nativeBuildInputs = [

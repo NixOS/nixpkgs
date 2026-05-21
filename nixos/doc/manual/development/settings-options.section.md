@@ -207,6 +207,14 @@ have a predefined type and string generator already declared under
       you will want to either use an alternative validator
       or set `doCheck = false` in the format options.
 
+`pkgs.formats.hcl1` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with HCL1 JSON-specific attributes `type` and
+    `generate` as specified [below](#pkgs-formats-result). The output
+    is JSON formatted according to HCL1's canonical representation,
+    where nested attribute sets are wrapped in arrays.
+
 `pkgs.formats.libconfig` { *`generator`* ? `<derivation>`, *`validator`* ? `<derivation>` }
 
 :  A function taking an attribute set with values

@@ -54,7 +54,7 @@ body:
       description: "Please include a step-by-step guide for reproducing this issue. Consider writing in concise, numbered bullet points to ensure that Nixpkgs developers can retrace your steps."
     validations:
       required: true
-  - type: "input"
+  - type: "textarea"
     id: "expected-behaviour"
     attributes:
       label: "Expected behaviour"
@@ -134,6 +134,8 @@ body:
         - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+label%3A%220.kind%3A+bug%22+label%3A%226.topic%3A+darwin%22). "
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+        - label: "I assert that I have read the [automation/AI policy](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#automationai-policy) and that this issue report complies with it."
           required: true
   - type: "markdown"
     attributes:

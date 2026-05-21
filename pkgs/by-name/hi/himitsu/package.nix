@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "himitsu";
-  version = "0.8";
+  version = "0.10";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "himitsu";
     rev = finalAttrs.version;
-    hash = "sha256-+GQgRPJut+3zvzSyTGujTbbwJNNgHtFxAoEEwU0lbfU=";
+    hash = "sha256-mG70yAZ0iq4KH6a99jM4MM5FSlx4BE7cvfdk+N1mo5w=";
   };
 
   nativeBuildInputs = [

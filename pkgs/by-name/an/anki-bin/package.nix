@@ -93,8 +93,8 @@ let
       targetPkgs =
         pkgs:
         (with pkgs; [
-          xorg.libxkbfile
-          xorg.libxshmfence
+          libxkbfile
+          libxshmfence
           libxcb-cursor
           krb5
           zstd

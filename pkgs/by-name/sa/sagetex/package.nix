@@ -6,14 +6,14 @@
   texliveBasic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sagetex";
   version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sagetex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OfhbXHbGI+DaDHqZCOGiSHJPHjGuT7ZqSEjKweloW38=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ alexnortung ];
     platforms = lib.platforms.all;
   };
-}
+})

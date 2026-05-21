@@ -14,7 +14,7 @@ let
     ;
   repo = "lesspass";
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "lesspass-cli";
   version = "9.1.9";
   pyproject = true;
@@ -22,11 +22,11 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = repo;
     repo = repo;
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
   };
 
-  sourceRoot = "${src.name}/cli";
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
   build-system = [
     setuptools
@@ -56,4 +56,4 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ jasoncarr ];
     license = lib.licenses.gpl3;
   };
-}
+})

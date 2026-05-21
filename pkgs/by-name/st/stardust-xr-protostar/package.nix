@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-protostar";
   version = "0-unstable-2024-12-29";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9KJO1Z3Aq0+hh9QqufWBxpMmfFOmdgMUJxfgGZMg2n4=";
   };
 
-  env.STARDUST_RES_PREFIXES = "${src}/res";
+  env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
   cargoHash = "sha256-9XJ+nnvpTzr/3ii9dFkfZDex/++W5Mq9k0bh2Y6tueA=";
 
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

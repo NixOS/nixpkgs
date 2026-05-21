@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "open-in-mpv";
   version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "Baldomo";
     repo = "open-in-mpv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mr1c2L5D1v+4VoPA4i5q7/RCdWLLZ1UfTGayiG5Nm6M=";
   };
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "open-in-mpv";
   };
-}
+})

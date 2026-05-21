@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2025.9.0";
+  version = "2026.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QoO4pMAtrsgaJ1yUYHc+otG3eMpw67W8sS7B/H3AoJk=";
+    hash = "sha256-VhZBQDAewy23iyMfli9Xsf1zIAKO6Q38OWNEOW9pdJg=";
   };
 
   build-system = [

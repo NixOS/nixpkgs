@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
-  vscode-generic,
+  buildVscode,
   fetchurl,
   appimageTools,
   undmg,
@@ -12,7 +11,6 @@
 
 let
   inherit (stdenv) hostPlatform;
-  finalCommandLineArgs = "--update=false " + commandLineArgs;
 
   sourcesJson = lib.importJSON ./sources.json;
   sources = lib.mapAttrs (
@@ -24,10 +22,9 @@ let
 
   source = sources.${hostPlatform.system};
 in
-(callPackage vscode-generic rec {
-  inherit useVSCodeRipgrep;
+(buildVscode rec {
+  inherit commandLineArgs useVSCodeRipgrep;
   inherit (sourcesJson) version vscodeVersion;
-  commandLineArgs = finalCommandLineArgs;
 
   pname = "cursor";
 
@@ -46,6 +43,9 @@ in
     else
       source;
 
+  # for unpacking the DMG
+  extraNativeBuildInputs = lib.optionals hostPlatform.isDarwin [ undmg ];
+
   sourceRoot =
     if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
 
@@ -58,7 +58,7 @@ in
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  # Cursor has no wrapper script.
+  # Cursor ships a launcher script that resolves its own VSCODE_PATH.
   patchVSCodePath = false;
 
   meta = {
@@ -66,7 +66,7 @@ in
     homepage = "https://cursor.com";
     changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       aspauldingcode
       prince213
@@ -81,10 +81,22 @@ in
   };
 }).overrideAttrs
   (oldAttrs: {
-    nativeBuildInputs =
-      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+    autoPatchelfIgnoreMissingDeps =
+      (oldAttrs.autoPatchelfIgnoreMissingDeps or [ ])
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) [
+        "libc.musl-*.so.*" # musl-based node modules are not used on glibc systems
+      ];
 
-    passthru = (oldAttrs.passthru or { }) // {
-      inherit sources;
-    };
+    preFixup =
+      (oldAttrs.preFixup or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        sed -i '/^Keywords=/a MimeType=application/x-cursor-workspace;' \
+          $out/share/applications/cursor.desktop
+      '';
+    postInstall =
+      (oldAttrs.postInstall or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        install -Dm644 ../mime/packages/cursor-workspace.xml -t $out/share/mime/packages
+        rm -f $out/lib/cursor/resources/appimageupdatetool.AppImage
+      '';
   })

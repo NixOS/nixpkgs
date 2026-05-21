@@ -5,14 +5,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timelimit";
   version = "1.9.2";
 
   src = fetchFromGitLab {
     owner = "timelimit";
     repo = "timelimit";
-    rev = "release/${version}";
+    rev = "release/${finalAttrs.version}";
     hash = "sha256-5IEAF8zCKaCVH6BAxjoa/2rrue9pRGBBkFzN57d+g+g=";
   };
 
@@ -20,8 +20,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installFlags = [ "PREFIX=$(out)" ];
-  INSTALL_PROGRAM = "install -m755";
-  INSTALL_DATA = "install -m644";
+
+  env = {
+    INSTALL_PROGRAM = "install -m755";
+    INSTALL_DATA = "install -m644";
+  };
 
   meta = {
     description = "Execute a command and terminates the spawned process after a given time with a given signal";
@@ -31,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "timelimit";
   };
-}
+})

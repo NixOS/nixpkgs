@@ -5,14 +5,14 @@
   ocaml,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coq2html";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "coq2html";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dBXYeRwBhBWXJfdULLzfgZU+WD6WC6R8wV2eS1zAkq8=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "coq2html";
   };
-}
+})

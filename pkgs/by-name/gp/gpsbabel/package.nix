@@ -9,7 +9,6 @@
   shapelib,
   zlib,
   withGUI ? false,
-  withMapPreview ? (!stdenv.hostPlatform.isDarwin),
   withDoc ? false,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -21,14 +20,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpsbabel";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "gpsbabel";
     repo = "gpsbabel";
-    rev = "gpsbabel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "gpsbabel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-0w8LsO+HwqZF8SQmwd8bCKma9PCM0hAzXhzWR4DgAHs=";
   };
 
@@ -73,8 +72,7 @@ stdenv.mkDerivation rec {
     shapelib
     zlib
   ]
-  ++ lib.optional withGUI libsForQt5.qtserialport
-  ++ lib.optional (withGUI && withMapPreview) libsForQt5.qtwebengine;
+  ++ lib.optional withGUI libsForQt5.qtserialport;
 
   nativeCheckInputs = [
     libxml2
@@ -90,8 +88,8 @@ stdenv.mkDerivation rec {
     "WITH_SHAPELIB=pkgconfig"
     "WITH_ZLIB=pkgconfig"
   ]
-  ++ lib.optionals (withGUI && !withMapPreview) [
-    "CONFIG+=disable-mappreview"
+  ++ lib.optionals withGUI [
+    "CONFIG+=disable-mappreview" # would require qt5 webengine
   ];
 
   makeFlags =
@@ -171,4 +169,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "gpsbabel";
   };
-}
+})

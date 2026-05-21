@@ -327,6 +327,15 @@ in
                 example = "tailnet.example.com";
               };
 
+              override_local_dns = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether to [override clients' DNS servers](https://tailscale.com/kb/1054/dns#override-dns-servers).
+                '';
+                example = false;
+              };
+
               nameservers = {
                 global = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
@@ -335,6 +344,58 @@ in
                     List of nameservers to pass to Tailscale clients.
                   '';
                 };
+              };
+
+              split = lib.mkOption {
+                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                default = { };
+                description = ''
+                  Split DNS configuration (map of domains and which DNS server to use for each).
+                  See <https://tailscale.com/kb/1054/dns/>.
+                '';
+                example = {
+                  "foo.bar.com" = [ "1.1.1.1" ];
+                };
+              };
+
+              extra_records = lib.mkOption {
+                type = lib.types.nullOr (
+                  lib.types.listOf (
+                    lib.types.submodule {
+                      options = {
+                        name = lib.mkOption {
+                          type = lib.types.str;
+                          description = "DNS record name.";
+                          example = "grafana.tailnet.example.com";
+                        };
+                        type = lib.mkOption {
+                          type = lib.types.enum [
+                            "A"
+                            "AAAA"
+                          ];
+                          description = "DNS record type.";
+                          example = "A";
+                        };
+                        value = lib.mkOption {
+                          type = lib.types.str;
+                          description = "DNS record value (IP address).";
+                          example = "100.64.0.3";
+                        };
+                      };
+                    }
+                  )
+                );
+                default = null;
+                description = ''
+                  Extra DNS records to expose to clients.
+                '';
+                example = ''
+                  [ {
+                    name = "grafana.tailnet.example.com";
+                    type = "A";
+                    example = "100.64.0.3";
+                  } ]
+                '';
               };
 
               search_domains = lib.mkOption {
@@ -591,6 +652,10 @@ in
       {
         assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
         message = "dns.base_domain must be set when using MagicDNS";
+      }
+      {
+        assertion = with cfg.settings; dns.override_local_dns -> dns.nameservers.global != [ ];
+        message = "dns.nameservers.global must be set when overriding local DNS";
       }
       (assertRemovedOption [ "settings" "acl_policy_path" ] "Use `policy.path` instead.")
       (assertRemovedOption [ "settings" "db_host" ] "Use `database.postgres.host` instead.")

@@ -60,7 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/bin
     ln -s $out/usr/local/WebullDesktop/WebullDesktop $out/bin/webull-desktop
     substituteInPlace $out/usr/share/applications/WebullDesktop.desktop \
-      --replace-fail Categories=Utiltity Categories=Finance
+      --replace-fail Categories=Utiltity Categories=Finance \
+      --replace-fail "Exec=/usr/local/WebullDesktop/WebullDesktop" "Exec=webull-desktop" \
+      --replace-fail "Icon=WebullDesktop.png" "Icon=WebullDesktop" \
+      --replace-fail "Version=8.2.0" "Version=${finalAttrs.version}"
+
+    ln -s $out/usr/share $out/share
+
 
     addAutoPatchelfSearchPath $out/usr/local/WebullDesktop
     addAutoPatchelfSearchPath $out/usr/local/WebullDesktop/platforms

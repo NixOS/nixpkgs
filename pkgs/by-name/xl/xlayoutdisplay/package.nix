@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libxrandr,
+  libxcursor,
+  libx11,
   boost,
   gtest,
 }:
@@ -20,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with xorg; [
-    libX11
-    libXrandr
-    libXcursor
+  buildInputs = [
+    libx11
+    libxrandr
+    libxcursor
     boost
   ];
   nativeCheckInputs = [ gtest ];

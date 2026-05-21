@@ -5,14 +5,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moproxy";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "sorz";
     repo = "moproxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Rqno+cg44IWBJbKWUP6BnxzwCjuNhFo9nBF6u2jlyA4=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ oluceps ];
     platforms = lib.platforms.linux;
   };
-}
+})

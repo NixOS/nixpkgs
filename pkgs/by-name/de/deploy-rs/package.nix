@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "deploy-rs";
-  version = "0-unstable-2025-12-18";
+  version = "0-unstable-2026-02-02";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "d5eff7f948535b9c723d60cd8239f8f11ddc90fa";
-    hash = "sha256-znKOwPXQnt3o7lDb3hdf19oDo0BLP4MfBOYiWkEHoik=";
+    rev = "77c906c0ba56aabdbc72041bf9111b565cdd6171";
+    hash = "sha256-hwsYgDnby50JNVpTRYlF3UR/Rrpt01OrxVuryF40CFY=";
   };
 
   cargoHash = "sha256-9O93YTEz+e2oxenE0gwxsbz55clbKo9+37yVOqz7ErE=";

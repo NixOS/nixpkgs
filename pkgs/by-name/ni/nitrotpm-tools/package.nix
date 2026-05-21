@@ -8,18 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nitrotpm-tools";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "NitroTPM-Tools";
-    rev = "v${version}";
-    hash = "sha256-ZTASHHa+LQ/hNaM0qfsaGdNwkZQQZnR9+f05DHbviLw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Jnv1ZKRs59eXnW/O6UCZLIhQolQ9LZjJI6+SqXVws5Q=";
   };
 
-  cargoHash = "sha256-z0b0bLKrnLdMfGKp9aIg3DPW3MJnEhjy9GjCYy44TTQ=";
+  cargoHash = "sha256-ckygzrbDzzjL2eBktAHdbA40E7HDeR8S5rZCbbuVIW0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,7 +41,10 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/aws/NitroTPM-Tools";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ arianvp ];
+    maintainers = with lib.maintainers; [
+      arianvp
+      mariusknaust
+    ];
     platforms = lib.platforms.linux;
   };
-}
+})

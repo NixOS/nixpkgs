@@ -6,7 +6,7 @@
   lapack,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   cudaSupport ? config.cudaSupport,
 
   # build-system
@@ -39,24 +39,26 @@
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.8.2";
+  version = "0.10.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    tag = "jax-v${version}";
-    hash = "sha256-WKdFEhOxJPLjOXOChZbLRGcw0GFeg/TT/FT6M72C6bo=";
+    tag = "jax-v${finalAttrs.version}";
+    hash = "sha256-/RCihrjONN/+QwyQRNEmlIa7JsCLzz+SkBe5sd+ThgU=";
   };
 
   patches = [
-    # https://github.com/jax-ml/jax/pull/32840
-    (fetchpatch2 {
-      url = "https://github.com/Prince213/jax/commit/af5c211d49f3b99447db2252d2cc2b8e0fb54d1c.patch?full_index=1";
-      hash = "sha256-ijEd+MDe91qyYfE+aMzR5rNmTeGadin6Io8PIfJWc3o=";
+    # setup.py: Include only jax.* in the built wheel
+    # https://github.com/jax-ml/jax/pull/37182
+    (fetchpatch {
+      url = "https://github.com/jax-ml/jax/commit/cb5a91780f84f124090d8f94e99c8771e87590f6.patch";
+      hash = "sha256-p6X9IFe4YUb2MQp7YjJHme1dueZ1Y37IKnANGruW1cM=";
     })
   ];
 
@@ -64,7 +66,7 @@ buildPythonPackage rec {
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
-  JAX_RELEASE = "1";
+  env.JAX_RELEASE = "1";
 
   dependencies = [
     jaxlib
@@ -73,7 +75,7 @@ buildPythonPackage rec {
     opt-einsum
     scipy
   ]
-  ++ lib.optionals cudaSupport optional-dependencies.cuda;
+  ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
   optional-dependencies = rec {
     cuda = [ jax-cuda12-plugin ];
@@ -194,4 +196,4 @@ buildPythonPackage rec {
       samuela
     ];
   };
-}
+})

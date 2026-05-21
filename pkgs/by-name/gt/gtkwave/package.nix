@@ -16,13 +16,13 @@
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkwave";
-  version = "3.3.126";
+  version = "3.3.127";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
-    sha256 = "sha256-llAZ10gpdGtdHTgqnPHiciRskRAdDhMfDaUSyUulgWo=";
+    url = "mirror://sourceforge/gtkwave/gtkwave-gtk3-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-8Z2i20Oye7zGaXJYQ0UZRaaMOkziMlYuNB1vY7gLVeQ=";
   };
 
   nativeBuildInputs = [
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -7,11 +7,11 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taglib-extras";
   version = "1.0.1";
   src = fetchurl {
-    url = "https://download.kde.org/stable/taglib-extras/${version}/src/taglib-extras-${version}.tar.gz";
+    url = "https://download.kde.org/stable/taglib-extras/${finalAttrs.version}/src/taglib-extras-${finalAttrs.version}.tar.gz";
     sha256 = "0cln49ws9svvvals5fzxjxlzqm0fzjfymn7yfp4jfcjz655nnm7y";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
   };
-}
+})

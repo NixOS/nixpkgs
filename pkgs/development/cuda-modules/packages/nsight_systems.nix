@@ -14,7 +14,10 @@
   rdma-core,
   ucx,
   wayland,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxdamage,
+  libxcursor,
 }:
 let
   # NOTE(@connorbaker): nsight_systems doesn't support Jetson, so no need for case splitting on aarch64-linux.
@@ -66,7 +69,7 @@ buildRedist (
     ];
 
     # NOTE(@connorbaker): nsight-exporter and nsight-sys are deprecated scripts wrapping nsys, it's fine to remove them.
-    prePatch = ''
+    prePatch = lib.optionalString (lib.versionOlder finalAttrs.version "2025.5.2.26") ''
       if [[ -d bin ]]; then
         nixLog "Removing bin wrapper scripts"
         for knownWrapper in bin/{nsys{,-ui},nsight-{exporter,sys}}; do
@@ -119,10 +122,10 @@ buildRedist (
       rdma-core
       ucx
       wayland
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXrandr
-      xorg.libXtst
+      libxcursor
+      libxdamage
+      libxrandr
+      libxtst
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
     ++ lib.optionals (backendStdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [

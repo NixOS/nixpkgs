@@ -7,14 +7,14 @@
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "afuse";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "pcarrier";
     repo = "afuse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-KpysJRvDx+12BSl9pIGRqbJAM4W1NbzxMgDycGCr2RM=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Automounter in userspace";
     homepage = "https://github.com/pcarrier/afuse";
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

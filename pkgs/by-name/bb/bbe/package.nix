@@ -4,12 +4,12 @@
   fetchurl,
   autoreconfHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bbe";
   version = "0.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bbe-/${version}/bbe-${version}.tar.gz";
+    url = "mirror://sourceforge/bbe-/${finalAttrs.version}/bbe-${finalAttrs.version}.tar.gz";
     sha256 = "1nyxdqi4425sffjrylh7gl57lrssyk4018afb7mvrnd6fmbszbms";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.hhm ];
     mainProgram = "bbe";
   };
-}
+})

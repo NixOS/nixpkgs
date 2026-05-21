@@ -7,11 +7,14 @@
 
   isoImage.edition = lib.mkDefault "plasma6";
 
-  services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6 = {
+    enable = true;
+    enableQt5Integration = false;
+  };
 
   # Automatically login as nixos.
   services.displayManager = {
-    sddm.enable = true;
+    plasma-login-manager.enable = true;
     autoLogin = {
       enable = true;
       user = "nixos";
@@ -19,9 +22,8 @@
   };
 
   environment.systemPackages = [
-    # FIXME: using Qt5 builds of Maliit as upstream has not ported to Qt6 yet
-    pkgs.maliit-framework
-    pkgs.maliit-keyboard
+    # provide onscreen keyboard
+    pkgs.kdePackages.plasma-keyboard
   ];
 
   environment.plasma6.excludePackages = [

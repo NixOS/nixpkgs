@@ -5,9 +5,9 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
   cython,
-  oldest-supported-numpy,
+  numpy,
+  setuptools,
 
   # dependencies
   array-api-compat,
@@ -15,7 +15,6 @@
   decorator,
   h5py,
   natsort,
-  numpy,
   pandas,
   patsy,
   requests,
@@ -29,20 +28,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-bio";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
     tag = finalAttrs.version;
-    hash = "sha256-M0P5DUAMlRTkaIPbxSvO99N3y5eTrkg4NMlkIpGr4/g=";
+    hash = "sha256-zBOUZukqLhTxKG9BluWB+2zTCx5ALhM1s+YP2itqg9A=";
   };
 
   build-system = [
-    setuptools
     cython
-    oldest-supported-numpy
+    numpy
+    setuptools
   ];
 
   dependencies = [
@@ -76,7 +75,7 @@ buildPythonPackage (finalAttrs: {
     description = "Data structures, algorithms and educational resources for bioinformatics";
     homepage = "http://scikit-bio.org/";
     downloadPage = "https://github.com/scikit-bio/scikit-bio";
-    changelog = "https://github.com/scikit-bio/scikit-bio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/scikit-bio/scikit-bio/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

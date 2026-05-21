@@ -73,18 +73,7 @@ with subtest("Superuser can be created"):
         "netbox-manage createsuperuser --noinput --username netbox --email netbox@example.com"
     )
     # Django doesn't have a "clean" way of inputting the password from the command line
-    machine.succeed("cat '${changePassword}' | netbox-manage shell")
-
-machine.wait_for_unit("network.target")
-
-with subtest("Home screen loads from nginx"):
-    machine.succeed(
-        "curl -sSfL http://localhost | grep '<title>Home | NetBox</title>'"
-    )
-
-with subtest("Staticfiles can be fetched"):
-    machine.succeed("curl -sSfL http://localhost/static/netbox.js")
-    machine.succeed("curl -sSfL http://localhost/static/docs/")
+    machine.succeed("cat '${changePassword}' | netbox-manage shell --interface python")
 
 def login(username: str, password: str):
     encoded_data = json.dumps({"username": username, "password": password})
@@ -101,8 +90,29 @@ def login(username: str, password: str):
     )
     return result["key"]
 
-with subtest("Can login"):
-    auth_token = login("netbox", "netbox")
+
+netbox_version = "${netboxVersion}"
+if compare(netbox_version, '4.5.2') < 0:
+    with subtest("Can login"):
+         auth_token = login("netbox", "netbox")
+
+else:
+    with subtest("Superusertoken can be created"):
+        full_token = "0123456789abcdef0123456789abcdef01234567"
+        stdout = machine.succeed("cat ${createToken} | netbox-manage shell")
+        token_prefix = stdout.split(r"Bearer ")[-1].lstrip().rstrip()
+        auth_token = f"{token_prefix}{full_token}"
+
+machine.wait_for_unit("network.target")
+
+with subtest("Home screen loads from nginx"):
+    machine.succeed(
+        "curl -sSfL http://localhost | grep '<title>Home | NetBox</title>'"
+    )
+
+with subtest("Staticfiles can be fetched"):
+    machine.succeed("curl -sSfL http://localhost/static/netbox.js")
+    machine.succeed("curl -sSfL http://localhost/static/docs/")
 
 def get(uri: str):
     return json.loads(
@@ -144,8 +154,8 @@ def post(uri: str, data: Dict[str, Any]):
 def patch(uri: str, data: Dict[str, Any]):
     return data_request(uri, "PATCH", data)
 
-# Retrieve netbox version
-netbox_version = get("/status/")["netbox-version"]
+with subtest("Can retrieve netbox version"):
+    assert netbox_version == get("/status/")["netbox-version"]
 
 with subtest("Can create objects"):
     result = post("/dcim/sites/", {"name": "Test site", "slug": "test-site"})
@@ -263,12 +273,15 @@ if compare(netbox_version, '4.2.0') < 0:
         assert result["data"]["prefix_list"][0]["prefix"] == test_objects["prefixes"]["v4-with-updated-desc"]["prefix"]
         assert int(result["data"]["prefix_list"][0]["site"]["id"]) == int(test_objects["prefixes"]["v4-with-updated-desc"]["scope"]["id"])
 
-with subtest("Can login with LDAP"):
-    machine.wait_for_unit("openldap.service")
-    login("alice", "${testPassword}")
+# With 4.5.2 and higher, obtaining a session cookie or token without supplying
+# proper CSRF tokens on the frontend /login/ endpoint is no longer possible
+if compare(netbox_version, '4.5.2') < 0:
+    with subtest("Can login with LDAP"):
+        machine.wait_for_unit("openldap.service")
+        login("alice", "${testPassword}")
 
-with subtest("Can associate LDAP groups"):
-    result = get("/users/users/?username=${testUser}")
+    with subtest("Can associate LDAP groups"):
+        result = get("/users/users/?username=${testUser}")
 
-    assert result["count"] == 1
-    assert any(group["name"] == "${testGroup}" for group in result["results"][0]["groups"])
+        assert result["count"] == 1
+        assert any(group["name"] == "${testGroup}" for group in result["results"][0]["groups"])

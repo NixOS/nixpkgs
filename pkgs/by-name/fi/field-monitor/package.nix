@@ -21,9 +21,11 @@
   xdg-desktop-portal,
   blueprint-compiler,
   libxml2,
+  nix-update-script,
   spice-protocol,
   spice-gtk,
   vte-gtk4,
+  gcr_4,
   gtk-vnc,
   usbredir,
   libepoxy,
@@ -32,7 +34,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "field-monitor";
-  version = "49.1";
+  version = "50.0";
 
   strictDeps = true;
 
@@ -40,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "theCapypara";
     repo = "field-monitor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vtRubZwIQRV3ySFwdPgZ1Eyxh32FPsAvissxjrV3JcE=";
+    hash = "sha256-IVHzMUjjVZHDTI6Jjq7i8wrENPerKzEiDT15otPFx9A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-zBCt/ptxAQ3TAzklmjbajQZ4Ou1+xlvH/k74yW34t9g=";
+    hash = "sha256-c4ANjQ1OoDMMifAUpU8iNE9lSBamAR+XbEmYrYphixU=";
   };
 
   mesonBuildType = "release";
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    gcr_4
     glib
     gsettings-desktop-schemas
     gtk-vnc
@@ -86,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-plugins-good
   ]);
+
+  passthru.updateScript = nix-update-script { };
 
   postInstall = ''
     wrapProgram $out/bin/de.capypara.FieldMonitor --prefix PATH ':' "$out/libexec"

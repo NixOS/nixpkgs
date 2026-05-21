@@ -23,6 +23,8 @@
   fetchurl,
   withoutTargetLibc,
   threadsCross,
+  buildIsHost,
+  hostIsTarget,
 }:
 
 let
@@ -36,10 +38,7 @@ let
   # aarch64-darwin, as it breaks building a foreign one:
   # https://github.com/iains/gcc-12-branch/issues/18
   canApplyIainsDarwinPatches =
-    stdenv.hostPlatform.isDarwin
-    && stdenv.hostPlatform.isAarch64
-    && (lib.systems.equals buildPlatform hostPlatform)
-    && (lib.systems.equals hostPlatform targetPlatform);
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildIsHost && hostIsTarget;
 
   inherit (lib) optionals optional;
 in
@@ -59,6 +58,16 @@ optionals noSysDirs (
   ]
   ++ (
     {
+      "16" = [
+        # Do not try looking for binaries and libraries in /lib and /usr/lib
+        ./13/no-sys-dirs-riscv.patch
+        # Mangle the nix store hash in __FILE__ to prevent unneeded runtime references
+        #
+        # TODO: Remove these and the `useMacroPrefixMap` conditional
+        # in `cc-wrapper` once <https://gcc.gnu.org/PR111527>
+        # is fixed.
+        ./13/mangle-NIX_STORE-in-__FILE__.patch
+      ];
       "15" = [
         # Do not try looking for binaries and libraries in /lib and /usr/lib
         ./13/no-sys-dirs-riscv.patch
@@ -102,66 +111,11 @@ optionals noSysDirs (
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
+# http://gcc.gnu.org/PR120718 backport (will be inclkuded in 15.3.0) to
+# fix `highway-1.3.0` ICE on aarch64-linux.
+++ optional is15 ./15/aarch64-sve-rtx.patch
 
 ## 2. Patches relevant on specific platforms ####################################
-
-### Musl+Go+gcc12
-
-# backport fixes to build gccgo with musl libc
-++ optionals (stdenv.hostPlatform.isMusl && langGo) [
-  # libgo: handle stat st_atim32 field and SYS_SECCOMP
-  # syscall: gofmt
-  # Add blank lines after //sys comments where needed, and then run gofmt
-  # on the syscall package with the new formatter.
-  # See https://go-review.googlesource.com/c/gofrontend/+/412074
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/cf79b1117bd177d3d4c6ed24b6fa243c3628ac2d.diff";
-    hash = "sha256-mS5ZiYi5D8CpGXrWg3tXlbhp4o86ew1imCTwaHLfl+I=";
-  })
-  # libgo: permit loff_t and off_t to be macros
-  # See https://go-review.googlesource.com/c/gofrontend/+/412075
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/7f195a2270910a6ed08bd76e3a16b0a6503f9faf.diff";
-    hash = "sha256-Ze/cFM0dQofKH00PWPDoklXUlwWhwA1nyTuiDAZ6FKo=";
-  })
-  # libgo: handle stat st_atim32 field and SYS_SECCOMP
-  # See https://go-review.googlesource.com/c/gofrontend/+/415294
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/762fd5e5547e464e25b4bee435db6df4eda0de90.diff";
-    hash = "sha256-o28upwTcHAnHG2Iq0OewzwSBEhHs+XpBGdIfZdT81pk=";
-  })
-  # runtime: portable access to sigev_notify_thread_id
-  # See https://sourceware.org/bugzilla/show_bug.cgi?id=27417
-  # See https://go-review.googlesource.com/c/gofrontend/+/434755
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/e73d9fcafbd07bc3714fbaf8a82db71d50015c92.diff";
-    hash = "sha256-1SjYCVHLEUihdON2TOC3Z2ufM+jf2vH0LvYtZL+c1Fo=";
-  })
-  # syscall, runtime: always call XSI strerror_r
-  # See https://go-review.googlesource.com/c/gofrontend/+/454176
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/b6c6a3d64f2e4e9347733290aca3c75898c44b2e.diff";
-    hash = "sha256-RycJ3YCHd3MXtYFjxP0zY2Wuw7/C4bWoBAQtTKJZPOQ=";
-  })
-  # libgo: check for makecontext in -lucontext
-  # See https://go-review.googlesource.com/c/gofrontend/+/458396
-  (fetchpatch {
-    excludes = [ "gcc/go/gofrontend/MERGE" ];
-    url = "https://github.com/gcc-mirror/gcc/commit/2b1a604a9b28fbf4f382060bebd04adb83acc2f9.diff";
-    hash = "sha256-WiBQG0Xbk75rHk+AMDvsbrm+dc7lDH0EONJXSdEeMGE=";
-  })
-  # x86: Fix -fsplit-stack feature detection via  TARGET_CAN_SPLIT_STACK
-  # Fixes compiling for non-glibc target
-  (fetchpatch {
-    url = "https://github.com/gcc-mirror/gcc/commit/c86b726c048eddc1be320c0bf64a897658bee13d.diff";
-    hash = "sha256-QSIlqDB6JRQhbj/c3ejlmbfWz9l9FurdSWxpwDebnlI=";
-  })
-]
 
 ## Darwin
 
@@ -249,3 +203,4 @@ optionals noSysDirs (
     hash = "sha256-8I2G4430gkYoWgUued4unqhk8ZCajHf1dcivAeuLZ0E=";
   })
 ]
+++ optional (targetPlatform.isMusl && targetPlatform.isx86_32) ./libssp-noshared-musl32.patch

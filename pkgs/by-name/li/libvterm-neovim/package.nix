@@ -6,13 +6,13 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvterm-neovim";
   # Releases are not tagged, look at commit history to find latest release
   version = "0.3.3";
 
   src = fetchurl {
-    url = "https://launchpad.net/libvterm/trunk/v${lib.versions.majorMinor version}/+download/libvterm-${version}.tar.gz";
+    url = "https://launchpad.net/libvterm/trunk/v${lib.versions.majorMinor finalAttrs.version}/+download/libvterm-${finalAttrs.version}.tar.gz";
     hash = "sha256-CRVvQ90hKL00fL7r5Q2aVx0yxk4M8Y0hEZeUav9yJuA=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rvolosatovs ];
     platforms = lib.platforms.unix;
   };
-}
+})

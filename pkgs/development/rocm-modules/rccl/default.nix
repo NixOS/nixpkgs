@@ -40,7 +40,7 @@ in
 # infiniband ib_peer_mem support isn't in the mainline kernel but is carried by some distros
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl${clr.gpuArchSuffix}";
-  version = "7.0.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -58,8 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rccl";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ByKz6TNdGVbh65ZH5PtgUbAj4qNVmOBmZ9SrOjkTbWU=";
+    hash = "sha256-A1IQYIDWqu3JLiPQ70G52s1/0ZweQxFlgMUH81qJWmU=";
   };
+
+  requiredSystemFeatures = [ "big-parallel" ]; # Very resource intensive LTO
 
   nativeBuildInputs = [
     cmake
@@ -136,11 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   # This package with sanitizers + manual integration test binaries built
   # must be ran manually

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emojify";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "mrowa44";
     repo = "emojify";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6cV+S8wTqJxPGsxiJ3hP6/CYPMWdF3qnz4ddL+F/oJU=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "emojify";
   };
-}
+})

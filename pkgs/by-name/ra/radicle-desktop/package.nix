@@ -1,4 +1,5 @@
 {
+  stdenv,
   fetchFromGitHub,
   cargo-tauri,
   fetchFromRadicle,
@@ -20,17 +21,18 @@
   wrapGAppsHook4,
   rustfmt,
   clippy,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
-    rev = "aeb405aaf53b56a426ab8d68c7f89b8953683224";
-    hash = "sha256-Z/6GdXf3ag/89H8UMD2GNU4CXA8TWyX8dl8uh0CTem8=";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-Tlb2RVhFUcfJZy5/FyJuSpkRZ0ZxhLe5ynAK2y7+f1Q=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -51,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-lcSNGmIv6u7DT47lOC69BRbVSK5IPiwjtdAS8aVxwqM=";
+    hash = "sha256-x0u75on1Kc+u1u1R1SLLOfmTG5kFVvn2PsaWdH/RB3w=";
   };
 
-  cargoHash = "sha256-z5fnwc7EjSvkyu4zTUyAvVfs6quwH2p9VFDK/TdzZJE=";
+  cargoHash = "sha256-ojb1gT2dOhdvUHxKR51t0EKjZdgCXYxzhC0lmh87Uq0=";
 
   twemojiAssets = fetchFromGitHub {
     owner = "twitter";
@@ -83,8 +85,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     libsoup_3
     openssl
-    webkitgtk_4_1
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ webkitgtk_4_1 ];
 
   preBuild = ''
     export GIT_HEAD=$(<$src/.git_head)
@@ -96,12 +98,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     radicle-node
     rustfmt
     clippy
+    writableTmpDirAsHomeHook
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    export RAD_HOME="$PWD/_rad-home"
     export RAD_PASSPHRASE=""
     rad auth --alias test
     bins="tests/tmp/bin/heartwood/$HW_RELEASE"
@@ -117,19 +119,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.env = finalAttrs.env;
+  passthru = {
+    inherit (finalAttrs) env;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Radicle desktop app";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
+    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      matthiasbeyer
-      defelo
-      faukah
-    ];
+    teams = [ lib.teams.radicle ];
+    maintainers = with lib.maintainers; [ faukah ];
     mainProgram = "radicle-desktop";
   };
 })

@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pytest-cov-stub,
   cython,
   setuptools,
   setuptools-scm,
@@ -17,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "nitime";
-  version = "0.11";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4Ie8fuk9CKdn/64TsCfN2No2dU16ICpBRWYerqqF0/0=";
+    hash = "sha256-Esv0iLBlXcBaoYoMpZgt6XAwJgTkYfyS6H69m3U5tv8=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +41,21 @@ buildPythonPackage rec {
     nibabel
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin; # tests hang indefinitely
+
+  disabledTests = [
+    # [doctest] nitime.tests.test_timeseries.test_UniformTime_repr
+    # Expected:
+    #     UniformTime([    0.,  1000.,  2000.,  3000.,  4000.], time_unit='ms')
+    # Got:
+    #     UniformTime([   0., 1000., 2000., 3000., 4000.], time_unit='ms')
+    "test_UniformTime_repr"
+  ];
 
   pythonImportsCheck = [ "nitime" ];
 

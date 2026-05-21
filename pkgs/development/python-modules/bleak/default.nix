@@ -16,7 +16,6 @@
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
   typing-extensions,
-  async-timeout,
 
   pytest-asyncio,
   pytest-cov-stub,
@@ -25,24 +24,27 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
     tag = "v${version}";
-    hash = "sha256-UrKJoEyLa75HMCOgxmOqJi1z+32buMra+dwVe5qbBds=";
+    hash = "sha256-zplCwm0LxDTbNvjWK6VYEFe0Azd2ginkoPZpV7Tpv20=";
   };
 
-  postPatch =
-    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace bleak/backends/bluezdbus/version.py \
-        --replace-fail \
-          '"bluetoothctl"' \
-          '"${lib.getExe' bluez "bluetoothctl"}"'
-    '';
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
+  ''
+  # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace bleak/backends/bluezdbus/version.py \
+      --replace-fail \
+        '"bluetoothctl"' \
+        '"${lib.getExe' bluez "bluetoothctl"}"'
+  '';
 
   build-system = [ poetry-core ];
 
@@ -58,9 +60,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -78,6 +77,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

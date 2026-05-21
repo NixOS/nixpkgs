@@ -5,6 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  versionCheckHook,
   # Deprecated options
   # Remove them as soon as possible
   withXclip ? null,
@@ -68,6 +69,9 @@ let
       };
       wrapper = callPackage ./wrapper.nix { micro = self; };
     };
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
 
     meta = {
       homepage = "https://micro-editor.github.io";

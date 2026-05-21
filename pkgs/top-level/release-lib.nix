@@ -20,7 +20,6 @@ let
   inherit (lib)
     addMetaAttrs
     any
-    derivations
     filter
     flip
     genAttrs
@@ -28,8 +27,6 @@ let
     hydraJob
     id
     isDerivation
-    lists
-    maintainers
     mapAttrs
     mapAttrs'
     mapAttrsRecursive

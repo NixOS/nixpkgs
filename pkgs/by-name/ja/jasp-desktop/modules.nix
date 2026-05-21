@@ -32,13 +32,6 @@ let
     ];
   };
 
-  jaspColumnEncoder-src = fetchFromGitHub {
-    owner = "jasp-stats";
-    repo = "jaspColumnEncoder";
-    rev = "32c53153da95087feb109c0f5f69534ffa3f32b7";
-    hash = "sha256-VOMcoXpLH24auQfZCWW6hQ10u6n2GxuEQHMaXrvGTnI=";
-  };
-
   jaspBase = buildRPackage {
     pname = "jaspBase";
     version = jasp-version;
@@ -46,11 +39,10 @@ let
     src = jasp-src;
     sourceRoot = "${jasp-src.name}/Engine/jaspBase";
 
-    env.INCLUDE_DIR = "../inst/include/jaspColumnEncoder";
-
-    postPatch = ''
-      mkdir -p inst/include
-      cp -r --no-preserve=all ${jaspColumnEncoder-src} inst/include/jaspColumnEncoder
+    preConfigure = ''
+      mkdir -p ./inst/include/
+      cp -r --no-preserve=all ../../Common ./inst/include/Common
+      export INCLUDE_DIR=$(pwd)/inst/include/Common/
     '';
 
     propagatedBuildInputs = [
@@ -120,13 +112,13 @@ let
 
   flexplot = buildRPackage {
     pname = "flexplot";
-    version = "0.25.5";
+    version = "0.26.3";
 
     src = fetchFromGitHub {
       owner = "dustinfife";
       repo = "flexplot";
-      rev = "9a39de871d48364dd5f096b2380a4c9907adf4c3";
-      hash = "sha256-yf5wbhfffztT5iF6h/JSg4NSbuaexk+9JEOfT5Is1vE=";
+      rev = "cae36ba45502ce1794ad35cfeaf0155275db3056";
+      hash = "sha256-aOCYy21EQ/lGDWQvkGAspTSZiJif8mlS2lCwS180dUA=";
     };
 
     propagatedBuildInputs = [
@@ -200,8 +192,8 @@ in
   modules = rec {
     jaspAcceptanceSampling = buildJaspModule {
       pname = "jaspAcceptanceSampling";
-      version = "0.95.3";
-      hash = "sha256-Z0NyUPAmgCYC3+w2JX2vSmkyFWdJERd5NckXfF46n5o=";
+      version = "0.96.0";
+      hash = "sha256-sbLzTuGr7r/OsIMliOfvwVsmgUgZxL+6rqiq4W+BIBc=";
       deps = [
         abtest
         BayesFactor
@@ -218,8 +210,8 @@ in
     };
     jaspAnova = buildJaspModule {
       pname = "jaspAnova";
-      version = "0.95.3";
-      hash = "sha256-d0m/mGyRkcBlk3961lafQ+X10yTvsWvQnExVDraW28M=";
+      version = "0.96.0";
+      hash = "sha256-K695RXTxzbYVF+gh8gzFTsceTTNdx976yF6WiPHm3No=";
       deps = [
         afex
         BayesFactor
@@ -247,8 +239,8 @@ in
     };
     jaspAudit = buildJaspModule {
       pname = "jaspAudit";
-      version = "0.95.3";
-      hash = "sha256-XnQFmf5xdUqClpaJ6Qz0zJAHs1ieeYd4nffxDKX7ReE=";
+      version = "0.96.0";
+      hash = "sha256-1j6Na7Ikk8XJQjbTRRuK28K3jMVdUVe0FwTzo5ywppY=";
       deps = [
         bstats
         extraDistr
@@ -261,8 +253,8 @@ in
     };
     jaspBain = buildJaspModule {
       pname = "jaspBain";
-      version = "0.95.3";
-      hash = "sha256-kt0s2VJQGhVeD+ALY4FTtU1+7hYw81cXM1WvJ99lnZQ=";
+      version = "0.96.0";
+      hash = "sha256-CcelkJJD/rr5BOx8MaCkHfbUKp7/tvWOSSC+Ilsopc8=";
       deps = [
         bain
         lavaan
@@ -276,8 +268,8 @@ in
     };
     jaspBFF = buildJaspModule {
       pname = "jaspBFF";
-      version = "0.95.3";
-      hash = "sha256-E+CYTFfiAM7Fng4vY39cceU2IUFcXKn+uejLufnwcOc=";
+      version = "0.96.0";
+      hash = "sha256-bh3uLZcjfYpwaNmEzqVW5eNdPFq/Ig3bh7+1DgXYoF8=";
       deps = [
         BFF
         jaspBase
@@ -286,8 +278,8 @@ in
     };
     jaspBfpack = buildJaspModule {
       pname = "jaspBfpack";
-      version = "0.95.3";
-      hash = "sha256-9biiB/m8QsSjlAheoo3hllxYyAIgoeEb1W0KXUEa5C8=";
+      version = "0.96.0";
+      hash = "sha256-S1lKrMC6BG6cjJWuxVYVtUciZIeePX0Nx/IvwCjixHY=";
       deps = [
         BFpack
         bain
@@ -300,8 +292,8 @@ in
     };
     jaspBsts = buildJaspModule {
       pname = "jaspBsts";
-      version = "0.95.3";
-      hash = "sha256-TJi0fqZ3abV9mM9XyRiuQfK1tkOJ7VluyKilUdHHj0Y=";
+      version = "0.96.0";
+      hash = "sha256-sFbn0yOr7ZaaO2APYNOshBcs1zvgIZUT89BvdRrN/+4=";
       deps = [
         Boom
         bsts
@@ -314,8 +306,8 @@ in
     };
     jaspCircular = buildJaspModule {
       pname = "jaspCircular";
-      version = "0.95.3";
-      hash = "sha256-L3WVErysIMtRLDRzaRd+MCYL9smzWERMTiyzrPHGPjQ=";
+      version = "0.96.0";
+      hash = "sha256-fqBSR/um02+BXuu7gucd7WWG/RSOeLmhXHQl2wXiVGw=";
       deps = [
         jaspBase
         jaspGraphs
@@ -325,8 +317,8 @@ in
     };
     jaspCochrane = buildJaspModule {
       pname = "jaspCochrane";
-      version = "0.95.3";
-      hash = "sha256-MAIj0ThgUdo07gHBs0a5tzEsJTrtPS3XnyW2Wj+xp3g=";
+      version = "0.96.0";
+      hash = "sha256-z6rglW4wItG9akHWplpDBzB5yzRko/ze+DcQotJmHTg=";
       deps = [
         jaspBase
         jaspGraphs
@@ -336,8 +328,8 @@ in
     };
     jaspDescriptives = buildJaspModule {
       pname = "jaspDescriptives";
-      version = "0.95.3";
-      hash = "sha256-W4LWha+GTVSrOAJLIv9Uy3wOnyHxoT0O/yxj9Zw8/Tg=";
+      version = "0.96.0";
+      hash = "sha256-cJCTglQhU5fCH7henOKA0h39VuA07zVVfATtuct8tqY=";
       deps = [
         ggplot2
         ggrepel
@@ -347,6 +339,7 @@ in
         forecast
         flexplot
         ggrain
+        ggh4x
         ggpp
         ggtext
         dplyr
@@ -359,8 +352,8 @@ in
 
     jaspDistributions = buildJaspModule {
       pname = "jaspDistributions";
-      version = "0.95.3";
-      hash = "sha256-EutMd5cD3jEW/3e3Ch9IClo1LaNsuvmnvh9cy8hG5Bc=";
+      version = "0.96.0";
+      hash = "sha256-uZWCVCOFfNkLNjJJ82x4H5rKH1m7KE3UDX1p/7dn4uY=";
       deps = [
         car
         fitdistrplus
@@ -377,8 +370,8 @@ in
     };
     jaspEquivalenceTTests = buildJaspModule {
       pname = "jaspEquivalenceTTests";
-      version = "0.95.3";
-      hash = "sha256-cTVPephc/9IIJ8eUP3Ma1d215E6bI1MOWtlQDGqPN70=";
+      version = "0.96.0";
+      hash = "sha256-4XFN6ikBfOZWHMTLbNPBwgMoYiLVULQE0XyNaoPQ40k=";
       deps = [
         BayesFactor
         ggplot2
@@ -391,8 +384,8 @@ in
     };
     jaspEsci = buildJaspModule {
       pname = "jaspEsci";
-      version = "0.95.3";
-      hash = "sha256-wgbp1iZRWfm6dRVkVhK6iC0hHu73pFm3Hk9pN7Z6ej8=";
+      version = "0.96.0";
+      hash = "sha256-pH1neP1GmL3usXP5ycQKGeLNzvfMV/UBrrKF718QaGI=";
       deps = [
         jaspBase
         jaspGraphs
@@ -404,8 +397,8 @@ in
     };
     jaspFactor = buildJaspModule {
       pname = "jaspFactor";
-      version = "0.95.3";
-      hash = "sha256-1e4HYst/G5JqN7fksFR907LqysdyTCcUXLgRfiSBCd0=";
+      version = "0.96.0";
+      hash = "sha256-AU9nTrxZNseN0Wsp3932V3N+ax5CzfJMoEB128AR5LM=";
       deps = [
         ggplot2
         jaspBase
@@ -423,8 +416,8 @@ in
     };
     jaspFrequencies = buildJaspModule {
       pname = "jaspFrequencies";
-      version = "0.95.3";
-      hash = "sha256-3JznrmKqAJJop57gNQw7eOLjbS7B41AriUdZTttoSkM=";
+      version = "0.96.0";
+      hash = "sha256-qolgiJjiODzheW04fXdtxNqAreEny7ln+GlwV4ztRik=";
       deps = [
         abtest
         BayesFactor
@@ -443,8 +436,8 @@ in
     };
     jaspJags = buildJaspModule {
       pname = "jaspJags";
-      version = "0.95.3";
-      hash = "sha256-wZsc3NSiNKa35R7c/mrnp+crA8OkNk/2JRiiEW8DZq4=";
+      version = "0.96.0";
+      hash = "sha256-f26njMClIUWNc4fGsPgwitzKbqdU6Ld+Ys6ukWAHE/M=";
       deps = [
         coda
         ggplot2
@@ -460,8 +453,8 @@ in
     };
     jaspLearnBayes = buildJaspModule {
       pname = "jaspLearnBayes";
-      version = "0.95.3";
-      hash = "sha256-YRzoF4FrPrSeDcKq7V9N8FcNtCKZ4n5e2O9u9aseAik=";
+      version = "0.96.0";
+      hash = "sha256-zqMcWFML/iexmegMtGWCe/OCGqwmWW98/XZfKVs6N8w=";
       deps = [
         extraDistr
         ggplot2
@@ -483,8 +476,8 @@ in
     };
     jaspLearnStats = buildJaspModule {
       pname = "jaspLearnStats";
-      version = "0.95.3";
-      hash = "sha256-PSrLmRlvd0U7hkFXRvzi5hFz7/Czj3iOSdWyGGoOHVI=";
+      version = "0.96.0";
+      hash = "sha256-Yvqhv269Uvr087IjiGMBzTHZj+4Wu5A8dN/F9+8odqY=";
       deps = [
         extraDistr
         ggplot2
@@ -502,8 +495,8 @@ in
     };
     jaspMachineLearning = buildJaspModule {
       pname = "jaspMachineLearning";
-      version = "0.95.3";
-      hash = "sha256-ZZKEO+FMx5uycD1JBln6HG5qLqbzRCnr/B2/yDUqhYs=";
+      version = "0.96.0";
+      hash = "sha256-Wg1C/ZJL98U8JkMfeZcc4/83DmCHRYOIn2OglsMqImw=";
       deps = [
         kknn
         AUC
@@ -541,8 +534,8 @@ in
     };
     jaspMetaAnalysis = buildJaspModule {
       pname = "jaspMetaAnalysis";
-      version = "0.95.3";
-      hash = "sha256-JxO3jvEVcYIkOPncCYLHJFbu0i2HYx7ltqEBzSNKRjM=";
+      version = "0.96.0";
+      hash = "sha256-bXHlYiGEtNMqr833ve3Qrdv+TCm7G4let07McMETUv8=";
       deps = [
         dplyr
         ggplot2
@@ -575,13 +568,12 @@ in
     };
     jaspMixedModels = buildJaspModule {
       pname = "jaspMixedModels";
-      version = "0.95.3";
-      hash = "sha256-rc0l9aYKVjpSruxutYxYHLRmDN045fBYXD3itKbzDYA=";
+      version = "0.96.0";
+      hash = "sha256-F7NEyqA+vW+66l/ZmWaVvTSbG+0fxI+SsgfV6GmwJLs=";
       deps = [
         afex
         emmeans
         ggplot2
-        ggpol
         jaspBase
         jaspGraphs
         lme4
@@ -595,8 +587,8 @@ in
     };
     jaspNetwork = buildJaspModule {
       pname = "jaspNetwork";
-      version = "0.95.3";
-      hash = "sha256-16qRhOgzFRgbImeIfTKZJyn8ZlGnohPp4/whabdDHeM=";
+      version = "0.96.0";
+      hash = "sha256-alF9pDjBqrJvqDaJIOf9F/SWu/wrmspSFY/chE8/U9k=";
       deps = [
         bootnet
         easybgm
@@ -619,8 +611,8 @@ in
     };
     jaspPower = buildJaspModule {
       pname = "jaspPower";
-      version = "0.95.3";
-      hash = "sha256-2PrPaksHMAFVYCPN+xigLDSyALarzrO4FTylMmi4+vk=";
+      version = "0.96.0";
+      hash = "sha256-Q5CBXoHr6jPs/UNMpyQXzhMm5a48G8LTYr37VKfzrrc=";
       deps = [
         pwr
         jaspBase
@@ -630,8 +622,8 @@ in
     };
     jaspPredictiveAnalytics = buildJaspModule {
       pname = "jaspPredictiveAnalytics";
-      version = "0.95.3";
-      hash = "sha256-mQx/LsFDaD9zS2DqqiXfFNT019/J3HPdNsPzxWn2Pwc=";
+      version = "0.96.0";
+      hash = "sha256-CrpozVhA+vTv15dWUH9CqK37BdO7okE8XML6BYRsoYw=";
       deps = [
         jaspBase
         jaspGraphs
@@ -651,8 +643,8 @@ in
     };
     jaspProcess = buildJaspModule {
       pname = "jaspProcess";
-      version = "0.95.3";
-      hash = "sha256-wWMpqOXOKEx3z0juBXfnfJvbKCeI+H/Wnhh24dNWJWw=";
+      version = "0.96.0";
+      hash = "sha256-ZO3Y+3qA84s0wUdL9iRqnc4vljzg69crH34eCbGWmOo=";
       deps = [
         blavaan
         dagitty
@@ -666,8 +658,8 @@ in
     };
     jaspProphet = buildJaspModule {
       pname = "jaspProphet";
-      version = "0.95.3";
-      hash = "sha256-AOm0oNqCHmkUdhC8Cqb4O9HkUoC9L8TFaSNcZ/DzoYQ=";
+      version = "0.96.0";
+      hash = "sha256-rEBXWEVpavXiMljtvNfKLVvI8VIaTk+yymaGx4w/li8=";
       deps = [
         rstan
         ggplot2
@@ -679,8 +671,8 @@ in
     };
     jaspQualityControl = buildJaspModule {
       pname = "jaspQualityControl";
-      version = "0.95.3";
-      hash = "sha256-zFxC3icKd84jjilwZBCe7JRV8S1eb4AO8UyBENXsF/U=";
+      version = "0.96.0";
+      hash = "sha256-5DNz827MZHfmLnFXNUTFweMmOdDftxm6S8ZJwzCCDa8=";
       deps = [
         car
         cowplot
@@ -708,11 +700,12 @@ in
         tibble
         vipor
         weibullness
+        flexsurv
       ];
     };
     jaspRegression = buildJaspModule {
       pname = "jaspRegression";
-      version = "0.95.3";
+      version = "0.96.0";
       rev = "b0ecad26bb248964e778ee6d4486d671b83930b2";
       hash = "sha256-wm/Fz/wA7B96bzj8UylZjFgrrZgwOTdGnCsmfaCPGp0=";
       deps = [
@@ -742,8 +735,8 @@ in
     };
     jaspReliability = buildJaspModule {
       pname = "jaspReliability";
-      version = "0.95.3";
-      hash = "sha256-80G8Z8JWxwyAer1GsQgzytEcSquCBW8Zmu92KKiHu1I=";
+      version = "0.96.0";
+      hash = "sha256-WZW9CAAKdEYUTwGC1zmtChvntgRTkLL6xwrpukDoqSo=";
       deps = [
         Bayesrel
         coda
@@ -761,8 +754,8 @@ in
     };
     jaspRobustTTests = buildJaspModule {
       pname = "jaspRobustTTests";
-      version = "0.95.3";
-      hash = "sha256-txcItwNHq41ifdjvyY9Jhp2sfHJYA/YStTxpyk/lUPQ=";
+      version = "0.96.0";
+      hash = "sha256-U6qH0tKC7lLFvnTGK9mNli7Azh/SA6pUEJdsUoOCsYo=";
       deps = [
         RoBTT
         ggplot2
@@ -772,8 +765,8 @@ in
     };
     jaspSem = buildJaspModule {
       pname = "jaspSem";
-      version = "0.95.3";
-      hash = "sha256-QI1OGAfyBJ9p3Nb/sI3A5sISXc4ZpsN1sPaJL/3chP8=";
+      version = "0.96.0";
+      hash = "sha256-acSH/0IbqDxSOZi30zBjDgU3I6jxUYCgVG9B7dbkAh8=";
       deps = [
         forcats
         ggplot2
@@ -788,12 +781,14 @@ in
         tibble
         tidyr
         SEMsens
+        mxsem
+        OpenMx
       ];
     };
     jaspSummaryStatistics = buildJaspModule {
       pname = "jaspSummaryStatistics";
-      version = "0.95.3";
-      hash = "sha256-6OEnYhp4NBd8mr518Mz63F7eZ297unDRYLiOoWzlAbc=";
+      version = "0.96.0";
+      hash = "sha256-UuC26atGRnRHwp1xhAJtj5vkdPvYjcs2WIPgAq/0Uvg=";
       deps = [
         BayesFactor
         bstats
@@ -810,8 +805,8 @@ in
     };
     jaspSurvival = buildJaspModule {
       pname = "jaspSurvival";
-      version = "0.95.3";
-      hash = "sha256-rrbzd8Iws7lhKPJGRtFLuFgRkqHa8B0R6ZH/HdHDk44=";
+      version = "0.96.0";
+      hash = "sha256-P652YSopruDje69vXfeBMSBMU/GPmYCuRp7jd2ZneEI=";
       deps = [
         survival
         ggsurvfit
@@ -822,8 +817,8 @@ in
     };
     jaspTTests = buildJaspModule {
       pname = "jaspTTests";
-      version = "0.95.3";
-      hash = "sha256-yuNLBi56qKCTCh/UNoYjA7YlyL/1B0QXsgN4C8SzQbs=";
+      version = "0.96.0";
+      hash = "sha256-K1thMejBibf8nzP07QbKyS/j3FbbrGQNPdiBpkhKf1w=";
       deps = [
         BayesFactor
         car
@@ -848,8 +843,8 @@ in
     };
     jaspTimeSeries = buildJaspModule {
       pname = "jaspTimeSeries";
-      version = "0.95.3";
-      hash = "sha256-qOrLihjSH7cEazTiFJZIfMe9uGZ6ltZ3uMm+1fwPN7E=";
+      version = "0.96.0";
+      hash = "sha256-FZEEa1n7B9Kt74L7dw+oYWmHBGobI78wUBzQ1wsKos8=";
       deps = [
         jaspBase
         jaspGraphs
@@ -859,8 +854,8 @@ in
     };
     jaspVisualModeling = buildJaspModule {
       pname = "jaspVisualModeling";
-      version = "0.95.3";
-      hash = "sha256-KwFfgwBlukRmSltHt1LVzIMB/x2iCvRMc/Rrhmmxw98=";
+      version = "0.96.0";
+      hash = "sha256-lhvH69LUIzXsFQ730hqcWnkTK0aeMhal3VhSTrr4eHc=";
       deps = [
         flexplot
         jaspBase

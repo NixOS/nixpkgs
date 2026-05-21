@@ -9,10 +9,10 @@
   wrapGAppsHook3,
   clutter,
   gettext,
-  libXcomposite,
-  libXinerama,
-  libXdamage,
-  libX11,
+  libxcomposite,
+  libxinerama,
+  libxdamage,
+  libx11,
   libwnck,
   libxfce4ui,
   libxfce4util,
@@ -65,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     garcon
     glib
     gtk3
-    libX11
-    libXcomposite
-    libXdamage
-    libXinerama
+    libx11
+    libxcomposite
+    libxdamage
+    libxinerama
     libwnck
     libxfce4ui
     libxfce4util

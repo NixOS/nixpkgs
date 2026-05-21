@@ -108,6 +108,7 @@ stdenv.mkDerivation rec {
       target = getArch stdenv.hostPlatform;
       target_system = stdenv.hostPlatform.uname.system;
       host = getArch stdenv.buildPlatform;
+      targetIsPpc64le = stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian;
 
       buildFlags = [
         "-v"
@@ -126,6 +127,10 @@ stdenv.mkDerivation rec {
       ++ lib.optional stdenv.hostPlatform.isDarwin "--clang"
       ++ lib.optionals (target_system != stdenv.buildPlatform.uname.system) [
         "-DOS=${target_system}"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isPower [
+        "-Ddisable_altivec=${if targetIsPpc64le then "0" else "1"}"
+        "-Ddisable_crypto_vsx=${if targetIsPpc64le then "0" else "1"}"
       ]
       ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
         "--disable-tests"

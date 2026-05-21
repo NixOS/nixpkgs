@@ -70,7 +70,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imgui";
   version = "1.91.4";
   outputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
   };
 
@@ -158,4 +158,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

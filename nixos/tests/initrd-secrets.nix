@@ -24,12 +24,15 @@ let
           boot.initrd.secrets = {
             "/test" = secretInStore;
 
-            # This should *not* need to be copied in postMountCommands
-            "/run/keys/test" = secretInStore;
+            # This should *not* need to be copied
+            "/run/test" = secretInStore;
           };
-          boot.initrd.postMountCommands = ''
-            cp /test /mnt-root/secret-from-initramfs
-          '';
+          boot.initrd.systemd = {
+            enable = true;
+            tmpfiles.settings."00-copy-secret" = {
+              "/sysroot/secret-from-initramfs".C.argument = "/test";
+            };
+          };
           boot.initrd.compressor = compressor;
           # zstd compression is only supported from 5.9 onwards. Remove when 5.10 becomes default.
           boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -40,7 +43,7 @@ let
         machine.wait_for_unit("multi-user.target")
         machine.succeed(
             "cmp ${secretInStore} /secret-from-initramfs",
-            "cmp ${secretInStore} /run/keys/test",
+            "cmp ${secretInStore} /run/test",
         )
       '';
     };

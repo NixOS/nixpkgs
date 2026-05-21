@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aichat";
   version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xgTGii1xGtCc1OLoC53HAtQ+KVZNO1plB2GVtVBBlqs=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mwdomino ];
     mainProgram = "aichat";
   };
-}
+})

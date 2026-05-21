@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   alsa-lib,
-  libX11,
+  libx11,
   libGLU,
   SDL2,
   lua5_3,
@@ -19,14 +19,14 @@
   buildClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teeworlds";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
     fetchSubmodules = true;
   };
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     # Quote nonsense is a workaround for https://github.com/NixOS/nix/issues/661
     substituteInPlace 'other/bundle/client/Info.plist.in' \
       --replace ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
-      --replace ${"'"}''${PROJECT_VERSION}' '${version}'
+      --replace ${"'"}''${PROJECT_VERSION}' '${finalAttrs.version}'
 
     # Make sure some bundled dependencies are actually unbundled.
     # This will fail compilation if one of these dependencies could not
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGLU
       alsa-lib
-      libX11
+      libx11
     ]
   );
 
@@ -101,8 +101,8 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString buildClient (
     lib.optionalString stdenv.hostPlatform.isLinux ''
       # Convert and install desktop icon
-      mkdir -p $out/share/pixmaps
-      icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
+      mkdir -p $out/share/icons/hicolor/256x256/apps
+      icotool --extract --index 1 --output $out/share/icons/hicolor/256x256/apps/teeworlds.png $src/other/icons/teeworlds.ico
 
       # Install menu item
       install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
@@ -150,4 +150,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ktop";
   version = "0.4.1";
   excludedPackages = [ ".ci" ];
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = "ktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5iFFYTZq5DcMYVnW90MKVDchVXzjXOPd5BeYcrqL9pQ=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/vladimirvivien/ktop/buildinfo.Version=v${version}"
+    "-X github.com/vladimirvivien/ktop/buildinfo.Version=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -39,4 +39,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

@@ -9,20 +9,21 @@
   zstd,
   git,
   rustup,
+  cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-dist";
-  version = "0.30.3";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
-    rev = "v${version}";
-    hash = "sha256-x59bUgd89XAwuHwGvREDqAS/cI4Ot7HGTONGbTOgzw8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BSE3pXo7Kk104v7VEh5WUk+Km1/n/kNf8NJGVGjUKoc=";
   };
 
-  cargoHash = "sha256-OTbUTYxqEzE3hyHq2hCbhigz5xJT2Bjd/pu6EI+0aWA=";
+  cargoHash = "sha256-bfX2Yt0wrPg1pbvYdr2O9VUqYlCFVRh4PIABWxZTgjg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,10 +38,12 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     git
     rustup
+    cacert
   ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   # remove tests that require internet access
@@ -54,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tool for building final distributable artifacts and uploading them to an archive";
     mainProgram = "dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
-    changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/axodotdev/cargo-dist/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -64,4 +67,4 @@ rustPlatform.buildRustPackage rec {
       mistydemeo
     ];
   };
-}
+})

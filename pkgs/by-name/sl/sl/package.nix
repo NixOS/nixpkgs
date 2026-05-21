@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sl";
   version = "5.05";
 
   src = fetchFromGitHub {
     owner = "eyJhb";
     repo = "sl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "11a1rdgb8wagikhxgm81g80g5qsl59mv4qgsval3isykqh8729bj";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "sl";
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   makeWrapper,
-  boost,
+  boost188,
   xz,
   libiconv,
   withGog ? false,
@@ -25,7 +25,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     xz
-    boost
+    # pin to oplder boost188 as boost189
+    # fails to find cmake bits: https://github.com/dscharrer/innoextract/pull/199
+    boost188
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 

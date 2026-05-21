@@ -16,17 +16,17 @@
   gtk3,
   libnova,
   libusb1,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phd2";
   version = "2.6.13";
 
   src = fetchFromGitHub {
     owner = "OpenPHDGuiding";
     repo = "phd2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GnT/tyk975caqESBSu4mdX5IWGi5O+RljLSd+CwoGWo=";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gtk3
     libnova
     libusb1
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   cmakeFlags = [
@@ -76,11 +76,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://openphdguiding.org/";
     description = "Telescope auto-guidance application";
-    changelog = "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${version}";
+    changelog = "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       returntoreality
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,7 +5,6 @@
   buildNpmPackage,
   makeWrapper,
   formats,
-  inter,
   databaseType ? "sqlite",
   environmentVariables ? { },
   nixosTests,
@@ -29,46 +28,43 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.13.1";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-rDysze915lmgbl/nz2NaPrFgNHAVOYRY4sVMnoYB3xE=";
+    hash = "sha256-1grYW3UrQsw94xFyKj+n8styihRdW/+aW2Q5lq9b3Bg=";
   };
 
-  npmDepsHash = "sha256-mSSzrkGZ0ZPYINRahzrbrO6oLDhmu8HWHfHzZKMroCg=";
+  npmDepsHash = "sha256-+qsHvytwAIbbNYpgNT6I7lekpxY0mUWcWGA9dT6rbtc=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
-  # Based on pkgs.nextjs-ollama-llm-ui.
-  postPatch = ''
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Inter } from \"next/font/google\"" \
-      "localFont from \"next/font/local\""
+  # dependency resolution is borked
+  npmFlags = [ "--legacy-peer-deps" ];
 
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "Inter({ subsets: [\"latin\"] })" \
-      "localFont({ src: './Inter.ttf' })"
-
-    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
-  '';
+  # upstream inconsistently updates this
+  # so leaving this here in case it's needed
+  # postPatch = ''
+  #   substituteInPlace server/lib/consts.ts --replace-fail \
+  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+  #     'export const APP_VERSION = "${finalAttrs.version}";'
+  # '';
 
   preBuild = ''
+    npm run set:${db false}
     npm run set:oss
-    npm run set:${db true}
-    npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema/ --name migration --out init
+    npm run db:generate
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    npm run build:${db false}
+    npm run build
     npm run build:cli
 
     runHook postBuild
@@ -79,18 +75,18 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cp -r node_modules $out/share/pangolin
-
-    cp -r .next/standalone/.next $out/share/pangolin
-    cp .next/standalone/package.json $out/share/pangolin
-
+    cp -r node_modules $out/share/pangolin/node_modules
+    cp -r .next/standalone/. $out/share/pangolin
     cp -r .next/static $out/share/pangolin/.next/static
-    cp -r public $out/share/pangolin/public
-
     cp -r dist $out/share/pangolin/dist
-    cp -r init $out/share/pangolin/dist/init
+    cp -r server/migrations $out/share/pangolin/dist/init
+    cp package.json $out/share/pangolin/package.json
 
     cp server/db/names.json $out/share/pangolin/dist/names.json
+    cp server/db/ios_models.json $out/share/pangolin/dist/ios_models.json
+    cp server/db/mac_models.json $out/share/pangolin/dist/mac_models.json
+
+    cp -r public $out/share/pangolin/public
 
     runHook postInstall
   '';

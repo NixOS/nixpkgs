@@ -168,13 +168,12 @@ in
       enable = true;
 
       virtualHosts.${cfg.domain} = {
-        locations = {
-          "/" = {
-            root = cfg.finalDrv;
-            tryFiles = "$uri $uri.html $uri/ =404";
-          };
+        root = cfg.finalDrv;
 
-          "/404.html".extraConfig = ''
+        locations = {
+          "/".tryFiles = "$uri $uri.html $uri/ =404";
+
+          "= /404.html".extraConfig = ''
             internal;
           '';
         };

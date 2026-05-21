@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dnsdiag";
-  version = "2.9.2";
+  version = "2.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "farrokhi";
     repo = "dnsdiag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AWMtdx70FW6L3JVQH5DNbzJGJ7kfw7THQNlTiyZ16c0=";
+    hash = "sha256-CMWjPgdYRL730AkC+PZaDAeefq9jCbO4o3RcdlIqsmU=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];

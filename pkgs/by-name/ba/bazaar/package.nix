@@ -5,11 +5,11 @@
   blueprint-compiler,
   desktop-file-utils,
   meson,
+  python3,
   ninja,
   pkg-config,
   wrapGAppsHook4,
   appstream,
-  bubblewrap,
   flatpak,
   glib-networking,
   glycin-loaders,
@@ -18,9 +18,13 @@
   libadwaita,
   libdex,
   libglycin,
+  libglycin-gtk4,
+  libproxy,
   libsoup_3,
   libxmlb,
+  libxml2,
   libyaml,
+  malcontent,
   md4c,
   webkitgtk_6_0,
   libsecret,
@@ -29,22 +33,37 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
-  version = "0.7.5";
+  version = "0.7.15";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  outputs = [
+    "out"
+    # for libbge
+    "lib"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
-    owner = "kolunmi";
+    owner = "bazaar-org";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c6mAWnX0iKXJqOxe/kgUqmXXVKO7ZEI+vKoYLKOuNos=";
+    hash = "sha256-+52W2iU8rdzN4cCxjkKe80qAbvyeqkvDYRRIiBB5yCg=";
   };
 
   nativeBuildInputs = [
     blueprint-compiler
     desktop-file-utils
+    libxml2
     meson
     ninja
     pkg-config
     wrapGAppsHook4
+    (python3.withPackages (p: [
+      p.babel
+      p.pygobject3
+    ]))
   ];
 
   buildInputs = [
@@ -56,23 +75,36 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libdex
     libglycin
+    libglycin-gtk4
+    glycin-loaders
+    libproxy
     libsoup_3
     libxmlb
     libyaml
+    malcontent
     md4c
     webkitgtk_6_0
     libsecret
   ];
 
+  postInstall = ''
+    moveToOutput bin/bge-demo $dev
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ bubblewrap ]}"
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+      # bazaar needs bazaar-dl-worker in path
+      --prefix PATH : $out/bin
+      --prefix LD_LIBRARY_PATH : $lib/lib
+      # gsettings schemas are moved to $lib
+      --prefix XDG_DATA_DIRS : $lib/share
     )
+
+    # isn't automatically picked out for some reason, while $dev/bin/bge-demo is...
+    wrapGApp $out/bin/bazaar
   '';
 
   passthru = {
-    inherit (libglycin) glycinPathsPatch;
     updateScript = nix-update-script { };
   };
 

@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "crossfire-jxclient";
+  pname = "crossfire-jxclient";
   version = "2025-01";
 
   src = fetchgit {

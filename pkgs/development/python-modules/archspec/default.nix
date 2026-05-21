@@ -40,7 +40,7 @@ buildPythonPackage rec {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     mainProgram = "archspec";
   };
 }

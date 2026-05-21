@@ -1,11 +1,11 @@
 {
-  stdenv,
+  gcc14Stdenv,
   lib,
   fetchzip,
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "miranda";
   version = "2.066";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # from the start so this mismatch cannot occur.
   src = fetchzip {
     url = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/src/mira-${
-      builtins.replaceStrings [ "." ] [ "" ] version
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }-src.tgz";
     sha256 = "KE/FTL9YW9l7VBAgkFZlqgSM1Bt/BXT6GkkONtyKJjQ=";
   };
@@ -62,17 +62,10 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: types.o:(.bss+0x11b0): multiple definition of `current_file'; y.tab.o:(.bss+0x70): first defined here
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      "-fcommon"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "-Wno-error=int-conversion"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
+    "CC=${gcc14Stdenv.cc.targetPrefix}cc"
     "CFLAGS=-O2"
     "PREFIX=${placeholder "out"}"
   ];
@@ -81,7 +74,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs quotehostinfo
-    substituteInPlace Makefile --replace strip '${stdenv.cc.targetPrefix}strip'
+    substituteInPlace Makefile --replace strip '${gcc14Stdenv.cc.targetPrefix}strip'
   '';
 
   meta = {
@@ -92,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "mira";
   };
-}
+})

@@ -4,23 +4,23 @@
   fetchurl,
   cpio,
   xorgproto,
-  libX11,
-  libXmu,
-  libXaw,
-  libXt,
+  libx11,
+  libxmu,
+  libxaw,
+  libxt,
   tcl,
   tk,
-  libXext,
+  libxext,
   fontconfig,
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xconq";
   version = "7.5.0-0pre.0.20050612";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/xconq/xconq/xconq-${version}/xconq-${version}.tar.gz";
+    url = "mirror://sourceforge/project/xconq/xconq/xconq-${finalAttrs.version}/xconq-${finalAttrs.version}.tar.gz";
     sha256 = "1za78yx57mgwcmmi33wx3533yz1x093dnqis8q2qmqivxav51lca";
   };
 
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cpio
     xorgproto
-    libX11
-    libXmu
-    libXaw
-    libXt
+    libx11
+    libxmu
+    libxaw
+    libxt
     tcl
     tk
-    libXext
+    libxext
     fontconfig
   ];
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

@@ -5,25 +5,25 @@
   gitUpdater,
   pkg-config,
   autoreconfHook,
-  libX11,
+  libx11,
   pam,
   libgcrypt,
-  libXrender,
+  libxrender,
   imlib2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alock";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "alock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
-  PAM_DEFAULT_SERVICE = "login";
+  env.PAM_DEFAULT_SERVICE = "login";
 
   configureFlags = [
     "--enable-pam"
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
   buildInputs = [
-    libX11
+    libx11
     pam
     libgcrypt
-    libXrender
+    libxrender
     imlib2
   ];
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.mit;
   };
-}
+})

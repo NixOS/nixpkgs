@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = chromedriver.meta // {
     description = "Custom Selenium ChromeDriver that passes all bot mitigation systems";
+    homepage = "https://github.com/ultrafunkamsterdam/undetected-chromedriver";
     mainProgram = "undetected-chromedriver";
     maintainers = [ ];
   };

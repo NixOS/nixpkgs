@@ -11,6 +11,7 @@
   npmHooks,
   yarn-berry_4,
   unzip,
+  writers,
 
   libnotify,
   libpulseaudio,
@@ -24,6 +25,10 @@
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
   yarn-berry = yarn-berry_4;
+
+  # Only apply to old versions after upstream updates to Yarn 4.14
+  # https://github.com/electron/electron/blob/main/package.json#L148
+  yarnPatch = ./yarn-4.14-support.patch;
 in
 
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
@@ -64,9 +69,20 @@ in
 
   npmRoot = "third_party/node";
 
+  missingHashes =
+    if (info.electron_yarn_data ? "missing_hashes") then
+      writers.writeJSON "missing-hashes.json" info.electron_yarn_data.missing_hashes
+    else
+      null;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     src = gclientDeps."src/electron".path;
-    hash = info.electron_yarn_hash;
+    patches = [ yarnPatch ];
+    hash = info.electron_yarn_data.hash;
+    missingHashes =
+      if (info.electron_yarn_data ? "missing_hashes") then
+        writers.writeJSON "missing-hashes.json" info.electron_yarn_data.missing_hashes
+      else
+        null;
   };
 
   dontYarnBerryInstallDeps = true; # we'll run the hook manually
@@ -92,22 +108,6 @@ in
 
   patches =
     base.patches
-    ++ lib.optionals (lib.versionOlder info.version "38") [
-      # Fix build with Rust 1.89.0
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6624733
-      (fetchpatch {
-        name = "Define-rust-no-alloc-shim-is-unstable-v2.patch";
-        url = "https://github.com/chromium/chromium/commit/6aae0e2353c857d98980ff677bf304288d7c58de.patch";
-        hash = "sha256-Dd38c/0hiH+PbGPJhhEFuW6kUR45A36XZqOVExoxlhM=";
-      })
-      # Fix build with LLVM 21+
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
-      (fetchpatch {
-        name = "Dont-return-an-enum-from-EnumSizeTraits-Count.patch";
-        url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch";
-        hash = "sha256-YIWcsCj5w0jUd7D67hsuk0ljTA/IbHwA6db3eK4ggUY=";
-      })
-    ]
     ++ lib.optionals (lib.versionOlder info.version "39") [
       # Fix build with Rust 1.90.0
       # https://chromium-review.googlesource.com/c/chromium/src/+/6875644
@@ -144,6 +144,12 @@ in
         url = "https://github.com/chromium/chromium/commit/9415f40bc6f853547f791e633be638c71368ce56.patch";
         hash = "sha256-+M4gI77SoQ4dYIe/iGFgIwF1fS/6KQ8s16vj8ht/rik=";
       })
+    ]
+    ++ lib.optionals (lib.versions.major info.version == "39") [
+      ./39-angle-patchdir.patch
+    ]
+    ++ lib.optionals (lib.versions.major info.version == "40") [
+      ./40-angle-patchdir.patch
     ];
 
   postPatch = ''
@@ -195,7 +201,16 @@ in
   ''
   + ''
     (
+      PATH=$PATH:${
+        lib.makeBinPath (
+          with pkgsBuildHost;
+          [
+            git
+          ]
+        )
+      }
       cd electron
+      git apply ${yarnPatch}
       YARN_ENABLE_SCRIPTS=0 yarnBerryConfigHook
     )
     (
@@ -280,9 +295,6 @@ in
     # other
     enable_widevine = false;
     override_electron_version = info.version;
-  }
-  // lib.optionalAttrs (lib.versionOlder info.version "38") {
-    content_enable_legacy_ipc = true;
   };
 
   installPhase = ''

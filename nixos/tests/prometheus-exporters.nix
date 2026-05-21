@@ -436,6 +436,24 @@ let
         '';
       };
 
+    fail2ban =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          exitOnError = true;
+        };
+        metricProvider = {
+          services.fail2ban.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("fail2ban.service")
+          wait_for_unit("prometheus-fail2ban-exporter.service")
+          wait_for_open_port(9191)
+          succeed("curl -sSf http://localhost:9191/metrics | grep 'f2b_errors'")
+        '';
+      };
+
     fastly =
       { pkgs, ... }:
       {
@@ -797,6 +815,7 @@ let
           };
           # initialize wallet, creates macaroon needed by exporter
           systemd.services.lnd.postStart = ''
+            until [ -f /var/lib/lnd/tls.cert ]; do sleep 1; done
             ${pkgs.curl}/bin/curl \
               --retry 20 \
               --retry-delay 1 \
@@ -1171,38 +1190,64 @@ let
         exporterTest = ''
           wait_for_unit("prometheus-node-cert-exporter.service")
           wait_for_open_port(9141)
+          succeed("test -f /run/certs/node-cert.cert")
           wait_until_succeeds(
               "curl -sSf http://localhost:9141/metrics | grep 'ssl_certificate_expiry_seconds{.\\+path=\"/run/certs/node-cert\\.cert\".\\+}'"
           )
         '';
 
-        metricProvider = {
-          system.activationScripts.cert.text = ''
-            mkdir -p /run/certs
-            cd /run/certs
+        metricProvider =
+          { config, ... }:
+          {
+            systemd.services.prometheus-node-cert-exporter = {
+              serviceConfig.ExecStartPre =
+                let
+                  createDir = pkgs.writeShellApplication {
+                    name = "create-dir";
+                    text =
+                      let
+                        inherit (config.services.prometheus.exporters.node-cert) user;
+                      in
+                      ''
+                        mkdir -p /run/certs
+                        chown ${user}:${user} /run/certs
+                        chmod ug+rwx /run/certs
+                      '';
+                  };
+                  createCerts = pkgs.writeShellApplication {
+                    name = "create-certs";
+                    text = ''
+                      cd /run/certs
 
-            cat >ca.template <<EOF
-            organization = "prometheus-node-cert-exporter"
-            cn = "prometheus-node-cert-exporter"
-            expiration_days = 365
-            ca
-            cert_signing_key
-            crl_signing_key
-            EOF
+                      cat >ca.template <<EOF
+                      organization = "prometheus-node-cert-exporter"
+                      cn = "prometheus-node-cert-exporter"
+                      expiration_days = 365
+                      ca
+                      cert_signing_key
+                      crl_signing_key
+                      EOF
 
-            ${pkgs.gnutls}/bin/certtool  \
-              --generate-privkey         \
-              --key-type rsa             \
-              --sec-param High           \
-              --outfile node-cert.key
+                      ${pkgs.gnutls}/bin/certtool  \
+                        --generate-privkey         \
+                        --key-type rsa             \
+                        --sec-param High           \
+                        --outfile node-cert.key
 
-            ${pkgs.gnutls}/bin/certtool     \
-              --generate-self-signed        \
-              --load-privkey node-cert.key  \
-              --template ca.template        \
-              --outfile node-cert.cert
-          '';
-        };
+                      ${pkgs.gnutls}/bin/certtool     \
+                        --generate-self-signed        \
+                        --load-privkey node-cert.key  \
+                        --template ca.template        \
+                        --outfile node-cert.cert
+                    '';
+                  };
+                in
+                [
+                  "+${lib.getExe createDir}"
+                  "${lib.getExe createCerts}"
+                ];
+            };
+          };
       };
 
     pgbouncer =
@@ -1514,26 +1559,6 @@ let
         '';
       };
 
-    rspamd =
-      { ... }:
-      {
-        exporterConfig = {
-          enable = true;
-        };
-        metricProvider = {
-          services.rspamd.enable = true;
-        };
-        exporterTest = ''
-          wait_for_unit("rspamd.service")
-          wait_for_unit("prometheus-rspamd-exporter.service")
-          wait_for_open_port(11334)
-          wait_for_open_port(7980)
-          wait_until_succeeds(
-              "curl -sSf 'localhost:7980/probe?target=http://localhost:11334/stat' | grep 'rspamd_scanned{host=\"rspamd\"} 0'"
-          )
-        '';
-      };
-
     rtl_433 =
       { ... }:
       {
@@ -1713,6 +1738,16 @@ let
           enable = true;
           tokenFile = "/tmp/faketoken";
         };
+        metricProvider = {
+          networking = {
+            # The exporter tries to access Hetzner on startup and crashes.
+            # Blocking this on the firewall level allows the exporter to start.
+            extraHosts = "127.0.0.1 api.hetzner.com";
+            firewall.extraCommands = ''
+              iptables -A OUTPUT -p tcp --dport 443 -d 127.0.0.1 -j DROP
+            '';
+          };
+        };
         exporterTest = ''
           succeed(
             'echo faketoken > /tmp/faketoken'
@@ -1875,24 +1910,23 @@ let
               # testing the NixOS module.
               (pkgs.writeText "allow-running-without-credentials" ''
                 diff --git a/cmd/tailscale-exporter/root.go b/cmd/tailscale-exporter/root.go
-                index 2ff11cb..2fb576f 100644
+                index 14089f9..2bb9a25 100644
                 --- a/cmd/tailscale-exporter/root.go
                 +++ b/cmd/tailscale-exporter/root.go
-                @@ -137,14 +137,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
-                ''\t// Create HTTP client that automatically handles token refresh
-                ''\thttpClient := oauthConfig.Client(context.Background())
+                @@ -162,13 +162,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
+                ''\t''\t}
 
-                -''\t// Test OAuth token generation
-                -''\ttoken, err := oauthConfig.Token(context.Background())
-                -''\tif err != nil {
-                -''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)
-                -''\t}
-                -''\tlogger.Info("OAuth token obtained", "token_type", token.TokenType)
-                -''\tlogger.Info("Successfully obtained OAuth token", "expires", token.Expiry)
+                ''\t''\thttpClient := oauthConfig.Client(context.Background())
+                -''\t''\ttoken, err := oauthConfig.Token(context.Background())
+                -''\t''\tif err != nil {
+                -''\t''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)
+                -''\t''\t}
+                -''\t''\tlogger.Info("OAuth token obtained", "token_type", token.TokenType)
+                -''\t''\tlogger.Info("Successfully obtained OAuth token", "expires", token.Expiry)
                 -
-                ''\t// Default labels for all metrics
-                ''\tdefaultLabels := prometheus.Labels{"tailnet": tailnet}
-                ''\treg := prometheus.WrapRegistererWith(
+                ''\t''\ttsCollector, err := tailscale.NewTailscaleCollector(
+                ''\t''\t''\tlogger,
+                ''\t''\t''\thttpClient,
               '')
             ];
           };
@@ -2018,7 +2052,7 @@ let
       {
         exporterConfig = {
           enable = true;
-          instance = "/run/varnish/varnish";
+          instance = "/var/run/varnishd";
           group = "varnish";
         };
         metricProvider = {

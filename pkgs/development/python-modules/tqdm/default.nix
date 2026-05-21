@@ -50,7 +50,7 @@ buildPythonPackage rec {
   # Too sensitive for on Hydra.
   disabledTests = [ "perf" ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   pythonImportsCheck = [ "tqdm" ];
 

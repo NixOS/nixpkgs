@@ -40,7 +40,6 @@ in
     { makePythonHook }:
     makePythonHook {
       name = "conda-unpack-hook";
-      propagatedBuildInputs = [ ];
     } ./conda-unpack-hook.sh
   ) { };
 
@@ -48,7 +47,6 @@ in
     { makePythonHook }:
     makePythonHook {
       name = "egg-build-hook.sh";
-      propagatedBuildInputs = [ ];
     } ./egg-build-hook.sh
   ) { };
 
@@ -67,7 +65,6 @@ in
     { makePythonHook }:
     makePythonHook {
       name = "egg-unpack-hook.sh";
-      propagatedBuildInputs = [ ];
     } ./egg-unpack-hook.sh
   ) { };
 
@@ -440,6 +437,17 @@ in
         setuptools_has_parallel = setuptools != null && lib.versionAtLeast setuptools.version "69";
       };
     } ./setuptools-build-hook.sh
+  ) { };
+
+  stestrCheckHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "stestr-check-hook";
+      propagatedBuildInputs = [ stestr ];
+      substitutions = {
+        inherit pythonCheckInterpreter;
+      };
+    } ./stestr-check-hook.sh
   ) { };
 
   unittestCheckHook = callPackage (

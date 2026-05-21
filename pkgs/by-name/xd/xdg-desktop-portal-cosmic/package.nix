@@ -17,20 +17,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.3";
+  version = "1.0.13";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-5U0xjVEGrOZzw7WnQRvoQe4VuWJ9drV3kNV/ogZQJio=";
+    hash = "sha256-/mUSpPdv8cSJ2oAuwIAYXjpy0Zy9ERarWMUrLEKf9a0=";
   };
 
-  cargoHash = "sha256-99MGWfZrDOav77SRI7c5V21JTfkq7ejC7x+ZiQ5J0Yw=";
+  cargoHash = "sha256-/7jxEktXW1+4nFK7ZFUO3oJhmLNuKMwErnqwgjBQiao=";
 
   separateDebugInfo = true;
-  strictDeps = true;
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -48,19 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkInputs = [ gst_all_1.gstreamer ];
 
   postPatch = ''
-    # While the `kate-hazen-COSMIC-desktop-wallpaper.png` image is present
-    # in the `pop-wallpapers` package, we're using the Orion Nebula image
-    # from NASA available in the `cosmic-wallpapers` package. Mainly because
-    # the previous image was used in the GNOME shell extension and the
-    # Orion Nebula image is widely used in the Rust-based COSMIC DE's
-    # marketing materials. Another reason to use the Orion Nebula image
-    # is that it's actually the default wallpaper as configured by the
-    # `cosmic-bg` package's configuration in upstream [1] [2].
-    #
-    # [1]: https://github.com/pop-os/cosmic-bg/blob/epoch-1.0.0-alpha.6/config/src/lib.rs#L142
-    # [2]: https://github.com/pop-os/cosmic-bg/blob/epoch-1.0.0-alpha.6/data/v1/all#L3
     substituteInPlace src/screenshot.rs src/widget/screenshot.rs \
-      --replace-fail '/usr/share/backgrounds/pop/kate-hazen-COSMIC-desktop-wallpaper.png' '${cosmic-wallpapers}/share/backgrounds/cosmic/orion_nebula_nasa_heic0601a.jpg'
+      --replace-fail '/usr/share/backgrounds' '${cosmic-wallpapers}/share/backgrounds'
   '';
 
   dontCargoInstall = true;

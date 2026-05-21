@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mkbrr";
-  version = "1.19.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "mkbrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EL+pYQCrP6pPa7cDBhuVv+X+PuiGz9OuqWbNC3PfEG0=";
+    hash = "sha256-M4lulMYb6jomS2sZ4E5nA6rP1KmuGiMjQEyuXqyl2vQ=";
   };
 
-  vendorHash = "sha256-mbcbACOKMohBw0SH5gH06CTkHtJk3WmbAqpcO0qMFOs=";
+  vendorHash = "sha256-BNswyeGBhm0CY6D9HcJHTDKIGCJ5QotiwRnr22HltMo=";
 
   ldflags = [
     "-s"

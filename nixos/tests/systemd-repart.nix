@@ -110,8 +110,7 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
-        assert "Growing existing partition 1." in systemd_repart_logs
+        machine.succeed("journalctl --boot --grep 'Growing existing partition 1.' --identifier systemd-repart")
       '';
   };
 
@@ -173,8 +172,7 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
-        assert "Encrypting future partition 2" in systemd_repart_logs
+        machine.succeed("journalctl --boot --grep 'Encrypting future partition 2' --identifier systemd-repart")
 
         assert "/dev/mapper/created-crypt" in machine.succeed("mount")
       '';
@@ -205,8 +203,7 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --unit systemd-repart.service")
-        assert "Growing existing partition 1." in systemd_repart_logs
+        machine.succeed("journalctl --grep 'Growing existing partition 1.' --identifier systemd-repart")
       '';
   };
 
@@ -273,8 +270,7 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
-        assert "Adding new partition 2 to partition table." in systemd_repart_logs
+        machine.succeed("journalctl --boot --grep 'Adding new partition 2 to partition table.' --identifier systemd-repart")
       '';
   };
 

@@ -16,14 +16,14 @@ let
   ocaml' = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "weidu";
   version = "249.00";
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
     repo = "weidu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
   };
 
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "weidu";
   };
-}
+})

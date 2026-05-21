@@ -7,21 +7,24 @@
   pyspnego,
   pytest-mock,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smbprotocol";
-  version = "1.15.0";
-  format = "setuptools";
+  version = "1.16.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "smbprotocol";
-    tag = "v${version}";
-    hash = "sha256-4BIrJAYazU4Bm6V1bYW/Bw2MXpR7CQpGQ6JammJ75HI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mxsvfn0O4f+SnofBVxKgmJ/e0iM7c/XjONDEtMVHvkc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     pyspnego
   ];
@@ -46,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python SMBv2 and v3 Client";
     homepage = "https://github.com/jborean93/smbprotocol";
-    changelog = "https://github.com/jborean93/smbprotocol/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/jborean93/smbprotocol/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

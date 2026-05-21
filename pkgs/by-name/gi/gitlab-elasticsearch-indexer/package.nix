@@ -9,19 +9,19 @@
 let
   codeParserBindings = callPackage ./code-parser.nix { };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-elasticsearch-indexer";
-  version = "5.10.1";
+  version = "5.14.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
-    rev = "v${version}";
-    hash = "sha256-UB3rR6Fk/5M8rpixyg7R0Zd5JZYpG4gEEDHXOQ4b3vI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yYl2cSPY5hn1GSda5ioMD3rEectNMtYGstVpz73pi3Y=";
   };
 
-  vendorHash = "sha256-EM41vNyE4nkv5IcGyRXqn+d7EHGMju2e76KWfHuOTmY=";
+  vendorHash = "sha256-yeVEQEXHGAkdkfcnjok8iOvVRxucObVAxhuACmyFDJw=";
 
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
@@ -60,4 +60,4 @@ buildGoModule rec {
       yayayayaka
     ];
   };
-}
+})

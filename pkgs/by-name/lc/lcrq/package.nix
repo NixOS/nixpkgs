@@ -1,14 +1,13 @@
 {
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcrq";
   version = "0.3.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "librecast";
     repo = "lcrq";
     rev = "v${finalAttrs.version}";

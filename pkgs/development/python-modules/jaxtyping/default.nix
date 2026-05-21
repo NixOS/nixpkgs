@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatchling,
@@ -16,8 +17,9 @@
   jax,
   jaxlib,
   pytestCheckHook,
-  tensorflow,
   torch,
+  # python <= 3.12 only
+  tensorflow,
 
   # passthru
   jaxtyping,
@@ -25,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jaxtyping";
-  version = "0.3.5";
+  version = "0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "jaxtyping";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0Vt6UD1xQkwve6yDVi5XQCoJ/IsJWHCkGesj66myQq4=";
+    hash = "sha256-Ex84xtns3wtIodXdpC6/88Kn0I+33B7ScHPIc9C5tuY=";
   };
 
   build-system = [ hatchling ];
@@ -50,8 +52,10 @@ buildPythonPackage (finalAttrs: {
     jax
     jaxlib
     pytestCheckHook
-    tensorflow
     torch
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    tensorflow
   ];
 
   doCheck = false;

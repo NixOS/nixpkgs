@@ -4,17 +4,16 @@
   fetchFromGitHub,
   lib,
 }:
-let
-  version = "0.2.0";
-in
-stdenv.mkDerivation {
-  name = "scope-lite-${version}";
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "scope-lite";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "martinmoene";
     repo = "scope-lite";
-    rev = "v${version}";
-    hash = "sha256-/Vu3blgyEOQRFqhQjuT/6ukV0iWA0TdPrLnt2Z/gd6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EZ+bBnMPpgATANa+al5SnVEfUFYc0TkaPTLNHD6zcWU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,4 +25,4 @@ stdenv.mkDerivation {
     homepage = "https://github.com/martinmoene/scope-lite";
     platforms = lib.platforms.all;
   };
-}
+})

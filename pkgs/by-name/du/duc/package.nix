@@ -13,14 +13,14 @@
 
 assert enableCairo -> cairo != null && pango != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duc";
   version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "duc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-hZ8bhPXS/trt6ZePjfuwx8PEfv0xCBqSJxRonLB7Ui0=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "duc";
   };
-}
+})

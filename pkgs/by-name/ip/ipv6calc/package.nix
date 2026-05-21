@@ -10,14 +10,14 @@
   geolite-legacy ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipv6calc";
   version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = "ipv6calc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-+u+7XdW0bS3nE5djdy7I1/NHZdXU9QKukZAvTkWsCK0=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -215,6 +215,10 @@
       # A string with a JSON attrset specifying registry mirrors, for example
       #   {"registry.example.org": "my-mirror.local/registry.example.org"}
       npmRegistryOverridesString ? config.npmRegistryOverridesString,
+      # Fetcher format version. Bump this to invalidate all existing hashes.
+      # Version 1: original format (tarballs only)
+      # Version 2: includes packuments for workspace support
+      fetcherVersion ? 1,
       ...
     }@args:
     let
@@ -259,7 +263,7 @@
             exit 1
           fi
 
-          prefetch-npm-deps $srcLockfile $out
+          outputHash="${hash_.outputHash}" prefetch-npm-deps $srcLockfile $out
 
           runHook postBuild
         '';
@@ -270,25 +274,31 @@
         # `{ "registry.example.com": "example-registry-bearer-token", ... }`
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
-        NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
+        env = {
+          NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
 
-        SSL_CERT_FILE =
-          if
-            (
-              hash_.outputHash == ""
-              || hash_.outputHash == lib.fakeSha256
-              || hash_.outputHash == lib.fakeSha512
-              || hash_.outputHash == lib.fakeHash
-            )
-          then
-            "${cacert}/etc/ssl/certs/ca-bundle.crt"
-          else
-            "/no-cert-file.crt";
+          # Fetcher version controls which features are enabled in prefetch-npm-deps
+          # Version 2+ enables packument fetching for workspace support
+          NPM_FETCHER_VERSION = toString fetcherVersion;
+
+          SSL_CERT_FILE =
+            if
+              (
+                hash_.outputHash == ""
+                || hash_.outputHash == lib.fakeSha256
+                || hash_.outputHash == lib.fakeSha512
+                || hash_.outputHash == lib.fakeHash
+              )
+            then
+              "${cacert}/etc/ssl/certs/ca-bundle.crt"
+            else
+              "/no-cert-file.crt";
+        }
+        // forceGitDeps_
+        // forceEmptyCache_;
 
         outputHashMode = "recursive";
       }
       // hash_
-      // forceGitDeps_
-      // forceEmptyCache_
     );
 }

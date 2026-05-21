@@ -180,7 +180,7 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkradiant";
 
   version = "unstable-2023-04-24";
@@ -235,14 +235,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # GCC 14 makes these errors by default
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration -Wno-error=int-conversion";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration -Wno-error=int-conversion -std=gnu17";
 
   desktopItems = [
     (makeDesktopItem {
       name = "gtkradiant";
       exec = "gtkradiant";
       desktopName = "GtkRadiant";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Development" ];
       icon = "gtkradiant";
       # includes its own splash screen
@@ -283,4 +283,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ astro ];
     platforms = lib.platforms.unix;
   };
-}
+})

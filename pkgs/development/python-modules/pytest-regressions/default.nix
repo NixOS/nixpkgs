@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.8.1";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ESSS";
     repo = "pytest-regressions";
     tag = "v${version}";
-    hash = "sha256-8FbPWKYHy/0ITrCx9044iYOR7B9g8tgEdV+QfUg4esk=";
+    hash = "sha256-pqlRfpi5Z9b6zrvU6M1sNRz5ltZLAFiJITFvex7YqcE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -61,7 +61,15 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
+  disabledTests = [
+    # https://github.com/ESSS/pytest-regressions/issues/225
+    "test_categorical"
+    "test_dataframe_with"
+    "test_different_data_types"
+    "test_nonrange_index"
+    "test_string_array"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
     # https://github.com/ESSS/pytest-regressions/issues/156
     # i686-linux not listed in the report, but seems to have this issue as well
     "test_different_data_types"

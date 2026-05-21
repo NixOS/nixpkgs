@@ -5,9 +5,9 @@
   libglut,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libxcb,
-  libXext,
+  libxext,
   libgbm,
   mesa,
   meson,
@@ -22,12 +22,12 @@
   glslang,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mesa-demos";
   version = "9.0.0";
 
   src = fetchurl {
-    url = "https://archive.mesa3d.org/demos/${pname}-${version}.tar.xz";
+    url = "https://archive.mesa3d.org/demos/mesa-demos-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libglut
-    libX11
+    libx11
     libxcb
-    libXext
+    libxext
     libGL
     libGLU
     libgbm
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andersk ];
   };
-}
+})

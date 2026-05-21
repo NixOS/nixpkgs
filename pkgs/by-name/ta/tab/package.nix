@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "9.2";
   pname = "tab";
 
   src = fetchFromGitHub {
     owner = "ivan-tkatchev";
     repo = "tab";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-UOXfnpzYMKDdp8EeBo2HsVPGn61hkCqHe8olX9KAgOU=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mstarzyk ];
     platforms = with lib.platforms; unix;
   };
-}
+})

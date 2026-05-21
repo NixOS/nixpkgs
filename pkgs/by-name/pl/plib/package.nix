@@ -7,20 +7,20 @@
   libGL,
   libglut,
   SDL,
-  libXi,
-  libSM,
-  libXmu,
-  libXext,
-  libX11,
+  libxi,
+  libsm,
+  libxmu,
+  libxext,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plib";
   version = "1.8.5";
 
   src = fetchurl {
     # XXX: The author doesn't use the orthodox SF way to store tarballs.
-    url = "https://plib.sourceforge.net/dist/${pname}-${version}.tar.gz";
+    url = "https://plib.sourceforge.net/dist/plib-${finalAttrs.version}.tar.gz";
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
 
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     SDL
 
     # The following libs ought to be propagated build inputs of Mesa.
-    libXi
-    libSM
-    libXmu
-    libXext
-    libX11
+    libxi
+    libsm
+    libxmu
+    libxext
+    libx11
   ];
 
   meta = {
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     homepage = "https://plib.sourceforge.net/";
     platforms = lib.platforms.unix;
   };
-}
+})

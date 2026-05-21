@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-env";
-  version = "1.1.5";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_env";
     inherit version;
-    hash = "sha256-kSCYQKoOQzhQc6xGSlVK0pR8wv1mOp3r+I0DsB4Mwc8=";
+    hash = "sha256-R14uvoYmzuAfSR8wSnSxITd0I5fWx4TqS8JY8GkjK4A=";
   };
 
   nativeBuildInputs = [

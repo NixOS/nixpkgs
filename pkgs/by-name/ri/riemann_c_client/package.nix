@@ -7,15 +7,13 @@
   pkg-config,
   file,
   protobufc,
-  withWolfSSL ? false,
-  wolfssl,
   withGnuTLS ? false,
   gnutls,
   withJSON ? true,
   json_c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "riemann-c-client";
   version = "2.2.2";
 
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "git.madhouse-project.org";
     owner = "algernon";
     repo = "riemann-c-client";
-    rev = "riemann-c-client-${version}";
+    rev = "riemann-c-client-${finalAttrs.version}";
     hash = "sha256-l9iUDhagODi58FDT9vEb90tsiIcrcMmGYCmH3ML3RCM=";
   };
 
@@ -45,12 +43,10 @@ stdenv.mkDerivation rec {
     file
     protobufc
   ]
-  ++ lib.optional withWolfSSL wolfssl
   ++ lib.optional withGnuTLS gnutls
   ++ lib.optional withJSON json_c;
 
-  configureFlags =
-    [ ] ++ lib.optional withWolfSSL "--with-tls=wolfssl" ++ lib.optional withGnuTLS "--with-tls=gnutls";
+  configureFlags = [ ] ++ lib.optional withGnuTLS "--with-tls=gnutls";
 
   doCheck = true;
   enableParallelBuilding = true;
@@ -62,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.eupl12;
     platforms = lib.platforms.linux;
   };
-}
+})

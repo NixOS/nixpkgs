@@ -8,7 +8,7 @@
   libpng,
   libtiff,
   libjpeg,
-  libX11,
+  libx11,
   SDL2,
   gdal,
   octave,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libtiff
     libjpeg
-    libX11
+    libx11
     SDL2
     gdal
     octave

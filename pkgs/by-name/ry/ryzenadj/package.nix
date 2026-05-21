@@ -5,14 +5,14 @@
   pciutils,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ryzenadj";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "FlyGoat";
     repo = "RyzenAdj";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-28ld8htm3DewTSV3WTG4dFOcX4JAEUMK9rq4AAm1/zY=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rhendric ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

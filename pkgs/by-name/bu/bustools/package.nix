@@ -8,14 +8,14 @@
   bustools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bustools";
   version = "0.45.1";
 
   src = fetchFromGitHub {
     owner = "BUStools";
     repo = "bustools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-G+ZMoUmhINp18XKmXpdb5GT7YMsiK/XX2zrjt56CbLg=";
   };
 
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.kallistobus.tools/";
     downloadPage = "https://bustools.github.io/download";
-    changelog = "https://github.com/BUStools/bustools/releases/tag/v${version}";
+    changelog = "https://github.com/BUStools/bustools/releases/tag/v${finalAttrs.version}";
     maintainers = [ lib.maintainers.dflores ];
     license = lib.licenses.bsd2;
     mainProgram = "bustools";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,27 +6,27 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minio-warp";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "warp";
-    rev = "v${version}";
-    hash = "sha256-y76A9m0vLCAEP7/HPRwCPZ5vt2xXw2f+dGmOOi86c1c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8MLn6ykfF8Ib1lNACFD5ALzGFdDWu0fE/dXLcHWFL4k=";
   };
 
-  vendorHash = "sha256-4gwFXMUCqr3Fui0iMnCNHLJ7ikyAdhX/rgZIarUNIHw=";
+  vendorHash = "sha256-tEy0nTueTGs3lZY1lX7e6XPnbL5mxsvLpfdDRE7A3EI=";
 
   # See .goreleaser.yml
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/minio/warp/pkg.ReleaseTag=v${version}"
-    "-X github.com/minio/warp/pkg.CommitID=${src.rev}"
-    "-X github.com/minio/warp/pkg.Version=${version}"
-    "-X github.com/minio/warp/pkg.ShortCommitID=${src.rev}"
+    "-X github.com/minio/warp/pkg.ReleaseTag=v${finalAttrs.version}"
+    "-X github.com/minio/warp/pkg.CommitID=${finalAttrs.src.rev}"
+    "-X github.com/minio/warp/pkg.Version=${finalAttrs.version}"
+    "-X github.com/minio/warp/pkg.ShortCommitID=${finalAttrs.src.rev}"
     "-X github.com/minio/warp/pkg.ReleaseTime=1970-01-01T00:00:00Z"
   ];
 
@@ -42,9 +42,9 @@ buildGoModule rec {
   meta = {
     description = "S3 benchmarking tool";
     homepage = "https://github.com/minio/warp";
-    changelog = "https://github.com/minio/warp/releases/tag/v${version}";
+    changelog = "https://github.com/minio/warp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ christoph-heiss ];
     mainProgram = "minio-warp";
   };
-}
+})

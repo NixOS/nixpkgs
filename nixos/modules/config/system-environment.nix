@@ -11,6 +11,23 @@ let
 
   cfg = config.environment;
 
+  suffixedVariables = lib.flip lib.mapAttrs cfg.profileRelativeSessionVariables (
+    envVar: suffixes:
+    lib.flip lib.concatMap cfg.profiles (profile: map (suffix: "${profile}${suffix}") suffixes)
+  );
+
+  combinedSessionVars = lib.zipAttrsWith (n: lib.concatLists) [
+    # Make sure security wrappers are prioritized without polluting
+    # shell environments with an extra entry. Sessions which depend on
+    # pam for its environment will otherwise have eg. broken sudo. In
+    # particular Gnome Shell sometimes fails to source a proper
+    # environment from a shell.
+    { PATH = [ config.security.wrapperDir ]; }
+
+    (lib.mapAttrs (n: lib.toList) cfg.sessionVariables)
+    suffixedVariables
+  ];
+
 in
 
 {
@@ -73,13 +90,11 @@ in
   };
 
   config = {
+    environment.etc."environment.d/50-systemd-path.conf".text = ''
+      PATH="${lib.concatStringsSep ":" combinedSessionVars.PATH}"
+    '';
     environment.etc."pam/environment".text =
       let
-        suffixedVariables = lib.flip lib.mapAttrs cfg.profileRelativeSessionVariables (
-          envVar: suffixes:
-          lib.flip lib.concatMap cfg.profiles (profile: map (suffix: "${profile}${suffix}") suffixes)
-        );
-
         # We're trying to use the same syntax for PAM variables and env variables.
         # That means we need to map the env variables that people might use to their
         # equivalent PAM variable.
@@ -88,21 +103,7 @@ in
         pamVariable =
           n: v: ''${n}   DEFAULT="${lib.concatStringsSep ":" (map replaceEnvVars (lib.toList v))}"'';
 
-        pamVariables = lib.concatStringsSep "\n" (
-          lib.mapAttrsToList pamVariable (
-            lib.zipAttrsWith (n: lib.concatLists) [
-              # Make sure security wrappers are prioritized without polluting
-              # shell environments with an extra entry. Sessions which depend on
-              # pam for its environment will otherwise have eg. broken sudo. In
-              # particular Gnome Shell sometimes fails to source a proper
-              # environment from a shell.
-              { PATH = [ config.security.wrapperDir ]; }
-
-              (lib.mapAttrs (n: lib.toList) cfg.sessionVariables)
-              suffixedVariables
-            ]
-          )
-        );
+        pamVariables = lib.concatStringsSep "\n" (lib.mapAttrsToList pamVariable combinedSessionVars);
       in
       ''
         ${pamVariables}

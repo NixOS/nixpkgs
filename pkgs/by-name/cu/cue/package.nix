@@ -5,21 +5,23 @@
   stdenv,
   installShellFiles,
   testers,
+  tests,
   callPackage,
+  pkgs,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cue";
-  version = "0.15.3";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xonTaZyJ3oyk4jcnyLIlOEP201jfM4cB7jNR6GxfK1E=";
+    hash = "sha256-mTj3XMWByNrKjm+/MOQGLyUKIv4JJ8i6Oaphbzls84U=";
   };
 
-  vendorHash = "sha256-ivFw62+pg503EEpRsdGSQrFNah87RTUrRXUSPZMFLG4=";
+  vendorHash = "sha256-HXRrVPjPc10Q1MVr1d9vZBWgSVqNZ5J0UgvP/hTPfcg=";
 
   subPackages = [ "cmd/*" ];
 
@@ -38,17 +40,27 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/cue completion zsh)
   '';
 
-  passthru = {
-    writeCueValidator = callPackage ./validator.nix { };
-    tests = {
-      test-001-all-good = callPackage ./tests/001-all-good.nix { };
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "cue version";
-        version = "v${finalAttrs.version}";
+  passthru =
+    let
+      cue = finalAttrs.finalPackage;
+      writeCueValidator = callPackage ./validator.nix { inherit cue; };
+    in
+    {
+      inherit writeCueValidator;
+
+      tests = {
+        validation = tests.cue-validation.override {
+          pkgs = pkgs.extend (_: _: { inherit writeCueValidator; });
+        };
+
+        test-001-all-good = callPackage ./tests/001-all-good.nix { inherit cue; };
+        version = testers.testVersion {
+          package = cue;
+          command = "cue version";
+          version = "v${finalAttrs.version}";
+        };
       };
     };
-  };
 
   meta = {
     description = "Data constraint language which aims to simplify tasks involving defining and using data";

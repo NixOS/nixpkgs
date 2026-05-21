@@ -5,16 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "maigret";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "soxoj";
     repo = "maigret";
-    tag = "v${version}";
-    hash = "sha256-y5b7t4ji72o1PXoqEQ0vNHqE1vwdkB/3gtsCj5GZ4Xg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3X8mRgsI0y1F/gUTWeYw83mQJKglJporpw7l9jI1Hvw=";
   };
 
   pythonRelaxDeps = true;
@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     "future-annotations"
     "future"
+    "PyPDF2"
     "six"
   ];
 
@@ -43,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
       chardet
       cloudscraper
       colorama
+      curl-cffi
       flask
       html5lib
       idna
@@ -54,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
       networkx
       platformdirs
       pycountry
-      pypdf2
+      pypdf
       pysocks
       python-bidi
       pyvis
@@ -86,18 +88,20 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # Tests require network access
+    "test_check_features_manually_cloudflare"
+    "test_check_features_manually_success"
+    "test_detect_known_engine"
+    "test_dialog_adds_site_negative"
+    "test_dialog_adds_site_positive"
+    "test_dialog_replace_site"
     "test_extract_ids_from_page"
     "test_import_aiohttp_cookies"
     "test_maigret_results"
     "test_pdf_report"
     "test_self_check_db_negative_enabled"
     "test_self_check_db_positive_enable"
-    "test_detect_known_engine"
-    "test_check_features_manually_success"
-    "test_dialog_adds_site_positive"
-    "test_dialog_replace_site"
-    "test_dialog_adds_site_negative"
-    #
+    "test_twitter_graphql_probe_claimed_vs_unclaimed"
+    # Sandbox issue
     "test_self_check_db"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -111,7 +115,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    changelog = "https://github.com/soxoj/maigret/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/soxoj/maigret/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
@@ -119,4 +123,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

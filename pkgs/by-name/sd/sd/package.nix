@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sd";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = "sd";
-    rev = "v${version}";
-    hash = "sha256-hC4VKEgrAVuqOX7b24XhtrxrnJW5kmlX4E6QbY9H8OA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HK53+1oH3EJm4Tg6BhLtG575FlBREb0OCetIQuCsBNc=";
   };
 
-  cargoHash = "sha256-KbEw09tTsUl9BLQsL7lW4VQq6D9E4lBiZf3Jrthst2Y=";
+  cargoHash = "sha256-iOCIX7hq8RqRihVQrVoU2qCTSziuJePxsexkDSCZS9c=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
       amar1729
     ];
   };
-}
+})

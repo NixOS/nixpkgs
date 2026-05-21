@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pds";
-  version = "0.4.204";
+  version = "0.4.219";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jYCMwHKKFIsfOgGYiKVrWtIT7atPA8NsetvfjDW05yE=";
+    hash = "sha256-zXNg1rtXN9qdTBvRlSiPlRu6k1Pv3T8nhROsEarev5U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/service";
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     cctools.libtool
   ];
 
-  # Required for `sharp` NPM dependency
+  # Required for `sharp` npm dependency
   buildInputs = [ vips ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -62,8 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-G6xZfbfz+jud1N6lxwp5FA5baAkFwmofejsPt/Gaze8=";
+    fetcherVersion = 3;
+    hash = "sha256-rZpimxX4oDXIaUdAkkNPEff6qYJ9C8KptsPWJKwPiFo=";
   };
 
   buildPhase = ''

@@ -1,23 +1,23 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "etcd";
-  version = "3.4.39";
+  version = "3.4.44";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
-    rev = "v${version}";
-    hash = "sha256-S1aNEd7pPgSu8vFhXIYFjEvfBG3OtmuKCvD5Zgj0m30=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-56V9cAlFiCdDm3X8lBJmjwj1HVRNihrCzIV0r0XEMHk=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-CqeSRyWDw1nCKlAI46iJXT5XjI3elxufx87QIlHwp1w=";
+  vendorHash = "sha256-DqKVZ4Z2RMRwi4Z/6Rh3SE6NSyuHePSYrIM7sPyPC74=";
 
   preBuild = ''
     go mod tidy
@@ -44,6 +44,6 @@ buildGo124Module rec {
     downloadPage = "https://github.com/etcd-io/etcd/";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ superherointj ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  writableTmpDirAsHomeHook,
 
   # build-system
   setuptools,
@@ -23,14 +22,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "5.27.0";
+  version = "6.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wBeWydrHrF+wNZnqWa2k8tCaUvjcoiSrmY85LUhrQds=";
+    hash = "sha256-djioOgEtfKxXcbxYJGjPjCQOxcXi54xXNowJJhUWjE4=";
   };
 
   build-system = [
@@ -38,9 +38,6 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
-  pythonRelaxDeps = [
-    "pytensor"
-  ];
   dependencies = [
     arviz
     cachetools
@@ -52,13 +49,6 @@ buildPythonPackage (finalAttrs: {
     scipy
     threadpoolctl
     typing-extensions
-  ];
-
-  nativeBuildInputs = [
-    # Arviz (imported by pymc) wants to write a stamp file to the homedir at import time.
-    # Without $HOME being writable, `pythonImportsCheck` fails.
-    # https://github.com/arviz-devs/arviz/commit/4db612908f588d89bb5bfb6b83a08ada3d54fd02
-    writableTmpDirAsHomeHook
   ];
 
   # The test suite is computationally intensive and test failures are not

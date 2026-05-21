@@ -9,7 +9,7 @@
   alsa-lib,
   zlib,
   wavpack,
-  wxGTK32,
+  wxwidgets_3_2,
   udev,
   jackaudioSupport ? false,
   libjack2,
@@ -20,14 +20,14 @@
   includeDemo ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grandorgue";
   version = "3.16.3-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-A6Gc9kCtohz1nWj/fmYsyXM0X3uJxEmDK2N2Dr5CW1U=";
   };
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     fftwFloat
     zlib
     wavpack
-    wxGTK32
+    wxwidgets_3_2
     yaml-cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.puzzlewolf ];
     mainProgram = "GrandOrgue";
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  xorg,
+  libxtst,
   pkg-config,
   cmake,
   libevdev,
@@ -18,14 +18,14 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xautoclick";
   version = "0.34";
 
   src = fetchFromGitHub {
     owner = "qarkai";
     repo = "xautoclick";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "GN3zI5LQnVmRC0KWffzUTHKrxcqnstiL55hopwTTwpE=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libevdev
-    xorg.libXtst
+    libxtst
   ]
   ++ lib.optionals gtkSupport [
     gtk3
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

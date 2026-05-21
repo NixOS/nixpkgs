@@ -11,11 +11,11 @@
   docbook_xml_dtd_45,
   docbook_xsl,
   libxslt,
-  apple-sdk,
+  darwin,
 }:
 
 let
-  xnu = apple-sdk.sourceRelease "xnu";
+  xnu = darwin.sourceRelease "xnu";
 in
 stdenv.mkDerivation rec {
   pname = "lsyncd";

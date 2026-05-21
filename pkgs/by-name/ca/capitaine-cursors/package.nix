@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   # Complains about not being able to find the fontconfig config file otherwise
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   buildInputs = [
     inkscape

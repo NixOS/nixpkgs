@@ -8,12 +8,12 @@
   libsamplerate,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-oss";
   version = "1.1.8";
 
   src = fetchurl {
-    url = "mirror://alsa/oss-lib/alsa-oss-${version}.tar.bz2";
+    url = "mirror://alsa/oss-lib/alsa-oss-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ZK3O9ZJ+hI0uAk5kxL+FtvOVlk2ZdOxhkFrky4011o4=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

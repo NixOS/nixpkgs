@@ -4,24 +4,24 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "figurine";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "arsham";
     repo = "figurine";
-    rev = "v${version}";
-    hash = "sha256-1q6Y7oEntd823nWosMcKXi6c3iWsBTxPnSH4tR6+XYs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-U25nbXr8SuSgMq1Nqk/7Ci4tKoWAyccv8j4aTIEox3k=";
   };
 
-  vendorHash = "sha256-mLdAaYkQH2RHcZft27rDW1AoFCWKiUZhh2F0DpqZELw=";
+  vendorHash = "sha256-CdiHPN0zfOedsz2M6JWFMQpG70vxLbKj//WkKyN58AQ=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.currentSha=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.currentSha=${finalAttrs.src.rev}"
   ];
 
   meta = {
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ironicbadger ];
   };
-}
+})

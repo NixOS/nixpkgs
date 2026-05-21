@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
 
   nixosTests,
@@ -48,13 +48,14 @@
   vulkan-loader,
   vulkan-memory-allocator,
   xbyak,
-  xxHash,
+  xxhash,
   zlib-ng,
   zydis,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+# relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
   version = "0.13.0";
 
@@ -126,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
     vulkan-memory-allocator
     xbyak
-    xxHash
+    xxhash
     zlib-ng
     zydis
   ];

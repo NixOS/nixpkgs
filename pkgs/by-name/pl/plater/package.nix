@@ -5,6 +5,7 @@
   lib,
   libGLU,
   makeDesktopItem,
+  copyDesktopItems,
   qt5,
 }:
 
@@ -22,28 +23,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qt5.wrapQtAppsHook
+    copyDesktopItems
   ];
   buildInputs = [
     libGLU
     qt5.qtbase
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "plater";
-    exec = "plater";
-    icon = "plater";
-    desktopName = "Ideamaker";
-    genericName = meta.description;
-    categories = [
-      "Utility"
-      "Engineering"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "plater";
+      exec = "plater";
+      icon = "plater";
+      desktopName = "Ideamaker";
+      genericName = meta.description;
+      categories = [
+        "Utility"
+        "Engineering"
+      ];
+    })
+  ];
 
   postInstall = ''
-    mkdir -p $out/share/pixmaps
-    ln -s ${desktopItem}/share/applications $out/share/
-    cp $src/gui/img/plater.png $out/share/pixmaps/${pname}.png
+    install -D $src/gui/img/plater.png -t $out/share/icons/hicolor/128x128/apps
   '';
 
   meta = {

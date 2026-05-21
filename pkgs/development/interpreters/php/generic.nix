@@ -28,7 +28,6 @@ let
       systemdLibs,
       system-sendmail,
       valgrind,
-      xcbuild,
       writeShellScript,
       common-updater-scripts,
       curl,
@@ -146,7 +145,7 @@ let
             '';
 
             phpWithExtensions = symlinkJoin {
-              name = "php-with-extensions-${version}";
+              pname = "php-with-extensions";
               inherit (php) version;
               nativeBuildInputs = [ makeBinaryWrapper ];
               passthru = php.passthru // {
@@ -240,8 +239,7 @@ let
             libtool
             pkg-config
             re2c
-          ]
-          ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+          ];
 
           buildInputs =
             # PCRE extension
@@ -346,6 +344,10 @@ let
 
             substituteInPlace $dev/bin/phpize \
               --replace-fail "$out/lib" "$dev/lib"
+          ''
+          + lib.optionalString (lib.versionAtLeast version "8.5") ''
+            # PHP 8.5+ has lexbor built into core; dom needs its headers.
+            cp -r ext/lexbor/lexbor $dev/include/php/ext/lexbor/
           '';
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
@@ -378,14 +380,14 @@ let
                       jq
                     ]
                   }
-                  new_version=$(curl --silent "https://www.php.net/releases/active" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
+                  new_version=$(curl --silent "https://www.php.net/releases/active.php" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
                   update-source-version "$UPDATE_NIX_ATTR_PATH.unwrapped" "$new_version" "--file=$1"
                 '';
               in
               [
                 script
                 # Passed as an argument so that update.nix can ensure it does not become a store path.
-                (./. + "/${lib.versions.majorMinor version}.nix")
+                ./default.nix
               ];
             buildEnv = mkBuildEnv { } [ ];
             withExtensions = mkWithExtensions { } [ ];
@@ -395,9 +397,15 @@ let
                 newPhpAttrsOverrides = lib.composeExtensions (lib.toExtension phpAttrsOverrides) (
                   lib.toExtension f
                 );
-                php = generic (args // { phpAttrsOverrides = newPhpAttrsOverrides; });
+                phpOverridden = finalAttrs.overrideAttrs f;
               in
-              php;
+              phpOverridden
+              // {
+                passthru = phpOverridden.passthru // {
+                  buildEnv = mkBuildEnv { phpAttrsOverrides = newPhpAttrsOverrides; } [ ];
+                  withExtensions = mkWithExtensions { phpAttrsOverrides = newPhpAttrsOverrides; } [ ];
+                };
+              };
             inherit ztsSupport;
 
             services.default = {

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cyclopts,
   matplotlib,
   numpy,
   pillow,
@@ -14,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.46.5";
+  version = "0.48.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
     tag = "v${version}";
-    hash = "sha256-yTCHbAOcAxXrXwKbTXKGuSwoA69hy+XBT1kt6MhdoxQ=";
+    hash = "sha256-tXTDZ1htOGTrdiqbCyMiCQz44lHN5ruqW6bWkc3G2CI=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    cyclopts
     matplotlib
     numpy
     pillow

@@ -3,11 +3,10 @@
   buildPythonApplication,
   makeWrapper,
   nix,
+  nix-prefetch-github,
   nix-prefetch-git,
   nurl,
   python3Packages,
-  vimPluginsUpdater,
-  writeShellScript,
 
   # optional
   neovim-unwrapped,
@@ -39,6 +38,7 @@ buildPythonApplication {
     makeWrapperArgs+=( --prefix PATH : "${
       lib.makeBinPath [
         nix
+        nix-prefetch-github
         nix-prefetch-git
         neovim-unwrapped
         nurl
@@ -49,11 +49,6 @@ buildPythonApplication {
 
   shellHook = ''
     export PYTHONPATH=pkgs/applications/editors/vim/plugins:$PYTHONPATH
-  '';
-
-  passthru.updateScript = writeShellScript "updateScript" ''
-    # don't saturate the update bot connection
-    ${lib.getExe vimPluginsUpdater} --proc 2 update
   '';
 
   meta.mainProgram = "vim-plugins-updater";

@@ -5,30 +5,30 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmi";
-  version = "0.51.2";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
-    owner = "paritytech";
+    owner = "wasmi-labs";
     repo = "wasmi";
-    tag = "v${version}";
-    hash = "sha256-yElqCVMPB2wiCxdOzmalD2SydcBgTl0+L52MDpluWTM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eFQ0dBOFE/vpRXfAYYZNncAVKMlaGf8jHvBT/a5UQRo=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-0YxKaA7viWiQYtPXAdWXSWa79EY2x//3WiSjZ1NkkOQ=";
+  cargoHash = "sha256-Vo5MGp3I/8sMDchNQORzlXS8z9Bp6cILnK4aYot9/FE=";
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Efficient WebAssembly interpreter";
-    homepage = "https://github.com/paritytech/wasmi";
-    changelog = "https://github.com/paritytech/wasmi/blob/${src.rev}/CHANGELOG.md";
+    description = "Efficient and versatile WebAssembly interpreter for embedded systems";
+    homepage = "https://github.com/wasmi-labs/wasmi";
+    changelog = "https://github.com/wasmi-labs/wasmi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "wasmi_cli";
-    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

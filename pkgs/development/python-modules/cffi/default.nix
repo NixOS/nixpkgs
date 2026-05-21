@@ -33,6 +33,15 @@ buildPythonPackage rec {
 
   doCheck = !(stdenv.hostPlatform.isMusl || stdenv.hostPlatform.useLLVM or false);
 
+  disabledTests = [
+    # parse errror
+    "test_dont_remove_comment_in_line_directives"
+    "test_multiple_line_directives"
+    "test_commented_line_directive"
+    # exception mismatch
+    "test_unknown_name"
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {

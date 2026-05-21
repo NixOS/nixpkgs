@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
     ./v25-latest-linux-fix.patch
+    ./0001-handle-result-from-DcoKeyConfig_ParseFromString.patch
   ];
 
   postPatch = ''
@@ -129,7 +130,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenVPN/openvpn3-linux/";
     changelog = "https://github.com/OpenVPN/openvpn3-linux/releases/tag/v${version}";
     maintainers = with lib.maintainers; [
-      shamilton
       progrm_jarvis
     ];
     platforms = lib.platforms.linux;

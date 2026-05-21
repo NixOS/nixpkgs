@@ -14,7 +14,6 @@
   humanize,
   jax,
   msgpack,
-  nest-asyncio,
   numpy,
   protobuf,
   psutil,
@@ -22,32 +21,35 @@
   simplejson,
   tensorstore,
   typing-extensions,
+  uvloop,
 
   # tests
   chex,
+  fastapi,
   google-cloud-logging,
+  httpx,
   mock,
   optax,
   portpicker,
-  pytest-xdist,
   pytestCheckHook,
   safetensors,
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.11.30";
+  version = "0.11.39";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
-    tag = "v${version}";
-    hash = "sha256-y8l0AVGt2t5zLX+x+yuWHsEDy68agpXIkrew+zfYGXU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KrehggcpKqMd51SdEo3uzYyvH8M15tmECHzvGLBhD/4=";
   };
 
-  sourceRoot = "${src.name}/checkpoint";
+  sourceRoot = "${finalAttrs.src.name}/checkpoint";
 
   build-system = [ flit-core ];
 
@@ -58,7 +60,6 @@ buildPythonPackage rec {
     humanize
     jax
     msgpack
-    nest-asyncio
     numpy
     protobuf
     psutil
@@ -66,25 +67,22 @@ buildPythonPackage rec {
     simplejson
     tensorstore
     typing-extensions
+    uvloop
   ]
   ++ etils.optional-dependencies.epath
   ++ etils.optional-dependencies.epy;
 
   nativeCheckInputs = [
     chex
+    fastapi
     google-cloud-logging
+    httpx
     mock
     optax
     portpicker
-    pytest-xdist
     pytestCheckHook
     safetensors
     torch
-  ];
-
-  pythonImportsCheck = [
-    "orbax"
-    "orbax.checkpoint"
   ];
 
   disabledTests = [
@@ -104,6 +102,14 @@ buildPythonPackage rec {
     # AssertionError: False is not true
     "test_register_and_get"
     "test_register_different_modules"
+
+    # IndexError: list index out of range
+    "test_named_sharding"
+
+    # ValueError: cannot reshape array of size 1 into shape (0,2)
+    "test_get_leaf_memory_per_device"
+    "test_number_of_broadcasts"
+    "test_tree_memory_per_device"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
@@ -128,7 +134,13 @@ buildPythonPackage rec {
     # Description from first occurrence: Number of processes to use.
     # https://github.com/google/orbax/issues/1580
     "orbax/checkpoint/_src/testing/multiprocess_test.py"
+    "orbax/checkpoint/_src/testing/oss/multiprocess_test.py"
     "orbax/checkpoint/experimental/emergency/"
+
+    # ImportError: cannot import name 'tiering_service_pb2' from
+    # 'orbax.checkpoint.experimental.tiering_service.proto'
+    # (the protobuf module is not generated from the .proto file)
+    "orbax/checkpoint/experimental/tiering_service/server_test.py"
 
     # ValueError: Distributed system is not available; please initialize it via `jax.distributed.initialize()` at the start of your program.
     "orbax/checkpoint/_src/handlers/array_checkpoint_handler_test.py"
@@ -145,7 +157,11 @@ buildPythonPackage rec {
     # '/build/absl_testing/DefaultSnapshotTest/runTest/root/path/to/source/data.txt'
     "orbax/checkpoint/_src/path/snapshot/snapshot_test.py"
 
+    # Expects to run on 8 devices
+    "orbax/checkpoint/_src/multihost/multihost_test.py"
+
     # Circular dependency flax
+    "orbax/checkpoint/_src/handlers/pytree_checkpoint_handler_test.py"
     "orbax/checkpoint/_src/metadata/empty_values_test.py"
     "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
     "orbax/checkpoint/_src/metadata/tree_test.py"
@@ -156,13 +172,19 @@ buildPythonPackage rec {
     "orbax/checkpoint/checkpoint_manager_test.py"
     "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"
+    "orbax/checkpoint/_src/handlers/standard_checkpoint_handler_test.py"
+  ];
+
+  pythonImportsCheck = [
+    "orbax"
+    "orbax.checkpoint"
   ];
 
   meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
-    changelog = "https://github.com/google/orbax/blob/v${version}/checkpoint/CHANGELOG.md";
+    changelog = "https://github.com/google/orbax/blob/${finalAttrs.src.tag}/checkpoint/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

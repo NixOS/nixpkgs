@@ -14,9 +14,20 @@
   ncurses,
   opencv4,
   openssl,
-  unixODBC,
+  unixodbc,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxmu,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
   libxml2,
   libuuid,
@@ -34,7 +45,9 @@ let
   dirName = "WolframEngine";
 in
 stdenv.mkDerivation rec {
-  inherit (l10n) version name src;
+  pname = "wolfram-engine";
+
+  inherit (l10n) version src;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -56,28 +69,26 @@ stdenv.mkDerivation rec {
     opencv4
     openssl
     (lib.getLib stdenv.cc.cc)
-    unixODBC
+    unixodbc
     xkeyboard_config
     libxml2
     libuuid
     zlib
     libGL
     libGLU
-  ]
-  ++ (with xorg; [
-    libX11
-    libXext
-    libXtst
-    libXi
-    libXmu
-    libXrender
+    libx11
+    libxext
+    libxtst
+    libxi
+    libxmu
+    libxrender
     libxcb
-    libXcursor
-    libXfixes
-    libXrandr
-    libICE
-    libSM
-  ]);
+    libxcursor
+    libxfixes
+    libxrandr
+    libice
+    libsm
+  ];
 
   # some bundled libs are found through LD_LIBRARY_PATH
   autoPatchelfIgnoreMissingDeps = true;

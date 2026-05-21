@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     libapparmor
+    perl
     which
   ];
 
@@ -46,6 +47,8 @@ stdenv.mkDerivation {
     "BINDIR=$(out)/bin"
     "SBINDIR=$(out)/bin"
   ];
+
+  strictDeps = true;
 
   meta = libapparmor.meta // {
     description = "Mandatory access control system - binary user-land utilities";

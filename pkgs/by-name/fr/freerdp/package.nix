@@ -19,17 +19,17 @@
   pkcs11helper,
   uriparser,
   zlib,
-  libX11,
-  libXcursor,
-  libXdamage,
-  libXdmcp,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libXv,
+  libx11,
+  libxcursor,
+  libxdamage,
+  libxdmcp,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
+  libxtst,
+  libxv,
   libxkbcommon,
   libxkbfile,
   wayland,
@@ -70,13 +70,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.21.0";
+  version = "3.26.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = finalAttrs.version;
-    hash = "sha256-oIws2HO2usOCtVDe6OTIdIDHYgb9tBIEctvCW6/Woxc=";
+    tag = finalAttrs.version;
+    hash = "sha256-7yUqZXuUn3OFhlWrZyXmmh/aGOp0uRJ7XxaLl1fVnVQ=";
   };
 
   postPatch = ''
@@ -117,17 +117,17 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     glib
     icu
-    libX11
-    libXcursor
-    libXdamage
-    libXdmcp
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
-    libXtst
-    libXv
+    libx11
+    libxcursor
+    libxdamage
+    libxdmcp
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxtst
+    libxv
     libjpeg_turbo
     libkrb5
     libopus
@@ -227,6 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://www.freerdp.com/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ deimelias ];

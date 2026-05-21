@@ -25,14 +25,14 @@ let
   pythonEnv = python3.withPackages (ps: [ ps.psutil ]);
   circt-llvm = callPackage ./circt-llvm.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "circt";
-  version = "1.139.0";
+  version = "1.140.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
-    rev = "firtool-${version}";
-    hash = "sha256-Yj9BqmmotIaTUHIUslaOmRXYC4ujQ9GNjEmaAfLgLgU=";
+    tag = "firtool-${finalAttrs.version}";
+    hash = "sha256-oitdYNGsEyraQqouOt9srfbDgVGFOAGZMdcf/rjnx5Q=";
     fetchSubmodules = true;
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
   # cannot use lib.optionalString as it creates an empty string, disabling all tests
-  LIT_FILTER_OUT =
+  env.LIT_FILTER_OUT =
     let
       lit-filters =
         # There are some tests depending on `clang-tools` to work. They are activated only when detected
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     # circt uses git to check its version, but when cloned on nix it can't access git.
     # So this hard codes the version.
     substituteInPlace cmake/modules/GenVersionFile.cmake \
-      --replace-fail "unknown git version" "${src.rev}"
+      --replace-fail "unknown git version" "${finalAttrs.src.rev}"
     # Increase timeout on tests because some were failing on hydra.
     # Using `replace-warn` so it doesn't break when upstream changes the timeout.
     substituteInPlace integration_test/CMakeLists.txt \
@@ -181,4 +181,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

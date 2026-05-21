@@ -21,6 +21,11 @@ stdenv.mkDerivation {
   buildPhase = "make mkpasswd";
   installPhase = "make install-mkpasswd";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     homepage = "https://packages.qa.debian.org/w/whois.html";
     description = "Overfeatured front-end to crypt, from the Debian whois package";

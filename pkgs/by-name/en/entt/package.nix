@@ -4,14 +4,14 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "entt";
   version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "skypjack";
     repo = "entt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IPAM7fr/tvSOMKWUbXbloNAnlp5t7J0ynSsTMZ2jKYs=";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
   };
-}
+})

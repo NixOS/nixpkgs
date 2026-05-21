@@ -6,14 +6,14 @@
   shocco,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "roundup";
   version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "bmizerany";
     repo = "roundup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0nxaqmbv8mdvq9wcaqxk6k5mr31i68jzxf1wxa6pp7xp4prwdc9z";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "roundup";
   };
-}
+})

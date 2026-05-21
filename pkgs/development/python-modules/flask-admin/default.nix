@@ -3,14 +3,12 @@
   fetchFromGitHub,
   flit-core,
   lib,
-  pythonOlder,
   # dependencies
   flask,
   jinja2,
   markupsafe,
   werkzeug,
   wtforms,
-  typing-extensions,
   # optional dependencies
   # sqlalchemy
   flask-sqlalchemy,
@@ -70,9 +68,6 @@ buildPythonPackage rec {
     markupsafe
     werkzeug
     wtforms
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   optional-dependencies = {

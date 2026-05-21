@@ -57,7 +57,7 @@ buildPythonPackage {
     sed -i 's/requests.*"/requests"/' setup.py
   '';
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     mkdir -p $out/lib

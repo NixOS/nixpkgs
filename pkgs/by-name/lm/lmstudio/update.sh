@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-for system in "aarch64-darwin darwin/arm64" "x86_64-linux linux/x64"; do
+for system in "aarch64-darwin darwin/arm64" "x86_64-linux linux/x64" "aarch64-linux linux/arm64"; do
   # shellcheck disable=SC2086
   set -- ${system} # split string into variables $1 and $2
 

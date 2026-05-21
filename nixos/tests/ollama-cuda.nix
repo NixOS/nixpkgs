@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   name = "ollama-cuda";
-  meta.maintainers = with lib.maintainers; [ abysssol ];
+  meta.maintainers = [ ];
 
   nodes.cuda =
     { ... }:

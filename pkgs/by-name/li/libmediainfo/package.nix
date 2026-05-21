@@ -12,13 +12,13 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmediainfo";
-  version = "25.10";
+  version = "26.05";
 
   src = fetchurl {
-    url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    hash = "sha256-rRPZeXsEbOOdDGWm+B0q7yQpc0whhlpqTFksfAHySd0=";
+    url = "https://mediaarea.net/download/source/libmediainfo/${finalAttrs.version}/libmediainfo_${finalAttrs.version}.tar.xz";
+    hash = "sha256-wIsth7L7XttFJsKooxfrHyz/RIB+RjGgN8qfmh1FUFQ=";
   };
 
   nativeBuildInputs = [
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.devhell ];
   };
-}
+})

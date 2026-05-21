@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "usacloud";
   version = "1.19.3";
 
   src = fetchFromGitHub {
     owner = "sacloud";
     repo = "usacloud";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uHZJnhj36NEAZxWfwrm0Dsw42NgQp37SgOduEGA8SEU=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/sacloud/usacloud/pkg/version.Revision=${src.rev}"
+    "-X=github.com/sacloud/usacloud/pkg/version.Revision=${finalAttrs.src.rev}"
   ];
 
   doInstallCheck = true;
@@ -33,9 +33,9 @@ buildGoModule rec {
   meta = {
     description = "CLI client for the Sakura Cloud";
     homepage = "https://github.com/sacloud/usacloud";
-    changelog = "https://github.com/sacloud/usacloud/releases/tag/v${version}";
+    changelog = "https://github.com/sacloud/usacloud/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "usacloud";
   };
-}
+})

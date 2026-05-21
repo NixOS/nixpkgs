@@ -6,7 +6,7 @@
   pkg-config,
   curl,
   gd,
-  libX11,
+  libx11,
   libxml2,
   libzip,
   SDL,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     gd
-    libX11
+    libx11
     libxml2
     libzip
     SDL

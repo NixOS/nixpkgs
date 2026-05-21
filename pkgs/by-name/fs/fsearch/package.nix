@@ -14,14 +14,14 @@
   icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsearch";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "cboxdoerfer";
     repo = "fsearch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VBcoDxh4ip2zLBcXVHDe9s1lVRQF4bZJKsGUt6sPcos=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fsearch";
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/fsearch.x86_64-darwin
   };
-}
+})

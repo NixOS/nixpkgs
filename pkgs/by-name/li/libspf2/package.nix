@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspf2";
   version = "2.2.13";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "libspf2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tkCHP3B1sBb0+scHBjX5lCvaeSrZryfaGKye02LFlYs=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       -e '/bin_PROGRAMS/s/spf_example_static//' src/spf_example/Makefile.am
   '';
 
-  CFLAGS = "-Wno-error=implicit-function-declaration";
+  env.CFLAGS = "-Wno-error=implicit-function-declaration";
 
   doCheck = true;
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

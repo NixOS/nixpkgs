@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   ant,
-  jdk,
+  jdk25,
   openjdk8-bootstrap,
   jre,
   stripJavaArchivesHook,
@@ -14,13 +14,13 @@
 let
   tweetnacl = stdenv.mkDerivation {
     pname = "tweetnacl";
-    version = "0-unstable-2020-02-12";
+    version = "0-unstable-2025-11-06";
 
     src = fetchFromGitHub {
       owner = "ianopolous";
       repo = "tweetnacl-java";
-      rev = "6d1bde81ea63051750cda40422b62e478b85d2b0";
-      hash = "sha256-BDWzDpUBi4UuvxFwA9ton+RtHOzDcWql1ti+cdvhzks=";
+      rev = "0cf99e1921b79eb91bc4c27cc15a27e325dbdb75";
+      hash = "sha256-RyyC3/XhOhL7UxtPd2WODJgG6mPqkF/KDtvoa8PKWEM=";
     };
 
     postPatch = ''
@@ -41,18 +41,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peergos";
-  version = "1.18.0";
+  version = "1.26.0";
+
   src = fetchFromGitHub {
     owner = "Peergos";
     repo = "web-ui";
     rev = "v${version}";
-    hash = "sha256-zE7BsbZV1KIPD0sn1rSlMxzNF+JcucG382Ek/N9vO8o=";
+    hash = "sha256-lvgiVjNbXWKrEYe8kCgAi4hwdvawZysjGJiDSInKYsM=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     ant
-    jdk
+    jdk25
     stripJavaArchivesHook
     makeWrapper
   ];

@@ -20,14 +20,14 @@
   versionCheckHook,
   mydumper,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mydumper";
   version = "0.21.1-1";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6x0d1Ywgy6kkfDs3KsS6pRK0/3z9Ur7klO8xMTsoDPI=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
@@ -105,13 +105,13 @@ stdenv.mkDerivation rec {
   passthru.tests = testers.testVersion {
     package = mydumper;
     command = "myloader --version";
-    version = "myloader v${version}";
+    version = "myloader v${finalAttrs.version}";
   };
 
   meta = {
     description = "High-performance MySQL backup tool";
     homepage = "https://github.com/mydumper/mydumper";
-    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
+    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -119,4 +119,4 @@ stdenv.mkDerivation rec {
       michaelglass
     ];
   };
-}
+})

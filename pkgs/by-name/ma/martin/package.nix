@@ -1,67 +1,155 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  fetchurl,
+  buildNpmPackage,
+  rustPlatform,
   pkg-config,
+  curl,
+  libz,
   openssl,
+  postgresql,
+  postgresqlTestHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  # check package.metadata.mln in https://github.com/maplibre/maplibre-native-rs/blob/main/Cargo.toml
+  mlnRelease = "core-9b6325a14e2cf1cc29ab28c1855ad376f1ba4903";
+  mlnHeaders = fetchurl {
+    url = "https://github.com/maplibre/maplibre-native/releases/download/${mlnRelease}/maplibre-native-headers.tar.gz";
+    hash = "sha256-VjVEc/+IZTBG9ixP/i7oeel+7gy3+DhSEOi2UDIqeLc=";
+  };
+  mlnLibrary = fetchurl (
+    let
+      sources = {
+        aarch64-linux = {
+          url = "https://github.com/maplibre/maplibre-native/releases/download/${mlnRelease}/libmaplibre-native-core-amalgam-linux-arm64-vulkan.a";
+          hash = "sha256-PHFNdzcG3+kngZmziMccCTnwBUbtsS2RAUNkTyNYXmc";
+        };
+        x86_64-linux = {
+          url = "https://github.com/maplibre/maplibre-native/releases/download/${mlnRelease}/libmaplibre-native-core-amalgam-linux-x64-vulkan.a";
+          hash = "sha256-T9H7NiXHv+hbMgOd5QetQzxjIX1Ufn6gNmBJJ/7Ha50=";
+        };
+      };
+    in
+    sources.${stdenv.hostPlatform.system}
+    // {
+      downloadToTemp = true;
+      recursiveHash = true;
+      postFetch = ''
+        install -Dm644 $downloadedFile $out/libmbgl-core-amalgam.a
+      '';
+    }
+  );
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "martin";
-  version = "0.9.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
-    rev = "v${version}";
-    hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
+    tag = "martin-v${finalAttrs.version}";
+    hash = "sha256-LaPRkmzTVNn3qKJjrDNz8bcSWXy5SubevfjGvb+JvUg=";
   };
 
-  cargoHash = "sha256-595VKHLajoNinyv12J9qUi55hOcOFRgUeLlzvSdjESs=";
+  patches = [ ./dont-build-webui.patch ];
+
+  cargoHash = "sha256-dOTlYQcn2TWtzhJNFf3cVyR5EOvjBgW3qgBReUlfjTg=";
+
+  webui = buildNpmPackage {
+    pname = "martin-ui";
+    inherit (finalAttrs) version doCheck;
+
+    src = "${finalAttrs.src}/martin/martin-ui";
+
+    postPatch = ''
+      substituteInPlace src/App.tsx \
+        --replace-warn "./assets" "$src/src/assets"
+      ln -sf ${finalAttrs.src}/demo/frontend/public/favicon.ico public/_/assets/favicon.ico
+    '';
+
+    npmDepsHash = "sha256-kuLnRFubvmskSRg1Jmdw79oTt0jrzbjW64zhcKfcuX4=";
+
+    buildPhase = ''
+      runHook preBuild
+      npm exec vite build
+      runHook postBuild
+    '';
+
+    checkPhase = ''
+      runHook preCheck
+      npm run test
+      runHook postCheck
+    '';
+
+    installPhase = ''
+      cp -r dist $out
+    '';
+  };
+
+  preBuild = ''
+    rm -rf martin/martin-ui/dist
+    cp -r ${finalAttrs.webui} martin/martin-ui/dist
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
-
-  checkFlags = [
-    "--skip function_source_schemas"
-    "--skip function_source_tile"
-    "--skip function_source_tilejson"
-    "--skip pg_get_function_tiles"
-    "--skip pg_get_function_source_ok_rewrite"
-    "--skip pg_get_function_source_ok"
-    "--skip pg_get_composite_source_tile_minmax_zoom_ok"
-    "--skip pg_get_function_source_query_params_ok"
-    "--skip pg_get_composite_source_tile_ok"
-    "--skip pg_get_catalog"
-    "--skip pg_get_composite_source_ok"
-    "--skip pg_get_health_returns_ok"
-    "--skip pg_get_table_source_ok"
-    "--skip pg_get_table_source_rewrite"
-    "--skip pg_null_functions"
-    "--skip utils::test_utils::tests::test_bad_os_str"
-    "--skip utils::test_utils::tests::test_get_env_str"
-    "--skip pg_get_table_source_multiple_geom_tile_ok"
-    "--skip pg_get_table_source_tile_minmax_zoom_ok"
-    "--skip pg_tables_feature_id"
-    "--skip pg_get_table_source_tile_ok"
-    "--skip table_source_schemas"
-    "--skip tables_srid_ok"
-    "--skip tables_tile_ok"
-    "--skip table_source"
-    "--skip tables_tilejson"
-    "--skip tables_multiple_geom_ok"
+  buildInputs = [
+    curl
+    libz
+    openssl
   ];
 
+  nativeCheckInputs = [
+    postgresql
+    postgresqlTestHook
+  ];
+
+  # Tests are time-consuming and moved to passthru.tests.withCheck.
+  doCheck = false;
+
+  checkFlags = [
+    # Requires docker
+    "--skip=test_nonexistent_tables_functions_generate_warning"
+  ];
+
+  passthru.tests = lib.optionalAttrs (!postgresqlTestHook.meta.broken) {
+    withCheck = finalAttrs.finalPackage.overrideAttrs {
+      doCheck = true;
+    };
+  };
+
+  env = {
+    MLN_PRECOMPILE = 1;
+    MLN_CORE_LIBRARY_PATH = "${mlnLibrary}/libmbgl-core-amalgam.a";
+    MLN_CORE_LIBRARY_HEADERS_PATH = "${mlnHeaders}";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=martin-v(.*)"
+      "--subpackage=webui"
+    ];
+  };
+
   meta = {
-    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
-    broken = true;
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # maplibre-native
+      fromSource
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
-}
+})

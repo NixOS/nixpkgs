@@ -7,13 +7,13 @@
   pkg-config,
   qttools,
   libxcb,
-  libXau,
+  libxau,
   pam,
   qtbase,
   qtdeclarative,
   qtquickcontrols2 ? null,
   systemd,
-  xkeyboardconfig,
+  xkeyboard-config,
   nixosTests,
   docutils,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/greeter/waylandkeyboardbackend.cpp \
-      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard-config}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXau
+    libxau
     pam
     qtbase
     qtdeclarative

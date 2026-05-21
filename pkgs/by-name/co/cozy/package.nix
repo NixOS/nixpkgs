@@ -13,7 +13,7 @@
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cozy";
   version = "1.3.0";
   pyproject = false; # built with meson
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "geigi";
     repo = "cozy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oMgdz2dny0u1XV13aHu5s8/pcAz8z/SAOf4hbCDsdjw";
   };
 
@@ -84,4 +84,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "com.github.geigi.cozy";
     platforms = lib.platforms.linux;
   };
-}
+})

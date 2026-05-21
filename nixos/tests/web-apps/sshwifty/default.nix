@@ -25,7 +25,7 @@
     machine.wait_for_unit("sshwifty.service")
     machine.wait_for_open_port(80)
     machine.wait_until_succeeds("curl --fail -6 http://localhost/", timeout=60)
-    machine.wait_until_succeeds("${lib.getExe pkgs.nodejs} ${./sshwifty-test.js}", timeout=60)
+    machine.wait_until_succeeds("${lib.getExe pkgs.nodejs-slim} ${./sshwifty-test.js}", timeout=60)
   '';
 
   meta.maintainers = [ lib.maintainers.ungeskriptet ];

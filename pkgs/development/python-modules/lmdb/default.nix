@@ -38,8 +38,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dw/py-lmdb";
     changelog = "https://github.com/jnwatson/py-lmdb/blob/py-lmdb_${version}/ChangeLog";
     license = lib.licenses.openldap;
-    maintainers = with lib.maintainers; [
-      ivan
+    maintainers = [
     ];
   };
 }

@@ -7,7 +7,7 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedigroups";
   version = "0.4.6";
 
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     domain = "git.ondrovo.com";
     owner = "MightyPork";
     repo = "group-actor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Sq22CwLLR10yrN3+dR2KDoS8r99+LWOH7+l+D3RWlKw=";
     forceFetchGit = true; # Archive generation is disabled on this gitea instance
     leaveDotGit = true; # git command in build.rs
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "fedigroups";
   };
-}
+})

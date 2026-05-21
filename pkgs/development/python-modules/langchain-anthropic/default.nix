@@ -22,21 +22,24 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-anthropic";
-  version = "1.3.0";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-anthropic==${version}";
-    hash = "sha256-/CqnpeQXYdafkly8shen72dIZU3I9o/2TwM903Nw9DA=";
+    tag = "langchain-anthropic==${finalAttrs.version}";
+    hash = "sha256-u0Ur2SZFI8NkiVMBFieZIkc3cJL2IvrFvB4ueCvGMEU=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/anthropic";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/anthropic";
 
   build-system = [ hatchling ];
+
+  # Langchain always tracks the latest release of anthropic whether or not it's needed
+  pythonRelaxDeps = [ "anthropic" ];
 
   dependencies = [
     anthropic
@@ -72,7 +75,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-anthropic/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-anthropic/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Anthropic";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/anthropic";
     license = lib.licenses.mit;
@@ -80,4 +83,4 @@ buildPythonPackage rec {
       lib.maintainers.sarahec
     ];
   };
-}
+})

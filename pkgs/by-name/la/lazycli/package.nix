@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazycli";
   version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazycli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1qq167hc7pp9l0m40ysphfljakmm8hjjnhpldvb0kbc825h0z8z5";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "lazycli";
   };
-}
+})

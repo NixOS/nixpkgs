@@ -9,13 +9,15 @@
   libxcb,
   lv2,
   pkg-config,
-  xorg,
+  libxdmcp,
+  libpthread-stubs,
+  libxshmfence,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eq10q";
   version = "2.2";
   src = fetchurl {
-    url = "mirror://sourceforge/project/eq10q/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/eq10q/eq10q-${finalAttrs.version}.tar.gz";
     sha256 = "16mhcav8gwkp29k9ki4dlkajlcgh1i2wvldabxb046d37dq4qzrk";
   };
 
@@ -28,9 +30,9 @@ stdenv.mkDerivation rec {
     gtkmm2
     libxcb
     lv2
-    xorg.libpthreadstubs
-    xorg.libXdmcp
-    xorg.libxshmfence
+    libpthread-stubs
+    libxdmcp
+    libxshmfence
   ];
 
   patches = [
@@ -75,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

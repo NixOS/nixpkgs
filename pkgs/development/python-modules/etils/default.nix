@@ -7,7 +7,6 @@
   # tests
   chex,
   jaxlib,
-  pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
   yapf,
@@ -116,7 +115,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     chex
     jaxlib
-    pytest-subtests
     pytest-xdist
     pytestCheckHook
     yapf

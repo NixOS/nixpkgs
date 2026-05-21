@@ -4,16 +4,16 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ntfy-alertmanager";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "https://git.xenrox.net/~xenrox/ntfy-alertmanager/refs/download/v${version}/ntfy-alertmanager-${version}.tar.gz";
-    hash = "sha256-Sn2hPt03o4Pi1WY/3d5oWhWUt8x+3P8hoNPS58tj0Kw=";
+    url = "https://git.xenrox.net/~xenrox/ntfy-alertmanager/refs/download/v${finalAttrs.version}/ntfy-alertmanager-${finalAttrs.version}.tar.gz";
+    hash = "sha256-SYDxwnSIUn0GVXIcD6ntf2l1Flaa4ebeTDdlXlNP6/M=";
   };
 
-  vendorHash = "sha256-NHaLv+Ulzl4ev3a6OjZiacCSmYAtvqFFmbYzAp+4AFU=";
+  vendorHash = "sha256-tqP/3yBkZQAAehNQVyU9j+jLBwBf/XWVQ+81Rz9+D2Y=";
 
   meta = {
     description = "Bridge between ntfy and Alertmanager";
@@ -26,4 +26,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

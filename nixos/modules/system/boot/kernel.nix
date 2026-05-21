@@ -410,9 +410,11 @@ in
             ln -s ${config.hardware.deviceTree.package} $out/dtbs
           ''}
 
-          echo -n "$kernelParams" > $out/kernel-params
+          echo -n "''${kernelParams[@]}" > $out/kernel-params
 
-          ln -s ${initrdPath} $out/initrd
+          ${optionalString config.boot.initrd.enable ''
+            ln -s ${initrdPath} $out/initrd
+          ''}
 
           ${optionalString (config.boot.initrd.secrets != { }) ''
             ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out

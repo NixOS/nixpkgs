@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   qt6,
   qt6Packages,
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.9.1";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-lSAIlwdOVFd8pcT4rZ17Jn9195BOtZnUgFysDKM6t9U=";
+    hash = "sha256-NTabdGaB87otc1zzKQLWXx4/nU5rXeTIw2O9nWXUMi0=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      name = "disable-auto-update.patch";
+      url = "https://sources.debian.org/data/main/t/texstudio/4.9.1%2Bds-1/debian/patches/0004-disable-auto-update.patch";
+      hash = "sha256-w4/u8ObJSQqHisZmxMSpJeveE+DJSgLqnfpEnizHsBg=";
+    })
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

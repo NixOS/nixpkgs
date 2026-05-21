@@ -6,20 +6,20 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pinniped";
-  version = "0.42.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "pinniped";
-    rev = "v${version}";
-    sha256 = "sha256-1r5EjF4Npt1iwlILTCHKlViO5MPcv8undKYJWN8cmVA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-C7N6iPD4caTUXR6gB+9sdfBlWyT1tfE8KwE5WaiUdQM=";
   };
 
   subPackages = "cmd/pinniped";
 
-  vendorHash = "sha256-aDP5yf0uGYSzvYqqRUS4P2ozLCRcS0eDJseicXv/99o=";
+  vendorHash = "sha256-B94/SR2OVsxDs9+MaivxPBMQsNWFwAEwuDT7xvWN8vg=";
 
   ldflags = [
     "-s"
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bpaulin ];
   };
-}
+})

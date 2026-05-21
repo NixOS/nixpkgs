@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   flit-core,
   pytestCheckHook,
 }:
@@ -17,6 +18,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-kBOU17/jRRAGb4MGawY0PY31OJf5arVz+J7xGBoMBkg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "pytest9-compat.patch";
+      url = "https://github.com/mahmoud/boltons/commit/a2af58548936c51a3d859f780e54ba170a6829bb.patch";
+      hash = "sha256-NRjfEKb0doJEtS5GyrF0dJYYr2u+ukogfUmmVnsHAwM=";
+    })
+  ];
 
   build-system = [ flit-core ];
 

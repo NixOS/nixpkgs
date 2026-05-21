@@ -2,7 +2,6 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  isPy38,
   lib,
   lz4,
   numpy,
@@ -59,9 +58,6 @@ buildPythonPackage rec {
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
   disabledTests = [ "test_cython_python" ];
-
-  # CLI tests are broken on Python 3.8. See https://github.com/fastavro/fastavro/issues/558.
-  disabledTestPaths = lib.optionals isPy38 [ "tests/test_main_cli.py" ];
 
   pythonImportsCheck = [ "fastavro" ];
 

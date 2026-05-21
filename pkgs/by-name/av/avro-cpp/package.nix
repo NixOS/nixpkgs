@@ -9,12 +9,12 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avro-c++";
   version = "1.12.0";
 
   src = fetchurl {
-    url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
+    url = "mirror://apache/avro/avro-${finalAttrs.version}/cpp/avro-cpp-${finalAttrs.version}.tar.gz";
     hash = "sha256-8u33cSanWw7BrRZncr4Fg1HOo9dESL5+LO8gBQwPmKs=";
   };
 
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ./0001-get-rid-of-fmt-fetchcontent.patch
     ./0002-fix-fmt-name-formatter.patch
     ./0003-fix-fmt-type-formatter.patch
+    ./0004-remove-boost-system-component.patch
   ];
 
   nativeBuildInputs = [
@@ -52,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

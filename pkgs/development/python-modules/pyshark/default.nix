@@ -1,28 +1,42 @@
 {
   lib,
   stdenv,
-  appdirs,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
+
+  # patches
   fetchpatch,
+  replaceVars,
+  wireshark-cli,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  appdirs,
   lxml,
   packaging,
-  pytestCheckHook,
-  replaceVars,
-  setuptools,
   termcolor,
-  wireshark-cli,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyshark";
   version = "0.6";
   pyproject = true;
 
+  # Almost all tests fail with:
+  # RuntimeError: There is no current event loop in thread 'MainThread'
+  disabled = pythonAtLeast "3.14";
+
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = "pyshark";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kzJDzUK6zknUyXPdKc4zMvWim4C5NQCSJSS45HI6hKM=";
   };
 
@@ -46,7 +60,7 @@ buildPythonPackage rec {
     })
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   build-system = [ setuptools ];
 
@@ -59,11 +73,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # flaky
@@ -83,8 +94,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
-    changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${version}";
+    changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

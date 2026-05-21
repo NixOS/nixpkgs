@@ -263,26 +263,32 @@ let
   vendorDir =
     runCommand "cargo-vendor-dir"
       (
-        if lockFile == null then
-          {
-            inherit lockFileContents;
-            passAsFile = [ "lockFileContents" ];
-          }
-        else
-          {
-            passthru = {
-              inherit lockFile;
-            };
-          }
+        {
+          __structuredAttrs = true;
+        }
+        // (
+          if lockFile == null then
+            {
+              inherit lockFileContents;
+            }
+          else
+            {
+              passthru = {
+                inherit lockFile;
+              };
+            }
+        )
       )
       ''
             mkdir -p $out/.cargo
 
             ${
-              if lockFile != null then
-                "ln -s ${lockFile} $out/Cargo.lock"
+              if lockFile == null then
+                ''
+                  printf "%s" "$lockFileContents" > "$out/Cargo.lock"
+                ''
               else
-                "cp $lockFileContentsPath $out/Cargo.lock"
+                "ln -s ${lockFile} $out/Cargo.lock"
             }
 
             cat > $out/.cargo/config.toml <<EOF

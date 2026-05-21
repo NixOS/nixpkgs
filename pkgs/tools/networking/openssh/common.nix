@@ -71,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
-
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "10.3") [
     # See discussion in https://github.com/NixOS/nixpkgs/issues/466049 and
     # https://gitlab.archlinux.org/archlinux/packaging/packages/openssh/-/issues/23
     (fetchpatch {
@@ -311,7 +312,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = extraMeta.maintainers or [ ];
+    teams = [ lib.teams.security-review ];
     mainProgram = "ssh";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openbsd" finalAttrs.version;
   }
   // extraMeta;
 })

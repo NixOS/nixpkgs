@@ -16,14 +16,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zluda";
-  version = "6-preview.45";
+  version = "6-preview.63";
 
   src = fetchFromGitHub {
     owner = "vosen";
     repo = "ZLUDA";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-796OuIM5a0saE0v1QHHAGRjUPT+YAIfUuEtAruMn8Mk=";
+    hash = "sha256-AZGSO6aV1T3elsVDJxFylhzYjkhkIy1QFtTdH4u4Lrw=";
     fetchSubmodules = true;
+    fetchLFS = true;
   };
 
   buildInputs = [
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     clang
   ];
 
-  cargoHash = "sha256-YNBeweZ/vfXGfM0lrZbAh71z6Rb0+B7nOuO8VL2BmCo=";
+  cargoHash = "sha256-2YAlc8HW+aqfRzLSXw/I++DM4/JneE7UNmV6BVZb4VM=";
 
   # Tests require a GPU and segfault in the sandbox
   doCheck = false;

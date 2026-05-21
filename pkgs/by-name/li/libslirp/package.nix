@@ -8,7 +8,7 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libslirp";
   version = "4.9.1";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "slirp";
     repo = "libslirp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MKP3iBExaPQryiahI1l/4bTgVht5Vu8AxaDyMotqmMo=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ];
 
   postPatch = ''
-    echo ${version} > .tarball-version
+    echo ${finalAttrs.version} > .tarball-version
   '';
 
   meta = {
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

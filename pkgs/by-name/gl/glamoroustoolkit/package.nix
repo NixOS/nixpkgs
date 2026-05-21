@@ -11,12 +11,12 @@
   freetype,
   glib,
   gtk3,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libxrender,
   libxkbcommon,
   libgit2,
   libglvnd,
@@ -36,12 +36,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.1.47";
+  version = "1.1.58";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-iMMl99qrcAxSX0ReonSjtY6oDTmDwug8TDXngUTngfQ=";
+    hash = "sha256-UVbtUnTEyghbmnWErNmZhZ5/PgiLlmLRjZjVIvzMcYo=";
   };
 
   nativeBuildInputs = [
@@ -86,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
         freetype
         glib
         gtk3
-        libX11
-        libXcursor
-        libXext
-        libXi
-        libXrandr
-        libXrender
+        libx11
+        libxcursor
+        libxext
+        libxi
+        libxrandr
+        libxrender
         libxkbcommon
         libglvnd
         libuuid

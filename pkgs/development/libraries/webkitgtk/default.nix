@@ -22,13 +22,14 @@
   wayland-scanner,
   libwebp,
   enchant,
-  xorg,
+  libx11,
   libxkbcommon,
   libavif,
   libepoxy,
   libjxl,
   at-spi2-core,
   cairo,
+  expat,
   libxml2,
   libsoup_3,
   libsecret,
@@ -37,7 +38,7 @@
   hyphen,
   icu,
   libsysprof-capture,
-  libpthreadstubs,
+  libpthread-stubs,
   nettle,
   libtasn1,
   p11-kit,
@@ -50,6 +51,7 @@
   libintl,
   lcms2,
   libmanette,
+  librice,
   geoclue2,
   flite,
   fontconfig,
@@ -59,7 +61,6 @@
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
-  woff2,
   bubblewrap,
   libseccomp,
   libbacktrace,
@@ -84,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.4";
+  version = "2.52.3";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -99,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-07+kc4Raz6tyY1utpeDRNP2meSxblcXFzRQbRhJb2OQ=";
+    hash = "sha256-Wz4NF05j3MKISLEZTg50SNWUjDwkJ+zZMcLFvlJhrrs=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -142,7 +143,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     cairo # required even when using skia
     enchant
+    expat
     flite
+    freetype
     libavif
     libepoxy
     libjxl
@@ -160,7 +163,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libidn
     libintl
     lcms2
-    libpthreadstubs
+    libpthread-stubs
     libsysprof-capture
     libtasn1
     libwebp
@@ -171,12 +174,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     nettle
     p11-kit
     sqlite
-    woff2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
     # https://bugs.webkit.org/show_bug.cgi?id=274032
     fontconfig
-    freetype
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
@@ -186,7 +187,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals systemdSupport [
     systemdLibs
@@ -197,6 +198,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExperimental [
     # For ENABLE_WEB_RTC
     openssl
+    librice
     # For ENABLE_WEBXR
     openxr-loader
   ]
@@ -219,7 +221,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]

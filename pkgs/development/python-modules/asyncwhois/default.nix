@@ -31,8 +31,7 @@ buildPythonPackage rec {
     python-socks
     tldextract
     whodap
-  ]
-  ++ python-socks.optional-dependencies.asyncio;
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

@@ -5,29 +5,29 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gickup";
-  version = "0.10.39";
+  version = "0.10.44";
 
   src = fetchFromGitHub {
     owner = "cooperspencer";
     repo = "gickup";
-    tag = "v${version}";
-    hash = "sha256-Aalt/oiNzV2a8Ix/ruL4r3q0W1EY1UTe9IVPWNL+lLA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AbeV/0CngNgCaLUIwv/uy8VgpiKiOXWGSjnW+xrd7gk=";
   };
 
-  vendorHash = "sha256-Xtreh7nHovBYh0PnFYn2VuYGN8GQSmy6EPnZnHSdt/o=";
+  vendorHash = "sha256-lCeUEReVh0Fg1gyyTvWq2CIdQLuGCN20u9TftiokI0I=";
 
-  ldflags = [ "-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${finalAttrs.version}" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to backup repositories";
     homepage = "https://github.com/cooperspencer/gickup";
-    changelog = "https://github.com/cooperspencer/gickup/releases/tag/v${version}";
+    changelog = "https://github.com/cooperspencer/gickup/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ adamcstephens ];
     mainProgram = "gickup";
     license = lib.licenses.asl20;
   };
-}
+})

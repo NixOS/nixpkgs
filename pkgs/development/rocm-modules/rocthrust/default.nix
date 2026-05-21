@@ -10,12 +10,12 @@
   gtest,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  version = "7.0.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -29,10 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocThrust";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-tbGEZ8NXu7euPN8CaRYOjcmTmYq1SUP7LNKOjO0RICE=";
+    sparseCheckout = [
+      "projects/rocthrust"
+      "shared"
+    ];
+    hash = "sha256-wHEgpmBZCYtvp+OyebrRyfoFz3WQyKWfHPrdzQVL8lY=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocthrust";
 
   nativeBuildInputs = [
     cmake
@@ -76,15 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm parallel algorithm library";
-    homepage = "https://github.com/ROCm/rocThrust";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocthrust";
     license = with lib.licenses; [ asl20 ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

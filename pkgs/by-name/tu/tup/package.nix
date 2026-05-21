@@ -12,7 +12,7 @@
 let
   fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tup";
   version = "0.8";
   outputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-biVR932wHiUG56mvXoKWFzrzpkclbW9RWM4vY1+OMZ0=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${version}'
+    substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${finalAttrs.version}'
 
     for path in Tupfile build.sh src/tup/server/Tupfile ; do
       substituteInPlace  $path  --replace-fail "pkg-config" "${stdenv.cc.targetPrefix}pkg-config"
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

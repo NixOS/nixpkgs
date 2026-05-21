@@ -75,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
         "--enable-avx512"
         "--enable-avx128-fma"
       ]
+  ++
+    lib.optionals (stdenv.hostPlatform.isAarch64 && (precision == "single" || precision == "double"))
+      [
+        "--enable-neon"
+      ]
   ++ lib.optionals enableMpi [
     "--enable-mpi"
     # link libfftw3_mpi explicitly with -lmpi

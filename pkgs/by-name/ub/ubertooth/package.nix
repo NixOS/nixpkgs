@@ -11,18 +11,18 @@
   udevGroup ? "ubertooth",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ubertooth";
   version = "2020-12-R1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "ubertooth";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "11r5ag2l5xn4pr7ycicm30w9c3ldn9yiqj1sqnjc79csxl2vrcfw";
   };
 
-  sourceRoot = "${src.name}/host";
+  sourceRoot = "${finalAttrs.src.name}/host";
 
   patches = [
     # https://github.com/greatscottgadgets/ubertooth/pull/546
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Open source wireless development platform suitable for Bluetooth experimentation";
     homepage = "https://github.com/greatscottgadgets/ubertooth";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

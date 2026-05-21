@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -24,7 +25,6 @@
   pyannoteai-sdk,
   pytorch-metric-learning,
   safetensors,
-  soundfile,
   speechbrain,
   tensorboardx,
   torch,
@@ -42,17 +42,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyannote-audio";
-  version = "4.0.1";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-hYrwpph+Powt+AuQjKo0kkBW+5jJGfzGTILzL9j22YI=";
+    hash = "sha256-mns5ooODnJBTfFlM4b0GOoWqeTeD2CEhMikby6WdIM4=";
   };
 
   build-system = [
@@ -61,7 +61,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "torch"
     "torchaudio"
+    "torchcodec"
   ];
   dependencies = [
     asteroid-filterbanks
@@ -79,7 +81,6 @@ buildPythonPackage rec {
     pyannoteai-sdk
     pytorch-metric-learning
     safetensors
-    soundfile
     speechbrain
     tensorboardx
     torch
@@ -121,21 +122,30 @@ buildPythonPackage rec {
     "test_audio_resample"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Crashes the interpreter
-    # - On aarch64-darwin: Trace/BPT trap: 5
-    # - On x86_64-darwin: Fatal Python error: Illegal instruction
-    "tests/inference_test.py"
-    "tests/test_train.py"
-  ];
+  disabledTestPaths =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # Crashes the interpreter
+      # - On aarch64-darwin: Trace/BPT trap: 5
+      # - On x86_64-darwin: Fatal Python error: Illegal instruction
+      "tests/inference_test.py"
+      "tests/test_train.py"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.14") [
+      # RuntimeError: Please call `iter(combined_loader)` first.
+      # https://github.com/Lightning-AI/pytorch-lightning/issues/20641
+      "tests/inference_test.py"
+      "tests/test_train.py"
+      # PicklingError: Can't pickle <class 'pyannote.database.registry.Debug'>
+      "tests/tasks/test_reproducibility.py"
+    ];
 
   meta = {
     description = "Neural building blocks for speaker diarization: speech activity detection, speaker change detection, overlapped speech detection, speaker embedding";
     homepage = "https://github.com/pyannote/pyannote-audio";
-    changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pyannote/pyannote-audio/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
     ];
   };
-}
+})

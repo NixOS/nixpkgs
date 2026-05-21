@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "10.3.1";
+  version = "10.3.4";
 
   desktopItem = makeDesktopItem {
     type = "Application";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://f000.backblazeb2.com/file/rooarr/rooarr${lib.versions.major version}${lib.versions.minor version}${lib.versions.patch version}-linux64.tar.gz";
-    hash = "sha256-J4/IsOH12CutjorGtZzKbL4uFYWd9SXmjNx32Vi5dr0=";
+    hash = "sha256-ck3te+arllKJW8j6ymgvckAtCPiQMkXNBoNkKspVwak=";
   };
 
   nativeBuildInputs = [

@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   packaging,
-  tomli,
   pytestCheckHook,
   build,
   hatchling,
@@ -35,8 +33,7 @@ buildPythonPackage rec {
 
   dependencies = [
     packaging
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

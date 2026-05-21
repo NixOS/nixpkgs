@@ -12,14 +12,14 @@
   cairo,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "castor";
   version = "0.9.0";
 
   src = fetchFromSourcehut {
     owner = "~julienxx";
     repo = "castor";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-yYLDbxmUR86fdpbHQQTiHVUbicnOD75cl3Vhofw5qr0=";
   };
 
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

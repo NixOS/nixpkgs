@@ -33,7 +33,6 @@ let
     isAttrs
     isString
     isInt
-    isList
     typeOf
     hashString
     ;

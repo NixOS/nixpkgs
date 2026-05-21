@@ -9,14 +9,14 @@
   gettext,
   libvdpau,
   libva,
-  libXv,
+  libxv,
   sqlite,
   yasm,
   freetype,
   fontconfig,
   fribidi,
   makeWrapper,
-  libXext,
+  libxext,
   libGLU,
   alsa-lib,
   withX265 ? true,
@@ -49,12 +49,12 @@
 assert default != "qt5" -> default == "cli";
 assert !withQT -> default != "qt5";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avidemux";
   version = "2.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
+    url = "mirror://sourceforge/avidemux/avidemux/${finalAttrs.version}/avidemux_${finalAttrs.version}.tar.gz";
     sha256 = "sha256-d9m9yoaDzlfBkradIHz6t8+Sp3Wc4PY/o3tcjkKtPaI=";
   };
 
@@ -109,13 +109,13 @@ stdenv.mkDerivation rec {
     gettext
     libvdpau
     libva
-    libXv
+    libxv
     sqlite
     fribidi
     fontconfig
     freetype
     alsa-lib
-    libXext
+    libxext
     libGLU
   ]
   ++ lib.optional withX264 x264
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     let
       wrapWith =
         makeWrapper: filename:
-        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libxext}/lib";
       wrapQtApp = wrapWith "wrapQtApp";
       wrapProgram = wrapWith "wrapProgram";
     in
@@ -188,4 +188,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2;
   };
-}
+})

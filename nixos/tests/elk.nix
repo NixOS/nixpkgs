@@ -19,7 +19,6 @@ let
       inherit name;
       meta = with pkgs.lib.maintainers; {
         maintainers = [
-          offline
           basvandijk
         ];
       };

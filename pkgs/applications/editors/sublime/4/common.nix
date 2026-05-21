@@ -9,7 +9,8 @@
   fetchurl,
   stdenv,
   lib,
-  xorg,
+  libxtst,
+  libx11,
   glib,
   libglvnd,
   glibcLocales,
@@ -22,6 +23,7 @@
   common-updater-scripts,
   curl,
   openssl_1_1,
+  openssl_3_5,
   bzip2,
   sqlite,
 }:
@@ -32,7 +34,7 @@ let
   binaries = [
     "sublime_text"
     "plugin_host-3.3"
-    "plugin_host-3.8"
+    "plugin_host-3.${if lib.versionAtLeast buildVersion "4205" then "14" else "8"}"
     crashHandlerBinary
   ];
   primaryBinary = "sublime_text";
@@ -49,8 +51,8 @@ let
   versionFile = toString ./packages.nix;
 
   neededLibraries = [
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
     glib
     libglvnd
     openssl_1_1
@@ -63,11 +65,11 @@ let
     sqlite
   ];
 
-  binaryPackage = stdenv.mkDerivation rec {
+  binaryPackage = stdenv.mkDerivation (finalAttrs: {
     pname = "${pnameBase}-bin";
     version = buildVersion;
 
-    src = passthru.sources.${stdenv.hostPlatform.system};
+    src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
     dontStrip = true;
     dontPatchELF = true;
@@ -89,12 +91,20 @@ let
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"}:$out \
           $binary
       done
 
+      # Unable to get plugin_host-3.14 not crash with Python from Nixpkgs
+      ${lib.optionalString (lib.versionAtLeast buildVersion "4205") "patchelf --set-rpath ${
+        lib.makeLibraryPath [
+          sqlite
+          openssl_3_5
+        ]
+      } libpython3.14.so.1.0"}
+
       # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
-      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
+      ${lib.optionalString (lib.versionOlder buildVersion "4205") "sed -i -e 's,/bin/cp\\x00,cp\\x00\\x00\\x00\\x00\\x00\\x00,g' ${primaryBinary}"}
 
       runHook postBuild
     '';
@@ -105,6 +115,7 @@ let
       # No need to patch these libraries, it works well with our own
       rm libcrypto.so.1.1 libssl.so.1.1
       ${lib.optionalString (lib.versionAtLeast buildVersion "4145") "rm libsqlite3.so"}
+      ${lib.optionalString (lib.versionAtLeast buildVersion "4205") "rm libcrypto.so.3 libssl.so.3"}
 
       mkdir -p $out
       cp -r * $out/
@@ -115,7 +126,7 @@ let
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
     postFixup = ''
-      sed -i 's#/usr/bin/pkexec#pkexec\x00\x00\x00\x00\x00\x00\x00\x00\x00#g' "$out/${primaryBinary}"
+      ${lib.optionalString (lib.versionOlder buildVersion "4205") "sed -i 's#/usr/bin/pkexec#pkexec\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00#g' \"$out/${primaryBinary}\""}
 
       wrapProgram $out/${primaryBinary} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
@@ -134,9 +145,9 @@ let
         };
       };
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = pnameBase;
   version = buildVersion;
 
@@ -190,7 +201,7 @@ stdenv.mkDerivation rec {
               exit 0
           fi
 
-          for platform in ${lib.escapeShellArgs meta.platforms}; do
+          for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
               update-source-version "${packageAttribute}".unwrapped "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
@@ -217,4 +228,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

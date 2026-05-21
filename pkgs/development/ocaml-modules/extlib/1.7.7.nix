@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 # Older version of extlib for Haxe 4.0 and 4.1.
 # May be replaceable by the next extlib + extlib-base64 release.
 {

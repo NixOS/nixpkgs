@@ -7,15 +7,15 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exfatprogs";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "exfatprogs";
     repo = "exfatprogs";
-    rev = version;
-    sha256 = "sha256-AwY5TkQRfWjkkcleymNN580mKGxIdZ0O30tt6yBbo5M=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-eXJg4mMYydOpYVgOup7WJze0qx6RVkia0xSZOlG+IOQ=";
   };
 
   nativeBuildInputs = [
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yuannan ];
     platforms = lib.platforms.linux;
   };
-}
+})

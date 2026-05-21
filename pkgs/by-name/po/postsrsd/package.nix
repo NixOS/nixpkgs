@@ -7,14 +7,14 @@
   help2man,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postsrsd";
   version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "roehling";
     repo = "postsrsd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Q7tXCd2Mz3WIGnIrbb8mfgT7fcmtVS4EtF0ztYmEsmM=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

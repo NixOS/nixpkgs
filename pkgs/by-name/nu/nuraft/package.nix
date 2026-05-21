@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nuraft";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "eBay";
     repo = "NuRaft";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-puO8E7tSLqB0oq/NlzEZqQgIZKm7ZUb4HhR0XuI9dco=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wheelsandmetal ];
     platforms = lib.platforms.all;
   };
-}
+})

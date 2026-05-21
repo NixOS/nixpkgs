@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "beets-filetote";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtronset";
     repo = "beets-filetote";
     tag = "v${version}";
-    hash = "sha256-5o0Hif0dNavYRH1pa1ZPTnOvk9VPXCU/Lqpg2rKzU/I=";
+    hash = "sha256-NsYBsP60SiCfQ63C4WMkshyreFqOSmx3LP5Gwq6ECF0=";
   };
 
   postPatch = ''

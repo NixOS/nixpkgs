@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "textlsp";
   version = "0.4.0";
   format = "setuptools";
@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hangyav";
     repo = "textLSP";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-euzihVBwpCgLD74SDOPD5P3X3vhEIBd4pP5EyVhPccQ=";
   };
 
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ justdeeevin ];
     mainProgram = "textlsp";
-    changelog = "https://github.com/hangyav/textLSP/releases/tag/v${version}";
+    changelog = "https://github.com/hangyav/textLSP/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.all;
   };
-}
+})

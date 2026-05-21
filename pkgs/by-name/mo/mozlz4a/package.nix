@@ -6,7 +6,7 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mozlz4a";
   version = "2022-03-19";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/${python3.sitePackages}/"
-    cp "${src}" "$out/${python3.sitePackages}/mozlz4a.py"
+    cp "${finalAttrs.src}" "$out/${python3.sitePackages}/mozlz4a.py"
 
     echo "#!${runtimeShell}" >> "$out/bin/mozlz4a"
     echo "export PYTHONPATH='$PYTHONPATH'" >> "$out/bin/mozlz4a"
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gist.github.com/Tblue/62ff47bef7f894e92ed5";
     mainProgram = "mozlz4a";
   };
-}
+})

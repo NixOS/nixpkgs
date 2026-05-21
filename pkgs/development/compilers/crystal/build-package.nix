@@ -108,9 +108,12 @@ stdenv.mkDerivation (
         ++ [ "runHook postConfigure" ]
       ));
 
-    CRFLAGS = lib.concatStringsSep " " defaultOptions;
+    env = {
+      CRFLAGS = lib.concatStringsSep " " defaultOptions;
 
-    PREFIX = placeholder "out";
+      PREFIX = placeholder "out";
+    }
+    // (args.env or { });
 
     inherit enableParallelBuilding;
     strictDeps = true;
@@ -203,8 +206,9 @@ stdenv.mkDerivation (
         done
       '';
 
-    meta = args.meta or { } // {
-      platforms = args.meta.platforms or crystal.meta.platforms;
-    };
+    meta = {
+      platforms = crystal.meta.platforms;
+    }
+    // (args.meta or { });
   }
 )

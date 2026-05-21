@@ -7,14 +7,14 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcue";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lipnitsk";
     repo = "libcue";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZMUUa8CmpFNparPsM/P2yvRto9E85EdTxpID5sKQbNI=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

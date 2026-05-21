@@ -15,6 +15,8 @@
   matplotlib,
   pandas,
   pymc,
+  pytensor,
+  seaborn,
   sparse,
 
   # tests
@@ -26,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bambi";
-  version = "0.17.2";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
     tag = finalAttrs.version;
-    hash = "sha256-Vjv62cYDIuTLE7MxRt4Havy7DMOiMTyIixbs4LGFGGs=";
+    hash = "sha256-vxsjPYQkqvmB5oKKl29+xq1BPEzBTozz9/W5mICWI4A=";
   };
 
   build-system = [
@@ -41,6 +43,9 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "sparse"
+  ];
   dependencies = [
     arviz-plots
     formulae
@@ -48,6 +53,8 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     pandas
     pymc
+    pytensor
+    seaborn
     sparse
   ];
 
@@ -73,6 +80,12 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert (<xarray.DataArray 'yield' ()> Size: 1B\narray(False) & <xarray.DataArray 'yield' ()> Size: 1B\narray(False))
     # https://github.com/bambinos/bambi/issues/888
     "test_beta_regression"
+
+    # Failing since blackjax was updated to 1.4
+    # ValueError: cannot select an axis to squeeze out which has size not equal to one,
+    # got shape=(4, 2) and dimensions=(0,)
+    "test_blackjax_method"
+    "test_legacy_nuts_blackjax_warning"
 
     # Tests require network access
     "test_alias_equal_to_name"
@@ -119,8 +132,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # Tests require network access
-    "tests/test_interpret.py"
-    "tests/test_interpret_messages.py"
+    "tests/test_interpret_plots.py"
   ];
 
   pythonImportsCheck = [ "bambi" ];

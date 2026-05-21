@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apfel";
   version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0Ix7KwEZUG/NmGJ380DVJbUA0PcoEJDlcGSc09l5Tbc=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     lhapdf.pdf_sets.NNPDF31_nnlo_as_0118
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-DAPFEL_VERSION=${version}";
+  env.NIX_CFLAGS_COMPILE = "-DAPFEL_VERSION=${finalAttrs.version}";
 
   meta = {
     description = "PDF Evolution Library";
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ veprbl ];
     platforms = lib.platforms.unix;
   };
-}
+})

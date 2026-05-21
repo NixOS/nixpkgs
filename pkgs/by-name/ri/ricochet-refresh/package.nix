@@ -4,7 +4,8 @@
   fetchFromGitHub,
   qt5,
   openssl,
-  protobuf,
+  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+  protobuf_21,
   pkg-config,
   cmake,
 }:
@@ -35,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     ])
     ++ [
       openssl
-      protobuf
+      protobuf_21
     ];
 
   nativeBuildInputs = [
     pkg-config
-    protobuf
+    protobuf_21
     cmake
     qt5.wrapQtAppsHook
   ];

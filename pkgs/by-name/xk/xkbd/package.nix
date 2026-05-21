@@ -3,15 +3,15 @@
   stdenv,
   fetchFromGitHub,
   freetype,
-  libXrender,
-  libXft,
+  libxrender,
+  libxft,
   xorgproto,
   xinput,
-  libXi,
-  libXext,
-  libXtst,
-  libXpm,
-  libX11,
+  libxi,
+  libxext,
+  libxtst,
+  libxpm,
+  libx11,
   autoreconfHook,
 }:
 
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype
-    libXrender
-    libXft
-    libXext
-    libXtst
-    libXpm
-    libX11
-    libXi
+    libxrender
+    libxft
+    libxext
+    libxtst
+    libxpm
+    libx11
+    libxi
     xorgproto
     xinput
   ];

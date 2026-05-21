@@ -56,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/polm/fugashi";
     changelog = "https://github.com/polm/fugashi/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ laurent-f1z1 ];
+    maintainers = [ ];
   };
 }

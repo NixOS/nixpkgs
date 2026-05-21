@@ -4,15 +4,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rpl";
-  version = "1.18";
+  version = "1.18.1";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N4043ig/ZoL4XpNpU5bzRh1xl3jheoAT9kvYfX9nHX4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Fr0BMv+QMhVaHMg+Xd7pPe4/swH0dBADABKgbSIjUCo=";
   };
 
   nativeBuildInputs = [
@@ -38,4 +38,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ cbley ];
   };
-}
+})

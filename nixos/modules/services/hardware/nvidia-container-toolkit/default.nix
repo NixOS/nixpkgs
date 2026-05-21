@@ -151,6 +151,17 @@
     };
 
   config = lib.mkMerge [
+    (lib.mkIf (config.virtualisation.docker.enableNvidia || config.virtualisation.podman.enableNvidia) {
+      hardware.nvidia-container-toolkit.enable = lib.mkDefault true;
+
+      warnings = lib.mkIf (!config.hardware.nvidia-container-toolkit.enable) [
+        ''
+          `virtualisation.docker.enableNvidia` or `virtualisation.podman.enableNvidia` is enabled,
+          but `hardware.nvidia-container-toolkit.enable` is disabled. The nvidia-container-toolkit
+          module is required for GPU support in containers.
+        ''
+      ];
+    })
     (lib.mkIf config.virtualisation.docker.enableNvidia {
       environment.etc."nvidia-container-runtime/config.toml".text = ''
         disable-require = true
@@ -162,7 +173,7 @@
         no-cgroups = false
         path = "${lib.getExe' pkgs.libnvidia-container "nvidia-container-cli"}"
         [nvidia-container-runtime]
-        mode = "auto"
+        mode = "cdi"
         runtimes = ["docker-runc", "runc", "crun"]
         [nvidia-container-runtime-hook]
         path = "${lib.getOutput "tools" config.hardware.nvidia-container-toolkit.package}/bin/nvidia-container-runtime-hook"
@@ -309,7 +320,6 @@
 
       systemd.services.nvidia-container-toolkit-cdi-generator = {
         description = "Container Device Interface (CDI) for Nvidia generator";
-        after = [ "systemd-udev-settle.service" ];
         requiredBy = lib.mkMerge [
           (lib.mkIf config.virtualisation.docker.enable [ "docker.service" ])
           (lib.mkIf config.virtualisation.podman.enable [ "podman.service" ])
@@ -318,6 +328,11 @@
         serviceConfig = {
           RuntimeDirectory = "cdi";
           RemainAfterExit = true;
+          # We wait for the udev events queue to empty in the *hope* that the
+          # devices needed here become available. This is terribly broken and
+          # essentially no better than a random sleep(). See PR #452645 for
+          # an attempt to fix this issue.
+          ExecStartPre = "-${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
           ExecStart =
             let
               script = pkgs.callPackage ./cdi-generate.nix {

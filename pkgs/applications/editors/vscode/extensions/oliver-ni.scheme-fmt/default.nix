@@ -1,9 +1,8 @@
 {
   lib,
   vscode-utils,
-  jq,
+  buildPackages,
   python3,
-  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -16,7 +15,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    ${lib.getExe jq} '.contributes.configuration.properties."scheme-fmt.pythonPath".default = "${lib.getExe python3}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    ${lib.getExe buildPackages.jq} '.contributes.configuration.properties."scheme-fmt.pythonPath".default = "${lib.getExe python3}"' package.json | ${lib.getExe' buildPackages.moreutils "sponge"} package.json
   '';
 
   meta = {

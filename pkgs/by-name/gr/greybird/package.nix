@@ -12,14 +12,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "greybird";
   version = "3.23.4";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "greybird";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-De8y+LRQ26UKrUECLCcbCg7p9Z+aRssQ/7YzegAUPw4=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

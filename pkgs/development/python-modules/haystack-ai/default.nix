@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  writableTmpDirAsHomeHook,
   boilerpy3,
   events,
   httpx,
@@ -68,7 +69,7 @@
   seqeval,
   pdf2image,
   pytesseract,
-  faiss,
+  faiss-cpu,
   # , faiss-gpu
   pinecone-client,
   onnxruntime,
@@ -91,23 +92,19 @@
 
 buildPythonPackage rec {
   pname = "haystack-ai";
-  version = "2.16.1";
+  version = "2.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "haystack";
     tag = "v${version}";
-    hash = "sha256-Z5T5X92Hig7nW1fUc8b+LuegJlIZbMfyjJ0PnVudPew=";
+    hash = "sha256-QqQTlyVUJU90lzMUe43Qd0WXXaxUi/53apvz/GlrsY0=";
   };
 
   nativeBuildInputs = [
     hatchling
-  ];
-
-  pythonRemoveDeps = [
-    # We call it faiss, not faiss-cpu.
-    "faiss-cpu"
+    writableTmpDirAsHomeHook
   ];
 
   propagatedBuildInputs = [
@@ -135,8 +132,6 @@ buildPythonPackage rec {
     tqdm
     transformers
   ];
-
-  env.HOME = "$(mktemp -d)";
 
   optional-dependencies = {
     # all = [
@@ -210,7 +205,7 @@ buildPythonPackage rec {
       pdf2image
       pytesseract
     ];
-    only-faiss = [ faiss ];
+    only-faiss = [ faiss-cpu ];
     # only-faiss-gpu = [
     #   faiss-gpu
     # ];

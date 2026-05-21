@@ -14,16 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.61.0";
+  version = "2.64.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_container";
     inherit version;
-    hash = "sha256-mkkbT7ybP7bjNo8fCPo8rsXGzw8WoDh7l2YS+5CJOr8=";
+    hash = "sha256-tBWT4YnyXUxaW195ZmnB5DhLoKJfaymPZLVWkVseN00=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

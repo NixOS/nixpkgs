@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "konstraint";
   version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = "konstraint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PzJTdSkobcgg04C/sdHJF9IAZxK62axwkkI2393SFbg=";
   };
   vendorHash = "sha256-nq1bHOOSNXcANTV0g8VCjcRKUCgfoMIHFgPqnJ+V4Bw=";
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/plexsystems/konstraint/internal/commands.version=${version}"
+    "-X github.com/plexsystems/konstraint/internal/commands.version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -40,13 +40,13 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/konstraint --help
-    $out/bin/konstraint --version | grep "${version}"
+    $out/bin/konstraint --version | grep "${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
   meta = {
     homepage = "https://github.com/plexsystems/konstraint";
-    changelog = "https://github.com/plexsystems/konstraint/releases/tag/v${version}";
+    changelog = "https://github.com/plexsystems/konstraint/releases/tag/v${finalAttrs.version}";
     description = "Policy management tool for interacting with Gatekeeper";
     mainProgram = "konstraint";
     longDescription = ''
@@ -57,4 +57,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

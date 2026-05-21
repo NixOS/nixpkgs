@@ -78,7 +78,7 @@ let
       inherit (finalAttrs.src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
-      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${finalAttrs.version}";
+      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${finalAttrs.src.tag}";
       license = with lib.licenses; [
         gpl3Only
         asl20

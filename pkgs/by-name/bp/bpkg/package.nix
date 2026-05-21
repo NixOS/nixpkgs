@@ -13,7 +13,7 @@
   enableStatic ? !enableShared,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpkg";
   version = "0.17.0";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
+    url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${finalAttrs.version}.tar.gz";
     hash = "sha256-Yw6wvTqO+VfCo91B2BUT0A8OIN0MVhGK1USYM7hgGMs=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ r-burns ];
     platforms = lib.platforms.all;
   };
-}
+})

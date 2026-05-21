@@ -12,8 +12,11 @@ let
     repo = "MBROLA-voices";
     rev = "fe05a0ccef6a941207fd6aaad0b31294a1f93a51";
     hash = "sha256-QBUggnde5iNeCESzxE0btVVTDOxc3Kdk483mdGUXHvA=";
+    inherit pname version meta;
   };
 
+  pname = "mbrola-voices";
+  version = "0-unstable-2020-03-30";
   meta = {
     description = "Speech synthesizer based on the concatenation of diphones (voice files)";
     homepage = "https://github.com/numediart/MBROLA-voices";
@@ -22,12 +25,9 @@ let
 in
 
 if (languages == [ ]) then
-  src // { inherit meta; }
+  src
 else
   stdenv.mkDerivation {
-    pname = "mbrola-voices";
-    version = "0-unstable-2020-03-30";
-
     inherit src;
 
     postPatch = ''
@@ -46,5 +46,5 @@ else
       runHook postInstall
     '';
 
-    inherit meta;
+    inherit pname version meta;
   }

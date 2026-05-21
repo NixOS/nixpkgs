@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://scorreia.com/software/panflute";
     changelog = "https://github.com/sergiocorreia/panflute/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
   };
 }

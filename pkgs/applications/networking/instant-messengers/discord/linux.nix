@@ -1,12 +1,12 @@
 {
   pname,
-  version,
-  src,
+  source,
   meta,
   binaryName,
   desktopName,
   self,
   autoPatchelfHook,
+  fetchurl,
   makeDesktopItem,
   lib,
   stdenv,
@@ -32,18 +32,19 @@
   libpulseaudio,
   libuuid,
   libva,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxcb,
+  libxkbcommon,
   libxshmfence,
   libgbm,
   nspr,
@@ -52,7 +53,8 @@
   systemdLibs,
   libappindicator-gtk3,
   libdbusmenu,
-  writeScript,
+  brotli,
+  writeShellScript,
   pipewire,
   python3,
   runCommand,
@@ -85,50 +87,13 @@ let
   ];
   enabledDiscordModsCount = builtins.length (lib.filter (x: x) discordMods);
 
-  disableBreakingUpdates =
-    runCommand "disable-breaking-updates.py"
-      {
-        pythonInterpreter = "${python3.interpreter}";
-        configDirName = lib.toLower binaryName;
-        meta.mainProgram = "disable-breaking-updates.py";
-      }
-      ''
-        mkdir -p $out/bin
-        cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
-        substituteAllInPlace $out/bin/disable-breaking-updates.py
-        chmod +x $out/bin/disable-breaking-updates.py
-      '';
-in
-assert lib.assertMsg (
-  enabledDiscordModsCount <= 1
-) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
-stdenv.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    meta
-    ;
+  inherit (source) version;
 
-  nativeBuildInputs = [
-    alsa-lib
-    autoPatchelfHook
-    cups
-    libdrm
-    libuuid
-    libXdamage
-    libX11
-    libXScrnSaver
-    libXtst
-    libxcb
-    libxshmfence
-    libgbm
-    nss
-    wrapGAppsHook3
-    makeShellWrapper
-  ];
+  src = fetchurl { inherit (source.distro) url hash; };
 
-  dontWrapGApps = true;
+  moduleSrcs = lib.mapAttrs (_: mod: fetchurl { inherit (mod) url hash; }) source.modules;
+
+  moduleVersions = lib.mapAttrs (_: mod: mod.version) source.modules;
 
   libPath = lib.makeLibraryPath (
     [
@@ -153,24 +118,28 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       libglvnd
       libnotify
-      libX11
-      libXcomposite
+      libx11
+      libxcomposite
       libunity
       libuuid
       libva
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXrandr
-      libXrender
-      libXtst
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxtst
       nspr
+      # nss is intentionally NOT in libPath: it would leak via LD_LIBRARY_PATH
+      # to xdg-open and break Firefox children when versions diverge (#514859,
+      # PR #186603)
       libxcb
+      libxkbcommon
       pango
       pipewire
-      libXScrnSaver
+      libxscrnsaver
       libappindicator-gtk3
       libdbusmenu
       wayland
@@ -178,15 +147,108 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withTTS [ speechd-minimal ]
   );
 
+  # Symlink native modules from the nix store into the user config dir
+  # where Discord's JS moduleUpdater expects them.
+  stageModules = writeShellScript "discord-stage-modules" ''
+    store_modules="$1"
+    modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
+    if [ ! -f "$modules_dir/installed.json" ]; then
+      mkdir -p "$modules_dir"
+      for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
+        ln -sfn "$store_modules/$m" "$modules_dir/$m"
+      done
+      echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
+        > "$modules_dir/installed.json"
+    fi
+  '';
+
+  disableBreakingUpdates =
+    runCommand "disable-breaking-updates.py"
+      {
+        pythonInterpreter = "${python3.interpreter}";
+        configDirName = lib.toLower binaryName;
+        skipModuleUpdate = lib.boolToString withOpenASAR;
+        meta.mainProgram = "disable-breaking-updates.py";
+      }
+      ''
+        mkdir -p $out/bin
+        cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
+        substituteAllInPlace $out/bin/disable-breaking-updates.py
+        chmod +x $out/bin/disable-breaking-updates.py
+      '';
+in
+assert lib.assertMsg (
+  enabledDiscordModsCount <= 1
+) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
+stdenv.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    cups
+    libdrm
+    libuuid
+    libxdamage
+    libx11
+    libxscrnsaver
+    libxtst
+    libxcb
+    libxshmfence
+    wrapGAppsHook3
+    makeShellWrapper
+    brotli
+  ];
+
+  dontWrapGApps = true;
+
+  buildInputs = [
+    alsa-lib
+    libgbm
+    nspr
+    nss
+    # The distro layout ships prebuilt `.node` modules:
+    # discord_dispatch is linked against openssl 1.1, discord_voice against libpulseaudio.
+    # Ignore the missing dependency on insecure openssl_1_1: discord_dispatch is
+    # effectively unused in practice.
+    libpulseaudio
+  ];
+
+  strictDeps = true;
+
+  dontUnpack = true;
+
+  inherit libPath;
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libssl.so.1.1"
+    "libcrypto.so.1.1"
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
-    mv * $out/opt/${binaryName}
+    mkdir -p $out/{bin,opt/${binaryName},share/icons/hicolor/256x256/apps}
 
+    # The host distro is a brotli-compressed tar with all files under a `files/`
+    # prefix (the channel binary, libffmpeg.so, resources/, etc). Module distros
+    # follow the same format with module contents under `files/`
+    brotli -d < $src | tar xf - --strip-components=1 -C $out/opt/${binaryName}
     chmod +x $out/opt/${binaryName}/${binaryName}
-    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        $out/opt/${binaryName}/${binaryName}
+
+    # The module directory layout must match what Discord's node runtime
+    # expects: modules/<name>/ (the moduleUpdater extracts zips into
+    # path.join(moduleInstallPath, moduleName) see processUnzipQueue)
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: src: ''
+        mkdir -p $out/opt/${binaryName}/modules/${name}
+        brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
+      '') moduleSrcs
+    )}
 
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
@@ -199,13 +261,13 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
+        --run "${stageModules} $out/opt/${binaryName}/modules" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
 
-    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
     ln -s "$desktopItem/share/applications" $out/share/
@@ -253,6 +315,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
+    # Exposed so reviewers can inspect which distro modules are pinned
+    inherit source moduleVersions;
     updateScript = ./update.py;
 
     tests = {

@@ -61,7 +61,7 @@ let
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.budgie.excludePackages;
 in
 {
-  meta.maintainers = lib.teams.budgie.members;
+  meta.teams = [ lib.teams.budgie ];
 
   imports = [
     (lib.mkRenamedOptionModule
@@ -156,15 +156,19 @@ in
       fi
     '';
 
+    # https://docs.buddiesofbudgie.org/10.10/developer/workflow/building-budgie-desktop/#compositor-recommendations
+    programs.labwc.enable = mkDefault true;
+    programs.gtklock.enable = mkDefault true;
+
     environment.systemPackages =
       with pkgs;
       [
         # Budgie Desktop.
         budgie-backgrounds
         budgie-control-center'
+        budgie-desktop-services
         (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
         budgie-desktop-view
-        budgie-screensaver
         budgie-session
 
         # Required by Budgie Menu.
@@ -181,14 +185,27 @@ in
       ]
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
+        bluejay
         nemo
-        mate.eom
-        mate.pluma
-        mate.atril
-        mate.engrampa
-        mate.mate-calc
-        mate.mate-system-monitor
+        eom
+        pluma
+        atril
+        engrampa
+        mate-calc
+        mate-system-monitor
         vlc
+
+        # Supplemental tooling.
+        # See budgie-desktop's with-runtime-dependencies meson option.
+        gammastep
+        grim
+        killall
+        mesa-demos # eglinfo
+        slurp
+        swaybg
+        swayidle
+        wdisplays
+        wlopm
 
         # Desktop themes.
         qogir-theme
@@ -224,9 +241,6 @@ in
     services.xserver.updateDbusEnvironment = true;
     programs.dconf.enable = true;
 
-    # Required by Budgie Screensaver.
-    security.pam.services.budgie-screensaver = { };
-
     # Required by Budgie's Polkit Dialog.
     security.polkit.enable = mkDefault true;
 
@@ -235,11 +249,12 @@ in
     programs.nm-applet.enable = config.networking.networkmanager.enable; # Budgie has no Network applet.
     programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
 
-    hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
+    hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and Bluejay.
 
     xdg.portal.enable = mkDefault true; # for BCC's Applications panel.
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # provides a XDG Portals implementation.
+      xdg-desktop-portal-wlr # for screenshot and screencast.
     ];
     xdg.portal.configPackages = mkDefault [ pkgs.budgie-desktop ];
 
@@ -274,11 +289,7 @@ in
     # Register packages for DBus.
     services.dbus.packages = [
       budgie-control-center'
-    ];
-
-    # Register packages for udev.
-    services.udev.packages = with pkgs; [
-      magpie
+      pkgs.budgie-desktop-services
     ];
 
     # Shell integration for MATE Terminal.

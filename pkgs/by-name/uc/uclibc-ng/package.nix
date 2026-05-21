@@ -69,11 +69,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.56";
+  version = "1.0.57";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-I8nKtUwRPgIPsgudwGvkpJVg33kbePy8LKiZpujyE90=";
+    hash = "sha256-i8c0tYTiP/auPQ67TA+x0dgUxYyCgiuTEw1Davp6zos=";
   };
 
   configurePhase = ''

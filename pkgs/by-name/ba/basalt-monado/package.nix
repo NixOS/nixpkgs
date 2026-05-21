@@ -6,7 +6,7 @@
   cereal,
   cmake,
   eigen,
-  extra-cmake-modules,
+  kdePackages,
   fetchFromGitLab,
   fmt,
   freeglut,
@@ -21,7 +21,7 @@
   pkg-config,
   stdenv,
   onetbb,
-  xorg,
+  libx11,
   cudaPackages,
   enableCuda ? config.cudaSupport,
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
   ];
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     magic-enum
     opencv'.cxxdev
     onetbb
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc

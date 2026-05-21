@@ -16,7 +16,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.version [
-      (case (range "8.9" "9.1") "20230107")
+      (case (range "8.9" "9.2") "20230107")
       (case (range "8.5" "8.16") "20200131")
     ] null;
   release."20230107".rev = "601e89ec019501c48c27fcfc14b9a3c70456e408";

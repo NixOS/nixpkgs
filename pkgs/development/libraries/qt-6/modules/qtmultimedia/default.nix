@@ -20,7 +20,7 @@
   libpulseaudio,
   pipewire,
   wayland,
-  libXrandr,
+  libxrandr,
   elfutils,
   libunwind,
   orc,
@@ -42,7 +42,7 @@ qtModule {
     pipewire
     alsa-lib
     wayland
-    libXrandr
+    libxrandr
     libva
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ];
@@ -72,6 +72,8 @@ qtModule {
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
+  };
 }

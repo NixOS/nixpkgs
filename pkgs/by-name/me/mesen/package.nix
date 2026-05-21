@@ -6,7 +6,7 @@
   fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
-  libX11,
+  libx11,
   SDL2,
 }:
 
@@ -62,7 +62,7 @@ buildDotnetModule rec {
 
     nativeBuildInputs = [ SDL2 ];
 
-    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libX11 ];
+    buildInputs = [ SDL2 ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ libx11 ];
 
     makeFlags = [ "core" ];
 

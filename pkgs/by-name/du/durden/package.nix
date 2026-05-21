@@ -1,15 +1,14 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
   version = "0.6.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "letoram";
     repo = "durden";
     tag = finalAttrs.version;

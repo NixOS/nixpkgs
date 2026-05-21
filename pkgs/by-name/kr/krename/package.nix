@@ -2,7 +2,7 @@
   stdenv,
   fetchFromGitLab,
   lib,
-  extra-cmake-modules,
+  cmake,
   kdePackages,
   taglib,
   exiv2,
@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    extra-cmake-modules
+    cmake
+    kdePackages.extra-cmake-modules
     kdePackages.kdoctools
     kdePackages.wrapQtAppsHook
   ];

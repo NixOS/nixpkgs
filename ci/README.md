@@ -24,7 +24,7 @@ The Nixpkgs merge bot empowers package maintainers by enabling them to merge PRs
 It serves as a bridge for maintainers to quickly respond to user feedback, facilitating a more self-reliant approach.
 Especially when considering there are roughly 20 maintainers for every committer, this bot is a game-changer.
 
-Following [RFC 172] the merge bot was originally implemented as a [python webapp](https://github.com/NixOS/nixpkgs-merge-bot), which has now been integrated into [`ci/github-script/bot.js`](./github-script/bot.js) and [`ci/github-script/merge.js`](./github-script/merge.js).
+Following [RFC 172], the merge bot was originally implemented as a [python webapp](https://github.com/NixOS/nixpkgs-merge-bot), which has now been integrated into [`ci/github-script/bot.js`](./github-script/bot.js) and [`ci/github-script/merge.js`](./github-script/merge.js).
 
 ### Using the merge bot
 

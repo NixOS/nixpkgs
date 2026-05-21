@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/databricks/databricks-cli";
     changelog = "https://github.com/databricks/databricks-cli/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

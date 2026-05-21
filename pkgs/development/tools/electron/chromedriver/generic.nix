@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   glib,
-  xorg,
+  libxcb,
   nspr,
   nss,
   autoPatchelfHook,
@@ -65,7 +65,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       glib
-      xorg.libxcb
+      libxcb
       nspr
       nss
     ];
@@ -86,6 +86,9 @@ let
       install -m777 -D chromedriver $out/bin/chromedriver
       runHook postInstall
     '';
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = {

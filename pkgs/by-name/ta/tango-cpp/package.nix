@@ -14,25 +14,17 @@
   tango-idl,
   zeromq,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tango-cpp";
-  version = "10.1.1";
+  version = "10.3.0";
 
   src = fetchFromGitLab {
     owner = "tango-controls";
     repo = "cppTango";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Edv7ZGnESjpuwt0Hentl0qgV2PfBgXWED7v9pUvTW0o=";
+    hash = "sha256-X4r2nMdW61TAqDLcVZ0tibJnn/ffXHt8RWSBDRqA0/8=";
   };
-
-  patches = [
-    # corresponds to PR https://gitlab.com/tango-controls/cppTango/-/merge_requests/1525
-    (fetchpatch {
-      url = "https://gitlab.com/tango-controls/cppTango/-/commit/66bd2d9deb79fb557eb2314376f9559e7476d3a1.patch";
-      hash = "sha256-ZUcBS4apVfXmXKnpGOQJ9DF8t79qJ2yqKXwaseiOC6U=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -56,8 +48,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tango Distributed Control System - C++ library";
     homepage = "https://gitlab.com/tango-controls/cppTango";
+    changelog = "https://gitlab.com/tango-controls/cppTango/-/blob/${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.gilice ];
   };
-}
+})

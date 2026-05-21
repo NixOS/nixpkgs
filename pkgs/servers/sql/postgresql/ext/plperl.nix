@@ -11,7 +11,8 @@ let
     let
       perl' = perl.withPackages f;
       finalPackage = buildEnv {
-        name = "${postgresql.pname}-plperl-${postgresql.version}";
+        pname = "${postgresql.pname}-plperl";
+        inherit (postgresql) version;
         paths = [ postgresql.plperl ];
         passthru = {
           inherit withPackages;

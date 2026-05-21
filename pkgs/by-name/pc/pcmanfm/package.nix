@@ -6,7 +6,7 @@
   glib,
   intltool,
   libfm,
-  libX11,
+  libx11,
   pango,
   pkg-config,
   wrapGAppsHook3,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk
     libfm'
-    libX11
+    libx11
     pango
     adwaita-icon-theme
   ];

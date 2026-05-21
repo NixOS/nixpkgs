@@ -14,14 +14,19 @@
   vlc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libssh2";
   version = "1.11.1";
 
   src = fetchurl {
-    url = "https://www.libssh2.org/download/libssh2-${version}.tar.gz";
+    url = "https://www.libssh2.org/download/libssh2-${finalAttrs.version}.tar.gz";
     hash = "sha256-2ex2y+NNuY7sNTn+LImdJrDIN8s+tGalaw8QnKv2WPc=";
   };
+
+  patches = [
+    # https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
+    ./CVE-2026-7598.patch
+  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -55,4 +60,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   jq,
   pkg-config,
+  makeWrapper,
   clang_20,
   libsecret,
   ripgrep,
@@ -14,24 +15,27 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.23.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tl9Iy1M0YxPvUpbIQRl7/P2iRIb5n1cvHEqK2k3OR5I=";
+    hash = "sha256-QYSzJdyjJ5SvPkI/uf/wu8MdM76W+djai6zD38IJpos=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-gPmH/Ym6+UxbpH8CEuDmdZtbR6HqWPjMchs1zlDELDU=";
+  npmDepsHash = "sha256-hKNEJ/MAseYs8WLr36h40pYv+5nef8EPhZIfmPKYJPY=";
+
+  dontPatchElf = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     jq
     pkg-config
+    makeWrapper
   ]
-  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
 
   buildInputs = [
     ripgrep
@@ -54,45 +58,49 @@ buildNpmPackage (finalAttrs: {
     substituteInPlace packages/core/src/tools/ripGrep.ts \
       --replace-fail "await ensureRgPath();" "'${lib.getExe ripgrep}';"
 
-    # Ideal method to disable auto-update
-    sed -i '/disableAutoUpdate: {/,/}/ s/default: false/default: true/' packages/cli/src/config/settingsSchema.ts
+    # Disable auto-update by changing default values in settings schema
+    sed -i '/enableAutoUpdate:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
+    sed -i '/enableAutoUpdateNotification:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
 
-    # Disable auto-update for real because the default value in settingsSchema isn't cleanly applied
-    # https://github.com/google-gemini/gemini-cli/issues/13569
+    # Also make sure the values are disabled in runtime code by changing condition checks to false
     substituteInPlace packages/cli/src/utils/handleAutoUpdate.ts \
-      --replace-fail "settings.merged.general?.disableAutoUpdate ?? false" "settings.merged.general?.disableAutoUpdate ?? true" \
-      --replace-fail "settings.merged.general?.disableAutoUpdate" "(settings.merged.general?.disableAutoUpdate ?? true)"
-    substituteInPlace packages/cli/src/ui/utils/updateCheck.ts \
-      --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)"
+      --replace-fail "if (!settings.merged.general.enableAutoUpdateNotification) {" "if (false) {" \
+      --replace-fail "settings.merged.general.enableAutoUpdate," "false," \
+      --replace-fail "!settings.merged.general.enableAutoUpdate" "!false"
   '';
 
   # Prevent npmDeps and python from getting into the closure
   disallowedReferences = [
     finalAttrs.npmDeps
-    nodejs_22.python
+    finalAttrs.nodejs.python
   ];
+
+  npmBuildScript = "bundle";
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,share/gemini-cli}
 
+    mkdir -p $out/{bin,share}
+    cp -r bundle $out/share/gemini-cli
+
+    # We only want to keep optionalDependencies (like @lydell/node-pty) to keep the closure size small,
+    # as regular dependencies are already bundled via esbuild into gemini.js.
+    jq '.dependencies = {} | del(.devDependencies) | del(.workspaces)' package.json > package.json.tmp && mv package.json.tmp package.json
     npm prune --omit=dev
-    rm node_modules/shell-quote/print.py # remove python demo to prevent python from getting into the closure
+    rm -rf node_modules/.bin
+
+    # keytar/build has gyp-mac-tool with a Python shebang that gets patched,
+    # creating a python3 reference in the closure
+    find node_modules -path "*/build/*" -type f -not -name "*.node" -delete
+    find node_modules -type d -empty -delete
+
     cp -r node_modules $out/share/gemini-cli/
 
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-test-utils
-    rm -f $out/share/gemini-cli/node_modules/gemini-cli-vscode-ide-companion
-    cp -r packages/cli $out/share/gemini-cli/node_modules/@google/gemini-cli
-    cp -r packages/core $out/share/gemini-cli/node_modules/@google/gemini-cli-core
-    cp -r packages/a2a-server $out/share/gemini-cli/node_modules/@google/gemini-cli-a2a-server
+    rm -f $out/share/gemini-cli/docs/CONTRIBUTING.md
 
-    rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli-core/dist/docs/CONTRIBUTING.md
-
-    ln -s $out/share/gemini-cli/node_modules/@google/gemini-cli/dist/index.js $out/bin/gemini
-    chmod +x "$out/bin/gemini"
+    makeWrapper "${lib.getExe finalAttrs.nodejs}" "$out/bin/gemini" \
+      --add-flags "--no-warnings=DEP0040" \
+      --add-flags "$out/share/gemini-cli/gemini.js"
 
     runHook postInstall
   '';
@@ -109,6 +117,7 @@ buildNpmPackage (finalAttrs: {
       xiaoxiangmoe
       FlameFlag
       taranarmo
+      caverav
     ];
     platforms = lib.platforms.all;
     mainProgram = "gemini";

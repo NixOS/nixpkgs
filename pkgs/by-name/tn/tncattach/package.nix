@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tncattach";
   version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "tncattach";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0n7ad4gqvpgabw2i67s51lfz386wmv0cvnhxq9ygxpsqmx9aynxk";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "tncattach";
   };
-}
+})

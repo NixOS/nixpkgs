@@ -8,11 +8,12 @@
   libGLU,
   libjack2,
   liblo,
-  libX11,
-  libXv,
+  libx11,
+  libxv,
   pkg-config,
   portmidi,
-  xorg,
+  libxpm,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ffmpeg
     libjack2
-    libX11
-    xorg.libXext
-    xorg.libXpm
+    libx11
+    libxext
+    libxpm
     # The following are recommended in the README, but are seemingly
     # unnecessary for a successful build. That said, the result of including
     # these in the build process is possibly required at runtime in some cases,
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libGLU
     liblo
-    libXv
+    libxv
     portmidi
   ];
 

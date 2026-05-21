@@ -113,8 +113,12 @@ stdenv.mkDerivation {
       lib.maintainers.das_j
       lib.maintainers.m00wl
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "grep";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version // {
+      product = "grep";
+    };
   };
 
   passthru = {

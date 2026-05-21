@@ -7,14 +7,14 @@
   pcsclite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "keycard-cli";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "status-im";
     repo = "keycard-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-H9fipHGxINMAXdxUYhyVZusDXA3HW1iQl8iRX6AF7iE=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.zimbatm ];
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/keycard-cli.x86_64-darwin
   };
-}
+})

@@ -25,18 +25,20 @@
 
   # optional-dependencies
   soundfile,
+  torchao,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "1.0.3";
+  version = "2.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zGZySn8nXCjwfcXYglJIrS/u1cqiJrErx1wQkC7H93k=";
+    hash = "sha256-TonwnbH1FQMoK7SyKiCyEVIn9TY8drUyN2ZOq8JpXj4=";
   };
 
   build-system = [
@@ -68,6 +70,9 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     audio = [
       soundfile
+    ];
+    quantize = [
+      torchao
     ];
   };
 

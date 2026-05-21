@@ -6,10 +6,6 @@
   # build-system
   flit-core,
 
-  # dependencies
-  pythonOlder,
-  typing-extensions,
-
   # optional-dependencies
   azure-storage-blob,
   azure-storage-file-datalake,
@@ -31,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.23.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     tag = "v${version}";
-    hash = "sha256-lRZYWGX3Yqs1GTIL3ugOiu+K9RF6vJdbKP/SZAStHLc=";
+    hash = "sha256-MpCgK1JnQ/Etp0EyH5z6iknrQeJ4Wn6rwBw2EjgVAic=";
   };
 
   postPatch =
@@ -49,10 +45,6 @@ buildPythonPackage rec {
     '';
 
   build-system = [ flit-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
 
   optional-dependencies = {
     all = optional-dependencies.azure ++ optional-dependencies.gs ++ optional-dependencies.s3;

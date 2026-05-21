@@ -46,7 +46,7 @@ perlPackages.buildPerlPackage rec {
   ]);
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = fontsConf;
+  env.FONTCONFIG_FILE = fontsConf;
 
   postPatch = ''
     patchShebangs .

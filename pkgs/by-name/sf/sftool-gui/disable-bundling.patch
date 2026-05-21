@@ -1,0 +1,22 @@
+diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
+index 419c116..aa3fece 100644
+--- a/src-tauri/tauri.conf.json
++++ b/src-tauri/tauri.conf.json
+@@ -23,7 +23,7 @@
+     "frontendDist": "../dist"
+   },
+   "bundle": {
+-    "active": true,
++    "active": false,
+     "icon": [
+       "icons/32x32.png",
+       "icons/128x128.png",
+@@ -39,7 +39,7 @@
+       "app",
+       "dmg"
+     ],
+-    "createUpdaterArtifacts": true
++    "createUpdaterArtifacts": false
+   },
+   "plugins": {
+     "updater": {

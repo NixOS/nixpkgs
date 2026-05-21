@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uid_wrapper";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://samba/cwrap/uid_wrapper-${version}.tar.gz";
+    url = "mirror://samba/cwrap/uid_wrapper-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-rkvzuPCnSPRwUxplBDazkYLIIX7pJpqcfpJcZDgKm9o=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -9,6 +9,7 @@
   lib,
   libdrm,
   libedit,
+  libgbm,
   libpulseaudio,
   libva,
   libxkbcommon,
@@ -21,12 +22,23 @@
   stdenv,
   writeShellScript,
   xkeyboard_config,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxinerama,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxshmfence,
 }:
 let
   pname = "plex-desktop";
-  version = "1.109.0";
-  rev = "85";
+  version = "1.112.0";
+  rev = "87";
   meta = {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
@@ -55,7 +67,7 @@ let
 
     src = fetchurl {
       url = "https://api.snapcraft.io/api/v1/snaps/download/qc6MFRM433ZhI1XjVzErdHivhSOhlpf0_${rev}.snap";
-      hash = "sha512-BSnA84purHv6qIVELp+AJI2m6erTngnupbuoCZTaje6LCd2+5+U+7gqWdahmO1mxJEGvuBwzetdDrp1Ibz5a6A==";
+      hash = "sha512-xDBnqPkYIpSsUe+X6oalecNz1bsX0O3pXUTI9GBZLAsT+4U4qdovn2ILPh4APJaqwNEswoIYepkjTSmm9pOI9A==";
     };
 
     nativeBuildInputs = [
@@ -68,6 +80,7 @@ let
       elfutils
       ffmpeg_6-headless
       libedit
+      libgbm
       libpulseaudio
       libva
       libxkbcommon
@@ -75,18 +88,18 @@ let
       minizip
       nss
       stdenv.cc.cc
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXtst
-      xorg.libxshmfence
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.xcbutilwm
-      xorg.xrandr
+      libxcomposite
+      libxdamage
+      libxinerama
+      libxrandr
+      libxrender
+      libxtst
+      libxshmfence
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libxcb-wm
+      xrandr
     ];
 
     strictDeps = true;

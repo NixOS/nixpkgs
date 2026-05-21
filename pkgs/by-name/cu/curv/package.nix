@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   git,
   pkg-config,
-  boost,
+  boost188,
   eigen_5,
   glm,
   gcc,
@@ -14,7 +14,12 @@
   makeWrapper,
   openexr,
   onetbb,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   ilmbase,
   llvmPackages,
   unstableGitUpdater,
@@ -22,14 +27,13 @@
 
 stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5-unstable-2026-01-17";
+  version = "0.5-unstable-2026-02-26";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "doug-moen";
     repo = "curv";
-    rev = "1c2eb68e47e3c61a98e39cd3c50f90691c5a268d";
-    hash = "sha256-PuRBnJswrg+PjtU6ize+PjoBpQSSEzO2CeCx9mQF+3w=";
+    rev = "bf573da133f94efacc6a42c9dc94666bfbfab6bc";
+    hash = "sha256-5tcF0vEvxd/SgNWM7lgZTujBsIF+v8t0I0g4tykBCPY=";
     fetchSubmodules = true;
   };
 
@@ -42,19 +46,19 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
+    boost188
     eigen_5
     glm
     libGL
     libpng
     openexr
     onetbb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ilmbase
@@ -63,7 +67,7 @@ stdenv.mkDerivation {
 
   # force char to be unsigned on aarch64
   # https://codeberg.org/doug-moen/curv/issues/227
-  NIX_CFLAGS_COMPILE = [ "-fsigned-char" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fsigned-char" ];
 
   # GPU tests do not work in sandbox, instead we do this for sanity
   doInstallCheck = true;
@@ -97,7 +101,8 @@ stdenv.mkDerivation {
     homepage = "https://codeberg.org/doug-moen/curv";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
+    # aarch64 fails installCheckPhase: https://hydra.nixos.org/build/319705783
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "curv";
   };

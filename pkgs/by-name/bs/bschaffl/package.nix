@@ -4,25 +4,25 @@
   fetchFromGitHub,
   pkg-config,
   cairo,
-  libX11,
+  libx11,
   lv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bschaffl";
   version = "1.4.10";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "bschaffl";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-zfhPYH4eUNWHV27ZtX2IIvobyPdKs5yGr/ryJRQa6as=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo
-    libX11
+    libx11
     lv2
   ];
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
   };
-}
+})

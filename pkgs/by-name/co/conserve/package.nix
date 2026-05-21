@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "conserve";
   version = "24.8.0";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "conserve";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rdZTx0wFFtWt3EcpvWHY6m+8TEHEj53vhVpdRp5wbos=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "conserve";
   };
-}
+})

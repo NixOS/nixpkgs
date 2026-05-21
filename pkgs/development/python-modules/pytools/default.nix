@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2025.2.4";
+  version = "2026.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nLgr50dW0ZIcArrTx2fr3kZ50tFDqFpMNY0y9lRuVG8=";
+    hash = "sha256-e2Q4yl7N7e5C4WyMtwLCrlYqmPsmLawaOwGxIcw0vtU=";
   };
 
   build-system = [ hatchling ];
@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pytools"
-    "pytools.batchjob"
     "pytools.lex"
   ];
 

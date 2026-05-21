@@ -12,7 +12,7 @@
   usePulseAudio ? config.pulseaudio or (lib.meta.availableOn stdenv.hostPlatform libpulseaudio),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.2";
   pname = "libao";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xiph";
     repo = "libao";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0svgk4sc9kdhcsfyvbvgm5vpbg3sfr6z5rliflrw49v3x2i4vxq5";
   };
 
@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     longDescription = ''
       Libao is Xiph.org's cross-platform audio library that allows
@@ -69,4 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

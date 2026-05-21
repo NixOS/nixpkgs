@@ -6,26 +6,20 @@ let
     any
     attrByPath
     attrNames
-    compare
     concat
-    concatMap
     elem
     filter
     foldl
     foldr
-    genericClosure
     head
     imap1
-    init
     isAttrs
     isFunction
     isInt
     isList
-    lists
     listToAttrs
     mapAttrs
     mergeAttrs
-    meta
     nameValuePair
     tail
     toList

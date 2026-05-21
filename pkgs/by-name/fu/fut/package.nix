@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fut";
-  version = "3.2.13";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "fusionlanguage";
     repo = "fut";
     tag = "fut-${finalAttrs.version}";
-    hash = "sha256-raYlY3HDL5+lv68IRVUXrpypmXfDkgWzHv/qZVECFhs=";
+    hash = "sha256-UOToKLQMO/g48DfXi9QQoZ7xJgBsz1Spjc35oEgjHis=";
   };
 
   buildPhase = ''
@@ -36,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = false;
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Fusion programming language";
@@ -48,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fusion-lang.org";
     changelog = "https://github.com/fusionlanguage/fut/releases/tag/fut-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin; # require macos-26
     maintainers = with lib.maintainers; [ chillcicada ];
     mainProgram = "fut";
   };

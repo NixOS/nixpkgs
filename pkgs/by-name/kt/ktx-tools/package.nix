@@ -8,14 +8,14 @@
   pkg-config,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ktx-tools";
   version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "KTX-Software";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yBRLKa0h64vDBvaessh2FwP16d8+jvW6udbyZvOMzTQ=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bonsairobo ];
     platforms = lib.platforms.linux;
   };
-}
+})

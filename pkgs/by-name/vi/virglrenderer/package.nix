@@ -8,7 +8,7 @@
   buildPackages,
   libGLU,
   libepoxy,
-  libX11,
+  libx11,
   libdrm,
   libgbm,
   libva,
@@ -22,15 +22,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "virglrenderer";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "virgl";
     repo = "virglrenderer";
     tag = finalAttrs.version;
-    hash = "sha256-5Ok5ctJ3kcBH05URctvZ0hCZA/o59r2KsAOJYoiWMHs=";
+    hash = "sha256-2RoKIjtxShJCaezbkCrtW+lSaWKnOoUZzpSEPCJHSC8=";
   };
+
+  patches = [
+    # https://gitlab.freedesktop.org/virgl/virglrenderer/-/merge_requests/1624
+    ./1001-virglrenderer-amdgpu-Use-inttypes-format-defines.patch
+  ];
 
   separateDebugInfo = true;
 
@@ -48,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGLU
-    libX11
+    libx11
     libdrm
     libgbm
   ]
@@ -65,11 +70,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "venus" vulkanSupport)
     (lib.mesonOption "drm-renderers" (
       lib.optionalString nativeContextSupport (
-        lib.concatStringsSep "," [
-          "amdgpu-experimental"
-          "asahi"
-          "msm"
-        ]
+        lib.concatStringsSep "," (
+          [
+            "amdgpu-experimental"
+            "asahi"
+          ]
+          # "MSM renderer doesn't support 32bit ARM target"
+          # https://gitlab.freedesktop.org/virgl/virglrenderer/-/blob/ea7db39433c40e9799f2dfdbf63e0b4754a0dd3d/meson.build#L338-340
+          ++ lib.optionals (!stdenv.hostPlatform.isAarch32) [
+            "msm"
+          ]
+        )
       )
     ))
   ];

@@ -5,6 +5,7 @@
   gcc,
   musl,
   binutils,
+  findutils,
   gnumake,
   gnutar,
   gzip,
@@ -26,6 +27,7 @@ bash.runCommand "${pname}-${version}"
       gcc
       musl
       binutils
+      findutils
       gnumake
       gnutar
       gzip
@@ -60,4 +62,8 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make install -j $NIX_BUILD_CORES PREFIX=$out
+
+    # Strip
+    # Ignore failures, because strip may fail on non-elf files.
+    find $out/{bin,lib} -type f -exec strip --strip-debug {} + || true
   ''

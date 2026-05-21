@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gostatic";
   version = "2.35";
 
   src = fetchFromGitHub {
     owner = "piranha";
     repo = "gostatic";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pxk9tauB7u0oe6g4maHh+dREZXKwMz44v3KB43yYW6c=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "gostatic";
   };
-}
+})

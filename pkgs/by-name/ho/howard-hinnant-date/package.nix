@@ -8,14 +8,14 @@
   replaceVars,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "howard-hinnant-date";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "HowardHinnant";
     repo = "date";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qfrmH3NRyrDVmHRmmWzM5Zz37E7RFXJqaV1Rq2E59qs=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     substituteInPlace date.pc.in \
       --replace '@CMAKE_INSTALL_LIB@' '@CMAKE_INSTALL_FULL_LIBDIR@' \
       --replace '@CMAKE_INSTALL_INCLUDE@' '@CMAKE_INSTALL_FULL_INCLUDEDIR@' \
-      --replace '@PACKAGE_VERSION@' '${version}'
+      --replace '@PACKAGE_VERSION@' '${finalAttrs.version}'
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

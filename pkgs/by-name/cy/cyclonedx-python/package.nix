@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cyclonedx-python";
-  version = "7.2.1";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
-    tag = "v${version}";
-    hash = "sha256-JhPrVNzuoUTOmFBaPiq+UuUBRCHG2mqz8z1/24OcZAI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mBOkSgHGKc77zhcMmdsrlZLXsK2t00VFiGW5eSN2lxc=";
   };
 
   build-system = with python3Packages; [ poetry-core ];
@@ -35,11 +35,11 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Python projects";
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
-    changelog = "https://github.com/CycloneDX/cyclonedx-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/CycloneDX/cyclonedx-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       blitz
     ];
     mainProgram = "cyclonedx-py";
   };
-}
+})

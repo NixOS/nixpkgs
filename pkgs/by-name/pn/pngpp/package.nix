@@ -8,12 +8,12 @@
 }:
 assert docSupport -> doxygen != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngpp";
   version = "0.2.10";
 
   src = fetchurl {
-    url = "mirror://savannah/pngpp/png++-${version}.tar.gz";
+    url = "mirror://savannah/pngpp/png++-${finalAttrs.version}.tar.gz";
     sha256 = "1qgf8j25r57wjqlnzdkm8ya5x1bmj6xjvapv8f2visqnmcbg52lr";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.ramkromberg ];
   };
-}
+})

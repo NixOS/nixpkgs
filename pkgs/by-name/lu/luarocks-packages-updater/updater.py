@@ -161,8 +161,8 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
 
         print(f"updated {outfilename}")
 
-        # Format the generated file with nix fmt
-        subprocess.run(["nix", "fmt", outfilename], check=True)
+        # Format the generated file with nixfmt
+        subprocess.run(["nixfmt", outfilename], check=True)
 
     @property
     def attr_path(self):

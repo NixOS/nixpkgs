@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyfakefs";
-  version = "5.9.2";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZsXGzNQJe0hPh4L5pQeP7gUz1GXg2cr1lMkVfVQ4JVM=";
+    hash = "sha256-BZ/QshdL/u1JnssKWbzP9VfyZ8xtiFr8Dlt254ttUNo=";
   };
 
   build-system = [ setuptools ];

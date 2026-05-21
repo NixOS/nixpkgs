@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cloudsmith-cli";
-  version = "1.8.7";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudsmith-io";
     repo = "cloudsmith-cli";
-    tag = "v${version}";
-    hash = "sha256-xUaa1B6f6W0Q/9q8sztFoCxEaxqXajImROC1sJb0Zdk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VfP7Bu8+F1bHiwceI9s+vHq76wEkG6+hJZe5jZgVm90=";
   };
 
   postPatch = ''
@@ -68,9 +68,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";
     mainProgram = "cloudsmith";
-    changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ usertam ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

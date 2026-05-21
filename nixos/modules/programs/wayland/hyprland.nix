@@ -56,7 +56,7 @@ in
       description = ''
         Launch Hyprland with the UWSM (Universal Wayland Session Manager) session manager.
         This has improved systemd support and is recommended for most users.
-        This automatically starts appropiate targets like `graphical-session.target`,
+        This automatically starts appropriate targets like `graphical-session.target`,
         and `wayland-session@Hyprland.target`.
 
         ::: {.note}
@@ -82,6 +82,15 @@ in
     lib.mkMerge [
       {
         environment.systemPackages = [ cfg.package ];
+
+        # Hyprland needs permissions to give itself SCHED_RR on startup:
+        # https://github.com/hyprwm/Hyprland/blob/main/src/init/initHelpers.cpp
+        security.wrappers.Hyprland = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_sys_nice+ep";
+          source = lib.getExe cfg.package;
+        };
 
         xdg.portal = {
           enable = true;
@@ -130,5 +139,5 @@ in
     ] "Nvidia patches are no longer needed")
   ];
 
-  meta.maintainers = lib.teams.hyprland.members;
+  meta.teams = [ lib.teams.hyprland ];
 }

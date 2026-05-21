@@ -7,7 +7,9 @@
 }:
 
 replaceVarsWith {
-  name = "lsb_release";
+  name = "lsb_release"; # Needed for lsb_release script name
+  pname = "lsb_release";
+  version = lib.trivial.release;
 
   src = ./lsb_release.sh;
 

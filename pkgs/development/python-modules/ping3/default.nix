@@ -1,18 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ping3";
-  version = "5.1.5";
+  version = "5.1.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bJm8hE4Lfbxcl2XotTAUDa8czSESyZ2wGreYMb2Agc0=";
+  src = fetchFromGitHub {
+    owner = "kyan001";
+    repo = "ping3";
+    tag = "v${version}";
+    hash = "sha256-9HWqJK8cxVKetrhcivI0p63I99XqkBVgZa6aR4Hablc=";
   };
 
   build-system = [ setuptools ];

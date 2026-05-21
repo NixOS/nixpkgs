@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lndmanage";
   version = "0.16.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bitromortac";
     repo = "lndmanage";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VUeGnk/DtNAyEYFESV6kXIRbKqUv4IcMnU3fo0NB4uQ=";
   };
 
@@ -52,4 +52,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ mmilata ];
     mainProgram = "lndmanage";
   };
-}
+})

@@ -4,44 +4,36 @@
   fetchurl,
   jdk,
   makeDesktopItem,
-  proEdition ? false,
   unzip,
+
+  # Either "community" or "pro"
+  iconName ? "community",
 }:
+assert lib.assertMsg (
+  iconName == "pro" || iconName == "community"
+) "iconName has to be either pro or community";
 
 let
-  version = "2026.1";
-
-  product =
-    if proEdition then
-      {
-        productName = "pro";
-        productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-4GvB1K4UZnZMor0jBWXvzgy0qfh234TZmtu6eSR4/jk=";
-      }
-    else
-      {
-        productName = "community";
-        productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-q0vKBEIzO18mNX7bn1vhnstnGr1pwjMnHXq6HdtpJy0=";
-      };
+  pname = "burpsuite";
+  version = "2026.4.3";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger-cdn.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
-      "https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
+      "https://portswigger-cdn.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
     ];
-    hash = product.hash;
+    hash = "sha256-mewbN1uZAFCsxAiXsrNKJ/AexCccVcza40DjxMDbrlM=";
   };
 
-  pname = "burpsuite";
   description = "Integrated platform for performing security testing of web applications";
+
   desktopItem = makeDesktopItem {
-    name = "burpsuite";
+    name = pname;
     exec = pname;
     icon = pname;
-    desktopName = product.productDesktop;
+    desktopName = "Burp Suite Desktop";
     comment = description;
     categories = [
       "Development"
@@ -49,12 +41,11 @@ let
       "System"
     ];
   };
-
 in
 buildFHSEnv {
   inherit pname version;
 
-  runScript = "${jdk}/bin/java -jar ${src}";
+  runScript = "${lib.getExe jdk} -jar ${src}";
 
   targetPkgs =
     pkgs: with pkgs; [
@@ -73,21 +64,22 @@ buildFHSEnv {
       udev
       libxkbcommon
       libgbm
+      libglvnd
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
     ];
 
   extraInstallCommands = ''
-    mkdir -p "$out/share/pixmaps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
+    mkdir -p "$out/share/icons/hicolor/64x64/apps"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
@@ -102,9 +94,9 @@ buildFHSEnv {
       exploiting security vulnerabilities.
     '';
     homepage = "https://portswigger.net/burp/";
-    changelog =
-      "https://portswigger.net/burp/releases/professional-community-"
-      + lib.replaceStrings [ "." ] [ "-" ] version;
+    changelog = "https://portswigger.net/burp/releases/professional-community-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.unfree;
     platforms = jdk.meta.platforms;

@@ -7,8 +7,8 @@
   bzip2,
   libzip,
   zstd,
-  szipSupport ? false,
-  szip,
+  szipSupport ? hdf5.szipSupport,
+  libaec,
   libxml2,
   m4,
   curl, # for DAP
@@ -18,12 +18,12 @@
 let
   inherit (hdf5) mpiSupport mpi;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
   version = "4.9.3";
 
   src = fetchurl {
-    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/netcdf-c-${finalAttrs.version}.tar.gz";
     hash = "sha256-pHQUmETmFEVmZz+s8Jf+olPchDw3vAp9PeBH3Irdpd0=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     libzip
     zstd
   ]
-  ++ lib.optional szipSupport szip
+  ++ lib.optional szipSupport libaec
   ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
@@ -99,7 +99,10 @@ stdenv.mkDerivation rec {
     description = "Libraries for the Unidata network Common Data Format";
     platforms = lib.platforms.unix;
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
-    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${version}/RELEASE_NOTES.html";
+    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/RELEASE_NOTES.html";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
   };
-}
+})

@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symmetrica";
   version = "3.1.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "sagemath";
     repo = "symmetrica";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-unaNQfmDcQFUKApka7eEkjceurMnX0FICQXGDbOAOXo=";
   };
 
@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
 
   # clang warning: passing arguments to '...' without a prototype is deprecated
   # in all versions of C and is not supported in C23.
-  CFLAGS = "-std=c99 -Wno-deprecated-non-prototype";
+  env.CFLAGS = toString [
+    "-std=c99"
+    "-Wno-deprecated-non-prototype"
+  ];
 
   enableParallelBuilding = true;
 
@@ -40,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://gitlab.com/sagemath/symmetrica";
   };
-}
+})

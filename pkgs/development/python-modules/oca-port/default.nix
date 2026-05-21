@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gitpython,
   giturlparse,
+  git-filter-repo,
   lib,
   nix-update-script,
   requests,
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "oca-port";
-  version = "0.18";
+  version = "0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "OCA";
     repo = "oca-port";
     tag = "v${version}";
-    hash = "sha256-r32ePlbg0GjryB5HDx0nQTq71lG/o+4sUFRdKW/K5ys=";
+    hash = "sha256-zewR/ArgNSXK2+S90UveELyeqIaqM3gquos0rQOTXag=";
   };
 
   build-system = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     giturlparse
     gitpython
     requests
+    git-filter-repo
   ];
 
   passthru.updateScript = nix-update-script { };

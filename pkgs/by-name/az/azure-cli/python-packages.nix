@@ -50,6 +50,7 @@ let
             argcomplete
             azure-cli-telemetry
             azure-common
+            azure-core
             azure-mgmt-core
             cryptography
             distro
@@ -87,6 +88,9 @@ let
             --ignore=azure/cli/core/tests/test_extension.py \
             --ignore=azure/cli/core/tests/test_util.py \
             --ignore=azure/cli/core/tests/test_argcomplete.py \
+            --ignore=azure/cli/core/tests/test_telemetry.py \
+            --ignore=azure/cli/core/tests/test_help.py \
+            --ignore=azure/cli/core/tests/test_command_table_integrity.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
@@ -187,11 +191,6 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
           "sha256-1nnRkyr4Im79B7DDqGz/FOrPAToFaGhE+a7r5bZMuOQ=";
 
-      # ModuleNotFoundError: No module named 'azure.mgmt.redhatopenshift.v2023_11_22'
-      azure-mgmt-redhatopenshift =
-        overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.5.0" "tar.gz"
-          "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
-
       # azure.mgmt.resource will shadow the other azure.mgmt.resource.* packages unless we merge them together
       azure-mgmt-resource-all = py.pkgs.buildPythonPackage {
         pname = "azure-mgmt-resource-all";
@@ -251,6 +250,50 @@ let
       azure-mgmt-synapse =
         overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
           "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
+
+      # ModuleNotFoundError: No module named 'azure.mgmt.web.v2024_11_01'
+      azure-mgmt-web = super.azure-mgmt-web.overridePythonAttrs (attrs: rec {
+        version = "9.0.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_web";
+          inherit version;
+          hash = "sha256-RFXs07SYV3CFwZBObRcTklTjWLoH/mxINaiRu697BsI=";
+        };
+      });
+
+      # Attribute virtual_machines does not exist - nixpkgs has 37.x but azure-cli 2.82.0 requires ~=34.1.0
+      azure-mgmt-compute = super.azure-mgmt-compute.overridePythonAttrs (attrs: rec {
+        version = "34.1.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_compute";
+          inherit version;
+          hash = "sha256-zZ010cwbjLC9JBrVXJG3fRTgSuc8YyraEUATX5whf+E=";
+        };
+      });
+
+      # ValueError: The operation 'azure.mgmt.mysqlflexibleservers.operations#LongRunningBackupOperations.begin_delete' is invalid.
+      azure-mgmt-mysqlflexibleservers =
+        super.azure-mgmt-mysqlflexibleservers.overridePythonAttrs
+          (attrs: rec {
+            version = "1.1.0b2";
+            src = fetchPypi {
+              pname = "azure_mgmt_mysqlflexibleservers";
+              inherit version;
+              hash = "sha256-yGpEFn9VOP1uSvpUCV/gYW56/5HulsCVx9wc/kWO+Ro=";
+            };
+          });
+
+      # ModuleNotFoundError: No module named 'azure.mgmt.recoveryservicesbackup.activestamp'
+      azure-mgmt-recoveryservicesbackup =
+        super.azure-mgmt-recoveryservicesbackup.overridePythonAttrs
+          (attrs: rec {
+            version = "9.2.0";
+            src = fetchPypi {
+              pname = "azure_mgmt_recoveryservicesbackup";
+              inherit version;
+              hash = "sha256-xAKz4ipsOHnfVrw34AYxQsM1LFECWZ/xAtGYJPGzKyk=";
+            };
+          });
     };
   };
 in

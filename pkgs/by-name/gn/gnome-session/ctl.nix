@@ -10,15 +10,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session-ctl";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "gnome-session-ctl";
-    rev = version;
-    hash = "sha256-rudb7ioTE5iaou0tzU5i2gWFW06NyWF5W5tjx2b5/0Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-XKOWn6Yuyf5QXuvDfFEWL/ElfcL0s9mHsyuBwdIenLM=";
   };
 
   nativeBuildInputs = [
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

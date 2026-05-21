@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "yarl";
     tag = "v${version}";
-    hash = "sha256-274uVOCTLUihDIJTG62hL2mOBaYDNvRLdTjMcasDFsw=";
+    hash = "sha256-vjWV9fgBg7Mw54hsXWnO81CxJCe9WzB0okMEUz1KRAc=";
   };
 
   build-system = [

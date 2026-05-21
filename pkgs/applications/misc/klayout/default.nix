@@ -1,64 +1,97 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
   python3,
+  python3Packages,
   ruby,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qtxmlpatterns,
   which,
   perl,
   libgit2,
-  stdenv,
+  libpng,
+  expat,
+  curl,
+  zlib,
+  wrapQtAppsHook,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qt5compat,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "klayout";
-  version = "0.30.4-1";
+  version = "0.30.8";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
-    rev = "v${version}";
-    hash = "sha256-EhIGxiXqo09/p8mA00RRvKgXJncVr4qguYSPyEC0fqc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RjMH6hrc0jyCLgG1D6cztBp5Fb3W5HgTxVTfI2bxgCs=";
   };
 
+  strictDeps = true;
+
   postPatch = ''
-    substituteInPlace src/klayout.pri --replace "-Wno-reserved-user-defined-literal" ""
-    patchShebangs .
+    patchShebangs --build .
   '';
 
+  dontUseQmakeConfigure = true;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
   nativeBuildInputs = [
-    which
+    (python3.withPackages (ps: [ ps.tomli ]))
+    installShellFiles
     perl
-    python3
     ruby
+    which
+    wrapQtAppsHook
+    qmake
+    qtbase
+    qtmultimedia
+    qtsvg
+    qttools
+    qt5compat
   ];
 
   buildInputs = [
     qtbase
     qtmultimedia
+    qtsvg
     qttools
-    qtxmlpatterns
+    qt5compat
     libgit2
+    libpng
+    expat
+    curl
+    zlib
   ];
 
   buildPhase = ''
     runHook preBuild
     mkdir -p $out/lib
-    ./build.sh -qt5 -prefix $out/lib -option -j$NIX_BUILD_CORES
+
+    ./build.sh \
+      -prefix $out/lib \
+      -option "-j$NIX_BUILD_CORES" \
+      -rpath $out/lib \
+      -libpng \
+      -libcurl \
+      -libexpat
+
     runHook postBuild
   '';
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir $out/bin
-
       install -Dm444 etc/klayout.desktop -t $out/share/applications
       install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
-      mv $out/lib/klayout $out/bin/
+
+      installBin $out/lib/klayout
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
@@ -76,21 +109,31 @@ mkDerivation rec {
     wrapQtApp "$out/Applications/klayout.app/Contents/MacOS/klayout"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  };
 
-  dontInstall = true; # Installation already happens as part of "build.sh"
+  # Installation is handled manually in buildPhase/postBuild via build.sh -prefix
+  dontInstall = true;
 
-  # Fix: "gsiDeclQMessageLogger.cc:126:42: error: format not a string literal
-  # and no format arguments [-Werror=format-security]"
+  # Fix for: "gsiDeclQMessageLogger.cc: error: format not a string literal"
   hardeningDisable = [ "format" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      pythonPackage = python3Packages.klayout;
+    };
+  };
 
   meta = {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
     mainProgram = "klayout";
     license = with lib.licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
-    changelog = "https://www.klayout.de/development.html#${version}";
+    changelog = "https://www.klayout.de/development.html#${finalAttrs.version}";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
-}
+})

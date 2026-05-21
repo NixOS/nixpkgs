@@ -9,25 +9,29 @@
   # dependencies
   fastavro,
   httpx,
-  httpx-sse,
   pydantic,
   pydantic-core,
   requests,
   tokenizers,
   types-requests,
   typing-extensions,
+
+  # optional-dependencies
+  aiohttp,
+  httpx-aiohttp,
+  oci,
 }:
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.20.2";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     tag = version;
-    hash = "sha256-Z0EEtDjVWYkE19nyo1ZQF0qE+Pe0VXlORaLtriPGSDQ=";
+    hash = "sha256-be6vhTGXnf1/iaD13VYjey/to+HX28VfmYlUPE2eFT4=";
   };
 
   build-system = [ poetry-core ];
@@ -35,7 +39,6 @@ buildPythonPackage rec {
   dependencies = [
     fastavro
     httpx
-    httpx-sse
     pydantic
     pydantic-core
     requests
@@ -44,7 +47,13 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonRelaxDeps = [ "httpx-sse" ];
+  optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
+    oci = [ oci ];
+  };
 
   # tests require CO_API_KEY
   doCheck = false;

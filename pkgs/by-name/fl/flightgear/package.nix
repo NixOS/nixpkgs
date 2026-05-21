@@ -7,19 +7,20 @@
   freealut,
   libGLU,
   libGL,
-  libICE,
+  libice,
   libjpeg,
   openal,
   plib,
-  libSM,
+  libsm,
   libunwind,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXi,
-  libXmu,
-  libXt,
+  libxext,
+  libxi,
+  libxmu,
+  libxt,
   simgear,
+  xz,
   zlib,
   boost,
   cmake,
@@ -30,10 +31,11 @@
   qt5,
   glew,
   curl,
+  nix-update-script,
 }:
 
 let
-  version = "2024.1.3";
+  version = "2024.1.5";
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
@@ -42,7 +44,7 @@ let
       owner = "flightgear";
       repo = "fgdata";
       tag = version;
-      hash = "sha256-LNHO/W8p4b8fYcehdfVecldKQ9uJp1zlg60xdgDC45c=";
+      hash = "sha256-8B5wSYjkWuPEySpqBiprZ+jrHy01HA9+iX70wNAn81s=";
     };
 
     dontUnpack = true;
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     owner = "flightgear";
     repo = "flightgear";
     tag = version;
-    hash = "sha256-m4bbWwMXwKJrMkb6svGrIZhcsPghrTMgFs8JCx3Wn/A=";
+    hash = "sha256-sORiO0SDChIVWIhGKelm7IE/cZ40gMqlZ1OoZZna7kI=";
   };
 
   nativeBuildInputs = [
@@ -71,28 +73,14 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    libglut
     freealut
-    libGLU
-    libGL
-    libICE
     libjpeg
     openal
-    openscenegraph
     plib
-    libSM
-    libunwind
-    libX11
-    xorgproto
-    libXext
-    libXi
-    libXmu
-    libXt
     (simgear.override { openscenegraph = openscenegraph; })
     zlib
     boost
     libpng
-    udev
     fltk_1_3
     apr
     qt5.qtbase
@@ -100,19 +88,54 @@ stdenv.mkDerivation rec {
     glew
     qt5.qtdeclarative
     curl
+    openscenegraph
+    xz
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libglut
+    libGLU
+    libGL
+    libice
+    libsm
+    libunwind
+    libx11
+    xorgproto
+    libxext
+    libxi
+    libxmu
+    libxt
+    udev
   ];
+
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (
+    lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "11.0"
+  );
 
   qtWrapperArgs = [ "--set FG_ROOT ${data}/share/FlightGear" ];
 
   postInstall = ''
     # Remove redundant AppImage artifacts
     rm -rf "$out/appdir"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The bundle copies OSG dylib dangling symlinks
+    rm -rf "$out/FlightGear.app/Contents/Frameworks"
+    # Place app bundle where macOS expects it
+    mkdir -p "$out/Applications"
+    mv "$out/FlightGear.app" "$out/Applications/"
+    # Provide fgfs in bin/ for CLI use, pointing into the bundle
+    ln -s "$out/Applications/FlightGear.app/Contents/MacOS/FlightGear" "$out/bin/fgfs"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Flight simulator";
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      raskin
+      kirillrdy
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
     license = lib.licenses.gpl2Plus;
     mainProgram = "fgfs";

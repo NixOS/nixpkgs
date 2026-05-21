@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "egglog";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "egraphs-good";
     repo = "egglog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j+3qknmezKqHVxvfmG9oPFtWOzJsimGXYe5PWX694mI=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
       XBagon
     ];
   };
-}
+})

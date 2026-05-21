@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terminal-parrot";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "jmhobbs";
     repo = "terminal-parrot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VOV1KKaZrKyz+Fj//RbPrBE3ImC60FNauayVAMmoxFc=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.heel ];
     mainProgram = "terminal-parrot";
   };
-}
+})

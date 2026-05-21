@@ -10,14 +10,14 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notmuch-bower";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "wangp";
     repo = "bower";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-THIMCIk6ugPpogfQ5DTHIgFD7no5IIVYfz2mqBvKBlY=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

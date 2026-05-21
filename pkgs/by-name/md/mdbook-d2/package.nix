@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-d2";
   version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+pwPJjjXNre5PduNT8oowP1K4CIT8egA5RxBpp2FmVs=";
   };
 
@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage rec {
     description = "D2 diagram generator plugin for MdBook";
     mainProgram = "mdbook-d2";
     homepage = "https://github.com/danieleades/mdbook-d2";
-    changelog = "https://github.com/danieleades/mdbook-d2/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/danieleades/mdbook-d2/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

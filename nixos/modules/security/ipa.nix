@@ -307,6 +307,7 @@ in
           allowed_uids = lib.concatStringsSep ", " cfg.ifpAllowedUids;
         };
       };
+      subIDsIntegration = true;
     };
 
     networking.timeServers = lib.optional cfg.useAsTimeserver cfg.server;

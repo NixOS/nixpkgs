@@ -48,8 +48,13 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D speedtest $out/bin/speedtest
-    install -D speedtest.5 $out/share/man/man5/speedtest.5
+    install -D speedtest.5 $man/share/man/man5/speedtest.5
   '';
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     description = "Command line internet speedtest tool by Ookla";

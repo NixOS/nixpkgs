@@ -15,7 +15,7 @@
   gtk3,
   hidapi,
   imgui,
-  libXrender,
+  libxrender,
   libpng,
   libusb1,
   libzip,
@@ -32,7 +32,7 @@
   wayland,
   wayland-scanner,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   zarchive,
   bluez,
 }:
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
     ninja
     pkg-config
-    wxGTK32
+    wxwidgets_3_2
     wayland-scanner
   ];
 
@@ -99,12 +99,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libusb1
     libzip
-    libXrender
+    libxrender
     pugixml
     rapidjson
     vulkan-headers
     wayland
-    wxGTK32
+    wxwidgets_3_2
     zarchive
     bluez
   ];

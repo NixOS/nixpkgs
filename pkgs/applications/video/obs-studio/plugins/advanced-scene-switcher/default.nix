@@ -17,7 +17,7 @@
   qtbase,
   stdenv,
   websocketpp,
-  libXScrnSaver,
+  libxscrnsaver,
   libusb1,
   pkg-config,
   # #FIXME: Could not get cmake to pick up on these dependencies
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     procps
     qtbase
     websocketpp
-    libXScrnSaver
+    libxscrnsaver
     libusb1
   ];
 

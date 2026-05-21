@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "htgettoken";
   version = "2.6";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fermitools";
     repo = "htgettoken";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jHKKTnFZ+6LHaB61wi5+Ht6ZHrE4dDqADIMfGWI47oM=";
   };
 
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = with python3.pkgs; ''
     wrapProgram $out/bin/htgettoken \
-      --set PYTHONPATH "${
+      --prefix PYTHONPATH : "${
         makePythonPath [
           gssapi
           paramiko
@@ -39,4 +39,4 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/fermitools/htgettoken";
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

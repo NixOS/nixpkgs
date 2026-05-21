@@ -28,14 +28,14 @@ assert enableViewer -> enableGstPlugin;
 assert enableViewer -> gtk3 != null;
 assert enableViewer -> wrapGAppsHook3 != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aravis";
   version = "0.8.35";
 
   src = fetchFromGitHub {
     owner = "AravisProject";
     repo = "aravis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RRIYZHtljZ44s1kmmUI1KMx92+PLLI/eCJRs4m0+egg=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tpw_rules ];
     platforms = lib.platforms.unix;
   };
-}
+})

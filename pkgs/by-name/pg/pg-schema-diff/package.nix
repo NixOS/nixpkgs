@@ -15,6 +15,10 @@ buildGoModule (finalAttrs: {
     hash = "sha256-MNuJS9zhTbF6FY1i5fF5VhX8pa+hVaQfdAaj3CKmG50=";
   };
 
+  subPackages = [
+    "cmd/pg-schema-diff"
+  ];
+
   nativeCheckInputs = [
     postgresql
   ];

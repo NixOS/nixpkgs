@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "lnkparse3";
-  version = "1.5.3";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matmaus";
     repo = "LnkParse3";
     tag = "v${version}";
-    hash = "sha256-1BjESKJxEO6EOR2/IRR1wxFrqFAYA/DUp9XL00xja8M=";
+    hash = "sha256-nTU6FMHM0hRwHBgszixZLArbhKKJmtwUXZC8ZW1KOvk=";
   };
 
   build-system = [ setuptools ];

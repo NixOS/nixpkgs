@@ -9,9 +9,6 @@
   qtsvg,
   qtwayland,
   kimageformats,
-  libavif,
-  libheif,
-  libjxl,
   wrapGAppsHook3,
   wrapQtAppsHook,
   geoclue2,
@@ -40,11 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     kimageformats
     qtwayland
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libavif
-    libheif
-    libjxl
   ]
   ++ lib.optionals withWebkit [
     glib-networking

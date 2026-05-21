@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   aiohttp-retry,
   buildPythonPackage,
   fetchFromGitHub,
@@ -9,41 +10,43 @@
   parameterized,
   pycryptodome,
   pytest-aiohttp,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-golden,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
   pyyaml,
-  requests,
-  requests-mock,
-  responses,
   setuptools,
+  syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrainbird";
-  version = "6.0.2";
+  version = "6.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "pyrainbird";
-    tag = version;
-    hash = "sha256-CcoZZ60PItqy0bCc36WfyNF9Fc28aHwQ6hhnY41lBNg=";
+    tag = finalAttrs.version;
+    hash = "sha256-0hjHPoUJP/sRljn0VS3qXUa5OhbxzYl5u/086kksLiE=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "aiohttp"
+  ];
+
   dependencies = [
+    aiohttp
     aiohttp-retry
     ical
     mashumaro
     pycryptodome
     python-dateutil
     pyyaml
-    requests
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -51,14 +54,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     parameterized
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
-    pytest-asyncio_0
+    pytest-aiohttp
+    pytest-asyncio
     pytest-cov-stub
     pytest-golden
     pytest-mock
     pytestCheckHook
-    requests-mock
-    responses
+    syrupy
   ];
 
   pythonImportsCheck = [ "pyrainbird" ];
@@ -66,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Rainbird controllers";
     homepage = "https://github.com/allenporter/pyrainbird";
-    changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${version}";
+    changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

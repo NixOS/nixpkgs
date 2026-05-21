@@ -13,14 +13,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-argos";
-  version = "1.16.1";
+  version = "1.17.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "orontee";
     repo = "argos";
     tag = "v${version}";
-    hash = "sha256-29P8cacYE07fMmSElAzVHC2+hwhyjuplcJjKikHPCwA=";
+    hash = "sha256-U6frnCor14dIDtgwn83dln+76NoIqBqPiwYLkVaa/x8=";
   };
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py

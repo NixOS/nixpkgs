@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "0.3";
+  version = "0.3.1";
 
   pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
     gstreamer
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     owner = "hzeller";
     repo = "gmrender-resurrect";
     rev = "v${version}";
-    sha256 = "sha256-Zt8YYRqqX5L/MGLsFzR8JOdYoNX9ypXLX5i+fqkzPkk=";
+    sha256 = "sha256-e8X/Ab4E6FmPpbRx4y8UZbuPTFaq2hz4Ye8dbKTqGUc=";
   };
 
   buildInputs = [

@@ -1,18 +1,18 @@
 {
   lib,
   python3,
-  fetchFromGitHub,
+  fetchFromCodeberg,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
-  version = "0.4.2";
+  version = "0.5.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "foresto";
+  src = fetchFromCodeberg {
+    owner = "forestix";
     repo = "joystickwake";
-    tag = "v${version}";
-    sha256 = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qIXXlwZec4CQk93gmY5O3mdGdlNCeXWTr/DDw4vwRUM=";
   };
 
   build-system = with python3.pkgs; [
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
-    dbus-next
+    dbus-fast
     pyudev
     xlib
   ];
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

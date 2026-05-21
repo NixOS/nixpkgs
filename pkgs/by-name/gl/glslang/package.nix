@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
+  gtest,
   python3,
   spirv-headers,
   spirv-tools,
@@ -10,14 +12,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "glslang";
-  version = "16.1.0";
+  version = "16.2.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     tag = finalAttrs.version;
-    hash = "sha256-cEREniYgSd62mnvKaQkgs69ETL5pLl5Gyv3hKOtSv3w=";
+    hash = "sha256-2uWnZZNGdZorHaiLzMb/rpM6bL9oBClKqiFkUH3krJQ=";
   };
+
+  patches = [
+    # Allow building against our already-built gtest, without eating a rebuild
+    # https://github.com/KhronosGroup/glslang/pull/4140
+    ./external-gtest.patch
+  ];
 
   outputs = [
     "bin"
@@ -35,11 +43,31 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-headers
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
+  checkInputs = [
+    gtest
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "BUILD_EXTERNAL" false)
     (lib.cmakeBool "ALLOW_EXTERNAL_SPIRV_TOOLS" true)
+    (lib.cmakeBool "ALLOW_EXTERNAL_GTEST" finalAttrs.finalPackage.doCheck)
   ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests =
+    # CompileToAstTest.FromFile/array_frag looks for result of UB, expected output is LE
+    # https://github.com/KhronosGroup/glslang/issues/2797
+    # GlslNonSemanticShaderDebugInfoSpirv13Test.FromFile/spv_debuginfo_coopmatKHR_comp has endianness-issues
+    # https://github.com/KhronosGroup/glslang/issues/4145
+    lib.optionals (!stdenv.hostPlatform.isLittleEndian) [
+      "glslang-gtests"
+    ];
 
   postInstall = ''
     # add a symlink for backwards compatibility

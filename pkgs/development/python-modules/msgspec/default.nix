@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   attrs,
   coverage,
   furo,
@@ -12,18 +11,19 @@
   pre-commit,
   pyright,
   pytest,
+  pytestCheckHook,
   pyyaml,
   setuptools,
+  setuptools-scm,
   sphinx,
   sphinx-copybutton,
   sphinx-design,
-  tomli,
   tomli-w,
 }:
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,10 +34,13 @@ buildPythonPackage rec {
     # use `$Format:%d$` in msgspec/_version.py, and GitHub produces different
     # tarballs depending on whether tagged commit is the last commit, see
     # https://github.com/NixOS/nixpkgs/issues/84312
-    hash = "sha256-CajdPNAkssriY/sie5gR+4k31b3Wd7WzqcsFmrlSoPY=";
+    hash = "sha256-DWDmnSuo12oXl9NVfNhIOtWrQeJ9DMmHxOyHY33Datk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   optional-dependencies = {
     dev = [
@@ -62,22 +65,23 @@ buildPythonPackage rec {
     ]
     ++ optional-dependencies.yaml
     ++ optional-dependencies.toml;
-    toml = [
-      tomli-w
-    ]
-    ++ lib.optional (pythonOlder "3.11") tomli;
+    toml = [ tomli-w ];
     yaml = [ pyyaml ];
   };
 
-  # Requires libasan to be accessible
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # `tests/typing` runs type checkers
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "msgspec" ];
 
   meta = {
     description = "Module to handle JSON/MessagePack";
     homepage = "https://github.com/jcrist/msgspec";
-    changelog = "https://github.com/jcrist/msgspec/releases/tag/${version}";
+    changelog = "https://github.com/jcrist/msgspec/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

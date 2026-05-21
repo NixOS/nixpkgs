@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "2.0.7";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
     tag = "v${version}";
-    hash = "sha256-XIvwLUvpl+AgrtR9mOkRXhxLc8mtSPk3+5779i/F+2s=";
+    hash = "sha256-3uLgc6zptmXlPg93qtsWbqNxXiBD/SEnXBL/IM/1m2c=";
   };
 
   build-system = [ uv-build ];

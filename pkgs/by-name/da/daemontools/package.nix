@@ -13,12 +13,12 @@ let
     sha256 = "sha256-om5r1ddUx1uObp9LR+SwCLLtm+rRuLoq28OLbhWhdzU=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "daemontools";
   version = "0.76";
 
   src = fetchurl {
-    url = "https://cr.yp.to/daemontools/daemontools-${version}.tar.gz";
+    url = "https://cr.yp.to/daemontools/daemontools-${finalAttrs.version}.tar.gz";
     sha256 = "07scvw88faxkscxi91031pjkpccql6wspk4yrlnsbrrb5c0kamd5";
   };
 
@@ -40,14 +40,14 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    cd daemontools-${version}
+    cd daemontools-${finalAttrs.version}
 
     sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h -std=gnu17_' src/conf-cc
 
     substituteInPlace src/Makefile \
       --replace-fail '/bin/sh' '${bash}/bin/bash -oxtrace'
 
-    sed -i -e "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
+    sed -i -e "s_^PATH=.*_PATH=$src/daemontools-${finalAttrs.version}/compile:''${PATH}_" src/rts.tests
 
     cat ${glibc.dev}/include/errno.h
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kevincox ];
     platforms = lib.platforms.unix;
   };
-}
+})

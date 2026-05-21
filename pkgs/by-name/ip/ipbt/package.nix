@@ -6,12 +6,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "20210215.5a9cb02";
   pname = "ipbt";
 
   src = fetchurl {
-    url = "https://www.chiark.greenend.org.uk/~sgtatham/ipbt/ipbt-${version}.tar.gz";
+    url = "https://www.chiark.greenend.org.uk/~sgtatham/ipbt/ipbt-${finalAttrs.version}.tar.gz";
     sha256 = "0w6blpv22jjivzr58y440zv6djvi5iccdmj4y2md52fbpjngmsha";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "ipbt";
   };
-}
+})

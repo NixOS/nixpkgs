@@ -9,14 +9,14 @@
   pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-open";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-open";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bZOknoRMkPqm1pFFFbvrHrSi90ANLEE5fLcABYHov6Q=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     # marked-man is broken and severly outdated.
     # pandoc with some extra metadata is good enough and produces a by man readable file.
-    cat <(echo echo '% git-open (1) Version ${version} | Git manual') git-open.1.md > tmp
+    cat <(echo echo '% git-open (1) Version ${finalAttrs.version} | Git manual') git-open.1.md > tmp
     mv tmp git-open.1.md
     pandoc --standalone --to man git-open.1.md -o git-open.1
   '';
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "git-open";
   };
-}
+})

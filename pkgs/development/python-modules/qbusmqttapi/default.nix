@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "qbusmqttapi";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qbus-iot";
     repo = "qbusmqttapi";
     tag = "v${version}";
-    hash = "sha256-8TNtfBxJcSwlcAgKF6Gvn+e4NGbOIE3JWBAgFKmNyKA=";
+    hash = "sha256-llFrgXtECdozAgz+RHTKig9sTKYJHfO7Rt5qz+/e7c8=";
   };
 
   postPatch = ''

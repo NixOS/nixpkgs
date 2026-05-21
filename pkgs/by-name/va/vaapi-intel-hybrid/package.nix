@@ -8,19 +8,19 @@
   cmrt,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libGL,
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-hybrid-driver";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-hybrid-driver";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-uYX7RoU1XVzcC2ea3z/VBjmT47xmzK67Y4LaiFXyJZ8=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cmrt
     libdrm
     libva
-    libX11
+    libx11
     libGL
     wayland
   ];
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tadfisher ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,5 +6,6 @@
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.minimal-bootstrap ];
     platforms = lib.platforms.unix;
+    mainProgram = "bash";
   };
 }

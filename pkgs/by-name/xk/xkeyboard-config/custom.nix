@@ -1,4 +1,4 @@
-# xkeyboardconfig variant extensible with custom layouts.
+# xkeyboard-config variant extensible with custom layouts.
 # See nixos/modules/services/x11/extra-layouts.nix
 {
   lib,

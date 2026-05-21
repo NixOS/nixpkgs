@@ -6,18 +6,19 @@
   click,
   pyyaml,
   sphinx,
+  sphinx-multitoc-numbering,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-external-toc";
-  version = "1.0.1";
+  version = "1.1.0";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "sphinx_external_toc";
-    hash = "sha256-p9LGPMR+xohUZEOyi8TvRmEhgn7z3Hu1Cd41S61OouA=";
+    hash = "sha256-+BgzhlAG9rSpslUKJHSm49fn8ssjuiMwkmBXfqZVUvY=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     click
     pyyaml
     sphinx
+    sphinx-multitoc-numbering
   ];
 
   pythonImportsCheck = [ "sphinx_external_toc" ];

@@ -10,7 +10,7 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
-  libX11,
+  libx11,
   freetype,
   zlib,
   debug,
@@ -32,7 +32,7 @@ let
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-    libX11
+    libx11
     freetype
   ];
 
@@ -65,6 +65,9 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs lang/compile_mo.sh
   '';
+
+  # remove once on O.I/ahead of upstream commit 15b3cb0
+  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-Wno-missing-noreturn";
 
   makeFlags = [
     "PREFIX=$(out)"

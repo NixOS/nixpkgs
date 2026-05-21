@@ -11,17 +11,17 @@ let
     SUBSYSTEM=="usb", ATTRS{idVendor}=="1cbe", ATTRS{idProduct}=="00fd", MODE="0666"
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lm4flash";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "utzig";
     repo = "lm4tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZjuCH/XjQEgg6KHAvb95/BkAy+C2OdbtBb/i6K30+uo=";
   };
-  sourceRoot = "${src.name}/lm4flash";
+  sourceRoot = "${finalAttrs.src.name}/lm4flash";
 
   strictDeps = true;
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ MostafaKhaled ];
     platforms = lib.platforms.all;
   };
-}
+})

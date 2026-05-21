@@ -18,14 +18,14 @@
   xvfb-run,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gtg";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "gtg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-O8qBD92P2g8QrBdMXa6j0Ozk+W80Ny5yk0KNTy7ekfE=";
   };
 
@@ -92,4 +92,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ oyren ];
     platforms = lib.platforms.linux;
   };
-}
+})

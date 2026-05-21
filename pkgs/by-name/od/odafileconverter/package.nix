@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   # To obtain the version you will need to run the following command:
   #
   # dpkg-deb -I ${odafileconverter.src} | grep Version
-  version = "26.7.0.0";
+  version = "27.1.0.0";
 
   src = fetchurl {
     # NB: this URL is not stable (i.e. the underlying file and the corresponding version will change over time)
-    url = "https://www.opendesign.com/guestfiles/get?filename=ODAFileConverter_QT6_lnxX64_8.3dll_26.7.deb";
-    hash = "sha256-MqST9Se66OJ+L0IKzuZkkFjCl3nb07gTO17j+lOWrHI=";
+    url = "https://www.opendesign.com/guestfiles/get?filename=ODAFileConverter_QT6_lnxX64_8.3dll_27.1.deb";
+    hash = "sha256-xxNjzVR1gXevR6NlFU8YDcUKHitSoTGZT9pUHBOjZ2Y=";
   };
 
   buildInputs = [
@@ -56,6 +56,9 @@ stdenv.mkDerivation rec {
       echo "patching $file"
       patchelf --set-rpath '${rpath}' $file
     done
+
+    substituteInPlace $out/share/applications/ODAFileConverter_*.desktop \
+      --replace-fail '/usr/bin/ODAFileConverter' 'ODAFileConverter'
   '';
 
   meta = {

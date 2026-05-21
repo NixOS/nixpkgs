@@ -8,18 +8,23 @@
 
 crystal.buildCrystalPackage rec {
   pname = "lucky-cli";
-  version = "1.1.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "luckyframework";
     repo = "lucky_cli";
-    rev = "v${version}";
-    hash = "sha256-mDUx9cQoYpU9kSAls36kzNVYZ8a4aqHEMIWfzS41NBk=";
+    tag = "v${version}";
+    hash = "sha256-68As7PSRYwhJGcQwI4FgM9aN0nhNrEjcv+10jKnlXeA=";
   };
 
   # the integration tests will try to clone a remote repos
   postPatch = ''
     rm -rf spec/integration
+  '';
+
+  preConfigure = ''
+    substituteInPlace "./src/lucky_cli/version.cr" \
+      --replace-fail '`shards version #{__DIR__}`' '"${version}"'
   '';
 
   format = "crystal";

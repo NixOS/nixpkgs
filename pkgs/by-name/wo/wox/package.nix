@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter338,
+  flutter341,
   keybinder3,
   nodejs,
   pnpm_9,
@@ -13,8 +13,10 @@
   buildGoModule,
   pkg-config,
   autoPatchelfHook,
-  xorg,
+  libxtst,
+  libx11,
   libxkbcommon,
+  xorgproto,
   libayatana-appindicator,
   gtk3,
   desktop-file-utils,
@@ -24,13 +26,13 @@
 }:
 
 let
-  version = "2.0.0-beta.8";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-eucyQKNuzJCLwAnyQVE/64gth+uVrCgyHLAJNfrUxvk=";
+    hash = "sha256-Qav2RhmhJQr2D1D3okshIrnnQuOh7V1gWbZwXR3LBAc=";
   };
 
   metaCommon = {
@@ -40,7 +42,7 @@ let
     maintainers = [ ];
   };
 
-  ui-flutter = flutter338.buildFlutterApplication {
+  ui-flutter = flutter341.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
@@ -48,9 +50,19 @@ let
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+    postPatch = ''
+      substituteInPlace linux/runner/my_application.cc \
+        --replace-fail "X11/Xkeysym.h" "X11/keysym.h"
+    '';
+
     nativeBuildInputs = [ autoPatchelfHook ];
 
-    buildInputs = [ keybinder3 ];
+    buildInputs = [
+      keybinder3
+      xorgproto
+      libx11
+      libxtst
+    ];
 
     meta = metaCommon // {
       mainProgram = "wox";
@@ -78,8 +90,8 @@ let
         sourceRoot
         ;
       pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-8EovIVJ+uAo9XJIIgRrpkQrcmNkKC2Ruja2md7NFZ4A=";
+      fetcherVersion = 3;
+      hash = "sha256-cbuVQV8ih8rztERFLUHGnK63MBz8+QVmzeegYLDwcj4=";
     };
 
     buildPhase = ''
@@ -159,7 +171,7 @@ buildGoModule {
     sed -i '/^	"path"$/d' plugin/host/host_python.go
   '';
 
-  vendorHash = "sha256-UMbhTV6fm9a2SVDsvwV1w9e4pPUhCdTi5FNVf8Rl3XM=";
+  vendorHash = "sha256-IDcIEZVCJp1ls5c2fblgX+I+MhfRDXqFbf0GhgcFiTo=";
 
   proxyVendor = true;
 
@@ -170,8 +182,8 @@ buildGoModule {
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
     libxkbcommon
     libayatana-appindicator
     gtk3
@@ -205,7 +217,7 @@ buildGoModule {
   ];
 
   postInstall = ''
-    install -Dm644 ../assets/app.png $out/share/icons/hicolor/1024x1024/apps/wox.png
+    install -Dm644 ../assets/app.png $out/share/icons/wox.png
   '';
 
   meta = metaCommon // {

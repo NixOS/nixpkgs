@@ -24,16 +24,16 @@
 let
   solidpython = callPackage ./solidpython { };
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "kikit";
-  version = "1.7.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yaqwsx";
     repo = "KiKit";
-    tag = "v${version}";
-    hash = "sha256-HSAQJJqJMVh44wgOQm+0gteShLogklBFuIzWtoVTf9I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QhtdQgMgHaB0xj2hQ4MCptr5DDgCOfRClUSyYzrFQis=";
     # Upstream uses versioneer, which relies on gitattributes substitution.
     # This leads to non-reproducible archives on GitHub.
     # See https://github.com/NixOS/nixpkgs/issues/84312
@@ -81,7 +81,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${version}"}' > kikit/_version.py
+    echo 'def get_versions(): return {"version": "${finalAttrs.version}"}' > kikit/_version.py
   '';
 
   preCheck = ''
@@ -98,7 +98,7 @@ buildPythonApplication rec {
   meta = {
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
-    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${src.tag}";
+    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [
       jfly
       matusf
@@ -106,4 +106,4 @@ buildPythonApplication rec {
     teams = with lib.teams; [ ngi ];
     license = lib.licenses.mit;
   };
-}
+})

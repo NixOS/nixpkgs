@@ -2,29 +2,63 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  fetchNpmDeps,
   aiofiles,
-  bcrypt,
   jinja2,
-  python-jose,
+  joserfc,
+  nodejs,
+  npmHooks,
+  pytestCheckHook,
+  pytest-homeassistant-custom-component,
+  pytest-cov-stub,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "christaangoossens";
   domain = "auth_oidc";
-  version = "0.6.3-alpha";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "christiaangoossens";
     repo = "hass-oidc-auth";
     tag = "v${version}";
-    hash = "sha256-+R2IIs9MixR8epVpk4QycN8PjOfRITlZ+oUbdPEk2eA=";
+    hash = "sha256-hA4Nic5AerghZZVEFSFRpBwX+2vl/0HhTeFgwkd3QPE=";
   };
+
+  postPatch = ''
+    # Tests import directly from auth_oidc, but the component is installed
+    # under custom_components.auth_oidc
+    for f in tests/test_hass_webserver.py tests/test_state_store.py; do
+      substituteInPlace "$f" \
+        --replace-fail "from auth_oidc" "from custom_components.auth_oidc"
+    done
+  '';
+
+  env.npmDeps = fetchNpmDeps {
+    name = "${domain}-npm-deps";
+    inherit src;
+    hash = "sha256-CmJ8AdD+AcqxwXK3lINJ0+8/feJM7dl9Q4cx7vftnMk=";
+  };
+
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+    nodejs
+  ];
 
   dependencies = [
     aiofiles
-    bcrypt
     jinja2
-    python-jose
+    joserfc
+  ];
+
+  postBuild = ''
+    npm run css
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-homeassistant-custom-component
+    pytest-cov-stub
   ];
 
   meta = {

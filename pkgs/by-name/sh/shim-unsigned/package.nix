@@ -19,14 +19,14 @@ let
     }
     .${system} or throwSystem;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shim";
   version = "16.1";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = "shim";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qHZfr7ncJOsb1Cijlp6eJSMzxa34H1h4lACqceOzg+s=";
     fetchSubmodules = true;
   };
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
       raitobezarius
     ];
   };
-}
+})

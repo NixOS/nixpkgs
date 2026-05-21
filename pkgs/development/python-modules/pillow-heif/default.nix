@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "1.1.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     tag = "v${version}";
-    hash = "sha256-hYBQA9DcY87e17SezK853xF6tRk8DoStmFryb/tQdRk=";
+    hash = "sha256-+SlDxNCbuqPqjgJx62snInsWQXWQwnO/sI4mll0Uu4Y=";
   };
 
   postPatch = ''

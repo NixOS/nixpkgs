@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastchess";
-  version = "1.6.0-alpha";
+  version = "1.8.0-alpha";
 
   src = fetchFromGitHub {
     owner = "Disservin";
     repo = "fastchess";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CyV9pKCqVXvgm/Lx62v6l3cr2xsVBs1iMOXAsGbpfXI=";
+    hash = "sha256-FwBsFgFNPbIL1bzQU1Uxf6JAxWKJXaJx1iZV+1hchX0=";
   };
 
   nativeBuildInputs = [

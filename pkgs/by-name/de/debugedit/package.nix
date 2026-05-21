@@ -7,20 +7,20 @@
   autoreconfHook,
   pkg-config,
   elfutils,
-  xxHash,
+  xxhash,
   help2man,
   util-linux,
   cpio,
   gdb,
   dwz,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "debugedit";
   version = "5.2";
 
   src = fetchgit {
     url = "git://sourceware.org/git/debugedit.git";
-    tag = "debugedit-${version}";
+    tag = "debugedit-${finalAttrs.version}";
     hash = "sha256-6SOw5t9Hnb9Picx18LwqLwaPieueO6mXl8/vGnU+81E=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     elfutils
-    xxHash
+    xxhash
   ];
 
   nativeCheckInputs = [
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = [ lib.systems.inspect.patterns.isElf ];
     maintainers = with lib.maintainers; [ deliciouslytyped ];
   };
-}
+})

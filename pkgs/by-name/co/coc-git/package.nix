@@ -30,6 +30,6 @@ buildNpmPackage (finalAttrs: {
     description = "Git integration of coc.nvim";
     homepage = "https://github.com/neoclide/coc-git";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

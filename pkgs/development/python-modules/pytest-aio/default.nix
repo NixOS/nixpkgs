@@ -4,29 +4,29 @@
   buildPythonPackage,
   curio-compat,
   fetchFromGitHub,
+  hatchling,
   hypothesis,
   pytest,
   pytestCheckHook,
   pythonOlder,
-  poetry-core,
-  trio,
   trio-asyncio,
+  trio,
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-aio";
-  version = "2.0.0";
+  version = "2.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "pytest-aio";
-    rev = "43681bcfc6d2ee07bf9397a1b42d1ccfbb891deb";
-    hash = "sha256-IBtiy4pyXblIkYQunFO6HpBkCnBcEpTqcFtVELrULkk=";
+    tag = finalAttrs.version;
+    hash = "sha256-HvD7bBT8QX9Au5TON4yLit2AOLVSRGqdkkwenyqzhpo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   buildInputs = [ pytest ];
 
@@ -45,15 +45,15 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonOlder "3.14") [
     trio-asyncio
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "pytest_aio" ];
 
   meta = {
     description = "Pytest plugin for aiohttp support";
     homepage = "https://github.com/klen/pytest-aio";
-    changelog = "https://github.com/klen/pytest-aio/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/klen/pytest-aio/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ifenslave";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/i/ifenslave-2.6/ifenslave-2.6_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/i/ifenslave-2.6/ifenslave-2.6_${finalAttrs.version}.orig.tar.gz";
     sha256 = "0h9hrmy19zdksl7ys250r158b943ihbgkb95n8p4k8l0vqsby5vr";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

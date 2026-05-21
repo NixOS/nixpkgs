@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch2,
   git,
   testers,
   aws-sam-cli,
@@ -11,14 +12,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.152.0";
+  version = "1.154.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-N+x9ZNd6WvDJTFERhWJD5HsDE7dFyH+jOnEMzJ3IHSk=";
+    hash = "sha256-wy6LZbWmK5rb0foFttPOvDOsFtrQNFc8mGBP9WTzVyw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -66,22 +67,33 @@ python3.pkgs.buildPythonApplication rec {
       tzlocal
       watchdog
     ]
-    ++ (with python3.pkgs.boto3-stubs.optional-dependencies; [
-      apigateway
-      cloudformation
-      ecr
-      iam
-      kinesis
-      lambda
-      s3
-      schemas
-      secretsmanager
-      signer
-      sqs
-      stepfunctions
-      sts
-      xray
-    ]);
+    ++ (
+      with python3.pkgs.boto3-stubs.optional-dependencies;
+      lib.concatLists [
+        apigateway
+        cloudformation
+        ecr
+        iam
+        kinesis
+        lambda
+        s3
+        schemas
+        secretsmanager
+        signer
+        sqs
+        stepfunctions
+        sts
+        xray
+      ]
+    );
+
+  patches = [
+    # Remove after aws-sam-cli > 1.154.0
+    (fetchpatch2 {
+      url = "https://github.com/aws/aws-sam-cli/commit/1e1664faae8ff799cbb03fe16ef1650689803587.patch";
+      hash = "sha256-HnOBrKkE/sIGZrgRq8G+ef1wnGvtALV4wma8J5eZfLc=";
+    })
+  ];
 
   # Remove after upstream bumps click > 8.1.8
   postPatch = ''

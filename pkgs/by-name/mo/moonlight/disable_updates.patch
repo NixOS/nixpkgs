@@ -1,5 +1,5 @@
 diff --git i/packages/core-extensions/src/moonbase/host.ts w/packages/core-extensions/src/moonbase/host.ts
-index 6bb7b62..71b57b9 100644
+index ca78483..25716c9 100644
 --- i/packages/core-extensions/src/moonbase/host.ts
 +++ w/packages/core-extensions/src/moonbase/host.ts
 @@ -79,22 +79,9 @@ electron.app.whenReady().then(() => {
@@ -26,7 +26,7 @@ index 6bb7b62..71b57b9 100644
  
        entries.splice(i + 1, 0, {
 diff --git i/packages/core-extensions/src/moonbase/native.ts w/packages/core-extensions/src/moonbase/native.ts
-index 51e347c..a6bdc58 100644
+index 9cccb0c..58e3e06 100644
 --- i/packages/core-extensions/src/moonbase/native.ts
 +++ w/packages/core-extensions/src/moonbase/native.ts
 @@ -39,24 +39,7 @@ export default function getNatives(): MoonbaseNatives {
@@ -56,15 +56,14 @@ index 51e347c..a6bdc58 100644
  
      async updateMoonlight(overrideBranch?: MoonlightBranch) {
 diff --git i/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx w/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
-index 49d7fcb..a65b57c 100644
+index a4aee57..ce564bb 100644
 --- i/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
 +++ w/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
-@@ -107,16 +107,6 @@ function ArrayFormItem({ config }: { config: "repositories" | "devSearchPaths" }
- export default function ConfigPage() {
+@@ -80,14 +80,6 @@ export default function ConfigPage() {
    return (
      <ErrorBoundary>
--      <div className={Margins.marginTop20}>
--        <FormSwitch
+       <Stack direction="vertical" gap={16}>
+-        <Switch
 -          checked={MoonbaseSettingsStore.getExtensionConfigRaw<boolean>("moonbase", "updateChecking", true) ?? true}
 -          onChange={(value: boolean) => {
 -            MoonbaseSettingsStore.setExtensionConfig("moonbase", "updateChecking", value);
@@ -72,7 +71,6 @@ index 49d7fcb..a65b57c 100644
 -          label="Automatic update checking"
 -          description="Checks for updates to moonlight"
 -        />
--      </div>
-       <FormItem title="Repositories">
-         <FormText className={Margins.marginBottom4}>A list of remote repositories to display extensions from</FormText>
-         <ArrayFormItem config="repositories" />
+         <ArrayFormItem
+           label="Repositories"
+           description="A list of remote repositories to display extensions from"

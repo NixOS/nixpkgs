@@ -407,6 +407,12 @@
     "project_path": "base/aurorae",
     "repo_path": "plasma/aurorae"
   },
+  "auto-chmod": {
+    "description": "Replaces the cryptic \"permission denied\" error when running a non-executable file with a prompt asking if you want to make it executable and run it.",
+    "name": "auto-chmod",
+    "project_path": "system/auto-chmod",
+    "repo_path": "system/auto-chmod"
+  },
   "automoc": {
     "description": "Automoc",
     "name": "automoc",
@@ -792,7 +798,7 @@
     "repo_path": "unmaintained/cutepaste"
   },
   "cxx-kde-frameworks": {
-    "description": "Extension Crate for cxx-qt which allows the use of KDE Frameworks in Rust software",
+    "description": "Bridge KDE Frameworks and Rust using cxx-qt",
     "name": "cxx-kde-frameworks",
     "project_path": "libs/cxx-kde-frameworks",
     "repo_path": "libraries/cxx-kde-frameworks"
@@ -946,6 +952,12 @@
     "name": "dragon",
     "project_path": "kdemultimedia/dragon",
     "repo_path": "multimedia/dragon"
+  },
+  "drawy": {
+    "description": "Your handy, infinite brainstorming tool!",
+    "name": "drawy",
+    "project_path": "graphics/drawy",
+    "repo_path": "graphics/drawy"
   },
   "drkonqi": {
     "description": "Crash handler for KDE software",
@@ -1163,11 +1175,11 @@
     "project_path": "third-party/gpgme",
     "repo_path": null
   },
-  "gpgmepp": {
+  "gpgmepp-legacy": {
     "description": "GPGME++ Library",
-    "name": "gpgmepp",
-    "project_path": "unmaintained/gpgmepp",
-    "repo_path": "unmaintained/gpgmepp"
+    "name": "gpgmepp-legacy",
+    "project_path": "unmaintained/gpgmepp-legacy",
+    "repo_path": "unmaintained/gpgmepp-legacy"
   },
   "granatier": {
     "description": "Granatier is a clone of the classic Bomberman game",
@@ -1349,6 +1361,12 @@
     "project_path": "utilities/kaichat",
     "repo_path": "utilities/kaichat"
   },
+  "kaichat-addons": {
+    "description": "Addons for KAIChat",
+    "name": "kaichat-addons",
+    "project_path": "utilities/kaichat-addons",
+    "repo_path": "utilities/kaichat-addons"
+  },
   "kaidan": {
     "description": "Modern chat app for every device",
     "name": "kaidan",
@@ -1463,6 +1481,12 @@
     "project_path": "kdesdk/kapptemplate",
     "repo_path": "sdk/kapptemplate"
   },
+  "kapsule": {
+    "description": "Incus-based container management with native KDE/Plasma integration",
+    "name": "kapsule",
+    "project_path": "kde-linux/kapsule",
+    "repo_path": "kde-linux/kapsule"
+  },
   "karchive": {
     "description": "Qt addon providing access to numerous types of archives",
     "name": "karchive",
@@ -1486,6 +1510,12 @@
     "name": "kartesio",
     "project_path": "edu/kartesio",
     "repo_path": "education/kartesio"
+  },
+  "karton": {
+    "description": "Libvirt-based Virtual Machine Manager for KDE.",
+    "name": "karton",
+    "project_path": "system/karton",
+    "repo_path": "system/karton"
   },
   "kasts": {
     "description": "Kirigami-based podcast player",
@@ -2459,6 +2489,12 @@
     "project_path": "libs/kdocumentstore",
     "repo_path": "libraries/kdocumentstore"
   },
+  "kdominate": {
+    "description": "KDominate is a tactical game for one or two players, where players place and convert tiles with the goal of controlling the majority of the board.",
+    "name": "kdominate",
+    "project_path": "games/kdominate",
+    "repo_path": "games/kdominate"
+  },
   "kdots": {
     "description": "Game to catch your opponent's dots by placing your dots on the game board where the lines cross",
     "name": "kdots",
@@ -2867,6 +2903,12 @@
     "project_path": "kdesdk/kirigami-gallery",
     "repo_path": "sdk/kirigami-gallery"
   },
+  "kirigami-workbench": {
+    "description": "Kirigami Workbench is designed for learning and prototyping with QML and Kirigami, whether you're experimenting for the first time or developing and testing a user interface",
+    "name": "kirigami-workbench",
+    "project_path": "sdk/kirigami-workbench",
+    "repo_path": "sdk/kirigami-workbench"
+  },
   "kiriki": {
     "description": "Kiriki is an addictive and fun dice game",
     "name": "kiriki",
@@ -2908,6 +2950,12 @@
     "name": "kitinerary-workbench",
     "project_path": "pim/kitinerary-workbench",
     "repo_path": "pim/kitinerary-workbench"
+  },
+  "kjar": {
+    "description": "OpenJDK SDK as a runnable Flatpak with a Kirigami interface",
+    "name": "kjar",
+    "project_path": "system/kjar",
+    "repo_path": "system/kjar"
   },
   "kjobwidgets": {
     "description": "KJobWidgets",
@@ -3304,6 +3352,12 @@
     "name": "kongress",
     "project_path": "utils/kongress",
     "repo_path": "utilities/kongress"
+  },
+  "konlineaccounts": {
+    "description": "KOnlineAccounts is a system service to allow applications to obtain information about system-wide logged in accounts",
+    "name": "konlineaccounts",
+    "project_path": "system/konlineaccounts",
+    "repo_path": "system/konlineaccounts"
   },
   "konqueror": {
     "description": "Web browser and Swiss Army knife for any kind of file management and previewing",
@@ -4811,6 +4865,12 @@
     "project_path": "base/mangonel",
     "repo_path": "utilities/mangonel"
   },
+  "mankalaengine": {
+    "description": "Engine used for creating computerized opponents for Mancala variants",
+    "name": "mankalaengine",
+    "project_path": "games/mankalaengine",
+    "repo_path": "games/mankalaengine"
+  },
   "marble": {
     "description": "Virtual Globe and World Atlas that you can use to learn more about the Earth",
     "name": "marble",
@@ -5010,7 +5070,7 @@
     "repo_path": "pim/mbox-importer"
   },
   "md4qt": {
-    "description": "Header-only C++ library for parsing Markdown.",
+    "description": "C++ library for parsing Markdown.",
     "name": "md4qt",
     "project_path": "libs/md4qt",
     "repo_path": "libraries/md4qt"
@@ -5380,6 +5440,12 @@
     "name": "oxygen-transparent",
     "project_path": "unmaintained/oxygen-transparent",
     "repo_path": "unmaintained/oxygen-transparent"
+  },
+  "package-compatibility-helper": {
+    "description": "Provides support for running or finding alternatives to certain application package types on Linux",
+    "name": "package-compatibility-helper",
+    "project_path": "kde-linux/package-compatibility-helper",
+    "repo_path": "kde-linux/package-compatibility-helper"
   },
   "packagekit-qt": {
     "description": null,
@@ -6004,6 +6070,12 @@
     "name": "pulseaudio-qt",
     "project_path": "libs/pulseaudio-qt",
     "repo_path": "libraries/pulseaudio-qt"
+  },
+  "pumoku": {
+    "description": "PuMoKu is a classic, 9x9 pumoku solving game aimed at Plasma Mobile",
+    "name": "pumoku",
+    "project_path": "games/pumoku",
+    "repo_path": "games/pumoku"
   },
   "purpose": {
     "description": "Framework for providing abstractions to get the developer's purposes fulfilled.",
@@ -6688,6 +6760,12 @@
     "name": "sysadmin-ci-utilities",
     "project_path": "sysadmin/ci-utilities",
     "repo_path": "sysadmin/ci-utilities"
+  },
+  "sysadmin-craft-ci": {
+    "description": "Contains all tooling necessary to run Craft CI jobs on all platforms",
+    "name": "sysadmin-craft-ci",
+    "project_path": "sysadmin/craft-ci",
+    "repo_path": "sysadmin/craft-ci"
   },
   "sysadmin-dns": {
     "description": "DNS Zone files for Sysadmin managed domains",
@@ -7810,6 +7888,12 @@
     "name": "websites-l10n-kde-org",
     "project_path": "websites/l10n-kde-org",
     "repo_path": "websites/l10n-kde-org"
+  },
+  "websites-labplot-org": {
+    "description": "Website for Labplot - labplot.org",
+    "name": "websites-labplot-org",
+    "project_path": "websites/labplot-org",
+    "repo_path": "websites/labplot-org"
   },
   "websites-lakademy-kde-org": {
     "description": "Website for LaKademy - lakademy.kde.org",

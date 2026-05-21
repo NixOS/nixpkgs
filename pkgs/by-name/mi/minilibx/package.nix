@@ -3,20 +3,20 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "minilibx";
-  version = "0-unstable-2021-10-30";
+  version = "0-unstable-2026-05-15";
 
   src = fetchFromGitHub {
     owner = "42Paris";
     repo = "minilibx-linux";
-    rev = "7dc53a411a7d4ae286c60c6229bd1e395b0efb82";
-    hash = "sha256-aRYMpaPC7dC6EHmmXugvwcQnaizRCQZKFcQX0K2MLM4=";
+    rev = "b8de9b411818f2e56dd2f4f23c5aa9bffc18a612";
+    hash = "sha256-LTZeVxa4NdGOai/GIrhPbWwXO7Vj7ct/gexeC81IvDw=";
   };
 
   outputs = [
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   dontConfigure = true;

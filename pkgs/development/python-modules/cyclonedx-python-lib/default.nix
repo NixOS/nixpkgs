@@ -20,16 +20,16 @@
   xmldiff,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cyclonedx-python-lib";
-  version = "11.6.0";
+  version = "11.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
-    tag = "v${version}";
-    hash = "sha256-LnXunfYUz76XIHEXhaFJymBMFln8sIH0yxCodRmKdY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-35JTr2he7sHOqG3Nd0UM9CZ4Q/HFv3UQsF6hxOKR/+k=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];
@@ -54,12 +54,8 @@ buildPythonPackage rec {
       jsonschema
       lxml
     ];
-    json-validation = [
-      jsonschema
-    ];
-    xml-validation = [
-      lxml
-    ];
+    json-validation = [ jsonschema ];
+    xml-validation = [ lxml ];
   };
 
   nativeCheckInputs = [
@@ -67,7 +63,7 @@ buildPythonPackage rec {
     pytestCheckHook
     xmldiff
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclonedx" ];
 
@@ -93,8 +89,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for generating CycloneDX SBOMs";
     homepage = "https://github.com/CycloneDX/cyclonedx-python-lib";
-    changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/${src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

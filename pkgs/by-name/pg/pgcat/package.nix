@@ -7,14 +7,14 @@
   pgcat,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pgcat";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "postgresml";
     repo = "pgcat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DHXUhAAOmPSt4aVp93I1y69of+MEboXJBZH50mzQTm8=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ cathalmullan ];
     mainProgram = "pgcat";
   };
-}
+})

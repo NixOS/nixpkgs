@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nova-password";
   version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "sapcc";
     repo = "nova-password";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-73o/dSS/cmLnie4Rbc3FOzRS2clw17GI7gk2nW1u3/I=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vinetos ];
     platforms = lib.platforms.all;
   };
-}
+})

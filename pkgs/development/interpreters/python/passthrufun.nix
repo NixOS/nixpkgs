@@ -110,10 +110,6 @@ let
 in
 rec {
   isPy27 = pythonVersion == "2.7";
-  isPy37 = pythonVersion == "3.7";
-  isPy38 = pythonVersion == "3.8";
-  isPy39 = pythonVersion == "3.9";
-  isPy310 = pythonVersion == "3.10";
   isPy311 = pythonVersion == "3.11";
   isPy312 = pythonVersion == "3.12";
   isPy313 = pythonVersion == "3.13";

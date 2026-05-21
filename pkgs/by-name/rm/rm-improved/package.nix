@@ -4,14 +4,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rm-improved";
   version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "nivekuil";
     repo = "rip";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jbXmGPrb9PhmCSUFVcCqg8HjntS2mrYeNuaMsU+zIFI=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nils-degroot ];
     mainProgram = "rip";
   };
-}
+})

@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch,
   config,
   callPackages,
   lib,
@@ -30,7 +29,6 @@
   nix-update-script,
   oniguruma,
   openldap,
-  openssl_1_1,
   openssl,
   pam,
   pcre2,
@@ -39,7 +37,7 @@
   readline,
   rsync,
   sqlite,
-  unixODBC,
+  unixodbc,
   uwimap,
   valgrind,
   zlib,
@@ -417,7 +415,10 @@ lib.makeScope pkgs.newScope (
           #
           # These will be passed as arguments to mkExtension above.
           extensionData = [
-            { name = "bcmath"; }
+            {
+              name = "bcmath";
+              env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+            }
             {
               name = "bz2";
               buildInputs = [ bzip2 ];
@@ -446,6 +447,10 @@ lib.makeScope pkgs.newScope (
               configureFlags = [
                 "--enable-dom"
               ];
+              # PHP 8.5+ has lexbor built into core; dom needs its headers.
+              env = lib.optionalAttrs (lib.versionAtLeast php.version "8.5") {
+                NIX_CFLAGS_COMPILE = "-I${php.unwrapped.dev}/include/php/ext/lexbor";
+              };
             }
             {
               name = "enchant";
@@ -573,28 +578,6 @@ lib.makeScope pkgs.newScope (
               ];
             }
             {
-              name = "opcache";
-              buildInputs = [
-                pcre2
-              ]
-              ++ lib.optional (
-                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
-              ) valgrind.dev;
-              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
-              zendExtension = true;
-              postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-                # Tests are flaky on darwin
-                rm ext/opcache/tests/blacklist.phpt
-                rm ext/opcache/tests/bug66338.phpt
-                rm ext/opcache/tests/bug78106.phpt
-                rm ext/opcache/tests/issue0115.phpt
-                rm ext/opcache/tests/issue0149.phpt
-                rm ext/opcache/tests/revalidate_path_01.phpt
-              '';
-              # Tests launch the builtin webserver.
-              __darwinAllowLocalNetworking = true;
-            }
-            {
               name = "openssl";
               buildInputs = [ openssl ];
               configureFlags = [ "--with-openssl" ];
@@ -627,8 +610,8 @@ lib.makeScope pkgs.newScope (
             {
               name = "pdo_odbc";
               internalDeps = [ php.extensions.pdo ];
-              buildInputs = [ unixODBC ];
-              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
+              buildInputs = [ unixodbc ];
+              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixodbc}" ];
               doCheck = false;
             }
             {
@@ -735,7 +718,10 @@ lib.makeScope pkgs.newScope (
             }
             { name = "sysvmsg"; }
             { name = "sysvsem"; }
-            { name = "sysvshm"; }
+            {
+              name = "sysvshm";
+              configureFlags = [ "CFLAGS=-std=gnu17" ];
+            }
             {
               name = "tidy";
               configureFlags = [ "--with-tidy=${html-tidy}" ];
@@ -827,6 +813,30 @@ lib.makeScope pkgs.newScope (
                 "--with-imap-ssl"
                 "--with-kerberos"
               ];
+            }
+          ]
+          ++ lib.optionals (lib.versionOlder php.version "8.5") [
+            {
+              name = "opcache";
+              buildInputs = [
+                pcre2
+              ]
+              ++ lib.optional (
+                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+              ) valgrind.dev;
+              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
+              zendExtension = true;
+              postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+                # Tests are flaky on darwin
+                rm ext/opcache/tests/blacklist.phpt
+                rm ext/opcache/tests/bug66338.phpt
+                rm ext/opcache/tests/bug78106.phpt
+                rm ext/opcache/tests/issue0115.phpt
+                rm ext/opcache/tests/issue0149.phpt
+                rm ext/opcache/tests/revalidate_path_01.phpt
+              '';
+              # Tests launch the builtin webserver.
+              __darwinAllowLocalNetworking = true;
             }
           ];
 

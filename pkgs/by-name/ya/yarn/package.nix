@@ -55,7 +55,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/yarnpkg/yarn/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      offline
       screendriver
     ];
     platforms = lib.platforms.all;

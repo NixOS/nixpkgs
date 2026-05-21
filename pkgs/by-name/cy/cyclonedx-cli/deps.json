@@ -16,23 +16,23 @@
   },
   {
     "pname": "CycloneDX.Core",
-    "version": "8.0.3",
-    "hash": "sha256-d9GiOXYxQ1Sv35rN5jywhgTS+HKHSydHVcJNbKs7Htg="
+    "version": "11.0.0",
+    "hash": "sha256-i1H/+oH4yljhvXg0PnM87F9qu2RtvPco7adZ2uxzOpY="
   },
   {
     "pname": "CycloneDX.Spdx",
-    "version": "8.0.3",
-    "hash": "sha256-86E8rIXeE6gu+W3yK33abZ5w5zwuDR0Qv5texxJnsv0="
+    "version": "11.0.0",
+    "hash": "sha256-JOY+PjDApeXdJlCXhcr91lUiC6DOQEcjoYuQbBaaiog="
   },
   {
     "pname": "CycloneDX.Spdx.Interop",
-    "version": "8.0.3",
-    "hash": "sha256-WpM0VZAjhN2f/IckRIzIeMIkpir9ZNAW+0ZGxL2cBNY="
+    "version": "11.0.0",
+    "hash": "sha256-N682Lern6x18EJlRuJDR+T7/n5+2DWXp4Kz1MNuGqEM="
   },
   {
     "pname": "CycloneDX.Utils",
-    "version": "8.0.3",
-    "hash": "sha256-CW6e3uPmCP1U98fcQsiDvn3fLkQOGcchPiUNq4aXDbQ="
+    "version": "11.0.0",
+    "hash": "sha256-3rBD3lAzQiv0TghEbfxCVUQoWNOX8tzFew7V0s4NRpE="
   },
   {
     "pname": "JetBrains.Annotations",
@@ -63,11 +63,6 @@
     "pname": "Microsoft.CSharp",
     "version": "4.0.1",
     "hash": "sha256-0huoqR2CJ3Z9Q2peaKD09TV3E6saYSqDGZ290K8CrH8="
-  },
-  {
-    "pname": "Microsoft.CSharp",
-    "version": "4.4.1",
-    "hash": "sha256-7/gsQHWAuFWrcVpVharASTNL+Mvl6Gw+AAw41k0MzXw="
   },
   {
     "pname": "Microsoft.NET.Test.Sdk",
@@ -391,8 +386,13 @@
   },
   {
     "pname": "System.CommandLine",
-    "version": "2.0.0-beta1.21308.1",
-    "hash": "sha256-14pgyMy3F86XickXZB+AMX6uMTkVvBg5tV90p1G+4yY="
+    "version": "2.0.0-beta4.22272.1",
+    "hash": "sha256-zSO+CYnMH8deBHDI9DHhCPj79Ce3GOzHCyH1/TiHxcc="
+  },
+  {
+    "pname": "System.CommandLine.NamingConventionBinder",
+    "version": "2.0.0-beta4.22272.1",
+    "hash": "sha256-Ffzs51XiFraSX1efQRO1IyiNraIgi8aOdkRRzCT6DB4="
   },
   {
     "pname": "System.Console",
@@ -530,11 +530,6 @@
     "hash": "sha256-+3pvhZY7rip8HCbfdULzjlC9FPZFpYoQxhkcuFm2wk8="
   },
   {
-    "pname": "System.Memory",
-    "version": "4.5.4",
-    "hash": "sha256-3sCEfzO4gj5CYGctl9ZXQRRhwAraMQfse7yzKoRe65E="
-  },
-  {
     "pname": "System.Net.Http",
     "version": "4.3.0",
     "hash": "sha256-UoBB7WPDp2Bne/fwxKF0nE8grJ6FzTMXdT/jfsphj8Q="
@@ -663,11 +658,6 @@
     "pname": "System.Runtime",
     "version": "4.3.0",
     "hash": "sha256-51813WXpBIsuA6fUtE5XaRQjcWdQ2/lmEokJt97u0Rg="
-  },
-  {
-    "pname": "System.Runtime.CompilerServices.Unsafe",
-    "version": "6.0.0",
-    "hash": "sha256-bEG1PnDp7uKYz/OgLOWs3RWwQSVYm+AnPwVmAmcgp2I="
   },
   {
     "pname": "System.Runtime.Extensions",
@@ -810,14 +800,9 @@
     "hash": "sha256-vufHXg8QAKxHlujPHHcrtGwAqFmsCD6HKjfDAiHyAYc="
   },
   {
-    "pname": "System.Text.Encodings.Web",
-    "version": "6.0.0",
-    "hash": "sha256-UemDHGFoQIG7ObQwRluhVf6AgtQikfHEoPLC6gbFyRo="
-  },
-  {
     "pname": "System.Text.Json",
-    "version": "6.0.2",
-    "hash": "sha256-YLpB48NRiQ8oCuUx0AHJzqUHYgUwXW/60shFkkN/5tM="
+    "version": "8.0.5",
+    "hash": "sha256-yKxo54w5odWT6nPruUVsaX53oPRe+gKzGvLnnxtwP68="
   },
   {
     "pname": "System.Text.RegularExpressions",

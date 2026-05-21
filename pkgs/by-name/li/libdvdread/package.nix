@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "7.0.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdread/${finalAttrs.version}/libdvdread-${finalAttrs.version}.tar.xz";
+    url = "https://get.videolan.org/libdvdread/${finalAttrs.version}/libdvdread-${finalAttrs.version}.tar.xz";
     hash = "sha256-Lj4EowXBXDljqgOuG5qDwdI5iAAD/PPd6YbTlDNV1Ac=";
   };
 

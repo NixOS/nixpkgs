@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubeclarity";
   version = "2.23.3";
 
   src = fetchFromGitHub {
     owner = "openclarity";
     repo = "kubeclarity";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MC9GeJeVG7ROkpmOW2HD/fWMMnHo43q4Du9MzWTk2cg=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
     lvm2
   ];
 
-  sourceRoot = "${src.name}/cli";
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
   env.CGO_ENABLED = "0";
 
@@ -55,8 +55,8 @@ buildGoModule rec {
       Kubernetes cluster, including images of application pods and system pods.
     '';
     homepage = "https://github.com/openclarity/kubeclarity";
-    changelog = "https://github.com/openclarity/kubeclarity/releases/tag/v${version}";
+    changelog = "https://github.com/openclarity/kubeclarity/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

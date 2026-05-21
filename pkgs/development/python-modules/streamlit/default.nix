@@ -27,17 +27,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "streamlit";
-  version = "1.53.0";
+  version = "1.55.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-ARQRbTRYny5lK/Ssc1o6ymmAfmWfkvmcmOe2INAAg48=";
+    hash = "sha256-AV5RK70C0AD0BH5REY3AhrcOfZxGtKEaM8JQlzE3liY=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "protobuf"
+  ];
 
   dependencies = [
     altair
@@ -65,10 +68,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "streamlit" ];
-
-  postInstall = ''
-    rm $out/bin/streamlit.cmd # remove windows helper
-  '';
 
   meta = {
     homepage = "https://streamlit.io/";

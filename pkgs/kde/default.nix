@@ -57,7 +57,6 @@ let
         # THIRD PARTY
         inherit
           cmark
-          gpgme
           taglib
           wayland
           wayland-protocols
@@ -85,7 +84,7 @@ let
         oxygen-icons = self.callPackage ./misc/oxygen-icons { };
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
-        plasma-keyboard = self.callPackage ./misc/plasma-keyboard { };
+        plasma-pass = self.callPackage ./misc/plasma-pass { };
         plasma-wayland-protocols = self.callPackage ./misc/plasma-wayland-protocols { };
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };

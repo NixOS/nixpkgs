@@ -5,8 +5,8 @@ It makes no assumptions about the container runner you choose to use to run the 
 
 The set of functions in `pkgs.ociTools` currently does not handle the [OCI image specification](https://github.com/opencontainers/image-spec).
 
-At a high-level an OCI implementation would download an OCI Image then unpack that image into an OCI Runtime filesystem bundle.
-At this point the OCI Runtime Bundle would be run by an OCI Runtime.
+At a high level, an OCI implementation would download an OCI Image then unpack that image into an OCI Runtime filesystem bundle.
+At this point, the OCI Runtime Bundle would be run by an OCI Runtime.
 `pkgs.ociTools` provides utilities to create OCI Runtime bundles.
 
 ## buildContainer {#ssec-pkgs-ociTools-buildContainer}
@@ -54,7 +54,7 @@ Note that no user namespace is created, which means that you won't be able to ru
 
 `os` **DEPRECATED**
 
-: Specifies the operating system on which the container filesystem is based on.
+: Specifies the operating system on which the container filesystem is based.
   If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties).
   According to the linked specification, all possible values for `$GOOS` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `darwin` or `linux`.
 

@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "refmt";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "rjeczalik";
     repo = "refmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HiAWSR2S+3OcIgwdQ0ltW37lcG+OHkDRDUF07rfNcJY=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ deemp ];
   };
-}
+})

@@ -8,9 +8,14 @@
 
   # dependencies
   boto3,
+  langchain,
   langchain-core,
   numpy,
   pydantic,
+
+  # optional-dependencies
+  anthropic,
+  langchain-anthropic,
 
   # tests
   langchain-tests,
@@ -22,16 +27,16 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.2.1";
+  version = "1.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
-    tag = "langchain-aws==${version}";
-    hash = "sha256-FJRlt8+Xo2TqXevgx/Pb9LF/fjej+VXzfxZwZEC67ok=";
+    tag = "langchain-aws==${finalAttrs.version}";
+    hash = "sha256-WSUwPEBZQRyHYDWs0j+RgeP3Mqer5dIRT7eKoRESpsU=";
   };
 
   postPatch = ''
@@ -39,31 +44,37 @@ buildPythonPackage rec {
       --replace-fail "--snapshot-warn-unused" ""
   '';
 
-  sourceRoot = "${src.name}/libs/aws";
+  sourceRoot = "${finalAttrs.src.name}/libs/aws";
 
   build-system = [ hatchling ];
 
   dependencies = [
     boto3
+    langchain
     langchain-core
     numpy
     pydantic
   ];
 
   pythonRelaxDeps = [
-    # Boto @ 1.35 has outstripped the version requirement
+    # Boto3 spec has outstripped the version requirement
     "boto3"
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
   ];
 
+  optional-dependencies = {
+    anthropic = anthropic.optional-dependencies.bedrock ++ [
+      langchain-anthropic
+    ];
+  };
+
   nativeCheckInputs = [
+    anthropic
     langchain-tests
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
@@ -83,7 +94,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
@@ -92,4 +103,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -22,7 +22,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ettercap";
   version = "0.8.4-unstable-2025-07-16";
 
@@ -83,9 +83,9 @@ stdenv.mkDerivation rec {
       analysis.
     '';
     homepage = "https://www.ettercap-project.org/";
-    changelog = "https://github.com/Ettercap/ettercap/releases/tag/${version}";
+    changelog = "https://github.com/Ettercap/ettercap/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

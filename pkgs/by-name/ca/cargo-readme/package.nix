@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-readme";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "webern";
     repo = "cargo-readme";
-    rev = "v${version}";
-    sha256 = "sha256-FFWHADATEfvZvxGwdkj+eTVoq7pnPuoUAhMGTokUkMs=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-p8QQNACU9lFig0vBQrb1u2T44Icwk10OBjGzaVLj7kk=";
   };
 
-  cargoHash = "sha256-24D+ZcMGZN175LZNcNW8F5IsStk4au4xB0ZFe95EjPk=";
+  cargoHash = "sha256-kfXDMBqS4/QC+khQhQ2Jrer8TuFKlnZFS3IZ2lcVOR8=";
 
   # disable doc tests
   cargoTestFlags = [
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

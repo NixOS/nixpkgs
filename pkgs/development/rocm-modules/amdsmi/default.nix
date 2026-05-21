@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rocmUpdateScript,
   cmake,
   pkg-config,
   libdrm,
+  python,
   wrapPython,
   autoPatchelfHook,
 }:
@@ -21,13 +21,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "7.0.2";
+  version = "7.2.3";
   src = fetchFromGitHub {
-    owner = "rocm";
-    repo = "amdsmi";
+    owner = "ROCm";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-1xQD68mrG1g9Bpw5/vxn+XxDM5HuAyEHyALyBixqR1s=";
+    sparseCheckout = [
+      "projects/amdsmi"
+      "shared"
+    ];
+    hash = "sha256-TFi+3txemvV6K827e8S3hZOd9jcj4Qzop6V9CdKrpLg=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/amdsmi";
 
   postPatch = ''
     substituteInPlace goamdsmi_shim/CMakeLists.txt \
@@ -43,11 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (fetchpatch {
-      name = "fix-build-with-gcc15.patch";
-      url = "https://github.com/ROCm/amdsmi/commit/902667db3cafe72e2009287cb96b160854ab9d81.patch";
-      hash = "sha256-MoOY5q6tQ7Q+bgm/600Etz+cxRk4L2ujkarnBjnfANw=";
-    })
+    # Fix error: redefinition of 'struct drm_color_ctm_3x4'
+    # https://github.com/ROCm/amdsmi/pull/165
+    ./drm-struct-redefinition-fix.patch
   ];
 
   nativeBuildInputs = [
@@ -70,21 +73,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    mkdir -p $out/${python.sitePackages}
+    ln -s $out/share/amd_smi/amdsmi $out/${python.sitePackages}/amdsmi
+
     makeWrapperArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdrm ]})
     wrapPythonProgramsIn $out
     rm $out/bin/amd-smi
     ln -sf $out/libexec/amdsmi_cli/amdsmi_cli.py $out/bin/amd-smi
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
-    homepage = "https://github.com/ROCm/rocm_smi_lib";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/amdsmi";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

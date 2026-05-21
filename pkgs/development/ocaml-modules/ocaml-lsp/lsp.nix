@@ -20,12 +20,13 @@
   result,
   pp,
   cmdliner,
+  cmdliner_1,
   ordering,
   ocamlformat-rpc-lib,
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.4" then
-      "1.24.0"
+      "1.25.0"
     else if lib.versionAtLeast ocaml.version "5.3" then
       "1.23.1"
     else if lib.versionAtLeast ocaml.version "5.2" then
@@ -45,7 +46,7 @@ let
     inherit version;
   };
 in
-buildDunePackage rec {
+buildDunePackage {
   pname = "lsp";
   inherit (jsonrpc_v) version src;
   minimalOCamlVersion = if lib.versionAtLeast version "1.7.0" then "4.12" else "4.06";
@@ -59,7 +60,7 @@ buildDunePackage rec {
   '';
 
   buildInputs =
-    if lib.versionAtLeast version "1.12.0" then
+    if lib.versionAtLeast version "1.17.0" then
       [
         pp
         re
@@ -73,6 +74,20 @@ buildDunePackage rec {
         stdune
         chrome-trace
       ]
+    else if lib.versionAtLeast version "1.12.0" then
+      [
+        pp
+        re
+        octavius
+        dune-build-info
+        dune-rpc
+        omd
+        cmdliner_1
+        ocamlformat-rpc-lib
+        dyn
+        stdune
+        chrome-trace
+      ]
     else if lib.versionAtLeast version "1.10.0" then
       [
         pp
@@ -81,7 +96,7 @@ buildDunePackage rec {
         dune-build-info
         dune-rpc
         omd
-        cmdliner
+        cmdliner_1
         ocamlformat-rpc-lib
         dyn
         stdune
@@ -92,7 +107,7 @@ buildDunePackage rec {
         octavius
         dune-build-info
         omd
-        cmdliner
+        cmdliner_1
         ocamlformat-rpc-lib
       ]
     else
@@ -102,7 +117,7 @@ buildDunePackage rec {
         octavius
         dune-build-info
         omd
-        cmdliner
+        cmdliner_1
       ];
 
   nativeBuildInputs = lib.optional (lib.versionOlder version "1.7.0") cppo;

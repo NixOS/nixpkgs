@@ -3,8 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  nodejs_20,
-  pnpm_8,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   wails,
@@ -13,21 +12,18 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-
 let
-  # NodeJS 22.18.0 broke our build, not sure why
-  wails' = wails.override { nodejs = nodejs_20; };
-  pnpm' = pnpm_8.override { nodejs = nodejs_20; };
+  pnpm = pnpm_10;
 in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
-  version = "3.0.3";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
     tag = "v${version}";
-    hash = "sha256-ndvrgSRblm7pVwnGvxpwtGVMEGp+mqpC4kE87lmt36M=";
+    hash = "sha256-VgLlMlCPLT8lu2tn+lrkqVCp2eoYhtyNnrWGGqesMd0=";
   };
 
   patches = [
@@ -46,8 +42,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm'
-    wails'
+    pnpm
+    wails
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -64,11 +60,11 @@ buildGoModule rec {
         pname
         version
         src
+        pnpm
         ;
-      pnpm = pnpm';
       sourceRoot = "${src.name}/frontend";
-      fetcherVersion = 1;
-      hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
+      fetcherVersion = 3;
+      hash = "sha256-p0PFIqnIDZPffKaACWWDUvdBN+a0aMbZTUvz9wRTY+k=";
     };
 
     pnpmRoot = "frontend";
@@ -83,7 +79,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-3nsJPuwL2Zw/yuHvd8rMSpj9DBBpYUaR19z9TSV/7jg=";
+  vendorHash = "sha256-LvDftUsmvrIY2WkC2pFxRasUGwytEE6ObhzDlrdgpB4=";
 
   buildPhase = ''
     runHook preBuild

@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "base16384";
   version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "fumiama";
     repo = "base16384";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qaDnv+KpXMYdx6eqH7pU0pEjSpU5xg9I7afxpoO3iGs=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.all;
   };
-}
+})

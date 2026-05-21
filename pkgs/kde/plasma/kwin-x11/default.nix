@@ -5,7 +5,7 @@
   qtsensors,
   qttools,
   qtwayland,
-  xorg,
+  libxcvt,
   libcanberra,
   libdisplay-info,
   libgbm,
@@ -39,6 +39,9 @@ mkKdeDerivation {
     libcanberra
     libdisplay-info
 
-    xorg.libxcvt
+    libxcvt
   ];
+
+  # plugin QML relies on non-global imports
+  dontQmlLint = true;
 }

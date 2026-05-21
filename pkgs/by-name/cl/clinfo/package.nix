@@ -6,14 +6,14 @@
   opencl-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clinfo";
   version = "3.0.25.02.14";
 
   src = fetchFromGitHub {
     owner = "Oblomov";
     repo = "clinfo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-UkkrRpmY5vZtTeEqPNYfxAGaJDoTSrNUG9N1Bknozow=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "clinfo";
   };
-}
+})

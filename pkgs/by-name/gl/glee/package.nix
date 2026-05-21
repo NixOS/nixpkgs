@@ -5,7 +5,7 @@
   cmake,
   libGLU,
   libGL,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     inherit rev;
-    url = "https://git.code.sf.net/p/${pname}/${pname}";
+    url = "https://git.code.sf.net/p/glee/glee";
     sha256 = "13mf3s7nvmj26vr2wbcg08l4xxqsc1ha41sx3bfghvq8c5qpk2ph";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libGL
-    xorg.libX11
+    libx11
   ];
 
   postPatch = ''

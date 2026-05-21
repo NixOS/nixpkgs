@@ -5,19 +5,19 @@
   cmake,
   pkg-config,
   makeWrapper,
-  wxGTK32,
+  wxwidgets_3_2,
   wxsqlite3,
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxsqliteplus";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "guanlisheng";
     repo = "wxsqliteplus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gyH1Wlmg9xQy7xm7rhKZa7BFTFFN4JQHp3CHmzMkVOg=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     wxsqlite3
     sqlite
   ];
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

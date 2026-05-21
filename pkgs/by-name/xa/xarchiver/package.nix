@@ -23,14 +23,14 @@
   desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.5.4.26";
   pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-s6lVKtWJRAFrkUYUwKGH+XNTGi/L+Zt0kSWIekBUWYs=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "xarchiver";
   };
-}
+})

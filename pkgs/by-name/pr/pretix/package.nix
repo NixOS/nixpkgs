@@ -3,8 +3,9 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
+  libredirect,
   nodejs,
-  python312,
+  python3,
   gettext,
   nixosTests,
   pretix,
@@ -12,10 +13,10 @@
 }:
 
 let
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      django = super.django_4;
+      django = super.django_5;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
         version = "2.3.0";
@@ -24,6 +25,12 @@ let
           tag = "v${version}";
           hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
         };
+        disabledTests = [
+          # error message mismatch
+          "test_validation_failed_message"
+          # fails dns resolution
+          "test_response_when_auth_server_response_return_404"
+        ];
       });
 
       stripe = super.stripe.overridePythonAttrs rec {
@@ -34,6 +41,8 @@ let
           inherit version;
           hash = "sha256-hOXkMINaSwzU/SpXzjhTJp0ds0OREc2mtu11LjSc9KE=";
         };
+
+        build-system = with self; [ setuptools ];
       };
 
       pretix = self.toPythonModule pretix;
@@ -42,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.10.1";
+  version = "2026.4.1";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${version}";
-    hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
+    hash = "sha256-afqhPiTg1g2rnJOl8yFYq/p2/fIxpfTp/3jbTXpiRZQ=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-GaUPVSHRZg5Aihk4WAjmF8M6zIL99DU9Z3F3dym78bs=";
+    npmDepsHash = "sha256-U4oXGir53h7R3z4p371PJGm2EU+arsqe/abn6GvSGXs=";
 
     dontBuild = true;
 
@@ -85,15 +94,17 @@ python.pkgs.buildPythonApplication rec {
     "bleach"
     "celery"
     "css-inline"
+    "cryptography"
     "django-bootstrap3"
     "django-compressor"
+    "django-filter"
     "django-formset-js-improved"
     "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
     "drf_ujson2"
-    "importlib-metadata"
+    "importlib_metadata"
     "kombu"
     "markdown"
     "oauthlib"
@@ -247,6 +258,7 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     with python.pkgs;
     [
+      libredirect.hook
       pytestCheckHook
       pytest-xdist
       pytest-mock
@@ -271,6 +283,13 @@ python.pkgs.buildPythonApplication rec {
   preCheck = ''
     export PYTHONPATH=$(pwd)/src:$PYTHONPATH
     export DJANGO_SETTINGS_MODULE=tests.settings
+
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
+
+  postCheck = ''
+    unset NIX_REDIRECTS
   '';
 
   passthru = {

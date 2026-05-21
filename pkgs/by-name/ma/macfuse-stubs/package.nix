@@ -6,15 +6,16 @@
   xar,
   undmg,
   libtapi,
+  isFuse3 ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "macfuse-stubs";
-  version = "4.8.0";
+  version = "5.1.3";
 
   src = fetchurl {
     url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
-    hash = "sha256-ucTzO2qdN4QkowMVvC3+4pjEVjbwMsB0xFk+bvQxwtQ=";
+    hash = "sha256-5fgP+MPfgm6Zf7eGs1EloMamcvS7oncLDe9rpjyk74E=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     for f in *.dylib; do
       tapi stubify --filetype=tbd-v2  "$f" -o "''${f%%.dylib}.tbd"
     done
-    sed -i "s|^prefix=.*|prefix=$out|" pkgconfig/fuse.pc
+    sed -i "s|^prefix=.*|prefix=$out|" pkgconfig/fuse{,3}.pc
     popd
   '';
 
@@ -45,9 +46,16 @@ stdenv.mkDerivation rec {
   # different license
   installPhase = ''
     mkdir -p $out/include $out/lib/pkgconfig
-    cp usr/local/lib/*.tbd $out/lib
-    cp usr/local/lib/pkgconfig/*.pc $out/lib/pkgconfig
-    cp -R usr/local/include/* $out/include
+  ''
+  + lib.optionalString isFuse3 ''
+    cp usr/local/lib/libfuse3*.tbd $out/lib
+    cp usr/local/lib/pkgconfig/fuse3.pc $out/lib/pkgconfig
+    cp -R usr/local/include/fuse3 $out/include
+  ''
+  + lib.optionalString (!isFuse3) ''
+    cp usr/local/lib/libfuse{,.2}.tbd $out/lib
+    cp usr/local/lib/pkgconfig/fuse.pc $out/lib/pkgconfig
+    cp -R usr/local/include/fuse{,.h} $out/include
   '';
 
   meta = {

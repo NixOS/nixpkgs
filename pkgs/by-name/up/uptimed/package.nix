@@ -5,13 +5,13 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uptimed";
   version = "0.4.7";
 
   src = fetchFromGitHub {
     sha256 = "sha256-gP6Syzu54/co4L+UCPikUhXDpxpfAB4jO/5ZF/9RdN0=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "uptimed";
     owner = "rpodgorny";
   };
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snooze";
   version = "0.5.1";
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "snooze";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ghWQ/bslWJCcsQ8OqS3MHZiiuGzbgzat6mkG2avSbEk=";
   };
   makeFlags = [
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "snooze";
   };
-}
+})

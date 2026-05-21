@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sqlite-anyio";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "davidbrochart";
     repo = "sqlite-anyio";
     tag = "v${version}";
-    hash = "sha256-cZyTpFmYD0l20Cmxl+Hwfh3oVkWvtXD45dMpcSwA2QE=";
+    hash = "sha256-1riZiLBccg7Vqq+a8xT5Lr4vxjkeMbf1wqXnTTgY8iY=";
   };
 
   build-system = [ hatchling ];

@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
 
   # nativeBuildInputs
   makeWrapper,
@@ -22,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.0.dev47-unstable-2026-01-12";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "librelane";
     repo = "librelane";
-    rev = "f1efecac3151f3275fa2ea7d656f8ea7e3225a9d";
-    hash = "sha256-XZHypZ+Ht1Zbb0N9VBUmrZKwWuqYA0/w7DpZBOO9KU8=";
+    tag = finalAttrs.version;
+    hash = "sha256-SA0y5ooqfDaoVlXzsHStG3uhBuyu9t9T2ej+49csizw=";
   };
 
   build-system = [
@@ -65,8 +66,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postInstall = ''
-    cp -r librelane/scripts $out/${python3Packages.python.sitePackages}/librelane/
-    cp -r librelane/examples $out/${python3Packages.python.sitePackages}/librelane/
+    # Create the site-packages subdirectory for librelane
+    dest="$out/${python3Packages.python.sitePackages}/librelane"
+    mkdir -p "$dest"
+
+    # Copy scripts and examples from the source into the installation
+    cp -r librelane/scripts "$dest/"
+    cp -r librelane/examples "$dest/"
   '';
 
   postFixup = ''
@@ -85,6 +91,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
         ]
       }
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^([0-9.]+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "ASIC implementation flow infrastructure";

@@ -16,17 +16,16 @@ import sys
 import time
 import traceback
 import urllib.error
-import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, date
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any, Callable
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, urlsplit
 
 import git
 from packaging.version import InvalidVersion, parse as parse_version
@@ -36,9 +35,12 @@ ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
 GIT_TAGS_PREFIX = "refs/tags/"
+AUTO_BRANCH = ""
 
 VERSION_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})$")
 VERSION_TAG_PATTERN = re.compile(r"^(.+?)-unstable-")
+NON_RELEASE_TAG_PREFIXES = ("pre-",)
+RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@-]*)$")
 
 LOG_LEVELS = {
     logging.getLevelName(level): level
@@ -87,13 +89,48 @@ class FetchConfig:
 
 def make_request(url: str, token=None) -> urllib.request.Request:
     headers = {}
-    if token is not None:
+    if token:
         headers["Authorization"] = f"token {token}"
     return urllib.request.Request(url, headers=headers)
 
 
 # a dictionary of plugins and their new repositories
 Redirects = dict["PluginDesc", "Repo"]
+
+
+def select_latest_tag(
+    tags: list[str],
+    normalize: Callable[[str], str | None] | None = None,
+) -> str | None:
+    best_version: tuple[str, Any] | None = None
+    best_text: tuple[str, str] | None = None
+
+    for tag in tags:
+        candidate = tag if normalize is None else normalize(tag)
+        if candidate is None:
+            continue
+
+        try:
+            version = parse_version(candidate)
+            if best_version is None or version > best_version[1]:
+                best_version = (tag, version)
+        except InvalidVersion:
+            if best_text is None or candidate > best_text[1]:
+                best_text = (tag, candidate)
+
+    if best_version is not None:
+        return best_version[0]
+    if best_text is not None:
+        return best_text[0]
+    return None
+
+
+def first_release_tag(tags: list[str]) -> str | None:
+    for tag in tags:
+        if normalize_release_version(tag) is not None:
+            return tag
+
+    return None
 
 
 class Repo:
@@ -103,7 +140,7 @@ class Repo:
         self._branch = branch
         # Redirect is the new Repo to use
         self.redirect: "Repo | None" = None
-        self.token: str | None = "dummy_token"
+        self.token: str | None = None
 
     @property
     def name(self):
@@ -126,9 +163,15 @@ class Repo:
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> tuple[str, datetime]:
         log.debug("Latest commit")
-        loaded = self._prefetch(None)
+        loaded = self._prefetch(None, fetch_submodules=False)
         updated = datetime.strptime(loaded["date"], "%Y-%m-%dT%H:%M:%S%z")
 
+        return loaded["rev"], updated
+
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def resolve_ref(self, ref: str) -> tuple[str, datetime]:
+        loaded = self._prefetch(ref, fetch_submodules=False)
+        updated = datetime.strptime(loaded["date"], "%Y-%m-%dT%H:%M:%S%z")
         return loaded["rev"], updated
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
@@ -156,21 +199,10 @@ class Repo:
             if not tags:
                 return None
 
-            valid_versions = []
-            invalid_tags = []
-
-            for tag in tags:
-                try:
-                    version = parse_version(tag)
-                    valid_versions.append((tag, version))
-                except InvalidVersion:
-                    invalid_tags.append(tag)
-
-            if valid_versions:
-                latest_tag = max(valid_versions, key=lambda x: x[1])[0]
-            elif invalid_tags:
-                latest_tag = max(invalid_tags)
-            else:
+            latest_tag = select_latest_tag(tags, normalize_release_version)
+            if latest_tag is None:
+                latest_tag = select_latest_tag(tags)
+            if latest_tag is None:
                 log.debug("No tags found for %s", self.uri)
                 return None
 
@@ -183,8 +215,11 @@ class Repo:
             log.warning("Unexpected error fetching tags for %s: %s", self.uri, e)
             return None
 
-    def _prefetch(self, ref: str | None):
-        cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
+    def _prefetch(self, ref: str | None, fetch_submodules: bool = True):
+        cmd = ["nix-prefetch-git", "--quiet"]
+        if fetch_submodules:
+            cmd.append("--fetch-submodules")
+        cmd.append(self.uri)
         if ref is not None:
             cmd.append(ref)
         log.debug(cmd)
@@ -198,11 +233,19 @@ class Repo:
         return loaded["sha256"]
 
     def as_nix(self, plugin: "Plugin") -> str:
+        ref_attr = (
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
+        )
         return f"""fetchgit {{
       url = "{self.uri}";
-      rev = "{plugin.commit}";
+      {ref_attr}
       hash = "{plugin.to_sri_hash()}";
     }}"""
+
+    def get_license_spdx_id(self, fallback_license: str | None = None) -> str | None:
+        return fallback_license
 
 
 class RepoGitHub(Repo):
@@ -262,6 +305,20 @@ class RepoGitHub(Repo):
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
             return Path(str(url.path)).name, updated
 
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def resolve_ref(self, ref: str) -> tuple[str, datetime]:
+        if ref == self.branch:
+            return self.latest_commit()
+        self._check_ref_redirect(ref)
+        return super().resolve_ref(ref)
+
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def _check_ref_redirect(self, ref: str) -> None:
+        ref_url = self.url(f"tree/{urllib.parse.quote(ref, safe='')}")
+        ref_req = make_request(ref_url, self.token)
+        with urllib.request.urlopen(ref_req, timeout=10) as req:
+            self._check_for_redirect(ref_url, req)
+
     def _execute_graphql(self, query: str, variables: dict) -> dict:
         graphql_url = "https://api.github.com/graphql"
 
@@ -274,48 +331,58 @@ class RepoGitHub(Repo):
         with urllib.request.urlopen(req, timeout=10) as response:
             return json.load(response)
 
-    def _extract_commit_date(self, target: dict) -> datetime | None:
-        commit_date_str = None
-        if "committedDate" in target:
-            commit_date_str = target["committedDate"]
-        elif "target" in target and "committedDate" in target["target"]:
-            commit_date_str = target["target"]["committedDate"]
+    @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
+    def _get_recent_tags_from_atom(self) -> list[str]:
+        tags_url = self.url("tags.atom")
+        tags_req = make_request(tags_url, self.token)
+        with urllib.request.urlopen(tags_req, timeout=10) as response:
+            xml = response.read()
 
-        if commit_date_str:
-            return datetime.fromisoformat(commit_date_str.replace("Z", "+00:00"))
-        return None
+        root = ET.fromstring(xml)
+        tags = []
+        for entry in root.findall(ATOM_ENTRY):
+            link = entry.find(ATOM_LINK)
+            if link is None:
+                continue
+
+            href = link.get("href")
+            if not href:
+                continue
+
+            tag_name = Path(urlparse(href).path).name
+            if tag_name:
+                tags.append(tag_name)
+
+        return tags
+
+    def _get_latest_tag_from_fallbacks(self) -> str | None:
+        try:
+            recent_tags = self._get_recent_tags_from_atom()
+            if recent_tags:
+                latest_tag = first_release_tag(recent_tags)
+                return latest_tag if latest_tag is not None else recent_tags[0]
+        except (urllib.error.URLError, ET.ParseError) as e:
+            log.warning(
+                "Failed to fetch GitHub tag feed for %s/%s: %s",
+                self.owner,
+                self.repo,
+                e,
+            )
+
+        return super().get_latest_tag()
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def get_latest_tag(self) -> str | None:
         try:
             if not self.token or self.token == "":
-                log.info(
-                    "No GitHub token available for %s/%s, using git ls-remote fallback",
-                    self.owner,
-                    self.repo,
-                )
-                return super().get_latest_tag()
+                return self._get_latest_tag_from_fallbacks()
 
-            # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
-            # an ancestor of the default branch.
             query = """
-            query GetLatestVersionInfo($owner: String!, $name: String!) {
+            query GetRecentTags($owner: String!, $name: String!) {
               repository(owner: $owner, name: $name) {
-                refs(refPrefix: "refs/tags/", first: 5, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) {
+                refs(refPrefix: "refs/tags/", first: 20, orderBy: {field: TAG_COMMIT_DATE, direction: DESC}) {
                   nodes {
                     name
-                    target {
-                      ... on Commit {
-                        committedDate
-                      }
-                      ... on Tag {
-                        target {
-                          ... on Commit {
-                            committedDate
-                          }
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -327,72 +394,43 @@ class RepoGitHub(Repo):
             )
 
             if "errors" in data:
+                if any(
+                    error.get("code") == "graphql_rate_limit"
+                    or error.get("type") == "RATE_LIMIT"
+                    for error in data["errors"]
+                ):
+                    log.warning(
+                        "GitHub GraphQL rate limit hit for %s/%s, falling back to tag feeds",
+                        self.owner,
+                        self.repo,
+                    )
+                    return self._get_latest_tag_from_fallbacks()
                 log.warning(
                     "GraphQL errors for %s/%s: %s",
                     self.owner,
                     self.repo,
                     data["errors"],
                 )
-                return None
+                return self._get_latest_tag_from_fallbacks()
 
-            if "data" not in data or not data["data"]:
-                log.warning(
-                    "No data in GraphQL response for %s/%s", self.owner, self.repo
-                )
-                return None
-
-            repo = data["data"]["repository"]
+            repo = data.get("data", {}).get("repository")
             if not repo:
-                log.debug(
-                    "Repository %s/%s not found or inaccessible", self.owner, self.repo
-                )
+                return self._get_latest_tag_from_fallbacks()
+
+            recent_tags = [node["name"] for node in repo["refs"]["nodes"]]
+            if not recent_tags:
                 return None
 
-            valid_versions = []
-            invalid_tags = []
-            for ref_node in repo["refs"]["nodes"]:
-                tag_name = ref_node["name"]
-                commit_date = self._extract_commit_date(ref_node["target"])
-                if not commit_date:
-                    continue
+            latest_tag = first_release_tag(recent_tags)
+            return latest_tag if latest_tag is not None else recent_tags[0]
 
-                try:
-                    version = parse_version(tag_name)
-                    valid_versions.append((tag_name, version, commit_date))
-                except InvalidVersion:
-                    invalid_tags.append((tag_name, None, commit_date))
-
-            def get_version(tag_tuple):
-                _, version, _ = tag_tuple
-                return version
-
-            def get_date(tag_tuple):
-                _, _, date = tag_tuple
-                return date or datetime.min
-
-            def get_max_versions(versions, sort_key):
-                return max(versions, key=sort_key, default=(None, None, None))
-
-            max_valid_tag, _, max_valid_date = get_max_versions(
-                valid_versions, get_version
-            )
-            max_invalid_tag, _, max_invalid_date = get_max_versions(
-                invalid_tags, get_date
-            )
-            if max_valid_tag and max_invalid_tag:
-                return (
-                    max_invalid_tag
-                    if (max_invalid_date or datetime.min)
-                    > (max_valid_date or datetime.min)
-                    else max_valid_tag
-                )
-            elif max_valid_tag:
-                return max_valid_tag
-            elif max_invalid_tag:
-                return max_invalid_tag
-            else:
-                return None
-
+        except urllib.error.HTTPError as e:
+            if e.code in (401, 403):
+                raise RuntimeError(
+                    "GitHub GraphQL auth failed for "
+                    f"{self.owner}/{self.repo} ({e.code}); refresh GITHUB_TOKEN"
+                ) from e
+            raise
         except Exception as e:
             log.warning(
                 "Error fetching version info for %s/%s: %s",
@@ -401,16 +439,14 @@ class RepoGitHub(Repo):
                 e,
                 exc_info=True,
             )
-            return None
+            return self._get_latest_tag_from_fallbacks()
 
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
         if url != response_url:
-            new_owner, new_name = (
-                urllib.parse.urlsplit(response_url).path.strip("/").split("/")[:2]
-            )
+            new_owner, new_name = urlsplit(response_url).path.strip("/").split("/")[:2]
 
-            new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self.branch)
+            new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self._branch)
             self.redirect = new_repo
 
     def prefetch(self, commit: str) -> str:
@@ -421,10 +457,46 @@ class RepoGitHub(Repo):
         return sha256
 
     def prefetch_github(self, ref: str) -> str:
-        cmd = ["nix-prefetch-url", "--unpack", self.url(f"archive/{ref}.tar.gz")]
+        cmd = ["nix-prefetch-github", self.owner, self.repo, "--rev", ref, "--json"]
         log.debug("Running %s", cmd)
         data = subprocess.check_output(cmd)
-        return data.strip().decode("utf-8")
+        loaded = json.loads(data)
+        return loaded["hash"]
+
+    def get_license_spdx_id(self, fallback_license: str | None = None) -> str | None:
+        license_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/license"
+        log.debug("Fetching license metadata from %s", license_url)
+
+        def log_fetch_failure(reason: str) -> str | None:
+            log.warning(
+                "Failed to fetch license metadata for %s/%s: %s; reusing %s",
+                self.owner,
+                self.repo,
+                reason,
+                fallback_license or "no cached license",
+            )
+            return fallback_license
+
+        try:
+            req = make_request(license_url, self.token)
+            with urllib.request.urlopen(req, timeout=10) as response:
+                data = json.load(response)
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
+            return log_fetch_failure(f"HTTP {e.code}")
+        except urllib.error.URLError as e:
+            return log_fetch_failure(str(e))
+
+        license_info = data.get("license")
+        if not isinstance(license_info, dict):
+            return None
+
+        spdx_id = license_info.get("spdx_id")
+        if not spdx_id or spdx_id == "NOASSERTION":
+            return None
+
+        return spdx_id
 
     def as_nix(self, plugin: "Plugin") -> str:
         if plugin.has_submodules:
@@ -432,10 +504,16 @@ class RepoGitHub(Repo):
         else:
             submodule_attr = ""
 
+        ref_attr = (
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
+        )
+
         return f"""fetchFromGitHub {{
       owner = "{self.owner}";
       repo = "{self.repo}";
-      rev = "{plugin.commit}";
+      {ref_attr}
       hash = "{plugin.to_sri_hash()}";{submodule_attr}
     }}"""
 
@@ -465,7 +543,7 @@ class PluginDesc:
 
     @staticmethod
     def load_from_string(config: FetchConfig, line: str) -> "PluginDesc":
-        branch = "HEAD"
+        branch = AUTO_BRANCH
         alias = None
         uri = line
         if " as " in uri:
@@ -484,8 +562,11 @@ class Plugin:
     commit: str
     has_submodules: bool
     sha256: str
+    version: str
     date: datetime | None = None
     last_tag: str | None = None
+    tag: str | None = None
+    license: str | None = None
 
     @property
     def normalized_name(self) -> str:
@@ -508,28 +589,11 @@ class Plugin:
         result = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
         return result.decode("utf-8").strip()
 
-    @property
-    def version(self) -> str:
-        assert self.date is not None
-        date_str = self.date.strftime("%Y-%m-%d")
-
-        tag_part = "0"
-        if self.last_tag:
-            tag = (
-                self.last_tag[1:]
-                if self.last_tag.startswith(("v", "V"))
-                else self.last_tag
-            )
-            if tag and tag[0].isdigit():
-                tag_part = tag
-
-        return f"{tag_part}-unstable-{date_str}"
-
     @staticmethod
     def parse_version_string(version_str: str) -> tuple[datetime, str | None]:
         date_match = VERSION_DATE_PATTERN.search(version_str)
         if not date_match:
-            raise ValueError(f"Cannot parse date from version: {version_str}")
+            raise ValueError(f"Cannot parse unstable version: {version_str}")
         date = datetime.fromisoformat(date_match.group(1))
 
         tag_match = VERSION_TAG_PATTERN.search(version_str)
@@ -543,6 +607,75 @@ class Plugin:
         copy = self.__dict__.copy()
         del copy["date"]
         return copy
+
+
+def normalize_release_version(tag: str) -> str | None:
+    normalized_tag = tag.strip()
+    lowered_tag = normalized_tag.lower()
+    if any(lowered_tag.startswith(prefix) for prefix in NON_RELEASE_TAG_PREFIXES):
+        return None
+
+    match = RELEASE_VERSION_PATTERN.match(normalized_tag)
+    if match is not None:
+        return match.group(1)
+
+    return None
+
+
+def make_unstable_version(date: datetime, last_tag: str | None) -> str:
+    date_str = date.strftime("%Y-%m-%d")
+
+    tag_part = "0"
+    if last_tag:
+        normalized_tag = normalize_release_version(last_tag)
+        if normalized_tag is not None:
+            tag_part = normalized_tag
+
+    return f"{tag_part}-unstable-{date_str}"
+
+
+def get_commit_target(
+    repo: Repo,
+    branch: str,
+    latest_tag: str | None,
+) -> tuple[str, datetime, str, str | None]:
+    if branch == "HEAD":
+        commit, date = repo.latest_commit()
+    else:
+        commit, date = repo.resolve_ref(branch)
+
+    return commit, date, make_unstable_version(date, latest_tag), None
+
+
+def select_plugin_target(
+    plugin_desc: PluginDesc,
+    current_plugin: Plugin | None,
+    latest_tag: str | None,
+) -> tuple[str, datetime, str, str | None]:
+    branch = plugin_desc.branch
+
+    if branch != AUTO_BRANCH:
+        return get_commit_target(plugin_desc.repo, branch, latest_tag)
+
+    release_version = (
+        normalize_release_version(latest_tag) if latest_tag is not None else None
+    )
+    if release_version is None:
+        return get_commit_target(plugin_desc.repo, "HEAD", latest_tag)
+
+    release_commit, release_date = plugin_desc.repo.resolve_ref(
+        f"{GIT_TAGS_PREFIX}{latest_tag}"
+    )
+
+    if current_plugin is not None:
+        if (
+            current_plugin.date is not None
+            and current_plugin.tag is None
+            and current_plugin.date.date() > release_date.date()
+        ):
+            return get_commit_target(plugin_desc.repo, "HEAD", latest_tag)
+
+    return release_commit, release_date, release_version, latest_tag
 
 
 def load_plugins_from_csv(
@@ -672,8 +805,12 @@ class Editor:
         for name, attr in data.items():
             checksum = attr["checksum"]
             version_str = attr["version"]
+            source_tag = checksum.get("tag")
 
-            date, last_tag = Plugin.parse_version_string(version_str)
+            if source_tag is not None:
+                date, last_tag = None, None
+            else:
+                date, last_tag = Plugin.parse_version_string(version_str)
 
             pdesc = PluginDesc.load_from_string(config, f"{attr['homePage']} as {name}")
             p = Plugin(
@@ -681,8 +818,11 @@ class Editor:
                 checksum["rev"],
                 checksum["submodules"],
                 checksum["sha256"],
+                version_str,
                 date,
                 last_tag=last_tag,
+                tag=source_tag,
+                license=attr.get("license"),
             )
 
             plugins.append((pdesc, p))
@@ -742,10 +882,15 @@ class Editor:
         current_plugins = self.get_current_plugins(config, self.nixpkgs)
         current_plugin_specs = self.load_plugin_spec(config, input_file)
 
-        cache: Cache = Cache(
-            [plugin for _description, plugin in current_plugins], self.cache_file
+        cache: Cache = Cache(current_plugins, self.cache_file)
+        current_plugin_map = {
+            plugin.normalized_name: plugin for _description, plugin in current_plugins
+        }
+        _prefetch = functools.partial(
+            prefetch,
+            cache=cache,
+            current_plugins=current_plugin_map,
         )
-        _prefetch = functools.partial(prefetch, cache=cache)
 
         to_update_for_filter = [x.replace(".", "-") for x in to_update]
         plugins_to_update = (
@@ -789,8 +934,6 @@ class Editor:
 
             # Track version changes for commit message generation
             updated_plugins = []
-            current_plugin_map = {p.normalized_name: p for _, p in current_plugins}
-
             for _, new_plugin in plugins:
                 old_plugin = current_plugin_map.get(new_plugin.normalized_name)
                 if old_plugin and old_plugin.version != new_plugin.version:
@@ -988,10 +1131,9 @@ class CleanEnvironment(object):
 def prefetch_plugin(
     p: PluginDesc,
     cache: "Cache | None" = None,
+    current_plugin: Plugin | None = None,
 ) -> tuple[Plugin, Repo | None]:
-    commit = None
-    log.info(f"Fetching last commit for plugin {p.name} from {p.repo.uri}@{p.branch}")
-    commit, date = p.repo.latest_commit()
+    log.info(f"Fetching source for plugin {p.name} from {p.repo.uri}@{p.branch}")
 
     latest_tag = p.repo.get_latest_tag()
     if latest_tag:
@@ -999,20 +1141,61 @@ def prefetch_plugin(
     else:
         log.debug("No tags found for %s, will use '0' prefix", p.name)
 
-    cached_plugin = cache[commit] if cache else None
+    commit, date, version, source_tag = select_plugin_target(
+        p,
+        current_plugin,
+        latest_tag,
+    )
+
+    cached_plugin = (
+        cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
+    )
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
-        cached_plugin.name = p.name
-        cached_plugin.date = date
-        cached_plugin.last_tag = latest_tag
-        return cached_plugin, p.repo.redirect
+        license_spdx_id = (
+            cached_plugin.license
+            or (current_plugin.license if current_plugin else None)
+            or p.repo.get_license_spdx_id()
+        )
+        return (
+            replace(
+                cached_plugin,
+                name=p.name,
+                commit=commit,
+                version=version,
+                date=date,
+                last_tag=latest_tag,
+                tag=source_tag,
+                license=license_spdx_id,
+            ),
+            p.repo.redirect,
+        )
 
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
-    sha256 = p.repo.prefetch(commit)
+    sha256 = (
+        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}")
+        if source_tag
+        else p.repo.prefetch(commit)
+    )
+    license_spdx_id = (
+        current_plugin.license
+        if current_plugin and current_plugin.license
+        else p.repo.get_license_spdx_id()
+    )
 
     return (
-        Plugin(p.name, commit, has_submodules, sha256, date=date, last_tag=latest_tag),
+        Plugin(
+            p.name,
+            commit,
+            has_submodules,
+            sha256,
+            version,
+            date=date,
+            last_tag=latest_tag,
+            tag=source_tag,
+            license=license_spdx_id,
+        ),
         p.repo.redirect,
     )
 
@@ -1078,13 +1261,27 @@ def get_cache_path(cache_file_name: str) -> Path | None:
     return Path(xdg_cache, cache_file_name)
 
 
+def plugin_cache_key(repo_uri: str, plugin: "Plugin") -> str:
+    ref = f"{GIT_TAGS_PREFIX}{plugin.tag}" if plugin.tag is not None else plugin.commit
+    return f"{repo_uri}@{ref}"
+
+
+def target_cache_key(repo_uri: str, commit: str, source_tag: str | None) -> str:
+    ref = f"{GIT_TAGS_PREFIX}{source_tag}" if source_tag is not None else commit
+    return f"{repo_uri}@{ref}"
+
+
 class Cache:
-    def __init__(self, initial_plugins: list[Plugin], cache_file_name: str) -> None:
+    def __init__(
+        self,
+        initial_plugins: list[tuple[PluginDesc, Plugin]],
+        cache_file_name: str,
+    ) -> None:
         self.cache_file = get_cache_path(cache_file_name)
 
         downloads = {}
-        for plugin in initial_plugins:
-            downloads[plugin.commit] = plugin
+        for plugin_desc, plugin in initial_plugins:
+            downloads[plugin_cache_key(plugin_desc.repo.uri, plugin)] = plugin
         downloads.update(self.load())
         self.downloads = downloads
 
@@ -1095,15 +1292,18 @@ class Cache:
         downloads: dict[str, Plugin] = {}
         with open(self.cache_file) as f:
             data = json.load(f)
-            for attr in data.values():
+            for cache_key, attr in data.items():
                 p = Plugin(
                     attr["name"],
                     attr["commit"],
                     attr["has_submodules"],
                     attr["sha256"],
+                    attr.get("version", ""),
                     last_tag=attr.get("last_tag"),
+                    tag=attr.get("tag"),
+                    license=attr.get("license"),
                 )
-                downloads[attr["commit"]] = p
+                downloads[cache_key] = p
         return downloads
 
     def store(self) -> None:
@@ -1113,8 +1313,8 @@ class Cache:
         os.makedirs(self.cache_file.parent, exist_ok=True)
         with open(self.cache_file, "w+") as f:
             data = {}
-            for name, attr in self.downloads.items():
-                data[name] = attr.as_json()
+            for cache_key, attr in self.downloads.items():
+                data[cache_key] = attr.as_json()
             json.dump(data, f, indent=4, sort_keys=True)
 
     def __getitem__(self, key: str) -> Plugin | None:
@@ -1125,11 +1325,16 @@ class Cache:
 
 
 def prefetch(
-    pluginDesc: PluginDesc, cache: Cache
+    pluginDesc: PluginDesc,
+    cache: Cache,
+    current_plugins: dict[str, Plugin] | None = None,
 ) -> tuple[PluginDesc, Exception | Plugin, Repo | None]:
     try:
-        plugin, redirect = prefetch_plugin(pluginDesc, cache)
-        cache[plugin.commit] = plugin
+        current_plugin = None
+        if current_plugins is not None:
+            current_plugin = current_plugins.get(pluginDesc.name.replace(".", "-"))
+        plugin, redirect = prefetch_plugin(pluginDesc, cache, current_plugin)
+        cache[target_cache_key(pluginDesc.repo.uri, plugin.commit, plugin.tag)] = plugin
         return (pluginDesc, plugin, redirect)
     except Exception as e:
         return (pluginDesc, e, None)

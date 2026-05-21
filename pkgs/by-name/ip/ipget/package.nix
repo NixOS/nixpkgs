@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipget";
-  version = "0.12.2";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipget";
-    rev = "v${version}";
-    hash = "sha256-j8CRJTqZZtZMeGEq8l4YBBXAwhX+EfO2aFMXS8/6Ek4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dG7nb9v+gKotRPVtO8tKqkOQ089zKBk39HxXkSXoW/U=";
   };
 
-  vendorHash = "sha256-vOuQVISXOpRsZLuJ89Lk3wQHtnt0l5PhnLiDcjGKbhs=";
+  vendorHash = "sha256-+BOo/xSdB0xR8Rtumh+sjEL025PVxmNTmSCR1HjfW3w=";
 
   postPatch = ''
     # main module (github.com/ipfs/ipget) does not contain package github.com/ipfs/ipget/sharness/dependencies
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ Luflosi ];
     mainProgram = "ipget";
   };
-}
+})

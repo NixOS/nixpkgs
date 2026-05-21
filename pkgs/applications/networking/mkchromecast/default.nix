@@ -12,7 +12,7 @@
   pulseaudio,
   nodejs,
   yt-dlp,
-  opusTools,
+  opus-tools,
   gst_all_1,
   enableSonos ? true,
   qtwayland,
@@ -23,7 +23,7 @@ let
     sox
     flac
     lame
-    opusTools
+    opus-tools
     gst_all_1.gstreamer
     nodejs
     ffmpeg

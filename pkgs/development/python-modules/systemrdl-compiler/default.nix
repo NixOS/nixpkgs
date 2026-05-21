@@ -10,17 +10,17 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "systemrdl-compiler";
-  version = "1.32.1";
+  version = "1.32.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SystemRDL";
     repo = "systemrdl-compiler";
-    tag = "v${version}";
-    hash = "sha256-BTONBzNE9GfBeallS6P4E1ukPs2EzFa31/SpxEjXmKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1Dx6WxSzGaZxwRzXR/bjfZSU7TsvTYNVN0NaK3qQ7eo=";
   };
 
   build-system = [
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})

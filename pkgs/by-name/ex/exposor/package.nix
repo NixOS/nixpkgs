@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "exposor";
   version = "1.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "abuyv";
     repo = "exposor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D/AMoLMUUjiKbrDS90GkVLHncMHSmtfjLINf97LEU1w=";
   };
 
@@ -37,9 +37,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool using internet search engines to detect exposed technologies with a unified syntax";
     homepage = "https://github.com/abuyv/exposor";
-    changelog = "https://github.com/abuyv/exposor/releases/tag/v${version}";
+    changelog = "https://github.com/abuyv/exposor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "exposor";
   };
-}
+})

@@ -42,14 +42,14 @@ let
   clangVersion = llvmPackages.clang-unwrapped.version;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terra";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-CukNCvTHZUhjdHyvDUSH0YCVNkThUFPaeyLepyEKodA=";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     in
     [
       "-DHAS_TERRA_VERSION=0"
-      "-DTERRA_VERSION=${version}"
+      "-DTERRA_VERSION=${finalAttrs.version}"
       "-DTERRA_LUA=luajit"
       "-DTERRA_SKIP_LUA_DOWNLOAD=ON"
       "-DCLANG_RESOURCE_DIR=${resourceDir}"
@@ -124,4 +124,4 @@ stdenv.mkDerivation rec {
     # https://github.com/terralang/terra/issues/597
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

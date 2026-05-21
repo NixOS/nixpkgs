@@ -8,16 +8,17 @@
   rustPlatform,
   sqlite,
   stdenv,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-branchless";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8uv+sZRr06K42hmxgjrKk6FDEngUhN/9epixRYKwE3U=";
   };
 
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   # - https://github.com/facebook/sapling/commit/9e27acb84605079bf4e305afb637a4d6801831ac
   postPatch = ''
     (
-      cd ../git-branchless-*-vendor/esl01-indexedlog-*/
+      cd $cargoDepsCopy/*/esl01-indexedlog-*/
       patch -p1 < ${./fix-esl01-indexedlog-for-rust-1_89.patch}
     )
   '';
@@ -67,10 +68,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_switch_auto_switch_interactive"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   meta = {
     description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
-    license = lib.licenses.gpl2Only;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.mit
+    ];
     mainProgram = "git-branchless";
     maintainers = with lib.maintainers; [
       nh2
@@ -78,4 +86,4 @@ rustPlatform.buildRustPackage rec {
       bryango
     ];
   };
-}
+})

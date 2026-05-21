@@ -29,14 +29,14 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "piper-tts";
-  version = "1.3.0";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "piper1-gpl";
     tag = "v${version}";
-    hash = "sha256-WDMIXsbUzJ5XnA/KUVUPQKZzkqrXagzAOrhFtLR4fGk=";
+    hash = "sha256-FHO+1d1iJimc6KweY/O6lEvWqGCyUwnDrslEfkxYR7A=";
   };
 
   patches = [
@@ -75,12 +75,15 @@ python3Packages.buildPythonApplication rec {
     cythonize --inplace src/piper/train/vits/monotonic_align/core.pyx
   '';
 
-  dependencies = [
-    python3Packages.onnxruntime
-  ]
-  ++ lib.optionals withTrain optional-dependencies.train
-  ++ lib.optionals withHTTP optional-dependencies.http
-  ++ lib.optionals withAlignment optional-dependencies.alignment;
+  dependencies =
+    with python3Packages;
+    [
+      onnxruntime
+      pathvalidate
+    ]
+    ++ lib.optionals withTrain optional-dependencies.train
+    ++ lib.optionals withHTTP optional-dependencies.http
+    ++ lib.optionals withAlignment optional-dependencies.alignment;
 
   optional-dependencies = {
     train =
@@ -89,7 +92,6 @@ python3Packages.buildPythonApplication rec {
         jsonargparse
         librosa
         lightning
-        pathvalidate
         pysilero-vad
         tensorboard
         tensorboardx

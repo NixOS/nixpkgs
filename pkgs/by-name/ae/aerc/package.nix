@@ -61,6 +61,7 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     make $makeFlags GOFLAGS="$GOFLAGS${lib.optionalString withNotmuch " -tags=notmuch"}" install
+    wrapPythonProgramsIn "$out/libexec/" "''${pythonPath[*]}"
 
     runHook postInstall
   '';

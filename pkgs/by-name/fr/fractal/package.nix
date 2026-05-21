@@ -23,10 +23,10 @@
   libshumate,
   wrapGAppsHook4,
   blueprint-compiler,
-  bubblewrap,
   sqlite,
   xdg-desktop-portal,
   libseccomp,
+  libglycin,
   glycin-loaders,
   libwebp,
 }:
@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     grass-sass
     gtk4
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    libglycin.setupHook
+    glycin-loaders
     gtk4
     gtksourceview5
     lcms2
@@ -98,13 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-rs
   ]);
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-      --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
-    )
-  '';
 
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 

@@ -5,7 +5,7 @@
   autoreconfHook,
   pciutils,
   pkg-config,
-  xorg,
+  libpciaccess,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.6.3";
 
   src = fetchurl {
-    url = "https://people.freedesktop.org/~airlied/radeontool/${pname}-${version}.tar.gz";
+    url = "https://people.freedesktop.org/~airlied/radeontool/radeontool-${version}.tar.gz";
     sha256 = "0mjk9wr9rsb17yy92j6yi16hfpa6v5r1dbyiy60zp4r125wr63za";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
-  buildInputs = [ xorg.libpciaccess ];
+  buildInputs = [ libpciaccess ];
 
   meta = {
     description = "Lowlevel tools to tweak register and dump state on radeon GPUs";

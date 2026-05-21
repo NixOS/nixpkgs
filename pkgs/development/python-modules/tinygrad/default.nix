@@ -247,12 +247,31 @@ buildPythonPackage (finalAttrs: {
     "test_float_cast_to_unsigned_underflow"
     "test_int8"
     "test_int8_to_uint16_negative"
+
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_conv2d_fused_half"
+    "test_conv2d_half"
+    "test_gemm_fp16"
+    "test_softmax_dtype"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky (pass when running a smaller set of tests: tests/unit/*, but not within the full test suite)
     # AttributeError: module 'tinygrad.runtime.autogen.libclang' has no attribute 'clang_parseTranslationUnit'
     "test_gen_from_header"
     "test_struct_ordering"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Exception: forward pass failed shape (2, 3, 64, 64)
+    "test_cast"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: Expected 1 operations, got 3
+    # assert 3 == 1
+    #  +  where 3 = len([ExecItem(ast=UOp(Ops.SINK, dtypes.void, arg=None, src=...
+    #  +  and   1 = len([{'cnt': 3, 'type': 'graph'}])
+    #
+    # test/test_jit.py:695: AssertionError
+    "TestJitGraphSplit"
   ];
 
   disabledTestPaths = [

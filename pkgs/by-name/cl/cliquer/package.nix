@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.23";
   pname = "cliquer";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dimpase";
     repo = "autocliquer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SGpur3sF1dYQU97wprERUqlr6LIX+NyXZVl0eSEd3uM=";
   };
 
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
       easy to use.
     '';
     homepage = "https://users.aalto.fi/~pat/cliquer.html";
-    downloadPage = src.meta.homepage; # autocliquer
+    downloadPage = finalAttrs.src.meta.homepage; # autocliquer
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     mainProgram = "cl";
     platforms = lib.platforms.unix;
   };
-}
+})

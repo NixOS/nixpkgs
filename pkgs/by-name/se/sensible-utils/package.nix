@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sensible-utils";
   version = "0.0.26";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "sensible-utils";
-    rev = "debian/${version}";
+    rev = "debian/${finalAttrs.version}";
     sha256 = "sha256-vxzCICkF3KDBe+IIZ63JMiZmfHOllHf1Xtw/vWaimc8=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pbek ];
     platforms = lib.platforms.unix;
   };
-}
+})

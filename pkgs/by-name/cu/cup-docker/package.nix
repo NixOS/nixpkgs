@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   web = stdenvNoCC.mkDerivation (finalAttrsWeb: {
-    pname = "${finalAttrs.pname}-web";
+    pname = "cup-docker-web";
     inherit (finalAttrs) version src;
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"

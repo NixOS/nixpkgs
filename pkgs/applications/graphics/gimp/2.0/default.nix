@@ -37,7 +37,7 @@
   gettext,
   makeWrapper,
   gtk-doc,
-  xorg,
+  libxpm,
   glib-networking,
   libmypaint,
   gexiv2,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
+    url = "https://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-UKhF7sEciDH+hmFweVD1uERuNfMO37ms+Y+FwRM/hW4=";
   };
 
@@ -149,6 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/gnome-team/gimp/-/raw/4cb293ec1a3b273281d5d9daf94b833c293797d7/debian/patches/CVE-2025-10934.patch";
       hash = "sha256-MmYdh74cky/dF3UTHC0xpDW6+aa8Vzh+4ADHCDtIDzo=";
     })
+    (fetchurl {
+      name = "c23.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/85bdad2b2ca7ba36a01bef945b1c4b193a2fa9d0.patch";
+      hash = "sha256-6g2Zhbx+WxX7lOCYAFII0yDbwILecExwFD22tZDED50=";
+    })
   ];
 
   # error: possibly undefined macro: AM_NLS
@@ -202,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libheif
     libexif
-    xorg.libXpm
+    libxpm
     glib-networking
     libmypaint
     mypaint-brushes1

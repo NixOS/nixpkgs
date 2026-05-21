@@ -10,7 +10,7 @@
   SDL_ttf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   # pf5234 (a developer?) at freenode #egoboo told me that I better use 2.7.3 until
   # they fix more, because it even has at least one bugs less than 2.7.4.
   # 2.8.0 does not start properly on linux
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "2.7.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/egoboo/egoboo-${version}.tar.gz";
+    url = "mirror://sourceforge/egoboo/egoboo-${finalAttrs.version}.tar.gz";
     sha256 = "18cjgp9kakrsa90jcb4cl8hhh9k57mi5d1sy5ijjpd3p7zl647hd";
   };
 
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
   # The user will need to have all the files in '.' to run egoboo, with
   # writeable controls.txt and setup.txt
   installPhase = ''
-    mkdir -p $out/share/egoboo-${version}
-    cp -v game/egoboo $out/share/egoboo-${version}
+    mkdir -p $out/share/egoboo-${finalAttrs.version}
+    cp -v game/egoboo $out/share/egoboo-${finalAttrs.version}
     cd ..
-    cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/egoboo-${version}
+    cp -v -Rd controls.txt setup.txt players modules basicdat $out/share/egoboo-${finalAttrs.version}
   '';
 
   buildInputs = [
@@ -62,12 +62,14 @@ stdenv.mkDerivation rec {
     '';
   */
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: mad.o:(.bss+0x233800): multiple definition of `tile_dict'; camera.o:(.bss+0x140): first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env = {
+    # Workaround build failure on -fno-common toolchains like upstream
+    # gcc-10. Otherwise build fails as:
+    #   ld: mad.o:(.bss+0x233800): multiple definition of `tile_dict'; camera.o:(.bss+0x140): first defined here
+    NIX_CFLAGS_COMPILE = "-fcommon";
 
-  NIX_LDFLAGS = "-lm";
+    NIX_LDFLAGS = "-lm";
+  };
 
   meta = {
     description = "3D dungeon crawling adventure";
@@ -79,4 +81,4 @@ stdenv.mkDerivation rec {
     # maintainers = [ ];
     # platforms = lib.platforms.all;
   };
-}
+})

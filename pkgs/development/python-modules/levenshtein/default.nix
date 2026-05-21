@@ -23,6 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-iKWS7gm0t3yPgeX5N09cTa3N1C6GXvIALueO8DlfLfE=";
   };
 
+  # https://github.com/rapidfuzz/Levenshtein/pull/84
+  patches = [ ./cython-3.2-compat.patch ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "Cython>=3.1.6,<3.2.0" Cython

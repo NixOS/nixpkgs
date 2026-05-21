@@ -10,12 +10,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smokeping";
   version = "2.9.0";
 
   src = fetchurl {
-    url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";
+    url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${finalAttrs.version}.tar.gz";
     hash = "sha256-8b41v8zCuhyfdfdtIisptXAk7+icW1ZLhsGjfOLR3bE=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

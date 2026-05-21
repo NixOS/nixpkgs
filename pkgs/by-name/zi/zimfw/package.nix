@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zimfw";
-  version = "1.18.0";
+  version = "1.20.0";
   src = fetchFromGitHub {
     owner = "zimfw";
     repo = "zimfw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     ## zim only needs this one file to be installed.
     sparseCheckout = [ "zimfw.zsh" ];
-    hash = "sha256-qQViaQOpLp8F4zvJETbNp0lxpdVhM1Meg7WcMKkjJRQ=";
+    hash = "sha256-fwpmeFDQRsTnWSoa9N3C+G/LDBCmDtbl+ckcyndMr7c=";
   };
   strictDeps = true;
   dontConfigure = true;
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.joedevivo ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -10,18 +10,18 @@
   sqlite,
   gnupg,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-wot";
-  version = "0.12.0";
+  version = "0.15.0-unstable-2026-02-25";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-wot";
-    rev = "v${version}";
-    hash = "sha256-Xbj1XLZQxyEYf/+R5e6EJMmL0C5ohfwZMZPVK5PwmUU=";
+    rev = "47a8fe9fe42319cae7a1185a2370e2e07f7e2898";
+    hash = "sha256-yL5Rod35M+wWfK3Ido+EPtyRKsOqEYmUW7v17oF6iZs=";
   };
 
-  cargoHash = "sha256-hpI791Bz0MqZgjI2E/KMseqfPQU56Qr0xmHigyPv4HU=";
+  cargoHash = "sha256-ykQbFoMH9+HILSlqhPuuW0xaNnUpXiSbhzQfNo66IKc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -88,4 +88,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "sq-wot";
   };
-}
+})

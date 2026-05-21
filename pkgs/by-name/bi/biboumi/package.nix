@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   libuuid,
   expat,
@@ -28,8 +28,7 @@ stdenv.mkDerivation {
   pname = "biboumi";
   version = "9.0-unstable-2025-10-27";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "poezio";
     repo = "biboumi";
     rev = "61242c35bc825d58c9db4301b5696bc17428bf98";

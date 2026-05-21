@@ -11,12 +11,12 @@ let
     enableJavaFX = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ganttproject-bin";
   version = "3.3.3316";
 
   src = fetchzip {
-    url = "https://dl.ganttproject.biz/ganttproject-${version}/ganttproject-${version}.zip";
+    url = "https://dl.ganttproject.biz/ganttproject-${finalAttrs.version}/ganttproject-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-tiEq/xdC0gXiUInLS9xGR/vI/BpdSA+mSf5yukuejc4=";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         icon = "ganttproject";
         desktopName = "GanttProject";
         genericName = "Shedule and manage projects";
-        comment = meta.description;
+        comment = finalAttrs.meta.description;
         categories = [ "Office" ];
       };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ganttproject";
   };
-}
+})

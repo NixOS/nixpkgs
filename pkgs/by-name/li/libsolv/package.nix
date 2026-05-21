@@ -17,15 +17,15 @@
   withConda ? true,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.7.35";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.7.36";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
-    rev = version;
-    hash = "sha256-DHECjda7s12hSysbaXK2+wM/nXpAOpTn+eSf9XGC3z0=";
+    rev = finalAttrs.version;
+    hash = "sha256-7a/vAdgW7ma2GHqv1LaQNFA7w1Hmzm6Q/HriNN6hlpE=";
   };
 
   cmakeFlags = [
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
-}
+})

@@ -13,18 +13,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "krunkit";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "krunkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dsEZZiLgHyd6xeXZCdDd4zsxzwQeIhAK+lewY2ZfvpY=";
+    hash = "sha256-T3PbSDaMqR/DLaTe1/tyMx/KseU5ENFzz1Gxd5/hRao=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-i0cC3aOEqcvOcwTPbM6AazMzd8Q+QLwuhnvPGv3ntsc=";
+    hash = "sha256-Yb2jyK4UBJCeVXSKl4UABnlMj+7SKpOIi49tD/itHYo=";
   };
 
   nativeBuildInputs = [

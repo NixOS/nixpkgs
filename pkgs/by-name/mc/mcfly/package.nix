@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcfly";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "cantino";
     repo = "mcfly";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eRuMsUN5zRWsM5BqYHI9iSfoHHMu5ugZDjeDc1GGQL8=";
   };
 
@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/cantino/mcfly";
     description = "Upgraded ctrl-r where history results make sense for what you're working on right now";
-    changelog = "https://github.com/cantino/mcfly/raw/v${version}/CHANGELOG.txt";
+    changelog = "https://github.com/cantino/mcfly/raw/v${finalAttrs.version}/CHANGELOG.txt";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.melkor333 ];
     mainProgram = "mcfly";
   };
-}
+})

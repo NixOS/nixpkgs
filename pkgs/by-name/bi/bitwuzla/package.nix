@@ -11,26 +11,29 @@
   gtest,
   gmp,
   cadical,
+  cadical' ? cadical.override { version = "2.1.3"; },
   cryptominisat,
   kissat,
   zlib,
   pkg-config,
   cmake,
   aiger,
+  mpfr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
-    rev = finalAttrs.version;
-    hash = "sha256-v5r+BWXUUbKtkos6qmGMC9MMytS/h759SHY6lsTHU1k=";
+    tag = finalAttrs.version;
+    hash = "sha256-3ThDKoXzCqDtiX3JXshqRtwri8V7lOFxmr+4IqQbUAQ=";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     meson
@@ -41,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cadical
+    cadical'
     cryptominisat
     btor2tools
     symfpu
@@ -49,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     kissat
     aiger
+    mpfr
   ];
 
   mesonFlags = [

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-pr";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "picosh";
     repo = "git-pr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2A2rP7yr8faVoIYAWprr+t7MwDPerhsuOjWWEl1mhXw=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     ];
     mainProgram = "git-ssh";
   };
-}
+})

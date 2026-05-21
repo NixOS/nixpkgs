@@ -8,18 +8,18 @@
   gst_all_1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livekit-ingress";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "ingress";
-    tag = "v${version}";
-    hash = "sha256-gt1oIAKEBwQWqDCLSsRgoe7oIk5jDNReN+dFYUNnRUc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xg69NfsEWJEJcRcLBkMgBmCEIVhSe1wjxWxBbO1k1e0=";
   };
 
-  vendorHash = "sha256-fttI+xNzHiDWKGkl20oGJOcWffElmmqNd7gbb5FiQZc=";
+  vendorHash = "sha256-n8QT+wRCxFq9vcclsOnLjc0NG2NJTgo2ouqXedSdKvQ=";
 
   subPackages = [ "cmd/server" ];
 
@@ -49,10 +49,10 @@ buildGoModule rec {
 
   meta = {
     description = "Ingest streams (RTMP/WHIP) or files (HLS, MP4) to LiveKit WebRTC";
-    changelog = "https://github.com/livekit/ingress/releases/tag/${src.tag}";
+    changelog = "https://github.com/livekit/ingress/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/livekit/ingress";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "ingress";
   };
-}
+})

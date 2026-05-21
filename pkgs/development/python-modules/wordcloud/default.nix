@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "wordcloud";
-  version = "1.9.5";
+  version = "1.9.6";
 
   pyproject = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-asfBN48ohtfoSWAKMG/r1B0NRrFc6HbWZaPlSfVAOws=";
+    hash = "sha256-3xfEaP+QO9CrpPh8ZUB0XROkkxIg3Uk3yzY62FpHcbk=";
   };
 
   nativeBuildInputs = [ cython ];

@@ -13,14 +13,14 @@
   libiberty,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.5.3";
   pname = "grive2";
 
   src = fetchFromGitHub {
     owner = "vitalif";
     repo = "grive2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-P6gitA5cXfNbNDy4ohRLyXj/5dUXkCkOdE/9rJPzNCg=";
   };
 
@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 2.8)' 'cmake_minimum_required(VERSION 3.10)'
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace libgrive/CMakeLists.txt --replace-fail \
+      'find_package(Boost 1.40.0 COMPONENTS program_options filesystem unit_test_framework regex system REQUIRED)' \
+      'find_package(Boost 1.40.0 COMPONENTS program_options filesystem unit_test_framework regex REQUIRED)'
   '';
 
   nativeBuildInputs = [
@@ -60,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "grive";
   };
-}
+})

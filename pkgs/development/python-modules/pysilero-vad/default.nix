@@ -5,7 +5,9 @@
   stdenv,
 
   # build-system
-  setuptools,
+  cmake,
+  ninja,
+  scikit-build-core,
 
   # tests
   pytestCheckHook,
@@ -13,17 +15,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysilero-vad";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cqjuU5JtsL+Fp3m3uzz8flrJEyn+JDUMWsXU0Ioh87U=";
+    hash = "sha256-S0PDtooVmy09i2fE40ZhaPIKfOTqXQS/rs7dwtm0+pQ=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cmake
+    ninja
+    scikit-build-core
+  ];
+
+  dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -40,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin; # ld: unknown option: --disable-new-dtags
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
     changelog = "https://github.com/rhasspy/pysilero-vad/blob/${finalAttrs.src.tag}/CHANGELOG.md";

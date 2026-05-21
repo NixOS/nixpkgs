@@ -10,14 +10,14 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspng";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "randy408";
     repo = "libspng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ humancalico ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "2.0";
 
   src = fetchzip {
-    url = "https://pcaro.es/d/otf-${pname}-${version}.tar.gz";
+    url = "https://pcaro.es/d/otf-hermit-${version}.tar.gz";
     stripRoot = false;
     hash = "sha256-RYXZ2yJ8BIxsgeEwhXz7g0NnWG3kMPZoJaOLMUQyWWQ=";
   };

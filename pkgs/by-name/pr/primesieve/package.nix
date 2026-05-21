@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "primesieve";
-  version = "12.11";
+  version = "12.13";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primesieve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gkaN92sDJimB/mY5f/3amVSXaTg6PukGvZvH6VklDnQ=";
+    hash = "sha256-BO+hhTSF2KdkC8ctwHZQQeI/biF1yEDyR4lCi4QOB/I=";
   };
 
   outputs = [

@@ -9,14 +9,14 @@
   openlibm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lite";
   version = "1.11";
 
   src = fetchFromGitHub {
     owner = "rxi";
     repo = "lite";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "lite";
   };
-}
+})

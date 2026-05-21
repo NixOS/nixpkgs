@@ -1021,6 +1021,20 @@
     };
     version = "3.5.0";
   };
+  debug = {
+    dependencies = [
+      "irb"
+      "reline"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "sha256-LgsKxhGfIgem+Kx9SnPKjrTkQPZNoKMTbDA0MUbpUrY=";
+      type = "gem";
+    };
+    version = "1.11.1";
+  };
   dentaku = {
     dependencies = [ "concurrent-ruby" ];
     groups = [ "default" ];
@@ -1302,10 +1316,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1ka175ci0q9ylpcy651pjj580diplkaskycn4n7jcmbyv7jwz6c6";
+      sha256 = "077n5ss3z3ds4vj54w201kd12smai853dp9c9n7ii7g3q7nwwg54";
       type = "gem";
     };
-    version = "2.14.0";
+    version = "2.14.1";
   };
   faraday-net_http = {
     dependencies = [ "net-http" ];

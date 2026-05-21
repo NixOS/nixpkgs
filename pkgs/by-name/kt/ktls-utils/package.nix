@@ -11,16 +11,17 @@
   systemd,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   nix-update-script,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ktls-utils";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "ktls-utils";
-    rev = "ktls-utils-${version}";
+    rev = "ktls-utils-${finalAttrs.version}";
     hash = "sha256-xBh9iSmTf8YCfahWnJvDx/nvz91NFZ3AiJ2JYs+pMfY=";
   };
 
@@ -47,15 +48,22 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.tlshd;
+    services.default = {
+      imports = [ (lib.modules.importApply ./service.nix { }) ];
+      tlshd.package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "TLS handshake utilities for in-kernel TLS consumers";
     homepage = "https://github.com/oracle/ktls-utils";
-    changelog = "https://github.com/oracle/ktls-utils/blob/${src.rev}/NEWS";
+    changelog = "https://github.com/oracle/ktls-utils/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "tlshd";
     platforms = lib.platforms.linux;
   };
-}
+})

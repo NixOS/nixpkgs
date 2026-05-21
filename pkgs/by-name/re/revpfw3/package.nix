@@ -4,7 +4,7 @@
   rustPlatform,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "revpfw3";
   version = "0.5.0";
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.tudbut.de/tudbut/revpfw3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oqBzRpfL5sMxE29HwVXW4rdnf5cfNCn2pUqZiYDhHDk=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tudbut ];
     mainProgram = "revpfw3";
   };
-}
+})

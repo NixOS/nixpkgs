@@ -5,7 +5,8 @@
   which,
   gfortran,
   libGLU,
-  xorg,
+  libxmu,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gfortran
     libGLU
-    xorg.libX11
-    xorg.libXmu
+    libx11
+    libxmu
   ];
 
   patches = [ ./dont_register_file_types.patch ];

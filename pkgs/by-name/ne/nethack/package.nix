@@ -12,9 +12,9 @@
   buildPackages,
   x11Mode ? false,
   qtMode ? false,
-  libXaw,
-  libXext,
-  libXpm,
+  libxaw,
+  libxext,
+  libxpm,
   bdftopcf,
   mkfontdir,
   pkg-config,
@@ -76,9 +76,9 @@ stdenvUsed.mkDerivation (finalAttrs: {
     ncurses
   ]
   ++ lib.optionals x11Mode [
-    libXaw
-    libXext
-    libXpm
+    libxaw
+    libxext
+    libxpm
   ]
   ++ lib.optionals qtMode [
     gzip
@@ -241,7 +241,7 @@ stdenvUsed.mkDerivation (finalAttrs: {
     homepage = "http://nethack.org/";
     license = lib.licenses.ngpl;
     platforms = if x11Mode then lib.platforms.linux else lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ olduser101 ];
     mainProgram = "nethack";
     broken = if qtMode then stdenv.hostPlatform.isDarwin else false;
   };

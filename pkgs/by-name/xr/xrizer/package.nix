@@ -19,27 +19,18 @@ let
     "x86_64-linux" = "bin/linux64";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xrizer";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
-    tag = "v${version}";
-    hash = "sha256-IRhLWlGHywp0kZe5aGmMHAF1zZwva3sGg68eG1E2K9A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y/K+eXECUi9wGol0IUuIUI9hqhEN8GHaOO5i1xMFNQo=";
   };
 
-  patches = [
-    # https://github.com/Supreeeme/xrizer/pull/262
-    (fetchpatch2 {
-      name = "xrizer-fix-aarch64.patch";
-      url = "https://github.com/Supreeeme/xrizer/commit/70ea6f616cd7608462cdf2f5bf76a85acf23fe33.patch?full_index=1";
-      hash = "sha256-Bwu/GjsaoS1VqpXmijBuZcJFUf6kRYWYWpGxm40AWyc=";
-    })
-  ];
-
-  cargoHash = "sha256-orfK5pwWv91hA7Ra3Kk+isFTR+qMHSZ0EYZTVbf0fO0=";
+  cargoHash = "sha256-btGPIujawY5NPmx7hGBxW5ZYi2RvboyQpfw6fA3c3jE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -76,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = builtins.attrNames platformPaths;
   };
-}
+})

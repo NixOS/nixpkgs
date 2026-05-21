@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "websocketd";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "joewalnes";
     repo = "websocketd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cp4iBSQ6Cd0+NPZ2i79Mulg1z17u//OCm3yoArbZEHs=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.bsd2;
     mainProgram = "websocketd";
   };
-}
+})

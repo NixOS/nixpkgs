@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steam-acf";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "chisui";
     repo = "acf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "16q3md7cvdz37pqm1sda81rkjf249xbsrlpdl639r06p7f4nqlc2";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ chisui ];
     mainProgram = "acf";
   };
-}
+})

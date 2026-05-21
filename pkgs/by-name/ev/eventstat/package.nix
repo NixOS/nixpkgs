@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eventstat";
   version = "0.06.00";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "eventstat";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-lCtXILpZn1/laRnsfE5DlQQQKKvfHxOJu87SkpWKeTE=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

@@ -4,13 +4,13 @@
   black,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
   genson,
   graphql-core,
   hatch-vcs,
   hatchling,
   httpx,
   inflect,
+  inline-snapshot,
   isort,
   jinja2,
   openapi-spec-validator,
@@ -18,23 +18,24 @@
   prance,
   ruff,
   pydantic,
-  pytest-benchmark,
+  pysnooper,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
-  toml,
+  time-machine,
+  watchfiles,
 }:
 
 buildPythonPackage rec {
   pname = "datamodel-code-generator";
-  version = "0.35.0";
+  version = "0.55.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
     tag = version;
-    hash = "sha256-whhyTkX3R76idVNmY/6O9aVDU7DSvDtLq7JK0NJXn0U=";
+    hash = "sha256-zsLJv7gKhmnEIS/AUvnBzm+07QFQoMdiFo/PkfRyHek=";
   };
 
   pythonRelaxDeps = [
@@ -57,10 +58,11 @@ buildPythonPackage rec {
     packaging
     pydantic
     pyyaml
-    toml
   ];
 
   optional-dependencies = {
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+    debug = [ pysnooper ];
     graphql = [ graphql-core ];
     http = [ httpx ];
     ruff = [ ruff ];
@@ -68,15 +70,18 @@ buildPythonPackage rec {
       openapi-spec-validator
       prance
     ];
+    watch = [
+      watchfiles
+    ];
   };
 
   nativeCheckInputs = [
-    freezegun
-    pytest-benchmark
+    inline-snapshot
     pytest-mock
     pytestCheckHook
+    time-machine
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "datamodel_code_generator" ];
 

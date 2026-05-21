@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     patchShebangs $out/opt/sumorobot-manager/main.py
-    wrapPythonProgramsIn "$out/opt" "$pythonPath"
+    wrapPythonProgramsIn "$out/opt" "''${pythonPath[*]}"
   '';
 
   meta = {

@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "unifi-protect-backup";
   version = "0.11.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ep1cman";
     repo = "unifi-protect-backup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t4AgPFqKS6u9yITIkUUB19/SxVwR7X8Cc01oPx3M+E0=";
   };
 
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Python tool to backup unifi event clips in realtime";
     homepage = "https://github.com/ep1cman/unifi-protect-backup";
-    changelog = "https://github.com/ep1cman/unifi-protect-backup/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ep1cman/unifi-protect-backup/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       das_j
@@ -61,4 +61,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "unifi-protect-backup";
   };
-}
+})

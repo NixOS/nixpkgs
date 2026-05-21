@@ -35,7 +35,7 @@ rec {
             -o ./test1.js
 
           echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
-          ${pkgs.nodejs}/bin/node ./test1.js
+          ${pkgs.lib.getExe pkgs.nodejs-slim} ./test1.js
 
           set +x
           if [ $? -ne 0 ]; then
@@ -77,7 +77,7 @@ rec {
           --embed-file ./test/xmlid/id_err1.xml
 
           echo "Using node to execute the test which basically outputs an error on stderr which we grep for"
-          ${pkgs.nodejs}/bin/node ./xmllint.test.js --noout test/xmlid/id_err1.xml 2>&1 | grep 0bar
+          ${pkgs.lib.getExe pkgs.nodejs-slim} ./xmllint.test.js --noout test/xmlid/id_err1.xml 2>&1 | grep 0bar
 
           set +x
           if [ $? -ne 0 ]; then
@@ -184,7 +184,7 @@ rec {
           -L. libz.a -I . -o example.js
 
           echo "Using node to execute the test"
-          ${pkgs.nodejs}/bin/node ./example.js
+          ${pkgs.lib.getExe pkgs.nodejs-slim} ./example.js
 
           set +x
           if [ $? -ne 0 ]; then

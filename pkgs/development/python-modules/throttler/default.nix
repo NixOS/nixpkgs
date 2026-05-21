@@ -7,16 +7,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "throttler";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uburuntu";
     repo = "throttler";
-    tag = "v${version}";
-    hash = "sha256-fE35zPjBUn4e1VRkkIUMtYJ/+LbnUxnxyfnU+UEPwr4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zcKhHA1PDEpfp+I/zHaGeg1x1F2LM0m7GxMLGDscCsw=";
   };
 
   build-system = [ setuptools ];
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/uburuntu/throttler/releases/tag/${src.tag}";
+    changelog = "https://github.com/uburuntu/throttler/releases/tag/${finalAttrs.src.tag}";
     description = "Zero-dependency Python package for easy throttling with asyncio support";
     homepage = "https://github.com/uburuntu/throttler";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ renatoGarcia ];
   };
-}
+})

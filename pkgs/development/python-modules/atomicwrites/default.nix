@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Atomic file writes on POSIX";
     homepage = "https://pypi.python.org/pypi/atomicwrites";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
   };
 }

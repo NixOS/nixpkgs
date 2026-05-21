@@ -11,12 +11,12 @@
   librevenge,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libodfgen";
   version = "0.1.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/libwpd/libodfgen/libodfgen-${version}/libodfgen-${version}.tar.xz";
+    url = "mirror://sourceforge/project/libwpd/libodfgen/libodfgen-${finalAttrs.version}/libodfgen-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-Mj5JH5VsjKKrsSyZjjUGcJMKMjF7+WYrBhXdSzkiuDE=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

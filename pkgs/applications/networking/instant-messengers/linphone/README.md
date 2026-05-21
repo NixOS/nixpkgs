@@ -28,11 +28,11 @@ Updating is done in 3 steps:
 
 ## Adding new libraries
 
-To add a new package to this scope, simply add a new subdirectory containing a `default.nix` file with the appropriate package name. The scope automatically picks up any directories and adds an according toplevel package.
+To add a new package to this scope, simply add a new subdirectory containing a `default.nix` file with the appropriate package name. The scope automatically picks up any directories and adds a corresponding toplevel package.
 
 If the package you are adding is contained within the `linphone-sdk` monorepo, it makes sense to use the `mkLinphoneDerivation` function to streamline the build process.
 
-If the package you are adding is a third-party libary with custom patches from BC, it should be prefixed with `bc-` for easy recognizability, so e.g. if BC were to patch `ffmpeg`, you would call the package `bc-ffmpeg`.
+If the package you are adding is a third-party library with custom patches from BC, it should be prefixed with `bc-` for easy recognizability, so e.g. if BC were to patch `ffmpeg`, you would call the package `bc-ffmpeg`.
 
 ## Notes for the future
 

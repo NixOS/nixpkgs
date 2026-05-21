@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.21";
+  version = "3.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
     tag = version;
-    hash = "sha256-INqZwN3x5MzrACyaUOa2A7mrKvld9reN1PJVxkq837o=";
+    hash = "sha256-+Nq/7ftOD9/un9TYdrztbaUcBtDcfju36bkrDH57+ms=";
   };
 
   pythonRelaxDeps = true;

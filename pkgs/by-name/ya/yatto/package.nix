@@ -2,24 +2,50 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  gitMinimal,
+  gitSetupHook,
+  jujutsu,
 }:
 buildGoModule (finalAttrs: {
   pname = "yatto";
-  version = "0.20.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "handlebargh";
     repo = "yatto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZIGtRPy2DfMzCK0WHJcv75d2oeHd2Sh3twrV6G/m5SI=";
+    hash = "sha256-sso0LlKzE/OJILCf7O5mdPgk6BUTiziQq2tcxcPMtkI=";
   };
 
-  vendorHash = "sha256-e+xv1mr8F3ODSsk67shJ+vI3isWcN3vaaqElUoDnvs0=";
+  vendorHash = "sha256-8bCk6c/EyghsHKLinWGIJhbl76j3V/rzTmrCWh+5cIU=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  nativeCheckInputs = [
+    gitMinimal
+    gitSetupHook
+    jujutsu
+  ];
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestJjCommit"
+        "TestJjContributors"
+        "TestJjUser"
+        "TestResolver/AllContributors_function_resolves_correctly"
+        "TestResolver"
+        "TestE2E_AddEditDeleteProject"
+        "TestE2E_AddEditDeleteProject/jj"
+        "TestE2E_AddEditDeleteTask"
+        "TestE2E_AddEditDeleteTask/jj"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = {
     description = "Terminal-based to-do application built with Bubble Tea";

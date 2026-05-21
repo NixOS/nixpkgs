@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
             # Increase header size to be able to inject extra RPATHs. Otherwise
             # x86_64-darwin build fails as:
             #    https://cache.nixos.org/log/g5wyq9xqshan6m3kl21bjn1z88hx48rh-stdenv-bootstrap-tools.drv
-            NIX_LDFLAGS = (prevAttrs.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
+            env = prevAttrs.env // {
+              NIX_LDFLAGS =
+                (prevAttrs.env.NIX_LDFLAGS or prevAttrs.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
+            };
           });
 
       # Avoid messing with libkrb5 and libnghttp2.

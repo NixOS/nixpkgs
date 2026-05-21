@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jhiccup";
   version = "2.0.10";
 
   src = fetchzip {
-    url = "https://www.azul.com/files/jHiccup-${version}-dist.zip";
+    url = "https://www.azul.com/files/jHiccup-${finalAttrs.version}-dist.zip";
     sha256 = "1hsvi8wjh615fnjf75h7b5afp04chqcgvini30vfcn3m9a5icbgy";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # jHiccup.jar
     for x in ./jHiccup ./jHiccupLogProcessor; do
       substituteInPlace $x \
-        --replace 'JHICCUP_Version=2.0.5' 'JHICCUP_Version=${version}' \
+        --replace 'JHICCUP_Version=2.0.5' 'JHICCUP_Version=${finalAttrs.version}' \
         --replace '$INSTALLED_PATH' $out/share/java
     done
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

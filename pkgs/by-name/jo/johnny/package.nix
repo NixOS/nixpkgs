@@ -4,19 +4,20 @@
   fetchFromGitHub,
   qt5,
   john,
+  imagemagick,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "johnny";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "johnny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fwRvyQbRO63iVt9AHlfl+Cv4NRFQmyVsZUQLxmzGjAY=";
   };
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
     qt5.wrapQtAppsHook
     qt5.qmake
+    imagemagick
   ];
 
   installPhase = ''
@@ -37,7 +39,9 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ john ]}
     install -D README $out/share/doc/johnny/README
     install -D LICENSE $out/share/licenses/johnny/LICENSE
-    install -D resources/icons/johnny_128.png $out/share/pixmaps/johnny.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick resources/icons/johnny.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/johnny.png
+    install -D resources/icons/johnny_128.png $out/share/icons/hicolor/128x128/apps/johnny.png
     runHook postInstall
   '';
 
@@ -65,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Misaka13514 ];
     platforms = lib.platforms.linux;
   };
-}
+})

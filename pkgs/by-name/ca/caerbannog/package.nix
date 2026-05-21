@@ -15,7 +15,7 @@
   pango,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "caerbannog";
   version = "0.3";
   pyproject = false;
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~craftyguy";
     repo = "caerbannog";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0wqkb9zcllxm3fdsr5lphknkzy8r1cr80f84q200hbi99qql1dxh";
   };
 
@@ -55,8 +55,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Mobile-friendly Gtk frontend for password-store";
     mainProgram = "caerbannog";
     homepage = "https://sr.ht/~craftyguy/caerbannog/";
-    changelog = "https://git.sr.ht/~craftyguy/caerbannog/refs/${version}";
+    changelog = "https://git.sr.ht/~craftyguy/caerbannog/refs/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -46,7 +46,12 @@ stdenv.mkDerivation {
     })
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true) ];
+  cmakeFlags = [
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   nativeBuildInputs = [
     cmake

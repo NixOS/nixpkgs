@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "radian";
   version = "0.6.15";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "radian";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9dpLQ3QRppvwOw4THASfF8kCkIVZmWLALLRwy1LRPiE=";
   };
 
@@ -66,8 +66,8 @@ python3Packages.buildPythonApplication rec {
     description = "21 century R console";
     mainProgram = "radian";
     homepage = "https://github.com/randy3k/radian";
-    changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/randy3k/radian/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ savyajha ];
   };
-}
+})

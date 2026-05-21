@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
-  version = "2022.10.3";
+  version = "2026.2.25";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "tuxera";
     repo = "ntfs-3g";
     rev = version;
-    sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
+    sha256 = "sha256-uiVh87ExLXq94NVqR8MEg7Lrvamm6MrH+qP3Nosii5c=";
   };
 
   buildInputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/tuxera/ntfs-3g";
     description = "FUSE-based NTFS driver with full write support";
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     mainProgram = "ntfs-3g";
     platforms = with lib.platforms; darwin ++ linux;
     license = with lib.licenses; [

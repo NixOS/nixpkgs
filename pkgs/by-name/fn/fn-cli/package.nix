@@ -5,15 +5,15 @@
   docker,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fn";
-  version = "0.6.47";
+  version = "0.6.56";
 
   src = fetchFromGitHub {
     owner = "fnproject";
     repo = "cli";
-    rev = version;
-    hash = "sha256-OqeSUQuo/PYgD9siXyMDFAASg2Me8JL31Z8ozgtr8l0=";
+    rev = finalAttrs.version;
+    hash = "sha256-GeOb6HkIScxcTTPgXcZy3VyJlwK8NxDJBikDv13tTQM=";
   };
 
   vendorHash = null;
@@ -39,4 +39,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.c4605 ];
   };
-}
+})

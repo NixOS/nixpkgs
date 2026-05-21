@@ -3,21 +3,15 @@
   installShellFiles,
   rustPlatform,
   fetchFromGitLab,
-  stdenv,
   mdbook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "engage";
-  version = "0.2.1";
-
-  outputs = [
-    "out"
-    "doc"
-  ];
+  version = "0.3.0";
 
   env = {
-    ENGAGE_DOCS_LINK = "file://${placeholder "doc"}/share/doc/${finalAttrs.pname}/index.html";
+    ENGAGE_BOOK_PATH = "${placeholder "out"}/share/doc/${finalAttrs.pname}";
   };
 
   src = fetchFromGitLab {
@@ -25,29 +19,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "charles";
     repo = "engage";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-n7ypFJBYT712Uzh1NnWWSOIpEDKR0e6sQxbiIN6pZgo=";
+    hash = "sha256-dKnpovsBcx3fyDK2eSVf4vzJaQ0uNGcKoYSE56kUDEg=";
   };
 
-  patches = [
-    # Support mdbook 0.5.x - remove deprecated multilingual field
-    ./mdbook-0.5-support.patch
-  ];
-
-  cargoHash = "sha256-UTIxxPBtxzsZilxriAT8ksl2ovoDzIhB+8f+b2cGN3k=";
+  cargoHash = "sha256-wHPjVP/hzMdmKVYDzjUGoaSKwcf7A9nYeM5HhvBQ+bc=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  checkFlags = [
-    # Upstream doesn't set `ENGAGE_DOCS_LINK` during tests so the output differs.
-    "--skip=long_help"
-  ];
+  buildAndTestSubdir = "crates/engage";
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd engage ${
       builtins.concatStringsSep " " (
-        map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
+        map (shell: "--${shell} <(cargo xtask completions ${shell})") [
           "bash"
           "zsh"
           "fish"
@@ -56,15 +42,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }
 
     ${lib.getExe mdbook} build
-    mkdir -p "$doc/share/doc"
-    mv public "$doc/share/doc/${finalAttrs.pname}"
+    mkdir -p $out/share/doc
+    mv public $out/share/doc/${finalAttrs.pname}
   '';
 
   meta = {
-    description = "Task runner with DAG-based parallelism";
+    description = "Process composer with ordering and parallelism based on directed acyclic graphs";
     mainProgram = "engage";
-    homepage = "https://gitlab.computer.surgery/charles/engage";
-    changelog = "https://charles.gitlab-pages.computer.surgery/engage/changelog.html";
+    homepage = "https://engage.computer.surgery";
+    changelog = "https://engage.computer.surgery/changelog.html";
     license = with lib.licenses; [
       asl20
       mit

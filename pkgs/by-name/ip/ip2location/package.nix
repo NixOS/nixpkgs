@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ip2location";
   version = "7.0.0";
 
   src = fetchurl {
     sha256 = "05zbc02z7vm19byafi05i1rnkxc6yrfkhnm30ly68zzyipkmzx1l";
-    url = "https://www.ip2location.com/downloads/ip2location-${version}.tar.gz";
+    url = "https://www.ip2location.com/downloads/ip2location-${finalAttrs.version}.tar.gz";
   };
 
   enableParallelBuilding = true;
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ip2location";
   };
-}
+})

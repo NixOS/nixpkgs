@@ -4,51 +4,63 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  qmake,
+  cmake,
   qtbase,
-  kcoreaddons,
-  kwidgetsaddons,
   qtsvg,
   wrapQtAppsHook,
+  qttools,
+  pugixml,
 }:
-
+let
+  singleApplication = fetchFromGitHub {
+    owner = "itay-grudev";
+    repo = "SingleApplication";
+    tag = "v3.2.0";
+    hash = "sha256-qjpPYPe1Oism6TetD/dMvTo1qyZKOsOPW+MzzNpJf3A=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "qelectrotech";
-  version = "0.9.0";
+  version = "0.100";
 
   src = fetchFromGitHub {
     owner = "qelectrotech";
     repo = "qelectrotech-source-mirror";
-    tag = "0.9";
-    hash = "sha256-tj8q+mRVtdeDXbpiv4retdbNiIfvAFlutXn7BmjqFYU=";
+    tag = version;
+    hash = "sha256-ElkqRiIHSXavXEw1ioFKL1cGnaBb2GXZuxgl98O4WuI=";
   };
 
+  patches = [
+    # stripped down version of https://codeberg.org/gentoo/gentoo/src/branch/master/sci-electronics/qelectrotech/files/qelectrotech-0.90_pre20250820-cmake.patch
+    ./system-pugixml.patch
+  ];
+
+  # fix wrong cmake conditional
   postPatch = ''
-    substituteInPlace qelectrotech.pro \
-      --replace-fail 'GIT_COMMIT_SHA="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --verify HEAD)\\\""' \
-                'GIT_COMMIT_SHA="\\\"${version}\\\""' \
-      --replace-fail "COMPIL_PREFIX              = '/usr/local/'" \
-                "COMPIL_PREFIX              = '$out/'" \
-      --replace-fail "INSTALL_PREFIX             = '/usr/local/'" \
-                "INSTALL_PREFIX             = '$out/'"
+    substituteInPlace cmake/fetch_kdeaddons.cmake \
+      --replace-fail "DEFINED BUILD_WITH_KF5" "BUILD_WITH_KF5"
   '';
+
+  cmakeFlags = [
+    "-DBUILD_WITH_KF5=OFF"
+    # relies on vendored catch2
+    "-DPACKAGE_TESTS=OFF"
+    "-DFETCHCONTENT_SOURCE_DIR_SINGLEAPPLICATION=${singleApplication}"
+    "-DBUILD_PUGIXML=OFF"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-    qmake
+    cmake
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
-    kcoreaddons
-    kwidgetsaddons
     qtbase
     qtsvg
-  ];
-
-  qmakeFlags = [
-    "INSTALLROOT=$(out)"
+    pugixml
   ];
 
   installPhase = ''

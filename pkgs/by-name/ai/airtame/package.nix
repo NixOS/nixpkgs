@@ -23,7 +23,11 @@
   libGL,
   vulkan-loader,
   curlWithGnuTls,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
   lib,
   libnotify,
   libappindicator-gtk3,
@@ -31,12 +35,12 @@
   pciutils,
 }:
 let
-  xorgDeps = with xorg; [
-    libXdamage
-    libXext
-    libXfixes
-    libXcomposite
-    libXrandr
+  xorgDeps = [
+    libxdamage
+    libxext
+    libxfixes
+    libxcomposite
+    libxrandr
   ];
 
   deps = [

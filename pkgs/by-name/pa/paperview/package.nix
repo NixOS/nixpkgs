@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   SDL2,
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
   ];
 
   makeFlags = [

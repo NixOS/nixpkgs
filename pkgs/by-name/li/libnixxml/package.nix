@@ -45,7 +45,8 @@ stdenv.mkDerivation {
     "--with-gd"
     "--with-glib"
   ];
-  CFLAGS = [
+
+  env.CFLAGS = toString [
     "-Wall"
     "-std=c90"
   ];

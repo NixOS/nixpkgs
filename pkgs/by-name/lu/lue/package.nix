@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lue";
   version = "0.4.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "superstarryeyes";
     repo = "lue";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-T7uh9PSCTkT+jYxQYC4ebPkabDz3pc6JjCGtgNatIAM=";
   };
 
@@ -54,4 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "lue";
   };
-}
+})

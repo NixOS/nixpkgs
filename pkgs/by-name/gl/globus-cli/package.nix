@@ -8,19 +8,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "globus-cli";
-  version = "3.38.0";
+  version = "3.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-cli";
     tag = version;
-    hash = "sha256-TjJ0GBXRYSMbWfCkGJSBzToHEjoN5ZJAzZe2yiRJhtg=";
+    hash = "sha256-bTS4dXQU49asmPmgUnf4VjAWJ34+1YbXmCJ4KOeOoMI=";
   };
 
   build-system = with python3Packages; [
-    setuptools
+    flit-core
     ruamel-yaml
+    flit-core
   ];
 
   dependencies = with python3Packages; [
@@ -31,6 +32,8 @@ python3Packages.buildPythonApplication rec {
     typing-extensions
     requests
   ];
+
+  pythonRelaxDeps = [ "globus-sdk" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -9,7 +9,6 @@
 
   # dependencies
   attrs,
-  exceptiongroup,
   idna,
   outcome,
   sniffio,
@@ -54,8 +53,7 @@ buildPythonPackage rec {
     outcome
     sniffio
     sortedcontainers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 

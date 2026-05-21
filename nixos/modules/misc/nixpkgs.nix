@@ -20,6 +20,9 @@ let
       rhs = optCall rhs_ { inherit lib pkgs; };
     in
     lib.recursiveUpdate lhs rhs
+    // lib.optionalAttrs (lhs ? allowUnfreePackages) {
+      allowUnfreePackages = lhs.allowUnfreePackages ++ (lib.attrByPath [ "allowUnfreePackages" ] [ ] rhs);
+    }
     // lib.optionalAttrs (lhs ? packageOverrides) {
       packageOverrides =
         pkgs:

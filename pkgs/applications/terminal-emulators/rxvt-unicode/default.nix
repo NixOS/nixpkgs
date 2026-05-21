@@ -4,11 +4,11 @@
   fetchurl,
   fetchpatch,
   makeDesktopItem,
-  libX11,
-  libXt,
-  libXft,
-  libXrender,
-  libXext,
+  libx11,
+  libxt,
+  libxft,
+  libxrender,
+  libxext,
   ncurses,
   fontconfig,
   freetype,
@@ -60,24 +60,24 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
+    url = "https://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
     sha256 = "qqE/y8FJ/g8/OR+TMnlYD3Spb9MS1u0GuP8DwtRmcug=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
-    libXt
-    libXft
+    libx11
+    libxt
+    libxft
     ncurses # required to build the terminfo file
     fontconfig
     freetype
-    libXrender
+    libxrender
     libptytty
   ]
   ++ lib.optionals perlSupport [
     perl
-    libXext
+    libxext
   ]
   ++ lib.optional gdkPixbufSupport gdk-pixbuf;
 
@@ -90,8 +90,6 @@ stdenv.mkDerivation {
     (
       if emojiSupport then
         [
-          # the required patches to libXft are in nixpkgs by default, see
-          # ../../../servers/x11/xorg/overrides.nix
           (fetchPatchFromAUR {
             name = "enable-wide-glyphs.patch";
             package = "rxvt-unicode-truecolor-wide-glyphs";

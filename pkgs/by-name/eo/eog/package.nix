@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   gettext,
@@ -32,9 +31,9 @@
   gi-docgen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eog";
-  version = "49.1";
+  version = "50.1";
 
   outputs = [
     "out"
@@ -43,8 +42,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/eog/${lib.versions.major version}/eog-${version}.tar.xz";
-    hash = "sha256-+t0S4UupzSvmmJ37zvQAAWRbY0QM7tjgSGewdYewZtw=";
+    url = "mirror://gnome/sources/eog/${lib.versions.major finalAttrs.version}/eog-${finalAttrs.version}.tar.xz";
+    hash = "sha256-b17m11ZUi4jiWph+DQbavDxsMlmPt99J+wiUXB/pSlU=";
   };
 
   patches = [
@@ -52,12 +51,6 @@ stdenv.mkDerivation rec {
     # We patch gobject-introspection to hardcode absolute paths but
     # our Meson patch will only pass the info when install_dir is absolute as well.
     ./fix-gir-lib-path.patch
-
-    # Switch to girepository-2.0
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/eog/raw/939eee56e5b72b02a8c0f4f867431cf6426adb9e/f/libpeas1_pygobject352.patch";
-      hash = "sha256-5QIkxxUvGKzb0cMCIcfuu7FX9XuY+RrKNunSvRDEDRc=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -132,10 +125,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNOME image viewer";
     homepage = "https://gitlab.gnome.org/GNOME/eog";
-    changelog = "https://gitlab.gnome.org/GNOME/eog/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/eog/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
     mainProgram = "eog";
   };
-}
+})

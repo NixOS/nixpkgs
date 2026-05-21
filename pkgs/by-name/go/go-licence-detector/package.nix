@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-licence-detector";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "go-licence-detector";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/94rUYWS8r8rRTmMyNs93voLdK3WlzJlIQWxgGE6eaQ=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

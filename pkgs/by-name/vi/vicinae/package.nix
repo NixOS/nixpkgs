@@ -1,5 +1,4 @@
 {
-  abseil-cpp,
   cmake,
   cmark-gfm,
   coreutils,
@@ -14,37 +13,38 @@
   nodejs,
   npmHooks,
   pkg-config,
-  protobuf,
   qt6,
-  gcc15Stdenv,
+  stdenv,
   wayland,
   libxml2,
+  udevCheckHook,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.18.3";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TU8MKOBYgTvYIFI8Col3ePeGntOlux3yYqmbSi7FG70=";
+    hash = "sha256-F034G8DctTGGi1ijekwkaXE4w5WZqHt2Hvvu8hqRfJE=";
   };
 
   apiDeps = fetchNpmDeps {
-    src = "${finalAttrs.src}/typescript/api";
-    hash = "sha256-UsTpMR23UQBRseRo33nbT6z/UCjZByryWfn2AQSgm6U=";
+    src = "${finalAttrs.src}/src/typescript/api";
+    hash = "sha256-lIXhMBJHujs6d9fXEK8Q+sfjkKyFJEMEtKrQorkfPeU=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
-    src = "${finalAttrs.src}/typescript/extension-manager";
-    hash = "sha256-wl8FDFB6Vl1zD0/s2EbU6l1KX4rwUW6dOZof4ebMMO8=";
+    src = "${finalAttrs.src}/src/typescript/extension-manager";
+    hash = "sha256-gpbS6MIHOSuHIfd4zDEB4EcMi9LHk9tPdnxwT0S0nbA=";
   };
 
   cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
     "VICINAE_GIT_TAG" = "v${finalAttrs.version}";
     "VICINAE_PROVENANCE" = "nix";
     "INSTALL_NODE_MODULES" = "OFF";
+    "INSTALL_BROWSER_NATIVE_HOST" = "OFF";
     "USE_SYSTEM_GLAZE" = "ON";
     "CMAKE_INSTALL_PREFIX" = placeholder "out";
     "CMAKE_INSTALL_DATAROOTDIR" = "share";
@@ -59,20 +59,18 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     ninja
     nodejs
     pkg-config
-    protobuf
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    abseil-cpp
     cmark-gfm
     glaze
     kdePackages.layer-shell-qt
     kdePackages.qtkeychain
+    kdePackages.syntax-highlighting
     libqalculate
     minizip
     nodejs
-    protobuf
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
@@ -81,10 +79,14 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Toggle telemetry from opt-out to opt-in
+    substituteInPlace extra/config.jsonc \
+      --replace-fail '"system_info": true' '"system_info": false'
+
     local postPatchHooks=()
     source ${npmHooks.npmConfigHook}/nix-support/setup-hook
-    npmRoot=typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
-    npmRoot=typescript/extension-manager npmDeps=${finalAttrs.extensionManagerDeps} npmConfigHook
+    npmRoot=src/typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
+    npmRoot=src/typescript/extension-manager npmDeps=${finalAttrs.extensionManagerDeps} npmConfigHook
   '';
 
   qtWrapperArgs = [
@@ -98,8 +100,12 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/share/systemd/user/vicinae.service \
-      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"
+      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"\
+      --replace-fail "ExecStart=vicinae" "ExecStart=$out/bin/vicinae"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   passthru.updateScript = ./update.sh;
 

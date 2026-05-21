@@ -27,14 +27,14 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "criu";
   version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
     repo = "criu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SfpJskXX7r3jbAwgZl2qpa7j1M4i8/sV6rlAWiUEoQs=";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./Documentation/Makefile \
       --replace "2>/dev/null" "" \
       --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
+    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${finalAttrs.version}.0"
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
@@ -150,4 +150,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

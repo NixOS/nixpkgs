@@ -1,33 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  docutils,
   fetchPypi,
-  pythonOlder,
+  build,
   importlib-metadata,
-  importlib-resources,
   setuptools,
   packaging,
+  typing-extensions,
+  appdirs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "2.0.1";
+  version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pkg_about";
     inherit version;
-    hash = "sha256-hgQOmp+R4ZWbq8hKRUQQzMO4hl/pHAGiJK9c4lxEkaI=";
+    hash = "sha256-g+RduU/aLD+UwZVexONXa8+rQznVmybC5G4ZnIugPqI=";
   };
 
-  # tox is listed in build requirements but not actually used to build
-  # keeping it as a requirement breaks the build unnecessarily
+  # Unnecessarily requires the newest versions available for these
   postPatch = ''
-    sed -i "/requires/s/, 'tox>=[^']*'//" pyproject.toml
+    sed -i 's/"setuptools>=[^"]*"/"setuptools>=${setuptools.version}"/' pyproject.toml
+    sed -i 's/"packaging>=[^"]*"/"packaging>=${packaging.version}"/' pyproject.toml
   '';
 
   build-system = [
@@ -36,14 +34,19 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    docutils
+    build
     importlib-metadata
-    importlib-resources
     packaging
-    setuptools
+    typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    appdirs
+    pytestCheckHook
+  ];
+
+  # Tries and fails to install itself via pip
+  disabledTests = [ "test_about_from_setup" ];
 
   pythonImportsCheck = [ "pkg_about" ];
 
@@ -52,5 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/karpierz/pkg_about/";
     changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
     license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

@@ -4,22 +4,23 @@
   cctools,
   fetchFromGitHub,
   jq,
-  makeWrapper,
+  makeBinaryWrapper,
   nodejs_22,
   python3,
+  xcbuild,
   yarn-berry_4,
   nixosTests,
 }:
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.1.0";
+  version = "26.5.2";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-WjWmiosDgEj3vTsOIKysR5HrNzkApQppUsdSil4Umbo=";
+    hash = "sha256-bcQAlG9acxTSqOQiSr1pmk4A6yjDWD/QH3AeYtqgAdo=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -27,8 +28,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "813c3d7cc8feb667c0ea3c25ba13156d75475cfe";
-    hash = "sha256-Qv9FFQCZv6WxYffP1W8Hdw15NDiGhkTeAUbyrOV5wxw=";
+    rev = "1713f1230b8643c39aece866de755976707a4060";
+    hash = "sha256-79WpnFsGkpkWA7qm19YQ41TYu5qxXCcecYHNvx3KGQ4=";
   };
 
 in
@@ -39,15 +40,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   sourceRoot = "${src.name}/";
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/actualbudget/actual/blob/master/package.json#L123
+    ./yarn-4.14-support.patch
+  ];
+
   nativeBuildInputs = [
     yarn-berry
     nodejs
     (yarn-berry.yarnBerryConfigHook.override { inherit nodejs; })
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
-    makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
+    xcbuild
   ];
 
   env = {
@@ -55,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     NODE_JQ_SKIP_INSTALL_BINARY = "true";
     SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
   };
+  # during build, vite tries to access localhost
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     ln -sv ../../../${translations.name} ./packages/desktop-client/locale
@@ -94,8 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-7CxsRmuA53JZJa8IznJKGVvHzE7CeM7XklIZznRqXis=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-yHvnahriFO4Yuuf+NrfHWQhH35T2eHmVOGw8SqP856Y=";
   };
 
   pname = "actual-server";
@@ -120,8 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     yarn workspaces focus @actual-app/sync-server --production
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
+    cp -r ./packages/crdt $out/lib/actual/packages/crdt
 
-    makeWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
+    makeBinaryWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 
@@ -130,7 +141,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) offlineCache;
+    inherit translations;
     tests = nixosTests.actual;
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -139,8 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
     license = lib.licenses.mit;
-    # https://github.com/NixOS/nixpkgs/issues/403846
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = with lib.platforms; linux ++ darwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag

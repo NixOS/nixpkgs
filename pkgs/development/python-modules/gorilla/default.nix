@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/christophercrouzet/gorilla";
     changelog = "https://github.com/christophercrouzet/gorilla/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

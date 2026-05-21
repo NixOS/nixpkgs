@@ -10,14 +10,13 @@
   nodejs,
   python3,
   rustc,
-  stdenv,
   unzip,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.11.4";
+  version = "1.12.1";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -27,10 +26,13 @@ let
     owner = "vadimcn";
     repo = "codelldb";
     rev = "v${version}";
-    hash = "sha256-+Pe7ij5ukF5pLgwvr+HOHjIv1TQDiPOEeJtkpIW9XWI=";
+    hash = "sha256-B8iCy4NXG7IzJVncbYm5VoAMfhMfxGF+HW7M5sVn5b0=";
   };
 
   lldb = llvmPackages_19.lldb;
+  stdenv = llvmPackages_19.libcxxStdenv;
+
+  cargoHash = "sha256-fuUTLdavMiYfpyxctXes2GJCsNZd5g1d4B/v+W/Rnu8=";
 
   adapter = (
     callPackage ./adapter.nix {
@@ -38,15 +40,16 @@ let
       # based on the provided CMake toolchain files.
       # <https://github.com/vadimcn/codelldb/tree/master/cmake>
       rustPlatform = makeRustPlatform {
-        stdenv = llvmPackages_19.libcxxStdenv;
-        inherit cargo rustc;
+        inherit stdenv cargo rustc;
       };
-      stdenv = llvmPackages_19.libcxxStdenv;
 
       inherit
         pname
         src
         version
+        stdenv
+        cargoHash
+        codelldb-launch
         ;
     }
   );
@@ -57,6 +60,36 @@ let
         pname
         src
         version
+        ;
+    }
+  );
+
+  codelldb-types = (
+    callPackage ./codelldb-types.nix {
+      rustPlatform = makeRustPlatform {
+        inherit stdenv cargo rustc;
+      };
+
+      inherit
+        pname
+        src
+        version
+        cargoHash
+        ;
+    }
+  );
+
+  codelldb-launch = (
+    callPackage ./codelldb-launch.nix {
+      rustPlatform = makeRustPlatform {
+        inherit stdenv cargo rustc;
+      };
+
+      inherit
+        pname
+        src
+        version
+        cargoHash
         ;
     }
   );
@@ -79,6 +112,8 @@ stdenv.mkDerivation {
     makeWrapper
     nodejs
     unzip
+    codelldb-types
+    codelldb-launch
   ];
 
   patches = [ ./patches/cmake-build-extension-only.patch ];
@@ -118,6 +153,11 @@ stdenv.mkDerivation {
     wrapProgram $ext/adapter/codelldb \
       --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
       --set-default LLDB_DEBUGSERVER_PATH "${adapter.lldbServer}"
+
+    # Used by VSCode
+    mkdir -p $ext/bin
+    cp ${codelldb-launch}/bin/codelldb-launch $ext/bin/codelldb-launch
+
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -132,7 +172,8 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit lldb adapter;
+    inherit lldb;
+    adapter = adapter.override { standalone = true; };
     updateScript = ./update.sh;
   };
 

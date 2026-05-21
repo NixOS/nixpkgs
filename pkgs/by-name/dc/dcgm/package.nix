@@ -86,6 +86,7 @@ stdenv.mkDerivation {
   patches = [
     ./remove-cuda-11.patch
     ./dynamic-libs.patch
+    ./fix-gcc15.patch
     (replaceVars ./fix-paths.patch {
       inherit coreutils;
       inherit util-linux;
@@ -145,6 +146,9 @@ stdenv.mkDerivation {
     "DcgmModuleSysmon::ReadCoreSpeed"
     "DcgmModuleSysmon::ReadTemperature"
     "Sysmon: initialize module"
+    # Test assumes plugins are installed relative to the binary with a
+    # populated `cudaless/` directory
+    "GetPluginCudalessDir returns cudaless directory in plugin directory"
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.
@@ -173,6 +177,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       de11n
       despsyched
+      sinrohit-desco
     ];
     mainProgram = "dcgmi";
     platforms = lib.platforms.linux;

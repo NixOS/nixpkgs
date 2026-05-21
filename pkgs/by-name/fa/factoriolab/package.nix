@@ -10,13 +10,13 @@
 }:
 buildNpmPackage rec {
   pname = "factoriolab";
-  version = "3.18.0";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "factoriolab";
     repo = "factoriolab";
     tag = "v${version}";
-    hash = "sha256-Id0o+Wxt0oNtik3lMHuvdm99HkuPY1XhE5yPCdkR8L4=";
+    hash = "sha256-GQNDYURKJFeuXM2k99xk/5cRCoQglAUlDBS7V/NkC7s=";
     fetchLFS = true;
   };
   buildInputs = [ vips ];
@@ -49,7 +49,7 @@ buildNpmPackage rec {
 
   meta = {
     homepage = "https://github.com/factoriolab/factoriolab";
-    changelog = "https://github.com/factoriolab/factoriolab/releases/tag/${version}";
+    changelog = "https://github.com/factoriolab/factoriolab/releases/tag/v${version}";
     description = "Angular-based calculator for factory games like Factorio and Dyson Sphere Program";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ patrickdag ];

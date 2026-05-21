@@ -33,8 +33,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.37.0";
+  version = "3.0.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
@@ -43,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-N6TYK/qMux/a0ktQyCGYHZg3g8S6To8g1FXnILk9HIw=";
+    hash = "sha256-JPBNqgNrd892aVVEVipehMjZwQ4fktf9/gM/eAohD3Y=";
   };
 
   build-system = [
@@ -84,15 +85,14 @@ buildPythonPackage (finalAttrs: {
     rm -rf pytensor
   '';
 
-  disabledTests = [
-    # TypeError: jax_funcified_fgraph() takes 2 positional arguments but 3 were given
-    "test_jax_Reshape_shape_graph_input"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error
     # tests.unittest_tools.WrongValue: WrongValue
     "test_op_sd"
     "test_op_ss"
+
+    # AssertionError: equal_computations failed
+    "test_infer_shape_db_handles_xtensor_lowering"
 
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"

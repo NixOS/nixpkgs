@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pr-tracker";
   version = "1.10.0";
 
   src = fetchzip {
-    url = "https://git.qyliss.net/pr-tracker/snapshot/pr-tracker-${version}.tar.xz";
+    url = "https://git.qyliss.net/pr-tracker/snapshot/pr-tracker-${finalAttrs.version}.tar.xz";
     hash = "sha256-lAraMuhAvTV/PX0R/SSga3bebuK0lizcyEK7Qo3iUmc=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   meta = {
-    changelog = "https://git.qyliss.net/pr-tracker/plain/NEWS?h=${version}";
+    changelog = "https://git.qyliss.net/pr-tracker/plain/NEWS?h=${finalAttrs.version}";
     description = "Nixpkgs pull request channel tracker";
     longDescription = ''
       A web server that displays the path a Nixpkgs pull request will take
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pr-tracker";
   };
-}
+})

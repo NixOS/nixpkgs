@@ -29,10 +29,10 @@ stdenvNoCC.mkDerivation {
 
   passthru.scriptName = "cut.lua";
 
-  meta = with lib; {
+  meta = {
     description = "An mpv plugin for cutting videos incredibly quickly";
     homepage = "https://github.com/familyfriendlymikey/mpv-cut";
-    license = licenses.unfree; # the repository doesn't have a license
-    maintainers = with maintainers; [ ncfavier ];
+    license = lib.licenses.unfree; # the repository doesn't have a license
+    maintainers = with lib.maintainers; [ ncfavier ];
   };
 }

@@ -12,9 +12,9 @@
   libsndfile,
   libxcb,
   libxkbcommon,
-  xcbutil,
-  xcbutilcursor,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-keysyms,
   zenity,
   curl,
   rsync,
@@ -62,9 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libxcb
     libxkbcommon
-    xcbutil
-    xcbutilcursor
-    xcbutilkeysyms
+    libxcb-util
+    libxcb-cursor
+    libxcb-keysyms
     zenity
     curl
     rsync

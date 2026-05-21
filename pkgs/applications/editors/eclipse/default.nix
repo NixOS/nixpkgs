@@ -6,12 +6,12 @@
   makeWrapper,
   freetype,
   fontconfig,
-  libX11,
-  libXrender,
+  libx11,
+  libxrender,
   zlib,
   glib,
   gtk3,
-  libXtst,
+  libxtst,
   jdk,
   gsettings-desktop-schemas,
   webkitgtk_4_1 ? null, # for internal web browser
@@ -56,13 +56,13 @@ let
       makeDesktopItem
       freetype
       fontconfig
-      libX11
-      libXrender
+      libx11
+      libxrender
       zlib
       jdk
       glib
       gtk
-      libXtst
+      libxtst
       gsettings-desktop-schemas
       webkitgtk_4_1
       makeWrapper
