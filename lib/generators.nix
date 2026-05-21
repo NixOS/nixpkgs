@@ -381,15 +381,17 @@ rec {
   toGitINI =
     let
       mkSectionName =
+        let
+          containsQuote = hasInfix ''"'';
+        in
         name:
         let
-          containsQuote = hasInfix ''"'' name;
           sections = splitString "." name;
-          section = head sections;
-          subsections = tail sections;
-          subsection = concatStringsSep "." subsections;
         in
-        if containsQuote || subsections == [ ] then name else ''${section} "${subsection}"'';
+        if containsQuote name || length sections == 1 then
+          name
+        else
+          ''${head sections} "${concatStringsSep "." (tail sections)}"'';
 
       mkValueString =
         v:
