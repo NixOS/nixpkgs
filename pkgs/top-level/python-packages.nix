@@ -16898,6 +16898,10 @@ self: super: with self; {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  entroly = callPackage ../development/python-modules/entroly { };
+
+  entroly-core = callPackage ../development/python-modules/entroly-core { };
+
   releases = callPackage ../development/python-modules/releases { };
 
   remarshal = callPackage ../development/python-modules/remarshal { };
