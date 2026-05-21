@@ -156,9 +156,10 @@ in
           isDefaultStateDirectory = lib.any isDefault paths;
         in
         {
-          ExecStart = "${cfg.package}/bin/garage server"
-          + lib.optionalString cfg.singleNode " --single-node"
-          + lib.optionalString cfg.defaultBucket " --default-bucket";
+          ExecStart =
+            "${cfg.package}/bin/garage server"
+            + lib.optionalString cfg.singleNode " --single-node"
+            + lib.optionalString cfg.defaultBucket " --default-bucket";
 
           StateDirectory = lib.mkIf isDefaultStateDirectory "garage";
           DynamicUser = lib.mkDefault true;
