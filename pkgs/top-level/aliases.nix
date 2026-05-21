@@ -1638,6 +1638,10 @@ mapAliases {
   ossec-server = throw "'ossec-server' has been removed due to lack of maintenance"; # Added 2025-11-08
   overrideLibcxx = throw "overrideLibcxx has been removed, as it was no longer used and Darwin now uses libc++ from the latest SDK; see the Nixpkgs 25.11 release notes for details"; # Added 2025-09-15
   overrideSDK = throw "overrideSDK has been removed as it was a legacy compatibility stub. See <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks-overrides> for migration instructions"; # Added 2025-08-04
+  OVMF = warnAlias "'OVMF' has been renamed to 'ovmf.qemu'" ovmf.qemu; # Added 2026-05-21
+  OVMF-cloud-hypervisor = warnAlias "'OVMF-cloud-hypervisor' has been renamed to 'ovmf.cloud-hypervisor'" ovmf.cloud-hypervisor; # Added 2026-05-21
+  OVMF-xen = warnAlias "'OVMF-xen' has been renamed to 'ovmf.xen'" ovmf.xen; # Added 2026-05-21
+  OVMFFull = warnAlias "'OVMFFull' has been renamed to 'ovmf.full'" ovmf.full; # Added 2026-05-21
   pactorio = throw "'pactorio' has been removed, as it has been unmaintained upstream since February 2024"; # Added 2026-01-01
   pacup = throw "'pacup' has been renamed to/replaced by 'perlPackages.pacup'"; # Converted to throw 2025-10-27
   PageEdit = throw "'PageEdit' has been renamed to/replaced by 'pageedit'"; # Converted to throw 2025-10-27

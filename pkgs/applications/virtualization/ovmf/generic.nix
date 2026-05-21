@@ -1,26 +1,74 @@
 {
-  stdenv,
-  nixosTests,
-  lib,
-  edk2,
-  util-linux,
-  nasm,
-  acpica-tools,
-  llvmPackages,
-  fetchFromGitLab,
-  python3,
-  pexpect,
-  xorriso,
-  qemu,
-  dosfstools,
-  mtools,
+  pname ? "ovmf",
+  meta ? { },
+
+  debug ? false,
   fdSize2MB ? false,
   fdSize4MB ? secureBoot,
-  secureBoot ? false,
-  systemManagementModeRequired ? secureBoot && stdenv.hostPlatform.isx86,
+  # "split" = produces ${fwPrefix}_CODE.fd + ${fwPrefix}_VARS.fd (qemu/xen).
+  # "single" = produces a single merged ${fwPrefix}.fd (cloud-hypervisor).
+  firmwareLayout ? "split",
+  firmwarePrefixByCpu ? {
+    x86_64 = "OVMF";
+    aarch64 = "AAVMF";
+    riscv64 = "RISCV_VIRT";
+    loongarch64 = "LOONGARCH_VIRT";
+  },
+  httpSupport ? false,
   # Whether to create an nvram variables template
   # which includes the MSFT secure boot keys
-  msVarsTemplate ? false,
+  msVarsSupport ? false,
+  projectDscPathByCpu ? {
+    x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
+    aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
+    riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
+    loongarch64 = "OvmfPkg/LoongArchVirt/LoongArchVirtQemu.dsc";
+  },
+  secureBoot ? false,
+  # Usually, this option is broken, do not use it except if you know what you are
+  # doing.
+  sourceDebug ? false,
+  systemManagementModeRequired ? secureBoot && stdenv.hostPlatform.isx86,
+  tlsSupport ? false,
+  tpmSupport ? false,
+
+  acpica-tools,
+  dosfstools,
+  edk2,
+  fetchFromGitLab,
+  lib,
+  llvmPackages,
+  mtools,
+  nasm,
+  nixosTests,
+  python3Packages,
+  qemu,
+  stdenv,
+  util-linux,
+  xorriso,
+}:
+
+let
+  version = lib.getVersion edk2;
+
+  cpuName = stdenv.hostPlatform.parsed.cpu.name;
+  fwPrefix =
+    firmwarePrefixByCpu.${cpuName}
+      or (throw "Unsupported ${pname} `firmwarePrefixByCpu` on ${cpuName}");
+  projectDscPath =
+    projectDscPathByCpu.${cpuName} or (throw "Unsupported OVMF `projectDscPath` on ${cpuName}");
+
+  msVarsArgsByCpu = {
+    x86_64 = {
+      flavor = "OVMF_4M";
+      archDir = "X64";
+    };
+    aarch64 = {
+      flavor = "AAVMF";
+      archDir = "AARCH64";
+    };
+  };
+  msVarsArgs = msVarsArgsByCpu.${cpuName} or null;
   # When creating the nvram variables template with
   # the MSFT keys, we also must provide a certificate
   # to use as the PK and first KEK for the keystore.
@@ -29,55 +77,8 @@
   # should change to a NixOS cert once we have our
   # own secure boot signing infrastructure.
   #
-  # Ignored if msVarsTemplate is false.
-  vendorPkKek ? "$NIX_BUILD_TOP/debian/PkKek-1-Debian.pem",
-  httpSupport ? false,
-  tpmSupport ? false,
-  tlsSupport ? false,
-  debug ? false,
-  # Usually, this option is broken, do not use it except if you know what you are
-  # doing.
-  sourceDebug ? false,
-  projectDscPath ?
-    {
-      x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
-      aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
-      riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
-      loongarch64 = "OvmfPkg/LoongArchVirt/LoongArchVirtQemu.dsc";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  fwPrefix ?
-    {
-      x86_64 = "OVMF";
-      aarch64 = "AAVMF";
-      riscv64 = "RISCV_VIRT";
-      loongarch64 = "LOONGARCH_VIRT";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}"),
-  metaPlatforms ? lib.subtractLists lib.platforms.i686 edk2.meta.platforms,
-}:
-
-let
-
-  platformSpecific = {
-    x86_64.msVarsArgs = {
-      flavor = "OVMF_4M";
-      archDir = "X64";
-    };
-    aarch64.msVarsArgs = {
-      flavor = "AAVMF";
-      archDir = "AARCH64";
-    };
-  };
-
-  cpuName = stdenv.hostPlatform.parsed.cpu.name;
-
-  inherit (platformSpecific.${cpuName}) msVarsArgs;
-
-  version = lib.getVersion edk2;
-
+  # Ignored if msVarsSupport is false.
+  vendorPkKek = "$NIX_BUILD_TOP/debian/PkKek-1-Debian.pem";
   OvmfPkKek1AppPrefix = "4e32566d-8e9e-4f52-81d3-5bb9715f9727";
 
   debian-edk-src = fetchFromGitLab {
@@ -96,16 +97,18 @@ let
   };
 
   buildPrefix = "Build/*/*";
-
 in
 
-assert msVarsTemplate -> fdSize4MB;
-assert msVarsTemplate -> platformSpecific ? ${cpuName};
-assert msVarsTemplate -> platformSpecific.${cpuName} ? msVarsArgs;
+assert msVarsSupport -> fdSize4MB;
+assert lib.assertOneOf "ovmf firmwareLayout" firmwareLayout [
+  "split"
+  "single"
+];
 
 edk2.mkDerivation projectDscPath (finalAttrs: {
-  pname = "OVMF";
-  inherit version;
+  inherit pname version;
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -121,9 +124,9 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     llvmPackages.bintools
     llvmPackages.llvm
   ]
-  ++ lib.optionals msVarsTemplate [
-    python3
-    pexpect
+  ++ lib.optionals msVarsSupport [
+    python3Packages.python
+    python3Packages.pexpect
     xorriso
     qemu
     dosfstools
@@ -164,7 +167,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
 
   env.PYTHON_COMMAND = "python3";
 
-  postUnpack = lib.optionalDrvAttr msVarsTemplate ''
+  postUnpack = lib.optionalDrvAttr msVarsSupport ''
     ln -s ${debian-edk-src}/debian
   '';
 
@@ -172,7 +175,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     (debian-edk-src + "/debian/patches/OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch")
   ];
 
-  postConfigure = lib.optionalDrvAttr msVarsTemplate ''
+  postConfigure = lib.optionalDrvAttr msVarsSupport ''
     tr -d '\n' < ${vendorPkKek} | sed \
       -e 's/.*-----BEGIN CERTIFICATE-----/${OvmfPkKek1AppPrefix}:/' \
       -e 's/-----END CERTIFICATE-----//' > vendor-cert-string
@@ -180,24 +183,26 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   '';
 
   postBuild =
-    lib.optionalString (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isLoongArch64) ''
-      (
-      cd ${buildPrefix}/FV
-      cp QEMU_EFI.fd ${fwPrefix}_CODE.fd
-      cp QEMU_VARS.fd ${fwPrefix}_VARS.fd
-      )
-    ''
-    + lib.optionalString stdenv.hostPlatform.isAarch ''
+    lib.optionalString
+      (firmwareLayout == "split" && (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isLoongArch64))
+      ''
+        (
+        cd ${buildPrefix}/FV
+        cp QEMU_EFI.fd ${fwPrefix}_CODE.fd
+        cp QEMU_VARS.fd ${fwPrefix}_VARS.fd
+        )
+      ''
+    + lib.optionalString (firmwareLayout == "split" && stdenv.hostPlatform.isAarch) ''
       # QEMU expects 64MiB CODE and VARS files on ARM/AARCH64 architectures
       # Truncate the firmware files to the expected size
       truncate -s 64M ${buildPrefix}/FV/${fwPrefix}_CODE.fd
       truncate -s 64M ${buildPrefix}/FV/${fwPrefix}_VARS.fd
     ''
-    + lib.optionalString stdenv.hostPlatform.isRiscV ''
+    + lib.optionalString (firmwareLayout == "split" && stdenv.hostPlatform.isRiscV) ''
       truncate -s 32M ${buildPrefix}/FV/${fwPrefix}_CODE.fd
       truncate -s 32M ${buildPrefix}/FV/${fwPrefix}_VARS.fd
     ''
-    + lib.optionalString msVarsTemplate ''
+    + lib.optionalString msVarsSupport ''
       (
       cd ${buildPrefix}
       # locale must be set on Darwin for invocations of mtools to work correctly
@@ -218,25 +223,20 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   postInstall = ''
     mkdir -vp $fd/FV
   ''
-  +
-    lib.optionalString
-      (builtins.elem fwPrefix [
-        "OVMF"
-        "AAVMF"
-        "RISCV_VIRT"
-        "LOONGARCH_VIRT"
-      ])
-      ''
-        mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
-      ''
-  + lib.optionalString stdenv.hostPlatform.isx86 ''
+  + lib.optionalString (firmwareLayout == "split") ''
+    mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
+  ''
+  + lib.optionalString (firmwareLayout == "single") ''
     mv -v $out/FV/${fwPrefix}.fd $fd/FV
   ''
-  + lib.optionalString msVarsTemplate ''
+  + lib.optionalString (firmwareLayout == "split" && stdenv.hostPlatform.isx86) ''
+    mv -v $out/FV/${fwPrefix}.fd $fd/FV
+  ''
+  + lib.optionalString msVarsSupport ''
     mv -v $out/FV/${fwPrefix}_VARS.ms.fd $fd/FV
     ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
   ''
-  + lib.optionalString stdenv.hostPlatform.isAarch ''
+  + lib.optionalString (firmwareLayout == "split" && stdenv.hostPlatform.isAarch) ''
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
     # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/rpms/edk2/blob/main/f/edk2.spec
     mkdir -vp $fd/AAVMF
@@ -252,27 +252,30 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     in
     {
       mergedFirmware = "${prefix}.fd";
-      firmware = "${prefix}_CODE.fd";
-      variables = "${prefix}_VARS.fd";
-      variablesMs =
-        assert msVarsTemplate;
-        "${prefix}_VARS.ms.fd";
+      firmware = if firmwareLayout == "split" then "${prefix}_CODE.fd" else "${prefix}.fd";
       # This will test the EFI firmware for the host platform as part of the NixOS Tests setup.
       tests.basic-systemd-boot = nixosTests.systemd-boot.basic;
       tests.secureBoot-systemd-boot = nixosTests.systemd-boot.secureBoot;
       inherit secureBoot systemManagementModeRequired;
+    }
+    // lib.optionalAttrs (firmwareLayout == "split") {
+      variables = "${prefix}_VARS.fd";
+    }
+    // lib.optionalAttrs msVarsSupport {
+      variablesMs = "${prefix}_VARS.ms.fd";
     };
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
-    platforms = metaPlatforms;
     maintainers = with lib.maintainers; [
       adamcstephens
       raitobezarius
       mjoerg
       sigmasquadron
     ];
-  };
+    platforms = lib.subtractLists lib.platforms.i686 edk2.meta.platforms;
+  }
+  // meta;
 })

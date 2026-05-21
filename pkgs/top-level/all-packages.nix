@@ -8067,17 +8067,7 @@ with pkgs;
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
-  OVMF = callPackage ../applications/virtualization/OVMF {
-    inherit (python3Packages) pexpect;
-  };
-  OVMFFull = callPackage ../applications/virtualization/OVMF {
-    inherit (python3Packages) pexpect;
-    secureBoot = true;
-    httpSupport = true;
-    tpmSupport = true;
-    tlsSupport = true;
-    msVarsTemplate = stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64;
-  };
+  ovmf = recurseIntoAttrs (callPackage ../applications/virtualization/ovmf { });
 
   inherit (import ../servers/sql/postgresql pkgs)
     postgresqlVersions
