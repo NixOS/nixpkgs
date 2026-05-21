@@ -1,4 +1,8 @@
-{ lib, pkgs }:
+{
+  lib,
+  pkgs,
+  config,
+}:
 
 lib.makeScope pkgs.newScope (
   self:
@@ -22,7 +26,6 @@ lib.makeScope pkgs.newScope (
     # libs
     skalibs = callPackage ./skalibs { };
     skalibs_2_10 = callPackage ./skalibs/2_10.nix { };
-    sdnotify-wrapper = callPackage ./sdnotify-wrapper { };
 
     # s6 tooling
     s6 = callPackage ./s6 { };
@@ -39,5 +42,8 @@ lib.makeScope pkgs.newScope (
     s6-networking-man-pages = self.s6-networking.passthru.manpages;
     s6-portable-utils-man-pages = self.s6-portable-utils.passthru.manpages;
     s6-rc-man-pages = self.s6-rc.passthru.manpages;
+  }
+  // lib.optionalAttrs config.allowAliases {
+    sdnotify-wrapper = throw "sdnotify-wrapper has been removed in favour of s6-notify-socket-from-fd in the s6 package";
   }
 )
