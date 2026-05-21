@@ -14,6 +14,7 @@
   makeDesktopItem,
   nftables,
   nix-update-script,
+  nixosTests,
   openssl,
   pkg-config,
   rustPlatform,
@@ -266,6 +267,8 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit portmasterDesktop portmasterUI;
+
+    tests = { inherit (nixosTests) portmaster; };
 
     updateScript = nix-update-script {
       extraArgs = [
