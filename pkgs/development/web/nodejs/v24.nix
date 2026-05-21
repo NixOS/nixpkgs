@@ -25,8 +25,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.15.0";
-  sha256 = "a4f653d79ed140aaad921e8c22a3b585ca85cfdab80d4030f6309e4663a8a1c8";
+  version = "24.16.0";
+  sha256 = "2ff84a6de70b6165290111b0fc656ded1ad207a799816fe720cc7c31232df30f";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -58,12 +58,19 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-      # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
-      # OpenSSL reports different errors
-      # https://github.com/nodejs/node/pull/62629
+
+      # frsize is only available with libuv 1.52.1
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/dd25d8f29d3ddadcf5a5ebfdf98ece55f9df96c6.patch?full_index=1";
-        hash = "sha256-6cxRN7TyWmJgUZt3jp2YXbVIjrDb2BNep5LxBOtT3Q0=";
+        url = "https://github.com/nodejs/node/commit/40ccfdecf94b3573c9cf9ae3bb771f0e472a7cf0.patch?full_index=1";
+        revert = true;
+        excludes = [ "doc/api/fs.md" ];
+        hash = "sha256-IbvP3MoZFpiplV3cYoTSbjQ4V4hGW1yphdgFS8HKPj8=";
+      })
+      # Percentile extension is not enabled on stdenv
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/be4d2f3a4c71f6e856935a975c900b085ca61f6c.patch?full_index=1";
+        revert = true;
+        hash = "sha256-91PZ3CWv5wqqvkNEk6GZ7iVzjtignpZNddo/WoBf8OY=";
       })
     ]
     ++ gypPatches
