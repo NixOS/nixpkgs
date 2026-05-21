@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,14 +14,16 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-ra664VbUKc8XpULCWhLMVnc1mW4pqZvbvwuBvRQRhcY=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    mkdir -p $out/share/{doc/${pname},fonts/truetype}
-    mv *.ttf $out/share/fonts/truetype/
-    mv *.txt documentation $out/share/doc/${pname}/
+  nativeBuildInputs = [ installFonts ];
 
-    runHook postInstall
+  postInstall = ''
+    mkdir -p $out/share/doc/alkalami
+    mv *.txt documentation $out/share/doc/alkalami
   '';
 
   meta = {
