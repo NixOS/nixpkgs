@@ -4,20 +4,23 @@
   fetchPypi,
   ncurses,
   x256,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unicurses";
   version = "3.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Uni-Curses";
     hash = "sha256-M4mjdmy2NSf5KiTVYznPy86bVgZB5u1vDi6GIH1Frc4=";
   };
 
-  propagatedBuildInputs = [ x256 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ x256 ];
 
   # Necessary because ctypes.util.find_library does not find the ncurses libraries
   postPatch = ''
@@ -34,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ michaelBelsanti ];
   };
-}
+})
