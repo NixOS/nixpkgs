@@ -12,6 +12,8 @@
   lapack,
   libxml2,
   libxslt,
+  docbook_xml_dtd_43,
+  docbook_xsl,
   llvmPackages,
   pkg-config,
   plfit,
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     libxml2
     libxslt
+    docbook_xml_dtd_43
+    docbook_xsl
     pkg-config
     python3
     sourceHighlight
@@ -81,6 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DIGRAPH_ENABLE_LTO=AUTO"
     "-DIGRAPH_ENABLE_TLS=ON"
     "-DBUILD_SHARED_LIBS=ON"
+  ];
+
+  buildFlags = [
+    "all"
+    "html"
   ];
 
   doCheck = true;
