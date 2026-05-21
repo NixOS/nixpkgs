@@ -1581,7 +1581,12 @@ rec {
 
     :::
   */
-  drop = count: list: sublist count (length list) list;
+  drop =
+    count: list:
+    let
+      len = length list;
+    in
+    genList (n: elemAt list (n + count)) (if count > len then 0 else len - count);
 
   /**
     Remove the last (at most) N elements of a list.
