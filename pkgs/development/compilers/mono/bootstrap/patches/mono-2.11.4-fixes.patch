@@ -1,0 +1,45 @@
+diff --git a/mono/io-layer/processes.c b/mono/io-layer/processes.c
+index 586b54715db..d27857aa092 100644
+--- a/mono/io-layer/processes.c
++++ b/mono/io-layer/processes.c
+@@ -18,6 +18,7 @@
+ #include <errno.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <unistd.h>
+ #include <signal.h>
+ #include <sys/wait.h>
+diff --git a/mono/mini/method-to-ir.c b/mono/mini/method-to-ir.c
+index d82a375b6a2..80f1c26ccf6 100644
+--- a/mono/mini/method-to-ir.c
++++ b/mono/mini/method-to-ir.c
+@@ -5704,7 +5704,7 @@ mono_get_gsharedvt_type (MonoClass *klass)
+ }
+ 
+ static MonoInst*
+-create_magic_tls_access (MonoCompile *cfg, MonoClassField *tls_field, MonoInst **cached_tls_addr, MonoInst *thread_local)
++create_magic_tls_access (MonoCompile *cfg, MonoClassField *tls_field, MonoInst **cached_tls_addr, MonoInst *tls_ins)
+ {
+ 	MonoInst *load, *addr, *temp, *store, *thread_ins;
+ 	MonoClassField *offset_field;
+@@ -5716,7 +5716,7 @@ create_magic_tls_access (MonoCompile *cfg, MonoClassField *tls_field, MonoInst *
+ 	thread_ins = mono_get_thread_intrinsic (cfg);
+ 	offset_field = mono_class_get_field_from_name (tls_field->parent, "tls_offset");
+ 
+-	EMIT_NEW_LOAD_MEMBASE_TYPE (cfg, load, offset_field->type, thread_local->dreg, offset_field->offset);
++	EMIT_NEW_LOAD_MEMBASE_TYPE (cfg, load, offset_field->type, tls_ins->dreg, offset_field->offset);
+ 	if (thread_ins) {
+ 		MONO_ADD_INS (cfg->cbb, thread_ins);
+ 	} else {
+diff --git a/runtime/Makefile.am b/runtime/Makefile.am
+index 6957a287d38..2d071230a84 100644
+--- a/runtime/Makefile.am
++++ b/runtime/Makefile.am
+@@ -1,6 +1,3 @@
+-# hack to prevent 'check' from depending on 'all'
+-AUTOMAKE_OPTIONS = cygnus
+-
+ tmpinst = _tmpinst
+ 
+ noinst_SCRIPTS = mono-wrapper monodis-wrapper
