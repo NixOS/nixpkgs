@@ -12337,6 +12337,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-dap-disasm = buildVimPlugin {
+    pname = "nvim-dap-disasm";
+    version = "0-unstable-2026-02-25";
+    src = fetchgit {
+      url = "https://codeberg.org/Jorenar/nvim-dap-disasm";
+      rev = "1119f3f2b22e411adcd123cdcf6d0425b61a31a7";
+      hash = "sha256-lq0tbMksVXccf6GGD7OxWAuoD9w8tlt30dpJSMtN4g8=";
+    };
+    meta.homepage = "https://codeberg.org/Jorenar/nvim-dap-disasm";
+    meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-dap-docker = buildVimPlugin {
     pname = "nvim-dap-docker";
     version = "0.2.0";
