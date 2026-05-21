@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   perl,
-  expat,
   fontconfig,
   freetype,
   libxrender,
@@ -29,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    expat
     fontconfig
     freetype
     libice
