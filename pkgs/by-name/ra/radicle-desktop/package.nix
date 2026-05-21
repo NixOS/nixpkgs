@@ -20,6 +20,7 @@
   wrapGAppsHook4,
   rustfmt,
   clippy,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -96,12 +97,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     radicle-node
     rustfmt
     clippy
+    writableTmpDirAsHomeHook
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    export RAD_HOME="$PWD/_rad-home"
     export RAD_PASSPHRASE=""
     rad auth --alias test
     bins="tests/tmp/bin/heartwood/$HW_RELEASE"
