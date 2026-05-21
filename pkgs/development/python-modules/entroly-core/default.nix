@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "juyterman1000";
     repo = "entroly";
     rev = "entroly-v${version_v}";
-    hash = "";
+    hash = "sha256-xWCfEV91zUOQdHTh+v4e+/JkTD8nkyln0Mv/7NUoWko=";
   };
 
   build-system = (
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     src = "${finalAttrs.src}/entroly-core";
     pname = "${finalAttrs.pname}-vendor";
     inherit version_v;
-    hash = "";
+    hash = "sha256-Ta1Gb3RLPikiuH+npeT22hDUkL6taQb3NKXsaC+krYM=";
   };
 
   postUnpack = ''
