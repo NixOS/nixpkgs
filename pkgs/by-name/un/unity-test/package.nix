@@ -71,6 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    AR = "llvm-ar";
+    RANLIB = "llvm-ranlib";
+  };
+
   # For the helper shebangs
   buildInputs = [
     python3
