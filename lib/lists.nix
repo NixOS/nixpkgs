@@ -1508,7 +1508,12 @@ rec {
 
     :::
   */
-  take = count: sublist 0 count;
+  take =
+    count: list:
+    let
+      len = length list;
+    in
+    genList (elemAt list) (if count > len then len else count);
 
   /**
     Returns the last (at most) N elements of a list.
