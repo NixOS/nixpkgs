@@ -60,27 +60,60 @@ buildPythonPackage (finalAttrs: {
     "mammoth"
     "youtube-transcript-api"
   ];
+
+  optional-dependencies = {
+    all = [
+      python-pptx
+      mammoth
+      pandas
+      openpyxl
+      xlrd
+      lxml
+      pdfminer-six
+      pdfplumber
+      olefile
+      pydub
+      speechrecognition
+      youtube-transcript-api
+      azure-ai-documentintelligence
+      azure-identity
+    ];
+    pptx = [ python-pptx ];
+    docx = [
+      mammoth
+      lxml
+    ];
+    xlsx = [
+      pandas
+      openpyxl
+    ];
+    xls = [
+      pandas
+      xlrd
+    ];
+    pdf = [
+      pdfminer-six
+      pdfplumber
+    ];
+    outlook = [ olefile ];
+    audio-transcription = [
+      pydub
+      speechrecognition
+    ];
+    youtube-transcription = [ youtube-transcript-api ];
+    az-doc-intel = [
+      azure-ai-documentintelligence
+      azure-identity
+    ];
+  };
+
   dependencies = [
-    azure-ai-documentintelligence
-    azure-identity
     beautifulsoup4
+    requests
+    markdownify
+    magika
     charset-normalizer
     defusedxml
-    lxml
-    magika
-    mammoth
-    markdownify
-    olefile
-    openpyxl
-    pandas
-    pdfminer-six
-    pdfplumber
-    pydub
-    python-pptx
-    requests
-    speechrecognition
-    xlrd
-    youtube-transcript-api
   ];
 
   # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
