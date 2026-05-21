@@ -1,19 +1,19 @@
 {
-  lib,
-  stdenv,
   bzip2,
-  cmake,
   cli11,
+  cmake,
+  lib,
+  libmamba,
   msgpack-c,
-  yaml-cpp,
   nlohmann_json,
-  zstd,
+  python3,
   reproc,
   spdlog,
+  stdenv,
   tl-expected,
-  libmamba,
-  python3,
   versionCheckHook,
+  yaml-cpp,
+  zstd,
 }:
 stdenv.mkDerivation {
   pname = "mamba-cpp";
@@ -22,17 +22,17 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    bzip2
+    cli11
+    libmamba
+    msgpack-c
+    nlohmann_json
     python3
     reproc
     spdlog
-    nlohmann_json
     tl-expected
-    zstd
-    bzip2
-    cli11
-    msgpack-c
     yaml-cpp
-    libmamba
+    zstd
   ];
 
   cmakeFlags = [
@@ -42,6 +42,9 @@ stdenv.mkDerivation {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Reimplementation of the conda package manager";

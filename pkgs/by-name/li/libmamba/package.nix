@@ -1,23 +1,23 @@
 {
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  cmake,
-  fmt,
-  spdlog,
-  tl-expected,
-  nlohmann_json,
-  yaml-cpp,
-  simdjson,
-  reproc,
-  libsolv,
-  curl,
-  msgpack-c,
-  libarchive,
-  zstd,
-  nix-update-script,
   bzip2,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  fmt,
+  lib,
+  libarchive,
+  libsolv,
+  msgpack-c,
+  nix-update-script,
+  nlohmann_json,
   python3,
+  reproc,
+  simdjson,
+  spdlog,
+  stdenv,
+  tl-expected,
+  yaml-cpp,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,19 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bzip2
+    curl
     fmt
+    libarchive
+    libsolv
+    msgpack-c
+    nlohmann_json
+    reproc
+    simdjson
     spdlog
     tl-expected
-    nlohmann_json
     yaml-cpp
-    simdjson
-    reproc
-    libsolv
-    curl
-    msgpack-c
-    libarchive
     zstd
-    bzip2
   ];
 
   cmakeFlags = [
@@ -57,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_LIBMAMBA_SPDLOG" true)
     (lib.cmakeBool "BUILD_SHARED" true)
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   passthru.updateScript = nix-update-script { };
 
