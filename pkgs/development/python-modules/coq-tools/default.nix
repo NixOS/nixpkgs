@@ -6,14 +6,14 @@
   subprocess4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coq-tools";
   version = "0.0.42";
   pyproject = true;
 
   src = fetchPypi {
     pname = "coq_tools";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-d+SAGmZKUQo2ZKuC91r/2RHDvi5GCIKGTxcuau1kN0U=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})
