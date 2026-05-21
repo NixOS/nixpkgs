@@ -16672,6 +16672,12 @@
     githubId = 963511;
     name = "Majiir Paktu";
   };
+  majinghe = {
+    email = "devops008@sina.com";
+    github = "majinghe";
+    githubId = 42570491;
+    name = "Jinghe Ma";
+  };
   makefu = {
     email = "makefu@syntax-fehler.de";
     github = "makefu";
@@ -30802,7 +30808,7 @@
     matrix = "@zeri:matrix.org";
     github = "zeri42";
     githubId = 68825133;
-  };
+ };
   zerodya = {
     name = "Nicola";
     email = "nicola.pagliuca@pm.me";
