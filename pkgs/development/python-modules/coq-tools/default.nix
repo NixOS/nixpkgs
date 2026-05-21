@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  subprocess4,
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ subprocess4 ];
 
   pythonImportsCheck = [ "coq_tools" ];
 
