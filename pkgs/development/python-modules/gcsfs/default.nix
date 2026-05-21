@@ -17,7 +17,6 @@
   requests,
 
   # optional-dependencies
-  fusepy,
   crcmod,
 }:
 
@@ -50,7 +49,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    gcsfuse = [ fusepy ];
     crc = [ crcmod ];
   };
 
