@@ -51,6 +51,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ flit-core ];
 
   pythonRelaxDeps = [
+    "cryptography"
     "sigstore-models"
   ];
 
@@ -82,6 +83,15 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "sigstore" ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'cryptography.hazmat.primitives.asymmetric.ec' has no attribute 'SECT163K1'
+    #
+    # Uses ec.SECT163K1 which cryptography 48 removed entirely.
+    # Upstream considers this over-testing (sigstore itself never uses this curve at runtime):
+    # https://github.com/sigstore/sigstore-python/issues/1603
+    "test/unit/internal/test_key_details.py"
+  ];
 
   disabledTests = [
     # Tests require network access
