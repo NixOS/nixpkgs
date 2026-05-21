@@ -42,7 +42,6 @@ let
     optional
     optionalString
     optionals
-    pipe
     remove
     seq
     splitString
@@ -55,6 +54,7 @@ let
     warn
     warnIf
     zipAttrsWith
+    any
     ;
 
   inherit (lib.generators) toPretty;
@@ -193,10 +193,6 @@ let
     "trivialautovarinit"
     "zerocallusedregs"
   ];
-
-  concretizeFlagImplications =
-    flag: impliesFlags: list:
-    if elem flag list then (list ++ impliesFlags) else list;
 
   removedOrReplacedAttrNames = [
     "checkInputs"
@@ -485,11 +481,6 @@ let
           actualValue;
       outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
 
-      # hardeningDisable additionally supports "all".
-      erroneousHardeningFlags = subtractLists knownHardeningFlags (
-        hardeningEnable ++ remove "all" hardeningDisable
-      );
-
       checkDependencyList = checkDependencyList' [ ];
       checkDependencyList' =
         positions: name: deps:
@@ -516,9 +507,19 @@ let
                 concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
               }${name} for ${attrs.name or attrs.pname}"
           ) 1 deps) deps;
+
+      isErroneous = flag: !elem flag knownHardeningFlags;
     in
-    if erroneousHardeningFlags != [ ] then
+    if
+      # Check if any hardening flag is erroneous
+      any isErroneous hardeningEnable || any (flag: flag != "all" && isErroneous flag) hardeningDisable
+    then
       abort (
+        let
+          erroneousHardeningFlags = subtractLists knownHardeningFlags (
+            hardeningEnable ++ remove "all" hardeningDisable
+          );
+        in
         "mkDerivation was called with unsupported hardening flags: "
         + toPretty { } {
           inherit
@@ -761,23 +762,21 @@ let
             else
               null
           } =
-            let
-              enabledHardeningOptions =
-                if elem "all" hardeningDisable then
-                  [ ]
-                else
-                  subtractLists (unique (
-                    pipe hardeningDisable [
-                      # disabling fortify implies fortify3 should also be disabled
-                      (concretizeFlagImplications "fortify" [ "fortify3" ])
-                      # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
-                      (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
-                      # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
-                      (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
-                    ]
-                  )) (defaultHardeningFlags ++ hardeningEnable);
-            in
-            concatStringsSep " " enabledHardeningOptions;
+            concatStringsSep " " (
+              if elem "all" hardeningDisable then
+                [ ]
+              else
+                filter (
+                  flag:
+                  !(elem flag hardeningDisable)
+                  # disabling fortify implies fortify3 should also be disabled
+                  && (flag == "fortify3" -> !elem "fortify" hardeningDisable)
+                  # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+                  && (flag == "strictflexarrays3" -> !elem "strictflexarrays1" hardeningDisable)
+                  # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+                  && (flag == "libcxxhardeningextensive" -> !elem "libcxxhardeningfast" hardeningDisable)
+                ) (defaultHardeningFlags ++ hardeningEnable)
+            );
 
           # TODO: remove platform condition
           # Enabling this check could be a breaking change as it requires to edit nix.conf
