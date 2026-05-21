@@ -1156,6 +1156,7 @@ with pkgs;
   git-annex-remote-dbx = callPackage ../applications/version-management/git-annex-remote-dbx {
     inherit (python3Packages)
       buildPythonApplication
+      setuptools
       dropbox
       annexremote
       humanfriendly

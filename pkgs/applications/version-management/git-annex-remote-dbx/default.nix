@@ -1,23 +1,28 @@
 {
   lib,
   buildPythonApplication,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   dropbox,
   annexremote,
   humanfriendly,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "git-annex-remote-dbx";
   version = "1.0.3";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5b6f8025ed1e9877f06882ddbd81f701a8e094647ab97595e2afc09016835a7c";
+  src = fetchFromGitHub {
+    owner = "montag451";
+    repo = "git-annex-remote-dbx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a1mCLFd9fykzX3BxQBsOe6oPUzQjAzyfxExFlXCOAvQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dropbox
     annexremote
     humanfriendly
@@ -30,4 +35,4 @@ buildPythonApplication rec {
     mainProgram = "git-annex-remote-dbx";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})
