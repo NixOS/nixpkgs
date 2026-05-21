@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "bitmath";
-  version = "1.3.3.1";
+  version = "1.4.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "293325f01e65defe966853111df11d39215eb705a967cb115851da8c4cfa3eb8";
+    sha256 = "sha256-fmSh5xYYh+JU27kQlC4mX+hApM8M7eTimh2pdUtzNOg=";
   };
 
   nativeCheckInputs = [
