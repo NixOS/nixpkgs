@@ -20,13 +20,13 @@
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "waste_collection_schedule";
-  version = "2.23.0";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hacs_waste_collection_schedule";
     tag = "v${version}";
-    hash = "sha256-YZBIh828kYhRxoRe5uIUJY4ZPJuJYZKCfA6BF/Fx2nk=";
+    hash = "sha256-fCtgEfaoI9IVEpe3YMFb8IkzNmGalueZaGv9JpS35Ok=";
   };
 
   dependencies = [

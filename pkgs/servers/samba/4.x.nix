@@ -205,6 +205,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs ./buildtools/bin
   ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The discard_const macro casts through uintptr_t, which newer clang
+    # rejects as non-constant in static initializers. Use a direct cast.
+    substituteInPlace lib/replace/replace.h --replace-fail \
+      '#define discard_const(ptr) ((void *)((uintptr_t)(ptr)))' \
+      '#define discard_const(ptr) ((void *)(ptr))'
+  ''
   + lib.optionalString isCross ''
     substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
   '';

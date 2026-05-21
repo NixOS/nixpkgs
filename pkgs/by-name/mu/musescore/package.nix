@@ -1,17 +1,19 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  fetchpatch,
+
+  # nativeBuildInputs
   cmake,
   wrapGAppsHook3,
   pkg-config,
   ninja,
+
+  # buildInputs
   alsa-lib,
   alsa-plugins,
   freetype,
   libjack2,
-  lame,
   libogg,
   libpulseaudio,
   libsndfile,
@@ -21,40 +23,46 @@
   flac,
   libopusenc,
   libopus,
-  tinyxml-2,
+  mnxdom,
   kdePackages,
+
+  # passthru tests
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.6.5";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lfgf09gLeoiXc0xsJvvKAnSJUjy/L2Fdis/9SNjb1KM=";
+    hash = "sha256-AEYZWkcjqB2pW+oBow2oMX1HQn4kRaTBBxhyxIbG0a4=";
   };
 
   cmakeFlags = [
-    "-DMUSE_APP_BUILD_MODE=release"
+    (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
-    "-DMUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT=OFF"
-    # Use our versions of system libraries
-    "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_HARFBUZZ=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
-    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
-    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
-    # Don't bundle qt qml files, relevant really only for darwin, but we set
-    # this for all platforms anyway.
-    "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
     # Don't build unit tests unless we are going to run them.
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+  ]
+  # Use our versions of system libraries, see:
+  # https://github.com/musescore/MuseScore/issues/11572
+  ++ map (l: lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_${l}" true) [
+    "FREETYPE"
+    "HARFBUZZ"
+    "MNXDOM"
+    # Implies also OPUS
+    "OPUSENC"
+    "FLAC"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/musescore/MuseScore/issues/33467
+    (lib.cmakeBool "MUE_BUILD_MACOS_INTEGRATION" false)
   ];
 
   qtWrapperArgs = [
@@ -94,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libjack2
     freetype
-    lame
     libogg
     libpulseaudio
     libsndfile
@@ -104,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     flac
     libopusenc
     libopus
-    tinyxml-2
+    mnxdom
     kdePackages.qtbase
     kdePackages.qtdeclarative
     kdePackages.qt5compat
