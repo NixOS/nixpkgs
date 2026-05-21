@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       dbreyfogle
+      me-and
     ];
     mainProgram = "copilot";
     platforms = [
