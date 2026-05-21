@@ -1875,7 +1875,7 @@ rec {
   init =
     list:
     assert lib.assertMsg (list != [ ]) "lists.init: list must not be empty!";
-    take (length list - 1) list;
+    genList (elemAt list) (length list - 1);
 
   /**
     Returns the image of the cross product of some lists by a function.
