@@ -394,11 +394,10 @@ rec {
           ''${head sections} "${concatStringsSep "." (tail sections)}"'';
 
       mkValueString =
-        v:
         let
-          escapedV = ''"${replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ] v}"'';
+          escape = replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ];
         in
-        mkValueStringDefault { } (if isString v then escapedV else v);
+        v: mkValueStringDefault { } (if isString v then ''"${escape v}"'' else v);
 
       # generation for multiple ini values
       mkKeyValue =
