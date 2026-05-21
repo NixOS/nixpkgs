@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/modelcontextprotocol/servers";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
-    mainProgram = "mcp-server-git";
+    mainProgram = "mcp-server-time";
     platforms = lib.platforms.all;
   };
 })
