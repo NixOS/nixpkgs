@@ -4,27 +4,28 @@
   fetchFromGitHub,
   requests,
   urllib3,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unifiled";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "florisvdk";
     repo = "unifiled";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1nmqxxhwa0isxdb889nhbp7w4axj1mcrwd3pr9d8nhpw4yj9h3vq";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     urllib3
   ];
 
-  # Project doesn't have any tests
-  doCheck = false;
   pythonImportsCheck = [ "unifiled" ];
 
   meta = {
@@ -33,4 +34,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
