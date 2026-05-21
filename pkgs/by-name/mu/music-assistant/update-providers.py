@@ -33,9 +33,13 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
 {%- for provider in providers | sort(attribute='domain') %}
     {{ provider.domain }} = {% if provider.available %}ps: with ps;{% else %}ps:{% endif %} [
 {%- for requirement in provider.available | sort %}
-      {{ requirement }}
+    {{ requirement }}
 {%- endfor %}
-    ];{% if provider.missing %} # missing {{ ", ".join(provider.missing) }}{% endif %}
+    ]
+{%- for requirement in provider.extra_list_deps | sort %}
+    ++ {{ requirement }}
+{%- endfor %}
+;{% if provider.missing %} # missing {{ ", ".join(provider.missing) }}{% endif %}
 {%- endfor %}
   };
 }
@@ -62,11 +66,19 @@ PACKAGE_MAP = {
 
 
 EXTRA_DEPS = {
+    # Those providers cannot guard pydantic behind TYPE_CHECKING
+    "msx_bridge": ["pydantic"],
+    "nicovideo": ["pydantic"],
     "ytmusic": [
         # https://github.com/music-assistant/server/blob/2.5.8/music_assistant/providers/ytmusic/__init__.py#L120
         "bgutil-ytdlp-pot-provider",
         "yt-dlp",
     ],
+}
+
+
+EXTRA_LIST_DEPS = {
+    "sendspin": ["aiosendspin.optional-dependencies.server"],
 }
 
 
@@ -194,6 +206,7 @@ class Provider:
     domain: str
     available: list[str] = field(default_factory=list)
     missing: list[str] = field(default_factory=list)
+    extra_list_deps: list[str] = field(default_factory=list)
 
     def __eq__(self, other):
         return self.domain == other.domain
@@ -207,7 +220,7 @@ async def resolve_providers(manifests) -> tuple[Set, Set]:
     providers = set()
     for manifest in manifests:
         provider = Provider(manifest.domain)
-        requirements = manifest.requirements + EXTRA_DEPS.get(manifest.domain, [])
+        requirements = manifest.requirements
         for requirement in requirements:
             # allow substituting requirement specifications that packaging cannot parse
             if requirement in PACKAGE_MAP:
@@ -228,6 +241,12 @@ async def resolve_providers(manifests) -> tuple[Set, Set]:
             version = await get_package_version(attr)
             if version not in requirement.specifier:
                 errors.append(f"{requirement} not satisfied by version {version}")
+        if manifest.domain in EXTRA_DEPS:
+            for requirement in EXTRA_DEPS[manifest.domain]:
+                provider.available.append(requirement)
+        if manifest.domain in EXTRA_LIST_DEPS:
+            for requirement in EXTRA_LIST_DEPS[manifest.domain]:
+                provider.extra_list_deps.append(requirement)
         providers.add(provider)
     if errors:
         print("\n - ", end="")

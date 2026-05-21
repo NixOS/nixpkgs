@@ -171,6 +171,7 @@ in
         DevicePolicy = "closed";
         LockPersonality = true;
         # breaks pyopenssl's cffi calls, used in remote access feature
+        # not compatible with llvmlite which is required by numba -> librosa
         MemoryDenyWriteExecute = false;
         ProcSubset = "pid";
         ProtectClock = true;
@@ -194,7 +195,7 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
-          "~@privileged @resources"
+          "~@privileged"
           "mbind"
         ]
         ++ lib.optionals useYTMusic [
