@@ -2,7 +2,7 @@
   stdenv,
   lib,
   writeText,
-  makeWrapper,
+  makeBinaryWrapper,
   factor-lang,
   factor-no-gui,
   librsvg,
@@ -83,7 +83,7 @@ in
       wrapped-factor
       ;
     nativeBuildInputs = [
-      makeWrapper
+      makeBinaryWrapper
       (lib.hiPrio finalAttrs.wrapped-factor)
     ]
     ++ attrs.nativeBuildInputs or [ ];
