@@ -5,6 +5,7 @@
   fetchzip,
   libarchive,
   pkg-config,
+  jq,
   platformio-core,
   writableTmpDirAsHomeHook,
   bluez,
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     }))
     writableTmpDirAsHomeHook
     makeBinaryWrapper
+    jq
   ];
 
   buildInputs = [
@@ -82,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -ar ${platformio-deps-native}/. platformio-deps-native
     chmod +w -R platformio-deps-native
     rm -f platformio-deps-native/core/appstate.json
+    jq "map_values($(date +%s))" platformio-deps-native/core/.cache/downloads/usage.db > usage_new.db
+    mv usage_new.db platformio-deps-native/core/.cache/downloads/usage.db
 
     export PLATFORMIO_CORE_DIR=platformio-deps-native/core
     export PLATFORMIO_LIBDEPS_DIR=platformio-deps-native/libdeps
