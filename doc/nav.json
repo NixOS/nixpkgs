@@ -478,6 +478,10 @@
                   "file": "hooks/installAgentSkills.section.md"
                 },
                 {
+                  "id": "installiconshook",
+                  "file": "hooks/installIconsHook.section.md"
+                },
+                {
                   "id": "installshellfiles",
                   "file": "hooks/installShellFiles.section.md"
                 },
