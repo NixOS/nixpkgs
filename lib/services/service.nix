@@ -1,11 +1,24 @@
 # Non-module arguments
 # These are separate from the module arguments to avoid implicit dependencies.
 # This makes service modules self-contains, allowing mixing of Nixpkgs versions.
+#
+# Portable service base module - imported into every modular service's module system.
+#
+# Defines the core service interface (`process.argv`, sub-`services`, `configData`)
+# and imports the contracts module. This is system-agnostic: it works regardless of
+# whether the containing system is NixOS, home-manager, or similar systems.
+#
+# Contract state propagates from parent services to sub-services automatically,
+# with `contracts.*.results` scoped to each service's own entries via direct injection.
+#
+# Service-manager-specific options (systemd units, launchd plists, etc.) are added
+# via `extraRootModules` in `lib/services/lib.nix`'s `configure` function, not here.
 { pkgs }:
 
 # The module
 {
   lib,
+  config,
   ...
 }:
 let
@@ -19,6 +32,7 @@ in
     ../../modules/generic/meta-maintainers.nix
     ../../nixos/modules/misc/assertions.nix
     (lib.modules.importApply ./config-data.nix { inherit pkgs; })
+    lib.contract.module
   ];
   options = {
     services = mkOption {
@@ -26,6 +40,20 @@ in
         types.submoduleWith {
           modules = [
             (lib.modules.importApply ./service.nix { inherit pkgs; })
+            # Propagate contract state to sub-services, scoping results
+            # so sub-service results are accessible via just the option name.
+            (
+              { name, ... }:
+              {
+                config = {
+                  inherit (config) contractDefinitions;
+                  contracts = lib.mapAttrs (contractType: _: {
+                    results = lib.mkForce (config.contracts.${contractType}.results.${name} or { });
+                    defaultProvider = lib.mkForce config.contracts.${contractType}.defaultProvider;
+                  }) config.contractDefinitions;
+                };
+              }
+            )
           ];
         }
       );
