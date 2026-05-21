@@ -6975,6 +6975,12 @@
     githubId = 392583;
     name = "Dirk-Willem van Gulik";
   };
+  disciple153 = {
+    email = "c_eps@yahoo.com";
+    github = "Disciple153";
+    githubId = 31453505;
+    name = "Canaan Epperson";
+  };
   disserman = {
     email = "disserman@gmail.com";
     github = "divi255";
