@@ -7,7 +7,6 @@
   blas,
   cmake,
   flex,
-  fop,
   glpk,
   gmp,
   lapack,
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     cmake
     flex
-    fop
     libxml2
     libxslt
     pkg-config
