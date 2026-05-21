@@ -3,22 +3,21 @@
   buildPythonPackage,
   fetchPypi,
   gitpython,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "git-sweep";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-zSnxw3JHsFru9fOZSJZX+XOu144uJ0DaIKYlAtoHV7M=";
   };
 
-  propagatedBuildInputs = [ gitpython ];
-
-  # Module has no tests
-  doCheck = false;
+  build-system = [ setuptools ];
+  dependencies = [ gitpython ];
 
   pythonImportsCheck = [ "gitsweep" ];
 
@@ -29,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})
