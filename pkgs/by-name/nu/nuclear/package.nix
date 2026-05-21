@@ -1,33 +1,83 @@
 {
-  appimageTools,
+  fetchFromGitHub,
+  fetchPnpmDeps,
   lib,
-  fetchurl,
+  rustPlatform,
+  cargo-tauri,
+  glib-networking,
+  jq,
+  moreutils,
+  nix-update-script,
+  nodejs_22,
+  openssl,
+  pkg-config,
+  pnpmConfigHook,
+  pnpm_10,
+  stdenv,
+  webkitgtk_4_1,
+  wrapGAppsHook4,
 }:
-appimageTools.wrapType2 (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nuclear";
-  version = "0.6.48";
-  src = fetchurl {
-    # Nuclear currently only publishes AppImage releases for x86_64, which is hardcoded in
-    # the package name. We also hardcode the host arch in the release name, but should upstream
-    # provide more arches, we should use stdenv.hostPlatform to determine the arch and choose
-    # source URL accordingly.
-    url = "https://github.com/nukeop/nuclear/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-v${finalAttrs.version}-x86_64.AppImage";
-    hash = "sha256-k3qGWPn+O4kazsrrZAYHIvSrrix9LNnnJgZGJqlJbJE=";
+  version = "1.37.3";
+
+  src = fetchFromGitHub {
+    owner = "nukeop";
+    repo = "nuclear";
+    tag = "player@1.37.3";
+    hash = "sha256-Ada86CXCrkIaEUKsCrBeji8Su5Bbl1a/ENghO5OJPZc=";
   };
 
-  extraInstallCommands = ''
-    install -m 444 -D ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
-    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
-  '';
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-TeoNYkP6rUfqxtnklcl8wLODesbv1kasKviTspVKKWU=";
+  };
 
+  cargoRoot = "packages/player/src-tauri";
+
+  postPatch =
+    let
+      tauriConfJson = "${finalAttrs.cargoRoot}/tauri.conf.json";
+    in
+    ''
+      jq '.bundle.createUpdaterArtifacts = false' ${tauriConfJson} | sponge ${tauriConfJson}
+    '';
+
+  buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  cargoHash = "sha256-bVioujpKUo3q3pNqFwgPRP+kFRZsNXxALDxXbpV0CjY=";
+
+  nativeBuildInputs = [
+    cargo-tauri.hook
+    jq
+    moreutils
+    nodejs_22
+    pkg-config
+    pnpmConfigHook
+    pnpm_10
+    wrapGAppsHook4
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    openssl
+    webkitgtk_4_1
+  ];
+
+  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Streaming music player that finds free music for you";
     homepage = "https://nuclear.js.org/";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.NotAShelf ];
-    platforms = [ "x86_64-linux" ];
-    mainProgram = "nuclear";
+    platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "nuclear-music-player";
   };
 })
