@@ -1352,11 +1352,6 @@ with pkgs;
     emojiSupport = true;
   };
 
-  termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
-    termite = termite-unwrapped;
-  };
-  termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
-
   twine = with python3Packages; toPythonApplication twine;
 
   inherit (callPackages ../development/tools/ammonite { })
