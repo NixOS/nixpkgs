@@ -93,7 +93,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/netbirdio/netbird/version.version=${finalAttrs.version}"
+    "-X github.com/netbirdio/netbird/version.version=v${finalAttrs.version}"
     "-X main.builtBy=nix"
   ];
 
