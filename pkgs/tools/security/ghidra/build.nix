@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle_8,
+  gradle,
   makeBinaryWrapper,
   openjdk21,
   unzip,
@@ -20,7 +20,7 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "12.0.4";
+  version = "12.1";
 
   isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
 
@@ -30,7 +30,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-ETRsLbnE4RU+MdmSxMHNIbevYsZhgrzqQDQmBojchLk=";
+    hash = "sha256-eAzmIqSE8cSGiEXYw9VPQ5iRGHZ0qfdwVnizVqoGa+Y=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -74,9 +74,6 @@ let
     }
     HERE
   '';
-
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -216,6 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      tbaldwin
       roblabla
       vringar
     ];
