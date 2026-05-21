@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
+  env.CFLAGS = "-fgnu89-inline";
 
   meta = {
     homepage = "https://www.logicalshift.co.uk/unix/zoom/";
