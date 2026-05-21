@@ -131,49 +131,57 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs build/toolchain/apple
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      hostPlatformLibraryExtension =
+        if stdenv.hostPlatform.isStatic then
+          stdenv.hostPlatform.extensions.staticLibrary
+        else
+          stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      runHook preInstall
 
-    install -v -m755 -D \
-      *${stdenv.hostPlatform.extensions.sharedLibrary}* \
-      -t "$out/lib"
-    install -v -m755 -D \
-      angle_shader_translator \
-      gaussian_distribution_gentables \
-      -t "$out/bin"
+      install -v -m755 -D \
+        *${hostPlatformLibraryExtension}* \
+        -t "$out/lib"
+      install -v -m755 -D \
+        angle_shader_translator \
+        gaussian_distribution_gentables \
+        -t "$out/bin"
 
-    cp -rv ../../include "$out"
+      cp -rv ../../include "$out"
 
-    mkdir -p $out/lib/pkgconfig
+      mkdir -p $out/lib/pkgconfig
 
-    cat > $out/lib/pkgconfig/angle.pc <<EOF
-    prefix=${placeholder "out"}
-    exec_prefix=''${prefix}
-    libdir=''${prefix}/lib
-    includedir=''${prefix}/include
+      cat > $out/lib/pkgconfig/angle.pc <<EOF
+      prefix=${placeholder "out"}
+      exec_prefix=''${prefix}
+      libdir=''${prefix}/lib
+      includedir=''${prefix}/include
 
-    Name: angle
-    Description: ${finalAttrs.meta.description}
+      Name: angle
+      Description: ${finalAttrs.meta.description}
 
-    URL: ${finalAttrs.meta.homepage}
-    Version: ${lib.versions.major finalAttrs.version}
-    Libs: -L''${libdir} -l${
-      lib.concatStringsSep " -l" [
-        "EGL"
-        "EGL_vulkan_secondaries"
-        "GLESv1_CM"
-        "GLESv2"
-        "GLESv2_vulkan_secondaries"
-        "GLESv2_with_capture"
-        "VkICD_mock_icd"
-        "feature_support"
-      ]
-    }
-    Cflags: -I''${includedir}
-    EOF
+      URL: ${finalAttrs.meta.homepage}
+      Version: ${lib.versions.major finalAttrs.version}
+      Libs: -L''${libdir} -l${
+        lib.concatStringsSep " -l" [
+          "EGL"
+          "EGL_vulkan_secondaries"
+          "GLESv1_CM"
+          "GLESv2"
+          "GLESv2_vulkan_secondaries"
+          "GLESv2_with_capture"
+          "VkICD_mock_icd"
+          "feature_support"
+        ]
+      }
+      Cflags: -I''${includedir}
+      EOF
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = {
     description = "Conformant OpenGL ES implementation for Windows, Mac, Linux, iOS and Android";
