@@ -12,7 +12,6 @@ let
     warn
     ;
   inherit (lib.attrsets) mapAttrs attrNames attrValues;
-  inherit (lib) max;
 in
 rec {
 
@@ -1626,7 +1625,19 @@ rec {
     ```
     :::
   */
-  dropEnd = n: xs: take (max 0 (length xs - n)) xs;
+  dropEnd =
+    n: list:
+    let
+      len = length list;
+    in
+    genList (elemAt list) (
+      if n > len then
+        0
+      else if n < 0 then
+        len
+      else
+        len - n
+    );
 
   /**
     Whether the first list is a prefix of the second list.
