@@ -5,7 +5,7 @@
   versionCheckHook,
   pkg-config,
   zstd,
-  OVMF,
+  ovmf,
   qemu,
   qemu-utils,
   openssl,
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     zstd
-    OVMF
+    ovmf.qemu
     qemu
     qemu-utils
     openssl

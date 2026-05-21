@@ -10,7 +10,7 @@
   withQemu ? false,
   qemu,
   makeWrapper,
-  OVMF,
+  ovmf,
 }:
 
 buildGoModule (finalAttrs: {
@@ -40,8 +40,8 @@ buildGoModule (finalAttrs: {
   + (lib.optionalString (withQemu && stdenv.hostPlatform.isLinux) ''
     substituteInPlace \
       pkg/minikube/registry/drvs/qemu2/qemu2.go \
-      --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
-      --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
+      --replace "/usr/share/OVMF/OVMF_CODE.fd" "${ovmf.qemu.firmware}" \
+      --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${ovmf.qemu.firmware}"
   '');
 
   nativeBuildInputs = [

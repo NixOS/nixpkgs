@@ -999,11 +999,11 @@ in
       OVMF = mkOption {
         type = types.package;
         default =
-          (pkgs.OVMF.override {
+          (pkgs.ovmf.qemu.override {
             secureBoot = cfg.useSecureBoot;
           }).fd;
         defaultText = ''
-          (pkgs.OVMF.override {
+          (pkgs.ovmf.qemu.override {
                     secureBoot = cfg.useSecureBoot;
                   }).fd'';
         description = "OVMF firmware package, defaults to OVMF configured with secure boot if needed.";

@@ -16,7 +16,7 @@
       virtualisation.useBootLoader = true;
       virtualisation.useEFIBoot = true;
       virtualisation.useSecureBoot = true;
-      virtualisation.efi.OVMF = pkgs.OVMFFull.fd;
+      virtualisation.efi.OVMF = pkgs.ovmf.full.fd;
       virtualisation.efi.keepVariables = true;
 
       boot.loader.efi.canTouchEfiVariables = true;

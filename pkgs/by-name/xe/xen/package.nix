@@ -36,7 +36,7 @@
   withIPXE ? true,
   ipxe,
   withOVMF ? true,
-  OVMF-xen,
+  ovmf,
   withSeaBIOS ? true,
   seabios-qemu,
 
@@ -276,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-qemu-traditional"
     "--with-system-qemu"
     (if withSeaBIOS then "--with-system-seabios=${seabios-qemu.firmware}" else "--disable-seabios")
-    (if withOVMF then "--with-system-ovmf=${OVMF-xen.mergedFirmware}" else "--disable-ovmf")
+    (if withOVMF then "--with-system-ovmf=${ovmf.xen.mergedFirmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
   ];

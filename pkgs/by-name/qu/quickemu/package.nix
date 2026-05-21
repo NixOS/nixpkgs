@@ -25,8 +25,7 @@
   xdg-user-dirs,
   xrandr,
   zsync,
-  OVMF,
-  OVMFFull,
+  ovmf,
   testers,
   installShellFiles,
 }:
@@ -70,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i \
-      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.firmware}","${OVMFFull.variables}" |' \
-      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
+      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${ovmf.full.firmware}","${ovmf.full.variables}" |' \
+      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${ovmf.qemu.firmware}","${ovmf.qemu.variables}" |' \
       -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       -e 's,\[ -x "\$(command -v smbd)" \],true,' \
