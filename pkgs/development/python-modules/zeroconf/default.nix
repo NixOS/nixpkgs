@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zeroconf";
   version = "0.149.15";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FhGe4TE0fl7b2VhGoqK2/3DEpOAwfZaAjPuHzeFaH8M=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
-}
+})
