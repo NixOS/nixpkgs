@@ -12,7 +12,6 @@
   gtk3,
   gtk4,
   fmt,
-  pcre,
   libuuid,
   libselinux,
   libsepol,
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     gtk4
     fmt
     fcitx5
-    pcre
     libuuid
     libselinux
     libsepol
