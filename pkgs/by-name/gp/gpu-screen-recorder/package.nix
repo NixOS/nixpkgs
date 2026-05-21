@@ -14,6 +14,7 @@
   wayland,
   wayland-scanner,
   vulkan-headers,
+  vulkan-loader,
   pipewire,
   libdrm,
   libva,
@@ -28,12 +29,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "5.12.5";
+  version = "5.13.8";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder";
     tag = finalAttrs.version;
-    hash = "sha256-cw3IejeWFhuFSzUgK2sv4LEa2ohHNx6C3T7+GhHljsY=";
+    hash = "sha256-0uYj9NA6KqORr7ag8OOMphWWyHU27ptuOs5q0lGLGLc=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-scanner
     vulkan-headers
+    vulkan-loader
     libdrm
     libva
     libxdamage
@@ -95,6 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       babbaj
       js6pak
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -1314,6 +1314,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  auto-dark-mode-nvim = buildVimPlugin {
+    pname = "auto-dark-mode.nvim";
+    version = "0-unstable-2026-03-29";
+    src = fetchFromGitHub {
+      owner = "f-person";
+      repo = "auto-dark-mode.nvim";
+      rev = "54058b4fe414bd64bd2904a6f8a63f1f14e3d8df";
+      hash = "sha256-xTgRyct3L6Gcz/vdYSc+h2IUgi/+Lh1Q4mxJwHISeis=";
+    };
+    meta.homepage = "https://github.com/f-person/auto-dark-mode.nvim/";
+    meta.license = getLicenseFromSpdxId "GPL-3.0-only";
+    meta.hydraPlatforms = [ ];
+  };
+
   auto-fix-return-nvim = buildVimPlugin {
     pname = "auto-fix-return.nvim";
     version = "0.4.0";
@@ -3899,6 +3913,20 @@ final: prev: {
     };
     meta.homepage = "https://github.com/rhysd/conflict-marker.vim/";
     meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
+  conflict-nvim = buildVimPlugin {
+    pname = "conflict.nvim";
+    version = "0-unstable-2026-04-25";
+    src = fetchFromGitHub {
+      owner = "niekdomi";
+      repo = "conflict.nvim";
+      rev = "fdc879c34c528aab90e1b90c5d408d141f31fef8";
+      hash = "sha256-hXww2PNTU5LX5egngKwMxOjvQl5CMgzBbDesRswPD2g=";
+    };
+    meta.homepage = "https://github.com/niekdomi/conflict.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -12334,6 +12362,19 @@ final: prev: {
     };
     meta.homepage = "https://github.com/jedrzejboczar/nvim-dap-cortex-debug/";
     meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-dap-disasm = buildVimPlugin {
+    pname = "nvim-dap-disasm";
+    version = "0-unstable-2026-02-25";
+    src = fetchgit {
+      url = "https://codeberg.org/Jorenar/nvim-dap-disasm";
+      rev = "1119f3f2b22e411adcd123cdcf6d0425b61a31a7";
+      hash = "sha256-lq0tbMksVXccf6GGD7OxWAuoD9w8tlt30dpJSMtN4g8=";
+    };
+    meta.homepage = "https://codeberg.org/Jorenar/nvim-dap-disasm";
+    meta.license = unfree;
     meta.hydraPlatforms = [ ];
   };
 

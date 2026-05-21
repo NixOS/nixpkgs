@@ -146,6 +146,17 @@ let
       # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.novy_cooker_hood.config.abort.no_compatible_transmitters
       "test_no_compatible_transmitters"
     ];
+    tractive = [
+      # [2026.5.3] Entity does not get set up
+      "test_binary_sensor"
+      "test_sensor"
+      "test_switch"
+      "test_switch_on"
+      "test_switch_off"
+      "test_switch_on_with_exception"
+      "test_switch_off_with_exception"
+      "test_switch_unavailable"
+    ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"

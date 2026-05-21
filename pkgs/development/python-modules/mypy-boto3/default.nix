@@ -574,8 +574,8 @@ in
     buildMypyBoto3Package "glue" "1.43.8"
       "sha256-CJJviequ3qlGqjvK0p4Z1/MPG0XK6k7LM0CkOfh4LCc=";
   mypy-boto3-grafana =
-    buildMypyBoto3Package "grafana" "1.43.8"
-      "sha256-qjSN2N+pZSw4PXSziognGUE4U7W+4BIr/qcmcu6+M9o=";
+    buildMypyBoto3Package "grafana" "1.43.11"
+      "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
 
   mypy-boto3-greengrass =
     buildMypyBoto3Package "greengrass" "1.43.0"
@@ -590,8 +590,8 @@ in
       "sha256-nTKK7qqa2apyNM4/U2AphLGvoSqemVKfpAciilJ0pRE=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.43.6"
-      "sha256-G0b+n8/YssnJeC5vdQSf2wNYlYNXhZYWnNzDw6wjgc8=";
+    buildMypyBoto3Package "guardduty" "1.43.11"
+      "sha256-P8QXa4Fcbyeh9mnFh+4OEby6aleplsSpotZzDCo/Pwc=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.43.0"
@@ -1170,8 +1170,8 @@ in
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.7"
-      "sha256-32sFjHHqE0IU9DouhrWPMG3RKpOYZ5Z2af+hD0vJkyg=";
+    buildMypyBoto3Package "sagemaker" "1.43.11"
+      "sha256-fajK9mOIDbfYcEftRqZDbktC1nOLa9xWIEnOzUwiLYA=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"

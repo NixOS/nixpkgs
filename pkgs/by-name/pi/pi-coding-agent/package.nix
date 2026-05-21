@@ -6,6 +6,7 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
   ripgrep,
+  fd,
   makeBinaryWrapper,
   stdenvNoCC,
 }:
@@ -77,7 +78,12 @@ buildNpmPackage (finalAttrs: {
       "$nm/@anthropic-ai/sandbox-runtime/vendor/seccomp"
   '';
 
-  postFixup = "wrapProgram $out/bin/pi --prefix PATH : ${lib.makeBinPath [ ripgrep ]}";
+  postFixup = "wrapProgram $out/bin/pi --prefix PATH : ${
+    lib.makeBinPath [
+      ripgrep
+      fd
+    ]
+  }";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [

@@ -52,9 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail awk ${lib.getExe gawk} \
       --replace-fail "hostname -s" "${lib.getExe hostname} -s" \
       --replace-fail dirname ${lib.getExe' coreutils "dirname"} \
-      --replace-fail readlink ${lib.getExe' coreutils "readlink"}
+      --replace-fail readlink ${lib.getExe' coreutils "readlink"} \
+      --replace-fail cat ${lib.getExe' coreutils "cat"}
 
-    sed -i '/USER_JAVA_OPTS=$RTG_JAVA_OPTS/a mkdir -p $HOME/.config/rtg-tools'  installer/rtg
+    sed -i '/# Now write the selection to local config/i mkdir -p $HOME/.config/rtg-tools' installer/rtg
   '';
 
   checkPhase = ''

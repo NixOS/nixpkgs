@@ -153,15 +153,16 @@ let
 
                   [[ ! -e eng/PublishSourceBuild.props ]] ||
                     substituteInPlace eng/PublishSourceBuild.props \
-                      --replace-fail 'AfterTargets="Publish"' "" \
-                      --replace-fail 'AfterTargets="DiscoverArtifacts"' ""
+                      --replace-quiet 'AfterTargets="Publish"' "" \
+                      --replace-quiet 'AfterTargets="Execute"' "" \
+                      --replace-quiet 'AfterTargets="DiscoverArtifacts"' ""
                 '';
                 buildFlags = [
                   "--online"
                 ]
                 ++ old.buildFlags
                 ++ [
-                  "-p:RootRepo=source-build-reference-packages"
+                  "-p:RootRepo=source-build-assets"
                   "-p:SkipPrepareSdkArchive=true"
                 ];
                 prebuiltPackages = null;
@@ -179,6 +180,7 @@ let
                 trap 'rm -fr "$tmp"' EXIT
 
                 HOME=$tmp/.home
+                mkdir -p "$HOME"
                 cd "$tmp"
 
                 phases="''${prePhases[*]:-} unpackPhase patchPhase ''${preConfigurePhases[*]:-} \

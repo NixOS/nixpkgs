@@ -193,7 +193,7 @@ in
 
     environment.systemPackages =
       # We increase the priority a little, so that plain glibc in systemPackages can't win.
-      lib.optional (config.i18n.glibcLocales != null && cfg.supportedLocales != [ ]) (
+      lib.optional (cfg.glibcLocales != null && cfg.supportedLocales != [ ]) (
         lib.setPrio (-1) cfg.glibcLocales
       );
 

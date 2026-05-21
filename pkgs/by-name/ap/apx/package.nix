@@ -115,10 +115,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Vanilla-OS/apx";
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      chewblacka
-      masrlinu
-    ];
+    maintainers = with lib.maintainers; [ masrlinu ];
     mainProgram = "apx";
   };
 })
