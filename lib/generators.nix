@@ -379,7 +379,6 @@ rec {
       See the [git-config documentation](https://git-scm.com/docs/git-config#_variables) for possible values.
   */
   toGitINI =
-    attrs:
     let
       mkSectionName =
         name:
@@ -427,7 +426,7 @@ rec {
 
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
-    toINI_ (gitFlattenAttrs attrs);
+    attrs: toINI_ (gitFlattenAttrs attrs);
 
   /**
     `mkKeyValueDefault` wrapper that handles dconf INI quirks.
