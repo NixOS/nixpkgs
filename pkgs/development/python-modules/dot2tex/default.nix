@@ -10,13 +10,13 @@
   texliveSmall,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dot2tex";
   version = "2.11.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KZoq8FruW74CV6VipQapPieSk9XDjyjQirissyM/584=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/kjellmf/dot2tex";
     license = lib.licenses.mit;
   };
-}
+})
