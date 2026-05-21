@@ -21,14 +21,14 @@
 let
   doit = buildPythonPackage rec {
     pname = "doit";
-    version = "0.36.0";
+    version = "0.37.0";
     pyproject = true;
 
     disabled = !isPy3k;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-cdB8zJUUyyL+WdmJmVd2ZeqrV+FvZE0EM2rgtLriNLw=";
+      hash = "sha256-08cuDkao+h3avqj4MHYkAt7gkMrzPDDCKVrHAQ248Jw=";
     };
 
     build-system = [ setuptools ];
