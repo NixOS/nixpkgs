@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
   version = "1.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-9IVXAuXfFSNM+1CMfI4OsBLYjH9fcTdXsqtpjhz2Jm0=";
   };
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "A distributed object storage system written in Rust";
     homepage = "https://github.com/rustfs/rustfs";
     license = licenses.asl20;
