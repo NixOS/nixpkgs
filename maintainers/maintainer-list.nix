@@ -18133,6 +18133,12 @@
     githubId = 20436235;
     name = "Billy Zaelani Malik";
   };
+  minksd = {
+    email = "danielminks1230@gmail.com";
+    github = "minksd";
+    githubId = 157417909;
+    name = "Daniel Minks";
+  };
   mio = {
     name = "Mio";
     email = "mio@mio19.uk";
