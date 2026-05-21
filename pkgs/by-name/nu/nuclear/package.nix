@@ -3,19 +3,23 @@
   fetchPnpmDeps,
   lib,
   rustPlatform,
+  # Common
   cargo-tauri,
-  glib-networking,
   jq,
   moreutils,
   nix-update-script,
   nodejs_22,
-  openssl,
   pkg-config,
   pnpmConfigHook,
   pnpm_10,
   stdenv,
+  # Linux Dependents
+  glib-networking,
+  openssl,
   webkitgtk_4_1,
   wrapGAppsHook4,
+  # Darwin Dependents
+  darwin,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nuclear";
@@ -42,17 +46,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "packages/player/src-tauri";
 
+  preBuild = lib.optionals stdenv.hostPlatform.isDarwin ''
+    mkdir -p $TMPDIR/mock_bin
+
+    # Create a fake `xattr` that simply exits with 0 (success)
+    cat << 'EOF' > $TMPDIR/mock_bin/xattr
+    #!/usr/bin/env bash
+    exit 0
+    EOF
+
+    chmod +x $TMPDIR/mock_bin/xattr
+
+    export PATH="$TMPDIR/mock_bin:$PATH"
+  '';
+
   postPatch =
     let
       tauriConfJson = "${finalAttrs.cargoRoot}/tauri.conf.json";
     in
     ''
       jq '.bundle.createUpdaterArtifacts = false' ${tauriConfJson} | sponge ${tauriConfJson}
+    ''
+    # disable Tauri's built-in codesigning
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      jq '.bundle.macOS.signingIdentity = null' ${tauriConfJson} | sponge ${tauriConfJson}
     '';
 
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoHash = "sha256-bVioujpKUo3q3pNqFwgPRP+kFRZsNXxALDxXbpV0CjY=";
+
+  tauriBuildFlags = [ "--verbose" ];
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -63,7 +87,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpmConfigHook
     pnpm_10
     wrapGAppsHook4
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
@@ -78,7 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://nuclear.js.org/";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.NotAShelf ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "nuclear-music-player";
   };
 })
