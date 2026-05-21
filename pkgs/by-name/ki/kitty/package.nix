@@ -216,6 +216,8 @@ buildPythonApplication rec {
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace kitty_tests/check_build.py \
+      --replace test_macos_dictation_forwarding no_test_macos_dictation_forwarding
 
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_transfer_send dont_test_transfer_send

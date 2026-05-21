@@ -37,7 +37,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.9.6";
+  version = "2.10.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4zfeMbqM43Gd/s7EDROEHste1+0+X9Qs3LUIxCp2Clg=";
+    hash = "sha256-hbsOA+8tOoFuwiz2KLdcJsbrn/sYec8vqzvh6mKgX08=";
   };
 
   build-system = with python3Packages; [
@@ -54,57 +54,103 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "agent-client-protocol"
-    "certifi"
-    "cryptography"
-    "gitpython"
-    "mistralai"
-    "opentelemetry-exporter-otlp-proto-http"
-    "opentelemetry-sdk"
-    "opentelemetry-semantic-conventions"
-    "pydantic-settings"
-    "zstandard"
-  ];
-  dependencies = with python3Packages; [
-    agent-client-protocol
-    anyio
-    cachetools
-    certifi
-    charset-normalizer
-    cryptography
-    gitpython
-    giturlparse
-    google-auth
-    httpx
-    jsonpatch
-    keyring
-    markdownify
-    mcp
-    mistralai
-    opentelemetry-api
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-sdk
-    opentelemetry-semantic-conventions
-    packaging
-    pexpect
-    pydantic
-    pydantic-settings
-    pyperclip
-    python-dotenv
-    pyyaml
-    requests
-    rich
-    sounddevice
-    textual
-    textual-speedups
-    tomli-w
-    tree-sitter
-    tree-sitter-bash
-    watchfiles
-    websockets
-    zstandard
-  ];
+  pythonRelaxDeps = true;
+  dependencies =
+    with python3Packages;
+    [
+      agent-client-protocol
+      annotated-types
+      anyio
+      attrs
+      beautifulsoup4
+      cachetools
+      certifi
+      cffi
+      charset-normalizer
+      click
+      cryptography
+      eval-type-backport
+      gitdb
+      gitpython
+      giturlparse
+      google-auth
+      googleapis-common-protos
+      h11
+      httpcore
+      httpx
+      httpx-sse
+      idna
+      importlib-metadata
+      jaraco-classes
+      jaraco-context
+      jaraco-functools
+      jsonpatch
+      jsonpath-python
+      jsonpointer
+      jsonschema
+      jsonschema-specifications
+      keyring
+      linkify-it-py
+      markdown-it-py
+      markdownify
+      mcp
+      mdit-py-plugins
+      mdurl
+      mistralai
+      more-itertools
+      opentelemetry-api
+      opentelemetry-exporter-otlp-proto-common
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-proto
+      opentelemetry-sdk
+      opentelemetry-semantic-conventions
+      packaging
+      pexpect
+      platformdirs
+      protobuf
+      ptyprocess
+      pyasn1
+      pyasn1-modules
+      pycparser
+      pydantic
+      pydantic-core
+      pydantic-settings
+      pygments
+      pyjwt
+      pyperclip
+      python-dateutil
+      python-dotenv
+      python-multipart
+      pyyaml
+      referencing
+      requests
+      rich
+      rpds-py
+      six
+      smmap
+      sounddevice
+      soupsieve
+      sse-starlette
+      starlette
+      textual
+      textual-speedups
+      tomli-w
+      tree-sitter
+      tree-sitter-bash
+      typing-extensions
+      typing-inspection
+      uc-micro-py
+      urllib3
+      uvicorn
+      watchfiles
+      websockets
+      zipp
+      zstandard
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      jeepney
+      secretstorage
+    ];
 
   pythonImportsCheck = [ "vibe" ];
 
@@ -114,6 +160,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.pytest-xdist
     python3Packages.pytestCheckHook
     python3Packages.respx
+    python3Packages.tomlkit
     uv
     versionCheckHook
     writableTmpDirAsHomeHook

@@ -149,6 +149,7 @@ stdenv.mkDerivation {
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
     ]
+    # see passthru.hasCrossTargetBug
     ++ lib.optional (
       lib.versionAtLeast version "10" && lib.versionOlder version "11"
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
@@ -157,7 +158,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
-    sdk_version=$(HOME=$(mktemp -d) ${bootstrapSdk}/bin/dotnet --version)
+    sdk_version=$(${bootstrapSdk}/bin/dotnet --version)
     jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
     mv global.json{~,}
 
@@ -177,16 +178,6 @@ stdenv.mkDerivation {
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1603' \
       src/nuget-client/src/NuGet.Core/NuGet.CommandLine.XPlat/NuGet.CommandLine.XPlat.csproj
-
-    # AD0001 crashes intermittently in source-build-reference-packages with
-    # CSC : error AD0001: Analyzer 'Microsoft.NetCore.CSharp.Analyzers.Runtime.CSharpDetectPreviewFeatureAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.
-    # possibly related to https://github.com/dotnet/runtime/issues/90356
-    xmlstarlet ed \
-      --inplace \
-      -s //Project -t elem -n PropertyGroup \
-      -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
-      src/source-build-reference-packages/src/referencePackages/Directory.Build.props
-
   ''
   + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
@@ -371,13 +362,11 @@ stdenv.mkDerivation {
     in
     ''
       runHook preConfigure
-
       # The build process tries to overwrite some things in the sdk (e.g.
       # SourceBuild.MSBuildSdkResolver.dll), so it needs to be mutable.
-      cp -Tr ${bootstrapSdk}/share/dotnet .dotnet
+      mkdir .dotnet
+      cp -r ${bootstrapSdk}/share/dotnet/* .dotnet/
       chmod -R +w .dotnet
-
-      export HOME=$(mktemp -d)
     ''
     + lib.optionalString (lib.versionAtLeast version "10") ''
       dotnet nuget add source "${bootstrapSdk.artifacts}"
@@ -446,12 +435,9 @@ stdenv.mkDerivation {
 
     # CLR_CC/CXX need to be set to stop the build system from using clang-11,
     # which is unwrapped
-    # dotnet needs to be in PATH to fix:
-    # src/sdk/eng/restore-toolset.sh: line 114: /nix/store/[...]-dotnet-sdk-9.0.100-preview.2.24157.14//.version: Read-only file system
     version= \
     CLR_CC=$(command -v clang) \
     CLR_CXX=$(command -v clang++) \
-    PATH=$PWD/.dotnet:$PATH \
       ./build.sh $buildFlags
 
     runHook postBuild
@@ -530,6 +516,7 @@ stdenv.mkDerivation {
     icu = _icu;
     # ilcompiler is currently broken: https://github.com/dotnet/source-build/issues/1215
     hasILCompiler = lib.versionAtLeast version "9";
+    hasCrossTargetBug = false;
   };
 
   meta = {

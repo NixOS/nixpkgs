@@ -28,13 +28,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "opencloud";
-  version = "6.2.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "opencloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gWz6L0/lBJvhQ/6+j3g2ENPRyQYZ2jGz+i+nUZa+5zQ=";
+    hash = "sha256-5bGsJcmrF01E0zXKxwRQpTZl/OinfW7da3nf3/T74hg=";
   };
 
   postPatch = ''

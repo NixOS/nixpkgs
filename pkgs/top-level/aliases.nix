@@ -516,6 +516,7 @@ mapAliases {
   clima = throw "'clima' has been removed, as it has been unmaintained upstream since December 2024, use glow instead"; # Added 2026-01-01
   clipbuzz = throw "clipbuzz has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   clipgrab = throw "'clipgrab' has been removed, as it was unmaintained in nixpkgs since 2022 and depended on vulnerable qt5 webengine."; # Added 2026-02-11
+  clipit = throw "'clipit' has been removed as it is unmaintained upstream and broken"; # Added 2026-05-16
   cloudlogoffline = throw "cloudlogoffline has been removed"; # Added 2025-05-18
   clucene_core = warnAlias "'clucene_core' has been renamed to 'clucene-core'" clucene-core; # Added 2026-01-12
   clucene_core_2 = warnAlias "'clucene_core_2' has been renamed to 'clucene-core_2'" clucene-core_2; # Added 2026-01-12
@@ -698,6 +699,7 @@ mapAliases {
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
+  fastfetchMinimal = warnAlias "'fastfetchMinimal' has been renamed to 'fastfetch.minimal'" fastfetch.minimal; # Added 2026-05-18
   fastJson = warnAlias "'fastJson' has been renamed to 'libfastjson'" libfastjson; # Added 2026-02-08
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27
   faustPhysicalModeling = warnAlias "'faustPhysicalModeling' has been renamed to 'faust-physicalmodeling'" faust-physicalmodeling; # Added 2026-02-08
@@ -710,7 +712,6 @@ mapAliases {
   fcitx5-skk-qt = throw "'fcitx5-skk-qt' has been renamed to/replaced by 'qt6Packages.fcitx5-skk-qt'"; # Converted to throw 2025-10-27
   fcitx5-unikey = throw "'fcitx5-unikey' has been renamed to/replaced by 'qt6Packages.fcitx5-unikey'"; # Converted to throw 2025-10-27
   fcitx5-with-addons = throw "'fcitx5-with-addons' has been renamed to/replaced by 'qt6Packages.fcitx5-with-addons'"; # Converted to throw 2025-10-27
-  fcp = throw "'fcp' has been removed as it has been unmaintained upstream since August 2022"; # Added 2026-02-07
   fedifetcher = throw "'fedifetcher' has been removed because there is now a similar native feature in Mastodon."; # Added 2025-12-08
   fennel = throw "'fennel' has been renamed to/replaced by 'luaPackages.fennel'"; # Converted to throw 2025-10-27
   fetchbower = throw "fetchbower has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
@@ -791,6 +792,7 @@ mapAliases {
   forge = throw "forge was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   forgejo-actions-runner = throw "'forgejo-actions-runner' has been renamed to/replaced by 'forgejo-runner'"; # Converted to throw 2025-10-27
   fractal-next = throw "'fractal-next' has been renamed to/replaced by 'fractal'"; # Converted to throw 2025-10-27
+  framac = frama-c; # Added 2026-04-24
   framework-system-tools = throw "'framework-system-tools' has been renamed to/replaced by 'framework-tool'"; # Converted to throw 2025-10-27
   francis = throw "'francis' has been renamed to/replaced by 'kdePackages.francis'"; # Converted to throw 2025-10-27
   freebsdCross = throw "'freebsdCross' has been renamed to/replaced by 'freebsd'"; # Converted to throw 2025-10-27
@@ -927,6 +929,7 @@ mapAliases {
   gsettings-qt = lomiri.gsettings-qt; # Added 2025-12-06
   gtkcord4 = throw "'gtkcord4' has been renamed to/replaced by 'dissent'"; # Converted to throw 2025-10-27
   gtkextra = throw "'gtkextra' has been removed due to lack of maintenance upstream."; # Added 2025-06-10
+  gtkgnutella = gtk-gnutella; # Added 2026-05-21
   gtuber = throw "'gtuber' has been removed due to being discontinued by upstream."; # Added 2025-12-12
   guile-disarchive = throw "'guile-disarchive' has been renamed to/replaced by 'disarchive'"; # Converted to throw 2025-10-27
   guile-sdl = throw "guile-sdl has been removed, as it was broken"; # Added 2025-08-25

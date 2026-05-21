@@ -4852,11 +4852,6 @@
     githubId = 18648043;
     name = "Daniel Cartwright";
   };
-  chewblacka = {
-    github = "chewblacka";
-    githubId = 18430320;
-    name = "John Garcia";
-  };
   Chili-Man = {
     email = "dr.elhombrechile@gmail.com";
     name = "Diego Rodriguez";
@@ -16082,6 +16077,12 @@
     githubId = 83420438;
     name = "Lewis";
   };
+  luc65r = {
+    email = "lucas@ransan.fr";
+    github = "luc65r";
+    githubId = 59375051;
+    name = "Lucas Ransan";
+  };
   LucaGuerra = {
     email = "luca@guerra.sh";
     github = "LucaGuerra";
@@ -19555,6 +19556,11 @@
     github = "nhooyr";
     githubId = 10180857;
     name = "Anmol Sethi";
+  };
+  nhshah15 = {
+    github = "nhshah15";
+    githubId = 31825306;
+    name = "Neil Shah";
   };
   ni5arga = {
     email = "hello@ni5arga.com";
@@ -29383,6 +29389,14 @@
     github = "wamserma";
     githubId = 60148;
   };
+  wanderer = {
+    name = "Martin Becze";
+    email = "martin@becze.org";
+    matrix = "@null_radix:matrix.org";
+    github = "wanderer";
+    githubId = 158211;
+    keys = [ { fingerprint = "82CB 91F4 F3E4 04A5 DAB2  78E8 8B99 1293 8FF2 1020"; } ];
+  };
   wariuccio = {
     name = "Wariuccio";
     github = "wariuccio";
@@ -30488,6 +30502,12 @@
     github = "ysndr";
     githubId = 7040031;
     name = "Yannik Sander";
+  };
+  ysnt-yes = {
+    name = "Yes";
+    github = "ysnt-yes";
+    githubId = 85800291;
+    email = "yes@ysnt.live";
   };
   yuannan = {
     email = "brandon@emergence.ltd";
