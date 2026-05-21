@@ -238,6 +238,21 @@ class VSCodeExtensionUpdater:
             logger.exception(e)
             sys.exit(1)
 
+    def _version_passed_validation(self, version_info: dict) -> bool:
+        """
+        Returns False when the marketplace reports a validation failure for this
+        version (e.g. virus scan). Such versions are hidden from the marketplace
+        UI and have no VsixSignature asset, so we must not select them.
+        """
+        message = version_info.get("validationResultMessage")
+        if not message:
+            return True
+        try:
+            results = json.loads(message).get("results", [])
+        except (json.JSONDecodeError, AttributeError):
+            return False
+        return not any(r.get("status") == "failure" for r in results)
+
     def find_compatible_extension_version(
         self, extension_versions: list, target_platform: str
     ) -> str:
@@ -249,6 +264,12 @@ class VSCodeExtensionUpdater:
             if candidate_platform is not None and candidate_platform != target_platform:
                 continue
             candidate_version = version_info.get("version")
+            if not self._version_passed_validation(version_info):
+                logger.debug(
+                    f"Skipping version {candidate_version} ({candidate_platform}): "
+                    "marketplace validation failed"
+                )
+                continue
             candidate_pre_release = next(
                 (
                     prop.get("value")
