@@ -315,6 +315,8 @@ in
         monospace = [ "Roboto Mono" ];
         sansSerif = [ "Inter" ];
       };
+
+      i18n.spellcheck.enable = mkDefault true;
     })
 
     (mkIf serviceCfg.apps.enable {

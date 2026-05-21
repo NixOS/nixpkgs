@@ -257,6 +257,8 @@ in
       serif = [ "Noto Serif" ];
     };
 
+    i18n.spellcheck.enable = mkDefault true;
+
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
     programs.kde-pim.enable = mkDefault true;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";

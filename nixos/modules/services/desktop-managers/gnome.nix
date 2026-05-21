@@ -425,6 +425,7 @@ in
       fonts.packages = removeExcluded [
         pkgs.adwaita-fonts
       ];
+      i18n.spellcheck.enable = mkDefault true;
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
