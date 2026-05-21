@@ -3,6 +3,7 @@
   fetchPypi,
   openssl,
   buildPythonPackage,
+  setuptools,
   pytest,
   dnspython,
   pynacl,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "dkimpy";
   version = "1.1.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +22,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     openssl
     dnspython
     pynacl
