@@ -12,20 +12,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.1.tar.gz";
-      hash = "sha256-TOSiFAphV/JYrUg9tB/BAtAGjn6P0DpaYHO2W3FcCGQ=";
+      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.2.tar.gz";
+      hash = "sha256-VbXsfKahp1X4AwAC10VghE+ZkxThovnYHHYyvkOTtFc=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.1-aarch64.tar.gz";
-      hash = "sha256-fWguwgUQstCytAMKam4scziEeyOxVEhIxS1O81HO/yI=";
+      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.2-aarch64.tar.gz";
+      hash = "sha256-f0Owuq0OjVwnp4Gj/diiPFn9F1Hf4gm/MwHzkabIH2w=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.1.dmg";
-      hash = "sha256-W28NwTNZe3Vj19J32nY8Jrn2rFVVd+0H2NWzDCTG8nw=";
+      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.2.dmg";
+      hash = "sha256-XzYv58bR8ts6MTREUjqQinCzHvTdrLVEDH5vg1vQ3so=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.1-aarch64.dmg";
-      hash = "sha256-tm/UFH/5FX0HQ/FnjQ/Jwwaf/cpIYb4j0NvKlazBp08=";
+      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.2-aarch64.dmg";
+      hash = "sha256-dJOqdY+D5FssDAvocMOXk9O22qk+QLxwDm2MHK2Wggg=";
     };
   };
   # update-script-end: urls
@@ -39,8 +39,8 @@ mkJetBrainsProduct {
   product = "PhpStorm";
 
   # update-script-start: version
-  version = "2026.1.1";
-  buildNumber = "261.23567.149";
+  version = "2026.1.2";
+  buildNumber = "261.24374.185";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
