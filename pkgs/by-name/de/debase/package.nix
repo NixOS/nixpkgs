@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     # fix build with gcc15
     substituteInPlace lib/Makefile \
       --replace-fail './configure' './configure cf_cv_type_of_bool=bool'
+
+    sed -i '1s/^/#include <stdbool.h>/' ./lib/ncurses/include/curses.h.in
   '';
 
   patches = [

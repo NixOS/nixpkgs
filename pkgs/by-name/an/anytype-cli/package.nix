@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "anytype-cli";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "anyproto";
