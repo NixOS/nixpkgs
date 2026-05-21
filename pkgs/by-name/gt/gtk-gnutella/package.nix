@@ -46,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   configureScript = "./build.sh";
   configureFlags = [
     "--configure-only"
-    # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
-    "--disable-malloc"
   ]
   ++ lib.optionals (!enableGui) [
     "--topless"
