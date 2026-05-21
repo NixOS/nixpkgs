@@ -26,6 +26,7 @@ let
     assertMsg
     attrNames
     concatLists
+    concatMap
     concatMapStringsSep
     concatStrings
     concatStringsSep
@@ -413,17 +414,21 @@ rec {
           recurse =
             path: value:
             if isAttrs value && !isDerivation value then
-              mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
+              concatMap (name: recurse ([ name ] ++ path) value.${name}) (attrNames value)
             else if length path > 1 then
-              {
-                ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
-              }
+              [
+                {
+                  ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
+                }
+              ]
             else
-              {
-                ${head path} = value;
-              };
+              [
+                {
+                  ${head path} = value;
+                }
+              ];
         in
-        attrs: foldl recursiveUpdate { } (flatten (recurse [ ] attrs));
+        attrs: foldl recursiveUpdate { } (recurse [ ] attrs);
 
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
