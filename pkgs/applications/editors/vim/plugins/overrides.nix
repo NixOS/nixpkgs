@@ -5830,6 +5830,16 @@ assertNoAdditions {
     };
   });
 
+  vim-tmux = super.vim-tmux.overrideAttrs (old: {
+    meta = old.meta // {
+      # original code publicDomain, MIT after fork
+      license = with lib.licenses; [
+        mit
+        publicDomain
+      ];
+    };
+  });
+
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {
     # Requires global variable
     nvimSkipModules = "tpipeline.main";
