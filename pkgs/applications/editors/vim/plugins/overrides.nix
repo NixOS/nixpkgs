@@ -3044,6 +3044,13 @@ assertNoAdditions {
     dependencies = [ self.nvim-dap ];
   };
 
+  nvim-dap-disasm = super.nvim-dap-disasm.overrideAttrs (old: {
+    dependencies = [ self.nvim-dap ];
+    meta = old.meta // {
+      license = lib.licenses.mit;
+    };
+  });
+
   nvim-dap-lldb = super.nvim-dap-lldb.overrideAttrs {
     dependencies = [ self.nvim-dap ];
   };
