@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.YARN_ZIP_SUPPORTED_CACHE_VERSION = berryCacheVersion;
   env.LIBZIP_SYS_USE_PKG_CONFIG = 1;
 
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     pkg-config
