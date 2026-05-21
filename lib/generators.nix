@@ -23,8 +23,10 @@
 let
   inherit (lib)
     addErrorContext
+    any
     assertMsg
     attrNames
+    attrValues
     concatLists
     concatMap
     concatMapStringsSep
@@ -53,6 +55,7 @@ let
     isString
     last
     length
+    genAttrs
     mapAttrs
     mapAttrsToList
     optionals
@@ -411,9 +414,10 @@ rec {
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs =
         let
+          isNonDrvAttrs = value: isAttrs value && !isDerivation value;
           recurse =
             path: value:
-            if isAttrs value && !isDerivation value then
+            if isNonDrvAttrs value then
               concatMap (name: recurse ([ name ] ++ path) value.${name}) (attrNames value)
             else if length path > 1 then
               [
@@ -428,7 +432,16 @@ rec {
                 }
               ];
         in
-        attrs: foldl recursiveUpdate { } (recurse [ ] attrs);
+        attrs:
+        let
+          # Filter the names for any that contain nested attrsets. attrs that
+          # don't contain nested attrsets can stay the same =
+          namesToRewrite = filter (
+            name: isAttrs attrs.${name} && any isNonDrvAttrs (attrValues attrs.${name})
+          ) (attrNames attrs);
+          attrsToRewrite = genAttrs namesToRewrite (name: attrs.${name});
+        in
+        removeAttrs attrs namesToRewrite // foldl recursiveUpdate { } (recurse [ ] attrsToRewrite);
 
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
