@@ -664,7 +664,12 @@ in
                   Mutable zone files, copying them to the `services.bind.directory` during preStart to allow for dynamic DNS
                   (DDNS) updates at runtime
                 '';
-                bindZoneOptions = lib.mkOption { type = lib.types.submodule bindZoneOptions; };
+                bindZoneOptions = lib.mkOption {
+                  type = lib.types.submodule bindZoneOptions;
+                  description = ''
+                    List of zones we claim authority over.
+                  '';
+                };
                 soa = {
                   mName = lib.mkOption {
                     type = lib.types.str;
