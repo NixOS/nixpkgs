@@ -1327,11 +1327,11 @@ in
             r = i - ((i / base) * base);
             q = (i - r) / base;
           in
-          [ r ] ++ go q;
+          go q ++ [ r ];
     in
     assert (isInt base);
     assert (isInt i);
     assert (base >= 2);
     assert (i >= 0);
-    lib.reverseList (go i);
+    go i;
 }
