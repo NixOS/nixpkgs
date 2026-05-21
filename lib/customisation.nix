@@ -34,6 +34,44 @@ let
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
+  makeErrorMessage =
+    autoArgs: fn: args: fargs: unpassedArgs:
+    let
+      # The first missing arg
+      arg = head (
+        # Filter out the default args. We did a similar computation in the
+        # happy path, but we're okay recomputing it in an error case
+        filter (name: !fargs.${name}) (attrNames unpassedArgs)
+      );
+      # Get a list of suggested argument names for a given missing one
+      getSuggestions =
+        arg:
+        pipe (autoArgs // args) [
+          attrNames
+          # Only use ones that are at most 2 edits away. While mork would work,
+          # levenshteinAtMost is only fast for 2 or less.
+          (filter (levenshteinAtMost 2 arg))
+          # Put strings with shorter distance first
+          (sortOn (levenshtein arg))
+          # Only take the first couple results
+          (take 3)
+          # Quote all entries
+          (map (x: "\"" + x + "\""))
+        ];
+
+      prettySuggestions =
+        suggestions:
+        if suggestions == [ ] then
+          ""
+        else if length suggestions == 1 then
+          ", did you mean ${elemAt suggestions 0}?"
+        else
+          ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
+
+      loc = unsafeGetAttrPos arg fargs;
+      loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
+    in
+    "lib.customisation.callPackageWith: Function called without required argument \"${arg}\" at ${loc'}${prettySuggestions (getSuggestions arg)}";
 in
 rec {
 
@@ -215,6 +253,29 @@ rec {
     else
       mirrorArgs f';
 
+  callSimplePackageWith =
+    autoArgs: filepath:
+    let
+      fn = import filepath;
+      fargs = functionArgs fn;
+
+      # All arguments that will be passed to the function
+      allArgs = intersectAttrs fargs autoArgs;
+
+      # arguments that weren't passed automatically to the function
+      unpassedArgs = removeAttrs fargs (attrNames allArgs);
+    in
+    # if nonempty, check if the function has defaults for those other args
+    if unpassedArgs == { } || all (value: value) (attrValues unpassedArgs) then
+      makeOverridable fn allArgs
+    else
+      # Only show the error for the first missing argument
+      # This needs to be an abort so it can't be caught with `builtins.tryEval`,
+      # which is used by nix-env and ofborg to filter out packages that don't evaluate.
+      # This way we're forced to fix such errors in Nixpkgs,
+      # which is especially relevant with allowAliases = false
+      abort (makeErrorMessage autoArgs fn { } fargs unpassedArgs);
+
   /**
     Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
@@ -264,46 +325,6 @@ rec {
     ```
   */
   callPackageWith =
-    let
-      makeErrorMessage =
-        autoArgs: fn: args: fargs: unpassedArgs:
-        let
-          # The first missing arg
-          arg = head (
-            # Filter out the default args. We did a similar computation in the
-            # happy path, but we're okay recomputing it in an error case
-            filter (name: !fargs.${name}) (attrNames unpassedArgs)
-          );
-          # Get a list of suggested argument names for a given missing one
-          getSuggestions =
-            arg:
-            pipe (autoArgs // args) [
-              attrNames
-              # Only use ones that are at most 2 edits away. While mork would work,
-              # levenshteinAtMost is only fast for 2 or less.
-              (filter (levenshteinAtMost 2 arg))
-              # Put strings with shorter distance first
-              (sortOn (levenshtein arg))
-              # Only take the first couple results
-              (take 3)
-              # Quote all entries
-              (map (x: "\"" + x + "\""))
-            ];
-
-          prettySuggestions =
-            suggestions:
-            if suggestions == [ ] then
-              ""
-            else if length suggestions == 1 then
-              ", did you mean ${elemAt suggestions 0}?"
-            else
-              ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
-
-          loc = unsafeGetAttrPos arg fargs;
-          loc' = if loc != null then loc.file + ":" + toString loc.line else "<unknown location>";
-        in
-        "lib.customisation.callPackageWith: Function called without required argument \"${arg}\" at ${loc'}${prettySuggestions (getSuggestions arg)}";
-    in
     autoArgs: fn: args:
     let
       f = if isFunction fn then fn else import fn;
