@@ -13,6 +13,7 @@ let
     warn
     ;
   inherit (lib)
+    foldr
     fromJSON
     isString
     readFile
@@ -1047,7 +1048,7 @@ in
 
   info = msg: builtins.trace "INFO: ${msg}";
 
-  showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
+  showWarnings = warnings: res: foldr warn res warnings;
 
   ## Function annotations
 
