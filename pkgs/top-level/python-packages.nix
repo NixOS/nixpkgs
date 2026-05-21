@@ -19001,6 +19001,8 @@ self: super: with self; {
 
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
 
+  subprocess4 = callPackage ../development/python-modules/subprocess4 { };
+
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
