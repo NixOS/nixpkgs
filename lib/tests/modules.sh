@@ -897,13 +897,21 @@ checkConfigOutput '^6$' config.contracts.basic.results.consumer.x.value ./contra
 # contracts: provider selection mechanisms
 # byRef: non-overridden instance falls back to defaultProvider (increment: 5 + 1 = 6)
 checkConfigOutput '^6$' config.result.default ./contracts-provider-selection.nix
-# byRef: per-instance override (double: 5 * 2 = 10)
+# by reference: per-instance override (double: 5 * 2 = 10)
 checkConfigOutput '^10$' config.result.override ./contracts-provider-selection.nix
+# by name: defaultProviderName enum (increment: 5 + 1 = 6)
+checkConfigOutput '^6$' config.result.by ./contracts-provider-selection.nix
 # instances-only routing: a leaf routed via an `instances` override resolves
 # even with no defaultProvider (increment: 5 + 1 = 6)
 checkConfigOutput '^6$' config.result.instancesOnly ./contracts-provider-selection.nix
 # unrouted leaf (no default, no override): accessing its result errors clearly
 checkConfigError 'contracts\.noProvider: an instance is .want.ed but routed to no provider' config.contracts.noProvider.results.consumer.unrouted.value ./contracts-provider-selection.nix
+# providerRequests: each provider's slice gathers only the requests routed to it
+# (default increment gets every instance but the `consumer.fast` override; double gets only it).
+checkConfigOutput '^"instance,slow"$' config.routed.increment ./contracts-provider-selection.nix
+checkConfigOutput '^"fast"$' config.routed.double ./contracts-provider-selection.nix
+# the routed slice mirrors `requests`, so request values survive
+checkConfigOutput '^"5"$' config.routed.incrementValue ./contracts-provider-selection.nix
 
 # contracts: deployer write at a `providerOptions` leaf must not mask consumer wants
 # (regression for the `_requests` re-application at `mkDefault` in mkProviderType).

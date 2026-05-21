@@ -80,7 +80,7 @@ rec {
         acc // lib.mapAttrs (_: def: { inherit (def) meta interface; }) service.contractDefinitions
       ) { } (lib.attrValues baseEvaluated);
 
-      # Aggregate `want`/`providers`/`defaultProvider` per type across all peers,
+      # Aggregate `want`/`providers`/`defaultProviderName` per type across all peers,
       # then resolve via the contracts module's own logic. `want` is nested under
       # each service's slot name to match the `results.<slot>.*` structure.
       joint =
@@ -100,11 +100,12 @@ rec {
                 contracts = lib.mapAttrs (
                   contractType: _:
                   let
-                    # `want` and `defaultProvider` come from `baseEvaluated` (no upstream)
+                    # `want` and `defaultProvider[Name]` come from `baseEvaluated` (no upstream)
                     # so that collecting them does not force `joint` resolution.
                     perServiceBase = lib.mapAttrsToList (serviceName: service: {
                       inherit serviceName;
                       want = service.contracts.${contractType}.want or { };
+                      defaultProviderName = service.contracts.${contractType}.defaultProviderName or null;
                     }) baseEvaluated;
                     # `providers` come from `evaluated` (with upstream) so provider instances
                     # see all consumers' requests when resolving results. Laziness breaks the
@@ -113,24 +114,37 @@ rec {
                     perServiceEval = lib.mapAttrsToList (serviceName: service: {
                       providers = service.contracts.${contractType}.providers or { };
                     }) evaluated;
-                    # Detect services that set `defaultProvider` directly. In `baseEvaluated`
-                    # (no upstream injection), `defaultProvider` is non-null only when the user
-                    # assigned it explicitly. Detection uses `baseEvaluated`; the VALUE is read
-                    # from `evaluated` so the provider module's `module.value` reflects
-                    # upstream-seeded requests. This does not create a cycle because `evaluated`
-                    # does not seed `defaultProvider` from `joint` (only `requests` and `results`
-                    # are seeded): the service's own `defaultProvider = providers.increment`
-                    # assignment resolves locally within `evaluated` using its seeded `requests`.
+                    defaultProviderName = lib.filter (e: e.defaultProviderName != null) perServiceBase;
+                    # Detect services that set `defaultProvider` directly (not via `defaultProviderName`).
+                    # In `baseEvaluated` (no upstream injection), `defaultProvider` is non-null
+                    # only when the user assigned it explicitly. Exclude services that already
+                    # set `defaultProviderName` (handled above) to avoid double-counting.
+                    # Detection uses `baseEvaluated`; the VALUE is read from `evaluated` so the
+                    # provider module's `module.value` reflects upstream-seeded requests. This
+                    # does not create a cycle because `evaluated` does not seed `defaultProvider`
+                    # from `joint` (only `requests` and `results` are seeded): the service's own
+                    # `defaultProvider = providers.increment` assignment resolves locally within
+                    # `evaluated` using its seeded `requests`.
                     perServiceDefaultProvider = lib.filter (e: e.detected) (
                       lib.mapAttrsToList (serviceName: service: {
                         inherit serviceName;
-                        detected = service.contracts.${contractType}.defaultProvider or null != null;
+                        detected =
+                          service.contracts.${contractType}.defaultProviderName or null == null
+                          && service.contracts.${contractType}.defaultProvider or null != null;
                       }) baseEvaluated
                     );
                   in
                   {
                     want = lib.listToAttrs (map (e: lib.nameValuePair e.serviceName e.want) perServiceBase);
                     providers = lib.foldl' (acc: e: acc // e.providers) { } perServiceEval;
+                  }
+                  // lib.optionalAttrs (defaultProviderName != [ ]) {
+                    defaultProviderName =
+                      assert lib.assertMsg (lib.length defaultProviderName == 1)
+                        "evalServices: multiple services declared `defaultProviderName` for `${contractType}`: ${
+                          lib.concatMapStringsSep ", " (e: e.serviceName) defaultProviderName
+                        }";
+                      (lib.head defaultProviderName).defaultProviderName;
                   }
                   // lib.optionalAttrs (perServiceDefaultProvider != [ ]) {
                     defaultProvider =

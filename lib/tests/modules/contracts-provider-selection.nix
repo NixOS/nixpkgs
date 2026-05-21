@@ -2,8 +2,9 @@
 # - instances-only routing: a `want` leaf routed via a per-instance `instances`
 #   override resolves even with no `defaultProvider` set; a sibling leaf routed
 #   by neither a default nor an override stays unrouted (per-leaf routing)
-# - byRef: `defaultProvider` reference for the default + a per-instance
+# - by reference: `defaultProvider` reference for the default + a per-instance
 #   override at one `instances` leaf (the other falls through to the default)
+# - by name: `defaultProviderName` enum
 {
   lib,
   config,
@@ -33,13 +34,18 @@ let
     };
   };
 
-  evaluated = lib.evalOption (mkOption { type = lib.contract.definitionType; }) arithmeticInterface;
-  inherit (evaluated) _mkProviderType;
+  # evaluated = lib.evalOption (mkOption { type = lib.contract.definitionType; }) arithmeticInterface;
+  # Uses the raw `_mkProviderType` rather than the `forModule` wrapper because
+  # the single `services.increment.arithmetic` option absorbs requests from
+  # three sibling contract types (`noProvider`, `by`) via
+  # `lib.mkMerge` below; the wrapped form would pre-bind one contract's
+  # `_requests`, which would be wrong for the other two.
+  inherit (lib.contract.forModule config) arithmetic;
 
   mkProvider =
     f:
     mkOption {
-      type = _mkProviderType {
+      type = arithmetic.mkProviderType {
         fulfill =
           { value }:
           {
@@ -58,24 +64,28 @@ in
     type = types.attrsOf types.int;
   };
 
+  # Routing view: which consumer instances each provider's `providerRequests`
+  # slice gathers (sorted, dot-joined), and a request value carried through it.
+  options.routed = mkOption {
+    type = types.attrsOf types.str;
+  };
+
   config = {
     # Additional contract types sharing the arithmetic interface.
-    contractDefinitions = lib.genAttrs [
-      "noProvider"
-      "byRef"
-    ] (_: arithmeticInterface);
+    contractDefinitions.noProvider = arithmeticInterface;
+    contractDefinitions.by = arithmeticInterface;
 
     # -- Providers: feed requests, compute results --
 
     services.increment.arithmetic = lib.mkMerge [
-      config.contracts.byRef.requests
+      config.contracts.by.requests
       config.contracts.noProvider.requests
     ];
-    services.double.arithmetic = config.contracts.byRef.requests;
+    services.double.arithmetic = config.contracts.by.requests;
 
     # Register providers.
-    contracts.byRef.providers.increment.module = options.services.increment.arithmetic;
-    contracts.byRef.providers.double.module = options.services.double.arithmetic;
+    contracts.by.providers.increment.module = options.services.increment.arithmetic;
+    contracts.by.providers.double.module = options.services.double.arithmetic;
     # `noProvider` gets a registered provider but no `defaultProvider`, so its
     # leaves are only routed by explicit `instances` overrides.
     contracts.noProvider.providers.increment.module = options.services.increment.arithmetic;
@@ -88,27 +98,46 @@ in
     contracts.noProvider.want.consumer.unrouted.request.value = 5;
     contracts.noProvider.instances.consumer.routed = config.contracts.noProvider.providers.increment;
     # Two instances under one consumer so the override only touches one of them.
-    contracts.byRef.want.consumer.fast.request.value = 5;
-    contracts.byRef.want.consumer.slow.request.value = 5;
+    contracts.by.want.consumer.fast.request.value = 5;
+    contracts.by.want.consumer.slow.request.value = 5;
+    contracts.by.want.consumer.instance.request.value = 5;
 
     # -- Provider selection --
 
-    # byRef: defaultProvider reference picks "increment" for everything
+    # by: defaultProvider reference picks "increment" for everything
     # (so `slow` -> 6), and a per-instance override at `consumer.fast`
     # picks "double" (5 * 2 = 10) by reading the provider's instance at
     # the matching path. Per-leaf priority handling in `nestedAttrsOf`
     # lets the override compose against the `defaultProvider`-derived
     # tree without `recursiveUpdate`.
-    contracts.byRef.defaultProvider = config.contracts.byRef.providers.increment;
-    contracts.byRef.instances.consumer.fast = config.contracts.byRef.providers.double;
+    contracts.by.defaultProvider = config.contracts.by.providers.increment;
+    contracts.by.instances.consumer.fast = config.contracts.by.providers.double;
+
+    # by: set defaultProviderName to "increment" (5 + 1 = 6)
+    contracts.by.defaultProviderName = "increment";
 
     # -- Collect results --
     result = {
-      default = config.contracts.byRef.results.consumer.slow.value;
-      override = config.contracts.byRef.results.consumer.fast.value;
+      default = config.contracts.by.results.consumer.slow.value;
+      override = config.contracts.by.results.consumer.fast.value;
+      by = config.contracts.by.results.consumer.instance.value;
       # instances-only routing: resolves via the `instances` override despite
       # `noProvider` having no `defaultProvider` (5 + 1 = 6).
       instancesOnly = config.contracts.noProvider.results.consumer.routed.value;
+    };
+
+    # -- providerRequests routing --
+    # `increment` is the default, so it gathers every instance except the
+    # `consumer.fast` override; `double` gathers only that override. Each
+    # provider's slice mirrors `requests`, so the request values survive.
+    routed = {
+      increment = lib.concatStringsSep "," (
+        lib.sort (a: b: a < b) (lib.attrNames config.contracts.by.providerRequests.increment.consumer)
+      );
+      double = lib.concatStringsSep "," (
+        lib.sort (a: b: a < b) (lib.attrNames config.contracts.by.providerRequests.double.consumer)
+      );
+      incrementValue = toString config.contracts.by.providerRequests.increment.consumer.slow.request.value;
     };
   };
 }
