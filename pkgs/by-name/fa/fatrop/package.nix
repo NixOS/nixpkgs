@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fatrop";
-  version = "1.0.0";
+  version = "1.0.1.mod";
 
   src = fetchFromGitHub {
     owner = "meco-group";
     repo = "fatrop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iPYNbDN/rqx33y4zPD49WpGG3CP78cPwRlWnfVRktKc=";
+    hash = "sha256-2exJa9pKISDnq1MFLDV5My09BYEEN09slCTPtogd/f8=";
   };
 
   nativeBuildInputs = [ cmake ];
