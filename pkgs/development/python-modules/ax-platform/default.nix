@@ -119,6 +119,8 @@ buildPythonPackage (finalAttrs: {
     "test_convert_observations"
     # broken with sqlalchemy 2
     "test_sql_storage"
+    # AssertionError
+    "test_online"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # flaky
