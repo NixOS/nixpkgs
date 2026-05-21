@@ -19696,6 +19696,12 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  nikableh = {
+    email = "nika@nikableh.moe";
+    github = "nikableh";
+    githubId = 61655860;
+    name = "Nika Krasnova";
+  };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";
     github = "nikivdev";
