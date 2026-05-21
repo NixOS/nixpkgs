@@ -445,7 +445,7 @@ rec {
 
     :::
   */
-  flatten = x: if isList x then concatMap (y: flatten y) x else [ x ];
+  flatten = x: if isList x then concatMap flatten x else [ x ];
 
   /**
     Remove elements equal to `e` from a list.  Useful for `buildInputs`.
