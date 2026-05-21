@@ -56,6 +56,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
   version = "1.2.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
