@@ -26702,12 +26702,6 @@
     githubId = 120188;
     name = "Scott W. Dunlop";
   };
-  sweber = {
-    email = "sweber2342+nixpkgs@gmail.com";
-    github = "sweber83";
-    githubId = 19905904;
-    name = "Simon Weber";
-  };
   sweenu = {
     name = "sweenu";
     email = "contact@sweenu.xyz";
