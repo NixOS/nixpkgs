@@ -11,6 +11,7 @@
   libx11,
   libsm,
   libice,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,8 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8pZ/HAVV341K6QRDUC0UzzO2rGW2AvSZ++Pp445V27w=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     perl
+    which
+  ];
+
+  buildInputs = [
     expat
     fontconfig
     freetype
@@ -34,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrender
   ];
 
+  strictDeps = true;
   __structuredAttrs = true;
   enableParallelBuilding = true;
 
