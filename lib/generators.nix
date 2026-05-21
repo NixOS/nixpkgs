@@ -401,11 +401,11 @@ rec {
 
       # generation for multiple ini values
       mkKeyValue =
-        k: v:
         let
-          mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
+          mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = ";
+          attrToString = k: v: "\t" + mkKeyValue k v;
         in
-        concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (toList v));
+        k: v: if isList v then concatStringsSep "\n" (map (attrToString k) v) else attrToString k v;
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs =
