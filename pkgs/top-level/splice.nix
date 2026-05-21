@@ -119,6 +119,11 @@ in
   # Use `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope { };
 
+  # callPackage with more invariants (must be passed a filepath instead of a
+  # function, no injecting other args). Good for performance-critical places
+  # like the by-name-overlay
+  callSimplePackage = lib.customisation.callSimplePackageWith pkgsForCall;
+
   callPackages = lib.callPackagesWith pkgsForCall;
 
   newScope = extra: lib.callPackageWith (pkgsForCall // extra);
