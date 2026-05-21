@@ -5,12 +5,12 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alkalami";
   version = "3.000";
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${version}.zip";
+    url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${finalAttrs.version}.zip";
     hash = "sha256-ra664VbUKc8XpULCWhLMVnc1mW4pqZvbvwuBvRQRhcY=";
   };
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     platforms = lib.platforms.all;
   };
-}
+})
