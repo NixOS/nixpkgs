@@ -65,6 +65,7 @@ let
     meta = {
       homepage = "https://pydoit.org/";
       description = "Task management & automation tool";
+      changelog = "https://github.com/pydoit/doit/blob/${version}/CHANGES";
       mainProgram = "doit";
       license = lib.licenses.mit;
       longDescription = ''
