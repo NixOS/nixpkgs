@@ -122,8 +122,6 @@ in
     };
 
   testScript = ''
-    start_all()
-
     with subtest("Bind starts and responds"):
       machine.wait_for_unit("bind.service")
       machine.succeed("host 192.168.0.1 127.0.0.1 | grep -qF ns.example.org")
@@ -132,7 +130,7 @@ in
       machineNonDefaultPort.wait_for_unit("bind.service")
       machineNonDefaultPort.succeed("host -p 9053 192.168.0.1 127.0.0.1 | grep -qF ns.example.org")
 
-    def run_dns_tests(node):
+    def run_dyn_zone_gen_tests(node):
         node.wait_for_unit("bind.service")
         node.wait_for_open_port(53)
 
@@ -224,7 +222,7 @@ in
             assert "Host-v6-only.example.com." in ptr_v6_only, "IPv6 PTR failed for Host-v6-only"
 
     # Execute tests against both standalone VMs
-    run_dns_tests(machineDynamicZoneGen)
-    run_dns_tests(machineDynamicZoneGenMutable)
+    run_dyn_zone_gen_tests(machineDynamicZoneGen)
+    run_dyn_zone_gen_tests(machineDynamicZoneGenMutable)
   '';
 }
