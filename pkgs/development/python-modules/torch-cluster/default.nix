@@ -23,7 +23,7 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torch-cluster";
-  version = "2.6.3-unstable-2026-03-26";
+  version = "1.6.3-unstable-2026-03-26";
   pyproject = true;
   __structuredAttrs = true;
 
