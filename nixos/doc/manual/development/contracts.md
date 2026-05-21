@@ -15,7 +15,7 @@ For each contract type, `config.contracts.<type>` exposes:
 - `want.<consumer>.<...>`: entries declared by consumers, each carrying a `request` (typed by the contract's interface) and (once fulfilled) a `result`.
 - `requests`: read-side view of `want`, with everything except canonical request fields stripped. Providers read this.
 - `providers.<name>`: registered providers (see below).
-- `defaultProvider`: pick which provider fulfills `want` entries when no per-instance override is set.
+- `defaultProvider` / `defaultProviderName`: pick which provider fulfills `want` entries when no per-instance override is set.
 - `instances`: the resolved provider for each consumer/option pair (defaults to `defaultProvider`).
 - `results.<consumer>.<...>`: the read-side view of `instances`, with `request` fields stripped. Consumers read this.
 
@@ -136,8 +136,9 @@ The `contract` path is inferred as `[ ]` here, since `module.value` has no `.ari
 
 ## Provider Selection {#contracts-provider-selection}
 
-A consumer's request is fulfilled by exactly one provider per instance. There are two ways to pick one:
+A consumer's request is fulfilled by exactly one provider per instance. There are three ways to pick one:
 
+- `contracts.<type>.defaultProviderName = "<name>"` — by name (an enum over the registered providers).
 - `contracts.<type>.defaultProvider = config.contracts.<type>.providers."<name>"` — by reference (e.g. for renamed contracts where the name changed).
 - `contracts.<type>.instances."<consumer>"."<option>" = config.contracts.<type>.providers."<name>"` — per-instance override, written as a provider reference (`{ module, contract? }`); `resolvedInstances` resolves it to the provider's instance at the matching path, and `providerRequests` resolves it to that provider's name. GUIs read references as typed values rather than opaque ones.
 
