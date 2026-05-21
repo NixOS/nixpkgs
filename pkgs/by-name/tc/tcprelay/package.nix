@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tcprelay";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitLab {
     owner = "overhead";
     repo = "tcp-relay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EL189n/amPoW+8IFkyvLQJk+mTslGTOc6TNJJFRTgoo=";
+    hash = "sha256-57Ca5GrXUXF8PFTPChzoxRL/JsfawsZem5mJtude17w=";
   };
 
   vendorHash = null;
