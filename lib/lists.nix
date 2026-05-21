@@ -6,8 +6,9 @@ let
   inherit (lib.strings) toInt;
   inherit (lib.trivial)
     compare
-    min
     id
+    min
+    seq
     warn
     ;
   inherit (lib.attrsets) mapAttrs attrNames attrValues;
@@ -276,11 +277,14 @@ rec {
     :::
   */
   foldl' =
+    let
+      inherit (builtins) foldl';
+    in
     op: acc:
     # The builtin `foldl'` is a bit lazier than one might expect.
     # See https://github.com/NixOS/nix/pull/7158.
     # In particular, the initial accumulator value is not forced before the first iteration starts.
-    builtins.seq acc (builtins.foldl' op acc);
+    seq acc (foldl' op acc);
 
   /**
     Map with index starting from 0
