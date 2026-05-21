@@ -84,7 +84,7 @@ let
   # modsrc at all.
   withModsrc = !enableKvm;
 
-  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix {
+  virtualboxGuestAdditionsIso = callPackage ./guest-additions-iso/default.nix {
     inherit virtualboxVersion;
   };
 
