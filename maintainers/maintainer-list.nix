@@ -4455,12 +4455,6 @@
     githubId = 289492;
     name = "Philip Horger";
   };
-  candeira = {
-    email = "javier@candeira.com";
-    github = "candeira";
-    githubId = 91694;
-    name = "Javier Candeira";
-  };
   caniko = {
     email = "gpg@rotas.mozmail.com";
     github = "caniko";
