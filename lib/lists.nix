@@ -1547,7 +1547,13 @@ rec {
 
     :::
   */
-  takeEnd = n: xs: drop (max 0 (length xs - n)) xs;
+  takeEnd =
+    count: list:
+    let
+      len = length list;
+      start = if count > len then 0 else len - count;
+    in
+    genList (i: elemAt list (start + i)) (if start > len then 0 else len - start);
 
   /**
     Remove the first (at most) N elements of a list.
