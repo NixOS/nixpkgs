@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # Tests are outdated and based on Nose, which is not supported anymore.
   doCheck = false;
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Matcher library for Python";

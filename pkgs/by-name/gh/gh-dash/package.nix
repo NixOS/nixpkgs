@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-dash";
-  version = "4.22.0";
+  version = "4.24.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vfp0AUSNl11w9jo7UeYDt+AdSxPzwPdeX7bWcZUkOGc=";
+    hash = "sha256-UewMOaXYervy5NGO2l9MgJuzRfYIHw12VKyFjJcjelc=";
   };
 
-  vendorHash = "sha256-4AbeoH0l7eIS7d0yyJxM7+woC7Q/FCh0BOJj3d1zyX4=";
+  vendorHash = "sha256-fXgj2q0HAGu9Jfdy7NJ6iE5hEKmt50HAEg/9Wds56g0=";
 
   ldflags = [
     "-s"
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     description = "Github Cli extension to display a dashboard with pull requests and issues";
     homepage = "https://www.gh-dash.dev";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "gh-dash";
   };
 })

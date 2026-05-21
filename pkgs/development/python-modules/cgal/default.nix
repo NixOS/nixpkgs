@@ -76,6 +76,12 @@ buildPythonPackage rec {
     done
   '';
 
+  preCheck = ''
+    # CGAL_Alpha_wrap_3.alpha_wrap_3(...) fails with a segmentation fault
+    # https://github.com/CGAL/cgal-swig-bindings/issues/306
+    rm examples/python/test_aw3.py
+  '';
+
   checkPhase = ''
     runHook preCheck
     (cd examples/python/

@@ -97,9 +97,10 @@
   withXwidgets ?
     !noGui
     && (withGTK3 || withPgtk || withNS || variant == "macport")
-    && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30"),
+    && (stdenv.hostPlatform.isDarwin || lib.versions.major version != "30"),
   # XXX: - upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
   # XXX: - Apple_SDK WebKit is compatible with Emacs.
+  # XXX: - upstream bug 80728 lifts the webkit2gtk version check added in upstream bug 66068
   withSmallJaDic ? false,
   withCompressInstall ? true,
 
@@ -165,37 +166,29 @@ stdenv.mkDerivation (finalAttrs: {
   patches =
     patches fetchpatch
     ++ lib.optionals withNativeCompilation [
-      (replaceVars
-        (
-          if lib.versionOlder finalAttrs.version "30" then
-            ./native-comp-driver-options.patch
-          else
-            ./native-comp-driver-options-30.patch
-        )
-        {
-          backendPath = (
-            lib.concatStringsSep " " (
-              map (x: ''"-B${x}"'') (
-                [
-                  # Paths necessary so the JIT compiler finds its libraries:
-                  "${lib.getLib libgccjit}/lib"
-                ]
-                ++ libGccJitLibraryPaths
-                ++ [
-                  # Executable paths necessary for compilation (ld, as):
-                  "${lib.getBin stdenv.cc.cc}/bin"
-                  "${lib.getBin stdenv.cc.bintools}/bin"
-                  "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-                ]
-                ++ lib.optionals stdenv.hostPlatform.isDarwin [
-                  # The linker needs to know where to find libSystem on Darwin.
-                  "${apple-sdk.sdkroot}/usr/lib"
-                ]
-              )
+      (replaceVars ./native-comp-driver-options-30.patch {
+        backendPath = (
+          lib.concatStringsSep " " (
+            map (x: ''"-B${x}"'') (
+              [
+                # Paths necessary so the JIT compiler finds its libraries:
+                "${lib.getLib libgccjit}/lib"
+              ]
+              ++ libGccJitLibraryPaths
+              ++ [
+                # Executable paths necessary for compilation (ld, as):
+                "${lib.getBin stdenv.cc.cc}/bin"
+                "${lib.getBin stdenv.cc.bintools}/bin"
+                "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                # The linker needs to know where to find libSystem on Darwin.
+                "${apple-sdk.sdkroot}/usr/lib"
+              ]
             )
-          );
-        }
-      )
+          )
+        );
+      })
     ];
 
   postPatch = lib.concatStringsSep "\n" [
@@ -251,13 +244,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
-  ]
-  ++ lib.optionals (variant == "macport") [
     texinfo
   ]
   ++ lib.optionals srcRepo [
     autoreconfHook
-    texinfo
   ]
   ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
 
@@ -505,11 +495,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken =
-      (withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) || withWebkitgtk;
-    knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
-      "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
-    ];
+    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   }
   // meta;
 })

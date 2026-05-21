@@ -17,13 +17,18 @@
   libpulseaudio,
   libwebp,
   libxcrypt,
+  mimalloc,
   openssl,
   python3,
   qt6Packages,
   woff2,
+  cargo,
   fast-float,
   ffmpeg,
+  fmt,
   fontconfig,
+  rustPlatform,
+  rustc,
   simdutf,
   skia,
   nixosTests,
@@ -36,13 +41,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-02-14";
+  version = "0-unstable-2026-05-04";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "ae9106a29da6b93695da2954e2a43b8ab2c2c112";
-    hash = "sha256-cmF5YVnS2kwS3YghPFcuCAP9PWnDs6xbS8XkdH268Qc=";
+    rev = "90b790f8702a5d5c5a66ef02f8669da2838ca6e3";
+    hash = "sha256-BdJ24YtKMv8B6Vvequf9b5qr0S3FfFuphFo78mCIaN4=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-sbNYOdY56+waCVQHbGuvV5jT9EawV2IiGmL1e/O6ZRc=";
   };
 
   postPatch = ''
@@ -73,10 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    cargo
     cmake
     ninja
     pkg-config
     python3
+    rustPlatform.cargoSetupHook
+    rustc
     qt6Packages.wrapQtAppsHook
     libtommath
   ];
@@ -85,12 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
     curlFull
     fast-float
     ffmpeg
+    fmt
     fontconfig
     libavif
     angle # libEGL
     libjxl
     libwebp
     libxcrypt
+    mimalloc
     openssl
     qt6Packages.qtbase
     qt6Packages.qtmultimedia
@@ -116,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu78
     simdjson
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
   ];

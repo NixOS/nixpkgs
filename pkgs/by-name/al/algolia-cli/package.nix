@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 let
-  version = "1.7.3";
+  version = "1.8.4";
 in
 buildGoModule {
   pname = "algolia-cli";
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "algolia";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-m7PAD9EKrl7eBzRwCHDcH+eBcFnfXIDnIm6wvOtay5g=";
+    hash = "sha256-ltr31AnZPTtnfMWaUtsswUnIOXfR76X8pjM9D0uiLJo=";
   };
 
-  vendorHash = "sha256-I6awzstThs0nC/Nyy00jCN3cpF1MXJcFTUM95E38HQI=";
+  vendorHash = "sha256-WdNuwUz64IZq3gfvFhXX536/tZ/67Ki0xiqIj7sLSEM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

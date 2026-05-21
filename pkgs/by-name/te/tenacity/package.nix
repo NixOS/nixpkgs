@@ -4,7 +4,7 @@
   fetchFromCodeberg,
   cmake,
   ninja,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   pkg-config,
   python3,
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     sratom
     suil
     twolame
-    wxGTK32
+    wxwidgets_3_2
     gtk3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

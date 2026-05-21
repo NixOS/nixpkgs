@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoconf269,
   autoreconfHook,
   pkg-config,
   libmysqlclient,
@@ -16,7 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sysbench";
   version = "1.0.20";
 
+  # Build fails with autoconf 2.73
   nativeBuildInputs = [
+    autoconf269
     autoreconfHook
     pkg-config
   ];

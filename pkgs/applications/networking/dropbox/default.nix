@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildFHSEnv,
   writeScript,
@@ -9,21 +8,8 @@
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version =
-    {
-      x86_64-linux = "217.4.4417";
-      i686-linux = "206.3.6386";
-    }
-    .${stdenv.hostPlatform.system} or "";
-
-  arch =
-    {
-      x86_64-linux = "x86_64";
-      i686-linux = "x86";
-    }
-    .${stdenv.hostPlatform.system};
-
-  installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
+  version = "246.4.3513";
+  installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.x86_64-${version}.tar.gz";
 
   desktopItem = makeDesktopItem {
     name = "dropbox";
@@ -129,10 +115,7 @@ buildFHSEnv {
     homepage = "https://www.dropbox.com/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ ttuegel ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = [ "x86_64-linux" ];
     mainProgram = "dropbox";
   };
 }

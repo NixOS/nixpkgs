@@ -342,6 +342,9 @@ def execute(argv: list[str]) -> None:
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 
+    if flake and (args.upgrade or args.upgrade_all):
+        logger.warning("'--upgrade(-all)' flag has no effect for flake-based systems")
+
     if can_run and not flake and not args.store_path:
         services.write_version_suffix(grouped_nix_args)
 

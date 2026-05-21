@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tool to print wayland toplevels and other compositor info";
     homepage = "https://git.sr.ht/~shinyzenith/waylevel";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "waylevel";
   };

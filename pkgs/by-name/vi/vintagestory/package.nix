@@ -5,17 +5,13 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  gtk2,
-  sqlite,
-  openal,
+  versionCheckHook,
   cairo,
   libGLU,
-  SDL2,
-  freealut,
   libglvnd,
   pipewire,
   libpulseaudio,
-  dotnet-runtime_8,
+  dotnet-runtime_10,
   x11Support ? true,
   libxi,
   libxcursor,
@@ -23,7 +19,6 @@
   waylandSupport ? false,
   wayland ? null,
   libxkbcommon ? null,
-  imagemagick,
 }:
 
 assert x11Support || waylandSupport;
@@ -32,39 +27,18 @@ assert waylandSupport -> libxkbcommon != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.21.6";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
-    hash = "sha256-LkiL/8W9MKpmJxtK+s5JvqhOza0BLap1SsaDvbLYR0c=";
+    hash = "sha256-caLSOm/WXpXrjC1az72Nc0XDWOpWB2R9iVq8ShDEZgU=";
   };
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-    imagemagick
-  ];
-
-  runtimeLibs = [
-    gtk2
-    sqlite
-    openal
-    cairo
-    libGLU
-    SDL2
-    freealut
-    libglvnd
-    pipewire
-    libpulseaudio
-  ]
-  ++ lib.optionals x11Support [
-    libx11
-    libxi
-    libxcursor
-  ]
-  ++ lib.optionals waylandSupport [
-    wayland
-    libxkbcommon
   ];
 
   desktopItems = [
@@ -93,42 +67,72 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps $out/share/fonts/truetype
     cp -r * $out/share/vintagestory
-    magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
+    install -Dm444 $out/share/vintagestory/assets/gameicon.png $out/share/icons/hicolor/512x512/apps/vintagestory.png
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
+
+    rm -rvf $out/share/vintagestory/{install,run,server}.sh
 
     runHook postInstall
   '';
 
-  preFixup =
-    let
-      runtimeLibs' = lib.strings.makeLibraryPath finalAttrs.runtimeLibs;
-    in
-    ''
-      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
-        --set-default mesa_glthread true \
-        ${lib.strings.optionalString waylandSupport ''
-          --set-default OPENTK_4_USE_WAYLAND 1 \
-        ''} \
-        --add-flags $out/share/vintagestory/Vintagestory.dll
+  makeWrapperArgs = [
+    "--set-default"
+    "mesa_glthread"
+    "true"
+  ]
+  ++ lib.optionals waylandSupport [
+    "--set-default"
+    "OPENTK_4_USE_WAYLAND"
+    "1"
+  ];
 
-      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
-        --set-default mesa_glthread true \
-        --add-flags $out/share/vintagestory/VintagestoryServer.dll
+  runtimeLibraryPath = lib.makeLibraryPath finalAttrs.passthru.runtimeLibs;
+  preFixup = ''
+     makeWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$runtimeLibraryPath")
 
-      find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
-        local filename="$(basename -- "$file")"
-        ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
-      done
-    '';
+     makeWrapper ${lib.meta.getExe dotnet-runtime_10} $out/bin/vintagestory \
+      "''${makeWrapperArgs[@]}" \
+       --add-flags $out/share/vintagestory/Vintagestory.dll
+
+    makeWrapper ${lib.getExe dotnet-runtime_10} $out/bin/vintagestory-server \
+      "''${makeWrapperArgs[@]}" \
+      --add-flags $out/share/vintagestory/VintagestoryServer.dll
+
+     find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+       local filename="$(basename -- "$file")"
+       ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+     done
+  '';
+
+  doInstallCheck = true;
+  installCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = ./update.sh;
+    runtimeLibs = [
+      cairo
+      libGLU
+      libglvnd
+      pipewire
+      libpulseaudio
+    ]
+    ++ lib.optionals x11Support [
+      libx11
+      libxi
+      libxcursor
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland
+      libxkbcommon
+    ];
+  };
 
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       artturin
       gigglesquid

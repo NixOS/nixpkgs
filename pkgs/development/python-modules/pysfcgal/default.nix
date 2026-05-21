@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python wrapper for SFCGAL";
     homepage = "https://gitlab.com/sfcgal/pysfcgal";
-    changelog = "https://gitlab.com/sfcgal/pysfcgal/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/sfcgal/pysfcgal/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     teams = with lib.teams; [
       geospatial

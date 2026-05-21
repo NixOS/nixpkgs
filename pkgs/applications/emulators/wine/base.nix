@@ -59,7 +59,7 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? stdenv.hostPlatform.isDarwin,
+  mingwSupport ? stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64,
   waylandSupport ? false,
   x11Support ? false,
   ffmpegSupport ? false,
@@ -174,7 +174,7 @@ stdenv.mkDerivation (
         ++ lib.optional cupsSupport pkgs.cups
         ++ lib.optional dbusSupport pkgs.dbus
         ++ lib.optional cairoSupport pkgs.cairo
-        ++ lib.optional odbcSupport pkgs.unixODBC
+        ++ lib.optional odbcSupport pkgs.unixodbc
         ++ lib.optional netapiSupport pkgs.samba4
         ++ lib.optional cursesSupport pkgs.ncurses
         ++ lib.optional vaSupport pkgs.libva

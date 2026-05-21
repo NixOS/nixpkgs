@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.9.2";
+  version = "1.9.3";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = [
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-TCeEh8DpVoxpF/HkahxM3ONDjawAkIiMo6S7ogG3fLg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nJrRdPs86oGNL4W2CJb16oSUgfzYr9A2i5sw9BAehME=";
   };
 
   cmakeFlags = [
@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/libgit2/libgit2/releases/tag/${finalAttrs.src.tag}";
     description = "Linkable library implementation of Git that you can use in your application";
     mainProgram = "git2";
     homepage = "https://libgit2.org/";

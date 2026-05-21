@@ -5,7 +5,6 @@
   replaceVars,
   accountsservice,
   budgie-desktop,
-  cheese,
   colord,
   colord-gtk,
   cups,
@@ -19,8 +18,6 @@
   glibc,
   gnome,
   gst_all_1,
-  gnome-bluetooth_1_0,
-  gnome-color-manager,
   gnome-desktop,
   gnome-settings-daemon,
   gsettings-desktop-schemas,
@@ -72,20 +69,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-sdAzReZVAZ5omLOhly/l3buiw01eem+k9+3RbVPzS2g=";
+    hash = "sha256-UiKMYLQ44U4w9MdSTp/AJg3scOoSCeG6gXUBCrM9pc8=";
   };
 
   patches = [
     (replaceVars ./paths.patch {
       budgie_desktop = budgie-desktop;
-      gcm = gnome-color-manager;
       inherit
         cups
         libgnomekbd
@@ -117,8 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gnome-desktop
     gst_all_1.gstreamer
-    cheese
-    gnome-bluetooth_1_0
     gnome-settings-daemon
     gsettings-desktop-schemas
     gsound

@@ -21,13 +21,13 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "3.1.4";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-BKrDJc0koOPHno+VOgfsUvvImJuKEkWdZvmCVffSRX8=";
+    hash = "sha256-YVZPXrYfOFd9lUdZ0rwWnbSDO91Bn1vZyO3AwnE2pZE=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
@@ -36,13 +36,13 @@ buildNpmPackage rec {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-XJsQFyi448yoRM8pUvaNpGDIZ41q0vpwYTgJufBBu1g=";
+  npmDepsHash = "sha256-IH2AVyHwMZuyZOUsAP7qoxm5Em32hk90Tp7uvSE9bIE=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems

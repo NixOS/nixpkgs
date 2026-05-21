@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
@@ -9,7 +10,7 @@
   cargo,
   rustc,
   cmake,
-  version ? "1.0.0-rc.5",
+  version ? "1.0.0-rc.12",
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rolldown";
@@ -20,14 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rolldown";
     repo = "rolldown";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-uqgJN7jn70z3cQlEEyk+0TeiHDn1AkvMmCaEOksHxhM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G26fPJElnIob1b94KqM5b2A64qs+x/d8FNrAsaN8BOI=";
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "rolldown";
     version = finalAttrs.version;
     src = finalAttrs.src;
-    hash = "sha256-tyayOAwdqP1euzicJrstwHiHxoFRWq+IGSiN/uFNZz8=";
+    hash = "sha256-btGnMU+t8zij/gRfFp5p6h2/781IZM5AWvZNqC2dfNs=";
   };
   pnpmDeps = fetchPnpmDeps {
     pname = "rolldown";
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     src = finalAttrs.src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-16NBCf4dP8a8dbgnmtFawMHKD7geIkLXt4F4w18FSUM=";
+    hash = "sha256-lQVbYV8S3P1+AQwF9PBDxJqbKf9jBAtwymKcxQ55FeQ=";
   };
 
   # cmake is only needed for Rust build (mimalloc-sys), not for a top-level configure
@@ -86,7 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Fast Rust-based bundler for JavaScript (built for openclaw)";
+    changelog = "https://github.com/rolldown/rolldown/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    description = "Fast Rust-based bundler for JavaScript";
+    homepage = "https://github.com/rolldown/rolldown";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.chrisportela ];
     inherit (nodejs_22.meta) platforms;
   };
 })

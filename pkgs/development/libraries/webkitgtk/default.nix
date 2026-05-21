@@ -51,6 +51,7 @@
   libintl,
   lcms2,
   libmanette,
+  librice,
   geoclue2,
   flite,
   fontconfig,
@@ -60,7 +61,6 @@
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
-  woff2,
   bubblewrap,
   libseccomp,
   libbacktrace,
@@ -85,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.5";
+  version = "2.52.3";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -100,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hzdjG6w+nHrT5SCPk3DgdsCdnEWzmYACHOVO2tzG+U8=";
+    hash = "sha256-Wz4NF05j3MKISLEZTg50SNWUjDwkJ+zZMcLFvlJhrrs=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -145,6 +145,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     enchant
     expat
     flite
+    freetype
     libavif
     libepoxy
     libjxl
@@ -173,12 +174,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     nettle
     p11-kit
     sqlite
-    woff2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
     # https://bugs.webkit.org/show_bug.cgi?id=274032
     fontconfig
-    freetype
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
@@ -199,6 +198,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExperimental [
     # For ENABLE_WEB_RTC
     openssl
+    librice
     # For ENABLE_WEBXR
     openxr-loader
   ]
@@ -221,7 +221,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]

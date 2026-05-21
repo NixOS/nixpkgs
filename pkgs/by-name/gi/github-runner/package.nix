@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.331.0";
+  version = "2.334.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qn3sOzZVBf/UfmMEkTPDfAWBtJzZv/xp9kCmiSowgUc=";
+    hash = "sha256-KSfzWwIf8Vpc8H0XM1tIqdZhdY/noZCeYLBvdWjqmLA=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -157,7 +157,9 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = true;
 
+  # tests fail with sandboxing under darwin
   __darwinAllowLocalNetworking = true;
+  __noChroot = stdenv.hostPlatform.isDarwin;
 
   # Fully qualified name of disabled tests
   disabledTests = [
@@ -182,13 +184,21 @@ buildDotnetModule (finalAttrs: {
     "TestSelfUpdateAsync_ValidateHash"
     "TestSelfUpdateAsync"
   ]
+  # Includes an `ActionDownloadInfo` that fails with sandboxed networking
   ++ map (x: "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.PrepareActions_${x}") [
+    "BatchesResolutionAcrossCompositeActions"
     "CompositeActionWithActionfile_CompositeContainerNested"
     "CompositeActionWithActionfile_CompositePrestepNested"
     "CompositeActionWithActionfile_MaxLimit"
     "CompositeActionWithActionfile_Node"
+    "DeduplicatesResolutionAcrossDepthLevels"
     "DownloadActionFromGraph"
+    "DownloadsNextLevelActionsBeforeRecursing"
+    "MultipleTopLevelActions_BatchesResolution"
+    "NestedCompositeContainers_BatchedResolution"
     "NotPullOrBuildImagesMultipleTimes"
+    "ParallelDownloadsAtSameDepth"
+    "ParallelDownloads_MultipleUniqueActions"
     "RepositoryActionWithActionYamlFile_DockerHubImage"
     "RepositoryActionWithActionfileAndDockerfile"
     "RepositoryActionWithActionfile_DockerHubImage"

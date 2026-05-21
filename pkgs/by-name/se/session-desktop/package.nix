@@ -8,7 +8,7 @@
   makeWrapper,
   fetchpatch,
   replaceVars,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
@@ -27,18 +27,20 @@
 }:
 
 let
+  pnpm = pnpm_10;
+
   fake-git = writeShellScriptBin "git" (lib.readFile ./fake-git.sh);
 
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {
     pname = "libsession-util-nodejs";
-    version = "0.6.12"; # find version in pnpm-lock.yaml
+    version = "0.6.17"; # find version in pnpm-lock.yaml
     src = fetchFromGitHub {
       owner = "session-foundation";
       repo = "libsession-util-nodejs";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
       deepClone = true; # need git rev for all submodules
-      hash = "sha256-6+eAofi4uapRKqJvCrekP7MWTfdd4VhOnSbc/8rsFic=";
+      hash = "sha256-j7smb0Rgjdqs4l3ahUV2bFXyvieV6Mcoti6wjSRovLo=";
       # fetchgit is not reproducible with deepClone + fetchSubmodules:
       # https://github.com/NixOS/nixpkgs/issues/100498
       postFetch = ''
@@ -109,7 +111,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.17.12";
+  version = "1.18.0";
   src =
     (fetchFromGitHub {
       owner = "session-foundation";
@@ -123,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -rf .git
         popd
       '';
-      hash = "sha256-+ZLTIBXXjqX1TAGboXU4OYQPBDXMm7epfY3tsi3zOfk=";
+      hash = "sha256-xulsnbC3C7n+4hFeuzRS8XzzYTO6T2vR3jBxTkxHFHE=";
     }).overrideAttrs
       (oldAttrs: {
         # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050
@@ -169,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-rusUkqokhhmbqTgzIQIbqFCNbI1pmIxO5USy7mmOzxs=";
+    hash = "sha256-8z4EDHpsvM0AFbJy2JXoE4vjiLaDshTihMQsrQzXdEs=";
   };
 
   buildPhase = ''

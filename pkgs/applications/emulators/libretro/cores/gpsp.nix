@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "gpsp";
-  version = "0-unstable-2026-01-27";
+  version = "0-unstable-2026-05-12";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "gpsp";
-    rev = "602512d7c687acb84cd56265cbcf2d7b7c75fb37";
-    hash = "sha256-YloLG2anJJ1hcVltN+d8XsshgZoDBrFRgRoQA7mfhN8=";
+    rev = "d6decfa351b575e2936afebba26d41ec20e4ddcd";
+    hash = "sha256-kqqNyBEaWlj9E4tZz7VK2186Y6DRDtcFBMIH7GpUDx4=";
   };
 
   makefile = "Makefile";

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     makeBinaryWrapper
   ]
-  ++ lib.optional stdenv.isDarwin unzip;
+  ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
 
   desktopItems = [
     (makeDesktopItem {
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
   ''
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/{bin,opt/Weasis,share/{applications,icons/hicolor/64x64/apps}}
 
     mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis/* $out/opt/Weasis
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeDeps}
     done
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis.app $out/Applications/
   ''

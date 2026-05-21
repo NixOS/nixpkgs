@@ -13,18 +13,19 @@
   # tests
   mock,
   pytestCheckHook,
+  pyocd,
 }:
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "2.0.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
     tag = "v${version}";
-    hash = "sha256-QitJGJGgXeSl5RaYW6+VtwOrV9AYDA9+kUHNtopDgVc=";
+    hash = "sha256-rkkdnpkl9UHcBDjp6lsFXR1zNn7tH1KeTQ7wV+yJ3m0=";
   };
 
   patches = [
@@ -52,6 +53,10 @@ buildPythonPackage rec {
     "test_jlink_restarted"
     "test_set_log_file_success"
   ];
+
+  passthru.tests = {
+    inherit pyocd;
+  };
 
   meta = {
     description = "Python interface for the SEGGER J-Link";

@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/actions/gh-actions-cache";
     changelog = "https://github.com/actions/gh-actions-cache/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "gh-actions-cache";
   };
 })

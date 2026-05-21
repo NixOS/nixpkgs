@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -23,4 +24,8 @@ stdenv.mkDerivation rec {
     libcec_platform
     tinyxml
   ];
+
+  meta = {
+    license = lib.licenses.gpl2Plus;
+  };
 }

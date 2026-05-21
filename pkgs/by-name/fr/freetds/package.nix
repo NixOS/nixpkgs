@@ -6,10 +6,10 @@
   pkg-config,
   openssl,
   odbcSupport ? true,
-  unixODBC ? null,
+  unixodbc ? null,
 }:
 
-assert odbcSupport -> unixODBC != null;
+assert odbcSupport -> unixodbc != null;
 
 # Work is in progress to move to cmake so revisit that later
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
   ]
-  ++ lib.optional odbcSupport unixODBC;
+  ++ lib.optional odbcSupport unixodbc;
 
   nativeBuildInputs = [
     autoreconfHook

@@ -16,6 +16,7 @@
   pkg-config,
   glibcLocalesUtf8,
   boehmgc,
+  libghostty-vt,
   llvmPackages,
   nixd,
   bash,
@@ -23,22 +24,23 @@
 }:
 
 let
-  version = "2.0.1";
-  devenvNixVersion = "2.32";
-  devenvNixRev = "7eb6c427c7a86fdc3ebf9e6cbf2a84e80e8974fd";
+  version = "2.1.2";
+  devenvNixVersion = "2.34";
+  devenvNixRev = "42d4b7de21c15f28c568410f4383fa06a8458a40";
 
-  nix_components =
-    (nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
-      owner = "cachix";
-      repo = "nix";
-      rev = devenvNixRev;
-      hash = "sha256-H26FQmOyvIGnedfAioparJQD8Oe+/byD6OpUpnI/hkE=";
-    })).overrideScope
-      (
-        finalScope: prevScope: {
-          version = devenvNixVersion;
-        }
-      );
+  devenvNixSrc = fetchFromGitHub {
+    name = "devenv-nix-${devenvNixVersion}-source";
+    owner = "cachix";
+    repo = "nix";
+    rev = devenvNixRev;
+    hash = "sha256-g2KEBuHpc3a56c+jPcg0+w6LSuIj6f+zzdztLCOyIhc=";
+  };
+
+  nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
+    finalScope: prevScope: {
+      version = devenvNixVersion;
+    }
+  );
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -47,16 +49,16 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v${version}";
-    hash = "sha256-cZRSu+XbZ2P91cKsjHBAc5uu6fblUyBVE1Cvk3ywPaM=";
+    tag = "v2.1.2";
+    hash = "sha256-EQnZCy7r4VMO6KDoytxHBa0mFbM1D9g1kaDfs/s0YZA=";
   };
 
-  cargoHash = "sha256-dzho5gZmfji4n+zHwr2uCqOijCFpVj9loYr8VQNil3g=";
+  cargoHash = "sha256-uEwxqnLqCFpyV2NbnfuUyVqKrMeVeQzoGQmElaVeGU8=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
-    VERGEN_IDEMPOTENT = "1";
+    DEVENV_IS_RELEASE = true;
   };
 
   cargoBuildFlags = [
@@ -78,7 +80,7 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     dbus
-    boehmgc
+    libghostty-vt
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c

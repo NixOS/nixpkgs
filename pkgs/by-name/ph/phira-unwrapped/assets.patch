@@ -1,11 +1,11 @@
 diff --git a/prpr/src/core.rs b/prpr/src/core.rs
-index 7f9d4db..33c44bb 100644
+index 24589df..7101fde 100644
 --- a/prpr/src/core.rs
 +++ b/prpr/src/core.rs
-@@ -68,6 +68,14 @@ thread_local! {
- }
+@@ -72,6 +72,14 @@ thread_local! {
  
  pub fn init_assets() {
+     #[cfg(not(target_env = "ohos"))]
 +    if let Ok(root_path) = std::env::var("PHIRA_ROOT") {
 +        let path = std::path::Path::new(&root_path);
 +        if path.exists() {

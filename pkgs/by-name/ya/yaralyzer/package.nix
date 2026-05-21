@@ -27,6 +27,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     yara-python
   ];
 
+  pythonRelaxDeps = [ "rich" ];
+
   pythonImportsCheck = [ "yaralyzer" ];
 
   passthru = {

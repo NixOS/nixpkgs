@@ -19,9 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-M9PqzSQkMcnfuL2n/eLwxnk3E9gSEVu0t6Tahiw7niI=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/KaTeX/KaTeX/blob/main/package.json#L58
+    ./yarn-4.14-support.patch
+  ];
+
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-bRzYuiYDAz9LTcaUgI0dvfxU/eo0uTSz0pPP7dH5XW8=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-6DxF+TtUOqW14ivBHETUMXzDspP/54k1OzbKeIJqDAQ=";
   };
 
   nativeBuildInputs = [

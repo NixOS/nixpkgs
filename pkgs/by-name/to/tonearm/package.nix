@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo126Module,
   cairo,
   copyDesktopItems,
   fetchFromGitea,
@@ -38,17 +38,17 @@ let
     ];
   };
 in
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "tonearm";
-  version = "1.2.0";
+  version = "1.4.0";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dergs";
     repo = "Tonearm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2on27z3BRf63gjs3NKmF9H0Le7hBdaHRUp8WQgFs3QU=";
+    hash = "sha256-tfnJiEJD0SWKxi5MjGbDLVe80niMcMHpzNaOM1SNEQo=";
   };
-  vendorHash = "sha256-j+7cobxVGNuZFYeRn5ad7XT4um8WNWE1byFo7qo9zK0=";
+  vendorHash = "sha256-/pUSUfOt5heiObZNQRlZjN1a+j9JocB43F9072pyLjw=";
 
   ldflags = [
     "-X \"codeberg.org/dergs/tonearm/internal/ui.Version=${finalAttrs.version}\""

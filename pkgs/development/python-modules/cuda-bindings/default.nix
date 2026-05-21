@@ -3,35 +3,81 @@
   buildPythonPackage,
   fetchFromGitHub,
   cudaPackages,
+  replaceVars,
   addDriverRunpath,
 
   # build-system
   cython,
-  setuptools,
   pyclibrary,
+  setuptools,
+  setuptools-scm,
 
   # env
   symlinkJoin,
 
-  # tests
+  # dependencies
   numpy,
+
+  # tests
+  cuda-pathfinder,
+  pytest-benchmark,
   pytestCheckHook,
+  util-linux,
 
   # passthru
   cuda-bindings,
 }:
 
+let
+  cudaVersion = cudaPackages.cudaMajorMinorVersion;
+
+  versionSpecificAttrs =
+    let
+      args = {
+        inherit replaceVars;
+        cudaLibPaths = {
+          libcudart = lib.getLib cudaPackages.cuda_cudart;
+          libcufile = lib.getLib cudaPackages.libcufile;
+          libnvfatbin = lib.getLib cudaPackages.libnvfatbin;
+          libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
+          libnvml = addDriverRunpath.driverLink;
+          libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
+          libnvvm =
+            if cudaOlder "13.0" then "${cudaPackages.cuda_nvcc}/nvvm" else lib.getLib cudaPackages.libnvvm;
+        };
+      };
+    in
+    {
+      # cuda-bindings patch versions DO NOT correspond to cuda toolkits' own path versions.
+      # Only major.minor is supposed to match
+      "12.9" = import ./12_9.nix args;
+      "13.0" = import ./13_0.nix args;
+      "13.1" = import ./13_1.nix args;
+      "13.2" = import ./13_2.nix args;
+    }
+    .${cudaVersion} or (throw "Unsupported cuda-bindings version: ${cudaVersion}");
+
+  inherit (cudaPackages) cudaOlder cudaAtLeast;
+in
 buildPythonPackage (finalAttrs: {
   pname = "cuda-bindings";
-  version = "12.8.0";
+  inherit (versionSpecificAttrs) version;
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7e9w70KkC6Pcvyu6Cwt5Asrc3W9TgsjiGvArRTer6Oc=";
+    hash = versionSpecificAttrs.sourceHash;
   };
+
+  # Apply patch relative to cuda_bindings
+  patchFlags = [ "-p2" ];
+
+  patches = [
+    versionSpecificAttrs.nvidiaLibsPatch
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/cuda_bindings";
 
@@ -49,9 +95,6 @@ buildPythonPackage (finalAttrs: {
     ''
       substituteInPlace cuda/bindings/_internal/nvjitlink_linux.pyx \
         --replace-fail \
-          'so_name = "libnvJitLink.so"' \
-          'so_name = "${lib.getLib cudaPackages.libnvjitlink}/lib/libnvJitLink.so"' \
-        --replace-fail \
           "handle = dlopen('libcuda.so.1'" \
           "handle = dlopen('${libCudaPath}/lib/libcuda.so.1'"
 
@@ -59,17 +102,8 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           "path = 'libcuda.so.1'" \
           "path = '${libCudaPath}/lib/libcuda.so.1'"
-
-      substituteInPlace cuda/bindings/_bindings/cynvrtc.pyx.in \
-        --replace-fail \
-          "dlfcn.dlopen('libnvrtc.so.12'" \
-          "dlfcn.dlopen('${lib.getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so.12'"
-
-      substituteInPlace cuda/bindings/_lib/cyruntime/cyruntime.pyx.in \
-        --replace-fail \
-          "dlfcn.dlopen('libcudart.so.12'" \
-          "dlfcn.dlopen('${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so.12'"
-    '';
+    ''
+    + (versionSpecificAttrs.postPatch or "");
 
   preBuild = ''
     export CUDA_PYTHON_PARALLEL_LEVEL=$NIX_BUILD_CORES
@@ -79,6 +113,7 @@ buildPythonPackage (finalAttrs: {
     cython
     pyclibrary
     setuptools
+    setuptools-scm
   ];
 
   env = {
@@ -93,37 +128,64 @@ buildPythonPackage (finalAttrs: {
   };
 
   buildInputs = [
+    cudaPackages.libcufile # cufile.h
+  ]
+  # Until 13.0, crt headers are shipped in nvcc
+  ++ lib.optionals (cudaOlder "13.0") [
     cudaPackages.cuda_nvcc # crt/host_defines.h
+  ]
+  ++ lib.optionals (cudaAtLeast "13.0") [
+    cudaPackages.cuda_crt # crt/host_defines.h
+  ];
+
+  pythonRemoveDeps = [
+    # We circumvent cuda_pathfinder to localize nvidia libs with patches
+    "cuda-pathfinder"
+  ];
+  dependencies = [
+    # Not explicitly listed as a dependency, but is required at import time
+    numpy
   ];
 
   pythonImportsCheck = [
     "cuda"
-    "cuda.cuda"
-    "cuda.cudart"
-    "cuda.nvrtc"
-  ];
+    "cuda.bindings.cufile"
+    "cuda.bindings.driver"
+    "cuda.bindings.nvjitlink"
+    "cuda.bindings.nvrtc"
+    "cuda.bindings.nvvm"
+    "cuda.bindings.runtime"
+  ]
+  ++ (versionSpecificAttrs.pythonImportsCheck or [ ]);
 
   preCheck = ''
     rm -rf cuda
   '';
 
   nativeCheckInputs = [
-    numpy
     pytestCheckHook
+  ]
+  ++ lib.optionals (cudaPackages.cudaAtLeast "13.0") [
+    # Although we don't want cuda.pathfinder as a dependency (to handle dlopens), it is imported by
+    # some tests
+    cuda-pathfinder
+
+    pytest-benchmark
+    util-linux # findmnt
   ];
 
   enabledTestPaths = [
     "tests/"
   ];
 
-  disabledTestPaths = [
+  disabledTestPaths = lib.optionals (cudaOlder "13.0") [
     # The current driver shipped in NixOS (590.48.01) advertises CUDA 13.1, causing the following
     # error:
     # cuda.bindings._internal.utils.NotSupportedError: only CUDA 12 driver is supported
-    #
-    # Ideally, we should transition to cuda 13 across the whole nixpkgs tree.
     "tests/test_nvjitlink.py"
   ];
+
+  disabledTests = versionSpecificAttrs.disabledTests or [ ];
 
   # Tests need access to a GPU
   doCheck = false;
@@ -133,7 +195,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    description = "CUDA Python: Performance meets Productivity";
+    description = "Standard set of low-level interfaces, providing access to the CUDA host APIs from Python";
     homepage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_bindings";
     changelog = "https://nvidia.github.io/cuda-python/${finalAttrs.version}/release/${finalAttrs.version}-notes.html";
     license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary Software

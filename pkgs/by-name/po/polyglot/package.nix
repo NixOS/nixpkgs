@@ -70,7 +70,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "Conlang construction toolkit";
     homepage = "https://draquet.github.io/PolyGlot/readme.html";
-    changelog = "https://github.com/DraqueT/PolyGlot/releases/tag/${version}";
+    changelog = "https://github.com/DraqueT/PolyGlot/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ noodlez1232 ];
     platforms = lib.platforms.linux;

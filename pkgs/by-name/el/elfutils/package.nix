@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
     })
+    (fetchpatch {
+      name = "fix-aarch64_attributes.patch";
+      url = "https://sourceware.org/git/?p=elfutils.git;a=patch;h=b27adc5262e807f341ca0a4910ce04294144f79a";
+      hash = "sha256-hksO5HXL9Jv5E4o2rI4NAgQp+4z+Lg7Wn/AdW7fpr0c=";
+    })
     # https://patchwork.sourceware.org/project/elfutils/patch/20251205145241.1165646-1-arnout@bzzt.net/
     ./test-run-sysroot-reliability.patch
   ]

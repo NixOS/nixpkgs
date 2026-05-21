@@ -1,22 +1,23 @@
 {
   lib,
-  buildGo124Module,
+  buildGo125Module,
   fetchFromCodeberg,
   fetchYarnDeps,
   nodejs,
   yarn,
   yarnConfigHook,
   nixosTests,
+  nix-update-script,
 }:
-buildGo124Module (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "gotosocial";
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchFromCodeberg {
     owner = "superseriousbusiness";
     repo = "gotosocial";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ifSm3tV8P435v7WUS2BYXfVS3FHu9Axz3IQWGdTw3Bg=";
+    hash = "sha256-Z3j5/pXnNTHgBmPEfFgjOJuL03LsPtvAwbuoL9wb5bk=";
   };
 
   vendorHash = null;
@@ -82,6 +83,7 @@ buildGo124Module (finalAttrs: {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.gotosocial = nixosTests.gotosocial;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gotosocial.org";

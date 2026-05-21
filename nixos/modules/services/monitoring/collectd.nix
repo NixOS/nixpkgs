@@ -46,6 +46,20 @@ in
 
     package = lib.mkPackageOption pkgs "collectd" { };
 
+    finalPackage = lib.mkOption {
+      readOnly = true;
+      default = minimalPackage;
+      defaultText = lib.literalExpression ''
+        if config.services.collectd.buildMinimalPackage then
+          cfg.package.override {
+            enabledPlugins = [ "syslog" ] ++ builtins.attrNames cfg.plugins;
+          }
+        else
+          cfg.package
+      '';
+      description = "The final package being used after applying plugins and minimalPackage.";
+    };
+
     buildMinimalPackage = lib.mkOption {
       default = false;
       description = ''

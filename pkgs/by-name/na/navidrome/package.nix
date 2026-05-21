@@ -3,6 +3,7 @@
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
+  fetchpatch,
   lib,
   nodejs_24,
   npmHooks,
@@ -15,27 +16,28 @@
   nix-update-script,
   ffmpegSupport ? true,
   versionCheckHook,
+  plugins ? [ ],
 }:
 
 buildGoModule (finalAttrs: {
   pname = "navidrome";
-  version = "0.60.3";
+  version = "0.61.2";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DwVmNJKjwEhTKIVPYFqaUR9SD4HpACkK4XJoFfQVRus=";
+    hash = "sha256-epSgGiDdfNRUaQtWoOd4ADKtF7Ptt3p9UOqsWBzZg7I=";
   };
 
-  vendorHash = "sha256-StI4CfWN/OnbYFktRriTJWMHTuJkCinpYk9qgsxMGG8=";
+  vendorHash = "sha256-RmmZudmWBxiw+c9g8KFEX+ALFD0xP/SBsYc6b6RWWO8=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-EA2WM7xaqP7rS0pjx+yXwpjdauaduvDefmFH73eByxI=";
+    hash = "sha256-7hy2vLCEicKzjORpJZ0mrRS8PT3GsJ8DWdvj/7SrB70=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +46,8 @@ buildGoModule (finalAttrs: {
     npmHooks.npmConfigHook
     pkg-config
   ];
+
+  runtimeInputs = plugins;
 
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
@@ -66,9 +70,6 @@ buildGoModule (finalAttrs: {
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     CGO_CFLAGS = toString [ "-Wno-return-local-addr" ];
-    # Workaround for https://github.com/golang/go/issues/77387
-    # Remove when go1.25.8 has been merged
-    CGO_CFLAGS_ALLOW = "--define-prefix";
   };
 
   postPatch = ''
@@ -79,8 +80,16 @@ buildGoModule (finalAttrs: {
     make buildjs
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/plugins/
+    ${lib.concatMapStringsSep "\n" (plugin: ''
+      ln -s ${plugin}/share/${plugin.pname}.ndp $out/share/plugins/
+    '') plugins}
+  '';
+
   tags = [
     "netgo"
+    "sqlite_fts5"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -92,6 +101,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
+    inherit plugins;
     tests.navidrome = nixosTests.navidrome;
     updateScript = nix-update-script { };
   };

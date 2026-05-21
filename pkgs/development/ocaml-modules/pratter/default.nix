@@ -7,7 +7,7 @@
   qcheck-alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "5.0.1";
   pname = "pratter";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
     domain = "forge.tedomum.net";
     owner = "koizel";
     repo = "pratter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ib7EplEvOuYcAS9cfzo5994SqCv2eiysLekYfH09IMw=";
   };
 
@@ -32,7 +32,7 @@ buildDunePackage rec {
     description = "Extended Pratt parser";
     homepage = "https://github.com/gabrielhdt/pratter";
     license = lib.licenses.bsd3;
-    changelog = "https://github.com/gabrielhdt/pratter/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/gabrielhdt/pratter/raw/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

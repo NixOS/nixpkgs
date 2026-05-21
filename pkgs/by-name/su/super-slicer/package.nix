@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchpatch,
   makeDesktopItem,
-  wxGTK31,
+  wxwidgets_3_1,
   prusa-slicer,
   libspnav,
   opencascade-occt_7_6,
@@ -21,9 +21,11 @@ let
     })
     ./super-slicer-use-boost186.patch
     ./super-slicer-fix-cereal-1.3.1.patch
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./no-ilmbase.patch
   ];
 
-  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
+  wxwidgets_3_1-prusa = wxwidgets_3_1.overrideAttrs (old: {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.1.4";
     src = fetchFromGitHub {
@@ -44,7 +46,7 @@ let
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
       overrides = {
-        wxGTK-override = wxGTK31-prusa;
+        wxGTK-override = wxwidgets_3_1-prusa;
       };
     };
     latest = {
@@ -52,7 +54,7 @@ let
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
       overrides = {
-        wxGTK-override = wxGTK31-prusa;
+        wxGTK-override = wxwidgets_3_1-prusa;
       };
     };
     beta = {

@@ -11,18 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcap-ng";
-  version = "0.9";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "stevegrubb";
     repo = "libcap-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KF4SaES6FYuoBoZB+hhWlFuQemWM4Vg8aybCOgXM+Uc=";
+    hash = "sha256-anuPOBWp4Hlpo+m6kYlSd2v7H3P7LQ9brZdq1lo7Po4=";
   };
 
   # NEWS needs to exist or else the build fails
   postPatch = ''
     touch NEWS
+    substituteInPlace utils/captest.c \
+      --replace-fail /usr/bin/captest ${placeholder "out"}/bin/captest
   '';
 
   strictDeps = true;
@@ -63,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ grimmauld ];
+    teams = [ lib.teams.security-review ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap-ng_project" finalAttrs.version;
   };
 })

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   fetchpatch,
   setuptools,
   pytest,
@@ -17,23 +16,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     tag = version;
-    hash = "sha256-3vBYOk/P78NOjAbs3fT6py5QOOK3fX+AKtO4j5vxZfk=";
+    hash = "sha256-TFTY6enuyzQx0U+qHVde71VHqVa0oEGbSJUwhMAsI7Q=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.13") [
+  patches = [
+    # https://github.com/aklajnert/pytest-subprocess/pull/202
     (fetchpatch {
-      # python 3.14 compat
-      # the patch however breaks 3.12:
-      # https://github.com/aklajnert/pytest-subprocess/issues/192
-      url = "https://github.com/aklajnert/pytest-subprocess/commit/be30d9a94ba45afb600717e3fcd95b8b2ff2c60e.patch";
-      hash = "sha256-TYk/Zu2MF+ROEKTgZI1rzA2MlW2it++xElfGZS0Dn5s=";
+      name = "fix-test_any_matching_program.patch";
+      url = "https://github.com/aklajnert/pytest-subprocess/commit/14c571b9b72a7b7e429189a9455fc715e6f0dbce.patch";
+      hash = "sha256-xDj5KSyv+JXRuMoUKpIr5oDN9y8V14LApRXbzNi9HI8=";
     })
   ];
 
@@ -50,8 +48,6 @@ buildPythonPackage rec {
     anyio
     typing-extensions
   ];
-
-  pytestFlags = [ "-Wignore::DeprecationWarning" ];
 
   meta = {
     description = "Plugin to fake subprocess for pytest";

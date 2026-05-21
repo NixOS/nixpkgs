@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   ldap3,
   ldaptor,
   matrix-synapse-unwrapped,
@@ -14,18 +14,15 @@
 
 buildPythonPackage rec {
   pname = "matrix-synapse-ldap3";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-i7ZRcXMWTUucxE9J3kEdjOvbLnBdXdHqHzhzPEoAnh0=";
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "matrix-synapse-ldap3";
+    tag = "v${version}";
+    hash = "sha256-d3TRtPEhyc45dj7k2TpJlBn8fZgKFDZxocKdfAoeI2w=";
   };
-
-  patches = [
-    # https://github.com/matrix-org/matrix-synapse-ldap3/pull/200
-    ./setuptools-pkg_resources.patch
-  ];
 
   build-system = [ setuptools ];
 

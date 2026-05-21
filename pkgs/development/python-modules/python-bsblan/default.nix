@@ -6,9 +6,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  mashumaro,
-  orjson,
   packaging,
+  pydantic,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
@@ -20,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-bsblan";
-  version = "4.1.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t60WMq1kbCIkcQSfr03K9Z6ro3zFGaDxCnl/84by+Qw=";
+    hash = "sha256-wK6r1fWXpbPVpUqLaLRjKKB2beXftdHujRL4pq3bhjc=";
   };
 
   postPatch = ''
@@ -42,9 +41,8 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     backoff
-    mashumaro
-    orjson
     packaging
+    pydantic
     yarl
   ];
 

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitLab {
     owner = "sherpa-team";
     repo = "sherpa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bh5C0BYbuAkbPrp27P0oD0yoxd53ViRtmpUKfN7kZ90=";
+    hash = "sha256-iXVP0XwgEpBWZ3vHq+7F9RGx6akShSizBIGkPIOw/r0=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''

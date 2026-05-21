@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "spotifyaio";
-  version = "1.0.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-spotify";
     tag = "v${version}";
-    hash = "sha256-wl8THtmdJ2l6XNDtmmnk/MF+qTZL0UsbL8o6i/Vwf5k=";
+    hash = "sha256-Bob6JpbUaQkeH2c5YKVSUkY/FNyVTf+qtB2Rm1xCRX0=";
   };
 
   postPatch = ''

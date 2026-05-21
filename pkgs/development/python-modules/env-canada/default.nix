@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "env-canada";
-  version = "0.13.2";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E6ZStsc0T0zbjC11wi1h0JtQVBrEPtr0SJwUodCbF7k=";
+    hash = "sha256-iiNsbXvZPLCJ0BzPYCs6UEZIm1S0tEqi3ClY7vX6le4=";
   };
 
   build-system = [ setuptools ];

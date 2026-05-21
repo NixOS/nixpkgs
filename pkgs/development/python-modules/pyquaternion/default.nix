@@ -21,6 +21,9 @@ buildPythonPackage rec {
 
   patches = [
     ./numpy2-repr.patch
+    # patch tests for numpy v2.4 behaviour
+    # https://numpy.org/devdocs/release/2.4.0-notes.html#raise-typeerror-on-attempt-to-convert-array-with-ndim-0-to-scalar
+    ./numpy2-float.patch
   ];
 
   # The VERSION.txt file is required for setup.py

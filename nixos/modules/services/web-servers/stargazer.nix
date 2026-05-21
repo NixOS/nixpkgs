@@ -109,7 +109,7 @@ in
 
     store = lib.mkOption {
       type = lib.types.path;
-      default = /var/lib/gemini/certs;
+      default = "/var/lib/gemini/certs";
       description = ''
         Path to the certificate store on disk. This should be a
         persistent directory writable by Stargazer.
@@ -284,7 +284,7 @@ in
     };
 
     # Create default cert store
-    systemd.tmpfiles.rules = lib.mkIf (cfg.store == /var/lib/gemini/certs) [
+    systemd.tmpfiles.rules = lib.mkIf ((builtins.toString cfg.store) == "/var/lib/gemini/certs") [
       ''d /var/lib/gemini/certs - "${cfg.user}" "${cfg.group}" -''
     ];
 

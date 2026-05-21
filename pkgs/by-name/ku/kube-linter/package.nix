@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kube-linter";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "kube-linter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nd8CLAp3MHuQs/firDPCZ4XlxVx73MMNGVNp5tsa1Rw=";
+    sha256 = "sha256-JpabvLiYnDglf6rLr7HLGPafs9HHV/GZBErXr7CBQbo=";
   };
 
-  vendorHash = "sha256-A8aNyMX9WtDDuqy6qOHTQkLnuckcsHEKZ3mfnC4Rx2s=";
+  vendorHash = "sha256-xG4RsgPOoCWFhMEMFyGKQB05O44Pm1jFo2YC8zal1Q0=";
 
   excludedPackages = [ "tool-imports" ];
 

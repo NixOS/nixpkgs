@@ -44,6 +44,7 @@ stdenv.mkDerivation {
   patches = [
     ./work-around-API-borkage.patch
     ./libapp-include-ctype.diff
+    ./use-stdbool.patch
   ];
 
   buildInputs = [

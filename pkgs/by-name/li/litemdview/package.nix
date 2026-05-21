@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XGjP+7i3mYCEzPYwVY+75DARdXJFY4vUWHFpPeoNqAE=";
   };
 
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
   buildInputs = [
     gtkmm3
   ];

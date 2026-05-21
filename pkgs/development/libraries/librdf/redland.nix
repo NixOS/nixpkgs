@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "1.0.17";
 
   src = fetchurl {
-    url = "http://download.librdf.org/source/redland-${version}.tar.gz";
+    url = "https://download.librdf.org/source/redland-${version}.tar.gz";
     sha256 = "de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681";
   };
 

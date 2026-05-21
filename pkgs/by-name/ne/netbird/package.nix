@@ -67,16 +67,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.65.3";
+  version = "0.71.3";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7OLCrmgkRViFhzxhyuRZGua6Bu8ntWdYNNlEpC0tB+o=";
+    hash = "sha256-1doOf/rgGbD/YtMY0+j1VM7933zR+G+Vyq6bF5fyuMg=";
   };
 
-  vendorHash = "sha256-zMjbciItpzzCmUoLZy+gEF9etQy2dRmZrRVg4iSC0+o=";
+  vendorHash = "sha256-NeZuj9o2yu5di+6jbNqCnAw0fI55GA5Otmr77c08QFc=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (componentName == "ui") pkg-config;
 
@@ -93,7 +93,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/netbirdio/netbird/version.version=${finalAttrs.version}"
+    "-X github.com/netbirdio/netbird/version.version=v${finalAttrs.version}"
     "-X main.builtBy=nix"
   ];
 
@@ -126,11 +126,11 @@ buildGoModule (finalAttrs: {
         ''
     # assemble & adjust netbird.desktop files for the GUI
     + lib.optionalString (stdenv.hostPlatform.isLinux && componentName == "ui") ''
-      install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/pixmaps/netbird.png"
+      install -Dm644 "$src/client/ui/assets/netbird-systemtray-connected.png" "$out/share/icons/hicolor/256x256/apps/netbird.png"
       install -Dm644 "$src/client/ui/build/netbird.desktop" "$out/share/applications/netbird.desktop"
 
       substituteInPlace $out/share/applications/netbird.desktop \
-        --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/${component.binaryName}"
+        --replace-fail "Exec=/usr/bin/netbird-ui" "Exec=${component.binaryName}"
     '';
 
   nativeInstallCheckInputs = lib.lists.optionals (component ? versionCheckProgramArg) [

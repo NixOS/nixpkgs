@@ -3,6 +3,7 @@
   copyPkgconfigItems,
   fetchFromRepoOrCz,
   makePkgconfigItem,
+  apple-sdk,
   perl,
   stdenv,
   texinfo,
@@ -63,18 +64,39 @@ stdenv.mkDerivation (finalAttrs: {
     "--cc=$CC"
     "--ar=$AR"
     "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
-    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
+    "--sysincludepaths=${
+      lib.concatStringsSep ":" (
+        [
+          "{B}/include"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "${apple-sdk.sdkroot}/usr/include"
+        ]
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+          "${lib.getDev stdenv.cc.libc}/include"
+        ]
+      )
+    }"
     # The first libpath will be the one in which tcc will look for libtcc1.a,
     # which is need for its tests.
     "--libpaths=$lib/lib/tcc:$lib/lib:${lib.getLib stdenv.cc.libc}/lib"
     # build cross compilers
     "--enable-cross"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # The bounds checker has an unresolved arm64 atomic helper on Darwin.
+    "--config-bcheck=no"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     "--config-musl"
   ];
 
   enableParallelBuilding = true;
+
+  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    # TCC cannot cross-compile x86 long double constants from aarch64-darwin.
+    makeFlagsArray+=("TCC_X=i386-win32 x86_64-win32 arm arm64 arm-wince c67 riscv64 arm64-osx")
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=implicit-int"
@@ -83,7 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Test segfault for static build
   doInstallCheck =
-    !stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    !stdenv.hostPlatform.isStatic
+    && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
   postPatch = ''
     patchShebangs texi2pod.pl
@@ -143,8 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
       onemoresuza
     ];
     platforms = lib.platforms.unix;
-    # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })
 # TODO: self-compilation

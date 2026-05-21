@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -13,8 +14,12 @@
   qtdeclarative,
   qttools,
   validatePkgConfig,
+  withDocumentation ? true,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-action-api";
   version = "1.2.1";
@@ -26,9 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pwHvbiUvkAi7/XgpNfgrqcp3znFKSXlAAacB2XsHQkg=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "0001-lomiri-action-api-fix-qt6-unit-tests.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-action-api/-/commit/8fadb3d75938403aca2dc0e9392370c0d9b45c3e.patch";
+      hash = "sha256-qqgFgw2YY6cPEbzGKI7r4fk/CgR9NRe1ZY2HUsKLNlo=";
+    })
+  ];
+
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withDocumentation [
     "doc"
   ];
 
@@ -46,11 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    doxygen
     pkg-config
     qtdeclarative
-    qttools # qdoc
     validatePkgConfig
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -64,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "GENERATE_DOCUMENTATION" true)
+    (lib.cmakeBool "GENERATE_DOCUMENTATION" withDocumentation)
     # Use vendored libhud2, TODO package libhud2 separately?
     (lib.cmakeBool "use_libhud2" false)
   ];
@@ -92,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
-    pkgConfigModules = [ "lomiri-action-qt-1" ];
+    pkgConfigModules = [
+      "lomiri-action-qt${lib.optionalString withQt6 "6"}-1"
+    ];
   };
 })

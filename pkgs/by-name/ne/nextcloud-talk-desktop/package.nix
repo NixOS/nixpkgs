@@ -28,6 +28,7 @@
   patchelf,
   undmg,
   makeWrapper,
+  libpulseaudio,
 }:
 let
   pname = "nextcloud-talk-desktop";
@@ -102,11 +103,17 @@ let
       libxrandr
       libxfixes
       libxcursor
+      libpulseaudio
     ];
 
-    # Required to launch the application and proceed past the zygote_linux fork() process
-    # Fixes `Zygote could not fork`
-    runtimeDependencies = [ systemd ];
+    runtimeDependencies = [
+      # Required to launch the application and proceed past the zygote_linux fork() process
+      # Fixes `Zygote could not fork`
+      systemd
+
+      # Fixes input/output audio device selection
+      libpulseaudio
+    ];
 
     desktopItems = [
       (makeDesktopItem {

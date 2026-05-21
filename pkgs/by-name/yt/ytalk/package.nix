@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     homepage = "http://ytalk.ourproject.org";
     description = "Terminal based talk client";

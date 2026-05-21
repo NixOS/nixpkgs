@@ -11,6 +11,7 @@
   gnupg,
   gpgme,
   merge3,
+  nix-update-script,
   openssh,
   paramiko,
   pytestCheckHook,
@@ -22,21 +23,21 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "1.0.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    tag = "dulwich-${version}";
-    hash = "sha256-7/aXxwK6LmERD8CSo+b1uuNVBrXcbBvksZ1YY28vB8A=";
+    tag = "dulwich-${finalAttrs.version}";
+    hash = "sha256-pyBAN1zSYGrOg4tic/SiKROHHUlFMtBSF0OOVNVvkyM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-O35g5LflL8ZF0HNWdsqg1mp09dKFNrryz23G1WZhhPE=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-U5X/D3iVg2qunji8HQbNeDzvYMoD4oRe5bL6l035lO0=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +75,7 @@ buildPythonPackage rec {
     openssh # for ssh-keygen
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 
@@ -88,8 +89,6 @@ buildPythonPackage rec {
   '';
 
   disabledTestPaths = [
-    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
-    "tests/contrib"
     # AssertionError: GPGMEError not raised
     "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
   ];
@@ -98,6 +97,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dulwich" ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^dulwich-([1-9][0-9.]+)$"
+    ];
+  };
+
   meta = {
     description = "Implementation of the Git file formats and protocols";
     longDescription = ''
@@ -105,7 +111,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${finalAttrs.src.tag}/NEWS";
     license = with lib.licenses; [
       asl20
       gpl2Plus
@@ -115,4 +121,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

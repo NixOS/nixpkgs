@@ -20,6 +20,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     googleapis-common-protos
     protobuf

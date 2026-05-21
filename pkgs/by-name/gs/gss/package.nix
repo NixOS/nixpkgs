@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  autoconf,
+  autoconf269,
   automake,
   gengetopt,
   gettext,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    autoconf
+    autoconf269
     automake
     gengetopt
     gettext

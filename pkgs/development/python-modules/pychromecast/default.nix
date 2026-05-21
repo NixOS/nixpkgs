@@ -10,20 +10,20 @@
 
 buildPythonPackage rec {
   pname = "pychromecast";
-  version = "14.0.9";
+  version = "14.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pychromecast";
     tag = version;
-    hash = "sha256-SpoVgXJV/9SVAcZXfeqpB3jkt9UUWcY9NBDGeIFhh4w=";
+    hash = "sha256-m9rucHSiApT0Xqkf4sjVRehcGGgvbaoGgbT/s3SLxKI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-       --replace-fail "setuptools>=65.6,<81.0" setuptools \
-       --replace-fail "wheel>=0.37.1,<0.46.0" wheel
+       --replace-fail "setuptools>=65.6,<83.0" setuptools \
+       --replace-fail "wheel>=0.37.1,<0.47.0" wheel
   '';
 
   build-system = [ setuptools ];

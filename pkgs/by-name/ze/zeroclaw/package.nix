@@ -9,29 +9,30 @@
   writableTmpDirAsHomeHook,
   gitMinimal,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
-  version = "0.1.7";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D4/2h7TlOwAU4tl1xcdULRfO21KmP+zLlqQ8DzLqnjQ=";
+    hash = "sha256-hVHfsBw3u0CLWAbmizLA9ZrB+3B0qBIrSUuzsyChwW0=";
   };
 
   postPatch =
     let
-      zeroclaw-web = callPackage ./zeroclaw-web { inherit (finalAttrs) version; };
+      zeroclaw-web = callPackage ./zeroclaw-web { inherit (finalAttrs) src version; };
     in
     ''
       mkdir -p web
       ln -s ${zeroclaw-web} web/dist
     '';
 
-  cargoHash = "sha256-sbC+fdMzjrx0dF5zHBHzMgZeIPQth1oXNqilooVZF8s=";
+  cargoHash = "sha256-6MGIJsaqRp3k/ysjdu6BE2iM2sehERQR+QoSqiThSpg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,21 +48,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gitMinimal
   ];
 
+  # wiremock tests require socket binding, which is denied in the darwin sandbox
   checkFlags = [
-    "--skip=memory::lucid::tests::failure_cooldown_avoids_repeated_lucid_calls"
-    "--skip=memory::lucid::tests::recall_handles_lucid_cold_start_delay_within_timeout"
-    "--skip=memory::lucid::tests::recall_merges_lucid_and_local_results"
+    "--skip=tests::exchange_pairing_code_posts_code_and_returns_token"
+    "--skip=tests::fetch_pairing_code_reads_gateway_pair_code_response"
+    "--skip=integration::telegram_attachment_fallback::"
+    "--skip=integration::telegram_finalize_draft::"
   ];
+
+  # The gateway serves the web dashboard from <binary_dir>/web/dist at runtime
+  postInstall =
+    let
+      zeroclaw-web = callPackage ./zeroclaw-web { inherit (finalAttrs) src version; };
+    in
+    ''
+      mkdir -p $out/bin/web
+      ln -s ${zeroclaw-web} $out/bin/web/dist
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, small, and fully autonomous AI assistant infrastructure — deploy anywhere, swap anything";
     homepage = "https://github.com/zeroclaw-labs/zeroclaw";
     changelog = "https://github.com/zeroclaw-labs/zeroclaw/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [
+      drupol
+      nixosclaw
+    ];
     mainProgram = "zeroclaw";
   };
 })

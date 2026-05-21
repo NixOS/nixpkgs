@@ -122,14 +122,6 @@
                 forceInstall = true;
               };
 
-              nixpkgs.overlays = [
-                (final: prev: {
-                  # Set tmpdir inside nixos-rebuild-ng to test
-                  # "Deploy works with very long TMPDIR"
-                  nixos-rebuild-ng = prev.nixos-rebuild-ng.override { withTmpdir = "/tmp"; };
-                })
-              ];
-
               # this will be asserted
               networking.hostName = "${hostname}";
             }

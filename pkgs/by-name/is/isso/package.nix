@@ -4,25 +4,25 @@
   fetchFromGitHub,
   nixosTests,
   fetchNpmDeps,
-  nodejs_20,
+  nodejs,
   npmHooks,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "isso";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = "isso";
     tag = finalAttrs.version;
-    hash = "sha256-kZNf7Rlb1DZtQe4dK1B283OkzQQcCX+pbvZzfL65gsA=";
+    hash = "sha256-8kXqqiMXxF0wCJ+AzYT8j0rjuhlXO3F6UJbump672b4=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-RBpuhFI0hdi8bB48Pks9Ac/UdcQ/DJw+WFnNj5f7IYE=";
+    hash = "sha256-e3r5iZLmXlf5YBPGgeNBDkdgfbNcIZIXbRLyyoyJiTU=";
   };
 
   outputs = [
@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     itsdangerous
     jinja2
     misaka
+    mistune
     html5lib
     werkzeug
     bleach
@@ -50,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.cffi
     python3Packages.sphinxHook
     python3Packages.sphinx
-    nodejs_20
+    nodejs
     npmHooks.npmConfigHook
   ];
 

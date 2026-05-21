@@ -24,11 +24,11 @@ index e15cab2fa..bad033dbf 100644
  
  if umockdev_integration_tests.allowed()
 diff --git a/meson.build b/meson.build
-index 7b065f278..1a4b0ea1f 100644
+index c7bf2c9aa..bf77bf6d6 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -239,8 +239,8 @@ else
-   datadir = join_paths(prefix, get_option('datadir'))
+@@ -241,8 +241,8 @@ else
+   includedir = join_paths(prefix, get_option('includedir'))
    sysconfdir = join_paths(prefix, get_option('sysconfdir'))
    localstatedir = join_paths(prefix, get_option('localstatedir'))
 -  installed_test_bindir = join_paths(libexecdir, 'installed-tests', meson.project_name())
@@ -47,10 +47,10 @@ index 7b065f278..1a4b0ea1f 100644
  conf.set_quoted('FWUPD_LIBDIR', libdir)
  conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
 diff --git a/meson_options.txt b/meson_options.txt
-index 18991b983..937578f19 100644
+index eb57391eb..420997355 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -197,6 +197,11 @@ option(
+@@ -198,6 +198,11 @@ option(
    value: 'fwupd-refresh',
    description: 'User account to use for fwupd-refresh.service (empty for DynamicUser)',
  )

@@ -13,16 +13,16 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygls";
-  version = "2.0.1";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
-    tag = "v${version}";
-    hash = "sha256-RznpnGBOZZeNP1pqL9jSNd0W2sJmW0CAo8DKP6t9APw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jxc1nKxfiRenb629a2WCZOzqyIOvT5XU4NrjmKPlDHk=";
   };
 
   nativeBuildInputs = [
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
-    changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kira-bruneau ];
   };
-}
+})

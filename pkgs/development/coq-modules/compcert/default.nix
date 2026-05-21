@@ -4,7 +4,6 @@
   coq,
   flocq,
   MenhirLib,
-  ocamlPackages,
   fetchpatch,
   makeWrapper,
   coq2html,
@@ -28,6 +27,11 @@ let
   target =
     targets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  menhir_20260203 = fetchpatch {
+    url = "https://github.com/AbsInt/CompCert/commit/5fd8013305ecf6fa7cd2ea5a0a6fa3ebb2bc31c5.patch";
+    hash = "sha256-0bDqGSkvJM/rdCoFa6if/pJLJ4gYx2Bkld9wJaQDQOU=";
+  };
 
   compcert = mkCoqDerivation {
 
@@ -66,7 +70,7 @@ let
 
     strictDeps = true;
 
-    nativeBuildInputs = with ocamlPackages; [
+    nativeBuildInputs = with coq.ocamlPackages; [
       makeWrapper
       ocaml
       findlib
@@ -74,7 +78,7 @@ let
       coq
       coq2html
     ];
-    buildInputs = with ocamlPackages; [ menhirLib ];
+    buildInputs = with coq.ocamlPackages; [ menhirLib ];
     propagatedBuildInputs = [
       flocq
       MenhirLib
@@ -94,7 +98,7 @@ let
       -use-external-Flocq \
       -use-external-MenhirLib \
       ${target} \
-    ''; # don't remove the \ above, the command gets appended in override below
+    ''; # do NOT remove the above "\", this must NOT end with a newline (c.f. below)
 
     installTargets = "documentation install";
     installFlags = [ ]; # trust ./configure
@@ -223,6 +227,16 @@ let
           }
           {
             cases = [
+              (range "8.15" "8.16")
+              (isEq "3.13")
+            ];
+            out = [
+              # Support for menhir 20260203
+              menhir_20260203
+            ];
+          }
+          {
+            cases = [
               (range "8.17" "8.19")
               (isEq "3.13")
             ];
@@ -252,6 +266,8 @@ let
                 url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
                 hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
               })
+              # Support for menhir 20260203
+              menhir_20260203
             ];
           }
           {
@@ -279,7 +295,7 @@ let
           }
           {
             cases = [
-              (isEq "8.20")
+              (range "8.19" "8.20")
               (isEq "3.15")
             ];
             out = [
@@ -288,6 +304,8 @@ let
                 url = "https://github.com/AbsInt/CompCert/commit/e524b0a19ae5140f64047b1cba6ebbe1d16d5bbf.patch";
                 hash = "sha256-24kt0hA75ooyXymH+kNS5VlsuXMHbkqTw4m+BzNUwrw=";
               })
+              # Support for menhir 20260203
+              menhir_20260203
             ];
           }
           {
@@ -323,6 +341,10 @@ in
 patched_compcert.overrideAttrs (
   o:
   lib.optionalAttrs (coq.version != null && coq.version == "dev") {
-    configurePhase = "${o.configurePhase} -ignore-ocaml-version -ignore-coq-version";
+    configurePhase = ''
+      ${o.configurePhase} \
+        -ignore-ocaml-version \
+        -ignore-coq-version
+    '';
   }
 )

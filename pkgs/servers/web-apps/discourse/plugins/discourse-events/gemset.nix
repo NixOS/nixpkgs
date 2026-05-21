@@ -1,14 +1,4 @@
 {
-  discourse_subscription_client = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "13vmi645ilsqjalz04738d8ng9zxhw5nd5s80lwcdd87dpzmkk3v";
-      type = "gem";
-    };
-    version = "0.1.11";
-  };
   icalendar = {
     dependencies = [ "ice_cube" ];
     groups = [ "default" ];
@@ -53,5 +43,65 @@
       type = "gem";
     };
     version = "0.3.5";
+  };
+  omnievent = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0xiz1jag2z8agjk1mycw44lkgrq7nfj2m6gx2v1zr8c6p2wvk4lj";
+      type = "gem";
+    };
+    version = "0.1.0.pre11";
+  };
+  omnievent-api = {
+    dependencies = [ "omnievent" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1nlp8vmsachbc8s8h6h34h9gw5i3yd6zbcs7sdkbhdwsqaf61ypp";
+      type = "gem";
+    };
+    version = "0.1.0.pre5";
+  };
+  omnievent-google = {
+    dependencies = [
+      "omnievent"
+      "omnievent-api"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1ma15ijrf0dq4mlghg3vrhz62llhfp7k6cq7nfwy12h229gnzdrx";
+      type = "gem";
+    };
+    version = "0.1.0.pre8";
+  };
+  omnievent-icalendar = {
+    dependencies = [ "omnievent" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0dl634wgah2dv851dhv18hkmg1p6a1laa2f9blizlizvnvi5g1g5";
+      type = "gem";
+    };
+    version = "0.1.0.pre9";
+  };
+  omnievent-outlook = {
+    dependencies = [
+      "omnievent"
+      "omnievent-api"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "072aycqq94w5bfj9nda8inxpc88a4bqn1l1jar0c4dcpyadqnd5r";
+      type = "gem";
+    };
+    version = "0.1.0.pre11";
   };
 }

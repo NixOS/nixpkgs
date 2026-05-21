@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3lbehoy3hbwuM4tXbtfQCXULFr1VQpjsSQ3fZzZcR4U=";
+    hash = "sha256-3FQjV4BZZpn7Loiu9Xm30cCqzkU1HgJ3sAc+I6D8OvQ=";
   };
 
   outputs = [

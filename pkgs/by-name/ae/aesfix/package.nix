@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "aesfix";
     homepage = "https://citp.princeton.edu/our-work/memory/";
     maintainers = with lib.maintainers; [ fedx-sudo ];
+    license = lib.licenses.bsd3;
   };
 })

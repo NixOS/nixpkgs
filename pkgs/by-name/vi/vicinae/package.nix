@@ -1,5 +1,4 @@
 {
-  abseil-cpp,
   cmake,
   cmark-gfm,
   coreutils,
@@ -14,31 +13,31 @@
   nodejs,
   npmHooks,
   pkg-config,
-  protobuf,
   qt6,
   stdenv,
   wayland,
   libxml2,
+  udevCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.20.2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mUHV5wFbtNt00XnghklltvJ/LRi+17fluGuFebQ0HEw=";
+    hash = "sha256-F034G8DctTGGi1ijekwkaXE4w5WZqHt2Hvvu8hqRfJE=";
   };
 
   apiDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/src/typescript/api";
-    hash = "sha256-UsTpMR23UQBRseRo33nbT6z/UCjZByryWfn2AQSgm6U=";
+    hash = "sha256-lIXhMBJHujs6d9fXEK8Q+sfjkKyFJEMEtKrQorkfPeU=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/src/typescript/extension-manager";
-    hash = "sha256-wl8FDFB6Vl1zD0/s2EbU6l1KX4rwUW6dOZof4ebMMO8=";
+    hash = "sha256-gpbS6MIHOSuHIfd4zDEB4EcMi9LHk9tPdnxwT0S0nbA=";
   };
 
   cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
@@ -60,12 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     nodejs
     pkg-config
-    protobuf
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    abseil-cpp
     cmark-gfm
     glaze
     kdePackages.layer-shell-qt
@@ -74,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     libqalculate
     minizip
     nodejs
-    protobuf
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
@@ -83,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Toggle telemetry from opt-out to opt-in
+    substituteInPlace extra/config.jsonc \
+      --replace-fail '"system_info": true' '"system_info": false'
+
     local postPatchHooks=()
     source ${npmHooks.npmConfigHook}/nix-support/setup-hook
     npmRoot=src/typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
@@ -103,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"\
       --replace-fail "ExecStart=vicinae" "ExecStart=$out/bin/vicinae"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   passthru.updateScript = ./update.sh;
 

@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "b4";
-  version = "0.14.3";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-MaSSe437tcl+38lWnNo7Zze7/YQwiB6MxIoLCIztYUc=";
+    hash = "sha256-uBXyrtIohxjP4qFMdkIaALxPCRjqMrRd0WRcmZ/dpp0=";
   };
 
   # tests make dns requests and fails
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     dkimpy
     patatt
     git-filter-repo
+    textual
   ];
 
   meta = {

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -12,15 +12,18 @@
   discord-canary,
   discord-development,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "2026.2.2";
+  version = "2026.5.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wZEpoUlDEbObXD5d2uA5vNBRrFOw4A6VLAc/MVNC4EE=";
+    hash = "sha256-RZ7fmgzENSt9bXuhPWW9wBaJ1dss/b23R1VS+tEU7io=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-1jGEzTPPlwAFDKPbH92HvYg4rzFrUJLqhZRMNS+H6GI=";
+    hash = "sha256-veZx/b+cvpcRh1xXO8Y34dJtY2cgncqVSYYywb85Geo=";
   };
 
   env = {
@@ -83,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ilys
       FlameFlag
+      isabelroses
     ];
   };
 })

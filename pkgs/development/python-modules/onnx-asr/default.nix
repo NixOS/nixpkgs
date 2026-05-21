@@ -10,11 +10,9 @@
 
   # build-time deps for the custom hatch build hook that generates
   # ONNX preprocessor models (listed in pyproject.toml [dependency-groups] build)
+  ml-dtypes,
   numpy,
-  onnx,
   onnxscript,
-  torch,
-  torchaudio,
 
   # dependencies
   onnxruntime,
@@ -25,26 +23,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnx-asr";
-  version = "0.10.2";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "istupakov";
     repo = "onnx-asr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KumdelY9oNMAEBSGVdvbBH6SYi93n2cA/eEqaE8MmIU=";
+    hash = "sha256-gi5U56ZPSo0bJ0Fmi8nebvIXENZWwX4lofk5vKV8gag=";
   };
 
   build-system = [
-    hatchling
     hatch-vcs
-    # The custom hatch build hook (hatch_build.py) generates ONNX preprocessor
-    # models at build time using these dependencies.
+    hatchling
+    ml-dtypes
     numpy
-    onnx
     onnxscript
-    torch
-    torchaudio
   ];
 
   dependencies = [

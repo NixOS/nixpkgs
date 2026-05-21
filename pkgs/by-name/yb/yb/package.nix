@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Run subset of tests that don't require YubiKey hardware
   doCheck = true;
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests"
   ];
 

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.34.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4sdwW4P+5Y+JHy2dU55Fobedh0toXoU6pIWTN294GMc=";
+    hash = "sha256-YPYGK1yDw0K5/gbJ9jwFSbpIJGKpkGy2iIcMiA9/xmA=";
     fetchSubmodules = true;
   };
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -m555 -Dt $out/bin build/linux-x86_64/poptracker
+    install -m555 -Dt $out/bin build/*/poptracker
     install -m444 -Dt $out/share/poptracker assets/*
     wrapProgram $out/bin/poptracker --prefix PATH : ${
       lib.makeBinPath [
@@ -105,6 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       pyrox0
     ];
     mainProgram = "poptracker";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.unix;
   };
 })

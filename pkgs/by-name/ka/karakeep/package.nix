@@ -96,6 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    # provide a environment variable to override the cache directory
+    # https://github.com/vercel/next.js/discussions/58864
+    patch -p1 -i ${./patches/cache-from-env-not-nix-store.patch}
+  '';
+
   installPhase = ''
     runHook preInstall
 

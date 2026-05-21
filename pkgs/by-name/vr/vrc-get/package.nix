@@ -8,12 +8,12 @@
   buildPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vrc-get";
   version = "1.9.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-b/rlHfm+AfrluCqoTyBqx86xVaNV3QBGollk5HyD4xk=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ bddvlpr ];
     mainProgram = "vrc-get";
   };
-}
+})

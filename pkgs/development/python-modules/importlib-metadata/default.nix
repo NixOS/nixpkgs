@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "8.7.1";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-Sf7xrmRAwYIFL0B8jTSmj3Lvw225ypDcARM5jy/d6Ls=";
+    hash = "sha256-pPV6tZnmouMBbXWVz9cutGYaUQbnh6lbzJDHEFuDHvw=";
   };
 
   postPatch = ''

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -15,21 +16,21 @@
 
   # tests
   onnx,
+  pyparsing,
   pytestCheckHook,
   torchvision,
-  pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-pfn-extras";
-  version = "0.8.4";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OrUYO0V5fWqkIjHiYkhvjeFy0YX8CxeRqzrw3NfGK2A=";
+    hash = "sha256-4XS2Poa8lUQM0p3vks77e/HSlhaxbZOsORUyk4Iqvyw=";
   };
 
   build-system = [ setuptools ];
@@ -44,10 +45,13 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     onnx
     pytestCheckHook
+    pyparsing
     torchvision
   ];
 
-  pytestFlags = [
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: `torch.jit.script` is not supported in Python 3.14+ and may break.
+    # Please switch to `torch.compile` or `torch.export`.
     "-Wignore::DeprecationWarning"
   ];
 

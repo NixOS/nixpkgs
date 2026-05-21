@@ -5,7 +5,7 @@
   autoreconfHook,
   pkg-config,
   libmediainfo,
-  wxGTK32,
+  wxwidgets_3_2,
   desktop-file-utils,
   libsm,
   imagemagick,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmediainfo
-    wxGTK32
+    wxwidgets_3_2
     desktop-file-utils
     libsm
     imagemagick

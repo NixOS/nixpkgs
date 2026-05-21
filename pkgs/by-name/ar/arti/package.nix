@@ -8,11 +8,12 @@
   openssl,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "2.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -20,10 +21,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-+VAuMeGaAZUaDktBvv6KIs7wklenr38emgJHbLWA2sU=";
+    hash = "sha256-OEGKjYJ3p4g0ZfeK6k8IJJPjgSBMrSlKlxsCw1OwyaI=";
   };
 
-  cargoHash = "sha256-4ii9Cr5ZNXuy4sKdOeZQat8N0kdR0E1TS3Q6nuV+ZHw=";
+  # Working around a bug in cargo that appears with cargo-auditable, see
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124.
+  postPatch = ''
+    substituteInPlace crates/arti/Cargo.toml \
+      --replace-fail '"tor-rpcbase"' '"dep:tor-rpcbase"'
+  '';
+
+  cargoHash = "sha256-OJgrIXL185W9rcQd7XZsgiqN4in74Oc2jDT1ZmcCC6E=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -67,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    tests = { inherit (nixosTests) tor; };
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
   };
 

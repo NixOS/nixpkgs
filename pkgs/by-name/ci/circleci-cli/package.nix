@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "circleci-cli";
-  version = "0.1.34592";
+  version = "0.1.36202";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = "circleci-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-yvR38Tyju26D0EdH7s1yioGr32l8d3VfHgC7lY2OmF4=";
+    sha256 = "sha256-79B1zQ6n066onSf08vYRXNxoq+pvBRyHAXPiTkhqMm8=";
   };
 
-  vendorHash = "sha256-GRWo9oq8M7zJoWCg6iNLbR+DPXvMXF3v+YRU2BBH5+8=";
+  vendorHash = "sha256-vTYepN/srd5qb2o1O5KwcGBwvKmV1DLG3/4OdtKJpVk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
       Command to enable you to reproduce the CircleCI environment locally and
       run jobs as if they were running on the hosted CirleCI application.
     '';
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     mainProgram = "circleci";
     license = lib.licenses.mit;
     homepage = "https://circleci.com/";

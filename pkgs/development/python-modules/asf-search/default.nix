@@ -51,6 +51,13 @@ buildPythonPackage rec {
     tenacity
   ];
 
+  disabledTestPaths = [
+    # requires asf_enumeration, not packaged
+    "tests/BaselineSearch/test_baseline_search.py"
+    # requires network
+    "tests/Pair/test_Pair.py"
+  ];
+
   pythonImportsCheck = [ "asf_search" ];
 
   meta = {

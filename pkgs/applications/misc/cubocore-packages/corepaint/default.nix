@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corepaint";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corepaint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ARFyBtkGYFMKnUD1h93GcQiKV6mFXxJvLEVeSXlaHZI=";
+    hash = "sha256-qk2Fm/IhUU/0y+ErMK/qQKxnD/en14ZKoiIJoJwBnMc=";
   };
 
   nativeBuildInputs = [

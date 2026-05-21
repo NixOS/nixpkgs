@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-lightning";
-  version = "2.6.1";
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -67,6 +67,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Lightning-AI/pytorch-lightning";
     changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

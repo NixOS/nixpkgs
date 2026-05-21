@@ -265,7 +265,7 @@
   harfbuzz,
   intel-media-sdk,
   kvazaar,
-  ladspaH,
+  ladspa-header,
   lame,
   lcevcdec,
   lcms2,
@@ -452,6 +452,8 @@ stdenv.mkDerivation (
       ]
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
+      ]
+      ++ optionals (lib.versionAtLeast version "5.1" && lib.versionOlder version "8.1") [
         (fetchpatch2 {
           name = "unbreak-hardcoded-tables.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/1d47ae65bf6df91246cbe25c997b25947f7a4d1d";
@@ -892,7 +894,7 @@ stdenv.mkDerivation (
       ++ optionals withJack [ libjack2 ]
       ++ optionals withJxl [ libjxl ]
       ++ optionals withKvazaar [ kvazaar ]
-      ++ optionals withLadspa [ ladspaH ]
+      ++ optionals withLadspa [ ladspa-header ]
       ++ optionals withLc3 [ liblc3 ]
       ++ optionals withLcevcdec [ lcevcdec ]
       ++ optionals withLcms2 [ lcms2 ]

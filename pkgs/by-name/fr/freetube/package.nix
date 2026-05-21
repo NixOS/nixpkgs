@@ -20,13 +20,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.23.14";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-9CO5/EcFPO50awY1QNutbAqDG2rhOv3DYk97/9YNVWI=";
+    hash = "sha256-4XyN7ENsDwLNB/dt7pp8z0sbdmHSNIyVEHlp5GXIues=";
   };
 
   # Darwin requires writable Electron dist
@@ -45,12 +45,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (replaceVars ./patch-build-script.patch {
       electron-version = electron.version;
     })
-    ./darwin-targets.patch
+    ./targets.patch
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-sM9CkDnATSEUf/uuUyT4JuRmjzwa1WzIyNYEw69MPtU=";
+    hash = "sha256-9rO/XYfOf1TEQOpb5clCfdTiuDeynpnk6L4WpcIIWGk=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/freetube \
       --add-flags "$out/share/freetube/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D _icons/icon.svg $out/share/icons/hicolor/scalable/apps/freetube.svg
   ''

@@ -1,41 +1,15 @@
-diff --git a/Common/CMakeLists.txt b/Common/CMakeLists.txt
-index 4251554..1600f77 100644
---- a/Common/CMakeLists.txt
-+++ b/Common/CMakeLists.txt
-@@ -31,7 +31,6 @@ target_include_directories(
- target_link_libraries(
- 	Common
- 	PUBLIC
--	Boost::system
- 	Boost::date_time
- 	Boost::timer
- 	Boost::chrono
-diff --git a/Engine/CMakeLists.txt b/Engine/CMakeLists.txt
-index f3a87e1..1949b2a 100644
---- a/Engine/CMakeLists.txt
-+++ b/Engine/CMakeLists.txt
-@@ -34,7 +34,6 @@ target_link_libraries(
- 	QMLComponents
- 	CommonData
- 	Common
--	Boost::system
- 	Boost::date_time
- 	Boost::timer
- 	Boost::chrono
 diff --git a/Tools/CMake/Libraries.cmake b/Tools/CMake/Libraries.cmake
-index 3b950e1..149747b 100644
+index 3f0fa28..6cdcfad 100644
 --- a/Tools/CMake/Libraries.cmake
 +++ b/Tools/CMake/Libraries.cmake
-@@ -67,11 +67,10 @@ if((NOT LibArchive_FOUND) AND (NOT WIN32))
+@@ -67,8 +67,8 @@ if((NOT LibArchive_FOUND) AND (NOT WIN32))
    endif()
  endif()
  
 -set(Boost_USE_STATIC_LIBS ON)
+-find_package(Boost 1.78 REQUIRED COMPONENTS system)
 +add_definitions(-DBOOST_LOG_DYN_LINK)
- find_package(
-   Boost 1.78 REQUIRED
-   COMPONENTS filesystem
--             system
-              date_time
-              timer
-              chrono)
++find_package(Boost 1.78 REQUIRED)
+ find_package(Qt6 REQUIRED COMPONENTS Core)
+ 
+ get_target_property(QT_TARGET_TYPE Qt6::Core TYPE)

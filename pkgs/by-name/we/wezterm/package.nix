@@ -26,20 +26,20 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wezterm";
-  version = "0-unstable-2026-01-17";
+  version = "0-unstable-2026-03-31";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "05343b387085842b434d267f91b6b0ec157e4331";
+    rev = "577474d89ee61aef4a48145cdec82a638d874751";
     fetchSubmodules = true;
-    hash = "sha256-V6WvkNZryYofarsyfcmsuvtpNJ/c3O+DmOKNvoYPbmA=";
+    hash = "sha256-LNQJAYILUZ9LZ4E4soh7tr5Zy+rntHz1Gd66lyPPkdk=";
   };
 
   postPatch = ''
-    echo ${version} > .tag
+    echo ${finalAttrs.version} > .tag
 
     # hash does not work well with NixOS
     substituteInPlace assets/shell-integration/wezterm.sh \
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/nix-support
-    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+    echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
@@ -142,7 +142,7 @@ rustPlatform.buildRustPackage rec {
         }
         ''
           mkdir -p $out/share/terminfo $out/nix-support
-          tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+          tic -x -o $out/share/terminfo ${finalAttrs.src}/termwiz/data/wezterm.terminfo
         '';
 
     tests = {
@@ -163,4 +163,4 @@ rustPlatform.buildRustPackage rec {
       SuperSandro2000
     ];
   };
-}
+})

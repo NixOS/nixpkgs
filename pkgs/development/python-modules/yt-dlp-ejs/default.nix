@@ -7,19 +7,21 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildPythonPackage rec {
   pname = "yt-dlp-ejs";
-  version = "0.5.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "ejs";
     tag = version;
-    hash = "sha256-mn0JpJQNCzDwNr0L1tit2B1Iwz2x3KNHi8Um3khfrHs=";
+    hash = "sha256-+tOA9sPk0BGJHFQCoAC8y5Bz3UcjgIPDQ8WDPkRlW5k=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -27,9 +29,10 @@ buildPythonPackage rec {
       pname
       version
       src
+      pnpm
       ;
-    fetcherVersion = 2;
-    hash = "sha256-3hhwKUzfdlKmth4uRlfBSdxEOIfhAVaq2PZIOHWGWiM=";
+    fetcherVersion = 3;
+    hash = "sha256-4qMOAl9Dbe1oYSRIeP7oPcV/+P8NLdIYvSNxaz0h+Z0=";
   };
 
   build-system = [

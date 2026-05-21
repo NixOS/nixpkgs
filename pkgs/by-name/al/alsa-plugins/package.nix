@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus # attributes.m4 & usb_stream.h
     ];
 
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

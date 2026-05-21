@@ -12,16 +12,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "copacetic";
-  version = "0.11.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kgFT+IK6zCGoGK8L/lwXyiUXCWYG7ElziPs0Q1cq+fw=";
+    hash = "sha256-pD6AdJ9GfTPVgI/e4zRW4oJjOzpEk9uY4kdEm5yLDrw=";
   };
 
-  vendorHash = "sha256-qe2VJHXSYtZJlMd5R2J1NXWcXb8+cbTiDBQeN20fbEE=";
+  vendorHash = "sha256-RKqaIwGDZj91lfbEJHcnG8RhIrixtR0VtieCfZD/rns=";
+
+  excludedPackages = [
+    "integration/..."
+    "test/..."
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,6 +46,8 @@ buildGoModule (finalAttrs: {
     "-X=main.version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkFlags =
     let
       # Skip tests that require network access and container services
@@ -52,6 +59,16 @@ buildGoModule (finalAttrs: {
         "TestPushToRegistry"
         "TestMultiPlatformPluginPatch"
         "TestPodmanLoader_Load_Success"
+        "TestMultiArchBulkPatching"
+        "TestComprehensiveBulkPatching"
+        "TestTrivyParserParseWithNodeJS/OS_and_Node.js_packages"
+        "TestLocalImageDescriptor"
+        "TestGetImageDescriptor"
+        "TestDotNetSDKImagePatching"
+        "TestGenerateWithoutReport"
+        "TestGenerateToStdout"
+        "TestCustomBuildPatching"
+        "TestNodeJSPatching"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -78,6 +95,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/project-copacetic/copacetic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "copa";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
   };
 })

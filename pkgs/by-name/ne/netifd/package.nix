@@ -3,10 +3,11 @@
   stdenv,
   cmake,
   fetchgit,
-  libnl,
+  libnl-tiny,
   libubox,
   uci,
   ubus,
+  ucode,
   json_c,
   pkg-config,
   udebug,
@@ -14,19 +15,20 @@
 
 stdenv.mkDerivation {
   pname = "netifd";
-  version = "unstable-2023-11-27";
+  version = "0-unstable-2026-02-26";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/netifd.git";
-    rev = "02bc2e14d1d37500e888c0c53ac41398a56b5579";
-    hash = "sha256-aMs/Y50+1Yk/j5jGubjBCRcPGw03oIitvEygaxRlr90=";
+    rev = "69a5afc9713adf31edbf3228a7a372ada7bba449";
+    hash = "sha256-R/ryiFiKNM7zrIgzlalAK0lNJF/vzWL56E9CbptJtmI=";
   };
 
   buildInputs = [
-    libnl.dev
+    libnl-tiny
     libubox
     uci
     ubus
+    ucode
     json_c
     udebug
   ];
@@ -45,11 +47,11 @@ stdenv.mkDerivation {
     sed "s|./ethtool-modes.h|$PWD/ethtool-modes.h|g" -i CMakeLists.txt
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-      "-Wno-error=maybe-uninitialized"
-    ]
-  );
+  cmakeFlags = [
+    (lib.cmakeFeature "LIBNL_LIBS" "-lnl-tiny")
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-I${libnl-tiny}/include/libnl-tiny";
 
   meta = {
     description = "OpenWrt Network interface configuration daemon";

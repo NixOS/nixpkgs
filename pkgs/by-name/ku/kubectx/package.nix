@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectx";
-  version = "0.9.5";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = "kubectx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HVmtUhdMjbkyMpTgbsr5Mm286F9Q7zbc5rOxi7OBZEg=";
+    hash = "sha256-/5VJ7RMq1kt+z9V+UymJ1SKbaFF+E9eHxYzkS37siG8=";
   };
 
-  vendorHash = "sha256-3xetjviMuH+Nev12DB2WN2Wnmw1biIDAckUSGVRHQwM=";
+  vendorHash = "sha256-6bzTLnT69IdLwgbz/zZhjQYm8WpimJlItutW6fvwACs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,6 +34,9 @@ buildGoModule (finalAttrs: {
     description = "Fast way to switch between clusters and namespaces in kubectl";
     license = lib.licenses.asl20;
     homepage = "https://github.com/ahmetb/kubectx";
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [
+      jlesquembre
+      miniharinn
+    ];
   };
 })

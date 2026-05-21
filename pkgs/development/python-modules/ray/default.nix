@@ -73,10 +73,11 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.54.0";
+  version = "2.55.1";
   format = "wheel";
+  __structuredAttres = true;
 
-  disabled = pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -90,19 +91,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-kouwkkWjxvfDwRO6jq/Gn5SNqWAtfzPoJR7N+XwVdhU=";
-          cp312 = "sha256-qXKv1ao92pnQsvNptfYuXdlYZat9N78uCg4NLPvZsyU=";
-          cp313 = "sha256-q4nmCJq7bkb7mP3ZbTmbMahS15EnzYrAB0bGHZPe+iw=";
+          cp311 = "sha256-1TgtoYHAPuL1Au9Gzwrku8MBV7W9mmfXZR9qJyUoqFo=";
+          cp312 = "sha256-JjcF9rqynnYiqU+C2iX9f5zq12zfiaB6qyj3nN+PnZU=";
+          cp313 = "sha256-E4DgQ+tXzeabfpGZxvJVjO648PxByX0dXlDqBCEV8wI=";
+          cp314 = "sha256-FW7T5yrZW2RdIAbNcajd28yJtWv8AAJ/YiWt94vZy3Q=";
         };
         aarch64-linux = {
-          cp311 = "sha256-SRrlargNiCLE6vTVu5bc8ypiMdjXt264A0QA65vhuxg=";
-          cp312 = "sha256-eVriHWt2QkXT9SG8WDNEbVhWnn396cV3dBfrKF2HRQ8=";
-          cp313 = "sha256-iVLCOoqpTxByjC0W4Nw3MtCaoOYlSAF1f/SUmEohT0U=";
+          cp311 = "sha256-DqL2cKdyWDOtIzOoxGq2mGWtBsjl3p9laV4PjzUzHOw=";
+          cp312 = "sha256-JlQfabtVYH74M1uqx1su0S/yzgLVYxMhmyntoAMDkiE=";
+          cp313 = "sha256-tBXVkOBi8kiQfg/kKZSUPxFya3F4/PSxz1VGch+xpfg=";
+          cp314 = "sha256-TmGNYeGxS2/emlhhUfP9nUNbC4UEi5l7yqf0pTN0eys=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-jjndVrR6Chgg1aWlQ4W75U0dZ+EJNzbRLY7U6Z0PpFU=";
-          cp312 = "sha256-z1wztLE4UOwkpb1fnZ4KgWH45Ya/0pflKRPRcN7ER/4=";
-          cp313 = "sha256-Wtd5Yf6hbGl6D7DlEhbdOcC+wohozeVKxmjt1Y0SuK4=";
+          cp311 = "sha256-AFP9W0APesViY6obvT1o+3k0Gwi43Gl8iHgtWsp7PtQ=";
+          cp312 = "sha256-E3+QBu7ijKq4JggDzKMU83u9o/yU/foxx3C10Bliatg=";
+          cp313 = "sha256-+YRKknLvLm61dxAlhmByz0I0z0x8waMeI1t95xEYZL4=";
+          cp314 = "sha256-sGIEXGTCvOOaUWYWJPcpLHu/MPKp2Hhieq4x1G2lcS0=";
         };
       };
     in

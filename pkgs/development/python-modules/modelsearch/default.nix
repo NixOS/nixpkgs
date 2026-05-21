@@ -21,20 +21,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modelsearch";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "django-modelsearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zmurjjiJO6A/9XuGsGQcBWRX4NW9xVCFkCVRUk0Ziro=";
+    hash = "sha256-UH1t/CXJ7OX250SoUZYKMIAHuCxYxOT6l79RXI/oMLs=";
   };
 
   build-system = [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "django-tasks"
+  ];
   dependencies = [
     django
     django-tasks

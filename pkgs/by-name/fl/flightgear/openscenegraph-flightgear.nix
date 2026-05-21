@@ -78,7 +78,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  cmakeFlags = [ "-DBUILD_OSG_APPLICATIONS=OFF" ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_OSG_APPLICATIONS" false)
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeFeature "OSG_WINDOWING_SYSTEM" "Cocoa");
 
   meta = {
     description = "3D graphics toolkit";

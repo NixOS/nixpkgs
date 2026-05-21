@@ -22,7 +22,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "4.0.23";
+  version = "5.0.6";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-3P4H30nS6RBe2Bd3aqa2ueLOm/hxSBux53GgJu/D4Xc=";
+    npmDepsHash = "sha256-QW8wnNBBJs8nHsNuczZZevm6ELqtljsDdL21qtFo6pM=";
 
     dontBuild = true;
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-i65AWbKuh2KsnugGKmmpUON20He2kgPR6EzwKKA09nQ=";
+    hash = "sha256-1lsM/qyNS1rRj0D45mSTtTz7ba+OZggdE0t9N4SHLBU=";
     rev = version;
   };
 
@@ -79,12 +79,8 @@ stdenv.mkDerivation rec {
 
         patchShebangs .
 
-        # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
-        sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
-
-        # Verify LLVM version patch was applied (fail when nixpkgs has LLVM 22+)
-        grep -q "EXPECTED_LLVM_VERSION = 21.1" tools/shared.py || \
-          (echo "ERROR: LLVM version patch failed - check if still needed" && exit 1)
+        # emscripten 5.0.0 expects LLVM tip-of-tree instead of LLVM 22
+        sed -i -e "s/EXPECTED_LLVM_VERSION = 23/EXPECTED_LLVM_VERSION = 22/g" tools/shared.py
 
         # fixes cmake support
         sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
@@ -106,14 +102,6 @@ stdenv.mkDerivation rec {
         sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
         sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
         sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
-
-        # Remove --no-stack-first flag (not in LLVM 21, added in LLVM 22 when --stack-first became default)
-        # Replace else block with pass to avoid empty block syntax error
-        sed -i "s/cmd.append('--no-stack-first')/pass/" tools/building.py
-
-        # Verify --no-stack-first was removed (fail if patch is no longer needed)
-        grep -q "cmd.append('--no-stack-first')" tools/building.py && \
-          (echo "ERROR: --no-stack-first patch not needed anymore" && exit 1) || true
 
         # Fix /tmp symlink issue (macOS: /tmp -> /private/tmp) causing relpath miscalculation
         sed -i 's/os\.path\.relpath(source_dir, build_dir)/os.path.relpath(source_dir, os.path.realpath(build_dir))/' tools/system_libs.py

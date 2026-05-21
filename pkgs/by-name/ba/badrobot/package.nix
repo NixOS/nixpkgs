@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "badrobot";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-U3b5Xw+GjnAEXteivztHdcAcXx7DYtgaUbW5oax0mIk=";
   };
   vendorHash = "sha256-oYdkCEdrw1eE5tnKveeJM3upRy8hOVc24JNN1bLX+ec=";
@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/controlplaneio/badrobot";
-    changelog = "https://github.com/controlplaneio/badrobot/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/controlplaneio/badrobot/releases/tag/v${finalAttrs.src.tag}";
     description = "Operator Security Audit Tool";
     mainProgram = "badrobot";
     longDescription = ''
@@ -47,6 +47,8 @@ buildGoModule (finalAttrs: {
       cluster permissions.
     '';
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ jk ];
+    maintainers = with lib.maintainers; [
+      jk
+    ];
   };
 })

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
   cmake,
   freetype,
@@ -17,7 +16,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2024.06.12.0";
+  version = "2025.09.18.4";
   pname = "cernlib";
   year = lib.versions.major version;
 
@@ -26,21 +25,17 @@ stdenv.mkDerivation rec {
       "https://ftp.riken.jp/cernlib/download/${year}_source/tar/cernlib-cernlib-${version}-free.tar.gz"
       "https://cernlib.web.cern.ch/download/${year}_source/tar/cernlib-cernlib-${version}-free.tar.gz"
     ];
-    hash = "sha256-SEFgQjPBkmRoaMD/7yXiXO9DZNrRhqZ01kptSDQur84=";
+    hash = "sha256-zhLZlR0CUtPPYr+99JpFnJ1er+L7YcoRLi5hKLERqR4=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/user-attachments/files/16832928/geant321-fix-weak-alias-on-darwin.patch";
-      hash = "sha256-YzaUh4rJBszGdp5s/HDQMI5qQhCGrTt9P6XCgZOFn1I=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)" \
-                     "cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)" \
       --replace-fail "find_program ( SED NAMES gsed" "find_program ( SED NAMES sed"
+
+    # termio.h is not found. Use the POSIX header
+    substituteInPlace packlib/cspack/tcpaw/tcpaw.c \
+      --replace-fail "#include <termio.h>" "#include <termios.h>" \
+      --replace-fail "struct termio" "struct termios"
   '';
 
   # gfortran warning's on iframework messes with CMake's check_fortran_compiler_flag

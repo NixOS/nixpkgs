@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.6.1";
 
   src = fetchgit {
-    url = "https://git.gnunet.org/libgnunetchat.git";
+    url = "https://git-www.taler.net/libgnunetchat.git";
     tag = "v${finalAttrs.version}";
     hash = "sha256-FKFoIuGGPcYVRBrsqn1rnodRVCLAjLKlgZOs9v4H+8w=";
   };
@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     pkgConfigModules = [ "gnunetchat" ];
     description = "Library for secure, decentralized chat using GNUnet network services";
-    homepage = "https://git.gnunet.org/libgnunetchat.git";
-    changelog = "https://git.gnunet.org/libgnunetchat.git/plain/ChangeLog?h=v${finalAttrs.version}";
+    homepage = "https://git-www.taler.net/libgnunetchat.git";
+    changelog = "https://git-www.taler.net/libgnunetchat.git/plain/ChangeLog?h=v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     teams = with lib.teams; [ ngi ];

@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/anordal/shellharden";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 })

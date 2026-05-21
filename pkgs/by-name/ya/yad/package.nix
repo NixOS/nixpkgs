@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.gpl3;
     mainProgram = "yad";
-    maintainers = with lib.maintainers; [ smironov ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 })

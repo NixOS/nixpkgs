@@ -1,24 +1,23 @@
 {
   lib,
   stdenv,
-  rustPlatform,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
+  rustPlatform,
   fetchNpmDeps,
-  symlinkJoin,
-  makeWrapper,
   rustc,
   cargo,
   npmHooks,
-  writableTmpDirAsHomeHook,
   lld,
+  pkg-config,
   binaryen,
   wasm-pack,
   cargo-about,
   nodejs,
-  pkg-config,
   wasm-bindgen-cli_0_2_100,
+  xz,
+  removeReferencesTo,
   cef-binary,
   wayland,
   openssl,
@@ -31,16 +30,16 @@
 }:
 
 let
-  version = "0-unstable-2026-01-27";
-  rev = "84e9d8c192bdf49e88e2aefe422656f8f47b3a6a";
+  version = "0-unstable-2026-05-02";
+  rev = "ab7f59ca61004a1b11f9ae4b1c511cefc7a0f404";
 
-  srcHash = "sha256-Prqm6/ttmCxH99bqQC26qEyOuC3NlTw0kFADJvA4jbw=";
-  shaderHash = "sha256-uc6FU0df5Xqp6YXEwODULhgUjSQvjRFGvdk+uFB7II0=";
-  cargoHash = "sha256-QvqvguS3KHJVGZJqpkRRZU7clVTfRJHkv6WygaAHOdM=";
-  npmHash = "sha256-TNoRGR4kWUmY0XDhpjWKudQ5e33gSl72YnXLx96NdLY=";
+  srcHash = "sha256-DV3/1dgtUiTmGkOm4z3GVJcWzvCjO/crzc/l8ovW0XA=";
+  shaderHash = "sha256-76hOCx1fpFBI5nVmIAIGd2StCRzhbCgs+GHMvxbflLc=";
+  cargoHash = "sha256-ZesLyXKjz2CSrAWUT5Hq6w97pR55I+C79qPwF0dqXXI=";
+  npmHash = "sha256-AX5Jqk2E+WyQJyHbgvvq74MRsYmWUju4bOkabhYoeig=";
 
-  brandingRev = "f44aa2f362ae4fed8d634878b817a1d3948a7dcb";
-  brandingHash = "sha256-3w086pZTw6PUlEAYFGkGD8q+EMtuy23YqunxJTxCPLc=";
+  brandingRev = "1939ca82f3341427059e15bfa205f7c22aaf867a";
+  brandingHash = "sha256-SDnCpLuppHVE7cUVidevH2O/2ma0S2tuQDhFkS/JLvA=";
 
   src = fetchFromGitHub {
     owner = "GraphiteEditor";
@@ -59,64 +58,6 @@ let
     hash = brandingHash;
   };
 
-  resources = stdenv.mkDerivation (finalAttrs: {
-    pname = "graphite-resources";
-    inherit version src;
-
-    cargoDeps = rustPlatform.fetchCargoVendor {
-      src = finalAttrs.src;
-      sourceRoot = finalAttrs.src.name;
-      hash = cargoHash;
-    };
-
-    npmDeps = fetchNpmDeps {
-      inherit (finalAttrs) pname version;
-      src = "${finalAttrs.src}/frontend";
-      hash = npmHash;
-    };
-
-    npmRoot = "frontend";
-    npmConfigScript = "setup";
-    makeCacheWritable = true;
-
-    nativeBuildInputs = [
-      rustPlatform.cargoSetupHook
-      rustc
-      cargo
-      npmHooks.npmConfigHook
-      lld
-      writableTmpDirAsHomeHook
-      binaryen
-      wasm-pack
-      nodejs
-      pkg-config
-      wasm-bindgen-cli_0_2_100
-      cargo-about
-      makeWrapper
-    ];
-
-    prePatch = ''
-      mkdir branding
-      cp -r ${branding}/* branding
-      cp $src/.branding branding/.branding
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-      pushd frontend
-      npm run native:build-production
-      popd
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r frontend/dist/* $out/
-      runHook postInstall
-    '';
-  });
-
   libraries = [
     stdenv.cc.cc.lib
     stdenv.cc.libc.out
@@ -129,70 +70,107 @@ let
     libxcb
     libx11
   ];
-  cef = cef-binary.overrideAttrs {
-    postFixup = ''
-      strip $out/Release/*.so*
+  cefPath = cef-binary.overrideAttrs (finalAttrs: {
+    pname = "cef-path";
+    postInstall = ''
+      find $out -mindepth 1 -delete
+      strip ./Release/*.so*
+      mv ./Release/* $out/
+      find "./Resources/locales" -maxdepth 1 -type f ! -name 'en-US.pak' -delete
+      mv ./Resources/* $out/
+      mv ./include $out/
+
+      cat ./CREDITS.html | ${xz}/bin/xz -9 -e -c > $out/CREDITS.html.xz
     '';
-  };
-  cefPath = symlinkJoin {
-    name = "cef-path";
-    paths = [
-      "${cef}/Release"
-      "${cef}/Resources"
-    ];
-    postBuild = ''
-      ln -s ${cef}/include $out/include
-      echo '${
-        builtins.toJSON {
-          type = "minimal";
-          name = builtins.baseNameOf cef.src.url;
-          sha1 = "";
-        }
-      }' > $out/archive.json
-    '';
-  };
+  });
 in
-rustPlatform.buildRustPackage {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphite";
-  inherit version src cargoHash;
+  inherit version src;
 
   nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+    lld
     pkg-config
-    makeWrapper
+    npmHooks.npmConfigHook
+    binaryen
+    wasm-bindgen-cli_0_2_100
+    wasm-pack
+    nodejs
+    cargo-about
+    removeReferencesTo
   ];
 
   buildInputs = libraries;
 
-  env.CEF_PATH = cefPath;
-  env.RASTER_NODES_SHADER_PATH = shaders;
-  env.EMBEDDED_RESOURCES = resources;
-  cargoBuildFlags = [
-    "-p"
-    "graphite-desktop"
-  ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    src = finalAttrs.src;
+    hash = cargoHash;
+  };
 
-  postUnpack = ''
-    mkdir ./branding
-    cp -r ${branding}/* ./branding
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) pname version;
+    src = "${finalAttrs.src}/frontend";
+    hash = npmHash;
+  };
+  npmRoot = "frontend";
+
+  postPatch = ''
+    mkdir branding
+    cp -r ${branding}/* branding
+    cp $src/.branding branding/.branding
+
+    substituteInPlace $cargoDepsCopy/*/cef-dll-sys-*/build.rs \
+      --replace-fail \
+        'download_cef::check_archive_json(&package_version, &path.to_string_lossy())?;' \
+        ""
   '';
 
-  postInstall = ''
+  postConfigure = ''
+    # Prevent `package-installer.js` from trying to update npm dependencies
+    touch -r frontend/package-lock.json -d '+1 year' frontend/node_modules/.install-timestamp
+  '';
+
+  env.CEF_PATH = cefPath;
+  env.RASTER_NODES_SHADER_PATH = shaders;
+  env.GRAPHITE_GIT_COMMIT_HASH = finalAttrs.src.rev;
+
+  buildPhase = ''
+    runHook preBuild
+    cargo run build desktop
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp ./target/release/graphite $out/bin/
+
     mkdir -p $out/share/applications
     cp $src/desktop/assets/*.desktop $out/share/applications/
 
     mkdir -p $out/share/icons/hicolor/scalable/apps
     cp ${branding}/app-icons/graphite.svg $out/share/icons/hicolor/scalable/apps/art.graphite.Graphite.svg
+
+    runHook postInstall
   '';
 
   postFixup = ''
     patchelf \
       --set-rpath "${lib.makeLibraryPath libraries}:${cefPath}" \
       --add-needed libGL.so \
+      --add-needed libEGL.so \
       $out/bin/graphite
+
+    remove-references-to -t ${rustc} $out/bin/graphite
   '';
 
-  # There are currently no tests for the desktop application
-  doCheck = false;
+  disallowedReferences = [ rustc ];
+
+  passthru.updateScript = ./update.nu;
 
   meta = {
     description = "Open source vector graphics editor and procedural design engine";
@@ -219,4 +197,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ timon ];
   };
-}
+})

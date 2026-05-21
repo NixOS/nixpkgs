@@ -12,13 +12,13 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "open-web-calendar";
-  version = "1.49";
+  version = "1.51";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "open_web_calendar";
-    hash = "sha256-vtmIqiF85zn8CiMUWsCKJUzfiiK/j+xlZIyuIMGxR4I=";
+    hash = "sha256-r+7ZKdNOhjnjE1MBNAkni4Rrpx4DMRhUaP1Mmk5wzOo=";
   };
 
   # The Pypi tarball doesn't contain open_web_calendars/features
@@ -39,7 +39,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   dependencies =
     with python.pkgs;
     [
-      flask-caching
       flask-allowed-hosts
       flask
       icalendar
@@ -48,6 +47,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       bcrypt
       caldav
       requests
+      requests-cache
       pyyaml
       recurring-ical-events
       gunicorn
@@ -59,7 +59,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ]
     ++ requests.optional-dependencies.socks;
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python.pkgs; [
+    pytestCheckHook
+    pytest-responses
+  ];
 
   enabledTestPaths = [ "open_web_calendar/test" ];
 

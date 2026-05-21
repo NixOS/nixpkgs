@@ -46,6 +46,7 @@ class Remote:
     host: str
     opts: list[str]
     sudo_password: str | None
+    store_type: str
 
     @classmethod
     def from_arg(
@@ -57,13 +58,18 @@ class Remote:
         if not host:
             return None
 
+        try:
+            store_type, host = host.split("://", 1)
+        except ValueError:
+            store_type = "ssh"
+
         opts = shlex.split(os.getenv("NIX_SSHOPTS", ""))
         if validate_opts:
             cls._validate_opts(opts, ask_sudo_password)
         sudo_password = None
         if ask_sudo_password:
             sudo_password = getpass.getpass(f"[sudo] password for {host}: ")
-        return cls(host, opts, sudo_password)
+        return cls(host, opts, sudo_password, store_type)
 
     @staticmethod
     def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
@@ -122,6 +128,7 @@ def run_wrapper(
     *,
     check: bool = True,
     env: Mapping[str, EnvValue] | None = None,
+    append_local_env: Mapping[str, str] | None = None,
     remote: Remote | None = None,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
@@ -189,11 +196,16 @@ def run_wrapper(
             popen_env = None if env is None else resolved_env
 
     logger.debug(
-        "calling run with args=%r, kwargs=%r, env=%r",
+        "calling run with args=%r, kwargs=%r, env=%r, append_local_env=%r",
         _sanitize_env_run_args(remote_run_args if remote else run_args),
         kwargs,
         env,
+        append_local_env,
     )
+
+    if append_local_env:
+        popen_env = dict(os.environ) if popen_env is None else dict(popen_env)
+        popen_env.update(append_local_env)
 
     try:
         r = subprocess.run(

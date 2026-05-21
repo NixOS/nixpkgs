@@ -6,6 +6,7 @@
   pkg-config,
   libsForQt5,
   sqlcipher,
+  nix-update-script,
 }:
 
 let
@@ -28,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail '"Unknown"' '"${finalAttrs.src.rev}"'
+
+    substituteInPlace src/app.plist \
+      --replace-fail '@ICON@' 'icon.icns'
   ''
   # Fix build with CMake 4
   # Will be part of the Qt6 port
@@ -62,16 +66,31 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "QSCINTILLA_INCLUDE_DIR" "${lib.getDev qt'.qscintilla}/include")
   ];
 
+  postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
+    # Copy the icon file to the app bundle
+    target="$(find . -name "*.app")"
+    mkdir -p "$target/Contents/Resources/"
+    cp $src/installer/macos/macapp.icns "$target/Contents/Resources/icon.icns"
+
+    mkdir -p $out/Applications
+    cp -r *.app $out/Applications
+  '';
+
   env.LANG = "C.UTF-8";
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "DB Browser for SQLite";
     mainProgram = "sqlitebrowser";
     homepage = "https://sqlitebrowser.org/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      savtrip
+    ];
     platforms = lib.platforms.unix;
   };
 })

@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.6";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Jx6UKPOkFucmeeWx3XR0p2bAvRG6VNlVGU/YNLu4NEY=";
+    hash = "sha256-MjUbfv+3o3f4qsLPxLDeUn+/h5YupMMhC/SecwmCR8Q=";
   };
 
   postPatch = ''

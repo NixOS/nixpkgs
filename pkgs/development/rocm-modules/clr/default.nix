@@ -13,11 +13,11 @@
   rocm-device-libs,
   rocm-comgr,
   rocm-runtime,
-  rocm-toolchain,
   rocm-core,
   roctracer,
   rocminfo,
   rocm-smi,
+  rocprofiler-register,
   symlinkJoin,
   numactl,
   libffi,
@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.2.0";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -82,10 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "clr";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-zz2O4Qsl1zXMC25L714azsFR2PROAvdpjgKhRolmt1w=";
+    sparseCheckout = [
+      "projects/clr"
+      "shared"
+    ];
+    hash = "sha256-n8yWWDxE36m2NN0cmqHXQy5omYPiYoqnaNbqWm63q3E=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/clr";
 
   nativeBuildInputs = [
     makeWrapper
@@ -108,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     zstd
     zlib
+    rocprofiler-register
   ];
 
   propagatedBuildInputs = [
@@ -132,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPROF_API_HEADER_PATH=${roctracer.src}/inc/ext"
     "-DROCM_PATH=${rocminfo}"
     "-DBUILD_ICD=ON"
-    "-DHIP_ENABLE_ROCPROFILER_REGISTER=OFF" # circular dep - may need -minimal and -full builds?
     "-DAMD_ICD_LIBRARY_DIR=${khronos-ocl-icd-loader}"
 
     # Temporarily set variables to work around upstream CMakeLists issue
@@ -207,12 +212,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${hipClang} $out/llvm
   '';
 
-  # libamdhip64.so dlopens its own bare name for hipGetProcAddress symbol resolution.
-  # Add its own directory to its RPATH so it can find itself
+  # libamdhip64.so dlopens its own bare name for hipGetProcAddress symbol resolution,
+  # same pattern with libhiprtc.so, so add own lib directory to all .so's
+  # RPATHs so they can find themselves and neighbouring libs
   # Must be in postFixup so it runs after patchelf --shrink-rpath which removes
   # the apparently useless rpath
   postFixup = ''
-    patchelf --add-rpath "$out/lib" "$out/lib/libamdhip64.so"
+    patchelf --add-rpath "$out/lib" "$out"/lib/*.so
   '';
 
   disallowedRequisites = [
@@ -236,15 +242,17 @@ stdenv.mkDerivation (finalAttrs: {
       # "9-4-generic" - since only 942 is valid for 6.4 target it directly
       # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
       "942" # MI300A/X, MI325X
-      # "950" #  MI350X TODO: Expected in ROCm 7.x
+      "950" # MI350X, MI355X
       # "10-1-generic" # fine for all RDNA1 cards
       "1010"
       # "10-3-generic"
       "1030" # W6800, various Radeon cards
+      # 1100 through 1103 = RDNA3
       # "11-generic" # will handle 7600, hopefully ryzen AI series iGPUs
       "1100"
       "1101"
       "1102"
+      "1103" # RDNA3 iGPU like Radeon 780M
       "1150" # Strix Point
       "1151" # Strix Halo
       # "12-generic"
@@ -254,19 +262,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     inherit hipClangPath;
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-      page = "tags?per_page=4";
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
 
     impureTests = {
+      # bash $(nix-build -A rocmPackages.clr.impureTests.rocm-smi)
       rocm-smi = callPackage ./test-rocm-smi.nix {
         inherit rocm-smi;
         clr = finalAttrs.finalPackage;
       };
-      opencl-example = callPackage ./test-opencl-example.nix {
+      # Simple subset of opencl-cts test_basic
+      opencl-cts = callPackage ./test-opencl-cts.nix {
         clr = finalAttrs.finalPackage;
       };
       generic-arch = callPackage ./test-isa-compat.nix {
@@ -296,6 +301,10 @@ stdenv.mkDerivation (finalAttrs: {
           "amdgcnspirv"
         ];
       };
+      hiprtc-type-traits = callPackage ./test-hiprtc-type-traits.nix {
+        clr = finalAttrs.finalPackage;
+        inherit rocm-smi;
+      };
     };
 
     selectGpuTargets =
@@ -317,7 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
-    homepage = "https://github.com/ROCm/clr";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/clr";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

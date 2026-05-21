@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
-  version = "0.2.12";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VTqjsbd5CsvsNEItl8tTWnfyKHZVlYQpOQXpah68VH8=";
+    hash = "sha256-T9QkdpNq7YTR2df1M+lIt+iocVzrFv1yUwq0wgBRHaA=";
   };
 
-  cargoHash = "sha256-2h7ObKcrhtbJyoIinA1sawfpbY3Kt/8tEyZzjEdSQBI=";
+  cargoHash = "sha256-yfML0XO2/Xug0IhbzX1P7PL1YspxWR1FJYP5VtqZzRA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,6 +50,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "common::context::tests::test_build_run_context"
     "common::resolve::test::canonicalization"
     "common::resolve::tests::test_resolve_path"
+    "system::audit::test::test_traverse_secure_open_negative"
+    "system::audit::test::test_traverse_secure_open_positive"
     "system::tests::kill_test"
 
     # Assumes $SHELL is an actual shell

@@ -4,15 +4,15 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "eslint";
-  version = "9.39.2";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "eslint";
     repo = "eslint";
-    tag = "v${version}";
-    hash = "sha256-VIJLEMIg9WUbrSAAHCZ6AJRrao0ssSbR+fyFQE+56vY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b0Gv7soMPTsbMOZLqMe5vMCPwInk9AFusepf2jJH/Ng=";
   };
 
   # NOTE: Generating lock-file
@@ -24,7 +24,7 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-5QC0XLxcwawRcrc3r3EfFdo3hTZDTHz9BF68WJLk7SE=";
+  npmDepsHash = "sha256-gi/aiWEzbf91LNTB2kMx9Iq4PoVORLs3mBjSSt2mFiQ=";
   npmInstallFlags = [ "--omit=dev" ];
 
   dontNpmBuild = true;
@@ -35,6 +35,7 @@ buildNpmPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/eslint/eslint/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Find and fix problems in your JavaScript code";
     homepage = "https://eslint.org";
     license = lib.licenses.mit;
@@ -43,4 +44,4 @@ buildNpmPackage rec {
       onny
     ];
   };
-}
+})

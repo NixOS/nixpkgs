@@ -6,13 +6,12 @@
   zlib,
   llvm,
   lib,
-  gcc-unwrapped,
+  gcc13,
   texinfo,
   gmp,
   mpfr,
   libmpc,
   gnutar,
-  glibc,
   makeWrapper,
   backend ? "mcode",
 }:
@@ -21,39 +20,37 @@ assert backend == "mcode" || backend == "llvm" || backend == "gcc";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "5.1.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "ghdl";
     repo = "ghdl";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-vPeODNTptxIjN6qLoIHaKOFf3P3iAK2GloVreHPaAz8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q5lAWMa1SFjoIJTdWlHSbS4Cg5RYWiej8F05Xrz9ArY=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env.LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
   nativeBuildInputs = [
     gnat
   ]
+  ++ lib.optionals (backend == "llvm" || backend == "gcc") [
+    makeWrapper
+  ]
   ++ lib.optionals (backend == "gcc") [
     texinfo
-    makeWrapper
   ];
+
   buildInputs = [
     zlib
-  ]
-  ++ lib.optionals (backend == "llvm") [
-    llvm
   ]
   ++ lib.optionals (backend == "gcc") [
     gmp
     mpfr
     libmpc
-  ];
-  propagatedBuildInputs = [
-  ]
-  ++ lib.optionals (backend == "llvm" || backend == "gcc") [
-    zlib
   ];
 
   preConfigure = ''
@@ -61,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/check_version  7.0/check_version  7/g' configure
   ''
   + lib.optionalString (backend == "gcc") ''
-    ${gnutar}/bin/tar -xf ${gcc-unwrapped.src}
+    ${gnutar}/bin/tar -xf ${gcc13.cc.src}
   '';
 
   configureFlags = [
@@ -73,16 +70,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-llvm-config=${llvm.dev}/bin/llvm-config"
   ]
   ++ lib.optionals (backend == "gcc") [
-    "--with-gcc=gcc-${gcc-unwrapped.version}"
+    "--with-gcc=gcc-${gcc13.cc.version}"
   ];
 
   buildPhase = lib.optionalString (backend == "gcc") ''
     make copy-sources
     mkdir gcc-objs
     cd gcc-objs
-    ../gcc-${gcc-unwrapped.version}/configure \
-      --with-native-system-header-dir=/include \
-      --with-build-sysroot=${lib.getDev glibc} \
+    ../gcc-${gcc13.cc.version}/configure \
+      --with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include \
+      --with-build-sysroot=/ \
       --prefix=$out \
       --enable-languages=c,vhdl \
       --disable-bootstrap \
@@ -90,20 +87,23 @@ stdenv.mkDerivation (finalAttrs: {
       --disable-multilib \
       --disable-libssp \
       --disable-libgomp \
-      --disable-libquadmath
+      --disable-libquadmath \
+      --with-gmp-include=${gmp.dev}/include \
+      --with-gmp-lib=${gmp.out}/lib \
+      --with-mpfr-include=${mpfr.dev}/include \
+      --with-mpfr-lib=${mpfr.out}/lib \
+      --with-mpc=${libmpc} \
+      --enable-default-pie=${if stdenv.targetPlatform.hasSharedLibraries then "yes" else "no"}
     make -j $NIX_BUILD_CORES
     make install
     cd ../
     make -j $NIX_BUILD_CORES ghdllib
   '';
 
-  postFixup = lib.optionalString (backend == "gcc") ''
+  postFixup = lib.optionalString (backend == "llvm" || backend == "gcc") ''
     wrapProgram $out/bin/ghdl \
-      --set LIBRARY_PATH ${
-        lib.makeLibraryPath [
-          glibc
-        ]
-      }
+      --set LIBRARY_PATH ${lib.makeLibraryPath [ zlib ]} \
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
   '';
 
   hardeningDisable = [
@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lucus16
       thoughtpolice
+      sempiternal-aurora
     ];
     platforms =
       lib.platforms.linux ++ lib.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];

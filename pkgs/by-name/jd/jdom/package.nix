@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.0.6.1";
 
   src = fetchzip {
-    url = "http://www.jdom.org/dist/binary/jdom-${finalAttrs.version}.zip";
+    url = "https://www.jdom.org/dist/binary/jdom-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-Y++mlO+7N5EU2NhRzLl5x5WXNqu/2tDO/NpNhfRegcg=";
   };

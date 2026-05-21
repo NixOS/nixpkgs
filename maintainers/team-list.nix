@@ -225,7 +225,6 @@ with lib.maintainers;
     members = [
       mdarocha
       corngood
-      ggg
       raphaelr
       jamiemagee
       anpin
@@ -295,12 +294,12 @@ with lib.maintainers;
 
   gcc = {
     members = [
-      synthetica
       vcunat
       ericson2314
     ];
     scope = "Maintain GCC (GNU Compiler Collection) compilers";
     shortName = "GCC";
+    enableFeatureFreezePing = true;
   };
 
   geospatial = {
@@ -359,7 +358,6 @@ with lib.maintainers;
   home-assistant = {
     members = [
       dotlambda
-      fab
       hexa
     ];
     scope = "Maintain the Home Assistant ecosystem";
@@ -437,6 +435,7 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+      igorcafe
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -485,14 +484,7 @@ with lib.maintainers;
   };
 
   lxc = {
-    members = [
-      aanderse
-      adamcstephens
-      megheaiulian
-      mkg20001
-    ];
-    scope = "All things linuxcontainers. Incus, LXC, and related packages.";
-    shortName = "lxc";
+    github = "lxc";
   };
 
   lxqt = {
@@ -695,6 +687,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  radicle = {
+    github = "radicle";
+  };
+
   rocm = {
     github = "rocm";
   };
@@ -717,6 +713,10 @@ with lib.maintainers;
   sdl = {
     github = "sdl";
     enableFeatureFreezePing = true;
+  };
+
+  security-review = {
+    github = "security-review";
   };
 
   stdenv = {

@@ -5,7 +5,7 @@
   lib,
   libidn2,
   libunistring,
-  mbedtls,
+  mbedtls_4,
   ncurses,
   nettle,
   nix-update-script,
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pihole-ftl";
-  version = "6.4.1";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "FTL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OpbBd+HS/gwcWNe/6VB3glout1sifJ8o5EnKuXfyZ/o=";
+    hash = "sha256-UMLTym9LSx8rlWKkFtHGtSEM0Stdpkfkz/7Iy/05jf8=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     libidn2
     libunistring
-    mbedtls
+    mbedtls_4
     ncurses
     nettle
     readline

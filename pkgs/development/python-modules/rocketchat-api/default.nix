@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rocketchat-api";
-  version = "3.1.0";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jadolg";
     repo = "rocketchat_API";
     tag = version;
-    hash = "sha256-K3b50mknji+pRTHfLdOBfvvr/zI8knjAzt5/0jhn3Tg=";
+    hash = "sha256-KatsV5MbZ7akD/nsNLEIwPecsaa9W8PplGCppe5rcZI=";
   };
 
   build-system = [

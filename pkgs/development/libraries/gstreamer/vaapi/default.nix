@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer-vaapi";
-  version = "1.26.5";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tC1E22PzGVpvMyluHq0ywU0B7ydFK3Bo8aLYZiT1Xqk=";
+    hash = "sha256-8S+TAnPHodPg1/hblP+dE3nRYqzMky6Mo9OJk+0n/Kw=";
   };
 
   nativeBuildInputs = [
@@ -112,6 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

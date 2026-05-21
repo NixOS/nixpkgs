@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://www.ibiblio.org/pub/Linux/system/serial/statserial-${finalAttrs.version}.tar.gz";
+    url = "https://www.ibiblio.org/pub/Linux/system/serial/statserial-${finalAttrs.version}.tar.gz";
     sha256 = "0rrrmxfba5yn836zlgmr8g9xnrpash7cjs7lk2m44ac50vakpks0";
   };
 

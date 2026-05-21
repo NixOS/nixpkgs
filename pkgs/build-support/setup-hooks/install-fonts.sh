@@ -38,13 +38,23 @@ installFonts() {
   installFont 'ttf' "$out/share/fonts/truetype"
   installFont 'ttc' "$out/share/fonts/truetype"
   installFont 'otf' "$out/share/fonts/opentype"
+  installFont 'otc' "$out/share/fonts/opentype"
+  installFont 'pfa' "$out/share/fonts/type1"
+  installFont 'pfb' "$out/share/fonts/type1"
+  installFont 'pfm' "$out/share/fonts/type1"
+  installFont 'afm' "$out/share/fonts/type1"
   installFont 'bdf' "$out/share/fonts/misc"
+  installFont 'pcf' "$out/share/fonts/misc"
   installFont 'otb' "$out/share/fonts/misc"
   installFont 'psf' "$out/share/consolefonts"
+  installFont 'psfu' "$out/share/consolefonts"
 
   if [ -n "${webfont-}" ]; then
     installFont 'woff' "$webfont/share/fonts/woff"
     installFont 'woff2' "$webfont/share/fonts/woff2"
+  elif [[ "${dontInstallWebfonts-}" != 1 && -n "$(find . \( -iname "*.woff" -o -iname "*.woff2" \) -print)" ]]; then
+    nixErrorLog "Consider adding \"webfont\" to outputs to install woff/woff2 files."
+    nixErrorLog "Alternatively, set dontInstallWebfonts to silence this."
+    exit 1
   fi
-
 }

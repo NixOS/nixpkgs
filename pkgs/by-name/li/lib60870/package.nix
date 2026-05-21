@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/CMakeLists.txt \
-      --replace-warn "-lrt" "" \
+      --replace-warn "-lrt" ""
   '';
 
   separateDebugInfo = true;

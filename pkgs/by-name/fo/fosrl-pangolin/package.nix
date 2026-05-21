@@ -5,7 +5,6 @@
   buildNpmPackage,
   makeWrapper,
   formats,
-  inter,
   databaseType ? "sqlite",
   environmentVariables ? { },
   nixosTests,
@@ -29,40 +28,37 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.15.3";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-UGfwbFbuQ0ljipCjnPxZ/Is2hh1vjZJb97Lo/43sWeg=";
+    hash = "sha256-1grYW3UrQsw94xFyKj+n8styihRdW/+aW2Q5lq9b3Bg=";
   };
 
-  npmDepsHash = "sha256-kfgwU5QusUNWVcRXlYCS3ES1Av/phCHG8nFBj0yjz2Q=";
+  npmDepsHash = "sha256-+qsHvytwAIbbNYpgNT6I7lekpxY0mUWcWGA9dT6rbtc=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
-  # Based on pkgs.nextjs-ollama-llm-ui.
-  postPatch = ''
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Geist, Inter, Manrope, Open_Sans } from \"next/font/google\"" \
-      "localFont from \"next/font/local\""
+  # dependency resolution is borked
+  npmFlags = [ "--legacy-peer-deps" ];
 
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "const font = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
-      "const font = localFont({ src: './Inter.ttf' });"
-
-    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
-  '';
+  # upstream inconsistently updates this
+  # so leaving this here in case it's needed
+  # postPatch = ''
+  #   substituteInPlace server/lib/consts.ts --replace-fail \
+  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+  #     'export const APP_VERSION = "${finalAttrs.version}";'
+  # '';
 
   preBuild = ''
     npm run set:${db false}
     npm run set:oss
-    npm run db:${db false}:generate
+    npm run db:generate
   '';
 
   buildPhase = ''

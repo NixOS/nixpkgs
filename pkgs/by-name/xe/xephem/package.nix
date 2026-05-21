@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   makeDesktopItem,
   copyDesktopItems,
   installShellFiles,
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xephem";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "XEphem";
     repo = "XEphem";
-    rev = finalAttrs.version;
-    hash = "sha256-TuzXrWoJOAHg31DrJObPcHBXgtqR/KWKFRsqddPzL4c=";
+    tag = finalAttrs.version;
+    hash = "sha256-zWINscuRO7k/q3u1hngcIkfOpxX75HUxxB2X41igdBg=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # fix compile error with GCC 14
-    (fetchpatch {
-      url = "https://github.com/XEphem/XEphem/commit/30e14f685ede015fcd8985cd83ee6510f93f0073.patch";
-      hash = "sha256-wNoLjR6xEl56ZA6FLBS2xtySeDEYXTCA8j4Z5JIrF6k=";
-    })
     ./add-cross-compilation-support.patch
   ];
 
@@ -52,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     cd GUI/xephem
     substituteInPlace xephem.c splash.c --replace-fail '/etc/XEphem' '${placeholder "out"}/etc/XEphem'
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 
@@ -79,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/etc
     echo "XEphem.ShareDir: $out/share/xephem" > $out/etc/XEphem
     installManPage xephem.1
-    install -Dm644 XEphem.png -t $out/share/pixmaps
+    install -Dm644 XEphem.png -t $out/share/icons/hicolor/128x128/apps
     runHook postInstall
   '';
 

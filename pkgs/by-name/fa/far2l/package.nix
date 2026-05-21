@@ -21,7 +21,7 @@
   withTTYX ? true,
   libx11,
   withGUI ? true,
-  wxGTK32,
+  wxwidgets_3_2,
   withUCD ? true,
   libuchardet,
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optional withTTYX libx11
-    ++ lib.optional withGUI wxGTK32
+    ++ lib.optional withGUI wxwidgets_3_2
     ++ lib.optional withUCD libuchardet
     ++ lib.optionals withColorer [
       spdlog

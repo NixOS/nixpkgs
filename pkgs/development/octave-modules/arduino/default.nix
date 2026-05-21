@@ -37,7 +37,7 @@ buildOctavePackage rec {
     name = "Octave Arduino Toolkit";
     homepage = "https://gnu-octave.github.io/packages/arduino/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Basic Octave implementation of the matlab arduino extension, allowing communication to a programmed arduino board to control its hardware";
   };
 }

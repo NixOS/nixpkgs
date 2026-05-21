@@ -507,16 +507,15 @@ in
               machine.send_key("alt-f4")
 
           # Morph is how we go online
-          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
-          # with subtest("morph browser works"):
-          #     open_starter()
-          #     machine.send_chars("Morph\n")
-          #     wait_for_text(r"(Bookmarks|address|site|visited any)")
-          #     machine.screenshot("morph_open")
-          #
-          #     # morph-browser has a separate VM test to test its basic functionalities
-          #
-          #     machine.send_key("alt-f4")
+          with subtest("morph browser works"):
+              open_starter()
+              machine.send_chars("Morph\n")
+              wait_for_text(r"(Bookmarks|address|site|visited any)")
+              machine.screenshot("morph_open")
+
+              # morph-browser has a separate VM test to test its basic functionalities
+
+              machine.send_key("alt-f4")
 
           # LSS provides DE settings
           with subtest("system settings open"):
@@ -689,7 +688,7 @@ in
               machine.screenshot("settings_lomiri-content-hub_peers")
 
               # Select Gallery as content source
-              mouse_click(460, 80)
+              mouse_click(540, 80)
 
               # Expect Gallery to be brought into the foreground, with its sharing page open
               wait_for_text("Photos")

@@ -8,7 +8,7 @@
   copyDesktopItems,
   cctools,
   makeWrapper,
-  nodejs,
+  nodejs-slim,
   yarnConfigHook,
   yarnBuildHook,
   wrapGAppsHook3,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.2.4";
 
   src = fetchFromGitHub {
-    owner = "troyeguo";
+    owner = "koodo-reader";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
     hash = "sha256-KUcI+0+ICMdwAF30CLM3QdS+X8UnYiHhcYkvEQ6WgS8=";
@@ -44,8 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs
-    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+    nodejs-slim
+    nodejs-slim.npm
+    (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
     yarnConfigHook
     yarnBuildHook
   ]
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     # we need to build cpu-features with the non-electron headers first
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs-slim}
     npm rebuild --verbose cpu-features
 
     export npm_config_nodedir=${electron.headers}
@@ -139,13 +140,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/koodo-reader/koodo-reader/releases/tag/${finalAttrs.src.tag}";
     description = "Cross-platform ebook reader";
     longDescription = ''
       A modern ebook manager and reader with sync and backup capacities
       for Windows, macOS, Linux and Web
     '';
-    homepage = "https://github.com/troyeguo/koodo-reader";
+    homepage = "https://github.com/koodo-reader/koodo-reader";
     license = lib.licenses.agpl3Only;
     mainProgram = "koodo-reader";
     maintainers = with lib.maintainers; [ tomasajt ];

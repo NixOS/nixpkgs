@@ -5,7 +5,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  lima,
+  krunkit,
+  lima-full,
   makeWrapper,
   procps,
   qemu,
@@ -60,13 +61,14 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
-        lib.makeBinPath [
-          # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
-          (lima.override {
-            withAdditionalGuestAgents = true;
-          })
-          qemu
-        ]
+        lib.makeBinPath (
+          [
+            # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
+            lima-full
+            qemu
+          ]
+          ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        )
       }
 
     installShellCompletion --cmd colima \

@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "High-performance event loop/event model with lots of features";
+    homepage = "https://software.schmorp.de/pkg/libev.html";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2; # or GPL2+

@@ -28,7 +28,6 @@ let
       systemdLibs,
       system-sendmail,
       valgrind,
-      xcbuild,
       writeShellScript,
       common-updater-scripts,
       curl,
@@ -240,8 +239,7 @@ let
             libtool
             pkg-config
             re2c
-          ]
-          ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+          ];
 
           buildInputs =
             # PCRE extension
@@ -399,9 +397,15 @@ let
                 newPhpAttrsOverrides = lib.composeExtensions (lib.toExtension phpAttrsOverrides) (
                   lib.toExtension f
                 );
-                php = generic (args // { phpAttrsOverrides = newPhpAttrsOverrides; });
+                phpOverridden = finalAttrs.overrideAttrs f;
               in
-              php;
+              phpOverridden
+              // {
+                passthru = phpOverridden.passthru // {
+                  buildEnv = mkBuildEnv { phpAttrsOverrides = newPhpAttrsOverrides; } [ ];
+                  withExtensions = mkWithExtensions { phpAttrsOverrides = newPhpAttrsOverrides; } [ ];
+                };
+              };
             inherit ztsSupport;
 
             services.default = {

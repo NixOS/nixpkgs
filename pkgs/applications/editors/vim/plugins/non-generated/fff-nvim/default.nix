@@ -5,36 +5,72 @@
   nix-update-script,
   openssl,
   perl,
+  zig,
+  gitMinimal,
   pkg-config,
   stdenv,
   vimUtils,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "896355b-unstable-2026-02-07";
+  version = "0.8.0";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "d7bc72786d4362ca70aa05d397f8d08bbaf39604";
-    hash = "sha256-CqX2QoDO7InjXYMzvljufA0QYhvFbsht2auE0+nVktw=";
+    tag = "v${version}";
+    hash = "sha256-JbV2dTQhTyZgDZYvFoR1mz9CeM2IPv59Qmp2iiJC8a0=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-jch2snZVoDqPkbeuF++yc/3ikoWal29bTKZjkyDgVjU=";
+    cargoHash = "sha256-L/Ens/wzw/jKaa1T3A2pLIBKs09saPEk/0bRhgRezPQ=";
+
+    cargoBuildFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
+
+    cargoCheckFlags = [
+      "-p"
+      "fff-nvim"
+      "--features"
+      "zlob"
+    ];
 
     nativeBuildInputs = [
       pkg-config
       perl
+      rustPlatform.bindgenHook
+      writableTmpDirAsHomeHook
+      zig
     ];
+
+    dontUseZigConfigure = true;
+    dontUseZigBuild = true;
+    dontUseZigCheck = true;
+    dontUseZigInstall = true;
+
+    # Some tests need git
+    nativeCheckInputs = [ gitMinimal ];
+
+    # Tests need these permissions in order to use the FSEvents API on macOS.
+    sandboxProfile = ''
+      (allow mach-lookup (global-name "com.apple.FSEvents"))
+    '';
 
     buildInputs = [
       openssl
     ];
 
-    env = {
-      RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+    # This test requires curl and GitHub access
+    checkFlags = [
+      "--skip=update_check::tests::test_update_check_end_to_end"
+    ];
 
+    env = {
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
@@ -60,7 +96,6 @@ vimUtils.buildVimPlugin {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.fff-nvim.fff-nvim-lib";
     };
 

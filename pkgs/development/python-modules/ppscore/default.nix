@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ppscore";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "8080labs";
     repo = "ppscore";
     tag = version;
-    hash = "sha256-gJStsL8fN17kvXO8EH/NHGIBelPknJzYw5WEvHsFooU=";
+    hash = "sha256-GhmyVWNWpEMNqXW808UhBHk1r6vOVibxKHVv5wWshLE=";
   };
 
   nativeBuildInputs = [

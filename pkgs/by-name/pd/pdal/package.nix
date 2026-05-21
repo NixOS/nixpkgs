@@ -24,7 +24,6 @@
   proj,
   sqlite,
   tiledb,
-  xercesc,
   zlib,
   zstd,
 }:
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     proj
     sqlite
     tiledb
-    xercesc
     zlib
     zstd
   ]

@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xq";
   version = "0.4.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Qe+crretlKJRoNPO2+aHxCmMO9MecqGjOuvdhr4a0NU=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "xq";
   };
-}
+})

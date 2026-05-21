@@ -29,7 +29,7 @@
   liblc3,
   libass,
   lrdf,
-  ladspaH,
+  ladspa-header,
   lcms2,
   libnice,
   webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1,
@@ -115,7 +115,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.26.5";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mJDyYvOyqVZNy2KenraX13uT0fcYl+2hqBcLfc/nMpQ=";
+    hash = "sha256-EQ+4J5Xw5Wmx4nsSq5aZ01x3YuH/TblTNdasjRRCrz0=";
   };
 
   patches = [
@@ -242,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
     spandsp
 
     # ladspa plug-in
-    ladspaH
+    ladspa-header
     lrdf # TODO: make build on Darwin
 
     # lv2 plug-in
@@ -431,6 +431,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

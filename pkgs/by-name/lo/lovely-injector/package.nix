@@ -7,7 +7,7 @@
   cmake,
 }:
 let
-  version = "0.8.0";
+  version = "0.9.0";
 in
 rustPlatform.buildRustPackage {
   pname = "lovely-injector";
@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage {
     owner = "ethangreen-dev";
     repo = "lovely-injector";
     tag = "v${version}";
-    hash = "sha256-leTe7j4RTqc6BkiS7W5e0viK8FEwJpPLNoyf4GLOI3E=";
+    hash = "sha256-TzBxyIf7MjzsdFaJLBp2dXWNj5sOXyoMifaaztNIOog=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-MnXB2ho48VPYtFSnGHGkuSv1eprOhmj4wMG2YmFSGec=";
+  cargoHash = "sha256-4ECH8E/GuV2NYvvjSkanmj4gPIahY40HlCrhR2aFJ5M=";
   cargoBuildFlags = [
     "--package"
     "lovely-unix"

@@ -12,16 +12,16 @@
   android-tools,
   ffmpeg,
   libusb1,
-  SDL2,
+  sdl3,
 }:
 
 let
-  version = "3.3.4";
+  version = "4.0";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    hash = "sha256-hYgjjJpaAKpUKQa27H5tVUHZ/7m10PbhvA42XiMDB54=";
+    hash = "sha256-hJJL1WSh62CJyHLHUh+WgFiXf5H1/wJRSox0r/MhDzo=";
   };
 in
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     tag = "v${version}";
-    hash = "sha256-5yd4YHVJH5+iBN5z0SYdTB0ay6vY4XwM/CCDjbEux74=";
+    hash = "sha256-o8jZXVwNub8KU7k2BjC9jvpX4Y7bKFySBUYw/dVHck0=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg
-    SDL2
+    sdl3
     libusb1
   ];
 

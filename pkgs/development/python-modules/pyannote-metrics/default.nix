@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pyannote-metrics";
-  version = "4.0.0";
+  version = "4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-metrics";
     tag = version;
-    hash = "sha256-Ga5oSRkVdeQkDnjFcFebdZnFljjyn/TrtV8Y6UJxT2c=";
+    hash = "sha256-j0rNzHX9xIP9LB2Rk5D0EsD5BOWR4Kp5CEuKi8l8QgY=";
   };
 
   postPatch = ''

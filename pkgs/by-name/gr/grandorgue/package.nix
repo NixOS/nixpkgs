@@ -9,7 +9,7 @@
   alsa-lib,
   zlib,
   wavpack,
-  wxGTK32,
+  wxwidgets_3_2,
   udev,
   jackaudioSupport ? false,
   libjack2,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
     zlib
     wavpack
-    wxGTK32
+    wxwidgets_3_2
     yaml-cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

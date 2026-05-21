@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "msroest";
-    repo = pname;
+    repo = "sabnzbd_exporter";
     tag = version;
     hash = "sha256-9oL9Zbzzbr0hZjOdkaH86Tho6gaR+/6uAMreLwYzB8o=";
   };
@@ -29,8 +29,8 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/bin
     cp sabnzbd_exporter.py $out/bin/
 
-    mkdir -p $out/share/${pname}
-    cp examples/* $out/share/${pname}/
+    mkdir -p $out/share/sabnzbd_exporter
+    cp examples/* $out/share/sabnzbd_exporter/
 
     runHook postInstall
   '';

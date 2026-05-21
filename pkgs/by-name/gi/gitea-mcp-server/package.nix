@@ -1,21 +1,22 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitea,
 }:
-buildGoModule (finalAttrs: {
+
+buildGo126Module (finalAttrs: {
   pname = "gitea-mcp-server";
-  version = "0.8.1";
+  version = "1.1.0";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "gitea-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2K5bdrz7P99PmcY4iJp74PHSyvvE/aiC8UJMz9q3N88=";
+    hash = "sha256-weJcl9Vp7mhPiaui7VGETs5t4trUDTegDoUR8gRTGIs=";
   };
 
-  vendorHash = "sha256-N1Ct479Q5RH4TCxcSbIBoGDP/atBlWkxwBLJLk82juM=";
+  vendorHash = "sha256-35zVDzivvO3tSi1RYvXJoLvrlvnp3JCzwC5FqDEj91M=";
 
   subPackages = [ "." ];
 

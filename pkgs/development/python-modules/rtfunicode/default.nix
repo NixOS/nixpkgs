@@ -3,19 +3,27 @@
   lib,
   fetchFromGitHub,
   unittestCheckHook,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtfunicode";
   version = "2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjpieters";
     repo = "rtfunicode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dmPpMplCQIJMHhNFzOIjKwEHVio2mjFEbDmq1Y9UJkA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.26,<0.10.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   nativeBuildInputs = [ unittestCheckHook ];
 
@@ -26,6 +34,6 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.lucasew ];
     license = lib.licenses.bsd2;
     homepage = "https://github.com/mjpieters/rtfunicode";
-    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${src.tag}";
+    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

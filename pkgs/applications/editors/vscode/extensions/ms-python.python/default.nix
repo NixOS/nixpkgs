@@ -15,19 +15,19 @@
 let
   supported = {
     x86_64-linux = {
-      hash = "sha256-MJ5FI1YbvknhuBgSQIpd/s4fyIvaOZHTQBeGxBo1uhs=";
+      hash = "sha256-HQfmDV6rJX6l1pGybe8//2QrTSwE+rlEJOi4/iW69lY=";
       arch = "linux-x64";
     };
     x86_64-darwin = {
-      hash = "sha256-Jk41L8QulT+olJxUl1E/UOOtD/qIIiwSlkP5R9qOJhU=";
+      hash = "sha256-tAZyt2fwB/GOhffY5lhHJTmbXG8UloynPtjoMtWRHok=";
       arch = "darwin-x64";
     };
     aarch64-linux = {
-      hash = "sha256-xeD73t9WleBz/p+DyIs9vRUlKcbzUwL1RxILNKOi+14=";
+      hash = "sha256-v7fatW/LMJ8CeSRrE/5b7dLqOrhNhwzUySUxtAMuBUE=";
       arch = "linux-arm64";
     };
     aarch64-darwin = {
-      hash = "sha256-gRViqhIyqmUId56lf8o6z9KK4rNK5Ufg9i2gecsTrVc=";
+      hash = "sha256-XntiQmvagiSWcfVIp13CDq2RTZ4NhKOzf4QmecZjMIs=";
       arch = "darwin-arm64";
     };
   };
@@ -41,7 +41,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "python";
     publisher = "ms-python";
-    version = "2025.16.0";
+    version = "2026.4.0";
   };
 
   buildInputs = [ icu ];

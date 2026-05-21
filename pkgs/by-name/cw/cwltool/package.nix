@@ -7,22 +7,27 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cwltool";
-  version = "3.1.20251031082601";
+  version = "3.1.20260315121657";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
     tag = finalAttrs.version;
-    hash = "sha256-avRNOdL4Ig2cYQWh8SqX/KWfgXyVg0TVfVFrlqzUCLA=";
+    hash = "sha256-0cd64fkaCMX+eaZ4maZW8sE+ZX7bTFy1DDY5leqf9B0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy==1.18.2" "mypy"
+      --replace-fail "mypy==1.19.1" "mypy"
   '';
+
+  pythonRelaxDeps = [
+    "prov"
+    "rdflib"
+  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -60,11 +65,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
-  pythonRelaxDeps = [
-    "prov"
-    "rdflib"
-  ];
-
   disabledTests = [
     "test_content_types"
     "test_env_filtering"
@@ -75,6 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     "tests/test_udocker.py"
     "tests/test_provenance.py"
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [

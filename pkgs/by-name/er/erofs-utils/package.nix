@@ -6,7 +6,7 @@
   pkg-config,
   fuse,
   util-linux,
-  xxHash,
+  xxhash,
   lz4,
   xz,
   zlib,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     util-linux
-    xxHash
+    xxhash
     lz4
     zlib
     xz

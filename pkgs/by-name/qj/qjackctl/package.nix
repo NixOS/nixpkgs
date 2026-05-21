@@ -13,14 +13,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.5";
+  version = "1.0.6";
   pname = "qjackctl";
 
   src = fetchFromGitHub {
     owner = "rncbc";
     repo = "qjackctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A4zoKqEO84kOfPwrkngv3EEXegCOs4QqFaS9KmgcKf4=";
+    hash = "sha256-EZR6E6swVRcD8uKZm8zCtps/P/marCfhdUaaOvArayo=";
   };
 
   buildInputs = [

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nitrotpm-tools";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "NitroTPM-Tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZTASHHa+LQ/hNaM0qfsaGdNwkZQQZnR9+f05DHbviLw=";
+    hash = "sha256-Jnv1ZKRs59eXnW/O6UCZLIhQolQ9LZjJI6+SqXVws5Q=";
   };
 
-  cargoHash = "sha256-z0b0bLKrnLdMfGKp9aIg3DPW3MJnEhjy9GjCYy44TTQ=";
+  cargoHash = "sha256-ckygzrbDzzjL2eBktAHdbA40E7HDeR8S5rZCbbuVIW0=";
 
   nativeBuildInputs = [
     pkg-config

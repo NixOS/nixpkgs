@@ -70,11 +70,17 @@ let
 
         atd = callPackage ../development/ocaml-modules/atd { };
 
+        atd-jsonlike = callPackage ../development/ocaml-modules/atd/jsonlike.nix { };
+
+        atd-yamlx = callPackage ../development/ocaml-modules/atd/yamlx.nix { };
+
         atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
         atdgen-codec-runtime = callPackage ../development/ocaml-modules/atdgen/codec-runtime.nix { };
 
         atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
+
+        atdml = callPackage ../development/ocaml-modules/atdml { };
 
         augeas = callPackage ../development/ocaml-modules/augeas {
           inherit (pkgs) augeas;
@@ -220,6 +226,8 @@ let
         caqti-eio = callPackage ../development/ocaml-modules/caqti/eio.nix { };
 
         caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
+
+        caqti-miou = callPackage ../development/ocaml-modules/caqti/miou.nix { };
 
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
@@ -668,7 +676,7 @@ let
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
         frama-c = callPackage ../development/ocaml-modules/frama-c {
-          framac = pkgs.framac.override {
+          frama-c = pkgs.frama-c.override {
             ocamlPackages = self;
             why3 = pkgs.why3.override { ocamlPackages = self; };
           };
@@ -685,6 +693,8 @@ let
         };
 
         frontc = callPackage ../development/ocaml-modules/frontc { };
+
+        fs-io = callPackage ../development/ocaml-modules/fs-io { };
 
         functory = callPackage ../development/ocaml-modules/functory { };
 
@@ -816,6 +826,8 @@ let
         hmap = callPackage ../development/ocaml-modules/hmap { };
 
         hpack = callPackage ../development/ocaml-modules/hpack { };
+
+        htmlit = callPackage ../development/ocaml-modules/htmlit { };
 
         http = callPackage ../development/ocaml-modules/cohttp/http.nix { };
 
@@ -1139,9 +1151,12 @@ let
 
         lutils = callPackage ../development/ocaml-modules/lutils { };
 
-        luv = callPackage ../development/ocaml-modules/luv {
-          inherit (pkgs) file;
-        };
+        inherit
+          (callPackage ../development/ocaml-modules/luv {
+          })
+          luv-0-5-12
+          luv
+          ;
 
         lwd = callPackage ../development/ocaml-modules/lwd { };
 
@@ -1183,6 +1198,8 @@ let
           cohttp = cohttp_5_3; # due to cohttp_static_handler pulling in cohttp_5_3
         };
 
+        malfunction = callPackage ../development/ocaml-modules/malfunction { };
+
         mariadb = callPackage ../development/ocaml-modules/mariadb {
           inherit (pkgs) mariadb;
         };
@@ -1214,6 +1231,8 @@ let
         mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
 
         menhir = callPackage ../development/ocaml-modules/menhir { };
+
+        menhirGLR = callPackage ../development/ocaml-modules/menhir/glr.nix { };
 
         menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
 
@@ -1373,6 +1392,8 @@ let
 
         mparser-pcre = callPackage ../development/ocaml-modules/mparser/pcre.nix { };
 
+        mparser-re = callPackage ../development/ocaml-modules/mparser/re.nix { };
+
         msgpck = callPackage ../development/ocaml-modules/msgpck { };
 
         mrmime = callPackage ../development/ocaml-modules/mrmime { };
@@ -1421,7 +1442,7 @@ let
 
         nottui-unix = callPackage ../development/ocaml-modules/lwd/nottui-unix.nix { };
 
-        notty = callPackage ../development/ocaml-modules/notty { };
+        notty-community = callPackage ../development/ocaml-modules/notty-community { };
 
         npy = callPackage ../development/ocaml-modules/npy {
           inherit (pkgs.python3Packages) numpy;
@@ -1460,8 +1481,6 @@ let
             { };
 
         ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
-
-        ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
         ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
 
@@ -1509,6 +1528,7 @@ let
         ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
         ocamlformat_0_27_0 = ocamlformat.override { version = "0.27.0"; };
         ocamlformat_0_28_1 = ocamlformat.override { version = "0.28.1"; };
+        ocamlformat_0_29_0 = ocamlformat.override { version = "0.29.0"; };
 
         ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix { };
 
@@ -1738,6 +1758,8 @@ let
 
         posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
+        posix-errno = callPackage ../development/ocaml-modules/posix/errno.nix { };
+
         posix-math2 = callPackage ../development/ocaml-modules/posix/math2.nix { };
 
         posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
@@ -1797,6 +1819,8 @@ let
         ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
 
         ppx_lun = callPackage ../development/ocaml-modules/lun/ppx.nix { };
+
+        ppx_mikmatch = callPackage ../development/ocaml-modules/ppx_mikmatch { };
 
         ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
 
@@ -2005,8 +2029,6 @@ let
           mdx = mdx.override { inherit logs; };
         };
 
-        sodium = callPackage ../development/ocaml-modules/sodium { };
-
         sosa = callPackage ../development/ocaml-modules/sosa { };
 
         soundtouch = callPackage ../development/ocaml-modules/soundtouch {
@@ -2091,6 +2113,12 @@ let
 
         terml = callPackage ../development/ocaml-modules/terml { };
 
+        testo = callPackage ../development/ocaml-modules/testo { };
+
+        testo-diff = callPackage ../development/ocaml-modules/testo/diff.nix { };
+
+        testo-util = callPackage ../development/ocaml-modules/testo/util.nix { };
+
         tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
         tezt = callPackage ../development/ocaml-modules/tezt { };
@@ -2120,6 +2148,8 @@ let
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
+
+        top-closure = callPackage ../development/ocaml-modules/top-closure { };
 
         topkg = callPackage ../development/ocaml-modules/topkg { };
 
@@ -2257,6 +2287,8 @@ let
 
         yaml-sexp = callPackage ../development/ocaml-modules/yaml/yaml-sexp.nix { };
 
+        yamlx = callPackage ../development/ocaml-modules/yamlx { };
+
         yojson = callPackage ../development/ocaml-modules/yojson { };
 
         yojson_2 = yojson.overrideAttrs (_: {
@@ -2327,9 +2359,11 @@ let
         dune_2 = pkgs.dune_2; # Added 2025-12-08
         dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        notty = throw "2026-05-05: notty is no longer maintained, use notty-community instead";
         ocaml-freestanding = throw "ocamlPackages.ocaml-freestanding has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
         ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05
+        ocaml_mysql = throw "ocamlPackages.ocaml_mysql is not maintained, use ocamlPackages.mariadb instead";
         torch = throw "ocamlPackages.torch has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
       }
     )).overrideScope

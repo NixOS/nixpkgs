@@ -36,8 +36,10 @@ appimageTools.wrapType2 rec {
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/notable.png \
-      $out/share/icons/hicolor/1024x1024/apps/notable.png
+    for size in 16 32 48 64 128 256 512 1024; do
+      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/''${size}x''${size}/apps/notable.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/notable.png
+    done
     substituteInPlace $out/share/applications/notable.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
     wrapProgram "$out/bin/${pname}" \

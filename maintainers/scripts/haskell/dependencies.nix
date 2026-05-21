@@ -1,6 +1,6 @@
 # Nix script to calculate the Haskell dependencies of every haskellPackage. Used by ./hydra-report.hs.
 let
-  pkgs = import ../../.. { };
+  pkgs = import ../../.. { config.allowAliases = false; };
   inherit (pkgs) lib;
   getDeps =
     _: pkg:

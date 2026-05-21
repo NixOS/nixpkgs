@@ -15,9 +15,9 @@
   xdg-utils,
   versionCheckHook,
 
-  version ? "1.6.1",
-  srcHash ? "sha256-7kwtWuYdYG3MDHThCkY5OZmx4pWaQXMYoOlJszmV2rM=",
-  cargoHash ? "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=",
+  version ? "1.9.0",
+  srcHash ? "sha256-ECged52tJaBSW2ua3MPDEBdGKPJ50Q347evd5wdbbU0=",
+  cargoHash ? "sha256-Vb86Zx851Mrn9yaNuIQHEuVr7PrD7plPZhPGFJOLKRg=",
   updateScript ? ./update.sh,
 }:
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
     hash = srcHash;
@@ -149,6 +149,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
           services.radicle.package = finalAttrs.finalPackage;
         };
       };
+      ci-broker = nixosTests.radicle-ci-broker.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
+      };
     };
   };
 
@@ -159,17 +164,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Unlike centralized code hosting platforms, there is no single entity controlling the network.
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
-    homepage = "https://radicle.xyz";
+    homepage = "https://radicle.dev";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      amesgen
-      lorenzleutgeb
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad";
   };
 })

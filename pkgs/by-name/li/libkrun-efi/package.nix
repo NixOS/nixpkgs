@@ -20,13 +20,13 @@
   withGpu ? true,
 }:
 let
-  version = "1.17.4";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
     tag = "v${version}";
-    hash = "sha256-Th4vCg3xHb6lbo26IDZES7tLOUAJTebQK2+h3xSYX7U=";
+    hash = "sha256-R7q52ZwiL9JsGofLPhXVTk/eH6bEob3DoZe21PHSBrU=";
   };
 
   virglrenderer = stdenv.mkDerivation (finalAttrs: {
@@ -78,7 +78,7 @@ let
     buildPhase = ''
       runHook preBuild
       cd init
-      $CC -O2 -static -Wall -o init init.c
+      $CC -O2 -static -Wall -o init init.c dhcp.c
       runHook postBuild
     '';
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-0xpAyNe1jF1OMtc7FXMsejqIv0xKc1ktEvm3rj/mVFU=";
+    hash = "sha256-3IAEWF+XGeKnb61SUpuVHMPiX6q0FgQFN4/eOBCH80c=";
   };
 
   nativeBuildInputs = [
@@ -124,8 +124,16 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withGpu "GPU=1";
 
-  preBuild = ''
-    cp ${initBinary}/init init/init
+  env.KRUN_INIT_BINARY_PATH = "${initBinary}/init";
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail \
+      '$(LIBRARY_RELEASE_$(OS)): $(SYSROOT_TARGET) $(INIT_BINARY_BSD)' \
+      '$(LIBRARY_RELEASE_$(OS)):'
+  '';
+
+  postInstall = ''
+    ln -s $out/lib/libkrun-efi.dylib $out/lib/libkrun.dylib
   '';
 
   passthru = {

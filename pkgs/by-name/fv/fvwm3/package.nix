@@ -1,6 +1,7 @@
 {
   lib,
   asciidoctor,
+  autoconf269,
   autoreconfHook,
   cairo,
   fetchFromGitHub,
@@ -40,7 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-y1buTWO1vHzloh2e4EK1dkD0uQa7lIFUbNMkEe5x6Vo=";
   };
 
+  # Build fails with autoconf 2.73
   nativeBuildInputs = [
+    autoconf269
     autoreconfHook
     asciidoctor
     pkg-config

@@ -7,14 +7,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.8.1";
+  version = "2.9";
   pname = "ocaml${ocaml.version}-camlpdf";
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "camlpdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZExQtcFBPiS7c6v+WEjZYQ6zXtqRTNLV0hYzYSB/eLE=";
+    hash = "sha256-8xBna7GDFbFf48069/ct71uFxLJU0eBfKVRWDnyYocs=";
   };
 
   nativeBuildInputs = [

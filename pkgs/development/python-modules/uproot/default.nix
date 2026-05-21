@@ -27,14 +27,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uproot";
-  version = "5.7.1";
+  version = "5.7.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-06pMcL2o5hHZLEbi8vdYhAAs5BBkHAskNHUB1o48KDU=";
+    hash = "sha256-OUvU54mgQl8SjgxwGHXr5/w+X9hbTL3vzflsP7UlxlA=";
   };
 
   build-system = [
@@ -94,6 +95,7 @@ buildPythonPackage (finalAttrs: {
     # Tests that try to download files
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
+    "tests/test_1610_read_TMatrixTSym_from_ttree.py"
   ];
 
   __darwinAllowLocalNetworking = true;

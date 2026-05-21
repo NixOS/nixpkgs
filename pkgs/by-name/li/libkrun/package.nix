@@ -7,6 +7,7 @@
   pkg-config,
   glibc,
   openssl,
+  libcap_ng,
   libepoxy,
   libdrm,
   pipewire,
@@ -33,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.17.0";
+  version = "1.17.4";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6HBSL5Zu29sDoEbZeQ6AsNIXUcqXVVGMk0AR2X6v1yU=";
+    hash = "sha256-Th4vCg3xHb6lbo26IDZES7tLOUAJTebQK2+h3xSYX7U=";
   };
 
   outputs = [
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-UIzbtBJH6aivoIxko1Wxdod/jUN44pERX9Hd+v7TC3Q=";
+    hash = "sha256-0xpAyNe1jF1OMtc7FXMsejqIv0xKc1ktEvm3rj/mVFU=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
@@ -65,11 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
     cargo
+    pkg-config
     rustc
-  ]
-  ++ lib.optional (variant == "sev" || variant == "tdx" || withGpu) pkg-config;
+  ];
 
   buildInputs = [
+    libcap_ng
     libkrunfw'
     glibc
     glibc.static

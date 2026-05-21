@@ -3,8 +3,8 @@
 let
   s3 = {
     bucket = "clickhouse-bucket";
-    accessKey = "BKIKJAA5BMMU2RHO6IBB";
-    secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
+    accessKey = "GKaaaaaaaaaaaaaaaaaaaaaaaa";
+    secretKey = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   };
 
   clickhouseS3StorageConfig = ''
@@ -13,9 +13,10 @@ let
         <disks>
           <s3_disk>
             <type>s3</type>
-            <endpoint>http://minio:9000/${s3.bucket}/</endpoint>
+            <endpoint>http://garage:9000/${s3.bucket}/</endpoint>
             <access_key_id>${s3.accessKey}</access_key_id>
             <secret_access_key>${s3.secretKey}</secret_access_key>
+            <region>garage</region>
             <metadata_path>/var/lib/clickhouse/disks/s3_disk/</metadata_path>
           </s3_disk>
           <s3_cache>
@@ -61,18 +62,27 @@ in
       virtualisation.memorySize = 4 * 1024;
     };
 
-    minio =
+    garage =
       { pkgs, ... }:
       {
         virtualisation.diskSize = 2 * 1024;
         networking.firewall.allowedTCPPorts = [ 9000 ];
 
-        services.minio = {
+        services.garage = {
           enable = true;
-          inherit (s3) accessKey secretKey;
-        };
+          package = pkgs.garage_2;
+          settings = {
+            rpc_bind_addr = "127.0.0.1:3901";
+            rpc_public_addr = "127.0.0.1:3901";
+            rpc_secret = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            replication_factor = 1;
 
-        environment.systemPackages = [ pkgs.minio-client ];
+            s3_api = {
+              s3_region = "garage";
+              api_bind_addr = "0.0.0.0:9000";
+            };
+          };
+        };
       };
   };
 
@@ -91,14 +101,17 @@ in
       selectQuery = pkgs.writeText "select.sql" "SELECT * from `demo`";
     in
     ''
-      minio.wait_for_unit("minio")
-      minio.wait_for_open_port(9000)
-      minio.succeed(
-        "mc alias set minio "
-        + "http://localhost:9000 "
-        + "${s3.accessKey} ${s3.secretKey} --api s3v4",
-        "mc mb minio/${s3.bucket}",
+      garage.wait_for_unit("garage.service")
+      garage.wait_for_open_port(3901)
+      garage_node_id = garage.succeed("garage status | tail -n1 | awk '{ print $1 }'")
+      garage.succeed(
+          f"garage layout assign -c 100MB -z garage {garage_node_id}",
+          "garage layout apply --version 1",
+          "garage key import ${s3.accessKey} ${s3.secretKey} --yes",
+          "garage bucket create ${s3.bucket}",
+          "garage bucket allow --read --write --owner ${s3.bucket} --key ${s3.accessKey}",
       )
+      garage.wait_for_open_port(9000)
 
       clickhouse.start()
       clickhouse.wait_for_unit("clickhouse.service")
@@ -119,9 +132,5 @@ in
       clickhouse.succeed(
           "cat ${selectQuery} | clickhouse-client | grep foo"
       )
-
-      minio.log(minio.succeed(
-        "mc ls minio/${s3.bucket}",
-      ))
     '';
 }

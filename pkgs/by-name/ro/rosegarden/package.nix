@@ -12,7 +12,7 @@
   fftwSinglePrec,
   flac,
   glib,
-  ladspaH,
+  ladspa-header,
   ladspaPlugins,
   libjack2,
   liblo,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwSinglePrec
     flac
     glib
-    ladspaH
+    ladspa-header
     ladspaPlugins
     libjack2
     liblo

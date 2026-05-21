@@ -8,7 +8,7 @@
   fixup-yarn-lock,
   go,
   makeWrapper,
-  nodejs_20,
+  nodejs,
   nix-update-script,
   patchelf,
   removeReferencesTo,
@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktn-cli";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "open-constructs";
     repo = "cdk-terrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KgDRQ76ePLJEdULMCTJTouMaWu0SCeV4NwNW2WpoaNY=";
+    hash = "sha256-qBpdeIa4V5hfVbkwa+5gHszSwqXJej0k0BdVImTdwt8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-0aOwRdfCTiQHmWzOk+ExLX+/EAryxheyILe7L7oyd4w=";
+    hash = "sha256-H8UnrCZx9yjKn7YxRqv+uJ73fw/ngPFI6zdayUizo1k=";
   };
 
   hcl2json-go-modules =
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     go
     makeWrapper
-    nodejs_20
+    nodejs
     patchelf
     removeReferencesTo
     yarn
@@ -129,7 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib/node_modules/cdktn-cli"
     cp -rL node_modules packages/cdktn-cli/bundle packages/cdktn-cli/package.json "$out/lib/node_modules/cdktn-cli/"
 
-    makeWrapper "${lib.getExe nodejs_20}" "$out/bin/cdktn" \
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/cdktn" \
+      --add-flags "--no-warnings=DEP0040" \
       --add-flags "$out/lib/node_modules/cdktn-cli/bundle/bin/cdktn.js"
 
     runHook postInstall
@@ -150,7 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
   # even with writableTmpDirAsHomeHook and CHECKPOINT_DISABLE=1
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # Skip pre-releases
+    extraArgs = [
+      "--version-regex"
+      "^v([\\d.]+)$"
+    ];
+  };
 
   meta = {
     description = "CDK for Terraform CLI";

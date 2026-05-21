@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sus-compiler";
-  version = "0.3.8";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4qtbK2zjbopoBmPIsaz5IZvvBwXdKupGDtcO5lw+Ivc=";
+    hash = "sha256-gU0PiMZNMYmroNQXD0LGutsr9aYPNI2BGeKB+9Brhqg=";
     fetchSubmodules = true;
     leaveDotGit = true;
 
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/sus_compiler";
 
-  updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
     description = "New Hardware Design Language that keeps you in the driver's seat";

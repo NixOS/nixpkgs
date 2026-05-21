@@ -20,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-Hoaldm55E0HC3qqqBS5uZvlgcWepnVLyJNQMB2P/t9Q=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     libgcrypt # provides libgcrypt.m4

@@ -1,35 +1,63 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
+  gitMinimal,
+  yarn-berry_4,
+  nodejs,
+  npmHooks,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "advanced-camera-card";
-  version = "7.27.3";
+  version = "7.27.4";
 
-  src = fetchzip {
-    url = "https://github.com/dermotduffy/advanced-camera-card/releases/download/v${version}/advanced-camera-card.zip";
-    hash = "sha256-1O0li7OIG0AtNmj2fTuQ8HXWvL0ocx7jCsTKdaUOBcI=";
+  src = fetchFromGitHub {
+    owner = "dermotduffy";
+    repo = "advanced-camera-card";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GHSyDdKGgPPMbcPIqlQbRA0V8gPd1YsId8gqPF0VgTs=";
+    leaveDotGit = true; # gitInfo plugin
   };
 
-  # TODO: build from source once yarn berry support lands in nixpkgs
-  dontBuild = true;
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/dermotduffy/advanced-camera-card/blob/main/package.json#L201
+    ./yarn-4.14-support.patch
+  ];
+
+  missingHashes = ./missing-hashes.json;
+
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    name = "${finalAttrs.pname}-yarn-deps";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-4fdSeSxSjd8EjPmu7U3ftxB+OJJc2uuvM3Umr5iY/a8=";
+  };
+
+  nativeBuildInputs = [
+    gitMinimal
+    nodejs
+    npmHooks.npmBuildHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
+  ];
+
+  npmBuildScript = "build";
 
   installPhase = ''
     runHook preInstall
 
-    install -d $out
-    install -m0644 *.js $out/
+    mkdir $out
+    cp -rv dist/* $out/
 
     runHook postInstall
   '';
 
   meta = {
-    changelog = "https://github.com/dermotduffy/advanced-camera-card/releases/tag/v${version}";
+    changelog = "https://github.com/dermotduffy/advanced-camera-card/releases/tag/${finalAttrs.src.tag}";
     description = "Comprehensive camera card for Home Assistant";
     homepage = "https://github.com/dermotduffy/advanced-camera-card";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

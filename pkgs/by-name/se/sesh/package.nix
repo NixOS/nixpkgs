@@ -4,25 +4,35 @@
   buildGoModule,
   go-mockery,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "sesh";
-  version = "2.20.0";
+  version = "2.26.2";
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     go-mockery
+    writableTmpDirAsHomeHook
   ];
+
   src = fetchFromGitHub {
     owner = "joshmedeski";
     repo = "sesh";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-YfgxXM8FPRAUk4jxUnQNNB8hMjiB5ZCRY2/S+OgzECs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zx3PvPBV+IP61i+eJOmuC+ck9sOFsZZ9jj1fD3p4ccI=";
+  };
+
+  # NOTE: prevent crash when getting vendor deps/hash
+  overrideModAttrs = _: {
+    preBuild = "";
   };
 
   preBuild = ''
     mockery
   '';
-  vendorHash = "sha256-GEWtbhZhgussFzfg1wNEU0Gr5zhXmwlsgH6d1cXOwvc=";
+
+  vendorHash = "sha256-9IiDp/HaxXQAyNzuVBLiO+oIijBbdKBjssCmj8WV9V4=";
 
   ldflags = [
     "-s"

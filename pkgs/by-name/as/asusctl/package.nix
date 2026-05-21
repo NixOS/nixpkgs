@@ -18,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.3.3";
+  version = "6.3.7";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     tag = finalAttrs.version;
-    hash = "sha256-nc6pGxLutxKyd4LiI23e7UfWK45aQiLQRKL6zX7rVO0=";
+    hash = "sha256-jBO9AzQt4T4VU8aMcC9ALI7xBesAZC4beEyZ4+0cPPU=";
   };
 
-  cargoHash = "sha256-LZsSnIGTemu+SvJxszPWkA5EIdu8XzruZXaYIibV31Q=";
+  cargoHash = "sha256-f/rD2zEvGwyyBFSih7G9vdwFepehYS1u38vBlKGZBFM=";
 
   postPatch = ''
     files="
@@ -50,10 +50,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
 
+    substituteInPlace data/asus-shutdown.service \
+      --replace-fail /usr/bin/asus-shutdown $out/bin/asus-shutdown
+
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
 
-    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/sg-0.4.0/build.rs \
+    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/source-*/sg-*/build.rs \
       --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 

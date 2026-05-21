@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.2.20";
+  version = "2026.5.12";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vZzfXsnOw0HIuPfQIfVxCKcl5EQd+zARO/IqzGtNMDk=";
+    hash = "sha256-X4Q7bwRroP8+2GLBfHFy8ru6y2UwBw3CaH43mym0O74=";
   };
 
-  cargoHash = "sha256-dWCDYcIkkopg7SMqAHjKoj0Wp4P47T7IdnXu9BriY00=";
+  cargoHash = "sha256-WFNy0/lP2wEuMRt21HpJZUMDJd6dPNKDY7Pqjx6AXxU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
     cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
     rustPlatform.bindgenHook
   ];
 

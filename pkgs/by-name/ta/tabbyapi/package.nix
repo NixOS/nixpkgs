@@ -99,7 +99,10 @@ python3Packages.buildPythonApplication {
       --add-flags "$out/${python3Packages.python.sitePackages}/main.py"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    cudaSupport = python3Packages.torch.cudaSupport;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Official API server for Exllama";

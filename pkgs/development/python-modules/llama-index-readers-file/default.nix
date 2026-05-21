@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-file";
-  version = "0.5.6";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_file";
     inherit version;
-    hash = "sha256-HAixT6zC3+kzYiqqJtx9KnpgI8QtPbiWoslIeJ7a8eo=";
+    hash = "sha256-/zZtb/XstxGSdayFkxDYtnLYtrMmGvrgL0CE/OkHa9A=";
   };
 
   pythonRelaxDeps = [

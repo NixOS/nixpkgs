@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dpm644 resources/icon.png $out/share/icons/hicolor/1024x1024/apps/thorium-reader.png
+    install -Dpm644 resources/icon.png $out/share/icons/thorium-reader.png
 
     cp -r dist/* $out/lib/node_modules/EDRLab.ThoriumReader/
 

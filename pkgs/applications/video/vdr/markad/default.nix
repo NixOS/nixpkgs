@@ -7,12 +7,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-markad";
-  version = "4.2.17";
+  version = "4.2.19";
 
   src = fetchFromGitHub {
     repo = "vdr-plugin-markad";
     owner = "kfb77";
-    hash = "sha256-27Axgh8brG0Apq06gry7uN95GtJ74FC1RNYVcqTUbE0=";
+    hash = "sha256-ecCWf/BKUe/L5Wrj9xKMRt+zVcmdCdYQw3s4Jwi4510=";
     tag = "V${version}";
   };
 

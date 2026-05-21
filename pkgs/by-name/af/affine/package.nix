@@ -46,13 +46,19 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.26.4";
+  version = "0.26.6";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5tOAkKTpdkN1UDztmy4Dt9kpRrWYVLolnXRwHmfXpLo=";
+    hash = "sha256-aJeW8I7hx9VN5AU6gVq18cKO0QuKtc7JGUDbVsSXXE4=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/toeverything/AFFiNE/blob/canary/package.json#L96
+    ./yarn-4.14-support.patch
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
@@ -62,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   # keep yarnOfflineCache same output style with offlineCache = yarn-berry.fetchYarnBerryDeps { inherit (finalAttrs) src missingHashes; hash = "" };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src patches;
     nativeBuildInputs = [
       yarn-berry
       cacert
@@ -106,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-nNPttQJBYJ3eyjR/INoC0MW5e3WcUkDpLdQ0W10+qj0=";
+    outputHash = "sha256-mNvvKbj9mUioh5Jw4CcRt0CpX1IcQC8JOxUnyy0Lw9c=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [

@@ -8,7 +8,6 @@
 let
   inherit (lib)
     getExe
-    mkDefault
     mkEnableOption
     mkIf
     mkOption

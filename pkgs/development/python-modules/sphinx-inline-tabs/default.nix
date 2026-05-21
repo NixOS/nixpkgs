@@ -6,7 +6,7 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-inline-tabs";
   version = "2025.12.21.14";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-inline-tabs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aHsTdCVu/e9uaM4ayOfY3IBjjivZwDiHoWA0W2vyvNA=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

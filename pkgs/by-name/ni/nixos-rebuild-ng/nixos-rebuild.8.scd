@@ -28,11 +28,12 @@ _nixos-rebuild_ \[--verbose] [--quiet] [--max-jobs MAX_JOBS] [--cores CORES] [--
 # DESCRIPTION
 
 This command updates the system so that it corresponds to the configuration
-specified in /etc/nixos/configuration.nix, /etc/nixos/flake.nix or the file and
-attribute specified by the *--file* and/or *--attr* options. Thus, every
+specified in /etc/nixos/configuration.nix, /etc/nixos/flake.nix,
+/etc/nixos/system.nix or the file and attribute specified by the *--file*,
+*--attr* or *--flake* options. Thus, every
 time you modify the configuration or any other NixOS module, you must run
 *nixos-rebuild* to make the changes take effect. It builds the new system in
-/nix/store, runs its activation script, and stop and (re)starts any system
+/nix/store, runs its activation script, stops and (re)starts any system
 services if needed. Please note that user services need to be started manually
 as they aren't detected by the activation script at the moment.
 
@@ -281,20 +282,21 @@ It must be one of the following:
 	Implies *--sudo*.
 
 *--file* _path_, *-f* _path_
-	Enable and build the NixOS system from the specified file. The file must
+	Build the NixOS system from the specified file. The file must
 	evaluate to an attribute set, and it must contain a valid NixOS
 	configuration at attribute _attrPath_. This is useful for building a
 	NixOS system from a nix file that is not a flake or a NixOS
 	configuration module. Attribute set a with valid NixOS configuration can
 	be made using _nixos_ function in nixpkgs or importing and calling
 	nixos/lib/eval-config.nix from nixpkgs. If specified without *--attr*
-	option, builds the configuration from the top-level attribute of the
+	option, builds the configuration from the top-level attribute set of the
 	file.
 
 *--attr* _attrPath_, *-A* _attrPath_
-	Enable and build the NixOS system from nix file and use the specified
-	attribute path from file specified by the *--file* option. If specified
-	without *--file* option, uses _default.nix_ in current directory.
+	Build the NixOS system from a nix file and use the specified
+	attribute path from the file specified by the *--file* option.
+	If specified without *--file* option, uses _system.nix_ in current directory,
+	the system-wide _<nixos-system>_ file, or finally, /etc/nixos/system.nix.
 
 *--flake* _flake-uri[#name]_, *-F* _flake-uri[#name]_
 	Build the NixOS system from the specified flake. It defaults to the
@@ -354,6 +356,11 @@ NIX_SUDOOPTS
 	Additional options to be passed to sudo on the command line.
 
 # FILES
+
+/etc/nixos/system.nix
+	If this file exists, then *nixos-rebuild* will use it as if the
+	*--file* option was given. This allows to build a self-contained
+	system configuration, without requiring ‘nixos’ channel.
 
 /etc/nixos/flake.nix
 	If this file exists, then *nixos-rebuild* will use it as if the

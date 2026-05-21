@@ -92,7 +92,7 @@ rustPlatform.buildRustPackage {
     description = "Customizable, modern file manager";
     homepage = "https://xplorer.space";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "xplorer";
   };
 }

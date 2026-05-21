@@ -5,6 +5,7 @@
   makeWrapper,
   darwin,
   fetchFromGitHub,
+  substitute,
   coreutils,
   unixtools,
   util-linux,
@@ -60,6 +61,18 @@ buildGoModule (finalAttrs: {
     # They used constants from another package that I couldn't figure
     # out how to resolve, so hardcoded the constants.
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
+
+    # They run a tool on the build platform in a way that isn't quite
+    # compatible with cross (`go run`). Simplest thing is to just make
+    # the file with a hardcoded value, as we already have it from attrs.
+    (substitute {
+      src = ./0001-makefile-don-t-use-tool-to-generate-version-file.patch;
+      substitutions = [
+        "--subst-var-by"
+        "VERSION"
+        finalAttrs.version
+      ];
+    })
   ];
 
   nativeBuildInputs = [

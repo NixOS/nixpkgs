@@ -83,6 +83,15 @@ in
       {
         environment.systemPackages = [ cfg.package ];
 
+        # Hyprland needs permissions to give itself SCHED_RR on startup:
+        # https://github.com/hyprwm/Hyprland/blob/main/src/init/initHelpers.cpp
+        security.wrappers.Hyprland = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_sys_nice+ep";
+          source = lib.getExe cfg.package;
+        };
+
         xdg.portal = {
           enable = true;
           extraPortals = [ cfg.portalPackage ];
@@ -130,5 +139,5 @@ in
     ] "Nvidia patches are no longer needed")
   ];
 
-  meta.maintainers = lib.teams.hyprland.members;
+  meta.teams = [ lib.teams.hyprland ];
 }

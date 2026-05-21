@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "ungit";
-  version = "1.5.28";
+  version = "1.5.30";
 
   src = fetchFromGitHub {
     owner = "FredrikNoren";
     repo = "ungit";
     rev = "v${version}";
-    hash = "sha256-zLc+qzbbaQs6Y3NJFHupxyZ0QfuM/VW97dFESR+5dVQ=";
+    hash = "sha256-P1B+MuiqJ621My1teYMDUD7hID2BsHchb24DIsXB9gU=";
   };
 
-  npmDepsHash = "sha256-pYOBdCb6G24JBGWOhd4fyVEEUn19D9t/GxjjIi/2ya0=";
+  npmDepsHash = "sha256-cybFoGLZYmcVg1nQ4s8CqhVDpA4zR74B+qwM0fpuIsI=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;

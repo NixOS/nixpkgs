@@ -7,7 +7,7 @@
   pkg-config,
   vapoursynth,
   ffmpeg,
-  xxHash,
+  xxhash,
   gitUpdater,
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     vapoursynth
     (ffmpeg.override { withLcms2 = true; })
-    xxHash
+    xxhash
   ];
 
   postPatch = ''

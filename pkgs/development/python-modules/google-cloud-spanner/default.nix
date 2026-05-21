@@ -46,6 +46,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     deprecated
     google-api-core

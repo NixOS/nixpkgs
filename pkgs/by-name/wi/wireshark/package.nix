@@ -52,6 +52,7 @@
   withQt ? true,
   qt6,
   libpcap' ? libpcap.override { withBluez = stdenv.hostPlatform.isLinux; },
+  withExtras ? stdenv.hostPlatform.isLinux,
 }:
 let
   isAppBundle = withQt && stdenv.hostPlatform.isDarwin;
@@ -59,7 +60,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.6.4";
+  version = "4.6.5";
 
   outputs = [
     "out"
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wireshark";
     owner = "wireshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h254dXxloBC5xQYcpeaLlAj2Ip4eQWHYSPPJLkIwQZw=";
+    hash = "sha256-Zvrwxjp4LK2J3QnxmPxKKrU01YHQvPyp54UWzeGNCjA=";
   };
 
   patches = [
@@ -185,6 +186,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     cmake --install . --prefix "''${!outputDev}" --component Development
   ''
+  + lib.optionalString withExtras ''
+    ln -s $out/libexec/wireshark/extcap/* -t $out/bin/
+  ''
   + lib.optionalString isAppBundle ''
     mkdir -p $out/Applications
     mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
@@ -226,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
       experts. It runs on UNIX, macOS and Windows.
     '';
     homepage = "https://www.wireshark.org";
-    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${finalAttrs.src.tag}.html";
+    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${finalAttrs.version}.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [

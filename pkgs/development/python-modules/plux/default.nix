@@ -34,6 +34,13 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  disabledTests = [
+    # Fails with pytest >= 9 which uses PEP 639 License-Expression metadata
+    # instead of legacy License field. Upstream pins pytest==8.4.1 in CI.
+    # https://github.com/localstack/plux/pull/46
+    "test_resolve_distribution_information"
+  ];
+
   pythonImportsCheck = [ "plugin.core" ];
 
   meta = {

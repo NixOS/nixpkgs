@@ -40,12 +40,13 @@
       allowAliases = false;
       allowUnfree = false;
       inHydra = true;
+      recursionMode = "hydra";
       # Exceptional unsafe packages that we still build and distribute,
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_7-1.7.4"
-        "kanidmWithSecretProvisioning_1_7-1.7.4"
+        "kanidm_1_8-1.8.6"
+        "kanidmWithSecretProvisioning_1_8-1.8.6"
       ];
     };
 
@@ -85,7 +86,6 @@ let
     id
     isDerivation
     optionals
-    recursiveUpdate
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;

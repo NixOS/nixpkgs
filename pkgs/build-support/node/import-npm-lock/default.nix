@@ -12,6 +12,7 @@ let
     match
     elemAt
     toJSON
+    toFile
     removeAttrs
     ;
   inherit (lib) importJSON mapAttrs;
@@ -52,9 +53,17 @@ let
                 // fetcherOpts
               ))
             else if lib.hasPrefix "git" module.resolved then
+              let
+                url = elemAt mUrl 1;
+                urlParts = lib.splitString "#" url;
+                commit = if builtins.length urlParts == 2 then elemAt urlParts 1 else null;
+              in
               (fetchGit (
                 {
-                  url = module.resolved;
+                  url = "${scheme}://${elemAt urlParts 0}";
+                }
+                // lib.optionalAttrs (commit != null) {
+                  rev = commit;
                 }
                 // fetcherOpts
               ))
@@ -157,18 +166,15 @@ lib.fix (self: {
       {
         inherit pname version;
 
-        passAsFile = [
-          "package"
-          "packageLock"
-        ];
-
         package = toJSON packageJSON';
         packageLock = toJSON packageLock';
+
+        __structuredAttrs = true;
       }
       ''
         mkdir $out
-        cp "$packagePath" $out/package.json
-        cp "$packageLockPath" $out/package-lock.json
+        printf "%s" "$package" > $out/package.json
+        printf "%s" "$packageLock" > $out/package-lock.json
       '';
 
   # Build node modules from package.json & package-lock.json
@@ -180,6 +186,11 @@ lib.fix (self: {
       nodejs,
       derivationArgs ? { },
     }:
+    let
+      # Backwards compatibility: if derivationArgs contains passAsFile,
+      # we can't force structuredAttrs here yet.
+      __structuredAttrs = !(derivationArgs ? passAsFile);
+    in
     stdenv.mkDerivation (
       {
         pname = derivationArgs.pname or "${getName package}-node-modules";
@@ -213,17 +224,29 @@ lib.fix (self: {
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
         ++ derivationArgs.nativeBuildInputs or [ ];
 
+        postPatch =
+          (
+            if __structuredAttrs then
+              ''
+                printf "%s" "$package" > package.json
+                printf "%s" "$packageLock" > package-lock.json
+              ''
+            else
+              ''
+                cp --no-preserve=mode "$packagePath" package.json
+                cp --no-preserve=mode "$packageLockPath" package-lock.json
+              ''
+          )
+          + derivationArgs.postPatch or "";
+
+        inherit __structuredAttrs;
+      }
+      // lib.optionalAttrs (!__structuredAttrs) {
         passAsFile = [
           "package"
           "packageLock"
         ]
-        ++ derivationArgs.passAsFile or [ ];
-
-        postPatch = ''
-          cp --no-preserve=mode "$packagePath" package.json
-          cp --no-preserve=mode "$packageLockPath" package-lock.json
-        ''
-        + derivationArgs.postPatch or "";
+        ++ derivationArgs.passAsFile;
       }
     );
 

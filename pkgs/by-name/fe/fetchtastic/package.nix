@@ -1,19 +1,20 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fetchtastic";
-  version = "0.10.2";
+  version = "0.10.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeremiah-k";
     repo = "fetchtastic";
     tag = finalAttrs.version;
-    hash = "sha256-E8f0je4w4sTmf/EX9I8dZ4Ge4bsEvr8E6S5i02n5k+E=";
+    hash = "sha256-eFDj3qv3cYt/7tf+v93QwqoVLEEfpt21g4l0MrLTaLc=";
   };
 
   pythonRelaxDeps = [ "platformdirs" ];
@@ -21,6 +22,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
+    aiofiles
+    aiohttp
     packaging
     pick
     platformdirs
@@ -31,12 +34,19 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "fetchtastic" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_download_firmware_success"
+    "test_get_target_path_for_release"
+    "test_platform_functions"
+  ];
 
   meta = {
     description = "Utility for downloading and managing the latest Meshtastic firmware releases";

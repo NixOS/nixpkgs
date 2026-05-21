@@ -8,7 +8,7 @@
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.4.10";
+  version = "6.5.2";
 
   sources = {
     "aarch64-linux" = fetchurl {
@@ -17,7 +17,7 @@ let
     };
     "x86_64-linux" = fetchurl {
       url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-      hash = "sha256-HueMU1cCOspIsDg4hC9ebMbIvkOtZGiSktB1VSMGgT8=";
+      hash = "sha256-caRL09PKJ33XHRReZ5qSpfgKH0wpJxGSHXfA83sz5UE=";
     };
   };
 
@@ -32,6 +32,8 @@ let
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  extraPkgs = pkgs: [ pkgs.libnotify ];
 
   extraBwrapArgs = [
     "--setenv _JAVA_AWT_WM_NONREPARENTING 1"

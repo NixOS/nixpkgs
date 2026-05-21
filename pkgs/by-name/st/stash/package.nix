@@ -131,7 +131,6 @@ buildGoModule (
       homepage = "https://stashapp.cc/";
       changelog = "https://github.com/stashapp/stash/blob/v${finalAttrs.version}/ui/v2.5/src/docs/en/Changelog/v${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}0.md";
       maintainers = with lib.maintainers; [
-        Golo300
         DrakeTDL
       ];
       platforms = [

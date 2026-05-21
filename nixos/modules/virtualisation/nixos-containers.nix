@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }@host:
 
@@ -55,8 +56,13 @@ let
       # Initialise the container side of the veth pair.
       if [[ -n "''${HOST_ADDRESS-}" ]]   || [[ -n "''${HOST_ADDRESS6-}" ]]  ||
          [[ -n "''${LOCAL_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
-         [[ -n "''${HOST_BRIDGE-}" ]]; then
+         [[ -n "''${HOST_BRIDGE-}" ]]    || [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
         ip link set host0 name eth0
+
+        if [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
+          ip link set dev eth0 address "$LOCAL_MAC_ADDRESS"
+        fi
+
         ip link set dev eth0 up
 
         if [[ -n "''${LOCAL_ADDRESS-}" ]]; then
@@ -139,7 +145,8 @@ let
     fi
 
     if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
-       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
+       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
+       [[ -n "''${LOCAL_MAC_ADDRESS-}" ]]; then
       extraFlags+=("--network-veth")
     fi
 
@@ -206,6 +213,7 @@ let
       --setenv LOCAL_ADDRESS="''${LOCAL_ADDRESS-}" \
       --setenv HOST_ADDRESS6="''${HOST_ADDRESS6-}" \
       --setenv LOCAL_ADDRESS6="''${LOCAL_ADDRESS6-}" \
+      --setenv LOCAL_MAC_ADDRESS="''${LOCAL_MAC_ADDRESS-}" \
       --setenv HOST_PORT="''${HOST_PORT-}" \
       --setenv PATH="$PATH" \
       ${optionalString cfg.ephemeral "--ephemeral"} \
@@ -488,6 +496,18 @@ let
       '';
     };
 
+    localMacAddress = mkOption {
+      type = types.nullOr (lib.types.strMatching "([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}");
+      default = null;
+      example = "de:b7:73:01:10:90";
+      description = ''
+        The MAC address assigned to the interface in the container. This address
+        is assigned early during container boot, and can thus be reliably used
+        for setups like IPv6 SLAAC with router advertisements. If this option is
+        not specified, the veth devices gets assigned a random,
+        locally-administered unicast MAC address.
+      '';
+    };
   };
 
   dummyConfig = {
@@ -500,6 +520,7 @@ let
     hostAddress6 = null;
     localAddress = null;
     localAddress6 = null;
+    localmacAddress = null;
     tmpfs = null;
   };
 
@@ -564,7 +585,6 @@ in
                           extraConfig =
                             { options, ... }:
                             {
-                              _file = "module at ${__curPos.file}:${toString __curPos.line}";
                               config = {
                                 nixpkgs =
                                   if options.nixpkgs ? hostPlatform then
@@ -1053,8 +1073,14 @@ in
                 }
                 // (optionalAttrs containerConfig.autoStart {
                   wantedBy = [ "machines.target" ];
-                  wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
-                  after = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
+                  wants = [
+                    "network.target"
+                  ]
+                  ++ (map (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device") cfg.interfaces);
+                  after = [
+                    "network.target"
+                  ]
+                  ++ (map (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device") cfg.interfaces);
                   restartTriggers = [
                     containerConfig.path
                     config.environment.etc."${configurationDirectoryName}/${name}.conf".source
@@ -1108,6 +1134,9 @@ in
                   ''}
                   ${optionalString (cfg.localAddress6 != null) ''
                     LOCAL_ADDRESS6=${cfg.localAddress6}
+                  ''}
+                  ${optionalString (cfg.localMacAddress != null) ''
+                    LOCAL_MAC_ADDRESS=${cfg.localMacAddress}
                   ''}
                 ''}
                 ${optionalString (cfg.networkNamespace != null) ''

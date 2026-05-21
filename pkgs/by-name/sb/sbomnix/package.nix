@@ -4,31 +4,21 @@
   git,
   grype,
   nix,
+  nixVersions,
   nix-visualize,
   python3,
   vulnix,
 }:
-
-let
-  python = python3.override {
-    self = python3;
-    packageOverrides = self: super: {
-      pyrate-limiter = super.pyrate-limiter_2;
-    };
-  };
-
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sbomnix";
-  version = "1.7.4";
+  version = "1.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
-    tag = "v${version}";
-    hash = "sha256-s7mmtbELRcl/7ab5A3fU7f8m4rIm+mBLmXMeYHa7/n4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LApJvPeyViGJiJPLu7dFBU79SbMKieLVFKbDtFHo7f4=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''
@@ -41,8 +31,10 @@ python.pkgs.buildPythonApplication rec {
     "--prefix PATH : ${
       lib.makeBinPath [
         git
-        nix
-        python.pkgs.graphviz
+        # nix
+        # TODO: remove once sbomnix support new JSON format: https://github.com/tiiuae/sbomnix/issues/267
+        nixVersions.nix_2_31
+        python3.pkgs.graphviz
         nix-visualize
         vulnix
         grype
@@ -50,9 +42,9 @@ python.pkgs.buildPythonApplication rec {
     }"
   ];
 
-  build-system = [ python.pkgs.setuptools ];
+  build-system = [ python3.pkgs.setuptools ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     colorlog
     dfdiskcache
@@ -89,4 +81,4 @@ python.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "sbomnix";
   };
-}
+})

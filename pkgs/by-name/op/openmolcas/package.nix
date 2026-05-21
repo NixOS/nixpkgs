@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+DU651GiGZRHdkLuGLCPU/95uOhG+kENCTi1T+8Hz1g=";
+    hash = "sha256-FzO1fvMw+/r6SKiaODlhkmKlbzQ9TXLYXk+xpz/fs2I=";
   };
 
   patches = [

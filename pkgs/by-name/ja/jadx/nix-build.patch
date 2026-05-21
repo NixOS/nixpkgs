@@ -1,8 +1,8 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 7e4d28a9..0fe94ff6 100644
+index df96f46c..f1f422f2 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -115,46 +115,11 @@ fun isNonStable(version: String): Boolean {
+@@ -126,42 +126,11 @@ fun isNonStable(version: String): Boolean {
  	destinationDirectory.set(layout.buildDirectory)
  }
  
@@ -10,9 +10,7 @@ index 7e4d28a9..0fe94ff6 100644
 -	group = "jadx"
 -	description = "Build Windows bundle"
 -
--	val guiTask = tasks.getByPath("jadx-gui:copyDistWin")
--	dependsOn(guiTask)
--	from(guiTask.outputs)
+-	from(distWinConfiguration)
 -
 -	destinationDirectory.set(layout.buildDirectory.dir("distWin"))
 -	archiveFileName.set("jadx-gui-$jadxVersion-win.zip")
@@ -22,9 +20,7 @@ index 7e4d28a9..0fe94ff6 100644
 -val distWinWithJre by tasks.registering(Zip::class) {
 -	description = "Build Windows with JRE bundle"
 -
--	val guiTask = tasks.getByPath(":jadx-gui:copyDistWinWithJre")
--	dependsOn(guiTask)
--	from(guiTask.outputs)
+-	from(distWinWithJreConfiguration)
 -
 -	destinationDirectory.set(layout.buildDirectory.dir("distWinWithJre"))
 -	archiveFileName.set("jadx-gui-$jadxVersion-with-jre-win.zip")
@@ -50,20 +46,20 @@ index 7e4d28a9..0fe94ff6 100644
  
  val cleanBuildDir by tasks.registering(Delete::class) {
 diff --git a/buildSrc/build.gradle.kts b/buildSrc/build.gradle.kts
-index ff9e7e36..7a63af40 100644
+index ed67e57a..99aa9eb4 100644
 --- a/buildSrc/build.gradle.kts
 +++ b/buildSrc/build.gradle.kts
 @@ -4,8 +4,6 @@
  
  dependencies {
- 	implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0")
+ 	implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.10")
 -
 -	implementation("org.openrewrite:plugin:6.19.1")
  }
  
  repositories {
 diff --git a/buildSrc/src/main/kotlin/jadx-java.gradle.kts b/buildSrc/src/main/kotlin/jadx-java.gradle.kts
-index ad65de18..ecb53db1 100644
+index 0f60d301..5e577155 100644
 --- a/buildSrc/src/main/kotlin/jadx-java.gradle.kts
 +++ b/buildSrc/src/main/kotlin/jadx-java.gradle.kts
 @@ -3,8 +3,6 @@
@@ -77,7 +73,7 @@ index ad65de18..ecb53db1 100644
  val jadxVersion: String by rootProject.extra
 diff --git a/buildSrc/src/main/kotlin/jadx-rewrite.gradle.kts b/buildSrc/src/main/kotlin/jadx-rewrite.gradle.kts
 deleted file mode 100644
-index aab46d55..00000000
+index ceca3fe5..00000000
 --- a/buildSrc/src/main/kotlin/jadx-rewrite.gradle.kts
 +++ /dev/null
 @@ -1,35 +0,0 @@
@@ -90,10 +86,10 @@ index aab46d55..00000000
 -}
 -
 -dependencies {
--	rewrite("org.openrewrite.recipe:rewrite-testing-frameworks:3.13.0")
--	rewrite("org.openrewrite.recipe:rewrite-logging-frameworks:3.11.0")
--	rewrite("org.openrewrite.recipe:rewrite-migrate-java:3.13.0")
--	rewrite("org.openrewrite.recipe:rewrite-static-analysis:2.12.0")
+-	rewrite("org.openrewrite.recipe:rewrite-testing-frameworks:3.24.0")
+-	rewrite("org.openrewrite.recipe:rewrite-logging-frameworks:3.20.0")
+-	rewrite("org.openrewrite.recipe:rewrite-migrate-java:3.24.0")
+-	rewrite("org.openrewrite.recipe:rewrite-static-analysis:2.24.0")
 -}
 -
 -tasks {
@@ -117,18 +113,18 @@ index aab46d55..00000000
 -	}
 -}
 diff --git a/jadx-gui/build.gradle.kts b/jadx-gui/build.gradle.kts
-index b9d64ae7..4c1c23f8 100644
+index 2677881f..4cec0884 100644
 --- a/jadx-gui/build.gradle.kts
 +++ b/jadx-gui/build.gradle.kts
-@@ -2,7 +2,6 @@
- 	id("jadx-kotlin")
+@@ -3,7 +3,6 @@
  	id("application")
  	id("jadx-library")
--	id("edu.sc.seis.launch4j") version "3.0.6"
  	id("com.gradleup.shadow") version "8.3.8"
- 	id("org.beryx.runtime") version "1.13.1"
+-	id("edu.sc.seis.launch4j") version "4.0.0"
+ 	id("org.beryx.runtime") version "2.0.1"
  }
-@@ -136,36 +135,6 @@
+ 
+@@ -129,36 +128,6 @@
  	}
  }
  
@@ -165,7 +161,7 @@ index b9d64ae7..4c1c23f8 100644
  runtime {
  	addOptions("--strip-debug", "--compress", "zip-9", "--no-header-files", "--no-man-pages")
  	addModules(
-@@ -186,48 +155,6 @@ fun escapeJVMOptions(): List<String> {
+@@ -179,48 +148,6 @@ fun escapeJVMOptions(): List<String> {
  	}
  }
  
@@ -211,6 +207,17 @@ index b9d64ae7..4c1c23f8 100644
 -	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 -}
 -
+ /**
+  * Register and expose distribution artifacts to use in top level packaging tasks
+  */
+@@ -230,10 +157,6 @@ fun escapeJVMOptions(): List<String> {
+ val distWinWithJreConfiguration by configurations.creating {
+ 	isCanBeResolved = false
+ }
+-artifacts {
+-	add(distWinConfiguration.name, copyDistWin)
+-	add(distWinWithJreConfiguration.name, copyDistWinWithJre)
+-}
+ 
  val syncNLSLines by tasks.registering(JavaExec::class) {
  	group = "jadx-dev"
- 	description = "Utility task to sync new/missing translation using EN as a reference"

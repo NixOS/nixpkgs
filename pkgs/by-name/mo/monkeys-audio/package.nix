@@ -6,19 +6,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "12.36";
+  version = "12.93";
   pname = "monkeys-audio";
 
   src = fetchzip {
     url = "https://monkeysaudio.com/files/MAC_${builtins.concatStringsSep "" (lib.strings.splitString "." finalAttrs.version)}_SDK.zip";
-    hash = "sha256-gat/VUvmfvYAux0cHN/I7LsLBrp1F04imNGMp0JzRto=";
+    hash = "sha256-T5Bt4g3xmxYb1YQyZ1/VnlJgk6JCPe8SiBT016dGPCA=";
     stripRoot = false;
   };
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Otherwise, >> related build errors are encountered
-    "-std=c++11"
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -26,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "APE codec and decompressor";
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ windows ++ darwin;
     mainProgram = "mac";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];

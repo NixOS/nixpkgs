@@ -25,6 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [
     "mlkit"
     "mlkit_libs"
+    "smltojs"
+    "smltojs_basislibs"
+  ];
+
+  installTargets = [
+    "install"
+    "install_smltojs"
   ];
 
   doCheck = true;

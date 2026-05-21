@@ -16,7 +16,6 @@
   pythran,
   pkg-config,
   setuptools,
-  xcbuild,
 
   # buildInputs
   # Upstream has support for using Darwin's Accelerate package. However this
@@ -45,14 +44,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scipy";
-  version = "1.17.0";
+  version = "1.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bDcM/RGfce/ZTYpTBNpKmX/7rXDqQs7rYkAmeXtzkZk=";
+    hash = "sha256-lFmqdbCf7pcosdZ7RFMv+8H9+ztMJbDS5g5fQs8Nws8=";
     fetchSubmodules = true;
   };
 
@@ -78,6 +77,12 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "numpy>=2.0.0,<2.7" numpy
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace scipy/meson.build \
+      --replace-fail "r = run_command('xcrun', '-sdk', 'macosx', '--show-sdk-version', check: true)" ""
+    substituteInPlace scipy/meson.build \
+      --replace-fail "sdkVersion = r.stdout().strip()" "sdkVersion = '${stdenv.hostPlatform.darwinSdkVersion}'"
   '';
 
   build-system = [
@@ -88,13 +93,6 @@ buildPythonPackage (finalAttrs: {
     pythran
     pkg-config
     setuptools
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Minimal version required according to:
-    # https://github.com/scipy/scipy/blob/v1.16.0/scipy/meson.build#L238-L244
-    (xcbuild.override {
-      sdkVer = "13.3";
-    })
   ];
 
   buildInputs = [

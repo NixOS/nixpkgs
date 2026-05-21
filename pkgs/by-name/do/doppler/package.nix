@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "doppler";
-  version = "3.75.3";
+  version = "3.76.0";
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
     rev = finalAttrs.version;
-    hash = "sha256-4OvU0Hy2uBjeyQibODi9WqdM0adUW2vTS9SCL+O2RFA=";
+    hash = "sha256-CmNSn4WRWMP07qC5APw8PTouCUOHJrz1ZYqpKhdiIDM=";
   };
 
   vendorHash = "sha256-u6SB3SXCqu7Y2aUoTAJ01mtDCxMofVQLAde1jDxVvks=";

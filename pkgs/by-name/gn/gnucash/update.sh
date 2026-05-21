@@ -19,6 +19,6 @@ src_doc_hash=$(nix-prefetch-github Gnucash gnucash-docs --rev "$latest_version" 
 src_doc_hash=$(nix-hash --to-sri --type sha256 "$src_doc_hash")
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
-sed -i default.nix -e "s|$old_src_hash|$src_hash|"
-sed -i default.nix -e "s|$old_src_doc_hash|$src_doc_hash|"
-sed -i default.nix -e "/ version =/s|\"${UPDATE_NIX_OLD_VERSION}\"|\"${latest_version}\"|"
+sed -i package.nix -e "s|$old_src_hash|$src_hash|"
+sed -i package.nix -e "s|$old_src_doc_hash|$src_doc_hash|"
+sed -i package.nix -e "/ version =/s|\"${UPDATE_NIX_OLD_VERSION}\"|\"${latest_version}\"|"

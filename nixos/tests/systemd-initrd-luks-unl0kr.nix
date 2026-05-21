@@ -14,6 +14,7 @@ in
   name = "systemd-initrd-luks-unl0kr";
   meta = {
     maintainers = [ ];
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
   };
 
   # TODO: Fix OCR: #302965
@@ -74,7 +75,10 @@ in
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
         virtualisation.fileSystems."/".autoFormat = true;
         # test mounting device unlocked in initrd after switching root
-        virtualisation.fileSystems."/cryptroot2".device = "/dev/mapper/cryptroot2";
+        virtualisation.fileSystems."/cryptroot2" = {
+          device = "/dev/mapper/cryptroot2";
+          fsType = "auto";
+        };
       };
     };
 

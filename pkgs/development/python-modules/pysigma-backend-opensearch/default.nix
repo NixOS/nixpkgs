@@ -7,16 +7,16 @@
   pysigma-backend-elasticsearch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-opensearch";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
-    tag = "v${version}";
-    hash = "sha256-lYTaE4ar7VjyA/tnjiXQJtjHPP9bCjdYuPHYjbZEuxY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CCIQQeR/WXFV8A1elLxc4o32oox5wsOupI1XVjwFrUs=";
   };
 
   pythonRelaxDeps = [ "pysigma" ];
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support OpenSearch for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-opensearch";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-opensearch/releases/tag/${src.tag}";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-opensearch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

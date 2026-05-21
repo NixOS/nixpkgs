@@ -4,6 +4,7 @@
   fetchNpmDeps,
   buildPackages,
   nodejs,
+  nodejs-slim,
   cctools,
 }@topLevelArgs:
 
@@ -101,7 +102,7 @@ lib.extendMkDerivation {
           (if npmConfigHook != null then npmConfigHook else npmHooks.npmConfigHook)
           (if npmBuildHook != null then npmBuildHook else npmHooks.npmBuildHook)
           (if npmInstallHook != null then npmInstallHook else npmHooks.npmInstallHook)
-          nodejs.python
+          nodejs-slim.python
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
       buildInputs = buildInputs ++ [ nodejs ];

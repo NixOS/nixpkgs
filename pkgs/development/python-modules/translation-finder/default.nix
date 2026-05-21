@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translation-finder";
   version = "2.24";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "translation-finder";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OVAsw+snISVyz3ZvcfqCpv0BRfTNzYSpI+YLafW5OQg=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   meta = {
     description = "Translation file finder for Weblate";
     homepage = "https://github.com/WeblateOrg/translation-finder";
-    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
     mainProgram = "weblate-discover";
     maintainers = with lib.maintainers; [ erictapen ];
   };
 
-}
+})

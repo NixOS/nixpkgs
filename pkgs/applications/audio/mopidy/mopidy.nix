@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       gst-plugins-good
       gst-plugins-ugly
       gst-plugins-rs
+      gst-libav
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pipewire ];
 

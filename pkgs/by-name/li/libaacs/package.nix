@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.11.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libaacs/${finalAttrs.version}/libaacs-${finalAttrs.version}.tar.bz2";
+    url = "https://get.videolan.org/libaacs/${finalAttrs.version}/libaacs-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-qIqg6+TJinf3rv/ZKrPvZKxUjGuCLoJIqLkmclvqCjk=";
   };
 

@@ -4,7 +4,7 @@
   vdr,
   fetchFromGitHub,
   graphicsmagick,
-  boost186,
+  boost,
   libgcrypt,
   ncurses,
   callPackage,
@@ -38,33 +38,6 @@ in
   skincurses = (mkPlugin "skincurses").overrideAttrs (oldAttr: {
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
-
-  femon = stdenv.mkDerivation rec {
-    pname = "vdr-femon";
-    version = "2.4.0";
-
-    buildInputs = [ vdr ];
-
-    src = fetchFromGitHub {
-      repo = "vdr-plugin-femon";
-      owner = "rofafor";
-      sha256 = "sha256-0qBMYgNKk7N9Bj8fAoOokUo+G9gfj16N5e7dhoKRBqs=";
-      rev = "v${version}";
-    };
-
-    postPatch = "substituteInPlace Makefile --replace /bin/true true";
-
-    makeFlags = [ "DESTDIR=$(out)" ];
-
-    meta = {
-      inherit (src.meta) homepage;
-      description = "DVB Frontend Status Monitor plugin for VDR";
-      maintainers = [ lib.maintainers.ck3d ];
-      license = lib.licenses.gpl2;
-      inherit (vdr.meta) platforms;
-    };
-
-  };
 
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
@@ -132,19 +105,19 @@ in
 
   fritzbox = stdenv.mkDerivation rec {
     pname = "vdr-fritzbox";
-    version = "1.5.4";
+    version = "1.5.8";
 
     src = fetchFromGitHub {
       owner = "jowi24";
       repo = "vdr-fritz";
       rev = version;
-      hash = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
+      hash = "sha256-o+wJJCAOTg6pPScZ0iIiEWZyT2/++pLtuOppNeaXzmQ=";
       fetchSubmodules = true;
     };
 
     buildInputs = [
       vdr
-      boost186
+      boost
       libgcrypt
     ];
 

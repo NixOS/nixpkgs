@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miniserve";
-  version = "0.33.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2uXZ2ItqgesAgm9/DDbFW3WKQ/VZfvTR2lQY6Gq9ohw=";
+    hash = "sha256-ae2Y51GuFjC65n2JYIPB1D029Zfhy7OvgZeQy+Syzqw=";
   };
 
-  cargoHash = "sha256-xCdugvSw9IR9EDp/8ZxgqnFwTYHnF0o+ldk1AlSSzSc=";
+  cargoHash = "sha256-KwkmkbQ1E2LJeif7iQmb7pFjZtXhu7BU+YutGb5UmY4=";
 
   nativeBuildInputs = [
     pkg-config

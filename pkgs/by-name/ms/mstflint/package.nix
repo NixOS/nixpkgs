@@ -7,6 +7,7 @@
   zlib,
   xz,
   expat,
+  bashNonInteractive,
   boost,
   curl,
   pkg-config,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optionals (!onlyFirmwareUpdater) [
+    bashNonInteractive
     boost
     curl
     expat

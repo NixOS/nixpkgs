@@ -460,8 +460,8 @@ with self;
 
   core = janePackage {
     pname = "core";
-    version = "0.17.1";
-    hash = "sha256-XkABcvglVJLVnWJmvfr5eVywyclPSDqanVOLQNqdNtQ=";
+    version = "0.17.2";
+    hash = "sha256-KIpQ6W2gsuq44TtGPpIs/j1kwbSP3GMmIwvZAYMYtNo=";
     meta.description = "Industrial strength alternative to OCaml's standard library";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [

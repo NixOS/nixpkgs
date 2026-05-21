@@ -3,28 +3,31 @@
   lib,
   fetchFromGitHub,
   python3,
+  python3Packages,
   extraPythonPackages ? ps: [ ],
   unstableGitUpdater,
   makeWrapper,
   writeShellScript,
 }:
-
+let
+  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+in
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.13.0-unstable-2026-01-02";
+  version = "0.13.0-unstable-2026-03-21";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "e60fe3d99b545d7e42ff2f5278efa5822668a57c";
-    sha256 = "sha256-ab3Z+J3wR/j5j6GS7vwcH42isn7xVPm+eH1pWQ2J8D0=";
+    rev = "594ec7e1205450ff0753d19f0724bbe8b380465d";
+    sha256 = "sha256-a496Ayas2IsP3K320EXc/7VDAtrqUzF8OaKNKBWf8lQ=";
   };
 
   sourceRoot = "${src.name}/klippy";
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [
-    (python3.withPackages (p: with p; [ cffi ]))
+    python3Packages.cffi
     makeWrapper
   ];
 
@@ -45,10 +48,30 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  # we need to run this to prebuild the chelper.
-  postBuild = ''
-    python ./chelper/__init__.py
+  # we need to run this to prebuild the chelper .so. However when cross
+  # compiling, a patch is temporarily required during the build process to
+  # prevent the build process from using dlopen() on this .so which has been
+  # built for a foreign architecture. We then place the unpatched __init__.py
+  # back, as this dlopen() call is required at runtime
+  postBuild =
+    if isCross then
+      ''
+        python ./chelper/__init__.py
+        mv ./chelper/__init__unpatched.py ./chelper/__init__.py
+      ''
+    else
+      ''
+        python ./chelper/__init__.py
+      '';
+
+  prePatch = lib.optionalString isCross ''
+    cp ./chelper/__init__.py ./chelper/__init__unpatched.py
   '';
+
+  patches = lib.optionals isCross [
+    # https://github.com/Klipper3d/klipper/pull/7254
+    ./cross-ffi.patch
+  ];
 
   # Python 3 is already supported but shebangs aren't updated yet
   postPatch = ''
@@ -58,7 +81,7 @@ stdenv.mkDerivation rec {
     done
 
     # needed for cross compilation
-    substituteInPlace ./chelper/__init__.py \
+    substituteInPlace ./chelper/__init__*.py \
       --replace 'GCC_CMD = "gcc"' 'GCC_CMD = "${stdenv.cc.targetPrefix}cc"'
   '';
 

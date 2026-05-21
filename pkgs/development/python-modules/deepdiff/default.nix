@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "8.6.1";
+  version = "8.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
     tag = version;
-    hash = "sha256-1DB1OgIS/TSMd+Pqd2vvW+qwM/b5+Dy3qStlg+asidE=";
+    hash = "sha256-/XRPP8O2ykoXwOZ2ou/7Yoa1x7t45dCx6G3aq30o3Wc=";
   };
 
   build-system = [
@@ -80,6 +80,8 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Times out on darwin in Hydra
     "test_repeated_timer"
+    # Requires too much RAM and fails only on Darwin from some reason.
+    "test_restricted_unpickler_memory_exhaustion_cve"
   ];
 
   pythonImportsCheck = [ "deepdiff" ];

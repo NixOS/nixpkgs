@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "node-gyp";
-  version = "12.2.0";
+  version = "12.3.0";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "node-gyp";
     tag = "v${version}";
-    hash = "sha256-0XTv7kDc5Mt7e4VuVQeuJusIxwQzePm4PaE9ms6oRoM=";
+    hash = "sha256-+QPQxWrO2n5QsyAmM5UfL/posEyQQGHmDG7EL0jBNeE=";
   };
 
-  npmDepsHash = "sha256-MflhEEUuzhXb6HTdnz2pvfZJN5w4/dAQ6Cw/C5jSbLs=";
+  npmDepsHash = "sha256-43YHmebfSYNb7glSjycQqjnLY13Bp9syXRAWNDjBIXY=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json

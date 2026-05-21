@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fetchmail";
-  version = "6.6.2";
+  version = "6.6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pRCSlewzGeDkXt0AnS2XcEKoMmq1LGqBeoL6mHED5PM=";
+    hash = "sha256-JG5fwONck93ho/tmd446twDhaAkjLklZxQi5EhQ3S7I=";
   };
 
   buildInputs = [

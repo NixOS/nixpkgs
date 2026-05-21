@@ -8,14 +8,14 @@
   writeScript,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudachi-rs";
   version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "WorksApplications";
     repo = "sudachi.rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2sJ9diE/EjrQmFcCc4VluE4Gu4RebTYitd7zzfgj3g4=";
   };
 
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     '';
     tests = {
       # detects an error that sudachidict is not found
-      cli = runCommand "${pname}-cli-test" { } ''
+      cli = runCommand "${finalAttrs.pname}-cli-test" { } ''
         mkdir $out
         echo "高輪ゲートウェイ駅" | ${lib.getExe sudachi-rs} > $out/result
       '';
@@ -58,9 +58,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Japanese morphological analyzer";
     homepage = "https://github.com/WorksApplications/sudachi.rs";
-    changelog = "https://github.com/WorksApplications/sudachi.rs/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/WorksApplications/sudachi.rs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "sudachi";
   };
-}
+})

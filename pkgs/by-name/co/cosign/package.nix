@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cosign";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "cosign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YYssI+fPw6drMZqAwRk3ubh0l/RgEN8b0eoEunihjlw=";
+    hash = "sha256-Flvi+dVb9RcaS5f1X8A8kevfzNbiSyglEYfJfievVfM=";
   };
 
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite);
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  vendorHash = "sha256-xC+Wfj1OTLhQAuJlyOB6KPaUXuzOxC2oLCqI5O/6znI=";
+  vendorHash = "sha256-q9dB54s9LD0klbDW8bWlXmFzPIPrFBcWJrhYRkyKTp0=";
 
   subPackages = [
     "cmd/cosign"

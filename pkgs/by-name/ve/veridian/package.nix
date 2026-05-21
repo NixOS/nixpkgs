@@ -15,10 +15,11 @@
 
   verible,
   verilator,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage {
   pname = "veridian";
-  version = "0-unstable-2025-12-01";
+  version = "0-unstable-2025-11-30";
 
   src = fetchFromGitHub {
     owner = "vivekmalneedi";
@@ -69,6 +70,16 @@ rustPlatform.buildRustPackage {
     RUSTFLAGS = "-C link-args=-lmimalloc";
     # this is needed so that veridian doesn't try to build the sv-lang package itself
     SLANG_INSTALL_PATH = sv-lang;
+  };
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        # Avoid using "nightly" tag: https://github.com/Mic92/nix-update/pull/430
+        "--version-regex=(0-unstable-.*)"
+      ];
+    };
   };
 
   meta = {

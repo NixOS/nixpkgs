@@ -35,7 +35,7 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbt-core";
   version = "1.11.2";
   pyproject = true;
@@ -43,11 +43,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+7q332Te3R6g8HvT1Gwa7vHo8OBmT0/E/CzunBYIvZk=";
   };
 
-  sourceRoot = "${src.name}/core";
+  sourceRoot = "${finalAttrs.src.name}/core";
 
   pythonRelaxDeps = [
     "agate"
@@ -121,11 +121,11 @@ buildPythonPackage rec {
         ])
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mausch
     ];
     mainProgram = "dbt";
   };
-}
+})

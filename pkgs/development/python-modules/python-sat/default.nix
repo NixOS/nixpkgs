@@ -6,10 +6,17 @@
   six,
   pypblib,
   pytestCheckHook,
+  fetchurl,
 }:
+let
+  kissat404src = fetchurl {
+    url = "https://github.com/arminbiere/kissat/archive/refs/tags/rel-4.0.4.tar.gz";
+    hash = "sha256-v+k+qmMjtIAR5LH890s/LiD53lRHZ+coAJ5bIBgpYZM=";
+  };
+in
 buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "1.8.dev30";
+  version = "1.9.dev2";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -17,8 +24,14 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "python_sat";
-    hash = "sha256-KaR6NPD6wzA0WcYzq/ptRFBeI0Pfumz/S2rVlsDKnU4=";
+    hash = "sha256-JntHdC4xhDVt8uzZzMn7bmIkMFjrwlZWBs8z0E4WeeU=";
   };
+
+  # The kissat source archive is not included in the repo and pysat attempts to
+  # download it at build time. We therefore prefetch and link it.
+  prePatch = ''
+    ln -s ${kissat404src} solvers/kissat404.tar.gz
+  '';
 
   preBuild = ''
     export MAKEFLAGS="-j$NIX_BUILD_CORES"

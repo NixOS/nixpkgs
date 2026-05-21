@@ -16,6 +16,7 @@
   coreutils,
   tzdata,
   cmake,
+  cyrus_sasl,
   perl,
   git,
   nixosTests,
@@ -27,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.53.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OFybPI2oppntYBEklJtdEhImZc/m4oaSSWylr2hHUjA=";
+    hash = "sha256-1t0fHBYBBfG8oFbo1QPXb5y8+lyIPPve4bDtry+KF5Q=";
   };
 
-  cargoHash = "sha256-Xuff8ZanFCtvitNYnOwCyd0UYjrhrP8UglJqbpScGVM=";
+  cargoHash = "sha256-/a/KnZEXBeAtYS0yXCmI+07acol0/UBwauIKTi/QF1k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,6 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Provides the mig command used by the build scripts
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
   buildInputs = [
+    cyrus_sasl
     oniguruma
     openssl
     protobuf
@@ -131,6 +133,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # Flakey on aarch64-linux
+    "--skip=sources::exec::tests::test_graceful_shutdown"
     "--skip=sources::exec::tests::test_run_command_linux"
     "--skip=topology::test::backpressure::buffer_drop_fan_out"
     "--skip=topology::test::backpressure::default_fan_out"

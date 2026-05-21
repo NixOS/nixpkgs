@@ -36,20 +36,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.5.8";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mXDro4m2QZEUcljpQNC5JqhVbRZgBVU1Wfiq1JtS0B0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3Rz8g03JHQ+52lOd92413ArE4LixioCFNSG7ytduxsA=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-i7eq8RDbuv+FzreClW8JFocUs7R8A02cOZ8NaAGBMfA=";
+    vendorHash = "sha256-WXlzUtiaphaSngWd6aXQuOHiBb3a3bCNgIHypMP4YXo=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-Dp684KKAb8Ge2PyPhBFgIB17Fs6swAF/Fw2z9SN4Aio=";
+    hash = "sha256-GAbP9H+c+JXymH0/vpeYOJrkkFJGVyKcpJYFeyRLSKc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -169,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       ltrump
+      myul
     ];
     platforms = lib.attrNames platformIds;
   };

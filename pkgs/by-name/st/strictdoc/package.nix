@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "strictdoc";
-  version = "0.18.1";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     tag = finalAttrs.version;
-    hash = "sha256-pfKEPdEYCW8pMOD5DH9oNVK1ypQKfFMUOXryte+JdCs=";
+    hash = "sha256-UkXVn1GVWBBhjFaRvkVk+E9mug3i2k7SQk+7JVA8KSo=";
   };
 
   build-system = [
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     jinja2
     lark
     lxml
+    markdown-it-py
     openpyxl
     orjson
     pandas

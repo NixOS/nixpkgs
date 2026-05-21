@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mailutils";
-  version = "3.19";
+  version = "3.21";
 
   src = fetchurl {
     url = "mirror://gnu/mailutils/mailutils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UCMNIANsW4rYyWsNmWF38fEz+6THx+O0YtOe6zCEn0U=";
+    hash = "sha256-5Hwe3GmbjWZ1/bx32zqEroN/GOHyCU/inUi7WKl+9ek=";
   };
 
   separateDebugInfo = true;
@@ -82,11 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lists.gnu.org/archive/html/bug-mailutils/2020-11/txtiNjqcNpqOk.txt";
       hash = "sha256-2rhuopBANngq/PRCboIr+ewdawr8472cYwiLjtHCHz4=";
     })
-    # Avoid hardeningDisable = [ "format" ]; - this patch is from the project's master branch and can be removed at the next version
-    (fetchpatch {
-      url = "https://cgit.git.savannah.gnu.org/cgit/mailutils.git/patch/?id=9379ec9e25ae6bdbd3d6f5ef9930ac2176d2efe7";
-      hash = "sha256-00R1DLMDPsvz3R6UgRO1ZvgMNCiHYS3lfjqAC9VD+Y4=";
-    })
     # https://github.com/NixOS/nixpkgs/issues/223967
     # https://lists.gnu.org/archive/html/bug-mailutils/2023-04/msg00000.html
     ./don-t-use-descrypt-password-in-the-test-suite.patch
@@ -96,6 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
       name = "mailutils-fix-sighandler-incompatible-pointer-types-gcc15.patch";
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/mailutils/-/raw/87c3614083260f52dd1222e872a1836f0ff9abe1/fix-build.patch";
       hash = "sha256-RN62l5mYqtViEjXpAlQKWhFez1TPynRMj/1nvZkq5Gs=";
+    })
+    # Fix for non-portable assumptions causing test failures on musl
+    (fetchpatch {
+      name = "portability.patch";
+      url = "https://cgit.git.savannah.gnu.org/cgit/mailutils.git/patch/?id=6e038f04d575731cf90a44cf0114e485a9827a26";
+      hash = "sha256-kamIiQty+/PEB9gC4tPsEMzz1GMGuZAe+DXqjdTeg70=";
     })
   ];
 

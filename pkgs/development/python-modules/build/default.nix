@@ -13,20 +13,21 @@
   pytest-xdist,
   pytestCheckHook,
   setuptools,
+  uv,
   virtualenv,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.4.0";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "build";
     tag = version;
-    hash = "sha256-otaAFL87o+1YB5/ar2rlOpDjFCWOKs+gfqZImuWH8IA=";
+    hash = "sha256-QprU0sXL6FL0rSVJwu8cYpcPlnYKzKAbkyDaTV778js=";
   };
 
   build-system = [ flit-core ];
@@ -59,6 +60,7 @@ buildPythonPackage rec {
         pytest-xdist
         pytestCheckHook
         setuptools
+        uv
         virtualenv
         wheel
       ];
@@ -79,8 +81,11 @@ buildPythonPackage rec {
         "test_output"
         "test_wheel_metadata"
         # Tests require network access to run pip install
-        "test_verbose_output"
+        "test_logging_output"
+        "test_pythonpath_does_not_interfere_with_outer_pip"
         "test_requirement_installation"
+        "test_verbose_logging_output"
+        "test_verbose_output"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Expects Apple's Python and its quirks

@@ -20,12 +20,13 @@ let
   };
 
   packageBuild = stdenv.mkDerivation {
-    name = "package-build";
+    pname = "package-build";
+    version = "4.0.0-unstable-2026-03-17";
     src = fetchFromGitHub {
       owner = "melpa";
       repo = "package-build";
-      rev = "d1722503145facf96631ac118ec0213a73082b76";
-      hash = "sha256-utsZLm9IF9UkTwxFWvJmwA3Ox4tlMeNNTo+f/CqYJGA=";
+      rev = "c25ea902ac4fceb1eb998d46ac176a1de077439b";
+      hash = "sha256-JkdKCfMi+D2ls/Aiz9OPdtLSv1+938BRBJqsIYJIfBM=";
     };
 
     prePatch = ''

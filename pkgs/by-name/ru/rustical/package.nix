@@ -4,25 +4,35 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  cacert,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustical";
-  version = "0.12.9";
+  version = "0.12.15";
 
   src = fetchFromGitHub {
     owner = "lennart-k";
     repo = "rustical";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1dGpYvsdrSngeZkSjtm0dgZBcZonlToDWvkb8rpmoMQ=";
+    hash = "sha256-ll7CFxYpzseYstBLe60VhYgvCYtobWeZ9/trBPTCSMg=";
   };
 
-  cargoHash = "sha256-3V6enIbZAErSk4+nZN3x03I+TyOisS3adBbnjbBXBFc=";
+  cargoHash = "sha256-eqY5xzlPOlGSqqegTWTHeLR+YJb9l52Ku2yGVfflQkk=";
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ openssl ];
 
-  env.OPENSSL_NO_VENDOR = true;
+  env = {
+    OPENSSL_NO_VENDOR = true;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) rustical;
+  };
 
   meta = {
     description = "Yet another calendar server aiming to be simple, fast and passwordless";

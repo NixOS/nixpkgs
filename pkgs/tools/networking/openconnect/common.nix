@@ -38,6 +38,11 @@ stdenv.mkDerivation {
     "--without-openssl-version-check"
   ];
 
+  # Not finding iconv on Darwin
+  env = {
+    am_cv_func_iconv_works = "yes";
+  };
+
   buildInputs = [
     gmp
     libxml2

@@ -353,17 +353,10 @@ stdenv.mkDerivation (finalAttrs: {
         "--with-milestone=fcs"
       ]
   )
-  ++ lib.optionals (!atLeast21) (
-    if atLeast11 then
-      [
-        "--with-freetype=system"
-        "--with-harfbuzz=system"
-      ]
-    else
-      [
-        "--disable-freetype-bundling"
-      ]
-  )
+  ++ lib.optionals (!atLeast21 && atLeast11) [
+    "--with-freetype=system"
+    "--with-harfbuzz=system"
+  ]
   ++ lib.optionals atLeast11 [
     "--with-libjpeg=system"
     "--with-libpng=system"
@@ -481,18 +474,6 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString atLeast25 ''
     chmod +x make/scripts/*.{template,sh,pl}
     patchShebangs --build make/scripts
-  ''
-  + lib.optionalString (!atLeast11) ''
-    # Fix build w/ glibc-2.42. Oldest backport target of this fix was
-    # JDK 11.
-    # See https://bugs.openjdk.org/browse/JDK-8354941
-    substituteInPlace \
-      hotspot/src/cpu/aarch64/vm/stubGenerator_aarch64.cpp \
-      hotspot/src/cpu/aarch64/vm/assembler_aarch64.hpp \
-      hotspot/src/cpu/aarch64/vm/assembler_aarch64.cpp \
-      hotspot/src/share/vm/opto/mulnode.cpp \
-      hotspot/src/share/vm/utilities/globalDefinitions.hpp \
-      --replace-fail "uabs" "g_uabs"
   '';
 
   installPhase = ''

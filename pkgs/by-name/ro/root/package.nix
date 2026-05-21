@@ -38,7 +38,7 @@
   procps,
   python3,
   which,
-  xxHash,
+  xxhash,
   zlib,
   zstd,
   giflib,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     onetbb
     xrootd
-    xxHash
+    xxhash
     xz
     zlib
     zstd

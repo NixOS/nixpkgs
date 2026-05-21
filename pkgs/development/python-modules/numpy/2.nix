@@ -13,7 +13,6 @@
   meson-python,
   mesonEmulatorHook,
   pkg-config,
-  xcbuild,
 
   # native dependencies
   blas,
@@ -35,7 +34,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.4.2";
+  version = "2.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-HFNa7siXRIBBjWrkqQd8QAPWQQsTrYFXNq2DRzVmkQk=";
+    hash = "sha256-LAGXw4vFpjZjZ2s/dXdzXHDm6Ah3pronjScqK02wivY=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -63,13 +62,28 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
+  mesonFlags = lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
+    # This is required to support CPUs with feature-sets earlier than x86-64-v2
+    # (before 2009). This will still build optimizations for newer features, but
+    # allow for importing with older machines. See:
+    #
+    #  - https://github.com/NixOS/nixpkgs/issues/496822
+    #  - https://numpy.org/devdocs/reference/simd/build-options.html
+    #  - https://github.com/numpy/numpy/issues/31073
+    #
+    # NOTE: It is possible to enable CPU features based upon attributes defined
+    # in `lib/systems/architectures.nix`, but that might trigger tons of
+    # rebuilds on old x86_64 CPU machines, and it will be too complex for
+    # maintenance.
+    (lib.mesonOption "cpu-baseline" "none")
+  ];
+
   build-system = [
     cython
     gfortran
     meson-python
     pkg-config
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   # we default openblas to build with 64 threads

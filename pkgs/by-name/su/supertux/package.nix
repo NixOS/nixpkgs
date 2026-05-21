@@ -19,47 +19,18 @@
   openal,
   libogg,
   libvorbis,
+  physfs,
+  fmt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "supertux";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://github.com/SuperTux/supertux/releases/download/v${finalAttrs.version}/SuperTux-v${finalAttrs.version}-Source.tar.gz";
-    sha256 = "1xkr3ka2sxp5s0spp84iv294i29s1vxqzazb6kmjc0n415h0x57p";
+    hash = "sha256-MvxbmbmZTtWOWDQdbyHekldks4ElbhCFkRNt5TvDHaU=";
   };
-
-  postPatch = ''
-    sed '1i#include <memory>' -i external/partio_zip/zip_manager.hpp # gcc12
-    # Fix build with cmake 4. Remove for version >= 0.6.4.
-    # See <https://github.com/SuperTux/supertux/pull/3093>
-    substituteInPlace CMakeLists.txt --replace-fail \
-      'cmake_minimum_required(VERSION 3.1)' \
-      'cmake_minimum_required(VERSION 4.0)'
-    substituteInPlace external/physfs/CMakeLists.txt --replace-fail \
-      'cmake_minimum_required(VERSION 2.8.12)' \
-      'cmake_minimum_required(VERSION 4.0)'
-    substituteInPlace external/sexp-cpp/CMakeLists.txt --replace-fail \
-      'cmake_minimum_required(VERSION 3.0)' \
-      'cmake_minimum_required(VERSION 4.0)'
-    substituteInPlace external/squirrel/CMakeLists.txt --replace-fail \
-      'cmake_minimum_required(VERSION 2.8)' \
-      'cmake_minimum_required(VERSION 4.0)'
-    substituteInPlace external/tinygettext/CMakeLists.txt --replace-fail \
-      'cmake_minimum_required(VERSION 2.4)' \
-      'cmake_minimum_required(VERSION 4.0)'
-    substituteInPlace external/SDL_ttf/CMakeLists.txt --replace-fail \
-      'cmake_minimum_required(VERSION 3.0)' \
-      'cmake_minimum_required(VERSION 4.0)'
-    substituteInPlace external/discord-sdk/CMakeLists.txt --replace-fail \
-      'cmake_minimum_required (VERSION 3.2.0)' \
-      'cmake_minimum_required (VERSION 4.0)'
-    # Fix build with boost 1.89.
-    substituteInPlace CMakeLists.txt --replace-fail \
-      'find_package(Boost REQUIRED COMPONENTS filesystem system date_time locale)' \
-      'find_package(Boost REQUIRED COMPONENTS filesystem date_time locale)'
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -82,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     libogg
     libvorbis
+    physfs
+    fmt
   ];
 
   cmakeFlags = [ "-DENABLE_BOOST_STATIC_LIBS=OFF" ];

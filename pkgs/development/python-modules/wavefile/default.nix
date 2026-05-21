@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "wavefile";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vokimon";
     repo = "python-wavefile";
     tag = "python-wavefile-${version}";
-    hash = "sha256-TLSWhLARY+3sHkl2p3d3LDGzLu6DggjTJWFpyrwRXSI=";
+    hash = "sha256-7pJcdp2abNurTl/pwAEW4QAalK7okMOCwlRPmKLWad4=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "radixtarget"
     "regex"
     "tabulate"
+    "websockets"
   ];
 
   build-system = with python3.pkgs; [
@@ -69,7 +70,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "OSINT automation for hackers";
     homepage = "https://pypi.org/project/bbot/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      robsliwi
+    ];
     mainProgram = "bbot";
   };
 })

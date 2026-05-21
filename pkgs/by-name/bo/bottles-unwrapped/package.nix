@@ -24,6 +24,7 @@
   gamescope,
   mangohud,
   vkbasalt-cli,
+  vulkan-tools,
   vmtouch,
   libportal,
   nix-update-script,
@@ -32,20 +33,19 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "62.0";
+  version = "63.2";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = finalAttrs.version;
-    hash = "sha256-UqK5ULFgNPe9r2xFolU1R5LnlD3kLgBK0qGl48elEwM=";
+    hash = "sha256-cBqKUf96BLYyVD8onkvejL7pcxYrVCnhjhhT9FSwuNo=";
   };
 
   patches = [
     ./vulkan_icd.patch
     ./redirect-bugtracker.patch
     ./remove-flatpak-check.patch
-    ./terminal.patch # Needed for `Launch with Terminal`
   ]
   ++ (
     if removeWarningPopup then
@@ -104,6 +104,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       xdpyinfo
       imagemagick
       vkbasalt-cli
+      vulkan-tools
 
       gamemode
       gamescope

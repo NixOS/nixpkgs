@@ -50,7 +50,7 @@
 }:
 
 let
-  nix = nixVersions.nix_2_33;
+  nix = nixVersions.nix_2_34;
 
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
@@ -132,14 +132,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2026-01-23";
+  version = "0-unstable-2026-03-13";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "8bc95a96f787eb36f29ceec773f5bf48bd121097";
-    hash = "sha256-Ro+qOHWmWuKJiUwX8bmNuGpb0cLUaPr0vsuZGAi2QCI=";
+    rev = "5decc46ce66335b225c1504a509fefa0f804436f";
+    hash = "sha256-wBVp3TDCBKyqyWbMlya+egjhSN7R067v20pUZINSF0g=";
   };
 
   outputs = [

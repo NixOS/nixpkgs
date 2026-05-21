@@ -45,15 +45,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lilypond";
-  version = "2.24.4";
+  version = "2.26.0";
   outputs = [
     "out"
     "man"
   ];
 
   src = fetchzip {
-    url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor finalAttrs.version}/lilypond-${finalAttrs.version}.tar.gz";
-    hash = "sha256-UYdORvodrVchxslOxpMiXrAh7DtB9sWp9yqZU/jeB9Y=";
+    url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor finalAttrs.version}/lilypond-${finalAttrs.version}.tar.gz";
+    hash = "sha256-HUkPhaWNZ4UKbmlEyLXepHCFcgrdoRSDtjZMriO68RM=";
   };
 
   postInstall = ''
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       ofl # mf/
     ];
     maintainers = with lib.maintainers; [
-      marcweber
+      eclairevoyant
       yurrriq
     ];
     platforms = lib.platforms.all;

@@ -30,7 +30,7 @@
   # True to build the webapp.
   buildWebapp ? true,
 
-  # The NPM dependency hash.
+  # The npm dependency hash.
   npmDepsHash ? lib.fakeHash,
 
   # Any extra attributes to pass to buildGoModule.
@@ -91,7 +91,7 @@ buildGoModule (
         go mod tidy
       '';
 
-      # Adding the NPM config hook here breaks things, and isn't even needed.
+      # Adding the npm config hook here breaks things, and isn't even needed.
       nativeBuildInputs = lib.lists.remove npmHooks.npmConfigHook final.nativeBuildInputs;
     };
 

@@ -40,12 +40,22 @@ let
       --replace-fail 'defined(__linux__)' '0'
   '';
 
+  meta = {
+    description = "SMT solver for Monotonic Theories";
+    mainProgram = "monosat";
+    platforms = lib.platforms.unix;
+    license = if includeGplCode then lib.licenses.gpl2 else lib.licenses.mit;
+    homepage = "https://github.com/sambayless/monosat";
+    maintainers = [ lib.maintainers.acairncross ];
+  };
+
   core = stdenv.mkDerivation {
     inherit
       pname
       version
       src
       patches
+      meta
       ;
     postPatch = commonPostPatch + ''
       substituteInPlace CMakeLists.txt \
@@ -72,15 +82,6 @@ let
     '';
 
     passthru = { inherit python; };
-
-    meta = {
-      description = "SMT solver for Monotonic Theories";
-      mainProgram = "monosat";
-      platforms = lib.platforms.unix;
-      license = if includeGplCode then lib.licenses.gpl2 else lib.licenses.mit;
-      homepage = "https://github.com/sambayless/monosat";
-      maintainers = [ lib.maintainers.acairncross ];
-    };
   };
 
   python =
@@ -98,6 +99,7 @@ let
         version
         src
         patches
+        meta
         ;
 
       build-system = [

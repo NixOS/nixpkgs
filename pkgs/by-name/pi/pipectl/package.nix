@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Ferdi265/pipectl";
     license = lib.licenses.gpl3;
     description = "Simple named pipe management utility";
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     mainProgram = "pipectl";
   };
 })

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -62,19 +63,20 @@
   pytest-xdist,
   pytest-watch,
   responses,
+  socksio,
   stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sentry-sdk";
-  version = "2.53.0";
+  version = "2.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = finalAttrs.version;
-    hash = "sha256-QPbfgzXPf1pp9BRaehS6e1yaeOegFsdjcAeqvrfx0zA=";
+    hash = "sha256-ny1MDl0J/TeYtlzpIuNUy9FR/+pEDF0+AOZNU4nJey4=";
   };
 
   postPatch = ''
@@ -95,6 +97,7 @@ buildPythonPackage (finalAttrs: {
     anthropic = [ anthropic ];
     # TODO: arq
     asyncpg = [ asyncpg ];
+    asyncio = [ httpcore ] ++ httpcore.optional-dependencies.asyncio;
     beam = [ apache-beam ];
     bottle = [ bottle ];
     celery = [ celery ];
@@ -164,7 +167,9 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytest-watch
     pytestCheckHook
+    socksio
   ]
+  ++ finalAttrs.finalPackage.optional-dependencies.asyncio
   ++ finalAttrs.finalPackage.optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;
@@ -215,6 +220,13 @@ buildPythonPackage (finalAttrs: {
     # KeyError: 'sentry.release'
     "test_logs_attributes"
     "test_logger_with_all_attributes"
+    "test_span_templates_ai_dicts"
+    "test_span_templates_ai_objects"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14" && stdenv.hostPlatform.isDarwin) [
+    # profiler_id not populated on darwin
+    "test_profile_stops_when_segment_ends"
+    "test_segment_span_has_profiler_id"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];

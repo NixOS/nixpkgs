@@ -60,23 +60,30 @@ buildPythonPackage rec {
     pytest-lazy-fixture
   ];
 
-  PYARROW_BUILD_TYPE = "release";
+  env = {
+    PYARROW_BUILD_TYPE = "release";
 
-  PYARROW_WITH_DATASET = zero_or_one true;
-  PYARROW_WITH_FLIGHT = zero_or_one arrow-cpp.enableFlight;
-  PYARROW_WITH_HDFS = zero_or_one true;
-  PYARROW_WITH_PARQUET = zero_or_one true;
-  PYARROW_WITH_PARQUET_ENCRYPTION = zero_or_one true;
-  PYARROW_WITH_S3 = zero_or_one arrow-cpp.enableS3;
-  PYARROW_WITH_GCS = zero_or_one arrow-cpp.enableGcs;
-  PYARROW_BUNDLE_ARROW_CPP_HEADERS = zero_or_one false;
+    PYARROW_WITH_DATASET = zero_or_one true;
+    PYARROW_WITH_FLIGHT = zero_or_one arrow-cpp.enableFlight;
+    PYARROW_WITH_HDFS = zero_or_one true;
+    PYARROW_WITH_PARQUET = zero_or_one true;
+    PYARROW_WITH_PARQUET_ENCRYPTION = zero_or_one true;
+    PYARROW_WITH_S3 = zero_or_one arrow-cpp.enableS3;
+    PYARROW_WITH_GCS = zero_or_one arrow-cpp.enableGcs;
+    PYARROW_BUNDLE_ARROW_CPP_HEADERS = zero_or_one false;
 
-  PYARROW_CMAKE_OPTIONS = [ "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib" ];
+    PYARROW_CMAKE_OPTIONS = toString [
+      "-DCMAKE_INSTALL_RPATH=${arrow-cpp}/lib"
+    ];
 
-  ARROW_HOME = arrow-cpp;
-  PARQUET_HOME = arrow-cpp;
+    ARROW_HOME = arrow-cpp;
+    PARQUET_HOME = arrow-cpp;
 
-  ARROW_TEST_DATA = lib.optionalString doCheck arrow-cpp.ARROW_TEST_DATA;
+  }
+  // lib.optionalAttrs doCheck {
+    ARROW_TEST_DATA = arrow-cpp.env.ARROW_TEST_DATA;
+  };
+
   doCheck = true;
 
   dontUseCmakeConfigure = true;
@@ -150,7 +157,7 @@ buildPythonPackage rec {
   disabledTests = [ "GcsFileSystem" ];
 
   preCheck = ''
-    export PARQUET_TEST_DATA="${arrow-cpp.PARQUET_TEST_DATA}"
+    export PARQUET_TEST_DATA="${arrow-cpp.env.PARQUET_TEST_DATA}"
     shopt -s extglob
     rm -r pyarrow/!(conftest.py|tests)
     mv pyarrow/conftest.py pyarrow/tests/parent_conftest.py

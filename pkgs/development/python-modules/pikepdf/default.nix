@@ -7,6 +7,7 @@
   jbig2dec,
   deprecated,
   lxml,
+  withMupdf ? false,
   mupdf-headless,
   numpy,
   packaging,
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "10.3.0";
+  version = "10.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -37,13 +38,19 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-fEIzmC17RYic4CFwBh5FdGbJmaWaiaPBK7eCQ7RCmr0=";
+    hash = "sha256-x17cRef8rB5UQQws48G/IqeSp4B3CaLzIoUIQ8fJeUg=";
   };
 
   patches = [
     (replaceVars ./paths.patch {
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
-      mutool = lib.getExe' mupdf-headless "mutool";
+      mutool =
+        if withMupdf then
+          lib.getExe' mupdf-headless "mutool"
+        else
+          # replace with non-existing path. This is okay, as this is only
+          # called by Jupyter/iPython
+          "mutool";
     })
   ];
 

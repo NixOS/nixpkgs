@@ -8,7 +8,7 @@
   glib,
   gtk2,
   libjack2,
-  ladspaH,
+  ladspa-header,
   gnome2,
   lv2,
   pkg-config,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk2
     libjack2
-    ladspaH
+    ladspa-header
     gnome2.libglade
     lv2
   ];

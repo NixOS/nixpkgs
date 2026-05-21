@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "24.13.0";
-  sha256 = "320fe909cbb347dcf516201e4964ef177b8138df9a7f810d0d54950481b3158b";
+  version = "24.15.0";
+  sha256 = "a4f653d79ed140aaad921e8c22a3b585ca85cfdab80d4030f6309e4663a8a1c8";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -56,6 +56,20 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+      # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+      # OpenSSL reports different errors
+      # https://github.com/nodejs/node/pull/62629
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/dd25d8f29d3ddadcf5a5ebfdf98ece55f9df96c6.patch?full_index=1";
+        hash = "sha256-6cxRN7TyWmJgUZt3jp2YXbVIjrDb2BNep5LxBOtT3Q0=";
+      })
+
+      # Patch for nghttp2 1.69 support
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
+      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
@@ -66,10 +80,8 @@ buildNodejs {
         revert = true;
       })
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # see: https://github.com/nodejs/node/issues/61025
-      ./sab-test-32bit.patch
     ];
 }

@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypsrp";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "pypsrp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EFe587tLTlNEzxhACtlbB0FspDOUvfF3ly0DRtAomuY=";
+    hash = "sha256-a0xTYrdy0SwYQ7NS/hm80BAarjhUazP/I/J7PlsIWIM=";
   };
 
   build-system = [ setuptools ];

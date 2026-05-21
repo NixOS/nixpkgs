@@ -9,13 +9,11 @@
   # dependencies
   eval-type-backport,
   httpx,
-  invoke,
+  jsonpath-python,
   opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-http,
-  opentelemetry-sdk,
+  opentelemetry-semantic-conventions,
   pydantic,
   python-dateutil,
-  pyyaml,
   typing-inspection,
 
   # optional-dependencies
@@ -26,19 +24,21 @@
   requests,
 
   # tests
+  opentelemetry-sdk,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "1.12.3";
+  version = "2.4.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DaCAO4/DoskFuRgNcoLWBuRdnxXfYhsgY/WZu/s1wk0=";
+    hash = "sha256-e2G/bqU45hCfcPEhj4zf5X7EKjs/zWhxCkn9J0u4F7U=";
   };
 
   preBuild = ''
@@ -50,18 +50,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
-    "opentelemetry-exporter-otlp-proto-http"
+    "opentelemetry-semantic-conventions"
   ];
   dependencies = [
     eval-type-backport
     httpx
-    invoke
+    jsonpath-python
     opentelemetry-api
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-sdk
+    opentelemetry-semantic-conventions
     pydantic
     python-dateutil
-    pyyaml
     typing-inspection
   ];
 
@@ -80,7 +78,15 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
+    opentelemetry-sdk
     pytestCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.agents
+  ++ finalAttrs.passthru.optional-dependencies.gcp;
+
+  disabledTests = [
+    # AssertionError: <Response [200 OK]> is not an instance of <class 'mistralai.extra.observability.otel.TracedResponse'>
+    "TestOtelTracing"
   ];
 
   meta = {

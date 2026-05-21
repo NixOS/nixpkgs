@@ -1194,6 +1194,13 @@ let
           # https://github.com/syl20bnr/flymake-elixir/issues/4
           flymake-elixir = addPackageRequires super.flymake-elixir [ self.flymake-easy ];
 
+          flymake-hadolint = super.flymake-hadolint.overrideAttrs (attrs: {
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace flymake-hadolint.el \
+                --replace-fail 'flymake-hadolint-program "hadolint"' 'flymake-hadolint-program "${lib.getExe pkgs.hadolint}"'
+            '';
+          });
+
           flyparens = ignoreCompilationError super.flyparens; # elisp error
 
           fold-dwim-org = ignoreCompilationError super.fold-dwim-org; # elisp error
@@ -1400,6 +1407,33 @@ let
           latex-table-wizard = mkHome super.latex-table-wizard;
 
           leaf-defaults = ignoreCompilationError super.leaf-defaults; # elisp error
+
+          liberime = super.liberime.overrideAttrs (
+            let
+              libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+            in
+            prevAttrs: {
+              buildInputs = prevAttrs.buildInputs ++ [
+                pkgs.librime
+              ];
+              nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [
+                pkgs.which
+              ];
+              postBuild =
+                prevAttrs.postBuild or ""
+                + "\n"
+                + ''
+                  make CC=$CC SUFFIX=${libExt}
+                '';
+              postInstall =
+                prevAttrs.postInstall or ""
+                + "\n"
+                + ''
+                  rm -rv $out/share/emacs/site-lisp/elpa/liberime-*/{src,emacs-module,Makefile}
+                  install src/liberime-core${libExt} $out/share/emacs/site-lisp/elpa/liberime-*
+                '';
+            }
+          );
 
           # https://github.com/abo-abo/lispy/pull/683
           # missing optional dependencies

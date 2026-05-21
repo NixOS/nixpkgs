@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "2.17.2";
+  version = "2.17.3";
 in
 buildGoLatestModule {
   pname = "wakapi";
@@ -16,10 +16,10 @@ buildGoLatestModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-UK6m8d+Yf5JQgDV/TdPpQ9TL2Y4aG4tR/WOP11IFzfg=";
+    hash = "sha256-kbh9YoD5Z4YoYsRCKxL7meHtjsfAKRXXKYvdVCrym/k=";
   };
 
-  vendorHash = "sha256-oXHTb7DLwWa/qOMSn3EhMTnDeUm1bIVGvuJzcxkiPF0=";
+  vendorHash = "sha256-jD8A28dgJs9CLB4Md8y8D9m1/BobzjIa4VoetYqU+y4=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
@@ -40,8 +40,14 @@ buildGoLatestModule {
       skippedTests = [
         # Skip tests that require network access
         "TestLoginHandlerTestSuite"
-        "Test_Load_OidcProviders"
+        "TestLoadOidcProviders"
         "TestUser_MinDataAge"
+        "TestPublicNetUrl"
+        "TestConfigTestSuite"
+        "TestWakatimeRelayMiddlewareTestSuite"
+        "TestServeHTTP_SkipNonPost"
+        "TestWakatimeUtils"
+        "TestWakatimeImporterTestSuite/TestCheckUrl"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

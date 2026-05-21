@@ -1,4 +1,5 @@
 {
+  aiofiles,
   buildPythonPackage,
   charset-normalizer,
   cryptography,
@@ -17,21 +18,17 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.17.0";
+  version = "3.18.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
     tag = "v${version}";
-    hash = "sha256-HGczeExOoZMBiPS//B/gu56Wnpzz55oawhTT67ekuOs=";
+    hash = "sha256-yr0N+wkGyscCz34xtAU7qMQT+kN341AL/7PZwGwzhpo=";
   };
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "wassima"
-  ];
 
   dependencies = [
     charset-normalizer
@@ -66,6 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "niquests" ];
 
   nativeCheckInputs = [
+    aiofiles
     cryptography
     fastapi
     pytest-asyncio
@@ -80,6 +78,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # NameResolutionError: Failed to resolve 'localhost'
+    "tests/test_rate_limiters.py"
     "tests/test_lowlevel.py"
     "tests/test_testserver.py"
   ];

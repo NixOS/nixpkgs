@@ -7,7 +7,7 @@ index de29a32..e731bbd 100644
  
  systemd_deps = dependency('systemd', required: false)
 -systemdsystemunitdir = systemd_deps.get_variable('systemdsystemunitdir', default_value: 'lib/systemd/system')
-+systemdsystemunitdir = get_option('libdir') / 'systemd'
++systemdsystemunitdir = get_option('libdir') / 'systemd' / 'system'
  
  #
  # Required dependencies

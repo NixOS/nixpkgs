@@ -32,7 +32,7 @@
   wayland,
   wayland-scanner,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   zarchive,
   bluez,
 }:
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
     ninja
     pkg-config
-    wxGTK32
+    wxwidgets_3_2
     wayland-scanner
   ];
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     vulkan-headers
     wayland
-    wxGTK32
+    wxwidgets_3_2
     zarchive
     bluez
   ];

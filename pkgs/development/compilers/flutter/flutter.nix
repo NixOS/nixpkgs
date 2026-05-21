@@ -26,6 +26,7 @@
   which,
   jq,
   writableTmpDirAsHomeHook,
+  installShellFiles,
   flutterTools ? null,
 }@args:
 
@@ -70,6 +71,7 @@ let
       makeWrapper
       jq
       gitMinimal
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     strictDeps = true;
@@ -156,6 +158,12 @@ let
         --add-flags "--disable-dart-dev --packages='${flutterTools.pubcache}/package_config.json' \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
 
       runHook postInstall
+    '';
+
+    postInstall = ''
+      $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      installShellCompletion --bash "$TMPDIR/flutter.bash"
+      installShellCompletion --zsh "$TMPDIR/flutter.bash"
     '';
 
     doInstallCheck = true;

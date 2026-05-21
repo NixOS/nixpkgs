@@ -30,13 +30,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "frankenphp";
-  version = "1.11.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "frankenphp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JzZXg/tkSZqLZn56RyLb8Q8SaeG/tHA8Sqxu99s5ks0=";
+    hash = "sha256-TYpbHwlFZ9S4uqdhZoU0YqhOrLHrKaMVlJLEi+heEgE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/caddy";
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-9RHD2ZcolhgQO0UKxkqFjxXGAVijSYQxVt7s+/aXNIo=";
+  vendorHash = "sha256-xmaMQIhImi9E7H/zA8DqrGG4oK5KIQWUTn+c1eas0Ho=";
 
   buildInputs = [
     phpUnwrapped

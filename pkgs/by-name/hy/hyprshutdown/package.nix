@@ -18,13 +18,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprshutdown";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprshutdown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dp5lyZzKsjdqJLfwr0S4ILets8eu1kLfBB2y/LxspsU=";
+    hash = "sha256-msCMXV9k9+1siOPaxSzNJwx/o8pn2srCR4h0pxyW/WE=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A graceful shutdown utility for Hyprland";
     homepage = "https://github.com/hyprwm/hyprshutdown";
+    changelog = "https://github.com/hyprwm/hyprshutdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.mithicspirit ];
     teams = [ lib.teams.hyprland ];

@@ -137,12 +137,6 @@
     "sha256": "12gh5ih4rkbdcrzdjml9rrlipbp2ymwhwxvr8y7lawmrflsas3r5",
     "version": "2.0.3"
   },
-  "so-clean-up-wp-seo": {
-    "path": "so-clean-up-wp-seo/tags/4.0.2",
-    "rev": "3114751",
-    "sha256": "1kqgmmaw99b164v554siygrxa3z7lxqhn0bwg7s01cm5fdg6i3dl",
-    "version": "4.0.2"
-  },
   "sqlite-database-integration": {
     "path": "sqlite-database-integration/tags/2.2.17",
     "rev": "3451878",

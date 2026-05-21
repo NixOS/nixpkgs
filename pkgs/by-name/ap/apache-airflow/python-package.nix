@@ -7,7 +7,7 @@
   # javascript
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
 
   # python
@@ -88,14 +88,16 @@
   enabledProviders,
 }:
 let
-  version = "3.1.6";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     tag = version;
-    hash = "sha256-wC6C0jhCA76/+KhBQbe3WeSGqR6FwaudCT5xPV39Z6c=";
+    hash = "sha256-jwWxH9fTTCFdLAaAN18/FUAbN0cTCPkkk9+0ZMYNXek=";
   };
+
+  pnpm = pnpm_10;
 
   airflowUi = stdenv.mkDerivation rec {
     pname = "airflow-ui-assets";
@@ -110,9 +112,14 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "airflow-ui";
-      inherit sourceRoot src version;
+      inherit
+        sourceRoot
+        src
+        version
+        pnpm
+        ;
       fetcherVersion = 3;
-      hash = "sha256-jpv47+DAAoMB4pJBcv5G6zTGQ+/qdg86iQ/H22gwpro=";
+      hash = "sha256-OkSDQoWsHQ6w1vIoX5W9zXHghV0obvL6Wji0HYN6CSs=";
     };
 
     buildPhase = ''
@@ -141,7 +148,7 @@ let
       pname = "simple-auth-manager-ui";
       inherit sourceRoot src version;
       fetcherVersion = 3;
-      hash = "sha256-ccLGYaAYJWSgegO+IfVZv1WdZ5YjhYYTZivqtDjdoOk=";
+      hash = "sha256-uQIVHzX0BcJuxgbPp6wqKhALbsfACSJjiMOdmrpuzOk=";
     };
 
     buildPhase = ''
@@ -199,10 +206,12 @@ let
       # remove cyclic dependency
       sed -i -E 's/"apache-airflow-task-sdk[^"]+",//' pyproject.toml
 
-      substituteInPlace pyproject.toml \
-        --replace-fail "GitPython==3.1.45" "GitPython" \
-        --replace-fail "hatchling==1.27.0" "hatchling" \
-        --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
+      # relax dependencies
+      sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+      sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+      sed -i -E 's/"GitPython==[^"]+"/"GitPython"/' pyproject.toml
+      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+      sed -i -E 's/"smmap==[^"]+"/"smmap"/' pyproject.toml
 
       # Copy built UI assets
       cp -r ${airflowUi}/share/airflow/ui/dist src/airflow/ui/
@@ -282,13 +291,6 @@ let
       uvicorn
     ]
     ++ (map buildProvider requiredProviders);
-
-    pythonRelaxDeps = [
-      # Temporary to fix CI only:
-      # https://github.com/apache/airflow/commit/c474be9ff06cf16bf96f93de9a09e30ffc476bee
-      "fastapi"
-      "universal-pathlib"
-    ];
   };
 
   taskSdk = buildPythonPackage {
@@ -301,6 +303,15 @@ let
     postPatch = ''
       # resolve cyclic dependency
       sed -i -E 's/"apache-airflow-core[^"]+",//' pyproject.toml
+
+      # relax dependencies
+      sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+      sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+      sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
+
+      # task-sdk needs config.yml from core subpackage
+      mkdir -p src/airflow/config_templates
+      cp ../airflow-core/src/airflow/config_templates/* src/airflow/config_templates/
     '';
 
     build-system = [
@@ -316,6 +327,7 @@ let
       greenback
       httpx
       jinja2
+      jsonschema
       methodtools
       msgspec
       pendulum
@@ -338,10 +350,10 @@ buildPythonPackage rec {
   pyproject = true;
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "GitPython==3.1.45" "GitPython" \
-      --replace-fail "hatchling==1.27.0" "hatchling" \
-      --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
+    # relax dependencies
+    sed -i -E 's/"hatchling==[^"]+"/"hatchling"/' pyproject.toml
+    sed -i -E 's/"packaging==[^"]+"/"packaging"/' pyproject.toml
+    sed -i -E 's/"trove-classifiers==[^"]+"/"trove-classifiers"/' pyproject.toml
   '';
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];

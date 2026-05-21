@@ -30,13 +30,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     babel
   ];
 
-  patches = [
-    # Workaround for a bug on Python >= 3.13+ and pygobject < 3.51.
-    # This can go away once nixpkgs is using pygobject >= 3.51.
-    # See <https://github.com/Cimbali/pympress/issues/330> for details.
-    ./issue-330-gprops-iter-actually-iterable.patch
-  ];
-
   dependencies =
     with python3Packages;
     [
@@ -44,9 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pycairo
       pygobject3
     ]
-    ++ lib.optional withVLC [
-      python-vlc
-    ];
+    ++ lib.optional withVLC python-vlc;
 
   nativeBuildInputs = [
     wrapGAppsHook3

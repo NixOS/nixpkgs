@@ -3,6 +3,7 @@
   stdenv,
   a2wsgi,
   aiohttp,
+  aiohttp-asgi-connector,
   aiosqlite,
   attrs,
   buildPythonPackage,
@@ -62,7 +63,6 @@
   starlette,
   tomli-w,
   tritonclient,
-  uv,
   uvicorn,
   watchfiles,
   # native check inputs
@@ -158,6 +158,7 @@ buildPythonPackage {
   dependencies = [
     a2wsgi
     aiohttp
+    aiohttp-asgi-connector
     aiosqlite
     attrs
     cattrs
@@ -200,7 +201,6 @@ buildPythonPackage {
     simple-di
     starlette
     tomli-w
-    uv
     uvicorn
     watchfiles
   ];

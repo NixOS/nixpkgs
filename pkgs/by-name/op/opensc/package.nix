@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensc";
-  version = "0.26.1";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     tag = finalAttrs.version;
-    hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
+    hash = "sha256-s/3bIhPGa3+SKjMh0CNgsU3nOkhEaxPTpmEbc6VIn3Q=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     "completiondir=$(out)/etc"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9\\.]+)$" ]; };
 
   meta = {
     description = "Set of libraries and utilities to access smart cards";

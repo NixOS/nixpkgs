@@ -28,7 +28,7 @@ in
         '';
         example = lib.literalExpression ''
           {
-            name = "dadada's repos";
+            name = "user's repos";
             log_format = "text";
             ssh = {
               listen_addr = ":23231";
@@ -60,10 +60,12 @@ in
         DynamicUser = true;
         Restart = "always";
         ExecStart = "${lib.getExe cfg.package} serve";
+
+        # Hooks must be executable, but DynamicUser mounts /var/lib/private as noexec
+        ExecPaths = "${stateDir}/repos";
+
         StateDirectory = "soft-serve";
         WorkingDirectory = stateDir;
-        RuntimeDirectory = "soft-serve";
-        RuntimeDirectoryMode = "0750";
         ProcSubset = "pid";
         ProtectProc = "invisible";
         UMask = "0027";
@@ -86,7 +88,6 @@ in
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
-        RemoveIPC = true;
         PrivateMounts = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [

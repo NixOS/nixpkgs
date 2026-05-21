@@ -274,7 +274,7 @@ buildFHSEnv {
       lcms2
       mpg123
       cairo
-      unixODBC
+      unixodbc
       samba4
       sane-backends
       openldap

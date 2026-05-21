@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "taskw-ng";
-  version = "2.0.0";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "taskw-ng";
-    tag = version;
-    hash = "sha256-hTZi6Y3jVlBI+CGQtHZ4PBU5rjEjE2l8o2rusCkEma0=";
+    tag = "v${version}";
+    hash = "sha256-KxXLSDvUclQlNbMR+Zzl6tgBrH2QxqjLVoyBK3OiKVU=";
   };
 
   pythonRelaxDeps = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   # TODO: doesn't pass because `can_use` fails and `task --version` seems not to be answering.
   # pythonImportsCheck = [ "taskw_ng" ];
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Module to interact with the Taskwarrior API";

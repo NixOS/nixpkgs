@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 "assets/img/winbox.png" -t "$out/share/icons/hicolor/1024x1024/apps"
+    install -Dm644 "assets/img/winbox.png" -t "$out/share/icons"
     install -Dm755 "WinBox" "$out/bin/WinBox"
 
     wrapProgram "$out/bin/WinBox" --run "${lib.getExe finalAttrs.migrationScript}"

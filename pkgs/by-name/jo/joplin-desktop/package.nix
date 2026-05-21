@@ -47,10 +47,21 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (releaseData) hash;
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/laurent22/joplin/blob/dev/package.json#L103
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes postPatch;
+    inherit (finalAttrs)
+      src
+      missingHashes
+      patches
+      postPatch
+      ;
     hash = releaseData.deps_hash;
   };
 

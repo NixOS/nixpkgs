@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "api-linter";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "api-linter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Yx4UTxFJSc+tsA2u6IiSlzV9H7occ2qKtCm7zwv5PaA=";
+    hash = "sha256-xks5oKfJSMV4MbPFrYGWv82XeBLYbGgXF4r4kbFX93Q=";
   };
 
-  vendorHash = "sha256-TiZRts1ruC0R5DQ5at7Z1c+zuGpD0f3D89X2b1gXA5s=";
+  vendorHash = "sha256-wPySRFqm396YRqEUZNMkA19SxqBNApwr8hm0PRA5cO0=";
 
   subPackages = [ "cmd/api-linter" ];
 

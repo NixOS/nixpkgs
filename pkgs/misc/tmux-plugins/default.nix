@@ -44,6 +44,7 @@ let
             pname = namePrefix + pluginName;
 
             strictDeps = true;
+            __structuredAttrs = true;
 
             inherit
               pluginName
@@ -75,14 +76,14 @@ in
 {
   inherit mkTmuxPlugin;
 
-  battery = mkTmuxPlugin {
+  battery = mkTmuxPlugin rec {
     pluginName = "battery";
-    version = "unstable-2019-07-04";
+    version = "2.0.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-battery";
-      rev = "f8b8e8451990365e0c98c38c184962e4f83b793b";
-      hash = "sha256-NfKaM4dPt7YaxG7kHMNxf95Mz0hIEhxqlVi2Obr+Da4=";
+      tag = "v${version}";
+      hash = "sha256-kyUrJdraDDye8WEBP2RgHN7kHmafToYtLmrMJ9u0f+0=";
     };
   };
 
@@ -242,12 +243,12 @@ in
 
   dotbar = mkTmuxPlugin rec {
     pluginName = "dotbar";
-    version = "0.3.0";
+    version = "0.3.2";
     src = fetchFromGitHub {
       owner = "vaaleyard";
       repo = "tmux-dotbar";
       tag = version;
-      hash = "sha256-n9k18pJnd5mnp9a7VsMBmEHDwo3j06K6/G6p7/DTyIY=";
+      hash = "sha256-WaRKepmPqiE+W8Tm0dBc6hGiqqZP122eXjrG0rJnt0w=";
     };
     meta = {
       homepage = "https://github.com/vaaleyard/tmux-dotbar";
@@ -379,17 +380,24 @@ in
       tag = "v${version}";
       hash = "sha256-TuWPw6sk61k7GnHwN2zH6x6mGurTHiA9f0E6NJfMa6g=";
     };
+    meta = {
+      homepage = "https://github.com/egel/tmux-gruvbox";
+      description = "Gruvbox colorscheme for Tmux";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ viena ];
+    };
   };
 
   harpoon = mkTmuxPlugin {
     pluginName = "harpoon";
     rtpFilePath = "harpoon.tmux";
-    version = "0.4.0";
+    version = "0.5.0";
     src = fetchFromGitHub {
       owner = "chaitanyabsprip";
       repo = "tmux-harpoon";
-      rev = "v0.4.0";
-      hash = "sha256-+IakWkPoQFhIQ4m/98NVYWe5tFKmtfKBnPXZcfU9iOk=";
+      rev = "v0.5.0";
+      hash = "sha256-eqzf3hEaliF1t7zwZlj1YDGvn0jKdbBTgy5PoOPVMEU=";
     };
     meta = {
       homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
@@ -979,12 +987,12 @@ in
 
   tmux-session-manager = mkTmuxPlugin rec {
     pluginName = "tmux-session-manager";
-    version = "1.1.1";
+    version = "1.1.2";
     src = fetchFromGitHub {
       owner = "PhilVoel";
       repo = "tmux-session-manager";
       tag = "v${version}";
-      hash = "sha256-WzzqfMRAF8vxrnYnudD6CZVn52bZyCSRaByQRRRK9X8=";
+      hash = "sha256-3uXl9N0LkS1txjaG8I+i1ACAW55tSNFzv358i3aRd/U=";
     };
     rtpFilePath = "session_manager.tmux";
     meta = {
@@ -1188,12 +1196,12 @@ in
   tmux-toggle-popup = mkTmuxPlugin rec {
     pluginName = "tmux-toggle-popup";
     rtpFilePath = "toggle-popup.tmux";
-    version = "0.4.4";
+    version = "0.5.1";
     src = fetchFromGitHub {
       owner = "loichyan";
       repo = "tmux-toggle-popup";
       tag = "v${version}";
-      hash = "sha256-tiiM5ETSrceyAyqhYRXjG1qCbjzZ0NJL5GWWbWX7Cbo=";
+      hash = "sha256-daUCkt1Np8ZYvLc3Bx0HvhnI988q7lIayJju/GB6Klw=";
     };
     meta = {
       homepage = "https://github.com/loichyan/tmux-toggle-popup";

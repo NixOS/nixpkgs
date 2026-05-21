@@ -9,6 +9,7 @@
   libmicrohttpd,
   libosmscout,
   libpostal,
+  libtiff,
   marisa,
   osrm-backend,
   protobuf_21,
@@ -50,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libsForQt5.kirigami2
     libsForQt5.qtquickcontrols2
     libsForQt5.qtlocation
     valhalla
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     osrm-backend
     libmicrohttpd
     libpostal
+    libtiff
     sqlite
     marisa
     kyotocabinet
@@ -67,9 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qmakeFlags = [
-    "SCOUT_FLAVOR=kirigami" # Choose to build the kirigami UI variant
+    "SCOUT_FLAVOR=qtcontrols"
     "CONFIG+=disable_mapnik" # Disable the optional mapnik backend
   ];
+
+  # valhalla 3.6 headers use std::ranges/std::views (C++20).
+  env.NIX_CFLAGS_COMPILE = "-std=c++20";
 
   meta = {
     description = "Maps server providing tiles, geocoder, and router";

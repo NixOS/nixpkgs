@@ -14,6 +14,7 @@
   threadpoolctl,
   pytestCheckHook,
   python,
+  sklearn-compat,
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     threadpoolctl
+    sklearn-compat
   ];
 
   optional-dependencies = {
@@ -72,12 +74,6 @@ buildPythonPackage rec {
     "imblearn/tests/test_docstring_parameters.py"
     # Skip dependencies test - pythonImportsCheck already does this
     "imblearn/utils/tests/test_min_dependencies.py"
-  ];
-
-  disabledTests = [
-    # Broken upstream test https://github.com/scikit-learn-contrib/imbalanced-learn/issues/1131
-    "test_estimators_compatibility_sklearn"
-    "test_balanced_bagging_classifier_with_function_sampler"
   ];
 
   meta = {

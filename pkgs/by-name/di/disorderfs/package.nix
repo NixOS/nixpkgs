@@ -1,20 +1,23 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   pkg-config,
-  fuse,
+  fuse3,
   attr,
   asciidoc-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "disorderfs";
-  version = "0.5.11";
+  version = "0.6.2";
 
-  src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/d/disorderfs/disorderfs_${finalAttrs.version}.orig.tar.bz2";
-    sha256 = "sha256-KqAMKVUykCgVdNyjacZjpVXqVdeob76v0iOuSd4TNIY=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "reproducible-builds";
+    repo = "disorderfs";
+    tag = finalAttrs.version;
+    hash = "sha256-1ehGbNYbOewnDrQ1JhozKMvfVaCH7sDCxrD0dvwAfw0=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     attr
   ];
 

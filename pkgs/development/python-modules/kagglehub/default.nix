@@ -38,14 +38,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kagglehub";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kaggle";
     repo = "kagglehub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TwyOC4ym46zjTyikOQk5qyHoMcaY6jHEzHddXKYJwhc=";
+    hash = "sha256-HyPFGde1v++7Ef5dSLHLA2u2RfnlwM+63RAV+lulTjw=";
   };
 
   build-system = [

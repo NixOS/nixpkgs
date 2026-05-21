@@ -49,6 +49,10 @@ let
         url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/81b14ae4eed038662b53cd20786fd5e0816279ec/community/qt5-qtbase/loongarch64.patch";
         hash = "sha256-BnpejF6/L73kVVts0R0/OMbVN8G4DXVFwBMJPLU9QbE=";
       })
+      (fetchpatch {
+        url = "https://salsa.debian.org/qt-kde-team/qt/qtbase/-/raw/6910758e1141f8ea65a8f2359ac30163d65bf6e2/debian/patches/cross_build_mysql.diff";
+        hash = "sha256-tzmmLmMXmeDwRVjdpWekDJvSkrIIlslC12HP7XPcm3E=";
+      })
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
@@ -185,52 +189,6 @@ let
         hash = "sha256-B/z/+tai01RU/bAJSCp5a0/dGI8g36nwso8MiJv27YM=";
       })
     ];
-    qtwebengine = [
-      ./qtwebengine-link-pulseaudio.patch
-      # Fixes Chromium build failure with Ninja 1.12.
-      # See: https://bugreports.qt.io/browse/QTBUG-124375
-      # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
-      ./qtwebengine-ninja-1.12.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./qtwebengine-darwin-no-platform-check.patch
-      ./qtwebengine-mac-dont-set-dsymutil-path.patch
-      ./qtwebengine-darwin-checks.patch
-    ];
-    qtwebkit = [
-      (fetchpatch {
-        name = "qtwebkit-python39-json.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/commit/78360c01c796b6260bf828bc9c8a0ef73c5132fd.patch";
-        sha256 = "yCX/UL666BPxjnxT6rIsUrJsPcSWHhZwMFJfuHhbkhk=";
-      })
-      (fetchpatch {
-        name = "qtwebkit-bison-3.7-build.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
-        sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
-      })
-      (fetchpatch {
-        name = "qtwebkit-glib-2.68.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
-        sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
-      })
-      (fetchpatch {
-        name = "qtwebkit-darwin-handle.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
-        sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
-      })
-      (fetchpatch {
-        name = "qtwebkit-libxml2-api-change.patch";
-        url = "https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b.patch";
-        sha256 = "WZEj+UuKhgJBM7auhND3uddk1wWdTY728jtiWVe7CSI=";
-      })
-      ./qtwebkit.patch
-      ./qtwebkit-icu68.patch
-      ./qtwebkit-cstdint.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./qtwebkit-darwin-no-readline.patch
-      ./qtwebkit-darwin-no-qos-classes.patch
-    ];
     qttools = [ ./qttools.patch ];
   };
 
@@ -311,26 +269,8 @@ let
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ../modules/qtwayland.nix { };
       qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
-      qtwebengine =
-        # Actually propagating stdenv change
-        let
-          # Won’t build with Clang 20, as `-Wenum-constexpr-conversion`
-          # was made a hard error.
-          # qt5webengine no longer maintained, FTBFS with GCC 15
-          stdenv' = if stdenv.cc.isClang then llvmPackages_19.stdenv else gcc14Stdenv;
-          qtModule' = qtModuleWithStdenv stdenv';
-        in
-        callPackage ../modules/qtwebengine.nix {
-          inherit (srcs.qtwebengine) version;
-          inherit (darwin) bootstrap_cmds;
-          stdenv = stdenv';
-          qtModule = qtModule';
-          python = python3;
-        };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
-      qtwebkit = callPackage ../modules/qtwebkit.nix { };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix { };
-      qtwebview = callPackage ../modules/qtwebview.nix { };
       qtx11extras = callPackage ../modules/qtx11extras.nix { };
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix { };
 

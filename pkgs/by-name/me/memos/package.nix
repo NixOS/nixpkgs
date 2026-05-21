@@ -7,9 +7,11 @@
   lib,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
 }:
 let
+  pnpm = pnpm_10;
+
   version = "0.25.3";
   src = fetchFromGitHub {
     owner = "usememos";
@@ -23,6 +25,7 @@ let
     inherit version src;
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/web";
       fetcherVersion = 3;
       hash = "sha256-xEOnxCgBD4uLypcZzCO+31S4r0sSfz8PpgEmZASeRZ4=";

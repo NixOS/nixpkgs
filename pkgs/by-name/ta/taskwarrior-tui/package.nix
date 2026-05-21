@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taskwarrior-tui";
-  version = "0.26.5";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mdkGRxe9d92WXBCLhBUWNALS4WwjoeYgZop2frZwNN0=";
+    sha256 = "sha256-8Gpf8D7XocdcHuJKLqfT1QeqkIa7cQHEAoTkKIl/RrU=";
   };
 
-  cargoHash = "sha256-Z9y8LLqTicbw4Q+lFalQo4kZFddU2fVMBl6iR4f6D9g=";
+  cargoHash = "sha256-u0W1qVj0SRYVtnoWMqxeuBC9QvibogL4quiQLxzM8LM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   postInstall = ''
-    installManPage docs/taskwarrior-tui.1
     installShellCompletion completions/taskwarrior-tui.{bash,fish} --zsh completions/_taskwarrior-tui
   '';
 

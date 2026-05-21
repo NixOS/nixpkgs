@@ -1,7 +1,7 @@
 {
   fetchzip,
   revision,
-  suffix,
+  browserVersion,
   system,
   throwSystem,
   stdenv,
@@ -24,15 +24,20 @@
   ...
 }:
 let
+  download =
+    (import ./browser-downloads.nix {
+      name = "chromium-headless-shell";
+      inherit revision browserVersion;
+    }).${system} or throwSystem;
+
   linux = stdenv.mkDerivation {
     name = "playwright-chromium-headless-shell";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-headless-shell-${suffix}.zip";
-      stripRoot = false;
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-4xPtmjRSbkWLmV2LzVClwjeQcmktZCvDS3gYo+FlkJc=";
-          aarch64-linux = "sha256-rnurwOiST8fdAC5kGC9uR+MRidGtIZCPQLrg+xZbuZQ=";
+          x86_64-linux = "sha256-kQCw0nQHHuUIfn8rGVcN7Ip6ZOk5c3Or+GG5RvSica4=";
+          aarch64-linux = "sha256-s2IIjSY5t9AtT05dUS0mp4fPlaixND9+Cg0+0S8Kkx8=";
         }
         .${system} or throwSystem;
     };
@@ -64,12 +69,11 @@ let
   };
 
   darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-headless-shell-${suffix}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-9MsBmUuaHq3P/eWxGcihzk09e1zuEr4dIMo6ZjSM8ZQ=";
-        aarch64-darwin = "sha256-i8L+C4p8DCcqb5C5B5q+JuX/fTPxhBva2dlFVDkdfQ0=";
+        x86_64-darwin = "sha256-kzbLpzzMpBurQHyGaz561A0K46GzgWPP2JSQKRV6C+Y=";
+        aarch64-darwin = "sha256-67ekk37uq5ITq9ZvwPTZhhqEgQY17g/3KJ/vnqZz3h0=";
       }
       .${system} or throwSystem;
   };

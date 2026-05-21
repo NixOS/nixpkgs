@@ -30,6 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Evu4qLlwg3Sf9w/ojtZMNxGJEtopHgKnwqlpf115zD4=";
   };
 
+  patches = [
+    # https://github.com/jerryscript-project/jerryscript/issues/5263
+    ./fix-gcc15.patch
+  ];
+
+  postPatch = ''
+    # get rid of bundled CMake toolchain files
+    rm cmake/toolchain_*
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -40,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "JERRY_MATH" enableMath)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-enum-enum-conversion -Wno-enum-float-conversion -Wno-literal-range";
 
   nativeCheckInputs = [
     python3
@@ -57,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Uses a custom lib variable that ignores what nixpkgs's cmake setupHook specifies.
   postInstall = ''
-    mkdir -p "$lib/lib"
-    mv "$out/lib/"*.so "$lib/lib"
+    mkdir $lib
+    mv "$out/lib" "$lib/"
   '';
 
   nativeInstallCheckInputs = [
@@ -92,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
       "libjerry-ext"
       "libjerry-port"
     ];
-    maintainers = with lib.maintainers; [ RossSmyth ];
+    maintainers = with lib.maintainers; [
+      RossSmyth
+      wishstudio
+    ];
   };
 })

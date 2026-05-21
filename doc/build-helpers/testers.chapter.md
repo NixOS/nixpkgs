@@ -129,6 +129,13 @@ It has two modes:
 
   Example: `{ "include_verbatim" = true; }`
 
+`extraArgs` (list of strings, optional) {#tester-lycheeLinkCheck-param-extraArgs}
+
+: Extra command line arguments to pass to the `lychee` invocation.
+  These are passed in both the offline (build) and [`online`](#tester-lycheeLinkCheck-return) modes.
+
+  Example: `[ "--format" "json" ]`
+
 `lychee` (derivation, optional) {#tester-lycheeLinkCheck-param-lychee}
 
 : The `lychee` package to use.

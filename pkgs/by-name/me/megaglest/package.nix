@@ -11,7 +11,7 @@
   lua,
   libvlc,
   libjpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   cppunit,
   ftgl,
   glew,
@@ -57,7 +57,7 @@ let
       stdenv.cc.cc
       glew
       libGLU
-      wxGTK32
+      wxwidgets_3_2
     ];
   };
   path-env = buildEnv {
@@ -127,7 +127,7 @@ stdenv.mkDerivation {
     libpng
     libjpeg
     libvlc
-    wxGTK32
+    wxwidgets_3_2
     glib
     cppunit
     fontconfig

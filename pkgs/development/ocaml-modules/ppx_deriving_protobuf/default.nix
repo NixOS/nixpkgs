@@ -8,14 +8,14 @@
   dune-configurator,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_deriving_protobuf";
   version = "3.0.0";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ppx_deriving_protobuf/releases/download/v${version}/ppx_deriving_protobuf-v${version}.tbz";
+    url = "https://github.com/ocaml-ppx/ppx_deriving_protobuf/releases/download/v${finalAttrs.version}/ppx_deriving_protobuf-v${finalAttrs.version}.tbz";
     sha256 = "1dc1vxnkd0cnrgac5v3zbaj2lq1d2w8118mp1cmsdxylp06yz1sj";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vyorkin ];
   };
-}
+})

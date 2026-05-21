@@ -5,14 +5,11 @@
   cmake,
   ninja,
   kdePackages,
-  qtPackages ? kdePackages,
+  qt6,
   gitUpdater,
 }:
-let
-  qtMajorVersion = lib.versions.major qtPackages.qtbase.version;
-in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "darkly-qt${qtMajorVersion}";
+  pname = "darkly";
   version = "0.5.32";
 
   src = fetchFromGitHub {
@@ -25,34 +22,27 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    qtPackages.wrapQtAppsHook
-    qtPackages.extra-cmake-modules
+    qt6.wrapQtAppsHook
+    kdePackages.extra-cmake-modules
   ];
 
-  buildInputs =
-    with qtPackages;
-    [
-      qtbase
-      kconfig
-      kcoreaddons
-      kcmutils
-      kguiaddons
-      ki18n
-      kiconthemes
-      kwindowsystem
-    ]
-    ++ lib.optionals (qtMajorVersion == "5") [
-      kirigami2
-    ]
-    ++ lib.optionals (qtMajorVersion == "6") [
-      kcolorscheme
-      kdecoration
-      kirigami
-    ];
+  buildInputs = with kdePackages; [
+    qtbase
+    kconfig
+    kcoreaddons
+    kcmutils
+    kguiaddons
+    ki18n
+    kiconthemes
+    kwindowsystem
+    kcolorscheme
+    kdecoration
+    kirigami
+  ];
 
-  cmakeFlags = map (v: lib.cmakeBool "BUILD_QT${v}" (v == qtMajorVersion)) [
-    "5"
-    "6"
+  cmakeFlags = [
+    "-DBUILD_QT5=OFF"
+    "-DBUILD_QT6=ON"
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
@@ -64,8 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ pluiedev ];
-  }
-  // lib.optionalAttrs (qtMajorVersion == "6") {
     mainProgram = "darkly-settings6";
   };
 })

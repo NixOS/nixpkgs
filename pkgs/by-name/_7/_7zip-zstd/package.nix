@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     "MSYSTEM=1"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -76,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
-      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+      --replace-fail windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
   buildPhase =
@@ -103,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preBuild
 
       for component in Bundles/{Alone,Alone2,Alone7z,Format7zF,SFXCon} UI/Console; do
-        make -j $NIX_BUILD_CORES -C CPP/7zip/$component -f ${makefile} $makeFlags
+        make -j $NIX_BUILD_CORES -C CPP/7zip/$component -f ${makefile} "''${makeFlags[@]}"
       done
 
       runHook postBuild

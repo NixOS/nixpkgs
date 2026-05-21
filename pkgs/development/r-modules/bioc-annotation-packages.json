@@ -1031,14 +1031,14 @@
     },
     "IlluminaHumanMethylationEPICv2anno_20a1_hg38": {
       "name": "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
-      "version": "1.0.0",
-      "sha256": "0vp4m3a7qal4d8qc9xaj7z3x484i33ix4c67qlbw0kskdir7rq5a",
+      "version": "1.0.1",
+      "sha256": "18y92h02dh3pcc27dn1m9jr4m6srwv7w25a4wg3c6jlrggnm5210",
       "depends": ["minfi"]
     },
     "IlluminaHumanMethylationEPICv2manifest": {
       "name": "IlluminaHumanMethylationEPICv2manifest",
-      "version": "1.0.0",
-      "sha256": "1z4b15x8cai27cqhl2lhl02nx0lv8q5c1774vdvvdajx2hivn77l",
+      "version": "1.0.1",
+      "sha256": "0dwynwhjf3dnbw6975fxvncrqk5si22vrcyf6wivvgak1zim9bjl",
       "depends": ["minfi"]
     },
     "IlluminaHumanMethylationMSAanno_ilm10a1_hg38": {

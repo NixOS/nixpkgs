@@ -51,7 +51,6 @@ let
     filter
     filterAttrs
     fix
-    fold
     foldAttrs
     foldl
     foldl'
@@ -558,6 +557,10 @@ runTests {
       "c"
     ];
     expected = "a\nb\nc\n";
+  };
+  testConcatLinesEmpty = {
+    expr = concatLines [ ];
+    expected = "";
   };
 
   testMakeIncludePathWithPkgs = {
@@ -3393,6 +3396,44 @@ runTests {
     ];
   };
 
+  testEmptyValueOption = {
+    expr =
+      let
+        module =
+          { lib, ... }:
+          {
+            options = {
+              "empty-value" = lib.mkOption {
+                type = lib.mkOptionType {
+                  name = "propagate-empty-value-to-default";
+                  emptyValue.value = 2;
+                };
+              };
+            };
+          };
+        eval = evalModules {
+          modules = [ module ];
+        };
+      in
+      filter (o: o.name == "empty-value") (optionAttrSetToDocList eval.options);
+    expected = [
+      {
+        declarations = [ ];
+        default = {
+          _type = "literalExpression";
+          text = "2";
+        };
+        description = null;
+        internal = false;
+        loc = [ "empty-value" ];
+        name = "empty-value";
+        readOnly = false;
+        type = "propagate-empty-value-to-default";
+        visible = true;
+      }
+    ];
+  };
+
   testDocOptionVisiblity = {
     expr =
       let
@@ -4752,7 +4793,7 @@ runTests {
   # for sub-directories
   testPackagesFromDirectoryNestedScopes =
     let
-      inherit (lib) makeScope recurseIntoAttrs;
+      inherit (lib) makeScope;
       emptyScope = makeScope lib.callPackageWith (_: { });
     in
     {
@@ -4786,6 +4827,58 @@ runTests {
             h = "h";
           };
         };
+      };
+    };
+
+  # Check that makeScope provides a default callPackage
+  testMakeScopeDefaultCallPackage =
+    let
+      scope = lib.makeScope lib.callPackageWith (self: {
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value";
+    };
+
+  # Check that callPackage can be overridden by the scope function
+  testMakeScopeOverrideCallPackage =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value-custom";
+    };
+
+  # Check that overriding callPackage persists through overrideScope
+  testMakeScopeOverrideCallPackagePersistsThroughOverrideScope =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+      overridden = scope.overrideScope (
+        _final: _prev: {
+          bar = scope.callPackage ({ }: "bar-value") { };
+        }
+      );
+    in
+    {
+      expr = { inherit (overridden) foo bar; };
+      expected = {
+        foo = "foo-value-custom";
+        bar = "bar-value-custom";
       };
     };
 
@@ -4922,4 +5015,103 @@ runTests {
   testReplaceElemAtOutOfRange = testingThrow (lib.replaceElemAt [ 1 2 3 ] 5 "a");
 
   testReplaceElemAtNegative = testingThrow (lib.replaceElemAt [ 1 2 3 ] (-1) "a");
+
+  testIsFree = {
+    expr = lib.licenses.isFree (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = true;
+  };
+
+  testIsUnfree = {
+    expr = lib.licenses.isFree (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [ lib.licenses.unfree ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = false;
+  };
+
+  testIsRedistributable = {
+    expr = lib.licenses.isRedistributable (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = true;
+  };
+
+  testIsUnredistributable = {
+    expr = lib.licenses.isRedistributable (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [ lib.licenses.unfree ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = false;
+  };
+
+  testContainsLicenses = {
+    expr = lib.licenses.containsLicenses [ lib.licenses.mit ] (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = true;
+  };
+
+  testToSPDX = {
+    expr = lib.licenses.toSPDX (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = "MIT AND (LicenseRef-nixos-free OR LicenseRef-nixos-unfree) AND (Apache-2.0 WITH LLVM-exception) AND EUPL-1.1+";
+  };
+
+  testEvaluateProperty = {
+    expr = lib.licenses.evaluateProperty (x: x.deprecated) true (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = false;
+  };
 }

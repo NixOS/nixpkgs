@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "boto3";
   inherit (botocore) version; # N.B: botocore, boto3, awscli needs to be updated in lockstep, bump botocore version for updating these.
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boto";
     repo = "boto3";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fzwVxbn4+5zkcAKQ9+bEbNSdwcPKZqsNIJZPqhV+n8w=";
   };
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "AWS SDK for Python";
     homepage = "https://github.com/boto/boto3";
-    changelog = "https://github.com/boto/boto3/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/boto/boto3/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     longDescription = ''
       Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     '';
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

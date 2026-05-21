@@ -141,7 +141,6 @@ crystal.buildCrystalPackage rec {
     maintainers = with lib.maintainers; [
       _999eagle
       GaetanLepage
-      sbruder
     ];
   };
 }

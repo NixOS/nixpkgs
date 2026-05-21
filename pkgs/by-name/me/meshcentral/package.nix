@@ -1,51 +1,47 @@
 {
   lib,
-  fetchzip,
-  fetchYarnDeps,
-  yarn2nix-moretea,
-  nodejs-slim_20,
-  dos2unix,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs_22,
 }:
 
-yarn2nix-moretea.mkYarnPackage {
-  version = "1.1.56";
+buildNpmPackage (finalAttrs: {
+  pname = "meshcentral";
+  version = "1.1.59";
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.56.tgz";
-    sha256 = "1n6kzbgmsn083sdwgwnn6cwch1ay20n1218bgzyv604hyvzrm0i2";
+  src = fetchFromGitHub {
+    owner = "Ylianst";
+    repo = "MeshCentral";
+    tag = finalAttrs.version;
+    hash = "sha256-qfiIofwFOXHzxnqyJyXCgwMqBhONjBiU/5YLOE7u4n8=";
   };
+
+  npmDepsHash = "sha256-UYPx3OIeT1HUgyjY743F/DTwsfIRTlsQLJxK99LbA/k=";
+  # Using the npmDeps with a newer nodejs causes `npm ci` errors, also upstream
+  # states they stick to the LTS version of nodejs:
+  # https://meshcentral.com/docs/MeshCentral2InstallGuide.pdf
+  nodejs = nodejs_22;
 
   patches = [
     ./fix-js-include-paths.patch
+    # from some reason the way the package is installed causes the `require`
+    # line in `$out/lib/node_modules/meshcentral/bin/meshcentral` to import the
+    # main file as a module, and thus nothing happens when it runs. We remove
+    # this conditional since we never use this as a module.
+    ./run.patch
+    # Add `optionalDependencies` that are used during runtime, to
+    # `package{,-lock}.json`. During a video meeting with upstream, they sort
+    # of agreed to track these optionalDependencies from now on, but they are
+    # still not sure about a few details regarding this. See:
+    #
+    # https://github.com/Ylianst/MeshCentral/pull/7672
+    #
+    # The above doesn't apply cleanly on 1.1.57, but hopefully it shouldn't be
+    # too hard to regenerate it for the next version.
+    ./optionalDependencies.patch
   ];
 
-  packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = "sha256-M5TZhY995VFFbY3cjM3jiEceiVm54N6CKxQRVACOL9w=";
-  };
-
-  # Tarball has CRLF line endings. This makes patching difficult, so let's convert them.
-  nativeBuildInputs = [ dos2unix ];
-  prePatch = ''
-    find . -name '*.js' -exec dos2unix {} +
-    ln -snf meshcentral.js bin/meshcentral
-  '';
-
-  preFixup = ''
-    mkdir -p $out/bin
-    chmod a+x $out/libexec/meshcentral/deps/meshcentral/meshcentral.js
-    sed -i '1i#!${lib.getExe nodejs-slim_20}' $out/libexec/meshcentral/deps/meshcentral/meshcentral.js
-    ln -s $out/libexec/meshcentral/deps/meshcentral/meshcentral.js $out/bin/meshcentral
-  '';
-
-  doDist = false;
-
-  publishBinsFor = [ ];
-
-  passthru.updateScript = ./update.sh;
+  dontNpmBuild = true;
 
   meta = {
     description = "Computer management web app";
@@ -54,4 +50,4 @@ yarn2nix-moretea.mkYarnPackage {
     license = lib.licenses.asl20;
     mainProgram = "meshcentral";
   };
-}
+})

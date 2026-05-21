@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       want to make use of librsb.
     '';
     license = with lib.licenses; [ lgpl3Plus ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     platforms = lib.platforms.all;
     # linking errors such as 'undefined reference to `gzungetc'
     broken = true;

@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "assh";
-  version = "2.17.0";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X5UWQe4c+QudmXKjFKafivO/OvdBNzyutrL+CUK0olg=";
+    hash = "sha256-/w4RluA7py6d75S04czNsgHpmR5rmAUZx8OnZfu9oNg=";
   };
 
   vendorHash = "sha256-EA39KqAN9SHPU362j6/j6okvT+eZb2R4unMA0bB+bVg=";

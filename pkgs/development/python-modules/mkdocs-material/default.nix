@@ -26,16 +26,16 @@
   trove-classifiers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-material";
-  version = "9.7.1";
+  version = "9.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
-    tag = version;
-    hash = "sha256-+DMxYTj3PYjhv3M3XQS+XgLRSMFAfFeZYiMEzl7Wo6o=";
+    tag = finalAttrs.version;
+    hash = "sha256-qQtVnWNSh7rJhVyufkebEq6n4lpBI3tZxHRT07AIZFA=";
   };
 
   build-system = [
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = {
-    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Material for mkdocs";
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";
@@ -94,4 +94,4 @@ buildPythonPackage rec {
       jaysa68
     ];
   };
-}
+})

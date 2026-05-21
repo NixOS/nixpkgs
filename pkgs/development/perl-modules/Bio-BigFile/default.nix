@@ -24,7 +24,7 @@ buildPerlModule rec {
   # - official documentation: https://www.ensembl.org/info/docs/tools/vep/script/vep_download.html#bigfile
   # - one of the developer's answer: https://github.com/Ensembl/ensembl-vep/issues/1412
   # BioBigfile needs the environment variable KENT_SRC to find kent
-  KENT_SRC = kent.overrideAttrs (old: rec {
+  env.KENT_SRC = kent.overrideAttrs (old: rec {
     pname = "kent";
     version = "335";
 

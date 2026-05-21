@@ -43,19 +43,6 @@ index b992f6f..eb828dd 100644
  }
  
  QString GocryptfsBackend::getConfigFilePath(const Device &device) const
-diff --git a/kded/engine/fusebackend_p.cpp b/kded/engine/fusebackend_p.cpp
-index 8763304..e6860d2 100644
---- a/kded/engine/fusebackend_p.cpp
-+++ b/kded/engine/fusebackend_p.cpp
-@@ -90,7 +90,7 @@ QProcess *FuseBackend::process(const QString &executable, const QStringList &arg
- 
- QProcess *FuseBackend::fusermount(const QStringList &arguments) const
- {
--    return process(fusermountExecutable, arguments, {});
-+    return process("@fusermount@", arguments, {});
- }
- 
- FutureResult<> FuseBackend::initialize(const QString &name, const Device &device, const MountPoint &mountPoint, const Vault::Payload &payload)
 diff --git a/kded/engine/vault.cpp b/kded/engine/vault.cpp
 index c101079..67c8a83 100644
 --- a/kded/engine/vault.cpp

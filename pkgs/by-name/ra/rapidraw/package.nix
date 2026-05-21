@@ -34,7 +34,7 @@
   gvfs,
   libheif,
   glib-networking,
-  nodejs_20,
+  nodejs_24,
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
@@ -42,41 +42,34 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.0";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PzPw7TJQK6ojsdw8cypS/drtc/ec93IYGIjTEdpIraI=";
-    fetchSubmodules = true;
-
-    # darwin/linux hash mismatch in rawler submodule
-    # Same fix as is used in dnglab packaging
-    postFetch = ''
-      rm -rf $out/src-tauri/rawler/rawler/data/testdata/cameras/Canon/{"EOS REBEL T7i","EOS Rebel T7i"}
-    '';
+    hash = "sha256-CnH8EuHzHxuXbnOry2gMU/tMqpE8++ztyNPk3HHdZqE=";
   };
 
-  cargoHash = "sha256-cgqNGft6LK5XNGv1CDLw5v+m8a9xmu7albfoGJnkE34=";
+  cargoHash = "sha256-c2MK1DyonfeZKfZAVWfwVh/In5SqKq7nnFrlz2686SM=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-4PbNSM4BIMOpmPcys/Vt5gzy/Pu9L6rPcG0lGnTDvGo=";
+    hash = "sha256-1A6b63FjNvkAbu62dRXfMjTL1y2wr2gEsZkLqYvTk0w=";
   };
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     wrapGAppsHook4
-    nodejs_20
+    nodejs_24
     npmHooks.npmConfigHook
     cargo-tauri.hook
     writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
-    nodejs_20
+    nodejs_24
     glib-networking
     openssl
     gtk3
@@ -136,29 +129,45 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ORT_STRATEGY = "system";
   };
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # Patch the .desktop file to set the Categories field
-    sed -i '/^Categories=/c\Categories=Graphics;Photography' "$out/share/applications/RapidRAW.desktop"
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Patch the .desktop file to set the Categories field
+      sed -i '/^Categories=/c\Categories=Graphics;Photography' "$out/share/applications/RapidRAW.desktop"
 
-    # Ensure the resources directory exists before linking
-    mkdir -p $out/lib/RapidRAW/resources
+      # Ensure the resources directory exists before linking
+      mkdir -p $out/lib/RapidRAW/resources
 
-    # link the .so file
-    ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
-  '';
+      # link the .so file
+      ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # The binary links against @rpath/libonnxruntime.*.dylib but has no LC_RPATH entries
+      install_name_tool -add_rpath "${onnxruntime}/lib" "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw"
+      # The app also dlopen()s libonnxruntime.dylib at a hardcoded path inside the bundle
+      mkdir -p "$out/Applications/RapidRAW.app/Contents/Resources/resources"
+      ln -sf ${onnxruntime}/lib/libonnxruntime.dylib "$out/Applications/RapidRAW.app/Contents/Resources/resources/libonnxruntime.dylib"
+    '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapGApp $out/bin/rapidraw \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
-      --set ORT_STRATEGY "system"
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapGApp $out/bin/rapidraw \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
+        --set ORT_STRATEGY "system"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapGApp "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw" \
+        --set ORT_STRATEGY "system"
+    '';
 
   meta = {
     description = "Blazingly-fast, non-destructive, and GPU-accelerated RAW image editor built with performance in mind";
     homepage = "https://github.com/CyberTimon/RapidRAW";
     license = lib.licenses.agpl3Only;
     mainProgram = "rapidraw";
-    maintainers = with lib.maintainers; [ taciturnaxolotl ];
+    maintainers = with lib.maintainers; [
+      philipdb
+      taciturnaxolotl
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

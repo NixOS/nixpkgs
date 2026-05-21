@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2025c";
+  version = "2026b";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-SqeeTv/uU/xAKf/l9uvpeTcoLrzfOG1dLakc6EFC+Vc=";
+      hash = "sha256-EUVD2fGaa/61vKQ2hq6hc9OHVaPbHy7sESZHrpLG9UQ=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-aX6+ZiVESu9QgPWOSdA0JLu1Lgi/SD0921rPEMvRV0A=";
+      hash = "sha256-N+nthCf101IcIvxY4pPL+wQ9cO7fEAOHCzPzY/Yco0Q=";
     })
   ];
 
@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
     "cc=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
+    "REDO=posix_right"
   ]
   ++ lib.optionals stdenv.hostPlatform.isWindows [
     "CFLAGS+=-DHAVE_DIRECT_H"

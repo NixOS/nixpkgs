@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "protobuf-matchers";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "inazarenko";
     repo = "protobuf-matchers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aIEqmA4JwnGHY80Ehr9tgyxzhAk1nAdiVtPbsI0P0Aw=";
+    hash = "sha256-UROM6QeqgRWECnVSM3aNDhQXhWOm2X0MjzIORAOZ2ng=";
   };
 
   postPatch = ''

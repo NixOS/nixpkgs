@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
           openssh
           procps
         ]
-      }" \
+      }"
   '';
 
   meta = {

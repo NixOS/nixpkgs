@@ -9,13 +9,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scope-tui";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "alemidev";
     repo = "scope-tui";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-MU9avQt+qFIQzF7GYNNoGiyfBD7eLOMQaBH6lFhLlOY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-etiJmbLuzrKZXhi/BsEhipvmzEilJAfgfv7t9oYrltw=";
   };
 
   cargoHash = "sha256-yAy3kk62HYe1/1EXGUhOg++sZua65iN3ZEmPoERcu0I=";

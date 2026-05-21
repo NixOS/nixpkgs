@@ -1,53 +1,48 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo126Module,
-  buildNpmPackage,
+  buildGoModule,
   ffmpeg,
+  nodejs,
+  npmHooks,
+  fetchNpmDeps,
+  nix-update-script,
 }:
-let
-  version = "3.5.0";
+buildGoModule (finalAttrs: {
+  pname = "seanime";
+  version = "3.8.2";
+
   src = fetchFromGitHub {
     owner = "5rahim";
     repo = "seanime";
-    rev = "v${version}";
-    hash = "sha256-5A2gg0ZFy9JP42I6fh9dcVUkS7P+0aH7arT4gdjAYHM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7wOmvOrs4/YiIjOGdp6pleUcUjNaXhZFvtwBTSn5BQI=";
   };
 
-  seanime-web = buildNpmPackage {
-    pname = "seanime-web";
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
 
-    inherit src version;
-
-    sourceRoot = "${src.name}/seanime-web";
-
-    patches = [ ./default-disable-update-check.patch ];
-
-    npmDepsHash = "sha256-kO5k4B5mKoIfhhujNM0jw+/ErVwxm9/nZ5eBTWnA7HQ=";
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r out $out/web
-
-      runHook postInstall
-    '';
+  env = {
+    npmRoot = "seanime-web";
+    npmDeps = fetchNpmDeps {
+      src = "${finalAttrs.src}/seanime-web";
+      hash = "sha256-LtRiwmrWSu4Zc0+/AywEEGpcxElIrp0A+x+8jWMfKig=";
+    };
   };
-in
-buildGo126Module {
-  pname = "seanime";
 
-  inherit src version;
-
-  vendorHash = "sha256-jdGkrU4WGgqkWN0FIaxVhtYfFnS+/ZnAY6dWB+gOmNQ=";
+  patches = [ ./default-disable-update-check.patch ];
 
   preBuild = ''
-    cp -r ${seanime-web}/web .
+    npm run build --prefix seanime-web
+    cp -r seanime-web/out web
 
     # .github scripts redeclare main
     rm -rf .github
   '';
+
+  vendorHash = "sha256-BPOLDqa9qt/nISJ6Ja6ZSDGf8oXwKgZ6sbMee6hFLfs=";
 
   subPackages = [ "." ];
 
@@ -58,6 +53,7 @@ buildGo126Module {
     "-w"
   ];
 
+  # for transcoding
   makeWrapperArgs = [
     "--prefix PATH : ${
       lib.makeBinPath [
@@ -65,6 +61,8 @@ buildGo126Module {
       ]
     }"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source media server for anime and manga";
@@ -74,4 +72,4 @@ buildGo126Module {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ thegu5 ];
   };
-}
+})

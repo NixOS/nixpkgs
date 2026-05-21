@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.28.0";
+  version = "1.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${version}";
-    hash = "sha256-56Z0peJcjBbNX51MLLaIKcD9Qg+5q+5I0gKRu84/8TM=";
+    hash = "sha256-8kKTqthpkH3A5secb8TqbM+/twA77R81y80MOPNQZPA=";
   };
 
   pythonRelaxDeps = [
@@ -56,5 +56,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    # https://github.com/GitGuardian/py-gitguardian/issues/167
+    broken = lib.versionAtLeast marshmallow.version "4";
   };
 }

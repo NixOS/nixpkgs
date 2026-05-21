@@ -59,14 +59,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qcodes";
-  version = "0.55.0";
+  version = "0.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jk1QfC3jcU0x5lrgnEYdJ2w/HU84xdx3XpDPkXDzPtE=";
+    hash = "sha256-7J1vKMG1/d/8O+j+RmUtVpjFdZB4w0BVoGrIONbr/e4=";
   };
 
   postPatch = ''

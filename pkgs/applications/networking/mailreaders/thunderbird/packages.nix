@@ -31,9 +31,11 @@ let
       ];
       # FIXME: let's hope that upstream will fix this soon and we can drop this hack again.
       # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
-      extraPostPatch = lib.optionalString (lib.versionAtLeast version "147") ''
-        find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
-      '';
+      extraPostPatch =
+        lib.optionalString (lib.versionAtLeast version "147" && lib.versionOlder version "149")
+          ''
+            find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
+          '';
 
       meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
@@ -53,20 +55,26 @@ let
         license = lib.licenses.mpl20;
       };
     }).override
-      {
-        geolocationSupport = false;
-        webrtcSupport = false;
+      (
+        {
+          geolocationSupport = false;
+          webrtcSupport = false;
 
-        pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
-      };
+          pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+        }
+        // lib.optionalAttrs (lib.versionAtLeast version "149") {
+          # https://bugzilla.mozilla.org/show_bug.cgi?id=2025767
+          crashreporterSupport = false;
+        }
+      );
 
 in
 rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "148.0";
-    sha512 = "ec5e586206ef217f37eb6985356994e7e7c9db6090f57d5b4c43a3a5dc0e1f5a56c0e7080d86fb895446845f9c9b948284f7417afebcf6e6120eca0e1ed238f3";
+    version = "150.0.2";
+    sha512 = "3e52220ff34aa6cd1bf46a910dba1f30d0abf7d19ed7f501ffeeb8f5901b8d97fdc0adb0cceb434ef8e83c7f7b83f28024b872280237af72ff2da9d89fafe065";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";

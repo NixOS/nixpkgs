@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "4.7.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "pupdate";
     rev = "${version}";
-    hash = "sha256-KodDuTVw06IFfwVOgbVwgNp74czjEcgu/T9rgYXlASQ=";
+    hash = "sha256-XZom0PDK5Vno0lCDFYE0lyH+ZDlfRNYqwUDo+zrI4ow=";
   };
 
   buildInputs = [
@@ -57,7 +57,7 @@ buildDotnetModule rec {
     description = "Update utility for the openFPGA cores, firmware, and other stuff on your Analogue Pocket";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ p-rintz ];
+    maintainers = [ ];
     mainProgram = "pupdate";
   };
 }

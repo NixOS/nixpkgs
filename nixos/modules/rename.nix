@@ -82,6 +82,10 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "pqos-wrapper"
+    ] "The corresponding package was removed from nixpkgs.") # added 2026-05-13
     (mkRemovedOptionModule
       [
         "services"
@@ -217,9 +221,27 @@ in
     (mkRemovedOptionModule
       [
         "services"
+        "globalprotect"
+      ]
+      "The corresponding package was removed from nixpkgs, as it depended on qt5 webengine. A replacements based on tauri exist upstream, but requires non-trivial maintainance in nixpkgs to update."
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
         "grafana-agent"
       ]
       "The grafana-agent module has been removed. Consider migrating to `grafana-alloy` (`services.alloy.enable`). See <https://grafana.com/docs/alloy/latest/set-up/migrate/>"
+    )
+    (mkRemovedOptionModule
+      [
+        "services"
+        "promtail"
+      ]
+      ''
+        The promtail module has been removed, as promtail reached its end of life.
+        Consider migrating to `grafana-alloy` (`services.alloy.enable`), or, if you are looking for something light-weight, `fluent-bit` (`services.fluent-bit.enable`).
+        See <https://grafana.com/docs/alloy/latest/set-up/migrate/> or <https://docs.fluentbit.io/manual/data-pipeline/outputs/loki>.
+      ''
     )
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
@@ -368,6 +390,10 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "ragnarwm" ] ''
+      The services.xserver.windowManager.ragnarwm module has been removed
+      because the corresponding package was removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [
       "services"
       "xmr-stak"
@@ -452,6 +478,10 @@ in
     (mkRemovedOptionModule [ "services" "gateone" ] ''
       The gateone module was removed since the package was removed alongside much other obsolete python 2.
     '')
+    (mkRemovedOptionModule [ "services" "opengfw" ] ''
+      The opengfw package and services.opengfw module have been removed since the upstream
+      GitHub repository and website have been shut down.
+    '')
     (mkRemovedOptionModule [ "virtualisation" "lxd" ] ''
       LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
       Consider migrating or switching to Incus, or remove from your configuration.
@@ -481,6 +511,15 @@ in
     '')
     (mkRemovedOptionModule [ "programs" "spacefm" ] ''
       spacefm has been removed since it was unmaintained upstream.
+    '')
+    (mkRemovedOptionModule [ "services" "pyload" ] ''
+      services.pyload has been removed since the pyload-ng package had vulnerabilities and was unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "xtreemfs" ] ''
+      services.xtreemfs has been removed as it was broken and unmaintained upstream
+    '')
+    (mkRemovedOptionModule [ "services" "xserver" "cmt" ] ''
+      services.xserver.cmt has been removed as it was broken and unmaintained upstream
     '')
     # Do NOT add any option renames here, see top of the file
   ];

@@ -2,14 +2,17 @@
   stdenv,
   lib,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_29_2,
+  node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_40,
+  electron_41,
   python3,
   makeWrapper,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
   jq,
   makeDesktopItem,
   copyDesktopItems,
@@ -23,10 +26,13 @@
 
   withAppleEmojis ? false,
 }:
+assert lib.warnIf (commandLineArgs != "")
+  "`commandLineArgs` has been deprecated and will be removed in the future. Consider creating a wrapper script or a desktop entry with your desired flags."
+  true;
 let
   nodejs = nodejs_24;
-  pnpm = pnpm_10;
-  electron = electron_40;
+  pnpm = pnpm_10_29_2;
+  electron = electron_41;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -34,34 +40,24 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  # Noto Color Emoji PNG files for emoji replacement; see below.
-  noto-fonts-color-emoji-png = noto-fonts-color-emoji.overrideAttrs (prevAttrs: {
-    pname = "noto-fonts-color-emoji-png";
-
-    # The build produces 136×128 PNGs by default for arcane font
-    # reasons, but we want square PNGs.
-    buildFlags = prevAttrs.buildFlags or [ ] ++ [ "BODY_DIMENSIONS=128x128" ];
-
-    makeTargets = [ "compressed" ];
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share
-      mv build/compressed_pngs $out/share/noto-fonts-color-emoji-png
-      python3 add_aliases.py --srcdir=$out/share/noto-fonts-color-emoji-png
-
-      runHook postInstall
-    '';
-  });
-
-  version = "8.1.0";
+  version = "8.9.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-pxylCBDEHOxcJeo/117661UMHSIKS7NSVJhwU48hPiA=";
+    hash = "sha256-HXxIjCVGh3JFAj0UUEAvmVnm7jMZdxRqWDILRDFCGw4=";
+    # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
+    # are fetched separately below.
+    postFetch = ''
+      rm $out/fonts/emoji.woff2
+    '';
+  };
+
+  apple-emoji = fetchurl {
+    url = "https://github.com/signalapp/Signal-Desktop/raw/refs/tags/v${version}/fonts/emoji.woff2";
+    hash = "sha256-yGdx5GZVnsmYn+SI9/yAfGhRyzO5Q5Bd0bW9AQyVzv8=";
+    meta.license = lib.licenses.unfree;
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -73,7 +69,7 @@ let
       inherit (finalAttrs) pname src version;
       inherit pnpm;
       fetcherVersion = 3;
-      hash = "sha256-WbdYcI5y01gdS9AIzy4VZZ6eFaTHaVPscTawLSsHzlc=";
+      hash = "sha256-CPZkybD/rCBMBK9qUSweBdLr9hXu0Ztn8fekqrRzUR4=";
     };
 
     strictDeps = true;
@@ -102,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [
+    node-gyp
     nodejs
     pnpmConfigHook
     pnpm
@@ -115,14 +112,33 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
-  buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
   patches = [
+    # Custom fonts currently don't work on windows other than the main one,
+    # which causes some of the text to look messed up. We want to include
+    # this patch since we are overriding the emoji font by default.
+    # Upstream PR: https://github.com/signalapp/Signal-Desktop/pull/7864
+    # This patch can be removed after `v8.11.0`.
+    (fetchpatch {
+      url = "https://github.com/signalapp/Signal-Desktop/commit/52ecd0d931e6071da79b016d2af1f508167b2a98.patch";
+      hash = "sha256-dtc0bwv9aLz92j5Zfm/SREWtQ43ljXN9Vm2VkeDbAx8=";
+    })
     ./force-90-days-expiration.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
+    # Signal ships the Apple emoji set without a licence and upstream
+    # does not seem terribly interested in fixing this; see:
+    #
+    # * <https://github.com/signalapp/Signal-Android/issues/5862>
+    # * <https://whispersystems.discoursehosting.net/t/signal-is-likely-violating-apple-license-terms-by-using-apple-emoji-in-the-sticker-creator-and-android-and-desktop-apps/52883>
+    #
+    # We work around this by replacing it with the Noto Color Emoji
+    # set, which is available under a FOSS licence and more likely to
+    # be used on a NixOS machine anyway. The Apple emoji are removed
+    # in `postFetch` to ensure that the build doesn’t cache the
+    # unlicensed emoji files.
     replaceVars ./replace-apple-emoji-with-noto-emoji.patch {
-      noto-emoji-pngs = "${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png";
+      inherit noto-fonts-color-emoji;
     }
   );
 
@@ -137,19 +153,22 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace app/updateDefaultSession.main.ts \
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
 
-    # https://github.com/signalapp/Signal-Desktop/issues/7667
-    substituteInPlace ts/util/version.std.ts \
-      --replace-fail 'isAdhoc(version)' 'true'
+    # Disable auto-updater https://github.com/signalapp/Signal-Desktop/issues/7667
+    substituteInPlace config/production.json \
+      --replace-fail '"updatesEnabled": true' '"updatesEnabled": false'
 
     # Nix builds do not need upstream release hooks (notarization and
     # language-pack postprocessing), and they expect a different macOS
     # app layout than nixpkgs' Electron provides.
     substituteInPlace package.json \
-      --replace-fail '"artifactBuildCompleted": "ts/scripts/artifact-build-completed.node.js",' "" \
-      --replace-fail '"afterSign": "ts/scripts/after-sign.node.js",' "" \
-      --replace-fail '"afterPack": "ts/scripts/after-pack.node.js",' "" \
-      --replace-fail '"sign": "./ts/scripts/sign-macos.node.js",' "" \
-      --replace-fail '"afterAllArtifactBuild": "ts/scripts/after-all-artifact-build.node.js",' ""
+      --replace-fail '"artifactBuildCompleted": "scripts/artifact-build-completed.mjs",' "" \
+      --replace-fail '"afterSign": "scripts/after-sign.mjs",' "" \
+      --replace-fail '"afterPack": "scripts/after-pack.mjs",' "" \
+      --replace-fail '"sign": "scripts/sign-macos.mjs",' "" \
+      --replace-fail '"afterAllArtifactBuild": "scripts/after-all-artifact-build.mjs",' ""
+  ''
+  + lib.optionalString withAppleEmojis ''
+    cp ${apple-emoji} fonts/emoji.woff2
   '';
 
   pnpmDeps = fetchPnpmDeps {
@@ -161,17 +180,13 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash =
-      if withAppleEmojis then
-        "sha256-XYLpn4yXEF0xBM2XkgeeGBCDQZepLvKwDJunbefq3XU="
-      else
-        "sha256-f0aOXmjw/RtQ70qQjwuGxRxhsFMk1jaqGr2Y1YOpMGg=";
+    hash = "sha256-ls7DYPI5Dq06KI7WCdEkKHPsHTMJ3kO0qJDZsHZQHBQ=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1772664318;
+    SOURCE_DATE_EPOCH = 1778260300;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Disable code signing during local macOS builds.
@@ -226,7 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Build it explicitly against Electron headers ahead of packaging.
     export npm_config_nodedir=${electron.headers}
     pushd node_modules/fs-xattr
-    pnpm exec node-gyp rebuild
+    node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
   '';
@@ -263,8 +278,9 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags ${lib.escapeShellArg commandLineArgs}
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -p $out/share
+    mkdir -p $out/share/polkit-1/actions
     cp -r dist/*-unpacked/resources $out/share/signal-desktop
+    mv $out/share/signal-desktop/*.policy $out/share/polkit-1/actions/
 
     for icon in build/icons/png/*
     do
@@ -274,7 +290,6 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
   ''
   + ''
@@ -305,6 +320,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit
+      apple-emoji
       libsignal-node
       ringrtc
       webrtc
@@ -323,15 +339,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://signal.org/";
     changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${finalAttrs.version}";
-    license =
-      with lib.licenses;
-      [
-        agpl3Only
+    license = with lib.licenses; [
+      agpl3Only
 
-        # Various npm packages
-        free
-      ]
-      ++ lib.optional withAppleEmojis unfree;
+      # Various npm packages
+      free
+    ];
     maintainers = with lib.maintainers; [
       eclairevoyant
       iamanaws

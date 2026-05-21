@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.linode-metadata
     python3Packages.pyyaml
     python3Packages.requests
-    python3Packages.terminaltables
     python3Packages.rich
     python3Packages.openapi3
     python3Packages.packaging

@@ -20,7 +20,7 @@
   python3Packages,
 
   cairo,
-  mysql80,
+  mysql84,
   libiodbc,
   proj,
 
@@ -41,7 +41,7 @@
 }:
 
 let
-  mysql = mysql80;
+  mysql = mysql84;
   gdal' = gdal.override { libmysqlclient = mysql; };
   antlr = antlr4_13;
 

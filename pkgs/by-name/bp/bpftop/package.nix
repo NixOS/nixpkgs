@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "bpftop";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "bpftop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8vb32+wHOnADpIIfO9mMlGu7GdlA0hS9ij0zSLcrO7A=";
+    hash = "sha256-QukcBq80tASPSHRg1yRouYiZqvca+ipp6RGzXqP2CwA=";
   };
 
-  cargoHash = "sha256-euiI4R4nCgnwiBA22kzn0c91hjOr0IOOAyFkW5ZadIk=";
+  cargoHash = "sha256-33VamoVq8O4cgdweWRaDqo5ey2lbLAHoPQVPgmyQwh0=";
 
   buildInputs = [
     elfutils

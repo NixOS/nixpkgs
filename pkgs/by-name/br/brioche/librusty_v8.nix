@@ -2,12 +2,12 @@
 { fetchLibrustyV8 }:
 
 fetchLibrustyV8 {
-  version = "140.2.0";
+  version = "146.9.0";
   shas = {
     # NOTE; Follows supported platforms of package (see meta.platforms attribute)!
-    x86_64-linux = "0xgkyjx4vhi001p8iv0wqjpal4nl0vj65fnhp5x8ckss6mhanymg";
-    aarch64-linux = "1gal8sylc0k9x37m4lrlncmcfaxn5bdizgi9rhyfb9da9wi41n9f";
-    x86_64-darwin = "0y117lgc1d90f3z285ljazacscs02mmk9b57h403ilgqfly8dzh7";
-    aarch64-darwin = "106n64mrmwk0jzm8zy891kjjbxrr7yggj7m986pxinf8igvab7br";
+    x86_64-linux = "167yh6wabn154axrylam4p76n5a411rqjdgaza4dwsfc5cg2zvv2";
+    aarch64-linux = "1lmpqndmv9lyzsca1sx4prw76fsnk63cr1i15jdmk764j3zyyki6";
+    x86_64-darwin = "1zdlwgq3kgd931ppd9afvqkn45vg8gjsz6k8jb2vnbwzf03grsv0";
+    aarch64-darwin = "0hm2wdkd5palsxdw0r9y5365gdww7f37g5z9260sa639211lipp4";
   };
 }

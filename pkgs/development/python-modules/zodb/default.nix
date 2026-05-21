@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zodb";
-  version = "6.2";
+  version = "6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zodb";
     tag = finalAttrs.version;
-    hash = "sha256-R6qf/9Sr70OsZzes+haT/J6RIz6Wlof/l6rQRl3snHI=";
+    hash = "sha256-XeLCzX6qBBAO2HgEtc2+/2z6DRn0UQjI036y+DbcKmQ=";
   };
 
   postPatch = ''

@@ -201,8 +201,16 @@ let
             ''}
 
             ssl_protocols ${cfg.sslProtocols};
-            ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
-            ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
+            ${optionalString (cfg.sslCiphers != null)
+              "ssl_ciphers ${
+                if lib.isList cfg.sslCiphers then (lib.concatStringsSep ":" cfg.sslCiphers) else cfg.sslCiphers
+              };"
+            }
+            ${optionalString (cfg.sslDhparam != false)
+              "ssl_dhparam ${
+                if cfg.sslDhparam == true then config.security.dhparams.params.nginx.path else cfg.sslDhparam
+              };"
+            }
 
             ${optionalString cfg.recommendedTlsSettings ''
               # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
@@ -964,24 +972,41 @@ in
       };
 
       sslCiphers = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (types.either types.str (types.listOf types.str));
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
-        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305";
-        description = "Ciphers to choose from when negotiating TLS handshakes.";
+        default = [
+          "ECDHE-ECDSA-AES128-GCM-SHA256"
+          "ECDHE-RSA-AES128-GCM-SHA256"
+          "ECDHE-ECDSA-AES256-GCM-SHA384"
+          "ECDHE-RSA-AES256-GCM-SHA384"
+          "ECDHE-ECDSA-CHACHA20-POLY1305"
+          "ECDHE-RSA-CHACHA20-POLY1305"
+          "DHE-RSA-AES128-GCM-SHA256"
+          "DHE-RSA-AES256-GCM-SHA384"
+          "DHE-RSA-CHACHA20-POLY1305"
+        ];
+        description = ''
+          List of available cipher suites to choose from when negotiating TLS sessions.
+
+          :::{.warn}
+          This option only handles cipher suites up to TLSv1.2. Use
+          `ssl_conf_command CipherSuites` to configure TLSv1.3 cipher suites.
+          :::
+        '';
       };
 
       sslProtocols = mkOption {
         type = types.str;
         default = "TLSv1.2 TLSv1.3";
-        example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
+        example = "TLSv1.3";
         description = "Allowed TLS protocol versions.";
       };
 
       sslDhparam = mkOption {
-        type = types.nullOr types.path;
-        default = null;
+        type = types.either types.path types.bool;
+        default = false;
         example = "/path/to/dhparams.pem";
-        description = "Path to DH parameters file.";
+        description = "Path to DH parameters file, or `true` to generate with `security.dhparms.params.nginx`.";
       };
 
       proxyResolveWhileRunning = mkOption {
@@ -1652,6 +1677,8 @@ in
           ) (filter (vhostConfig: vhostConfig.useACMEHost != null) acmeEnabledVhosts);
       in
       listToAttrs acmePairs;
+
+    security.dhparams.params.nginx = lib.mkIf (cfg.sslDhparam == true) { };
 
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {

@@ -83,13 +83,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.12.2";
+  version = "3.12.4";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W9MSZP+qmG7r2SzjOXbeYebY5vx8z8cpySv/sGyj42Y=";
+    hash = "sha256-sD/ZAOvMWK2+AGw6wgziDsheH+hwUwhd7i2f65cjFKg=";
   };
 
   nativeBuildInputs = [
@@ -260,6 +260,10 @@ stdenv.mkDerivation (finalAttrs: {
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Trace/BPT trap: 5 on macOS
+    "gcore/hdf4multidim.py"
   ];
   disabledTests = [
     # tests that attempt to make network requests
@@ -318,7 +322,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gdal.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      marcweber
       dotlambda
     ];
     teams = [ lib.teams.geospatial ];

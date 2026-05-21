@@ -8,7 +8,7 @@
   ncurses,
   libcap,
   libnl,
-  sensorsSupport ? stdenv.hostPlatform.isLinux,
+  sensorsSupport ? (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic),
   lm_sensors,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
@@ -19,13 +19,13 @@ assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "htop" + lib.optionalString withVimKeys "-vim";
-  version = "3.4.1";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = "htop";
     tag = finalAttrs.version;
-    hash = "sha256-fVqQwXbJus2IVE1Bzf3yJJpKK4qcZN/SCTX1XYkiHhU=";
+    hash = "sha256-mw7pixNk+AF2Hz8YUkkUleQpR8yNF0pb1NjYgID076A=";
   };
 
   patches = lib.optional withVimKeys (fetchpatch2 {

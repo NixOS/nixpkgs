@@ -4,7 +4,7 @@
   fetchurl,
   scons,
   boost,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace SConstruct \
       --replace "'TERM' : os.environ['TERM']," "" \
       --replace "Options" "Variables" \
-      --replace "-fomit-frame-pointer -ffast-math -mfpmath=sse" "-I${boost.dev}/include -I${ladspaH}/include" \
+      --replace "-fomit-frame-pointer -ffast-math -mfpmath=sse" "-I${boost.dev}/include -I${ladspa-header}/include" \
       --replace "env.has_key('cxx')" "True" \
       --replace "env['cxx']" "'${stdenv.cc.targetPrefix}c++'" \
       --replace "-Wl,--strip-all" ""

@@ -1,5 +1,4 @@
 {
-  lib,
   fetchFromGitHub,
   buildPythonPackage,
 
@@ -13,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plyfile";
   version = "1.1.3";
   pyproject = true;
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dranjan";
     repo = "python-plyfile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bSevEk8ZtJybv6FYsUYKdDJJWyPK7Kstc4NNISdHV2o=";
   };
 
@@ -38,4 +37,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/dranjan/python-plyfile";
     maintainers = [ ];
   };
-}
+})

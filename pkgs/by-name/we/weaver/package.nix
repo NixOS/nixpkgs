@@ -3,41 +3,41 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  fetchNpmDeps,
+  fetchPnpmDeps,
   testers,
   installShellFiles,
   pkg-config,
   openssl,
   nodejs,
-  npmHooks,
+  pnpm_10,
+  pnpmConfigHook,
   python3,
 }:
 
+let
+  pnpm = pnpm_10;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
-  version = "0.21.2";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LMDJg3IKrKRPDkprwlWmBVeaZeI2dZht0eHv7eVGqjo=";
+    hash = "sha256-tq88qWrm243Go64LpH7kU89ryq2xm9nkIJI+ZeQU7IU=";
   };
 
-  cargoHash = "sha256-EzY7OtgPDxT3g2ISV0VZTKa9kLqtKJZH4zT9v2xN/s8=";
+  cargoHash = "sha256-Qxx+BrioVBX5Yy6YVJAnYdNEZVqiZUJTnWNgc74sI44=";
 
-  postPatch = ''
-    # Remove build.rs to build UI separately.
-    rm build.rs
-  '';
-
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-VOL2BLTfJ1nM2L3IZpixOuAaBUHVJX032MGb3+eousY=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-9ifyIKFQiWKM0hzToibU4zuA64PmznqtpFWILFsFvGQ=";
   };
-  npmRoot = "ui";
+  pnpmRoot = "ui";
 
   buildInputs = [ openssl ];
 
@@ -45,7 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     pkg-config
     nodejs
-    npmHooks.npmConfigHook
+    pnpmConfigHook
+    pnpm
     python3
   ];
 
@@ -56,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preBuild = ''
     pushd ui
-    npm run build
+    pnpm build
     popd
   '';
 

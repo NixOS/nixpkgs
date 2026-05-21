@@ -15,14 +15,15 @@
   wrapGAppsHook3,
 
   glib-networking,
-  jre,
+  jdk25,
   libsoup_3,
   openssl,
   webkitgtk_4_1,
 
   nix-update-script,
+  nixosTests,
 
-  isDesktopVariant, # set in all-packages.nix
+  isDesktopVariant ? false,
   buildWithFrontend ? !isDesktopVariant,
 }:
 
@@ -31,21 +32,27 @@ assert isDesktopVariant -> !buildWithFrontend;
 
 let
   gradle = gradle_8;
+  jre = jdk25;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.4.5";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Fk6tuuoTI5ziZ6GjbrRdlvNdToEPb3f155T1OL47XQs=";
+    hash = "sha256-5MZwwBT8Qi1kO+DAO/3JIm0/yAFtQLBo1UXDRZUjK7s=";
   };
 
   patches = [
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
+
+    # Note: only affects the desktop variant
+    # fix path to the stirling-pdf binary
+    # and add support for the stirlingpdf:// protocol
+    ./fix-desktop-file.patch
   ];
 
   npmRoot = "frontend";
@@ -54,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-cVVxbkXD5sz6YmHOwbXj1GYRa2s9PmRFtuNsz2tLRhI=";
+    hash = "sha256-HyQok7Cd1kfWKCtaeHAhvZgxSvaKCk32bdJoNKj//rA=";
   };
 
   cargoRoot = "frontend/src-tauri";
@@ -68,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-lO2IdJUAnhpSnF4vTEn4EdnyrxIXyEUvpNl0VWd2fFs=";
+    hash = "sha256-t6TBUsfOadn3KNLxva6iajlhg21dFqxgH962e1bIRLI=";
   };
 
   mitmCache = gradle.fetchDeps {
@@ -81,7 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
   # we'll trigger it manually in postBuild
   dontTauriBuild = true;
 
-  env.PUPPETEER_SKIP_DOWNLOAD = "1";
+  env = {
+    PUPPETEER_SKIP_DOWNLOAD = "1";
+    # taken from here https://github.com/Stirling-Tools/Stirling-PDF/blob/main/.github/workflows/tauri-build.yml#L346-L348
+    VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY = "sb_publishable_UHz2SVRF5mvdrPHWkRteyA_yNlZTkYb";
+    VITE_SAAS_SERVER_URL = "https://app.stirlingpdf.com";
+    VITE_SAAS_BACKEND_API_URL = "https://api.stirlingpdf.com";
+  };
 
   # disable spotless because it tries to fetch files not in deps.json
   # and also because it slows down the build process
@@ -96,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gradle
-    gradle.jdk # one of the tests also require that the `java` command is available on the command line
+    jre # one of the tests also require that the `java` command is available on the command line
     makeBinaryWrapper
   ]
   ++ lib.optionals (buildWithFrontend || isDesktopVariant) [
@@ -154,7 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${jre} "$res_dir/runtime/jre"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) stirling-pdf-desktop; };
+  };
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";

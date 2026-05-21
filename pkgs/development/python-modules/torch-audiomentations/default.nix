@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torch-audiomentations";
   version = "0.12.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asteroid-team";
     repo = "torch-audiomentations";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5ccVO1ECiIn0q7m8ZLHxqD2fhaXeMDKUEswa49dRTsY=";
   };
 
@@ -74,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast audio data augmentation in PyTorch";
     homepage = "https://github.com/asteroid-team/torch-audiomentations";
-    changelog = "https://github.com/asteroid-team/torch-audiomentations/releases/tag/v${version}";
+    changelog = "https://github.com/asteroid-team/torch-audiomentations/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
-}
+})

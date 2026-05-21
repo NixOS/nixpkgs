@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
+  postPatch = ''
+    # gcc15
+    substituteInPlace bdfgrab.c --replace-fail 'int (*old_error_handler)();' 'XErrorHandler old_error_handler;'
+    substituteInPlace hbf.c --replace-fail 'typedef	int	bool;' '// typedef	int	bool;'
+  '';
+
   meta = {
     description = "Bitmap Font Editor";
     longDescription = ''

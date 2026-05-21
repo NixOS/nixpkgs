@@ -18,12 +18,17 @@
   pyannote-audio,
   torch,
   torchaudio,
+  torchcodec,
+  torchvision,
   transformers,
   triton,
 
   # native packages
   ffmpeg,
   ctranslate2-cpp, # alias for `pkgs.ctranslate2`, required due to colliding with the `ctranslate2` Python module.
+
+  # tests
+  versionCheckHook,
 
   # enable GPU support
   cudaSupport ? torch.cudaSupport,
@@ -39,14 +44,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "whisperx";
-  version = "3.8.1";
+  version = "3.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-bain";
     repo = "whisperX";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2HjQtb8k3px0kqXowKtCXkiG2GuKLCuCtDOPYYa/tbc=";
+    hash = "sha256-dFjB0X7JUqv7r64QLbsQwJNRWti+xGUOWKkhOxJE1tg=";
   };
 
   # As `makeWrapperArgs` does not apply to the module, and whisperx depends on `ffmpeg`,
@@ -61,6 +66,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
+    "huggingface-hub"
     "torch"
     "torchaudio"
   ];
@@ -75,14 +81,18 @@ buildPythonPackage (finalAttrs: {
     pyannote-audio
     torch
     torchaudio
+    torchcodec
+    torchvision
     transformers
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
   ];
 
-  # No tests in repository
-  doCheck = false;
+  # No python tests in repository
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "whisperx" ];
 

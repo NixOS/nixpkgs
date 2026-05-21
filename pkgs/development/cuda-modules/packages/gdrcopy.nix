@@ -22,13 +22,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "gdrcopy";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "gdrcopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2cDsDc1lGW9rNF1q3EhjmiJhNaIwuFYlNdooPe7/R2I=";
+    hash = "sha256-KfdCiJE8q5MUYjI5qsZjeFmBm9jKfdSxtrlhmQRosns=";
   };
 
   outputs = [ "out" ];

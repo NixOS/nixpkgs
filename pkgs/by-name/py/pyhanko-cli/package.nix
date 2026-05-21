@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyhanko-cli";
-  version = "0.2.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-cli/v${finalAttrs.version}";
-    hash = "sha256-UyJ9odchy63CcCkJVtBgraRQuD2fxqCciwLuhN4+8aw=";
+    hash = "sha256-huOy04wY7xP1gZ5azsZYnMXLZ4MwMkLGujlgXTtjLy4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko-cli";
@@ -46,6 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ (with python3Packages; [
     pytestCheckHook
+    pytest-asyncio
     pyhanko.testData
     requests-mock
     freezegun
@@ -68,7 +69,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Sign and stamp PDF files";
     mainProgram = "pyhanko";
     homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-cli";
-    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/pyhanko-cli/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko-cli";
+    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko-cli";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
   };

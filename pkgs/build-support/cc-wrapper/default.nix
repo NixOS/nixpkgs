@@ -195,6 +195,7 @@ let
         cooperlake = versionAtLeast ccVersion "10.0";
         tigerlake = versionAtLeast ccVersion "10.0";
         knm = versionAtLeast ccVersion "8.0";
+        rocketlake = versionAtLeast ccVersion "11.0";
         alderlake = versionAtLeast ccVersion "12.0";
         sapphirerapids = versionAtLeast ccVersion "11.0";
         emeraldrapids = versionAtLeast ccVersion "13.0";
@@ -228,6 +229,7 @@ let
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm = versionAtLeast ccVersion "7.0";
+        rocketlake = versionAtLeast ccVersion "13.0";
         alderlake = versionAtLeast ccVersion "16.0";
         sapphirerapids = versionAtLeast ccVersion "12.0";
         emeraldrapids = versionAtLeast ccVersion "16.0";
@@ -786,29 +788,31 @@ stdenvNoCC.mkDerivation {
     # This confuses libtool.  So add it to the compiler tool search
     # path explicitly.
     + optionalString (!nativeTools && !isArocc) ''
+      ccLDFlags=()
+      ccCFlags=()
       if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
-        ccLDFlags+=" -L${cc_solib}/lib64"
-        ccCFlags+=" -B${cc_solib}/lib64"
+        ccLDFlags+=("-L${cc_solib}/lib64")
+        ccCFlags+=("-B${cc_solib}/lib64")
       fi
-      ccLDFlags+=" -L${cc_solib}/lib"
-      ccCFlags+=" -B${cc_solib}/lib"
+      ccLDFlags+=("-L${cc_solib}/lib")
+      ccCFlags+=("-B${cc_solib}/lib")
 
     ''
     + optionalString (cc.langAda or false && !isArocc) ''
       touch "$out/nix-support/gnat-cflags"
       touch "$out/nix-support/gnat-ldflags"
       basePath=$(echo $cc/lib/*/*/*)
-      ccCFlags+=" -B$basePath -I$basePath/adainclude"
+      ccCFlags+=("-B$basePath" "-I$basePath/adainclude")
       gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
 
       echo "$gnatCFlags" >> $out/nix-support/gnat-cflags
     ''
     + ''
-      echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
-      echo "$ccCFlags" >> $out/nix-support/cc-cflags
+      echo "''${ccLDFlags[*]}" >> $out/nix-support/cc-ldflags
+      echo "''${ccCFlags[*]}" >> $out/nix-support/cc-cflags
     ''
     + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
-      echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
+      echo "-L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
     ## Prevent clang from seeing /usr/include. There is a desire to achieve this
@@ -830,7 +834,7 @@ stdenvNoCC.mkDerivation {
           && !targetPlatform.isAndroid
         )
         ''
-          echo " -nostdlibinc" >> $out/nix-support/cc-cflags
+          echo "-nostdlibinc" >> $out/nix-support/cc-cflags
         ''
 
     ##
@@ -867,7 +871,7 @@ stdenvNoCC.mkDerivation {
           );
       in
       optionalString enable_fp ''
-        echo " -fno-omit-frame-pointer ${optionalString enable_leaf_fp "-mno-omit-leaf-frame-pointer "}" >> $out/nix-support/cc-cflags-before
+        echo "-fno-omit-frame-pointer${optionalString enable_leaf_fp " -mno-omit-leaf-frame-pointer"}" >> $out/nix-support/cc-cflags-before
       ''
     )
 

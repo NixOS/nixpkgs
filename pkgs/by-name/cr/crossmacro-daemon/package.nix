@@ -14,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "crossmacro-daemon";
-  version = "0.9.8";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "alper-han";
     repo = "CrossMacro";
     tag = "v${version}";
-    hash = "sha256-kca7MTv3KXygLuRoYHuOFJOMKVYny0f9mpWwWhzgqHg=";
+    hash = "sha256-M+Mat8pYeUyzomuvDdHdTHbyquTBDqrHHObVixTM3is=";
   };
 
   projectFile = "src/CrossMacro.Daemon/CrossMacro.Daemon.csproj";

@@ -22,13 +22,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.12";
+  version = "0.4.14";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sdM3owUYI0P12+R4YyYtF/20Zl0EpJY6t4Z1q/K5EqM=";
+    hash = "sha256-El3gXpfNofHev84tpa0v16y2Sjdo6kmlm44hgHcinCk=";
   };
 
   patches = [
@@ -47,7 +47,7 @@ buildNpmPackage (finalAttrs: {
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-Zihy5VYlkeQtmZUS25kgu3aYGPfQdUxjNSK33WHOEeQ=";
+  npmDepsHash = "sha256-gOk/hHWGLwAxPIBqasoUzfszPv911afb/VLn7w7g5KE=";
 
   nativeBuildInputs = [
     finalAttrs.passthru.clojureWithCache
@@ -181,7 +181,7 @@ buildNpmPackage (finalAttrs: {
 
       dontFixup = true;
 
-      outputHash = "sha256-ytS7JiQUC7U0vxuQddxQfDnm0Pt4stkRBfiIlbOpeTk=";
+      outputHash = "sha256-fwKeKfOIAWj9HQdXpEafZuJz5jwXNKpkS0JmuP3FXo0=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };
@@ -195,7 +195,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/repath-studio/repath-studio/blob/v${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/repath-studio/repath-studio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Cross-platform vector graphics editor, that combines procedural tooling with traditional design workflows";
     homepage = "https://repath.studio";
     downloadPage = "https://github.com/repath-studio/repath-studio";

@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sushi";
-  version = "46.0";
+  version = "50.rc.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/sushi/${lib.versions.major finalAttrs.version}/sushi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lghbqqQwqyFCxgaqtcR+L7sv0+two1ITfmXFmlig8sY=";
+    hash = "sha256-l6efnH4IsLF2Am7Ux6BDXwYSxMENoz1H4rr6ucYpImM=";
   };
 
   nativeBuildInputs = [

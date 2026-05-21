@@ -459,9 +459,11 @@ effectiveStdenv.mkDerivation {
     cudaPackages.cuda_nvcc
   ];
 
-  # Configure can't find the library without this.
-  OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
-  OpenBLAS = optionalString withOpenblas openblas_;
+  env = {
+    # Configure can't find the library without this.
+    OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
+    OpenBLAS = optionalString withOpenblas openblas_;
+  };
 
   cmakeFlags = [
     (cmakeBool "BUILD_INFO_SKIP_SYSTEM_VERSION" true)

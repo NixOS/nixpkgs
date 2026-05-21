@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "deebot-client";
-  version = "18.0.0";
+  version = "18.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -31,12 +31,12 @@ buildPythonPackage (finalAttrs: {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = finalAttrs.version;
-    hash = "sha256-ZKLA8RbYsysY+pAT9K6z2yThWo2YeM6TLqLBMuo+/GQ=";
+    hash = "sha256-dQh98CIEbxpRga2BbB8X1KtGZ18jvVv4DhyJ1LFNNuw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UcgQKv8YhsWdOzKQ7K3HTX/FmopQen7HQ/Jyuj+hePI=";
+    hash = "sha256-MNMLOF3j+bGEhDeRln5wLOG6gY+ssSQqrb8vdmyJdtA=";
   };
 
   nativeBuildInputs = [

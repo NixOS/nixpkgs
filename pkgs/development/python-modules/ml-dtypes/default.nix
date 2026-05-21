@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -29,6 +30,15 @@ buildPythonPackage rec {
     # Hence, we rely on the bundled eigen library.
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix tests for numpy 2.4.3, which changed the way testing assertions
+    # handle behaviors with NaN equivalence on the custom numeric types.
+    (fetchpatch2 {
+      url = "https://github.com/jax-ml/ml_dtypes/commit/04c4dc8b23720d9d92f3cc849ffc387d5798db84.patch?full_index=1";
+      hash = "sha256-jqqiDYcHq58JxSqtHfXcNWFbMFhvufqafDPHmORe6F0=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

@@ -49,12 +49,12 @@
     "format"
     "fortify"
     "fortify3"
-    "libcxxhardeningextensive"
     "libcxxhardeningfast"
     "pic"
     "relro"
     "stackclashprotection"
     "stackprotector"
+    "strictflexarrays1"
     "strictoverflow"
     "zerocallusedregs"
   ],

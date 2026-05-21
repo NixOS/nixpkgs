@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
     tag = version;
-    hash = "sha256-e2F2g8NfMyAfiHPUq8KRs99pu7yEZTpWraxhsAZXE4Q=";
+    hash = "sha256-UnsjmsOigScAW7qlbV3JCJljENrWvZd7gQRSCGSZn+8=";
   };
 
   pythonRelaxDeps = [

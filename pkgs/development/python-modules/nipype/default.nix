@@ -3,95 +3,120 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
   # python dependencies
+  acres,
   click,
   python-dateutil,
   etelemetry,
   filelock,
   looseversion,
-  mock,
+  lxml,
   networkx,
   nibabel,
   numpy,
   packaging,
   prov,
-  psutil,
   puremagic,
   pybids,
   pydot,
-  pytest,
+  pytestCheckHook,
   pytest-xdist,
-  pytest-forked,
+  pytest-cov-stub,
   rdflib,
   scipy,
   simplejson,
   traits,
+
+  # optional-dependencies
+  datalad,
+  duecredit,
+  pandas,
+  paramiko,
+  psutil,
+  sphinx,
   xvfbwrapper,
+
   # other dependencies
   which,
   bash,
   glibcLocales,
-  # causes Python packaging conflict with any package requiring rdflib,
-  # so use the unpatched rdflib by default (disables Nipype provenance tracking);
-  # see https://github.com/nipy/nipype/issues/2888:
-  useNeurdflib ? false,
 }:
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.10.0";
-  format = "setuptools";
+  version = "1.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GeXWzvpwmXGY94vGZe9NPTy1MyW1uYpy5Rrvra9rPg4=";
+    hash = "sha256-ZwfsTDz44Zg673+O6nlifue3q0qklkmZFVDhKcFlt6c=";
   };
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
       --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+    substituteInPlace nipype/pipeline/engine/tests/test_nodes.py \
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
-  pythonRelaxDeps = [ "traits" ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
+    acres
     click
-    python-dateutil
     etelemetry
     filelock
     looseversion
+    lxml
     networkx
     nibabel
     numpy
     packaging
     prov
-    psutil
     puremagic
     pydot
+    python-dateutil
     rdflib
     scipy
     simplejson
     traits
-    xvfbwrapper
   ];
 
+  passthru.optional-dependencies = {
+    data = [ datalad ];
+    duecredit = [ duecredit ];
+    profiler = [ psutil ];
+    pybids = [ pybids ];
+    ssh = [ paramiko ];
+    xvfbwrapper = [ xvfbwrapper ];
+  };
+
   nativeCheckInputs = [
-    pybids
     glibcLocales
-    mock
-    pytest
-    pytest-forked
+    pandas
+    pytestCheckHook
+    pytest-cov-stub
     pytest-xdist
+    sphinx
     which
   ];
 
   # checks on darwin inspect memory which doesn't work in build environment
   doCheck = !stdenv.hostPlatform.isDarwin;
-  # ignore tests which incorrect fail to detect xvfb
-  checkPhase = ''
-    pytest nipype/tests -k 'not display and not test_no_et_multiproc'
-  '';
-  pythonImportsCheck = [ "nipype" ];
+
+  pythonImportsCheck = [
+    "nipype"
+    "nipype.algorithms"
+    "nipype.interfaces"
+  ];
 
   meta = {
     homepage = "https://nipy.org/nipype";

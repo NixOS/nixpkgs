@@ -27,6 +27,6 @@ buildNpmPackage rec {
     mainProgram = "nodemon";
     homepage = "https://nodemon.io";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.14.3";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NeuralEnsemble";
     repo = "python-neo";
     tag = version;
-    hash = "sha256-y2MGzIfF+KrEzdjUxiDaU1ZKBK5FksX1IBJdc9RvLhM=";
+    hash = "sha256-VdT7PFSle8HxWfsPrrI+mHtsTO315+Sw0RGx8HSYtwk=";
   };
 
   build-system = [ setuptools ];
@@ -40,6 +40,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires network and export HOME dir
     "neo/test/rawiotest/test_maxwellrawio.py"
+  ];
+
+  disabledTests = [
+    # numpy 2.x boolean index strictness regression
+    "test__time_slice_deepcopy_data"
   ];
 
   pythonImportsCheck = [ "neo" ];

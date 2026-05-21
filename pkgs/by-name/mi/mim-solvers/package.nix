@@ -14,26 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mim-solvers";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1Mqu9Hfy65HUIOVG/gJBpSMlOwDWVcH+LrR8CaWz0BE=";
+    hash = "sha256-t21zzUo+Oiqvr3lYN9v1lCeoki3I1FWPqo3gWzM6Kdw=";
   };
-
-  patches = [
-    # ref. https://github.com/machines-in-motion/mim_solvers/pull/71 merged upstream
-    (fetchpatch {
-      name = "build-standalone-python-interface.patch";
-      url = "https://github.com/machines-in-motion/mim_solvers/commit/796eecf05dd9165dd0795aa562ead17de4f19633.patch";
-      hash = "sha256-/OiMzyDVEbpC/Dr/HcguwAdhmbQNxnIRsHAVkX68xqA=";
-    })
-    # Fix for crocoddyl 3.1.0
-    # ref. https://github.com/machines-in-motion/mim_solvers/pull/72
-    ./fix-croco-310.patch
-  ];
 
   nativeBuildInputs = [
     cmake

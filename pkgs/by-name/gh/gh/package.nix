@@ -4,24 +4,29 @@
   buildGoModule,
   installShellFiles,
   stdenv,
-  testers,
-  gh,
+  versionCheckHook,
+  makeWrapper,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gh";
-  version = "2.87.3";
+  version = "2.92.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F4xUwj/krB5vjIfnvmwySlztBrcxJ+k1GvXb2gs7eXY=";
+    hash = "sha256-/7EiX4ZZPhSNgY/D5OVOako/c0ujHq05GMj3UB11bqQ=";
   };
 
-  vendorHash = "sha256-POrm4lHEO2Eti7dbohKBwXW+DTs22EUZX+tMNUCL3lg=";
+  vendorHash = "sha256-pBLRCIRjN3VoXbTFSq+R9/N3uAUCEjvPtk8LKKKS51s=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   # N.B.: using the Makefile is intentional.
   # We pass "nixpkgs" for build.Date to avoid `gh --version` reporting a very old date.
@@ -33,7 +38,9 @@ buildGoModule (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 bin/gh -t $out/bin
+    installBin bin/gh
+    wrapProgram $out/bin/gh \
+      --set-default GH_TELEMETRY false
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installManPage share/man/*/*.[1-9]
@@ -50,9 +57,8 @@ buildGoModule (finalAttrs: {
   # most tests require network access
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = gh;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "GitHub CLI tool";
@@ -63,6 +69,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       mdaniels5757
       zowoq
+      savtrip
     ];
   };
 })

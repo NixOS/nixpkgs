@@ -13,7 +13,7 @@
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -46,15 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-o9dxtqXfCKTQpvNrbD/h0F3Hh39TEEA1qqYA9tN3j5I=";
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 3;
+    hash = "sha256-Ue1K1KmRi4gF7E519deVY7QH+22dqlECMjdA7Z7qDCA=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_29_2
     jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -177,6 +177,9 @@ stdenv.mkDerivation (finalAttrs: {
       "Network"
       "InstantMessaging"
       "Chat"
+    ];
+    mimeTypes = [
+      "x-scheme-handler/discord"
     ];
   });
 

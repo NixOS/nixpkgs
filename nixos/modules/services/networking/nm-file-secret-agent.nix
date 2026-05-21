@@ -112,7 +112,7 @@ in
               trim = lib.mkOption {
                 description = "whether leading and trailing whitespace should be stripped from the files content before being passed to NetworkManager";
                 type = lib.types.nullOr lib.types.bool;
-                default = null;
+                default = true;
               };
             };
           }

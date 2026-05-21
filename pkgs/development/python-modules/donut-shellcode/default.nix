@@ -17,6 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-gKa7ngq2+r4EYRdwH9AWnJodJjCdppzKch4Ve/4ZPhk=";
   };
 
+  # aplib64.a objects lack .note.GNU-stack; linker marks .so executable-stack, breaking dlopen.
+  env.NIX_LDFLAGS = "-z,noexecstack";
+
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "donut" ];

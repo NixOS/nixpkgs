@@ -11,12 +11,12 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh-unwrapped";
-  version = "4.3.0";
+  version = "4.3.2";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A3bEBKJlWYqsw41g4RaTwSLUWq8Mw/zz4FpMj4Lua+c=";
+    hash = "sha256-TSXa6nL2TpOfDCsZIGCFAMbkQy2Z40gam7JrxBy5FGY=";
   };
 
   strictDeps = true;
@@ -71,36 +71,43 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-    # Run both shell completion and manpage generation tasks. Unlike the
-    # fine-grained variants, the 'dist' command doesn't allow specifying the
-    # path but that's fine, because we can simply install them from the implicit
-    # output directories.
-    $out/bin/xtask dist
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        # Run both shell completion and manpage generation tasks. Unlike the
+        # fine-grained variants, the 'dist' command doesn't allow specifying the
+        # path but that's fine, because we can simply install them from the implicit
+        # output directories.
+        ${emulator} $out/bin/xtask dist
 
-    # The dist task above should've created
-    #  1. Shell completions in comp/
-    #  2. The NH manpage (nh.1) in man/
-    # Let's install those.
-    # The important thing to note here is that installShellCompletion cannot
-    # actually load *all* shell completions we generate with 'xtask dist'.
-    # Elvish, for example isn't supported. So we have to be very explicit
-    # about what we're installing, or this will fail.
-    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} ./comp/*.{bash,fish,zsh,nu}
-    installManPage ./man/nh.1
+        # The dist task above should've created
+        #  1. Shell completions in comp/
+        #  2. The NH manpage (nh.1) in man/
+        # Let's install those.
+        # The important thing to note here is that installShellCompletion cannot
+        # actually load *all* shell completions we generate with 'xtask dist'.
+        # Elvish, for example isn't supported. So we have to be very explicit
+        # about what we're installing, or this will fail.
+        installShellCompletion --cmd ${finalAttrs.meta.mainProgram} ./comp/*.{bash,fish,zsh,nu}
+        installManPage ./man/nh.1
+      ''
+    )
+    + ''
+      # Avoid populating PATH with an 'xtask' cmd
+      rm $out/bin/xtask
+    '';
 
-    # Avoid populating PATH with an 'xtask' cmd
-    rm $out/bin/xtask
-  '';
-
-  cargoHash = "sha256-BLv69rL5L84wNTMiKHbSumFU4jVQqAiI1pS5oNLY9yE=";
+  cargoHash = "sha256-ZR8vvG2mXrGg6GeyP7C0uWhPW6cp2QPYj2cOJUSyeAs=";
 
   passthru.updateScript = nix-update-script { };
 
   env.NH_REV = finalAttrs.src.tag;
 
   meta = {
-    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Yet another nix cli helper";
     homepage = "https://github.com/nix-community/nh";
     license = lib.licenses.eupl12;

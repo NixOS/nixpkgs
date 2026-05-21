@@ -13,21 +13,24 @@
   openssh,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   stdenv,
   sqliteSupport ? true,
   nixosTests,
 }:
 
 let
+  pnpm = pnpm_10;
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-0p7P68BvO3hv0utUbnPpHSpGLlV7F9HHmOITvJAb/ww=";
+      inherit pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-dewYYPO2wmNyYiQadoEKWJ10cghm6Lv7UE1iVlyNiEY=";
     };
 
     nativeBuildInputs = [
@@ -48,18 +51,18 @@ let
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.25.4";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${gitea.version}";
-    hash = "sha256-sVpCdDJWzHtRKiqTeRuvrHf/cmeLbLs4THAqkH8hqMY=";
+    hash = "sha256-UlPS+gcSEzKY+g5y+k3NsL3b8FRVHnlqkiuJTz5ijFM=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-y7HurJg+/V1cn8iKDXepk/ie/iNgiJXsQbDi1dhgark=";
+  vendorHash = "sha256-JSyjJIdRePbSnKL6GHdjx5Xbnsniq6KHOlEFsYvMmbw=";
 
   outputs = [
     "out"
@@ -71,10 +74,17 @@ buildGoModule rec {
   # go-modules derivation doesn't provide $data
   # so we need to wait until it is built, and then
   # at that time we can then apply the substituteInPlace
-  overrideModAttrs = _: { postPatch = null; };
+  overrideModAttrs = _: {
+    postPatch = ''
+      substituteInPlace go.mod \
+        --replace-fail "go 1.26.2" "go 1.26"
+    '';
+  };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
+    substituteInPlace go.mod \
+      --replace-fail "go 1.26.2" "go 1.26"
   '';
 
   subPackages = [ "." ];

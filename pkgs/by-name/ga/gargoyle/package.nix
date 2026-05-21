@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchDebianPatch,
-  fetchpatch,
   cmake,
   pkg-config,
   fluidsynth,
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gargoyle";
-  version = "2023.1";
+  version = "2026.1.1";
 
   src = fetchFromGitHub {
     owner = "garglk";
     repo = "garglk";
     tag = finalAttrs.version;
-    hash = "sha256-XsN5FXWJb3DSOjipxr/HW9R7QS+7iEaITERTrbGEMwA=";
+    hash = "sha256-cBFsxbXQa2xqCwW6Gd90vupAykkHvRjeM5yjA383doQ=";
   };
 
   patches = [
@@ -37,17 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
       patch = "ftbfs_gcc14.patch";
       hash = "sha256-eMx/RlUpq5Ez+1L8VZo40Y3h2ZKkqiQEmKTlkZRMXnI=";
     })
-    (fetchpatch {
-      name = "cmake4-fix";
-      url = "https://github.com/garglk/garglk/commit/8d976852e2db0215e9cf4f926e626f1aa766f751.patch?full_index=1";
-      hash = "sha256-lJAuiOErSp3oDmeoqrfCdnHH816VLYiVthIG4U8BJ5E=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace garglk/garglk.pc.in \
-      --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@" \
-      --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@" \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
   '';
 
   nativeBuildInputs = [

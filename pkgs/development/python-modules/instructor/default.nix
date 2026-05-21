@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "instructor";
-  version = "1.14.5";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MxFHCjtIUESuvDkNvEEcZdWXTLAxGFH9ZJ1wx8E4N14=";
+    hash = "sha256-+mYVg4IuoU/GEK/L3qXUfO224eWMrRtoXTTi8RhOJk4=";
   };
 
   build-system = [ hatchling ];
@@ -103,6 +103,9 @@ buildPythonPackage (finalAttrs: {
     # pydantic validation mismatch
     "test_control_characters_not_allowed_in_anthropic_json_strict_mode"
     "test_control_characters_allowed_in_anthropic_json_non_strict_mode"
+
+    # Upstream bug: test expects TypeError but code raises ConfigurationError
+    "test_openai_schema_raises_error"
   ];
 
   disabledTestPaths = [

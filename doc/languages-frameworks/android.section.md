@@ -27,7 +27,7 @@ Alternatively, you can pass composeAndroidPackages to the `withSdk` passthrough:
 }
 ```
 
-These will export `ANDROID_SDK_ROOT` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
+These will export `ANDROID_HOME` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
 in the specified Android build environment.
 
 ## Deploying an Android SDK installation with plugins {#deploying-an-android-sdk-installation-with-plugins}
@@ -308,7 +308,7 @@ Ensure that your buildToolsVersion and ndkVersion match what is declared in andr
 If you are using cmake, make sure its declared version is correct too.
 
 Otherwise, you may get cryptic errors from aapt2 and the Android Gradle plugin warning
-that it cannot install the build tools because the SDK directory is not writeable.
+that it cannot install the build tools because the SDK directory is not writable.
 
 ```gradle
 android {

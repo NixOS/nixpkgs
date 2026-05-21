@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   ddt,
+  installShellFiles,
   openstackdocstheme,
   osc-lib,
   osc-placement,
@@ -27,6 +28,7 @@
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
+  stdenv,
   stestrCheckHook,
   versionCheckHook,
 }:
@@ -67,6 +69,10 @@ buildPythonPackage (finalAttrs: {
   ]
   # to support proxy envs like ALL_PROXY in requests
   ++ requests.optional-dependencies.socks;
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   nativeCheckInputs = [
     ddt
@@ -115,6 +121,11 @@ buildPythonPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd openstack \
+      --bash <($out/bin/openstack complete)
+  '';
 
   meta = {
     description = "OpenStack Command-line Client";

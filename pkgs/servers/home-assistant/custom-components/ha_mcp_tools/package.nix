@@ -3,22 +3,30 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   nix-update-script,
+  ruamel-yaml,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "homeassistant-ai";
   domain = "ha_mcp_tools";
-  version = "6.7.1";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${version}";
-    hash = "sha256-CQbjPEtCos0Fi6aAaIWSRMCUQKmjYviYkvJZzbCZg6Y=";
+    hash = "sha256-qRWNh7kKFQZpgZjkpc/Qv2s16DdWFX35HLHIToYXccU=";
   };
 
+  dependencies = [
+    ruamel-yaml
+  ];
+
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
   };
 
   meta = {

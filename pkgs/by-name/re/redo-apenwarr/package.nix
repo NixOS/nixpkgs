@@ -66,11 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-    (with python3.pkgs; [
-      beautifulsoup4
-      markdown
-    ])
     which
+    python3.pkgs.beautifulsoup4
+    python3.pkgs.markdown
     installShellFiles
     gnumake42 # fails with make 4.4
   ];

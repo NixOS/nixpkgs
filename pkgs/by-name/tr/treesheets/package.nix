@@ -6,7 +6,7 @@
   ninja,
   wrapGAppsHook3,
   makeWrapper,
-  wxGTK32,
+  wxwidgets_3_2,
   unstableGitUpdater,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${

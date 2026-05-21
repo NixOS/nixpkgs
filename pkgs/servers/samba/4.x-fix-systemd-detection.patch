@@ -1,0 +1,34 @@
+From 450a6183586243d907843c7d89973452b59d8b10 Mon Sep 17 00:00:00 2001
+From: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Date: Fri, 17 Apr 2026 22:35:08 +0000
+Subject: [PATCH] fix systemd detection after argparse migration
+
+---
+ lib/util/wscript | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/util/wscript b/lib/util/wscript
+index 425f659a2ed..b8baabfbea9 100644
+--- a/lib/util/wscript
++++ b/lib/util/wscript
+@@ -13,7 +13,7 @@ def options(opt):
+ 
+     opt.add_option('--with-systemd',
+                    help=("Enable systemd integration"),
+-                   action='store_true', dest='enable_systemd')
++                   action='store_true', dest='enable_systemd', default=None)
+ 
+     opt.add_option('--without-systemd',
+                    help=("Disable systemd integration"),
+@@ -21,7 +21,7 @@ def options(opt):
+ 
+     opt.add_option('--with-lttng',
+                    help=("Enable lttng integration"),
+-                   action='store_true', dest='enable_lttng')
++                   action='store_true', dest='enable_lttng', default=None)
+ 
+     opt.add_option('--without-lttng',
+                    help=("Disable lttng integration"),
+-- 
+2.53.0
+

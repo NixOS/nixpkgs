@@ -257,6 +257,7 @@ in
               cfg.package
               falcon
               uvicorn
+              nominatim-api
             ];
           NOMINATIM_DATABASE_DSN = nominatimApiDsn;
           NOMINATIM_DATABASE_WEBUSER = cfg.database.apiUser;

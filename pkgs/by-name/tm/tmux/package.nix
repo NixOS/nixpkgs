@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   bison,
   libevent,
@@ -13,7 +14,7 @@
   # broken on i686-linux https://github.com/tmux/tmux/issues/4597
   withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  withUtempter ? stdenv.hostPlatform.isLinux,
   libutempter,
   withSixel ? true,
   versionCheckHook,
@@ -35,6 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-VwOyR9YYhA/uyVRJbspNrKkJWJGYFFktwPnnwnIJ97s=";
   };
+
+  patches = [
+    # Fix NULL pointer dereference in control_write() when a control-mode
+    # client is notified before control_state has been allocated.
+    # https://github.com/tmux/tmux/issues/4980
+    (fetchpatch {
+      name = "tmux-control-notify-uninitialized.patch";
+      url = "https://github.com/tmux/tmux/commit/e5a2a25fafb8ee107c230d8acad694f6b635f8bb.patch";
+      hash = "sha256-UPbhMNnH1WJwTH/LVwjVonTqvNhyuniUrYm7iLVkCfg=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cilium-cli";
-  version = "0.19.0";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "cilium-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pW+9UN+pWkKCYRTvZxslrPgczOezVnPpDF5XdRHCh+g=";
+    hash = "sha256-zlPl6J+Vbv2An1bauzhee8hrtEEg1ENR6SKSzv3PCS0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

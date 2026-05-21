@@ -8,6 +8,7 @@
   dbus,
   dconf,
   ddcutil,
+  enlightenment,
   glib,
   hwdata,
   imagemagick,
@@ -41,12 +42,16 @@
   yyjson,
   zlib,
   zfs,
+
+  fastfetch,
+
   # Feature flags
   audioSupport ? true,
   brightnessSupport ? true,
   dbusSupport ? true,
   flashfetchSupport ? false,
   terminalSupport ? true,
+  enlightenmentSupport ? true,
   gnomeSupport ? true,
   imageSupport ? true,
   openclSupport ? true,
@@ -61,13 +66,16 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.59.0";
+  version = "2.63.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-XnVSVf9dFWJLmMDsXNclWCnMTwigVORXYhcpxTgEWuY=";
+    hash = "sha256-6c3vA8AFSfew1TdSeUmJ4mIbFyDaJPVWUc93iZyqRY0=";
   };
 
   outputs = [
@@ -122,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optionals dbusSupport [
           # Bluetooth, wifi, player & media detection
           dbus
+        ]
+        ++ lib.optionals enlightenmentSupport [
+          # Eet support for reading Enlightenment window manager configuration.
+          enlightenment.efl
         ]
         ++ lib.optionals gnomeSupport [
           # Needed for values that are only stored in DConf + Fallback for GSettings.
@@ -215,6 +227,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
 
+    (lib.cmakeBool "ENABLE_EET" enlightenmentSupport)
+
     (lib.cmakeBool "ENABLE_ELF" terminalSupport)
 
     (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
@@ -261,7 +275,28 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    # finalAttrs.finalPackage.override doesn’t exist
+    minimal = fastfetch.override {
+      audioSupport = false;
+      brightnessSupport = false;
+      dbusSupport = false;
+      enlightenmentSupport = false;
+      flashfetchSupport = false;
+      gnomeSupport = false;
+      imageSupport = false;
+      openclSupport = false;
+      openglSupport = false;
+      rpmSupport = false;
+      sqliteSupport = false;
+      terminalSupport = false;
+      vulkanSupport = false;
+      waylandSupport = false;
+      x11Support = false;
+      xfceSupport = false;
+    };
+  };
 
   meta = {
     description = "Actively maintained, feature-rich and performance oriented, neofetch like system information tool";
@@ -282,6 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
       * audioSupport: PulseAudio functionality
       * brightnessSupport: External display brightness detection via DDCUtil
       * dbusSupport: DBus functionality for Bluetooth, WiFi, player & media detection
+      * enlightenmentSupport: Enlightenment configuration detection via EFL's Eet
       * flashfetchSupport: Build the flashfetch utility (default: false)
       * gnomeSupport: GNOME integration (dconf, dbus, gio)
       * imageSupport: Image rendering (chafa and imagemagick)

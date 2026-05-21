@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp $src $out/share/games/lovegames/techmino.love
 
     mkdir -p $out/bin
-    makeWrapper ${love}/bin/love $out/bin/techmino \
+    makeWrapper ${lib.getExe love} $out/bin/techmino \
       --add-flags $out/share/games/lovegames/techmino.love \
       --suffix LUA_CPATH : ${ccloader}/lib/lua/${luajit.luaversion}/CCLoader.so
 
@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/26F-Studio/Techmino/releases";
     homepage = "https://github.com/26F-Studio/Techmino/";
     license = lib.licenses.lgpl3;
+    platforms = love.meta.platforms;
     mainProgram = "techmino";
     maintainers = with lib.maintainers; [ chayleaf ];
   };

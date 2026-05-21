@@ -18,6 +18,7 @@
   pipewire,
   krunner,
   python3,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kwin";

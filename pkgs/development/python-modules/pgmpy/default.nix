@@ -28,7 +28,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pgmpy";
-  version = "1.0.0-unstable-2025-12-20";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {

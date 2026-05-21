@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--emoji" "" \
+      --replace-fail "--emoji" ""
   '';
 
   build-system = [ poetry-core ];

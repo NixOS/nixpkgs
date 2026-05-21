@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  autogen,
-  autoconf,
-  automake,
+  autoreconfHook,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
@@ -13,17 +10,40 @@
   # compatibility.
   stripPrefix ? stdenv.hostPlatform.isDarwin,
   disableInitExecTls ? false,
+  # Page size in KiB to configure jemalloc for.
+  # Defaults to 64 on architectures where 64KB pages are common, 4 otherwise.
+  # Note that a higher value is compatible with lower page sizes but may waste memory.
+  pageSizeKiB ?
+    if
+      (
+        stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isPower64
+      )
+    then
+      64
+    else
+      4,
 }:
+
+let
+  pageSizeMap = {
+    "4" = 12;
+    "16" = 14;
+    "64" = 16;
+  };
+in
+assert lib.asserts.assertOneOf "pageSizeKiB" (toString pageSizeKiB) (
+  builtins.attrNames pageSizeMap
+);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
-  version = "5.3.0-unstable-2025-09-12";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "jemalloc";
     repo = "jemalloc";
-    rev = "c0889acb6c286c837530fdbeb96007b0dee8b776";
-    hash = "sha256-lBNgvUhuiRPgzr8JC4zSSCT2KpDBktBVX72zfvAEHvo=";
+    tag = finalAttrs.version;
+    hash = "sha256-uGQppR2LS/Hhx4eWnavPDW3tzMyI1Df4XYrWEMQwBuw=";
   };
 
   patches = [
@@ -34,17 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autogen
-    autoconf
-    automake
+    autoreconfHook
   ];
 
-  # TODO: switch to autoreconfHook when updating beyond 5.3.0
-  # https://github.com/jemalloc/jemalloc/issues/2346
-  configureScript = "./autogen.sh";
-
   configureFlags = [
-    "--with-version=${lib.versions.majorMinor finalAttrs.version}.0-0-g${finalAttrs.src.rev}"
+    "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
   ]
   # see the comment on stripPrefix
@@ -54,12 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/jemalloc/jemalloc/issues/467
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
   ++ [
-    (
-      if (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64) then
-        "--with-lg-page=16"
-      else
-        "--with-lg-page=12"
-    )
+    "--with-lg-page=${toString pageSizeMap."${toString pageSizeKiB}"}"
   ]
   # See https://github.com/jemalloc/jemalloc/issues/1997
   # Using a value of 48 should work on both emulated and native x86_64-darwin.
@@ -80,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://jemalloc.net/";
+    downloadPage = "https://github.com/jemalloc/jemalloc";
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation

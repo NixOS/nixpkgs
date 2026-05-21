@@ -97,7 +97,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.7";
+  version = "15.0.14";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-Uj2H6ONVpn3EtzMNl8xqOAf6UeO6FGAKtyH9DKh976U=";
+      hash = "sha256-E/q2wXeTGcEhiAvUCrFKv34gc4vP4o3ZPjqkcS6Dxgk=";
     };
   };
 
@@ -291,7 +291,7 @@ stdenv.mkDerivation rec {
     inherit sources;
     updateScript = callPackage ./update.nix {
       inherit pname version meta;
-      baseUrl = "https://cdn.mullvad.net/browser/";
+      baseUrl = "https://dist.torproject.org/mullvadbrowser/";
       name = "mullvad-browser";
     };
   };
@@ -305,6 +305,7 @@ stdenv.mkDerivation rec {
       felschr
       panicgh
       sigmasquadron
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

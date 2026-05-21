@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     URL: ${finalAttrs.meta.homepage}
     Version: ${finalAttrs.version}
 
-    Cflags: -I \''${includedir}
-    Libs: -L \''${libdir} -lblst
+    Cflags: -I\''${includedir}
+    Libs: -L\''${libdir} -lblst
     Libs.private:
     EOF
 

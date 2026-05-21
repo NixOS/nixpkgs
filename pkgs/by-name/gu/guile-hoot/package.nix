@@ -3,7 +3,12 @@
   stdenv,
   fetchFromCodeberg,
   autoreconfHook,
+  makeWrapper,
+  nodejs,
   guile,
+  guile-websocket,
+  guile-fibers,
+  guile-gnutls,
   pkg-config,
   texinfo,
   nix-update-script,
@@ -21,11 +26,30 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    makeWrapper
     autoreconfHook
     guile
     pkg-config
     texinfo
+    nodejs
   ];
+  propagatedBuildInputs = [
+    guile-fibers
+    guile-websocket
+    guile-gnutls
+  ];
+
+  postInstall =
+    let
+      libs = [ "$out" ] ++ finalAttrs.propagatedBuildInputs;
+    in
+    ''
+      cp ./repl/repl.js $out/share/guile-hoot/0.8.0/repl/repl.js
+      wrapProgram $out/bin/hoot \
+        --prefix GUILE_LOAD_PATH : ${lib.makeSearchPath guile.siteDir libs} \
+        --prefix GUILE_LOAD_COMPILED_PATH : ${lib.makeSearchPath guile.siteCcacheDir libs}
+    '';
+
   buildInputs = [
     guile
   ];
@@ -41,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jinser ];
     platforms = lib.platforms.unix;
+    mainProgram = "hoot";
   };
 })

@@ -16,11 +16,11 @@
 }:
 let
   pname = "xz";
-  version = "5.8.2";
+  version = "5.8.3";
 
   src = fetchurl {
     url = "https://tukaani.org/xz/xz-${version}.tar.gz";
-    hash = "sha256-zgnFCllieGuD5do4nJDdLBXs0JgKJY3QH3D5585YqPE=";
+    hash = "sha256-PToblzryGBFPT4ibuqL0wDfequDI6BXuw4HD1Ua5dKA=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -77,11 +77,12 @@ bash.runCommand "${pname}-${version}"
       --disable-silent-rules \
       --disable-nls \
       --disable-shared \
+      --disable-scripts \
       --disable-assembler
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
   ''

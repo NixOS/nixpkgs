@@ -17,14 +17,14 @@ Consider the following package:
   maven,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "jd-cli";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "intoolswetrust";
     repo = "jd-cli";
-    tag = "jd-cli-${version}";
+    tag = "jd-cli-${finalAttrs.version}";
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
 
@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ majiir ];
   };
-}
+})
 ```
 
 This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stdenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.
@@ -133,7 +133,7 @@ step 2 which will most probably fail the build. The `go-offline` plugin cannot
 handle these so-called [dynamic dependencies](https://github.com/qaware/go-offline-maven-plugin?tab=readme-ov-file#dynamic-dependencies).
 In that case you must add these dynamic dependencies manually with:
 ```nix
-maven.buildMavenPackage rec {
+maven.buildMavenPackage {
   manualMvnArtifacts = [
     # add dynamic test dependencies here
     "org.apache.maven.surefire:surefire-junit-platform:3.1.2"

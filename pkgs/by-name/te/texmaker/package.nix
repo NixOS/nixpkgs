@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "6.0.1";
 
   src = fetchurl {
-    url = "http://www.xm1math.net/texmaker/texmaker-${finalAttrs.version}.tar.bz2";
+    url = "https://www.xm1math.net/texmaker/texmaker-${finalAttrs.version}.tar.bz2";
     hash = "sha256-uMI13wzY/XcUzXDTte42MWOwJUqd6pGAeBuPDi5GyvY=";
   };
 
@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       cfouche
-      markuskowa
     ];
     mainProgram = "texmaker";
   };

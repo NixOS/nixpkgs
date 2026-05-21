@@ -64,6 +64,7 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
   generated Neovim configuration via the `$VIMINIT` environment variable, i.e. : `export VIMINIT='lua dofile("/nix/store/…-init.lua")'`. This has side effects like preventing Neovim from sourcing your `init.lua` in `$XDG_CONFIG_HOME/nvim` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#startup) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse the generated vimscript init code via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
+- `extraLuaPackages`: A function passed on to `lua.withPackages`
 - `withPython3`, `withNodeJs`, `withRuby` control when to enable neovim
   providers (see `:h provider`).
 
@@ -90,6 +91,7 @@ wrapNeovimUnstable neovim-unwrapped {
     (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
     hex-nvim
   ];
+  extraLuaPackages = lp: [ lp.mpack ];
   withPython3 = true;
   withNodeJs = false;
   withRuby = false;
@@ -112,6 +114,25 @@ Some plugins require specific configuration to work. We choose not to
 patch those plugins but expose the necessary configuration under
 `PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
 needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
+
+### Plugin license overrides {#neovim-plugin-license-overrides}
+
+Generated Vim and Neovim plugins get their `meta.license` from GitHub license metadata when possible.
+Some upstream repositories do not expose a license file that GitHub can detect, or only mention the license in a README.
+In those cases, add a manual `meta.license` override in [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+
+For example, if upstream documents that a plugin uses the Vim license but GitHub does not detect it:
+
+```nix
+{
+  foo-nvim = super.foo-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      # README says this plugin is distributed under the Vim license.
+      license = lib.licenses.vim;
+    };
+  });
+}
+```
 
 ## LuaRocks based plugins {#neovim-luarocks-based-plugins}
 

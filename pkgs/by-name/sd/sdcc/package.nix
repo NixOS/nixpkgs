@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "doc"
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "man"
   ];
 

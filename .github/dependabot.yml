@@ -5,3 +5,5 @@ updates:
     schedule:
       interval: "weekly"
     labels: []
+    commit-message:
+      prefix: ".github"

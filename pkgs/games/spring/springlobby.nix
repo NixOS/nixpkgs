@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
-  wxGTK32,
+  wxwidgets_3_2,
   openal,
   pkg-config,
   curl,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     openal
     curl
     libtorrent-rasterbar

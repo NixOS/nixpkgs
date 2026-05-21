@@ -8,7 +8,7 @@
 
 let
   pname = "py-deprecate";
-  version = "0.4.0";
+  version = "0.7.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -18,7 +18,7 @@ buildPythonPackage {
     owner = "Borda";
     repo = "pyDeprecate";
     tag = "v${version}";
-    hash = "sha256-Rc/5Y3myEUjbXRr2uE+1iaIrCZK+eeKXy05+C75sn3g=";
+    hash = "sha256-agJTANU3WhmAxj8EjeewHtvPxF9Fr0cRHNTMZBtDFQA=";
   };
 
   nativeCheckInputs = [

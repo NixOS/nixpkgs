@@ -21,22 +21,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.12.0";
+  version = "4.14.1";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-/IzIvPgm18YXSq5RUBXdWsMk45jEs15qkPCnKeMW+E4=";
+    hash = "sha256-O30MSLv2eQIFs6yjo6LU6aMwHVl5fn7KsVMpIiFL25I=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L182
+    ./yarn-4.14-support.patch
+  ];
 
   # This might need to be updated between releases.
   # See https://nixos.org/manual/nixpkgs/stable/#javascript-yarnBerry-missing-hashes
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-3j1lydMNR3kI+G49Sz+LZ2YhwMQWcwKAn09ao4ur0oc=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-xb4HwmLjO1xCQ/KEav3EM2FwCu0vi/tXZVY+gSoonyQ=";
   };
 
   nativeBuildInputs = [

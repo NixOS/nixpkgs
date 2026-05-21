@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   sqlite,
-  unixODBC,
+  unixodbc,
   zstd,
   fetchurl,
 }:
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     sqlite
-    unixODBC
+    unixodbc
     zstd
   ];
 
@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/lovasoa/SQLpage";
     changelog = "https://github.com/lovasoa/SQLpage/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "sqlpage";
   };
 })

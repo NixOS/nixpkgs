@@ -48,7 +48,7 @@ import ./make-test-python.nix {
       };
 
     smtp2 =
-      { pkgs, ... }:
+      { config, pkgs, ... }:
       {
         imports = [ common/user-account.nix ];
         networking = {
@@ -71,15 +71,21 @@ import ./make-test-python.nix {
           serverConfiguration = ''
             listen on 0.0.0.0
             action dovecot_deliver mda \
-              "${pkgs.dovecot}/libexec/dovecot/deliver -d %{user.username}"
+              "${config.services.dovecot2.package}/libexec/dovecot/deliver -d %{user.username}"
             match from any for local action dovecot_deliver
           '';
         };
         services.dovecot2 = {
           enable = true;
-          enableImap = true;
-          mailLocation = "maildir:~/mail";
-          protocols = [ "imap" ];
+          enablePAM = true;
+          settings = {
+            dovecot_config_version = "2.4.3";
+            dovecot_storage_version = config.services.dovecot2.package.version;
+            mail_driver = "maildir";
+            mail_path = "~/mail";
+            protocols.imap = true;
+            auth_allow_cleartext = true;
+          };
         };
       };
 

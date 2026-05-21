@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "154.3";
+  version = "155.4";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,14 +48,14 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-PguKdpZ3yaV7eW1NKZpbsOEUiMxX6gdYZxJ4p7wkvi8=";
+    hash = "sha256-NHI+YLh4ptuAEff6NM9ZgN2haB+iZ9np7nf6iRMzgHw=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-RMoXtyDh9DbEYxYLAopItp6Bf8kg92Av+g5lSqKFhdU=";
+    hash = "sha256-9nUj9aP1yAvZEDBuJPfE4ZzGEbZOSuVK+KbD1kUG+dM=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -92,12 +92,6 @@ stdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  patches = [
-    # Fixes a build system issue where the classes UnsafeBuffers and Java16Buffers get built
-    # and copied multiple times, which causes conflicts when zipping up the final arc-core jar.
-    ./0001-fix-duplicate-classes.patch
-  ];
-
   postPatch = ''
     # Ensure the prebuilt shared objects don't accidentally get shipped
     rm -r Arc/natives/natives-*/libs/*
@@ -105,6 +99,10 @@ stdenv.mkDerivation {
     rm -f Arc/arc-core/unsafe/unsafe.jar
 
     cd Mindustry
+
+    # Fix duplicate class entries in arc-core jar with newer Gradle
+    substituteInPlace ../Arc/arc-core/build.gradle \
+      --replace-fail 'jar{' 'jar{ duplicatesStrategy = DuplicatesStrategy.EXCLUDE'
 
     # Remove unbuildable iOS stuff
     sed -i '/^project(":ios"){/,/^}/d' build.gradle
@@ -162,20 +160,20 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString enableClient ''
     pushd ../Arc
-    # unsupported platforms need to be excluded because their native build tools aren't available
-    gradle jnigenBuild -x jnigenBuildAndroid -x jnigenBuildWindows -x jnigenBuildWindows64
-    gradle jnigenJarNativesDesktop
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
-    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf backends/backend-sdl/build/Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed "$glewlib" \
-      --add-needed "$sdllib"
-    # Put the freshly-built libraries where the pre-built libraries used to be:
-    cp arc-core/libs/*/* natives/natives-desktop/libs/
-    cp backends/backend-sdl/build/Arc/backends/backend-sdl/libs/*/* natives/natives-desktop/libs/
-    # below target dirs are based on Arc upstream: Arc/extensions/../build.gradle
+    gradle jnigenBuildLinux64
+    # Copy freshly-built libraries to where Gradle resource dirs expect them.
+    # Using jnigenBuildLinux64 skips the postJni tasks, so we copy manually.
+    # arc-core uses relative libsDir, others use absolute which causes path doubling.
+    cp arc-core/libs/linux64/* natives/natives-desktop/libs/
+    cp -r backends/backend-sdl/build/Arc/backends/backend-sdl/libs/* backends/backend-sdl/libs/
     cp extensions/freetype/build/Arc/extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
     cp extensions/filedialogs/build/Arc/extensions/filedialogs/libs/*/* natives/natives-filedialogs/libs/
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+      --add-needed "$glewlib" \
+      --add-needed "$sdllib"
+    gradle jnigenJarNativesDesktop
     popd
 
     gradle desktop:dist

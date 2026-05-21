@@ -9,13 +9,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ipp-usb";
-  version = "0.9.31";
+  version = "0.9.33";
 
   src = fetchFromGitHub {
     owner = "openprinting";
     repo = "ipp-usb";
     rev = finalAttrs.version;
-    sha256 = "sha256-WoJa00dSTXknoEjRO/L1yZc6pA0SfAhKsG6QqS6aDSc=";
+    sha256 = "sha256-G8eCRzfwF7fFROFgDPuiSVH2NAvKefGJfzLU6yW23z4=";
   };
 
   postPatch = ''
@@ -23,7 +23,8 @@ buildGoModule (finalAttrs: {
     rm ipp-usb.8
     substituteInPlace Makefile \
       --replace-fail "install: all" "install: man" \
-      --replace-fail "/usr/" "/"
+      --replace-fail "/usr/" "/" \
+      --replace-fail "install -s" "install" # Nix already strips binaries in $out/sbin, this also fixes cross
     substituteInPlace systemd-udev/ipp-usb.service --replace-fail "/sbin" "$out/bin"
     for i in paths.go ipp-usb.8.md; do
       substituteInPlace $i --replace-fail "/usr" "$out"

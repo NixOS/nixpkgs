@@ -10,24 +10,30 @@
   elfutils,
   nix,
   nixosTests,
+  systemd,
+  util-linux,
+  cacert,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixseparatedebuginfod2";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-INY9mLJ+7i3BoShqFZMELm9aXiDbZkuLyokgm42kEbo=";
+    hash = "sha256-D327Pz3oHOHgfekXnDRQ0l+GrIcFUK1zcIqzR2Y3zqU=";
   };
 
-  cargoHash = "sha256-6JyC0CLGnkbQWp8l27DXZ04Gt0nsNNSBFfcvAQtllE4=";
+  cargoHash = "sha256-iAhm54jb+5Nv/XG6GYpoEgPjYmBTHvEnnmynFF8D8n4=";
 
   buildInputs = [
     libarchive
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    systemd
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -37,6 +43,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bubblewrap
     elfutils
     nix
+    util-linux
+    cacert
+  ];
+
+  # disable systemd feature on non linux
+  cargoBuildFlags = lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "--no-default-features"
   ];
 
   env.OPENSSL_NO_VENDOR = "1";

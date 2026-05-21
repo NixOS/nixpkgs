@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapraid";
-  version = "13.0";
+  version = "14.4";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-IoK37ZXlMRLDPjzsLUqcfcu4asdstFJYgHc2wAg9lno=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zkKdJwRcOmrSWX7CHHTAlL2GYbVjLkNVFficBum86F8=";
   };
 
   env.VERSION = finalAttrs.version;
@@ -35,8 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.snapraid.it/";
+    downloadPage = "https://github.com/amadvance/snapraid/releases";
+    changelog = "https://github.com/amadvance/snapraid/blob/v${finalAttrs.version}/HISTORY";
     description = "Backup program for disk arrays";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;
     mainProgram = "snapraid";

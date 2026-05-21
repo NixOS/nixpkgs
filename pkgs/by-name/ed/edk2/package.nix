@@ -182,8 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
           ++ attrs.nativeBuildInputs or [ ];
           strictDeps = true;
 
-          env.${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
-
           prePatch = ''
             rm -rf BaseTools
             ln -sv ${buildPackages.edk2}/BaseTools BaseTools
@@ -211,7 +209,14 @@ stdenv.mkDerivation (finalAttrs: {
         // removeAttrs attrs [
           "nativeBuildInputs"
           "depsBuildBuild"
+          "env"
         ]
+        // {
+          env = {
+            ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
+          }
+          // (attrs.env or { });
+        }
       );
   };
 })

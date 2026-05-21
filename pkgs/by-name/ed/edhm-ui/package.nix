@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edhm-ui";
-  version = "3.0.63";
+  version = "3.0.67";
 
   strictDeps = true;
 
   src = fetchzip {
     url = "https://github.com/BlueMystical/EDHM_UI/releases/download/v${finalAttrs.version}/edhm-ui-v3-linux-x64.zip";
-    hash = "sha256-f+nVupCywLlZYLKB8O1tGJKOKq3zT8PQM5mjLcp2MOY=";
+    hash = "sha256-JhWHub1YmdSJXZcyOK97/5TnBsKVN0dg7nwqg0EP7H8=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp libEGL.so $out/opt/edhm-ui/libEGL.so
 
     # Install icon
-    install -Dm644 $out/opt/edhm-ui/resources/images/icon.png $out/share/pixmaps/edhm-ui.png
+    install -Dm644 $out/opt/edhm-ui/resources/images/icon.png $out/share/icons/hicolor/256x256/apps/edhm-ui.png
 
     runHook postInstall
   '';

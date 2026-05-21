@@ -28,17 +28,17 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "correctionlib";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cms-nanoAOD";
     repo = "correctionlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-aLTeyDOo80p8xzl/IPnpT3BOjS2qOYn/Z7pidcLoEY8=";
+    hash = "sha256-zIKxMulID6JomaSDuI57cHA7xAZIfGBOOYCKS7Xrkaw=";
   };
 
   postPatch = ''
@@ -81,8 +81,8 @@ buildPythonPackage rec {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";
     mainProgram = "correction";
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
-    changelog = "https://github.com/cms-nanoAOD/correctionlib/releases/tag/v${version}";
+    changelog = "https://github.com/cms-nanoAOD/correctionlib/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

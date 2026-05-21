@@ -22,14 +22,17 @@ let
     assertMsg
     generators
     licenses
+    nameValuePair
     recurseIntoAttrs
+    replaceString
     ;
 
-  mkUnfreePkg = name: {
+  mkPkg = name: license: {
     pname = name;
     version = "1.0";
-    meta.license = licenses.unfree;
+    meta.license = license;
   };
+
   assertValidity =
     {
       nixpkgsConfig,
@@ -52,77 +55,97 @@ let
       toPretty = generators.toPretty { };
     in
     assertMsg (actual.success == expected) ''
-      Expected validity of package ${lib.getName pkg} to be ${toPretty expected},
-      but got ${toPretty actual} with config:
+      Expected validity of package '${lib.getName pkg}' with unfree license
+      '${licenses.toSPDX pkg.meta.license}' to be ${toPretty expected}, but got
+      ${toPretty actual}
+      with config:
       ${toPretty nixpkgsConfig}
     '';
 
   runAssertions = assertions: lib.deepSeq assertions "";
 
-in
-recurseIntoAttrs {
-
-  allowOnlyFreePackagesByDefault = assertValidity {
-    nixpkgsConfig = { };
-    pkg = mkUnfreePkg "forbidden";
-    expected = false;
-  };
-
-  allowAllUnfreePackages = assertValidity {
-    nixpkgsConfig = {
-      allowUnfree = true;
+  mkTests = mkUnfreePkg: {
+    allowOnlyFreePackagesByDefault = assertValidity {
+      nixpkgsConfig = { };
+      pkg = mkUnfreePkg "forbidden";
+      expected = false;
     };
-    pkg = mkUnfreePkg "allowed";
+
+    allowAllUnfreePackages = assertValidity {
+      nixpkgsConfig = {
+        allowUnfree = true;
+      };
+      pkg = mkUnfreePkg "allowed";
+    };
+
+    allowUnfreePackagesWithPredicate =
+      let
+        nixpkgsConfig = {
+          allowUnfreePredicate = pkg: lib.getName pkg == "allowed-by-predicate";
+        };
+      in
+      [
+        (assertValidity {
+          inherit nixpkgsConfig;
+          pkg = mkUnfreePkg "allowed-by-predicate";
+        })
+        (assertValidity {
+          inherit nixpkgsConfig;
+          pkg = mkUnfreePkg "allowed-by-nothing";
+          expected = false;
+        })
+      ];
+
+    allowUnfreeWithPackages = runAssertions [
+      (assertValidity {
+        nixpkgsConfig = {
+          allowUnfreePackages = [ "unfree" ];
+        };
+        pkg = mkUnfreePkg "unfree";
+        expected = true;
+      })
+    ];
+
+    allowUnfreePackagesOrPredicate =
+      let
+        nixpkgsConfig = {
+          allowUnfreePackages = [ "allowed-by-packages" ];
+          allowUnfreePredicate = pkg: lib.getName pkg == "allowed-by-predicate";
+        };
+      in
+      runAssertions [
+        (assertValidity {
+          inherit nixpkgsConfig;
+          pkg = mkUnfreePkg "allowed-by-packages";
+        })
+        (assertValidity {
+          inherit nixpkgsConfig;
+          pkg = mkUnfreePkg "allowed-by-predicate";
+        })
+        (assertValidity {
+          inherit nixpkgsConfig;
+          pkg = mkUnfreePkg "forbidden";
+          expected = false;
+        })
+      ];
   };
 
-  allowUnfreePackagesWithPredicate =
-    let
-      nixpkgsConfig = {
-        allowUnfreePredicate = pkg: lib.getName pkg == "allowed-by-predicate";
-      };
-    in
-    [
-      (assertValidity {
-        inherit nixpkgsConfig;
-        pkg = mkUnfreePkg "allowed-by-predicate";
-      })
-      (assertValidity {
-        inherit nixpkgsConfig;
-        pkg = mkUnfreePkg "allowed-by-nothing";
-        expected = false;
-      })
-    ];
-
-  allowUnfreeWithPackages = runAssertions [
-    (assertValidity {
-      nixpkgsConfig = {
-        allowUnfreePackages = [ "unfree" ];
-      };
-      pkg = mkUnfreePkg "unfree";
-      expected = true;
-    })
+  unfreeLicenses = [
+    licenses.unfree
+    (licenses.AND [
+      licenses.free
+      licenses.unfree
+    ])
   ];
+in
 
-  allowUnfreePackagesOrPredicate =
-    let
-      nixpkgsConfig = {
-        allowUnfreePackages = [ "allowed-by-packages" ];
-        allowUnfreePredicate = pkg: lib.getName pkg == "allowed-by-predicate";
-      };
-    in
-    runAssertions [
-      (assertValidity {
-        inherit nixpkgsConfig;
-        pkg = mkUnfreePkg "allowed-by-packages";
-      })
-      (assertValidity {
-        inherit nixpkgsConfig;
-        pkg = mkUnfreePkg "allowed-by-predicate";
-      })
-      (assertValidity {
-        inherit nixpkgsConfig;
-        pkg = mkUnfreePkg "forbidden";
-        expected = false;
-      })
-    ];
-}
+recurseIntoAttrs (
+  builtins.listToAttrs (
+    map (
+      license:
+      nameValuePair (replaceString " " "-" (licenses.toSPDX license)) (
+        recurseIntoAttrs (mkTests (name: mkPkg name license))
+      )
+    ) unfreeLicenses
+  )
+)

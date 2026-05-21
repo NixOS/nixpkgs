@@ -5,6 +5,7 @@
   pkg-config,
   bzip2,
   zstd,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -14,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dmcg310";
     repo = "Rust-Traverse";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OcCWmBNDo4AA5Pk5TQqb8hen9LlHaY09Wrm4BkrU7qA=";
   };
 
@@ -33,12 +34,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Terminal based file explorer";
     homepage = "https://github.com/dmcg310/Rust-Traverse";
     changelog = "https://github.com/dmcg310/Rust-Traverse/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "rt";
   };
 })

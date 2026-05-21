@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Chromium's Darwin toolchain defines _LIBCPP_HARDENING_MODE itself; keep
   # cc-wrapper from injecting a conflicting default.
-  hardeningDisable = lib.optionals stdenv.isDarwin [
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
     "libcxxhardeningfast"
     "libcxxhardeningextensive"
   ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gclient2nix.gclientUnpackHook
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk
     xcodebuild
   ];
@@ -78,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     pulseaudio
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.compiler-rt
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ];
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace modules/audio_device/linux/pulseaudiosymboltable_linux.cc \
       --replace-fail "libpulse.so.0" "${pulseaudio}/lib/libpulse.so.0"
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix Darwin Python script shebangs for sandbox builds
     patchShebangs build/mac/should_use_hermetic_xcode.py build/toolchain/apple/linker_driver.py
 
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace build/config/mac/BUILD.gn \
       --replace-fail "apple-macos" "apple-darwin"
   ''
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace modules/audio_device/linux/alsasymboltable_linux.cc \
       --replace-fail "libasound.so.2" "${alsa-lib}/lib/libasound.so.2"
   '';
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   gnFlags =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # webrtc uses chromium's `src/build/BUILDCONFIG.gn`. many of these flags
       # are copied from pkgs/applications/networking/browsers/chromium/common.nix.
       ''target_os="linux"''
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''custom_toolchain="//build/toolchain/linux/unbundle:default"''
       ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ''target_os="mac"''
       ''mac_deployment_target="${stdenv.hostPlatform.darwinMinVersion}"''
       "use_sysroot=true"
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       "use_custom_libcxx=false"
       ''rust_sysroot_absolute="${buildPackages.rustc}"''
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.buildPlatform != stdenv.hostPlatform) [
       ''host_toolchain="//build/toolchain/linux/unbundle:host"''
       ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:host"''
     ];

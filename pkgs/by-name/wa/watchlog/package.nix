@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchlog";
-  version = "1.254.0";
+  version = "1.259.0";
 
   src = fetchFromGitLab {
     owner = "kevincox";
     repo = "watchlog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gXglNyeIrLCarHwn0shSAOEcoVOW9yaCuXA/KGB1pdo=";
+    hash = "sha256-MjuQ1k38ZS1d6kJitEH9DTCUWzvUNhm3mto/QAWxE5k=";
   };
 
-  cargoHash = "sha256-aw5WRBnQJqn9zUzXir4HNNywcwX3yZW5RKkPZBa5XD0=";
+  cargoHash = "sha256-Mukw9DLIaPI0/CQws7AQwHmGmX/T4KuoX/2KTAUZXx4=";
 
   meta = {
     description = "Easier monitoring of live logs";

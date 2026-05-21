@@ -69,6 +69,8 @@
       };
   };
   testScript = ''
+    import os
+
     # Helpers
     def cmd(command):
       print(f"+{command}")

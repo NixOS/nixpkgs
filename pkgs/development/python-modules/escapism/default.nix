@@ -2,20 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "escapism";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-rdEw5IqFuxquo+dPsDH1AzxwVa7bOaMmX5I9X0DD+XQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-rdEw5IqFuxquo+dPsDH1AzxwVa7bOaMmX5I9X0DD+XQ=";
   };
 
-  # No tests distributed
-  doCheck = false;
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Simple, generic API for escaping strings";
@@ -23,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bzizou ];
   };
-}
+})

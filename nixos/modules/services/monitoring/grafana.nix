@@ -2070,6 +2070,11 @@ in
           for more information.
 
           See https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/#re-encrypt-secrets on how to re-encrypt.
+
+          As stated in the NixOS changelog for 26.05, there's no official way to rotate.
+          Either hard-code the old key ("SW2YcwTIb9zpOOhoPsMm") if your setup doesn't have any secrets in the DB that need
+          special protection or perform a rotation with a 3rd-party tool
+          (https://github.com/erooke/grafana-secretkey-rotation-tool/tree/d9dc788902fa5185e15cb15ce6129f7237ab6138).
         '';
       }
     ];
@@ -2086,7 +2091,7 @@ in
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
-        exec ${cfg.package}/bin/grafana server -homepath ${cfg.dataDir} -config ${configFile}
+        exec ${lib.getExe cfg.package} server -homepath ${cfg.dataDir} -config ${configFile}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;

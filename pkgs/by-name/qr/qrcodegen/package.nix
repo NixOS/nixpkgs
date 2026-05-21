@@ -38,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $out/lib/ libqrcodegen.a
     install -Dt $out/include/qrcodegen/ qrcodegen.h
 
+    mkdir -p $out/lib/pkgconfig
+    substitute ${./qrcodegen.pc} $out/lib/pkgconfig/qrcodegen.pc \
+      --subst-var out \
+      --subst-var pname \
+      --subst-var version
+
     runHook postInstall
   '';
 

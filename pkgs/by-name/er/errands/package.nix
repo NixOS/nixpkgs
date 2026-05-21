@@ -52,6 +52,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     lxml
     caldav
     pycryptodomex
+    urllib3
+    requests
   ];
 
   dontWrapGApps = true;

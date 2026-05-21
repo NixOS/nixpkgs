@@ -9,6 +9,11 @@ stdenvNoCC.mkDerivation {
   pname = "atkinson-hyperlegible-next";
   version = "2.001-unstable-2025-02-21";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "atkinson-hyperlegible-next";

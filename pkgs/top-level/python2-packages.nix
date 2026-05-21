@@ -61,7 +61,7 @@ with super;
 
   six = disabled super.six;
 
-  wcwidth = disabled super.wcwitch;
+  wcwidth = disabled super.wcwidth;
 
   wheel = callPackage ../development/python2-modules/wheel { };
 

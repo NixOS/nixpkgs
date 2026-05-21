@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "distgen";
-  version = "2.2";
+  version = "2.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-w+/aiLv5NCQFD0ItlC+Wy9BuvA/ndDQcLf6Iyb9trF4=";
+    hash = "sha256-EDRCGf4laHZs//E3w5FxlkuTfbVLxnaGmQF/xjwaKDQ=";
   };
 
   build-system = with python3.pkgs; [

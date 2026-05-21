@@ -30,6 +30,7 @@
 , "news": "agpl3Plus"
 , "nextpod": "agpl3Only"
 , "notes": "agpl3Plus"
+, "oidc": "agpl3Only"
 , "oidc_login": "agpl3Only"
 , "onlyoffice": "asl20"
 , "phonetrack": "agpl3Plus"

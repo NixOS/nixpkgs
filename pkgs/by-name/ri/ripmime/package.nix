@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://pldaniels.com/ripmime/";
     platforms = lib.platforms.all;
     mainProgram = "ripmime";
+    license = lib.licenses.bsd3;
   };
 
   passthru = {

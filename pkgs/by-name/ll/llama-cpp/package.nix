@@ -40,6 +40,7 @@
   shaderc,
   vulkan-headers,
   vulkan-loader,
+  spirv-headers,
   ninja,
 }:
 
@@ -78,7 +79,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "8124";
+  version = "9190";
 
   outputs = [
     "out"
@@ -89,7 +90,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-RyYHk4IaxT23GUn9vvGZqKXoprpY7bMNSoOq0b9VFXM=";
+    hash = "sha256-zajArFzrLUUVsfG1xBttwzwaT9QNlKzDbvSxvof+FMQ=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -99,10 +100,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   patches = [ ];
 
-  postPatch = ''
-    rm tools/server/public/index.html.gz
-  '';
-
   nativeBuildInputs = [
     cmake
     installShellFiles
@@ -110,6 +107,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     pkg-config
+    spirv-headers
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -124,8 +122,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ openssl ];
 
-  npmRoot = "tools/server/webui";
-  npmDepsHash = "sha256-FKjoZTKm0ddoVdpxzYrRUmTiuafEfbKc4UD2fz2fb8A=";
+  npmRoot = "tools/ui";
+  npmDepsHash = "sha256-WaEePrEZ7O/7deP2KJhe0AwiSKYA8HOqETmMHUkmBe0=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
@@ -214,7 +212,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "llama";
     maintainers = with lib.maintainers; [
       booxter
-      dit7ya
       philiptaron
       xddxdd
       yuannan

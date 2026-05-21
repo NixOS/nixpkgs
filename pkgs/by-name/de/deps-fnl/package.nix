@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deps.fnl";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitLab {
     owner = "andreyorst";
     repo = "deps.fnl";
     tag = version;
-    hash = "sha256-gUqi0g7myWTbjILN4RQqbeeaSYcg0oVJYNO0Gv9XzNY=";
+    hash = "sha256-FrFeRbfK4sHd3pjiVDMrE8IpDKptZuwkTLMQ9hppVRY=";
   };
 
   dontBuild = true;

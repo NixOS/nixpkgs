@@ -12,6 +12,7 @@
   alsa-lib,
   eigen,
   gtest,
+  kissfft,
   nlohmann_json,
   onnxruntime,
 
@@ -49,17 +50,17 @@ let
       };
     }
     {
-      name = "kaldifst-1.7.17.tar.gz";
+      name = "kaldifst-1.8.0.tar.gz";
       src = fetchurl {
-        url = "https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.7.17.tar.gz";
-        hash = "sha256-xLcBojpAC9qAMlhrAsfg1egTp2WDLfYMI+bfnmKwEPQ=";
+        url = "https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.8.0.tar.gz";
+        hash = "sha256-PyR7flokCQcSAvXivGIABg9mcowKNEPAOSOtJyPgQLM=";
       };
     }
     {
-      name = "kaldi-decoder-0.2.11.tar.gz";
+      name = "kaldi-decoder-0.3.0.tar.gz";
       src = fetchurl {
-        url = "https://github.com/k2-fsa/kaldi-decoder/archive/refs/tags/v0.2.11.tar.gz";
-        hash = "sha256-hcpGJTVZJUHrW6bSGEMAnPNHOPUbKLcfhIgqNpS1KL8=";
+        url = "https://github.com/k2-fsa/kaldi-decoder/archive/refs/tags/v0.3.0.tar.gz";
+        hash = "sha256-ufNM+0/TsTRBAO6tee9NN6oVliJ0ueMFbeNFAh92obA=";
       };
     }
     {
@@ -77,24 +78,17 @@ let
       };
     }
     {
-      name = "openfst-sherpa-onnx-2024-06-19.tar.gz";
+      name = "openfst-1.8.5-2026-04-11.tar.gz";
       src = fetchurl {
-        url = "https://github.com/csukuangfj/openfst/archive/refs/tags/sherpa-onnx-2024-06-19.tar.gz";
-        hash = "sha256-XJjoLMUJxWGFAt3khguOoE2EOFDtV+bWtZC2RLJohT0=";
+        url = "https://github.com/csukuangfj/openfst/archive/refs/tags/v1.8.5-2026-04-11.tar.gz";
+        hash = "sha256-V/vEuVCugbGg4eKYrxVlLalopnI6WSt4dOm0AnqApbQ=";
       };
     }
     {
-      name = "hclust-cpp-2024-09-29.tar.gz";
+      name = "hclust-cpp-2026-02-25.tar.gz";
       src = fetchurl {
-        url = "https://github.com/csukuangfj/hclust-cpp/archive/refs/tags/2024-09-29.tar.gz";
-        hash = "sha256-q6tRRIo8tUJyquB1IpcDBuCyzGR51Z17Geeu5NbO3TM=";
-      };
-    }
-    {
-      name = "kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip";
-      src = fetchurl {
-        url = "https://github.com/mborgerding/kissfft/archive/febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip";
-        hash = "sha256-SXED5mQWjr45WAt1etvmFvbPhaFlcq9YHKe8QtCrE/0=";
+        url = "https://github.com/csukuangfj/hclust-cpp/archive/refs/tags/2026-02-25.tar.gz";
+        hash = "sha256-jxTgJMcJ1zr7QK5pyyLeS3Pbpny85A8uUYgT2oE5q1Y=";
       };
     }
   ]
@@ -117,13 +111,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
-  version = "1.12.25";
+  version = "1.12.38";
 
   src = fetchFromGitHub {
     owner = "k2-fsa";
     repo = "sherpa-onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NRiqk/YMk3vhlBRrmeMsJ544Xv1b7GCSMQD2ec+xi+k=";
+    hash = "sha256-lzcquKwP68KOem50b4X0+nZ3s2IthiYB76IxfvmJo54=";
   };
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "python" ];
@@ -179,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_EIGEN" "${eigen.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_KISSFFT" "${kissfft.src}")
     "-Wno-dev"
   ]
   ++ lib.optionals pythonSupport [

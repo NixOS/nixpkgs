@@ -17,18 +17,18 @@
   openldap,
   geoip,
   curl,
-  unixODBC,
+  unixodbc,
   lmdb,
   tinycdb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "5.0.3";
+  version = "5.0.5";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-7DEgUBlQp3LHhcYA9Zno9NcR9wOgLL0b7ELtwaBfgcw=";
+    hash = "sha256-wUT+sjz8LNR+vzNRMq6gr6tgWttP9PMJVb40RQNODe8=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     yaml-cpp
     libsodium
     curl
-    unixODBC
+    unixodbc
     openssl
     systemd
     lmdb

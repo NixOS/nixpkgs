@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.5.4";
+  version = "4.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hAh45bw28NNQFl8GiL8UA+1IryxQBPdlGnBKXZih6+g=";
+    hash = "sha256-vlsjhBfI08QMQ8FzM+BogAXbukHhnr4aD8ZmZVicCv0=";
   };
 
   build-system = [

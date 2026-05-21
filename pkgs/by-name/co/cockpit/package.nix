@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  asciidoc,
+  asciidoctor,
   autoreconfHook,
   bashInteractive,
   cacert,
@@ -53,18 +53,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "356";
+  version = "362";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-Mmxp/rh+4YQovAUdnNkKnjZXz1kcdnhG2TuBhNSXY+Y=";
+    hash = "sha256-Aos7jQ9T8q/ZYZZGXZrSQzTWXXIrAcu3OorJ/Utkq28=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    asciidoc
+    asciidoctor
     autoreconfHook
     makeWrapper
     docbook_xml_dtd_43
@@ -169,11 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     # fix polkit agent helper path
     substituteInPlace src/cockpit/polkit.py \
       --replace-fail "/usr/lib/polkit-1/polkit-agent-helper-1" "/run/wrappers/bin/polkit-agent-helper-1"
-  '';
-
-  preConfigure = ''
-    # Make sure our Python comes before any other Python (e.g. from asciidoc)
-    export PATH="${lib.makeBinPath [ python3Packages.python ]}:$PATH"
   '';
 
   configureFlags = [

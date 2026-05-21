@@ -49,7 +49,7 @@ buildBazelPackage' rec {
       rm -rv "$bazelOut/external/host_platform"
     '';
 
-    hash = "sha256-CekpXINZSr6Hysa4qrVkdchBla9pgBwRtqBiuUGPNq0=";
+    hash = "sha256-znkwUs984vbinz/BLo1uxQ+PvxkpXo719lJu4TD1Vmg=";
   };
 
   buildAttrs.installPhase = ''

@@ -11,12 +11,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "8.2.0";
+  version = "8.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZFI+mUAd307n8J9VF4fcEnER7rmsjYsOgDeWbv3XoaU=";
+    hash = "sha256-9HfpSTM2vLfDorEO6nKmCumn9J6WitoNTQG/946sRLs=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       websocket-client
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     decompress = urllib3.optional-dependencies.brotli ++ urllib3.optional-dependencies.zstd;

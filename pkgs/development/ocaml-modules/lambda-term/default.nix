@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildDunePackage,
   zed,
-  lwt_log,
   lwt_react,
   mew_vi,
   uucp,
@@ -23,7 +22,6 @@ buildDunePackage (finalAttrs: {
 
   propagatedBuildInputs = [
     zed
-    lwt_log
     lwt_react
     mew_vi
     uucp

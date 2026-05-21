@@ -6,7 +6,9 @@
   unittestCheckHook,
 
   setuptools,
+  setuptools-scm,
 
+  jamo,
   regex,
   panphon,
   marisa-trie,
@@ -15,19 +17,23 @@
 
 buildPythonPackage rec {
   pname = "epitran";
-  version = "1.34.0";
+  version = "1.35.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmort27";
     repo = "epitran";
     tag = "v${version}";
-    hash = "sha256-LKESBSLn2gpXx8kEXmykEkTboIMiS5gZ2Kb9rj1lDTk=";
+    hash = "sha256-XXEZEptrVH+wfWm85B8yZ+RI+6AUZjWFKMjst/V7aE0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
+    jamo
     regex
     panphon
     marisa-trie

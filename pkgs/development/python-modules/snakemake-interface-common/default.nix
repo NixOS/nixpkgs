@@ -4,20 +4,30 @@
   buildPythonPackage,
   configargparse,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "snakemake-interface-common";
-  version = "1.22.0";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-common";
     tag = "v${version}";
-    hash = "sha256-DxbB/UaBkLbG18CGHyDMo7dmRlVY2tD3BhO0MShbnq4=";
+    hash = "sha256-D3vktJmn1CifdiEg5UPGpBuuigEIb+ja4yklHZA6ytQ=";
   };
+
+  patches = [
+    # Upstream PR: https://github.com/snakemake/snakemake-interface-common/pull/89
+    (fetchpatch {
+      name = "relax-packaging-dependency.patch";
+      url = "https://github.com/snakemake/snakemake-interface-common/commit/d585b5c0c7c0ec0df60a1a26d5d413f3ee88e63f.patch";
+      hash = "sha256-mZ03mx7W5XpdNzr1aNVyQm7/hPdD7yuYqk7DCR9y7Fw=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

@@ -10,6 +10,7 @@ let
     isInt
     isAttrs
     isList
+    isDerivation
     all
     any
     attrNames
@@ -103,6 +104,11 @@ lib.fix (self: {
           ) (attrNames attrs);
     };
 
+  derivation = {
+    name = "derivation";
+    verify = isDerivation;
+  };
+
   listOf =
     t:
     assert isTypeDef t;
@@ -139,6 +145,29 @@ lib.fix (self: {
     {
       name = "union<${concatStringsSep "," (map (t: t.name) types)}>";
       verify = v: any (func: func v) funcs;
+    };
+
+  intersection =
+    types:
+    assert all isTypeDef types;
+    let
+      # Store a list of functions so we don't have to pay the cost of attrset lookups at runtime.
+      funcs = map (t: t.verify) types;
+    in
+    {
+      name = "intersection<${concatStringsSep "," (map (t: t.name) types)}>";
+      verify = v: all (func: func v) funcs;
+    };
+
+  not =
+    t:
+    assert isTypeDef t;
+    let
+      inherit (t) verify;
+    in
+    {
+      name = "not<${t.name}>";
+      verify = v: !(verify v);
     };
 
   enum =

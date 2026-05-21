@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "httpx";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hgeBZJqBFNWqcElfgGv8r1yAzifoD27GHPyxh6LpOaU=";
+    hash = "sha256-WVmxXdQUNrWaVgxx9cirafgsW8+wuNsYyCXYV3mvX9E=";
   };
 
-  vendorHash = "sha256-Ug39SdHVZFf7e1BGcszuTqxdQ5yfVNQiYhcsrvxT4cQ=";
+  vendorHash = "sha256-ALC8vhK/vzuKpiE1iQ2u0Orx/fUw5eVz32LyMrdrrrk=";
 
   subPackages = [ "cmd/httpx" ];
 

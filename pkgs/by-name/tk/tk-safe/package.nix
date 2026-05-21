@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
     mv * $out/opt/tk-safe
     ln -s $out/opt/tk-safe/app/tk-safe $out/bin/tk-safe
 
-    mkdir -p $out/share/icons/hicolor/1024x1024/apps
-    ln -s $out/opt/tk-safe/meta/gui/icon.png $out/share/icons/hicolor/1024x1024/apps/tk-safe.png
+    mkdir -p $out/share/icons
+    ln -s $out/opt/tk-safe/meta/gui/icon.png $out/share/icons/tk-safe.png
 
     runHook postInstall
   '';

@@ -14,7 +14,7 @@
   gdal,
   python3,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     proj
     gdal
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # TODO: libGLU doesn't build for macOS because of Mesa issues
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   enableParallelBuilding = true;

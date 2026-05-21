@@ -36,9 +36,10 @@
   stdenv,
   onetbb,
   withDocs ? false,
-  withOsl ? true,
+  withOsl ? !stdenv.hostPlatform.isDarwin,
   withTools ? false,
   withUsdView ? false,
+  withMaterialX ? true,
   writeShellScriptBin,
 }:
 
@@ -96,8 +97,8 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
-    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
-    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" withMaterialX)
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" withOsl)
   ];
 
   nativeBuildInputs = [

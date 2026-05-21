@@ -13,20 +13,33 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ntpd-rs";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gOt2X/tqtFrmxkTO/8UFwmyX0vPKHsTu+qe5AfqDtMk=";
+    hash = "sha256-JeOgXIvn5kVy+KjCpjkR+7di1SYD3hi0dEoVpm5vxDg=";
   };
 
-  cargoHash = "sha256-DXAy/K70sNhVOjDOd6G/juE7JgmewPzGHZDeXAOZ1+s=";
+  cargoHash = "sha256-rQdLNYa9nyiA7xgi57aDjeSQpa4D7BDW32SVEduSm2U=";
 
   nativeBuildInputs = [
     pandoc
     installShellFiles
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  # These fail based on timestamp issues with bundled certificates
+  # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
+  checkFlags = [
+    "--skip=daemon::keyexchange::tests::key_exchange_connection_limiter"
+    "--skip=daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
+    "--skip=daemon::ntp_source::tests::test_deny_stops_poll"
+    "--skip=daemon::ntp_source::tests::test_timeroundtrip"
+    "--skip=daemon::server::tests::test_server_serves"
+    "--skip=daemon::spawn::nts::tests::allow_srv_direct_name_resolution"
   ];
 
   postPatch = ''

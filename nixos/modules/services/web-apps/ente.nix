@@ -359,5 +359,8 @@ in
     })
   ];
 
-  meta.maintainers = with lib.maintainers; [ oddlama ];
+  meta = {
+    doc = ./ente.md;
+    maintainers = with lib.maintainers; [ oddlama ];
+  };
 }

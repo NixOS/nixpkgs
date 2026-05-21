@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.28.4";
+  version = "2.34.4";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-bct1ntvjK738QkoumqwsMJdV+ikpLVtW061637m4vIg=";
+      hash = "sha256-w20nrn3wo9Dvv3BILYBzuJTTLXqcWaRAF7SiPtryhwk=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -42,22 +42,22 @@ stdenv.mkDerivation rec {
       name = "vc-intrinsics";
       owner = "intel";
       repo = "vc-intrinsics";
-      tag = "v0.24.3";
-      hash = "sha256-VRws9wzBvNph1sTFjhmigM8ZDI6VMp8ZUJR4cZaK5uA=";
+      tag = "v0.25.0";
+      hash = "sha256-ozc1w3V5RqWHwqNHuefZJMN8RAYxrJxH9bd1BEqxfiQ=";
     })
     (fetchFromGitHub {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v16.0.9";
-      hash = "sha256-N6C9OY0ZV36KXdlPXQ+UW8AKdzg+0xMip9uPnsKAcH0=";
+      tag = "v16.0.11";
+      hash = "sha256-ema1jTNMHs3pUituVb1NPllc6cA8eYJHtDOjuEzIDWM=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v16.0.22";
-      hash = "sha256-3ymwHSNqCdMIgzPYIYUIHMjJHSxdcGK11DF8qPM6nMs=";
+      tag = "v16.0.24";
+      hash = "sha256-aTcwfQt2WdOA44jfHdD7x7oxt8emSDexgZnI7MPVqvU=";
     })
   ];
 
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${version}";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];

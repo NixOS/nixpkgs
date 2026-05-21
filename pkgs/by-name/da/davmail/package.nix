@@ -14,7 +14,7 @@
   gnugrep,
   zulu,
   preferGtk3 ? true,
-  preferZulu ? true,
+  preferZulu ? false,
 }:
 
 let
@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
-  version = "6.4.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "mguessan";
     repo = "davmail";
     tag = finalAttrs.version;
-    hash = "sha256-dj+7e0b8GcyoDzEWGG1SEMijqRBo1IJUFtgxkt9XNRU=";
+    hash = "sha256-bQyZ+Sela70fOle+uqqG+y3fACeItvkmidXOFXW+DOk=";
   };
 
   buildPhase = ''
@@ -82,7 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     homepage = "https://davmail.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      doronbehar
+      shymega
+    ];
     platforms = lib.platforms.all;
     mainProgram = "davmail";
   };

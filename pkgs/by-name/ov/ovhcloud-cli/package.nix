@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   installShellFiles,
   testers,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "ovhcloud-cli";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "ovhcloud-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fX8pjFLXHeHKp1K7XlwLrP5ivz/Tjk8vsPIbqEAWbU8=";
+    hash = "sha256-MiDX819XWBdtaeVwTRDMuuvmfWRQ0qhi3gQABHVQR3k=";
   };
 
-  vendorHash = "sha256-WNONEceR/cDVloosQ/BMYjPTk9elQ1oTX89lgzENSAI=";
+  vendorHash = "sha256-fDn6MUD2jr06T66xSxUtNFsL+upF1M2tD6IVdzhgfVI=";
 
   env.CGO_ENABLED = 0;
 

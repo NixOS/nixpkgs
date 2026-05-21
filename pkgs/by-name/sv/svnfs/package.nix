@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FUSE filesystem for accessing Subversion repositories";
     homepage = "https://www.jmadden.eu/index.php/svnfs/";
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "svnfs";
   };

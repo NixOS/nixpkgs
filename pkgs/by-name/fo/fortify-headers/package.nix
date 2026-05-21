@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fortify-headers";
-  version = "1.1alpine3";
+  version = "3.0.1";
 
   # upstream only accessible via git - unusable during bootstrap, hence
-  # extract from the alpine package
+  # extract from GitHub release.
   src = fetchurl {
-    url = "https://dl-cdn.alpinelinux.org/alpine/v3.18/main/x86_64/fortify-headers-1.1-r3.apk";
-    name = "fortify-headers.tar.gz"; # ensure it's extracted as a .tar.gz
-    hash = "sha256-8A8JcKHIBgXpUuIP4zs3Q1yBs5jCGd5F3H2E8UN/S2g=";
+    url = "https://github.com/jvoisin/fortify-headers/archive/refs/tags/${finalAttrs.version}.tar.gz";
+    hash = "sha256-V2rB3C25pQPYRYwen0ps6LBDfPw8UHhZ12AaO42KwOY=";
   };
 
   patches = [
@@ -21,14 +21,20 @@ stdenv.mkDerivation {
     ./restore-macros.patch
   ];
 
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out
-    cp -r include/fortify $out/include
+    cp -r include $out/include
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "git://git.2f30.org/fortify-headers";
+  };
 
   meta = {
     description = "Standalone header-based fortify-source implementation";
@@ -37,4 +43,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pobrn/mktorrent/wiki";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      Profpatsch
       winter
     ];
     platforms = lib.platforms.all;

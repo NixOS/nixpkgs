@@ -11,13 +11,13 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycares";
   version = "5.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-WjwknIMEMmMUOYFfmoGEY0FvKoy9semI54dX3prnUIE=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for c-ares";
     homepage = "https://github.com/saghul/pycares";
-    changelog = "https://github.com/saghul/pycares/releases/tag/v${version}";
+    changelog = "https://github.com/saghul/pycares/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

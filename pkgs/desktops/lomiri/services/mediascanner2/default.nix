@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediascanner2";
-  version = "0.118";
+  version = "0.200";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/mediascanner2";
     tag = finalAttrs.version;
-    hash = "sha256-ZJXJNDZUDor5EJ+rn7pQt7lLzoszZUQM3B+u1gBSMs8=";
+    hash = "sha256-tTEbH5gXK+0y3r1LCxsZ6vr1FVyXWZaNAXaR6jcIP0Y=";
   };
 
   outputs = [
@@ -45,7 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/qml/MediaScanner.*/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  # https://gitlab.com/ubports/development/core/mediascanner2/-/commit/4268b8c0a7e99c1d12f43599b1ae76b5b27572ec
+  # Remove when version > 0.200
+  + ''
+    substituteInPlace src/extractor/CMakeLists.txt src/qml/MediaScanner.0.1/CMakeLists.txt \
+      --replace-fail 'msg(' 'message('
   '';
 
   strictDeps = true;
@@ -82,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
-  cmakeFlags = [ (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck) ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

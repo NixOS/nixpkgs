@@ -10,7 +10,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
-  version = "5.1.0";
+  version = "6.0.1";
 
   src =
     let
@@ -19,11 +19,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         {
           x86_64-darwin = {
             arch = "x86_64";
-            hash = "sha256-G7o0nHsf6Ay2k3quMs45KH9h4yEpbvyGPm/u86naWcM=";
+            hash = "sha256-7+iDBr4GG5bdTuAlAmMQkEkIzVgLo2+DEdravClaLtQ=";
           };
           aarch64-darwin = {
             arch = "arm64";
-            hash = "sha256-XZM0YeFLHYhoEqQLaG1Jz3OWcT9DILqFEcgqI3yvDk8=";
+            hash = "sha256-BZ9UE8H28kjqiMNdLDUUyC9madR4rBV1mLUGyj6ol3Y=";
           };
         }
         .${stdenvNoCC.hostPlatform.system}

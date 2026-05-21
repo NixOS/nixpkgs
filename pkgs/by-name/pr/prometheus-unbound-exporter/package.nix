@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.5.0";
+  version = "0.6.0";
 in
 buildGoModule {
   pname = "unbound_exporter";
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "letsencrypt";
     repo = "unbound_exporter";
     tag = "v${version}";
-    hash = "sha256-xVc6xES3YdKIaP6rwAzI0/RLoer7bcq7VAmfjYii8VI=";
+    hash = "sha256-XsiQGVYBEXM8DQtQWEA2wk/19TGGZaIBt7Vc4HHfIBY=";
   };
 
-  vendorHash = "sha256-6ZiBXQRsmlUU7h9Dvlb5WHnYAjrrhbw0rypP5ChoKPs=";
+  vendorHash = "sha256-2M7s9YPAFxCQcIgF+HDKu6kztHBvbl/S2BmaBngeBFI=";
 
   passthru.tests = {
     inherit (nixosTests.prometheus-exporters) unbound;

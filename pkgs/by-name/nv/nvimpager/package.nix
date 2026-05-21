@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvimpager";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = "nvimpager";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Au9rRZMZfU4qHi/ng6JO8FnMpySKDbKzr75SBPY3QiA=";
+    sha256 = "sha256-hwUI0DlkXveE+m4BkO8xEF/IARqSVk2E6tw07+UtnbA=";
   };
 
   buildInputs = [

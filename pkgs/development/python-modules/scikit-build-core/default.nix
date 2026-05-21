@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -39,8 +38,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-zBTDacTkeclz+/X0SUl1xkxLz4zsfeLOD4Ew0V1Y1iU=";
   };
 
-  # TODO: Rebuild avoidance; clean up on `staging`.
-  ${if stdenv.hostPlatform.isDarwin then "patches" else null} = [
+  patches = [
     # Backport an upstream commit to fix the tests on Darwin.
     (fetchpatch {
       url = "https://github.com/scikit-build/scikit-build-core/commit/c30f52a3b2bd01dc05f23d3b89332c213006afe0.patch";

@@ -31,6 +31,22 @@ Unfree software is not tested or built in Nixpkgs continuous integration, and th
 Most unfree licenses prohibit either executing or distributing the software.
 :::
 
+The `NIXPKGS_CONFIG` environment variable can override the configuration file location.
+Nixpkgs resolves the config in this order:
+
+1.  `$NIXPKGS_CONFIG`, if set and the file exists.
+2.  `~/.config/nixpkgs/config.nix`, if it exists.
+3.  `~/.nixpkgs/config.nix` (legacy), if it exists.
+4.  Empty configuration.
+
+On NixOS, `NIXPKGS_CONFIG` points to `/etc/nix/nixpkgs-config.nix` system-wide.
+Drop a file there to apply configuration to `nix-env`, `nix-shell`, and other user-level commands.
+NixOS does not create this file.
+The [`nixpkgs.config`](https://nixos.org/manual/nixos/stable/options#opt-nixpkgs.config) option does not affect `nix-env`, `nix-shell`, or other user-level commands.
+
+This lookup applies to non-flake usage like channels and `<nixpkgs>`.
+Flakes ignore it; pass `config` directly when importing `nixpkgs`.
+
 ## Installing broken packages {#sec-allow-broken}
 
 There are several ways to try compiling a package which has been marked as broken.
@@ -41,11 +57,11 @@ There are several ways to try compiling a package which has been marked as broke
     $ export NIXPKGS_ALLOW_BROKEN=1
     ```
 
--   For permanently allowing broken packages that match some condition to be built, you may add `allowBrokenPredicate` to your user's configuration file with the desired condition, for example:
+-   For permanently allowing broken packages with a specific name to be built, you may add a corresponding `problems.handlers` to your user's configuration file, for example:
 
     ```nix
     {
-      allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+      problems.handlers.hello.broken = "warn"; # or "ignore"
     }
     ```
 
@@ -179,6 +195,7 @@ Currently, the following problem kinds are known (with more reserved to be added
 - "removal": The package is planned to be removed some time in the future. Unique.
 - "deprecated": The package relies on software which has reached its end of life.
 - "maintainerless": Automatically generated for packages with `meta.maintainers == []`. Unique, not manually specifiable.
+- "broken": Automatically generated for packages with `meta.broken = true`.
 
 Each problem has a handler that deals with it, which can be one of "error", "warn" or "ignore".
 "error" will disallow evaluating a package, while "warn" will simply print a message to the log.

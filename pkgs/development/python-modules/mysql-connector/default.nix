@@ -4,29 +4,29 @@
   dnspython,
   fetchFromGitHub,
   protobuf,
-  mysql80,
+  mysql84,
   openssl,
   pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "9.6.0";
+  version = "9.7.0";
   format = "setuptools";
 
   setupPyBuildFlags = [
-    "--with-mysql-capi=${mysql80}"
+    "--with-mysql-capi=${mysql84}"
     "--with-openssl-include-dir=${openssl.dev}/include"
     "--with-openssl-lib-dir=${lib.getLib openssl}/lib"
     "-L"
-    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib"
+    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql84}/lib"
   ];
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     tag = version;
-    hash = "sha256-EwdJpiyplck26Tc9SiczxGieJ3GcTGMQva/fDzhzWn4=";
+    hash = "sha256-D4aAkdIfAcsQumjROA6/+KB6CcjVYcq7yo4FeVUZtX0=";
   };
 
   sourceRoot = "${src.name}/mysql-connector-python";
@@ -40,14 +40,18 @@ buildPythonPackage rec {
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
   ];
 
-  nativeBuildInputs = [ mysql80 ];
+  nativeBuildInputs = [ mysql84 ];
+
+  buildInputs = [
+    mysql84
+    openssl
+    pkgs.zlib
+    pkgs.zstd
+  ];
 
   propagatedBuildInputs = [
     dnspython
     protobuf
-    mysql80
-    openssl
-    pkgs.zstd
   ];
 
   pythonImportsCheck = [ "mysql" ];

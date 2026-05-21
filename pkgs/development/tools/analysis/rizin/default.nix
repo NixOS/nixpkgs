@@ -15,7 +15,7 @@
   libmspack,
   libzip,
   lz4,
-  xxHash,
+  xxhash,
   xz,
   meson,
   python3,
@@ -105,7 +105,7 @@ let
       openssl
       libmspack
       tree-sitter
-      xxHash
+      xxhash
       xz
       zstd
       binutils

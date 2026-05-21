@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ smironov ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

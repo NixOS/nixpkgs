@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  setuptools-scm,
   pytestCheckHook,
   pytest-cov-stub,
   vcrpy,
@@ -21,8 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-e1wa4Qkn+eAs9NVOLHSoqgDNKcONY33v48lI09jp8zo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     citeproc-py
     looseversion
     requests

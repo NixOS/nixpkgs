@@ -5,16 +5,17 @@
   lib,
   fetchFromGitHub,
   nix-update-script,
+  enableWayland ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "godsvg";
-  version = "1.0-alpha14";
+  version = "1.0-alpha15";
   src = fetchFromGitHub {
     owner = "MewPurPur";
     repo = "GodSVG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bo45Zu13RRPxf5tZhCxAulTe61o9kwqX1nEFJDaeBng=";
+    hash = "sha256-vEwkpYMIqiqCFVNE7UzEts/lSS9zR+AgvvSr+vj0Aas=";
   };
 
   nativeBuildInputs = [
@@ -53,11 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${godot_4_6}/bin/godot4 $out/bin/godsvg \
     --add-flag "--main-pack" \
-    --add-flag "$out/share/godsvg/godsvg.pck"
+    --add-flag "$out/share/godsvg/godsvg.pck" \
+    ${lib.optionalString enableWayland ''
+      --add-flag "--display-driver" \
+      --add-flag wayland
+    ''}
 
     install -Dm444 ./assets/logos/icon.svg $out/share/icons/hicolor/scalable/apps/godsvg.svg
     install -Dm444 ./assets/logos/icon.png $out/share/icons/hicolor/256x256/apps/godsvg.png
-    install -Dm444 ./assets/GodSVG.desktop $out/share/applications/GodSVG.desktop
+    install -Dm444 ./no_export/distribution/com.godsvg.GodSVG.desktop $out/share/applications/GodSVG.desktop
 
     runHook postInstall
   '';

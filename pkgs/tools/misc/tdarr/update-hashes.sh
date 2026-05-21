@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p curl jq unzip
 set -euo pipefail
 
 # Updates tdarr packages to the latest version
@@ -20,11 +21,12 @@ fi
 
 echo "Latest version: $LATEST_VERSION" >&2
 
-# Check current version in common.nix
-CURRENT_VERSION=$(grep -oP '(?<=version = ")[^"]+' "$COMMON_FILE" 2>/dev/null)
+# Use the current version injected by update.nix, falling back to grepping common.nix for standalone use
+CURRENT_VERSION="${UPDATE_NIX_OLD_VERSION:-$(grep -oP '(?<=version = ")[^"]+' "$COMMON_FILE")}"
 
 if [[ "$CURRENT_VERSION" == "$LATEST_VERSION" ]]; then
     echo "Tdarr packages are already on the latest version ($LATEST_VERSION)" >&2
+    echo "[]"
     exit 0
 fi
 
@@ -32,7 +34,14 @@ echo "Updating from $CURRENT_VERSION to $LATEST_VERSION..." >&2
 
 fetch_and_convert() {
     local url=$1
-    nix-prefetch-url --unpack "$url" 2>/dev/null | xargs nix hash convert --hash-algo sha256 --to sri
+    local tmpdir
+    tmpdir=$(mktemp -d)
+    # Clean up temp directory on return
+    trap "rm -rf '$tmpdir'" RETURN
+
+    curl -sSL -o "$tmpdir/archive.zip" "$url" || { echo "Error: failed to download $url" >&2; return 1; }
+    unzip -q "$tmpdir/archive.zip" -d "$tmpdir/unpacked" || { echo "Error: failed to unzip $url" >&2; return 1; }
+    nix hash path "$tmpdir/unpacked"
 }
 
 # Fetch all hashes for both server and node

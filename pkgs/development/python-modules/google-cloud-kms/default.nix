@@ -37,6 +37,8 @@ buildPythonPackage rec {
   ]
   ++ google-api-core.optional-dependencies.grpc;
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   nativeCheckInputs = [
     mock
     pytest-asyncio

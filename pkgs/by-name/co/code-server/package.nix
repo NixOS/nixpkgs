@@ -10,12 +10,13 @@
   git,
   rsync,
   pkg-config,
-  yarn,
+  runCommand,
   python3,
   esbuild,
-  nodejs_20,
+  nodejs_22,
   node-gyp,
   libsecret,
+  libkrb5,
   libx11,
   libxkbfile,
   ripgrep,
@@ -23,14 +24,13 @@
   xcbuild,
   quilt,
   nixosTests,
+  prefetch-npm-deps,
 }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs_20;
-  yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [ ];
+  nodejs = nodejs_22;
 
   esbuild' = esbuild.override {
     buildGoModule =
@@ -38,12 +38,12 @@ let
       buildGoModule (
         args
         // rec {
-          version = "0.16.17";
+          version = "0.27.2";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
             rev = "v${version}";
-            hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+            hash = "sha256-JbJB3F1NQlmA5d0rdsLm4RVD24OPdV4QXpxW8VWbESA=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
@@ -55,8 +55,17 @@ let
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
     sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
+    ln -s -f ${lib.getExe esbuild'} ${path}/node_modules/esbuild/bin/esbuild
   '';
+
+  vscodeTarget =
+    {
+      x86_64-linux = "linux-x64";
+      aarch64-linux = "linux-arm64";
+      x86_64-darwin = "darwin-x64";
+      aarch64-darwin = "darwin-arm64";
+    }
+    .${system};
 
   # Comment from @code-asher, the code-server maintainer
   # See https://github.com/NixOS/nixpkgs/pull/240001#discussion_r1244303617
@@ -74,59 +83,51 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "1962f48b7f71772dc2c060dbaa5a6b4c0792a549";
+  commit = "1c6fb2dc200eb57c5c7d612004e18a5e6ae8b0ed";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.91.1";
+  version = "4.115.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-w0+lg/DcxKLrAz6DQGQ9+yPn42LrQ95Yn16IKNfqPvE=";
+    hash = "sha256-Hoi5QABYwRySGB9DNyEI6qMFYXCka3rfsE5j0Ww7Ax8=";
   };
 
-  yarnCache = stdenv.mkDerivation {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
-    inherit (finalAttrs) src;
-
-    nativeBuildInputs = [
-      yarn'
-      git
-      cacert
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$PWD
-      export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
-
-      yarn --cwd "./vendor" install --modules-folder modules --ignore-scripts --frozen-lockfile
-
-      yarn config set yarn-offline-mirror $out
-      find "$PWD" -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} yarn --cwd {} \
-          --frozen-lockfile --ignore-scripts --ignore-platform \
-          --ignore-engines --no-progress --non-interactive
-
-      find ./lib/vscode -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} yarn --cwd {} \
-          --ignore-scripts --ignore-engines
-
-      runHook postBuild
-    '';
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-LCmygPid6VJqR1PCOMk/Hc6bo4nwsLwYr7O1p3FQVvQ=";
-  };
+  nodeModules =
+    runCommand "code-server-node-modules"
+      {
+        inherit (finalAttrs) src;
+        nativeBuildInputs = finalAttrs.nativeBuildInputs ++ [
+          prefetch-npm-deps
+        ];
+        outputHashMode = "recursive";
+        outputHashAlgo = "sha256";
+        outputHash = "sha256-nsKsbSuIMvqKT9XVPIsEN6EgvnDvB7rAuUYZDLBBO4A=";
+        env = {
+          FORCE_EMPTY_CACHE = true;
+          FORCE_GIT_DEPS = true;
+          npm_config_progress = false;
+          npm_config_cafile = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        };
+      }
+      ''
+        runPhase unpackPhase
+        export HOME=$TMPDIR/home
+        mkdir $out
+        for p in $(find -name package-lock.json)
+        do (
+          echo "Prefetching $p"
+          prefetch-npm-deps "$p" "$out/$(dirname $p)"
+        )
+        done
+      '';
 
   nativeBuildInputs = [
     nodejs
-    yarn'
     python3
     pkg-config
     makeWrapper
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     rsync
     jq
     moreutils
+    prefetch-npm-deps
     quilt
   ];
 
@@ -143,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libsecret
+    libkrb5
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -165,35 +168,56 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '$(git rev-parse HEAD)' "${commit}"
     substituteInPlace ./ci/build/build-release.sh \
       --replace-fail '$(git rev-parse HEAD)' "${commit}"
+
+    substituteInPlace ./lib/vscode/build/npm/postinstall.ts \
+      --replace-fail "child_process.execSync('git config pull.rebase merges');" \
+        "try { child_process.execSync('git config pull.rebase merges'); } catch {}" \
+      --replace-fail "child_process.execSync('git config blame.ignoreRevsFile .git-blame-ignore-revs');" \
+        "try { child_process.execSync('git config blame.ignoreRevsFile .git-blame-ignore-revs'); } catch {}"
+  '';
+
+  env = {
+    NODE_OPTIONS = "--openssl-legacy-provider --max-old-space-size=4096";
+    NODE_ENV = "development";
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    NIX_NODEJS_BUILDNPMPACKAGE = "1";
+    npm_config_nodedir = nodejs;
+    npm_config_node_gyp = "${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js";
+    npm_config_offline = true;
+    npm_config_progress = false;
+    forceGitDeps = true;
+  };
+
+  preConfigure = ''
+    export HOME=$TMPDIR/home
+    mkdir -p $HOME
+    cp -R $nodeModules $TMPDIR/cache
+    chmod -R +w $TMPDIR/cache
   '';
 
   configurePhase = ''
     runHook preConfigure
 
-    # run yarn offline by default
-    echo '--install.offline true' >> .yarnrc
-
-    # set default yarn opts
-    ${lib.concatMapStrings (option: ''
-      yarn --offline config set ${option}
-    '') defaultYarnOpts}
-
-    # set offline mirror to yarn cache we created in previous steps
-    yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
-
-    # skip unnecessary electron download
-    export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+    for p in $(find -name package-lock.json -exec dirname {} \;)
+    do (
+      echo "Setting up $p/node_modules"
+      cd $p
+      if [ -e node_modules ]
+      then
+        echo >&2 "File exists $p/node_modules"
+        exit 0
+      fi
+      npm_config_cache=$TMPDIR/cache/$p npm ci --ignore-scripts
+      patchShebangs node_modules
+    )
+    done
 
     # set nodedir to prevent node-gyp from downloading headers
     # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
     mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    echo 11 > $HOME/.node-gyp/${nodejs.version}/installVersion
     ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-
-    # use updated node-gyp. fixes the following error on Darwin:
-    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
-    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
 
     runHook postConfigure
   '';
@@ -225,20 +249,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch out remote download of nodejs from build script.
     patch -p1 -i ${./remove-node-download.patch}
 
-    # Install dependencies.
-    patchShebangs .
-    find . -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} yarn --cwd {} \
-          --offline --frozen-lockfile --ignore-scripts --ignore-engines
     patchShebangs .
 
     # Use esbuild from nixpkgs.
-    ${patchEsbuild "./lib/vscode/build" "0.12.6"}
-    ${patchEsbuild "./lib/vscode/extensions" "0.11.23"}
-
-    # Kerberos errors while building, so remove it for now as it is not
-    # required.
-    yarn remove kerberos --cwd lib/vscode/remote --offline --frozen-lockfile --ignore-scripts --ignore-engines
+    ${patchEsbuild "./lib/vscode/build" "0.27.2"}
+    ${patchEsbuild "./lib/vscode/extensions" "0.27.2"}
 
     # Put ripgrep binary into bin, so post-install does not try to download it.
     find -name ripgrep -type d \
@@ -246,9 +261,14 @@ stdenv.mkDerivation (finalAttrs: {
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
 
     # Run post-install scripts after patching.
-    find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
-      -and -type f -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+    find -name package.json -type f -exec sh -c '
+      if jq -e ".scripts.postinstall" {} >/dev/null
+      then
+        echo >&2 "Running postinstall script in $(dirname {})"
+        npm --prefix=$(dirname {}) run postinstall
+      fi
+      exit 0
+    ' \;
     patchShebangs .
 
   ''
@@ -268,8 +288,11 @@ stdenv.mkDerivation (finalAttrs: {
     npm rebuild --offline --prefix lib/vscode/remote
 
     # Build code-server and VS Code.
-    yarn build
-    VERSION=${finalAttrs.version} yarn build:vscode
+    npm run build
+    VERSION=${finalAttrs.version} npm run build:vscode
+
+    # build-release.sh expects the packaged VS Code tree to carry a node binary.
+    cp ${lib.getExe nodejs} ./lib/vscode-reh-web-${vscodeTarget}/node
 
     # Inject version into package.json.
     jq --slurp '.[0] * .[1]' ./package.json <(
@@ -281,7 +304,7 @@ stdenv.mkDerivation (finalAttrs: {
     ) | sponge ./package.json
 
     # Create release, keeping all dependencies.
-    KEEP_MODULES=1 yarn release
+    KEEP_MODULES=1 npm run release
 
     # Prune development dependencies.  We only need to do this for the root as
     # the VS Code build process already does this for VS Code.
@@ -306,7 +329,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    prefetchYarnCache = lib.overrideDerivation finalAttrs.yarnCache (d: {
+    prefetchNodeModules = lib.overrideDerivation finalAttrs.nodeModules (d: {
       outputHash = lib.fakeSha256;
     });
     tests = {

@@ -25,24 +25,24 @@
   gtest,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
   libpng,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
   openvdb,
+  openexr,
   opencv,
   pcre,
   systemd,
   onetbb,
   webkitgtk_4_1,
-  wxGTK31,
+  wxwidgets_3_1,
   libx11,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
   wxGTK' =
-    (wxGTK31.override {
+    (wxwidgets_3_1.override {
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;
@@ -94,11 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gtk3
     hicolor-icon-theme
-    ilmbase
     libpng
     mpfr
     nlopt
     opencascade-occt_7_6
+    openexr
     openvdb
     pcre
     onetbb
@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zhaofengli
       dsluijk
+      miniharinn
     ];
     mainProgram = "bambu-studio";
     platforms = lib.platforms.linux;

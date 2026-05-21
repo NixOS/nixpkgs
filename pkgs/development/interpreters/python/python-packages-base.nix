@@ -24,10 +24,24 @@ let
       let
         result = f origArgs;
         overrideWith =
+          # Preserve the plain arguments whenever possible,
+          # as `overrideStdenvCompat` works more reliably with `args.stdenv`
+          # than `result.__stdenvPythonCompat`.
+          # TODO(@ShamrockLee): After `overrideStdenvCompat` is fully deprecated,
+          # simplify as
+          # ```nix
+          # newArgs: lib.extends (lib.toExtension newArgs) origArgs
+          # ```
           if lib.isFunction origArgs then
-            newArgs: lib.extends (_: lib.toFunction newArgs) origArgs
+            newArgs: lib.extends (lib.toExtension newArgs) origArgs
           else
-            newArgs: origArgs // lib.toFunction newArgs origArgs;
+            newArgs:
+            if !(lib.isFunction newArgs) then
+              origArgs // newArgs
+            else if !(lib.isFunction (newArgs origArgs)) then
+              origArgs // newArgs origArgs
+            else
+              finalAttrs: origArgs // newArgs finalAttrs origArgs;
       in
       if lib.isAttrs result then
         result
@@ -55,24 +69,29 @@ let
         args:
         let
           result = f args;
-          getName = x: x.pname or (lib.getName (x.name or "<unnamed>"));
-          applyMsgStdenvArg =
-            name:
-            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
-              ${name}: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
-                buildPythonPackage.override { stdenv = customStdenv; } { }
-            '';
+          handleStdenvArg =
+            attrs: attrName:
+            let
+              name = attrs.pname or (lib.getName (attrs.name or "<unnamed>"));
+              pos = attrs.__stdenvPythonCompatPos or (builtins.unsafeGetAttrPos attrName attrs);
+              msg = [
+                "${name}: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:"
+                "  buildPythonPackage.override { stdenv = customStdenv; } { }"
+              ]
+              ++ lib.optionals (pos != null) [
+                "`stdenv` argument found at ${pos.file}:${toString pos.line}"
+              ];
+            in
+            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) (lib.concatLines msg) attrs.${attrName};
         in
         if lib.isFunction args && result ? __stdenvPythonCompat then
           # Less reliable, as constructing with the wrong `stdenv` might lead to evaluation errors in the package definition.
-          f'.override { stdenv = applyMsgStdenvArg (getName result) result.__stdenvPythonCompat; } (
+          f'.override { stdenv = handleStdenvArg result "__stdenvPythonCompat"; } (
             finalAttrs: removeAttrs (args finalAttrs) [ "stdenv" ]
           )
         else if (!lib.isFunction args) && (args ? stdenv) then
           # More reliable, but only works when args is not `(finalAttrs: { })`
-          f'.override { stdenv = applyMsgStdenvArg (getName args) args.stdenv; } (
-            removeAttrs args [ "stdenv" ]
-          )
+          f'.override { stdenv = handleStdenvArg args "stdenv"; } (removeAttrs args [ "stdenv" ])
         else
           result
       )

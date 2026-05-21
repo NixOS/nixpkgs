@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   models-dev,
+  nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
@@ -12,14 +13,16 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.2.17";
+  version = "1.15.5";
+
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4I243hvqQjPU09GsIyQu/3Cv+THKFf5QTbC3x0aO83Q=";
+    hash = "sha256-HZiqia9QzkJMfRQ6bzFBsiGXNHv1WFLUdwhekE+rXM8=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -41,11 +44,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
       bun install \
         --cpu="*" \
         --frozen-lockfile \
-        --filter ./packages/opencode \
+        --filter ./ \
+        --filter ./packages/app \
         --filter ./packages/desktop \
+        --filter ./packages/opencode \
+        --filter ./packages/shared \
         --ignore-scripts \
         --no-progress \
         --os="*"
@@ -68,16 +75,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-orNyesv8Y3vooV1upr+X1CKHUdygyDQ3hmyPVlHC6Zk=";
+    outputHash = "sha256-lxwxaFTgonMPIe2GweEVZhCMSUN/quBgV1wvV05U5wc=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [
     bun
+    nodejs
     installShellFiles
     makeBinaryWrapper
-    models-dev
     writableTmpDirAsHomeHook
   ];
 
@@ -92,11 +99,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preConfigure
 
     cp -R ${finalAttrs.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
 
     runHook postConfigure
   '';
 
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+  env.OPENCODE_DISABLE_MODELS_FETCH = true;
   env.OPENCODE_VERSION = finalAttrs.version;
   env.OPENCODE_CHANNEL = "stable";
 
@@ -105,7 +115,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd ./packages/opencode
     bun --bun ./script/build.ts --single --skip-install
-    bun --bun ./script/schema.ts schema.json
+    bun --bun ./script/schema.ts config.json tui.json
 
     runHook postBuild
   '';
@@ -126,7 +136,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        )
      }
 
-    install -Dm644 schema.json $out/share/opencode/schema.json
+    install -Dm644 config.json $out/share/opencode/config.json
+    install -Dm644 tui.json $out/share/opencode/tui.json
 
     runHook postInstall
   '';
@@ -142,11 +153,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   doInstallCheck = true;
-  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "OPENCODE_DISABLE_MODELS_FETCH"
+  ];
   versionCheckProgramArg = "--version";
 
   passthru = {
-    jsonschema = "${placeholder "out"}/share/opencode/schema.json";
+    jsonschema = {
+      config = "${placeholder "out"}/share/opencode/config.json";
+      tui = "${placeholder "out"}/share/opencode/tui.json";
+    };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -161,8 +178,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       delafthi
-      graham33
       DuskyElf
+      graham33
+      superherointj
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
@@ -172,5 +190,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-darwin"
     ];
     mainProgram = "opencode";
+    badPlatforms = [
+      # Broken as 2026-04-23, errors as:
+      # CPU lacks AVX support, strange crashes may occur. Reinstall Bun
+      "x86_64-darwin"
+    ];
   };
 })

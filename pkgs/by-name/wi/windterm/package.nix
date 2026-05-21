@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     ${builtins.toJSON profiles}
     EOF
     install -Dm644 $out/app/windterm/license.txt $out/share/licenses/windterm/license.txt
-    install -Dm644 $out/app/windterm/windterm.png -t $out/share/icons/hicolor/1024x1024/apps
+    install -Dm644 $out/app/windterm/windterm.png -t $out/share/icons
     substituteInPlace $out/app/windterm/windterm.desktop \
       --replace-fail "/usr/bin/" ""
     install -Dm644 $out/app/windterm/windterm.desktop $out/share/applications/windterm.desktop

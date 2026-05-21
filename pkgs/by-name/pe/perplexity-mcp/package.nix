@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "perplexity-mcp";
-  version = "0-unstable-2026-02-26";
+  version = "0-unstable-2026-04-14";
 
   src = fetchFromGitHub {
     owner = "perplexityai";
     repo = "modelcontextprotocol";
-    rev = "95c7a8e9307bc067cbbcf8cbc4290e3ca670eea4";
-    hash = "sha256-J9ZM7GaaK4JZYlYHDxBUHhPOUPW61Ppdj3CHJjAd8rM=";
+    rev = "dd5e0785520833ebc95d5e97c8fa68971dcae07b";
+    hash = "sha256-hMIPsUsI1e8bOdPQ9t6m4/vGv07NCuC8wnYLUKolNOo=";
   };
 
-  npmDepsHash = "sha256-/AtK/jCYB1Wd3DO49loNrmWlnk80OoTxdsFRp5/OW7A=";
+  npmDepsHash = "sha256-UWxUjneYQeM9GlbIr/zW2TrZuPJ2QOTKwbXKNuVazFg=";
 
   passthru = {
     updateScript = nix-update-script {

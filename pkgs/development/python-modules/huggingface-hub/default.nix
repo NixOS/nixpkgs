@@ -25,6 +25,9 @@
   toml,
   fastai,
   fastcore,
+  # gradio
+  gradio,
+  requests,
   # mcp
   mcp,
 
@@ -34,14 +37,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.5.0";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XuqZvTu3DuncGpRWXipxtDLY2alY7QVm89ZmpgTdfVo=";
+    hash = "sha256-Q9N0QnxV8oJcxUsJzv4wX8Z6FkNdEfUH5BEVoZolsRY=";
   };
 
   build-system = [ setuptools ];
@@ -71,6 +74,10 @@ buildPythonPackage (finalAttrs: {
       toml
       fastai
       fastcore
+    ];
+    gradio = [
+      gradio
+      requests
     ];
     hf_xet = [
       hf-xet

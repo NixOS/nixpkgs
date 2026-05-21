@@ -43,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     level-zero
   ]
-  ++ lib.optionals useJemalloc [
-    hwloc
-  ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ]
@@ -55,12 +52,19 @@ stdenv.mkDerivation (finalAttrs: {
     gbenchmark
   ];
 
+  propagatedBuildInputs = [
+    hwloc
+  ];
+
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
     hash = "sha256-1Z65rNsUNeaeSJmxwpEHPbiU4KEDvyrWL9LyAWFsR1c=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     # The CMake tries to find out the version via git.
@@ -72,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     # causing the package to link to /build
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${jemalloc_targ_BINARY_DIR}" "$out/jemalloc"
+
+    # $<BUILD_INTERFACE:hwloc> only links hwloc at build time, so the installed
+    # cmake targets omit it. Downstream static consumers (e.g. UR adapters in
+    # intel-llvm) then fail to link. Export hwloc unconditionally instead.
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse $<BUILD_INTERFACE:''${UMF_HWLOC_NAME}>)' \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse ''${UMF_HWLOC_NAME})'
   '';
 
   # If included, jemalloc needs to be vendored, as they don't support using a pre-built version

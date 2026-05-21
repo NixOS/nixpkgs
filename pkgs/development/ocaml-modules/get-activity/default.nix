@@ -11,7 +11,7 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "get-activity";
   inherit (get-activity-lib) version src;
 
@@ -42,7 +42,7 @@ buildDunePackage rec {
     homepage = "https://github.com/tarides/get-activity";
     description = "Collect activity and format as markdown for a journal";
     license = lib.licenses.mit;
-    changelog = "https://github.com/tarides/get-activity/releases/tag/${version}";
+    changelog = "https://github.com/tarides/get-activity/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ zazedd ];
   };
-}
+})

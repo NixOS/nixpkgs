@@ -3,8 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  runCommand,
+  srcOnly,
+  bashNonInteractive,
   cmake,
-  opencv4,
   ceres-solver,
   suitesparse,
   metis,
@@ -14,6 +16,9 @@
   pybind11,
   numpy,
   pyyaml,
+  flask,
+  fpdf2,
+  opencv-python,
   lapack,
   gtest,
   gflags,
@@ -22,46 +27,42 @@
   networkx,
   pillow,
   exifread,
-  gpxpy,
   pyproj,
   python-dateutil,
   joblib,
-  repoze-lru,
   xmltodict,
-  distutils,
   cloudpickle,
   scipy,
   sphinx,
   matplotlib,
-  fpdf,
+  scikit-build-core,
+  ninja,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opensfm";
-  version = "unstable-2023-12-09";
+  version = "0.5.1-unstable-2026-05-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapillary";
     repo = "OpenSfM";
-    rev = "7f170d0dc352340295ff480378e3ac37d0179f8e";
-    sha256 = "sha256-l/HTVenC+L+GpMNnDgnSGZ7+Qd2j8b8cuTs3SmORqrg=";
+    rev = "1dc5b95b5c8c4cadd653bdc9f6eb97c0ac1602ba";
+    sha256 = "sha256-K3+H8QSzTxIGAtYDGqOuJFTVaqk+B/R/MDMepJ/bRxY=";
   };
 
   patches = [
+    ./0001-cmake-use-system-pybind11.patch
     ./0002-cmake-find-system-distributed-gtest.patch
-    ./0003-cmake-use-system-pybind11.patch
-    ./0004-pybind_utils.h-conflicts-with-nixpkgs-pybind.patch
-    ./0005-fix-numpy-2-test-failures.patch # not upstreamed due to cla, but you're free upstream it -@pbsds
-    ./fix-scripts.patch
+    ./0003-fix-scripts.patch
   ];
 
   postPatch = ''
-    substituteInPlace opensfm/src/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
-
-    rm opensfm/src/cmake/FindGlog.cmake
+    # devendor
+    rm opensfm/src/cmake/FindGlog.cmake # (ubuntu 20.04 fallback)
     rm opensfm/src/cmake/FindGflags.cmake
+    rm -rf  opensfm/src/third_party/gtest
+    rm -rf  opensfm/src/third_party/pybind11
 
     # HAHOG is the default descriptor.
     # We'll test both HAHOG and SIFT because this is
@@ -72,15 +73,20 @@ buildPythonPackage rec {
     # make opensfm correctly import glog headers
     export CXXFLAGS=-DGLOG_USE_GLOG_EXPORT
 
-    sed -i -e 's/^.*BuildDoc.*$//' setup.py
+    # we use the pyproject.toml
+    rm setup.py
   '';
 
-  build-system = [ setuptools ];
+  dontUseCmakeConfigure = true;
+
+  build-system = [
+    setuptools
+    scikit-build-core
+    ninja
+  ];
 
   nativeBuildInputs = [
     cmake
-    pkg-config
-    sphinx
   ];
 
   buildInputs = [
@@ -93,41 +99,45 @@ buildPythonPackage rec {
     gtest
     glog
     pybind11
+    bashNonInteractive # for patchShebangs
   ];
 
   dependencies = [
     numpy
     scipy
     pyyaml
-    opencv4.cxxdev
+    flask
+    fpdf2
+    opencv-python
     networkx
     pillow
     matplotlib
-    fpdf
     exifread
-    gpxpy
     pyproj
     python-dateutil
     joblib
-    repoze-lru
     xmltodict
     cloudpickle
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    distutils
   ];
 
-  dontUseCmakeBuildDir = true;
-  cmakeFlags = [
-    "-Bcmake_build"
-    "-Sopensfm/src"
-  ];
+  # pyproject.toml has yet to enable the [project.scripts]
+  postInstall = ''
+    if [[ -d $out/bin ]]; then
+      echo >&2 "ERROR: $out/bin found, re-check our assumptions"
+      false
+    fi
+    install -Dt $out/bin -m +rwx bin/opensfm
+    install -Dt $out/bin -m +rwx bin/opensfm_run_all
+    install -Dt $out/bin -m +rwx bin/opensfm_main.py
+  '';
 
   disabledTests = [
-    "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
-    "test_match_candidates_from_metadata_bow" # flaky
+    # flaky
+    "test_match_candidates_from_metadata_bow"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_reconstruction_incremental"
@@ -136,6 +146,27 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opensfm" ];
 
+  # https://opensfm.org/docs/using.html#quickstart
+  passthru.tests = lib.genAttrs' [ "berlin" "lund" ] (
+    name:
+    lib.nameValuePair "integration-test-${name}" (
+      runCommand "opensfm-integration-test-${name}"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          set -euo pipefail
+          opensfm --help
+          cp -r ${srcOnly finalAttrs.finalPackage}/data/${name} data
+          chmod -R +w data/
+          bash -x $(command -v opensfm_run_all) data/
+          if [[ -s data/camera_models.json && -s data/undistorted/reconstruction.json ]]; then
+            touch $out
+          fi
+        ''
+    )
+  );
+
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = [
@@ -143,8 +174,8 @@ buildPythonPackage rec {
       lib.maintainers.SomeoneSerge
     ];
     license = lib.licenses.bsd2;
-    changelog = "https://github.com/mapillary/OpenSfM/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mapillary/OpenSfM/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Open source Structure-from-Motion pipeline from Mapillary";
     homepage = "https://opensfm.org/";
   };
-}
+})

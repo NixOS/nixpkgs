@@ -104,31 +104,41 @@ let
         + "/docker.nix"
       );
 
-  nixImageBase = pkgs.callPackage nixImageBaseFn {
-    name = "local/nix-base";
-    tag = "latest";
+  nixImageBase =
+    nixConf:
+    pkgs.callPackage nixImageBaseFn {
+      name = "local/nix-base";
+      tag = "latest";
 
-    bundleNixpkgs = false;
-    maxLayers = 2;
+      bundleNixpkgs = false;
+      maxLayers = 2;
 
-    # You can add here a user with uid,gid,uname,gname etc.
-    # We are using root.
+      # You can add here a user with uid,gid,uname,gname etc.
+      # We are using root.
 
-    extraPkgs = nixStorePkgs;
+      extraPkgs = nixStorePkgs;
 
-    nixConf = {
-      cores = "0";
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      nixConf = {
+        cores = "0";
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+      }
+      // nixConf;
     };
-  };
 
   # This is the daemon image which provides the store
   # as volumes.
   nixDaemonImage = pkgs.dockerTools.buildLayeredImage {
-    fromImage = nixImageBase;
+    fromImage = nixImageBase {
+      min-free = "1G"; # Triggers garbage collection.
+      max-free = "10G"; # Stops garbage collection at 10G free space.
+
+      # Reduce disk usage by discarding old derivations/outputs
+      keep-derivations = false;
+      keep-outputs = false;
+    };
     name = "local/nix-daemon";
     tag = "latest";
 

@@ -13,7 +13,7 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10_29_2,
 
   _7zz,
   electron,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
-  version = "0.25.1";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = finalAttrs.version;
-    hash = "sha256-l9aFuhOylcQrHa+0R0P4Jy5iL2gA6xJsUJt8KvWIMuM=";
+    hash = "sha256-AORB6oxvDUNOxnwgIlAKkgtt0+NpU16Fc4qc1aMhxkQ=";
   };
 
   patches = [
@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch
       ;
 
+    pnpm = pnpm_10_29_2;
+
     # let's just be safe and add these explicitly to nativeBuildInputs
     # even though the fetcher already uses them in its implementation
     nativeBuildInputs = [
@@ -65,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       moreutils
     ];
 
-    fetcherVersion = 2;
-    hash = "sha256-U1hW6j1WRyuh2rUgMxwF8LCRk7wgSlV6cqapBoXvAdU=";
+    fetcherVersion = 3;
+    hash = "sha256-0Z/C4x4ZDPC+3o5i6KJgFqmAhHk9CUhoPB9+6yyLtdE=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pnpmConfigHook
-    pnpm
+    pnpm_10_29_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems

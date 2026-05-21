@@ -75,7 +75,7 @@ Because entries in the Nix store are inert and do nothing by themselves, package
 
 This section describes a general framework of understanding and exceptions might apply.
 
-Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
+Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project or included in [search.nixos.org's list of indexed 3rd-party flakes](https://github.com/NixOS/nixos-search/blob/main/flakes/manual.toml)
 
 ---
 
@@ -874,7 +874,7 @@ $ nix-build -A phoronix-test-suite.tests
 Here are examples of package tests:
 
 - [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
-- [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
+- [Lobster compile test](by-name/lo/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
 - [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
@@ -1210,7 +1210,7 @@ Security fixes are submitted in the same way as other changes and thus the same 
 
 If a security fix applies to both master and a stable release then, similar to regular changes, they are preferably delivered via master first and cherry-picked to the release branch.
 
-Critical security fixes may by-pass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
+Critical security fixes may bypass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
 
 ### Vulnerability Roundup
 

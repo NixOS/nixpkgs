@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   pkg-config,
   makeWrapper,
   freetype,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ]
   ++ lib.optionals enableWayland [
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     wayland-scanner
   ];
 

@@ -1,5 +1,5 @@
 import ./make-test-python.nix (
-  { lib, pkgs, ... }@args:
+  { lib, pkgs, ... }:
   let
     inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 

@@ -42,7 +42,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tqdm
   ];
 
-  pythonRelaxDeps = [ "docutils" ];
+  pythonRelaxDeps = [
+    "docutils"
+    "tabulate"
+  ];
 
   nativeCheckInputs = with python3Packages; [
     backoff
@@ -101,6 +104,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
+    maintainers = with lib.maintainers; [ phaer ];
     changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "backblaze-b2";

@@ -14,16 +14,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.10.5";
+  version = "0.15.11";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k6o8X98f7zMgB5gsw1cX8rfxE88LTgz5qgDTZ+rLeMA=";
+    hash = "sha256-6ArEbnJOAKexoSy7Epis5OC8XYmmQpZPILtUEv4E0k4=";
   };
 
-  npmDepsHash = "sha256-L5Ga/TZ1dhlZWx9cCk988dIax4w92B2L4uviUSsgn1c=";
+  npmDepsFetcherVersion = 3;
+  npmDepsHash = "sha256-J/dvHeC38uiZKgB6mGAnlCbAKXdai/mMzdP1E1Pa6Yg=";
 
   # npm 11 incompatible with fetchNpmDeps
   # https://github.com/NixOS/nixpkgs/issues/474535
@@ -75,6 +76,13 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # Build several internal packages first (required by main bundle)
+    npm run build --workspace=@qwen-code/channel-base
+    npm run build --workspace=@qwen-code/channel-telegram
+    npm run build --workspace=@qwen-code/channel-weixin
+    npm run build --workspace=@qwen-code/channel-dingtalk
+    npm run build --workspace=@qwen-code/web-templates
+
     npm run generate
     npm run bundle
 
@@ -107,7 +115,6 @@ buildNpmPackage (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       lonerOrz
-      taranarmo
     ];
   };
 })

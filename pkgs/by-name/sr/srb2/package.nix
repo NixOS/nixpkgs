@@ -99,12 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/icons
-
+    mkdir -p $out/bin $out/share/applications
     copyDesktopItems
 
-    cp ../srb2.png $out/share/pixmaps/.
-    cp ../srb2.png $out/share/icons/.
+    install -D ../srb2.png -t $out/share/icons/hicolor/256x256/apps
 
     cp bin/lsdlsrb2 $out/bin/srb2
     wrapProgram $out/bin/srb2 --set SRB2WADDIR "${finalAttrs.assets}/share/srb2"

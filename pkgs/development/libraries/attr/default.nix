@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.microblaze;
     license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.security-review ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "attr_project" version;
   };
 }

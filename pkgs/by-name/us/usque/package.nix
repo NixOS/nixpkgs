@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   stdenv,
   nix-update-script,
@@ -8,17 +8,17 @@
   installShellFiles,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "usque";
-  version = "1.4.2";
+  version = "3.0.0";
   src = fetchFromGitHub {
     owner = "Diniboy1123";
     repo = "usque";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U2C0To9WaQZaAuWbx3+h4hhDI8n3H55cXOnS9l2l2rY=";
+    hash = "sha256-xgndE4kfR7LVLBvcxJ68Yq0NLN+8zyciMYaP9K+qS9M=";
   };
 
-  vendorHash = "sha256-SS0Lqdfdp3hO2hUW0oRXH9jQWW/68a/tKYU7PMgeQYs=";
+  vendorHash = "sha256-29f/5PnmqaVS8PP1xVksgszFk3GyYZXXGDD1hjE/iSA=";
 
   ldflags = [
     "-s"

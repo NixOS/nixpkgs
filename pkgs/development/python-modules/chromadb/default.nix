@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonAtLeast,
 
   # build inputs
   cargo,
@@ -36,6 +35,7 @@
   posthog,
   pybase64,
   pydantic,
+  pydantic-settings,
   pypika,
   pyyaml,
   requests,
@@ -68,23 +68,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.5.2";
+  version = "1.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = finalAttrs.version;
-    hash = "sha256-fIlev0B1PapZAO9PgrFIfIh429lcmh/dQ9aGHSNJSLw=";
+    hash = "sha256-bxRRpwd7pmE+/JMARaqjuE+xFh8Qx70Aon2w56sOi1I=";
   };
-
-  # https://github.com/chroma-core/chroma/issues/5996
-  # https://github.com/chroma-core/chroma/issues/6546
-  disabled = pythonAtLeast "3.14";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zoyn2IBeM5FlDpA0blYU5tpu8KFXHLG/KzvQN6Hsf2I=";
+    hash = "sha256-0vuXMxwbbpfMA0UcHcLieTJK6u67o6EYdJLH5Q+wtc8=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -93,16 +89,27 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
   };
 
-  postPatch = ''
+  postPatch =
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
-    substituteInPlace pyproject.toml \
-      --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
-
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
+    ''
     # Flip anonymized telemetry to opt in versus current opt-in out for privacy
-    substituteInPlace chromadb/config.py \
-      --replace-fail "anonymized_telemetry: bool = True" \
-                     "anonymized_telemetry: bool = False"
-  '';
+    + ''
+      substituteInPlace chromadb/config.py \
+        --replace-fail "anonymized_telemetry: bool = True" \
+                       "anonymized_telemetry: bool = False"
+    ''
+    # error: queries overflow the depth limit!
+    # https://github.com/chroma-core/chroma/issues/6891
+    # https://github.com/chroma-core/chroma/issues/6892
+    # https://github.com/chroma-core/chroma/issues/6687
+    + ''
+      sed -i '1i #![recursion_limit = "256"]' rust/blockstore/src/lib.rs
+      sed -i '1i #![recursion_limit = "256"]' rust/index/src/lib.rs
+      sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
+    '';
 
   pythonRelaxDeps = [
     "fastapi"
@@ -145,6 +152,7 @@ buildPythonPackage (finalAttrs: {
     posthog
     pybase64
     pydantic
+    pydantic-settings
     pypika
     pyyaml
     requests
@@ -250,9 +258,16 @@ buildPythonPackage (finalAttrs: {
     # ValueError: An instance of Chroma already exists for ephemeral with different settings
     "chromadb/test/test_chroma.py"
 
-    # pytest can't tell which test_schema.py to load
-    # https://github.com/chroma-core/chroma/issues/6031
-    "chromadb/test/property/test_schema.py"
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    # https://github.com/chroma-core/chroma/issues/6659
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_host_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_port_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client[async_client]"
+
+    # ValueError: Could not connect to a Chroma server.
+    "chromadb/test/property/test_add_mcmr.py::test_add_small[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_medium[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_large[single-region]"
   ];
 
   __darwinAllowLocalNetworking = true;

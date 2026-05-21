@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   qtbase,
   qttools,
@@ -7,7 +8,10 @@
 
 mkDerivation {
   pname = "kwidgetsaddons";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [ qttools ];
   propagatedBuildInputs = [ qtbase ];
   outputs = [

@@ -16,9 +16,7 @@ buildOctavePackage rec {
     sha256 = "sha256-G49gAZ/lzir1YwEAPjBGRjNJ3VMxI+iXnsS0yev8f2s=";
   };
 
-  buildInputs = [
-    (lib.optional enableJava jdk)
-  ];
+  buildInputs = lib.optional enableJava jdk;
 
   propagatedBuildInputs = [
     unzip
@@ -30,7 +28,7 @@ buildOctavePackage rec {
       gpl3Plus
       bsd2
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Input/Output in external formats";
   };
 }

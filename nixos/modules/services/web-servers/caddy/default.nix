@@ -435,13 +435,13 @@ in
           null
           options.services.caddy.httpPort.default
         ]
-      ) "http_port ${cfg.httpPort}"}
+      ) "http_port ${toString cfg.httpPort}"}
       ${optionalString (
         !elem cfg.httpsPort [
           null
           options.services.caddy.httpsPort.default
         ]
-      ) "https_port ${cfg.httpsPort}"}
+      ) "https_port ${toString cfg.httpsPort}"}
       log {
         ${cfg.logFormat}
       }

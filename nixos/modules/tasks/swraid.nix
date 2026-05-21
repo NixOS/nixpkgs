@@ -26,6 +26,7 @@ in
       [ "boot" "initrd" "services" "swraid" "mdadmConf" ]
       [ "boot" "swraid" "mdadmConf" ]
     )
+    (lib.mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
   ];
 
   options.boot.swraid = {

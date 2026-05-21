@@ -10,6 +10,7 @@
   pytest-mock,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonAtLeast,
   requests,
   requests-mock,
   responses,
@@ -54,12 +55,19 @@ buildPythonPackage rec {
     mkdir -p $HOME
   '';
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # argparse usage prefix uses the actual prog (python3.14 -m pytest) instead of sys.argv[0]
+    "test_default_help"
+    "test_help"
+    "test_search_help"
+  ];
+
   pythonImportsCheck = [ "censys" ];
 
   meta = {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
-    changelog = "https://github.com/censys/censys-python/releases/tag/v${src.tag}";
+    changelog = "https://github.com/censys/censys-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "censys";

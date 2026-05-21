@@ -7,29 +7,19 @@
   fetchpatch,
   lksctp-tools,
   iproute2,
-  unstableGitUpdater,
+  nix-update-script,
   makeWrapper,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ueransim";
-  version = "3.2.6-unstable-2024-08-27";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "aligungr";
     repo = "ueransim";
-    rev = "528061fe10389876da58d3bd15e8cba6d7c152a9";
-    hash = "sha256-8OxJzEcpFT6e/nQw1VK9kBdw9ulXedCpUEaBxIAN9cA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dnFGPEgnmbx+ehfeas1Imv8G7s8snd7P2h70E3PtmuY=";
   };
-
-  patches = [
-    # Fix gcc-15 build failure:
-    #   https://github.com/aligungr/UERANSIM/pull/777
-    (fetchpatch {
-      name = "gcc-15.patch";
-      url = "https://github.com/aligungr/UERANSIM/commit/8ffce535a11b63f688552c5c81f7d3ac793f47de.patch";
-      hash = "sha256-w2T7PTR/ELNf9sre/GoHqZQb9A8k54cTKoce/RZ7XCU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -63,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source 5G UE and RAN (gNodeB) implementation";

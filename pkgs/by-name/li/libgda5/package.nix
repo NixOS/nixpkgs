@@ -48,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix configure detection of features with c99.
     ./0001-gcc14-fix.patch
 
+    # Fix K&R-style MD5 definitions that fail under C23.
+    ./0002-c23-md5c.patch
+
     # Fix build with gettext 0.25
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/libgda5/raw/945495e5c6cdd98a5360eff77245421876a97a57/f/gettext.patch";

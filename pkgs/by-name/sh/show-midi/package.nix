@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dt $out/share/ShowMIDI/themes Themes/*
 
-    install -D Design/icon.png $out/share/icons/hicolor/1024x1024/apps/show-midi.png
+    install -D Design/icon.png $out/share/icons/show-midi.png
 
     mkdir -p $out/bin $out/lib/lv2 $out/lib/vst3
     cd Builds/LinuxMakefile/build/

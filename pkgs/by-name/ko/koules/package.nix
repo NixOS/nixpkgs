@@ -10,12 +10,13 @@
   libx11,
   libxext,
   makeDesktopItem,
+  imagemagick,
 }:
 
 let
   debian-extras = fetchzip {
-    url = "mirror://debian/pool/main/k/koules/koules_1.4-27.debian.tar.xz";
-    hash = "sha256-g0Z6C1YSZL6N2eYUuZgXkPDoOLc4e9jAFL3ivk3OAS8=";
+    url = "mirror://debian/pool/main/k/koules/koules_1.4-29.debian.tar.xz";
+    hash = "sha256-8AQGU3uAu1nCKeu4nqCDOL7FcSJeYvD1pmidEPLLekY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     gccmakedep
     installShellFiles
     copyDesktopItems
+    imagemagick
   ];
   buildInputs = [
     libx11
@@ -60,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 xkoules $out/bin/xkoules
     install -Dm755 koules.sndsrv.linux $out/lib/koules.sndsrv.linux
     install -m644 sounds/* $out/lib/
-    install -Dm644 Koules.xpm $out/share/pixmaps/koules.xpm
+    mkdir -p $out/share/icons/hicolor/32x32/apps
+    magick Koules.xpm -background none -extent 32x32-1 -gravity center $out/share/icons/hicolor/32x32/apps/koules.png
     installManPage xkoules.6
     runHook postInstall
   '';

@@ -11,22 +11,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgedoc";
-  version = "1.10.7";
+  version = "1.10.8";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     tag = finalAttrs.version;
-    hash = "sha256-9HbvnnvC1eWoOxPE6yW2GcULgIrXDZ4B+mt7ZYz4j/Q=";
+    hash = "sha256-9gKpjmE8z/9PUILCiVK1utNYKD8kscbCBKxerqTO3z4=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/hedgedoc/hedgedoc/blob/develop/package.json#L28
+    ./yarn-4.14-support.patch
+  ];
 
   # Generate this file with:
   # nix run nixpkgs#yarn-berry_4.yarn-berry-fetcher missing-hashes yarn.lock
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-7QJu6HSXCNameGq/NZpq7V0VHam7qRWzQQfzkzvARs4=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-AMTSCM8dNwAddI3QZMFDzxJmJPvJ9fGK79at2I0S/pE=";
   };
 
   nativeBuildInputs = [

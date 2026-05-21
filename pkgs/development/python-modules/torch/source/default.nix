@@ -3,9 +3,9 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   git-unroll,
   buildPythonPackage,
-  fetchpatch,
   python,
   runCommand,
   writeShellScript,
@@ -25,6 +25,7 @@
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
+  withNvshmem ? (cudaSupport && cudaPackages.libnvshmem.meta.available),
   MPISupport ? false,
   mpi,
   buildDocs ? false,
@@ -118,7 +119,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
+  # https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L2569-L2572
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -140,12 +141,11 @@ let
         "9.0"
         "9.0a"
         "10.0"
-        "10.0"
         "10.0a"
-        "10.1"
-        "10.1a"
         "10.3"
         "10.3a"
+        "11.0"
+        "11.0a"
         "12.0"
         "12.0a"
         "12.1"
@@ -248,6 +248,7 @@ let
       && !(builtins.elem cudaPackages.cudaMajorVersion [
         "11"
         "12"
+        "13"
       ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
       MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
@@ -281,7 +282,7 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   outputs = [
@@ -305,13 +306,28 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
-    # [CPUBLAS] Fix UB: use vector::resize() instead of reserve() before operator[] access
-    # Merged in https://github.com/pytorch/pytorch/pull/175315
-    # TODO: drop at the next release
+
+    # The GCC version upperbounds were wrong for cuda 12.8 and 12.9, which led downstream builds to
+    # illegitimately fail with:
+    #   RuntimeError: The current installed version of g++ (14.3.0) is greater than the maximum
+    #   required version by CUDA 12.9. Please make sure to use an adequate version of g++
+    #   (>=6.0.0, <14.0).
+    # TODO: remove at the next release
     (fetchpatch {
-      name = "fix-ub-in-cpublas";
-      url = "https://github.com/pytorch/pytorch/commit/f08aafa9e82c5ae142b97dbfcac1ebd5d9ca7fde.patch";
-      hash = "sha256-J9QNKDWytA0nBpKr5q4kVnufyMEJHev0mfmyQCxog/w=";
+      name = "allow-gcc-14-with-cuda-12.8-9";
+      url = "https://github.com/pytorch/pytorch/commit/39565a7dcf8f93ea22cedeaa20088b24ff6d2634.patch";
+      hash = "sha256-Au5fVbs7i33d9c4Xj8koiBP7lGnsTGTaX4VlE2gAfy8=";
+    })
+
+    # pybind11 3.0.3 changes led to ambiguous deduction in some return types
+    # that used `py::make_tuple`, so the type is explicitly specified where
+    # needed.
+    # Merged pull request: https://github.com/pytorch/pytorch/pull/179277
+    # TODO: remove at the next release
+    (fetchpatch {
+      name = "pybind11-3.0.3-ambiguous-return-type.patch";
+      url = "https://github.com/pytorch/pytorch/commit/b248ebc17075c0c3ad2b2532970d2ada32b2cf94.patch";
+      hash = "sha256-HY5JFGNoroFsfuUOO5j6WNP6gMHWUcIJFmWLqV8PV94=";
     })
   ]
   ++ lib.optionals cudaSupport [
@@ -323,6 +339,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # with the Nix store, which fails. Simply remove this step to get
     # rpaths that point to the Nix store.
     ./disable-cmake-mkl-rpath.patch
+  ]
+  ++ lib.optionals rocmSupport [
+    # [ROCm] Make AOTriton bundling optional via BUILD_AOTRITON_INTO_WHEEL flag
+    # https://github.com/pytorch/pytorch/pull/182030
+    ./no-bundle-aotriton.patch
   ];
 
   postPatch = ''
@@ -368,12 +389,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
       '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
   ''
+  # Doesn't pick up the environment variable?
   + lib.optionalString rocmSupport ''
-    # https://github.com/facebookincubator/gloo/pull/297
-    substituteInPlace third_party/gloo/cmake/Hipify.cmake \
-      --replace-fail "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
-
-    # Doesn't pick up the environment variable?
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
   ''
@@ -469,6 +486,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     USE_SYSTEM_NCCL = finalAttrs.env.USE_NCCL;
     USE_STATIC_NCCL = finalAttrs.env.USE_NCCL;
 
+    USE_NVSHMEM = setBool withNvshmem;
+
     # Set the correct Python library path, broken since
     # https://github.com/pytorch/pytorch/commit/3d617333e
     PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
@@ -492,6 +511,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
+    # Don't copy AOTriton to output, load from AOTriton package
+    BUILD_AOTRITON_INTO_WHEEL = false;
     # Broken HIP flag setup, fails to compile due to not finding rocthrust
     # Only supports gfx942 so let's turn it off for now
     USE_FBGEMM_GENAI = setBool false;
@@ -577,6 +598,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       # Some platforms do not support NCCL (i.e., Jetson)
       (lib.getDev nccl) # Provides nccl.h
       (lib.getOutput "static" nccl) # Provides static library
+    ]
+    ++ lists.optionals withNvshmem [
+      cudaPackages.libnvshmem
     ]
     ++ [
       cuda_profiler_api # <cuda_profiler_api.h>
@@ -746,13 +770,17 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       rocmSupport
       rocmPackages
       unroll-src
+      gpuTargetString
+      rocmtoolkit_joined
       ;
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-    tests = callPackage ../tests { };
+    tests = callPackage ../tests {
+      inherit rocmSupport cudaSupport;
+    };
   };
 
   meta = {
@@ -762,6 +790,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     homepage = "https://pytorch.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      caniko
       GaetanLepage
       LunNova # esp. for ROCm
       teh

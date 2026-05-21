@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "11b-20160615";
 
   src = fetchurl {
-    url = "http://www2.cs.tum.edu/projects/cup/releases/java-cup-src-${finalAttrs.version}.tar.gz";
+    url = "https://www2.cs.tum.edu/projects/cup/releases/java-cup-src-${finalAttrs.version}.tar.gz";
     hash = "sha256-4OdzYG5FzhqorROD5jk9U+2dzyhh5D76gZT1Z+kdv/o=";
   };
 

@@ -11,10 +11,10 @@
 assert zlib != null;
 
 let
-  patchVersion = "1.6.54";
+  patchVersion = "1.6.56";
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
-    hash = "sha256-Vjj8RQDq9IRXtNfJ5VP9gqsB13MEpwB32DNoQp1E8bQ=";
+    hash = "sha256-nOMtSidjoqxfJYcmui9J6QETJ8HujDCGKjLQ8wiJ++g=";
   };
   whenPatched = lib.optionalString apngSupport;
 
@@ -24,15 +24,11 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
-  version = if !stdenv.isDarwin then "1.6.55" else "1.6.54"; # FIXME: darwin lags temporarily
+  version = "1.6.56";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
-    hash =
-      if !stdenv.isDarwin then
-        "sha256-2SVyKGSDetWuKoIHDUsuBgPccq9EvUV8OWIpgli46C0="
-      else
-        "sha256-AcnYowPJQewsURwUMSo7HTbO20Hi9RaMzaqF1TuIeAU=";
+    hash = "sha256-99i/FgG3gE9YOiVKs0OmVJymzyfSVcMCxHry2dNqbxg=";
   };
   postPatch =
     whenPatched "gunzip < ${patch_src} | patch -Np1"

@@ -4,36 +4,42 @@
   fetchFromGitHub,
   pytestCheckHook,
 
+  async-geotiff,
   attrs,
   boto3,
   cachetools,
   color-operations,
+  h5netcdf,
   hatchling,
   httpx,
   morecantile,
   numexpr,
   numpy,
+  obstore,
   pydantic,
   pystac,
+  pytest-asyncio,
   rasterio,
   rioxarray,
+  typing-extensions,
+  zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
-  version = "8.0.5";
+  version = "9.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    tag = version;
-    hash = "sha256-FOTwP4iTLfWl81KKarLOQQyp4gpi6Q+pjUXfZrXXsfo=";
+    tag = finalAttrs.version;
+    hash = "sha256-oLMWrf3udqlf4SlQnBU7Stm6MzXS7EN6xWiTNtOOm4g=";
   };
 
   build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cachetools
     color-operations
@@ -44,23 +50,42 @@ buildPythonPackage rec {
     pydantic
     pystac
     rasterio
+    typing-extensions
   ];
 
+  optional-dependencies = {
+    s3 = [ boto3 ];
+    xarray = [ rioxarray ];
+    zarr = [
+      obstore
+      zarr
+    ];
+  };
+
   nativeCheckInputs = [
-    boto3
+    h5netcdf
     pytestCheckHook
-    rioxarray
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  checkInputs = [
+    async-geotiff
+    pytest-asyncio
   ];
 
   pythonImportsCheck = [ "rio_tiler" ];
+
+  disabledTests = [
+    # Requires network access
+    "test_dataset_reader"
+    # for some reason, str date representation are not the same
+    "test_xarray_reader"
+  ];
 
   meta = {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
-    # Tests broken with gdal 3.10
-    # https://github.com/cogeotiff/rio-tiler/issues/769
-    broken = true;
   };
-}
+})

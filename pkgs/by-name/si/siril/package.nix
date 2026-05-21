@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siril";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
     tag = finalAttrs.version;
-    hash = "sha256-qE1K3/o7ubrIEWldRgus1quSVehJqjFxhsKb1HQPNLA=";
+    hash = "sha256-4arzjGhWr5avQKVUvF6HYmQMdbKGh75vNIahNOgsLxU=";
   };
 
   nativeBuildInputs = [

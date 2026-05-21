@@ -74,8 +74,37 @@ let
         {
           attrdiff: {
             added: ["package1"],
-            changed: ["package2", "package3"],
+            changed: ["package2", "package3", "package4"],
             removed: ["package4"],
+          },
+          attrdiffByKernel: {
+            darwin: {
+              added: [],
+              changed: ["package2", "package4"],
+              removed: ["package4"],
+            },
+            linux: {
+              added: ["package1"],
+              changed: ["package3", "package4"],
+              removed: [],
+            },
+          },
+          attrdiffByPlatform: {
+            aarch64-darwin: {
+              added: [],
+              changed: ["package2"],
+              removed: ["package4"],
+            },
+            aarch64-linux: {
+              added: ["package1"],
+              changed: ["package3"],
+              removed: [],
+            },
+            x86_64-linux: {
+              added: [],
+              changed: ["package4"],
+              removed: [],
+            },
           },
           labels: {
             "10.rebuild-darwin: 1-10": true,
@@ -113,6 +142,8 @@ let
   inherit (import ./utils.nix { inherit lib; })
     groupByKernel
     convertToPackagePlatformAttrs
+    groupAttrdiffByKernel
+    groupAttrdiffByPlatform
     groupByPlatform
     extractPackageNames
     getLabels
@@ -123,12 +154,19 @@ let
   # - values: lists of `packagePlatformPath`s
   diffAttrs = builtins.fromJSON (builtins.readFile "${combined}/combined-diff.json");
 
-  changedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
-  removedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.removed;
 
   changed-paths =
     let
+      attrdiff = lib.mapAttrs (_: extractPackageNames) {
+        inherit (diffAttrs) added changed removed;
+      };
+      attrdiffByPlatform = groupAttrdiffByPlatform {
+        inherit (diffAttrs) added changed removed;
+      };
+      attrdiffByKernel = groupAttrdiffByKernel {
+        inherit (diffAttrs) added changed removed;
+      };
       rebuildsByPlatform = groupByPlatform rebuildsPackagePlatformAttrs;
       rebuildsByKernel = groupByKernel rebuildsPackagePlatformAttrs;
       rebuildCountByKernel = lib.mapAttrs (
@@ -137,7 +175,7 @@ let
     in
     writeText "changed-paths.json" (
       builtins.toJSON {
-        attrdiff = lib.mapAttrs (_: extractPackageNames) { inherit (diffAttrs) added changed removed; };
+        inherit attrdiff attrdiffByKernel attrdiffByPlatform;
         inherit
           rebuildsByPlatform
           rebuildsByKernel
@@ -150,21 +188,19 @@ let
             kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
           ) rebuildsByKernel
           // {
-            "10.rebuild-nixos-tests" =
-              lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds)
-              &&
-                # Only set this label when no other label with indication for staging has been set.
-                # This avoids confusion whether to target staging or batch this with kernel updates.
-                lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
+            "10.rebuild-nixos-tests" = lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds);
           };
       }
     );
 
+  getMaintainers = callPackage ./maintainers.nix { };
+
   inherit
-    (callPackage ./maintainers.nix {
-      changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
-      changedpathsjson = touchedFilesJson;
-      removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
+    (getMaintainers {
+      affectedAttrPaths = map (a: a.packagePath) (
+        convertToPackagePlatformAttrs (diffAttrs.changed ++ diffAttrs.removed)
+      );
+      changedFiles = lib.importJSON touchedFilesJson;
     })
     users
     teams
@@ -181,7 +217,7 @@ runCommand "compare"
     ];
     users = builtins.toJSON users;
     teams = builtins.toJSON teams;
-    packages = builtins.toJSON packages;
+    packages = builtins.toJSON (lib.map (lib.concatStringsSep ".") packages);
     passAsFile = [
       "users"
       "teams"

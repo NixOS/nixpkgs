@@ -90,6 +90,18 @@ stdenv.mkDerivation rec {
       excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
       hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
+    # syslogd: fix writing to local log file
+    # https://lists.busybox.net/pipermail/busybox/2024-October/090969.html
+    (fetchpatch {
+      url = "https://hg.slitaz.org/wok/raw-file/1cba565dc2a9/busybox/stuff/busybox-1.37-fix-syslogd.patch";
+      hash = "sha256-NZRctLv1CpTfnR6+CA890YY8ljBQLGkkselyP5/TnsQ=";
+    })
+    # https://lists.busybox.net/pipermail/busybox/2026-March/092010.html
+    ./build-system-buffer-overflow.patch
+
+    # [PATCH v2 1/1] wget: don't allow control characters or spaces in the URL
+    # https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
+    ./CVE-2025-60876.patch
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
@@ -165,6 +177,7 @@ stdenv.mkDerivation rec {
     1 a busybox() { '$out'/bin/busybox "$@"; }\
     logger() { '$out'/bin/logger "$@"; }\
     ' ${debianDispatcherScript} > ${outDispatchPath}
+    sed -i 's|/sbin/resolvconf|"$(busybox which resolvconf)"|g' ${outDispatchPath}
     chmod 555 ${outDispatchPath}
     HOST_PATH=$out/bin patchShebangs --host ${outDispatchPath}
   '';
@@ -193,6 +206,7 @@ stdenv.mkDerivation rec {
       TethysSvensson
       qyliss
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "busybox" version;

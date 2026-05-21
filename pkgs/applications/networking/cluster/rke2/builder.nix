@@ -74,8 +74,13 @@ buildGoModule (finalAttrs: {
     lvm2 # dmsetup
   ];
 
-  # Passing boringcrypto to GOEXPERIMENT variable to build with goboring library
-  env.GOEXPERIMENT = "boringcrypto";
+  # Enable FIPS 140-3 compliance mode for Go
+  # at time of writing, upstream RKE2 uses the GOEXPERIMENT BoringCrypto module instead:
+  # https://docs.rke2.io/security/fips_support
+  # which has been superseded by this - see https://go.dev/doc/security/fips140#goboringcrypto
+  env.GOFIPS140 = "latest";
+  # tlsmlkem=0 can be removed in a future version of Go, see https://github.com/golang/go/issues/75166
+  env.GODEBUG = "fips140=only,tlsmlkem=0";
 
   # https://github.com/rancher/rke2/blob/104ddbf3de65ab5490aedff36df2332d503d90fe/scripts/build-binary#L27-L39
   ldflags =
@@ -131,12 +136,6 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    # Verify that the binary uses BoringCrypto
-    go tool nm $out/bin/.rke2-wrapped | grep '_Cfunc__goboringcrypto_' > /dev/null
-    runHook postInstallCheck
-  '';
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 

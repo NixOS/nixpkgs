@@ -2,20 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   cython,
+  meson-python,
+  numpy,
+  setuptools-scm,
+
+  # dependencies
   formulaic,
   mypy-extensions,
-  numpy,
   pandas,
   pyhdfe,
-  pytestCheckHook,
   scipy,
-  setuptools,
-  setuptools-scm,
   statsmodels,
+
+  # tests
+  pytestCheckHook,
+  xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linearmodels";
   version = "7.0";
   pyproject = true;
@@ -23,24 +30,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bashtage";
     repo = "linearmodels";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/unFszNGaEPsoXDtaS3tsLnsX4A6e7Y88O8pDrf4nKc=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "setuptools_scm[toml]>=8.0.0,<9.0.0" "setuptools_scm[toml]"
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools_scm[toml]>=8,<9" "setuptools_scm[toml]"
+      --replace-fail "setuptools_scm>=9.2.0,<10" "setuptools_scm"
   '';
 
   build-system = [
-    setuptools
-    setuptools-scm
     cython
+    meson-python
+    numpy
+    setuptools-scm
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   dependencies = [
     formulaic
@@ -52,9 +58,16 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "linearmodels" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    xarray
+  ];
+
+  preCheck = ''
+    rm linearmodels/__init__.py
+  '';
 
   disabledTestPaths = [
     # Skip long-running tests
@@ -64,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Models for panel data, system regression, instrumental variables and asset pricing";
     homepage = "https://bashtage.github.io/linearmodels/";
-    changelog = "https://github.com/bashtage/linearmodels/releases/tag/${src.tag}";
+    changelog = "https://github.com/bashtage/linearmodels/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

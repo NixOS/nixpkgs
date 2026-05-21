@@ -7,17 +7,20 @@
   darwin,
   makeBinaryWrapper,
   coreutils,
+  curl,
+  gawk,
   nix-prefetch-darcs,
   nix-prefetch-fossil,
   nix-prefetch-git,
   nix-prefetch-pijul,
+  removeReferencesTo,
   testers,
   nixtamal,
 }:
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.1.2";
+  version = "1.5.4";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -26,11 +29,12 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-Sgr3FGMjo/eETc6DA+rnBHKIQ3yUPkFKRRbf4O1Ns/o=";
+    hash = "sha256-ST90m0SF3dyGOV3Q43bJ9bGuznP0WIkQsIJXUNFNPOs=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    removeReferencesTo
     # For manpages
     python3Packages.docutils
     python3Packages.pygments
@@ -40,11 +44,15 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   ];
 
   buildInputs = with ocamlPackages; [
-    camomile
     cmdliner
+    fmt
+    ppx_deriving_qcheck
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
+    camomile
     eio
     eio_main
-    fmt
     jingoo
     (jsont.override {
       withBrr = false;
@@ -53,10 +61,11 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     kdl
     logs
     ppx_deriving
-    ppx_deriving_qcheck
+    qcheck-core
     saturn
     stdint
     uri
+    xdg
   ];
 
   checkInputs = with ocamlPackages; [
@@ -72,20 +81,51 @@ ocamlPackages.buildDunePackage (finalAttrs: {
 
   doCheck = true;
 
-  postInstall = ''
-    wrapProgram "$out/bin/nixtamal" --prefix PATH : ${
+  outputs = [
+    "bin"
+    "data"
+    "doc"
+    "lib"
+    "man"
+    "out"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    dune install \
+       -j "$NIX_BUILD_CORES" \
+       --cache="disabled" \
+       --prefix="$out" \
+       --bindir="$bin/bin" \
+       --datadir="$data/share" \
+       --docdir="$doc/share/doc" \
+       --mandir="$man/share/man" \
+       --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" \
+       nixtamal
+
+    for dep in "${ocamlPackages.ocaml}" "${ocamlPackages.camomile}"
+    do
+        remove-references-to -t "$dep" "$bin/bin/nixtamal"
+    done
+
+    wrapProgram "$bin/bin/nixtamal" --prefix PATH : ${
       lib.makeBinPath [
         coreutils
+        curl
+        gawk
         nix-prefetch-darcs
         nix-prefetch-fossil
         nix-prefetch-git
         nix-prefetch-pijul
       ]
     }
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = nixtamal;
+    package = nixtamal.bin;
     command = "${nixtamal.meta.mainProgram} --version";
   };
 
@@ -93,6 +133,12 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     license = with lib.licenses; [ gpl3Plus ];
     platforms = lib.platforms.unix;
     mainProgram = "nixtamal";
+    outputsToInstall = [
+      "bin"
+      "data"
+      "doc"
+      "man"
+    ];
     homepage = "https://nixtamal.toast.al";
     changelog = "https://nixtamal.toast.al/changelog/";
     description = "Fulfilling input pinning for Nix";
@@ -100,7 +146,8 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       Nixtamal’s keys features
 
       • Automate the manual work of input pinning, allowing to lock & refresh inputs
-      • Declaritive KDL manifest file over imperative CLI flags
+      • Declarative KDL manifest file over imperative CLI flags
+      • diff/grep-friendly lockfile
       • Host, forge, VCS-agnostic
       • Choose eval time fetchers (builtins) or build time fetchers (Nixpkgs, default) — which opens up fetching Darcs, Pijul, & Fossil
       • Supports mirrors

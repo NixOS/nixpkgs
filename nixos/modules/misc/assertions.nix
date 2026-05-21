@@ -34,5 +34,5 @@
   };
   # impl of assertions is in
   # - <nixpkgs/nixos/modules/system/activation/top-level.nix>
-  # - <nixpkgs/nixos/modules/system/service/portable/lib.nix>
+  # - <nixpkgs/lib/services/lib.nix>
 }

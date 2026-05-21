@@ -5,7 +5,6 @@
   zlib,
   curl,
   expat,
-  fuse,
   fuse3,
   openssl,
   autoreconfHook,
@@ -30,9 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     openssl
     python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ fuse3 ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fuse ];
+    fuse3
+  ];
+
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
 
   meta = {
     homepage = "http://afflib.sourceforge.net/";

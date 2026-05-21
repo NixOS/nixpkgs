@@ -4,20 +4,22 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "postcss";
-  version = "8.5.8";
+  version = "8.5.14";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "postcss";
     tag = finalAttrs.version;
-    hash = "sha256-28IUSx5R1KbyM8OV0U7FrhU+qL2zaJShMVvSQMChcA4=";
+    hash = "sha256-5cBSl5gMJz73v6ynzcLhv/f2Rr7Ei9xzJAVeZHgXS/Q=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-SwTVjgS4Hkl1SgXqSdjjbyKqUW2TfD1ruLu2Jcl51gg=";
+    hash = "sha256-XLFSpq0V49Lp2bVvHc3X0w+Qwj/duZFTey/vu/Nt9Jk=";
   };
 
   dontBuild = true;
@@ -52,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Transforming styles with JS plugins";
     homepage = "https://postcss.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

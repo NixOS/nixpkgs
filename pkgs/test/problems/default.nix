@@ -20,7 +20,17 @@ lib.mapAttrs (
       export NIX_STATE_DIR=$(mktemp -d)
       mkdir $out
 
-      command=(
+
+      command=()
+      ${lib.optionalString (builtins.pathExists (./cases + "/${name}/env.nix")) ''
+        command+=(
+          env
+          ${lib.concatMapAttrsStringSep "\n" (name: value: "${name}=${toString value}") (
+            import (./cases + "/${name}/env.nix")
+          )}
+        )
+      ''}
+      command+=(
         # FIXME: Using this version because it doesn't print a trace by default
         # Probably should have some regex-style error matching instead
         "${lib.getBin nix}/bin/nix-instantiate"

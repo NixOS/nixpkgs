@@ -10,18 +10,7 @@
   stdenv,
   nixpkgsFun,
   overlays,
-  makeMuslParsedPlatform,
 }:
-let
-  makeLLVMParsedPlatform =
-    parsed:
-    (
-      parsed
-      // {
-        abi = lib.systems.parse.abis.llvm;
-      }
-    );
-in
 self: super: {
   pkgsLLVM = nixpkgsFun {
     overlays = [
@@ -84,7 +73,9 @@ self: super: {
         ]
         ++ overlays;
         ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-          config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
+          config = lib.systems.parse.tripleFromSystem (
+            lib.systems.parse.mkMuslSystem stdenv.hostPlatform.parsed
+          );
         };
       }
     else
@@ -160,12 +151,11 @@ self: super: {
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags
             ++ [
-              "strictflexarrays1"
               "shadowstack"
               "nostrictaliasing"
               "pacret"
               "glibcxxassertions"
-              "libcxxhardeningfast"
+              "libcxxhardeningextensive"
               "trivialautovarinit"
             ]
           ) super'.stdenv;

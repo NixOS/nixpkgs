@@ -33,7 +33,7 @@ buildPythonApplication rec {
       into images or ASCII art
     '';
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     mainProgram = "pandoc-imagine";
   };
 }

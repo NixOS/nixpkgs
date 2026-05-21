@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "otus-lisp";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "yuriy-chumak";
     repo = "ol";
     rev = finalAttrs.version;
-    hash = "sha256-5ixpTTXwJbLM2mJ/nwzjz0aKG/QGVLPScY8EaG7swGU=";
+    hash = "sha256-7QUyfA9aEZ0VJO4Un2jCyXIxl98tsW4/KjW7LWDnMtU=";
   };
 
   nativeBuildInputs = [ xxd ];
