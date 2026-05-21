@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.30.0";
+  version = "4.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     tag = version;
-    hash = "sha256-WFikKZxc9PjqcAcKrZIXaFO7XiUBAg8y60/UH2so4Vc=";
+    hash = "sha256-za2krpb8Gll0zjuVFgQApDeROI7YSYo4fG6pi2hdv3g=";
   };
 
   build-system = [ hatchling ];
