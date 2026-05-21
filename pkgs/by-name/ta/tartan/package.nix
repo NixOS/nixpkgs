@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation {
   pname = "tartan";
-  version = "0.3.0-unstable-2025-01-07";
+  version = "0.3.0-unstable-2025-11-09";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "tartan";
     repo = "tartan";
-    rev = "983aaf238946ced55da8824c1170a254992d9717";
-    hash = "sha256-4w9cAs6kA+RAmi2CC+5CHB1UWC+7zkBqvZlHAdgENu4=";
+    rev = "59cda5f8cabd478154c1ee1742e28e9b0177b8f1";
+    hash = "sha256-hbKoNcecziRbhE35sGrNpJC+TCZY/bQ+TqRFGUERTBo=";
   };
 
   nativeBuildInputs = [
