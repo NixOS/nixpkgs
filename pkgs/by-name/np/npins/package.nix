@@ -17,22 +17,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npins";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "andir";
     repo = "npins";
     tag = finalAttrs.version;
-    sha256 = "sha256-ksOXi7u4bpHyWNHwkUR62fdwKowPW5GqBS7MA7Apwh4=";
+    sha256 = "sha256-XzJaDf5tlrYGTMJ+eS9hH9l79S4JA8h2KfbvKHF14xY=";
   };
 
-  cargoHash = "sha256-A93cFkBt+gHCuLAE7Zk8DRmsGoMwJkqtgHZd4lbpFs0=";
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "clap"
-    "crossterm"
-    "env_logger"
-  ];
+  cargoHash = "sha256-Fiku3UULsm6HL1skjJA/UiW9VRFRWbnXULQFBiVDCJ0=";
 
   nativeBuildInputs = [ makeWrapper ];
 
