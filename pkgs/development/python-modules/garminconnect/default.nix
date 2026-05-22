@@ -5,7 +5,6 @@
   garth,
   pdm-backend,
   requests,
-  withings-sync,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +21,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "garth"
-    "withings-sync"
   ];
 
   build-system = [ pdm-backend ];
@@ -30,7 +28,6 @@ buildPythonPackage rec {
   dependencies = [
     garth
     requests
-    withings-sync
   ];
 
   # Tests require a token
