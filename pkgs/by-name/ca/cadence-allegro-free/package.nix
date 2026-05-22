@@ -3,7 +3,6 @@
   symlinkJoin,
   writeShellScriptBin,
   makeDesktopItem,
-  copyDesktopItems,
   wineWow64Packages,
   winetricks,
 }:
@@ -46,6 +45,12 @@ let
       ${wine}/bin/wineboot --init
       ${winetricks}/bin/winetricks -q corefonts vcrun2019 dotnet48
       echo "==> Wine prefix ready."
+    else
+      # Refresh prefix DLLs from the current wine. Old prefixes can be
+      # missing files like cryptbase.dll after a wine upgrade, which makes
+      # advapi32's SystemFunction036 forward fail at startup.
+      echo "==> Refreshing Wine prefix DLLs..."
+      ${wine}/bin/wineboot --update
     fi
 
     echo "==> Running installer: $installer"
@@ -146,6 +151,9 @@ symlinkJoin {
     allegro-winecfg
     desktopItem
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Wine wrapper scripts for Cadence Allegro X Free PCB Viewer";
