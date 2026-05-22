@@ -40,6 +40,9 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
@@ -53,13 +56,13 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 antigravity $out/bin/antigravity
-    ln -s antigravity $out/bin/agy
+    install -Dm755 antigravity "$out/bin/antigravity"
+    ln -s antigravity "$out/bin/agy"
     runHook postInstall
   '';
 
   meta = {
-    description = "Google's agentic development platform CLI, bringing multi-step reasoning and tool calling to the terminal";
+    description = "Google's agentic development platform CLI";
     homepage = "https://antigravity.google";
     license = lib.licenses.unfree;
     mainProgram = "antigravity";
@@ -69,6 +72,6 @@ stdenv.mkDerivation {
       "x86_64-darwin"
       "x86_64-linux"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [binaryNativeCode];
   };
 }
