@@ -181,12 +181,12 @@ buildGoModule (finalAttrs: {
           gvproxy
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [
-          aardvark-dns
+          aardvark-dns # dns
           catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-          netavark
-          passt
-          conmon
-          crun
+          netavark # networking
+          passt # rootless networking
+          conmon # runtime monitor
+          crun # runtime
         ]
         ++ extraRuntimes;
     };
