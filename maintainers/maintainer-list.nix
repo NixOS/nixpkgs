@@ -4455,12 +4455,6 @@
     githubId = 289492;
     name = "Philip Horger";
   };
-  candeira = {
-    email = "javier@candeira.com";
-    github = "candeira";
-    githubId = 91694;
-    name = "Javier Candeira";
-  };
   caniko = {
     email = "gpg@rotas.mozmail.com";
     github = "caniko";
@@ -6327,12 +6321,6 @@
     github = "davinci42";
     githubId = 4347318;
     email = "davinci42.cn@gmail.com";
-  };
-  davisrichard437 = {
-    email = "davisrichard437@gmail.com";
-    github = "davisrichard437";
-    githubId = 85075437;
-    name = "Richard Davis";
   };
   davorb = {
     email = "davor@davor.se";
@@ -26707,12 +26695,6 @@
     github = "swdunlop";
     githubId = 120188;
     name = "Scott W. Dunlop";
-  };
-  sweber = {
-    email = "sweber2342+nixpkgs@gmail.com";
-    github = "sweber83";
-    githubId = 19905904;
-    name = "Simon Weber";
   };
   sweenu = {
     name = "sweenu";
