@@ -14,7 +14,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
-    rev = version;
+    tag = version;
     hash = "sha256-Dc6OSWUTFftP2tyRFoxHm+TsnSMDfx627DhmYnPie9w=";
   };
 

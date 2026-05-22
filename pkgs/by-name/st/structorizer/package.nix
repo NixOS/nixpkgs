@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fesch";
     repo = "Structorizer.Desktop";
-    rev = version;
+    tag = version;
     hash = "sha256-ur00Vq+bl+R5MBpmGQO8nX9rEVNMgih1OzWlpY0RDIk=";
   };
 

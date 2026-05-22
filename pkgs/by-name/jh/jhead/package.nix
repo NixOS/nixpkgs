@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Matthias-Wandel";
     repo = "jhead";
-    rev = version;
+    tag = version;
     hash = "sha256-d1cuy4kkwY/21UcpNN6judrFxGVyEH+b+0TaZw9hP2E=";
   };
 

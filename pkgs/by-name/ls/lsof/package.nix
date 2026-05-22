@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    rev = version;
+    tag = version;
     hash = "sha256-M/2xcii8ibGAI/6f34AE7aEb9fmn+iSWqWqnyDhg4CI=";
   };
 

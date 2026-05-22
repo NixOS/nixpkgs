@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "ModemManager";
-    rev = version;
+    tag = version;
     hash = "sha256-rBLOqpx7Y2BB6/xvhIw+rDEXsLtePhHLBvfpSuJzQik=";
   };
 

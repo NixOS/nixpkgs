@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "derhuerst";
     repo = "db-rest";
-    rev = version;
+    tag = version;
     hash = "sha256-1iJ26l6C6GevNkoDVMztPHiH3YsutJa3xWAsfYvgR9U=";
   };
 

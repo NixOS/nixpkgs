@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
-    rev = version;
+    tag = version;
     hash = versionHashes."${version}";
   };
 

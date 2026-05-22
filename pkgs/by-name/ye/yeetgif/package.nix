@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sgreben";
     repo = "yeetgif";
-    rev = version;
+    tag = version;
     hash = "sha256-Z05GhtEPj3PLXpjF1wK8+pNUY3oDjbwZWQsYlTX14Rc=";
   };
 

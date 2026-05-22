@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix-gtk";
-    rev = finalAttrs.version;
-    sha256 = "sha256-EWe84bLG14RkCNbHp0S5FbUQ5/Ye/KbCk3gPTsGg9oQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-EWe84bLG14RkCNbHp0S5FbUQ5/Ye/KbCk3gPTsGg9oQ=";
   };
 
   dontBuild = true;

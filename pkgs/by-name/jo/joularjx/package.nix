@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "joular";
     repo = "joularjx";
-    rev = version;
+    tag = version;
     hash = "sha256-hr8a3Qr1LdFfGBLVJVkm6hhCW7knG4VpXj7nCtcptuU=";
   };
 

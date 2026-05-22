@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zbanks";
     repo = "radiance";
-    rev = version;
+    tag = version;
     hash = "sha256-RWPcbUg7/gggPuUZLyMJ/m2S5GGfrdE6SWyXERIXsdk=";
   };
 

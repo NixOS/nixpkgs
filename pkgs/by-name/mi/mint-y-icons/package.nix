@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-y-icons";
-    rev = version;
+    tag = version;
     hash = "sha256-YciWUzvu+2krbSGz5mqpCVRE22T8/gl4Ln4rILB5Tq8=";
   };
 
