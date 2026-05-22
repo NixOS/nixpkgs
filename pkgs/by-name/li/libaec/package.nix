@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libaec";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.dkrz.de";
     owner = "k202009";
     repo = "libaec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cxDP+JNwokxgzH9hO2zw+rIcz8XG7E8ujbAbWpgUEW8=";
+    hash = "sha256-aBm+CXCq7sdJb6Qq9sNuTzNj0nRwTJI20HsqUg1Qi/8=";
   };
 
   nativeBuildInputs = [
