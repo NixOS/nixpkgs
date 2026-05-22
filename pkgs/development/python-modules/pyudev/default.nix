@@ -9,12 +9,13 @@
   hypothesis,
   docutils,
   stdenvNoCC,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyudev";
   version = "0.24.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,13 +27,9 @@ buildPythonPackage rec {
       --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
   '';
 
-  nativeCheckInputs = [
-    pytest
-    mock
-    hypothesis
-    docutils
-  ];
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   checkPhase = ''
     py.test
@@ -41,6 +38,13 @@ buildPythonPackage rec {
   # Bunch of failing tests
   # https://github.com/pyudev/pyudev/issues/187
   doCheck = false;
+
+  nativeCheckInputs = [
+    pytest
+    mock
+    hypothesis
+    docutils
+  ];
 
   meta = {
     homepage = "https://pyudev.readthedocs.org/";
