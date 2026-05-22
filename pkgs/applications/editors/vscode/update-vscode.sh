@@ -41,7 +41,15 @@ for system in $systems; do
   update-source-version vscode $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
 done
 
-rev=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/git/ref/tags/$latestVersion | jq --raw-output .object.sha)
+# The VS Code update server uses an internal build commit that differs from the git tag commit.
+# We derive it from the redirect URL returned by the version-based server download endpoint.
+serverUrl="https://update.code.visualstudio.com/$(printf '%s' "$latestVersion" | awk -F. '{if(NF==2) print $1"."$2".0"; else print}')/server-linux-x64/stable"
+rev=$(curl --fail --silent --head "$serverUrl" | grep -i '^location:' | grep -oE '[0-9a-f]{40}')
+if [[ -z "$rev" ]]; then
+  echo "Error: Could not determine build commit from update server redirect"
+  exit 1
+fi
+echo "build commit (rev): $rev"
 vscodeServerHash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url https://update.code.visualstudio.com/commit:$rev/server-linux-x64/stable))
 update-source-version vscode $rev $vscodeServerHash --version-key=rev --source-key=vscodeServer.src --ignore-same-version --ignore-same-hash
 
