@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clang-root";
-  version = "20-20250925-01";
+  version = "20-20260408-01";
 
   src = fetchgit {
     url = "https://github.com/root-project/llvm-project";
     tag = "ROOT-llvm${version}";
-    hash = "sha256-qEoQVv/Aw9gqKSNa8ZJGqPzwXvH1yXiSOkvrUWeXI+g=";
+    hash = "sha256-EXBUI1+DWkqTH4KdVoqxPjG8WyL0P5AEemLvBJqaVrQ=";
   };
 
   nativeBuildInputs = [
