@@ -51,6 +51,7 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-httpbin,
+  pytest-rerunfailures,
   pytest-xdist,
   writableTmpDirAsHomeHook,
   anyio,
@@ -161,6 +162,11 @@ buildPythonPackage (finalAttrs: {
     xvfb
   ];
 
+  pytestFlags = [
+    "--reruns 3"
+    "--reruns-delay 5"
+  ];
+
   preCheck = ''
     export PATH=$PATH:$out/bin
   '';
@@ -186,12 +192,6 @@ buildPythonPackage (finalAttrs: {
 
     # Probably won't work in the Nix sandbox due to `xcffib.ConnectionException`
     "test_urgent_hook_fire"
-
-    # flaky: race between force_update() executor task and widget.info() read
-    "test_threadpolltext_force_update"
-
-    # flaky: race between repl server bind and client connect
-    "test_repl_server_executes_code"
   ];
 
   passthru = {
