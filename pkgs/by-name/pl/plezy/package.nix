@@ -123,7 +123,7 @@ let
       install -Dm644 assets/plezy.png $out/share/icons/hicolor/128x128/apps/plezy.png
       for size in 16 24 32 48 64 256 512; do
         mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
-        convert assets/plezy.png -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/plezy.png
+        magick assets/plezy.png -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/plezy.png
       done
     '';
 
