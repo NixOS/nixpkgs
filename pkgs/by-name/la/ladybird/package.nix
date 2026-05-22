@@ -179,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fgaz
       jk
+      schembriaiden
     ];
     platforms = [
       "x86_64-linux"
