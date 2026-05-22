@@ -47,7 +47,7 @@ let
       rm cygwin1.tar.xz
       cp -r * $out
       7z x EAC.exe
-      convert .rsrc/1033/ICON/29.ico -thumbnail 128x128 -alpha on -background none -flatten "$out/eac.ico.128.png"
+      magick .rsrc/1033/ICON/29.ico -thumbnail 128x128 -alpha on -background none -flatten "$out/eac.ico.128.png"
     '';
   };
 
