@@ -1,9 +1,6 @@
-{ buildAstalModule }:
+{ buildAstalModule, wl-vapi-gen }:
 buildAstalModule {
   name = "wl";
-  buildInputs = [ ];
+  nativeBuildInputs = [ wl-vapi-gen ];
   meta.description = "Central wayland connection manager";
-  # needs https://codeberg.org/kotontrion/wl-vapi-gen,
-  # which has 11 commits and needs to be packaged
-  meta.broken = true;
 }
