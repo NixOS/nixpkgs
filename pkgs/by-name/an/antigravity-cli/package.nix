@@ -65,6 +65,7 @@ stdenv.mkDerivation {
     description = "Google's agentic development platform CLI";
     homepage = "https://antigravity.google";
     license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ beeelias ];
     mainProgram = "antigravity";
     platforms = [
       "aarch64-darwin"
