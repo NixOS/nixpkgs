@@ -36,13 +36,13 @@
 }:
 
 let
-  version = "4.7.2.0";
+  version = "4.8.6.2";
   todesk-unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "todesk-unwrapped";
     version = version;
     src = fetchurl {
-      url = "https://web.archive.org/web/20250302114501if_/https://newdl.todesk.com/linux/todesk-v4.7.2.0-amd64.deb";
-      hash = "sha256-v7VpXXFVaKI99RpzUWfAc6eE7NHGJeFrNeUTbVuX+yg=";
+      url = "https://web.archive.org/web/20260329112316if_/https://dl.todesk.com/linux/todesk-v4.8.6.2-amd64.deb";
+      hash = "sha256-s/Kvf8EglIkD3zqkVZVctYI/tcH17H3KF6yKTLpTyAg=";
     };
     nativeBuildInputs = [ dpkg ];
 
