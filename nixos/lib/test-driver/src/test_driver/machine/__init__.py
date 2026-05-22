@@ -1721,6 +1721,7 @@ class NspawnMachine(BaseMachine):
         with self.nested("waiting for the container to power off"):
             self.process.wait()
             self.process = None
+            self.pid = None
 
 
 class MachineDeprecationWrapper:
