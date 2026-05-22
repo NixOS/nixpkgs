@@ -538,6 +538,8 @@ self: super: with self; {
 
   aiosonos = callPackage ../development/python-modules/aiosonos { };
 
+  aiospamc = callPackage ../development/python-modules/aiospamc { };
+
   aiosql = callPackage ../development/python-modules/aiosql { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
@@ -5685,6 +5687,8 @@ self: super: with self; {
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
+  flanker = callPackage ../development/python-modules/flanker { };
+
   flasgger = callPackage ../development/python-modules/flasgger { };
 
   flash-attn = callPackage ../development/python-modules/flash-attn { };
@@ -5723,6 +5727,12 @@ self: super: with self; {
 
   flask-dance = callPackage ../development/python-modules/flask-dance { };
 
+  flask-debugtoolbar = callPackage ../development/python-modules/flask-debugtoolbar { };
+
+  flask-debugtoolbar-sqlalchemy =
+    callPackage ../development/python-modules/flask-debugtoolbar-sqlalchemy
+      { };
+
   flask-dramatiq = callPackage ../development/python-modules/flask-dramatiq { };
 
   flask-elastic = callPackage ../development/python-modules/flask-elastic { };
@@ -5758,6 +5768,8 @@ self: super: with self; {
   flask-paranoid = callPackage ../development/python-modules/flask-paranoid { };
 
   flask-principal = callPackage ../development/python-modules/flask-principal { };
+
+  flask-profiler = callPackage ../development/python-modules/flask-profiler { };
 
   flask-pymongo = callPackage ../development/python-modules/flask-pymongo { };
 
@@ -11173,6 +11185,10 @@ self: super: with self; {
 
   newick = callPackage ../development/python-modules/newick { };
 
+  newrelic = callPackage ../development/python-modules/newrelic { };
+
+  newrelic-telemetry-sdk = callPackage ../development/python-modules/newrelic-telemetry-sdk { };
+
   newspaper3k = callPackage ../development/python-modules/newspaper3k { };
 
   newversion = callPackage ../development/python-modules/newversion { };
@@ -12263,6 +12279,8 @@ self: super: with self; {
   parquet = callPackage ../development/python-modules/parquet { };
 
   parse = callPackage ../development/python-modules/parse { };
+
+  parse-crontab = callPackage ../development/python-modules/parse-crontab { };
 
   parse-type = callPackage ../development/python-modules/parse-type { };
 
@@ -14996,6 +15014,8 @@ self: super: with self; {
   pyrdfa3 = callPackage ../development/python-modules/pyrdfa3 { };
 
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
+
+  pyre2 = callPackage ../development/python-modules/pyre2 { };
 
   pyreadstat = callPackage ../development/python-modules/pyreadstat { };
 
@@ -18068,6 +18088,8 @@ self: super: with self; {
   skytemple-ssb-emulator = callPackage ../development/python-modules/skytemple-ssb-emulator {
     inherit (pkgs) libpcap;
   };
+
+  sl-pgp = callPackage ../development/python-modules/sl-pgp { };
 
   slack-bolt = callPackage ../development/python-modules/slack-bolt { };
 
@@ -21273,6 +21295,8 @@ self: super: with self; {
 
   watchgod = callPackage ../development/python-modules/watchgod { };
 
+  watchtower = callPackage ../development/python-modules/watchtower { };
+
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
   watergate-local-api = callPackage ../development/python-modules/watergate-local-api { };
@@ -21699,6 +21723,8 @@ self: super: with self; {
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
+
+  yacron = callPackage ../development/python-modules/yacron { };
 
   yacs = callPackage ../development/python-modules/yacs { };
 
