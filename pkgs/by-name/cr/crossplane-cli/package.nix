@@ -42,6 +42,9 @@ buildGoModule (finalAttrs: {
     description = "Utility to make using Crossplane easier";
     mainProgram = "crossplane";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ selfuryon ];
+    maintainers = with lib.maintainers; [
+      selfuryon
+      LorenzBischof
+    ];
   };
 })
