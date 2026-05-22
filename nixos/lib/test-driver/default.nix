@@ -29,6 +29,7 @@
 
   enableNspawn ? false,
   enableOCR ? false,
+  enableQemu ? false,
   extraPythonPackages ? (_: [ ]),
 }:
 
@@ -56,7 +57,6 @@ buildPythonApplication {
   propagatedBuildInputs = [
     coreutils
     netpbm
-    qemu_pkg
     socat
     util-linux
     vde2
@@ -70,6 +70,9 @@ buildPythonApplication {
   ++ lib.optionals enableOCR [
     imagemagick_light
     tesseract4
+  ]
+  ++ lib.optionals enableQemu [
+    qemu_pkg
   ];
 
   # containers test requires extra nix features that are not available in ofborg.

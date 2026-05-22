@@ -17,6 +17,7 @@ let
     inherit (config) enableOCR extraPythonPackages;
     qemu_pkg = config.qemu.package;
     enableNspawn = config.containers != { };
+    enableQemu = config.nodes != { };
   };
 
   typeHints =
