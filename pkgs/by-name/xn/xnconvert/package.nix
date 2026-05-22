@@ -18,7 +18,7 @@ let
         };
       }
       ''
-        convert $src $out
+        magick $src $out
       '';
   desktopItem = (
     makeDesktopItem {
@@ -58,7 +58,7 @@ appimageTools.wrapType2 {
     longDescription = ''
       XnConvert is a fast, powerful and free cross-platform batch image converter.
       It allows to automate editing of your photo collections: you can rotate,
-      convert and compress your images, photos and pictures easily, and apply over
+      magick and compress your images, photos and pictures easily, and apply over
       80 actions (like resize, crop, color adjustments, filter, ...).
       All common picture and graphics formats are supported (JPEG, TIFF, PNG, GIF,
       WebP, PSD, JPEG2000, JPEG-XL, OpenEXR, camera RAW, HEIC, PDF, DNG, CR2).
