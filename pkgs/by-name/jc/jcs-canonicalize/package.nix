@@ -72,9 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       canonical bytes out). The CLI reads JSON from stdin and writes
       canonical JSON to stdout.
 
-      Ships an RFC 8785 Appendix E conformance test suite and a golden-file
-      drift test so consumers can rely on the byte sequence not changing
-      across releases.
+      Tested against the cyberphone/json-canonicalization reference corpus
+      plus a golden-file drift test so consumers can rely on the byte
+      sequence not changing across releases.
     '';
     homepage = "https://github.com/arcanesys/jcs-canonicalize";
     changelog = "https://github.com/arcanesys/jcs-canonicalize/releases/tag/v${finalAttrs.version}";
