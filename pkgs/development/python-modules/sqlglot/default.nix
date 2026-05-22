@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "sqlglot";
-  version = "28.9.0";
+  version = "30.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "sqlglot";
     owner = "tobymao";
     tag = "v${version}";
-    hash = "sha256-2AmHKGAoDF8w9k8VN9d25Js3UiSh8YNqdGRHN7VqRpw=";
+    hash = "sha256-N5eUcaJHRINbOyF23f3wfGTcSzpJ7/gcMtFFbhPRkcE=";
   };
 
   build-system = [
