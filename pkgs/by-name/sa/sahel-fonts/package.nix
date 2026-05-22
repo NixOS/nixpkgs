@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Persian (farsi) Font - فونت (قلم) فارسی ساحل";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 })
