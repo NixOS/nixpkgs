@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     set -eu -o pipefail
 
-    version = "$(curl -Ls -o /dev/null -w %{url_effective} https://www.visual-paradigm.com/downloads/vpce/checksum.html | sed -E 's#.*/vpce([0-9]+\.[0-9]+)/([0-9]+)/.*#\1.\2#')"
+    version="$(curl -Ls -o /dev/null -w %{url_effective} https://www.visual-paradigm.com/downloads/vpce/checksum.html | sed -E 's#.*/vpce([0-9]+\.[0-9]+)/([0-9]+)/.*#\1.\2#')"
 
     update-source-version visual-paradigm-ce "$version"
   '';
