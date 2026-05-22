@@ -44,8 +44,8 @@ let
     in
     runCommand "coq-logos" { buildInputs = [ imagemagick ]; } ''
       mkdir -p $out
-      convert ${coq.src}/ide/${dir}/coq.png -resize 32x32 $out/logo-32x32.png
-      convert ${coq.src}/ide/${dir}/coq.png -resize 64x64 $out/logo-64x64.png
+      magick ${coq.src}/ide/${dir}/coq.png -resize 32x32 $out/logo-32x32.png
+      magick ${coq.src}/ide/${dir}/coq.png -resize 64x64 $out/logo-64x64.png
     '';
 
   launcher =
