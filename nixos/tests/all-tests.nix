@@ -868,6 +868,7 @@ in
   languagetool = runTest ./languagetool.nix;
   lanraragi = runTest ./lanraragi.nix;
   lasuite-docs = runTest ./web-apps/lasuite-docs.nix;
+  lasuite-drive = runTest ./web-apps/lasuite-drive.nix;
   lasuite-meet = runTest ./web-apps/lasuite-meet.nix;
   latestKernel.login = runTest {
     imports = [ ./login.nix ];

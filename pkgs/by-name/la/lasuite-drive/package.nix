@@ -4,6 +4,7 @@
   python3,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
 }:
 let
   version = "0.18.0";
@@ -141,6 +142,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   passthru = {
     inherit mail frontend;
+    tests = {
+      login-upload-and-download-file = nixosTests.lasuite-drive;
+    };
   };
 
   __structuredAttrs = true;
