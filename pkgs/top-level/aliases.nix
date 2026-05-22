@@ -1587,6 +1587,7 @@ mapAliases {
   oguri = throw "'oguri' has been removed from nixpkgs because the upstream repository was archived. Please see https://github.com/vilhalmer/oguri#notice-unmaintained for upstream's suggested replacements."; # Added 2026-05-04
   oil = throw "'oil' has been renamed to/replaced by 'oils-for-unix'"; # Converted to throw 2025-10-27
   olaris-server = throw "'olaris-server' has been removed as it failed to build since 2024"; # Added 2026-01-15
+  olive-editor = throw "'olive-editor' has been removed as it is unmaintained upstream and broken"; # Added 2026-05-22
   oneDNN = onednn; # Added 2026-02-08
   oneDNN_2 = onednn_2; # Added 2026-02-08
   onevpl-intel-gpu = throw "'onevpl-intel-gpu' has been renamed to/replaced by 'vpl-gpu-rt'"; # Converted to throw 2025-10-27
