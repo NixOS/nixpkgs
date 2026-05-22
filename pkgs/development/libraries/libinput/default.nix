@@ -32,8 +32,6 @@
 }:
 
 let
-  mkFlag = optSet: flag: "-D${flag}=${lib.boolToString optSet}";
-
   sphinx-build =
     let
       env = python3.withPackages (
@@ -119,10 +117,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (mkFlag documentationSupport "documentation")
-    (mkFlag eventGUISupport "debug-gui")
-    (mkFlag testsSupport "tests")
-    (mkFlag wacomSupport "libwacom")
+    (lib.mesonBool "documentation" documentationSupport)
+    (lib.mesonBool "debug-gui" eventGUISupport)
+    (lib.mesonBool "tests" testsSupport)
+    (lib.mesonBool "libwacom" wacomSupport)
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ]
