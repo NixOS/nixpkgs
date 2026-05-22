@@ -7,7 +7,6 @@
   meson,
   ninja,
   libevdev,
-  lua5_4,
   mtdev,
   udev,
   wacomSupport ? stdenv.hostPlatform.isLinux,
@@ -20,6 +19,8 @@
   cairo,
   glib,
   gtk3,
+  luaSupport ? true,
+  lua5_4,
   testsSupport ? false,
   check,
   valgrind,
@@ -82,7 +83,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libevdev
-    lua5_4
     mtdev
     (python3.withPackages (
       pp: with pp; [
@@ -98,6 +98,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals wacomSupport [
     libwacom
+  ]
+  ++ lib.optionals luaSupport [
+    lua5_4
   ]
   ++ lib.optionals eventGUISupport [
     # GUI event viewer
@@ -121,6 +124,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "debug-gui" eventGUISupport)
     (lib.mesonBool "tests" testsSupport)
     (lib.mesonBool "libwacom" wacomSupport)
+    (lib.mesonEnable "lua-plugins" luaSupport)
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ]
