@@ -16,6 +16,8 @@ maven.buildMavenPackage rec {
     hash = "sha256-uY6cUjmyuenfK3jAWvugsYa5qg8rbnvRZZ6qA/g2fZM=";
   };
 
+  patches = [ ./fix-maven-plugin-versions.patch ];
+
   mvnHash = "sha256-EaOIAy0+YPrF+yGsFKKqcA4bt90bq1Z86V57P9rMatE=";
 
   buildOffline = true;
