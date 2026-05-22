@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  fixDarwinDylibNames,
   removeReferencesTo,
   cppSupport ? true,
   fortranSupport ? false,
@@ -79,6 +80,7 @@ stdenv.mkDerivation rec {
     removeReferencesTo
     cmake
   ]
+  ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
   ++ optional fortranSupport fortran;
 
   buildInputs =
