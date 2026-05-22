@@ -510,7 +510,7 @@ lib.makeOverridable (
 
     preFixup = ''
       if [ -z "''${dontStrip-}" -a -e $out/vmlinux ]; then
-        strip -v -S -p $out/vmlinux
+        $STRIP -v -S -p $out/vmlinux
       fi
     '';
 
