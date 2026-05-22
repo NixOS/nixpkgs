@@ -8,6 +8,13 @@
 
   # dependencies
   snakemake-interface-common,
+
+  # tests
+  pytestCheckHook,
+  snakemake-logger-plugin-rich,
+
+  # passthru
+  snakemake-interface-logger-plugins,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -33,8 +40,18 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "snakemake_interface_logger_plugins" ];
 
-  # Tests require snakemake-logger-plugin-rich, which is not packaged in nixpkgs
+  nativeCheckInputs = [
+    pytestCheckHook
+    snakemake-logger-plugin-rich
+  ];
+
+  enabledTestPaths = [ "tests/tests.py" ];
+
+  # Circular dependency with snakemake
   doCheck = false;
+  passthru.tests.pytest = snakemake-interface-logger-plugins.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     description = "Stable interface for interactions between Snakemake and its logger plugins";
