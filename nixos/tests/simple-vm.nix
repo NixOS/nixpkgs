@@ -1,5 +1,5 @@
 {
-  name = "simple";
+  name = "simple-vm";
 
   nodes.machine = { };
 

@@ -188,7 +188,7 @@ let
             kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
           ) rebuildsByKernel
           // {
-            "10.rebuild-nixos-tests" = lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds);
+            "10.rebuild-nixos-tests" = lib.elem "nixosTests.simple-vm" (extractPackageNames diffAttrs.rebuilds);
           };
       }
     );
