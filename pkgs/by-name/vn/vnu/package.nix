@@ -61,6 +61,9 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version src;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     ant
     installShellFiles
