@@ -126,7 +126,11 @@ let
     comment = "Cadence Allegro X Free PCB Viewer (Wine)";
     exec = "allegro-run";
     icon = "applications-engineering";
-    categories = [ "Electronics" "Engineering" "Science" ];
+    categories = [
+      "Electronics"
+      "Engineering"
+      "Science"
+    ];
     terminal = false;
   };
 in
