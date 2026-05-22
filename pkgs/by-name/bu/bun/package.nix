@@ -6,6 +6,7 @@
   unzip,
   installShellFiles,
   makeWrapper,
+  callPackage,
   openssl,
   writeShellScript,
   curl,
@@ -114,6 +115,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         update-source-version "bun" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
+    tests.hello = callPackage ./tests/hello.nix { bun = finalAttrs.finalPackage; };
   };
   meta = {
     homepage = "https://bun.sh";
