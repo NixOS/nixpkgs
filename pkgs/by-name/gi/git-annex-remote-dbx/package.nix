@@ -1,14 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  setuptools,
-  dropbox,
-  annexremote,
-  humanfriendly,
 }:
 
-buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-annex-remote-dbx";
   version = "1.0.3";
   pyproject = true;
@@ -20,9 +16,9 @@ buildPythonApplication (finalAttrs: {
     hash = "sha256-a1mCLFd9fykzX3BxQBsOe6oPUzQjAzyfxExFlXCOAvQ=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     dropbox
     annexremote
     humanfriendly
