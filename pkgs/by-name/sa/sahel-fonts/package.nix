@@ -2,26 +2,26 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sahel-fonts";
   version = "3.4.0";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "sahel-font";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U4tIICXZFK9pk7zdzRwBPIPYFUlYXPSebnItUJUgGJY=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/sahel-fonts {} \;
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/rastikerdar/sahel-font";
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})
