@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   # data/gui/gametype_back.bmp isn't exactly the official icon but since
   # there is no official icon we use that one
   postBuild = ''
-    convert gui/gametype_back.bmp blackvoxel.png
+    magick gui/gametype_back.bmp blackvoxel.png
   '';
 
   installFlags = [
