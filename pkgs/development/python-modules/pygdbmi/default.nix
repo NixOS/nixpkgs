@@ -5,12 +5,13 @@
   fetchFromGitHub,
   gdb,
   pytest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygdbmi";
   version = "0.11.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs01";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-JqEDN8Pg/JttyYQbwkxKkLYuxVnvV45VlClD23eaYyc=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     gdb
@@ -27,7 +30,7 @@ buildPythonPackage rec {
   # tests require gcc for some reason
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postPatch = ''
+  preCheck = ''
     # tries to execute flake8,
     # which is likely to break on flake8 updates
     echo "def main(): return 0" > tests/static_tests.py
