@@ -62,6 +62,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
+      --disable-nls \
       CC=musl-gcc \
       CFLAGS=-static
 
@@ -70,4 +71,5 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+    rm -rf $out/libexec $out/share
   ''
