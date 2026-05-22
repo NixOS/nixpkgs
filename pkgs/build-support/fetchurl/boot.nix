@@ -1,5 +1,11 @@
 let
   mirrors = import ./mirrors.nix;
+  inherit (builtins)
+    elemAt
+    head
+    isString
+    match
+    ;
 in
 
 {
@@ -15,13 +21,13 @@ let
       let
         u = rewriteURL url;
       in
-      if builtins.isString u then
+      if isString u then
         u
       else
         throw "rewriteURL deleted the only URL passed to fetchurlBoot (was ${url})";
 in
 {
-  url ? builtins.head urls,
+  url ? head urls,
   urls ? [ ],
   sha256 ? "",
   hash ? "",
@@ -45,7 +51,7 @@ import <nix/fetchurl.nix> {
     # supports only one URI, use the first listed mirror.
     let
       url_ = handleUrl url;
-      m = builtins.match "mirror://([a-z]+)/(.*)" url_;
+      m = match "mirror://([a-z]+)/(.*)" url_;
     in
-    if m == null then url_ else builtins.head (mirrors.${builtins.elemAt m 0}) + (builtins.elemAt m 1);
+    if m == null then url_ else head (mirrors.${elemAt m 0}) + (elemAt m 1);
 }
