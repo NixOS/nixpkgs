@@ -2241,6 +2241,7 @@ mapAliases {
   wmii_hg = throw "'wmii_hg' has been renamed to/replaced by 'wmii'"; # Converted to throw 2025-10-27
   wolfssl = throw "'wolfssl' has been removed because it has an unclear licensing situation and no remaining users in Nixpkgs"; # Added 2026-04-03
   woof = throw "'woof' has been removed as it is broken and unmaintained upstream"; # Added 2025-09-04
+  wordpress_6_7 = throw "'wordpress_6_7' has been removed in favor of the new release, as it is unmaintained upstream"; # Added 2026-05-22
   worldengine-cli = throw "'worldengine-cli' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   wpa_supplicant_ro_ssids = throw "'wpa_supplicant_ro_ssids' has been renamed to/replaced by 'wpa_supplicant'"; # Converted to throw 2025-10-27
   wrangler_1 = throw "'wrangler_1' has been removed as it has been abandoned upstream and has known vulnerabilities, consider using 'wrangler' instead."; # Added 2026-02-01
