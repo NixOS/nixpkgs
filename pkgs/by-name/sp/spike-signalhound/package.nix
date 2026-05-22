@@ -37,6 +37,9 @@ stdenv.mkDerivation (
     pname = "spike-signalhound";
     version = "4.0.11";
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     src = fetchurl {
       url = "https://signalhound.com/sigdownloads/Spike/Spike%28Ubuntu22.04x64%29_${versionUnderscored}.zip";
       hash = "sha256-5zM8TMJOt9w8s+feeuOOFXrnUe7JZu8SBdiBshp/qTo=";
