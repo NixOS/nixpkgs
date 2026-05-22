@@ -2,25 +2,28 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alkalami";
   version = "3.000";
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${version}.zip";
+    url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${finalAttrs.version}.zip";
     hash = "sha256-ra664VbUKc8XpULCWhLMVnc1mW4pqZvbvwuBvRQRhcY=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    mkdir -p $out/share/{doc/${pname},fonts/truetype}
-    mv *.ttf $out/share/fonts/truetype/
-    mv *.txt documentation $out/share/doc/${pname}/
+  nativeBuildInputs = [ installFonts ];
 
-    runHook postInstall
+  postInstall = ''
+    mkdir -p $out/share/doc/alkalami
+    mv *.txt documentation $out/share/doc/alkalami
   '';
 
   meta = {
@@ -30,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     platforms = lib.platforms.all;
   };
-}
+})
