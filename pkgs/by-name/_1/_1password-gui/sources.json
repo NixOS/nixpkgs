@@ -5,11 +5,11 @@
       "sources": {
         "x86_64": {
           "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.21.x64.tar.gz",
-          "hash": "sha256-+TNkHD+CEODImJqxsvYO008UYqOAyrFpfXiaI5zYuDs="
+          "hash": "sha256-JwiMi2iozP6jWSIUtgXla86aSAhuUob7snqtUbeXPpI="
         },
         "aarch64": {
           "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.12.21.arm64.tar.gz",
-          "hash": "sha256-zY2hwSANgpGLGh/qOXUbY2JlZnNpXByysAgZvnuS+Qc="
+          "hash": "sha256-WPFUqKKfdadzF7BtR9gUm0SlYq4ZN36eICfGsPxirH0="
         }
       }
     },
@@ -18,11 +18,11 @@
       "sources": {
         "x86_64": {
           "url": "https://downloads.1password.com/mac/1Password-8.12.21-x86_64.zip",
-          "hash": "sha256-3CX1Qv2lYTy23XXRaAblOE+mp5YoX4qtV0SXV4hP8xI="
+          "hash": "sha256-tAWgIe7mcaGANCn8Kr0h6+zmvqufDJMjzAI3FrAGNk0="
         },
         "aarch64": {
           "url": "https://downloads.1password.com/mac/1Password-8.12.21-aarch64.zip",
-          "hash": "sha256-dwE97R0ZXn5kH9GGlyE+Zizb2T5GasgpGW+5zUFog8U="
+          "hash": "sha256-1c6YbzFYNyHKzY13OZ7z1Ad5hzgTIMs3aT0nluK9l0w="
         }
       }
     }
