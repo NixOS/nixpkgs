@@ -2,13 +2,13 @@
   lib,
   symlinkJoin,
   writeShellScriptBin,
-  wineWowPackages,
+  wineWow64Packages,
   winetricks,
 }:
 
 let
   version = "25.1";
-  wine = wineWowPackages.full;
+  wine = wineWow64Packages.full;
   winePrefix = "$HOME/.local/share/cadence-allegro";
 
   wineEnv = ''
