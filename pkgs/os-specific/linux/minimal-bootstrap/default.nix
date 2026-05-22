@@ -402,6 +402,7 @@ lib.makeScope
             echo ${bash-static.tests.get-version}
             echo ${binutils-static.tests.get-version}
             echo ${bzip2-static.tests.get-version}
+            echo ${bzip2-static.tests.compress}
             echo ${coreutils-static.tests.get-version}
             echo ${diffutils-static.tests.get-version}
             echo ${findutils-static.tests.get-version}
