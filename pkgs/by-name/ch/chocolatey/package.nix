@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   dontStrip = true;
