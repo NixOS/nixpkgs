@@ -5,17 +5,20 @@
   fetchPypi,
   cups,
   libiconv,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycups";
   version = "2.0.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hD44XB2/aUmWyoTvAqfzDCg3YDVYj1++rNa64AXPfI0=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ cups ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
@@ -27,4 +30,4 @@ buildPythonPackage rec {
     homepage = "http://cyberelk.net/tim/software/pycups/";
     license = with lib.licenses; [ gpl2Plus ];
   };
-}
+})
