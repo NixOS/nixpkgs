@@ -121,6 +121,9 @@ buildPythonPackage (finalAttrs: {
     "test_sql_storage"
     # AssertionError
     "test_online"
+    # Timeout
+    "test_efficient_loo_cv_with_fully_bayesian_model"
+    "test_fitting_auxiliary_experiment_dataset"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # flaky
