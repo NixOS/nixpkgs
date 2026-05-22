@@ -79,6 +79,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
+      --disable-nls \
       CC=musl-gcc \
       CFLAGS="-static -std=gnu17"
 
@@ -87,4 +88,7 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    # Remove files not needed to execute make in the bootstrap chain.
+    rm -rf $out/include $out/share
   ''
