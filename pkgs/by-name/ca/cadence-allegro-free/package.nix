@@ -2,6 +2,8 @@
   lib,
   symlinkJoin,
   writeShellScriptBin,
+  makeDesktopItem,
+  copyDesktopItems,
   wineWow64Packages,
   winetricks,
 }:
@@ -118,6 +120,15 @@ let
     ${wineEnv}
     ${wine}/bin/winecfg "$@"
   '';
+  desktopItem = makeDesktopItem {
+    name = "cadence-allegro-free";
+    desktopName = "Cadence Allegro Viewer";
+    comment = "Cadence Allegro X Free PCB Viewer (Wine)";
+    exec = "allegro-run";
+    icon = "applications-engineering";
+    categories = [ "Electronics" "Engineering" "Science" ];
+    terminal = false;
+  };
 in
 symlinkJoin {
   name = "cadence-allegro-free-${version}";
@@ -128,10 +139,8 @@ symlinkJoin {
     allegro-exec
     allegro-winetricks
     allegro-winecfg
+    desktopItem
   ];
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   meta = {
     description = "Wine wrapper scripts for Cadence Allegro X Free PCB Viewer";
