@@ -521,44 +521,50 @@ let
       throw "repoRevToName: invalid kind";
 
   /**
-    Filter sources by a list of double star glob patterns.
+    Filter a source tree by a list of doublestar-style glob patterns,
+    returning a source that only contains paths matching at least one
+    pattern. `*` matches a single path component, and `**` matches any
+    number of components.
 
     # Inputs
 
     `src`
 
-    : 1\. Function argument
+    : The source tree to filter.
 
     `patterns`
 
-    : 2\. Function argument
+    : List of glob patterns to include, e.g. `[ "*.py" "src/**" ]`.
+      A leading `**` (e.g. `**\/*.py` for all `.py` files at any depth)
+      is also supported; the `\` here is just a Nix string escape used
+      to avoid closing this comment.
 
     # Examples
     :::{.example}
     ## `sourceByGlobs` usage example
 
-    - Include all .py files recursively
+    - Include everything under a subdirectory
     ```nix
-    src = sourceByGlobs ./my-subproject ["**\/*.py" ]
+    src = sourceByGlobs ./. [ "src/**" "tests/**" ]
     ```
 
     - Include all .py files in root directory only
     ```nix
-    src = sourceByGlobs ./my-subproject ["*.py" ]
+    src = sourceByGlobs ./. [ "*.py" ]
     ```
 
     :::
   */
   sourceByGlobs =
     let
-      splitPath = path: filter isString (split "\/" path);
+      splitPath = path: filter isString (split "/" path);
       # Make component regex
       mkRe =
         s:
         if s == "**" then
           ".*" # Has special handling below
         else
-          concatStrings (map (tok: if isList tok then "[^\/]*" else escapeRegex tok) (split "\\*+" s));
+          concatStrings (map (tok: if isList tok then "[^/]*" else escapeRegex tok) (split "\\*+" s));
 
       # Make a source filter function from pattern
       mkMatcher =
