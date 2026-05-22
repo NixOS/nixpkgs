@@ -7,7 +7,6 @@
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "homematicip";
   version = "2.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "hahn-th";
