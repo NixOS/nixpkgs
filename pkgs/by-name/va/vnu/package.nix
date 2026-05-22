@@ -15,7 +15,7 @@
 }:
 
 let
-  pname = "validator-nu";
+  pname = "vnu";
   version = "25.12.12";
 
   src = fetchFromGitHub {
