@@ -29,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/vimlinuz/mdwatch";
     changelog = "https://github.com/vimlinuz/mdwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ x123 ];
+    maintainers = with lib.maintainers; [
+      x123
+      vimlinuz
+    ];
     mainProgram = "mdwatch";
   };
 })
