@@ -21,6 +21,10 @@
       hash = "sha256-Sdd7nE1mgz05W6FF8BSTPbuhcJCnV/rGzrySJSLAT7w=";
     };
 
+    # NPV-164 and NPV-166
+    __structuredAttrs = true;
+    strictDeps = true;
+
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
       hash = "sha256-Y3QCh9Dv17eROlZB7Fd8z0io7cbgHasBbK+IgrCCWkY=";
