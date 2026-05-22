@@ -53,7 +53,7 @@ let
       dontInstall = true;
 
       buildPhase = ''
-        convert ./resources/clojupyter/assets/logo-64x64.png -resize ${size}x${size} $out
+        magick ./resources/clojupyter/assets/logo-64x64.png -resize ${size}x${size} $out
       '';
 
       inherit meta;
