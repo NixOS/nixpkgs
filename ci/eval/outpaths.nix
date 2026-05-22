@@ -108,6 +108,8 @@ in
 tweak (
   (removeAttrs nixpkgsJobs blacklist)
   // {
-    nixosTests = lib.filterAttrs (name: _: name == "simple-vm") nixosJobs.tests;
+    nixosTests = lib.filterAttrs (
+      name: _: name == "simple-container" || name == "simple-vm"
+    ) nixosJobs.tests;
   }
 )

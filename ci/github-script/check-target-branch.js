@@ -99,6 +99,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
     ...Object.values(changed.rebuildCountByKernel),
   )
   const rebuildsAllTests =
+    changed.attrdiff.changed.includes('nixosTests.simple-container') ||
     changed.attrdiff.changed.includes('nixosTests.simple-vm')
 
   // https://github.com/NixOS/nixpkgs/pull/481205#issuecomment-3790123921
