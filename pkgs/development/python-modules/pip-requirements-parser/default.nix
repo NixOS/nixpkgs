@@ -20,6 +20,15 @@ buildPythonPackage rec {
     hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
   };
 
+  patches = [
+    # packaging 26.0 changed the string representation of requirements with
+    # URLs to contain an extra space before the `@`.
+    # https://github.com/pypa/packaging/pull/953
+    # https://github.com/aboutcode-org/pip-requirements-parser/issues/27
+    # https://github.com/aboutcode-org/pip-requirements-parser/pull/28
+    ./packaging-26.patch
+  ];
+
   dontConfigure = true;
 
   nativeBuildInputs = [ setuptools-scm ];
