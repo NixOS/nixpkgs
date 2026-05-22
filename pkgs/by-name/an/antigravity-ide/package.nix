@@ -14,22 +14,22 @@ let
   information = (lib.importJSON ./information.json);
   source =
     information.sources."${hostPlatform.system}"
-      or (throw "antigravity: unsupported system ${hostPlatform.system}");
+      or (throw "antigravity-ide: unsupported system ${hostPlatform.system}");
 in
 buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
   inherit (information) version vscodeVersion;
-  pname = "antigravity";
+  pname = "antigravity-ide";
 
-  executableName = "antigravity";
-  longName = "Antigravity";
-  shortName = "Antigravity";
-  libraryName = "antigravity";
-  iconName = "antigravity";
+  executableName = "antigravity-ide";
+  longName = "Antigravity IDE";
+  shortName = "Antigravity IDE";
+  libraryName = "antigravity-ide";
+  iconName = "antigravity-ide";
 
   src = fetchurl { inherit (source) url sha256; };
 
-  sourceRoot = if hostPlatform.isDarwin then "Antigravity.app" else "Antigravity";
+  sourceRoot = if hostPlatform.isDarwin then "Antigravity IDE.app" else "Antigravity IDE";
 
   tests = { };
   updateScript = ./update.js;
@@ -44,7 +44,7 @@ buildVscode {
       extraBuildCommands = (args.extraBuildCommands or "") + ''
         mkdir -p "$out/opt/google/chrome"
       '';
-      runScript = writeShellScript "antigravity-wrapper" ''
+      runScript = writeShellScript "antigravity-ide-wrapper" ''
         for candidate in google-chrome-stable google-chrome chromium-browser chromium; do
           if target=$(command -v "$candidate"); then
             ${coreutils}/bin/ln -sf "$target" /opt/google/chrome/chrome
@@ -56,10 +56,10 @@ buildVscode {
     };
 
   meta = {
-    mainProgram = "antigravity";
+    mainProgram = "antigravity-ide";
     description = "Agentic development platform, evolving the IDE into the agent-first era";
-    homepage = "https://antigravity.google";
-    downloadPage = "https://antigravity.google/download";
+    homepage = "https://antigravity.google/product/antigravity-ide";
+    downloadPage = "https://antigravity.google/download#antigravity-ide";
     changelog = "https://antigravity.google/changelog";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -72,6 +72,7 @@ buildVscode {
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
       Zaczero
+      schembriaiden
     ];
   };
 }
