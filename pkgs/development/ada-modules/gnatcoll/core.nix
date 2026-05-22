@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/AdaCore/gnatcoll-core/commit/515db1c9f1eea8095f2d9ff9570159a78c981ec6.patch";
       sha256 = "1ghnkhp5fncb7qcmf59kyqvy0sd0pzf1phnr2z7b4ljwlkbmcp36";
     })
+    # Fix compilation with GNAT 16
+    (fetchpatch2 {
+      name = "gnatcoll-core-gnat-16.patch";
+      url = "https://github.com/AdaCore/gnatcoll-core/commit/b266466e0a05b30615ec43d72782c345470455b9.patch?full_index=1";
+      hash = "sha256-rG0D1y2dbXA2M2Arnto+f7iAhg3yCfTPDbDRN+pMJKQ=";
+    })
   ];
 
   postPatch = ''
