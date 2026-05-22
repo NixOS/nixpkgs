@@ -288,6 +288,10 @@ in
 buildFHSEnv {
   pname = "stm32cubeprogrammer";
   inherit version;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   runScript = "${package}/bin/.STM32CubeProgrammer-inner";
 
   extraInstallCommands = ''
