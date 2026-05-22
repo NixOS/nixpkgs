@@ -430,6 +430,9 @@ in
       containerdHash = "sha256-vz7RFJkFkMk2gp7bIMx1kbkDFUMS9s0iH0VoyD9A21s=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
+      knownVulnerabilities = [
+        "docker_28 has been unmaintained since November 2025, use docker_29 or newer instead"
+      ];
     };
 
   docker_29 =
