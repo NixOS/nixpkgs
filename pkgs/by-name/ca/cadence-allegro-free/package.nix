@@ -171,6 +171,7 @@ symlinkJoin {
     homepage = "https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-downloads-start.html";
     license = lib.licenses.unfree;
     mainProgram = "allegro-run";
+    maintainers = with lib.maintainers; [ beeelias ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
