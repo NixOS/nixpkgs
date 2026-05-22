@@ -9,32 +9,28 @@
 
 buildGoModule (finalAttrs: {
   pname = "crossplane-cli";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "crossplane";
-    repo = "crossplane";
+    repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sQ2sCgFDGogQIIWdNCAKVkorsVuNtUOcaALqE/PGwJ4=";
+    hash = "sha256-FZx31AvGC70iSX3KcLyb5GpwiItO0LliLNeNk8WIX8s=";
   };
 
-  vendorHash = "sha256-DD0I4XLcN3pHhJKc5wBaldQU7gndszqCExSW4jqLMKQ=";
+  vendorHash = "sha256-QZyKX94a9iMvB2NCNr27M7hrQJG9Por0mLW3lCf8f58=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crossplane/crossplane/v2/internal/version.version=v${finalAttrs.version}"
+    "-X github.com/crossplane/crossplane-runtime/v2/pkg/version.version=v${finalAttrs.version}"
   ];
 
-  subPackages = [ "cmd/crank" ];
-
-  postInstall = ''
-    mv $out/bin/crank $out/bin/crossplane
-  '';
+  subPackages = [ "cmd/crossplane" ];
 
   passthru.tests.version = testers.testVersion {
     package = crossplane-cli;
-    command = "crossplane version --client || true";
+    command = "crossplane version --client";
     version = "v${finalAttrs.version}";
   };
 
