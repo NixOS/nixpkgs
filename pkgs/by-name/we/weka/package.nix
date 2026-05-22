@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
       mkdir -p $out/share/icons/hicolor/$size/apps
-      magick convert $out/share/weka/weka.gif -resize $size $out/share/icons/hicolor/$size/apps/weka.png
+      magick $out/share/weka/weka.gif -resize $size $out/share/icons/hicolor/$size/apps/weka.png
     done;
 
     runHook postInstall
