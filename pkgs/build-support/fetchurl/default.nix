@@ -260,7 +260,7 @@ lib.extendMkDerivation {
         else
           throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
-      finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+      finalHashHasColon = lib.match ".*:.*" finalAttrs.hash != null;
       finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
 
       resolvedUrl = lib.head (resolveUrl url);
