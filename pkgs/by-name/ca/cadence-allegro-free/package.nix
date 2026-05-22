@@ -16,7 +16,8 @@ let
   wineEnv = ''
     export WINEPREFIX="${winePrefix}"
     export WINEARCH=win64
-    export WINEDLLOVERRIDES="mscoree=n;mshtml=n"
+    export WINEDLLOVERRIDES="mscoree=n;mshtml=n;cryptbase=b"
+    export WINEDEBUG="''${WINEDEBUG:--all,err+seh,err+module}"
     export PATH="${wine}/bin:$PATH"
   '';
 
