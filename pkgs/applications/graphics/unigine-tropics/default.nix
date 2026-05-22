@@ -46,15 +46,15 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : $libPath:$out/lib/unigine/tropics/bin \
       --run "cd $out/lib/unigine/tropics"
 
-    convert -size 256x256 xc:Transparent -fill gradient:'dodgerblue-white' -stroke Transparent -draw "roundrectangle 0,0 256,256 50,50"  $name/icon.png
-    convert $name/icon.png -fill white -stroke white -draw "polygon  69.2564,84.1261 117.9,84.1261 117.9,206.56 138.1,206.56 138.1,84.1261 186.744,84.1261 186.744,65.9877 69.2564,65.9877 69.2564,84.1261" $name/icon.png
+    magick -size 256x256 xc:Transparent -fill gradient:'dodgerblue-white' -stroke Transparent -draw "roundrectangle 0,0 256,256 50,50"  $name/icon.png
+    magick $name/icon.png -fill white -stroke white -draw "polygon  69.2564,84.1261 117.9,84.1261 117.9,206.56 138.1,206.56 138.1,84.1261 186.744,84.1261 186.744,65.9877 69.2564,65.9877 69.2564,84.1261" $name/icon.png
 
     for RES in 16 24 32 48 64 128 256
     do
         mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
-        convert $name/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Tropics.png
+        magick $name/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Tropics.png
     done
-    convert $name/icon.png -resize 128x128 $out/share/icons/Tropics.png
+    magick $name/icon.png -resize 128x128 $out/share/icons/Tropics.png
 
     runHook postInstall
   '';
