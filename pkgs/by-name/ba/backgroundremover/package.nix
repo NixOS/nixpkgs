@@ -91,7 +91,7 @@ let
               ];
             }
             ''
-              convert ${demoImage} input.png
+              magick ${demoImage} input.png
               export NUMBA_CACHE_DIR=$(mktemp -d)
               backgroundremover -i input.png -o $out
             '';
