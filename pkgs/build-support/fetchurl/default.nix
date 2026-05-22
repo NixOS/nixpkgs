@@ -11,6 +11,7 @@
 }:
 
 let
+  defaultNativeBuildInputs = [ curl ];
   inherit (lib)
     concatMap
     elemAt
@@ -296,7 +297,7 @@ lib.extendMkDerivation {
 
       builder = ./builder.sh;
 
-      nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
+      nativeBuildInputs = defaultNativeBuildInputs ++ nativeBuildInputs;
 
       urls = urls_;
 
