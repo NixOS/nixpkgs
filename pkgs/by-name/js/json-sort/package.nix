@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "json-sort";
-  version = "1.1.0";
+  version = "1.1.5";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "drupol";
     repo = "json-sort";
     tag = finalAttrs.version;
-    hash = "sha256-yojMXJiP87l5B7D74V6z9FNvSYebtn71GnB0d+Q7/UI=";
+    hash = "sha256-Xs1dMtPUmunkExQQ6IRmfFNz/3hVbARdtAL6K2Ur0ZQ=";
   };
 
-  cargoHash = "sha256-LpZIVWWb8HI1HM3m8Vhfk27bWFpU37GYssmsfEJQAVg=";
+  cargoHash = "sha256-RrNgmQ5v5zCKz/XaaLub16URmurQxfYTeNxy6UswFYY=";
 
   dontUseCargoParallelTests = true;
 

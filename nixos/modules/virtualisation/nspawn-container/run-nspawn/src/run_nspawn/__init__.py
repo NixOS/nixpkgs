@@ -169,6 +169,7 @@ def run(
 
     root_dir.mkdir(parents=True, exist_ok=True)
     root_dir.chmod(0o755)
+    (root_dir / "usr/bin").mkdir(parents=True, exist_ok=True)
 
     with (
         mk_netns(f"nixos-nspawn-{container_name}") as netns,
