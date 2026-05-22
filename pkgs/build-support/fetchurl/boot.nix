@@ -53,5 +53,5 @@ import <nix/fetchurl.nix> {
       url_ = handleUrl url;
       m = match "mirror://([a-z]+)/(.*)" url_;
     in
-    if m == null then url_ else head (mirrors.${elemAt m 0}) + (elemAt m 1);
+    if m == null then url_ else head (mirrors.${head m}) + (elemAt m 1);
 }
