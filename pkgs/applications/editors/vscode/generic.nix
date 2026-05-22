@@ -181,9 +181,6 @@ stdenv.mkDerivation (
       buildFHSEnv customizedArgs;
   in
   {
-    strictDeps = true;
-    __structuredAttrs = true;
-
     inherit
       pname
       version
