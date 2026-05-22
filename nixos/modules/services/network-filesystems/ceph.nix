@@ -409,7 +409,7 @@ in
       lib.optional (cfg.global.monInitialMembers == null)
         "Not setting up a list of members in monInitialMembers requires that you set the host variable for each mon daemon or else the cluster won't function";
 
-    environment.etc."ceph/ceph.conf".text =
+    environment.etc."ceph/${cfg.global.clusterName}.conf".text =
       let
         # Merge the extraConfig set for mgr daemons, as mgr don't have their own section
         globalSection = expandCamelCaseAttrs (
