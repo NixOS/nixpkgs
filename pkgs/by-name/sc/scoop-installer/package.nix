@@ -20,6 +20,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-3/fU4UGou2n4wBhj9gqRDrmdbzMd9pWuNn2gZbeCF/0=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
