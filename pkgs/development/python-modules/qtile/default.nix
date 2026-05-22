@@ -208,6 +208,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "http://www.qtile.org/";
     license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
+    changelog = "https://github.com/qtile/qtile/blob/v${finalAttrs.version}/CHANGELOG";
     mainProgram = "qtile";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
