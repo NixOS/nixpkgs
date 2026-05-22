@@ -63,7 +63,7 @@ mkKdeDerivation {
     cp ${logoFile} breeze/images/${resolvedLogoName}.logo.png
 
     # conversion for 16bit taken from the breeze-plymouth readme
-    convert ${logoFile} -alpha Background -background "#000000" -fill "#000000" -flatten tmp.png
+    magick ${logoFile} -alpha Background -background "#000000" -fill "#000000" -flatten tmp.png
     pngtopnm tmp.png | pnmquant 16 | pnmtopng > breeze/images/16bit/${resolvedLogoName}.logo.png
   '';
 }
