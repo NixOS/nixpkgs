@@ -13,6 +13,14 @@
   tenacity,
   throttler,
   wrapt,
+
+  # tests
+  pytestCheckHook,
+  snakemake,
+  snakemake-storage-plugin-http,
+
+  # passthru
+  snakemake-interface-storage-plugins,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -41,8 +49,24 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "snakemake_interface_storage_plugins" ];
 
-  # No tests
+  nativeCheckInputs = [
+    pytestCheckHook
+    snakemake
+    snakemake-storage-plugin-http
+  ];
+
+  enabledTestPaths = [ "tests/tests.py" ];
+
+  disabledTests = [
+    # Requires internet access
+    "test_storage"
+  ];
+
+  # Circular dependency with snakemake
   doCheck = false;
+  passthru.tests.pytest = snakemake-interface-storage-plugins.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     description = "Stable interface for interactions between Snakemake and its storage plugins";
