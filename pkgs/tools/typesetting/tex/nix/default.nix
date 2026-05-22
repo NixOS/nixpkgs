@@ -252,7 +252,7 @@ rec {
         fi
 
         mkdir -p $out
-        convert -units PixelsPerInch \
+        magick -units PixelsPerInch \
           -density 600 \
           -trim \
           -matte \
