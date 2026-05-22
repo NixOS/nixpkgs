@@ -7,14 +7,16 @@ let
     functionArgs
     pathExists
     release
-    setFunctionArgs
     toBaseDigits
     version
     versionSuffix
     warn
     ;
   inherit (lib)
+    foldr
+    fromJSON
     isString
+    readFile
     ;
 in
 {
@@ -789,7 +791,7 @@ in
     importJSON :: Path -> Any
     ```
   */
-  importJSON = path: builtins.fromJSON (builtins.readFile path);
+  importJSON = path: fromJSON (readFile path);
 
   /**
     Reads a TOML file.
@@ -836,7 +838,7 @@ in
     importTOML :: Path -> Any
     ```
   */
-  importTOML = path: fromTOML (builtins.readFile path);
+  importTOML = path: fromTOML (readFile path);
 
   /**
     `warn` *`message`* *`value`*
@@ -1046,7 +1048,7 @@ in
 
   info = msg: builtins.trace "INFO: ${msg}";
 
-  showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
+  showWarnings = warnings: res: foldr warn res warnings;
 
   ## Function annotations
 
@@ -1177,7 +1179,10 @@ in
     let
       fArgs = functionArgs f;
     in
-    g: setFunctionArgs g fArgs;
+    g: {
+      __functor = self: g;
+      __functionArgs = fArgs;
+    };
 
   /**
     Turns any non-callable values into constant functions.
@@ -1325,11 +1330,11 @@ in
             r = i - ((i / base) * base);
             q = (i - r) / base;
           in
-          [ r ] ++ go q;
+          go q ++ [ r ];
     in
     assert (isInt base);
     assert (isInt i);
     assert (base >= 2);
     assert (i >= 0);
-    lib.reverseList (go i);
+    go i;
 }
