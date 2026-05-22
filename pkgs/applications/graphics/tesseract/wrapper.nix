@@ -69,7 +69,7 @@ let
       ''
         text="hello nix"
 
-        convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 \
+        magick -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 \
           -fill black -annotate +5+20 "$text" /tmp/test-img.png 2>/dev/null
         ocrResult=$(tesseract /tmp/test-img.png - | tr -d "\f")
 
