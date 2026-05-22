@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    convert goattrk2.bmp goattracker.png
+    magick goattrk2.bmp goattracker.png
     install -Dm644 goattracker.png $out/share/icons/hicolor/32x32/apps/goattracker.png
     ${lib.optionalString (
       !isStereo
