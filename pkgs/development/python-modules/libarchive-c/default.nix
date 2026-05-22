@@ -8,12 +8,13 @@
   glibcLocales,
   mock,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "libarchive-c";
   version = "5.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Changaco";
@@ -36,6 +37,8 @@ buildPythonPackage rec {
     substituteInPlace libarchive/ffi.py --replace-fail \
       "find_library('archive')" "'${libarchive.lib}/lib/libarchive${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "libarchive" ];
 
