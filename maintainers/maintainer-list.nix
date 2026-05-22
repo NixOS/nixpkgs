@@ -3207,7 +3207,8 @@
     githubId = 703631;
   };
   beeelias = {
-    name = "beeelias";
+    name = "Elias Hanelt";
+    email = "elias.hanelt@gmail.com";
     github = "beeelias";
     githubId = 236911673;
   };
