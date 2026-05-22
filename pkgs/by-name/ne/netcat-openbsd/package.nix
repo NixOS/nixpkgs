@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netcat-openbsd";
-  version = "1.234-2";
+  version = "1.238-1";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "netcat-openbsd";
     tag = "debian/${finalAttrs.version}";
-    hash = "sha256-kA9QzEI4nutQrKonHw+SxWYbuBLtn91edMAk8JBdAhU=";
+    hash = "sha256-CCxPZmZlTRNcQ985zf1RVYE4m3OHTM8FFWol1g8Osjc=";
   };
 
   strictDeps = true;
