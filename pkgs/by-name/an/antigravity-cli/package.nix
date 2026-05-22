@@ -72,6 +72,6 @@ stdenv.mkDerivation {
       "x86_64-darwin"
       "x86_64-linux"
     ];
-    sourceProvenance = with lib.sourceTypes; [binaryNativeCode];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
