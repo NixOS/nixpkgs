@@ -26,8 +26,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Smooths scrolling and set mouse scroll directions independently on macOS";
     homepage = "https://mos.caldis.me/";
