@@ -7,6 +7,7 @@
   jdk_headless,
   jre_headless,
   makeWrapper,
+  maven,
   pandoc,
   python3,
   stdenvNoCC,
@@ -16,13 +17,13 @@
 
 let
   pname = "validator-nu";
-  version = "25.12.12";
+  version = "26.5.21";
 
   src = fetchFromGitHub {
     owner = "validator";
     repo = "validator";
-    rev = "7ed7f67468f7f61975dcc78891ea462fce578828";
-    hash = "sha256-cdDmhRyXIdoNWhP4oqu7vRb5abuNXRqvt4P4Dzq48xY=";
+    rev = "a41fe4e78b13f65119f099c936c8e3a49459d44a";
+    hash = "sha256-o0/0aFT32mXIxYyUEyAvg9fjzgwZaia7ci4J2fV7I+Y=";
   };
 
   deps = stdenvNoCC.mkDerivation {
@@ -33,6 +34,7 @@ let
       ant
       cacert
       jdk_headless
+      maven
       python3
     ];
 
@@ -45,16 +47,42 @@ let
 
     buildPhase = ''
       python checker.py dldeps
+      ant -f build/build.xml dl-html5spec
+      # Pre-download Maven plugins needed for jing-shade
+      export MAVEN_OPTS="-Dmaven.repo.local=$PWD/.m2/repository"
+      cat > $PWD/dummy-pom.xml << EOF
+      <project>
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>dummy</groupId>
+        <artifactId>dummy</artifactId>
+        <version>1.0</version>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-shade-plugin</artifactId>
+              <version>3.5.1</version>
+            </plugin>
+          </plugins>
+        </build>
+      </project>
+      EOF
+      mvn -f $PWD/dummy-pom.xml dependency:resolve-plugins 2>&1 || true
     '';
 
     installPhase = ''
-      mkdir "$out" "$out/build"
+      mkdir -p "$out" "$out/build" "$out/resources"
       mv dependencies extras "$out"
-      mv build/html5spec "$out/build"
+      mv resources/spec "$out/resources/spec"
+      if [ -d "$PWD/.m2" ]; then
+        cp -r "$PWD/.m2" "$out/"
+        # Strip non-deterministic Maven metadata files
+        find "$out/.m2" -type f \( -name "_remote.repositories" -o -name "resolver-status.properties" \) -delete
+      fi
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-8cMoLeOnKNqisezkVS2UeVW11gtkGmhvQWrbSVuqbb8=";
+    outputHash = "sha256-gWYiB5lw1u2K0VCQulyz3Syc1Xs3rFLSrETUzVmss+s=";
   };
 
 in
@@ -66,6 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installShellFiles
     jdk_headless
     makeWrapper
+    maven
     pandoc
     python3
   ];
@@ -78,7 +107,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     ln -s '${deps}/dependencies' '${deps}/extras' .
-    ln -s '${deps}/build/html5spec' build/
+    mkdir -p resources
+    ln -s '${deps}/resources/spec' resources/spec
+    if [ -d "${deps}/.m2" ]; then
+      mkdir -p "$PWD/.m2"
+      cp -r "${deps}/.m2"/* "$PWD/.m2/"
+      chmod -R +w "$PWD/.m2"
+      export MAVEN_OPTS="-Dmaven.repo.local=$PWD/.m2/repository"
+    fi
     JAVA_HOME='${jdk_headless}' python checker.py --offline build
     make -C docs VNU_VERSION='${finalAttrs.version}' DATE='date -d @$(SOURCE_DATE_EPOCH)'
   '';
