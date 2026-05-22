@@ -2,14 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  mecab,
   setuptools-scm,
   requests,
   tqdm,
   wasabi,
   plac,
-  cython,
-  platformdirs,
   setuptools,
 }:
 
@@ -39,12 +36,9 @@ buildPythonPackage (finalAttrs: {
     tqdm
     wasabi
     plac
-    platformdirs
   ];
 
   nativeBuildInputs = [
-    cython
-    mecab
     setuptools-scm
   ];
 
