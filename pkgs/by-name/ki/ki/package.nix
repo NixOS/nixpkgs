@@ -54,6 +54,8 @@ python3Packages.buildPythonApplication {
     # requires git to not be in path, but git is needed for other tests
     "test_clone_cleans_up_on_error"
     "test_clone_clean_up_preserves_directories_that_exist_a_priori"
+    # flaky: shutil.copytree races background git pack operations on .git/objects
+    "test_pull_does_not_duplicate_decks_converted_to_subdecks_of_new_top_level_decks"
   ];
 
   dontCheckRuntimeDeps = true;
