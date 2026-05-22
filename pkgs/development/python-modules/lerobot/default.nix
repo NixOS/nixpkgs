@@ -41,14 +41,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i4szKM8b766mAA0AxCHB4s1wEEZbGeBKGeGpLICVsrM=";
+    hash = "sha256-ZTRcJRVb6niSJXniUgq0C5ztVTWh0HTo3rc99WRc1qI=";
   };
 
   build-system = [
@@ -63,6 +64,7 @@ buildPythonPackage (finalAttrs: {
     "draccus"
     "numpy"
     "opencv-python-headless"
+    "packaging"
     "rerun-sdk"
     "torch"
     "torchcodec"
@@ -179,6 +181,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # Require internet access
+    # httpx.ConnectError: [Errno -3] Temporary failure in name resolution
+    "tests/policies/test_relative_actions.py"
+
     # Sometimes hang forever on some CPU models
     "tests/policies/test_sac_policy.py"
 
