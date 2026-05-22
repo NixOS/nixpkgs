@@ -68,13 +68,31 @@ let
 
   # Prebuilt FFmpeg binaries from build-deps release matching the submodule commit
   ffmpegDepsTag = "v2026.516.30821";
+  ffmpegArch =
+    {
+      x86_64-linux = "Linux-x86_64";
+      aarch64-linux = "Linux-aarch64";
+      powerpc64le-linux = "Linux-ppc64le";
+      x86_64-darwin = "Darwin-x86_64";
+      aarch64-darwin = "Darwin-arm64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "sunshine: unsupported platform ${stdenv.hostPlatform.system} for prebuilt FFmpeg binaries");
+  ffmpegHash =
+    {
+      x86_64-linux = "sha256-wyMZ/MKGe+/o/zria006WDeMOpwb/vkCnJlpMhw7xuw=";
+      aarch64-linux = "sha256-ELbJRAumF47DuUT2xvaXJTSXytUZbSOi0y0zXargBi4=";
+      powerpc64le-linux = "sha256-i3sLpeqhK8m/tuNWH7FKUEU85oj2yMq4GqcPuFvE4/s=";
+      x86_64-darwin = "sha256-/OUePstB1gw5sDeKVI54bF4R5sWDT9uAWmzFMbRFi/A=";
+      aarch64-darwin = "sha256-cHgTuBWQ2A8PQR4F3brJpOLxxNvB4/YdMtUSRUMXv6Y=";
+    }
+    .${stdenv.hostPlatform.system};
   ffmpegBinaries = stdenv.mkDerivation {
     pname = "sunshine-ffmpeg-binaries";
     version = ffmpegDepsTag;
 
     src = fetchurl {
-      url = "https://github.com/LizardByte/build-deps/releases/download/${ffmpegDepsTag}/Linux-x86_64-ffmpeg.tar.gz";
-      hash = "sha256-wyMZ/MKGe+/o/zria006WDeMOpwb/vkCnJlpMhw7xuw=";
+      url = "https://github.com/LizardByte/build-deps/releases/download/${ffmpegDepsTag}/${ffmpegArch}-ffmpeg.tar.gz";
+      hash = ffmpegHash;
     };
 
     dontConfigure = true;
@@ -238,6 +256,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
     (lib.cmakeBool "GLAD_SKIP_PIP_INSTALL" true)
+    (lib.cmakeFeature "FFMPEG_PREPARED_BINARIES" "${ffmpegBinaries}")
   ]
   # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
   ++ lib.optionals isLinux [
@@ -246,7 +265,6 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
     (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
     (lib.cmakeFeature "SYSTEMD_MODULES_LOAD_DIR" "lib/modules-load.d")
-    (lib.cmakeFeature "FFMPEG_PREPARED_BINARIES" "${ffmpegBinaries}")
   ]
   ++ lib.optionals (!cudaSupport) [
     (lib.cmakeBool "SUNSHINE_ENABLE_CUDA" false)
@@ -313,6 +331,12 @@ stdenv'.mkDerivation (finalAttrs: {
       devusb
       anish
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "powerpc64le-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })
