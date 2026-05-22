@@ -272,6 +272,8 @@ mapAliases {
   abseil-cpp_202301 = throw "abseil-cpp_202301 has been removed as it was unused in tree"; # Added 2025-08-09
   abseil-cpp_202501 = throw "abseil-cpp_202501 has been removed as it was unused in tree"; # Added 2025-09-15
   acd-cli = throw "adc-cli has been removed as it was unmaintained"; # Added 2026-05-02
+  adb-sync = throw "'adb-sync' has been removed, as it depends on fuse2. Consider using 'better-adb-sync' instead"; # Added 2026-05-22
+  adbfs-rootless = throw "'adbfs-rootless' has been removed, as it depends on fuse2"; # Added 2026-05-22
   adjustor = throw "adjustor has been removed as it part of the 'handheld-daemon' package"; # Added 2025-11-16
   adminer-pematon = throw "'adminer-pematon' has been renamed to/replaced by 'adminneo'"; # Converted to throw 2025-10-27
   adminerneo = throw "'adminerneo' has been renamed to/replaced by 'adminneo'"; # Converted to throw 2025-10-27
