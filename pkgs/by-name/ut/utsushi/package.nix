@@ -88,10 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/etc/{sane.d,udev/rules.d}
     touch $out/etc/sane.d/dll.conf
 
-    # absolute paths to convert & tesseract
+    # absolute paths to magick & tesseract
     sed -i '/\[AC_DEFINE(\[HAVE_IMAGE_MAGICK\], \[1\])/a \ MAGICK_CONVERT="${imagemagick}/bin/convert"' configure.ac
     substituteInPlace filters/magick.cpp \
-      --replace 'convert ' '${imagemagick}/bin/convert '
+      --replace 'magick ' '${imagemagick}/bin/magick '
     substituteInPlace filters/reorient.cpp \
       --replace '"tesseract' '"${tesseract4}/bin/tesseract'
     substituteInPlace filters/get-text-orientation \
