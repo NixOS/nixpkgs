@@ -15,18 +15,17 @@
 
 let
   pname = "pgadmin";
-  version = "9.14";
-  yarnHash = "sha256-mJa5L8N40JWogQ8/LllSdX/uJHMzKULCow9+e5gFe/A=";
+  version = "9.15";
+  yarnHash = "sha256-ey3JyQy4L6R6UqzRTT9qY9Z6Se62UGrX75hpNEOQxTU=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-NQe1ZN8jQEJE5qSpL5MjgLwWLGrGXCIHaCd8zLpsx3s=";
+    hash = "sha256-a8DacMPXgDP633T0zRX45vHTrkb+2ys74XPErLPMz3E=";
   };
 
-  # Remove after https://github.com/pgadmin-org/pgadmin4/commit/79e490c5fa6031af7baa83f04f751bdc790dc408 is released
-  yarnPatch = ./yarn-4.14-support.patch;
+  yarnPatch = ./yarn-4.16-support.patch;
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
@@ -66,7 +65,6 @@ pythonPackages.buildPythonApplication rec {
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
     ./check-system-config-dir.patch
-
   ];
 
   postPatch = ''
