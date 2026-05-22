@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--ar=${stdenv.cc.targetPrefix}ar"
     "--target=${stdenv.hostPlatform.config}"
+    "--disable-shani"
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableStatic "lib-static")
   ];
