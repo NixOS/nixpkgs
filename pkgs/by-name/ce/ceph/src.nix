@@ -4,12 +4,16 @@
   fetchurl,
 }:
 
-applyPatches (final: {
-  pname = "ceph-src";
+let
   version = "20.2.1";
+in
+
+applyPatches {
+  pname = "ceph-src";
+  inherit version;
 
   src = fetchurl {
-    url = "https://download.ceph.com/tarballs/ceph-${final.version}.tar.gz";
+    url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
     hash = "sha256-3neaoBQYOTiLsgHgqdYiuEM5guHE17/DrGEXt2OXJUI=";
   };
 
@@ -27,4 +31,4 @@ applyPatches (final: {
     # See: https://github.com/ceph/ceph/pull/67904
     ./patches/0001-mgr-python-interpreter.patch
   ];
-})
+}
