@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     for size in 16 24 32 48 64 128 256 512 1024; do
       mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
       if [ ! -e quake3-urt_"$size"x"$size"x32.png ] ; then
-        convert -resize "$size"x"$size" quake3-urt_512x512x32.png quake3-urt_"$size"x"$size"x32.png
+        magick -resize "$size"x"$size" quake3-urt_512x512x32.png quake3-urt_"$size"x"$size"x32.png
       fi
       install -Dm644 quake3-urt_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/urbanterror.png
     done;
