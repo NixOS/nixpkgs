@@ -90,12 +90,9 @@ in
 
             Plugins = {
               Enabled = mkOption {
-                default = (builtins.length cfg.plugins) != 0;
-                defaultText = literalExpression "builtins.length \"\${config.services.navidrome.plugins != 0}\"";
+                default = true;
                 description = ''
                   Enable plugin support in navidrome.
-
-                  This is automatically enabled if {option}`services.navidrome.plugins` is used.
                 '';
               };
               Folder = mkOption {

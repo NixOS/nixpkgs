@@ -18,14 +18,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "spotiflac";
-  version = "7.1.6";
+  version = "7.1.7";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "afkarxyz";
     repo = "SpotiFLAC";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iQBJS2IsOzamC1plkd9BGbSajY9UpomaXMJRJgQ36t4=";
+    hash = "sha256-2bCKsgrJH8jfggluNdNqX+LdG8NLcsuhrJwkaRTXAOs=";
   };
 
   nativeBuildInputs = [
@@ -86,7 +86,7 @@ buildGoModule (finalAttrs: {
     runHook postInstall;
   '';
 
-  vendorHash = "sha256-ZUmQPOMkeF8YUow6gr4yyRnPJIbCnAltM50H5yo3MGs=";
+  vendorHash = "sha256-0H3U+i7SbbO7WkF9O8U8JoRxtroyEofzi2XrrWi6HWY=";
 
   desktopItems = [
     (makeDesktopItem {
