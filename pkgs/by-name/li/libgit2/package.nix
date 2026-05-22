@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.9.3";
+  version = "1.9.4";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libgit2";
     repo = "libgit2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nJrRdPs86oGNL4W2CJb16oSUgfzYr9A2i5sw9BAehME=";
+    hash = "sha256-ZKUiz3pdFE2SKxh53X2oyr7hs32Njj5YVA0OXDXz7h0=";
   };
 
   cmakeFlags = [
