@@ -180,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
         then
           mv netgen_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/netgen.png
         else
-          convert -resize "$size"x"$size" netgen_512x512x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/netgen.png
+          magick -resize "$size"x"$size" netgen_512x512x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/netgen.png
         fi
       done;
     '';
