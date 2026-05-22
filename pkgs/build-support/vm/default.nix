@@ -1333,6 +1333,42 @@ let
       ];
     };
 
+    ubuntu2604x86_64 = {
+      name = "ubuntu-26.04-resolute-amd64";
+      fullName = "Ubuntu 26.04 Resolute (amd64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/main/binary-amd64/Packages.xz";
+          hash = "sha256-7ZrEHLJj767MWgagdC3FZXDi+1/5TE8uSy+9zd1zzyQ=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/universe/binary-amd64/Packages.xz";
+          hash = "sha256-FYe+htZtOFQjJSFeDhCfdb1pXI8k15Os4nYgOKatWB4=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/main/binary-amd64/Packages.xz";
+          hash = "sha256-EVMoiLf7KqEfG+QtBKbCbQY+creamYm6EbndC+Ogqj4=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/universe/binary-amd64/Packages.xz";
+          hash = "sha256-Xw3Ao/IR6j2tTsAotuestXZBpBvPles4gKGCAILmhMw=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/main/binary-amd64/Packages.xz";
+          hash = "sha256-Qcrp4D/K+a/bWEQLWzI8bw50Y9IuDmZ/qW+0YOOgsmc=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/universe/binary-amd64/Packages.xz";
+          hash = "sha256-7COZT1+EDlfzJCiJ+rOPpCUo9WTkMHniUOTOvkrBOGg=";
+        })
+      ];
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z";
+      packages = commonDebPackages ++ [
+        "diffutils"
+        "libc-bin"
+      ];
+    };
+
     debian11i386 = {
       name = "debian-11.11-bullseye-i386";
       fullName = "Debian 11.11 Bullseye (i386)";
