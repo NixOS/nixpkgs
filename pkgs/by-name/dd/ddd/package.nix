@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mv $out/bin/dddexe $out/bin/ddd
-    convert icons/ddd.xbm ddd.png
+    magick icons/ddd.xbm ddd.png
     install -D ddd.png $out/share/icons/hicolor/48x48/apps/ddd.png
   '';
 
