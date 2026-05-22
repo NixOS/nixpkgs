@@ -43,6 +43,9 @@ let
     pname = "stm32cubeprogrammer-unwrapped";
     inherit version;
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     src = requireFile {
       name = "SetupSTM32CubeProgrammer_linux_64.zip";
       sha256 = "fffa017abb4da14582e129aa9a1e4f87e6d0719a3cb950c0184f4cb48ab60aa7";
