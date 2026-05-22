@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aiocsv";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MKuranowski";
     repo = "aiocsv";
     tag = "v${version}";
-    hash = "sha256-cNoUrD0UP8F2W2HiSm7dQL3nhiL/h0Hr6TDsAKWb24M=";
+    hash = "sha256-WENNtQKvpUuoYai6r8nTRamwCOloVA42YoAA3JGK9B8=";
   };
 
   build-system = [
