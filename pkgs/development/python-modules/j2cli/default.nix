@@ -8,22 +8,21 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "j2cli";
   version = "0.3.10";
-  format = "setuptools";
   disabled = pythonAtLeast "3.12";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "6f6f643b3fa5c0f72fbe9f07e246f8e138052b9f689e14c7c64d582c59709ae4";
   };
 
-  doCheck = false; # tests aren't installed thus aren't found, so skip
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+  dependencies = [
     jinja2
     pyyaml
-    setuptools
   ];
 
   meta = {
@@ -40,4 +39,4 @@ buildPythonPackage rec {
       SuperSandro2000
     ];
   };
-}
+})
