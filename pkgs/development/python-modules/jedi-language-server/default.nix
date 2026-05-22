@@ -6,6 +6,7 @@
 
   # build-system
   poetry-core,
+  pythonRelaxDepsHook,
 
   # dependencies
   docstring-to-markdown,
@@ -35,7 +36,10 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "jedi" ];
 
   dependencies = [
     docstring-to-markdown
