@@ -68,6 +68,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Tabnine extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-tabnine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

@@ -5,7 +5,7 @@
   fetchurl,
   gst_all_1,
   jack2,
-  ladspaH,
+  ladspa-header,
   libGL,
   libGLU,
   libxrandr,
@@ -39,7 +39,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsp-plugins";
-  version = "1.2.26";
+  version = "1.2.29";
 
   outputs = [
     "out"
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
-    hash = "sha256-RIMqmSJkF90u+nSICZCj3nGrAx1mfUXsPQb3lXicCfM=";
+    hash = "sha256-QEKXw63YecUI2wbVEZ4R78HQRzUn0qae057HfB0ZcvI=";
   };
 
   # By default, GStreamer plugins are installed right alongside GStreamer itself
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     jack2
-    ladspaH
+    ladspa-header
     libGL
     libGLU
     libxrandr

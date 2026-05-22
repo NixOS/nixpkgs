@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mistralai";
-  version = "1.1.1";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${version}";
-    hash = "sha256-cdUl6LusttH6c0tBvaxQR5UGHjwyubKELCDv61VQ6Qo=";
+    hash = "sha256-52qgkr9oem4jFGNWvoC3wb0WR2z9yhglqA8sJHIhtbs=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mistralai";
@@ -59,6 +59,9 @@ buildPythonPackage rec {
     "test__convert_dict_to_message_tool_call"
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
+    # RuntimeError: Cannot send a request, as the client has been closed.
+    # Tries to download from huggingface hub
+    "test_mistral_init"
   ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];

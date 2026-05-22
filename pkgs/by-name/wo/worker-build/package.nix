@@ -2,21 +2,25 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
-  version = "0.7.4";
+  version = "0.8.3";
 
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [ pkg-config ];
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LeW0CHYBaib81AqftYpW38FFR3P7q7OJE2NmrK9oi9Q=";
+    hash = "sha256-sRKQALNYUmzxaqYJCWR8b3yvqg8e4EHe1Cm7vqRx8hU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-W1m7W7LepgZ3WPjmZ7qXlu3WnvZkpGO35sHryOFqhfk=";
+  cargoHash = "sha256-enePrsTLpiTDxqnFFD38N4amOKY5oHHctPl9RFj2eRo=";
 
   buildAndTestSubdir = "worker-build";
 

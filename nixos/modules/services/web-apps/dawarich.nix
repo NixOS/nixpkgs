@@ -701,6 +701,7 @@ in
 
   meta.maintainers = with lib.maintainers; [
     diogotcorreia
+    tmarkus
   ];
 
 }

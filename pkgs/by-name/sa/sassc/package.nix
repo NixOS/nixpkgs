@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "sassc";
     maintainers = with lib.maintainers; [
-      codyopel
       pjones
     ];
     platforms = lib.platforms.unix;

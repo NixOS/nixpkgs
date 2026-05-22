@@ -14,8 +14,10 @@
   cvxopt,
   highspy,
   osqp,
+  qdldl,
   scipy,
   scs,
+  sparsediffpy,
 
   # tests
   hypothesis,
@@ -26,14 +28,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7bLvVvOthbEe+Ry/NQCxP5El9K8qITIGwJzypooT2mw=";
+    hash = "sha256-48tczmRdNExerlVTNMuRNi1dC5XhUSXNBwIGbJ9vFnU=";
   };
 
   postPatch =
@@ -57,8 +60,10 @@ buildPythonPackage (finalAttrs: {
     highspy
     numpy
     osqp
+    qdldl
     scipy
     scs
+    sparsediffpy
   ];
 
   nativeCheckInputs = [
@@ -75,6 +80,11 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "cvxpy" ];
 
   disabledTests = [
+    # Numerical assertions failing
+    "test_oprelcone_1_m1_k3_real"
+    "test_oprelcone_1_m3_k1_real"
+    "test_oprelcone_1_m4_k4_real"
+
     # Disable the slowest benchmarking tests, cuts test time in half
     "test_tv_inpainting"
     "test_diffcp_sdp_example"

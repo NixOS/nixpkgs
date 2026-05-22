@@ -10,7 +10,6 @@
   pycryptodomex,
   pygtrie,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -26,8 +25,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-8fcBIcZ2l6mkKe9YQe5+5fh7+vK9qxzBO2kLRUONumQ=";
   };
-
-  disabled = pythonOlder "3.11";
 
   nativeBuildInputs = [
     setuptools

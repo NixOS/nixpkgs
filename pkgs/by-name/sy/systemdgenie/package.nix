@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation {
   pname = "systemdgenie";
-  version = "0.99.0-unstable-2026-01-29";
+  version = "0.99.0-unstable-2026-05-03";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "SystemdGenie";
     owner = "system";
-    rev = "5f6665b8ae3e6300fd52da759ad5e5211a533ecb";
-    hash = "sha256-OzoJJYEcEsXKaAggvqpjN9YQEMX49bxvF5s0+ymplQs=";
+    rev = "4b669ff4c51f42f3104d43097f584cbb5d99581a";
+    hash = "sha256-qrow4QCkVri+WbOZSe0tYn/oBdVB4n0SQmGuCYX1j8o=";
   };
 
   strictDeps = true;

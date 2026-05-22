@@ -7,16 +7,16 @@
 
 buildNpmPackage {
   pname = "coc-markdownlint";
-  version = "0-unstable-2026-02-01";
+  version = "0-unstable-2026-05-01";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-markdownlint";
-    rev = "63af4c902d6472572369c21dc46d73f47d626606";
-    hash = "sha256-B5kd8p+muh6P9St5EMKPr7Bya3grWt/beg/2/2saVsI=";
+    rev = "91345f973c7fde3e72f95bc7648043c35e23e007";
+    hash = "sha256-Uj+PKaihRaWybWvt82Aenmt1/seTsJwgb4LSF+gIAc0=";
   };
 
-  npmDepsHash = "sha256-Jhiuu3GJuZUeL8QoEjCdW3mxYSMH33eIDzRTvsdQ83o=";
+  npmDepsHash = "sha256-J5LHaKrtQeYiIU06rargZrQX5P4ABP0cP0wuPHIRzjw=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
@@ -24,6 +24,6 @@ buildNpmPackage {
     description = "Markdownlint extension for coc.nvim";
     homepage = "https://github.com/fannheyward/coc-markdownlint";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

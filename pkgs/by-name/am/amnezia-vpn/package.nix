@@ -21,95 +21,96 @@
   xray,
   nix-update-script,
   bash,
+  callPackage,
 }:
 let
-  awg-vendored = amneziawg-go.overrideAttrs (
+  amneziawg' = amneziawg-go.overrideAttrs (
     finalAttrs: prevAttrs: {
       name = "amneziawg-go";
-      version = "0.2.13";
+      version = "0.2.16";
 
       src = fetchFromGitHub {
         owner = "amnezia-vpn";
         repo = "amneziawg-go";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-vXSPUGBMP37kXJ4Zn5TDLAzG8N+yO/IIj9nSKrZ+sFA=";
+        hash = "sha256-JGmWMPVgereSZmdHUHC7ZqWCwUNfxfj3xBf/XDDHhpo=";
       };
 
-      vendorHash = "sha256-9OtIb3UQXpAA0OzPhDIdb9lXZQHHiYCcmjHAU+vCtpk=";
+      vendorHash = "sha256-ZO8sLOaEY3bii9RSxzXDTCcwlsQEYmZDI+X1WPXbE9c=";
     }
   );
 
-  amnezia-tun2socks = tun2socks.overrideAttrs (
+  tun2socks' = tun2socks.overrideAttrs (
     finalAttrs: prevAttrs: {
-      pname = "amnezia-tun2socks";
-      version = "2.5.4";
+      pname = "tun2socks";
+      version = "2.5.2-c8f8cb5";
 
       src = fetchFromGitHub {
-        owner = "amnezia-vpn";
-        repo = "amnezia-tun2socks";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-lHo7WtcqccBSHly6neuksh1gC7RCKxbFNX9KSKNNeK8=";
+        owner = "xjasonlyu";
+        repo = "tun2socks";
+        rev = "c8f8cb5caf6796039a08d3ebad5354767795628b";
+        hash = "sha256-VF8Mm323w0dwhXyFAJVi67BWepury59sVq1+DDzBjU8=";
       };
 
-      vendorHash = "sha256-VvOaTJ6dBFlbGZGxnHy2sCtds1tyhu6VsPewYpsDBiM=";
+      vendorHash = "sha256-fHwr/Hnqufgi3D93GLxd5lqNetJswWvQ0+MqPq3QxV4=";
     }
   );
 
-  amnezia-xray = xray.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      pname = "amnezia-xray";
-      version = "1.8.15";
+  amnezia-xray = callPackage ./xray-lib.nix { };
 
-      src = fetchFromGitHub {
-        owner = "amnezia-vpn";
-        repo = "amnezia-xray-core";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-3ZGkfGxYl9/yE7Q2CsJkFJ6xSGybBdq3DztQ0f4VsnY=";
-      };
+  # Amnezia Gateway (AGW) public keys for premium server list verification.
+  # These PEM-formatted RSA public keys are hardcoded in the upstream binary
+  # and used to verify signatures on server list responses from the AGW service.
+  # The original values were extracted from the upstream linux binary using
+  # `strings` command, as they are not present in any public source files.
+  # Newlines are escaped (\n -> \\n) to prevent Makefile generation failures
+  # during build when these variables are exported via preConfigure.
+  dev-agw-public-key = lib.replaceStrings [ "\n" ] [ "\\n" ] (builtins.readFile ./dev_agw_public_key);
+  dev-agw-endpoint = "http://gw.dev.amzsvc.com:80/";
+  dev-s3-endpoint = "https://s3.eu-north-1.amazonaws.com/amnezia-dev/";
 
-      vendorHash = "sha256-AimQsuBRhgpTY5rW8WRejCkx4s9Q9n+OuTf4XCrgpnE=";
-    }
+  prod-agw-public-key = lib.replaceStrings [ "\n" ] [ "\\n" ] (
+    builtins.readFile ./prod_agw_public_key
   );
-
-  amneziaPremiumConfig = fetchurl {
-    url = "https://raw.githubusercontent.com/amnezia-vpn/amnezia-client-lite/f45d6b242c1ac635208a72914e8df76ccb3aa44c/macos-signed-build.sh";
-    hash = "sha256-PnaPVPlyglUphhknWwP7ziuwRz+WOz0k9WRw6Q0nG2c=";
-    postFetch = ''
-      sed -nri '/PROD_AGW_PUBLIC_KEY|PROD_S3_ENDPOINT/p' $out
-    '';
-  };
+  prod-s3-endpoint = lib.concatStringsSep ", " [
+    "https://s3.eu-north-1.amazonaws.com/amnezia/"
+    "https://amnzstrg01.blob.core.windows.net/lambda-list/"
+    "https://storage.googleapis.com/lambda-list/"
+    "https://objectstorage.eu-zurich-1.oraclecloud.com/n/zrhfyaq6qxvh/b/lambda-list/o/"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.11.4";
+  version = "4.8.15.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-LNzXYNhW1fbQhEkailqmX69MgPGJfJAu6KhGh5oSlJc=";
+    hash = "sha256-ZUWesEpXb+L7NzL/jkWpS3b4DGq4733T5zc+VXSw9Ic=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
     substituteInPlace client/platforms/linux/daemon/wireguardutilslinux.cpp \
-      --replace-fail 'm_tunnel.start(appPath.filePath("../../client/bin/wireguard-go"), wgArgs);' 'm_tunnel.start("${awg-vendored}/bin/amneziawg-go", wgArgs);'
+      --replace-fail 'm_tunnel.start(appPath.filePath("../../client/bin/wireguard-go"), wgArgs);' 'm_tunnel.start("${amneziawg'}/bin/amneziawg-go", wgArgs);'
     substituteInPlace client/utilities.cpp \
       --replace-fail 'return Utils::executable("../../client/bin/openvpn", true);' 'return Utils::executable("${openvpn}/bin/openvpn", false);' \
-      --replace-fail 'return Utils::executable("../../client/bin/tun2socks", true);' 'return Utils::executable("${amnezia-tun2socks}/bin/amnezia-tun2socks", false);' \
+      --replace-fail 'return Utils::executable("../../client/bin/tun2socks", true);' 'return Utils::executable("${tun2socks'}/bin/tun2socks", false);' \
       --replace-fail 'return Utils::usrExecutable("wg-quick");' 'return Utils::executable("${wireguard-tools}/bin/wg-quick", false);'
-    substituteInPlace client/protocols/xrayprotocol.cpp \
-      --replace-fail 'return Utils::executable(QString("xray"), true);' 'return Utils::executable(QString("${amnezia-xray}/bin/xray"), false);'
     substituteInPlace client/protocols/openvpnovercloakprotocol.cpp \
       --replace-fail 'return Utils::executable(QString("/ck-client"), true);' 'return Utils::executable(QString("${cloak-pt}/bin/ck-client"), false);'
     substituteInPlace client/protocols/shadowsocksvpnprotocol.cpp \
       --replace-fail 'return Utils::executable(QString("/ss-local"), true);' 'return Utils::executable(QString("${shadowsocks-rust}/bin/sslocal"), false);'
     substituteInPlace client/configurators/openvpn_configurator.cpp \
-      --replace-fail ".arg(qApp->applicationDirPath());" ".arg(\"$out/libexec\");"
+      --replace-fail ".arg(qApp->applicationDirPath());" ".arg(\"$out/libexec\");" \
+      --replace-fail "int nVersion = 1;" "int nVersion = 0;"
     substituteInPlace client/ui/qautostart.cpp \
       --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "AmneziaVPN"
     substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
-      --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/pixmaps/AmneziaVPN.png"
+      --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/icons/hicolor/512x512/apps/AmneziaVPN.png"
     substituteInPlace deploy/data/linux/AmneziaVPN.service \
       --replace-fail "ExecStart=/opt/AmneziaVPN/service/AmneziaVPN-service.sh" "ExecStart=$out/bin/AmneziaVPN-service" \
       --replace-fail "Environment=LD_LIBRARY_PATH=/opt/AmneziaVPN/client/lib" ""
@@ -123,7 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace service/server/CMakeLists.txt \
       --replace-fail 'set(OPENSSL_INCLUDE_DIR "''${OPENSSL_ROOT_DIR}/linux/include")' 'set(OPENSSL_INCLUDE_DIR "${openssl.dev}/include")' \
       --replace-fail 'set(OPENSSL_LIB_CRYPTO_PATH "''${OPENSSL_ROOT_DIR}/linux/x86_64/libcrypto.a")' 'set(OPENSSL_LIB_CRYPTO_PATH "${openssl.out}/lib/libcrypto.so")' \
-      --replace-fail 'set(OPENSSL_USE_STATIC_LIBS TRUE)' 'set(OPENSSL_USE_STATIC_LIBS FALSE)'
+      --replace-fail 'set(OPENSSL_USE_STATIC_LIBS TRUE)' 'set(OPENSSL_USE_STATIC_LIBS FALSE)' \
+      --replace-fail 'set(AMNEZIA_XRAY_LIB_PATH "''${AMNEZIA_XRAY_ROOT_DIR}/linux/x86_64/amnezia_xray.a")' 'set(AMNEZIA_XRAY_LIB_PATH "${amnezia-xray}/lib/amnezia_xray.a")' \
+      --replace-fail 'set(AMNEZIA_XRAY_INCLUDE_DIR "''${AMNEZIA_XRAY_ROOT_DIR}/linux/x86_64")' 'set(AMNEZIA_XRAY_INCLUDE_DIR "${amnezia-xray}/include")'
   '';
 
   strictDeps = true;
@@ -144,35 +147,31 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
   ];
 
+  # These environment variables are baked into the binary at build time.
+  # They configure which Amnezia Gateway servers and S3 endpoints the client
+  # uses for fetching verified server lists (premium functionality).
   preConfigure = ''
-    source ${amneziaPremiumConfig}
+    export DEV_AGW_PUBLIC_KEY="${dev-agw-public-key}"
+    export DEV_AGW_ENDPOINT="${dev-agw-endpoint}"
+    export DEV_S3_ENDPOINT="${dev-s3-endpoint}"
+    export PROD_AGW_PUBLIC_KEY="${prod-agw-public-key}"
+    export PROD_S3_ENDPOINT="${prod-s3-endpoint}"
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/libexec $out/share/applications $out/share/pixmaps $out/lib/systemd/system
-    install -m555 client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
-    install -m555 ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
-    install -m444 ../AppDir/AmneziaVPN.desktop $out/share/applications/
-    install -m444 ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
-    install -m444 ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
+    install -Dm555 client/AmneziaVPN service/server/AmneziaVPN-service -t $out/bin/
+    install -Dm555 ../deploy/data/linux/client/bin/update-resolv-conf.sh -t $out/libexec/
+    install -Dm444 ../AppDir/AmneziaVPN.desktop -t $out/share/applications/
+    install -Dm444 ../deploy/data/linux/AmneziaVPN.png -t $out/share/icons/hicolor/512x512/apps
+    install -Dm444 ../deploy/data/linux/AmneziaVPN.service -t $out/lib/systemd/system/
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit amnezia-tun2socks amnezia-xray awg-vendored;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "amnezia-tun2socks"
-        "--subpackage"
-        "amnezia-xray"
-        "--subpackage"
-        "awg-vendored"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

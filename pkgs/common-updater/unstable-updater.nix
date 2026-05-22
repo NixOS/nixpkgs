@@ -107,7 +107,7 @@ let
           git describe --tags --abbrev=0 --match "''${tag_format}" 2> /dev/null || true
       }
 
-      pushd "$tmpdir"
+      pushd "$tmpdir" >&2
       commit_date="$(git show -s --pretty='format:%cs')"
       commit_sha="$(git show -s --pretty='format:%H')"
       last_tag=""
@@ -135,11 +135,11 @@ let
               last_tag="0"
           fi
           if [[ -n "$tag_prefix" ]]; then
-              echo "Stripping prefix '$tag_prefix' from tag '$last_tag'"
+              echo "Stripping prefix '$tag_prefix' from tag '$last_tag'" >&2
               last_tag="''${last_tag#"''${tag_prefix}"}"
           fi
           if [[ -n "$tag_converter" ]]; then
-              echo "Running '$last_tag' through: $tag_converter"
+              echo "Running '$last_tag' through: $tag_converter" >&2
               last_tag="$(echo "''${last_tag}" | ''${tag_converter})"
           fi
       else
@@ -150,14 +150,15 @@ let
           exit 1
       fi
       new_version="$last_tag-unstable-$commit_date"
-      popd
+      popd >&2
       # rm -rf "$tmpdir"
 
       # update the nix expression
       update-source-version \
           "$UPDATE_NIX_ATTR_PATH" \
           "$new_version" \
-          --rev="$commit_sha"
+          --rev="$commit_sha" \
+          --print-changes
     '';
   };
 

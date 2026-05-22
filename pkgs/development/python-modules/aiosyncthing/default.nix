@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for the Syncthing REST API";
     homepage = "https://github.com/zhulik/aiosyncthing";
-    changelog = "https://github.com/zhulik/aiosyncthing/releases/tag/v${version}";
+    changelog = "https://github.com/zhulik/aiosyncthing/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

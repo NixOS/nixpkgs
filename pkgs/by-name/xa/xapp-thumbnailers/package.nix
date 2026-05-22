@@ -109,7 +109,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "XappThumbnailers" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "Thumbnailers for GTK desktop environments";

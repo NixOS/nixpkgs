@@ -15,11 +15,12 @@
   json-glib,
   libintl,
   zathura,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "girara";
-  version = "0.4.5";
+  version = "2026.02.04";
 
   outputs = [
     "out"
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pwmt";
     repo = "girara";
     tag = finalAttrs.version;
-    hash = "sha256-XjRmGgljlkvxwcbPmA9ZFAPAjbClSQDdmQU/GFeLLxI=";
+    hash = "sha256-wTVgldfo8pWdY244nNldiogioijv/k32w1A8pEqOTRE=";
   };
 
   nativeBuildInputs = [
@@ -74,8 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
       meson test --print-errorlogs
   '';
 
-  passthru.tests = {
-    inherit zathura;
+  passthru = {
+    updateScript = gitUpdater { };
+    tests = {
+      inherit zathura;
+    };
   };
 
   meta = {

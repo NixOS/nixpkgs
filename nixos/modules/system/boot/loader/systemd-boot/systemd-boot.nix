@@ -102,6 +102,7 @@ let
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
+    set -euo pipefail
     ${systemdBootBuilder}/bin/systemd-boot "$@"
     ${cfg.extraInstallCommands}
   '';

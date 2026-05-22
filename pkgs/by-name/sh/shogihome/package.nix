@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_39,
+  electron_40,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,20 +18,20 @@
 }:
 
 let
-  electron = electron_39;
+  electron = electron_40;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.26.1";
+  version = "1.27.2";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7kDk85tN4uP0WJnof8yyn0M85Qairls5ZqhKwwhRQxc=";
+    hash = "sha256-VaHIDhTYcGT4J7ken/Cz0QwSlL42RMcP4lqFR4P7/SM=";
   };
 
-  npmDepsHash = "sha256-Sft5fEf86o1uUJ+yszx9XgQBGNRc+9aKRyR5rOelgQw=";
+  npmDepsHash = "sha256-2NeiCpcX1j7z+PtIF3euQamVTa+6G4SEHPGk8IVC1Dw=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -158,10 +158,12 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Shogi frontend supporting USI engines";
     homepage = "https://sunfish-shogi.github.io/shogihome/";
-    license = with lib.licenses; [
-      mit
-      asl20 # for icons
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        mit
+        asl20 # for icons
+      ];
     maintainers = with lib.maintainers; [
       kachick
     ];

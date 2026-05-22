@@ -1,11 +1,11 @@
-diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
-index e69150cd..c4ce7975 100644
---- a/app/CMakeLists.txt
-+++ b/app/CMakeLists.txt
-@@ -392,17 +392,6 @@
-   set(deploy_tool_options_arg "-force-openssl --release --no-translations")
+diff --git i/app/CMakeLists.txt w/app/CMakeLists.txt
+index 1ab415ea..23792435 100644
+--- i/app/CMakeLists.txt
++++ w/app/CMakeLists.txt
+@@ -872,17 +872,6 @@ elseif(WIN32)
+   set(deploy_tool_options_arg "-force-openssl --release --no-translations --no-compiler-runtime")
  endif()
-
+ 
 -qt_generate_deploy_qml_app_script(
 -  TARGET ${PROJECT_EXECUTABLE}
 -  OUTPUT_SCRIPT deploy_script
@@ -17,9 +17,6 @@ index e69150cd..c4ce7975 100644
 -
 -install(SCRIPT ${deploy_script})
 -
- #-------------------------------------------------------------------------------
- # Packaging
- #-------------------------------------------------------------------------------
--- 
-2.47.2
-
+ #---------------------------------------------------------------------------------------------------
+ # CPack installer/package generation
+ #---------------------------------------------------------------------------------------------------

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       --replace "version = 'git'" "version = '${version}'"
   '';
 
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   nativeBuildInputs = [
     makeWrapper

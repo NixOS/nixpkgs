@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoconf,
   automake,
   docbook_xml_dtd_42,
@@ -60,6 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./specify-localedir.patch
 
     ./gettext-0.25.patch
+
+    # CVE-2026-4948: https://github.com/NixOS/nixpkgs/issues/505280
+    (fetchpatch2 {
+      url = "https://github.com/Prince213/firewalld/commit/e621b4b54be7cd8d77ce549ec17c6f814f9bd337.patch?full_index=1";
+      hash = "sha256-8auXNPVYnNk1UI0jM82IEQrMBhG189/I+DbaXt0VEhc=";
+    })
   ];
 
   postPatch = ''

@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
+    url = "https://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
     sha256 = "qqE/y8FJ/g8/OR+TMnlYD3Spb9MS1u0GuP8DwtRmcug=";
   };
 

@@ -3,6 +3,7 @@
   python3,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -61,6 +62,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    writableTmpDirAsHomeHook # for cache generation.
   ];
 
   disabledTests = [
@@ -84,8 +86,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # We already build Sphinx so we do not need to test it
     "tests/test_docs.py"
   ];
-
-  HOME = "$TMPDIR"; # for cache generation.
 
   # Necessary because it confuse the tests when it does "from ripe.atlas.sagan import X"
   # version.py is used by Sphinx tests.

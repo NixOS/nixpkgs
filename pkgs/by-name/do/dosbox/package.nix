@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
   ];
 
-  depsBuildBuild = [
+  depsBuildBuild = lib.optionals (!stdenv.buildPlatform.isDarwin) [
     binutils # build calls `ar`
   ];
 

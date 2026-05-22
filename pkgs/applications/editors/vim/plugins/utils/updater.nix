@@ -3,6 +3,7 @@
   buildPythonApplication,
   makeWrapper,
   nix,
+  nix-prefetch-github,
   nix-prefetch-git,
   nurl,
   python3Packages,
@@ -37,6 +38,7 @@ buildPythonApplication {
     makeWrapperArgs+=( --prefix PATH : "${
       lib.makeBinPath [
         nix
+        nix-prefetch-github
         nix-prefetch-git
         neovim-unwrapped
         nurl

@@ -26,6 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
 
+  patches = [ ./asyncio-loop.patch ];
+
   build-system = [ setuptools-scm ];
 
   dependencies = [

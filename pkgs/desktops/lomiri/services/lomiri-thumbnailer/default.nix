@@ -32,6 +32,9 @@
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
   version = "3.1.0";
@@ -76,6 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Tests run in parallel to other builds, don't suck up cores
     substituteInPlace tests/headers/compile_headers.py \
       --replace-fail 'max_workers=multiprocessing.cpu_count()' "max_workers=1"
+  ''
+  # https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/31
+  # Too simple to bother with fetchpatch
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'find_package(Boost COMPONENTS filesystem iostreams regex system REQUIRED)' \
+        'find_package(Boost COMPONENTS filesystem iostreams regex REQUIRED)'
   '';
 
   strictDeps = true;
@@ -133,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
@@ -168,6 +180,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+    }
+    // lib.optionalAttrs (!withQt6) {
       # gallery app delegates to thumbnailer, tests various formats
       inherit (nixosTests.lomiri-gallery-app)
         format-mp4
@@ -179,11 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       # music app relies on thumbnailer to extract embedded cover art
       music-app = nixosTests.lomiri-music-app;
-
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-        versionCheck = true;
-      };
     };
     updateScript = gitUpdater { };
   };
@@ -200,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "liblomiri-thumbnailer-qt"
+      "liblomiri-thumbnailer-qt${lib.optionalString withQt6 "6"}"
     ];
   };
 })

@@ -9,7 +9,7 @@
   makeBinaryWrapper,
 }:
 let
-  version = "0.2.4";
+  version = "0.2.5";
 in
 buildGoModule {
   pname = "owncast";
@@ -19,14 +19,12 @@ buildGoModule {
     owner = "owncast";
     repo = "owncast";
     tag = "v${version}";
-    hash = "sha256-euqmAsGLh7enMbRKeGS7pB3L+12uAHFM2mqahst/bww=";
+    hash = "sha256-REgo9RC1izb9vJ6ae66Wti9yfP8DrCGetf6O4rX3DPY=";
   };
 
-  patches = [
-    ./fix-go.sum.diff
-  ];
+  vendorHash = "sha256-T4nr4lNUEq6grZ21qumaOjIDIDoJK7Ql8j8WbCy2u3g=n";
 
-  vendorHash = "sha256-XQXv1XeedHQozB56+boi32jsXQoCtD2XIg3deDvXIfw=";
+  subPackages = [ "." ];
 
   propagatedBuildInputs = [ ffmpeg ];
 

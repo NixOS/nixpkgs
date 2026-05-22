@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  stdenv,
 
   # build-system
   hatchling,
@@ -36,17 +35,32 @@
   transforms3d,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brax";
-  version = "0.14.0";
+  version = "0.14.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
-    tag = "v${version}";
-    hash = "sha256-CkRXEYtlP8IhEZ7lVnpxlwiyLdICAfILwHfRUfuub08=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/oznBa44xKl+9T1YrTVhCbuKZj16V1BTlnmCGRbF45g=";
   };
+
+  patches = [
+    # AttributeError: jax.device_put_replicated is deprecated; use jax.device_put instead.
+    # See https://docs.jax.dev/en/latest/migrate_pmap.html#drop-in-replacements for a drop-in replacement.
+    ./dont-use-device_put_replicated-compat.patch
+  ];
+
+  # TypeError: clip() got an unexpected keyword argument 'a_min'
+  postPatch = ''
+    substituteInPlace brax/fluid.py \
+      --replace-fail \
+        "box = 6.0 * jp.clip(jp.sum(diag_inertia_v, axis=-1), a_min=1e-12)" \
+        "box = 6.0 * jp.clip(jp.sum(diag_inertia_v, axis=-1), min=1e-12)"
+  '';
 
   build-system = [
     hatchling
@@ -88,11 +102,17 @@ buildPythonPackage rec {
     "testModelEncoding1"
     "testTrain"
     "testTrainDomainRandomize"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+
+    # ValueError: Error: no decoder found for mesh file 'meshes/pyramid.stl'
+    "test_convex_convex"
+    "test_dumps"
+    "test_dumps_invalidstate_raises"
+
     # Flaky:
     # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
     "test_pendulum_period2"
+    # AssertionError: Array(837.4592, dtype=float32) not greater than 990.0
+    "testSpeed1"
   ];
 
   disabledTestPaths = [
@@ -100,9 +120,7 @@ buildPythonPackage rec {
     "brax/generalized/constraint_test.py"
   ];
 
-  pythonImportsCheck = [
-    "brax"
-  ];
+  pythonImportsCheck = [ "brax" ];
 
   meta = {
     description = "Massively parallel rigidbody physics simulation on accelerator hardware";
@@ -110,4 +128,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

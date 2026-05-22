@@ -27,7 +27,7 @@ let
           (case (range "8.13" "8.14") "1.13.7")
           (case "8.12" "1.12.0")
           (case "8.11" "1.11.4")
-        ] { }
+        ] coq.ocamlPackages.elpi.version
       );
   elpi = coq.ocamlPackages.elpi.override { version = default-elpi-version; };
   propagatedBuildInputs_wo_elpi = [

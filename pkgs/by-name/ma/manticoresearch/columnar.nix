@@ -66,13 +66,13 @@ let
       platforms = lib.platforms.all;
     };
   });
-  streamvbyte = stdenv.mkDerivation (finalAttrs: rec {
+  streamvbyte = stdenv.mkDerivation (finalAttrs: {
     pname = "streamvbyte";
     version = "efdd9dace81a4a8f844267631879b500c6d913cf"; # see SVB_GITHUB in columnar's cmake/GetStreamvbyte.cmake
     src = fetchFromGitHub {
       owner = "manticoresoftware";
       repo = "streamvbyte";
-      rev = version;
+      rev = finalAttrs.version;
       hash = "sha256-a9E1aWBY/P7wI+kgHqhEiD3THctFfeFcy658RcNpHfQ=";
     };
     nativeBuildInputs = [

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  installFonts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,21 +17,23 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1x3r505dylz9rz8dj98h5n9d0zixyxmvvhnjnms9qxdrz9bxy9g1";
   };
 
-  nativeBuildInputs = (
-    with python3Packages;
-    [
+  nativeBuildInputs =
+    (with python3Packages; [
       python
       fonttools
       fontforge
-    ]
-  );
+    ])
+    ++ [ installFonts ];
 
   postPatch = ''
     rm *.otf
   '';
 
+  # installFonts adds a hook to `postInstall` that installs fonts
+  # into the correct directories
   installPhase = ''
-    install -m444 -Dt $out/share/fonts/opentype *.otf
+    runHook preInstall
+    runHook postInstall
   '';
 
   meta = {

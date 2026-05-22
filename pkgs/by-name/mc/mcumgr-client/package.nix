@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcumgr-client";
-  version = "0.0.7";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "vouch-opensource";
     repo = "mcumgr-client";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-P5ykIVdWAxuCblMe7kzjswEca/+MsqpizCGUHIpR4qc=";
+    hash = "sha256-IbjWJ4AEUxIvj3gSyz7w4q0DL1q2u0q2JO8O+I5qXnY=";
   };
 
-  cargoHash = "sha256-+n+Z/o+DvP2ltos8DP8nTyKbn/Zr3ln6cLyKJ+yWm1M=";
+  cargoHash = "sha256-V8o89jGqjxJPVIQIh6IbnahXVMktT2gZg/5H+Sr0ogQ=";
 
   passthru.updateScript = nix-update-script { };
 

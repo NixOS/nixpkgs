@@ -5,6 +5,7 @@
   fetchzip,
   libarchive,
   pkg-config,
+  jq,
   platformio-core,
   writableTmpDirAsHomeHook,
   bluez,
@@ -29,11 +30,11 @@
 assert builtins.isBool enableDefaultConfig;
 
 let
-  version = "2.7.18.fb3bf78";
+  version = "2.7.23.b246bcd";
 
   platformio-deps-native = fetchzip {
     url = "https://github.com/meshtastic/firmware/releases/download/v${version}/platformio-deps-native-tft-${version}.zip";
-    hash = "sha256-rud8F+aYVljNw2rpApIkjuN8ob/ZxvcXNJ+oAVSeMpE=";
+    hash = "sha256-Jr8/KnzNedGvMfMEjrqBv5HwKZS0jZpHFfp/saQEnng=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "firmware";
-    hash = "sha256-RI1U0xZDy22C+YO5gKbxo5YWDzVeRWJ8u6tTyDdwqGU=";
+    hash = "sha256-oNV6ZP5aSAFBcn9Y+yEzVTtMKg40eXcvDw5LlyZAft4=";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
   };
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     }))
     writableTmpDirAsHomeHook
     makeBinaryWrapper
+    jq
   ];
 
   buildInputs = [
@@ -82,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -ar ${platformio-deps-native}/. platformio-deps-native
     chmod +w -R platformio-deps-native
     rm -f platformio-deps-native/core/appstate.json
+    jq "map_values($(date +%s))" platformio-deps-native/core/.cache/downloads/usage.db > usage_new.db
+    mv usage_new.db platformio-deps-native/core/.cache/downloads/usage.db
 
     export PLATFORMIO_CORE_DIR=platformio-deps-native/core
     export PLATFORMIO_LIBDEPS_DIR=platformio-deps-native/libdeps

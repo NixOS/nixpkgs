@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-json-logger";
-  version = "3.3.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nhairs";
     repo = "python-json-logger";
     tag = "v${version}";
-    hash = "sha256-q1s+WRU5xTmF4YW20DrDnXbMeW6vGYzVekxxIDVt8gw=";
+    hash = "sha256-YFtM+YWXDCaipqhQntdGeGbTmWO5XMGfpWhgQwicxFQ=";
   };
 
   build-system = [ setuptools ];

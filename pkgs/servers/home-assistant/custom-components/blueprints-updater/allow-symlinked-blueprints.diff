@@ -1,0 +1,26 @@
+diff --git a/custom_components/blueprints_updater/coordinator.py b/custom_components/blueprints_updater/coordinator.py
+index 9cbbe32..92a5ab5 100644
+--- a/custom_components/blueprints_updater/coordinator.py
++++ b/custom_components/blueprints_updater/coordinator.py
+@@ -3234,21 +3234,6 @@ def scan_blueprints(
+                         continue
+ 
+                     full_path = os.path.join(root, file)
+-                    real_full_path = os.path.realpath(full_path)
+-                    try:
+-                        if (
+-                            os.path.commonpath([real_full_path, real_blueprint_path])
+-                            != real_blueprint_path
+-                        ):
+-                            _LOGGER.warning(
+-                                "Security alert: Ignoring blueprint symlink outside root: %s",
+-                                full_path,
+-                            )
+-                            continue
+-                    except (ValueError, OSError):
+-                        _LOGGER.warning("Skipping blueprint with invalid path: %s", full_path)
+-                        continue
+-
+                     if relative_path := get_blueprint_relative_path(hass, full_path):
+                         try:
+                             with open(full_path, encoding="utf-8") as f:

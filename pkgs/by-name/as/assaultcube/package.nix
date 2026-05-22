@@ -83,8 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     if (test -e source/src/ac_client) then
       cp source/src/ac_client $out/bin
       mkdir -p $out/share/applications
-      install -Dpm644 packages/misc/icon.png $out/share/icons/assaultcube.png
-      install -Dpm644 packages/misc/icon.png $out/share/pixmaps/assaultcube.png
+      install -Dpm644 packages/misc/icon.png $out/share/icons/hicolor/32x32/apps/assaultcube.png
 
       makeWrapper $out/bin/ac_client $out/bin/assaultcube \
         --chdir "$out/share/games/assaultcube" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"

@@ -6,25 +6,27 @@
   openssl,
   pkg-config,
   rustPlatform,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hullcaster";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "gilcu3";
     repo = "hullcaster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BR3klwy6vm6nJ38sgS/PGPQ19n0GJq6eQE97lHmg+kQ=";
+    hash = "sha256-O3MBvadayZ6hryexPX/VN1NUZpHTg/JZATJRIOBgZCg=";
   };
 
-  cargoHash = "sha256-TZmRObtkwrHRy/I6hhacbHUWiajKDLnHafLWIwVM15o=";
+  cargoHash = "sha256-/2prlOy3h+TtACJ9Oa7f9kYiaFGjFhoS8dO26w0fTrk=";
 
   buildInputs = [
     alsa-lib
     dbus
     openssl
+    sqlite
   ];
 
   nativeBuildInputs = [
@@ -34,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # work around error: Could not create filepath: /homeless-shelter/.local/share
   checkFlags = [
     "--skip=gpodder::tests::gpodder"
+    "--skip=config::tests"
+    "--skip=gpodder::tests"
   ];
 
   meta = {

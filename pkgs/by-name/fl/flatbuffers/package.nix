@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "25.9.23";
+  version = "25.12.19";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
-    rev = "v${version}";
-    hash = "sha256-A9nWfgcuVW3x9MDFeviCUK/oGcWJQwadI8LqNR8BlQw=";
+    tag = "v${version}";
+    hash = "sha256-I4PthsQOOV8tsi5uRYudyqBPcbE+ZH8Q9j0Ms4HP9Ec=";
   };
 
   nativeBuildInputs = [

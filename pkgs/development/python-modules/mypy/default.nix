@@ -3,10 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   pythonAtLeast,
-  pythonOlder,
   isPyPy,
 
   # build-system
@@ -16,6 +14,7 @@
   types-setuptools,
 
   # propagates
+  librt,
   mypy-extensions,
   tomli,
   typing-extensions,
@@ -34,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.17.1";
+  version = "1.20.1";
   pyproject = true;
 
   # relies on several CPython internals
@@ -44,17 +43,8 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-FfONUCCMU1bJXHx3GHH46Tu+wYU5FLPOqeCSCi1bRSs=";
+    hash = "sha256-MQZZyGu6xFh3wO+0lWED+mingjK92v/onljtp9gylmM=";
   };
-
-  patches = [
-    # Fix the build on Darwin with a case‐sensitive store.
-    # Remove on next release.
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/7534898319cb7f16738c11e4bc1bdcef0eb13c38.patch";
-      hash = "sha256-5jD0JBRnirmoMlUz9+n8G4AqHqCi8BaUX5rEl9NnLts=";
-    })
-  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -70,11 +60,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    librt
     mypy-extensions
     pathspec
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     dmypy = [ psutil ];
@@ -113,9 +103,15 @@ buildPythonPackage rec {
   ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
-    # fails with typing-extensions>=4.10
-    # https://github.com/python/mypy/issues/17005
-    "test_runtime_typing_objects"
+    # A change to the base64 decoder in CPython 3.13.13 and 3.14.4 causes this
+    # test to fail. At the time of writing, upstream skips the test.
+    # Upstream issue: https://github.com/python/mypy/issues/21120
+    # CPython issue: https://github.com/python/cpython/issues/145264
+    "testAllBase64Features_librt_experimental"
+    # https://github.com/python/mypy/issues/21120
+    "testAllBase64Features_librt"
+    # fails to import librt
+    "test_diff_cache_produces_valid_json"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # requires distutils
@@ -123,6 +119,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # circular dependency on distutils
+    "mypyc/test/test_external.py"
     # fails to find tyoing_extensions
     "mypy/test/testcmdline.py"
     "mypy/test/testdaemon.py"

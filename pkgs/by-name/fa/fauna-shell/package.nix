@@ -59,7 +59,7 @@ buildNpmPackage (finalAttrs: {
     description = "Interactive shell for FaunaDB";
     homepage = "https://github.com/fauna/fauna-shell";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "fauna";
   };
 })

@@ -2,89 +2,119 @@
   lib,
   stdenv,
   fetchurl,
-  glib,
-  libx11,
-  gst_all_1,
-  libepoxy,
-  pango,
-  cairo,
-  gdk-pixbuf,
-  e2fsprogs,
-  libkrb5,
-  libva,
-  openssl,
-  pcsclite,
-  gtk3,
-  libselinux,
-  libxml2,
-  libffi,
+  autoPatchelfHook,
+  replaceVars,
+  wrapGAppsHook4,
   python3Packages,
   cpio,
-  autoPatchelfHook,
-  wrapGAppsHook3,
+  cups,
+  cyrus_sasl,
+  gdk-pixbuf,
+  glib,
+  glib-networking,
+  gst_all_1,
+  gtk4,
+  libfido2,
+  libva,
+  lz4,
+  pcsclite,
+  protobufc,
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "nice-dcv-client";
-  version = "2021.2.3797-1";
+  version = "2025.0.8846-1";
+in
+stdenv.mkDerivation {
+  inherit version pname;
+
   src = fetchurl {
-    url = "https://d1uj6qtbmh3dt5.cloudfront.net/2021.2/Clients/nice-dcv-viewer-${version}.el8.x86_64.rpm";
-    sha256 = "sha256-iLz25SB5v7ghkAZOMGPmpNaPihd8ikzCQS//r1xBNRU=";
+    url = "https://d1uj6qtbmh3dt5.cloudfront.net/${lib.versions.majorMinor version}/Clients/nice-dcv-viewer-${version}.el9.x86_64.rpm";
+    sha256 = "sha256-JYvOxwSQQKjTLvpfpAQe1tqHS4QsshYJyzC5kIFEZLc=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook3
+    wrapGAppsHook4
     python3Packages.rpm
   ];
+
   unpackPhase = ''
     rpm2cpio $src | ${cpio}/bin/cpio -idm
   '';
 
   buildInputs = [
-    libselinux
-    libkrb5
-    libxml2
-    libva
-    e2fsprogs
-    libx11
-    openssl
-    pcsclite
-    gtk3
-    cairo
-    libepoxy
-    pango
+    cups
+    cyrus_sasl
     gdk-pixbuf
+    gtk4
+    libfido2
+    libva
+    lz4
+    pcsclite
+    protobufc
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
   ];
 
-  installPhase = ''
-    mkdir -p $out/bin/
-    mkdir -p $out/lib64/
-    mv usr/bin/dcvviewer $out/bin/dcvviewer
-    mv usr/lib64/* $out/lib64/
-    mkdir -p $out/libexec/dcvviewer
-    mv usr/libexec/dcvviewer/dcvviewer $out/libexec/dcvviewer/dcvviewer
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/libexec/dcvviewer/dcvviewer
-    # Fix the wrapper script to have the right basedir.
-    sed -i "s#basedir=/usr#basedir=$out#" $out/bin/dcvviewer
-    mv usr/share $out/
+  installPhase =
+    let
+      gst_plugin_system_path = lib.makeSearchPath "lib/gstreamer-1.0/" (
+        with gst_all_1;
+        [
+          gstreamer
+          gst-plugins-base
+          gst-plugins-good
+        ]
+      );
+      fixPathsPatch = replaceVars ./fix-paths.patch {
+        basedir = null;
+        gio_extra_modules = "${glib-networking}/lib/gio/modules";
+        gst_plugin_scanner = "${gst_all_1.gstreamer.out}/libexec/gstreamer-1.0/gst-plugin-scanner";
+        gst_plugin_system_path = gst_plugin_system_path;
+        dcv_sasl_plugin_dir = "${cyrus_sasl.out}/lib/sasl2";
+      };
+    in
+    ''
+      # Fix the wrapper script paths.
+      patch -p1 < ${fixPathsPatch}
+      substituteInPlace usr/bin/dcvviewer \
+        --replace-fail '@basedir@' "$out"
 
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+      mkdir -p $out/bin/
+      mv usr/bin/dcvviewer $out/bin/dcvviewer
 
-    # we already ship libffi.so.7
-    ln -s ${lib.getLib libffi}/lib/libffi.so $out/lib64/libffi.so.6
-  '';
+      mkdir -p $out/libexec/dcvviewer
+      mv \
+        usr/libexec/dcvviewer/dcvextensionswatchdog \
+        usr/libexec/dcvviewer/dcvviewer \
+        $out/libexec/dcvviewer
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        $out/libexec/dcvviewer/dcvviewer
 
-  meta = {
+      mkdir -p $out/lib64/dcvviewer
+      mv \
+        ./usr/lib64/dcvviewer/libavcodec.so.61 \
+        ./usr/lib64/dcvviewer/libavutil.so.59 \
+        ./usr/lib64/dcvviewer/libdcv.so \
+        ./usr/lib64/dcvviewer/libsoup-3.0.so.0 \
+        $out/lib64/dcvviewer
+
+      mv usr/share $out/
+      rm -rf $out/usr/share/doc
+
+      ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+    '';
+
+  meta = with lib; {
     description = "High-performance remote display protocol";
     homepage = "https://aws.amazon.com/hpc/dcv/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ rmcgibbo ];
+    maintainers = with maintainers; [
+      rmcgibbo
+      jhol
+    ];
   };
 }

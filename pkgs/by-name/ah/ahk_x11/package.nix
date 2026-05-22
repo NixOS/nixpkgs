@@ -62,7 +62,7 @@ crystal.buildCrystalPackage {
 
   postInstall = ''
     install -Dm644 -t $out/share/licenses/ahk_x11/ LICENSE
-    install -Dm644 -t $out/share/pixmaps/ assets/ahk_x11.png
+    install -Dm644 -t $out/share/icons/hicolor/48x48/apps/ assets/ahk_x11.png
     install -Dm644 -t $out/share/applications/ assets/*.desktop
     install -Dm644 assets/ahk_x11-mime.xml $out/share/mime/packages/ahk_x11.xml
   '';

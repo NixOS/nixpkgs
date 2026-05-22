@@ -4,10 +4,11 @@
   lib,
   fetchFromGitLab,
   fetchgit,
+  gitUpdater,
 
   cmake,
+  pkg-config,
   ninja,
-  extra-cmake-modules,
   flex,
   bison,
   wrapGAppsHook3,
@@ -62,14 +63,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.8.0";
+  version = "9.0.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yUrB0FXUcm+6QtlB7HMqdPpdhrV2iAo1oRkjgsHJiCU=";
+    hash = "sha256-zYOtTL4qEjXa/ZYlDIvneziYBXq4tIiVjRsrSJMaS0k=";
   };
 
   patches = [
@@ -80,8 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     flex
     bison
     kdePackages.wrapQtAppsHook
@@ -199,13 +201,17 @@ stdenv.mkDerivation (finalAttrs: {
   # over 3h in a normal build slot (2 cores
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = {
     description = "Photo management application";
     homepage = "https://www.digikam.org/";
     changelog = "${finalAttrs.src.meta.homepage}-/blob/master/project/NEWS.${finalAttrs.version}";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ philipdb ];
     platforms = lib.platforms.linux;
     mainProgram = "digikam";
   };

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "playball";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "paaatrick";
     repo = "playball";
     tag = "v${version}";
-    hash = "sha256-xgAhzNWCLNmbrwaYAGmXMercoRgXWPjjV5dcnXunmeA=";
+    hash = "sha256-ldxYKLRtdNKU1xORT5HxgEMiMajUY7OwnkQ+jlsOIxY=";
   };
 
-  npmDepsHash = "sha256-s0JKBJnVYkeXOE62F6BZRKwd0Hg3IOuMai6rmKUi6TI=";
+  npmDepsHash = "sha256-9sbTK7nV8m4uaUZy6DL/0r+JUlBoTkIpgYy7sacf130=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

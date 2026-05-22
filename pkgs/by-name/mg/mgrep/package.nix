@@ -1,15 +1,18 @@
 {
   lib,
+  pnpm_10,
   stdenv,
   fetchFromGitHub,
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
   npmHooks,
   nix-update-script,
 }:
 
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgrep";
   version = "0.1.10";
@@ -23,8 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-qNsYMp25OAbbv+K7qvNRB+7QzzrgtrKQkUoe9IMIR5c=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-T1mbRDBLU4SjZSgqyKgusZe5UV9hI+/bAmBYoAWcWtQ=";
   };
 
   nativeBuildInputs = [

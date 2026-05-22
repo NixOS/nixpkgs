@@ -3,22 +3,33 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  autoconf-archive,
+  pkg-config,
   texinfo,
+  check,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netmask";
-  version = "2.4.4";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "tlby";
     repo = "netmask";
     rev = "v${finalAttrs.version}";
-    sha256 = "1269bmdvl534wr0bamd7cqbnr76pnb14yn8ly4qsfg29kh7hrds6";
+    hash = "sha256-BXCZsk+52nygxtY1s4C79WCwy/iOSwgRnQYnauWGipQ=";
   };
 
   buildInputs = [ texinfo ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+  ];
+
+  nativeCheckInputs = [ check ];
+
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/tlby/netmask";

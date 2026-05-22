@@ -8,24 +8,26 @@
   pkg-config,
   vala,
   wrapGAppsHook4,
+  accountsservice,
   glib,
   granite7,
   gsettings-desktop-schemas,
   gtk4,
   pantheon-wayland,
   systemd,
+  libadwaita,
   libx11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "8.1.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     tag = version;
-    hash = "sha256-e02cVUEzRGVIJQQh2bONLUhrjRfeSpYQYWup5Sn9HhM=";
+    hash = "sha256-LmPLjOZVVHKMfYTEyOH2IkB/fw47pK0VqdWrckdBQ6w=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +39,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    accountsservice
     glib
     granite7
     gsettings-desktop-schemas
     gtk4
     pantheon-wayland
     systemd
+    libadwaita
     libx11
   ];
 

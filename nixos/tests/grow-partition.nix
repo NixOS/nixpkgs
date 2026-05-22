@@ -30,6 +30,7 @@ let
 
       fileSystems = {
         "/".device = rootFsDevice;
+        "/".fsType = "ext4";
       };
 
       # Needed for installing bootloader

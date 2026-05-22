@@ -1,9 +1,8 @@
-{ ... }:
+{ pkgs, ... }:
 {
   name = "rasdaemon";
   meta = {
-    maintainers = [ ];
-    broken = true; # test timed out
+    inherit (pkgs.rasdaemon.meta) maintainers;
   };
 
   nodes.machine =

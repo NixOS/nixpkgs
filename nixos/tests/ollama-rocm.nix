@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   name = "ollama-rocm";
-  meta.maintainers = with lib.maintainers; [ abysssol ];
+  meta.maintainers = [ ];
 
   nodes.rocm =
     { ... }:

@@ -19,7 +19,7 @@ url_and_key_list=(
   "aarch64-darwin-311 $cpu_bucket/torchvision-${version}-cp311-cp311-macosx_11_0_arm64.whl torchvision-${version}-cp311-cp311-macosx_11_0_arm64.whl"
   "aarch64-darwin-312 $cpu_bucket/torchvision-${version}-cp312-cp312-macosx_11_0_arm64.whl torchvision-${version}-cp312-cp312-macosx_11_0_arm64.whl"
   "aarch64-darwin-313 $cpu_bucket/torchvision-${version}-cp313-cp313-macosx_12_0_arm64.whl torchvision-${version}-cp313-cp313-macosx_12_0_arm64.whl"
-  "aarch64-darwin-314 $cpu_bucket/torchvision-${version}-cp314-cp314-macosx_11_0_arm64.whl torchvision-${version}-cp314-cp314-macosx_11_0_arm64.whl"
+  "aarch64-darwin-314 $cpu_bucket/torchvision-${version}-cp314-cp314-macosx_12_0_arm64.whl torchvision-${version}-cp314-cp314-macosx_12_0_arm64.whl"
   "aarch64-linux-310 $cpu_bucket/torchvision-${version}%2Bcpu-cp310-cp310-manylinux_2_28_aarch64.whl torchvision-${version}-cp310-cp310-linux_aarch64.whl"
   "aarch64-linux-311 $cpu_bucket/torchvision-${version}%2Bcpu-cp311-cp311-manylinux_2_28_aarch64.whl torchvision-${version}-cp311-cp311-linux_aarch64.whl"
   "aarch64-linux-312 $cpu_bucket/torchvision-${version}%2Bcpu-cp312-cp312-manylinux_2_28_aarch64.whl torchvision-${version}-cp312-cp312-linux_aarch64.whl"

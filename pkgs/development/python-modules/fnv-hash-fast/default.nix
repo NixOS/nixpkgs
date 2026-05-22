@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "fnv-hash-fast";
-  version = "1.6.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "fnv-hash-fast";
     tag = "v${version}";
-    hash = "sha256-1o/SwX9N+wBNVkihUuCYrJAEH28FxhKEhyOEK7tK1XE=";
+    hash = "sha256-wfiOI23LzdoTYl5/Wr/+3qvcJ3ce9ZrfETQXX1g6eIU=";
   };
 
   build-system = [
@@ -30,8 +30,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ fnvhash ];
-
-  pythonRelaxDeps = [ "fnvhash" ];
 
   pythonImportsCheck = [ "fnv_hash_fast" ];
 

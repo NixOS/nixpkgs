@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   defang,
   dnspython,
@@ -9,7 +8,6 @@
   playwrightcapture,
   poetry-core,
   pydantic,
-  pythonOlder,
   redis,
   requests,
   ua-parser,
@@ -49,8 +47,7 @@ buildPythonPackage rec {
   ]
   ++ playwrightcapture.optional-dependencies.recaptcha
   ++ redis.optional-dependencies.hiredis
-  ++ ua-parser.optional-dependencies.regex
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ++ ua-parser.optional-dependencies.regex;
 
   # Module has no tests
   doCheck = false;

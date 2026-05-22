@@ -11,7 +11,7 @@
   gtk2,
   gtk3,
   gnome-panel,
-  mate,
+  mate-panel,
   libxfce4util,
   xfce4-panel,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (desktopSupport == "mate") [
     gtk3
-    mate.mate-panel
+    mate-panel
   ]
   ++ lib.optionals (desktopSupport == "xfce4") [
     gtk2
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   # Setup hook replaces ${prefix} in pc files so we cannot use
   # --define-variable=prefix=$prefix
-  PKG_CONFIG_LIBXFCE4PANEL_1_0_LIBDIR = "$(out)/lib";
+  env.PKG_CONFIG_LIBXFCE4PANEL_1_0_LIBDIR = "$(out)/lib";
 
   meta = {
     homepage = "https://github.com/kalj/xmonad-log-applet";

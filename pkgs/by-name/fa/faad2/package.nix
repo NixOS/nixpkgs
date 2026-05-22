@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source MPEG-4 and MPEG-2 AAC decoder";
     homepage = "https://sourceforge.net/projects/faac/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     mainProgram = "faad";
     platforms = lib.platforms.all;
   };

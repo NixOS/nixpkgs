@@ -7,7 +7,7 @@
   fetchgit,
   srcOnly,
   removeReferencesTo,
-  nodejs_20,
+  nodejs_24,
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -17,8 +17,8 @@
   zip,
 }:
 let
-  nodeSources = srcOnly nodejs_20;
-  pnpm' = pnpm_9.override { nodejs = nodejs_20; };
+  nodeSources = srcOnly nodejs_24;
+  pnpm' = pnpm_9.override { nodejs = nodejs_24; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -40,17 +40,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-wallet-core";
-  version = "1.3.1";
+  version = "1.5.10";
 
+  # NOTE: we have to use the tag's commit, else:
+  # > fatal: Not a valid object name
+  # > Unrecognized git object type:
+  # > Unable to checkout refs/tags/v1.5.10 from https://git-www.taler.net/taler-typescript-core.git.
   src = fetchgit {
-    url = "https://git.taler.net/taler-typescript-core.git";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-YTFS4s8GuC3SQ/b4JJ5DbEbzc8hrywYaf6rtSKGiSpE=";
+    url = "https://git-www.taler.net/taler-typescript-core.git";
+    rev = "3816d089724c513299b62b20bdb88d94d5be67f5";
+    hash = "sha256-/KxB4uBbJbnFUPAc6a++bfTwl2CM1ZYjxPTDYwRh21Q=";
+  };
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm';
+    fetcherVersion = 3;
+    hash = "sha256-W5C2JVFbEccf4b+ppeEJ68au/2Tqfsry7ri6Qi1M50k=";
   };
 
   nativeBuildInputs = [
     customPython
-    nodejs_20
+    nodejs_24
     pnpmConfigHook
     pnpm'
     gitMinimal
@@ -58,14 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     zip
   ];
 
-  pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm';
-    fetcherVersion = 1;
-    hash = "sha256-jwoSvqE0hqRxu76vDtUOpZxvi4SsmKukfpmp5G6ZV/I=";
-  };
-
-  buildInputs = [ nodejs_20 ];
+  buildInputs = [
+    nodejs_24
+  ];
 
   # Make a fake git repo with a commit.
   # Without this, the package does not build.
@@ -89,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
   # After the pnpm configure, we need to build the binaries of all instances
   # of better-sqlite3. It has a native part that it wants to build using a
   # script which is disallowed.
-  # Adapted from mkYarnModules.
   preBuild = ''
     for f in $(find -path '*/node_modules/better-sqlite3' -type d); do
       (cd "$f" && (
@@ -109,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   meta = {
-    homepage = "https://git.taler.net/wallet-core.git/";
+    homepage = "https://git-www.taler.net/taler-typescript-core.git";
     description = "CLI wallet for GNU Taler written in TypeScript and Anastasis Web UI";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.ngi ];

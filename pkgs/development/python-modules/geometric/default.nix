@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "geometric";
-  version = "1.1";
+  version = "1.1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "leeping";
     repo = "geomeTRIC";
     tag = version;
-    hash = "sha256-hxNzyuupktUWDzZXXJNsVoC6m/kyE1fbfY5K6LiO+x0=";
+    hash = "sha256-LY5eNKocJL/Ty8tLup6q2o5RkGfIp6P6Hmju4wF3cDw=";
   };
 
   propagatedBuildInputs = [

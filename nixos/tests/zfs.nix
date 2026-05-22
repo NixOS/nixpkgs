@@ -23,7 +23,6 @@ let
 
       nodes.machine =
         {
-          config,
           pkgs,
           lib,
           ...
@@ -53,6 +52,8 @@ let
 
           # /dev/disk/by-id doesn't get populated in the NixOS test framework
           boot.zfs.devNodes = "/dev/disk/by-uuid";
+
+          boot.zfs.forceImportRoot = lib.mkDefault false;
 
           specialisation.samba.configuration = {
             services.samba = {
@@ -101,6 +102,7 @@ let
             systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [ "forcepool.mount" ];
             systemd.targets.zfs.wantedBy = lib.mkVMOverride [ ];
             boot.zfs.forceImportAll = true;
+            boot.zfs.forceImportRoot = true;
             virtualisation.fileSystems."/forcepool" = {
               device = "forcepool";
               fsType = "zfs";
@@ -203,7 +205,6 @@ let
 
 in
 {
-
   series_2_3 = makeZfsTest {
     zfsPackage = pkgs.zfs_2_3;
     kernelPackages = pkgs.linuxPackages;
@@ -225,8 +226,29 @@ in
     enableSystemdStage1 = true;
   };
 
-  installerBoot = (import ./installer.nix { inherit system; }).separateBootZfs;
-  installer = (import ./installer.nix { inherit system; }).zfsroot;
+  installerBoot =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).separateBootZfs;
+
+  installer =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = false;
+    }).zfsroot;
+
+  installerBootWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).separateBootZfs;
+
+  installerWithSystemdStage1 =
+    (import ./installer.nix {
+      inherit system;
+      systemdStage1 = true;
+    }).zfsroot;
 
   expand-partitions = makeTest {
     name = "multi-disk-zfs";

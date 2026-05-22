@@ -5,7 +5,6 @@
   qt6Packages,
   stdenv,
   cmake,
-  extra-cmake-modules,
   inotify-tools,
   kdePackages,
   libcloudproviders,
@@ -23,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "4.0.6";
+  version = "4.0.8";
 
   outputs = [
     "out"
@@ -34,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GPNJ2zrHzHQgJvj1ANi6LYsTlkuc5splFAwC5XaR3+0=";
+    hash = "sha256-EKJj2z3CkWrNL2idBHu5jHuPXQXKwjEjUAgo6OOY/08=";
   };
 
   patches = [
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     librsvg
     sphinx
     qt6Packages.wrapQtAppsHook

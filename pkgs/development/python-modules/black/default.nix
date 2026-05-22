@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   pytestCheckHook,
   aiohttp,
   click,
@@ -19,8 +18,6 @@
   parameterized,
   platformdirs,
   tokenize-rt,
-  tomli,
-  typing-extensions,
   uvloop,
 }:
 
@@ -64,10 +61,6 @@ buildPythonPackage rec {
     packaging
     pathspec
     platformdirs
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-    typing-extensions
   ];
 
   optional-dependencies = {

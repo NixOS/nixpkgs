@@ -43,7 +43,6 @@ stdenv.mkDerivation {
     patchShebangs modeline2edid
   '';
 
-  passAsFile = [ "modelines" ];
   clean = false;
   modelines = "";
 
@@ -51,7 +50,7 @@ stdenv.mkDerivation {
     runHook preConfigure
 
     test "$clean" != 1 || rm *x*.S
-    ./modeline2edid - <"$modelinesPath"
+    echo "$modelines" | ./modeline2edid -
 
     for file in *.S ; do
       echo "--- generated file: $file"
@@ -77,6 +76,8 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dm 444 *.bin -t "$out/lib/firmware/edid"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Hackerswork to generate an EDID blob from given Xorg Modelines";

@@ -194,17 +194,27 @@ in
     systemd.services.undervolt = {
       description = "Intel Undervolting Service";
 
-      # Apply undervolt on boot, nixos generation switch and resume
-      wantedBy = [
-        "multi-user.target"
-        "post-resume.target"
-      ];
-      after = [ "post-resume.target" ]; # Not sure why but it won't work without this
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
         ExecStart = "${cfg.package}/bin/undervolt ${toString cliArgs}";
+      };
+    };
+
+    systemd.services.undervolt-sleep = {
+      description = "Preserve Intel Undervolting After Sleep";
+
+      wantedBy = [ "sleep.target" ];
+      before = [ "sleep.target" ];
+
+      unitConfig.StopWhenUnneeded = true;
+      serviceConfig = {
+        Type = "oneshot";
+        Restart = "no";
+        RemainAfterExit = true;
+        ExecStop = "${cfg.package}/bin/undervolt ${toString cliArgs}";
       };
     };
 

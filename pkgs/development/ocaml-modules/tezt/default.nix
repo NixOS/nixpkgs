@@ -31,5 +31,6 @@ buildDunePackage rec {
   meta = {
     description = "Test framework for unit tests, integration tests, and regression tests";
     license = lib.licenses.mit;
+    broken = lib.versionAtLeast lwt.version "6.0.0";
   };
 }

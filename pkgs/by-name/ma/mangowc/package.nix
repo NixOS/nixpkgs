@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangowc";
-  version = "0.10.8";
+  version = "0.12.8";
 
   src = fetchFromGitHub {
-    owner = "DreamMaoMao";
-    repo = "mangowc";
+    owner = "mangowm";
+    repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-Vszn4Zp0pojvvKkyP7M7V5iqNRB0kUvwd9iez+KzOyM=";
+    hash = "sha256-k9qFn9I+eeAq1kBfw6QRLRMDb6sIV+pgd5zpKNoc1ck=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "mango";
     description = "Lightweight and feature-rich Wayland compositor based on dwl";
-    homepage = "https://github.com/DreamMaoMao/mangowc";
+    homepage = "https://mangowm.github.io";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hustlerone ];
     platforms = lib.platforms.linux;

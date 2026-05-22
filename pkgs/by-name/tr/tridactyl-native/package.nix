@@ -30,7 +30,6 @@ buildNimPackage {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       timokau
-      dit7ya
       kiike
     ];
   };

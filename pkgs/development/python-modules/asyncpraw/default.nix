@@ -15,7 +15,7 @@
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncpraw";
   version = "7.8.1-unstable-2025-10-08";
   pyproject = true;
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python Reddit API Wrapper";
     homepage = "https://asyncpraw.readthedocs.io/";
-    changelog = "https://github.com/praw-dev/asyncpraw/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/praw-dev/asyncpraw/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.amadejkastelic ];
   };
-}
+})

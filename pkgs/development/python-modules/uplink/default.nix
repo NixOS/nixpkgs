@@ -14,7 +14,6 @@
   pytest-asyncio,
   pytest-twisted,
   twisted,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

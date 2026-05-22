@@ -43,14 +43,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "2.4.3";
+  version = "2.4.6";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = version;
-    hash = "sha256-3Z6ADcq+E83xD3GMd19zm0n7+w1SuCYP4KcNL9M/DM4=";
+    hash = "sha256-QHfJ52uMDlE/rqqy7y2JIQLMOPaTp7eh4DEsPLBx6p8=";
   };
 
   pyproject = true;
@@ -116,6 +116,7 @@ python3.pkgs.buildPythonApplication rec {
       h2
       truststore
     ]
+    ++ httpx.optional-dependencies.socks
     ++ lib.optionals enableE2E [
       pycrypto
       python-gnupg
@@ -148,6 +149,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       raskin
       hlad
+      vbgl
     ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;

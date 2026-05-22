@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "numbat";
-  version = "1.20.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wh7HmE9UPu7+/aguaqON2/pmEHulYw69O0YjoKeDuRg=";
+    hash = "sha256-xezYRtIzP3MHme/7DwaM0hMgGTcio6iABuNREOOh6HU=";
   };
 
-  cargoHash = "sha256-F8fjrkQVWmDKGXNYG1e1Fvu9z1EgHC/2zuqN3O/2exE=";
+  cargoHash = "sha256-oNGq00Znh5WLc+y2NEWZL7Bl17gIaSY7PXYLel9Ucjg=";
 
   env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 

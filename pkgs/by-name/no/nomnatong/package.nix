@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python3Packages,
   nix-update-script,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -18,6 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    installFonts
     python3Packages.afdko
     python3Packages.fonttools
   ];
@@ -34,22 +36,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 NomNaTong-Regular.otf -t $out/share/fonts/opentype/
-    install -Dm444 NomNaTong-Regular.ttf -t $out/share/fonts/truetype/
-
-    runHook postInstall
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://nomfoundation.org/nom-tools/Nom-Font";
     description = "Hán-Nôm Coded Character Set and Nom Na Tong Regular Reference Font";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.eclairevoyant ];
     platforms = lib.platforms.all;
   };
 })

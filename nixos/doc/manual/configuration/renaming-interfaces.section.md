@@ -22,7 +22,7 @@ to `false`.
 In case there are multiple interfaces of the same type, it's better to
 assign custom names based on the device hardware address. For example,
 we assign the name `wan` to the interface with MAC address
-`52:54:00:12:01:01` using a netword link unit:
+`52:54:00:12:01:01` using a network link unit:
 
 ```nix
 {

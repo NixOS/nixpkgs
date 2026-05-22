@@ -3,6 +3,7 @@
   rustPlatform,
   webkitgtk_4_1,
   pkg-config,
+  openssl,
   buildNpmPackage,
   makeDesktopItem,
   fetchFromGitHub,
@@ -12,7 +13,6 @@
   glib,
   copyDesktopItems,
   wrapGAppsHook4,
-  nodejs_22,
 }:
 let
   pac-cmd = stdenv.mkDerivation {
@@ -28,11 +28,18 @@ let
 
     postPatch = ''
       rm binaries/*/pac
-      substituteInPlace Makefile --replace-fail 'uname -p' 'uname -m'
+       substituteInPlace Makefile \
+        --replace-fail 'uname -p' 'uname -m' \
+        --replace-fail 'ifneq ($(filter arm%,$(UNAME_P)),)' 'ifneq ($(filter aarch64 arm%,$(UNAME_P)),)'
     '';
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ glib ];
+
+    preBuild = ''
+      mkdir -p binaries/linux_arm
+    '';
+
     installPhase = ''
       runHook preInstall
 
@@ -52,13 +59,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gephgui-wry";
-  version = "5.4.1";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "gephgui-pkg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nlWFiEFraI4sUBTs/ZxiHpaeYHert78oPiyFc6LKV30=";
+    hash = "sha256-PpkhIfA1jTqiY+4UwonrUk2wq+wL2Rhltfhp0LSURMg=";
     fetchSubmodules = true;
   };
 
@@ -67,10 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) version src;
 
     sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
-    npmDepsHash = "sha256-dGzmdvzKp/JHCgDf3NJb0oolgW4Y/spagzpeVpMF28w=";
-
-    # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-    nodejs = nodejs_22;
+    npmDepsHash = "sha256-GFeHowIv+TiejSNK6kAGAgYcwc2DHu3c4UBEeTScIPk=";
 
     installPhase = ''
       runHook preInstall
@@ -83,32 +87,44 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
-  cargoHash = "sha256-7EJvcnltKlq94jahnMpvzdFJ8P12HjUGC6AOXirpcg4=";
+  cargoHash = "sha256-Ekl03CvM32E3Q86YZL8eBFYAzDcpAXq8yVi2Fg3t5yc=";
 
   nativeBuildInputs = [
     pkg-config
     perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
     wrapGAppsHook4
   ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ webkitgtk_4_1 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
 
   preBuild = ''
     cp -r ${finalAttrs.gephgui}/ gephgui/dist/
   '';
 
-  postInstall = ''
-    install -m 444 -D gephgui/public/gephlogo.png $out/share/icons/hicolor/512x512/apps/geph.png
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -m 444 -D gephgui/public/gephlogo.png $out/share/icons/hicolor/512x512/apps/geph.png
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications"
+      cp -a ../macos/template.app "$out/Applications/Geph.app"
+      chmod -R u+w "$out/Applications/Geph.app"
+      install -Dm755 "$out/bin/gephgui-wry" "$out/Applications/Geph.app/Contents/MacOS/bin/gephgui-wry"
+      ln -s "$out/Applications/Geph.app/Contents/MacOS/entrypoint" "$out/bin/Geph"
+    '';
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --suffix PATH : ${lib.makeBinPath [ pac-cmd ]}
     )
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "Geph";
       desktopName = "Geph";
@@ -133,8 +149,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://github.com/geph-official/gephgui-wry";
-    mainProgram = "gephgui-wry";
-    platforms = lib.platforms.linux;
+    mainProgram = if stdenv.hostPlatform.isDarwin then "Geph" else "gephgui-wry";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       penalty1083

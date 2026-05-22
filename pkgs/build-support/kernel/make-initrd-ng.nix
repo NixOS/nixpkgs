@@ -16,7 +16,6 @@ in
   pkgsBuildHost,
   makeInitrdNGTool,
   binutils,
-  runCommand,
   # Name of the derivation (not of the resulting file!)
   name ? "initrd",
 
@@ -74,47 +73,53 @@ in
     _compressorMeta.ubootName
       or (throw "Unrecognised compressor ${_compressorName}, please specify uInitrdCompression"),
 }:
-runCommand name
-  {
-    compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
-    passthru = {
-      compressorExecutableFunction = _compressorFunction;
-      compressorArgs = _compressorArgsReal;
-    };
+stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
 
-    inherit
-      extension
-      makeUInitrd
-      uInitrdArch
-      prepend
-      ;
-    ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
+  # the initrd will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
 
-    passAsFile = [ "contents" ];
-    contents = builtins.toJSON contents;
+  inherit
+    name
+    extension
+    makeUInitrd
+    uInitrdArch
+    prepend
+    ;
+  ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
-    nativeBuildInputs = [
-      makeInitrdNGTool
-      cpio
-    ]
-    ++ lib.optional makeUInitrd ubootTools;
-  }
-  ''
+  compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
+  contentsJSON = builtins.toJSON contents;
+
+  nativeBuildInputs = [
+    makeInitrdNGTool
+    cpio
+  ]
+  ++ lib.optional makeUInitrd ubootTools;
+
+  buildCommand = ''
     mkdir -p ./root/{run,tmp,var/empty}
     ln -s ../run ./root/var/run
-    make-initrd-ng "$contentsPath" ./root
+    make-initrd-ng <(echo "$contentsJSON") ./root
     mkdir "$out"
     (cd root && find . -exec touch -h -d '@1' '{}' +)
-    for PREP in $prepend; do
+    for PREP in ''${prepend[@]}; do
       cat $PREP >> $out/initrd
     done
     (cd root && find . -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
 
     if [ -n "$makeUInitrd" ]; then
-        mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img
-        # Compatibility symlink
-        ln -sf "initrd.img" "$out/initrd"
+      mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img
+      # Compatibility symlink
+      ln -sf "initrd.img" "$out/initrd"
     else
-        ln -s "initrd" "$out/initrd$extension"
+      ln -s "initrd" "$out/initrd$extension"
     fi
-  ''
+  '';
+
+  passthru = {
+    compressorExecutableFunction = _compressorFunction;
+    compressorArgs = _compressorArgsReal;
+  };
+})

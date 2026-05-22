@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "2.7.1";
   pyproject = true;
 
-  PBR_VERSION = finalAttrs.version;
+  env.PBR_VERSION = finalAttrs.version;
 
   src = fetchFromGitHub {
     owner = "getpatchwork";

@@ -13,21 +13,19 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-path";
-  version = "0.3.4";
+  version = "0.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "jsonschema-path";
     tag = version;
-    hash = "sha256-rCepDnVAOEsokKjWCuqDYbGIq6/wn4rsQRx5dXTUsYo=";
+    hash = "sha256-abAhWtBnZUeg1VGphfnvxPzSnPM6VjM/XKLPJVIrIXg=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "referencing" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     pathable
     pyyaml
     referencing

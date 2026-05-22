@@ -33,20 +33,17 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "0-unstable-2025-06-02";
+  version = "0-unstable-2026-04-09";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "62321fd7128ab2650b459d4195781af8185e46b5";
-    hash = "sha256-l6EdHJLd42TU+4pLakdU3a5PLVxrxjta0CSRy5hVBFU=";
+    rev = "89df288dd6ba5b2ec95b3c5eaf1e7e0c3a870fc4";
+    hash = "sha256-wdO3AACCEN3IDYWt5a+f7zrcPFoqz+c7vLpo6LZk29w=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # fix build with abseil 202508
-    # upstream PR: https://github.com/desktop-app/tg_owt/pull/164
-    ./abseil-202508.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

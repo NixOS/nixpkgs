@@ -33,6 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "fprettify";
     homepage = "https://pypi.org/project/fprettify/";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ fabiangd ];
+    maintainers = [ ];
   };
 })

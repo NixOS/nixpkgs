@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   pkg-config,
   httplib,
   libarchive,
@@ -14,20 +14,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FGg89bluN2IJJtkjwPa6dC83CBLdOr+LW5ArUKp4awk=";
   };
-
-  patches = [ ./qt6_10.patch ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     qt6.wrapQtAppsHook
   ];

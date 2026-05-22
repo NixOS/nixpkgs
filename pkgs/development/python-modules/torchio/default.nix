@@ -11,6 +11,7 @@
   deprecated,
   einops,
   humanize,
+  jaxtyping,
   nibabel,
   numpy,
   packaging,
@@ -24,6 +25,7 @@
   # optional dependencies
   colorcet,
   matplotlib,
+  monai,
   pandas,
   ffmpeg-python,
   scikit-learn,
@@ -35,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.21.1";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-ut1uRak87J5b1bjLkupUB2HZEog8WVFwLMHNtNhmC4s=";
+    hash = "sha256-b6ED3IyQgC0A0dqYiXC0GTf6ZqwE1Ka7ojM7OJu1xfI=";
   };
 
   build-system = [
@@ -53,6 +55,7 @@ buildPythonPackage rec {
     deprecated
     einops
     humanize
+    jaxtyping
     nibabel
     numpy
     packaging
@@ -64,21 +67,28 @@ buildPythonPackage rec {
     typer
   ];
 
-  optional-dependencies = {
-    csv = [ pandas ];
-    plot = [
-      colorcet
-      matplotlib
-    ];
-    video = [ ffmpeg-python ];
-    sklearn = [ scikit-learn ];
-  };
+  optional-dependencies =
+    let
+      extras = {
+        csv = [ pandas ];
+        monai = [ monai ];
+        plot = [
+          colorcet
+          matplotlib
+        ];
+        video = [ ffmpeg-python ];
+        sklearn = [ scikit-learn ];
+      };
+    in
+    extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
     matplotlib
     parameterized
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.monai
+  ++ optional-dependencies.sklearn;
 
   disabledTests = [
     # tries to download models:
@@ -97,7 +107,7 @@ buildPythonPackage rec {
   meta = {
     description = "Medical imaging toolkit for deep learning";
     homepage = "https://docs.torchio.org";
-    changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/TorchIO-project/torchio/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bcdarwin ];
   };

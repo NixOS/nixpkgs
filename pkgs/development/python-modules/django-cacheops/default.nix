@@ -54,7 +54,7 @@ buildPythonPackage rec {
     redisTestHook
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = {
     description = "Slick ORM cache with automatic granular event-driven invalidation for Django";

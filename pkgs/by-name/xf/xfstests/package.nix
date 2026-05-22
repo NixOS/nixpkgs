@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Torture test suite for filesystems";
     homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "xfstests-check";
   };

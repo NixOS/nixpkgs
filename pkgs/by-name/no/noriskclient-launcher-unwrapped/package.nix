@@ -18,18 +18,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.17";
+  version = "0.6.21";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SihBoCh8QRU0UkgMyjm9fmiq+9GuUAhpvHC6UOjSkxA=";
+    hash = "sha256-RiKFSKHnyeiIcSaOltr4qv0pEBX5wctfztZ+8yrHjnE=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-tRvtYeOUn3xm7dhLWnzlpS8SK8NVVQAtNgvyiM48X28=";
+    hash = "sha256-VWl6YqTiBRz85GICFKGwDZRBcITGQdWE7EUzW58wHdY=";
   };
 
   patches = [
@@ -41,14 +41,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  cargoHash = "sha256-mldZg4Y12o6Laf2RJSeLzKCcqBpFesUbHhmxRjT9MDI=";
+  cargoHash = "sha256-FiM1FuWeGmfZlnKiIImGOsJnKt3qsLqvY6oRUvOSBWM=";
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  checkFlags = [
+    # test fails to find correct function
+    "--skip=utils::string_utils::safe_truncate"
+  ];
 
   nativeBuildInputs = [
     cargo-tauri.hook

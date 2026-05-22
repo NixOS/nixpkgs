@@ -3,21 +3,24 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pygobject-stubs";
-  version = "2.14.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pygobject-stubs";
     tag = "v${version}";
-    hash = "sha256-pConIc8FBq2a7yrfRHa07p2e/Axgrv4p+W0nq1WzERw=";
+    hash = "sha256-3gWz/mWAMoXAHMfCFv3ri680iuMm0WLtGyMODujq31M=";
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   # This package does not include any tests.
   doCheck = false;

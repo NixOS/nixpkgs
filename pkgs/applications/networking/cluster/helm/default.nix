@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-helm";
-  version = "3.19.1";
+  version = "3.20.2";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1Cc7W6qyawcg5ZfjsGWH7gScdRhcYpqppjzD83QWV60=";
+    sha256 = "sha256-YF5djCmCoPdLlEa/cksQgGtscEmIsQTiRqYZNyFjsEY=";
   };
-  vendorHash = "sha256-81qCRwp57PpzK/eavycOLFYsuD8uVq46h12YVlJRK7Y=";
+  vendorHash = "sha256-kqx23LekpuZJFisVZUoXBY9vHh9zviKyaW5NSa4ecxM=";
 
   subPackages = [ "cmd/helm" ];
   ldflags = [
@@ -39,6 +39,11 @@ buildGoModule (finalAttrs: {
     ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
   '';
 
+  overrideModAttrs = _: {
+    # the goModules derivation will otherwise inherit the preBuild phase defined above
+    preBuild = "";
+  };
+
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''
@@ -47,13 +52,27 @@ buildGoModule (finalAttrs: {
 
     # skipping version tests because they require dot git directory
     substituteInPlace cmd/helm/version_test.go \
-      --replace "TestVersion" "SkipVersion"
+      --replace-fail "TestVersion" "SkipVersion"
     # skipping plugin tests
     substituteInPlace cmd/helm/plugin_test.go \
-      --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
-      --replace "TestLoadPlugins" "SkipLoadPlugins"
+      --replace-fail "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
+      --replace-fail "TestLoadPlugins" "SkipLoadPlugins"
     substituteInPlace cmd/helm/helm_test.go \
-      --replace "TestPluginExitCode" "SkipPluginExitCode"
+      --replace-fail "TestPluginExitCode" "SkipPluginExitCode"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # skipping as test fails in sandbox
+    substituteInPlace cmd/helm/dependency_build_test.go \
+      --replace-fail "TestDependencyBuildCmd" "SkipDependencyBuildCmd"
+    substituteInPlace cmd/helm/dependency_update_test.go \
+      --replace-fail "TestDependencyUpdateCmd" "SkipDependencyUpdateCmd"
+    # skipping as test fails in sandbox
+    substituteInPlace cmd/helm/install_test.go \
+      --replace-fail "TestInstall" "SkipInstall"
+    # skipping as test fails in sandbox
+    substituteInPlace cmd/helm/pull_test.go \
+      --replace-fail "TestPullCmd" "SkipPullCmd" \
+      --replace-fail "TestPullWithCredentialsCmd" "SkipPullWithCredentialsCmd"
   '';
 
   nativeBuildInputs = [ installShellFiles ];

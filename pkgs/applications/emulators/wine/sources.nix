@@ -61,7 +61,7 @@ let
         nix
       ]
     }
-    sources_file=${__curPos.file}
+    sources_file=./pkgs/applications/emulators/wine/sources.nix
     source ${./update-lib.sh}
   '';
 
@@ -89,6 +89,14 @@ let
       name = "add-truncf-to-the-import-library.patch";
       url = "https://gitlab.winehq.org/wine/wine/-/commit/ed66bd5c97ecc17c42a4942dafac7d406c1e5120.patch";
       hash = "sha256-mn0fRZ840MYk1WZsBLcachUzyNmBUSlvf50t9jFGXp0=";
+    })
+  ];
+
+  patches-add-dll-accept-device-paths-wine-older-than-11_1 = [
+    (pkgs.fetchpatch {
+      name = "add-dll-accept-device-paths";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/401910ae25a11032f2da7baa1666d71e8bca2496.patch";
+      hash = "sha256-2726u9/vhhx39Tq7vOw24hslmeyZZEbxRRqe7JMFvCU";
     })
   ];
 
@@ -123,7 +131,8 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ];
+    ]
+    ++ patches-add-dll-accept-device-paths-wine-older-than-11_1;
 
     updateScript = writeShellScript "update-wine-stable" ''
       ${updateScriptPreamble}
@@ -142,9 +151,9 @@ rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "11.1";
+    version = "11.8";
     url = "https://dl.winehq.org/wine/source/11.x/wine-${version}.tar.xz";
-    hash = "sha256-v0x8j7XYwfZW8wor6pOHDIXxP/gxGrL2Hd75AOsoy48=";
+    hash = "sha256-U6qFmV1Ll/ARahxWuKahQXcw71mid4GdLT0xNk6lVrA=";
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
@@ -154,7 +163,7 @@ rec {
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {
       inherit version;
-      hash = "sha256-KBiESkLVEEWyUPzv1I7j8U9zjqfYdF+FL6wRCcIE290=";
+      hash = "sha256-lW5dfCfsB+z84mlLpfmkR7QDxmhL+RcBufSftUutHto=";
       domain = "gitlab.winehq.org";
       owner = "wine";
       repo = "wine-staging";
@@ -177,9 +186,9 @@ rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "10.3.0";
+      version = "11.0.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      hash = "sha256-zs5cYxgAlN/98B0PvjYqS2BuUoC5jN/RuFaM35tXL5g=";
+      hash = "sha256-1+/t4Lm9z1ITT4zWztWdn+zpdvcLEaQAvbR7hkVpzSc=";
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''

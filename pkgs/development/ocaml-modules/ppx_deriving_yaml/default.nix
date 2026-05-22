@@ -24,7 +24,7 @@ let
       };
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_deriving_yaml";
   inherit (param) version;
 
@@ -37,7 +37,7 @@ buildDunePackage rec {
       };
 
   src = fetchurl {
-    url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${version}/ppx_deriving_yaml-${version}.tbz";
+    url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${finalAttrs.version}/ppx_deriving_yaml-${finalAttrs.version}.tbz";
     inherit (param) hash;
   };
 
@@ -60,4 +60,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

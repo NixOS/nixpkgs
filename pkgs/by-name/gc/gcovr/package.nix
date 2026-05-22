@@ -35,17 +35,12 @@ python3Packages.buildPythonPackage (finalAttrs: {
       --replace-fail "hatch-vcs==0.4.0" "hatch-vcs>=0.4.0"
   '';
 
-  dependencies =
-    with python3Packages;
-    (
-      [
-        colorlog
-        jinja2
-        lxml
-        pygments
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    );
+  dependencies = with python3Packages; [
+    colorlog
+    jinja2
+    lxml
+    pygments
+  ];
 
   pythonImportsCheck = [
     "gcovr"

@@ -10,7 +10,9 @@
   attrNamesOnly ? false,
 
   # Set this to `null` to build for builtins.currentSystem only
-  systems ? builtins.fromJSON (builtins.readFile ../supportedSystems.json),
+  systems ? builtins.fromJSON (
+    builtins.readFile (path + "/pkgs/top-level/release-supported-systems.json")
+  ),
 
   # Customize the config used to evaluate nixpkgs
   extraNixpkgsConfig ? { },
@@ -32,6 +34,9 @@ let
             allowInsecurePredicate = x: true;
             allowVariants = !attrNamesOnly;
             checkMeta = true;
+
+            # Silence the `x86_64-darwin` deprecation warning.
+            allowDeprecatedx86_64Darwin = true;
 
             handleEvalIssue =
               reason: errormsg:
@@ -67,7 +72,9 @@ let
 
   nixosJobs = import (path + "/nixos/release.nix") {
     inherit attrNamesOnly;
-    supportedSystems = if systems == null then [ builtins.currentSystem ] else systems;
+    supportedSystems = lib.filter (lib.hasSuffix "-linux") (
+      if systems == null then [ builtins.currentSystem ] else systems
+    );
   };
 
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
@@ -101,6 +108,6 @@ in
 tweak (
   (removeAttrs nixpkgsJobs blacklist)
   // {
-    nixosTests.simple = nixosJobs.tests.simple;
+    nixosTests = lib.filterAttrs (name: _: name == "simple") nixosJobs.tests;
   }
 )

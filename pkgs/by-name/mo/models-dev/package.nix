@@ -2,19 +2,18 @@
   lib,
   stdenvNoCC,
   bun,
-  fetchgit,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2026-02-07";
+  version = "0-unstable-2026-05-19";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "e1747322adc49416ca2dcd52de1bbcda6fdbaf1f";
-    hash = "sha256-ZVMPh8DYQdFDYdF0Jvfh4gKEGrRsdypws4GjLjsfXFU=";
+    rev = "db0a7cf6113f380b15e8ab21944e5de18bb30feb";
+    hash = "sha256-kFskkQ5YrK7ler8s+vC5ONEjmNmOpiIKAZqoiCk97Qk=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -58,7 +57,7 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-E78Hb4ByMfYL/IZG911dX6XRRKNJ0UbQUWMSv0dclFo=";
+    outputHash = "sha256-kn5Ung5DGDYMf5MHnZ+jsqXCg+MYahfkbiixcD9kh4Y=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

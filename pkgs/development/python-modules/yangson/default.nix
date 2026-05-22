@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "yangson";
-  version = "1.6.3";
+  version = "1.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CZ-NIC";
     repo = "yangson";
     tag = version;
-    hash = "sha256-WOeSGGOd5+g+8dSyeml+mdehEjaSHtUkNSdkGl4xSao=";
+    hash = "sha256-goheMKny+ZH2twD1g3CvzocaiSIK50VPZZTAP+YCWx0=";
   };
 
   build-system = [ poetry-core ];
@@ -28,6 +28,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [ "elementpath" ];
+
+  # only used for docs build
+  pythonRemoveDeps = [ "sphinxcontrib-shtest" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

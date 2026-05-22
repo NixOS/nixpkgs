@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.7.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wlaRHCRcbj4Hw7PVYeB6N1bMS4FL3gPo1uC1OOmJwuA=";
+    hash = "sha256-g2brBYSwYQhZ1L1rYCZStWWH76qVSR/NBTEEByr7W5g=";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''

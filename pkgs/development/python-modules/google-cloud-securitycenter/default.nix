@@ -13,16 +13,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.42.0";
+  version = "1.44.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_securitycenter";
     inherit version;
-    hash = "sha256-zwCV0I0vBIgvVRXG31JX8M00u8mzXGMCw/5QpEMKa+Q=";
+    hash = "sha256-ir0rdSUREsfGTyR8YbSWbpDd1GxYOZ2hj8f7jwTmVsc=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     grpc-google-iam-v1

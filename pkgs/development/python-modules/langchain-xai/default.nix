@@ -23,19 +23,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-xai";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-xai==${version}";
-    hash = "sha256-Eryr68TQDN37AwJVEm1jJvwqcxMjl2KO42dy7doJCrA=";
+    tag = "langchain-xai==${finalAttrs.version}";
+    hash = "sha256-RUklm627HiwMcpKkm+0uWZgHp4iDtSsmEpLb9MxumqI=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/xai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/xai";
 
   build-system = [ hatchling ];
 
@@ -44,12 +44,6 @@ buildPythonPackage rec {
     langchain-core
     langchain-openai
     requests
-  ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
   ];
 
   nativeCheckInputs = [
@@ -78,7 +72,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-xai/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-xai/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with X AI";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/xai";
     license = lib.licenses.mit;
@@ -86,4 +80,4 @@ buildPythonPackage rec {
       lib.maintainers.sarahec
     ];
   };
-}
+})

@@ -5,7 +5,6 @@
   numpy,
   pandas,
   pyarrow,
-  pythonOlder,
   pytz,
   setuptools,
 }:

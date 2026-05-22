@@ -3,7 +3,7 @@
   buildPecl,
   lib,
   libiconv,
-  unixODBC,
+  unixodbc,
   php,
 }:
 
@@ -15,7 +15,7 @@ buildPecl {
 
   internalDeps = [ php.extensions.pdo ];
 
-  buildInputs = [ unixODBC ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  buildInputs = [ unixodbc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = {
     description = "Microsoft Drivers for PHP for SQL Server";

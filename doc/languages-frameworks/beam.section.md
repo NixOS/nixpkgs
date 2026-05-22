@@ -32,7 +32,7 @@ We provide a version of Rebar3, under `rebar3`. We also provide a helper to fetc
 
 We also provide a version on Rebar3 with plugins included, under `rebar3WithPlugins`. This package is a function which takes two arguments: `plugins`, a list of nix derivations to include as plugins (loaded only when specified in `rebar.config`), and `globalPlugins`, which should always be loaded by rebar3. Example: `rebar3WithPlugins { globalPlugins = [beamPackages.pc]; }`.
 
-When adding a new plugin it is important that the `packageName` attribute is the same as the atom used by rebar3 to refer to the plugin.
+When adding a new plugin it is important that the `name` attribute is the same as the atom used by rebar3 to refer to the plugin.
 
 ### Mix & Erlang.mk {#build-tools-other}
 
@@ -93,7 +93,7 @@ there are 3 steps: frontend dependencies (javascript), backend dependencies (eli
 
 ##### mixRelease - Frontend dependencies (javascript) {#mix-release-javascript-deps}
 
-For phoenix projects, inside of Nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
+For phoenix projects, inside of Nixpkgs you can either use `fetchYarnDeps` or `buildNpmPackage`. An example with `fetchYarnDeps` can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/pl/plausible/package.nix). An example with `fetchYarnDeps` will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
 
 ##### mixRelease - backend dependencies (mix) {#mix-release-mix-deps}
 

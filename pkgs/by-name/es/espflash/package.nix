@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espflash";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CeXkC+3M22EmHG0KL0wMXn49bUbxgD33ojQvbeaf5Gs=";
+    hash = "sha256-SXXFXwr+oO+BbBQ/BZgCKhbdcaybVr1JY66q+xM2Quc=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-Vgf3k0pT8VswESXuWIIeZlCFLm861BYrteRFkmhk/3M=";
+  cargoHash = "sha256-ZAp9hEzDrzjYSJLKeMCjAoiybOqPdDLqIGOvBTCr5uU=";
 
   cargoBuildFlags = [
     "--exclude=xtask"

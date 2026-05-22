@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (
     };
   in
   {
-    inherit (lib.trivial) version;
+    version = lib.trivial.release;
     pname = "nixpkgs-manual";
 
     nativeBuildInputs = [ nixos-render-docs ];

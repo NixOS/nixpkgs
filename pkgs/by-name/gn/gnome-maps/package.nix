@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  blueprint-compiler,
   meson,
   ninja,
   gettext,
@@ -30,16 +31,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "49.4";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hvqvWNQNauDy9fN8nA3TEsPuKqTlElsfSjHv5Kn4BLA=";
+    hash = "sha256-Qs3wNn+UXOPbEgOmvP0dX1822crDYcgcGFZ7kxMN6es=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
+    blueprint-compiler
     gettext
     meson
     ninja

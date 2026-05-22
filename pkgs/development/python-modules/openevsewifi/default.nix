@@ -6,6 +6,7 @@
   fetchpatch,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   requests,
   requests-mock,
 }:
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     requests-mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   patches = [
@@ -42,11 +44,6 @@ buildPythonPackage rec {
       hash = "sha256-XGeyi/PchBju1ICgL/ZCDGCbWwIJmLAcHuKaj+kDsI0=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytest-cov = "^2.8.1"' ""
-  '';
 
   pythonImportsCheck = [ "openevsewifi" ];
 

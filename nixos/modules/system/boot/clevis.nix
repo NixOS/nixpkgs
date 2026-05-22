@@ -78,8 +78,8 @@ in
         copy_bin_and_libs ${pkgs.curl}/bin/curl
         copy_bin_and_libs ${pkgs.bashNonInteractive}/bin/bash
         copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
-        copy_bin_and_libs ${pkgs.gnused}/bin/gnused
-        copy_bin_and_libs ${pkgs.gnugrep}/bin/gnugrep
+        copy_bin_and_libs ${pkgs.gnused}/bin/sed
+        copy_bin_and_libs ${pkgs.gnugrep}/bin/grep
 
         copy_bin_and_libs ${pkgs.tpm2-tools}/bin/.tpm2-wrapped
         mv $out/bin/{.tpm2-wrapped,tpm2}
@@ -106,6 +106,7 @@ in
       systemd = {
         extraBin = lib.mkIf systemd.enable {
           clevis = "${cfg.package}/bin/clevis";
+          curl = "${pkgs.curl}/bin/curl";
         };
 
         storePaths = lib.mkIf systemd.enable [

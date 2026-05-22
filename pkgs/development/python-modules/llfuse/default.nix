@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
-    changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${version}/Changes.rst";
+    changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${src.tag}/Changes.rst";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

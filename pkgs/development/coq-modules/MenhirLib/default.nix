@@ -18,10 +18,11 @@ let
       in
       with lib.versions;
       lib.switch coq.coq-version [
-        (case (range "8.12" "9.2") "20250903")
+        (case (range "8.12" "9.2") "20260203")
         (case (range "8.7" "8.11") "20200624")
       ] null;
     release = {
+      "20260203".hash = "sha256-S1kJav+VKSVTg3EAyIvqIl+T8X5fBrh6ENrOiRmKMe0=";
       "20250903".sha256 = "sha256-ap1OvcvCAuqmFDwhPwMBosHs3cm5NxPW/w1J8AzWduk=";
       "20240715".sha256 = "sha256-9CSxAIm0aEXkwF+aj8u/bqLG30y5eDNz65EnohJPjzI="; # coq 8.9 - 8.20
       "20231231".sha256 = "sha256-veB0ORHp6jdRwCyDDAfc7a7ov8sOeHUmiELdOFf/QYk="; # coq 8.7 - 8.19

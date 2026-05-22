@@ -13,19 +13,20 @@
   slurp,
   wl-clipboard,
   unixtools,
+  glib,
   bash,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grimblast";
-  version = "0.1-unstable-2026-01-14";
+  version = "0.1-unstable-2026-03-28";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "541628cebe42792ddf5063c4abd6402c2f1bd68f";
-    hash = "sha256-CopNx3j//gZ2mE0ggEK9dZ474UcbDhpTw+KMor8mSxI=";
+    rev = "b3c2a094163cad4aac7af09333fddf2c9838c348";
+    hash = "sha256-xr3Ih1HrAIlO9GGrmnVrmRh50GSPMWI4QWmbEwlbYq8=";
   };
 
   strictDeps = true;
@@ -56,6 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           slurp
           wl-clipboard
           unixtools.getopt
+          glib
         ]
       }"
   '';

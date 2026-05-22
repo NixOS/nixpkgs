@@ -90,6 +90,18 @@ let
       ]
       ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
+    buildFlags = lib.optionals stdenv.hostPlatform.isStatic [
+      # Don't use the default Make target for static,
+      # since it builds shared libraries for bundled packages.
+      "binaries"
+      "libraries"
+      "doc"
+    ];
+
+    makeFlags = lib.optionals stdenv.hostPlatform.isStatic [
+      "INSTALL_PACKAGE_TARGETS="
+    ];
+
     enableParallelBuilding = true;
 
     postInstall =
@@ -118,6 +130,7 @@ let
 
     passthru = rec {
       inherit release version;
+      isTcl9 = lib.versions.major version == "9";
       libPrefix = "tcl${release}";
       libdir = "lib/${libPrefix}";
       tclPackageHook = callPackage (
@@ -129,6 +142,16 @@ let
             inherit (meta) maintainers platforms;
           };
         } ./tcl-package-hook.sh
+      ) { };
+      tclRequiresCheckHook = callPackage (
+        { buildPackages }:
+        makeSetupHook {
+          name = "tcl-requires-check-hook";
+          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+          meta = {
+            inherit (meta) maintainers platforms;
+          };
+        } ./tcl-requires-check-hook.sh
       ) { };
       # verify that Tcl's clock library can access tzdata
       tests.tzdata = runCommand "${pname}-test-tzdata" { } ''

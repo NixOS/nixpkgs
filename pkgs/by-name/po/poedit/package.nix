@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   autoconf,
   automake,
   libtool,
   gettext,
   pkg-config,
-  wxGTK32,
+  wxwidgets_3_2,
   boost,
   icu,
   lucenepp,
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poedit";
-  version = "3.6.2";
+  version = "3.9";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${finalAttrs.version}-oss";
-    hash = "sha256-Lb1R7GMB0GeS2xZASR7w4ee33mMEKP9gPabRHkHlIJI=";
+    hash = "sha256-N/o57n624b+StXrT6jBxEFSGElcHdV6wrf/Y2JbA55k=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     lucenepp
     nlohmann_json
-    wxGTK32
+    wxwidgets_3_2
     icu
     pugixml
     gtk3
@@ -76,6 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)-oss"
+    ];
+  };
 
   meta = {
     description = "Cross-platform gettext catalogs (.po files) editor";

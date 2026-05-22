@@ -66,10 +66,10 @@
     "version": "22.5.0"
   },
   "hcaptcha-for-forms-and-more": {
-    "path": "hcaptcha-for-forms-and-more/tags/4.22.0",
-    "rev": "3441969",
-    "sha256": "1rargx812pi98mf0qynr5lcxs4y1fg7jpgxd96r72i97q8ck20l3",
-    "version": "4.22.0"
+    "path": "hcaptcha-for-forms-and-more/tags/4.23.0",
+    "rev": "3456290",
+    "sha256": "222ae768d76ba2e447185619357e5adc0282f14451534b11dcd6a2358f0d212e",
+    "version": "4.23.0"
   },
   "hello-dolly": {
     "path": "hello-dolly/tags/1.7.2",
@@ -136,12 +136,6 @@
     "rev": "3169544",
     "sha256": "12gh5ih4rkbdcrzdjml9rrlipbp2ymwhwxvr8y7lawmrflsas3r5",
     "version": "2.0.3"
-  },
-  "so-clean-up-wp-seo": {
-    "path": "so-clean-up-wp-seo/tags/4.0.2",
-    "rev": "3114751",
-    "sha256": "1kqgmmaw99b164v554siygrxa3z7lxqhn0bwg7s01cm5fdg6i3dl",
-    "version": "4.0.2"
   },
   "sqlite-database-integration": {
     "path": "sqlite-database-integration/tags/2.2.17",

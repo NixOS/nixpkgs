@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   postPatch = ''
+    substituteInPlace compiler/wla-dx/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
     substituteInPlace tools/816-opt/Makefile \
       --replace-fail 'LDFLAGS := -lpthread' 'LDFLAGS :=' \
       --replace-fail 'LDFLAGS := -pthread' 'LDFLAGS += -pthread' \

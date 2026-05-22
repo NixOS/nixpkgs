@@ -28,8 +28,10 @@ mkDerivation {
 
   qmakeFlags = [ "ldutils.pro" ];
 
-  LDUTILS_LIB = placeholder "out";
-  LDUTILS_INCLUDE = placeholder "out";
+  env = {
+    LDUTILS_LIB = placeholder "out";
+    LDUTILS_INCLUDE = placeholder "out";
+  };
 
   meta = {
     description = "Headers and link library for other ldutils projects";

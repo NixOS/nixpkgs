@@ -103,8 +103,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "File list/WebDAV program that supports multiple storages";
-    homepage = "https://github.com/alist-org/alist";
-    changelog = "https://github.com/alist-org/alist/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/AlistGo/alist";
+    changelog = "https://github.com/AlistGo/alist/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       agpl3Only
       # alist-web

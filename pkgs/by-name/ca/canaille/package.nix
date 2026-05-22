@@ -2,9 +2,10 @@
   lib,
   python3,
   fetchFromGitLab,
-  fetchpatch,
+  fetchpatch2,
   openldap,
   nixosTests,
+  postgresql,
 }:
 
 let
@@ -12,21 +13,27 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.74";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
     tag = version;
-    hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
+    hash = "sha256-hreEjMrD6mRapgrSDPRWcmqfLxfsOpK7dC8lHJkAY7Y=";
   };
 
   patches = [
-    # https://gitlab.com/yaal/canaille/-/merge_requests/275
-    (fetchpatch {
-      url = "https://gitlab.com/yaal/canaille/-/commit/1c7fc8b1034a4423f7f46ad8adeced854910b702.patch";
-      hash = "sha256-fu7D010NG7yUChOve7HY3e7mm2c/UGpfcTAiTU8BnGg=";
+    # Backport authlib 1.7 compatibility.
+    (fetchpatch2 {
+      url = "https://gitlab.com/yaal/canaille/-/commit/b356baa82109a7fdf61a8258572d199ffd3c9604.diff";
+      hash = "sha256-/U6S3h6qIl763ZsGpOm6CVk4NaY3A7mq3PkT193aLEs=";
+    })
+    # Update OIDC tests for authlib 1.7 behavior.
+    (fetchpatch2 {
+      url = "https://gitlab.com/yaal/canaille/-/commit/c1b6d103ebf374cd6a21d9af8376c910c2d0d5d9.diff";
+      hash = "sha256-MjwkUb54ikt1+xUXBTOIBi9E+DmPdwYhw0W0c0prF/Q=";
+      includes = [ "tests/oidc/*" ];
     })
   ];
 
@@ -36,31 +43,35 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies =
-    with python.pkgs;
-    [
-      blinker
-      flask
-      flask-caching
-      flask-wtf
-      pydantic-settings
-      httpx
-      wtforms
-    ]
-    ++ sentry-sdk.optional-dependencies.flask;
+  dependencies = with python.pkgs; [
+    blinker
+    click
+    dramatiq
+    dramatiq-eager-broker
+    flask
+    flask-caching
+    flask-dramatiq
+    flask-session
+    flask-wtf
+    httpx
+    pydantic-settings
+    wtforms
+  ];
 
   nativeCheckInputs =
     with python.pkgs;
     [
       pytestCheckHook
-      coverage
+      postgresql
       flask-webtest
       pyquery
       pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
+      pytest-postgresql
       pytest-smtpd
       pytest-xdist
+      python-avatars
       scim2-tester
       slapd
       toml
@@ -68,13 +79,7 @@ python.pkgs.buildPythonApplication rec {
       time-machine
       pytest-scim2-server
     ]
-    ++ optional-dependencies.front
-    ++ optional-dependencies.oidc
-    ++ optional-dependencies.scim
-    ++ optional-dependencies.ldap
-    ++ optional-dependencies.postgresql
-    ++ optional-dependencies.otp
-    ++ optional-dependencies.sms;
+    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -87,10 +92,21 @@ python.pkgs.buildPythonApplication rec {
     export SBIN="${openldap}/bin"
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
-
-    # Just use their example config for testing
-    export CONFIG=tests/app/fixtures/default-config.toml
   '';
+
+  # Cap xdist workers; concurrent slapd fixtures race the 10s bind window.
+  dontUsePytestXdist = true;
+  pytestFlags = [ "--numprocesses=4" ];
+
+  disabledTests = [
+    # Tries to use DNS resolution
+    "test_send_new_email_error"
+    "test_send_test_email_ssl"
+    # flaky: timing-sensitive intruder lockout retry window
+    "test_intruder_lockout_fail_second_attempt_then_succeed_in_third"
+    # requires external network for logo fetch
+    "test_mail_with_unreachable_external_logo"
+  ];
 
   optional-dependencies = with python.pkgs; {
     front = [
@@ -98,6 +114,7 @@ python.pkgs.buildPythonApplication rec {
       flask-babel
       flask-talisman
       flask-themer
+      isodate
       pycountry
       pytz
       tomlkit
@@ -108,12 +125,15 @@ python.pkgs.buildPythonApplication rec {
       joserfc
     ];
     scim = [
-      httpx
-      scim2-models
       authlib
+      httpx
       scim2-client
+      scim2-models
     ];
-    ldap = [ python-ldap ];
+    ldap = [
+      ldappool
+      python-ldap
+    ];
     sentry = [ sentry-sdk ];
     postgresql = [
       flask-alembic
@@ -128,8 +148,18 @@ python.pkgs.buildPythonApplication rec {
       pillow
       qrcode
     ];
+    fido = [ webauthn ];
     sms = [ smpplib ];
-    server = [ hypercorn ];
+    captcha = [ captcha ];
+    server = [
+      asgiref
+      hypercorn
+      isodate
+      pydanclick
+      tomlkit
+    ];
+    redis = [ dramatiq ] ++ dramatiq.optional-dependencies.redis;
+    rabbitmq = [ dramatiq ] ++ dramatiq.optional-dependencies.rabbitmq;
   };
 
   passthru = {
@@ -142,7 +172,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
-    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];

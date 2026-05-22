@@ -100,13 +100,13 @@ buildPythonPackage (finalAttrs: {
     "test_module_misc"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
     changelog = "https://github.com/microsoft/markitdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ malik ];
   };
 })

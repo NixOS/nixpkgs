@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       The LADSPA SDK, including the ladspa.h API header file,
       ten example LADSPA plugins and
       three example programs (applyplugin, analyseplugin and listplugins).
-      For just ladspa.h, use the ladspaH package.
+      For just ladspa.h, use the ladspa-header package.
     '';
     homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
     license = lib.licenses.lgpl2;

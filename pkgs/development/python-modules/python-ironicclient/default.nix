@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.15.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-ironicclient";
     tag = version;
-    hash = "sha256-suN1Eam+vHhpvaQ+QyEQPsbyb0D8G9m7FnAZgnhWS80=";
+    hash = "sha256-AbxzRpyfplR4Mk9CcaRXi+CNo08tlRIxAFxsJjrkxvY=";
   };
 
   build-system = [

@@ -30,7 +30,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-tokenizers";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     repo = "tokenizers";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-la1PH8KT6iWYjvwBNYcQu5KwRS1/6H7SX5Vu6bpD+vg=";
+    hash = "sha256-4VWOKCdRx1VpYoJq7LYfpdcAAQeHnLD5mxI65XrrEHs=";
   };
 
   patches = [

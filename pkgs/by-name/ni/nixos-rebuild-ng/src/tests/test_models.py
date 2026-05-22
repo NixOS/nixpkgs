@@ -5,19 +5,57 @@ from unittest.mock import Mock, patch
 from pytest import MonkeyPatch
 
 import nixos_rebuild.models as m
+import nixos_rebuild.nix as n
 
 from .helpers import get_qualified_name
 
 
-def test_build_attr_from_arg() -> None:
-    assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
-    assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
-        Path("default.nix"), "attr"
-    )
+def test_build_attr_from_arg(tmp_path: Path) -> None:
     assert m.BuildAttr.from_arg("attr", "file.nix") == m.BuildAttr(
         Path("file.nix"), "attr"
     )
-    assert m.BuildAttr.from_arg(None, "file.nix") == m.BuildAttr(Path("file.nix"), None)
+
+    with patch(
+        # system.nix exists
+        "pathlib.Path.exists",
+        autospec=True,
+        side_effect=[True],
+    ):
+        assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
+            Path("system.nix"), "attr"
+        )
+
+    with patch(
+        # <nixos-system> is defined
+        get_qualified_name(n.find_file),
+        autospec=True,
+        return_value=Path("/some/file.nix"),
+    ):
+        assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
+            "<nixos-system>", "attr"
+        )
+
+    with (
+        # <nixos-system> not defined
+        patch(get_qualified_name(n.find_file), autospec=True, return_value=None),
+        # system.nix does not exist, but /etc/nixos/system.nix does
+        patch(
+            "pathlib.Path.exists",
+            autospec=True,
+            side_effect=[True],
+        ),
+    ):
+        assert m.BuildAttr.from_arg(None, None) == m.BuildAttr(
+            Path("/etc/nixos/system.nix"), None
+        )
+
+    with patch(
+        # <nixos-system> not defined
+        get_qualified_name(n.find_file),
+        autospec=True,
+        return_value=None,
+    ):
+        assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
 
 
 def test_build_attr_to_attr() -> None:
@@ -43,7 +81,7 @@ def test_flake_parse(mock_node: Mock, tmpdir: Path, monkeypatch: MonkeyPatch) ->
         autospec=True,
         return_value=subprocess.CompletedProcess([], 0, stdout="remote\n"),
     ):
-        target_host = m.Remote("target@remote", [], None)
+        target_host = m.Remote("target@remote", [], None, "ssh")
         assert m.Flake.parse("/path/to/flake", target_host) == m.Flake(
             "/path/to/flake", 'nixosConfigurations."remote"'
         )
@@ -162,9 +200,9 @@ def test_flake_from_arg(
             return_value=subprocess.CompletedProcess([], 0, "remote-hostname\n"),
         ),
     ):
-        assert m.Flake.from_arg("/path/to", m.Remote("user@host", [], None)) == m.Flake(
-            "/path/to", 'nixosConfigurations."remote-hostname"'
-        )
+        assert m.Flake.from_arg(
+            "/path/to", m.Remote("user@host", [], None, "ssh")
+        ) == m.Flake("/path/to", 'nixosConfigurations."remote-hostname"')
 
 
 @patch("pathlib.Path.mkdir", autospec=True)

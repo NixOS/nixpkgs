@@ -11,23 +11,23 @@
   pytest-asyncio,
   pytest-cov-stub,
   python-dateutil,
-  setuptools,
+  hatchling,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "openfga-sdk";
-  version = "0.9.5";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-e/Pgyj7A1HtcDPeRy0QK+Nok2ruWBiU9A1Yh7RZvtVI=";
+    hash = "sha256-OKldYozT/rWa1uU8yXO9UyHaOGsVVCLr62lN9TESY0g=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

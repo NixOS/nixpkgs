@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "badkeys";
-  version = "0.0.16";
+  version = "0.0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "badkeys";
     repo = "badkeys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pWbrp+2CBU+dxyXUXT+oSS2fvPjO7qSVHEcoHpXR4JM=";
+    hash = "sha256-sQ2HOgffVklHKpOTmIHMR0QSfsB9lxrEcaT2jzicVlM=";
   };
 
   build-system = with python3Packages; [

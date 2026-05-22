@@ -19,6 +19,8 @@
   libsolv,
   libxml2,
   libyaml,
+  libpkgmanifest,
+  acl,
   pcre2,
   rpm,
   sdbus-cpp_2,
@@ -33,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.18.0";
+  version = "5.4.1.0";
 
   outputs = [
     "out"
@@ -44,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-VTuGHHNNdoDfbJ86GOR4a+Fy2s+NSXPH337+AZpLKuo=";
+    hash = "sha256-wvWOQyY7K9fCds2am8gYpjw9mPl7IbOdHT92b8pwonc=";
   };
 
   nativeBuildInputs = [
@@ -71,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     librepo
     util-linux
     libsolv
+    libpkgmanifest
+    acl
     libxml2
     libyaml
     pcre2.dev
@@ -86,16 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
 
   cmakeFlags = [
-    "-DWITH_PERL5=OFF"
-    "-DWITH_PYTHON3=OFF"
-    "-DWITH_RUBY=OFF"
-    "-DWITH_SYSTEMD=OFF"
-    "-DWITH_PLUGIN_RHSM=OFF" # Red Hat Subscription Manager plugin
+    (lib.cmakeBool "WITH_PERL5" false)
+    (lib.cmakeBool "WITH_PYTHON3" false)
+    (lib.cmakeBool "WITH_RUBY" false)
+    (lib.cmakeBool "WITH_SYSTEMD" false)
+    (lib.cmakeBool "WITH_PLUGIN_RHSM" false) # Red Hat Subscription Manager plugin
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
     #  because the absolute path is interpreted with root at $out).
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
   postBuild = ''

@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -v -D -m 755 swingsane $out/bin/swingsane
 
       unzip -j swingsane-${finalAttrs.version}.jar "com/swingsane/images/*.png"
-      install -v -D -m 644 swingsane_512x512.png $out/share/pixmaps/swingsane.png
+      install -v -D -m 644 swingsane_512x512.png $out/share/icons/hicolor/512x512/apps/swingsane.png
 
       cp -v -r ${desktopItem}/share/applications $out/share
     '';

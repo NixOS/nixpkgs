@@ -30,15 +30,15 @@
   stateDir ? "/etc/pihole",
 }:
 
-(resholve.mkDerivation rec {
+(resholve.mkDerivation (finalAttrs: {
   pname = "pihole";
-  version = "6.1.4";
+  version = "6.4";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "pi-hole";
-    tag = "v${version}";
-    hash = "sha256-2B2GUJKt4jHEjQLBx96FRuHpnLCTzE4UPDaeQvnDONc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aBQO+wAqeuXc9ekByVFlOZQ9SBCGsozGdoS8r1qhGuk=";
   };
 
   patches = [
@@ -61,11 +61,11 @@
     install -Dm 555 -t $out/bin pihole
     install -Dm 555 -t $scriptsDir/advanced/Scripts gravity.sh
 
-    # The installation script is sourced by advanced/Scripts/piholeARPTable.sh etc
+    # The installation script is sourced by advanced/Scripts/piholeDebug.sh etc
     cp --parents -r -t $scriptsDir/ 'automated install/' advanced/{Scripts,Templates}/
 
     installShellCompletion --bash --name pihole.bash \
-      advanced/bash-completion/pihole
+      advanced/bash-completion/pihole.bash
 
     runHook postInstall
   '';
@@ -86,10 +86,10 @@
           "${relativeScripts}/database_migration/gravity-db.sh"
           "${relativeScripts}/gravity.sh"
           "${relativeScripts}/list.sh"
-          "${relativeScripts}/piholeARPTable.sh"
           "${relativeScripts}/piholeCheckout.sh"
           "${relativeScripts}/piholeDebug.sh"
           "${relativeScripts}/piholeLogFlush.sh"
+          "${relativeScripts}/piholeNetworkFlush.sh"
           "${relativeScripts}/query.sh"
           "${relativeScripts}/update.sh"
           "${relativeScripts}/updatecheck.sh"
@@ -129,6 +129,7 @@
           "/etc/os-release"
           "/etc/pihole/versions"
           "/etc/pihole/setupVars.conf"
+          "/opt/pihole/utils.sh"
         ];
         external = [
           # Used by chronometer.sh to get GPU information on Raspberry Pis
@@ -178,6 +179,7 @@
           "/etc/pihole/versions"
           "/etc/pihole/setupVars.conf"
           "$cachedVersions"
+          "/opt/pihole/utils.sh"
         ];
 
         "$PIHOLE_SETUP_VARS_FILE" = true;
@@ -190,9 +192,9 @@
         "${scriptsDir}/api.sh" = true;
         "${scriptsDir}/gravity.sh" = true;
         "${scriptsDir}/list.sh" = true;
-        "${scriptsDir}/piholeARPTable.sh" = true;
         "${scriptsDir}/piholeDebug.sh" = true;
         "${scriptsDir}/piholeLogFlush.sh" = true;
+        "${scriptsDir}/piholeNetworkFlush.sh" = true;
         "${scriptsDir}/query.sh" = true;
         "${scriptsDir}/uninstall.sh" = true;
         "${scriptsDir}/update.sh" = true;
@@ -232,7 +234,7 @@
   meta = {
     description = "Black hole for Internet advertisements";
     homepage = "https://pi-hole.net";
-    changelog = "https://github.com/pi-hole/pi-hole/releases/tag/v${version}";
+    changelog = "https://github.com/pi-hole/pi-hole/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = lib.platforms.linux;
@@ -241,10 +243,8 @@
 
   passthru.tests = nixosTests.pihole-ftl;
 
-  passthru = {
-    inherit stateDir;
-  };
-}).overrideAttrs
+  passthru = { inherit stateDir; };
+})).overrideAttrs
   (old: {
     # Resholve can't fix the hardcoded absolute paths, so substitute them before resholving
     preFixup = ''

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
 
   # build-system
   hatch-vcs,
@@ -13,7 +13,6 @@
   # dependencies
   packaging,
   pathspec,
-  exceptiongroup,
 
   # tests
   build,
@@ -23,27 +22,32 @@
   pytest-subprocess,
   pytestCheckHook,
   setuptools,
-  tomli,
   virtualenv,
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-build-core";
-  version = "0.11.5";
+  version = "0.11.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
-    tag = "v${version}";
-    hash = "sha256-4DwODJw1U/0+K/d7znYtDO2va71lzp1gDm4Bg9OBjQY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zBTDacTkeclz+/X0SUl1xkxLz4zsfeLOD4Ew0V1Y1iU=";
   };
 
-  postPatch = lib.optionalString (pythonOlder "3.11") ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"error",' '"error", "ignore::UserWarning",'
-  '';
+  patches = [
+    # Backport an upstream commit to fix the tests on Darwin.
+    (fetchpatch {
+      url = "https://github.com/scikit-build/scikit-build-core/commit/c30f52a3b2bd01dc05f23d3b89332c213006afe0.patch";
+      excludes = [ ".github/workflows/ci.yml" ];
+      hash = "sha256-5E9QfF5UcSNY1wzHzieEEHEPYzPjUTb66CKCodYb9vo=";
+    })
+  ];
+
+  postPatch = "";
 
   build-system = [
     hatch-vcs
@@ -53,10 +57,6 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     pathspec
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
   ];
 
   nativeCheckInputs = [
@@ -94,8 +94,8 @@ buildPythonPackage rec {
   meta = {
     description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
-    changelog = "https://github.com/scikit-build/scikit-build-core/blob/${src.tag}/docs/about/changelog.md";
+    changelog = "https://github.com/scikit-build/scikit-build-core/blob/${finalAttrs.src.tag}/docs/about/changelog.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

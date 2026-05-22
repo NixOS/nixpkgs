@@ -14,11 +14,12 @@
   sphinx,
   sphinx-basic-ng,
   unzip,
+  useWebNative ? (lib.meta.availableOn stdenv.buildPlatform nodejs),
 }:
 
 let
   pname = "furo";
-  version = "2025.07.19";
+  version = "2025.12.19";
   # version on pypi doesn't have month & day padded with 0
   pypiVersion =
     let
@@ -38,7 +39,7 @@ let
     owner = "pradyunsg";
     repo = "furo";
     tag = version;
-    hash = "sha256-pIF5zrh5YbkuSkrateEB/tDULSNbeVn2Qx+Fm3nOYGE=";
+    hash = "sha256-s9CQXmHI3PoXbB24e8rUd9ip02UZTjPHP4Ar6hV3mUc=";
   };
 
   web-bin =
@@ -49,7 +50,7 @@ let
         format = "wheel";
         dist = "py3";
         python = "py3";
-        hash = "sha256-veqGmCLf0rSU6oTAlzk3410Vda8Ii2chopx/eHityeM=";
+        hash = "sha256-uw6tUwn5UAEwZlomvuh2k8Qc5Nvf+GTb+2sNrkZz0k8=";
       };
     in
     runCommand "${pname}-web-bin"
@@ -76,7 +77,7 @@ let
     '';
   };
 
-  web = if (lib.meta.availableOn stdenv.buildPlatform nodejs) then web-native else web-bin;
+  web = if useWebNative then web-native else web-bin;
 in
 
 buildPythonPackage rec {

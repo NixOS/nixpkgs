@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build system
   setuptools,
@@ -33,6 +34,9 @@ buildPythonPackage rec {
     hash = "sha256-yrGKmJW4W8bPazKHWkwgNWDPiQYg1KTEuI7hC3yOWek=";
     fetchSubmodules = true;
   };
+
+  # Set an event loop in the doctest helper; policy.get_event_loop no longer auto-creates one on 3.14.
+  patches = lib.optional (pythonAtLeast "3.14") ./python-3.14-asyncio-loop.patch;
 
   build-system = [ setuptools ];
 

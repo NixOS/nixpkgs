@@ -158,6 +158,7 @@ let
           builtins.storeDir
           "/etc/"
         ]
+        ++ cfg.extraConfigFiles
         ++ lib.optional (cfg.secretsFile != null) cfg.secretsFile;
         DeviceAllow = "/dev/rfkill rw";
         LockPersonality = true;

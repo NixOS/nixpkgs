@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.103.0";
+  version = "1.106.0";
   pyproject = true;
 
   # https://github.com/aws/serverless-application-model/issues/3831
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     tag = "v${version}";
-    hash = "sha256-FW7tmXsD4VfR/c6IJUCvsYPYLIisaEqAhD0sp9ufA/s=";
+    hash = "sha256-9KrBoa50lgZcqe/wzt05TsuUYbjRuQXgXTVHjDKBmr4=";
   };
 
   postPatch = ''

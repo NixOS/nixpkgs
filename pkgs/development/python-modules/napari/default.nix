@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   # build-system
@@ -24,12 +23,13 @@
   napari-console,
   napari-npe2,
   napari-svg,
-  numpydoc,
   pandas,
   pillow,
   pint,
   psutil,
   pydantic,
+  pydantic-extra-types,
+  pydantic-settings,
   pyopengl,
   pyyaml,
   scikit-image,
@@ -44,6 +44,7 @@
 
   # tests
   hypothesis,
+  pooch,
   pretend,
   pyautogui,
   pytest-pretty,
@@ -56,18 +57,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "napari";
-  version = "0.6.6";
+  version = "0.7.0";
   pyproject = true;
-
-  # napari uses pydantic v1 which is not compatible with python 3.14
-  # ValueError: '__slots__' in __slots__ conflicts with class variable
-  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F0l6GWyZ6n4HNZW7XyUk4ZBPQfrAW4DWixCaRHViDPI=";
+    hash = "sha256-fDt9n4+yQcA03IO7sMhcpiP3TfOWfyvbCjY7ImEj+Qg=";
   };
 
   postPatch = ''
@@ -86,11 +83,6 @@ buildPythonPackage (finalAttrs: {
     qt6.qtbase
   ];
 
-  pythonRelaxDeps = [
-    "app-model"
-    "psygnal"
-    "vispy"
-  ];
   dependencies = [
     app-model
     appdirs
@@ -104,12 +96,13 @@ buildPythonPackage (finalAttrs: {
     napari-console
     napari-npe2
     napari-svg
-    numpydoc
     pandas
     pillow
     pint
     psutil
     pydantic
+    pydantic-extra-types
+    pydantic-settings
     pyopengl
     pyyaml
     scikit-image
@@ -134,6 +127,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     hypothesis
+    pooch
     pretend
     pyautogui
     pytest-pretty
@@ -189,6 +183,7 @@ buildPythonPackage (finalAttrs: {
     # Fatal Python error: Aborted
     "test_add_layer_data_to_viewer_optional"
     "test_from_layer_data_tuple_accept_deprecating_dict"
+    "test_layer_rename_updates_combobox"
     "test_layers_populate_immediately"
     "test_magicgui_add_data"
     "test_magicgui_add_future_data"

@@ -16,17 +16,18 @@
   libmad,
   libuuid,
   minizip,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "endless-sky";
-  version = "0.10.16";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QO7Yv8H7hvavyOG/G9+HZh+a7XlCAf7fyPlszvOF91M=";
+    hash = "sha256-QXLIHAAdpK6lvKv0471KsiB+B06RKUfYoUNYKi8NAlg=";
   };
 
   patches = [
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     minizip
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";

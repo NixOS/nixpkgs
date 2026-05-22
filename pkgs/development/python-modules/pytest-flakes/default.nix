@@ -6,7 +6,7 @@
   pyflakes,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   # upstream has abandoned project in favor of pytest-flake8
   # retaining package to not break other packages
   pname = "pytest-flakes";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "953134e97215ae31f6879fbd7368c18d43f709dc2fab5b7777db2bb2bac3a924";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/pytest-flakes";
     description = "Pytest plugin to check source code with pyflakes";
   };
-}
+})

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   version = "0.2"; # version taken from Arch AUR
 
   src = fetchurl {
-    url = "http://ronja.twibright.com/utils/vncrec-twibright.tgz";
+    url = "https://ronja.twibright.com/utils/vncrec-twibright.tgz";
     sha256 = "1yp6r55fqpdhc8cgrgh9i0mzxmkls16pgf8vfcpng1axr7cigyhc";
   };
 

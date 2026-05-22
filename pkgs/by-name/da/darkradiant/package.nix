@@ -6,7 +6,7 @@
   pkg-config,
   zlib,
   libjpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   libxml2,
   libsigcxx,
   libpng,
@@ -41,14 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     asciidoctor
     wrapGAppsHook3
-    wxGTK32
+    wxwidgets_3_2
     installShellFiles
   ];
 
   buildInputs = [
     zlib
     libjpeg
-    wxGTK32
+    wxwidgets_3_2
     libxml2
     libsigcxx
     libpng

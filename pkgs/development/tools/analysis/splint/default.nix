@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex ];
 
+  buildFlags = [
+    "CFLAGS=-std=gnu99"
+  ];
+
   doCheck = true;
 
   meta = {

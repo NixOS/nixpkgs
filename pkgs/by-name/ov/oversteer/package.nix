@@ -34,18 +34,17 @@ let
     ]
   );
 
-  version = "0.8.3";
 in
-stdenv.mkDerivation {
-  inherit version;
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.8.3";
 
   pname = "oversteer";
 
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "oversteer";
-    rev = "v${version}";
-    sha256 = "sha256-X58U7lFH53nCaXnE7uXgV7aea6qntNfH5TIt68xSefY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X58U7lFH53nCaXnE7uXgV7aea6qntNfH5TIt68xSefY=";
   };
 
   buildInputs = [
@@ -101,11 +100,11 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/berarma/oversteer";
-    changelog = "https://github.com/berarma/oversteer/releases/tag/${version}";
+    changelog = "https://github.com/berarma/oversteer/releases/tag/${finalAttrs.src.tag}";
     description = "Steering Wheel Manager for Linux";
     mainProgram = "oversteer";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.srounce ];
     platforms = lib.platforms.unix;
   };
-}
+})

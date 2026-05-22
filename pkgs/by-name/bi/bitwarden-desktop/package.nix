@@ -33,13 +33,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2026.1.0";
+  version = "2026.3.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-Z6YMAzn1J5n27qqx3PsaMmD9uIK7FTEl1/tEzePD+6Y=";
+    hash = "sha256-ecaCHk04N9h0RP8gK0o+MLgYS6Linsqi7AaC86hwQ3U=";
   };
 
   patches = [
@@ -55,6 +55,10 @@ buildNpmPackage' rec {
   ];
 
   postPatch = ''
+    # https://github.com/bitwarden/clients/pull/20480
+    substituteInPlace package-lock.json apps/desktop/desktop_native/napi/package.json \
+      --replace-fail '"@napi-rs/cli": "3.5.1"' '"@napi-rs/cli": "3.2.0"'
+
     # remove code under unfree license
     rm -r bitwarden_license
 
@@ -79,12 +83,9 @@ buildNpmPackage' rec {
     "--legacy-peer-deps"
   ];
 
-  npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    "--ignore-scripts"
-  ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-/S0itw2m2k7GiiwBEzeqFQ8oUYD4yIO4knTTn37qkfA=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-1t4CSd1NDC1medTTFHSzX9ZkgHqPG2L//yjaloH47z0=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -94,7 +95,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-Q1FWH46EcITEwLquv52lnLnhbetD8bpTUl3agFZQ0Es=";
+    hash = "sha256-d9Iv7OekHOteH1lyAuyj/EzfU/KSCW6ATx83foOW3IE=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -134,7 +135,7 @@ buildNpmPackage' rec {
     patchShebangs apps/desktop/node_modules
 
     pushd apps/desktop/desktop_native/napi
-    npm run build
+    npm run build -- --release
     popd
 
     pushd apps/desktop/desktop_native/proxy
@@ -165,7 +166,11 @@ buildNpmPackage' rec {
   ];
 
   checkFlags = [
+    # fails in zbus
     "--skip=password::password::tests::test"
+    # requires some debug feature to be enabled
+    "--skip=storage::serialization::tests::test_keydata_from_corrupted_bytes"
+    "--skip=storage::serialization::tests::test_keydata_from_empty_bytes"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=clipboard::tests::test_write_read"
@@ -196,6 +201,7 @@ buildNpmPackage' rec {
     cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
 
     makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
+      --run "ulimit -c 0" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \

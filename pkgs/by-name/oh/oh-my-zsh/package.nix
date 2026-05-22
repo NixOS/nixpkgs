@@ -19,14 +19,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2026-02-02";
+  version = "2026-02-19";
   pname = "oh-my-zsh";
 
   src = fetchFromGitHub {
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    rev = "9df4ea095fe27ccd0ee95f2d34bab884c4a75585";
-    sha256 = "sha256-SR0Lopccq8oSKHOl5p/YMXNzds5pAqUgeXsy2mLbtS0=";
+    rev = "52d93f18d61f11db69b4591d7fc7bd5578954d30";
+    sha256 = "sha256-fGFPVHbJFtXvuiR0yOc9Qt1TUuIfNAYezGQtESt9REA=";
   };
 
   strictDeps = true;

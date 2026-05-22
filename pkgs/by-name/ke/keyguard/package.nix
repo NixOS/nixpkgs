@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20260125.1";
-    hash = "sha256-ALVf0ECUSxXFS7U5fxn6X10jSHf7tBk7cYm2/+Bk5HE=";
+    tag = "r20260201";
+    hash = "sha256-7n6/YgRzte2qsgQEfqppdpp5t8+xBjfOKjvNotAgJB0=";
   };
 
   postPatch = ''

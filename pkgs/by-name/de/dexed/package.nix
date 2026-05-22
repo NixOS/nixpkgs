@@ -5,6 +5,7 @@
   gitUpdater,
   cmake,
   pkg-config,
+  fetchpatch,
   libx11,
   libxrandr,
   libxinerama,
@@ -26,6 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-9EbaME3kw2ptCWpaV9CnM0j5HOof264s5iFoOTcjwNg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-min-macos-version";
+      # https://github.com/asb2m10/dexed/pull/523
+      url = "https://github.com/asb2m10/dexed/commit/e41f1b8147bb6a5b7e9330a7ec6a598a1e74a524.patch";
+      sha256 = "sha256-8ZrAirXUACk8BJUPfA/LQORCUOqjSTsKoS9HFyrkvV8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

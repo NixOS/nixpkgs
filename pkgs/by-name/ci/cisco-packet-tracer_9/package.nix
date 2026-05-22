@@ -74,6 +74,10 @@ appimageTools.wrapType2 rec {
 
       install -Dm444 ${contents}/usr/share/icons/hicolor/48x48/apps/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer-9.png
       cp -r ${contents}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/
+
+      for desktop in $out/share/applications/*.desktop; do
+        sed -i '/^\[Desktop Entry\]/a StartupWMClass=PacketTracer' "$desktop"
+      done
     '';
 
   meta = {

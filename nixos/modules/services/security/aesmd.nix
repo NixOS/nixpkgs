@@ -11,7 +11,6 @@ let
     literalExpression
     makeLibraryPath
     mkEnableOption
-    mkForce
     mkIf
     mkOption
     mkPackageOption
@@ -129,11 +128,6 @@ in
 
     hardware.cpu.intel.sgx.provision.enable = true;
 
-    # Make sure the AESM service can find the SGX devices until
-    # https://github.com/intel/linux-sgx/issues/772 is resolved
-    # and updated in nixpkgs.
-    hardware.cpu.intel.sgx.enableDcapCompat = mkForce true;
-
     systemd.services.aesmd =
       let
         storeAesmFolder = "${sgx-psw}/aesm";
@@ -156,25 +150,16 @@ in
         }
         // cfg.environment;
 
-        # Make sure any of the SGX application enclave devices is available
-        unitConfig.AssertPathExists = [
-          # legacy out-of-tree driver
-          "|/dev/isgx"
-          # DCAP driver
-          "|/dev/sgx/enclave"
-          # in-tree driver
-          "|/dev/sgx_enclave"
-        ];
+        # Ensure the SGX application enclave device is available
+        unitConfig.AssertPathExists = [ "/dev/sgx_enclave" ];
 
         serviceConfig = {
-          ExecStartPre = pkgs.writeShellScript "copy-aesmd-data-files.sh" ''
-            set -euo pipefail
-            whiteListFile="${aesmDataFolder}/white_list_cert_to_be_verify.bin"
-            if [[ ! -f "$whiteListFile" ]]; then
-              ${pkgs.coreutils}/bin/install -m 644 -D \
+          # Run with elevated privileges to create /var/opt/aesmd/... before
+          # dropping to DynamicUser.
+          ExecStartPre = ''
+            +${lib.getExe' pkgs.coreutils "install"} -m 644 -D \
                 "${storeAesmFolder}/data/white_list_cert_to_be_verify.bin" \
-                "$whiteListFile"
-            fi
+                "${aesmDataFolder}/white_list_cert_to_be_verify.bin"
           '';
           ExecStart = "${sgx-psw}/bin/aesm_service --no-daemon";
           ExecReload = ''${pkgs.coreutils}/bin/kill -SIGHUP "$MAINPID"'';
@@ -196,9 +181,8 @@ in
           RuntimeDirectory = "aesmd";
           RuntimeDirectoryMode = "0750";
 
-          # Hardening
+          # --- Hardening ---
 
-          # chroot into the runtime directory
           RootDirectory = "%t/aesmd";
           BindReadOnlyPaths = [
             builtins.storeDir
@@ -215,10 +199,6 @@ in
           PrivateDevices = false;
           DevicePolicy = "closed";
           DeviceAllow = [
-            # legacy out-of-tree driver
-            "/dev/isgx rw"
-            # DCAP driver
-            "/dev/sgx rw"
             # in-tree driver
             "/dev/sgx_enclave rw"
             "/dev/sgx_provision rw"
@@ -230,7 +210,7 @@ in
           RestrictAddressFamilies = [
             # Allocates the socket /var/run/aesmd/aesm.socket
             "AF_UNIX"
-            # Uses the HTTP protocol to initialize some services
+            # Makes HTTPS requests to the Intel PCCS service (or a cache).
             "AF_INET"
             "AF_INET6"
           ];

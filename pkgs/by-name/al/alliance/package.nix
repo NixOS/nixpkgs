@@ -12,22 +12,21 @@
   automake,
   autoconf,
   libtool,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alliance";
-  version = "unstable-2025-02-24";
+  version = "5.1.1-unstable-2025-02-24";
 
-  src =
-    let
-      src = fetchFromGitHub {
-        owner = "lip6";
-        repo = "alliance";
-        rev = "a8502d32df0a4ad1bd29ab784c4332319669ecd2";
-        hash = "sha256-b2uaYZEzHMB3qCMRVANNnjTxr6OYb1Unswxjq5knYzM=";
-      };
-    in
-    "${src}/alliance/src";
+  src = fetchFromGitHub {
+    owner = "lip6";
+    repo = "alliance";
+    rev = "a8502d32df0a4ad1bd29ab784c4332319669ecd2";
+    hash = "sha256-b2uaYZEzHMB3qCMRVANNnjTxr6OYb1Unswxjq5knYzM=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/alliance/src";
 
   nativeBuildInputs = [
     libtool
@@ -70,11 +69,14 @@ stdenv.mkDerivation {
     cp -p distrib/*.png $out/icons/hicolor/48x48/apps/
   '';
 
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
   meta = {
     description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
     license = with lib.licenses; gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+    broken = true;
   };
-}
+})

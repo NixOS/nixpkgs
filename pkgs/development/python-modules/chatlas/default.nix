@@ -24,20 +24,22 @@
   pillow,
   pytest-asyncio,
   pytest-snapshot,
+  pytest-vcr,
   pytestCheckHook,
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chatlas";
-  version = "0.13.2";
+  version = "0.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "chatlas";
-    tag = "v${version}";
-    hash = "sha256-uCgpNvDJZKwxX4HYF8tyvJ1AiQLmybuxrZkYK/u5xlg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wf+YYC7coJ9euOXIP9Oq7k2z8zhLZdfjVM+yxmM9MAY=";
   };
 
   build-system = [
@@ -64,6 +66,7 @@ buildPythonPackage rec {
     pillow
     pytest-asyncio
     pytest-snapshot
+    pytest-vcr
     pytestCheckHook
     tenacity
   ];
@@ -167,8 +170,8 @@ buildPythonPackage rec {
     description = "Friendly guide to building LLM chat apps in Python with less effort and more clarity";
     homepage = "https://posit-dev.github.io/chatlas";
     downloadPage = "https://github.com/posit-dev/chatlas";
-    changelog = "https://github.com/posit-dev/chatlas/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/chatlas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

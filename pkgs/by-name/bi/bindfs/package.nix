@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bindfs.org";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      lovek323
       lovesegfault
     ];
     platforms = lib.platforms.unix;

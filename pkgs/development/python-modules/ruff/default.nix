@@ -20,7 +20,7 @@ buildPythonPackage {
     # Do not rely on path lookup at runtime to find the ruff binary.
     # Use the propagated binary instead.
     ''
-      substituteInPlace python/ruff/__main__.py \
+      substituteInPlace python/ruff/_find_ruff.py \
         --replace-fail \
           'ruff_exe = "ruff" + sysconfig.get_config_var("EXE")' \
           'return "${lib.getExe ruff}"'
@@ -29,7 +29,7 @@ buildPythonPackage {
     # to avoid rebuilding the ruff binary for every active python package set.
     + ''
       substituteInPlace pyproject.toml \
-        --replace-fail 'requires = ["maturin>=1.9,<2.0"]' 'requires = ["hatchling"]' \
+        --replace-fail 'requires = ["maturin>=1.9.3,<2.0"]' 'requires = ["hatchling"]' \
         --replace-fail 'build-backend = "maturin"' 'build-backend = "hatchling.build"'
 
       cat >> pyproject.toml <<EOF

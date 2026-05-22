@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   click,
   click-log,
   click-threading,

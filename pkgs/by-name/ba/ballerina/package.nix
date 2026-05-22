@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     mainProgram = "bal";
     license = lib.licenses.asl20;
     platforms = openjdk.meta.platforms;
-    maintainers = with lib.maintainers; [ eigengrau ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }

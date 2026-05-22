@@ -30,14 +30,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lance-namespace";
-  version = "0.4.5";
+  version = "0.7.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cUwvPPOQemusthuTMttdojqApnWL4JmCdSB5oGZCfZ8=";
+    hash = "sha256-UI6vbmquZlfDVS4R3PFxc14E+3Z6uccGfg5P/Jfs+LY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/lance_namespace";
@@ -46,9 +47,6 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
-  pythonRemoveDeps = [
-    "pylance"
-  ];
   dependencies = [
     lance-namespace-urllib3-client
     typing-extensions

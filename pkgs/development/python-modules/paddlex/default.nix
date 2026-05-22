@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   numpy,
   pillow,
   pyyaml,
@@ -24,22 +25,26 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paddlex";
-  version = "3.3.12";
+  version = "3.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
-    tag = "v${version}";
-    hash = "sha256-IK+Mk2IWrDGCLH3nw5/WR0uPIFBAsb/h4/MMmSlxT9s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q6JVv+7HC/HtEK/LgKhld29tMrk0KY+h9c5VGDfHyvE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
     "pyyaml"
+    "numpy"
   ];
 
   dependencies = [
@@ -69,7 +74,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/PaddlePaddle/PaddleX";
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
-    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
+    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     platforms = [
       "x86_64-linux"
@@ -78,4 +83,4 @@ buildPythonPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

@@ -16,7 +16,7 @@ let
 in
 
 {
-  meta.maintainers = lib.teams.cosmic.members;
+  meta.teams = [ lib.teams.cosmic ];
 
   options.services.displayManager.cosmic-greeter = {
     enable = lib.mkEnableOption "COSMIC greeter";
@@ -73,7 +73,9 @@ in
       extraGroups = [ "video" ];
     };
     # Required for authentication
-    security.pam.services.cosmic-greeter = { };
+    security.pam.services.cosmic-greeter = {
+      allowNullPassword = true;
+    };
 
     hardware.graphics.enable = true;
     services.accounts-daemon.enable = true;

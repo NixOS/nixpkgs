@@ -8,13 +8,13 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlab-timelogs";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-WmdN3w0t7omA2F+Fpv+PkT/hymgTzxlTSBytKep+6Lo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-DNMJczR4yaglIOcNmb2E1g+UP0VeJaIb5TvdKUcWzc0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     iconv
   ];
 
-  cargoHash = "sha256-Ap/R/Sa60LUAKByzKGYzj/IZeq/UDiZzBxYY0Ell6Kw=";
+  cargoHash = "sha256-aCt534oDG9u37xLQjG7Ye+EKpTgW4q/LqaVkxw5iEJ0=";
 
   meta = {
     description = "CLI utility to support you with your time logs in GitLab";
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
       gitlab-timelogs is not associated with the official GitLab project!
     '';
     homepage = "https://github.com/phip1611/gitlab-timelogs";
-    changelog = "https://github.com/phip1611/gitlab-timelogs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/phip1611/gitlab-timelogs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       blitz
       phip1611
     ];
   };
-}
+})

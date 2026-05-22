@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
     description = "Install private Elm packages from any git url";
     homepage = "https://github.com/robinheghan/elm-git-install";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-git-install";
   };
 })

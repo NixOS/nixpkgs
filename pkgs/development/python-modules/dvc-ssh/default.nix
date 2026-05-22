@@ -4,18 +4,19 @@
   buildPythonPackage,
   dvc-objects,
   fetchPypi,
+  setuptools,
   setuptools-scm,
   sshfs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-ssh";
   version = "4.2.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "dvc_ssh";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-T6yTLF8ivZRE2H1Oez/9bAnMjlbZjrPG1LRDAdNTUBc=";
   };
 
@@ -24,7 +25,10 @@ buildPythonPackage rec {
     "dvc"
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     bcrypt
@@ -51,8 +55,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "SSH plugin for dvc";
-    homepage = "https://pypi.org/project/dvc-ssh/${version}";
-    changelog = "https://github.com/iterative/dvc-ssh/releases/tag/${version}";
+    homepage = "https://pypi.org/project/dvc-ssh/";
+    changelog = "https://github.com/iterative/dvc-ssh/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmqtt";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "qmqtt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cIzBnJdMFY25cWf1rBoRQx1G0/5S32igF8vcte+nyHI=";
+    hash = "sha256-OhRvVOJt5GRwNNKsXLpneDyx8SIptP6KAlIAsWOOcjo=";
   };
 
   outputs = [

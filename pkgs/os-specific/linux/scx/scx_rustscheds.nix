@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
-  version = "1.0.20";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MUWbNsxmbCRCOWB2dHpi5dEY2rNRrINxJSyl5SNSO9Y=";
+    hash = "sha256-/EE1+mlbCQmeLqhbHM+k1JwrRw1Z1mOZmq/ffR1l4bg=";
   };
 
-  cargoHash = "sha256-H58wschck+l41fQh9W5SNVb5g9lAnw90SOSd/RtGXyw=";
+  cargoHash = "sha256-1alU6Hl7wHM69JK1ZRWzhT843ROs0WhkBUuDDweZSvk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,20 +51,52 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "zerocallusedregs"
   ];
 
-  doCheck = true;
-  checkFlags = [
-    "--skip=compat::tests::test_ksym_exists"
-    "--skip=compat::tests::test_read_enum"
-    "--skip=compat::tests::test_struct_has_field"
-    "--skip=cpumask"
-    "--skip=topology"
-    "--skip=proc_data::tests::test_thread_operations"
-    "--skip=json::tests::test_with_resources"
-    "--skip=json::tests::test_with_dir"
-  ];
+  # most of the tests rely on system CPU topology info,
+  # which is not available in the sandbox
+  doCheck = false;
+
+  # we don't need these
+  postInstall = ''
+    rm $out/bin/{scx_arena_selftests,vmlinux_docify,xtask}
+  '';
+
+  __structuredAttrs = true;
+  EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    cd $out/bin
+    found=(scx_*)
+    if [[ "''${found[@]}" != "''${EXPECTED_SCHEDULERS[@]}" ]]; then
+      echo "List of available schedulers changed, expected: ''${EXPECTED_SCHEDULERS[@]}, found: ''${found[@]}"
+      exit 1
+    fi
+
+    runHook postInstallCheck
+  '';
 
   passthru.tests.basic = nixosTests.scx;
   passthru.updateScript = nix-update-script { };
+  passthru.schedulers = [
+    "scx_beerland"
+    "scx_bpfland"
+    "scx_cake"
+    "scx_chaos"
+    "scx_cosmos"
+    "scx_flash"
+    "scx_flow"
+    "scx_lavd"
+    "scx_layered"
+    "scx_mitosis"
+    "scx_p2dq"
+    "scx_pandemonium"
+    "scx_rlfifo"
+    "scx_rustland"
+    "scx_rusty"
+    "scx_tickless"
+  ];
 
   meta = {
     description = "Sched-ext Rust userspace schedulers";

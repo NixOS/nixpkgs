@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "rednotebook";
   version = "2.42";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-4e3LvBVrhqzNja9kOZ5xJVYvwjGkKNvIuXou4YfD6w4=";
   };
 
@@ -54,10 +54,10 @@ buildPythonApplication rec {
 
   meta = {
     homepage = "https://rednotebook.sourceforge.io/";
-    changelog = "https://github.com/jendrikseipp/rednotebook/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jendrikseipp/rednotebook/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "rednotebook";
   };
-}
+})

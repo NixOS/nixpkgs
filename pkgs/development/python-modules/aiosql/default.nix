@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-postgresql,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   sphinx-rtd-theme,

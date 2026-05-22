@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kde-rounded-corners";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "matinlotfali";
     repo = "KDE-Rounded-Corners";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v/kobtUoWBbYP4iMiUqWNnpIYyu5CBmYHnwxfN4eoQ0=";
+    hash = "sha256-ivWOMl0cveJHC6eX/QYteVi2GaRJ/2j02YlDj/Uvs1s=";
   };
 
   nativeBuildInputs = [

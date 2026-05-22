@@ -7,7 +7,7 @@
   findutils,
   flac,
   lame,
-  opusTools,
+  opus-tools,
   procps,
   sox,
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
           findutils
           sox
           procps
-          opusTools
+          opus-tools
           lame
           flac
         ]

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ready-check";
-  version = "1.2.6";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sesh";
     repo = "ready";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0UY2Q1jYGRtjvaWMwgMJrNaQZQnEJ5ST4o4PAVYWVc=";
+    hash = "sha256-QdYg2kemfZCY5RkEiry1U5eLStd10HdRpQHn7+hOL/g=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
+    cryptography
     thttp
     tld
   ];

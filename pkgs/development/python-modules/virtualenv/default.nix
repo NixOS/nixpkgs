@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   isPyPy,
   distlib,
   fetchFromGitHub,
@@ -57,7 +56,6 @@ buildPythonPackage rec {
     # Network access
     "test_seed_link_via_app_data"
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ "test_help" ]
   ++ lib.optionals isPyPy [
     # encoding problems
     "test_bash"

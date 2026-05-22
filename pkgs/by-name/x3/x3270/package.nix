@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "${majorVersion}.${minorVersion}${versionSuffix}";
 
   src = fetchurl {
-    url = "http://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${finalAttrs.version}-src.tgz";
+    url = "https://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${finalAttrs.version}-src.tgz";
     hash = "sha256-hDju5ZeVzTv78ZYwUzabmqMK9rheTZJ7clTSTpkkM7E=";
   };
 

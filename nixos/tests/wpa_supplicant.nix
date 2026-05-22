@@ -137,7 +137,7 @@ let
       testScript = ''
         # save hostapd config file for manual inspection
         machine.wait_for_unit("hostapd.service")
-        machine.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
+        machine.copy_from_machine("/run/hostapd/wlan0.hostapd.conf")
 
         ${extraTestScript}
       '';
@@ -257,7 +257,7 @@ in
           machine.succeed("wpa_cli -i wlan0 list_networks | grep -q test2")
 
       # save file for manual inspection
-      machine.copy_from_vm(config_file)
+      machine.copy_from_machine(config_file)
 
       # check hardening options
       machine.succeed("systemd-analyze security wpa_supplicant >&2")
@@ -273,6 +273,11 @@ in
       # add a virtual wlan interface
       boot.kernelModules = [ "mac80211_hwsim" ];
 
+      users.users.alice = {
+        isNormalUser = true;
+        group = "users";
+      };
+
       # wireless client
       networking.wireless = {
         enable = lib.mkOverride 0 true;
@@ -283,7 +288,7 @@ in
     };
 
     testScript = ''
-      wpa_cli = "sudo -u nobody -g wpa_supplicant wpa_cli"
+      wpa_cli = "sudo -u alice -g wpa_supplicant wpa_cli"
 
       with subtest("Daemon is running and accepting connections"):
           machine.wait_for_unit("wpa_supplicant-wlan1.service")

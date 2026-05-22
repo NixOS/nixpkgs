@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mode switching tool for controlling 'multi-mode' USB devices";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
-      marcweber
       peterhoeg
     ];
     platforms = lib.platforms.linux;

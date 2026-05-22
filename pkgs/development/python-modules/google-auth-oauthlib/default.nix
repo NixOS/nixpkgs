@@ -7,21 +7,23 @@
   google-auth,
   requests-oauthlib,
   click,
-  mock,
   pytestCheckHook,
+  gitUpdater,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "google-auth-oauthlib";
-  version = "1.2.4";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "google-auth-library-python-oauthlib";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-itnkKMHTpJNjMVvpXYq9V/ybaE/Ekt3uED1IoVebRcg=";
+    repo = "google-cloud-python";
+    tag = "google-auth-oauthlib-v${finalAttrs.version}";
+    hash = "sha256-lfB544cDaywiGTV0KlecU7oEl2Gbb4Ou8UCp+YjGtOA=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/google-auth-oauthlib";
 
   build-system = [ setuptools ];
 
@@ -35,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
@@ -53,10 +54,14 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.updateScript = {
+    rev-prefix = "google-auth-oauthlib-v";
+  };
+
   meta = {
     description = "Google Authentication Library: oauthlib integration";
-    homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
-    changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-auth-oauthlib";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-auth-oauthlib/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       sarahec

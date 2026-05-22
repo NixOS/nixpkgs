@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.7";
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
-  NROFF = "${groff}/bin/nroff";
+  env.NROFF = "${groff}/bin/nroff";
 
   patches = [
     # Pull upstream fix for parallel install failures.

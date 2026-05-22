@@ -273,6 +273,10 @@ in
           "bcachefs" = "${cfg.package}/bin/bcachefs";
           "mount.bcachefs" = "${cfg.package}/bin/mount.bcachefs";
         };
+        boot.initrd.systemd.storePaths = [
+          # Used by the ExecStart= in bcachefs-wait-devices@.service.
+          "${cfg.package}/sbin/bcachefs"
+        ];
         boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           copy_bin_and_libs ${cfg.package}/bin/bcachefs
           copy_bin_and_libs ${cfg.package}/bin/mount.bcachefs
@@ -285,6 +289,7 @@ in
           commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs)
         );
 
+        boot.initrd.systemd.packages = [ cfg.package ];
         boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
       })
 

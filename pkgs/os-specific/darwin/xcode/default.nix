@@ -125,6 +125,14 @@ lib.makeExtensible (self: {
   xcode_26_1_1_Apple_silicon = requireXcode "26.1.1_Apple_silicon" "sha256-5dZ1O7iD2CF8R4TBeBLkaKLe/WOi8CMJJ1/Bg+uitCw=";
   xcode_26_2 = requireXcode "26.2_Universal" "sha256-uCw71PjAuvtKTIpcYsiFSjUZQnIBIpIoOm1QaaYHD7k=";
   xcode_26_2_Apple_silicon = requireXcode "26.2_Apple_silicon" "sha256-YxMVppJwRzTA6xWOILxVjLdl0bNmtZSifG/KQx6inRE=";
+  xcode_26_3 = requireXcode "26.3_Universal" "sha256-qrPSc036x3tW1TWWfX10+IS2c08dRCa6KFc+++35ueM=";
+  xcode_26_3_Apple_silicon = requireXcode "26.3_Apple_silicon" "sha256-q2p45zqAZUH6Z1Q3DHbZgpuuFTjZoMPhEfFdeIUvclw=";
+  xcode_26_4 = requireXcode "26.4_Universal" "sha256-0Cg4Ytu2+JOLEqw1ZZoB6hxFXNA2KriTLwLpT8bmA7I=";
+  xcode_26_4_Apple_silicon = requireXcode "26.4_Apple_silicon" "sha256-urkJVqUY6+5z0YiEqCru9M/OneDLAMzdGfOt7i3d1WI=";
+  xcode_26_4_1 = requireXcode "26.4.1_Universal" "sha256-N9QgPKfZV64gJPlr4r/0gPS0yAgJd3a+qlr0YbzMCU4=";
+  xcode_26_4_1_Apple_silicon = requireXcode "26.4.1_Apple_silicon" "sha256-8MtGX97e/2+zvY2Et9Jm9eXqVmyr+U02UqsKmffh9hs=";
+  xcode_26_5 = requireXcode "26.5_Universal" "sha256-hQ1I7CuVOmkCcVLo1AUV25PJGL33fT3MuWR+DJZ84aQ=";
+  xcode_26_5_Apple_silicon = requireXcode "26.5_Apple_silicon" "sha256-lavdscO0z4Tyf22vV8QMooOt5yYFwnTi1oe3yA+wTdA=";
   xcode =
     self."xcode_${
       lib.replaceStrings [ "." ] [ "_" ] (

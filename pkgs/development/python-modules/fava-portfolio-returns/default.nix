@@ -14,12 +14,12 @@
 }:
 let
   pname = "fava-portfolio-returns";
-  version = "2.3.0";
+  version = "2.4.0";
   src = fetchFromGitHub {
     owner = "andreasgerstmayr";
     repo = "fava-portfolio-returns";
-    rev = "v${version}";
-    hash = "sha256-NM+0gcgSztcgzYj0nCe9DOK90lrzE0TOzH30WvTKsUA=";
+    tag = "v${version}";
+    hash = "sha256-3v5zIpho6HppNm1yJdVJKhPxKgNsvRetOQIAKkp6u9U=";
   };
 
   frontend = buildNpmPackage (finalAttrs: {
@@ -28,7 +28,7 @@ let
 
     src = "${src}/frontend";
 
-    npmDepsHash = "sha256-MDoZC5IAR9puWMLBhLb5HRoagBPyNiyJ+0879ljCNUo=";
+    npmDepsHash = "sha256-/9sCyhGUOZ/muwJNKABy7ouPJa5ieVXjIFCSWw9AyRo=";
 
     postPatch = ''
       substituteInPlace package.json \

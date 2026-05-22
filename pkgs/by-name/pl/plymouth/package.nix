@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   writeText,
   replaceVars,
   meson,
@@ -19,11 +20,12 @@
   systemd,
   xkeyboard-config,
   fontconfig,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
-  version = "24.004.60";
+  version = "26.134.222";
 
   outputs = [
     "out"
@@ -34,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "plymouth";
     repo = "plymouth";
-    rev = finalAttrs.version;
-    hash = "sha256-9JmZCm8bjteJTQrMSJeL4x2CAI6RpKowFUDSCcMS4MM=";
+    tag = finalAttrs.version;
+    hash = "sha256-TarN9NLWzYmE9GS/rtaa0w8SVOES86sUMZWbnsgRDHY=";
   };
 
   patches = [
@@ -67,8 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libxkbcommon
     pango
-    systemd
     xkeyboard-config
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
   ];
 
   mesonFlags =
@@ -87,9 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dbackground-start-color-stop=0x000000"
       "-Dbackground-end-color-stop=0x000000"
       "-Drelease-file=/etc/os-release"
-      "-Dudev=enabled"
+      "-Dudev=${if systemdSupport then "enabled" else "disabled"}"
       "-Drunstatedir=/run"
       "-Druntime-plugins=true"
+      "-Dsystemd-integration=${lib.boolToString systemdSupport}"
+    ]
+    ++ lib.optionals systemdSupport [
       "--cross-file=${crossFile}"
     ];
 

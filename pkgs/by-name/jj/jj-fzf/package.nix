@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jj-fzf";
-  version = "0.34.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "tim-janik";
     repo = "jj-fzf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aJyKVMg/yI2CmAx5TxN0w670Rq26ESdLzESgh8Jr4nE=";
+    hash = "sha256-sWW8A+Y25jcYPEHEgqWjwaGm/eWqNCnDLgqK9WXq6HM=";
   };
 
   strictDeps = true;

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-fireworks";
-  version = "1.1.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-fireworks==${version}";
-    hash = "sha256-gLc3pPxQZTm6PU5r1o7mxlnRI8tCeg/w9jkbbfUCSec=";
+    hash = "sha256-ladhHikzzLOf8mz98c+vawoSCTKBAx2XcQPtzMePr2A=";
   };
 
   sourceRoot = "${src.name}/libs/partners/fireworks";

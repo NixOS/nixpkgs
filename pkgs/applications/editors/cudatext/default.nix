@@ -40,14 +40,14 @@ let
     }
   ) (lib.importJSON ./deps.json);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
   version = "1.202.1";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
   };
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   env.NIX_LDFLAGS = toString [
     "--as-needed"
     "-rpath"
-    (lib.makeLibraryPath buildInputs)
+    (lib.makeLibraryPath finalAttrs.buildInputs)
   ];
 
   buildPhase =
@@ -146,4 +146,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "cudatext";
   };
-}
+})

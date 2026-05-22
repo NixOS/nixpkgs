@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   rustPlatform,
   fetchNpmDeps,
@@ -8,39 +9,29 @@
   gitMinimal,
   cmake,
   boringssl,
-  runCommand,
   fetchFromGitHub,
   python3,
   nodejs,
 }:
-let
-  # boring-sys expects the static libraries in build/ instead of lib/
-  boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
-    mkdir $out
-    cd $out
-    ln -s ${boringssl.out}/lib build
-    ln -s ${boringssl.dev}/include include
-  '';
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.86.12";
+  version = "0.92.2";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XVq1fvhUF0WqSs1lJRCBRuhOW4idY6Nm21UdX4/6TE8=";
+    hash = "sha256-7VimtFjobM2EQl0cV0K1EIPeV015e+00ljfAfM4KNJI=";
   };
 
-  cargoHash = "sha256-vat7vjL9HDY/m7CLUJNpU3NZ79nCVHxLO5tEtaEDBnE=";
+  cargoHash = "sha256-HBrg//iKNo5/TuVtf9NuVbAyrhul2VVXwC0an7jGEgs=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-O2dMH45YfPlwgqYtQK7HGBgAtfePb6YIrnwqbGIGcnA=";
+    hash = "sha256-BV5E898u07LLoUVMVRJCHKhp4OJJl2fc5973n16T51k=";
   };
 
   nativeBuildInputs = [
@@ -53,8 +44,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npmHooks.npmConfigHook
     rustPlatform.bindgenHook
   ];
-  env.BORING_BSSL_PATH = "${boringssl-wrapper}";
-  env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+
+  env = {
+    BORING_BSSL_INCLUDE_PATH = "${boringssl.dev}/include";
+    BORING_BSSL_PATH = boringssl;
+    NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+  };
 
   patches = [
     # This is used to strip absolute paths of dependencies to avoid leaking info about build machine. Nix builders
@@ -66,6 +61,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "'prebuilds'" "'$out/lib'" \
       --replace-fail "objcopy = shutil.which('%s-linux-gnu-objcopy' % cargo_target.split('-')[0]) or 'objcopy'" \
                      "objcopy = os.getenv('OBJCOPY', 'objcopy')"
+  ''
+  + lib.optionalString boringssl.passthru.isShared ''
+    substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs \
+      --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
+      --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
   '';
 
   buildPhase = ''

@@ -13,7 +13,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+    - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       env:
         MERGED_SHA: ${{ inputs.merged-as-untrusted-at }}
         TARGET_SHA: ${{ inputs.target-as-trusted-at }}
@@ -95,25 +95,22 @@ runs:
           // This would fail without --refetch, because the we had a partial clone before, but changed it above.
           await run('git', 'fetch', '--depth=1', '--refetch', 'origin', ...(commits.map(({ sha }) => sha)))
 
-          // Checking out onto tmpfs takes 1s and is faster by at least factor 10x.
+          // On Linux, checking out onto tmpfs takes 1s and is faster by at least 10x.
+          // Currently, on Darwin we can only allocate 3.5GB, which isn't enough.
+          // See https://github.com/NixOS/nixpkgs/pull/506437
           await run('mkdir', 'nixpkgs')
-          switch (process.env.RUNNER_OS) {
-            case 'macOS':
-              await run('sudo', 'mount_tmpfs', 'nixpkgs')
-              break
-            case 'Linux':
-              await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
-              break
+          if (process.env.RUNNER_OS === 'Linux') {
+            await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
           }
 
-          // Create all worktrees in parallel.
-          await Promise.all(
-            commits.map(async ({ sha, path }) => {
-              await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
-              await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
-              await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
-            })
-          )
+          // Git worktree setup can race when multiple worktrees are created and
+          // initialized at the same time against one repository. See #511286.
+          // Keep the setup sequential so shared repo config updates cannot contend.
+          for (const { sha, path } of commits) {
+            await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
+            await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
+            await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
+          }
 
           // Apply pin bump to untrusted worktree
           if (pin_bump_sha) {
@@ -134,3 +131,6 @@ runs:
               await rm('pin-bump.patch')
             }
           }
+
+          console.log('final disk usage:')
+          await run('df', '-h')

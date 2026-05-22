@@ -2,6 +2,10 @@
   lib,
   stdenvNoCC,
   fetchFromGitLab,
+  hicolor-icon-theme,
+  kdePackages,
+  papirus-icon-theme,
+  unstableGitUpdater,
   colorVariants ? [ ], # default: install all icons
 }:
 
@@ -18,14 +22,23 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2024-06-10";
+    version = "0-unstable-2026-05-15";
 
     src = fetchFromGitLab {
       owner = "aiyahm";
       repo = "FairyWren-Icons";
-      rev = "a86736cc9ff50af0ca59ef31c464da2f9e9da103";
-      hash = "sha256-IzTq45lMdlAt+mEb7gpp1hWKBUSeLWINK53Sv4RithI=";
+      rev = "d4a7d6d0a363e9a640a97e54318e64a52c7fcc28";
+      hash = "sha256-08w8DhTpQeJzqgcBjaH5ELkahgrYrYjulCVR8zd5n9Q=";
     };
+
+    propagatedBuildInputs = [
+      hicolor-icon-theme
+      kdePackages.breeze-icons
+      papirus-icon-theme
+    ];
+
+    dontDropIconThemeCache = true;
+    dontWrapQtApps = true;
 
     installPhase = ''
       runHook preInstall
@@ -38,11 +51,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
 
     dontFixup = true;
 
+    passthru.updateScript = unstableGitUpdater { };
+
     meta = {
       description = "FairyWren Icon Set";
       homepage = "https://gitlab.com/aiyahm/FairyWren-Icons";
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ iamanaws ];
       platforms = lib.platforms.all;
-      license = with lib.licenses; [ gpl3Plus ];
+      license = lib.licenses.gpl3Plus;
     };
   }

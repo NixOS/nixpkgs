@@ -29,16 +29,18 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: |
-            ci/supportedSystems.json
+            ci/github-script/supportedSystems.js
 
       - id: prepare
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           MERGED_SHA: ${{ inputs.mergedSha }}
           TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
             const { classify } = require('./ci/supportedBranches.js')
+            const supportedSystems = require('./ci/github-script/supportedSystems.js')
+
             const baseBranch = (
               context.payload.merge_group?.base_ref ??
               context.payload.pull_request.base.ref
@@ -47,19 +49,23 @@ jobs:
             core.setOutput('base', baseClassification)
             core.info('base classification:', baseClassification)
 
-            core.setOutput('mergedSha', context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA)
-            core.info(`mergedSha: ${context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA}`)
-            core.setOutput('targetSha', context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA)
-            core.info(`targetSha: ${context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA}`)
-            core.setOutput('systems', require('./ci/supportedSystems.json'))
+            const mergedSha = context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA
+            core.setOutput('mergedSha', mergedSha)
+            core.info(`mergedSha: ${mergedSha}`)
+
+            const targetSha = context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA
+            core.setOutput('targetSha', targetSha)
+            core.info(`targetSha: ${targetSha}`)
+
+            const systems = await supportedSystems({ github, context, targetSha })
+            core.setOutput('systems', systems)
 
   check:
     name: Check
     needs: [prepare]
     uses: ./.github/workflows/check.yml
     permissions:
-      # cherry-picks; formality right now, but unused
-      pull-requests: write
+      pull-requests: write # cherry-picks: unused in merge queue but required for check workflow
     secrets:
       CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
@@ -83,9 +89,8 @@ jobs:
     # The eval workflow requests these permissions so we must explicitly allow them,
     # even though they are unused when working with the merge queue.
     permissions:
-      # compare
-      pull-requests: write
-      statuses: write
+      pull-requests: write # compare: unused in merge queue but required by eval workflow
+      statuses: write # compare: unused in merge queue but required by eval workflow
     secrets:
       CACHIX_AUTH_TOKEN_GHA: ${{ secrets.CACHIX_AUTH_TOKEN_GHA }}
     with:
@@ -118,9 +123,9 @@ jobs:
       - build
     runs-on: ubuntu-slim
     permissions:
-      statuses: write
+      statuses: write # creating 'no PR failures' commit status
     steps:
-      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           RESULTS: ${{ toJSON(needs.*.result) }}
         with:

@@ -6,21 +6,21 @@
   # the following are non-haskell dependencies
   makeWrapper,
   which,
+  buildNpmPackage,
   maude,
   graphviz,
   glibcLocales,
-  fetchpatch,
 }:
 
 let
   inherit (haskellPackages) mkDerivation;
 
-  version = "1.10.0";
+  version = "1.12.0";
   src = fetchFromGitHub {
     owner = "tamarin-prover";
     repo = "tamarin-prover";
-    rev = version;
-    hash = "sha256-v1BruU2p/Sg/g7b9a+QRza46bD7PkMtsGq82qFaNhpI=";
+    tag = version;
+    hash = "sha256-yXJIJENygr/lmkrVap4ohb8Pua4kri+yaD/Dy0Hpwn4=";
   };
 
   # tamarin has its own dependencies, but they're kept inside the repo,
@@ -141,6 +141,20 @@ let
     }
   );
 
+  tamarin-frontend = buildNpmPackage {
+    pname = "tamarin-frontend";
+    inherit version src;
+
+    sourceRoot = "source/frontend";
+
+    npmDepsHash = "sha256-GJiOCyTUfseZXd5WU018MKjxvrc+UOr7l7ZZSpzCS54=";
+
+    installPhase = ''
+      mkdir -p $out
+      cp dist/* $out/
+    '';
+  };
+
 in
 mkDerivation (
   common "tamarin-prover" src
@@ -148,20 +162,15 @@ mkDerivation (
     isLibrary = false;
     isExecutable = true;
 
-    patches = [
-      # Allows tamarin-prover to run with Maude 3.5.1
-      # This should be removed on the next release
-      (fetchpatch {
-        url = "https://github.com/tamarin-prover/tamarin-prover/commit/1a41b507e7f60d081d8c91cd465386d57f814f11.patch";
-        includes = [ "src/Main/Console.hs" ];
-        hash = "sha256-X8qhscwy+efATrl3rLtn0Xi9M5a2CsFrjBbiqvVRtSE=";
-      })
-    ];
-
     # strip out unneeded deps manually
     doHaddock = false;
     enableSharedExecutables = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+
+    preBuild = ''
+      cp ${tamarin-frontend}/*.js data/js/
+      cp ${tamarin-frontend}/*.css data/css/
+    '';
 
     # wrap the prover to be sure it can find maude, sapic, etc
     executableToolDepends = [

@@ -7,16 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-acl";
-  version = "0.0.1-unstable-2026-02-04";
+  version = "0.0.1-unstable-2026-05-12";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "acl";
-    rev = "8ba4838795d65b63f4bd6b7f945c4f92932e95e3";
-    hash = "sha256-mamqwBwTBnuf+XPT492F3GRSoX0Kj7dLKxhLLYRzNII=";
+    rev = "a661fe211a2b6c1881e15bfabe0bd94488445302";
+    hash = "sha256-ixXevx72Sg7ExaID8pwUMzc4ujkFSy3qT73dLfJ62IU=";
   };
 
-  cargoHash = "sha256-JvGIEBUjpH/6V53VJKi27XdNi3rDd6u7j+NtW/Pq8cQ=";
+  cargoHash = "sha256-tz6gCpqlVjdJwzjHdL82V7cUm8Fz/WYCYCAVc16C1SA=";
+
+  cargoBuildFlags = [ "--workspace" ];
 
   checkFlags = [
     # Operation not supported

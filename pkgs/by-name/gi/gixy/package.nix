@@ -40,8 +40,9 @@ python.pkgs.buildPythonApplication rec {
     # Migrate tests to pytest
     # https://github.com/yandex/gixy/pull/146
     (fetchpatch2 {
-      url = "https://github.com/yandex/gixy/compare/6f68624a7540ee51316651bda656894dc14c9a3e...b1c6899b3733b619c244368f0121a01be028e8c2.patch";
-      hash = "sha256-6VUF2eQ2Haat/yk8I5qIXhHdG9zLQgEXJMLfe25OKEo=";
+      name = "migrate-tests-to-pytest.patch";
+      url = "https://github.com/yandex/gixy/compare/6f68624a7540ee51316651bda656894dc14c9a3e...b1c6899b3733b619c244368f0121a01be028e8c2.diff?full_index=1";
+      hash = "sha256-qIKKTC65ewZqiKiNLcaglKEdFh0SBZMJgIvY41/7WUc=";
     })
     ./python3.13-compat.patch
   ];

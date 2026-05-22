@@ -44,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required (VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace \
+      src/general/CMakeLists.txt \
+      src/test/CMakeLists.txt \
+      src/gripgen/CMakeLists.txt \
+      src/grip/CMakeLists.txt \
+      --replace-fail ' system' ""
   '';
 
   meta = {

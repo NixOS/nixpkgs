@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.11.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "xkbcommon";
     repo = "libxkbcommon";
     tag = "xkbcommon-${finalAttrs.version}";
-    hash = "sha256-IV1dgGM8z44OQCQYQ5PiUUw/zAvG5IIxiBywYVw2ius=";
+    hash = "sha256-wUsxsM0xXTg7nbvFMXrrnHherOepj0YI77eferjRgJA=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     doxygen
   ]
-  ++ lib.optional stdenv.isLinux xvfb
+  ++ lib.optional stdenv.hostPlatform.isLinux xvfb
   ++ lib.optional withWaylandTools wayland-scanner;
 
   buildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
-  doCheck = stdenv.isLinux; # TODO: disable just a part of the tests
+  doCheck = stdenv.hostPlatform.isLinux; # TODO: disable just a part of the tests
   preCheck = ''
     patchShebangs ../test/
   '';

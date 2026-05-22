@@ -62,6 +62,7 @@
   xjadeo,
   libxrandr,
   libxinerama,
+  libjpeg,
   optimize ? true, # disable to print Lua DSP script output to stdout
   videoSupport ? true,
 }:
@@ -72,14 +73,14 @@ stdenv.mkDerivation (
   in
   {
     pname = "ardour";
-    version = "9.0";
+    version = "9.5";
 
     # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
     # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
     src = fetchgit {
       url = "git://git.ardour.org/ardour/ardour.git";
-      rev = finalAttrs.version;
-      hash = "sha256-zgWNKYN45qa2xLWnL3W/UWfRVBJN3+hya9dpIZLLJvo=";
+      tag = finalAttrs.version;
+      hash = "sha256-Jaq1jgiGMmLeIw66RIXfZJxc+HCho2eGl5uEqAlNk6w=";
     };
 
     bundledContent = fetchzip {
@@ -168,6 +169,7 @@ stdenv.mkDerivation (
       taglib
       vamp-plugin-sdk
       libxinerama
+      libjpeg
       libxrandr
     ]
     ++ lib.optionals videoSupport [
@@ -192,14 +194,17 @@ stdenv.mkDerivation (
     ]
     ++ lib.optional optimize "--optimize";
 
-    env.NIX_CFLAGS_COMPILE = toString [
-      # 'ioprio_set' syscall support:
-      "-D_GNU_SOURCE"
-      # compiler doesn't find headers without these:
-      "-I${lib.getDev serd}/include/serd-0"
-      "-I${lib.getDev sratom}/include/sratom-0"
-      "-I${lib.getDev sord}/include/sord-0"
-    ];
+    env = {
+      NIX_CFLAGS_COMPILE = toString [
+        # 'ioprio_set' syscall support:
+        "-D_GNU_SOURCE"
+        # compiler doesn't find headers without these:
+        "-I${lib.getDev serd}/include/serd-0"
+        "-I${lib.getDev sratom}/include/sratom-0"
+        "-I${lib.getDev sord}/include/sord-0"
+      ];
+      LINKFLAGS = "-lpthread";
+    };
 
     postInstall = ''
       # wscript does not install these for some reason
@@ -226,8 +231,6 @@ stdenv.mkDerivation (
           ]
         }"
     '';
-
-    LINKFLAGS = "-lpthread";
 
     meta = {
       description = "Multi-track hard disk recording software";

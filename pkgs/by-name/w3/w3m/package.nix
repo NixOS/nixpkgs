@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "w3m";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchFromSourcehut {
     owner = "~rkta";
     repo = "w3m";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rz9tNkMg5xUqMpMdK2AQlKjCJlCjgLQOkj4A/eyPm0M=";
+    hash = "sha256-VJztcvcmmA8f5RJ+NEYjPE8CGEfCRRjQ+fuF0UpY+sA=";
   };
 
   env = {
@@ -114,6 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
     substituteInPlace ./configure --replace /usr /no-such-path
   '';
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   enableParallelBuilding = false;
 

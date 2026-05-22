@@ -2,26 +2,24 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  async-timeout,
   cython,
   libpq,
   uvloop,
   postgresql,
-  pythonOlder,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   setuptools,
   distro,
 }:
 
 buildPythonPackage rec {
   pname = "asyncpg";
-  version = "0.30.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xVHpkoq2cHYC9EgRgX+CujxEbgGL/h06vsyLpfPqyFE=";
+    hash = "sha256-yYk4bIOUC/vXhxgPKxUZQV4tPWJ3pw2dDwFFrHNQBzU=";
   };
 
   build-system = [
@@ -29,17 +27,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  # required for compatibility with Python versions older than 3.11
-  # see https://github.com/MagicStack/asyncpg/blob/v0.29.0/asyncpg/_asyncio_compat.py#L13
-  dependencies = lib.optionals (pythonOlder "3.11") [ async-timeout ];
-
   nativeCheckInputs = [
     libpq.pg_config
     uvloop
     postgresql
     postgresql.pg_config
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
     distro
   ];
 

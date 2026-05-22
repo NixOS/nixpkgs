@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "2.0.11";
+  version = "2.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TXJpaMCSKCeOiWPVb9//czux+JV8VlJsiWH8fUb1tkw=";
+    hash = "sha256-95OiG3I9S9eJHMYkRd9Y52XnCROFV98fvmUs4SRBF4s=";
   };
 
   build-system = with python3Packages; [
@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     numpy
     open-clip-torch
     pillow
+    pillow-heif
     requests
     torch
     torchvision

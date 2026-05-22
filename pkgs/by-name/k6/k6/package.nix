@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "k6";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "k6";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rfurCWplI21vEYEArxp4wrAn6oOWenMkGetFDy5WCAY=";
+    hash = "sha256-dtP2G0rk8f3TEPTf5fu/1BEH4nLzboTyE/vveVhlcqo=";
   };
 
   subPackages = [ "./" ];

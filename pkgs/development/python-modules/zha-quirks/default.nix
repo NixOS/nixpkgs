@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.156";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-vVA8FmNLzatfClRTvb9pZm5SQxgSQh+iAllOl+OIo6Q=";
+    hash = "sha256-mDcvVwqzSmszaJDahzkRNteiO4C/eU+BqTdBpWj5yGw=";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";
-    homepage = "https://github.com/dmulcahey/zha-device-handlers";
+    homepage = "https://github.com/zigpy/zha-device-handlers";
     changelog = "https://github.com/zigpy/zha-device-handlers/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];

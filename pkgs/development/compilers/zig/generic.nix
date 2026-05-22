@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  __structuredAttrs = true;
+
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
   # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the

@@ -11,12 +11,12 @@
 
 let
   pname = "pgrok";
-  version = "1.4.6";
+  version = "1.5.0";
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     tag = "v${version}";
-    hash = "sha256-Meavhgq0xHRAfCgzdazC1wu8aDw39qQCZrVtZUScwgs=";
+    hash = "sha256-arPFccclBie3XOBt0q6UC96fPaPc7NmgQDMsd2H2bhI=";
   };
 in
 
@@ -41,11 +41,11 @@ buildGoModule {
       src
       ;
     pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-o6wxO8EGRmhcYggJnfxDkH+nbt+isc8bfHji8Hu9YKg=";
+    fetcherVersion = 3;
+    hash = "sha256-D8UZoN0ZnjB8CXQiHmBZwBEt57XGb5SDLg61xxSqNus=";
   };
 
-  vendorHash = "sha256-l/tUO7fevi+zUmUp6CQoVNrzMF7LIzbo2Qsa/ez6LiA=";
+  vendorHash = "sha256-ob8s1jYL2+JGaqjCsM10jgirPiEyTY4U3IVVlHVdoGQ=";
 
   ldflags = [
     "-s"

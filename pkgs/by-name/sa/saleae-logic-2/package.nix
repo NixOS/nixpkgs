@@ -6,10 +6,10 @@
 }:
 let
   pname = "saleae-logic-2";
-  version = "2.4.40";
+  version = "2.4.44";
   src = fetchurl {
     url = "https://downloads2.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
-    hash = "sha256-TG7fH8b0L/O8RjlMB3QJM3/8my49uBX2RwufrVWDgpI=";
+    hash = "sha256-lJp0al4tRqXwb6I8iziCav481XNAuEjASo1ZfUWdYLU=";
   };
   desktopItem = makeDesktopItem {
     name = "saleae-logic-2";
@@ -31,9 +31,12 @@ appimageTools.wrapType2 {
     ''
       mkdir -p $out/etc/udev/rules.d
       cp ${appimageContents}/resources/linux-x64/99-SaleaeLogic.rules $out/etc/udev/rules.d/
-      mkdir -p $out/share/pixmaps
+      mkdir $out/share
       ln -s ${desktopItem}/share/applications $out/share/
-      cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
+      for size in 16 32 48 64 128 256; do
+        install -Dm644 -t $out/share/icons/hicolor/"$size"x"$size"/apps \
+          ${appimageContents}/usr/share/icons/hicolor/"$size"x"$size"/apps/Logic.png
+      done
     '';
 
   extraPkgs =

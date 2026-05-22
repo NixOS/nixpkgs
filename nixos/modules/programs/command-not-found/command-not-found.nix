@@ -38,8 +38,6 @@ in
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
 
-        Requires nix-channels to be set and downloaded (sudo nix-channel --update.)
-
         See also nix-index and nix-index-database as an alternative for flakes-based systems.
 
         Additionally, having the env var NIX_AUTO_RUN set will automatically run the matching package, and with NIX_AUTO_RUN_INTERACTIVE it will confirm the package before running.
@@ -47,38 +45,48 @@ in
     };
 
     dbPath = lib.mkOption {
-      default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite";
       description = ''
-        Absolute path to programs.sqlite.
+        Absolute path to `programs.sqlite`, which contains mappings from binary names to package names.
 
-        By default this file will be provided by your channel
-        (nixexprs.tar.xz).
+        If a nixpkgs tarball from https://channels.nixos.org is used as the source of nixpkgs, this file will be provided and this option be set by default.
+
+        To use the stateful `programs.sqlite` database, set this option to
+        `/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite`.
+        If you do so, you can update it with `sudo nix-channels --update`.
       '';
       type = lib.types.path;
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    programs.bash.interactiveShellInit = ''
-      command_not_found_handle() {
-        '${commandNotFound}/bin/command-not-found' "$@"
-      }
-    '';
+  config = lib.mkMerge [
+    {
+      programs.command-not-found = {
+        enable = lib.mkDefault (builtins.pathExists cfg.dbPath);
+        dbPath = pkgs.path + "/programs.sqlite";
+      };
+    }
 
-    programs.zsh.interactiveShellInit = ''
-      command_not_found_handler() {
-        '${commandNotFound}/bin/command-not-found' "$@"
-      }
-    '';
+    (lib.mkIf cfg.enable {
+      programs.bash.interactiveShellInit = ''
+        command_not_found_handle() {
+          '${commandNotFound}/bin/command-not-found' "$@"
+        }
+      '';
 
-    # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
-    programs.fish.interactiveShellInit = ''
-      function fish_command_not_found
-         "${commandNotFound}/bin/command-not-found" $argv
-      end
-    '';
+      programs.zsh.interactiveShellInit = ''
+        command_not_found_handler() {
+          '${commandNotFound}/bin/command-not-found' "$@"
+        }
+      '';
 
-    environment.systemPackages = [ commandNotFound ];
-  };
+      # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
+      programs.fish.interactiveShellInit = ''
+        function fish_command_not_found
+           "${commandNotFound}/bin/command-not-found" $argv
+        end
+      '';
 
+      environment.systemPackages = [ commandNotFound ];
+    })
+  ];
 }

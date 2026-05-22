@@ -93,8 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs} \
       $out/share/a-keys-path/a-keys-path
 
-    mkdir -p $out/share/pixmaps
-    cp icon.png $out/share/pixmaps/a-keys-path.png
+    install -D icon.png $out/share/icons/hicolor/256x256/apps/a-keys-path.png
 
     install -Dm644 ${finalAttrs.desktopItem}/share/applications/a-keys-path.desktop \
       $out/share/applications/a-keys-path.desktop

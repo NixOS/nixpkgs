@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mindstorm38";
+    owner = "theorzr";
     repo = "portablemc";
     tag = "v${finalAttrs.version}";
     hash = "sha256-KE1qf6aIcDjwKzrdKDUmriWfAt+vuriew6ixHKm0xs8=";
@@ -84,14 +84,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/mindstorm38/portablemc";
+    homepage = "https://github.com/theorzr/portablemc";
     description = "Fast, reliable and cross-platform command-line Minecraft launcher and API for developers";
     longDescription = ''
       A fast, reliable and cross-platform command-line Minecraft launcher and API for developers.
       Including fast and easy installation of common mod loaders such as Fabric, Forge, NeoForge and Quilt.
       This launcher is compatible with the standard Minecraft directories.
     '';
-    changelog = "https://github.com/mindstorm38/portablemc/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/theorzr/portablemc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     mainProgram = "portablemc";
     maintainers = with lib.maintainers; [ tomasajt ];

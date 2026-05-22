@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pv";
-  version = "1.10.3";
+  version = "1.10.5";
 
   src = fetchurl {
     url = "https://www.ivarch.com/programs/sources/pv-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qhYwx5r2lgqJIv+mTSw+f4dIbaIfy1fid4JClP0mZ0I=";
+    hash = "sha256-qyG0+GYigGRragLhufCWeQkY+JyVK74NBv73XTtS+xU=";
   };
 
   meta = {

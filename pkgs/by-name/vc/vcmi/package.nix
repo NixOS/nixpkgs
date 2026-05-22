@@ -24,17 +24,18 @@
   versionCheckHook,
   xz,
   zlib,
+  enableMMAI ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
-  version = "1.7.1";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-3XZQyq6urCTI/A6tCSHgzPgOvzH8ckXvDRamWvVgeVY=";
+    hash = "sha256-uzdnRKF0xb2B2r6kTzk6OEDGBdOwcu9eGYsvv4ALCF0=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     xz
     zlib
-  ];
+  ]
+  ++ lib.optional enableMMAI onnxruntime;
+
+  # GCC 15 ICE in -Wmismatched-tags diagnostic during template specialisation lookup
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-mismatched-tags";
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_CLIENT" true)
@@ -71,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_GOLDMASTER" true)
     (lib.cmakeBool "ENABLE_TEST" false) # Requires nonfree data files.
     (lib.cmakeBool "ENABLE_PCH" false)
+    (lib.cmakeBool "ENABLE_DISCORD" false)
+    (lib.cmakeBool "ENABLE_MMAI" enableMMAI)
     (lib.cmakeFeature "CMAKE_INSTALL_RPATH" "$out/lib/vcmi")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")

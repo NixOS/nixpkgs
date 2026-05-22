@@ -7,8 +7,6 @@
 let
   cfg = config.services.rabbitmq;
 
-  inherit (builtins) concatStringsSep;
-
   config_file_content = lib.generators.toKeyValue { } cfg.configItems;
   config_file = pkgs.writeText "rabbitmq.conf" config_file_content;
 

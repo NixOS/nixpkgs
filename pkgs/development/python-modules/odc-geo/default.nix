@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   affine,
@@ -28,20 +28,20 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "odc-geo";
-  version = "0.4.10";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-geo";
-    tag = "v${version}";
-    hash = "sha256-f4wUUzcv4NM44zrCvW3sBRybppIBZEAm+oiTSW1B+Fw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rFhCY5rkZgVXM8aqsV0PoT8iPPpgNEQRI9MVqk6OQFQ=";
   };
 
   build-system = [
-    setuptools
+    flit-core
   ];
 
   dependencies = [
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     matplotlib
     pytestCheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTestMarks = [ "network" ];
 
@@ -96,6 +96,8 @@ buildPythonPackage rec {
     "test_warp_nan"
     # requires imagecodecs package (currently not available on nixpkgs)
     "test_cog_with_dask_smoke_test"
+    # xarray compat issue
+    "test_xr_reproject"
   ];
 
   pythonImportsCheck = [
@@ -111,8 +113,8 @@ buildPythonPackage rec {
       with geospatial metadata and geo-registered `xarray` rasters.
     '';
     homepage = "https://github.com/opendatacube/odc-geo/";
-    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

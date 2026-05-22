@@ -7,19 +7,19 @@
   cmake,
   python3,
   qt6,
-  imagemagick,
+  iconConvTools,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pokefinder";
-  version = "4.2.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Admiral-Fish";
     repo = "PokeFinder";
     rev = "v${finalAttrs.version}";
-    sha256 = "wjHqox0Vxc73/UTcE7LSo/cG9o4eOqkcjTIW99BxsAc=";
+    hash = "sha256-tItPvA0f2HnY7SUSnb7A5jGwbRs7eQoS4vibBomZ9pw=";
     fetchSubmodules = true;
   };
 
@@ -27,21 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./set-desktop-file-name.patch
   ];
 
-  postPatch = ''
-    patchShebangs Source/Core/Resources/
-  '';
-
   installPhase = ''
     runHook preInstall
   ''
   + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/Applications
-    cp -R Source/PokeFinder.app $out/Applications
+    cp -R PokeFinder.app $out/Applications
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    install -D Source/PokeFinder $out/bin/PokeFinder
-    mkdir -p $out/share/pixmaps
-    convert "$src/Source/Form/Images/pokefinder.ico[-1]" $out/share/pixmaps/pokefinder.png
+    install -D PokeFinder $out/bin/PokeFinder
+    icoFileToHiColorTheme $src/Form/Images/pokefinder.ico pokefinder $out
   ''
   + ''
     runHook postInstall
@@ -50,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
-    python3
+    (python3.withPackages (ps: [ ps.zstandard ]))
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-    imagemagick
+    iconConvTools
   ];
 
   desktopItems = [

@@ -66,7 +66,7 @@
     ''
       start_all()
 
-      harmonia.wait_for_unit("harmonia.service")
+      harmonia.wait_for_unit("harmonia.socket")
 
       ncps.wait_for_unit("ncps.service")
 

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "High-quality data compression program";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bzip2;
     pkgConfigModules = [ "bz2" ];
     platforms = lib.platforms.all;
     maintainers = [ ];

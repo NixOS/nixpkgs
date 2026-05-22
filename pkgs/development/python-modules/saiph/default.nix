@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  poetry-core,
+  hatchling,
   fetchFromGitHub,
   pytestCheckHook,
   doubles,
@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "saiph";
-  version = "2.0.3";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "octopize";
     repo = "saiph";
     tag = "saiph-v${version}";
-    hash = "sha256-8AbV3kjPxjZo28CgahfbdNl9+ESWOfUt8YT+mWwbo5Q=";
+    hash = "sha256-3KcCiGgcJ+1WLQPvxDJyGrn8TEiBVIh/9TsCMkku3ls=";
   };
 
   pyproject = true;
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   dependencies = [

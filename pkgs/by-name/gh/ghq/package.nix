@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   installShellFiles,
   testers,
@@ -9,18 +9,18 @@
   ghq,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "ghq";
-  version = "1.8.1";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Iw8hu2QtnRgRbSTqtIPDmKbx5FcE2j68VfzP4egbZgY=";
+    sha256 = "sha256-z7tLCSThR4EFLk8GnyrB8H6d/9t5AKegVEdzlleCS94=";
   };
 
-  vendorHash = "sha256-RRxRwYTkveOZvvxAwpG9ie4+ZdUDDkZZfX5cNn0DAhA=";
+  vendorHash = "sha256-/uk1hf5eXpNULKm7UeVgQ7Lc7YOU+eV9Yd/4lYorz/8=";
 
   doCheck = false;
 

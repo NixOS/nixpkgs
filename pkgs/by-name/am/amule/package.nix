@@ -10,7 +10,7 @@
   lib,
   cmake,
   zlib,
-  wxGTK32,
+  wxwidgets_3_2,
   perl,
   cryptopp,
   libupnp,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     zlib
-    wxGTK32
+    wxwidgets_3_2
     perl
     cryptopp.dev
     libupnp

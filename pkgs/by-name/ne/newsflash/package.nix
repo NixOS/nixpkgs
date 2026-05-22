@@ -14,7 +14,9 @@
   gdk-pixbuf,
   clapper-unwrapped,
   gtk4,
+  gtksourceview5,
   libadwaita,
+  libseccomp,
   libxml2,
   openssl,
   sqlite,
@@ -27,18 +29,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "4.2.1";
+  version = "5.1.0";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-me9/2sA1Thne10+JrSMvicDRxXuevCnM8Tb+kwXzNDI=";
+    hash = "sha256-BfzrnTyMLFiM+aHtrppvl/j/fjB4TbEkbl/yHYOnXa8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-cgu1zP85UCb/6gYNcj/khc6u1kSwX0UZ2oIjM2UUBOA=";
+    hash = "sha256-4z2RGelDhi4RmVQ/+Ba340Pm05x4ruaRYAtJ1HuRHqA=";
   };
 
   postPatch = ''
@@ -70,7 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     clapper-unwrapped
     gtk4
+    gtksourceview5
     libadwaita
+    libseccomp
     libxml2
     openssl
     sqlite

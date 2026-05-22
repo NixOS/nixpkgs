@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [ "--skip=impure" ];
 
-  PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
   meta = {
     description = "Rust TUI client for steamcmd";

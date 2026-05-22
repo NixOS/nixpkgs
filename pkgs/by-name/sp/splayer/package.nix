@@ -2,31 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron,
+  electron_39,
   rustPlatform,
   cargo,
   rustc,
   python3,
+  pkg-config,
+  openssl,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
   removeReferencesTo,
 }:
+let
+  electron = electron_39;
+  pnpm = pnpm_10_29_2;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.9";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-+9F4ckATxRE+/PhMi5c1GVDq5V9QMOogCD9uT6QkREM=";
+    hash = "sha256-E29TJlp7nMokJbbi/YLuYf9qWmwvo/r4qQckKrVyumI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -35,9 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-tAOtrxQasIQ1IS2jKdcX4KEM5p3zhshqw8phzsj667Q=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-NaKI2369TlF8DDMy6Q3RUqb2B2/T756Zd6gu4ATz/yc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -46,12 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-QKk1coOuZNaqKgvbBgorvOotHmTJ+YXTHBfyhF0L37E=";
+    hash = "sha256-gd/5f3yraTQI5bu1VE6HHsGDeKJLR1oTm2H+pg1PAOA=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm
     nodejs
     rustPlatform.cargoSetupHook
     cargo
@@ -59,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     makeWrapper
     copyDesktopItems
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -80,16 +91,15 @@ stdenv.mkDerivation (finalAttrs: {
     # of better-sqlite3. It has a native part that it wants to build using a
     # script which is disallowed.
     # What's more, we need to use headers from electron to avoid ABI mismatches.
-    # Adapted from mkYarnModules.
     for f in $(find . -path '*/node_modules/better-sqlite3' -type d); do
       (cd "$f" && (
       npm run build-release --offline --nodedir="${electron.headers}"
+      rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
       find build -type f -exec \
         ${lib.getExe removeReferencesTo} \
         -t "${electron.headers}" {} \;
       ))
     done
-    rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
 
     pnpm build
 

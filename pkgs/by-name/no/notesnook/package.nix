@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.3.8";
+  version = "3.3.19";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -27,10 +27,10 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-7gPCmC3uol5ukwu8OOhhqk9pBTgWjI14wYmM61nlg+A=";
-        aarch64-linux = "sha256-JmWt7yr/Ij01x7bTWUQ7UAwKcEf9i91fZZsHpEWRJYY=";
-        x86_64-darwin = "sha256-5Obl3YveMx38sdLIGRz3Lqi3mloruTyH/3MsNNX03TA=";
-        aarch64-darwin = "sha256-P1xqMFGAQQVq76O1RTp+3kZtzM1xGvSUpbki64KTji8=";
+        x86_64-linux = "sha256-l4+SeM6KXLICbHzoIpotwdCkbCaPV83TT8mlvc+Z0Qs=";
+        aarch64-linux = "sha256-9yWClJWI/1F8QGkUQCsPQcqbAqjC+JM4jXA8SmpoKNQ=";
+        x86_64-darwin = "sha256-LAsCRRLAZ0bsHkitXHE4jF6+tgSm0HnWNKG3bSKLy+0=";
+        aarch64-darwin = "sha256-GkhO6iCn+CrLDGhKBGyogm0dNvpAPZS0xH/ED5oSN2U=";
       }
       .${system} or throwSystem;
   };

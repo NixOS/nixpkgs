@@ -6,13 +6,13 @@
 buildHomeAssistantComponent rec {
   owner = "Hypfer";
   domain = "valetudo";
-  version = "2025.12.0";
+  version = "2026.01.1";
 
   src = fetchFromGitHub {
     owner = "Hypfer";
     repo = "hass-valetudo";
     tag = "${version}";
-    hash = "sha256-dHrN9Bbmm3J47MRmwExZH6Mi4RvRBZdQ4R1xeCewcSc=";
+    hash = "sha256-xJ8kA+ujWuen5660GWZSo90WsHpfwQVStIheaIRxAg8=";
   };
   meta = {
     description = "Valetudo for Home Assistant";

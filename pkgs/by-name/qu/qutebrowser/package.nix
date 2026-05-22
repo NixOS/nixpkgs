@@ -26,15 +26,15 @@
 let
   pdfjs =
     let
-      version = "5.4.394";
+      version = "5.6.205";
     in
     fetchzip {
       url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-      hash = "sha256-KMpSwF5MmoWdNoIUd4ZOwbJZZmjkid8wUoFKw7XjQFA=";
+      hash = "sha256-JMmxoT68PNJ/MmlMwVNYcHerorklLv5YY6C55xjn73w=";
       stripRoot = false;
     };
 
-  version = "3.6.3";
+  version = "3.7.0";
 in
 
 python3.pkgs.buildPythonApplication {
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-bb4oieYevWMAOuQLMZ4egfMG6SToMWxnla5IhAIcL68=";
+    hash = "sha256-x/lYhOpeZnXlhAJb6lXP+VDEfXSa/39BX2jaA/zOD5I=";
   };
 
   # Needs tox

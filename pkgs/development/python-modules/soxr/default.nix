@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -11,7 +10,6 @@
   scikit-build-core,
   setuptools,
   setuptools-scm,
-  typing-extensions,
 
   # native dependencies
   libsoxr,
@@ -25,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dofuuz";
     repo = "python-soxr";
     tag = "v${version}";
-    hash = "sha256-8NVQD1LamIRe77bKEs8YqHXeXifdMJpQUedmeiBRHSI=";
+    hash = "sha256-XdSInR0ogbcku6yvMkGEEIxu2nlqa0mffBtd+ifvzoU=";
   };
 
   patches = [ ./cmake-nanobind.patch ];
@@ -53,9 +51,6 @@ buildPythonPackage rec {
     nanobind
     setuptools
     setuptools-scm
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   buildInputs = [ libsoxr ];

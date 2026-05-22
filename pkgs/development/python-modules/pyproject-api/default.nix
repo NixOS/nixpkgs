@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build time
   hatchling,
@@ -10,7 +9,6 @@
 
   # runtime
   packaging,
-  tomli,
 
   # docs
   sphinxHook,
@@ -51,7 +49,7 @@ buildPythonPackage rec {
     sphinx-autodoc-typehints
   ];
 
-  dependencies = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ packaging ];
 
   nativeCheckInputs = [
     pytest-mock

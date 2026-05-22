@@ -1,28 +1,25 @@
 {
+  lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
   versionCheckHook,
-  lib,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "goshs";
-  version = "1.1.3";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "patrickhener";
     repo = "goshs";
-    tag = finalAttrs.version;
-    hash = "sha256-oGcGaLPtagyvDNdSkNx4U0wEj57yrYCGnKUGGR4U0aw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xGV9Sr+IAkGrDv6Qz2mgDS6vL9oBj9l7AuZ13SW91FE=";
   };
 
-  vendorHash = "sha256-43Bu4BAmMmd6WrDNztQNCi2OdlzIfbrQC100DkcD4uE=";
+  vendorHash = "sha256-3+MGBaFWmMf2gDiZhYUxHFNmEfD/Xr1lNddlA5FQLUE=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -41,10 +38,12 @@ buildGoModule (finalAttrs: {
     "-skip=^TestGetIPv4Addr$"
   ];
 
+  versionCheckProgramArg = [ "-v" ];
+
   meta = {
     description = "Simple, yet feature-rich web server written in Go";
     homepage = "https://goshs.de";
-    changelog = "https://github.com/patrickhener/goshs/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/patrickhener/goshs/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab

@@ -16,18 +16,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "wails";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = "wails";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H1Nml2vhCx4IB/CT+kDro5joAw8ewpxoQjDgvqamAr8=";
+    hash = "sha256-XngfbEbXhPRRKbNp/aaVCleISABTs90d5JjmwIq7nsk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/v2";
 
-  vendorHash = "sha256-RgRrKok06HDg6j5tbOmtX9mOl/t6eXuCwQ2OhOXbHUU=";
+  vendorHash = "sha256-dmSH5I+bOErmtCxQdjkJXp1x2G5bpElL1VK6aZOv69I=";
 
   proxyVendor = true;
 
@@ -64,7 +64,7 @@ buildGoModule (finalAttrs: {
   # As Wails calls a compiler, certain apps and libraries need to be made available.
   postFixup = ''
     wrapProgram $out/bin/wails \
-      --prefix PATH : ${
+      --suffix PATH : ${
         lib.makeBinPath [
           pkg-config
           go
@@ -72,7 +72,7 @@ buildGoModule (finalAttrs: {
           nodejs
         ]
       } \
-      --prefix LD_LIBRARY_PATH : "${
+      --suffix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath (
           lib.optionals stdenv.hostPlatform.isLinux [
             gtk3

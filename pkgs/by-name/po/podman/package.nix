@@ -42,13 +42,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.7.1";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wfzkn8sv7LajwTZzlWi2gy7Uox4rWGc0i8/OjTIqi5o=";
+    hash = "sha256-WUcM594sUerb7/SsAu0PkpOyYuIMjaosr8Bp6d36dYk=";
   };
 
   patches = [
@@ -181,12 +181,12 @@ buildGoModule (finalAttrs: {
           gvproxy
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [
-          aardvark-dns
+          aardvark-dns # dns
           catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-          netavark
-          passt
-          conmon
-          crun
+          netavark # networking
+          passt # rootless networking
+          conmon # runtime monitor
+          crun # runtime
         ]
         ++ extraRuntimes;
     };

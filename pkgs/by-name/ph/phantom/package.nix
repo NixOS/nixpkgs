@@ -35,8 +35,10 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/scalable/app
     cp phantom-qt $out/bin
+    cp ../src/phantom-qt.desktop $out/share/applications
+    cp ../src/phantom.svg $out/share/icons/hicolor/scalable/app
 
     runHook postInstall
   '';
@@ -45,7 +47,7 @@ stdenv.mkDerivation {
     description = "Markdown editor with support for multi-tab";
     homepage = "https://codeberg.org/ItsZariep/Phantom";
     license = lib.licenses.gpl3Only;
-    mainProgram = "phantom";
+    mainProgram = "phantom-qt";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ reylak ];
   };

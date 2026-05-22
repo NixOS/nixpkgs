@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "e-imzo";
-  version = "5.00";
+  version = "6.3.7";
 
   src = fetchurl {
     url = "https://cdn.xinux.uz/e-imzo/E-IMZO-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-jPAZu98prkC4NQlfA8/kJuw9qdCrSSSyzySSWPlIXpY=";
+    hash = "sha256-XjS9FAIqMc9tV1aeO8D6dP9hg7ppPE/iRHX/pmzfZmM=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -m 755 -d $out/lib/e-imzo
     install -m 644 ./E-IMZO.jar $out/lib/e-imzo/
     install -m 644 ./E-IMZO.pem $out/lib/e-imzo/
-    install -m 644 ./truststore.jks $out/lib/e-imzo/
     cp -r ./lib $out/lib/e-imzo/
 
     makeWrapper ${jre8}/bin/java $out/bin/e-imzo \

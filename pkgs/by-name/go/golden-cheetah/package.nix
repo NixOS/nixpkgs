@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
-  version = "3.7-SP1";
+  version = "3.8-DEV2603";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NsXTe4Ht4TFDu7/nK3/hdCk/K2mPm59I9GHkVOTDc74=";
+    hash = "sha256-FxQ18KJfR+fegQ5Qu4vI3vqckj4mB8s9VtSdRtIQISg=";
   };
 
   buildInputs =
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $out/bin
         cp src/GoldenCheetah $out/bin
         install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
-        install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
+        install -Dm644 src/Resources/images/gc.png $out/share/icons/hicolor/512x512/apps/goldencheetah.png
 
         runHook postInstall
       ''

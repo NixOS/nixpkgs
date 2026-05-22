@@ -39,21 +39,18 @@
   libnfs,
   openssh,
   libsecret,
-  libgdata,
   libmsgraph,
   python3,
   gsettings-desktop-schemas,
-  googleSupport ? false, # dependency on vulnerable libsoup versions
 }:
 
-assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.58.1";
+  version = "1.60.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/FN9a7qx/6dpct99ShgZsMD+GevR3+gkIdHzLhS13Ds=";
+    hash = "sha256-ZIJz8GnpLH48ATuSFI6CyQHwgETis7FMbPvVImn2tkY=";
   };
 
   patches = [
@@ -109,9 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-online-accounts
     libsecret
     libmsgraph
-  ]
-  ++ lib.optionals googleSupport [
-    libgdata
   ];
 
   mesonFlags = [
@@ -136,14 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dkeyring=false"
     "-Donedrive=false"
   ]
-  ++ lib.optionals (!googleSupport) [
-    "-Dgoogle=false"
-  ]
   ++ lib.optionals (avahi == null) [
     "-Ddnssd=false"
   ]
   ++ lib.optionals (samba == null) [
-    # Xfce don't want samba
     "-Dsmb=false"
   ];
 

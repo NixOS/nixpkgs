@@ -1,74 +1,108 @@
 {
   lib,
-  mkYarnPackage,
+  stdenv,
   fetchYarnDeps,
   fetchFromGitHub,
-  srcOnly,
-  makeWrapper,
-  removeReferencesTo,
+
+  # native
+  yarn,
+  yarnConfigHook,
+  node-gyp,
   python3,
+  srcOnly,
+  removeReferencesTo,
+  yarnBuildHook,
+  makeWrapper,
+
+  # buildInputs
   nodejs_20,
   matrix-sdk-crypto-nodejs,
+  napi-rs-cli,
 }:
 
 let
-  nodejs = nodejs_20; # only supports nodejs v18.X - v20.X
-  pin = lib.importJSON ./pin.json;
-  nodeSources = srcOnly nodejs;
-
+  yarn' = yarn.override {
+    nodejs = nodejs_20;
+  };
+  yarnConfigHook' = yarnConfigHook.override {
+    nodejs = nodejs_20;
+    yarn = yarn';
+  };
+  yarnBuildHook' = yarnBuildHook.override {
+    nodejs = nodejs_20;
+    yarn = yarn';
+  };
+  matrix-sdk-crypto-nodejs' = matrix-sdk-crypto-nodejs.override {
+    nodejs = nodejs_20;
+    napi-rs-cli = napi-rs-cli.override {
+      nodejs = nodejs_20;
+    };
+  };
+  nodeSources = srcOnly nodejs_20;
 in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-appservice-discord";
-  inherit (pin) version;
-  inherit nodejs;
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-discord";
-    rev = "v${version}";
-    hash = pin.srcHash;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UyRMMbnX4aJVv8oQfgn/rkZT1cRATtcgFj4fXszDKqo=";
   };
 
-  packageJSON = ./package.json;
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = pin.yarnSha256;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-s8ictJX65mSU2oxaIuCswfb2flo2RN9a1JZevacN/Ic=";
   };
 
-  pkgConfig = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" = {
-      postInstall = ''
-        # replace with the built package
-        cd ..
-        rm -r matrix-sdk-crypto-nodejs
-        ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/* ./
-      '';
-    };
+  nativeBuildInputs = [
+    yarnConfigHook'
+    yarnBuildHook'
+    nodejs_20
+    node-gyp
+    python3
+    removeReferencesTo
+    makeWrapper
+  ];
 
-    better-sqlite3 = {
-      nativeBuildInputs = [ python3 ];
-      postInstall = ''
-        # build native sqlite bindings
-        npm run build-release --offline --nodedir="${nodeSources}"
-        find build -type f -exec \
-          ${removeReferencesTo}/bin/remove-references-to \
-          -t "${nodeSources}" {} \;
-      '';
-    };
-  };
+  preBuild = ''
+    cp -r ${matrix-sdk-crypto-nodejs'}/lib/node_modules/@matrix-org ./node_modules
+    cd ./node_modules/better-sqlite3
+    npm run build-release --offline --nodedir="${nodeSources}"
+    find build -type f -exec remove-references-to -t "${nodeSources}" {} \;
+    cd ../../
+  '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  # npmHooks.npmInstallHook and yarnInstallHook don't work for this package
+  # because:
+  #
+  # - There is no `bin` key in
+  #   package.json, which instructs it to create a binary file for the package.
+  # - The build/ directory, containing the compiled `.js` files from some
+  #   doesn't get picked up by `yarn pack`.
+  installPhase = ''
+    runHook preInstall
 
-  buildPhase = ''
-    runHook preBuild
+    mkdir -p $out/lib/node_modules
 
-    # compile TypeScript sources
-    yarn --offline build
+    mv build $out/lib/node_modules/matrix-appservice-discord
+    cp -r node_modules $out/lib/node_modules/matrix-appservice-discord
+    makeWrapper '${nodejs_20}/bin/node' "$out/bin/matrix-appservice-discord" \
+      --add-flags "$out/lib/node_modules/matrix-appservice-discord/src/discordas.js"
 
-    runHook postBuild
+    # admin tools wrappers
+    for toolPath in $out/lib/node_modules/matrix-appservice-discord/tools/*; do
+      makeWrapper '${nodejs_20}/bin/node' \
+        "$out/bin/matrix-appservice-discord-$(basename $toolPath .js)" \
+        --add-flags "$toolPath"
+    done
+
+    runHook postInstall
   '';
 
   doCheck = true;
+
   checkPhase = ''
     runHook preCheck
 
@@ -78,29 +112,6 @@ mkYarnPackage rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    OUT_JS_DIR="$out/${passthru.nodeAppDir}/build"
-
-    # server wrapper
-    makeWrapper '${nodejs}/bin/node' "$out/bin/${pname}" \
-      --add-flags "$OUT_JS_DIR/src/discordas.js"
-
-    # admin tools wrappers
-    for toolPath in $OUT_JS_DIR/tools/*; do
-      makeWrapper '${nodejs}/bin/node' \
-        "$out/bin/${pname}-$(basename $toolPath .js)" \
-        --add-flags "$toolPath"
-    done
-  '';
-
-  # don't generate the dist tarball
-  doDist = false;
-
-  passthru = {
-    nodeAppDir = "libexec/${pname}/deps/${pname}";
-    updateScript = ./update.sh;
-  };
-
   meta = {
     description = "Bridge between Matrix and Discord";
     homepage = "https://github.com/matrix-org/matrix-appservice-discord";
@@ -109,4 +120,4 @@ mkYarnPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "matrix-appservice-discord";
   };
-}
+})

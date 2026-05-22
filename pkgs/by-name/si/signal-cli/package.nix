@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   makeWrapper,
-  openjdk21_headless,
+  openjdk25_headless,
   libmatthew_java,
   dbus,
   dbus_java,
@@ -12,12 +12,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "signal-cli";
-  version = "0.13.22";
+  version = "0.14.2";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${finalAttrs.version}/signal-cli-${finalAttrs.version}.tar.gz";
-    hash = "sha256-FFPChw0w0QqX8ZJnqpwxS5mf2OeDlVW8QQyDjTozOAs=";
+    hash = "sha256-riu8b8ZomoqyPVfmN9fpzbtDQpN72xtU1M9rVkDfHg0=";
   };
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
@@ -36,8 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   + (
     if stdenvNoCC.hostPlatform.isLinux then
       ''
-        makeWrapper ${openjdk21_headless}/bin/java $out/bin/signal-cli \
-          --set JAVA_HOME "${openjdk21_headless}" \
+        makeWrapper ${openjdk25_headless}/bin/java $out/bin/signal-cli \
+          --set JAVA_HOME "${openjdk25_headless}" \
           --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
           --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
           --add-flags "org.asamk.signal.Main"
@@ -45,8 +45,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     else
       ''
         wrapProgram $out/bin/signal-cli \
-          --prefix PATH : ${lib.makeBinPath [ openjdk21_headless ]} \
-          --set JAVA_HOME ${openjdk21_headless}
+          --prefix PATH : ${lib.makeBinPath [ openjdk25_headless ]} \
+          --set JAVA_HOME ${openjdk25_headless}
       ''
   )
   + ''
@@ -71,7 +71,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/AsamK/signal-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = [ lib.maintainers.klea ];
     platforms = lib.platforms.all;
   };
 })

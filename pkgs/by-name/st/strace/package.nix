@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strace";
-  version = "6.18";
+  version = "7.0";
 
   src = fetchurl {
     url = "https://strace.io/files/${finalAttrs.version}/strace-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CtXcupc6aed5ZQ7xyzNbEu5gcW/HMmYJiVvTPm0qcyU=";
+    hash = "sha256-bJJBm+Py7FYLMXKKRlIhfFmGTIZCunsbN3GxsBOtB0s=";
   };
 
   separateDebugInfo = true;

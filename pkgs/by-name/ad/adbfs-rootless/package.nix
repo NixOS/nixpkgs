@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # very ugly way of replacing the adb calls
     substituteInPlace adbfs.cpp \
-      --replace '"adb ' '"${android-tools}/bin/adb '
+      --replace-fail '"adb ' '"${android-tools}/bin/adb '
   '';
 
   installPhase = ''

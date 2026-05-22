@@ -23,6 +23,8 @@ let
           tag = version;
           hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
         };
+
+        propagatedBuildInputs = with python3.pkgs; [ packaging ];
       });
     };
   };

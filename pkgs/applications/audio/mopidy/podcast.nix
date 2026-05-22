@@ -5,13 +5,13 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-podcast";
   version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-Podcast";
     hash = "sha256-grNPVEVM2PlpYhBXe6sabFjWVB9+q+apIRjcHUxH52A=";
   };
@@ -40,4 +40,4 @@ pythonPackages.buildPythonApplication rec {
       lib.maintainers.daneads
     ];
   };
-}
+})

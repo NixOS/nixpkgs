@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.2";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/libdom-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/libs/releases/libdom-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-0F5FrxZUcBTCsKOuzzZw+hPUGfUFs/X8esihSR/DDzw=";
   };
 
@@ -35,8 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     expat
     netsurf-buildsystem
-    libhubbub
     libparserutils
+  ];
+
+  propagatedBuildInputs = [
+    libhubbub
     libwapcaplet
   ];
 

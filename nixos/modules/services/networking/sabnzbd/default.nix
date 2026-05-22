@@ -33,7 +33,7 @@ let
     "__version__" = 19;
     "__encoding__" = "utf-8";
   };
-  allSettings = cfg.settings // mandatoryGlobalSettings;
+  allSettings = mandatoryGlobalSettings // cfg.settings;
 
   # sabnzbd uses configobj type inis, which support
   # nested sections specified by increasing numbers
@@ -514,10 +514,7 @@ in
     systemd.services.sabnzbd =
       let
         files =
-          if cfg.configFile != null then
-            [ sabnzbdIniPath ]
-          else
-            (lib.optional cfg.allowConfigWrite sabnzbdIniPath) ++ [ publicSettingsIni ] ++ cfg.secretFiles;
+          (lib.optional cfg.allowConfigWrite sabnzbdIniPath) ++ [ publicSettingsIni ] ++ cfg.secretFiles;
         iniPathQuoted = lib.escapeShellArg sabnzbdIniPath;
       in
       {
@@ -532,10 +529,17 @@ in
           StateDirectory = cfg.stateDir;
           ExecStart = "${lib.getExe cfg.package} -d -f ${iniPathQuoted}";
         };
+      }
+      // lib.optionalAttrs (cfg.configFile == null) {
         preStart = ''
           set -euo pipefail
 
           ${lib.toShellVar "files" files}
+
+          # We overwrite this immediately, but the merge script requires that
+          # all files exist
+          # See also: nixpkgs #504224
+          (touch ${iniPathQuoted} 2>/dev/null || true)
 
           tmpfile=$(mktemp)
 

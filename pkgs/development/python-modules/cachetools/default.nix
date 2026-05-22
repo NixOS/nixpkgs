@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "6.2.2";
+  version = "6.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "cachetools";
     tag = "v${version}";
-    hash = "sha256-seoyqkrRQpRiMd5GTEvenjirn173Hq40Zuk1u7TvMPI=";
+    hash = "sha256-LlDyrjiRYCD9btDl5NA0Seb3jk3hlpNhwu0jAQp9YZE=";
   };
 
   build-system = [ setuptools ];

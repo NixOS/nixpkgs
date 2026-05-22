@@ -41,6 +41,11 @@ stdenv.mkDerivation {
     substituteInPlace CMakeLists.txt --replace-fail \
       'cmake_minimum_required(VERSION 2.8.8)' \
       'cmake_minimum_required(VERSION 3.10)'
+
+    # boost 1.89 no longer provides boost_system as a separate CMake component
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'find_package(Boost COMPONENTS filesystem system REQUIRED)' \
+      'find_package(Boost COMPONENTS filesystem REQUIRED)'
   '';
 
   nativeBuildInputs = [

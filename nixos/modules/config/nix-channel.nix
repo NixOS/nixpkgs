@@ -9,7 +9,6 @@
 { config, lib, ... }:
 let
   inherit (lib)
-    mkDefault
     mkIf
     mkOption
     stringAfter

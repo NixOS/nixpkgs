@@ -2,6 +2,7 @@
   lib,
   mkTclDerivation,
   fetchfossil,
+  tcl,
 }:
 
 mkTclDerivation rec {
@@ -35,5 +36,6 @@ mkTclDerivation rec {
     homepage = "https://core.tcl-lang.org/tcludp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
+    broken = tcl.isTcl9;
   };
 }

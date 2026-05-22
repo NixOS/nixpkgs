@@ -5,56 +5,69 @@
   rustPlatform,
   pythonImportsCheckHook,
   buildPythonPackage,
-
-  cargo,
-  rustc,
   pkg-config,
-  sccache,
-  setuptools,
-  setuptools-rust,
-  setuptools-scm,
+  heimdal,
 }:
-
 buildPythonPackage rec {
   pname = "python-kadmin-rs";
-  version = "0.6.3";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authentik-community";
     repo = "kadmin-rs";
     rev = "kadmin/version/${version}";
-    hash = "sha256-ofoxgaTflem/QG/aQc6M5oxrUl/YoLHzDWlNyeVr0H8=";
+    hash = "sha256-7aRbpQblRFoCmuZJgm2mrGoUNL0BBcIpzlKblCnHVPc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-mSwuR8TCljPYgVhguZiu2fXprCl+IEyZxE7ML+FBI98=";
+    hash = "sha256-dzTcB5GfeUbgikznq4YFEzZ75z0zvz4I1/+5UCQ0e2o=";
   };
 
+  # The include directories of krb5 and heimdal contain overlapping paths.
+  # Only add one and set the other required paths via environment variables.
   buildInputs = [
     pkgs.krb5
   ];
 
+  env = {
+    KADMIN_MIT_CLIENT_INCLUDES = "${pkgs.krb5.dev}/include";
+    KADMIN_MIT_SERVER_INCLUDES = "${pkgs.krb5.dev}/include";
+    KADMIN_HEIMDAL_CLIENT_INCLUDES = "${heimdal.dev}/include";
+    KADMIN_HEIMDAL_SERVER_INCLUDES = "${heimdal.dev}/include";
+    KADMIN_MIT_CLIENT_KRB5_CONFIG = "${pkgs.krb5.dev}/bin/krb5-config";
+    KADMIN_MIT_SERVER_KRB5_CONFIG = "${pkgs.krb5.dev}/bin/krb5-config";
+    KADMIN_HEIMDAL_CLIENT_KRB5_CONFIG = "${heimdal.dev}/bin/krb5-config";
+    KADMIN_HEIMDAL_SERVER_KRB5_CONFIG = "${heimdal.dev}/bin/krb5-config";
+
+    K5TEST_MIT_KDB5_UTIL = "${pkgs.krb5}/bin/kdb5_util";
+    K5TEST_MIT_KRB5KDC = "${pkgs.krb5}/bin/krb5kdc";
+    K5TEST_MIT_KADMIN = "${pkgs.krb5}/bin/kadmin";
+    K5TEST_MIT_KADMIN_LOCAL = "${pkgs.krb5}/bin/kadmin.local";
+    K5TEST_MIT_KADMIND = "${pkgs.krb5}/bin/kadmind";
+    K5TEST_MIT_KPROP = "${pkgs.krb5}/bin/kprop";
+    K5TEST_MIT_KINIT = "${pkgs.krb5}/bin/kinit";
+    K5TEST_MIT_KLIST = "${pkgs.krb5}/bin/klist";
+
+    K5TEST_HEIMDAL_KDC = "${heimdal}/libexec/kdc";
+    K5TEST_HEIMDAL_KADMIN = "${heimdal}/bin/kadmin";
+    K5TEST_HEIMDAL_KADMIND = "${heimdal}/libexec/kadmind";
+    K5TEST_HEIMDAL_KINIT = "${heimdal}/bin/kinit";
+    K5TEST_HEIMDAL_KLIST = "${heimdal}/bin/klist";
+    K5TEST_HEIMDAL_KTUTIL = "${heimdal}/bin/ktutil";
+  };
+
   nativeBuildInputs = [
-    sccache
     pkg-config
     pythonImportsCheckHook
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
-    cargo
-    rustc
-  ];
-
-  build-system = [
-    setuptools
-    setuptools-rust
-    setuptools-scm
+    rustPlatform.maturinBuildHook
   ];
 
   pythonImportsCheck = [
     "kadmin"
-    "kadmin_local"
   ];
 
   meta = {

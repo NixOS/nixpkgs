@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "credential-detector";
-  version = "1.14.3";
+  version = "1.14.6";
 
   src = fetchFromGitHub {
     owner = "ynori7";
     repo = "credential-detector";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-20ySTLpjTc1X0iJsbzbeLmWF0xYzzREGOqEWrB2X1GQ=";
+    hash = "sha256-15v+2rBEC7/bwDt+HKnQmObsqyFkLSdCZSpGN2nfius=";
   };
 
-  vendorHash = "sha256-VWmfATUbfnI3eJbFTUp6MR1wGESuI15PHZWuon5M5rg=";
+  vendorHash = "sha256-U6/xFRi0Xr8sVhhokmkBLCd7zqe+4A9rhNTNG/XIjSw=";
 
   ldflags = [
     "-s"

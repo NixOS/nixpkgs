@@ -4,18 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
 }:
-
-let
-  python = python3.override {
-    self = python3;
-    packageOverrides = self: super: {
-      pyrate-limiter = super.pyrate-limiter_2;
-    };
-  };
-
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "conkeyscan";
   version = "1.1.0";
   pyproject = true;
@@ -23,7 +12,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CompassSecurity";
     repo = "conkeyscan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xYCms+Su7FmaG7KVHZpzfD/wx9Gepz11t8dEK/YDfvI=";
   };
 
@@ -38,12 +27,12 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
+      --replace-fail "{{VERSION_PLACEHOLDER}}" "${finalAttrs.version}"
   '';
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     atlassian-python-api
     beautifulsoup4
     clize
@@ -62,9 +51,9 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to scan Confluence for keywords";
     homepage = "https://github.com/CompassSecurity/conkeyscan";
-    changelog = "https://github.com/CompassSecurity/conkeyscan/releases/tag/v${version}";
+    changelog = "https://github.com/CompassSecurity/conkeyscan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "conkeyscan";
   };
-}
+})

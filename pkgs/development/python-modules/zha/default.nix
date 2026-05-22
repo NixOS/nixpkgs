@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.89";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     tag = version;
-    hash = "sha256-mtlf8Uh2C9s5ie6aWWbRuNvmS0QbzqpCMeSf/WTW0Zw=";
+    hash = "sha256-JYwTDD3YmHPgSSwFTGhoL9MY5SZ2jLBlgGqQDEnvF1k=";
   };
 
   postPatch = ''
@@ -93,6 +93,7 @@ buildPythonPackage rec {
     "test_startup_concurrency_limit"
     "test_fan_ikea"
     "test_background"
+    "test_gateway_startup_failure" # Failed first attempt, passed second, flaky
   ];
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];

@@ -37,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     if !stdenv.hostPlatform.isDarwin then
       [ "--with-libc=libc.so.6" ]
     else
-      [ "--with-libc=libc${stdenv.hostPlatform.extensions.sharedLibrary}" ];
+      [
+        "--with-libc=libc${stdenv.hostPlatform.extensions.sharedLibrary}"
+        "CFLAGS=-std=gnu17"
+      ];
 
   dontAddDisableDepTrack = stdenv.hostPlatform.isDarwin;
 

@@ -368,8 +368,11 @@ in
   nix-main-c = callPackage ../src/libmain-c/package.nix { };
 
   nix-cmd = callPackage ../src/libcmd/package.nix { };
+  # TODO: upstream nix-cmd-c to Nix from devenv
+  nix-cmd-c = callPackage ../src/libcmd-c/package.nix { };
 
   nix-cli = callPackage ../src/nix/package.nix { };
+  ${whenAtLeast "2.34pre" "nix-nswrapper"} = callPackage ../src/nswrapper/package.nix { };
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 
@@ -377,7 +380,8 @@ in
   nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
   nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
 
-  nix-perl-bindings = callPackage ../src/perl/package.nix { };
+  nix-perl-bindings =
+    if (lib.versionAtLeast version "2.35pre") then null else callPackage ../src/perl/package.nix { };
 
   nix-everything = callPackage ../packaging/everything.nix { } // {
     # Note: no `passthru.overrideAllMesonComponents` etc

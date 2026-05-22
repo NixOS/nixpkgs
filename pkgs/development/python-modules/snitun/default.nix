@@ -8,7 +8,6 @@
   pytest-aiohttp,
   pytest-codspeed,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
 }:
 
@@ -23,6 +22,11 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-luXv5J0PUvW+AGTecwkEq+qkG1N5Ja5NbBKJ3M6HC0I=";
   };
+
+  patches = [
+    # https://github.com/NabuCasa/snitun/pull/459
+    ./fix-python-3.14-compatibility.diff
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -58,7 +62,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/NabuCasa/snitun/releases/tag/${src.tag}";
     homepage = "https://github.com/nabucasa/snitun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Scriptkiddi ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

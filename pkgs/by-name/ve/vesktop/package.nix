@@ -13,7 +13,7 @@
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jLaA6tHupiMdzZK42TLB1oqd9/5pt1TERJiRG4FIM7k=";
+    hash = "sha256-YPDlqiO+0BtDgC7aFl8B2KPYsT41WqzOQ7et2Tejs3M=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,15 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-V38oQAhj4PBuaFXyeEHdBKaTXeIdeqNk887gPSmtZoU=";
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 3;
+    hash = "sha256-Ue1K1KmRi4gF7E519deVY7QH+22dqlECMjdA7Z7qDCA=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_29_2
     jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -87,12 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   };
 
-  # disable code signing on macos
-  # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
-  '';
-
   # electron builds must be writable
   preBuild = ''
     # Validate electron version matches upstream package.json
@@ -119,7 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
       --dir \
       -c.asarUnpack="**/*.node" \
       -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"} # disable code signing on macos, https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
 
     runHook postBuild
   '';
@@ -182,6 +177,9 @@ stdenv.mkDerivation (finalAttrs: {
       "Network"
       "InstantMessaging"
       "Chat"
+    ];
+    mimeTypes = [
+      "x-scheme-handler/discord"
     ];
   });
 

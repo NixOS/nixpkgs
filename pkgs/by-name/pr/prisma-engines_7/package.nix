@@ -11,19 +11,19 @@
 # function correctly.
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prisma-engines_7";
-  version = "7.2.0";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     tag = finalAttrs.version;
-    hash = "sha256-1CwpUtNuqxGNjBmmmo/Aet8XrmnCQfDToI7vZaNupDI=";
+    hash = "sha256-nquIcOmFz+ikD0x/YEPZ5NVKCFPCdR5MSCHldn+b9jI=";
   };
 
-  cargoHash = "sha256-U5d/HkuWnD/XSrAJr5AYh+WPVGDOcK/e4sC0udPZoyU=";
+  cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
 
   # Use system openssl.
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 # Read the example's README: https://github.com/pimeys/nix-prisma-example/blob/main/README.md
 # Prisma requires 2 packages, `prisma-engines` and `prisma`, to be at *exact* same versions.
 # Certify at `package.json` that dependencies "@prisma/client" and "prisma" are equal, meaning no caret (`^`) in version.
-# Configure NPM to use exact version: `npm config set save-exact=true`
+# Configure npm to use exact version: `npm config set save-exact=true`
 # Delete `package-lock.json`, delete `node_modules` directory and run `npm install`.
 # Run prisma client from `node_modules/.bin/prisma`.
 # Run `./node_modules/.bin/prisma --version` and check if both prisma packages versions are equal, current platform is `linux-nixos`, and other keys equal to the prisma environment variables you defined for prisma.

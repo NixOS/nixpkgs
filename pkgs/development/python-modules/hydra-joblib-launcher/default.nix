@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   # tries to write to source directory otherwise:
-  pytestFlagsArray = [ "-p no:cacheprovider" ];
+  pytestFlags = [ "-pno:cacheprovider" ];
 
   meta = {
     inherit (hydra-core.meta) changelog license;

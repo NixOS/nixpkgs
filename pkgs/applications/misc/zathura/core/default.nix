@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.14";
+  version = "2026.05.20";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura";
     tag = finalAttrs.version;
-    hash = "sha256-Ejd39gUWA9YEoPpaaxo+9JkoezAjXYpXTB+FGdXt03U=";
+    hash = "sha256-ChrIJKPVukkW6d/grGcMJ6sZ9sctIOmyJv6TAehh1T8=";
   };
 
   outputs = [
@@ -109,6 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Core component for zathura PDF viewer";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })

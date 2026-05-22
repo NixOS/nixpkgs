@@ -6,20 +6,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "time";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/time/time-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+6zwyB5iQp3z4zvaTO44dWYE8Y4B2XczjiMwaj47Uh4=";
+    url = "mirror://gnu/time/time-${finalAttrs.version}.tar.xz";
+    hash = "sha256-cGv3uERMqeuQN+ntoY4dDrfCMnrn2MLOOkgjxfgMexE=";
   };
-
-  patches = [
-    # fixes cross-compilation to riscv64-linux
-    ./time-1.9-implicit-func-decl-clang.patch
-    # https://lists.gnu.org/archive/html/bug-time/2025-10/msg00000.html
-    # fix compilation with gcc15
-    ./time-1.9-fix-sighandler-prototype-for-c23.patch
-  ];
 
   outputs = [
     "out"

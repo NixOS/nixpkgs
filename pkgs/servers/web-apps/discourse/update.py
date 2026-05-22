@@ -42,10 +42,10 @@ class DiscourseVersion:
         """Take either a tag or version number, calculate the other."""
         if version.startswith('v'):
             self.tag = version
-            self.version = version.lstrip('v')
+            self.version = version.lstrip('v').rstrip("-latest")
         else:
             self.tag = 'v' + version
-            self.version = version
+            self.version = version.rstrip("-latest")
 
         self._version = Version(self.version)
 
@@ -247,7 +247,7 @@ def update(rev):
     old_pnpm_hash = _nix_eval('discourse.assets.pnpmDeps.outputHash')
     new_pnpm_hash = _get_build_lock_hash()
     if new_pnpm_hash is not None:
-        click.echo(f"Updating yarn lock hash: {old_pnpm_hash} -> {new_pnpm_hash}")
+        click.echo(f"Updating pnpm lock hash: {old_pnpm_hash} -> {new_pnpm_hash}")
 
         with open(Path(__file__).parent / "default.nix", 'r+') as f:
             content = f.read()

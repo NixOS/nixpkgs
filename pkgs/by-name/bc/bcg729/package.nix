@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://linphone.org/technical-corner/bcg729";
     changelog = "https://gitlab.linphone.org/BC/public/bcg729/raw/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

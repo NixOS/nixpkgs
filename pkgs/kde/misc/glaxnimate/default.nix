@@ -14,7 +14,7 @@
 
 mkKdeDerivation rec {
   pname = "glaxnimate";
-  version = "0.5.80";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
@@ -22,7 +22,7 @@ mkKdeDerivation rec {
     repo = "glaxnimate";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-+4vvp9nxtpKUOojgQL9T5Eyv9eMCGGwmDAex91XPwyA=";
+    hash = "sha256-hHAe/xF6QDjiC2JqCUB1FngLsMSelMqEdHjXJwjTVjk=";
   };
 
   extraBuildInputs = [

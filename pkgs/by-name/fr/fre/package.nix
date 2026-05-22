@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI tool for tracking your most-used directories and files";
     homepage = "https://github.com/camdencheek/fre";
-    changelog = "https://github.com/camdencheek/fre/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/camdencheek/fre/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ gaykitty ];
     mainProgram = "fre";

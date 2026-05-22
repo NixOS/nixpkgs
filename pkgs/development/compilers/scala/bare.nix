@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       natsukagami
       hamzaremmal
       dottybot
+      turebentzin
     ];
   };
 })

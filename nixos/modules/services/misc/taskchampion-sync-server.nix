@@ -59,14 +59,20 @@ in
       type = types.listOf types.str;
       default = [ ];
     };
+    dynamicUser = lib.mkOption {
+      description = "Whether to use dynamic user";
+      type = types.bool;
+      default = lib.versionAtLeast config.system.stateVersion "26.05";
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    users.users.${cfg.user} = lib.mkIf (cfg.user == defaultUser) {
+    users.users.${cfg.user} = lib.mkIf (!cfg.dynamicUser && cfg.user == defaultUser) {
       isSystemUser = true;
       inherit (cfg) group;
     };
-    users.groups.${cfg.group} = lib.mkIf (cfg.group == defaultGroup) { };
+    users.groups.${cfg.group} = lib.mkIf (!cfg.dynamicUser && cfg.group == defaultGroup) { };
+
     networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.port ];
 
     systemd.services.taskchampion-sync-server = {
@@ -75,12 +81,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        # If we enable DynamicUser, users need to move
-        # /var/lib/taskchampion-sync-server to
-        # /var/lib/private/taskchampion-sync-server manually, which is a
-        # breakage. So we keep the old behavior and we'll do the migration in
-        # another PR.
-        DynamicUser = false;
+        DynamicUser = cfg.dynamicUser;
         StateDirectory = lib.mkIf (cfg.dataDir == defaultDir) "taskchampion-sync-server";
         ExecStart = ''
           ${lib.getExe cfg.package} \

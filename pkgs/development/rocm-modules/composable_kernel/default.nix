@@ -54,6 +54,7 @@ let
       targets = [
         "device_grouped_conv1d_fwd_instance"
         "device_grouped_conv2d_fwd_instance"
+        "device_grouped_conv2d_fwd_bias_bnorm_clamp_instance"
         "device_grouped_conv2d_fwd_bias_clamp_instance"
         "device_grouped_conv2d_fwd_clamp_instance"
         "device_grouped_conv2d_fwd_dynamic_op_instance"
@@ -77,6 +78,7 @@ let
       targets = [
         "device_grouped_conv3d_fwd_instance"
         "device_grouped_conv3d_fwd_clamp_instance"
+        "device_grouped_conv3d_fwd_bias_bnorm_clamp_instance"
         "device_grouped_conv3d_fwd_bias_clamp_instance"
         "device_grouped_conv3d_fwd_bilinear_instance"
         "device_grouped_conv3d_fwd_convinvscale_instance"

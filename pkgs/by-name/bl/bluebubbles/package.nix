@@ -54,7 +54,8 @@ flutter329.buildFlutterApplication rec {
   postInstall = ''
     sed -i 's#Icon=.*/bluebubbles.png#Icon=bluebubbles#g' snap/gui/bluebubbles.desktop
     install -Dm0644 snap/gui/bluebubbles.desktop $out/share/applications/bluebubbles.desktop
-    install -Dm0644 snap/gui/bluebubbles.png $out/share/pixmaps/bluebubbles.png
+    install -Dm0644 snap/gui/bluebubbles.png -t $out/share/icons/hicolor/1024x1024/apps
+    install -Dm0644 flatpak/icon/128x128.png $out/share/icons/hicolor/128x128/apps/bluebubbles.png
   '';
 
   extraWrapProgramArgs = ''

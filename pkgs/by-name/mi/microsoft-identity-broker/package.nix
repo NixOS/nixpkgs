@@ -25,11 +25,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";
-  version = "2.5.0";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${version}-noble_amd64.deb";
-    hash = "sha256-zid9kjjz3mBfJFfiYUoqlIyQSsR041JN3Ib+JFSSEbE=";
+    hash = "sha256-cbG+HJ1nuOyxR/sd1P69QTEUaklywbJOP7o6K7l6SEs=";
   };
 
   nativeBuildInputs = [

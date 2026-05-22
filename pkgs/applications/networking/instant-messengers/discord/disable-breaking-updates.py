@@ -41,11 +41,16 @@ if os.path.exists(settings_path):
 else:
     settings = {}
 
-if settings.get("SKIP_HOST_UPDATE"):
-    print("[Nix] Disabling updates already done")
-else:
-    skip_host_update = {"SKIP_HOST_UPDATE": True}
-    settings.update(skip_host_update)
+required_settings = {"SKIP_HOST_UPDATE": True}
+if "@skipModuleUpdate@" == "true":
+    required_settings["SKIP_MODULE_UPDATE"] = True
+
+missing_settings = {
+    key: value for key, value in required_settings.items() if settings.get(key) != value
+}
+
+if missing_settings:
+    settings.update(missing_settings)
 
     os.makedirs(os.path.dirname(settings_path), exist_ok=True)
 
@@ -54,3 +59,5 @@ else:
 
     settings_path_temp.rename(settings_path)
     print("[Nix] Disabled updates")
+else:
+    print("[Nix] Disabling updates already done")

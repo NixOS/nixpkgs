@@ -106,6 +106,8 @@ lib.makeScope newScope (self: {
 
   melonds = self.callPackage ./cores/melonds.nix { };
 
+  melondsds = self.callPackage ./cores/melondsds.nix { };
+
   mesen = self.callPackage ./cores/mesen.nix { };
 
   mesen-s = self.callPackage ./cores/mesen-s.nix { };
@@ -148,6 +150,8 @@ lib.makeScope newScope (self: {
   prosystem = self.callPackage ./cores/prosystem.nix { };
 
   puae = self.callPackage ./cores/puae.nix { };
+
+  puae2021 = self.callPackage ./cores/puae2021.nix { };
 
   quicknes = self.callPackage ./cores/quicknes.nix { };
 

@@ -9,7 +9,7 @@
   openssh,
   openssl,
   python3,
-  xxHash,
+  xxhash,
   zstd,
   installShellFiles,
   nixosTests,
@@ -22,14 +22,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = finalAttrs.version;
-    hash = "sha256-v42Mv2wz34w2VYu2mPT/K7VtGSYsUDr+NUM99AzpSB0=";
+    hash = "sha256-pMZr9cVr84b948b5Iuevpy6AtMeYo/Ma8uFLuagAYy4=";
   };
 
   postPatch = ''
@@ -62,7 +62,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   buildInputs = [
     libb2
     lz4
-    xxHash
+    xxhash
     zstd
     openssl
   ]

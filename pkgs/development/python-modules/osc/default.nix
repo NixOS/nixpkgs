@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "1.23.0";
+  version = "1.26.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    hash = "sha256-FcoFWNiuSdU5qGNGJACxD9RpDDw1D9yRzVGVaXy39GY=";
+    hash = "sha256-2h9099tSGMjjSN8HN3B/mk6ZNV3Ga1eHhtWkULX1iJQ=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper

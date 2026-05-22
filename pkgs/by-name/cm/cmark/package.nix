@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cmark";
     homepage = "https://github.com/commonmark/cmark";
     changelog = "https://github.com/commonmark/cmark/raw/${finalAttrs.version}/changelog.txt";
-    maintainers = [ lib.maintainers.michelk ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
   };

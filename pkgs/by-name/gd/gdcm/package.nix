@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   enableVTK ? true,
   vtk,
@@ -20,21 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.2.2";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iUJrXcVHdCmL5atm6in4KvgPXbYmAYFxM6TGoZeY9EE=";
+    hash = "sha256-8ZNq89a369mm/hPe0tywo4Tqzt65Xhb0pbEguy8CSsA=";
   };
-
-  patches = [
-    ./add-missing-losslylosslessarray-in-TestTransferSyntax.patch
-    # Fix vtk deprecated api, See https://docs.vtk.org/en/latest/release_details/9.3.html#id13.
-    # Upstream mailing list: https://sourceforge.net/p/gdcm/mailman/message/59197515.
-    ./fix-vtk-deprecated-api.patch
-  ];
 
   cmakeFlags = [
     "-DGDCM_BUILD_APPLICATIONS=ON"

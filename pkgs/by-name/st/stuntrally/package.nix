@@ -51,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/vdrift/paths.cpp \
       --replace-fail "@GAME_DATA_DIR@" "$out/share/stuntrally3/data" \
       --replace-fail "@GAME_CONFIG_DIR@" "$out/share/stuntrally3/config"
+
+    # Fix build with boost 1.89
+    substituteInPlace CMake/AddMissingTargets.cmake --replace-fail \
+      'find_package(Boost REQUIRED COMPONENTS system thread filesystem)' \
+      'find_package(Boost REQUIRED COMPONENTS thread filesystem)'
   '';
 
   strictDeps = true;

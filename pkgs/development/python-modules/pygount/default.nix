@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pygount";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roskakori";
     repo = "pygount";
     tag = "v${version}";
-    hash = "sha256-hoj27L1wXOjzU3jdWIP5MtlO6fzKOYXfW/Pf3AdYKc0=";
+    hash = "sha256-1Ws/8znFusdn2jKFvbiPD7ZRbOnPDqBZceMizWfeVlM=";
   };
 
   build-system = [

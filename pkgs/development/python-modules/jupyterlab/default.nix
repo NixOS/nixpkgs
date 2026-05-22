@@ -17,22 +17,20 @@
   notebook-shim,
   packaging,
   setuptools,
-  tomli,
   tornado,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.5.0";
+  version = "4.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab";
     tag = "v${version}";
-    hash = "sha256-3vKz79/19F4kZeTjHSChgwAsM8quzIVBmjiRekA/8vo=";
+    hash = "sha256-kJ9DWfb9VWEPfpG17E3KIvGqWlr0iO2a094Ne7LS1U8=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +45,7 @@ buildPythonPackage rec {
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit src;
     sourceRoot = "${src.name}/jupyterlab/staging";
-    hash = "sha256-3Gvbsi/oi8lTRrCYut126zsksjSSWmfJCoRxDmjne1E=";
+    hash = "sha256-2YGs0clj44BSEGdp3wChw97jFSMiAeMnCv3PNhdnEeA=";
   };
 
   preBuild = ''
@@ -73,8 +71,7 @@ buildPythonPackage rec {
     setuptools
     tornado
     traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   makeWrapperArgs = [
     "--set"

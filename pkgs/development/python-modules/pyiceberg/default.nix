@@ -60,14 +60,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iceberg-python";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${finalAttrs.version}";
-    hash = "sha256-sej0RJuoTnpX0DXC54RTacZNJIxzorcG4xlxByNUxc4=";
+    hash = "sha256-MjBvLJOnjtpIwBMkI+81S6aipye+PnbrC8T317Qj6rY=";
   };
 
   build-system = [
@@ -209,6 +209,8 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
     "-Wignore::ResourceWarning"
+    # Using `@model_validator` with mode='after' on a classmethod is deprecated
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince212"
   ];
 
   preCheck = ''
@@ -282,6 +284,10 @@ buildPythonPackage (finalAttrs: {
 
     # Hangs forever (from tests/io/test_pyarrow.py)
     "test_getting_length_of_file_gcs"
+
+    # Timing sensitive
+    # AssertionError: assert 8 == 5
+    "test_hive_wait_for_lock"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'

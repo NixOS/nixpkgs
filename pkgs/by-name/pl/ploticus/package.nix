@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-zlib-file-type.patch
   ];
 
+  # GCC 15 uses C23, which fails with the following error
+  # plg.h:283:8: error: conflicting types for 'atof'; have 'double(void)'
+  #   283 | double atof(), sqrt(), log();
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildInputs = [
     zlib
     libx11

@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-gdrive";
   version = "3.0.1";
   pyproject = true;
@@ -16,16 +16,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-gdrive";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oqHSMmwfR24ydJlpXGI3cCxIlF0BwNdgje5zKa0c7FA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dvc
     pydrive2
   ];
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Drive plugin for DVC";
     homepage = "https://github.com/iterative/dvc-gdrive";
-    changelog = "https://github.com/iterative/dvc-gdrive/releases/tag/${version}";
+    changelog = "https://github.com/iterative/dvc-gdrive/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

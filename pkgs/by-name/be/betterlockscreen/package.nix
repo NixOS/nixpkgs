@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       eyjhb
-      sebtm
     ];
   };
 })

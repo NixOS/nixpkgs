@@ -12,7 +12,7 @@
   findutils,
   fossil,
   gawk,
-  gitMinimal,
+  git,
   git-lfs,
   gnugrep,
   gnused,
@@ -26,7 +26,7 @@ let
   mkPrefetchScript =
     tool: src: deps:
     stdenv.mkDerivation {
-      inherit (lib.trivial) version;
+      version = lib.trivial.release;
       pname = "nix-prefetch-${tool}";
 
       strictDeps = true;
@@ -77,7 +77,7 @@ rec {
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils
     gawk
-    gitMinimal
+    git
     git-lfs
     gnused
   ];

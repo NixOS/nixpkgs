@@ -5,6 +5,7 @@
   betamax,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   flit-core,
   mock,
   prawcore,
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-jxF7rlMwKIKwyYv35vYWAdtClsVhnIkywoyMQeggGBc=";
   };
+
+  patches = [
+    # fix tests under python 3.14
+    (fetchpatch {
+      url = "https://github.com/praw-dev/praw/commit/9edc0bfa62c1878c395d8bc225edfe87e4fc4cd4.patch";
+      includes = [ "tests/unit/test_reddit.py" ];
+      hash = "sha256-QozdHz8WPCsuBgFgx1j0NwFsPFBmq9KhKiW7B5/QmfE=";
+    })
+  ];
 
   build-system = [ flit-core ];
 

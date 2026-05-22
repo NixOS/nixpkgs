@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       matthewcroughan
-      nixinator
     ];
     platforms = lib.platforms.linux;
   };

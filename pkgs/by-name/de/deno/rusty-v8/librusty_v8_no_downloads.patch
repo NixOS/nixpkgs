@@ -1,0 +1,30 @@
+diff --git a/build.rs b/build.rs
+index 970e88bb..afb92e8a 100644
+--- a/build.rs
++++ b/build.rs
+@@ -251,7 +251,6 @@ fn build_v8(is_asan: bool) {
+     download_ninja_gn_binaries();
+   }
+ 
+-  download_rust_toolchain();
+ 
+   // `#[cfg(...)]` attributes don't work as expected from build.rs -- they refer to the configuration
+   // of the host system which the build.rs script will be running on. In short, `cfg!(target_<os/arch>)`
+@@ -461,17 +460,6 @@ fn maybe_clone_repo(dest: &str, repo: &str) {
+ }
+ 
+ fn maybe_install_sysroot(arch: &str) {
+-  let sysroot_path = format!("build/linux/debian_sid_{arch}-sysroot");
+-  if !PathBuf::from(sysroot_path).is_dir() {
+-    assert!(
+-      Command::new(python())
+-        .arg("./build/linux/sysroot_scripts/install-sysroot.py")
+-        .arg(format!("--arch={arch}"))
+-        .status()
+-        .unwrap()
+-        .success()
+-    );
+-  }
+ }
+ 
+ fn download_ninja_gn_binaries() {

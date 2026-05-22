@@ -17,16 +17,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dovi-tool";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "quietvoid";
     repo = "dovi_tool";
     tag = finalAttrs.version;
-    hash = "sha256-4C9d8Rt1meV6Pcdnf2SaiWGA97sRj2WmvKsf1rC01Bs=";
+    hash = "sha256-8UG3p84wjuPpnwcz65dyDbLDaoFXtokxNvnldBZHqwc=";
   };
 
-  cargoHash = "sha256-Dg6IDcYm3qTSyE5kVgZ8Yka8538KDFyBN+weUyAfQT8=";
+  cargoHash = "sha256-nr2F+QZurNN/iCFW62LZaheZkuCGId4TSRuYd1yYH88=";
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pkg-config

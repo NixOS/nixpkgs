@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.2";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/texi2mdoc/snapshots/texi2mdoc-${finalAttrs.version}.tgz";
+    url = "https://mdocml.bsd.lv/texi2mdoc/snapshots/texi2mdoc-${finalAttrs.version}.tgz";
     sha256 = "1zjb61ymwfkw6z5g0aqmsn6qpw895zdxv7fv3059gj3wqa3zsibs";
   };
 

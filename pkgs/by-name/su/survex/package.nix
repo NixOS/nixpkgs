@@ -14,16 +14,16 @@
   gdal,
   python3,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "survex";
-  version = "1.4.19";
+  version = "1.4.20";
 
   src = fetchurl {
     url = "https://survex.com/software/${finalAttrs.version}/survex-${finalAttrs.version}.tar.gz";
-    hash = "sha256-X8FZCZTJ7DkZeYnrzaLCukRhs/kTHwre9F1TTRlK2ro=";
+    hash = "sha256-mSq/O5nsjHqypTUg/P/dAeIMZKyi5QcCtiydkOhh4N0=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     proj
     gdal
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # TODO: libGLU doesn't build for macOS because of Mesa issues
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   enableParallelBuilding = true;

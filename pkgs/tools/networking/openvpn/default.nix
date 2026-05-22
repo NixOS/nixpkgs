@@ -23,19 +23,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.14";
+  version = "2.6.19";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-nramYYNS+ee3canTiuFjG17f7tbUAjPiQ+YC3fIZXno=";
+    hash = "sha256-E3AlJvaHwYslQMGj8uGJGHuqplIR7c9/9ncvpp8FNs8=";
   };
-
-  # Effectively a backport of https://github.com/OpenVPN/openvpn/commit/1d3c2b67a73a0aa011c13e62f876d24e49d41df0
-  # to fix build on linux-headers 6.16.
-  # FIXME: remove in next update
-  patches = [
-    ./dco.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highscore-nestopia";
-  version = "0-unstable-2025-12-30";
+  version = "0-unstable-2026-03-03";
 
   src = fetchFromGitLab {
     owner = "highscore-emu";
     repo = "nestopia";
-    rev = "529e69b6e577f42a246c8fa44ef7f3095647adaf";
-    hash = "sha256-2aBEtut6AShP1Nz0BqNTFD3/gN2cj5PY8JL8WbLE7XE=";
+    rev = "0ef62709df9ff3af8729c9d7dc257d8fbc2cd48c";
+    hash = "sha256-DRA1l5wV/jZhbFni5ZXD6agObt+XZYrPIbgkzSgUGEo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/highscore";

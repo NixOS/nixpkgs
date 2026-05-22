@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dos2unix";
-  version = "7.5.2";
+  version = "7.5.4";
 
   src = fetchurl {
     url = "https://waterlan.home.xs4all.nl/dos2unix/dos2unix-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-JkdCRGYIRC60j5bCCvbaMDyzqSs2TnLLfiT4gjnEvzo=";
+    hash = "sha256-+BGiueSgyTbGHvfBcymT0YIOXPAR9Nk4YYhcy4EByiE=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://waterlan.home.xs4all.nl/dos2unix.html";
     changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${finalAttrs.version}/tree/dos2unix/NEWS.txt?format=raw";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

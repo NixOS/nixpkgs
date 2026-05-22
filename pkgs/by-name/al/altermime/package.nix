@@ -32,7 +32,7 @@ gccStdenv.mkDerivation rec {
     description = "MIME alteration tool";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
-    license.fullName = "alterMIME LICENSE";
+    license = lib.licenses.sendmail;
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";
   };

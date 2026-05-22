@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.1.12";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "pgsrip";

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   libevdev,
   libxkbcommon,
   meson,
@@ -12,6 +13,9 @@
   protobufc,
   systemd,
   buildPackages,
+  epoll-shim,
+  basu,
+  evdev-proto,
 }:
 let
   munit = fetchFromGitHub {
@@ -33,12 +37,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-PqQpJz88tDzjwsBuwxpWcGAWz6Gp6A/oAOS87uxGOGs=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isBSD [
+    # From https://gitlab.freedesktop.org/libinput/libei/-/merge_requests/357
+    (fetchpatch {
+      name = "peercred-bsd.patch";
+      url = "https://gitlab.freedesktop.org/libinput/libei/-/commit/4f11112be0c0a89e8f078c0b4bcc103dbc6ac875.patch";
+      hash = "sha256-Z6oZphzyfHMdAQninbUvEtxr738sx/SQV8o0fkF25iI=";
+    })
+  ];
+
   buildInputs = [
     libevdev
     libxkbcommon
     protobuf
     protobufc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    basu
+    epoll-shim
+    evdev-proto
   ];
   nativeBuildInputs = [
     meson
@@ -56,6 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
+  mesonFlags = lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "-Dsd-bus-provider=basu"
+  ];
+
   postPatch = ''
     ln -s "${munit}" ./subprojects/munit
     patchShebangs ./proto/ei-scanner
@@ -67,6 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/libinput/libei";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pedrohlc ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

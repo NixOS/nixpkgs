@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "azure_synapse_artifacts";
     inherit version;
-    hash = "sha256-1+N1Fs+FaeA8YE2SHjQH1xQM91I7Z7Z/dXyvmZ48juc=";
+    hash = "sha256-3cD7Yic4w+q3RlzkKM+gzUGtAahw+9RTYeTVjRdcYjw=";
   };
 
   propagatedBuildInputs = [

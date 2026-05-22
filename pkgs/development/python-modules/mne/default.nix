@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
+  stdenv,
   hatchling,
   hatch-vcs,
   numpy,
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "mne";
-  version = "1.11.0";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
     tag = "v${version}";
-    hash = "sha256-lssSHlWUj3TU0F/31jTFc+oFdBx1C+9aolee6M8mJtw=";
+    hash = "sha256-8PzYTG8z35IG0nVegoPaJB/vpULujqHDd2VtLeXS0SQ=";
   };
 
   postPatch = ''
@@ -92,9 +93,10 @@ buildPythonPackage rec {
     "test_fine_cal_systems"
     "test_simulate_raw_bem"
   ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    #https://github.com/mne-tools/mne-python/issues/13577
-    "test_set_montage_artinis_basic"
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fails when no "model name" is present in /proc/cpuinfo,
+    # which is common on Arm Linux systems
+    "test_sys_info_basic"
   ];
 
   pytestFlag = [

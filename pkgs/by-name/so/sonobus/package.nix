@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     cd ../linux
     ./install.sh "$out"
 
-    install -Dm444 $src/images/sonobus_logo_96.png $out/share/pixmaps/sonobus.png
+    install -Dm444 $src/images/sonobus_logo_96.png $out/share/icons/hicolor/96x96/apps/sonobus.png
 
     runHook postInstall
   '';

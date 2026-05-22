@@ -1,6 +1,5 @@
 {
   lib,
-  fetchurl,
   fetchFromGitHub,
   rustPlatform,
   cacert,
@@ -12,6 +11,7 @@
   versionCheckHook,
   pytestCheckHook,
   pytest-asyncio,
+  python-dotenv,
   websockets,
   httpx,
   sniffio,
@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.6.0";
+  version = "2.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-Jj75ycr9Y0aCTP5YGzd6um/7emWKqqegUDB7HpTfTcM=";
+    hash = "sha256-KId5e1ITRCkLNmvY5q/ZT18INzS8Uh9HFCzfKEablOY=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -35,17 +35,12 @@ buildPythonPackage rec {
   # and allow the final application to make the allocator decision
   # via LD_PRELOAD or similar.
   patches = [
-    (fetchurl {
-      # Refresh expired TLS certificates for tests
-      url = "https://github.com/emmett-framework/granian/commit/189f1bed2effb4a8a9cba07b2c5004e599a6a890.patch";
-      hash = "sha256-7FgVR7/lAh2P5ptGx6jlFzWuk24RY7wieN+aLaAEY+c=";
-    })
-    ./no-alloc.patch
+    ./no-alloc.patch # with --unified=1 context
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Q7BWwvkK5rRuhVobxW4qXLo6tnusOaQYN8mBoNVoulw=";
+    hash = "sha256-rR65e05uWmag+21n1YA1TILYU6ArajW2+QVOfGn4zGo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -58,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    dotenv = [ python-dotenv ];
     pname = [ setproctitle ];
     reload = [ watchfiles ];
     # rloop = [ rloop ]; # not packaged

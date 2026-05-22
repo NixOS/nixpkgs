@@ -36,6 +36,11 @@ buildPythonPackage rec {
     "test_batinfo_name_default"
   ];
 
+  passthru = {
+    # Upstream has a broken 2.0 tag that causes this package to get downgraded to 0.2
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Module to retrieve battery information";
     homepage = "https://github.com/nicolargo/batinfo";

@@ -57,7 +57,7 @@ buildGoModule (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm644 internal/icon/seabird.svg $out/share/pixmaps/dev.skynomads.Seabird.svg
+    install -Dm644 internal/icon/seabird.svg $out/share/icons/hicolor/scalable/dev.skynomads.Seabird.svg
   '';
 
   desktopItems = [ "dev.skynomads.Seabird.desktop" ];

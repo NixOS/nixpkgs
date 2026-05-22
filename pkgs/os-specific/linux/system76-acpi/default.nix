@@ -5,7 +5,8 @@
   kernel,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "system76-acpi-module-${finalAttrs.version}-${kernel.version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "system76-acpi-module";
   version = "1.0.2";
 
   passthru.moduleName = "system76_acpi";

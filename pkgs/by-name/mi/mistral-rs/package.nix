@@ -74,13 +74,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2gE3LRm2oy6H+y6dRNnwYIjlaG67it16bfhfTk4CUTc=";
+    hash = "sha256-WuDvD2ifk0AtB4fpgLqQSiXVfb/50M9oIuz738pdsis=";
   };
 
   patches = [
@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "lto = false"
     '';
 
-  cargoHash = "sha256-nktoMh07PfGJ156XrKa1N/icB634cr9ybsHq/y9zHKo=";
+  cargoHash = "sha256-MzGU62v6ZvVzTN7Ra+zz1uNlk4ul09YG5Hbj2A7hZbY=";
 
   nativeBuildInputs = [
     pkg-config

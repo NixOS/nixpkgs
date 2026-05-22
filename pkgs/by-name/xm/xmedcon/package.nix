@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  buildPackages,
   fetchurl,
   gtk3,
   glib,
@@ -12,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmedcon";
-  version = "0.25.3";
+  version = "0.26.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/xmedcon/xmedcon-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-9VrTQP614tIrmZRm9bSpmlXqCbMPzqvhv222eFiKS4M=";
+    sha256 = "sha256-r0oDA5wMS2bkKCgM7C+WxUahGvJm7NUA/iUNu2uZJPE=";
   };
 
   buildInputs = [
@@ -29,6 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
+  ];
+
+  # xmedcon looks also for a host c compiler when cross-compiling
+  # otherwise you obtain following error message:
+  # "error: no acceptable C compiler found in $PATH"
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
   ];
 
   meta = {

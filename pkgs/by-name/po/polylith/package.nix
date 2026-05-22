@@ -17,7 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  passAsFile = [ "polyWrapper" ];
   polyWrapper = ''
     #!${runtimeShell}
     ARGS=""
@@ -32,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp "$polyWrapperPath" $out/bin/poly
+    printf "%s" "$polyWrapper" > $out/bin/poly
     chmod a+x $out/bin/poly
 
     runHook postInstall
@@ -46,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tool used to develop Polylith based architectures in Clojure";

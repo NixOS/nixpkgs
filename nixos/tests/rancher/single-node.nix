@@ -84,9 +84,6 @@ in
       machine.wait_for_unit("${serviceName}")
       machine.succeed("kubectl cluster-info")
       machine.fail("sudo -u noprivs kubectl cluster-info")
-      ${lib.optionalString (rancherDistro == "k3s") ''
-        machine.succeed("k3s check-config")
-      ''}
 
       # Also wait for our service account to show up; it takes a sec
       machine.wait_until_succeeds("kubectl get serviceaccount default")

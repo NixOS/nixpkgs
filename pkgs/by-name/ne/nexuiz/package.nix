@@ -2,28 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  # required for both
   unzip,
-  zlib,
-  curl,
-  libjpeg,
-  libpng,
-  libvorbis,
-  libtheora,
-  libogg,
-  libmodplug,
-  # glx
-  libx11,
-  libGLU,
-  libGL,
-  libxpm,
-  libxext,
-  libxxf86vm,
-  libxxf86dga,
-  alsa-lib,
-  # sdl
-  SDL,
-  # icon
+  makeBinaryWrapper,
+  darkplaces,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -45,19 +26,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     unzip
     copyDesktopItems
-  ];
-  buildInputs = [
-    # glx
-    libx11
-    libGLU
-    libGL
-    libxpm
-    libxext
-    libxxf86vm
-    libxxf86dga
-    alsa-lib
-    # sdl
-    SDL
+    makeBinaryWrapper
   ];
 
   postUnpack = ''
@@ -66,41 +35,23 @@ stdenv.mkDerivation {
     cd ../../
   '';
 
-  env.NIX_LDFLAGS = toString [
-    "-rpath ${zlib.out}/lib"
-    "-rpath ${curl.out}/lib"
-    "-rpath ${libjpeg.out}/lib"
-    "-rpath ${libpng.out}/lib"
-    "-rpath ${libvorbis.out}/lib"
-    "-rpath ${libtheora.out}/lib"
-    "-rpath ${libogg.out}/lib"
-    "-rpath ${libmodplug.out}/lib"
-  ];
-
-  buildPhase = ''
-    cd sources/darkplaces/
-    DP_FS_BASEDIR="$out/share/nexuiz"
-    make DP_FS_BASEDIR=$DP_FS_BASEDIR cl-release
-    make DP_FS_BASEDIR=$DP_FS_BASEDIR sdl-release
-    make DP_FS_BASEDIR=$DP_FS_BASEDIR sv-release
-    cd ../../
-  '';
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
     mkdir -pv "$out/bin/"
-    cp -v sources/darkplaces/darkplaces-glx "$out/bin/nexuiz-glx"
-    cp -v sources/darkplaces/darkplaces-sdl "$out/bin/nexuiz-sdl"
-    cp -v sources/darkplaces/darkplaces-dedicated "$out/bin/nexuiz-dedicated"
+    makeWrapper ${lib.getBin darkplaces}/bin/darkplaces $out/bin/nexuiz \
+      --inherit-argv0 \
+      --add-flags "-basedir $out/share/nexuiz"
+    makeWrapper ${lib.getBin darkplaces}/bin/darkplaces-dedicated $out/bin/nexuiz-dedicated \
+      --inherit-argv0 \
+      --add-flags "-basedir $out/share/nexuiz"
     mkdir -pv "$out/share/nexuiz/"
     cp -rv data/ "$out/share/nexuiz/"
-    ln -s "$out/bin/nexuiz-sdl" "$out/bin/nexuiz"
     mkdir -pv $out/share/icon/
     cp sources/darkplaces/nexuiz.ico $out/share/icon/nexuiz.ico
     runHook postInstall
   '';
-
-  dontPatchELF = true;
 
   desktopItems = [
     (makeDesktopItem {

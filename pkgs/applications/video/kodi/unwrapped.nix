@@ -287,7 +287,6 @@ stdenv.mkDerivation (
       tinyxml-2
       taglib
       libssh
-      gtest
       ncurses
       spdlog
       alsa-lib
@@ -405,6 +404,10 @@ stdenv.mkDerivation (
       waylandpp.bin
     ];
 
+    nativeCheckInputs = [
+      gtest
+    ];
+
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ];
@@ -445,9 +448,23 @@ stdenv.mkDerivation (
       "-DWITH_TEXTUREPACKER=${lib.getExe texturePacker}"
     ];
 
-    # 14 tests fail but the biggest issue is that every test takes 30 seconds -
-    # I'm guessing there is a thing waiting to time out
-    doCheck = false;
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    checkPhase = ''
+      runHook preCheck
+
+      make -j $NIX_BUILD_CORES kodi-test
+
+      ./kodi-test --gtest_filter=-${
+        lib.concatStringsSep ":" [
+          "TestCPUInfo.GetCPUFrequency"
+          "TestNetwork.PingHost"
+          "TestSystemInfo.GetOsName"
+          "TestSystemInfo.GetOsPrettyNameWithVersion"
+        ]
+      }
+
+      runHook postCheck
+    '';
 
     preConfigure = ''
       cmakeFlagsArray+=("-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}")

@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   name = "ollama-vulkan";
-  meta.maintainers = with lib.maintainers; [ abysssol ];
+  meta.maintainers = [ ];
 
   nodes.vulkan =
     { ... }:

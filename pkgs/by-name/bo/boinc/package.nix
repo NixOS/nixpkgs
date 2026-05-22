@@ -14,7 +14,7 @@
   libglut,
   libjpeg,
   libtool,
-  wxGTK32,
+  wxwidgets_3_2,
   libxcb-util,
   sqlite,
   gtk3,
@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "8.2.8";
+  version = "8.2.11";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-yCsqkC6kle2oE29KP5qILe0F+5AOpFl2S3s2c09x7N4=";
+    hash = "sha256-xWEAjTWEUCTTtxfCFFMcrJD0DRVmUAgi2vE0GifTX2Q=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libxi
     libglut
     libjpeg
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     libxscrnsaver
     libnotify

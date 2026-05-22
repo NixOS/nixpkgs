@@ -1,11 +1,13 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  hostPkgs,
+  ...
+}:
 {
   name = "systemd-initrd-luks-fido2";
 
-  meta = {
-    # `canokey-qemu` is marked broken.
-    broken = true;
-  };
+  qemu.package = hostPkgs.qemu_test.override { canokeySupport = true; };
 
   nodes.machine =
     { pkgs, config, ... }:
@@ -22,6 +24,7 @@
           "-device canokey,bus=usb-bus.0,file=/tmp/canokey-file"
         ];
       };
+
       boot.loader.systemd-boot.enable = true;
 
       boot.initrd.systemd.enable = true;

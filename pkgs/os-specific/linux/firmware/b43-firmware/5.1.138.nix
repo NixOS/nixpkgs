@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  b43FirmwareCutter,
+  b43-fwcutter,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "b43-firmware";
@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-8ecGeqxbYrZ7i25MUXmQJ3gEM5rBYGXrE8cx/5Ca5G8=";
   };
 
-  nativeBuildInputs = [ b43FirmwareCutter ];
+  nativeBuildInputs = [ b43-fwcutter ];
 
   installPhase = ''
     mkdir -p $out/lib/firmware

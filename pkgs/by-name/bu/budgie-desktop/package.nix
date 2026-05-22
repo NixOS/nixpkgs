@@ -38,11 +38,13 @@
   vala,
   validatePkgConfig,
   wrapGAppsHook3,
+  xdg-desktop-portal,
 }:
 
 let
   pythonEnv = python3.withPackages (
     pp: with pp; [
+      dbus-python
       psutil
       pygobject3
       systemd-python
@@ -51,14 +53,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.10.1";
+  version = "10.10.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-6SRnub0FMRE9AcHwsnYH4WMdG2kqEpl5dfHy56FwrGU=";
+    hash = "sha256-Eaq7/LY65HpyPRfR57FWDPqkVqBbymlHHQHFUvxER20=";
   };
 
   outputs = [
@@ -122,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/session/budgie-desktop.in \
       --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}" \
+      --replace-fail "@libexecdirroot@/xdg-desktop-portal" "${xdg-desktop-portal}/libexec/xdg-desktop-portal" \
       --replace-fail "@gsd_libexecdir@/budgie-session-compositor-ready" "${budgie-session}/libexec/budgie-session-compositor-ready"
 
     chmod +x src/bridges/labwc/labwc_bridge.py

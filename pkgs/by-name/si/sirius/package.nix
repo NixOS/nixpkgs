@@ -106,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
+    rocmPackages.rocsolver
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
@@ -133,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
     "-include cstdint"
   ];

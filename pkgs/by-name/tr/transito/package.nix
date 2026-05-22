@@ -45,11 +45,9 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     install -Dm644 -t $out/share/applications assets/transito.desktop
-    install -Dm644 -t $out/share/pixmaps assets/transito.png
-    for icon in assets/transito_*.png
-    do
+    for icon in assets/transito_*.png; do
       name=$(basename $icon .png)
-      install -Dm644 -t $out/share/icons/hicolor/''${name#transito_}/apps $icon
+      install -Dm644 $icon $out/share/icons/hicolor/''${name#transito_}/apps/transito.png
     done
   '';
 
@@ -76,6 +74,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "transito";
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

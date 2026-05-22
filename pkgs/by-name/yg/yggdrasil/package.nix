@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yggdrasil";
-  version = "0.5.12";
+  version = "0.5.13";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NlNQnYmK//p35pj2MInD6RVsajM/bGDhOuzOZZYoWRw=";
+    hash = "sha256-L4eNrytAklblRrAQPf4zzgvrtHaZWmpTMcOLwkKMPCc=";
   };
 
-  vendorHash = "sha256-xZpUWIR3xTjhhNSwPoHx7GLUgcZJrWfF0FMExlluBmg=";
+  vendorHash = "sha256-z09K/ZDw9mM7lfqeyZzi0WRSedzgKED0Sywf1kJXlDk=";
 
   subPackages = [
     "cmd/genkeys"

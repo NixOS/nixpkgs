@@ -1,19 +1,17 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
   anyio,
-
-  # tests
+  buildPythonPackage,
   dirty-equals,
+  fetchFromGitHub,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  rustPlatform,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "watchfiles";
   version = "1.1.1";
   pyproject = true;
@@ -21,12 +19,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "watchfiles";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UlQnCYSNU9H4x31KenSfYExGun94ekrOCwajORemSco=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src version;
+    inherit (finalAttrs) pname src version;
     hash = "sha256-6sxtH7KrwAWukPjLSMAebguPmeAHbC7YHOn1QiRPigs=";
   };
 
@@ -35,9 +33,7 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  dependencies = [
-    anyio
-  ];
+  dependencies = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -66,9 +62,9 @@ buildPythonPackage rec {
   meta = {
     description = "File watching and code reload";
     homepage = "https://watchfiles.helpmanual.io/";
-    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/v${version}";
+    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "watchfiles";
   };
-}
+})

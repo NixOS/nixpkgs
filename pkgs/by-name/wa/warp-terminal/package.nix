@@ -18,6 +18,7 @@
   libxcursor,
   libx11,
   libxcb,
+  xz, # liblzma
   zlib,
   makeWrapper,
   waylandSupport ? false,
@@ -57,6 +58,7 @@ let
       fontconfig
       (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
       zlib
+      xz
     ];
 
     runtimeDependencies = [

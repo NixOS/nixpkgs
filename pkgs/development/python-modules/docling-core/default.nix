@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  defusedxml,
   jsonref,
   jsonschema,
   latex2mathml,
@@ -29,16 +30,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-core";
-  version = "2.63.0";
+  version = "2.73.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-core";
-    tag = "v${version}";
-    hash = "sha256-j1z9xxlUeuVEu2EtfsnCFm0WQc4nhulQSv0dAbBYXBY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aK+XHZjKsmFPgRv0oDed1CdBwZags/zcALumgcfQjjY=";
   };
 
   build-system = [
@@ -46,7 +47,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "defusedxml"
+    "pillow"
+    "typer"
+  ];
   dependencies = [
+    defusedxml
     jsonref
     jsonschema
     latex2mathml
@@ -62,13 +69,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
-
-  pythonImportsCheck = [
-    "docling_core"
-  ];
+  pythonImportsCheck = [ "docling_core" ];
 
   nativeCheckInputs = [
     gitpython
@@ -82,13 +83,14 @@ buildPythonPackage rec {
     "test/test_code_chunker.py"
     "test/test_code_chunking_strategy.py"
     "test/test_hybrid_chunker.py"
+    "test/test_line_chunker.py"
   ];
 
   meta = {
-    changelog = "https://github.com/docling-project/docling-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python library to define and validate data types in Docling";
     homepage = "https://github.com/docling-project/docling-core";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

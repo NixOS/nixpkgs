@@ -17,6 +17,7 @@ let
     warn
     map
     isList
+    foldl'
     ;
 in
 
@@ -80,8 +81,8 @@ rec {
         inherit buildCommand name;
         passAsFile = [ "buildCommand" ] ++ (derivationArgs.passAsFile or [ ]);
       }
-      // lib.optionalAttrs (!derivationArgs ? meta) {
-        pos =
+      // {
+        ${if !derivationArgs ? meta then "pos" else null} =
           let
             args = builtins.attrNames derivationArgs;
           in
@@ -89,81 +90,94 @@ rec {
             builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
           else
             null;
+        ${if runLocal then "preferLocalBuild" else null} = true;
+        ${if runLocal then "allowSubstitutes" else null} = false;
       }
-      // (lib.optionalAttrs runLocal {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-      })
       // removeAttrs derivationArgs [ "passAsFile" ]
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
-  writeTextFile =
-    {
-      name,
-      text,
-      executable ? false,
-      destination ? "",
-      checkPhase ? "",
-      meta ? { },
-      passthru ? { },
-      allowSubstitutes ? false,
-      preferLocalBuild ? true,
-      derivationArgs ? { },
-    }@args:
-    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
-      destination must be an absolute path, relative to the derivation's out path,
-      got '${destination}' instead.
+  writeTextFile = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      Ensure that the path starts with a / and specifies at least the filename.
-    '';
+    excludeDrvArgNames = [
+      "derivationArgs"
+    ];
 
-    let
-      matches = builtins.match "/bin/([^/]+)" destination;
-    in
-    runCommand name
-      (
-        {
-          pos = builtins.unsafeGetAttrPos "name" args;
-          inherit
-            text
-            executable
-            checkPhase
-            allowSubstitutes
-            preferLocalBuild
-            ;
-          passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
-          meta =
-            lib.optionalAttrs (executable && matches != null) {
-              mainProgram = lib.head matches;
-            }
-            // meta
-            // derivationArgs.meta or { };
-          passthru = passthru // derivationArgs.passthru or { };
-        }
-        // removeAttrs derivationArgs [
-          "passAsFile"
-          "meta"
-          "passthru"
-        ]
-      )
-      ''
-        target=$out${lib.escapeShellArg destination}
-        mkdir -p "$(dirname "$target")"
+    extendDrvArgs =
+      finalAttrs:
+      {
+        name,
+        text,
+        executable ? false,
+        destination ? "",
+        checkPhase ? "",
+        meta ? { },
+        passthru ? { },
+        allowSubstitutes ? false,
+        preferLocalBuild ? true,
+        derivationArgs ? { },
+        pos ? builtins.unsafeGetAttrPos "name" args,
+      }@args:
+      {
+        inherit
+          pos
+          name
+          text
+          executable
+          checkPhase
+          allowSubstitutes
+          preferLocalBuild
+          ;
+        destination =
+          assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+            destination must be an absolute path, relative to the derivation's out path,
+            got '${destination}' instead.
 
-        if [ -e "$textPath" ]; then
-          mv "$textPath" "$target"
-        else
-          echo -n "$text" > "$target"
-        fi
+            Ensure that the path starts with a / and specifies at least the filename.
+          '';
+          destination;
+        passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
 
-        if [ -n "$executable" ]; then
-          chmod +x "$target"
-        fi
+        buildCommand = ''
+          target=$out$destination
+          mkdir -p "$(dirname "$target")"
 
-        eval "$checkPhase"
-      '';
+          if [ -e "$textPath" ]; then
+            mv "$textPath" "$target"
+          else
+            printf "%s" "$text" > "$target"
+          fi
+
+          if [ -n "$executable" ]; then
+            chmod +x "$target"
+          fi
+
+          eval "$checkPhase"
+        '';
+
+        meta =
+          let
+            matches = builtins.match "/bin/([^/]+)" finalAttrs.destination;
+            isProgram = finalAttrs.executable && matches != null;
+          in
+          {
+            ${if isProgram then "mainProgram" else null} = lib.head matches;
+          }
+          // meta
+          // derivationArgs.meta or { };
+        passthru = passthru // derivationArgs.passthru or { };
+      }
+      // removeAttrs derivationArgs [
+        "passAsFile"
+        "meta"
+        "passthru"
+      ];
+
+    # `writeTextFile`'s set pattern doesn't have ellipses.
+    inheritFunctionArgs = false;
+  };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
@@ -241,101 +255,29 @@ rec {
       meta.mainProgram = name;
     };
 
-  # TODO: move parameter documentation to the Nixpkgs manual
   # See doc/build-helpers/trivial-build-helpers.chapter.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeShellApplication
   writeShellApplication =
     {
-      /*
-         The name of the script to write.
-
-         Type: String
-      */
       name,
-      /*
-         The shell script's text, not including a shebang.
-
-         Type: String
-      */
       text,
-      /*
-         Inputs to add to the shell script's `$PATH` at runtime.
-
-         Type: [String|Derivation]
-      */
       runtimeInputs ? [ ],
-      /*
-         Extra environment variables to set at runtime.
-
-         Type: AttrSet
-      */
       runtimeEnv ? null,
-      /*
-         `stdenv.mkDerivation`'s `meta` argument.
-
-         Type: AttrSet
-      */
       meta ? { },
-      /*
-         `stdenv.mkDerivation`'s `passthru` argument.
-
-         Type: AttrSet
-      */
       passthru ? { },
-      /*
-         The `checkPhase` to run. Defaults to `shellcheck` on supported
-         platforms and `bash -n`.
-
-         The script path will be given as `$target` in the `checkPhase`.
-
-         Type: String
-      */
       checkPhase ? null,
-      /*
-         Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
-
-         See <https://www.shellcheck.net/wiki/> for a list of checks.
-
-         Type: [String]
-      */
       excludeShellChecks ? [ ],
-      /*
-         Extra command-line flags to pass to ShellCheck.
-
-         Type: [String]
-      */
       extraShellCheckFlags ? [ ],
-      /*
-         Bash options to activate with `set -o` at the start of the script.
-
-         Defaults to `[ "errexit" "nounset" "pipefail" ]`.
-
-         Type: [String]
-      */
       bashOptions ? [
         "errexit"
         "nounset"
         "pipefail"
       ],
-      /*
-        Extra arguments to pass to `stdenv.mkDerivation`.
-
-        :::{.caution}
-        Certain derivation attributes are used internally,
-        overriding those could cause problems.
-        :::
-
-        Type: AttrSet
-      */
       derivationArgs ? { },
-      /*
-         Whether to inherit the current `$PATH` in the script.
-
-         Type: Bool
-      */
       inheritPath ? true,
     }@args:
     writeTextFile {
+      pos = builtins.unsafeGetAttrPos "name" args;
       inherit
         name
         meta
@@ -356,10 +298,16 @@ rec {
           export ${name}
         '') runtimeEnv
       )
-      + lib.optionalString (runtimeInputs != [ ]) ''
+      + ''
 
-        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+        export PATH="${
+          lib.concatStringsSep ":" (
+            (lib.optionals (runtimeInputs != [ ]) [ (lib.makeBinPath runtimeInputs) ])
+            ++ (lib.optionals inheritPath [ "$PATH" ])
+          )
+        }"
       ''
+
       + ''
 
         ${text}
@@ -400,10 +348,10 @@ rec {
       {
         inherit pname code;
         executable = true;
-        passAsFile = [ "code" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
+        __structuredAttrs = true;
         meta = {
           mainProgram = pname;
         };
@@ -411,7 +359,7 @@ rec {
       ''
         n=$out/bin/${pname}
         mkdir -p "$(dirname "$n")"
-        mv "$codePath" code.c
+        printf "%s" "$code" > code.c
         $CC -x c code.c -o "$n"
       '';
 
@@ -572,69 +520,79 @@ rec {
     other derivations.  A derivation created with linkFarm is often used in CI
     as a easy way to build multiple derivations at once.
   */
-  symlinkJoin =
-    args_@{
-      name ?
-        assert lib.assertMsg (
-          args_ ? pname && args_ ? version
-        ) "symlinkJoin requires either a `name` OR `pname` and `version`";
-        "${args_.pname}-${args_.version}",
-      paths,
-      stripPrefix ? "",
-      preferLocalBuild ? true,
-      allowSubstitutes ? false,
-      postBuild ? "",
-      failOnMissing ? stripPrefix == "",
-      ...
-    }:
-    assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
-      stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+  symlinkJoin = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      Ensure that the path starts with / and specifies path to the subdirectory.
-    '';
+    excludeDrvArgNames = [
+      "postBuild"
+      "stripPrefix"
+      "paths"
+      "failOnMissing"
+    ];
 
-    let
-      mapPaths =
-        f: paths:
-        map (
-          path:
-          if path == null then
-            null
-          else if isList path then
-            mapPaths f path
-          else
-            f path
-        ) paths;
-      args =
-        removeAttrs args_ [
-          "name"
-          "postBuild"
-          "stripPrefix"
-          "paths"
-          "failOnMissing"
-        ]
-        // {
-          # Allow getting the proper position of the output derivation.
-          # Since one of these are required, it should be fairly accurate.
-          pos =
-            if args_ ? pname then
-              builtins.unsafeGetAttrPos "pname" args_
+    extendDrvArgs =
+      finalAttrs:
+      args@{
+        name ?
+          assert lib.assertMsg (
+            finalAttrs ? pname && finalAttrs ? version
+          ) "symlinkJoin requires either a `name` OR `pname` and `version`";
+          "${finalAttrs.pname}-${finalAttrs.version}",
+        paths,
+        stripPrefix ? "",
+        preferLocalBuild ? true,
+        allowSubstitutes ? false,
+        postBuild ? "",
+        failOnMissing ? stripPrefix == "",
+        ...
+      }:
+      assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
+        stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+
+        Ensure that the path starts with / and specifies path to the subdirectory.
+      '';
+      let
+        mapPaths =
+          f:
+          map (
+            path:
+            if path == null then
+              null
+            else if isList path then
+              mapPaths f path
             else
-              builtins.unsafeGetAttrPos "name" args_;
-          inherit preferLocalBuild allowSubstitutes;
-          paths = mapPaths (path: "${path}${stripPrefix}") paths;
-          passAsFile = [ "paths" ];
-        }; # pass the defaults
-    in
-    runCommand name args ''
-      mkdir -p $out
-      for i in $(cat $pathsPath); do
-        ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
-          optionalString (!failOnMissing) "; fi"
-        }
-      done
-      ${postBuild}
-    '';
+              f path
+          );
+      in
+      {
+        enableParallelBuilding = true;
+        inherit name allowSubstitutes preferLocalBuild;
+        passAsFile = [
+          "buildCommand"
+          "paths"
+        ];
+        paths = mapPaths (path: "${path}${stripPrefix}") paths;
+        buildCommand = ''
+          mkdir -p $out
+          if [ -n "''${pathsPath:-}" ] && [ -f "$pathsPath" ]; then
+            mapfile -d " " -t paths < "$pathsPath"
+          fi
+          for i in "''${paths[@]}"; do
+            ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${
+              optionalString (!failOnMissing) "; fi"
+            }
+          done
+          ${postBuild}
+        '';
+      }
+      // {
+        ${if !args ? meta then "pos" else null} =
+          if args ? pname then
+            builtins.unsafeGetAttrPos "pname" args
+          else
+            builtins.unsafeGetAttrPos "name" args;
+      };
+  };
 
   # TODO: move linkFarm docs to the Nixpkgs manual
   /*
@@ -672,7 +630,7 @@ rec {
           entries
         # We do this foldl to have last-wins semantics in case of repeated entries
         else if (lib.isList entries) then
-          lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
+          foldl' (a: b: a // { "${b.name}" = b.path; }) { } entries
         else
           throw "linkFarm entries must be either attrs or a list!";
 
@@ -687,7 +645,7 @@ rec {
         # This is the best we can do since the other attrs are either defined here, or curried values that
         # we cannot extract a position from
         pos =
-          if lib.isAttrs entries then
+          if (lib.isAttrs entries) && (entries != { }) then
             builtins.unsafeGetAttrPos (builtins.head (builtins.attrNames entries)) entries
           else
             null;
@@ -773,6 +731,8 @@ rec {
           # but users are likely passing non-substitution arguments through substitutions
           # turn off __structuredAttrs to unbreak substituteAll
           __structuredAttrs = false;
+          pname = name;
+          version = lib.trivial.release + "pre-git";
           inherit meta;
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
@@ -926,67 +886,86 @@ rec {
 
   # Docs in doc/build-helpers/fetchers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
-  requireFile =
-    {
-      name ? null,
-      sha256 ? null,
-      sha1 ? null,
-      hash ? null,
-      url ? null,
-      message ? null,
-      hashMode ? "flat",
-    }:
-    assert (message != null) || (url != null);
-    assert (sha256 != null) || (sha1 != null) || (hash != null);
-    assert (name != null) || (url != null);
-    let
-      msg =
-        if message != null then
-          message
-        else
-          ''
-            Unfortunately, we cannot download file ${name_} automatically.
-            Please go to ${url} to download it yourself, and add it to the Nix store
-            using either
-              nix-store --add-fixed ${hashAlgo} ${name_}
-            or
-              nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
-          '';
-      hashAlgo =
-        if hash != null then
-          (builtins.head (lib.strings.splitString "-" hash))
-        else if sha256 != null then
-          "sha256"
-        else
-          "sha1";
-      hashAlgo_ = if hash != null then "" else hashAlgo;
-      hash_ =
-        if hash != null then
-          hash
-        else if sha256 != null then
-          sha256
-        else
-          sha1;
-      name_ = if name == null then baseNameOf (toString url) else name;
-    in
-    stdenvNoCC.mkDerivation {
-      name = name_;
-      outputHashMode = hashMode;
-      outputHashAlgo = hashAlgo_;
-      outputHash = hash_;
-      preferLocalBuild = true;
-      builder = writeScript "restrict-message" ''
-        source ${stdenvNoCC}/setup
-        cat <<_EOF_
+  requireFile = lib.extendMkDerivation {
+    constructDrv = stdenv.mkDerivation;
 
-        ***
-        ${msg}
-        ***
+    excludeDrvArgNames = [
+      "hash"
+      "hashMode"
+      "message"
+      "sha1"
+      "sha256"
+      "url"
+    ];
 
-        _EOF_
-        exit 1
-      '';
-    };
+    extendDrvArgs =
+      finalAttrs:
+      {
+        name ? null,
+        sha256 ? null,
+        sha1 ? null,
+        hash ? null,
+        url ? null,
+        message ? null,
+        hashMode ? "flat",
+      }@args:
+      assert (message != null) || (url != null);
+      assert (sha256 != null) || (sha1 != null) || (hash != null);
+      assert (name != null) || (url != null);
+      let
+        msg =
+          if message != null then
+            message
+          else
+            ''
+              Unfortunately, we cannot download file ${name_} automatically.
+              Please go to ${url} to download it yourself, and add it to the Nix store
+              using either
+                nix-store --add-fixed ${hashAlgo} ${name_}
+              or
+                nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
+            '';
+        hashAlgo =
+          if hash != null then
+            (builtins.head (lib.strings.splitString "-" hash))
+          else if sha256 != null then
+            "sha256"
+          else
+            "sha1";
+        hashAlgo_ = if hash != null then "" else hashAlgo;
+        hash_ =
+          if hash != null then
+            hash
+          else if sha256 != null then
+            sha256
+          else
+            sha1;
+        name_ = if name == null then baseNameOf (toString url) else name;
+      in
+      {
+        outputHashMode = hashMode;
+        outputHashAlgo = hashAlgo_;
+        outputHash = hash_;
+        preferLocalBuild = true;
+        builder = writeScript "restrict-message" ''
+          printf '%s' ${lib.escapeShellArg msg}
+          exit 1
+        '';
+      }
+      // (lib.optionalAttrs (name == null) {
+        # The case of providing `url`, but not `name`. This has
+        # weird interactions with the positioning system
+
+        # When we set `name` explicitly here, we override where the
+        # position is read from. So we must fix it here.
+        pos = lib.unsafeGetAttrPos "url" args;
+
+        # If a name is not provided, use the basename of the url
+        name = builtins.warn "providing a URL without a name is deprecated" baseNameOf (toString url);
+      });
+
+    inheritFunctionArgs = false;
+  };
 
   # TODO: move copyPathToStore docs to the Nixpkgs manual
   /*
@@ -1053,10 +1032,7 @@ rec {
             if builtins.isPath finalAttrs.src then
               baseNameOf finalAttrs.src + "-patched"
             else if builtins.isAttrs finalAttrs.src && (finalAttrs.src ? name) then
-              let
-                srcName = builtins.parseDrvName finalAttrs.src.name;
-              in
-              "${srcName.name}-patched${lib.optionalString (srcName.version != "") "-${srcName.version}"}"
+              finalAttrs.src.name + "-patched"
             else
               throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
           );
@@ -1068,9 +1044,12 @@ rec {
         preferLocalBuild = true;
         allowSubstitutes = false;
 
-        dontConfigure = true;
-        dontBuild = true;
-        doCheck = false;
+        # unconditionally disable phases that are we don't want
+        phases = [
+          "unpackPhase"
+          "patchPhase"
+          "installPhase"
+        ];
 
         installPhase = "cp -R ./ $out";
 
@@ -1079,7 +1058,6 @@ rec {
         passthru = extraPassthru // finalAttrs.src.passthru or { };
 
         # Carry (and merge) information from the underlying `src` if present.
-        # If there is not src.meta, this meta block will be blank regardless.
         meta = lib.optionalAttrs (finalAttrs.src ? meta) (removeAttrs finalAttrs.src.meta [ "position" ]);
       };
   };

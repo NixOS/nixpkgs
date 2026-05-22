@@ -19,17 +19,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "banks";
-  version = "2.4.0";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "masci";
     repo = "banks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rIN90R/olhBvOUlgh9KUV/1MxO814g561gTJam98Ny0=";
+    hash = "sha256-FSulHLWXNO9jz9K7qgrrZcvfe2iQGxdkJVOZlo+Qw/c=";
   };
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   build-system = [ hatchling ];
 

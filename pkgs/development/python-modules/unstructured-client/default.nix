@@ -1,57 +1,47 @@
 {
   aiofiles,
   buildPythonPackage,
-  cryptography,
   deepdiff,
-  eval-type-backport,
   fetchFromGitHub,
+  httpcore,
   httpx,
   lib,
-  nest-asyncio,
-  poetry-core,
   pydantic,
   pypdf,
+  pypdfium2,
   pytest-asyncio,
   pytestCheckHook,
   python,
-  python-dateutil,
   requests-toolbelt,
-  typing-inspection,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "unstructured-client";
-  version = "0.42.9";
+  version = "0.44.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+neZK7I5qjidLlM298TrVl5mGFBdGZdxAdFaJIf0tNk=";
+    hash = "sha256-joQj2tMOD3bW/bU0ffZ7Usfh7hRWrVGKfGreC9ks18E=";
   };
 
   preBuild = ''
     ${python.interpreter} scripts/prepare_readme.py
   '';
 
-  build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiofiles
-    cryptography
-    eval-type-backport
+    httpcore
     httpx
-    nest-asyncio
     pydantic
     pypdf
-    python-dateutil
+    pypdfium2
     requests-toolbelt
-    typing-inspection
   ];
 
   pythonImportsCheck = [ "unstructured_client" ];

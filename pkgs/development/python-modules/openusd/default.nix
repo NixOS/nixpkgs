@@ -24,8 +24,8 @@
   numpy,
   opencolorio,
   openimageio,
+  openshadinglanguage,
   opensubdiv,
-  osl,
   ptex,
   pyopengl,
   pyqt6,
@@ -36,9 +36,10 @@
   stdenv,
   onetbb,
   withDocs ? false,
-  withOsl ? true,
+  withOsl ? !stdenv.hostPlatform.isDarwin,
   withTools ? false,
   withUsdView ? false,
+  withMaterialX ? true,
   writeShellScriptBin,
 }:
 
@@ -79,7 +80,7 @@ buildPythonPackage rec {
     })
   ];
 
-  env.OSL_LOCATION = "${osl}";
+  env.OSL_LOCATION = lib.optionalString withOsl "${openshadinglanguage}";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -96,8 +97,8 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
-    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
-    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" withMaterialX)
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" withOsl)
   ];
 
   nativeBuildInputs = [
@@ -131,7 +132,7 @@ buildPythonPackage rec {
     libx11
     libxt
   ]
-  ++ lib.optionals withOsl [ osl ]
+  ++ lib.optionals withOsl [ openshadinglanguage ]
   ++ lib.optionals withUsdView [ qt6.qtbase ]
   ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 

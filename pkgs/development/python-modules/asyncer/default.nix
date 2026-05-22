@@ -4,26 +4,28 @@
   fetchFromGitHub,
   pdm-backend,
   anyio,
+  sniffio,
   typing-extensions,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "asyncer";
-  version = "0.0.12";
+  version = "0.0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "asyncer";
     tag = version;
-    hash = "sha256-ViPCy9N93qcpaAeawuUoSnLiW1jVGFM14K9LC/AQ+Fc=";
+    hash = "sha256-4h6s0jsAzTT6LbsvfQGkc7qNCcPgoyR9Qr/yro1ukbg=";
   };
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     anyio
+    sniffio
     typing-extensions
   ];
 

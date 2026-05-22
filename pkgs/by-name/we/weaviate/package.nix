@@ -33,6 +33,6 @@ buildGoModule (finalAttrs: {
     description = "ML-first vector search engine";
     homepage = "https://github.com/weaviate/weaviate";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

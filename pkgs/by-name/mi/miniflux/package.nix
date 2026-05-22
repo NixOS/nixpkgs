@@ -1,24 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "miniflux";
-  version = "2.2.16";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     tag = finalAttrs.version;
-    hash = "sha256-mJ0FgoTm/SzS/T6xcLk232Xs3TgaDQahib4BeWzNfAk=";
+    hash = "sha256-AF5wiFLXtyf0ZxfVu0zdXcVExm7Zoh/wYS9FuSjfipk=";
   };
 
-  vendorHash = "sha256-XrTmXAUABlTQaA3Z0vU0HQW5Q1e/Yg6yq690oZH8M+A=";
+  vendorHash = "sha256-9qHe21/Qu2OInjcn4gQOh3LEQ1iqT6rzm8agj+YUD68=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,6 +30,8 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X miniflux.app/v2/internal/version.Version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux

@@ -5,13 +5,13 @@
 }:
 maven.buildMavenPackage rec {
   pname = "binary-file-toolkit";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "boricj";
     repo = "binary-file-toolkit";
     tag = "v${version}";
-    hash = "sha256-ABDJDdx0OxXVOgYAw4kZAP3Psr+w7YevP1xk1RszXw8=";
+    hash = "sha256-HMzRh/Q06Ik33mEkmh5U6qLiWk7ZCEstYq3Ll/pFhXM=";
   };
 
   mvnHash = "sha256-Ek2qulMSHd1ZJfEloo6fIe+QMqub/Ftna/TzTt01ky8=";

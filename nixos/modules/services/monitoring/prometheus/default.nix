@@ -66,7 +66,7 @@ let
     rule_files = optionals (!(cfg.enableAgentMode)) (
       map (promtoolCheck "check rules" "rules") (
         cfg.ruleFiles
-        ++ [
+        ++ optionals (builtins.length cfg.rules > 0) [
           (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
         ]
       )
@@ -97,7 +97,7 @@ let
     ++ (
       if (cfg.enableAgentMode) then
         [
-          "--enable-feature=agent"
+          "--agent"
         ]
       else
         [

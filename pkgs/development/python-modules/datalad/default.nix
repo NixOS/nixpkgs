@@ -37,9 +37,6 @@
   distro,
   # win
   colorama,
-  # python-version-dependent
-  pythonOlder,
-  typing-extensions,
   # tests
   pytest-retry,
   pytest-xdist,
@@ -51,14 +48,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalad";
-  version = "1.3.1";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = finalAttrs.version;
-    hash = "sha256-cVsbEHM1zJYxzxHuoxErxGe4w5ioYZn11t5BvtXnH4A=";
+    hash = "sha256-5PAHHN+dgMAxqUZn3vXWsoesw3lQMy6Q8nUJYa4SofM=";
   };
 
   postPatch = ''
@@ -95,8 +92,7 @@ buildPythonPackage (finalAttrs: {
       annexremote
       looseversion
     ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
     downloaders = [
       boto3
       keyrings-alt

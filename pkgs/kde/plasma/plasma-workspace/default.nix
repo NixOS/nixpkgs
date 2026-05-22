@@ -15,12 +15,14 @@
   qtlocation,
   qtpositioning,
   qtsvg,
+  qttools,
+  qtvirtualkeyboard,
   qtwayland,
+  plasma5support,
+  qqc2-breeze-style,
   libcanberra,
   libqalculate,
   pipewire,
-  qttools,
-  qqc2-breeze-style,
   gpsd,
 }:
 mkKdeDerivation {
@@ -36,12 +38,27 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
+
+    # stop accidentally duplicating fontconfig configs
+    ./fontconfig.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+    "devtools"
+    "sessions"
   ];
 
   postInstall = ''
     # Prevent patching this shell file, it only is used by sourcing it from /bin/sh.
     chmod -x $out/libexec/plasma-sourceenv.sh
   '';
+
+  extraCmakeFlags = [
+    "-DGLIBC_LOCALE_GEN=OFF"
+    "-DGLIBC_LOCALE_PREGENERATED=ON"
+  ];
 
   extraNativeBuildInputs = [
     pkg-config
@@ -53,6 +70,7 @@ mkKdeDerivation {
     qtsvg
     qtwayland
 
+    plasma5support
     qqc2-breeze-style
 
     libcanberra
@@ -67,12 +85,19 @@ mkKdeDerivation {
     gpsd
   ];
 
+  extraPropagatedBuildInputs = [
+    qtvirtualkeyboard
+  ];
+
   qtWrapperArgs = [ "--inherit-argv0" ];
 
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''
     mkdir -p $out/nix-support
     echo "${lsof} ${xmessage} ${xrdb}" > $out/nix-support/depends
+
+    moveToOutput share/xsessions $sessions
+    moveToOutput share/wayland-sessions $sessions
   '';
 
   passthru.providedSessions = [

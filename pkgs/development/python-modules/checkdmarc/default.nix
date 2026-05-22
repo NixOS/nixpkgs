@@ -12,7 +12,6 @@
   pyleri,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   timeout-decorator,
   xmltodict,
@@ -20,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.13.2";
+  version = "5.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = finalAttrs.version;
-    hash = "sha256-Ub/B3IO7f5Ah2XNTJ90Y6whP+PIDCL7ucHGd5sWwJRk=";
+    hash = "sha256-MafEl+5uZS490ZZqi74alOnbLfDyMGb5RK5CtyHUS60=";
   };
 
   pythonRelaxDeps = [
@@ -66,6 +65,11 @@ buildPythonPackage (finalAttrs: {
     "testSplitSPFRecord"
     "testTooManySPFDNSLookups"
     "testTooManySPFVoidDNSLookups"
+    "testDNSSEC"
+    "testDnssecFalseWhenNoKey"
+    "testGetDnskeyCache"
+    "testIncludeMissingSPF"
+    "testKnownGood"
   ];
 
   meta = {

@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
-  version = "1.0.5";
+  version = "1.0.6";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~autumnull";
     repo = "haredo";
     rev = finalAttrs.version;
-    hash = "sha256-gpui5FVRw3NKyx0AB/4kqdolrl5vkDudPOgjHc/IE4U=";
+    hash = "sha256-wjowPlSIotP8RSV0whiVWne+irtDdoPD+iSC2F9GVfs=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ./bin/haredo ''${enableParallelChecking:+-j$NIX_BUILD_CORES} test
+    ./bin/haredo ''${enableParallelChecking:+-j$NIX_BUILD_CORES} test/all
 
     runHook postCheck
   '';

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Yate's license is GPL with an exception for linking with
     # OpenH323 and PWlib (licensed under MPL).
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

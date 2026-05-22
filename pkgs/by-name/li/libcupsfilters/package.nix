@@ -32,6 +32,18 @@ stdenv.mkDerivation {
     hash = "sha256-WEcg+NSsny/N1VAR1ejytM+3nOF3JlNuIUPf4w6N2ew=";
   };
 
+  # Undefined symbols for architecture x86_64:
+  #   "_iconv", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  #   "_iconv_close", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  #   "_iconv_open", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  # ld: symbol(s) not found for architecture x86_64
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
+
   patches = [
     (fetchpatch {
       # https://github.com/OpenPrinting/cups-filters/security/advisories/GHSA-893j-2wr2-wrh9
@@ -49,7 +61,9 @@ stdenv.mkDerivation {
       url = "https://github.com/OpenPrinting/libcupsfilters/commit/b69dfacec7f176281782e2f7ac44f04bf9633cfa.patch";
       hash = "sha256-rPUbgtTu7j3uUZrtUhUPO1vFbV6naxIWsHf6x3JhS74=";
     })
-  ];
+  ]
+  # build on platforms without execvpe
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./execve.patch;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -77,7 +91,9 @@ stdenv.mkDerivation {
     "--with-ippfind-path=${lib.getExe' cups "ippfind"}"
     "--enable-imagefilters"
     "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
-  ];
+  ]
+  # build on platforms without execvpe (path to Ghostscript must be absolute)
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gs-path=${lib.getExe ghostscript}";
   makeFlags = [
     "CUPS_SERVERBIN=$(out)/lib/cups"
     "CUPS_DATADIR=$(out)/share/cups"
@@ -88,6 +104,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/OpenPrinting/libcupsfilters";
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

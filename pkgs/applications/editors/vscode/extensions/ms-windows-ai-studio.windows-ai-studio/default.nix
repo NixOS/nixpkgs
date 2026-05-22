@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "windows-ai-studio";
     publisher = "ms-windows-ai-studio";
-    version = "0.22.1";
-    hash = "sha256-eUtl1x3HqpFEUGkBVb8EOHneWV7DfYHHWGmM5gOGYcg=";
+    version = "1.0.1";
+    hash = "sha256-85bFomfGcFiXJuTUv46B47PEtzFP6H7rggCZzf5/fK8=";
   };
 
   meta = {

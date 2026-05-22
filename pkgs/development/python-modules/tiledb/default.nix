@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.36.0";
+  version = "0.36.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     tag = version;
-    hash = "sha256-zkooZuy6BAV2aR5PQ67/tiX/dARQw5WDNQVqlrs/U2s=";
+    hash = "sha256-LzXj6bs+DuOMDhPeXAmBuarA+eEe67LWWnhpNhR660k=";
   };
 
   build-system = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  TILEDB_PATH = tiledb;
+  env.TILEDB_PATH = tiledb;
 
   disabled = !isPy3k; # Not bothering with python2 anymore
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   # otherwise it cannot be imported because extension modules are not compiled in sources
   checkPhase = ''
     pushd "$TMPDIR"
-    ${python.interpreter} -m pytest --pyargs tiledb${lib.optionalString stdenv.isDarwin " -k 'not test_ctx_thread_cleanup and not test_array'"}
+    ${python.interpreter} -m pytest --pyargs tiledb${lib.optionalString stdenv.hostPlatform.isDarwin " -k 'not test_ctx_thread_cleanup and not test_array'"}
     popd
   '';
 

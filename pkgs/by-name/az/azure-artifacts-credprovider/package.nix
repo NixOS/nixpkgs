@@ -8,12 +8,12 @@
 buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  version = "1.4.1";
+  version = "2.0.1";
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "artifacts-credprovider";
     rev = "v${version}";
-    sha256 = "sha256-MYOl+UfRExeZsozcPJynWbx5JpYL0dxTADycAt6Wm7o=";
+    sha256 = "sha256-rllLLSSebnnmsBtj+oj5FK6qyh4qPf0Zn7fKCnhrHpQ=";
   };
   pname = "azure-artifacts-credprovider";
   projectFile = "CredentialProvider.Microsoft/CredentialProvider.Microsoft.csproj";

@@ -14,18 +14,19 @@
   threadpoolctl,
   pytestCheckHook,
   python,
+  sklearn-compat,
 }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "imbalanced-learn";
     tag = version;
-    hash = "sha256-1R7jHOkTO3zK9bkUvvOPQ420ofqIO7J1rqixFEbApR0=";
+    hash = "sha256-nY8Hn+EsKOXqAQV9TtuZaQY+XnxNNzIaHYM2n0gD5rY=";
   };
 
   build-system = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     threadpoolctl
+    sklearn-compat
   ];
 
   optional-dependencies = {
@@ -74,16 +76,10 @@ buildPythonPackage rec {
     "imblearn/utils/tests/test_min_dependencies.py"
   ];
 
-  disabledTests = [
-    # Broken upstream test https://github.com/scikit-learn-contrib/imbalanced-learn/issues/1131
-    "test_estimators_compatibility_sklearn"
-    "test_balanced_bagging_classifier_with_function_sampler"
-  ];
-
   meta = {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
-    changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${version}";
+    changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rmcgibbo

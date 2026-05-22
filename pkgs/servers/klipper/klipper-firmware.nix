@@ -7,7 +7,7 @@ args@{
   bintools-unwrapped,
   libffi,
   libusb1,
-  wxGTK32,
+  wxwidgets_3_2,
   python3,
   gcc-arm-embedded,
   klipper,
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     avrdude
     stm32flash
     pkg-config
-    wxGTK32 # Required for bossac
+    wxwidgets_3_2 # Required for bossac
   ];
 
   configurePhase = ''

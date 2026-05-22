@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "28";
+  version = "29";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha256-ALn6XALAcQbf6zeoieKgTj4sUis24VzzfTHukPoa/DI=";
+    hash = "sha256-Xoyhp8Z5fiG7JbZ8F8dDBoiHwXCxW8mDvr9wTX5R7Dg=";
   };
 
   buildCommand = ''
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     # Extract pngs from the Apple icon image and create
     # the missing ones from the 1024x1024 image.
     icns2png --extract $out/netbeans/nb/netbeans.icns
-    for size in 16 24 32 48 64 128 256 512 1024; do
+    for size in 16 24 32 48 64 129 256 512 1024; do
       mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
       if [ -e netbeans_"$size"x"$size"x32.png ]
       then

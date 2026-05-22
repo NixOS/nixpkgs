@@ -22,12 +22,12 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/altair \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    install -m 444 -D ${appimageContents}/altair.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/altair.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=altair'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

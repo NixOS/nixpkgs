@@ -28,15 +28,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest7CheckHook
   ];
 
-  dependencies =
-    with python3Packages;
-    [
-      click
-      cookiecutter
-      gitpython
-      typer
-    ]
-    ++ lib.optional (pythonOlder "3.11") python3Packages.toml;
+  dependencies = with python3Packages; [
+    click
+    cookiecutter
+    gitpython
+    typer
+  ];
 
   pythonImportsCheck = "cruft";
 

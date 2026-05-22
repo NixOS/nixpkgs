@@ -33,13 +33,13 @@
 let
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
-    version = "0.10.4";
+    version = "0.10.5";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      hash = "sha256-TuzUerfOn8+3YfueG00IBP9sMpvy2deyL16mWQ8cRHg=";
+      hash = "sha256-P7mgdHIq7/Vkk5CR4mUYtQ0xBjh3J2QrYAobKbw1KXM=";
     };
 
     nativeBuildInputs = [
@@ -78,7 +78,7 @@ let
 
   xrdp = stdenv.mkDerivation rec {
     pname = "xrdp";
-    version = "0.10.4.1";
+    version = "0.10.6";
 
     src = applyPatches {
       inherit version;
@@ -89,7 +89,7 @@ let
         repo = "xrdp";
         rev = "v${version}";
         fetchSubmodules = true;
-        hash = "sha256-ula1B9/eriJ+0r6d9r2LAzh7J3s6/uvAiTKeRzLuVL0=";
+        hash = "sha256-BoIpWafUWznRHN8BaZmld8vVbZtywaGiooGPnDtDCjM=";
       };
     };
 

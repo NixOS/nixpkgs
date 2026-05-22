@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-8vmq/YstuBYUxe00P4NrxD/eMYI++R9uvn1sCcMTr7I=";
   };
 
+  patches = [
+    # gcc-15 build fix: https://github.com/kensanata/bitlbee-mastodon/pull/61
+    ./gcc-15.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

@@ -24,5 +24,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "Mocking, stubbing and spying framework for python";
+    license = lib.licenses.bsd3;
   };
 }

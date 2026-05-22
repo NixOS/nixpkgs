@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "octodns-ddns";
-  version = "0.2.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-ddns";
     tag = "v${version}";
-    hash = "sha256-n4dTkJT5UmmEqtN5x2zkJe7NQtjXz3gPwwFnOmMIfIs=";
+    hash = "sha256-mHcm2MlQUVju3+3aQ3DVaMvg5WmDUi5+4zgAEQP3kiA=";
   };
 
   build-system = [
@@ -27,11 +27,6 @@ buildPythonPackage rec {
     octodns
     requests
   ];
-
-  postPatch = ''
-    substituteInPlace tests/test_octodns_source_ddns.py \
-      --replace-fail "assertEquals" "assertEqual"
-  '';
 
   env.OCTODNS_RELEASE = 1;
 

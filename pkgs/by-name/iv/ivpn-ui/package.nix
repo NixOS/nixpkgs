@@ -11,18 +11,18 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
-  version = "3.15.0";
+  version = "3.15.6";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
+    hash = "sha256-C24klcr10i0lki74eNfJ4bappdIttp3S4FGg1wkAGcY=";
   };
 
   sourceRoot = "source/ui";
 
-  npmDepsHash = "sha256-OOBBUDJwTP2T/KqzJPRV+A9ncRmb14KBoAXqa0T6c58=";
+  npmDepsHash = "sha256-S/fB3MxEDLVEZ762EkBkyemYW2rgBGtCH5y/6p6nqgE=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -84,7 +84,7 @@ buildNpmPackage (finalAttrs: {
     downloadPage = "https://github.com/ivpn/desktop-app";
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = [ "x86_64-linux" ];
   };
 })

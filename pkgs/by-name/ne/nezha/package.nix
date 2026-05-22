@@ -48,13 +48,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nezha";
-  version = "1.14.14";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F6M/bpuupQDDxKrafWlB3vk6iKf1QfJU1x0p3MAzzhM=";
+    hash = "sha256-XZPyzIiqf2UG1gE6uHiYSVPCP6G/lrKK+Y3vRgkPk20=";
   };
 
   proxyVendor = true;
@@ -90,11 +90,11 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ go-swag ];
 
   # Generate code for Swagger documentation endpoints (see cmd/dashboard/docs).
-  preBuild = ''
-    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
+  postConfigure = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d cmd/dashboard -g main.go -o cmd/dashboard/docs
   '';
 
-  vendorHash = "sha256-9vJzQqXkoENRapcHp/afSCcdOrt8bxrIyJT/cBeas+A=";
+  vendorHash = "sha256-x347CkS4nw8hFUhmuewvrqNDE2a2lT3KmIQ1hc98NJE=";
 
   ldflags = [
     "-s"

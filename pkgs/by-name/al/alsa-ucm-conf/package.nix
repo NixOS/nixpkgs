@@ -1,6 +1,7 @@
 {
   directoryListingUpdater,
   fetchurl,
+  fetchpatch,
   lib,
   stdenvNoCC,
   coreutils,
@@ -9,12 +10,20 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
-  version = "1.2.15.1";
+  version = "1.2.15.3";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-JGxdWdIXtvf0ehH9EPG3ZtJavLDZyZavMHm7nJrFobA=";
+    hash = "sha256-n3noE8CPyGz6Rt11xPzaGkpRtILbJgfh/PqvuS9YijE=";
   };
+
+  patches = [
+    # fix for typo in 1.2.15.3 – remove with subsequent release
+    (fetchpatch {
+      url = "https://github.com/alsa-project/alsa-ucm-conf/commit/95377000e849259764f37295e0ddd58fd8a55a76.patch";
+      hash = "sha256-o2qR69jiGXFWM0mxeIhXd+tCvGikYqnoalce1UOVppw=";
+    })
+  ];
 
   dontBuild = true;
 

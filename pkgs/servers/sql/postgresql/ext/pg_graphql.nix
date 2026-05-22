@@ -11,16 +11,16 @@ buildPgrxExtension (finalAttrs: {
   cargo-pgrx = cargo-pgrx_0_16_1;
 
   pname = "pg_graphql";
-  version = "1.5.12";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "pg_graphql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mJBxen6Gg1LbzIF+WKThrs+wPD01a6WjZ+AHrGdWL4Q=";
+    hash = "sha256-DOmxdLuYlRoQRprN4tni6JyXZ3nWaEqVQU0DNSYRYTc=";
   };
 
-  cargoHash = "sha256-GZjoHGqNhZOuMbHji1Y3xKmdJ1GB1KasT+47P2e83sU=";
+  cargoHash = "sha256-pgwx8Axctd37J79nUTbCGp6g2PGiHdgt99pMqGGLmyA=";
 
   # pgrx tests try to install the extension into postgresql nix store
   doCheck = false;

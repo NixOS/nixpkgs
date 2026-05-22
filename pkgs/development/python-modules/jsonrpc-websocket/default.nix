@@ -10,21 +10,21 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonrpc-websocket";
-  version = "3.2.0";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "jsonrpc-websocket";
-    tag = version;
-    hash = "sha256-SgwEY/5MPEkSrcsQV4qkVgKmYYYsWA2YluReOz7sEjc=";
+    tag = finalAttrs.version;
+    hash = "sha256-vhE5jee3ryrKFm9s8SFklBIk+pV8FkUERwWQ75u/PIw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     jsonrpc-base
@@ -48,7 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "JSON-RPC websocket client library for asyncio";
     homepage = "https://github.com/emlove/jsonrpc-websocket";
+    changelog = "https://github.com/emlove/jsonrpc-websocket/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

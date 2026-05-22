@@ -9,16 +9,17 @@
   fetchPnpmDeps,
   makeWrapper,
   nix-update-script,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "turborepo-remote-cache";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "ducktors";
     repo = "turborepo-remote-cache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OSqQ1unaQa2f0ANfCkxS9yJKiWUd1FLil3GE+BrQhoA=";
+    hash = "sha256-I5EySaE0SFUmJdK9AAR6Id1TpTS3IOclRazTio8wFeI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -73,7 +74,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) turborepo-remote-cache; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/ducktors/turborepo-remote-cache";

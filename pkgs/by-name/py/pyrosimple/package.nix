@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "parsimonious"
     "prometheus-client"
     "python-daemon"
   ];
@@ -45,9 +46,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       shtab
       python-box
       tomli-w
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
     ]
     ++ lib.optional withInotify inotify;
 

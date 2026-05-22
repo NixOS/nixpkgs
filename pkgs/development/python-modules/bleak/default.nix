@@ -16,7 +16,6 @@
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
   typing-extensions,
-  async-timeout,
 
   pytest-asyncio,
   pytest-cov-stub,
@@ -61,9 +60,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -81,6 +77,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

@@ -40,7 +40,6 @@ let
     flip
     getName
     hasSuffix
-    head
     isBool
     max
     optional
@@ -48,12 +47,8 @@ let
     optionals
     optionalString
     removePrefix
-    splitString
     stringLength
     ;
-
-  getOptionalAttrs =
-    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
 
   leftPadName =
     name: against:
@@ -82,17 +77,12 @@ let
     "installer"
   ];
 
-  isBootstrapPackage' = flip elem (
-    [
-      "build"
-      "packaging"
-      "pyproject-hooks"
-      "wheel"
-    ]
-    ++ optionals (python.pythonOlder "3.11") [
-      "tomli"
-    ]
-  );
+  isBootstrapPackage' = flip elem [
+    "build"
+    "packaging"
+    "pyproject-hooks"
+    "wheel"
+  ];
 
   isSetuptoolsDependency' = flip elem [
     "setuptools"
@@ -117,6 +107,9 @@ lib.extendMkDerivation {
     "dependencies"
     "optional-dependencies"
     "build-system"
+
+    # Deprecated arguments
+    "pytestFlagsArray"
   ];
 
   extendDrvArgs =
@@ -273,7 +266,7 @@ lib.extendMkDerivation {
             if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
 
         in
-        attrName: inputs: map (checkDrv attrName) inputs;
+        attrName: map (checkDrv attrName);
 
       isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 
@@ -282,6 +275,14 @@ lib.extendMkDerivation {
       isSetuptoolsDependency = isSetuptoolsDependency' (finalAttrs.pname or null);
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+
+      runtimeDepsCheckHook =
+        if isBootstrapPackage then
+          pythonRuntimeDepsCheckHook.override {
+            inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+          }
+        else
+          pythonRuntimeDepsCheckHook;
 
     in
     {
@@ -330,17 +331,11 @@ lib.extendMkDerivation {
           else
             pypaBuildHook
         )
-        (
-          if isBootstrapPackage then
-            pythonRuntimeDepsCheckHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-            }
-          else
-            pythonRuntimeDepsCheckHook
-        )
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
         wheelUnpackHook
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "egg") [
         eggUnpackHook
@@ -373,20 +368,23 @@ lib.extendMkDerivation {
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-      propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
-        propagatedBuildInputs
-        ++ getFinalPassthru "dependencies"
+      propagatedBuildInputs =
+        validatePythonMatches "propagatedBuildInputs" (
+          propagatedBuildInputs ++ getFinalPassthru "dependencies"
+        )
         ++ [
           # we propagate python even for packages transformed with 'toPythonApplication'
           # this pollutes the PATH but avoids rebuilds
           # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
           python
-        ]
-      );
+        ];
 
       inherit strictDeps;
 
-      LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+      env = {
+        LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+      }
+      // (attrs.env or { });
 
       # Python packages don't have a checkPhase, only an installCheckPhase
       doCheck = false;
@@ -418,7 +416,12 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
         updateScript = nix-update-script { };
+        # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
+        # They are internal and subject to changes.
+        # TODO(@ShamrockLee): Remove when overrideStdenvCompat gets removed.
         ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
+        ${if attrs ? stdenv then "__stdenvPythonCompatPos" else null} =
+          builtins.unsafeGetAttrPos "stdenv" attrs;
       }
       // attrs.passthru or { };
 
@@ -434,6 +437,19 @@ lib.extendMkDerivation {
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
+    // (
+      let
+        deprecatedFlagNotEmpty =
+          attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ];
+        pos = builtins.unsafeGetAttrPos "pytestFlagsArray" attrs;
+      in
+      {
+        ${if deprecatedFlagNotEmpty then "pytestFlagsArray" else null} = throw ''
+          buildPythonPackage: Deprecated flag pytestFlagsArray found at ${pos.file}:${toString pos.line}
+            Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+        '';
+      }
+    )
     //
       lib.mapAttrs
         (
@@ -442,13 +458,11 @@ lib.extendMkDerivation {
             attrs.${name} == [ ]
           ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
         )
-        (
-          getOptionalAttrs [
-            "enabledTestMarks"
-            "enabledTestPaths"
-            "enabledTests"
-          ] attrs
-        );
+        {
+          ${if attrs ? enabledTestMarks then "enabledTestMarks" else null} = attrs.enabledTestMarks;
+          ${if attrs ? enabledTestPaths then "enabledTestPaths" else null} = attrs.enabledTestPaths;
+          ${if attrs ? enabledTests then "enabledTests" else null} = attrs.enabledTests;
+        };
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.

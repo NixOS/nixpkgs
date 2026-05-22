@@ -9,7 +9,7 @@
   ntk,
   libjack2,
   libsndfile,
-  ladspaH,
+  ladspa-header,
   liblo,
   libsigcxx,
   lrdf,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     ntk
     libjack2
     libsndfile
-    ladspaH
+    ladspa-header
     liblo
     libsigcxx
     lrdf

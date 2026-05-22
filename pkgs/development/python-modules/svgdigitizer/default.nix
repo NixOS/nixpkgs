@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "svgdigitizer";
-  version = "0.14.1";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";
     repo = "svgdigitizer";
     tag = version;
-    hash = "sha256-ZOR9CviQhPyJQjbLpR53ZVwaarrICg87vtzCL1nq+jE=";
+    hash = "sha256-Wba1I80wi2YGbHqpbXfCoHw0zkNovX3PRPkdqhm05Ys=";
   };
 
   build-system = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     svgwrite
   ];
   # https://github.com/echemdb/svgdigitizer/issues/252
-  MPLBACKEND = "Agg";
+  env.MPLBACKEND = "Agg";
 
   nativeCheckInputs = [
     pytestCheckHook

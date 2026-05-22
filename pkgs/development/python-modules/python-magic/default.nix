@@ -38,6 +38,9 @@ buildPythonPackage rec {
       url = "https://github.com/ahupp/python-magic/commit/3d2405ca80cd39b2a91decd26af81dcf181390a4.patch";
       hash = "sha256-HRsnO9MGfMD9BkJdC4SrEFQ1OZEaXpwakXFLoaCPK94=";
     })
+
+    # Fix test failures due to modified output in file 5.47
+    ./fix-parquet-test.patch
   ];
 
   preCheck = ''

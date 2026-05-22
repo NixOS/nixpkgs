@@ -5,10 +5,8 @@
   flit-core,
   pyproject-hooks,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testpath,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +21,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ flit-core ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # We need to disable tests because this package is part of the bootstrap chain
   # and its test dependencies cannot be built yet when this is being built.

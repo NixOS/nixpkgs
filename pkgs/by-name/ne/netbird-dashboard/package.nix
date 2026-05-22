@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "netbird-dashboard";
-  version = "2.31.0";
+  version = "2.38.1";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "dashboard";
     rev = "v${version}";
-    hash = "sha256-vpxMPoF0xn5UzY1Yo5Y2NAfmwC21Z6Ogv+C30JKyj0E=";
+    hash = "sha256-YaBrFY8zOH3iAcs+JNISchDwAY9ts7UwPXX1QoMWSxU=";
   };
 
-  npmDepsHash = "sha256-IyNVeoEusQlxOYzYe9xIwtHepDRyjUfKHGNNR8LoOSA=";
+  npmDepsHash = "sha256-Ze+1r5Uh+wdm3MuVr93oS2itodx9Zdv+JYO6Uji1saw=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   installPhase = ''
@@ -24,14 +24,14 @@ buildNpmPackage rec {
 
   env = {
     CYPRESS_INSTALL_BINARY = 0;
+    NEXT_PUBLIC_DASHBOARD_VERSION = version;
   };
 
   meta = {
     description = "NetBird Management Service Web UI Panel";
     homepage = "https://github.com/netbirdio/dashboard";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      patrickdag
+    maintainers = [
     ];
   };
 }

@@ -3,35 +3,28 @@
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   stdenv,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.5.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y/hTD31WUcVn/OBuNwdhbjDZd36EKbOJRr9PFDKHifg=";
+    hash = "sha256-P/wfvKRAvqRgUJabVE9RvT4o3fNZ52JX48hXm3C3orI=";
   };
 
-  vendorHash = "sha256-dZhrozZc3SeZQQ7lGeeICrptL2I0DH0EpsjCt4CjCJU=";
-
-  overrideModAttrs = old: {
-    # https://gitlab.com/cznic/libc/-/merge_requests/10
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  vendorHash = "sha256-dD21m6tlwkZkclYOcYUNlsPXxYmLggjrFTv9XctCIt0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = [
-    "./cmd/docgen"
-    "./tests"
+  subPackages = [
+    "cmd/temporal"
   ];
 
   ldflags = [
@@ -43,9 +36,7 @@ buildGoModule (finalAttrs: {
   # Tests fail with x86 on macOS Rosetta 2
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd temporal \

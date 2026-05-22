@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.4.1";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-j8qwvzs5zYqU/j7nqCZMYABRWjrzd9o0FmlmCasTMW0=";
+    hash = "sha256-hj1kDsyZ9JI+rWxY6NNAarOhyp3TsNR8zfb967bv46s=";
   };
 
   nativeBuildInputs = [

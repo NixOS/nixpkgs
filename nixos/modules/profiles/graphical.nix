@@ -10,7 +10,7 @@
   };
 
   services = {
-    displayManager.sddm.enable = true;
+    displayManager.plasma-login-manager.enable = true;
     libinput.enable = true; # for touchpad support on many laptops
   };
 

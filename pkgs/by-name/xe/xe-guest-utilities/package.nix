@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "xe-guest-utilities";
-  version = "8.4.0";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "xenserver";
     repo = "xe-guest-utilities";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LpZx+Km2qRywYK/eFLP3aCDku6K6HC4+MzEODH+8Gvs=";
+    hash = "sha256-U4s2g5hB0vQ4cI58/GtFbWpWgP4I+GZ/OLYI55Sw4wI=";
   };
 
   nativeBuildInputs = [

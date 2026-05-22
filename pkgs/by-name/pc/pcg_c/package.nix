@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "pcg-c";
 
   src = fetchzip {
-    url = "http://www.pcg-random.org/downloads/pcg-c-${finalAttrs.version}.zip";
+    url = "https://www.pcg-random.org/downloads/pcg-c-${finalAttrs.version}.zip";
     sha256 = "0smm811xbvs03a5nc2668zd0178wnyri2h023pqffy767bpy1vlv";
   };
 

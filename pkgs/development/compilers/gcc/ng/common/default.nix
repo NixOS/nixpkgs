@@ -130,6 +130,7 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
+          "-B${targetGccPackages.libgomp}/lib"
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
       };
@@ -145,6 +146,8 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
+          "-B${targetGccPackages.libgomp}/lib"
+          "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
         ];
       };
 
@@ -159,6 +162,8 @@ makeScopeWithSplicing' {
           "-B${targetGccPackages.libgcc}/lib"
           "-B${targetGccPackages.libssp}/lib"
           "-B${targetGccPackages.libatomic}/lib"
+          "-B${targetGccPackages.libgomp}/lib"
+          "-I${targetGccPackages.libgomp}/lib/gcc/${metadata.release_version}/include"
         ];
       };
 
@@ -229,6 +234,10 @@ makeScopeWithSplicing' {
       };
 
       libstdcxx = callPackage ./libstdcxx {
+        stdenv = overrideCC stdenv buildGccPackages.gccWithLibatomic;
+      };
+
+      libgomp = callPackage ./libgomp {
         stdenv = overrideCC stdenv buildGccPackages.gccWithLibatomic;
       };
     };

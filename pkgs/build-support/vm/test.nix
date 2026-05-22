@@ -2,12 +2,12 @@
   hello,
   patchelf,
   pcmanfm,
+  runCommand,
   stdenv,
   vmTools,
 }:
 let
   inherit (vmTools)
-    buildRPM
     diskImages
     makeImageTestScript
     runInLinuxImage
@@ -44,6 +44,23 @@ in
       # goes out-of-memory with many cores
       enableParallelBuilding = false;
     })
+  );
+
+  # Sanity check to ensure the dpkg --install commands have run
+  checkPerlInstalledInDebian = runInLinuxImage (
+    runCommand "check-perl"
+      {
+        diskImage = diskImages.debian13x86_64;
+        diskImageFormat = "qcow2";
+        memSize = 512;
+      }
+      ''
+        echo Check if perl is present
+        perl -v
+        echo Check if perl is installed
+        dpkg -l | grep 'ii *perl'
+        mkdir $out
+      ''
   );
 
   # RPM-based distros

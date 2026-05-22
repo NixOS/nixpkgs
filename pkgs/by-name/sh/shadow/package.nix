@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadow";
-  version = "4.18.0";
+  version = "4.19.4";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     tag = finalAttrs.version;
-    hash = "sha256-M7We3JboNpr9H0ELbKcFtMvfmmVYaX9dYcsQ3sVX0lM=";
+    hash = "sha256-vR6dwB3EttGY2DgQ20nOr9kNhF+nsAaBEyklcJAZ20Y=";
   };
 
   outputs = [
@@ -77,9 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Would have to be done as part of the NixOS modules,
     # see https://github.com/NixOS/nixpkgs/issues/109457
     ./fix-install-with-tcb.patch
-    # This unit test fails: https://github.com/shadow-maint/shadow/issues/1382
-    # Can be removed after the next release
-    ./disable-xaprintf-test.patch
   ];
 
   postPatch = ''
@@ -103,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-group-name-max-length=32"
     "--with-bcrypt"
     "--with-yescrypt"
+    "--disable-logind" # needs systemd, which causes infinite recursion
     (lib.withFeature withLibbsd "libbsd")
   ]
   ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
@@ -134,7 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Suite containing authentication-related tools such as passwd and su";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "shadow_project" finalAttrs.version;
   };
 
   passthru = {

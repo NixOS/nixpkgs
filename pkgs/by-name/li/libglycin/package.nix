@@ -22,8 +22,6 @@
   gnome,
   replaceVars,
   bubblewrap,
-  jq,
-  moreutils,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -33,7 +31,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "2.0.7";
+  version = "2.1.1";
 
   outputs = [
     "out"
@@ -45,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xBasKbbT7NxnuQwVU3uhKTzrevlvoQHK5nt9HTflCrA=";
+    hash = "sha256-jo6S4xKxTSxfOgR73FMFrcuZMe8BUM90v1JqN0Hm+zI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UVVVjMt4vWkLob0H/MxIaW6rkBSFImu+5dezaCnc3Q8=";
+    hash = "sha256-BaIQs2be/W/dQFbO9KthJUWVE2vCT6H594geYJqzIzc=";
   };
 
   nativeBuildInputs = [
@@ -140,8 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
         (
           replaceVars ./patch-vendor-hook.sh {
             bwrap = "${bubblewrap}/bin/bwrap";
-            jq = "${jq}/bin/jq";
-            sponge = "${moreutils}/bin/sponge";
+            jq = "${buildPackages.jq}/bin/jq";
+            sponge = "${buildPackages.moreutils}/bin/sponge";
           }
         );
 
@@ -165,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "glycin-1"
+      "glycin-2"
     ];
   };
 })

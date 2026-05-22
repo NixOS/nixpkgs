@@ -19,28 +19,30 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ freebsd.makeMinimal ];
 
-  ARCH = freebsd.makeMinimal.MACHINE_ARCH;
-  OPSYS = "FreeBSD";
-  _OSRELEASE = "${lib.versions.majorMinor freebsd.makeMinimal.version}-RELEASE";
+  env = {
+    ARCH = freebsd.makeMinimal.MACHINE_ARCH;
+    OPSYS = "FreeBSD";
+    _OSRELEASE = "${lib.versions.majorMinor freebsd.makeMinimal.version}-RELEASE";
 
-  AWK = "awk";
-  CHMOD = "chmod";
-  FIND = "find";
-  MKDIR = "mkdir -p";
-  PKG_BIN = "${buildPackages.pkg}/bin/pkg";
-  RM = "rm -f";
-  SED = "${buildPackages.freebsd.sed}/bin/sed";
-  SETENV = "env";
-  SH = "sh";
-  TOUCH = "touch";
-  XARGS = "xargs";
+    AWK = "awk";
+    CHMOD = "chmod";
+    FIND = "find";
+    MKDIR = "mkdir -p";
+    PKG_BIN = "${buildPackages.pkg}/bin/pkg";
+    RM = "rm -f";
+    SED = "${buildPackages.freebsd.sed}/bin/sed";
+    SETENV = "env";
+    SH = "sh";
+    TOUCH = "touch";
+    XARGS = "xargs";
 
-  ABI_FILE = runCommandCC "abifile" { } "$CC -shared -o $out";
-  CLEAN_FETCH_ENV = true;
-  INSTALL_AS_USER = true;
-  NO_CHECKSUM = true;
-  NO_MTREE = true;
-  SRC_BASE = freebsd.source;
+    ABI_FILE = runCommandCC "abifile" { } "$CC -shared -o $out";
+    CLEAN_FETCH_ENV = true;
+    INSTALL_AS_USER = true;
+    NO_CHECKSUM = true;
+    NO_MTREE = true;
+    SRC_BASE = freebsd.source;
+  };
 
   preUnpack = ''
     export MAKE_JOBS_NUMBER="$NIX_BUILD_CORES"

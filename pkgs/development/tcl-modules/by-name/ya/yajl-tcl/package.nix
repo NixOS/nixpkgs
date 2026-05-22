@@ -29,6 +29,11 @@ mkTclDerivation rec {
     yajl
   ];
 
+  buildFlags = [
+    # https://github.com/flightaware/yajl-tcl/pull/45
+    "CFLAGS=-std=gnu17"
+  ];
+
   meta = {
     description = "Tcl bindings for Yet Another JSON Library";
     homepage = "https://github.com/flightaware/yajl-tcl";

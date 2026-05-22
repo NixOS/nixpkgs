@@ -5,9 +5,10 @@
   fetchDebianPatch,
   testers,
   autoreconfHook,
-  bash,
+  bashNonInteractive,
   tcl,
   tk,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -75,14 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    bash # allow /bin/sh shebang in hfs to get patched during fixupPhase
+    bashNonInteractive # allow /bin/sh shebang in hfs to get patched during fixupPhase
     tcl
     tk
   ];
 
   configureFlags = [
-    (lib.strings.withFeatureAs true "tcl" "${tcl}")
-    (lib.strings.withFeatureAs true "tk" "${tk}")
+    (lib.strings.withFeatureAs true "tcl" tcl)
+    (lib.strings.withFeatureAs true "tk" tk)
   ];
 
   # Tcl code doesn't pass const strings to API
@@ -97,15 +98,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook # current volume is tracked in $HOME/.hcwd
+  ];
+
   installCheckPhase =
     let
       diskLabel = "Test Disk";
     in
     ''
       runHook preInstallCheck
-
-      # current volume is tracked in $HOME/.hcwd
-      export HOME=$(mktemp -d)
 
       # Allow pipeline to fail here
       set +o pipefail

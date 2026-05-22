@@ -7,11 +7,13 @@
   libxslt,
   c-ares,
   cjson,
+  libargon2,
   libuuid,
   libuv,
   libwebsockets,
   openssl,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  sqlite,
   systemd,
   uthash,
   nixosTests,
@@ -32,13 +34,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mosquitto";
-  version = "2.0.22";
+  version = "2.1.2";
+  # Tests disabled: upstream test suite requires additional Python deps,
+  # uses chown() to fixed UIDs, and relies on signal handling that breaks
+  # in sandboxed builds. Re-enable once upstream tests are sandbox-friendly.
+  doCheck = false;
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-mosquitto";
     repo = "mosquitto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PCiNxRG2AqVlS2t/u7Cqn8NbTrrYGO1OXl8zvPQRrJM=";
+    hash = "sha256-Zl55yjuzQY2fyaKs/zLaJ7a3OONKTDQPaT+DpPURdZI=";
   };
 
   postPatch = ''
@@ -63,22 +69,27 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     c-ares
     cjson
+    libargon2
     libuuid
     libuv
     libwebsockets'
     openssl
+    sqlite
     uthash
   ]
   ++ lib.optional withSystemd systemd;
+
+  propagatedBuildInputs = [ cjson ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_BUNDLED_DEPS" false)
     (lib.cmakeBool "WITH_WEBSOCKETS" true)
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
+    (lib.cmakeBool "WITH_TESTS" finalAttrs.doCheck)
   ];
 
   postFixup = ''
-    sed -i "s|^prefix=.*|prefix=$lib|g" $dev/lib/pkgconfig/*.pc
+    sed -i "s|^libdir=.*|libdir=$lib/lib|g" $dev/lib/pkgconfig/*.pc
   '';
 
   passthru.tests = {
@@ -88,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source MQTT v3.1/3.1.1/5.0 broker";
     homepage = "https://mosquitto.org/";
-    changelog = "https://github.com/eclipse/mosquitto/blob/v${finalAttrs.version}/ChangeLog.txt";
+    changelog = "https://github.com/eclipse-mosquitto/mosquitto/blob/v2.0.22/ChangeLog.txt";
     license = lib.licenses.epl10;
     maintainers = with lib.maintainers; [
       peterhoeg

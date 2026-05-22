@@ -57,13 +57,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.24.2";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-kyTcDmNGKJuOMZ7cxIWh6o7aasRUoAB4M0tIG81BQsE=";
+    hash = "sha256-BAqGNi5lfYYTQd7CPH0lssLc5/AkeuKSVEFcrF/cNyc=";
   };
 
   outputs = [
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libhiredis=${hiredis}"
   ];
 
-  PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
+  env.PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
 
   # Remove references to compile-time dependencies that are included in the configure flags
   postConfigure =

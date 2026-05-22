@@ -6,6 +6,7 @@
   fetchFromGitLab,
   applyPatches,
   autoAddDriverRunpath,
+  android-tools,
   avahi,
   boost,
   cli11,
@@ -40,6 +41,7 @@
   pkg-config,
   python3,
   qt6,
+  sdl2-compat,
   shaderc,
   systemd,
   udev,
@@ -53,13 +55,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "26.2";
+  version = "26.2.3";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wVFC8VDtALHI6e0655Ytc4gNOPnJP65XWNzlhzH2eoc=";
+    hash = "sha256-pU7FYPp5wa0MK0ut/BfFlnUai8yMcylpWC0CoAExAio=";
   };
 
   monado = applyPatches {
@@ -67,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "9dcc3e1de2f7449d9757f5db332c867b4d794fb3";
-      hash = "sha256-ueg/GDnKP4nRVepdNE3sgK8sYckZc0aaC0CQc3tuxik=";
+      rev = "723652b545a79609f9f04cb89fcbf807d9d6451a";
+      hash = "sha256-wGqvTI/X22apc8XCN3GCGQClHfBW5xk73mZnwWvHtyI=";
     };
 
     postPatch = ''
@@ -107,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    android-tools
     eigen
     freetype
     glm
@@ -178,8 +181,16 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   preFixup = lib.optional (!clientLibOnly) ''
+    wrapProgram "$out/bin/wivrn-server" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          sdl2-compat
+          udev
+        ]
+      }
     wrapQtApp "$out/bin/wivrn-dashboard" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]} \
+      --prefix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
   desktopItems = lib.optionals (!clientLibOnly) [

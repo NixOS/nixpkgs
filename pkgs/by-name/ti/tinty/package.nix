@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "0.29.0";
+  version = "0.32.2";
 in
 rustPlatform.buildRustPackage {
   pname = "tinty";
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "tinted-theming";
     repo = "tinty";
     tag = "v${version}";
-    hash = "sha256-p05fRJR0boNKGAZ7+KGPyY3XUmj20QfZteWr80cA/po=";
+    hash = "sha256-+13iS99bwvIZDy96x1fgOtDyvbu59ieY4nUZk91mK4s=";
   };
 
-  cargoHash = "sha256-Mdfz412Y1kb4V6LXOHxrbP3WsnWiZ+irCO5Qi3DRQ4c=";
+  cargoHash = "sha256-gShC4+uzdJVi3KuLc6ImJRvEWvIY4vgKcYT8Aykm0Xc=";
 
   # Pretty much all tests require internet access
   doCheck = false;
@@ -35,7 +35,10 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/tinted-theming/tinty/blob/refs/tags/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ pluiedev ];
+    maintainers = with lib.maintainers; [
+      pluiedev
+      cohei
+    ];
     mainProgram = "tinty";
   };
 }

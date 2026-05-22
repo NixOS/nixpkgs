@@ -106,7 +106,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "networkx"
+    "sphinx"
   ];
 
   buildInputs = [

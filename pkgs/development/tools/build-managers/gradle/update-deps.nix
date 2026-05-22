@@ -101,6 +101,12 @@ lib.makeOverridable (
           "${dirOf pkg.meta.position}/${data}"
       }"
 
+      # Check that the parent directory exists before running more costly tasks
+      if [ ! -d $(dirname "$outPath") ]; then
+        echo "Directory \"$(dirname "$outPath")\" does not exist, aborting as the next steps would fail anyway"
+        exit 1
+      fi
+
       pushd "$(mktemp -d)" >/dev/null
       MITM_CACHE_DIR="$PWD"
       trap "rm -rf '$MITM_CACHE_DIR'" SIGINT SIGTERM ERR EXIT
@@ -130,8 +136,8 @@ lib.makeOverridable (
       export MITM_CACHE_CERT_DIR="$PWD"
       export MITM_CACHE_CA="$MITM_CACHE_CERT_DIR/ca.cer"
       popd >/dev/null
-      useBwrap="''${USE_BWRAP:-${toString useBwrap}}"
-      if [ -n "$useBwrap" ]; then
+      useBwrap="''${USE_BWRAP:-${if useBwrap then "1" else "0"}}"
+      if [[ "$useBwrap" -ne 0 ]]; then
         # bwrap isn't necessary, it's only used to prevent messy build scripts from touching ~
         bwrap \
           --unshare-all --share-net --clearenv --chdir / --setenv HOME /homeless-shelter \

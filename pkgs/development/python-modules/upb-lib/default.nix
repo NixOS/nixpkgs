@@ -5,7 +5,6 @@
   hatchling,
   pyserial-asyncio-fast,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "upb-lib";
   version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "gwww";

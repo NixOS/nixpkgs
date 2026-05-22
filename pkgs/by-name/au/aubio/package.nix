@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://aubio.org/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
-      marcweber
       fpletz
     ];
     platforms = lib.platforms.linux;

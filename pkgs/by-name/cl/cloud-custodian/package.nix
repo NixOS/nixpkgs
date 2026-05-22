@@ -20,6 +20,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "docutils"
     "importlib-metadata"
     "referencing"
+    "tabulate"
     "urllib3"
   ];
 

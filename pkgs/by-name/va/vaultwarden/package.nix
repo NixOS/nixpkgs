@@ -8,9 +8,10 @@
   pkg-config,
   openssl,
   libiconv,
-  dbBackend ? "sqlite",
+  dbBackend ? "sqlite_system",
   libmysqlclient,
   libpq,
+  sqlite,
 }:
 
 let
@@ -19,16 +20,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vaultwarden";
-  version = "1.35.3";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     tag = finalAttrs.version;
-    hash = "sha256-Q/kMdrKMBB5Tbfi4Cy9ucI6iH8eOr+fzi876+ef2kV4=";
+    hash = "sha256-jc2f7Ia2c+U1cQBXmyzfQAgFMFoAPexLejs6/FKaN9I=";
   };
 
-  cargoHash = "sha256-3wS8LoFMYhd8uwjDyNfWLMQEK3USotTzTHEJNimG3pM=";
+  cargoHash = "sha256-sjWBM9SsI/7AQ8SuFiTR19l8kqp3rhy64Uh/1TatH6A=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = finalAttrs.version;
@@ -41,7 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ]
   ++ lib.optional (dbBackend == "mysql") libmysqlclient
-  ++ lib.optional (dbBackend == "postgresql") libpq;
+  ++ lib.optional (dbBackend == "postgresql") libpq
+  ++ lib.optional (dbBackend == "sqlite_system") sqlite;
 
   buildFeatures = dbBackend;
 

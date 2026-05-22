@@ -63,13 +63,13 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lutris-unwrapped";
-  version = "0.5.19";
+  version = "0.5.22";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
+    hash = "sha256-4mNknvfJQJEPZjQoNdKLQcW4CI93D6BUDPj8LtD940A=";
   };
 
   pyproject = false;

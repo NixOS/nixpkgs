@@ -23,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makefile = "Makefile.unx";
-  makeFlags = [ "ZPATH=${zlib.static}/lib" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm555 -t $out/bin/ pngcheck
+    installBin pngcheck
     installManPage $pname.1
     runHook postInstall
   '';

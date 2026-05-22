@@ -22,8 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-FulW9qNVVZtOoRfm+NPwQENJU9Ib1GBzcjHxk5QS70g=";
 
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  env = {
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
+  };
 
   buildAndTestSubdir = "tools/src/LSP";
 

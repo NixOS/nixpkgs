@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.2.9";
+  version = "2026.5.12";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JIItmBm0T50688seBgNyDHmPDlhLG90C+UGo1519Hk8=";
+    hash = "sha256-X4Q7bwRroP8+2GLBfHFy8ru6y2UwBw3CaH43mym0O74=";
   };
 
-  cargoHash = "sha256-mW3bsGA7Bx/aoh0GIIUBJaMhGgYzN9zT/nT44ADEqoc=";
+  cargoHash = "sha256-WFNy0/lP2wEuMRt21HpJZUMDJd6dPNKDY7Pqjx6AXxU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
     cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
     rustPlatform.bindgenHook
   ];
 
@@ -104,7 +106,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         # Ignore subcrate releases (fox, aqua-registry)
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
     tests = {

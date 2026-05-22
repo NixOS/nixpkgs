@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-navigator";
-  version = "25.12.0";
+  version = "26.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "ansible_navigator";
-    hash = "sha256-i6yw282NWUaCZBtAYi3rQsLk+GGyp8QHyqBi7nwwIlo=";
+    hash = "sha256-FpDFWyNnlt28wAG6OgJjwvK+UMCEDyH4P9fQ+t5J8FQ=";
   };
 
   build-system = with python3Packages; [
@@ -44,6 +44,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://ansible.readthedocs.io/projects/navigator/";
     changelog = "https://github.com/ansible/ansible-navigator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melkor333 ];
+    maintainers = with lib.maintainers; [
+      melkor333
+      ilkecan
+    ];
   };
 })

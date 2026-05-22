@@ -132,8 +132,8 @@ let
           default = [ ];
           description = "Environment files for this container.";
           example = [
-            /path/to/.env
-            /path/to/.env.secret
+            "/path/to/.env"
+            "/path/to/.env.secret"
           ];
         };
 
@@ -197,7 +197,7 @@ let
             Override the username or UID (and optionally groupname or GID) used
             in the container.
           '';
-          example = "nobody:nogroup";
+          example = "alice:users";
         };
 
         volumes = mkOption {

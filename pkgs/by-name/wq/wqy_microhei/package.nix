@@ -2,24 +2,19 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wqy-microhei";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wqy/wqy-microhei-${version}-beta.tar.gz";
+    url = "mirror://sourceforge/wqy/wqy-microhei-${finalAttrs.version}-beta.tar.gz";
     hash = "sha256-KAKsgCOqNqZupudEWFTjoHjTd///QhaTQb0jeHH3IT4=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 wqy-microhei.ttc $out/share/fonts/wqy-microhei.ttc
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Chinese Unicode font optimized for screen display";
@@ -28,4 +23,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.pkmx ];
     platforms = lib.platforms.all;
   };
-}
+})

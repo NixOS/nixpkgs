@@ -24,7 +24,7 @@ let
       lib.optionalString (num != null) ''
         -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
         -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
-        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+        -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs
       '';
 
   start_script = ''

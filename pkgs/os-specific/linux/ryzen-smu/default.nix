@@ -24,6 +24,7 @@ let
 
     makeFlags = [
       "-C userspace"
+      "CC=${stdenv.cc.targetPrefix}cc"
     ];
 
     installPhase = ''
@@ -46,6 +47,7 @@ stdenv.mkDerivation {
   makeFlags = [
     "TARGET=${kernel.modDirVersion}"
     "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   installPhase = ''

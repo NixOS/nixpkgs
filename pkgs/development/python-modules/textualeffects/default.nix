@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "textualeffects";
-  version = "0.1.4";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hnCTIdSc16v0ftUTeCEwF05vXYXqFplqfDhwnDZGxGM=";
+    hash = "sha256-5C84ZdvcgVgxroFZycOdHdB4my3qK8b4wVxD4kd+XfE=";
   };
 
   build-system = [ hatchling ];

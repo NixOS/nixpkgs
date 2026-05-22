@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmark-gfm,
   xxd,
-  fastJson,
+  libfastjson,
   libzip,
   ninja,
   meson,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmark-gfm
-    fastJson
+    libfastjson
     libzip
   ];
 

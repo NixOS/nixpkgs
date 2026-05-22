@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   lib,
-  nodejs_20,
+  nodejs-slim_20,
   perl,
   postgresql,
   postgresqlBuildExtension,
@@ -13,7 +13,7 @@
 }:
 
 let
-  libv8 = nodejs_20.libv8;
+  libv8 = nodejs-slim_20.libv8;
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "plv8";

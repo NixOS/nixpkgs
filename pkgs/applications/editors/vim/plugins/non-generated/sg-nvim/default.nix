@@ -58,6 +58,9 @@ vimUtils.buildVimPlugin {
   nvimSkipModules = [
     # Dependent on active fuzzy search state
     "sg.cody.fuzzy"
+    # Invokes a request that fails in the check hook
+    # https://github.com/sourcegraph/sg.nvim/blob/775f22b75a9826eabf69b0094dd1d51d619fe552/lua/sg/health.lua#L2
+    "sg.health"
   ];
 
   passthru = {

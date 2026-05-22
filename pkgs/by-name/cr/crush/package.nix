@@ -1,28 +1,34 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  buildGo126Module,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "crush";
-  version = "0.41.0";
+  version = "0.65.3";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CfYBAGuny+v7wvJBDCeZVxG+M9LE+eBaq5REjJA2yyw=";
+    hash = "sha256-X+bCwpyAFUkM1ljj5I6w6gts6b6IWYm1d4veV0mR0gA=";
   };
 
-  vendorHash = "sha256-2rEerdtwNAhQbdqabyyetw30DSpbmIxoiU2YPTWbEcg=";
+  vendorHash = "sha256-moVpfFscZLz7mQw+pqaG132k9KTNyRdKOFNNd0RN1oo=";
 
   ldflags = [
     "-s"
     "-X=github.com/charmbracelet/crush/internal/version.Version=${finalAttrs.version}"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   checkFlags =
@@ -44,7 +50,14 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  updateScript = nix-update-script { };
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd crush \
+      --bash <($out/bin/crush completion bash) \
+      --fish <($out/bin/crush completion fish) \
+      --zsh <($out/bin/crush completion zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Glamourous AI coding agent for your favourite terminal";

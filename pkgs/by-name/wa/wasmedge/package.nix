@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.16.1";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-h98gjBITAYpD6pdrlgfOC0cAYdJA6i9fWdD0bMsuEK4=";
+    sha256 = "sha256-Z6SnTKLW1nBa9gCSDO3d+CmwfWpGRAb2D9ZCoqqqMjk=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wasmedge.org/";
     license = with lib.licenses; [ asl20 ];
     description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Graphical front-end to Git";
     maintainers = with lib.maintainers; [
       peterhoeg
-      markuskowa
     ];
     inherit (qt6.qtbase.meta) platforms;
     mainProgram = "qgit";

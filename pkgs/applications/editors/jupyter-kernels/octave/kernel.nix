@@ -6,14 +6,14 @@
 
 with python3Packages;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "octave-kernel";
   version = "0.34.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "octave_kernel";
-    inherit version;
+    inherit (finalAttrs) version;
     sha256 = "sha256-5ki2lekfK7frPsmPBIzYQOfANCUY9x+F2ZRAQSdPTxo=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ thomasjm ];
     platforms = lib.platforms.all;
   };
-}
+})

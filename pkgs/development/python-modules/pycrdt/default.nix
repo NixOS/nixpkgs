@@ -8,8 +8,6 @@
 
   # dependencies
   anyio,
-  pythonOlder,
-  exceptiongroup,
 
   # tests
   objsize,
@@ -22,14 +20,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pycrdt";
-  version = "0.12.46";
+  version = "0.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt";
     tag = finalAttrs.version;
-    hash = "sha256-rL6heeHg5uhLFt3qY+NKIEA4FLIR/MtwEqleq29DPA8=";
+    hash = "sha256-gfXdH/V2ZwxfxMFoA20cMv0ilgxuCULl4EFl2vqStqI=";
   };
 
   postPatch = ''
@@ -43,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
   ];
 
-  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  dependencies = [ anyio ];
 
   pythonImportsCheck = [ "pycrdt" ];
 

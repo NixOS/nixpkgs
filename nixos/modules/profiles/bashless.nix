@@ -35,6 +35,8 @@
   users.manageLingering = lib.mkDefault false;
   # Relies on the gzip command which depends on bash
   services.logrotate.enable = lib.mkDefault false;
+  # The resize helper pulls in bash
+  services.lvm.resizeHelper.enable = false;
 
   # Check that the system does not contain a Nix store path that contains the
   # string "bash".

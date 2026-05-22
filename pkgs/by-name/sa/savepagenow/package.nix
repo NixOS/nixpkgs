@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     sha256 = "sha256-ztM1g71g8SN1LTyFF7sxaLhC3+nVsC9fJwfYPjkUsdE=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   build-system = with python3Packages; [ setuptools-scm ];
 

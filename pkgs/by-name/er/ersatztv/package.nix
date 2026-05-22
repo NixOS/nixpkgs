@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "ersatztv";
-  version = "26.2.0";
+  version = "26.5.1";
 
   src = fetchFromGitHub {
     owner = "ErsatzTV";
-    repo = "ErsatzTV";
+    repo = "legacy";
     rev = "v${version}";
-    sha256 = "sha256-Ld0IdPMfkEdNfEy75bFzAUNhGdG/B8CSUVZKokcxReg=";
+    sha256 = "sha256-2w+4xppj3E8H6WXea/iuNfloUmBsFQKDBpTnUn3RWvE=";
   };
   postPatch = ''
     # Remove config of development tools that don't end up in
@@ -32,6 +32,8 @@ buildDotnetModule rec {
     "ErsatzTV.Scanner"
   ];
   nugetDeps = ./nuget-deps.json;
+
+  dotnetFlags = [ "-p:TreatWarningsAsErrors=false" ];
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 

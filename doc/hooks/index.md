@@ -20,6 +20,7 @@ ghc.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
+installFonts.section.md
 julec.section.md
 just.section.md
 libglycin.section.md
@@ -28,6 +29,11 @@ libxml2.section.md
 meson.section.md
 mpi-check-hook.section.md
 ninja.section.md
+nodejs-install-executables.section.md
+nodejs-install-manuals.section.md
+npm-build-hook.section.md
+npm-config-hook.section.md
+npm-install-hook.section.md
 patch-rc-path-hooks.section.md
 perl.section.md
 pkg-config.section.md

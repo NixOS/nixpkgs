@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     Description: Simple and easy-to-use immediate-mode gui library
     URL: https://github.com/raysan5/raygui
     Version: ${finalAttrs.version}
-    Cflags: -I"{includedir}"
+    Cflags: -I$out/include
     EOF
 
     runHook postInstall

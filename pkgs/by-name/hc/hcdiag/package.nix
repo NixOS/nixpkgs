@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "hcdiag";
-  version = "0.5.10";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcdiag";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uJjgQG4ce73/yT2b0lfx9L2Z2Jy93d/uAIs3aTxmjms=";
+    hash = "sha256-SXP5Poa4mjlvp4AQzSekHBCc07+a3bWVOPJWxfOuB/Q=";
   };
 
   vendorHash = "sha256-mUqXnUAnN052RMsMtiUpOTlDVb59Xh3+++E/BtEEQGk=";

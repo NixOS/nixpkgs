@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Backup suite that stores files on other disks";
     homepage = "https://savannah.nongnu.org/projects/storebackup";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

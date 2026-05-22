@@ -42,6 +42,9 @@
   copyDesktopItems,
   pulseaudio,
   udev,
+  libxkbcommon,
+  wayland,
+  libepoxy,
 }:
 
 let
@@ -100,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     libsm
     libxrender
     udev
+    libxkbcommon
+    wayland
+    libepoxy
   ];
 
   nativeBuildInputs = [
@@ -188,6 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     mainProgram = "anydesk";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fraioveio ];
   };
 })

@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
     homepage = "https://github.com/patjak/mba6x_bl";
     license = lib.licenses.gpl2Only;
+    broken = lib.versionAtLeast kernel.version "6.11";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.simonvandel ];
   };

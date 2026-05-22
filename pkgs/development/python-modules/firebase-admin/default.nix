@@ -20,27 +20,19 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firebase-admin";
-  version = "7.1.0";
+  version = "7.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-admin-python";
-    tag = "v${version}";
-    hash = "sha256-xlKrtH8f9UzY9OGYrpNH0i2OAlcxTrpzPC5JEuL8plM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RaoBR9NVFdpIXuSVQScAySWpUOumV+flkfKMBGOFs6w=";
   };
 
   build-system = [ setuptools ];
-
-  patches = [
-    (fetchpatch {
-      name = "remove-asyncio-default-fixture-loop-scope.patch";
-      url = "https://github.com/firebase/firebase-admin-python/commit/de713d21da83b1f50c24c5a23132ffc442700448.patch";
-      hash = "sha256-D4edbVHMejpnSmIYblrq9E5+YdbBzLe/VWbObvMNGdk=";
-    })
-  ];
 
   dependencies = [
     cachecontrol
@@ -78,11 +70,11 @@ buildPythonPackage rec {
   meta = {
     description = "Firebase Admin Python SDK";
     homepage = "https://github.com/firebase/firebase-admin-python";
-    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jhahn
       sarahec
     ];
   };
-}
+})

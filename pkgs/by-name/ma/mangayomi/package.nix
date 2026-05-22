@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter338,
+  flutter341,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
@@ -14,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-NcM0saSuNlxw16+MIT5o/DLRhV5+PbNBb2HnbRpYl/o=";
+    hash = "sha256-p2PjylbwOSCtJlPhT7sf1VOZfJx6y0CkNY6xIo2ij5I=";
   };
 
   metaCommon = {
@@ -37,14 +37,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-3q+fI0MHg+wSSkbEzqXxdoGkF0B/LhLMbB6VcX3xuwE=";
+    cargoHash = "sha256-lKEkTHLTX6RdTxC8bU3GQm0RD2RBy4rDHzBHIiks4eg=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter338.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

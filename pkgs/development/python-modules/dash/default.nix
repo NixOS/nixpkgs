@@ -39,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dash";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Vt109x4T+DhBXfQf7MKoexmWFc23uuU0Nn3Ia/Xm5I=";
+    hash = "sha256-8LR0iNc8lJBKzbJuvZ8jzta1G3TbQ9yIBSXFvvyeqmI=";
   };
 
   nativeBuildInputs = [
@@ -138,9 +138,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      antoinerg
-      tomasajt
-    ];
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 })

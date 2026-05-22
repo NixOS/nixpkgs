@@ -19,6 +19,8 @@
   audio_source ? true,
   bladerf_source ? stdenv.hostPlatform.isLinux,
   libbladeRF,
+  dragonlabs_source ? true,
+  libdlcr,
   file_source ? true,
   hackrf_source ? true,
   hackrf,
@@ -81,21 +83,18 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrpp";
 
-  upstreamVersion = "1.2.1";
-  version = "${finalAttrs.upstreamVersion}-unstable-2025-10-09";
+  upstreamVersion = "1.3.0";
+  version = "${finalAttrs.upstreamVersion}-unstable-2026-03-24";
 
   src = fetchFromGitHub {
     owner = "AlexandreRouma";
     repo = "SDRPlusPlus";
-    rev = "4658a1ade6707dee6f2ae09ba9eb71097223ea93";
-    hash = "sha256-UxYAcqOMPQYdUbL2636LpOGbCaxHjLiJhsH62s+0AZU=";
+    rev = "a6df4d58e5f6b3045883a70aeb8fb41fd5dbf1d9";
+    hash = "sha256-VzeLGQTnRur5vB+M5TovpLhI2QYKvpZjZjthuGyjcm0=";
   };
 
   patches = [
     ./0001-Allow-management-of-resources-and-modules-paths.patch
-    # CMake 4 dropped support of versions lower than 3.5,
-    # versions lower than 3.10 are deprecated.
-    ./cmake4.patch
   ];
 
   postPatch = ''
@@ -122,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional airspy_source airspy
   ++ lib.optional airspyhf_source airspyhf
   ++ lib.optional bladerf_source libbladeRF
+  ++ lib.optional dragonlabs_source libdlcr
   ++ lib.optional hackrf_source hackrf
   ++ lib.optional limesdr_source limesuite
   ++ lib.optionals rtl_sdr_source [
@@ -148,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OPT_BUILD_AIRSPY_SOURCE" airspy_source)
     (lib.cmakeBool "OPT_BUILD_AUDIO_SOURCE" audio_source)
     (lib.cmakeBool "OPT_BUILD_BLADERF_SOURCE" bladerf_source)
+    (lib.cmakeBool "OPT_BUILD_DRAGONLABS_SOURCE" dragonlabs_source)
     (lib.cmakeBool "OPT_BUILD_FILE_SOURCE" file_source)
     (lib.cmakeBool "OPT_BUILD_HACKRF_SOURCE" hackrf_source)
     (lib.cmakeBool "OPT_BUILD_HERMES_SOURCE" hermes_source)

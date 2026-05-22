@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bagels";
-  version = "0.3.9";
+  version = "0.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnhancedJax";
     repo = "bagels";
     tag = finalAttrs.version;
-    hash = "sha256-LlEQ0by6Si37e8FvC4agjLy8eanizSA1iq44BaQ8D5o=";
+    hash = "sha256-w7Q7yCKffya2SyuHUaTWOugkeyTZbL9JNj/Ir3tnafE=";
   };
 
   build-system = with python3Packages; [
@@ -80,13 +80,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # AttributeError: 'NoneType' object has no attribute 'defaults'
     "test_basic_balance_calculation"
     "test_combined_balance_calculation"
+    "test_create_template"
+    "test_create_multiple_templates"
+    "test_delete_template"
+    "test_get_adjacent_template"
+    "test_get_all_templates"
     "test_get_days_in_period"
     "test_get_period_average"
     "test_get_period_figures"
     "test_get_start_end_of_period"
     "test_get_start_end_of_week"
+    "test_get_template_by_id"
     "test_split_balance_calculation"
+    "test_swap_template_order"
+    "test_swap_template_order_edge_cases"
+    "test_template_validation"
     "test_transfer_balance_calculation"
+    "test_update_template"
   ];
 
   meta = {

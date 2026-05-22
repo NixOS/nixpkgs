@@ -10,6 +10,14 @@
 }:
 let
   cfg = config.services.mihomo;
+
+  AmbientCapabilities =
+    lib.optional cfg.tunMode "CAP_NET_ADMIN"
+    ++ lib.optionals cfg.processesInfo [
+      "CAP_DAC_READ_SEARCH"
+      "CAP_SYS_PTRACE"
+    ];
+  CapabilityBoundingSet = AmbientCapabilities;
 in
 {
   options.services.mihomo = {
@@ -48,9 +56,13 @@ in
     };
 
     tunMode = lib.mkEnableOption ''
-      necessary permission for Mihomo's systemd service for TUN mode to function properly.
+      necessary capabilities for Mihomo's systemd service for TUN mode to function properly.
 
       Keep in mind, that you still need to enable TUN mode manually in Mihomo's configuration
+    '';
+
+    processesInfo = lib.mkEnableOption ''
+      necessary capabilities for rules about process information such as `process-name`
     '';
   };
 
@@ -76,8 +88,7 @@ in
         LoadCredential = "config.yaml:${cfg.configFile}";
 
         ### Hardening
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = "";
+        inherit AmbientCapabilities CapabilityBoundingSet;
         DeviceAllow = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -105,8 +116,6 @@ in
         UMask = "0077";
       }
       // lib.optionalAttrs cfg.tunMode {
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
         PrivateDevices = false;
         PrivateUsers = false;
         RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";

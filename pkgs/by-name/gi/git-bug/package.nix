@@ -67,7 +67,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       royneary
       DeeUnderscore
-      sudoforge
     ];
     mainProgram = "git-bug";
   };

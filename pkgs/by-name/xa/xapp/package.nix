@@ -17,7 +17,7 @@
   wrapGAppsHook3,
   file,
   inxi,
-  mate,
+  mate-panel,
   dbus,
   libdbusmenu-gtk3,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libxkbfile
     python3.pkgs.pygobject3 # for .pc file
-    mate.mate-panel # for gobject-introspection
+    mate-panel # for gobject-introspection
     dbus
     libdbusmenu-gtk3
   ];

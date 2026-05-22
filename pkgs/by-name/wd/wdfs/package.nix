@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.2";
 
   src = fetchurl {
-    url = "http://noedler.de/projekte/wdfs/wdfs-${finalAttrs.version}.tar.gz";
+    url = "https://noedler.de/projekte/wdfs/wdfs-${finalAttrs.version}.tar.gz";
     sha256 = "fcf2e1584568b07c7f3683a983a9be26fae6534b8109e09167e5dff9114ba2e5";
   };
   nativeBuildInputs = [
@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     fuse
     glib
     neon
+  ];
+
+  # autoconf 2.72 sets the C standard to C23 but not all compilers are ready for that
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -21,7 +21,7 @@ stdenv.mkDerivation (
   in
   {
 
-    version = if lib.versionAtLeast ocaml.version "4.12" && !legacy then "8.04.00" else "7.14";
+    version = if lib.versionAtLeast ocaml.version "4.12" && !legacy then "8.05.00" else "7.14";
 
     pname = "ocaml${ocaml.version}-camlp5";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation (
           "rel${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
       hash =
         {
-          "8.04.00" = "sha256-5IQVGm/tqEzXmZmSYGbGqX+KN9nQLQgw+sBP+F2keXo=";
+          "8.05.00" = "sha256-Y7d72gAxtyAQOIvLGua6Pib+FCoeMlbRYa9vzc+9hRo=";
           "8.03.2" = "sha256-nz+VfGR/6FdBvMzPPpVpviAXXBWNqM3Ora96Yzx964o=";
           "7.14" = "sha256-/ORtS0uc/GN+g3y6N5ftjL4OBSqV6iswLRbfpeNCprU=";
         }
@@ -81,7 +81,7 @@ stdenv.mkDerivation (
 
     meta = {
       broken =
-        lib.versionAtLeast ocaml.version "5.04" && !lib.versionAtLeast finalAttrs.version "8.04.00";
+        lib.versionAtLeast ocaml.version "5.04" && !lib.versionAtLeast finalAttrs.version "8.05.00";
       description = "Preprocessor-pretty-printer for OCaml";
       longDescription = ''
         Camlp5 is a preprocessor and pretty-printer for OCaml programs.

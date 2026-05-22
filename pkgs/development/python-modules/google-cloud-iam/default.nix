@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam";
-  version = "2.20.0";
+  version = "2.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-iam-v${version}";
-    hash = "sha256-ICSBKEqNaXZZopGDwB0pkt06xN0gnsTBUA/HCQVxQTU=";
+    hash = "sha256-dVgcnnInqjUjySL7wjxGzI33t1YZJ8e9mSsmjAJ+fBI=";
   };
 
   sourceRoot = "${src.name}/packages/google-cloud-iam";
@@ -40,6 +40,8 @@ buildPythonPackage rec {
     protobuf
   ]
   ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   nativeCheckInputs = [
     mock

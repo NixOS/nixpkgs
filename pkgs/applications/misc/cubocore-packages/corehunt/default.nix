@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corehunt";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = "corehunt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QJJ+e+5UKka1Hbrtyn+agpJ7FLADHupZt41K8Mq8H4c=";
+    hash = "sha256-D3O1RnhXZmIGlk75OxfYvQI+8sytXTho2MvccI5Xyvg=";
   };
 
   nativeBuildInputs = [

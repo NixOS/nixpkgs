@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   };
 
   # Set the correct install path:
-  LIBVA_DRIVERS_PATH = "${placeholder "out"}/lib/dri";
+  env.LIBVA_DRIVERS_PATH = "${placeholder "out"}/lib/dri";
 
   postInstall = lib.optionalString enableHybridCodec ''
     ln -s ${vaapi-intel-hybrid}/lib/dri/* $out/lib/dri/

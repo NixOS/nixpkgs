@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.31.4";
+  version = "1.31.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5+zOQzmJHyewsi4veeue/kQRi9OEIHNZ/Bg1D3iKzgA=";
+    hash = "sha256-RuuwO+UrenfAPHJcedosooHW6PWVd8pmsXyQCWGMrng=";
   };
 
   build-system = [

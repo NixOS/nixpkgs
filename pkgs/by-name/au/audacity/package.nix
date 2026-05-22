@@ -49,7 +49,7 @@
   libxkbcommon,
   util-linux,
   wavpack,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   libpng,
   libjpeg,
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     twolame
     portaudio
     wavpack
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # for portaudio

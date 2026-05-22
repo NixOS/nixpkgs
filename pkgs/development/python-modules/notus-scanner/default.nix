@@ -7,9 +7,7 @@
   psutil,
   pytestCheckHook,
   python-gnupg,
-  pythonOlder,
   sentry-sdk,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -37,8 +35,7 @@ buildPythonPackage rec {
     psutil
     python-gnupg
     sentry-sdk
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

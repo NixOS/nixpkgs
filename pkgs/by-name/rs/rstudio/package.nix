@@ -19,13 +19,14 @@
   makeWrapper,
   nodejs,
   npmHooks,
+  python3,
   xcbuild,
   yarn,
   yarnConfigHook,
   zip,
 
-  boost187,
-  electron_38,
+  boost190,
+  electron_41,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -44,7 +45,8 @@
 }:
 
 let
-  electron = electron_38;
+  electron = electron_41;
+  boost = boost190;
 
   mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
@@ -62,8 +64,8 @@ let
     owner = "quarto-dev";
     repo = "quarto";
     # Note: rev should ideally be the last commit of the release/rstudio-[codename] branch
-    rev = "591b3520eafbb4da7b26b9f31aac6948801f19d8";
-    hash = "sha256-scdm66Ekfjp5wdNDXcVZA5ZhNgFvuf/kIBF56HrE8uM=";
+    rev = "8c1669f3095c5afee6bcd98a659d51a43300bda9";
+    hash = "sha256-01urKiFz5iDtW8r+w7zwUDXUOKZIOhi/ip329RsuQ+Q=";
   };
 
   hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -83,21 +85,21 @@ let
     ln -s ${quarto}/share $out/share
   '';
 in
-stdenv.mkDerivation rec {
-  pname = "RStudio";
-  version = "2026.01.0+392";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "rstudio";
+  version = "2026.04.0+526";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    tag = "v${version}";
-    hash = "sha256-Q79uoNKh4plRFTe3uOTr27Hh/fMMkCbRPveZyq7cHQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6oHH3C3/MGFSOuI+FvyrLyOKRyy455Wkr75ZL8ZeiWg=";
   };
 
   # sources fetched into _deps via cmake's FetchContent
   extSrcs = stdenv.mkDerivation {
-    name = "${pname}-${version}-ext-srcs";
-    inherit src;
+    name = "rstudio-${finalAttrs.version}-ext-srcs";
+    inherit (finalAttrs) src;
 
     nativeBuildInputs = [
       cacert
@@ -123,7 +125,7 @@ stdenv.mkDerivation rec {
     dontBuild = true;
     dontFixup = true;
 
-    outputHash = "sha256-t2kWnviFMw7TdxaJpiGDXe0M5HSIGD7o5hqWiPKUdOc=";
+    outputHash = "sha256-XzSDU4GVY6OrIFG4qCWUF94nV6fcz9zyFSlSvttVrYw=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -145,12 +147,12 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!server) [
     makeWrapper
-    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+    (python3.withPackages (ps: [ ps.setuptools ]))
     npmHooks.npmConfigHook
   ];
 
   buildInputs = [
-    boost187
+    boost
     libuuid
     openssl
     R
@@ -192,13 +194,16 @@ stdenv.mkDerivation rec {
     # on Darwin, cmake uses find_library to locate R instead of using the PATH
     NIX_LDFLAGS = "-L${R}/lib/R/lib";
 
-    RSTUDIO_VERSION_MAJOR = lib.versions.major version;
-    RSTUDIO_VERSION_MINOR = lib.versions.minor version;
-    RSTUDIO_VERSION_PATCH = lib.versions.patch version;
-    RSTUDIO_VERSION_SUFFIX = "+" + toString (lib.tail (lib.splitString "+" version));
+    RSTUDIO_VERSION_MAJOR = lib.versions.major finalAttrs.version;
+    RSTUDIO_VERSION_MINOR = lib.versions.minor finalAttrs.version;
+    RSTUDIO_VERSION_PATCH = lib.versions.patch finalAttrs.version;
+    RSTUDIO_VERSION_SUFFIX = "+" + toString (lib.tail (lib.splitString "+" finalAttrs.version));
   };
 
   patches = [
+    # Partly taken from https://github.com/rstudio/rstudio/pull/17470
+    ./electron-41.patch
+
     # Hack RStudio to only use the input R and provided libclang.
     (replaceVars ./r-location.patch {
       R = lib.getBin R;
@@ -246,10 +251,10 @@ stdenv.mkDerivation rec {
   makeCacheWritable = true;
 
   npmDeps = fetchNpmDeps {
-    name = "rstudio-${version}-npm-deps";
-    inherit src;
-    postPatch = "cd ${npmRoot}";
-    hash = "sha256-7gXLCFhan/TCTlc2okMWuWzfRYXmuwcqhmGKAqJOEM0=";
+    name = "rstudio-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ${finalAttrs.npmRoot}";
+    hash = "sha256-MuTY+vjtbgbk73dm6bsCUmi34z/HCDnB5/RLkZ/rrVo=";
   };
 
   preConfigure = ''
@@ -285,8 +290,8 @@ stdenv.mkDerivation rec {
 
     # node used by cmake and node used for distribution
     # version in cmake/globals.cmake
-    RSTUDIO_NODE_VERSION="22.13.1"
-    RSTUDIO_INSTALLED_NODE_VERSION="22.21.1"
+    RSTUDIO_NODE_VERSION="22.22.2"
+    RSTUDIO_INSTALLED_NODE_VERSION="22.22.2"
 
     mkdir -p dependencies/common/node
     ln -s ${nodejs} dependencies/common/node/$RSTUDIO_NODE_VERSION
@@ -314,7 +319,9 @@ stdenv.mkDerivation rec {
     rm -r electron-dist
 
     # force @electron/packager to use our electron instead of downloading it
-    substituteInPlace node_modules/@electron/packager/dist/packager.js \
+    substituteInPlace \
+      node_modules/@electron/packager/dist/packager.js \
+      node_modules/@electron-forge/core/node_modules/@electron/packager/dist/packager.js \
       --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
 
     # now that we patched everything, we still have to run the scripts we ignored with --ignore-scripts
@@ -359,7 +366,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://github.com/rstudio/rstudio/tree/${src.rev}/version/news";
+    changelog = "https://github.com/rstudio/rstudio/tree/${finalAttrs.src.rev}/version/news";
     description = "Set of integrated tools for the R language";
     homepage = "https://www.rstudio.com/";
     license = lib.licenses.agpl3Only;
@@ -371,4 +378,4 @@ stdenv.mkDerivation rec {
     # rstudio-server on darwin is only partially supported by upstream
     platforms = lib.platforms.linux ++ lib.optionals (!server) lib.platforms.darwin;
   };
-}
+})

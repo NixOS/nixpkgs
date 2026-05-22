@@ -5,7 +5,7 @@
   chromium,
   fetchzip,
   revision,
-  suffix,
+  browserVersion,
   system,
   throwSystem,
   lib,
@@ -41,6 +41,12 @@
   ...
 }:
 let
+  download =
+    (import ./browser-downloads.nix {
+      name = "chromium";
+      inherit revision browserVersion;
+    }).${system} or throwSystem;
+
   # Playwright expects different directory names for different architectures:
   # - linux-x64 expects: chrome-linux64
   # - linux-arm64 expects: chrome-linux
@@ -54,11 +60,11 @@ let
   chromium-linux = stdenv.mkDerivation {
     name = "playwright-chromium";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-r715GrQMPRIsM2/Z6SRyvo/6j4fbWXKfCCh//Cc2DGw=";
-          aarch64-linux = "sha256-bS8CstCia8dm2DG9vBKHjsfeoXkyBZStBefu0kD8c2o=";
+          x86_64-linux = "sha256-GtaJk9Qr1bTbDfpB+noGlLcIDEIS2uzDiV5rb2DZhVQ=";
+          aarch64-linux = "sha256-jsesQ6juzMPQzmn0Ygb8hmpxCeLHJVBL89qto5yuh5s=";
         }
         .${system} or throwSystem;
     };
@@ -121,12 +127,11 @@ let
     '';
   };
   chromium-darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-kGHlIxS9Ti362XmBt+aepYV45cCZoBRqJ+YBsLasDp0=";
-        aarch64-darwin = "sha256-LwY25Ckh1ZY+L196shf8ydF4IHXUIeI83Yqp8KG+nc4=";
+        x86_64-darwin = "sha256-CxnLSe+sZYskO7H5f3cA+BlWCZsFOPpp1gVG5s37r80=";
+        aarch64-darwin = "sha256-n3JLK+hJwzPihC2qSHrSCYPz3jonZNz7GMgXiPBLaS0=";
       }
       .${system} or throwSystem;
   };

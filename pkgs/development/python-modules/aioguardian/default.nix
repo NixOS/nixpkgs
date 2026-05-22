@@ -10,7 +10,6 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   voluptuous,
   typing-extensions,
   yarl,
@@ -20,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "aioguardian";
   version = "2026.01.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bachya";

@@ -212,7 +212,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
-    downloadPage = "github.com/sunpy/sunpy";
+    downloadPage = "https://github.com/sunpy/sunpy";
     changelog = "https://docs.sunpy.org/en/stable/whatsnew/changelog.html";
     license = lib.licenses.bsd2;
     maintainers = [ ];

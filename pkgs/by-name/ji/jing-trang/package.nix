@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     saxon
   ];
 
-  CLASSPATH = "lib/saxon.jar";
+  env.CLASSPATH = "lib/saxon.jar";
 
   patches = [
     ./no-git-during-build.patch

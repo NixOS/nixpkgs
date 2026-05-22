@@ -21,15 +21,19 @@
 
 buildPythonPackage rec {
   pname = "colcon-core";
-  version = "0.19.0";
+  version = "0.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-core";
     tag = version;
-    hash = "sha256-R/TVHPT305PwaVSisP0TtbgjCFBwCZkXOAgkYhCKpyY=";
+    hash = "sha256-FV/G2FcnBgr7mUY/Jr+bVAdEfhHL9qAnpc92hpTfy7Y=";
   };
+
+  # Upstream tracking issue: https://github.com/ros2/ros2/issues/1738
+  # This will break some functionality of building setuptools packages using colcon, other package types should work fine
+  patches = [ ./0001-update-setuptools.patch ];
 
   build-system = [ setuptools ];
 
@@ -62,13 +66,18 @@ buildPythonPackage rec {
   pythonRemoveDeps = [
     # We use pytest-cov-stub instead (and it is not a runtime dependency anyways)
     "pytest-cov"
+    # Upper bound on setuptools is too strict for nixpkgs
+    "setuptools"
   ];
 
   meta = {
     description = "Command line tool to build sets of software packages";
     homepage = "https://github.com/colcon/colcon-core";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ guelakais ];
+    maintainers = with lib.maintainers; [
+      amronos
+      guelakais
+    ];
     mainProgram = "colcon";
   };
 }

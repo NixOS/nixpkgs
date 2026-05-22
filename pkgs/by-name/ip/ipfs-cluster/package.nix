@@ -1,20 +1,20 @@
 {
   lib,
-  buildGo124Module,
+  buildGo125Module,
   fetchFromGitHub,
 }:
 
-buildGo124Module (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "ipfs-cluster";
-  version = "1.1.4";
+  version = "1.1.5";
 
-  vendorHash = "sha256-VVejr6B7eDNNQF34PS/PaQ50mBNZgzJS50aNzbLJgCg=";
+  vendorHash = "sha256-ARzpn/LzFIA+3ghW+xdQvFFiFwxT79dk4vpgEKoEBzk=";
 
   src = fetchFromGitHub {
     owner = "ipfs-cluster";
     repo = "ipfs-cluster";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mdLrLiRNudpQ8i0lvwoNAqhSWJ8VMEC1ZRxXHWHpqLY=";
+    hash = "sha256-TOUntNZtTj6cS+6+MwIwKdUZ/gB5D63osn4+fpGGkDY=";
   };
 
   checkFlags =

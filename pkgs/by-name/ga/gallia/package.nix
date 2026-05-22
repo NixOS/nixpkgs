@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     zstandard
   ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   nativeCheckInputs =
     with python3.pkgs;

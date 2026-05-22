@@ -1,11 +1,12 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
+  installShellFiles,
   fuse,
 }:
-buildGoModule (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "plakar";
   version = "1.0.6";
 
@@ -22,18 +23,27 @@ buildGoModule (finalAttrs: {
     fuse
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   checkFlags =
     let
       skippedTests = [
         # mount: fusermount: exec: "fusermount": executable file not found in $PATH
         "TestExecuteCmdMountDefault"
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBTreeScanMemory"
         "TestBTreeScanPebble"
+        "TestExecuteCmdServerDefault"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  postInstall = ''
+    installManPage $(find $src -regex '.*\.[0-9]$')
+  '';
 
   meta = {
     mainProgram = "plakar";

@@ -5,22 +5,22 @@
   fetchFromGitHub,
   pytestCheckHook,
   regex,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "tatsu-lts";
-  version = "5.13.1";
+  version = "5.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dnicolodi";
     repo = "TatSu-LTS";
     tag = "v${version}-LTS";
-    hash = "sha256-cfGAWZDAnoD3ddhVIkOHyiv7gUDgnAWu1ZBvDEiQ2AQ=";
+    hash = "sha256-2mMIFJ9baN6hmx2HPR3kKZHuhAWC30sTIIaRRuTc1Gg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     colorama

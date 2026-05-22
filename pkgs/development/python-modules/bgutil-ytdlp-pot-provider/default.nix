@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "bgutil-ytdlp-pot-provider";
-  version = "1.2.2";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Brainicism";
     repo = "bgutil-ytdlp-pot-provider";
     tag = version;
-    hash = "sha256-KKImGxFGjClM2wAk/L8nwauOkM/gEwRVMZhTP62ETqY=";
+    hash = "sha256-dhpataQ1HSCRPnm4k3K/NMaQPQdNrx8C4q855l7kbbQ=";
   };
 
   sourceRoot = "${src.name}/plugin";

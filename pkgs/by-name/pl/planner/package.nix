@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "planner";
     homepage = "https://gitlab.gnome.org/World/planner";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ amiloradovsky ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

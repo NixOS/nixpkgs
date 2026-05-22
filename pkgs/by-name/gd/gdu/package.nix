@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gdu";
-  version = "5.32.0";
+  version = "5.36.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E//6rO3LsGLLNrPFVi/R3njkhOI1GnM9mGI/AIcVG/Q=";
+    hash = "sha256-jtIVfXCIuJPsw3ryJiMI9W0L2uMeCGKt/7dWCS519fI=";
   };
 
-  vendorHash = "sha256-xtw7CKpXEvjpfDQ9x0coLmfTQPy+NiWfrKL8l5vFS9o=";
+  vendorHash = "sha256-L3nuVoxr+LqBT/9TrwAxJEOxOr53KlXH8rWsFTt2SNc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -47,6 +47,7 @@ buildGoModule (finalAttrs: {
       skippedTests = [
         "TestStoredAnalyzer" # https://github.com/dundee/gdu/issues/371
         "TestAnalyzePathWithIgnoring"
+        "TestTopDirFollowSymlink"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

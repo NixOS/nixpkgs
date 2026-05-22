@@ -27,13 +27,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.40.2";
+  version = "3.4.40.4";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sV6eWIgx/0e+uUCbbRwAPPqNcFWUQWyuHnzrwcYJkqA=";
+    hash = "sha256-pRYXzFUbVXYwD7edhBoVcVo/QDo6QSJJQd58Hf3rBGo=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''
       install -D -m444 ${packagingDir}/atlauncher.desktop -t $out/share/applications
       install -D -m444 ${packagingDir}/atlauncher.metainfo.xml -t $out/share/metainfo
-      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/pixmaps
+      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/icons/hicolor/128x128/apps
       install -D -m444 ${packagingDir}/atlauncher.svg -t $out/share/icons/hicolor/scalable/apps
     '';
 

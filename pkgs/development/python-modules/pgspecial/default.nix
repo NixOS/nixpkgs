@@ -45,7 +45,7 @@ buildPythonPackage rec {
     postgresql
   ];
 
-  pytestFlagsArray = [ "-vvv" ];
+  pytestFlags = [ "-vvv" ];
 
   env = {
     PGDATABASE = "_test_db";

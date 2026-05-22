@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bootdev-cli";
-  version = "1.22.1";
+  version = "1.29.4";
 
   src = fetchFromGitHub {
     owner = "bootdotdev";
     repo = "bootdev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eOyJx99TwjG7UWTvzYtelLsN1BwhORZD9zkyA13VYSY=";
+    hash = "sha256-BU43XyK+5/YTI+61UGZSUPHmeWUIlal7sW6vgR5KCPg=";
   };
 
-  vendorHash = "sha256-jhRoPXgfntDauInD+F7koCaJlX4XDj+jQSe/uEEYIMM=";
+  vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
 
   ldflags = [
     "-s"
@@ -33,10 +33,9 @@ buildGoModule (finalAttrs: {
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd bootdev \
-      --bash <($out/bin/bootdev completion bash) \
-      --zsh <($out/bin/bootdev completion zsh) \
-      --fish <($out/bin/bootdev completion fish)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd bootdev --"$shell" <($out/bin/bootdev completion "$shell")
+    done
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

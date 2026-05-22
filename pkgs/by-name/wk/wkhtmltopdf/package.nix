@@ -94,6 +94,8 @@ in
 stdenv.mkDerivation (
   {
     pname = "wkhtmltopdf";
+    # required to fix eval when it's not overridden by platform below
+    version = "none";
 
     dontStrip = true;
 

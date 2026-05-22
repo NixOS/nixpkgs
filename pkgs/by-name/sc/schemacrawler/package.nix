@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schemacrawler";
-  version = "17.6.1";
+  version = "17.6.3";
 
   src = fetchzip {
     url = "https://github.com/schemacrawler/SchemaCrawler/releases/download/v${finalAttrs.version}/schemacrawler-${finalAttrs.version}-bin.zip";
-    hash = "sha256-ZQJiHu3nqCSpVaixapzw2p9ix2xUhgzwEIcSntv0hxU=";
+    hash = "sha256-yWp2UJ0kwSebYj8jYGPODIJrmrPhmDzavhoJsVfYQWw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

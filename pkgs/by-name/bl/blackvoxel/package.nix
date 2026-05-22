@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 blackvoxel.png $out/share/icons/hicolor/1024x1024/apps/blackvoxel.png
+    install -Dm644 blackvoxel.png $out/share/icons/blackvoxel.png
   '';
 
   desktopItems = [

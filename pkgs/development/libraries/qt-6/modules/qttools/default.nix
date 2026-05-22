@@ -14,10 +14,6 @@
 qtModule {
   pname = "qttools";
 
-  patches = [
-    ./paths.patch
-  ];
-
   postPatch = ''
     substituteInPlace \
       src/qdoc/catch/CMakeLists.txt \

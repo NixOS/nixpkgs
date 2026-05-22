@@ -17,22 +17,17 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.H";
+    version = "0.H-2025-07-10-0402";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
-      tag = "${version}-RELEASE";
-      sha256 = "sha256-ZCD5qgqYSX7sS+Tc1oNYq9soYwNUUuWamY2uXfLjGoY=";
+      # Head of 0.H-branch
+      tag = "cdda-${version}";
+      sha256 = "sha256-r4cl8cij68WmQRfg+DHQIeDBIwhgwSre6kAUYZaCPR8=n";
     };
 
     patches = [
-      # fix compilation of the vendored flatbuffers under gcc14
-      (fetchpatch {
-        name = "fix-flatbuffers-with-gcc14";
-        url = "https://github.com/CleverRaven/Cataclysm-DDA/commit/1400b1018ff37196bd24ba4365bd50beb571ac14.patch";
-        hash = "sha256-H0jct6lSQxu48eOZ4f8HICxo89qX49Ksw+Xwwtp7iFM=";
-      })
       # Unconditionally look for translation files in $out/share/locale
       ./locale-path.patch
     ];

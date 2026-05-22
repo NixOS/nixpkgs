@@ -42,7 +42,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   hardeningDisable = [ "fortify" ];
-  CXXFLAGS = lib.optionals withOpenMP [ "-fopenmp" ];
+
+  env = lib.optionalAttrs withOpenMP {
+    CXXFLAGS = "-fopenmp";
+  };
 
   doCheck = true;
 
@@ -64,6 +67,6 @@ stdenv.mkDerivation rec {
       publicDomain
     ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
   };
 }

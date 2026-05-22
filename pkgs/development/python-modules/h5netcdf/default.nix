@@ -3,23 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   h5py,
+  netcdf,
   pytestCheckHook,
-  netcdf4,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.6.4";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h5netcdf";
     repo = "h5netcdf";
     tag = "v${version}";
-    hash = "sha256-SFlea/ABP78GQgGkh7hscAlGfpKVnXN2zr99D9LCpeQ=";
+    hash = "sha256-m+8vdWOQb9aIg/mPeTrN20EzTj229Cit3nYgrkPlfGA=";
   };
 
   build-system = [
@@ -30,8 +29,8 @@ buildPythonPackage rec {
   dependencies = [ h5py ];
 
   nativeCheckInputs = [
+    netcdf
     pytestCheckHook
-    netcdf4
   ];
 
   pythonImportsCheck = [ "h5netcdf" ];

@@ -8,9 +8,10 @@ let
   cfg = config.services.stalwart;
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "stalwart.toml" cfg.settings;
-  useLegacyStorage = lib.versionOlder config.system.stateVersion "24.11";
-  useLegacyDefault = lib.versionOlder config.system.stateVersion "26.05";
-  default = if useLegacyDefault then "stalwart-mail" else "stalwart";
+  useLegacyStorage = lib.versionOlder cfg.stateVersion "24.11";
+  pre2605 = lib.versionOlder cfg.stateVersion "26.05";
+  stalwartIdentifier = if pre2605 then "stalwart-mail" else "stalwart";
+  stalwartIdentifierText = ''if lib.versionOlder config.services.stalwart.stateVersion "26.05" then "stalwart-mail" else "stalwart"'';
 
   parsePorts =
     listeners:
@@ -30,6 +31,15 @@ in
   ];
   options.services.stalwart = {
     enable = lib.mkEnableOption "the all-in-one collaboration and mail server, Stalwart";
+
+    stateVersion = lib.mkOption {
+      type = lib.types.str;
+      description = ''
+        The version of this module (=version of NixOS) when this module was first enabled on this particular machine, used to maintain compatibility with application data created on older versions of this module.
+
+        See {option}`system.stateVersion` for details on the NixOS-global equivalent to this option.
+      '';
+    };
 
     package = lib.mkPackageOption pkgs "stalwart" { };
 
@@ -55,7 +65,8 @@ in
 
     dataDir = lib.mkOption {
       type = lib.types.path;
-      default = if useLegacyDefault then "/var/lib/stalwart-mail" else "/var/lib/stalwart";
+      default = "/var/lib/${stalwartIdentifier}";
+      defaultText = lib.literalExpression "/var/lib/\${${stalwartIdentifierText}}";
       description = ''
         Data directory for stalwart
       '';
@@ -63,7 +74,8 @@ in
 
     user = lib.mkOption {
       type = lib.types.str;
-      inherit default;
+      default = stalwartIdentifier;
+      defaultText = lib.literalExpression stalwartIdentifierText;
       description = ''
         User ownership of service
       '';
@@ -71,7 +83,8 @@ in
 
     group = lib.mkOption {
       type = lib.types.str;
-      inherit default;
+      default = stalwartIdentifier;
+      defaultText = lib.literalExpression stalwartIdentifierText;
       description = ''
         Group ownership of service
       '';
@@ -114,12 +127,24 @@ in
 
     # Default config: all local
     services.stalwart.settings = {
-      tracer.stdout = {
-        type = lib.mkDefault "stdout";
-        level = lib.mkDefault "info";
-        ansi = lib.mkDefault false; # no colour markers to journald
-        enable = lib.mkDefault true;
-      };
+      tracer =
+        if pre2605 then
+          {
+            stdout = {
+              type = lib.mkDefault "stdout";
+              level = lib.mkDefault "info";
+              ansi = lib.mkDefault false; # no colour markers to journald
+              enable = lib.mkDefault true;
+            };
+          }
+        else
+          {
+            journal = {
+              type = lib.mkDefault "journal";
+              level = lib.mkDefault "info";
+              enable = lib.mkDefault true;
+            };
+          };
       store =
         if useLegacyStorage then
           {
@@ -155,7 +180,7 @@ in
           );
         in
         {
-          path = "/var/cache/${default}";
+          path = "/var/cache/${stalwartIdentifier}";
           resource = lib.mkIf hasHttpListener (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
         };
     };
@@ -165,10 +190,10 @@ in
     # service is restarted on a potentially large number of files.
     # That would cause unnecessary and unwanted delays.
     users = {
-      groups = lib.mkIf (cfg.group == default) {
+      groups = lib.mkIf (cfg.group == stalwartIdentifier) {
         ${cfg.group} = { };
       };
-      users = lib.mkIf (cfg.user == default) {
+      users = lib.mkIf (cfg.user == stalwartIdentifier) {
         ${cfg.user} = {
           isSystemUser = true;
           inherit (cfg) group;
@@ -197,7 +222,7 @@ in
           KillSignal = "SIGINT";
           Restart = "on-failure";
           RestartSec = 5;
-          SyslogIdentifier = default;
+          SyslogIdentifier = stalwartIdentifier;
 
           ExecStartPre =
             if useLegacyStorage then
@@ -217,8 +242,8 @@ in
           ReadWritePaths = [
             cfg.dataDir
           ];
-          CacheDirectory = default;
-          StateDirectory = default;
+          CacheDirectory = stalwartIdentifier;
+          StateDirectory = stalwartIdentifier;
 
           # Upstream uses "stalwart" as the username since 0.12.0
           User = cfg.user;

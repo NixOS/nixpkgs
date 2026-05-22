@@ -18,7 +18,7 @@ let
   jdk = jdk_headless;
 
   freenet_ext = fetchurl {
-    url = "https://github.com/freenet/fred/releases/download/build01495/freenet-ext.jar";
+    url = "https://github.com/hyphanet/fred/releases/download/build01495/freenet-ext.jar";
     hash = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
   };
 
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freenet";
-  version = "01505";
+  version = "01506";
 
   src = fetchFromGitHub {
     owner = "hyphanet";
     repo = "fred";
     tag = "build${version}";
-    hash = "sha256-0ffYQ+8hZqFLjMk6A2rapKZsz/lZNpbG6K0wDqBSdY8=";
+    hash = "sha256-MmI/e/Sh4WeSSw2//xpmJtF5/oC9+eauXnTMLuojb2A=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
-    changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
+    changelog = "https://github.com/hyphanet/fred/blob/build${version}/NEWS.md";
     mainProgram = "freenet";
   };
 }

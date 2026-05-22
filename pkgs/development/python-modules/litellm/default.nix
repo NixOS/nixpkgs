@@ -1,10 +1,13 @@
 {
   lib,
+  a2a-sdk,
   aiohttp,
+  anthropic,
   apscheduler,
   azure-identity,
   azure-keyvault-secrets,
   azure-storage-blob,
+  azure-storage-file-datalake,
   backoff,
   boto3,
   buildPythonPackage,
@@ -16,33 +19,42 @@
   fetchFromGitHub,
   google-cloud-iam,
   google-cloud-kms,
+  google-genai,
+  grpcio,
   gunicorn,
   httpx,
   importlib-metadata,
   jinja2,
   jsonschema,
+  langfuse,
   mcp,
   openai,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   orjson,
-  poetry-core,
   polars,
   prisma,
+  prometheus-client,
   pydantic,
   pyjwt,
   pynacl,
-  python,
+  pypdf,
   python-dotenv,
   python-multipart,
   pyyaml,
   requests,
   resend,
+  restrictedpython,
   rich,
   rq,
+  sentry-sdk,
   soundfile,
   tiktoken,
   tokenizers,
-  uvloop,
+  uv-build,
   uvicorn,
+  uvloop,
   websockets,
   nixosTests,
   nix-update-script,
@@ -50,17 +62,22 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.80.0";
+  version = "1.83.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable.1";
-    hash = "sha256-W1tckXXQ9PlqTW5S4ml0X5rcPXSCioubDaSkQxHQrMY=";
+    tag = "v${version}-stable";
+    hash = "sha256-SZow0qof9DRlohWjT3J/NHtmhe96OLLcdHt55RQ7Zmw=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build==0.10.7" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     aiohttp
@@ -98,6 +115,7 @@ buildPythonPackage rec {
       pynacl
       python-multipart
       pyyaml
+      restrictedpython
       rich
       rq
       soundfile
@@ -107,6 +125,7 @@ buildPythonPackage rec {
     ];
 
     extra_proxy = [
+      a2a-sdk
       azure-identity
       azure-keyvault-secrets
       google-cloud-iam
@@ -115,25 +134,41 @@ buildPythonPackage rec {
       # FIXME package redisvl
       resend
     ];
+
+    proxy-runtime = [
+      anthropic
+      # FIXME package azure-ai-contentsafety
+      azure-storage-file-datalake
+      # FIXME package ddtrace
+      # FIXME package detect-secrets
+      # FIXME package google-cloud-aiplatform
+      google-genai
+      grpcio
+      langfuse
+      # FIXME package mangum
+      opentelemetry-api
+      opentelemetry-exporter-otlp
+      opentelemetry-sdk
+      # FIXME package llm-sandbox
+      prometheus-client
+      pypdf
+      sentry-sdk
+    ];
   };
 
-  pythonImportsCheck = [
-    "litellm"
-    "litellm_enterprise"
-  ];
+  pythonImportsCheck = [ "litellm" ];
 
-  # Relax dependency check on openai, may not be needed in the future
-  pythonRelaxDeps = [ "openai" ];
+  pythonRelaxDeps = [
+    "aiohttp"
+    "click"
+    "importlib-metadata"
+    "jsonschema"
+    "openai"
+    "python-dotenv"
+  ];
 
   # access network
   doCheck = false;
-
-  postFixup = ''
-    # Symlink litellm_enterprise to make it discoverable
-    pushd $out/lib/python${python.pythonVersion}/site-packages
-    ln -s enterprise/litellm_enterprise litellm_enterprise
-    popd
-  '';
 
   passthru = {
     tests = { inherit (nixosTests) litellm; };

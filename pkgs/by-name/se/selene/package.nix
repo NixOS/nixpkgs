@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "selene";
-  version = "0.30.0";
+  version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
     repo = "selene";
     tag = finalAttrs.version;
-    hash = "sha256-zsqgLE9igxGGjymMJSt6JR453bw63TWeZwRVmkDm6ag=";
+    hash = "sha256-6NjEE5r9vILnWIyALN8b3aiYWJ9hGzAoYEv+lxNL32Y=";
   };
 
-  cargoHash = "sha256-RxIDFE+FGKUDvM1Fy/doSy/mf2JuklhoMGpSqoHhAV4=";
+  cargoHash = "sha256-0BZroMbaRtpfOf2p33S830T2V+/eobezX0HVsZ/qtnI=";
 
   nativeBuildInputs = lib.optionals robloxSupport [
     pkg-config

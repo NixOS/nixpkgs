@@ -12,16 +12,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "sops";
-  version = "3.11.0";
+  version = "3.13.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AAnrZvNkBgliHdk1lAoFrJdISNWteFdBUorRycKsptU=";
+    hash = "sha256-df3CwJv+sROmikvWZbFGB1OrcSL1svuvFr6WJKYWhDc=";
   };
 
-  vendorHash = "sha256-9bB3MbE03KEaxUp0VvCnNVKUY4zSUoam8h2cDlAz7RY=";
+  vendorHash = "sha256-cdaxcNCCHK2Rve96KvmO9lc9gZtgqu6rDeYb2vRvdHw=";
 
   subPackages = [ "cmd/sops" ];
 
@@ -61,7 +63,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://getsops.io/";
     description = "Simple and flexible tool for managing secrets";
-    changelog = "https://github.com/getsops/sops/blob/v${finalAttrs.version}/CHANGELOG.rst";
+    changelog = "https://github.com/getsops/sops/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "sops";
     maintainers = with lib.maintainers; [
       Scrumplex

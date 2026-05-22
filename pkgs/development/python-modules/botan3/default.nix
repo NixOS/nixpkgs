@@ -34,7 +34,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  sourceRoot = "Botan-${version}/src/python";
+  sourceRoot = "source/src/python";
 
   postPatch = ''
     # remove again, when https://github.com/randombit/botan/pull/5040 got

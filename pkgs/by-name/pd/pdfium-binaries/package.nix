@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfium-binaries";
-  version = "7643";
+  version = "7749";
 
   src =
     let
@@ -27,17 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
       hash =
         if withV8 then
           selectSystem {
-            x86_64-linux = "sha256-u44789oMKbBQ6USu4BnyoL4ZcCKDVkh81kOku9ZfloE=";
-            aarch64-linux = "sha256-w+WI4+aESiBafPv4bbvwVqptecenzEj3M9wSH43n294=";
-            x86_64-darwin = "sha256-0cPMIu8NDrnDd/4g0eL0j0jV9bzQCh36Ahx4mC/Hw9E=";
-            aarch64-darwin = "sha256-R09JnjpcQMMfjbhFzRwE4/KXb9FCXzt/APM+oEUdknk=";
+            x86_64-linux = "sha256-I3JTNnqXpDHwl+sOS/AlPj4znG2OFIqRxtJNhXD+w6I=";
+            aarch64-linux = "sha256-PBkwxcjsqeEElNC+V74h4P1e508IB/zXjGoQuwK6Krk=";
+            x86_64-darwin = "sha256-aumdSND6Lefr6GgmWBSX4pQhZj8jJIABi6VJSqKNin8=";
+            aarch64-darwin = "sha256-DpoPHGaFkjfOa3tXItYLeJpTLfRXOrjlN/+eyPEcgOQ=";
           }
         else
           selectSystem {
-            x86_64-linux = "sha256-IpiNeuB5fOm2hYBfjydrg4G00xtvJQEqZJIzxHtzwac=";
-            aarch64-linux = "sha256-NgboVIUuntEO/CyXcTJB8Gn9H1B5Z0GEfR7FhCFbHko=";
-            x86_64-darwin = "sha256-fBatwgVRO4TawMAd0MaXxvgX+OLln+K10RjsGsvPLBs=";
-            aarch64-darwin = "sha256-Sqrt5V0IxYuZmy1w9faDrESkoI4QNhtKS+GHY0ushGA=";
+            x86_64-linux = "sha256-0VaBPO4angdRqerquTjqizZWvGxrRP8k7DZXLw8Yqaw=";
+            aarch64-linux = "sha256-h7JJxmCg9GIaVMajNZb+AeClIeX8w9XWM2RYqGhPoUY=";
+            x86_64-darwin = "sha256-1Or4cuxvx13Z70kIj7Q1DM1hg/bW5SPAGEDEtnBU6YI=";
+            aarch64-darwin = "sha256-rJqrpCo+5bzqyUsRubGOsBZ8orV1dSuXfjADFJmxBOw=";
           };
       stripRoot = false;
     };

@@ -4,9 +4,9 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   fetchFromGitHub,
-  buildGo124Module,
+  buildGo125Module,
   installShellFiles,
   callPackage,
   nixosTests,
@@ -15,14 +15,16 @@
       nodejs
       fetchPnpmDeps
       pnpmConfigHook
-      pnpm
+      pnpm_10
       fetchFromGitHub
       ;
   },
 }:
 
 let
-  buildGoModule = buildGo124Module;
+  pnpm = pnpm_10;
+
+  buildGoModule = buildGo125Module;
 
   inherit (import ./sources.nix { inherit fetchFromGitHub; })
     pname
@@ -116,7 +118,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
-      dit7ya
       nicomem
     ];
     mainProgram = "authelia";
