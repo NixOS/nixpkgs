@@ -158,5 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ShamrockLee ];
+    mainProgram = "xrootd";
   };
 })
