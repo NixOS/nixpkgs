@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jank-lang";
     repo = "jank";
     rev = "86cd33b8edb7504209719f43391a185b84211a0c";
-    hash = "sha256-vZ/jTwGjoJsHsaOmgrPwUkUSXk8NGBpBkElg21oqB/U=";
+    hash = "sha256-bvm9jI6D6m0hQ+plQuEVwv25sw+KlKFVvPtsmAc31KE=";
   };
 
   buildInputs = [ llvmPackages.llvm ];
