@@ -87,6 +87,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
 
+  # https://github.com/vectordotdev/vector/pull/25406
+  postPatch = ''
+    substituteInPlace lib/vector-config/src/schema/visitors/merge.rs \
+      --replace-fail 'destination.merge(source);' 'Mergeable::merge(destination, source);'
+  '';
+
   doCheck = true;
   checkType = "debug";
 
