@@ -43,6 +43,12 @@ qtModule {
       hash = "sha256-ESy35OlmsvI4yFQ/rFT8oelOUBCwCmlcbQJvwcTrCig=";
       revert = true;
     })
+
+    # backport fix recommended by KDE
+    (fetchpatch {
+      url = "https://github.com/qt/qtdeclarative/commit/8a2c82be6ad90e3f2a0760d8bab1e3a8cdb2473a.diff";
+      hash = "sha256-3KbyoQPAiRyCwGnwwYV3y0yz2i6UAJcX70EPsXV0ZZM=";
+    })
   ];
 
   cmakeFlags = [
