@@ -32,13 +32,13 @@
 
 (resholve.mkDerivation (finalAttrs: {
   pname = "pihole";
-  version = "6.4";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "pi-hole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aBQO+wAqeuXc9ekByVFlOZQ9SBCGsozGdoS8r1qhGuk=";
+    hash = "sha256-A34LLXI+hmDNXN4MoLLlC9tW3xx+v/1La/qzFSDW0xQ=";
   };
 
   patches = [
