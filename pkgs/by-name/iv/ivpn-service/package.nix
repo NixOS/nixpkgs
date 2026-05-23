@@ -14,7 +14,6 @@
   gawk,
   util-linux,
   liboqs,
-  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn-service";
@@ -108,8 +107,6 @@ buildGoModule (finalAttrs: {
         ]
       }
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Official IVPN Desktop app service daemon";
