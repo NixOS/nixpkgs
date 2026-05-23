@@ -13,13 +13,17 @@
   iptables,
   gawk,
   util-linux,
+  liboqs,
   nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn-service";
   version = "3.15.6";
 
-  buildInputs = [ wirelesstools ];
+  buildInputs = [
+    wirelesstools
+    liboqs
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
@@ -62,7 +66,9 @@ buildGoModule (finalAttrs: {
       --replace-fail 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
       'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"' \
       --replace-fail 'v2rayBinaryPath = path.Join(installDir, "v2ray/v2ray")' \
-      'v2rayBinaryPath = "${v2ray}/bin/v2ray"'
+      'v2rayBinaryPath = "${v2ray}/bin/v2ray"' \
+      --replace-fail 'kemHelperBinaryPath = path.Join(installDir, "kem/kem-helper")' \
+      'kemHelperBinaryPath = "${placeholder "out"}/bin/kem-helper"'
   '';
 
   ldflags = [
@@ -72,8 +78,17 @@ buildGoModule (finalAttrs: {
     "-X github.com/ivpn/desktop-app/daemon/version._time=1970-01-01"
   ];
 
+  postBuild = ''
+    $CC -O2 -pthread \
+        References/common/kem-helper/main.c \
+        References/common/kem-helper/base64.c \
+        -loqs -Wl,-z,stack-size=5242880 \
+        -o kem-helper
+  '';
+
   postInstall = ''
     mv $out/bin/{daemon,ivpn-service}
+    install -Dm755 kem-helper $out/bin/kem-helper
   '';
 
   postFixup = ''
