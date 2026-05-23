@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     installManPage fossil.1
-    installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
+    installShellCompletion --cmd fossil tools/fossil-autocomplete.{bash,zsh}
   '';
 
   meta = {
