@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-homewizard-energy";
-  version = "10.0.1";
+  version = "10.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/bz/KM6kCLciHRcPifd5F1P6Agzzb2ULxEzWP9xbfwo=";
+    hash = "sha256-8JgoikNo1ZWeQLQT/9Zn0X0qDcj+wszGht2SWMCRtto=";
   };
 
   postPatch = ''

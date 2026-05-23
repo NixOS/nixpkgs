@@ -3,7 +3,7 @@
   repoRevToNameMaybe,
   fetchgit,
   fetchzip,
-}:
+}@args:
 let
   # Here defines fetchFromGitHub arguments that determines useFetchGit,
   # The attribute value is their default values.
@@ -37,6 +37,10 @@ let
   adjustFunctionArgs = f: lib.setFunctionArgs f (faUseFetchGit // lib.functionArgs f);
 
   decorate = f: lib.makeOverridable (adjustFunctionArgs f);
+
+  # fetchzip may not be overridable when using external tools, for example nix-prefetch
+  fetchzip =
+    if args.fetchzip ? override then args.fetchzip.override { withUnzip = false; } else args.fetchzip;
 in
 decorate (
   {
@@ -105,14 +109,7 @@ decorate (
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
-    fetcher =
-      if useFetchGit then
-        fetchgit
-      # fetchzip may not be overridable when using external tools, for example nix-prefetch
-      else if fetchzip ? override then
-        fetchzip.override { withUnzip = false; }
-      else
-        fetchzip;
+    fetcher = if useFetchGit then fetchgit else fetchzip;
     privateAttrs = lib.optionalAttrs private {
       netrcPhase =
         # When using private repos:
