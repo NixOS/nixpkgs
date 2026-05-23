@@ -12,19 +12,19 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2026.1.1.tar.gz";
+      url = "https://download-cdn.jetbrains.com/go/goland-2026.1.1.tar.gz";
       hash = "sha256-ASzqw8xuRaSAwzoiBsL+6PRyuSvBh43tnF4mEmkur9s=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2026.1.1-aarch64.tar.gz";
+      url = "https://download-cdn.jetbrains.com/go/goland-2026.1.1-aarch64.tar.gz";
       hash = "sha256-25PADBycdas3n6BWSGOJhuMaLcik5P5AfcEO6mY75js=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2026.1.1.dmg";
+      url = "https://download-cdn.jetbrains.com/go/goland-2026.1.1.dmg";
       hash = "sha256-kKr5/7z5gbL0YORDET0y7LgczWLEQ31lqsrHgkxrzQ8=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2026.1.1-aarch64.dmg";
+      url = "https://download-cdn.jetbrains.com/go/goland-2026.1.1-aarch64.dmg";
       hash = "sha256-zfdJrXBatvAl3wNMQ3LhF9oOxo1dEyo8wr4lCoFdm9I=";
     };
   };
