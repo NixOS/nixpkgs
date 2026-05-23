@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-tcl3270"
   ];
 
+  enableParallelBuilding = true;
+
   preBuild = ''
     if [ -n "$SOURCE_DATE_EPOCH" ]; then
       export SOURCE_DATE_EPOCH="$(date -u -d "@$SOURCE_DATE_EPOCH" '+%a %b %d %H:%M:%S UTC %Y')"
