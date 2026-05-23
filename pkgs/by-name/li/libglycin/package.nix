@@ -106,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
+  strictDeps = true;
+
   passthru = {
     updateScript =
       let

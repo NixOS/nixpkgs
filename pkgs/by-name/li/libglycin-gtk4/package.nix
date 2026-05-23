@@ -91,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
+  strictDeps = true;
+
   meta = {
     description = "C-Bindings to convert glycin frames to GDK Textures";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
