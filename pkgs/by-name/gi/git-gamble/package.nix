@@ -31,11 +31,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    installShellFiles
     makeWrapper
+    installShellFiles
   ];
   postInstall = ''
     wrapProgram $out/bin/git-gamble \
+      --prefix PATH : "${lib.makeBinPath [ gitMinimal ]}"
+
+    wrapProgram $out/bin/git-time-keeper \
       --prefix PATH : "${lib.makeBinPath [ gitMinimal ]}"
 
     export PATH="$PATH:$out/bin/"
