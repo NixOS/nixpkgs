@@ -29,7 +29,7 @@ let
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
-      timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
+      timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
       enableEditor = cfg.enableEditor;
       extraConfig = cfg.extraConfig;
       extraEntries = cfg.extraEntries;
