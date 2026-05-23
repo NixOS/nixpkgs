@@ -4140,6 +4140,8 @@ with pkgs;
     inherit (emacs.pkgs.melpaStablePackages) irony;
   };
 
+  jank = callPackage ../development/compilers/jank { };
+
   openjfx17 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "17"; };
   openjfx21 = openjfx;
   openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
