@@ -22,13 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     lib.optionalString stdenv.cc.isClang ''
       substituteInPlace makefile \
-        --replace "\$(CXX)" "\$(CXX) -std=c++98"
+        --replace-fail "\$(CXX)" "\$(CXX) -std=c++98"
     ''
     +
     # fix the doc build on TeX Live 2023
     ''
       substituteInPlace Documentation/manual.tex \
-        --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
+        --replace-fail '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
     '';
 
   outputs = [
