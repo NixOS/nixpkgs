@@ -6,7 +6,7 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   electron,
@@ -21,7 +21,7 @@
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 
   platformIds = {
     "x86_64-linux" = "linux";
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-GAbP9H+c+JXymH0/vpeYOJrkkFJGVyKcpJYFeyRLSKc=";
+    hash = "sha256-M2Fdie0XK2Pck/fP7Djxb7XNAQXpJO2i2kSJrDj1G0E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
