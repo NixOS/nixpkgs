@@ -31,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-s87pFrSY8esCYsqZ4M3mPRxoo29qrgFbEYBdk9E/P/A=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
