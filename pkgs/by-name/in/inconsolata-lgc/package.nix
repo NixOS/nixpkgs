@@ -6,6 +6,7 @@
   installFonts,
   ruby,
   ttfautohint-nox,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "inconsolata-lgc";
@@ -46,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} OFL.txt README.md
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fork of Inconsolata font, with proper support of Cyrillic and Greek";
