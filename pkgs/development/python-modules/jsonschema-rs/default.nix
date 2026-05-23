@@ -52,6 +52,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonschema_rs" ];
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
