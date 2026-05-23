@@ -42,14 +42,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "markitdown";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WKA2eY8wY3SM9xZ7Cek5eUcJbO5q6eMDx2aTKfQnFvE=";
+    hash = "sha256-sqWfft/yaI/0FavhIbAHqltgVfTNk0GJk/phyvdn7Ck=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/markitdown";
