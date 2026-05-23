@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Macaulay2/mathic";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.unix;
   };
 })
