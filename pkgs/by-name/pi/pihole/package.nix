@@ -231,6 +231,11 @@
       ];
     };
 
+  passthru = {
+    inherit stateDir;
+    tests = nixosTests.pihole-ftl;
+  };
+
   meta = {
     description = "Black hole for Internet advertisements";
     homepage = "https://pi-hole.net";
@@ -240,12 +245,11 @@
     platforms = lib.platforms.linux;
     mainProgram = "pihole";
   };
-
-  passthru.tests = nixosTests.pihole-ftl;
-
-  passthru = { inherit stateDir; };
 })).overrideAttrs
   (old: {
+    # fixes nix-update trying to update resholve instead of this package
+    inherit (old) version src;
+
     # Resholve can't fix the hardcoded absolute paths, so substitute them before resholving
     preFixup = ''
       scriptsDir=$out/share/pihole
