@@ -291,7 +291,7 @@ let
             lib.optionalAttrs (iface.ipv4 != null) {
               ${prefix} =
                 # Top merge
-                (lib.optionals (acc_0 ? ${prefix}) acc_0.${prefix})
+                (acc_0.${prefix} or [ ])
                 ++ [ "${host_octets} IN PTR ${hostname}.${domain}." ]
                 ++ (lib.optionals (iface ? domains) (
                   lib.foldlAttrs (
@@ -373,7 +373,7 @@ let
             in
             lib.optionalAttrs (iface.ipv6 != null) {
               ${prefix} =
-                (lib.optionals (acc_0 ? ${prefix}) acc_0.${prefix})
+                (acc_0.${prefix} or [ ])
                 ++ [ "${host_hexes} IN PTR ${hostname}.${domain}." ]
                 ++ (lib.optionals (iface ? domains) (
                   lib.foldlAttrs (
