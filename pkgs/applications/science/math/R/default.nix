@@ -198,9 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  # make tex output available to texlive.combine
-  passthru.pkgs = [ finalAttrs.finalPackage.tex ];
-  passthru.tlType = "run";
   # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
   passthru.tlDeps = with texlive; [
     amsfonts
