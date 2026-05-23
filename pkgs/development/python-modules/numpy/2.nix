@@ -18,6 +18,7 @@
   blas,
   coreutils,
   lapack,
+  removeReferencesTo,
 
   # Reverse dependency
   sage,
@@ -103,12 +104,18 @@ buildPythonPackage (finalAttrs: {
     ln -s ${finalAttrs.finalPackage.passthru.cfg} site.cfg
   '';
 
+  postBuild = ''
+    remove-references-to -t ${blas} build/numpy/__config__.py
+    remove-references-to -t ${lapack} build/numpy/__config__.py
+  '';
+
   enableParallelBuilding = true;
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
     pytest-xdist
+    removeReferencesTo
     setuptools
     typing-extensions
   ];
