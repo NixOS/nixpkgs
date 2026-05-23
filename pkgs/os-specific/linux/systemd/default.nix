@@ -15,6 +15,7 @@
   gperf,
   glibcLocales,
   autoPatchelfHook,
+  writeScript,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -433,8 +434,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
 
     # Mount
-    (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
-    (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+    (lib.mesonOption "mount-path" "/run/wrappers/bin/mount")
+    (let
+      umount-wrapped = writeScript "umount-wrapped" ''
+        #!/bin/sh
+        [ -k /run/wrappers/bin/umount ] && exec /run/wrappers/bin/umount "$@"
+        [ -k /usr/bin/umount ] && exec /usr/bin/umount "$@"
+        exec "${lib.getOutput "mount" util-linux}/bin/umount" "$@"
+    '';
+    in lib.mesonOption "umount-path" "${umount-wrapped}")
 
     # Swap
     (lib.mesonOption "swapon-path" "${lib.getOutput "swap" util-linux}/sbin/swapon")
