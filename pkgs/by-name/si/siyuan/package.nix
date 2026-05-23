@@ -15,12 +15,15 @@
   copyDesktopItems,
   nix-update-script,
   xdg-utils,
+  darwin,
 }:
 
 let
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "darwin";
+    "aarch64-darwin" = "darwin-arm64";
   };
 
   platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
@@ -86,8 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpmConfigHook
     pnpm_9
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -114,6 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
     # link kernel into the correct starting place so that electron-builder can copy it to it's final location
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
+
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
   '';
 
   buildPhase = ''
@@ -121,19 +132,36 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
 
-    npm exec electron-builder -- \
-        --dir \
-        --config electron-builder-${platformId}.yml \
-        -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version}
+    electronBuilderArgs=(
+      --dir
+      --config electron-builder-${platformId}.yml
+      -c.electronDist=electron-dist
+      -c.electronVersion=${electron.version}
+      -c.mac.identity=null
+    )
+
+    npm exec electron-builder -- "''${electronBuilderArgs[@]}"
 
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications $out/bin
 
+    cp -R build/mac*/*.app $out/Applications/SiYuan.app
+
+    cat > $out/bin/siyuan << EOF
+    #!${stdenv.shell}
+    exec open -na "$out/Applications/SiYuan.app" --args "\$@"
+    EOF
+    chmod +x $out/bin/siyuan
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/siyuan
+
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
@@ -145,11 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
-
+  ''
+  + ''
     runHook postInstall
   '';
 
-  desktopItems = [ desktopEntry ];
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [ desktopEntry ];
 
   passthru = {
     inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
