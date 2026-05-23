@@ -18,8 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "kallisto";
     owner = "pachterlab";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
+    hash = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
+
+  patches = [
+    # https://github.com/pmelsted/bifrost/pull/18
+    ./bifrost-fix-datastorage-sz_link-typo.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt ext/bifrost/CMakeLists.txt \
