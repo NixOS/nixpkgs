@@ -18,7 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-h+ZNGj33FIwg4fOCyfGJrUKM2vDDQl76JcLhtboAOtc=";
   };
 
+  patches = [
+    # ROOT 6.40 made rootcling fail when no selection rules are provided
+    # (https://root.cern/doc/v640/release-notes.html#core-libraries). The patch
+    # appends $*LinkDef.h to the dictionary pattern rule so rootcint picks up
+    # the LinkDef.h files we drop into src/ in postPatch.
+    ./rootcling-linkdef.patch
+  ];
+
   postPatch = ''
+    cp ${./TFileStringLinkDef.h} src/TFileStringLinkDef.h
+    cp ${./TFileVectorLinkDef.h} src/TFileVectorLinkDef.h
+
     sed -i appl_grid/serialise_base.h -e '1i#include <cstdint>'
   '';
 
