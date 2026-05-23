@@ -56,7 +56,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "jank-lang";
     repo = "jank";
     rev = "86cd33b8edb7504209719f43391a185b84211a0c";
-    hash = "sha256-bvm9jI6D6m0hQ+plQuEVwv25sw+KlKFVvPtsmAc31KE=";
+    hash = "sha256-+AN13Njo7SRynfYuskkS5QSvnRCsjq/DWl3XG4fXit0=";
     fetchSubmodules = true;
   };
 
