@@ -10,6 +10,7 @@
   hamlib_4,
   hamlib ? hamlib_4,
   hamlibSupport ? true,
+  hidapi,
   perl,
   portaudio,
   python3,
@@ -44,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
       alsa-lib
       udev
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ portaudio ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      hidapi
+      portaudio
+    ]
     ++ lib.optionals gpsdSupport [ gpsd ]
     ++ lib.optionals hamlibSupport [ hamlib ]
     ++ lib.optionals extraScripts [
