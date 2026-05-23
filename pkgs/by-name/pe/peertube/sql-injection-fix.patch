@@ -1,0 +1,27 @@
+diff --git i/server/core/models/actor/actor-follow.ts w/server/core/models/actor/actor-follow.ts
+index 6852a0b3a..807ebcfdb 100644
+--- i/server/core/models/actor/actor-follow.ts
++++ w/server/core/models/actor/actor-follow.ts
+@@ -633,20 +633,8 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
+     }
+   }
+ 
+-  static updateScore (inboxUrl: string, value: number, t?: Transaction) {
+-    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
+-      'WHERE id IN (' +
+-      'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+-      'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
+-      `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
+-      ')'
+-
+-    const options = {
+-      type: QueryTypes.BULKUPDATE,
+-      transaction: t
+-    }
+-
+-    return ActorFollowModel.sequelize.query(query, options)
++  static updateScore (_inboxUrl: string, _value: number, _t?: Transaction) {
++    return
+   }
+ 
+   static async updateScoreByFollowingServers (serverIds: number[], value: number, t?: Transaction) {
