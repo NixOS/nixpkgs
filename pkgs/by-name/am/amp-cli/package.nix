@@ -56,8 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postPhases = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ "postPatchelf" ];
-  postPatchelf = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
     '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/libexec/amp-cli/amp \
       -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
     '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/libexec/amp-cli/amp
