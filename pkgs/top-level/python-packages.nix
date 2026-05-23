@@ -20826,8 +20826,6 @@ self: super: with self; {
     inherit (pkgs) units-llnl;
   };
 
-  unittest-data-provider = callPackage ../development/python-modules/unittest-data-provider { };
-
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
   univers = callPackage ../development/python-modules/univers { };

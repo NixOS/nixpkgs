@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BenjaminJurke/cohomCalg";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.unix;
   };
 })

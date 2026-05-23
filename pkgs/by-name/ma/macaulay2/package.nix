@@ -294,5 +294,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://macaulay2.com/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
