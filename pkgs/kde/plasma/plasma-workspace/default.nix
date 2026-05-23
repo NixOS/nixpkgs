@@ -24,6 +24,7 @@
   libqalculate,
   pipewire,
   gpsd,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";
@@ -41,6 +42,12 @@ mkKdeDerivation {
 
     # stop accidentally duplicating fontconfig configs
     ./fontconfig.patch
+
+    # backport qt 6.11.1 regression workaround
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/31a64dfa1a71ab1b6a495f2f44132c86858acb8f.diff";
+      hash = "sha256-j+AEdDlutDuXmYdK8BJH8bgDF9gieCkbFJK8di+9nxk=";
+    })
   ];
 
   outputs = [
