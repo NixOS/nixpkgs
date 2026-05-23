@@ -47,5 +47,10 @@ callPackage ./generic.nix args {
       url = "https://github.com/nginx/nginx/commit/39d7d0ba0799fcff6baee52b6525f45739593cfd.patch";
       hash = "sha256-6PwV0iz4kQGGBwVk9129aH+TFzbSx3QSVpp22AoKQY4=";
     })
+    (fetchpatch {
+      name = "CVE-2026-9256.patch";
+      url = "https://github.com/nginx/nginx/commit/ca4f92a27464ae6c2082245e4f67048c633aa032.patch";
+      hash = "sha256-tf3KNIki5m8ADj+ghhSlVOsmY5yoLI1HH6/MID+UxbM=";
+    })
   ];
 }
