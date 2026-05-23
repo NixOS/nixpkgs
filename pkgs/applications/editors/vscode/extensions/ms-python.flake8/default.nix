@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-python";
     name = "flake8";
-    version = "2026.4.0";
-    hash = "sha256-2o6a0wPYVFa+XWQoKBxKcWxlH8IPOzKxtXNt7qUi9mM=";
+    version = "2026.6.0";
+    hash = "sha256-n++DEjZsNY3YkvldyWuk3dCYgFbIxqMOun42lWEHGog=";
   };
 
   meta = {
