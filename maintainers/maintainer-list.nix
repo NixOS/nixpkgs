@@ -10478,6 +10478,11 @@
     githubId = 14929991;
     keys = [ { fingerprint = "F7D3 7890 228A 9074 40E1  FD48 46B9 228E 814A 2AAC"; } ];
   };
+  haansn08 = {
+    name = "Stefan Haan";
+    github = "haansn08";
+    githubId = 6215916;
+  };
   hacker1024 = {
     name = "hacker1024";
     email = "hacker1024@users.sourceforge.net";
