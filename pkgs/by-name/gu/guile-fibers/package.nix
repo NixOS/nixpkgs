@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   autoreconfHook,
   guile,
   libevent,
@@ -11,13 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-fibers";
-  version = "1.3.1";
+  version = "1.4.3";
 
-  src = fetchFromGitHub {
-    owner = "wingo";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "guile";
     repo = "fibers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
+    hash = "sha256-RiZYHnlvUd1/LAJ7YpOdoMFGpwtGsnp+aDQjxoBPCuA=";
   };
 
   strictDeps = true;
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/wingo/fibers";
+    homepage = "https://codeberg.org/guile/fibers";
     description = "Concurrent ML-like concurrency for Guile";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
