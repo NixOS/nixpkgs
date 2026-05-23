@@ -2051,12 +2051,8 @@ with haskellLib;
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
-  cabal-fmt = doJailbreak (
-    super.cabal-fmt.override {
-      # Needs newer Cabal-syntax version.
-      Cabal-syntax = self.Cabal-syntax_3_10_3_0;
-    }
-  );
+  # https://github.com/phadej/cabal-fmt/issues/98
+  cabal-fmt = doJailbreak super.cabal-fmt;
 
   # Pick bound changes from development branch, same commit also adds support for Cabal >= 3.14
   glirc = lib.pipe super.glirc [
