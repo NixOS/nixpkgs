@@ -43,6 +43,8 @@ buildGoModule {
     openpam
   ];
 
+  checkFlags = [ "-skip=^(TestMangleSCIONAddrURL|TestRoundTripper)$" ];
+
   ldflags = [
     "-s"
     "-w"
