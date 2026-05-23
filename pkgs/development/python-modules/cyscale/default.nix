@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyscale";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "latent-to";
     repo = "cyscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L75xuo4LWfTMs1XYV8zSPtmxqgjWin9wcALDUjz5L1k=";
+    hash = "sha256-QkIyb00/KIVicdX/k3UhjGSvcwQ+yxcSAkMlC7tVpLM=";
   };
 
   build-system = [ setuptools ];
