@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://sourceforge.net/projects/xdb/";
     description = "C++ class library formerly known as XDB";
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2;
   };
