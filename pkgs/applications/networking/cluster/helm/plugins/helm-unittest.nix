@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "1.0.3";
+  version = "1.1.0";
 in
 buildGoModule {
   pname = "helm-unittest";
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "helm-unittest";
     repo = "helm-unittest";
     tag = "v${version}";
-    hash = "sha256-wArRsC52ga485rpm8ns99NY/qUZ/FImK4C/L1q460HI=";
+    hash = "sha256-tSagZzAEaJRNZwflrqoyuIMWmt3oCsyHPHwctNTrtVM=";
   };
 
-  vendorHash = "sha256-dkAzmFvLbhbIYCKsk1+TfckdNkNh6OkpDabJDDSwXJM=";
+  vendorHash = "sha256-LZOvss6wiZZi5USuXfivqtt69dTKzEmm7lM2LUDACfY=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
