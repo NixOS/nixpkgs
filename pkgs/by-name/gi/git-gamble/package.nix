@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
   checkFlags = [
     # this test can be flaky ; help is needed to stabilize it in upstream
-    "--skip=git_time_keeper::white_box::lock_file::create_as_many_as_lock_files_when_starting_several_times"
+    "--skip=git_gamble::cancel_command_with_signal::fail_when_git_is_killed"
   ];
 
   nativeBuildInputs = [
