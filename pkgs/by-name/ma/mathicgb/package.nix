@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Macaulay2/mathicgb";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.unix;
   };
 })

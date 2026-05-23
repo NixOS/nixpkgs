@@ -4,6 +4,8 @@
   autoPatchelfHook,
   cacert,
   fetchurl,
+  glib,
+  libsecret,
   makeBinaryWrapper,
   bash,
   nodejs,
@@ -28,12 +30,25 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    stdenv.cc.cc.lib
+    glib
+    libsecret
+  ];
   sourceRoot = "package";
   dontStrip = true;
-  # keytar.node and computer.node have optional system-library deps not provided
-  # here; ignore missing deps rather than fail the build.
-  autoPatchelfIgnoreMissingDeps = true;
+  # computer.node requires GUI/media libraries (X11, pipewire, libei, libjpeg,
+  # libpng) for screen-capture and input-simulation features that are not
+  # relevant for CLI use; ignore those missing deps rather than fail the build
+  # or pull in heavy dependencies.
+  autoPatchelfIgnoreMissingDeps = [
+    "libX11.so.6"
+    "libXtst.so.6"
+    "libjpeg.so.8"
+    "libpng16.so.16"
+    "libpipewire-0.3.so.0"
+    "libei.so.1"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -69,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       dbreyfogle
+      me-and
     ];
     mainProgram = "copilot";
     platforms = [
