@@ -112,7 +112,7 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
 
 ## Custom packages {#sec-language-texlive-custom-packages}
 
-You may find that you need to use an external TeX package. A derivation for such package has to provide the contents of the "texmf" directory in its `"tex"` output, according to the [TeX Directory Structure](https://tug.ctan.org/tds/tds.html). Dependencies on other TeX packages can be listed in the attribute `tlDeps`.
+You may find that you need to use an external TeX package. A derivation for such package has to provide the contents of the "texmf" directory in its `"tex"` output, according to the [TeX Directory Structure](https://tug.ctan.org/tds/tds.html). Dependencies on other TeX packages can be listed in the attribute `passthru.tlDeps`, which is a function taking a package set and returning a list of packages.
 
 The functions `texlive.combine` and `texlive.withPackages` recognise the following outputs:
 
@@ -138,7 +138,7 @@ let
       "tex"
       "texdoc"
     ];
-    passthru.tlDeps = with texlive; [ latex ];
+    passthru.tlDeps = ps: [ ps.latex ];
 
     srcs = [
       (fetchurl {
@@ -169,12 +169,13 @@ let
           latexmk
         ]
       ))
-      # multiple-outputs.sh fails if $out is not defined
-      (writeShellScript "force-tex-output.sh" ''
-        out="''${tex-}"
-      '')
       writableTmpDirAsHomeHook # Need a writable $HOME for latexmk
     ];
+
+    # multiple-outputs.sh fails if $out is not defined
+    preHook = ''
+      out="''${tex-}"
+    '';
 
     dontConfigure = true;
 

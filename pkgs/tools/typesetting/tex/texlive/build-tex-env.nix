@@ -76,7 +76,11 @@ lib.fix (
               p.pname or p.name
               + lib.optionalString (p.outputSpecified or false) ("-" + p.tlOutputName or p.outputName or "");
             inherit p;
-            tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
+            tlDeps =
+              if p ? tlDeps then
+                (if builtins.isFunction p.tlDeps then p.tlDeps tl else ensurePkgSets p.tlDeps)
+              else
+                [ ];
           };
         in
         # texlive.combine: the wrapper already resolves all dependencies
