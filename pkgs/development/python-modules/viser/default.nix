@@ -171,6 +171,8 @@ buildPythonPackage (finalAttrs: {
     "viser"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/viser-project/viser/releases/tag/${finalAttrs.src.tag}";
     description = "Web-based 3D visualization in Python";
