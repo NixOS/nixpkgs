@@ -4,6 +4,10 @@
   fetchFromGitHub,
   io,
   datatypes,
+  mesa,
+  gnuplot,
+  makeFontsConf,
+  writableTmpDirAsHomeHook,
 }:
 
 buildOctavePackage rec {
@@ -21,6 +25,16 @@ buildOctavePackage rec {
     io
     datatypes
   ];
+
+  nativeOctavePkgTestInputs = [
+    mesa
+    gnuplot
+    writableTmpDirAsHomeHook
+  ];
+
+  octavePkgTestEnv.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://packages.octave.org/statistics";
