@@ -61,16 +61,16 @@ let
     name = "onnx-src";
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.20.1";
-    hash = "sha256-XZJXD6sBvVJ6cLPyDkKOW8oSkjqcw9whUqDWd7dxY3c=";
+    tag = "v1.21.0";
+    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
   };
 
   cutlass-src = fetchFromGitHub {
     name = "cutlass-src";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v4.2.1";
-    hash = "sha256-iP560D5Vwuj6wX1otJhwbvqe/X4mYVeKTpK533Wr5gY=";
+    tag = "v4.4.2";
+    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
   };
 
   dlpack-src = fetchFromGitHub {
@@ -109,14 +109,14 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.24.4";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-CjPgRkPyp7dUPAOo3cePWQvucOlQAwtT4NO5w3NkV+E=";
+    hash = "sha256-+9M4mEPLLJ5N+JomoXIKcUBV85lr6lFJjJQ3qsMRrQY=";
   };
 
   patches = [
@@ -269,7 +269,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
     # leads to failing builds, which isn't particularly useful for Nixpkgs
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=unused-variable")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=unused-variable -Wno-error=deprecated")
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202508.src}")
