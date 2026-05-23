@@ -97,8 +97,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "fortify" ];
 
-  cmakeBuildDir = "./compiler+runtime/build";
-  cmakeDir = "../compiler+runtime";
+  cmakeBuildDir = "compiler+runtime/build";
+  cmakeDir = "compiler+runtime";
+
   cmakeFlags = [
     "-DCMAKE_SKIP_RPATH=ON"
     "-DFETCHCONTENT_SOURCE_DIR_LIBDWARF=${libdwarf-lite-src}"
