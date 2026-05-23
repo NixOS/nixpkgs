@@ -113,7 +113,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   checkPhase = ''
-      ./jank-test
+      pushd ..
+      ./build/jank-test
+      popd
   '';
 
   meta = with lib; {
