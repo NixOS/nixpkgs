@@ -922,8 +922,8 @@ in
         let
           # Filter out only the mutable domains
           mutable_domains = lib.filterAttrs (_: pcsd_domain: pcsd_domain.mutable) processed_domains;
-          # Generate the install commands for all files (main + reverse) for each mutable domain
-          installScripts = lib.mapAttrsToList (
+          # Generate the install commands for each mutable domain
+          install_scripts = lib.mapAttrsToList (
             _: pcsd_domain:
             lib.concatMapStringsSep "\n" (
               file: "install -m 0644 ${file} ${config.services.bind.directory}/${file.name}"
@@ -935,7 +935,7 @@ in
             ${lib.getExe' bindPkg "rndc-confgen"} -c ${bindRndcKeyFile} -a -A ${bindRndcMacType} 2>/dev/null
           fi
         ''
-        + (lib.optionalString (mutable_domains != { }) (lib.concatLines installScripts));
+        + (lib.optionalString (mutable_domains != { }) (lib.concatLines install_scripts));
 
       serviceConfig = {
         Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
