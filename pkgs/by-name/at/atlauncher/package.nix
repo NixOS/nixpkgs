@@ -36,6 +36,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-pRYXzFUbVXYwD7edhBoVcVo/QDo6QSJJQd58Hf3rBGo=";
   };
 
+  patches = [
+    # Launch4j does not publish the Linux workdir artifact selected on aarch64.
+    # Nixpkgs only needs the cross-platform jar, so remove the Windows exe task.
+    ./remove-launch4j.patch
+  ];
+
   nativeBuildInputs = [
     gradle
     makeWrapper
@@ -52,8 +58,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   gradleFlags = [
     "-Dorg.gradle.java.home=${jdk17_headless.home}"
-    "--exclude-task"
-    "createExe"
   ];
 
   installPhase =
