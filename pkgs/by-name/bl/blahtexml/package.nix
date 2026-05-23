@@ -4,7 +4,7 @@
   stdenv,
   libiconv,
   libxslt,
-  texliveFull,
+  texliveBasic,
   xercesc,
 }:
 
@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     libxslt
-    texliveFull # scheme-full needed for ucs package
+    (texliveBasic.withPackages (ps: [
+      ps.cm-super
+      ps.ucs
+    ]))
   ];
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
