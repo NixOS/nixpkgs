@@ -28534,6 +28534,12 @@
     githubId = 30677291;
     name = "u2x1";
   };
+  u3kkasha = {
+    email = "fida.waseque@gmail.com";
+    github = "u3kkasha";
+    githubId = 146055002;
+    name = "Fida Waseque Choudhury";
+  };
   uakci = {
     name = "uakci";
     email = "git@uakci.space";
