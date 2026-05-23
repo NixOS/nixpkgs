@@ -8,6 +8,7 @@
 let
 
   cfg = config.services.dnscrypt-proxy;
+  settingsFormat = pkgs.formats.toml { };
 
 in
 
@@ -36,7 +37,7 @@ in
           };
         }
       '';
-      type = lib.types.attrs;
+      type = settingsFormat.type;
       default = { };
     };
 
