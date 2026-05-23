@@ -19,6 +19,10 @@
 }:
 
 let
+  inherit (stdenv.hostPlatform) isLinux isDarwin system;
+
+  pnpm = pnpm_9;
+
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
@@ -26,16 +30,7 @@ let
     "aarch64-darwin" = "darwin-arm64";
   };
 
-  platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
-
-  desktopEntry = makeDesktopItem {
-    name = "siyuan";
-    desktopName = "SiYuan";
-    comment = "Refactor your thinking";
-    icon = "siyuan";
-    exec = "siyuan %U";
-    categories = [ "Utility" ];
-  };
+  platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
@@ -72,9 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Set flags and tags as per upstream's Dockerfile
     ldflags = [
       "-s"
-      "-w"
-      "-X"
-      "github.com/siyuan-note/siyuan/kernel/util.Mode=prod"
+      "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
     ];
     tags = [ "fts5" ];
   };
@@ -88,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals isLinux [
     makeWrapper
     copyDesktopItems
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 
@@ -106,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       postPatch
       ;
-    pnpm = pnpm_9;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-GAbP9H+c+JXymH0/vpeYOJrkkFJGVyKcpJYFeyRLSKc=";
   };
@@ -148,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
   ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString isDarwin ''
     mkdir -p $out/Applications $out/bin
 
     cp -R build/mac*/*.app $out/Applications/SiYuan.app
@@ -159,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
     chmod +x $out/bin/siyuan
   ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString isLinux ''
     mkdir -p $out/share/siyuan
 
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
@@ -178,16 +171,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [ desktopEntry ];
+  desktopItems = lib.optional isLinux (makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  });
 
-  passthru = {
-    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(\\d+\\.\\d+\\.\\d+)$"
+      "--subpackage=kernel"
+    ];
   };
 
   meta = {
