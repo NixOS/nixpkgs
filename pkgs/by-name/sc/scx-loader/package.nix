@@ -3,6 +3,7 @@
   rustPlatform,
   lib,
   nix-update-script,
+  nixosTests,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx-loader";
@@ -36,7 +37,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "/usr/bin/scx_loader" "$out/bin/scx_loader"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) scx-loader; };
+  };
 
   meta = {
     mainProgram = "scxctl";
