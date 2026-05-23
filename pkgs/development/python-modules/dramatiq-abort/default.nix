@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-i5vL9yjQQambG8m6RDByr7/j8+PhDdLsai3pDrH1A4Q=";
   };
 
+  patches = [
+    # https://github.com/Flared/dramatiq-abort/pull/38
+    ./dramatiq-2.0-stub-broker-fail-fast.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
