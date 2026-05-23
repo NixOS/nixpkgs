@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_39,
+  electron_40,
   dart-sass,
   mpv-unwrapped,
   fetchPnpmDeps,
@@ -16,16 +16,16 @@
 }:
 let
   pname = "feishin";
-  version = "1.7.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-DVlZ1ucCr8nP/TMvS2GBxjimdm8cie155vWoYMx7gbM=";
+    hash = "sha256-TSjgjNHhPSZ4k7zZTH5e3FCkl6d7B/2w2WCt0S5OW0g=";
   };
 
-  electron = electron_39;
+  electron = electron_40;
 in
 buildNpmPackage {
   inherit pname version;
@@ -42,7 +42,7 @@ buildNpmPackage {
       src
       ;
     fetcherVersion = 3;
-    hash = "sha256-LeoOksMWZjhVkEjTn5sS2xuX3QxGX8O7iC/3suVwiug=";
+    hash = "sha256-2fLqqCbbCIPoW/wGzsZOpZd5tnvyrLYlrVhbFWixlDM=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -78,18 +78,14 @@ buildNpmPackage {
       # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
       cp -r ${electron.dist}/Electron.app ./
       find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
-
-      # Disable code signing during build on macOS.
-      # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-      export CSC_IDENTITY_AUTO_DISCOVERY=false
-      sed -i "/afterSign/d" package.json
     ''
     + ''
       npm exec electron-builder -- \
         --dir \
         -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
         -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false
+        -c.npmRebuild=false \
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
     '';
 
   installPhase = ''
