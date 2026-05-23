@@ -187,13 +187,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "opencode";
-    badPlatforms = [
-      # Broken as 2026-04-23, errors as:
-      # CPU lacks AVX support, strange crashes may occur. Reinstall Bun
-      "x86_64-darwin"
-    ];
   };
 })
