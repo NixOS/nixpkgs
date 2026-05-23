@@ -2079,8 +2079,7 @@ mapAliases {
   SDL2_classic_ttf = throw "'SDL2_classic_ttf' has been removed as part of the deprecation of 'SDL2_classic'. Consider upgrading to 'SDL2_ttf' built with 'sdl2-compat'."; # Added 2025-05-20
   SDL_compat = sdl12-compat; # Added 2026-05-19
   sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
-  seafile-server = throw "'seafile-server' has been removed as it is unmaintained"; # Added 2025-08-21
-  seahub = throw "'seahub' has been removed as it is unmaintained"; # Added 2025-08-21
+  # seafile-server and seahub were re-added for Seafile 13.0 in pkgs/by-name/se/
   securefs = throw "'securefs' has been removed as it depends on fuse2"; # Added 2026-05-05
   semantik = throw "'semantik' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-17
   semiphemeral = throw "'semiphemeral' has been removed as it is archived upstream"; # Added 2025-11-06
