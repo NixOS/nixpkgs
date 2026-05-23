@@ -107,8 +107,7 @@ symlinkJoin {
   pname = "mpv-with-scripts";
   inherit (mpv-unwrapped) version;
 
-  # TODO: don't link all mpv outputs
-  paths = [ mpv-unwrapped.all ];
+  paths = map (m: mpv-unwrapped.${m}) (lib.filter (o: o != "dev") mpv-unwrapped.outputs);
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
