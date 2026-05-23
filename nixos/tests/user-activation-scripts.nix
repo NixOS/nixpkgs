@@ -13,6 +13,7 @@
       isNormalUser = true;
     };
     systemd.user.tmpfiles.users.alice.rules = [ "r %h/file-to-remove" ];
+    specialisation.changed.configuration.system.userActivationScripts.bar = "true";
   };
 
   testScript = ''
@@ -36,5 +37,12 @@
     machine.succeed("/run/current-system/bin/switch-to-configuration test")
     verify_user_activation_run_count(2)
     machine.succeed("[[ ! -f /home/alice/file-to-remove ]] || false")
+    # Activation must not be killed while running.
+    machine.fail("journalctl -b _SYSTEMD_USER_UNIT=nixos-activation.service | grep -q 'code=killed'")
+
+    # Changed activation script: still exactly one run.
+    machine.succeed("/run/current-system/specialisation/changed/bin/switch-to-configuration test")
+    verify_user_activation_run_count(3)
+    machine.fail("journalctl -b _SYSTEMD_USER_UNIT=nixos-activation.service | grep -q 'code=killed'")
   '';
 }
