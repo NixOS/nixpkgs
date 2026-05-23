@@ -9268,8 +9268,6 @@ self: super: with self; {
 
   llama-stack-client = callPackage ../development/python-modules/llama-stack-client { };
 
-  llfuse = callPackage ../development/python-modules/llfuse { inherit (pkgs) fuse; };
-
   llguidance = callPackage ../development/python-modules/llguidance { };
 
   llm = callPackage ../development/python-modules/llm { };
@@ -15755,6 +15753,8 @@ self: super: with self; {
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
+
+  python-backoff = callPackage ../development/python-modules/python-backoff { };
 
   python-barbicanclient = callPackage ../development/python-modules/python-barbicanclient { };
 

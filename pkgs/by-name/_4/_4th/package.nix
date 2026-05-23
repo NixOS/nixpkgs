@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
+  preBuild = ''
+    cp sources/include${if stdenv.hostPlatform.is64bit then "64" else "32"}/* sources/
+    make -C sources clean
+  '';
+
   makeFlags = [
     "-C sources"
     "CC:=$(CC)"

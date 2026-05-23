@@ -1,7 +1,7 @@
 {
-  name = "simple";
+  name = "simple-container";
 
-  nodes.machine = { };
+  containers.machine = { };
 
   testScript = ''
     start_all()
