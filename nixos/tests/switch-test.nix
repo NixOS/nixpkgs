@@ -1754,9 +1754,10 @@ in
           out = switch_to_specialisation("${machine}", "simpleUserService")
           user_systemctl("is-active usertest.service")
 
-          # No-op switch does nothing
+          # No-op switch leaves the test unit alone.
           out = switch_to_specialisation("${machine}", "simpleUserService")
-          assert_lacks(out, "user units:")
+          assert_lacks(out, "usertest.service")
+          assert_contains(out, "restarting the following user units: nixos-activation.service")
 
           # Modifying the unit stop-starts it (default stopIfChanged=true)
           out = switch_to_specialisation("${machine}", "simpleUserServiceModified")
@@ -1773,7 +1774,7 @@ in
           # reloadIfChanged=true reloads instead
           out = switch_to_specialisation("${machine}", "simpleUserServiceReload")
           assert_lacks(out, "stopping the following user units:")
-          assert_lacks(out, "restarting the following user units:")
+          assert_lacks(out, "restarting the following user units: usertest.service")
           assert_contains(out, "reloading the following user units: usertest.service")
           user_systemctl("is-active usertest.service")
 

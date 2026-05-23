@@ -1486,6 +1486,9 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         &mut units_to_filter,
     )?;
 
+    // Restarted unconditionally below; don't list it as skipped.
+    units_to_skip.remove("nixos-activation.service");
+
     let print_units = |verb: &str, units: &HashMap<String, ()>| {
         if units.is_empty() {
             return;
@@ -1586,6 +1589,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     // Toplevels with system.activatable = false do not ship this unit; mirror
     // the system scope's tolerance for a missing activate script.
     if new_unit_dir.join("nixos-activation.service").exists() {
+        eprintln!("restarting the following user units: nixos-activation.service");
         match systemd.restart_unit("nixos-activation.service", "replace") {
             Ok(_) => {
                 log::debug!("waiting for nixos activation to finish");
