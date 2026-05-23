@@ -158,9 +158,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) vector;
-    };
+    tests = nixosTests.vector;
     updateScript = nix-update-script { };
   };
 
