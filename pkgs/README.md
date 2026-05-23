@@ -327,7 +327,7 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 - **If it’s a _terminal emulator_:**
 
-  - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt` or `termite`)
+  - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt`)
 
 - **If it’s a _file manager_:**
 
