@@ -98,7 +98,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "fortify" ];
 
   cmakeBuildDir = "compiler+runtime/build";
-  cmakeDir = "compiler+runtime";
+  cmakeDir = "..";
 
   cmakeFlags = [
     "-DCMAKE_SKIP_RPATH=ON"
