@@ -26,14 +26,7 @@ in
 
     package = lib.mkPackageOption pkgs "gamescope" { };
 
-    capSysNice = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Add cap_sys_nice capability to the GameScope
-        binary so that it may renice itself.
-      '';
-    };
+    capSysNice = lib.mkEnableOption "cap_sys_nice capability on the GameScope binary so that it may renice itself";
 
     args = lib.mkOption {
       type = lib.types.listOf lib.types.str;
