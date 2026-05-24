@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-ysBO/ridfy7YPoTsVwAxar9UvfM/qxrx2dp0EtDNLvE=";
   };
 
+  patches = [
+    # Fix test_main expecting exit code 0 from click group with no args (click 8.2 returns 2).
+    ./test-main-click-8.2-exit-code.patch
+  ];
+
   nativeCheckInputs = [
     jinja2
     unittestCheckHook
