@@ -61,7 +61,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for f in $out/share/tfenv/bin/* $out/share/tfenv/libexec/*; do
       [ -f "$f" ] || continue
       wrapProgram "$f" \
-        --prefix PATH : "${runtimePath}:$out/share/tfenv/bin-extra"
+        --prefix PATH : "${runtimePath}:$out/share/tfenv/bin-extra" \
+        --run 'export TFENV_CONFIG_DIR=''${TFENV_CONFIG_DIR:-''${XDG_DATA_HOME:-''$HOME/.local/share}/tfenv}'
     done
 
     ln -s $out/share/tfenv/bin/tfenv $out/bin/tfenv
