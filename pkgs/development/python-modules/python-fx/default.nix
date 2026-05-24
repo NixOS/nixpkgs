@@ -26,7 +26,7 @@
   yamale,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-fx";
   version = "0.4.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cielong";
     repo = "pyfx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a9gKdM6InH0KP0yrDOo6W90ClMVshbVxLjtiG9yiq1s=";
   };
 
@@ -88,9 +88,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module to view JSON in a TUI";
     homepage = "https://github.com/cielong/pyfx";
-    changelog = "https://github.com/cielong/pyfx/releases/tag/${src.tag}";
+    changelog = "https://github.com/cielong/pyfx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pyfx";
   };
-}
+})
