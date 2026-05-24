@@ -168,10 +168,20 @@ let
     ''
       # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
       # if on a USB drive.
-      wait_target "device" ${dev.device} || die "${dev.device} is unavailable"
+      wait_target "device" ${dev.device} || ${
+        if dev.skipIfMissing then
+          ''echo "WARNING: ${dev.device} is unavailable, skipping LUKS device ${dev.name}"; true''
+        else
+          ''die "${dev.device} is unavailable"''
+      }
 
       ${optionalString (dev.header != null) ''
-        wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
+        wait_target "header" ${dev.header} || ${
+          if dev.skipIfMissing then
+            ''echo "WARNING: header ${dev.header} is unavailable, skipping LUKS device ${dev.name}"; true''
+          else
+            ''die "${dev.header} is unavailable"''
+        }
       ''}
 
       try_empty_passphrase() {
@@ -829,6 +839,21 @@ in
                     Whether to fallback to interactive passphrase prompt if the keyfile
                     cannot be found. This will prevent unattended boot should the keyfile
                     go missing.
+                  '';
+                };
+
+                skipIfMissing = mkOption {
+                  default = false;
+                  type = types.bool;
+                  description = ''
+                    If the device (or its detached header) is not available after
+                    the wait period, skip it and continue booting instead of
+                    aborting. Useful for optional or removable encrypted devices
+                    that should not block the boot process when absent.
+
+                    Note: enabling this means the device will silently remain
+                    locked if it is missing; make sure your system can boot
+                    without it.
                   '';
                 };
 
