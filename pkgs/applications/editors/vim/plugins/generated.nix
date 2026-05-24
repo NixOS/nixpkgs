@@ -1776,6 +1776,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  blink-calc = buildVimPlugin {
+    pname = "blink-calc";
+    version = "0-unstable-2025-10-06";
+    src = fetchFromGitHub {
+      owner = "joelazar";
+      repo = "blink-calc";
+      rev = "199e8a5fe356d553d33a3511ca28e625dac5c470";
+      hash = "sha256-3w+vQf3N6+umBUF+PkCbPXggn53rNekxHgR2y+ICwHw=";
+    };
+    meta.homepage = "https://github.com/joelazar/blink-calc/";
+    meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   blink-cmp-avante = buildVimPlugin {
     pname = "blink-cmp-avante";
     version = "0.1.0-unstable-2025-07-24";
