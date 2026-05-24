@@ -7616,6 +7616,11 @@
     githubId = 54573;
     name = "Edward Amsden";
   };
+  eana = {
+    github = "eana";
+    githubId = 18534280;
+    name = "Jonas Eana";
+  };
   earldouglas = {
     email = "james@earldouglas.com";
     github = "earldouglas";

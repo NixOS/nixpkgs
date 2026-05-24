@@ -1,35 +1,41 @@
 {
   lib,
+  stdenv,
   attrs,
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
+  bash,
+  fish,
   hatch-vcs,
   hatchling,
   markdown,
   mkdocs,
+  pexpect,
   pydantic,
   pymdown-extensions,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
-  rich-rst,
   rich,
+  rich-rst,
   sphinx,
   syrupy,
   trio,
+  zsh,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.10.2";
+  version = "4.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlsjhBfI08QMQ8FzM+BogAXbukHhnr4aD8ZmZVicCv0=";
+    hash = "sha256-tDDYVqhjvTRQ0rTvib4ek49zEnEefkKoq1t/3C/PRlQ=";
   };
 
   build-system = [
@@ -47,7 +53,6 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
-    docs = [ sphinx ];
     mkdocs = [
       mkdocs
       markdown
@@ -56,32 +61,45 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    pexpect
     pydantic
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     syrupy
+
+    # integrations
+    sphinx
+    bash
+    fish
+    zsh
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
-    # Test requires bash
-    "test_positional_not_treated_as_command"
     # Building docs
     "build_succeeds"
-  ];
-
-  disabledTestPaths = [
-    # Tests requires sphinx
-    "tests/test_sphinx_ext.py"
-  ];
+    # https://github.com/BrianPugh/cyclopts/issues/820
+    "test_behavior[fish-literal-positional]"
+    "test_behavior[fish-multi-positional-second]"
+    "test_behavior[fish-equals-form-option-value]"
+    "test_behavior[fish-multi-positional-third]"
+  ]
+  # https://github.com/BrianPugh/cyclopts/issues/821
+  ++ lib.lists.optional (
+    stdenv.hostPlatform.system == "aarch64-linux"
+  ) "test_collection_option_repeats";
 
   meta = {
     description = "Module to create CLIs based on Python type hints";
     homepage = "https://github.com/BrianPugh/cyclopts";
     changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      PerchunPak
+    ];
   };
 })
