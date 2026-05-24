@@ -151,7 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
         sakura
         stupidterm
         terminator
-        termite
         xfce4-terminal
         ;
       inherit blackbox-terminal;

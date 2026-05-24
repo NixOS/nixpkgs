@@ -10,14 +10,14 @@
 
 buildGo126Module (finalAttrs: {
   pname = "athens";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "gomods";
       repo = "athens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-4KCPYqLtqz46zr5+LB4CyG4ZQrjQaPgMEhCuGOWIJKg=";
+      hash = "sha256-hNk0hW7R7HdE4Wt1KuKSIUarRGKbtbFqQbfls1HXTqI=";
     };
     # Trim the patch version, not needed anyway.
     postPatch = ''

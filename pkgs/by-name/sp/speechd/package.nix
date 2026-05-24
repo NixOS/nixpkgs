@@ -16,7 +16,6 @@
   glib,
   dotconf,
   libsndfile,
-  runtimeShell,
   withLibao ? true,
   libao,
   withPulse ? false,
@@ -32,7 +31,7 @@
   pcaudiolib,
   mbrola,
   withPico ? true,
-  svox,
+  picotts,
   libsOnly ? false,
 }:
 
@@ -100,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     flite
   ]
   ++ lib.optionals withPico [
-    svox
+    picotts
   ];
 
   pythonPath = [
@@ -134,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = lib.optionalString withPico ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${picotts}/share/pico/lang"
   '';
 
   installFlags = [

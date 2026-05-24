@@ -1,22 +1,34 @@
 {
   lib,
-  argparse-dataclass,
   buildPythonPackage,
-  configargparse,
   fetchFromGitHub,
   fetchpatch,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  argparse-dataclass,
+  configargparse,
+
+  # tests
+  pytestCheckHook,
+  snakemake,
+
+  # passthru
+  snakemake-interface-common,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-common";
   version = "1.23.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-common";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D3vktJmn1CifdiEg5UPGpBuuigEIb+ja4yklHZA6ytQ=";
   };
 
@@ -29,7 +41,9 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     argparse-dataclass
@@ -38,16 +52,24 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_interface_common" ];
 
-  # test_snakemake_version: No module named 'snakemake'
-  # nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    snakemake
+  ];
 
-  # enabledTestPaths = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
+
+  # Circular dependency with snakemake
+  doCheck = false;
+  passthru.tests.pytest = snakemake-interface-common.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     description = "Common functions and classes for Snakemake and its plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-common";
-    changelog = "https://github.com/snakemake/snakemake-interface-common/releases/tag/v${version}";
+    changelog = "https://github.com/snakemake/snakemake-interface-common/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

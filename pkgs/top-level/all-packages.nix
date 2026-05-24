@@ -1141,6 +1141,7 @@ with pkgs;
     perlSupport = false;
     rustSupport = false; # Needed for bootstrap
     withpcre2 = false;
+    curl = if stdenv.hostPlatform.isFreeBSD then curlMinimal else curl; # Needed for FreeBSD bootstrap
   };
 
   bump2version = with python3Packages; toPythonApplication bump2version;
@@ -1351,11 +1352,6 @@ with pkgs;
   rxvt-unicode-unwrapped-emoji = rxvt-unicode-unwrapped.override {
     emojiSupport = true;
   };
-
-  termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
-    termite = termite-unwrapped;
-  };
-  termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
   twine = with python3Packages; toPythonApplication twine;
 
@@ -7200,7 +7196,6 @@ with pkgs;
     s6-portable-utils-man-pages
     s6-rc
     s6-rc-man-pages
-    sdnotify-wrapper
     skalibs
     skalibs_2_10
     tipidee

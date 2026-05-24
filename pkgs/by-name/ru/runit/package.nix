@@ -7,13 +7,13 @@
   static ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "runit";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "https://smarden.org/runit/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Y08jyMTR1EAEO+D+ko3fkEYmKJ6Xv+fFgm6TqvLMb+k=";
+    url = "https://smarden.org/runit/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Y08jyMTR1EAEO+D+ko3fkEYmKJ6Xv+fFgm6TqvLMb+k=";
   };
 
   patches = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  sourceRoot = "admin/${pname}-${version}";
+  sourceRoot = "admin/${finalAttrs.pname}-${finalAttrs.version}";
 
   doCheck = true;
 
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   + lib.optionalString (!static) ''
     sed -i 's,-static,,g' src/Makefile
   '';
+
+  enableParallelBuilding = true;
 
   preBuild = ''
     cd src
@@ -66,5 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "http://smarden.org/runit";
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "runit";
   };
-}
+})
