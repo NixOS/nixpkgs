@@ -7,11 +7,12 @@
   stdenv,
   testers,
   nix-update-script,
+  makeWrapper,
   writableTmpDirAsHomeHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mystmd";
-  version = "1.9.0";
+  version = "1.9.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jupyter-book";
     repo = "mystmd";
     tag = "mystmd@${finalAttrs.version}";
-    hash = "sha256-gAUfL2sTdTmslPuOnkeTwv/GmarM5nWpxjg3KPL+1fs=";
+    hash = "sha256-SopL2yIFWWCMm7afjkMrG4Z7Ohxxb5gfCrKNRX5tyo8=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       bun
       nodejs
       writableTmpDirAsHomeHook
+      makeWrapper
     ];
 
     dontConfigure = true;
@@ -69,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bun
     nodejs
+    makeWrapper
   ];
 
   buildInputs = [
@@ -92,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r node_modules $out/lib/
     cp -r packages $out/lib/
     install -D packages/mystmd/dist/myst.cjs $out/bin/myst
-
+    wrapProgram $out/bin/myst --prefix PATH : ${lib.makeBinPath [ nodejs ]}
     runHook postInstall
   '';
 
