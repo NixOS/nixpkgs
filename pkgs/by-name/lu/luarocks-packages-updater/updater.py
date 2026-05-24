@@ -105,6 +105,26 @@ def extract_rev(nix_expr: str) -> str | None:
     return None
 
 
+def commit_files(repo, message: str, files: list[Path]) -> None:
+    worktree = repo.working_tree_dir
+    paths = [str(path) for path in files]
+
+    subprocess.run(["git", "add", "--", *paths], cwd=worktree, check=True)
+    diff_result = subprocess.run(
+        ["git", "diff", "--cached", "--quiet", "--", *paths],
+        cwd=worktree,
+        check=False,
+    )
+    if diff_result.returncode == 0:
+        print("no changes in working tree to commit")
+        return
+    if diff_result.returncode != 1:
+        raise RuntimeError("Could not inspect staged changes")
+
+    print(f'committing to nixpkgs "{message}"')
+    subprocess.run(["git", "commit", "-m", message, "--", *paths], cwd=worktree, check=True)
+
+
 # rename Editor to LangUpdate/ EcosystemUpdater
 class LuaEditor(nixpkgs_plugin_update.Editor):
     def create_parser(self):
@@ -131,7 +151,42 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         return luaPackages
 
     def update(self, args):
-        update_plugins(self, args)
+        if args.no_commit:
+            update_plugins(self, args)
+            return
+
+        fetch_config = FetchConfig(args.proc, args.github_token)
+        specs = self.load_plugin_spec(fetch_config, args.input_file)
+        specs = sorted(specs, key=lambda v: v.name.lower())
+
+        if args.update_only:
+            specs = [
+                p
+                for p in specs
+                if p.normalized_name in args.update_only or p.name in args.update_only
+            ]
+
+        if not specs:
+            log.error("No matching Lua packages to update")
+            return
+
+        assert self.nixpkgs_repo is not None
+        for spec in specs:
+            update = self.get_update(
+                str(args.input_file),
+                str(args.outfile),
+                fetch_config,
+                to_update=[spec.name],
+            )
+            _redirects, updated_plugins = update()
+
+            for name, old_ver, new_ver in updated_plugins:
+                if old_ver == "init":
+                    msg = f"{self.attr_path}.{name}: init at {new_ver}"
+                else:
+                    msg = f"{self.attr_path}.{name}: {old_ver} -> {new_ver}"
+
+                commit_files(self.nixpkgs_repo, msg, [args.outfile])
 
     def generate_nix(self, results: list[tuple[LuaPlugin, str]], outfilename: str):
         with tempfile.NamedTemporaryFile("w+") as f:
