@@ -17635,6 +17635,8 @@ self: super: with self; {
 
   scrap-engine = callPackage ../development/python-modules/scrap-engine { };
 
+  scrapli = callPackage ../development/python-modules/scrapli { };
+
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
