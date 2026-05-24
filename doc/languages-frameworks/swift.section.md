@@ -160,7 +160,7 @@ This essentially runs: `swift test -c release`
 
 In some cases, it may be necessary to patch a SwiftPM dependency. SwiftPM
 dependencies are located in `.build/checkouts`, but the `swiftpm2nix` helper
-provides these as symlinks to read-only `/nix/store` paths. In order to patch
+provides these as symlinks to read-only `/nix/store` paths. To patch
 them, we need to make them writable.
 
 A special function `swiftpmMakeMutable` is available to replace the symlink
