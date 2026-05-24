@@ -31,29 +31,13 @@ let
     rev = "v1.5.7";
     hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
   };
-
-  cmakeCxxFlags = lib.concatStringsSep " " [
-    (lib.trim (lib.readFile "${llvmPackages.clang}/nix-support/cc-cflags"))
-    (lib.trim (lib.readFile "${llvmPackages.clang}/nix-support/libc-crt1-cflags"))
-  ];
-
-  cmakeLinkerFlags = lib.concatStringsSep " " [
-    (lib.trim (lib.readFile "${llvmPackages.clang}/nix-support/cc-ldflags"))
-    "-Wl,-rpath,${llvmPackages.stdenv.cc.libc}/lib"
-    "-L${lib.getLib llvmPackages.libllvm}/lib"
-    "-L${lib.getLib bzip2}/lib"
-    "-L${lib.getLib openssl}/lib"
-    "-L${lib.getLib zlib}/lib"
-    "-L${lib.getLib zstd}/lib"
-    "-L${lib.getLib libedit}/lib"
-    "-L${lib.getLib libxml2}/lib"
-  ];
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
-  __structuredAttrs = true;
-  strictDeps = true;
   pname = "jank";
   version = "unstable-0.1-alpha-2026-05-22";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jank-lang";
@@ -82,10 +66,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
-  # checkInputs = [
-  #   glibcLocales
-  # ];
-
   postPatch = ''
     patchShebangs ./compiler+runtime/bin/ar-merge
   '';
@@ -102,11 +82,22 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "jank_unity_build" true)
     (lib.cmakeBool "jank_test" finalAttrs.doCheck)
     (lib.cmakeBool "jank_force_phase_2" true)
-    "-DCMAKE_CXX_FLAGS=${cmakeCxxFlags}"
-    "-DCMAKE_EXE_LINKER_FLAGS=${cmakeLinkerFlags}"
-    "-DCMAKE_SHARED_LINKER_FLAGS=${cmakeLinkerFlags}"
-    "-DCMAKE_MODULE_LINKER_FLAGS=${cmakeLinkerFlags}"
   ];
+
+  # This runs as a bash script just before CMake configures the project
+  preConfigure = ''
+    local cxxFlags="$(cat ${llvmPackages.clang}/nix-support/cc-cflags) $(cat ${llvmPackages.clang}/nix-support/libc-crt1-cflags)"
+
+    local linkerFlags="$(cat ${llvmPackages.clang}/nix-support/cc-ldflags) -Wl,-rpath,${llvmPackages.stdenv.cc.libc}/lib -L${lib.getLib llvmPackages.libllvm}/lib -L${lib.getLib bzip2}/lib -L${lib.getLib openssl}/lib -L${lib.getLib zlib}/lib -L${lib.getLib zstd}/lib -L${lib.getLib libedit}/lib -L${lib.getLib libxml2}/lib"
+
+    # Append to the array created by structuredAttrs
+    cmakeFlags+=(
+      "-DCMAKE_CXX_FLAGS=$cxxFlags"
+      "-DCMAKE_EXE_LINKER_FLAGS=$linkerFlags"
+      "-DCMAKE_SHARED_LINKER_FLAGS=$linkerFlags"
+      "-DCMAKE_MODULE_LINKER_FLAGS=$linkerFlags"
+    )
+  '';
 
   env = {
     LC_ALL = "C.UTF-8";
@@ -123,7 +114,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     description = "The native Clojure dialect hosted on LLVM with seamless C++ interop";
     homepage = "https://jank-lang.org";
     license = licenses.mpl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ arik ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "jank";
   };
