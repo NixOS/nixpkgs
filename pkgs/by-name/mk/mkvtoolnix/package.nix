@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
