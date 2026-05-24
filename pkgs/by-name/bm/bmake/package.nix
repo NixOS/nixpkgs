@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     ) "export"
   );
 
+  __structuredAttrs = true;
+
   strictDeps = true;
 
   doCheck = true;
