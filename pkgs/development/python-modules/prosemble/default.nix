@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prosemble";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "naotoo1";
     repo = "prosemble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-296Z1lHBcOVQbkfO7KlNnWe7f7xjbKFHJRfGUPaHKWY=";
+    hash = "sha256-0wqYj3jhYWr/GPM3KCwYBT5sLYxzvopDfpMXmxy2kKM=";
   };
 
   build-system = [
