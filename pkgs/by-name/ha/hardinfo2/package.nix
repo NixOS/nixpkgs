@@ -37,7 +37,7 @@
   dmidecode,
   gawk,
   iperf,
-  mesa-demos,
+  mesa-utils,
   sysbench,
   udisks,
   vulkan-tools,
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   runtimeDeps = [
     # system stats
     dmidecode
-    mesa-demos # glxinfo + vkgears for benchmark
+    mesa-utils # glxinfo + vkgears for benchmark
 
     # display info
     vulkan-tools # vulkaninfo
