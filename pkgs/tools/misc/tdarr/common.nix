@@ -6,7 +6,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  ffmpeg,
+  ffmpeg-full,
   handbrake,
   mkvtoolnix,
   ccextractor,
@@ -51,7 +51,7 @@ let
 
   binPath = lib.makeBinPath (
     [
-      ffmpeg
+      ffmpeg-full
       mkvtoolnix
     ]
     ++ includeInPath
@@ -77,10 +77,10 @@ let
       ''_cfg="$rootDataPath/configs/${componentName}_Config.json"; if [ -f "$_cfg" ]; then grep -q ffprobePath "$_cfg" || sed -i '1s/{/{"ffprobePath":"",/' "$_cfg"; else printf '{"ffprobePath":""}' > "$_cfg"; fi''
       "--set-default"
       "ffmpegPath"
-      "${ffmpeg}/bin/ffmpeg"
+      "${ffmpeg-full}/bin/ffmpeg"
       "--set-default"
       "ffprobePath"
-      "${ffmpeg}/bin/ffprobe"
+      "${ffmpeg-full}/bin/ffprobe"
       "--set-default"
       "mkvpropeditPath"
       "${mkvtoolnix}/bin/mkvpropedit"
