@@ -7,7 +7,6 @@
   v4l-utils,
   wrapGAppsHook3,
   lib,
-  fetchpatch,
 }:
 
 python3Packages.buildPythonApplication {
@@ -23,11 +22,7 @@ python3Packages.buildPythonApplication {
   };
   patches = [
     # remove when https://github.com/azeam/camset/pull/30 merged
-    (fetchpatch {
-      url = "https://github.com/azeam/camset/commit/61e500c661cc6f2d5095a380be719c10c0f77c61.patch";
-      name = "fix-numpy-2.3";
-      hash = "sha256-FEoxwJSAV/pxtMkCuzdRLjrdbsp7ZNXiMlBtEAK9IJs=";
-    })
+    ./fix-numpy-2.3.patch
   ];
 
   build-system = with python3Packages; [ setuptools ];

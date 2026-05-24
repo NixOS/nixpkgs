@@ -1,0 +1,22 @@
+From 61e500c661cc6f2d5095a380be719c10c0f77c61 Mon Sep 17 00:00:00 2001
+From: limes007 <39467727+limes007@users.noreply.github.com>
+Date: Wed, 17 Sep 2025 11:02:57 +0200
+Subject: [PATCH] bugfix for numpy >2.3
+
+---
+ camset/cam_window.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/camset/cam_window.py b/camset/cam_window.py
+index 7eac4ae..f709634 100644
+--- a/camset/cam_window.py
++++ b/camset/cam_window.py
+@@ -68,7 +68,7 @@ def show_frame(self):
+             # TODO: resizing video and window this way is very cpu intensive for large resolutions, should be improved or removed
+             frame = cv2.resize(frame, dim, interpolation = cv2.INTER_CUBIC)
+             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # needed for proper color representation in gtk
+-            pixbuf = GdkPixbuf.Pixbuf.new_from_data(frame.tostring(),
++            pixbuf = GdkPixbuf.Pixbuf.new_from_data(frame.tobytes(),
+                                                 GdkPixbuf.Colorspace.RGB,
+                                                 False,
+                                                 8,
