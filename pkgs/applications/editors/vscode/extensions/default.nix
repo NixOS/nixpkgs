@@ -675,8 +675,8 @@ let
         mktplcRef = {
           name = "markdown-mermaid";
           publisher = "bierner";
-          version = "1.32.0";
-          hash = "sha256-1LlRTkskBAlYV+fq3GVyOUGYXbILvKIByBu2uKwTUUc=";
+          version = "1.32.1";
+          hash = "sha256-bH8JBZOfj2Km5/tfaiSzrkOl2kOU+XwZcuWOpU9iVEM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-mermaid/changelog";
@@ -4244,8 +4244,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.10.3";
-          hash = "sha256-PzK3cQYgLmSya4YPaOTBa3P1tOb4iO+Of4JsdbZFwxk=";
+          version = "0.10.4";
+          hash = "sha256-fonAbZ2nvC3Dz/9j4J23hiiJ/xgT8z/LI1HYYQh6u9w=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
@@ -4867,8 +4867,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.69";
-          hash = "sha256-wP2Mw4K0Fh4xKaffzl1OwrWnWu6npZ2PyVDaT5LUeeY=";
+          version = "0.0.70";
+          hash = "sha256-chp6chYUg3HzWm68NfSs3B8obSJxPSCjFHMwBK31ps4=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -5110,8 +5110,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.27.3";
-          hash = "sha256-8ZkdAZLplf9RI5sFGqsjVMlsletck/qXJ6D1Dxz9AuI=";
+          version = "0.27.4";
+          hash = "sha256-nEONTcT0chv+gpi43naszDCh3R0aKnwC91hZ8hqje7s=";
         };
         meta = {
           license = lib.licenses.mit;

@@ -43,6 +43,8 @@ buildPythonPackage rec {
 
   build-system = [ uv-build ];
 
+  pythonRelaxDeps = [ "jedi" ];
+
   dependencies = [
     click
     docutils
