@@ -7,7 +7,7 @@
   nixosTests,
 }:
 let
-  version = "0.18.0";
+  version = "0.18.0-preprod";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
