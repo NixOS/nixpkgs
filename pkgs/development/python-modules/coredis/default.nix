@@ -19,7 +19,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coredis";
   version = "6.6.1";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "coredis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Jn6tqMpyk849/hwYM0DHuQnGbMltRpTXAVcN5Kt6lk4=";
   };
 
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
-    changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/alisaifee/coredis/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
   };
-}
+})
