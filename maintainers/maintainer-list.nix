@@ -13245,6 +13245,12 @@
     githubId = 57130301;
     keys = [ { fingerprint = "1CC5 B67C EB9A 13A5 EDF6 F10E 0B4A 3662 FC58 9202"; } ];
   };
+  jonas-elhs = {
+    name = "Jonas Elhs";
+    email = "jonas.elhs@outlook.com";
+    github = "jonas-elhs";
+    githubId = 177471339;
+  };
   jonas-w = {
     email = "nixpkgs@03j.de";
     github = "jonas-w";
