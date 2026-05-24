@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "http://smarden.org/runit";
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "runit";
   };
 }
