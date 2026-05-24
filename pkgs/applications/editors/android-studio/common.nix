@@ -38,7 +38,7 @@
   libx11,
   libxcb,
   libxkbcommon,
-  mesa-demos,
+  mesa-utils,
   libxcb-wm,
   libxcb-render-util,
   libxcb-keysyms,
@@ -121,7 +121,7 @@ let
 
             # For Android emulator
             file
-            mesa-demos
+            mesa-utils
             pciutils
             setxkbmap
 

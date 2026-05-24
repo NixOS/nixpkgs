@@ -49,7 +49,7 @@
         };
 
         systemPackages = with pkgs; [
-          mesa-demos
+          mesa-utils
           wayland-utils
           foot
           alacritty

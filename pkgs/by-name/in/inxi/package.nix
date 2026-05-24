@@ -25,7 +25,7 @@
   upower,
   pciutils,
   withRecommendedDisplayInformationPrograms ? withRecommends,
-  mesa-demos,
+  mesa-utils,
   xrandr,
   xprop,
   xdpyinfo,
@@ -50,7 +50,7 @@ let
     pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals withRecommendedDisplayInformationPrograms [
-    mesa-demos
+    mesa-utils
     xdpyinfo
     xprop
     xrandr

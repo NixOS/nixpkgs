@@ -178,7 +178,7 @@ let
       pkgs.libxi
       pkgs.libxkbcommon
       pkgs.libxslt
-      pkgs.mesa-demos
+      pkgs.mesa-utils
       pkgs.nspr
       pkgs.nss
       pkgs.pango
