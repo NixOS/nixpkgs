@@ -10,6 +10,7 @@
   gawk,
   gnugrep,
   gnused,
+  testers,
   unzip,
 }:
 
@@ -69,7 +70,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s $out/share/tfenv/bin/terraform $out/bin/terraform
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage.tfenv;
+    };
+  };
 
   meta = {
     description = "Terraform version manager";
