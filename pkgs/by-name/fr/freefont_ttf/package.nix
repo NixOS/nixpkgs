@@ -26,6 +26,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/freefont/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 })
