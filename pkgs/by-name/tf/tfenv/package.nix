@@ -6,6 +6,7 @@
   nix-update-script,
   coreutils,
   curl,
+  findutils,
   gawk,
   gnugrep,
   gnused,
@@ -16,6 +17,7 @@ let
   runtimePath = lib.makeBinPath [
     coreutils
     curl
+    findutils
     gawk
     gnugrep
     gnused
