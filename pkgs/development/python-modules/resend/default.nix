@@ -9,7 +9,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "resend";
   version = "2.30.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "resend";
     repo = "resend-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-P9f5u7gOC7IqzlcmSIgxYX8+yn+57jifn2FP6zzHVRg=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "SDK for Resend";
     homepage = "https://github.com/resend/resend-python";
-    changelog = "https://github.com/resend/resend-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/resend/resend-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
