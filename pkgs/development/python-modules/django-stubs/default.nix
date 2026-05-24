@@ -7,7 +7,6 @@
   uv-build,
   redis,
   mypy,
-  pytest-mypy-plugins,
   oracledb,
   pytestCheckHook,
   types-pytz,
@@ -31,6 +30,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.9.9,<0.10.0" "uv_build>=0.9.9"
+
+    sed -i "/mypy/d" pytest.ini
   '';
 
   build-system = [ uv-build ];
@@ -53,7 +54,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest-mypy-plugins
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;

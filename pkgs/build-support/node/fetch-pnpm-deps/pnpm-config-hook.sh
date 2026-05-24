@@ -90,6 +90,9 @@ pnpmConfigHook() {
         echo "2. Build the derivation and wait for it to fail with a hash mismatch"
         echo "3. Copy the 'got: sha256-' value back into the pnpmDeps.hash field"
         echo
+        echo "If you see ERR_PNPM_LOCKFILE_CONFIG_MISMATCH above this, try changing the pnpm version"
+        echo "Found 'pnpm' with version '$pnpmVersion'"
+        echo
 
         exit 1
     fi

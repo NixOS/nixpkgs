@@ -99,12 +99,11 @@ let
           "lib/clang"
         ];
         # SYNCME: this version number must be synced with the one in make-bootstrap-tools.nix
-        version = "18";
+        version = "21";
       };
       libunwind = linkBootstrap {
         name = "libunwind";
         paths = [
-          "lib/libunwind.a"
           "lib/libunwind.so"
           "lib/libunwind.so.1"
           "lib/libunwind.so.1.0"
@@ -291,6 +290,7 @@ let
     };
     freebsd = {
       locales = linkBootstrap { paths = [ "share/locale" ]; };
+      libiconvModules = linkBootstrap { paths = [ "lib/i18n" ]; };
       libc = linkBootstrap {
         name = "bootstrapLibs";
         paths = [
@@ -303,16 +303,12 @@ let
           "lib/crtendS.o"
           "lib/crti.o"
           "lib/crtn.o"
-          "lib/libc++.a"
           "lib/libc++.so"
           "lib/libc++.so.1"
-          "lib/libc.a"
           "lib/libc.so"
           "lib/libc.so.7"
-          "lib/libc_nonshared.a"
           "lib/libcrypt.so"
           "lib/libcrypt.so.5"
-          "lib/libcxxrt.a"
           "lib/libcxxrt.so"
           "lib/libcxxrt.so.1"
           "lib/libdevstat.so"
@@ -329,11 +325,10 @@ let
           "lib/libgcc_s.so.1"
           "lib/libkvm.so"
           "lib/libkvm.so.7"
-          "lib/libm.a"
           "lib/libm.so"
           "lib/libm.so.5"
           "lib/libmd.so"
-          "lib/libmd.so.6"
+          "lib/libmd.so.7"
           "lib/libncurses.so"
           "lib/libncurses.so.6"
           "lib/libncursesw.so"
@@ -344,7 +339,7 @@ let
           "lib/libthr.so"
           "lib/libthr.so.3"
           "lib/libutil.so"
-          "lib/libutil.so.9"
+          "lib/libutil.so.10"
           "lib/libxnet.so"
           "include"
           "share"
@@ -459,8 +454,6 @@ let
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
           export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
           export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
-        ''
-        + lib.optionalString (prevStage.freebsd ? libiconvModules) ''
           export PATH_I18NMODULE=${prevStage.freebsd.libiconvModules}/lib/i18n
         '';
       };
@@ -589,7 +582,10 @@ in
       __bootstrapArchive = bootstrapArchive;
       fetchurl = prevStage.fetchurlReal;
       freebsd = super.freebsd.overrideScope (
-        self': super': { localesPrev = prevStage.freebsd.localesReal; }
+        self': super': {
+          inherit (prevStage.freebsd) libc;
+          localesPrev = prevStage.freebsd.localesReal;
+        }
       );
     };
   })
