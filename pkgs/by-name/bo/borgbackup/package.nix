@@ -70,11 +70,15 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     acl
   ];
 
-  dependencies = with python.pkgs; [
-    msgpack
-    packaging
-    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      msgpack
+      packaging
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pyfuse3
+    ];
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''

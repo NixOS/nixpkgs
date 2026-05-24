@@ -5,7 +5,6 @@
   python,
   pkgs,
   pycparser,
-  pytest-mypy,
   pytestCheckHook,
   setuptools-git-versioning,
   setuptools,
@@ -32,6 +31,10 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace ci/cbindgen.py \
       --replace-fail "'-D__builtin_va_list=int'," "'-D__builtin_va_list=int', '-Dnullptr_t=void*',"
 
+    # Don't run mypy via pytest-mypy (type checking breaks easily)
+    substituteInPlace pytest.ini \
+      --replace-fail 'addopts = --doctest-modules --mypy' 'addopts = --doctest-modules'
+
     sed -i '/^backend-path = \[/,/^\]/d' pyproject.toml
 
     # Use nixpkgs' wasmtime instead of downloading prebuilt C API artifacts.
@@ -57,7 +60,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pycparser
-    pytest-mypy
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
