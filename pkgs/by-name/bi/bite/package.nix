@@ -21,16 +21,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bite";
-  version = "0.3";
+  version = "0.43";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "WINSDK";
     repo = "bite";
-    rev = "V${finalAttrs.version}";
-    hash = "sha256-gio4J+V8achSuR2vQa2dnvOR/u4Zbb5z0UE0xP0gGCU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-akwkTV1bZJ3GcEtObyF+qN5IkBRoXdztUSOghjQy7A0=";
   };
 
-  cargoHash = "sha256-ESGX1hnDnU2taKQXre4AQRzQxTC7W+0cEIoQPPC9Lfs=";
+  cargoHash = "sha256-OlxUHYTbljWGWdiceBmW3J0oB4w0/5izgNnwCafV6xY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -90,7 +92,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Disassembler focused on comprehensive rust support";
     homepage = "https://github.com/WINSDK/bite";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vinnymeller ];
+    maintainers = with lib.maintainers; [
+      vinnymeller
+      kybe236
+    ];
     mainProgram = "bite";
   };
 })

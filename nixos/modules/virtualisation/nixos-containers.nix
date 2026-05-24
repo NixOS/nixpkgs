@@ -524,6 +524,19 @@ let
     tmpfs = null;
   };
 
+  # Parses an IPv4 address with an optional prefix
+  ipv4FromString =
+    str:
+    let
+      segments = lib.splitString "/" str;
+      prefix = lib.elemAt segments 1;
+      hasPrefix = builtins.length segments == 2;
+    in
+    {
+      address = lib.head segments;
+      prefixLength = if hasPrefix then builtins.fromJSON prefix else 32;
+    };
+
 in
 
 {
@@ -594,6 +607,14 @@ in
                                 boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
+                                networking.interfaces = lib.mkIf config.privateNetwork {
+                                  eth0.ipv4.addresses = lib.optional (config.localAddress != null) (
+                                    ipv4FromString config.localAddress
+                                  );
+                                  eth0.ipv6.addresses = lib.optional (config.localAddress6 != null) (
+                                    lib.network.ipv6.fromString config.localAddress6
+                                  );
+                                };
                                 assertions = [
                                   {
                                     assertion =
