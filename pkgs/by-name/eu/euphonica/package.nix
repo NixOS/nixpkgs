@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       paperdigits
       aaravrav
+      doronbehar
     ];
     mainProgram = "euphonica";
     platforms = with lib.platforms; linux;
