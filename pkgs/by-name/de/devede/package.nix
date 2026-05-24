@@ -11,6 +11,13 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   gobject-introspection,
+  # The subtitle encoder and mixer 'spumux' looks for the font 'arial' by default (hardcoded in devede)
+  # and it should be made available to that program in the user environment or it throws an error.
+  # If overrideFont is true we instead use a particular font file in the nix store,
+  # which is always available by design.
+  overrideFont ? true,
+  liberation_ttf,
+  fontPath ? "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf",
 }:
 
 let
@@ -66,6 +73,10 @@ buildPythonApplication (finalAttrs: {
     substituteInPlace src/devedeng/configuration_data.py \
       --replace-fail "/usr/share" "$out/share" \
       --replace-fail "/usr/local/share" "$out/share"
+  ''
+  + lib.optionalString overrideFont ''
+    substituteInPlace src/devedeng/subtitles_mux.py \
+      --replace-fail arial ${fontPath}
   '';
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
