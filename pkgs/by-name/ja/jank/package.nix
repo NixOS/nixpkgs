@@ -114,7 +114,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     description = "The native Clojure dialect hosted on LLVM with seamless C++ interop";
     homepage = "https://jank-lang.org";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ arik ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "jank";
   };
