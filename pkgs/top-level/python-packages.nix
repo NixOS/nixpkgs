@@ -17637,6 +17637,8 @@ self: super: with self; {
 
   scrapli = callPackage ../development/python-modules/scrapli { };
 
+  scrapli-netconf = callPackage ../development/python-modules/scrapli-netconf { };
+
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
