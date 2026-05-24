@@ -35,15 +35,15 @@ stdenv.mkDerivation rec {
   ) ./darwin-aarch64-no-fpcr-exception-traps.patch;
 
   postPatch = ''
-    substituteInPlace fpcsrc/compiler/systems/t_darwin.pas \
+    substituteInPlace compiler/systems/t_darwin.pas \
       --replace-fail "LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib',true)" "LibrarySearchPath.AddLibraryPath(sysrootpath,'$SDKROOT/usr/lib',true)"
 
     # Replace the `codesign --remove-signature` command with a custom script, since `codesign` is not available
     # in nixpkgs
     # Remove the -no_uuid strip flag which does not work on llvm-strip, only
     # Apple strip.
-    substituteInPlace fpcsrc/compiler/Makefile \
-      --replace \
+    substituteInPlace compiler/Makefile \
+      --replace-fail \
         "\$(CODESIGN) --remove-signature" \
         "${./remove-signature.sh}" \
       --replace "ifneq (\$(CODESIGN),)" "ifeq (\$(OS_TARGET), darwin)" \

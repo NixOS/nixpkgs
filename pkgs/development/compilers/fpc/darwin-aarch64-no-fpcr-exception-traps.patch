@@ -1,7 +1,6 @@
---- a/fpcsrc/rtl/aarch64/aarch64.inc
-+++ b/fpcsrc/rtl/aarch64/aarch64.inc
-@@ -130,5 +130,12 @@ procedure SysInitFPU;
-     { clear all "exception happened" flags we care about}
+--- a/rtl/aarch64/aarch64.inc
++++ b/rtl/aarch64/aarch64.inc
+@@ -131,6 +131,9 @@
      setfpsr(getfpsr and not(fpu_exception_mask shr fpu_exception_mask_to_status_mask_shift));
      { enable invalid operations and division by zero exceptions. }
      setfpcr(((getfpcr and not(fpu_exception_mask)) or fpu_dze or fpu_ofe or fpu_ioe));
