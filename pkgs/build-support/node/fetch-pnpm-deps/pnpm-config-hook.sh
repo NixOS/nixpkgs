@@ -28,6 +28,11 @@ pnpmConfigHook() {
     if versionAtLeast "$pnpmVersion" "11"; then
       # pnpm 11 uses a different mechanism to manage package manager versions
       export pnpm_config_pm_on_fail=ignore
+
+      # Disable lockfile verification against supply-chain policies. This is
+      # already done in fetchPnpmDeps, so if these checks failed there, we
+      # wouldn't be here in the first place
+      export pnpm_config_trust_lockfile=true
     else
       pnpm config set manage-package-manager-versions false
     fi
