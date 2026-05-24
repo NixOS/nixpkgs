@@ -3117,6 +3117,8 @@ with pkgs;
 
   zellijPlugins = recurseIntoAttrs (callPackage ../by-name/ze/zellij/plugins { });
 
+  zsync_0_8 = callPackage ../by-name/zs/zsync/0_8.nix { };
+
   zstd = callPackage ../tools/compression/zstd {
     cmake = buildPackages.cmakeMinimal;
   };
