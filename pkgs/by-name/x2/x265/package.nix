@@ -74,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     echo 'set(X265_LATEST_TAG "${finalAttrs.version}")' >> ./cmake/Version.cmake
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
   ]
