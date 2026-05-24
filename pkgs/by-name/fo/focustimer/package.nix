@@ -25,13 +25,16 @@
   gettext,
 }:
 stdenv.mkDerivation rec {
-  pname = "gnome-pomodoro";
+  pname = "focustimer";
   version = "1.1.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "focustimerhq";
     repo = "FocusTimer";
-    rev = version;
+    tag = version;
     hash = "sha256-ZtHyOsxRDEGwnfwyNGlIVebDayvIobePTOOs3xyw/VM=";
   };
 
@@ -77,6 +80,10 @@ stdenv.mkDerivation rec {
     libpeas2
     sqlite
   ];
+
+  postInstall = ''
+    ln -s $out/bin/focus-timer $out/bin/gnome-pomodoro
+  '';
 
   meta = {
     homepage = "https://gnomepomodoro.org/";
