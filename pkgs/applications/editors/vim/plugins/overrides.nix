@@ -370,6 +370,10 @@ assertNoAdditions {
     };
   });
 
+  blink-calc = super.blink-calc.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };

@@ -18573,10 +18573,6 @@ with self;
         }
       done
     '';
-    passthru = {
-      tlType = "run";
-      pkgs = [ LaTeXML.tex ];
-    };
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";
       homepage = "https://dlmf.nist.gov/LaTeXML/";
