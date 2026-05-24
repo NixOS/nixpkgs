@@ -73,6 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-mac-integration-gtk2
   ];
 
+  # where to find the AM_GNU_GETTEXT_VERSION macro
+  preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    addToSearchPath ACLOCAL_PATH ${gettext}/share/gettext/m4
+  '';
+
   doCheck = false; # requires X11 daemon
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
