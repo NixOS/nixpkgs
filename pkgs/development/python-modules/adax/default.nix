@@ -4,12 +4,13 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "adax";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-wmcZtiML02i1XfqpFzni2WDrxutTvP5laVvTAGtNg0Y=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
