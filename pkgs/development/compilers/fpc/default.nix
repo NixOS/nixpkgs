@@ -3,10 +3,10 @@
   stdenv,
   fetchurl,
   gawk,
-  fetchpatch,
   undmg,
   cpio,
   xar,
+  fetchFromGitLab,
   libiconv,
 }:
 
@@ -24,12 +24,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "3.2.2";
+  version = "3.2.4";
   pname = "fpc";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/freepascal/fpcbuild-${version}.tar.gz";
-    sha256 = "85ef993043bb83f999e2212f1bca766eb71f6f973d362e2290475dbaaf50161f";
+  src = fetchFromGitLab {
+    owner = "freepascal.org/fpc";
+    repo = "source";
+    tag = "release_3_2_4_rc1";
+    hash = "sha256-1TOQuHtI6/t/iCR6c7gNkLRZ7cdliTTVt66X+a60orc=";
   };
 
   buildInputs = [
