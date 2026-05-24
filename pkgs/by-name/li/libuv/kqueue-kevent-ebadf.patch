@@ -1,0 +1,22 @@
+diff --git a/src/unix/kqueue.c b/src/unix/kqueue.c
+index 27d2881..3a4e9f6 100644
+--- a/src/unix/kqueue.c
++++ b/src/unix/kqueue.c
+@@ -275,9 +275,14 @@ void uv__io_poll(uv_loop_t* loop, int timeout) {
+                   timeout == -1 ? NULL : &spec);
+     uv__io_poll_check(loop, pset);
+
+-    if (nfds == -1)
+-      assert(errno == EINTR);
+-    else if (nfds == 0)
++    if (nfds == -1) {
++      /* kevent() can fail with EINTR (signal), EBADF (closed fd still in
++       * changelist), or ENOENT (fd removed between changelist submit and
++       * kevent call). All are transient; treat them the same as EINTR
++       * and retry after updating the timeout.
++       */
++      assert(errno == EINTR || errno == EBADF || errno == ENOENT);
++    } else if (nfds == 0)
+       /* Unlimited timeout should only return with events or signal. */
+       assert(timeout != -1);
+

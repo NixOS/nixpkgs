@@ -39,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # libuv's kqueue poller asserts errno == EINTR after kevent() fails,
+    # but kevent() can also return EBADF or ENOENT when a file descriptor
+    # is closed while still in the changelist. This happens with pnpm/Node.js
+    # in the nix build sandbox. https://github.com/libuv/libuv/issues/976
+    ./kqueue-kevent-ebadf.patch
+  ];
+
   postPatch =
     let
       toDisable = [
