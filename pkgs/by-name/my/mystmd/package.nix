@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mystmd";
-  version = "1.9.0";
+  version = "1.9.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jupyter-book";
     repo = "mystmd";
     tag = "mystmd@${finalAttrs.version}";
-    hash = "sha256-gAUfL2sTdTmslPuOnkeTwv/GmarM5nWpxjg3KPL+1fs=";
+    hash = "sha256-SopL2yIFWWCMm7afjkMrG4Z7Ohxxb5gfCrKNRX5tyo8=";
   };
 
   node_modules = stdenv.mkDerivation {
