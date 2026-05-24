@@ -4404,6 +4404,8 @@ self: super: with self; {
 
   dill = callPackage ../development/python-modules/dill { };
 
+  dimi = callPackage ../development/python-modules/dimi { };
+
   dinghy = callPackage ../development/python-modules/dinghy { };
 
   dingz = callPackage ../development/python-modules/dingz { };
