@@ -6869,8 +6869,8 @@ with self;
     pname = "Crypt-Argon2";
     version = "0.019";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.019.tar.gz";
-      hash = "sha256-+Fm+6NL2tAf11EZFwiOu4hL+AFkd/YLlBlrhvnio5Dg=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-${version}.tar.gz";
+      hash = "sha256-1l5RoZQ+6AglEkUNw1KuUpUQZswJI/u38uYK+l8WTi0=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     meta = {
@@ -10982,6 +10982,29 @@ with self;
     meta = {
       description = "Declare version conflicts for your dist";
       homepage = "https://metacpan.org/release/Dist-CheckConflicts";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  DistBuild = buildPerlModule rec {
+    pname = "Dist-Build";
+    version = "0.028";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Dist-Build-${version}.tar.gz";
+      hash = "sha256-JPFLFA4Tq3x1PU25bI0zbQnepcb1H+1IvA92Khyhgx8=";
+    };
+    propagatedBuildInputs = [
+      ExtUtilsConfig
+      ExtUtilsHelpers
+      ExtUtilsInstallPaths
+    ];
+    meta = {
+      changes = "https://github.com/Leont/dist-build/blob/v${version}/Changes";
+      description = "Modern module builder, author tools not included";
+      homepage = "https://github.com/Leont/dist-build";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
