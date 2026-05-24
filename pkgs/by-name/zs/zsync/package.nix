@@ -3,26 +3,27 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  openssl,
   perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsync";
-  version = "0.6.4";
+  version = "0.6.6";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cph6";
     repo = "zsync";
-    tag = finalAttrs.version;
-    hash = "sha256-qZSjh23snJHWmrIUxRvpu5pZ1G3rJcnl08WGEEM+0Jw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HE9CwoFK6301rwwKY1zy+wvN1r6ODsecgClDGWKyB3s=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/c";
 
-  patches = [
-    ./remove-inexisting-rsumtest.patch
-    ./c23.patch
-  ];
+  patches = [ ./c23.patch ];
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
@@ -38,9 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl ];
 
   doCheck = true;
 
@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       ryand56
     ];
     platforms = with lib.platforms; all;
+    mainProgram = "zsync";
   };
 })
