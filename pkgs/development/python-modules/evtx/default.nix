@@ -8,7 +8,7 @@
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "evtx";
   version = "0.11.1";
   pyproject = true;
@@ -16,12 +16,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omerbenamram";
     repo = "pyevtx-rs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oF/Hvox294/Vi7TqaJVAboAFreavnlhmqa5rpVsOv6o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-4pDLwM1ylZbqymG+cL7QVByc43p8XJi2MKb/cL3aWak=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bindings for evtx";
     homepage = "https://github.com/omerbenamram/pyevtx-rs";
-    changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${src.tag}";
+    changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
