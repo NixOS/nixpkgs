@@ -1611,6 +1611,7 @@ mapAliases {
   opencollada-blender = throw "opencollada-blender has been removed, as it is unmaintained upstream"; # Added 2026-04-26
   opencolorio_1 = throw "'opencolorio_1' has been removed. Use opencolorio instead"; # Added 2026-01-03
   openconnect_gnutls = throw "'openconnect_gnutls' has been renamed to/replaced by 'openconnect'"; # Converted to throw 2025-10-27
+  opendrop = throw "'opendrop' has been removed as it was unmaintained upstream"; # Added 2026-05-24
   openexr_3 = throw "'openexr_3' has been renamed to/replaced by 'openexr'"; # Converted to throw 2025-10-27
   opengfw = throw "'opengfw' has been removed because the upstream repository was deleted"; # Added 2026-03-16
   openhmd = throw "'openhmd' has been removed due to being unmaintained upstream"; # Added 2025-11-05
