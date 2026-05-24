@@ -7,13 +7,13 @@
   static ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "runit";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "https://smarden.org/runit/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Y08jyMTR1EAEO+D+ko3fkEYmKJ6Xv+fFgm6TqvLMb+k=";
+    url = "https://smarden.org/runit/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Y08jyMTR1EAEO+D+ko3fkEYmKJ6Xv+fFgm6TqvLMb+k=";
   };
 
   patches = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  sourceRoot = "admin/${pname}-${version}";
+  sourceRoot = "admin/${finalAttrs.pname}-${finalAttrs.version}";
 
   doCheck = true;
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "runit";
   };
-}
+})
