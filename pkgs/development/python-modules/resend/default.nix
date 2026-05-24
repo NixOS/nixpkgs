@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pytest-asyncio,
   pytestCheckHook,
   requests,
   typing-extensions,
@@ -10,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "resend";
-  version = "2.23.0";
+  version = "2.30.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "resend";
     repo = "resend-python";
     tag = "v${version}";
-    hash = "sha256-kUcudZCIU8LNl7HgBDRJ85rPIZRBVgvbp12ZgbfAZ4k=";
+    hash = "sha256-P9f5u7gOC7IqzlcmSIgxYX8+yn+57jifn2FP6zzHVRg=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +28,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "resend" ];
 
