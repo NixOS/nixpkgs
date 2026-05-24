@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "leidenalg";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vtraag";
     repo = "leidenalg";
     tag = version;
-    hash = "sha256-u4xW1gsWDpbsFVLlOIiPZtpw9t4iFBC7fzwn04flev8=";
+    hash = "sha256-E8mFzEVzff3BEt5sPDXy8/ofZgVfzgiUyIqT59/Trd0=";
   };
 
   build-system = [ setuptools-scm ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     libleidenalg
   ];
 
-  propagatedBuildInputs = [ igraph ];
+  dependencies = [ igraph ];
 
   nativeCheckInputs = [
     ddt
