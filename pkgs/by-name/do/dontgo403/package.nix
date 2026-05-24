@@ -6,21 +6,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "dontgo403";
-  version = "1.0.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "devploit";
     repo = "dontgo403";
-    tag = finalAttrs.version;
-    hash = "sha256-qA1i8l2oBQQ5IF8ho3K2k+TAndUTFGwb2NfhyFqfKzU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AkzXTr46blM1WT89J+H0UlqAaix8Dme31i+ejTx2g1s=";
   };
 
-  vendorHash = "sha256-IGnTbuaQH8A6aKyahHMd2RyFRh4WxZ3Vx/A9V3uelRg=";
+  vendorHash = "sha256-zAkS0o+wOQLmCil7Lh7DIZCcHYiceb1KwiK/vkSYYwk=";
 
   ldflags = [
     "-w"
     "-s"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Tool to bypass 40X response codes";
