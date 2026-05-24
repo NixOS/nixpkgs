@@ -16,6 +16,7 @@
   glib,
   glibc,
   icu,
+  libffi,
   python3,
   gn,
   ninja,
@@ -106,6 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     glib
     icu
+    libffi
   ]
   ++ lib.optionals stdenv.targetPlatform.isDarwin [
     apple-sdk_15
@@ -123,6 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTC_BOOTSTRAP = 1;
     EXTRA_GN_ARGS = lib.concatStringsSep " " (
       [
+        "use_system_libffi=true"
         "use_sysroot=false" # prevent download of debian sysroot
         "clang_version=\"${lib.versions.major llvmPackages.clang.version}\""
         "rustc_version=\"${rustc.version}\""
