@@ -12,6 +12,8 @@
 mkKdeDerivation {
   pname = "kfilemetadata";
 
+  outputs = [ "out" "dev" ];
+
   # Fix installing cmake files into wrong directory
   # FIXME(later): upstream
   patches = [ ./cmake-install-paths.patch ];

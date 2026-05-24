@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   pname = "kio-extras-kf5";
   version = "24.02.2";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/kio-extras-kf5-${version}.tar.xz";
     hash = "sha256-qar1jzuALINBu6HOuVBU+RUFnqRH9Z/8e5M8ynGxKsk=";
