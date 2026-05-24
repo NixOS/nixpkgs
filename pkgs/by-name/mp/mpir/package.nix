@@ -15,16 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mpir";
   version = "3.0.0";
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  nativeBuildInputs = [
-    m4
-    which
-    yasm
-    texinfo
-    autoreconfHook
-  ];
-
   src = fetchFromGitHub {
     owner = "wbhart";
     repo = "mpir";
@@ -49,6 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/a67361db03777a80446ffa8e512f26edb299268f/community/mpir/gcc15.patch";
       hash = "sha256-8RqMHYqDowHytgBd4RsGEOLkk+spYS+iqWQL2kzGAtI=";
     })
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [
+    m4
+    which
+    yasm
+    texinfo
+    autoreconfHook
   ];
 
   configureFlags = [ "--enable-cxx" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];
