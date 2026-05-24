@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     libplasma.out
     plasma5support.out
     plasma-workspace.out
+    ksvg.out
   ];
 
   installPhase = ''
