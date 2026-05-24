@@ -89,6 +89,10 @@ pnpmConfigHook() {
 
     runHook prePnpmInstall
 
+    echo "Final pnpm config:"
+    pnpm config list
+    echo
+
     if ! pnpm install \
         --offline \
         --ignore-scripts \
