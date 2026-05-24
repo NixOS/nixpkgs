@@ -28,24 +28,20 @@
 
 buildPythonPackage rec {
   pname = "python-fx";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cielong";
     repo = "pyfx";
     tag = "v${version}";
-    hash = "sha256-Q5ihWnoa7nf4EkrY4SgrwjaNvTva4RdW9GRbnbsPXPc=";
+    hash = "sha256-a9gKdM6InH0KP0yrDOo6W90ClMVshbVxLjtiG9yiq1s=";
   };
 
   postPatch = ''
     rm src/pyfx/model/common/jsonpath/*.py # upstream checks in generated files, remove to ensure they were regenerated
     antlr -Dlanguage=Python3 -visitor src/pyfx/model/common/jsonpath/*.g4
     rm src/pyfx/model/common/jsonpath/*.{g4,interp,tokens} # no need to install
-
-    # https://github.com/cielong/pyfx/pull/148
-    substituteInPlace src/pyfx/view/common/frame.py \
-      --replace-fail "self.__super.__init__()" "super().__init__()"
   '';
 
   pythonRelaxDeps = true;
