@@ -147,7 +147,7 @@ flutter341.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm644 assets/app_icons/icon-red.png $out/share/pixmaps/mangayomi.png
+    install -Dm644 assets/app_icons/icon-red.png $out/share/icons/mangayomi.png
   '';
 
   extraWrapProgramArgs = ''
