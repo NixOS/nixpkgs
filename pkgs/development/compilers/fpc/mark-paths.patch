@@ -1,8 +1,7 @@
 diff --git a/fpcsrc/compiler/systems/t_linux.pas b/fpcsrc/compiler/systems/t_linux.pas
-index a7398fb9..8e46fec0 100644
 --- a/fpcsrc/compiler/systems/t_linux.pas
 +++ b/fpcsrc/compiler/systems/t_linux.pas
-@@ -135,13 +135,13 @@ begin
+@@ -135,7 +135,7 @@
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib64',true);
        { /lib64 should be the really first, so add it before everything else }
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib',true);
@@ -11,15 +10,16 @@ index a7398fb9..8e46fec0 100644
  {$else}
  {$ifdef powerpc64}
        if target_info.abi<>abi_powerpc_elfv2 then
--        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64;=/usr/lib64;=/usr/X11R6/lib64',true)
-+        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/@syslibpath@;=/usr/lib64;=/usr/X11R6/lib64',true)
-       else
--        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64;=/usr/lib/powerpc64le-linux-gnu;=/usr/X11R6/powerpc64le-linux-gnu',true);
-+        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/@syslibpath@;=/usr/lib/powerpc64le-linux-gnu;=/usr/X11R6/powerpc64le-linux-gnu',true);
+@@ -146,7 +146,7 @@
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib64',true);
+       { /lib64 should be the really first, so add it before everything else }
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib',true);
+-      LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64',true);
++      LibrarySearchPath.AddLibraryPath(sysrootpath,'=@syslibpath@',true);
  {$else powerpc64}
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib;=/usr/lib;=/usr/X11R6/lib',true);
  {$endif powerpc64}
-@@ -165,7 +165,7 @@ begin
+@@ -174,7 +174,7 @@
  {$endif i386}
  {$ifdef aarch64}
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib64',true);
@@ -28,7 +28,7 @@ index a7398fb9..8e46fec0 100644
  {$endif aarch64}
  {$ifdef powerpc}
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/powerpc-linux-gnu',true);
-@@ -186,53 +186,53 @@ begin
+@@ -198,7 +198,7 @@
  end;
  
  {$ifdef m68k}
@@ -37,23 +37,19 @@ index a7398fb9..8e46fec0 100644
  {$endif m68k}
  
  {$ifdef i386}
+@@ -205,4 +205,4 @@
 -  const defdynlinker='/lib/ld-linux.so.2';
 +  const defdynlinker='@dynlinker-prefix@/lib/ld-linux.so.2';
  {$endif}
  
  {$ifdef x86_64}
+@@ -209,4 +209,4 @@
 -  const defdynlinker='/lib64/ld-linux-x86-64.so.2';
 +  const defdynlinker='@dynlinker-prefix@/lib64/ld-linux-x86-64.so.2';
  {$endif x86_64}
  
  {$ifdef sparc}
--  const defdynlinker='/lib/ld-linux.so.2';
-+  const defdynlinker='@dynlinker-prefix@/lib/ld-linux.so.2';
- {$endif sparc}
- 
- {$ifdef powerpc}
--  const defdynlinker='/lib/ld.so.1';
-+  const defdynlinker='@dynlinker-prefix@/lib/ld.so.1';
+@@ -218,8 +218,8 @@
  {$endif powerpc}
  
  {$ifdef powerpc64}
@@ -64,6 +60,7 @@ index a7398fb9..8e46fec0 100644
    var defdynlinker: string;
  {$endif powerpc64}
  
+@@ -226,11 +226,11 @@
  {$ifdef arm}
  {$ifdef FPC_ARMHF}
 -  const defdynlinker='/lib/ld-linux-armhf.so.3';
@@ -78,6 +75,7 @@ index a7398fb9..8e46fec0 100644
  {$endif FPC_ARMEL}
  {$endif FPC_ARMHF}
  {$endif arm}
+@@ -237,6 +237,6 @@
  
  {$ifdef aarch64}
 -const defdynlinker='/lib/ld-linux-aarch64.so.1';
@@ -85,8 +83,7 @@ index a7398fb9..8e46fec0 100644
  {$endif aarch64}
  
  {$ifdef mips}
--  const defdynlinker='/lib/ld.so.1';
-+  const defdynlinker='@dynlinker-prefix@/lib/ld.so.1';
+@@ -244,7 +244,7 @@
  {$endif mips}
  
  {$ifdef sparc64}
@@ -95,7 +92,7 @@ index a7398fb9..8e46fec0 100644
  {$endif sparc64}
  
  
-@@ -267,9 +267,9 @@ begin
+@@ -279,9 +279,9 @@
        libctype:=uclibc;
      end
  {$ifdef i386}
