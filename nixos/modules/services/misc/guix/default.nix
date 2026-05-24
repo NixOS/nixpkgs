@@ -144,7 +144,6 @@ in
         default = [
           "https://ci.guix.gnu.org"
           "https://bordeaux.guix.gnu.org"
-          "https://berlin.guix.gnu.org"
         ];
         example = lib.literalExpression ''
           options.services.guix.substituters.urls.default ++ [
@@ -163,7 +162,6 @@ in
         default = [
           "${cfg.package}/share/guix/ci.guix.gnu.org.pub"
           "${cfg.package}/share/guix/bordeaux.guix.gnu.org.pub"
-          "${cfg.package}/share/guix/berlin.guix.gnu.org.pub"
         ];
         defaultText = ''
           The packaged signing keys from {option}`services.guix.package`.
