@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
 
   # build-system
@@ -31,23 +31,20 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.6.3";
+    version = "2.7.0";
     pyproject = true;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-G2K2iElEpX2+MhUJq5T9TTswcHXgwurpkaxx7hWtOO0=";
+    src = fetchFromGitHub {
+      owner = "urllib3";
+      repo = "urllib3";
+      tag = version;
+      hash = "sha256-iN59MS5gKgDxe2v4ILrZ/1y7wV4yB1tFs4ATKppYAAk=";
     };
 
     build-system = [
       hatchling
       hatch-vcs
     ];
-
-    postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace-fail ', "setuptools-scm>=8,<10"' ""
-    '';
 
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
