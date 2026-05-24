@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ld64";
-  version = "956.6";
+  version = "957.1";
 
   outputs = [
     "out"
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple-oss-distributions";
     repo = "ld64";
     tag = "ld64-${finalAttrs.version}";
-    hash = "sha256-2VlBjlCZ+ZPKGZ0f5UuG3jJTLZIBXf8IZOiD6snheh4=";
+    hash = "sha256-KUkEKz2jQq815ls25u0JMYmad4cN9PS/nC3E5eV19co=";
   };
 
   patches = [
