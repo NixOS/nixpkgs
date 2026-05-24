@@ -1737,6 +1737,7 @@ with pkgs;
     texliveSmall
     texliveTeTeX
     ;
+  texliveFullWithDocs = texliveFull.overrideAttrs { withDocs = true; };
   texlivePackages = recurseIntoAttrs (lib.mapAttrs (_: v: v.build) texlive.pkgs);
 
   futhark = haskell.lib.compose.justStaticExecutables haskellPackages.futhark;

@@ -14,7 +14,9 @@
   nodejs,
   npmHooks,
   openssl,
+  pipewire, # pw-metadata for bit-perfect sample rate queries
   pkg-config,
+  pulseaudio, # pactl for PipeWire device enumeration and sink routing
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
@@ -66,6 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     gappsWrapperArgs+=(
+      --prefix PATH : ${
+        lib.makeBinPath [
+          pulseaudio
+          pipewire
+        ]
+      }
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libappindicator
