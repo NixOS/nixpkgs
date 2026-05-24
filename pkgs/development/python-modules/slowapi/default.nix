@@ -45,6 +45,10 @@ buildPythonPackage rec {
     # AssertionError: assert '1740326049.9886339' == '1740326049'
     "test_headers_no_breach"
     "test_headers_breach"
+    # tests use @app.route() removed in Starlette 1.0
+    # https://github.com/laurentS/slowapi/issues/271
+    "test_retry_after"
+    "test_exempt_decorator"
   ];
 
   pythonImportsCheck = [ "slowapi" ];
