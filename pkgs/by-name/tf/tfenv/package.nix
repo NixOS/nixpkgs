@@ -4,14 +4,24 @@
   fetchFromGitHub,
   makeWrapper,
   nix-update-script,
-  unzip,
+  coreutils,
   curl,
+  gawk,
   gnugrep,
   gnused,
-  gawk,
-  coreutils,
+  unzip,
 }:
 
+let
+  runtimePath = lib.makeBinPath [
+    coreutils
+    curl
+    gawk
+    gnugrep
+    gnused
+    unzip
+  ];
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
@@ -46,16 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for f in $out/share/tfenv/bin/* $out/share/tfenv/libexec/*; do
       [ -f "$f" ] || continue
       wrapProgram "$f" \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            unzip
-            curl
-            gnugrep
-            gnused
-            gawk
-            coreutils
-          ]
-        }"
+        --prefix PATH : "${runtimePath}"
     done
 
     ln -s $out/share/tfenv/bin/tfenv $out/bin/tfenv
