@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "SN Pro Font Family";
     homepage = "https://github.com/supernotes/sn-pro";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
 })
