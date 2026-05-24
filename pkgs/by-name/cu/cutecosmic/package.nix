@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cutecosmic";
-  version = "0.1-unstable-2026-03-25";
+  version = "0-unstable-2026-03-25";
 
   src = fetchFromGitHub {
     owner = "IgKh";
