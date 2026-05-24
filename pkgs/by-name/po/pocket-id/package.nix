@@ -13,13 +13,13 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mnmBwQ79sScTPM4Gh9g0x/QTmqm1TgxaOkww+bvs1b4=";
+    hash = "sha256-2tGd/gl0Pm5b5GfkTsChvZoWov4dwljwqDcitX5NKCY=";
   };
 
   patches = [
@@ -28,13 +28,18 @@ buildGo125Module (finalAttrs: {
       url = "https://github.com/pocket-id/pocket-id/commit/34890235ba8c2d856e3a121fdf59fe9d627e8596.patch?full_index=1";
       hash = "sha256-Th1/J9M7kxcXyuNa0CZIIX1CuIS31Dx12+O4bzSxS0E=";
     })
+    # based on https://github.com/pocket-id/pocket-id/commit/978ac87deffec58beaccd15aead975e91b94c8a5.patch, modifications:
+    # - remove added tests due to merge conflicts
+    # - remove group restriction check as it's a v2 feature: https://github.com/pocket-id/pocket-id/pull/1164
+    # - adapt to IsUserGroupAllowedToAuthorize function signature changes
+    ./CVE-2026-43983.patch
   ];
 
   patchFlags = [ "-p2" ];
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-CmhPURPNwcpmD9shLrQPVKFGBirEMjq0Z4lmgMCpxS8=";
+  vendorHash = "sha256-ttbiuYRWbn8KRZtg499R4NF/E9+B+fOylxZcMwNg69M=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -50,6 +55,13 @@ buildGo125Module (finalAttrs: {
     mv $out/bin/cmd $out/bin/pocket-id
   '';
 
+  checkFlags = [
+    # requires networking
+    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+  ];
+
+  doCheck = !stdenvNoCC.hostPlatform.isDarwin;
+
   frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
@@ -62,8 +74,8 @@ buildGo125Module (finalAttrs: {
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
-      fetcherVersion = 1;
-      hash = "sha256-/e1zBHdy3exqbMvlv0Jth7vpJd7DDnWXGfMV+Cdr56I=";
+      fetcherVersion = 3;
+      hash = "sha256-Ybief+B7M1ATqHf9GlBlPFjII+ybCN4ATU94p0GKtI4=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
