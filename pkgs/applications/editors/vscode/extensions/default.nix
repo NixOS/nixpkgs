@@ -675,8 +675,8 @@ let
         mktplcRef = {
           name = "markdown-mermaid";
           publisher = "bierner";
-          version = "1.32.0";
-          hash = "sha256-1LlRTkskBAlYV+fq3GVyOUGYXbILvKIByBu2uKwTUUc=";
+          version = "1.32.1";
+          hash = "sha256-bH8JBZOfj2Km5/tfaiSzrkOl2kOU+XwZcuWOpU9iVEM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-mermaid/changelog";
