@@ -55,10 +55,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
+    mkdir -p $out/share/tfenv/bin-extra
+    ln -s ${lib.getExe gnugrep} $out/share/tfenv/bin-extra/ggrep
+
     for f in $out/share/tfenv/bin/* $out/share/tfenv/libexec/*; do
       [ -f "$f" ] || continue
       wrapProgram "$f" \
-        --prefix PATH : "${runtimePath}"
+        --prefix PATH : "${runtimePath}:$out/share/tfenv/bin-extra"
     done
 
     ln -s $out/share/tfenv/bin/tfenv $out/bin/tfenv
