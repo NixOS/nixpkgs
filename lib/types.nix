@@ -876,7 +876,7 @@ rec {
             extractItem =
               file: raw:
               let
-                hasOrder = raw._type or null == "order";
+                hasOrder = isType "order" raw;
                 item = if hasOrder then raw.content else raw;
                 key = head (attrNames item);
                 peeled = peelProperties item.${key};
@@ -888,7 +888,19 @@ rec {
                   prio = if hasOrder then raw.priority else peeled.prio;
                 }
               else
-                throw "A definition for option `${showOption loc}' is not of type `${description}'. Each list element must be a single-key attribute set.";
+                throw "A definition for option `${showOption loc}' is not of type `${description}'. ${
+                  if !isAttrs item then
+                    "Each list element must be an attribute set, but got ${builtins.typeOf item}"
+                  else
+                    "Each list element must be a single-key attribute set, but got ${toString (length (attrNames item))} keys"
+                }.${
+                  showDefs [
+                    {
+                      inherit file;
+                      value = raw;
+                    }
+                  ]
+                }";
 
             # Convert a definition to a flat list of { file, key, value, prio, overridePrio }
             defToItems =
@@ -969,14 +981,7 @@ rec {
           inherit asAttrs mergeAttrValues;
           elemType = elemType.substSubModules m;
         };
-      functor = elemTypeFunctor name { inherit elemType; } // {
-        type =
-          payload:
-          types.attrListWith {
-            inherit asAttrs mergeAttrValues;
-            inherit (payload) elemType;
-          };
-      };
+      typeMerge = t: null; # Disable type merging
       nestedTypes.elemType = elemType;
     };
 
