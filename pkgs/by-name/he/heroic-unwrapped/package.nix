@@ -108,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
       "${epic-integration}/EpicGamesLauncher.exe" \
       "$bin_dir/x64/win32/"
 
+    # Match StartupWMClass in the desktop file so taskbars can associate the
+    # running Electron window with Heroic's icon.
     makeWrapper "${lib.getExe electron}" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
@@ -118,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
           ]
         )
       }" \
+      --add-flags --class=heroic \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
