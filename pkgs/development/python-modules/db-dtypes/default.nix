@@ -6,21 +6,23 @@
   packaging,
   pandas,
   pyarrow,
-  pytest8_3CheckHook,
+  pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-db-dtypes-pandas";
-    tag = "v${version}";
-    hash = "sha256-cF40Y2J944AojOXKoTzQ/ybTFY4GP5G8KWY6+NWyRT8=";
+    repo = "google-cloud-python";
+    tag = "db-dtypes-v${version}";
+    hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
   };
+
+  sourceRoot = "${src.name}/packages/db-dtypes";
 
   build-system = [ setuptools ];
 
@@ -31,21 +33,14 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  nativeCheckInputs = [ pytest8_3CheckHook ];
-
-  disabledTests = [
-    # ValueError: Unable to avoid copy while creating an array as requested.
-    "test_array_interface_copy"
-    # Failed: DID NOT RAISE <class 'TypeError'>
-    "test_reduce_series_numeric"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "db_dtypes" ];
 
   meta = {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
-    homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
-    changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/db-dtypes";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/db-dtypes/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
