@@ -45,8 +45,8 @@ let
         sourceRoot
         ;
       pnpm = pnpm_11;
-      fetcherVersion = 3;
-      hash = "sha256-zyY54pqlQnYdOyrNZA/WiALzdf4ZGwMLnwm6Mpb0S5k=";
+      fetcherVersion = 4;
+      hash = "sha256-jkPm7SySkzriOTcLpibJazNAzUKE48s6vBEzY7+ypBU=";
     };
 
     postBuild = ''

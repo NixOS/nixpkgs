@@ -66,6 +66,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Skip type checking
     "tests/typecheck/"
+    "ext/tests/typecheck/"
   ];
 
   pythonImportsCheck = [ "django-stubs" ];

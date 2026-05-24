@@ -77,7 +77,7 @@ buildPythonPackage {
 
   meta = {
     description = "Utilities to facilitate the installation of Python packages";
-    homepage = "https://pypi.python.org/pypi/setuptools";
+    homepage = "https://pypi.org/project/setuptools/";
     license = with lib.licenses; [
       psfl
       zpl20
