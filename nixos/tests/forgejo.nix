@@ -63,16 +63,21 @@ let
             specialisation = {
               runner = {
                 inheritParentConfig = true;
-                configuration.services.forgejo.runner = {
-                  package = pkgs.forgejo-runner;
-                  instances."test" = {
-                    enable = true;
-                    url = "http://localhost:3000";
-                    labels = [
-                      # type ":host" does not depend on docker/podman/lxc
-                      "native:host"
-                    ];
-                    registrationTokenFile = "/var/lib/forgejo/runner_token";
+                configuration = {
+                  services.forgejo.runner = {
+                    package = pkgs.forgejo-runner;
+
+                    instances = {
+                      legacy-registration = {
+                        enable = true;
+                        url = "http://localhost:3000";
+                        labels = [
+                          # type ":host" does not depend on docker/podman/lxc
+                          "native:host"
+                        ];
+                        registrationTokenFile = "/var/lib/forgejo/runner_token";
+                      };
+                    };
                   };
                 };
               };
@@ -81,7 +86,7 @@ let
                 inheritParentConfig = true;
                 configuration.services.gitea-actions-runner = {
                   package = pkgs.forgejo-runner;
-                  instances."test" = {
+                  instances.test = {
                     enable = true;
                     name = "ci";
                     url = "http://localhost:3000";
@@ -269,8 +274,8 @@ let
               )
 
               server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
-              server.wait_for_unit("forgejo-runner@test.service")
-              server.succeed("journalctl -o cat -u forgejo-runner@test.service | grep -q 'Runner registered successfully'")
+              server.wait_for_unit("forgejo-runner-legacy\\\\x2dregistration.service", timeout=10)
+              server.succeed("journalctl -o cat -u forgejo-runner-legacy\\\\x2dregistration.service | grep -q 'Runner registered successfully'")
 
               # enable actions feature for this repository, defaults to disabled
               server.succeed(
