@@ -50,6 +50,13 @@ buildNodejs {
         hash = "sha256-hSTLljmVzYmc3WAVeRq9EPYluXGXFeWVXkykufGQPVw=";
       })
     ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # libuv's kqueue poller asserts errno == EINTR after kevent() fails,
+      # but kevent() can also return EBADF or ENOENT when a file descriptor
+      # is closed while still in the changelist. This happens with pnpm in
+      # the nix build sandbox. https://github.com/libuv/libuv/issues/976
+      ./kqueue-kevent-ebadf.patch
+    ]
     ++ gypPatches
     ++ [
       ./configure-armv6-vfpv2.patch

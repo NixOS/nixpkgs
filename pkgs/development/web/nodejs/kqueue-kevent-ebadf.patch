@@ -1,0 +1,20 @@
+--- a/deps/uv/src/unix/kqueue.c
++++ b/deps/uv/src/unix/kqueue.c
+@@ -290,9 +290,14 @@
+                   ARRAY_SIZE(events),
+                   timeout == -1 ? NULL : &spec);
+
+-    if (nfds == -1)
+-      assert(errno == EINTR);
+-    else if (nfds == 0)
++    if (nfds == -1) {
++      /* kevent() can fail with EINTR (signal), EBADF (closed fd still in
++       * changelist), or ENOENT (fd removed between changelist submit and
++       * kevent call). All are transient; treat them the same as EINTR
++       * and retry after updating the timeout.
++       */
++      assert(errno == EINTR || errno == EBADF || errno == ENOENT);
++    } else if (nfds == 0)
+       /* Unlimited timeout should only return with events or signal. */
+       assert(timeout != -1);
+
