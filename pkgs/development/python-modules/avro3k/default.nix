@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Serialization and RPC framework";
     mainProgram = "avro";
-    homepage = "https://pypi.python.org/pypi/avro3k/";
+    homepage = "https://pypi.org/project/avro3k/";
     license = lib.licenses.asl20;
   };
 }
