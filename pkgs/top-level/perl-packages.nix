@@ -6865,15 +6865,16 @@ with self;
     };
   };
 
-  CryptArgon2 = buildPerlModule {
+  CryptArgon2 = buildPerlModule rec {
     pname = "Crypt-Argon2";
-    version = "0.019";
+    version = "0.031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-${version}.tar.gz";
       hash = "sha256-1l5RoZQ+6AglEkUNw1KuUpUQZswJI/u38uYK+l8WTi0=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     meta = {
+      changelog = "https://github.com/Leont/crypt-argon2/blob/v${version}/Changes";
       description = "Perl interface to the Argon2 key derivation functions";
       license = with lib.licenses; [ cc0 ];
     };
