@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "db-dtypes";
   version = "1.6.0";
   pyproject = true;
@@ -19,11 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "db-dtypes-v${version}";
+    tag = "db-dtypes-v${finalAttrs.version}";
     hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
   };
 
-  sourceRoot = "${src.name}/packages/db-dtypes";
+  sourceRoot = "${finalAttrs.src.name}/packages/db-dtypes";
 
   patches = [
     (fetchpatch {
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/db-dtypes";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/db-dtypes/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/db-dtypes/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
