@@ -45,13 +45,9 @@ stdenv.mkDerivation rec {
   patches = [
     ./mark-paths.patch # mark paths for later substitution in postPatch
   ]
-  ++ lib.optional stdenv.hostPlatform.isAarch64 (fetchpatch {
-    # backport upstream patch for aarch64 glibc 2.34
-    url = "https://gitlab.com/freepascal.org/fpc/source/-/commit/a20a7e3497bccf3415bf47ccc55f133eb9d6d6a0.patch";
-    hash = "sha256-xKTBwuOxOwX9KCazQbBNLhMXCqkuJgIFvlXewHY63GM=";
-    stripLen = 1;
-    extraPrefix = "fpcsrc/";
-  });
+  ++ lib.optional (
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin
+  ) ./darwin-aarch64-no-fpcr-exception-traps.patch;
 
   postPatch = ''
     # substitute the markers set by the mark-paths patch
@@ -74,6 +70,9 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # SYSROOTPATH prevents the Makefile from hardcoding /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+    export SYSROOTPATH="$SDKROOT"
+
     NIX_LDFLAGS="-syslibroot $SDKROOT -L${lib.getLib libiconv}/lib"
   '';
 
