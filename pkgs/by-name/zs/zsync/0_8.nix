@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,6 +25,8 @@ buildGoModule (finalAttrs: {
     "cmd/*"
     "internal/*"
   ];
+
+  passthru.tests = nixosTests.zsync;
 
   meta = {
     description = "File distribution system using the rsync algorithm";

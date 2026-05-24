@@ -5,6 +5,8 @@
   autoreconfHook,
   openssl,
   perl,
+
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
