@@ -2,33 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cargo,
   rustPlatform,
-  rustc,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ast-serialize";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mypyc";
     repo = "ast_serialize";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R5hNpbJjKKZDOKQCdGZQ+0iW5vdh5CzSgzORESh4bDU=";
+    hash = "sha256-GmhbMraI16J6ePtn7lXAWaJ+9zDH1GdebKIAzm5w9ok=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-uhUMaUkaL57X8CVy6T9pCQa62IsOeKN/dhZTPVXSn14=";
+    hash = "sha256-h+BklNeoQaRVWczsE9sFXgvFrnHW5vjWOVaOvLghv0U=";
   };
 
   build-system = [
-    cargo
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    rustc
   ];
 
   pythonImportsCheck = [
