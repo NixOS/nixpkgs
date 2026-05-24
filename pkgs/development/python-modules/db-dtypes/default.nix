@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   numpy,
   packaging,
   pandas,
@@ -23,6 +24,15 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/packages/db-dtypes";
+
+  patches = [
+    (fetchpatch {
+      name = "support-pandas-3.0.patch";
+      url = "https://github.com/googleapis/google-cloud-python/commit/2086b34d8b3418462c9bc89b96eac779a25a3afd.patch";
+      relative = "packages/db-dtypes";
+      hash = "sha256-0NvbTCnr95IW7rkQVu3iUDsNXU/LzXhJwwSDdliFZ+Y=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
