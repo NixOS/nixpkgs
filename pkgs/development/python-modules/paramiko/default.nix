@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paramiko";
   version = "5.0.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "paramiko";
     repo = "paramiko";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zzbM2oGaZ5jkIN7LyDGuMAKSpSmUwpBbup6MBVdTaXA=";
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/paramiko/paramiko/";
-    changelog = "https://github.com/paramiko/paramiko/blob/${src.tag}/sites/www/changelog.rst";
+    changelog = "https://github.com/paramiko/paramiko/blob/${finalAttrs.src.tag}/sites/www/changelog.rst";
     description = "Native Python SSHv2 protocol library";
     license = lib.licenses.lgpl21Plus;
     longDescription = ''
@@ -55,4 +55,4 @@ buildPythonPackage rec {
       supported. SFTP client and server mode are both supported too.
     '';
   };
-}
+})
