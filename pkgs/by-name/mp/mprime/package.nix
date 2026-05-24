@@ -81,14 +81,18 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   buildPhase = ''
+    runHook preBuild
     make -C gwnum -f ${gwnum} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
     make -C ${srcDir} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 -t $out/bin ${srcDir}/mprime
 
     install -Dm444 -t $out/${docDir} license.txt readme.txt stress.txt undoc.txt
+    runHook postInstall
   '';
 
   meta = {
