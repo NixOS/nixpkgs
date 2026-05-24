@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,10 +14,11 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-jOcl+mo6CJ9Lnn3nAUiXXHCJssovVgLoPrbGxj4uzQs=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
     install -m444 -Dt $out/share/doc/${pname}-${version} README *.txt
 
     runHook postInstall
