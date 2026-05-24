@@ -6,6 +6,7 @@
   ncurses,
   readline,
   unixtools,
+  groff,
   enableReadline ? true,
 }:
 
@@ -20,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     hash = "sha256-dPEj32SiR7RhI9fBa9ny9+EEuuiXS2WswRcDVuOMJXc=";
   };
+
+  patches = [
+    ./fix-usage-generation.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makefile.target \
@@ -39,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "T=$(out)"
+    "NROFF=${lib.getExe' groff "nroff"}"
     "INCDIR="
     "BINDIR=/bin"
     "LIBDIR=/lib"

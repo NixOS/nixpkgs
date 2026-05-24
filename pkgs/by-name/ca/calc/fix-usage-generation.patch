@@ -1,0 +1,11 @@
+diff --git a/Makefile b/Makefile
+index b12766d..abc2c95 100644
+--- a/Makefile
++++ b/Makefile
+@@ -536,7 +536,7 @@ calc.usage: calc.1 ${MK_SET}
+ 	    LESSCHARSET=iso8859 ${CALCPAGER} calc.1; \
+ 	else \
+ 	    ${NROFF} -man calc.1; \
+-	fi 2>&1 | ${GREP} -E -v 'cannot adjust line' | ${COL} -b > $@
++	fi 2>&1 | ${GREP} -E -v 'cannot adjust line' > $@
+ 	${Q} echo calc.usage formed
