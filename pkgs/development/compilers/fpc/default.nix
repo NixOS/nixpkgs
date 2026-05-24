@@ -39,21 +39,14 @@ stdenv.mkDerivation rec {
     gawk
   ];
 
-  glibc = stdenv.cc.libc.out;
-
-  # Patch paths for linux systems. Other platforms will need their own patches.
-  patches = [
-    ./mark-paths.patch # mark paths for later substitution in postPatch
-  ]
-  ++ lib.optional (
+  # Darwin/AArch64: SysInitFPU enables FPCR exception traps, but AppKit
+  # executes FP ops that trap during NSWindow init. CLEAR the trap-enable
+  # bits after setting them. is equivalent to calling Math.SetExceptionMask.
+  patches = lib.optional (
     stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin
   ) ./darwin-aarch64-no-fpcr-exception-traps.patch;
 
   postPatch = ''
-    # substitute the markers set by the mark-paths patch
-    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by dynlinker-prefix "${glibc}"
-    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
-
     substituteInPlace fpcsrc/compiler/systems/t_darwin.pas \
       --replace-fail "LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib',true)" "LibrarySearchPath.AddLibraryPath(sysrootpath,'$SDKROOT/usr/lib',true)"
 
@@ -94,6 +87,15 @@ stdenv.mkDerivation rec {
     # to resolve the location of /etc
     mkdir -p $out/etc
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/etc
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Point the installed compiler to glibc in the Nix store via fpc.cfg.
+    for cfg in "$out/lib/fpc/etc/fpc.cfg" "$out/etc/fpc.cfg"; do
+      printf "%s\n" \
+        "-Fl${stdenv.cc.libc.out}/lib" \
+        "-Xd${stdenv.cc.libc.out}/lib/$(cd "${stdenv.cc.libc.out}/lib" && echo ld-linux*.so.*)" \
+        >> "$cfg"
+    done
   '';
 
   passthru = {
