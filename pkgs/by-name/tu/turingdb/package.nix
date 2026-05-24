@@ -28,13 +28,13 @@ let
 in
 turingstdenv.mkDerivation (finalAttrs: {
   pname = "turingdb";
-  version = "1.31";
+  version = "1.32";
 
   src = fetchFromGitHub {
     owner = "turing-db";
     repo = "turingdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dorRoDWylZo/QRJbqEZOUf+JNHSKCIi/s8wxZ2HwZsI=";
+    hash = "sha256-cpaMX7TUdUl6hJTFz1UQ7cmgE6cb7sKIMdT55jRO5Bo=";
 
     fetchSubmodules = true;
 
