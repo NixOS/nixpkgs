@@ -460,8 +460,7 @@ optionalAttrs allowAliases aliases
 
   toml =
     { }:
-    json { }
-    // {
+    {
       type = types.toml;
 
       generate =
