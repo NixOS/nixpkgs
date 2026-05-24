@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiocomelit";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiocomelit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EB07sAGSyTpsCNH8xwOuHBYhQyajBnZBP+8WCLBq7i4=";
+    hash = "sha256-E5hI3PGNmJxly5RvOsV4DsGxOLsdfYppcMSTcoX0ohQ=";
   };
 
   build-system = [ setuptools ];

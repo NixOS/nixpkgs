@@ -1,8 +1,8 @@
 {
   stdenv,
+  pnpm,
   lib,
   fetchFromGitHub,
-  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,

@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ] ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
   buildInputs = [
     openssl
+    expat
   ]
-  ++ (if enableGui then [ libsForQt5.qtcharts ] else [ expat ])
-  ++ lib.optional stdenv.hostPlatform.isDarwin expat;
+  ++ lib.optional enableGui libsForQt5.qtcharts;
 
   configureFlags = [
     "--with-libssl"
@@ -50,9 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
       [ "--disable-gui" ]
   );
 
-  installPhase = lib.optional stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/bin
-    cp -R src/ophcrack $out/bin
+  installPhase = lib.optional (stdenv.hostPlatform.isDarwin && enableGui) ''
+    mkdir -p $out/Applications
+    cp -R src/ophcrack.app $out/Applications/ophcrack.app
   '';
 
   meta = {

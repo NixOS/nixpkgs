@@ -13,6 +13,7 @@
   buildPackages,
 
   # Run time
+  bashNonInteractive,
   readline,
   expat,
   libipt,
@@ -47,6 +48,7 @@
     (lib.getLib targetPackages.stdenv.cc.cc)
   ],
   writeScript,
+  versionCheckHook,
 }:
 
 let
@@ -109,9 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
     perl
     setupDebugInfoDirs
-  ];
+  ]
+  ++ optional pythonSupport python3;
 
   buildInputs = [
+    bashNonInteractive # for shebangs of gcore, gdb-add-index, gstack
     ncurses
     readline
     expat
@@ -126,7 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional withTui ncurses
   ++ optional withMpfr mpfr
   ++ optional withGmp gmp
-  ++ optional pythonSupport python3
   ++ optional withGuile guile
   ++ optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
   ++ optional stdenv.hostPlatform.isDarwin libiconv;
@@ -134,6 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -182,9 +187,9 @@ stdenv.mkDerivation (finalAttrs: {
     (withFeature true "system-readline")
     (withFeature true "system-zlib")
     (withFeature true "expat")
-    (withFeatureAs true "libexpat-prefix" "${expat.dev}")
-    (withFeatureAs withGmp "gmp" "${gmp.dev}")
-    (withFeatureAs withMpfr "mpfr" "${mpfr.dev}")
+    (withFeatureAs true "libexpat-prefix" expat.dev)
+    (withFeatureAs withGmp "gmp" gmp.dev)
+    (withFeatureAs withMpfr "mpfr" mpfr.dev)
     (withFeature pythonSupport "python")
     (withFeature withGuile "guile")
     (enableFeature enableSim "sim")
@@ -206,6 +211,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove Info files already provided by Binutils and other packages.
     rm -v $out/share/info/bfd.info
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = writeScript "update-gdb" ''

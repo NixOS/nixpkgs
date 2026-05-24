@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     # mkDerivation's splicing logic from kicking in.
     "${glib.dev}"
   ]
-  ++ optional enableAirplay2 [
+  ++ optionals enableAirplay2 [
     libplist.bin
     unixtools.xxd
   ];

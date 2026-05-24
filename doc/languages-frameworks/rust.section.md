@@ -871,6 +871,15 @@ general. A number of other parameters can be overridden:
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
+- Extra arguments passed to `rustc` when the crate is a proc-macro,
+  replacing `extraRustcOpts`. Useful to keep instrumentation flags
+  (sanitizers, coverage) off host dylibs. Defaults to `null`, which
+  inherits `extraRustcOpts`:
+
+  ```nix
+  (myProcMacro { }).override { extraRustcOptsForProcMacro = [ ]; }
+  ```
+
 - The lint level cap passed to `rustc`. Defaults to `null`, which
   auto-resolves to `"allow"` (silences all lints) when `lints` is
   empty, or `"forbid"` (no cap) when `lints` is set. Because `rustc`

@@ -17,6 +17,9 @@
   discord-development,
   buildWebExtension ? false,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
   version = "1.14.13";
@@ -42,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       postPatch
       ;
-    pnpm = pnpm_10;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-hk1rnNog5xvuIVI0M1ZJ5xrEuk0zcBiYsbROUycdi+A=";
   };
@@ -51,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     git
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
   ];
 
   env = {

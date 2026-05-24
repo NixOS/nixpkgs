@@ -399,7 +399,6 @@ in
   imports = [
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
-    ./guest-networking-options.nix
     (mkRenamedOptionModule
       [
         "virtualisation"

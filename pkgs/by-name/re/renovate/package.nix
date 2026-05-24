@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     cctools # contains libtool, required by better-sqlite3
   ];

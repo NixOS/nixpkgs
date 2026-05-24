@@ -10,23 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tTPm/2ftCz0G6ytkzsyzQiJDWp48f9nzzY/J2Z1TZjo=";
+    hash = "sha256-P/wfvKRAvqRgUJabVE9RvT4o3fNZ52JX48hXm3C3orI=";
   };
 
-  vendorHash = "sha256-/3c1J0i0hr309G7iEmtnc24reqH17Q9E5dxOPufmYQc=";
-
-  overrideModAttrs = old: {
-    # https://gitlab.com/cznic/libc/-/merge_requests/10
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  vendorHash = "sha256-dD21m6tlwkZkclYOcYUNlsPXxYmLggjrFTv9XctCIt0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

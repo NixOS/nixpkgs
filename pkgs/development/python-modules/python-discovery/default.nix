@@ -18,14 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-discovery";
-  version = "1.2.2";
+  version = "1.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "python-discovery";
     tag = finalAttrs.version;
-    hash = "sha256-udyPGZ3vz+1nld2m3igLNZ+i1pnutkLeXFpHn738KRQ=";
+    hash = "sha256-n1clHxiQIEhtT4Zwn+sziFqyc828kf5Box3lIAqbddU=";
   };
 
   build-system = [

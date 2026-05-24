@@ -94,6 +94,7 @@ mapAliases {
   async_stagger = throw "'async_stagger' has been renamed to/replaced by 'async-stagger'"; # Converted to throw 2025-10-29
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
   atsim_potentials = throw "'atsim_potentials' has been renamed to/replaced by 'atsim-potentials'"; # Converted to throw 2025-10-29
+  aubio = throw "'aubio' only direct user LedFX switched to a fork named 'aubio-ledfx', hence the aubio package has been replaced."; # Added 2026-04-20
   audio-metadata = throw "'audio-metadata' has been removed as it's unmaintained since 2020"; # Added 2026-03-12
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   av_13 = throw "'av_13' has been renamed to/replaced by 'av'"; # Added 2026-02-01
@@ -154,6 +155,7 @@ mapAliases {
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
   django-cryptography = throw "'django-cryptography' has been removed as it was unmaintained upstream"; # Added 2026-03-22
+  django-mdeditor = throw "'django-mdeditor' has been removed as it was unmaintained upstream and the latest release was vulnerable"; # Added 2026-05-02
   django-modelsearch = modelsearch; # added 2026-03-02
   django_3 = throw "Django 3 has reached it's EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
   django_4 = throw "Django 4 has reached it's EOL in 2026-04 and has therefore been removed."; # added 2026-03-30
@@ -314,6 +316,7 @@ mapAliases {
   llama-index-readers-llama-parse = throw "'llama-index-readers-llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25
   llama-parse = throw "'llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25
   llamaindex-py-client = throw "'llamaindex-pyclient' has been removed as it was removed from upstream"; # Added 2026-04-03
+  llfuse = throw "'llfuse' hase been removed, as it depends on fuse2, and is no longer developed. Please use 'mfusepy' instead"; # Added 2026-05-20
   lmcloud = throw "'lmcloud' has been renamed to/replaced by 'pylamarzocco'"; # Converted to throw 2025-10-29
   logilab_common = throw "'logilab_common' has been renamed to/replaced by 'logilab-common'"; # Converted to throw 2025-10-29
   loo-py = throw "'loo-py' has been renamed to/replaced by 'loopy'"; # Converted to throw 2025-10-29
@@ -479,6 +482,7 @@ mapAliases {
   python-Levenshtein = throw "'python-Levenshtein' has been renamed to/replaced by 'levenshtein'"; # Converted to throw 2025-10-29
   python-lz4 = throw "'python-lz4' has been renamed to/replaced by 'lz4'"; # Converted to throw 2025-10-29
   python-mbedtls = throw "'python-mbedtls' has been removed as it is unmaintained";
+  python-openzwave = throw "python-openzwave was removed because openzwave is no longer maintained upstream. Consider using python3Packages.zwave-js-server-python"; # Added 2026-05-14
   python-qt = throw "python-qt has been removed, because hard to maintain and not required by anything"; # Added 2025-01-14
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = throw "'python-subunit' has been renamed to/replaced by 'subunit'"; # Converted to throw 2025-10-29
@@ -488,7 +492,7 @@ mapAliases {
   python_fedora = throw "'python_fedora' has been renamed to/replaced by 'python-fedora'"; # Converted to throw 2025-10-29
   python_magic = throw "'python_magic' has been renamed to/replaced by 'python-magic'"; # Converted to throw 2025-10-29
   python_mimeparse = throw "'python_mimeparse' has been renamed to/replaced by 'python-mimeparse'"; # Converted to throw 2025-10-29
-  python_openzwave = throw "'python_openzwave' has been renamed to/replaced by 'python-openzwave'"; # Converted to throw 2025-10-29
+  python_openzwave = throw "python-openzwave was removed because openzwave is no longer maintained upstream. Consider using python3Packages.zwave-js-server-python"; # Converted to throw 2025-10-29
   python_simple_hipchat = throw "'python_simple_hipchat' has been renamed to/replaced by 'python-simple-hipchat'"; # Converted to throw 2025-10-29
   pythonix = throw "pythonix was removed as it was unmaintained since 2022"; # added 2025-07-24
   pytorch = throw "'pytorch' has been renamed to/replaced by 'torch'"; # Converted to throw 2025-10-29
@@ -580,6 +584,7 @@ mapAliases {
   systembridge = throw "systembridge has been removed because it is unmaintained upstream"; # Added 2025-11-23
   systemd = throw "systemd was removed because it was misnamed; use systemd-python instead"; # added 2025-11-09
   sysv_ipc = throw "'sysv_ipc' has been renamed to/replaced by 'sysv-ipc'"; # Converted to throw 2025-10-29
+  tbats = throw "'tbats' has been removed due to lack of upstream maintenance"; # Added 2026-05-11
   tbm-utils = throw "'tbm-utils' has been removed as it is unmaintained since 2020"; # Added 2026-03-12
   tensorflow-bin_2 = throw "'tensorflow-bin_2' has been renamed to/replaced by 'tensorflow-bin'"; # Converted to throw 2025-10-29
   tensorflow-build_2 = throw "'tensorflow-build_2' has been renamed to/replaced by 'tensorflow-build'"; # Converted to throw 2025-10-29
@@ -612,6 +617,7 @@ mapAliases {
   ufoLib2 = throw "'ufoLib2' has been renamed to/replaced by 'ufolib2'"; # Converted to throw 2025-10-29
   unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
+  unittest-data-provider = throw "'unittest-data-provider' has been removed as it was unused, unmaintained, and upstream suggests 'pytest parameterize' instead."; # Added 2026-05-22
   update_checker = throw "'update_checker' has been renamed to/replaced by 'update-checker'"; # Converted to throw 2025-10-29
   vcver = throw "vcver has been removed, since it was an unused leaf package"; # added 2025-08-25
   vega_datasets = throw "'vega_datasets' has been renamed to/replaced by 'vega-datasets'"; # Converted to throw 2025-10-29
@@ -636,6 +642,7 @@ mapAliases {
   z3 = throw "'z3' has been renamed to/replaced by 'z3-solver'"; # Converted to throw 2025-10-29
   zc-buildout221 = throw "'zc-buildout221' has been renamed to/replaced by 'zc-buildout'"; # Converted to throw 2025-10-29
   zc_lockfile = throw "'zc_lockfile' has been renamed to/replaced by 'zc-lockfile'"; # Converted to throw 2025-10-29
+  zebrafy = throw "'zebrafy' has been removed due to lack of upstream maintenance"; # Added 2026-05-11
   zetup = "'zetup' has been removed because it is unmaintained"; # Added 2026-01-19
   zeversolarlocal = throw "'zeversolarlocal' has been removed because it is unmaintained"; # Added 2026-01-28
   zope_component = throw "'zope_component' has been renamed to/replaced by 'zope-component'"; # Converted to throw 2025-10-29

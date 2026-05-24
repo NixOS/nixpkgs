@@ -209,12 +209,12 @@ let
             };
           }) mountable;
         };
-        passAsFile = [ "filesystems" ];
+        __structuredAttrs = true;
       }
       ''
         (
           echo "builtins.fromJSON '''"
-          jq . < "$filesystemsPath"
+          printf "%s" "$filesystems" | jq .
           echo "'''"
         ) > $out
 

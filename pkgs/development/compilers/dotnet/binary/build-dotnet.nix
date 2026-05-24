@@ -197,6 +197,8 @@ mkWrapper type (
 
     passthru = {
       inherit icu hasILCompiler;
+      # https://github.com/dotnet/sdk/pull/53405
+      hasCrossTargetBug = lib.versionAtLeast version "10";
     }
     // lib.optionalAttrs (type == "sdk") (
       let

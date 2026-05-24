@@ -8,6 +8,7 @@
   buildPackages,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch,
   flex,
   gettext,
   lib,
@@ -84,6 +85,15 @@ stdenv.mkDerivation {
     # https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=99852365513266afdd793289813e8e565186c9e6
     # https://github.com/NixOS/nixpkgs/issues/170946
     ./deterministic-temp-prefixes.patch
+
+    # Fix gcc-15 build:
+    # https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=8ebe62f3f0d27806b1bf69f301f5e188b4acd2b4
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff_plain;h=8ebe62f3f0d27806b1bf69f301f5e188b4acd2b4";
+      hash = "sha256-Od0PXWKoo9rKhveZ1rWJsdpS17fgmU2AevcVWXvWkSA=";
+      excludes = [ "opcodes/s390-opc.c" ];
+    })
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wsjtx";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "WSJTX";
     repo = "wsjtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZM46ouS4NyXP7wPsAxY7Uf2mn0CawRiRmqYkkS8yTAU=";
+    hash = "sha256-0Agm6lvzH3sgBatOBpYV3/CoyNJsO7Sw9mD/wewJ1DM=";
   };
 
   nativeBuildInputs = [

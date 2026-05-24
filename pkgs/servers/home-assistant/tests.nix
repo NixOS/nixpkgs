@@ -1,14 +1,16 @@
 {
   lib,
+  stdenv,
   home-assistant,
 }:
 
 let
   getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+  inherit (lib) concatMap;
 
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    alexa = map getComponentDeps [
+    alexa = concatMap getComponentDeps [
       "cloud"
       "frontend"
       "stream"
@@ -49,7 +51,7 @@ let
       pychromecast
     ];
     lutron_caseta = getComponentDeps "frontend";
-    mastodon = map getComponentDeps [
+    mastodon = concatMap getComponentDeps [
       "stream"
     ];
     miele = getComponentDeps "cloud";
@@ -93,10 +95,6 @@ let
   };
 
   extraDisabledTestPaths = {
-    hypontech = [
-      # outdated snapshot
-      "tests/components/hypontech/test_sensor.py::test_sensors"
-    ];
     influxdb = [
       # These tests fail because they check for the number of warnings in the
       # logs and there is an extra warning in the logs:
@@ -117,21 +115,6 @@ let
       "tests/components/minecraft_server/test_init.py"
       "tests/components/minecraft_server/test_sensor.py"
     ];
-    modem_callerid = [
-      # aioserial mock produces wrong state
-      "tests/components/modem_callerid/test_init.py::test_setup_entry"
-    ];
-    nzbget = [
-      # type assertion fails due to introduction of parameterized type
-      "tests/components/nzbget/test_config_flow.py::test_user_form"
-      "tests/components/nzbget/test_config_flow.py::test_user_form_show_advanced_options"
-      "tests/components/nzbget/test_config_flow.py::test_user_form_cannot_connect"
-      "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
-    ];
-    overseerr = [
-      # imports broken future module
-      "tests/components/overseerr/test_event.py"
-    ];
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
@@ -139,8 +122,8 @@ let
   };
 
   extraDisabledTests = {
-    conversation = [
-      # intent fixture mismatch
+    conversation = lib.optionals stdenv.hostPlatform.isAarch64 [
+      # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
     ];
     ecovacs = [
@@ -155,33 +138,37 @@ let
       # 2026.5.0: after reload device is in loaded state instead of retry state
       "test_usb_device_reactivity"
     ];
-    roborock = [
-      # Translation not found for vacuum
-      "test_clean_segments_mixed_maps"
-      "test_segments_changed_issue"
+    honeywell_string_lights = [
+      # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.honeywell_string_lights.config.abort.no_compatible_transmitters"
+      "test_no_compatible_transmitters"
     ];
-    sensor = [
-      # Failed: Translation not found for sensor
-      "test_validate_unit_change_convertible"
-      "test_validate_statistics_unit_change_no_device_class"
-      "test_validate_statistics_state_class_removed"
-      "test_validate_statistics_state_class_removed_issue_cleaned_up"
-      "test_validate_statistics_unit_change_no_conversion"
-      "test_validate_statistics_unit_change_equivalent_units_2"
-      "test_update_statistics_issues"
-      "test_validate_statistics_mean_type_changed"
+    lutron_caseta = [
+      # [2026.5.4] creates binary_sensor.basement_bedroom_left_shade_battery
+      #            expects binary_sensor.basement_bedroom_basement_bedroom_left_shade_battery
+      "test_battery_sensor_handles_bridge_response_error"
     ];
-    shell_command = [
-      # tries to retrieve file from github
-      "test_non_text_stdout_capture"
+    novy_cooker_hood = [
+      # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.novy_cooker_hood.config.abort.no_compatible_transmitters
+      "test_no_compatible_transmitters"
     ];
-    vacuum = [
-      # Translation not found for vacuum
-      "test_segments_changed_issue"
+    tractive = [
+      # [2026.5.3] Entity does not get set up
+      "test_binary_sensor"
+      "test_sensor"
+      "test_switch"
+      "test_switch_on"
+      "test_switch_off"
+      "test_switch_on_with_exception"
+      "test_switch_off_with_exception"
+      "test_switch_unavailable"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
       "test_subscribe_discovery"
+    ];
+    zha = [
+      # [2026.5.2] assert <HardwareType.OTHER: 'other'> == <HardwareType... 'skyconnect'>
+      "test_detect_radio_hardware"
     ];
   };
 in

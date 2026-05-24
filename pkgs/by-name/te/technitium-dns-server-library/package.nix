@@ -7,17 +7,17 @@
 }:
 buildDotnetModule rec {
   pname = "technitium-dns-server-library";
-  version = "14.3.0";
+  version = "15.2.0";
 
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "TechnitiumLibrary";
     tag = "dns-server-v${version}";
-    hash = "sha256-Z8qGp9zMsmPNroO2cS7t7A4lwQ7pnGdzCAcCCEYoXrE=";
+    hash = "sha256-PC8j7JT4JiisGGfHORke63boLC4W1gLoaQQ3jPz5Qtc=";
     name = "${pname}-${version}";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   nugetDeps = ./nuget-deps.json;
 
@@ -35,7 +35,10 @@ buildDotnetModule rec {
     homepage = "https://github.com/TechnitiumSoftware/DnsServer";
     license = lib.licenses.gpl3Only;
     mainProgram = "technitium-dns-server-library";
-    maintainers = with lib.maintainers; [ fabianrig ];
+    maintainers = with lib.maintainers; [
+      fabianrig
+      awildleon
+    ];
     platforms = lib.platforms.linux;
   };
 }

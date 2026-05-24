@@ -84,8 +84,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # require network access
-    "test_pdb_from_url"
+    "test_load_pdb_from_url"
+    "test_load_from_url"
     "test_1vii_url_and_gz"
+    "test_1vii_load_from_mixture"
     "test_3"
 
     # fail due to data race

@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   ocamlPackages,
+  darwin,
   dune,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation {
@@ -22,12 +24,16 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = with ocamlPackages; [
-    dune
-    findlib
-    menhir
-    ocaml
-  ];
+  nativeBuildInputs =
+    with ocamlPackages;
+    [
+      dune
+      findlib
+      menhir
+      ocaml
+      writableTmpDirAsHomeHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = with ocamlPackages; [
     ansiterminal
@@ -53,6 +59,13 @@ stdenv.mkDerivation {
   installPhase = ''
     dune install -p acgtk --prefix $out --libdir $OCAMLFIND_DESTDIR
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^release-(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     homepage = "https://acg.loria.fr/";

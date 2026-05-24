@@ -101,6 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PORTABLE" true)
     (lib.cmakeBool "USE_PCH" false)
     (lib.cmakeBool "BUILD_FFTPACK_DEPRECATED" true) # Needed for casacpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Upstream probes this flag, but it fails on darwin, so pass it explicitly
+    (lib.cmakeFeature "CMAKE_Fortran_FLAGS" "-fallow-argument-mismatch")
   ];
 
   meta = {

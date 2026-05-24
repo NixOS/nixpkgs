@@ -46,7 +46,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/brimdata/zed/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      dit7ya
       knl
     ];
   };

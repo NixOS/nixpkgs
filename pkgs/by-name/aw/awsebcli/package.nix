@@ -27,7 +27,7 @@ in
 
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awsebcli";
-  version = "3.27.1";
+  version = "3.27.2";
   pyproject = true;
   doInstallCheck = true;
 
@@ -35,7 +35,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = finalAttrs.version;
-    hash = "sha256-5SmV+V+B3GYDnuOH8abh+NzGTZpMId41ZrJ7Fr6cXZo=";
+    hash = "sha256-hTRgNqccwbXxpS4F+JD2h19N/U671NjCBEMiDp6Jbio=";
   };
 
   pythonRelaxDeps = [

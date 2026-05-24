@@ -130,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
         "shutdown_close_pipe"
       ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # ENETUNREACH when performed in jailed build env
+        "tcp_connect"
+        "udp_connect"
+        "connect_unspecified"
         # EOPNOTSUPP when performed in jailed build env
         "tcp_reuseport"
         "udp_reuseport"

@@ -2,35 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   ninja,
   qt6,
   spdlog,
-  zlib-ng,
-  minizip-ng,
+  zlib,
   libbass,
   libbassmidi,
+  xz,
+  libchdr,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vgmtrans";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "vgmtrans";
     repo = "vgmtrans";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HVC45B1DFThZRkPVrroiay+9ufkOrTMUZoNIuC1CjjM=";
+    hash = "sha256-eI+AFZtw8+IND6bLytUZN7lPHe03LoqLnpP6SCnvQyQ=";
   };
-
-  patches = [
-    # https://github.com/vgmtrans/vgmtrans/pull/567
-    (fetchpatch2 {
-      name = "fix-version-string.patch";
-      url = "https://github.com/vgmtrans/vgmtrans/commit/5ad8a60a19476d2ae9a7c409b83ab6d5e1ff827f.patch?full_index=1";
-      hash = "sha256-I5ykYzj3tUBQ2e3TAnCm5Ry1Hmmi2IVneFQCe5/JV/A=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -43,22 +34,30 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     libbass
     libbassmidi
+    xz
+    zlib
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
   ];
 
   preConfigure = ''
-    rm -r lib/{spdlog,zlib-ng,minizip-ng}
+    rm -r lib/{spdlog,libchdr}
     ln -s ${spdlog.src} lib/spdlog
-    ln -s ${zlib-ng.src} lib/zlib-ng
-    ln -s ${minizip-ng.src} lib/minizip-ng
+    ln -s ${libchdr.src} lib/libchdr
+    tar xzf ${zlib.src} --strip-components=1 -C lib/zlib
   '';
 
   meta = {
     description = "Tool to convert proprietary, sequenced videogame music to industry-standard formats";
     homepage = "https://github.com/vgmtrans/vgmtrans";
-    license = with lib.licenses; [
-      zlib
-      libpng
-      bsd3 # oki_adpcm_state
+    license = [
+      # it has been previously observed that package inputs will override licenses with the same name
+      # it is imperative to not use `with lib.license` here.
+      lib.licenses.zlib
+      lib.licenses.libpng
+      lib.licenses.bsd3 # oki_adpcm_state
     ];
     # See CMakePresets.json
     platforms = [

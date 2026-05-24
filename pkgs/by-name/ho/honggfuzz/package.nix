@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   makeWrapper,
   clang,
   llvm,
@@ -10,26 +9,19 @@
   libopcodes,
   libunwind,
   libblocksruntime,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "honggfuzz";
-  version = "2.6";
+  version = "2.6-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "honggfuzz";
-    rev = finalAttrs.version;
-    sha256 = "sha256-/ra6g0qjjC8Lo8/n2XEbwnZ95yDHcGhYd5+TTvQ6FAc=";
+    rev = "48790f7b18f30ba4a95272ea290b720662ed56c9";
+    hash = "sha256-RHNOZF5ttqdh3daGGVRHkvL9g2aZFDGDmmW056ohI6w=";
   };
-
-  patches = [
-    # [PATCH] mangle: support gcc-15 with __attribute__((nonstring))
-    (fetchpatch2 {
-      url = "https://github.com/google/honggfuzz/commit/4cfa62f4fdb56e3027c1cb3aecf04812e786f0fd.patch?full_index=1";
-      hash = "sha256-79/GZfqTH1o/21P7At5ZPmvcCSYWAsVakSv5dNCT+XI=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace hfuzz_cc/hfuzz-cc.c \
@@ -65,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp libhfcommon/libhfcommon.a $out/lib
     cp libhfnetdriver/libhfnetdriver.a $out/lib
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "[0-9]*";
+  };
 
   meta = {
     description = "Security oriented, feedback-driven, evolutionary, easy-to-use fuzzer";

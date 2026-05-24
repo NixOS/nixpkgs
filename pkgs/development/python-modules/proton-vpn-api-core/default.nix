@@ -119,7 +119,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       anthonyroussel
-      sebtm
       rapiteanu
     ];
   };

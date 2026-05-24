@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
-  version = "4.35.0-1";
+  version = "4.36.0-1";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sz/pIV7eV/lZe6Wckao+frf8HUcWnAVBAV2+gC5KJ3U=";
+    hash = "sha256-H4NMSjSOSmkM9lDcbsEBOB6AM5GBRKUoCDWm5QbaS3g=";
   };
 
   nativeBuildInputs = [

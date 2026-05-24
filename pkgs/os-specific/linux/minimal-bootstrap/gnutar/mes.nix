@@ -55,6 +55,7 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out
 
     # Build
+    # NOTE: parallel build (-j) breaks gnutar build under tcc-mes; keep serial.
     make AR="tcc -ar"
 
     # Install

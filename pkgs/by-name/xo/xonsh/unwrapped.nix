@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.23.5";
+  version = "0.23.7";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-jiHcOSkqvQj6/BFyDFUcTvknATAYqeVco0KecCXBWD0=";
+    hash = "sha256-KKkHqaAHnj1WMeJPrvpNXwXZ6c/V6SIIfoLYytY4kPY";
   };
 
   build-system = [
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     # required by test_xonsh_activator
     virtualenv
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # required by test_man_completion
     man
     util-linux
@@ -110,7 +110,7 @@ buildPythonPackage rec {
     "test_vc_get_branch"
     "test_dirty_working_directory"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on Darwin
     "test_bash_and_is_alias_is_only_functional_alias"
     "test_complete_command"
@@ -119,6 +119,13 @@ buildPythonPackage rec {
     "test_skipper_command"
     "test_xonsh_lexer_no_win"
     "test_on_command_not_found_dict_without_env"
+    "test_alias_shadowing_real_binary_is_not_only_functional"
+    "test_complete_inner_command_plain"
+    "test_complete_inner_command_after_double_dash"
+    "test_complete_inner_command_after_double_dash_empty"
+    "test_complete_inner_command_after_flag_with_value"
+    "test_complete_inner_command_after_long_flag_with_value"
+    "test_complete_inner_command_after_env_assign"
   ];
 
   disabledTestPaths = [

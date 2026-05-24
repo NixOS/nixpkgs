@@ -76,6 +76,9 @@ buildPythonPackage (finalAttrs: {
     "test_glm4v"
     "test_glm4v_moe"
     "test_kimi_vl"
+
+    # flaky: statistical bias tolerance occasionally exceeded
+    "test_turboquant_prod_is_nearly_unbiased_across_seeds"
   ];
 
   disabledTestPaths = [

@@ -731,7 +731,7 @@ let
             ;
 
           debsFlat = lib.flatten debs;
-          debsGrouped = debs;
+          debsGrouped = map toString debs;
 
           preVM = createEmptyImage { inherit size fullName; };
 

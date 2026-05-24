@@ -402,6 +402,29 @@ rec {
         done
       '';
 
+  # verify that l3build works correctly
+  l3build =
+    runCommand "texlive-test-l3build"
+      {
+        nativeBuildInputs = [ (texliveSmall.withPackages (ps: [ ps.l3build ])) ];
+      }
+      ''
+        cat >>build.lua <<EOF
+        module = "texlive-test-l3build"
+        typesetfiles = {"*.tex"}
+        EOF
+
+        cat >>test-l3build.tex <<EOF
+        \documentclass{article}
+        \begin{document}
+        l3build ran successfully.
+        \end{document}
+        EOF
+
+        l3build doc
+        l3build install --full --texmfhome "$out"
+      '';
+
   # verify that the restricted mode gets enabled when
   # needed (detected by checking if it disallows --gscmd)
   repstopdf =

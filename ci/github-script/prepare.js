@@ -181,9 +181,9 @@ module.exports = async ({ github, context, core, dry }) => {
           event: 'REQUEST_CHANGES',
           reviewKey,
         })
+      } else {
+        await dismissReviews({ github, context, core, dry, reviewKey })
       }
-    } else {
-      await dismissReviews({ github, context, core, dry, reviewKey })
     }
 
     let mergedSha, targetSha

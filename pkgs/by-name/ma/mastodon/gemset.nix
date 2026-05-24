@@ -247,10 +247,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0cl2qpvwiffym62z991ynks7imsm87qmgxf0yfsmlwzkgi9qcaa6";
+      sha256 = "1by7h2lwziiblizpd5yx87jsq8ppdhzvwf08ga34wzqgcv1nmpvz";
       type = "gem";
     };
-    version = "2.8.7";
+    version = "2.9.0";
   };
   aes_key_wrap = {
     groups = [ "default" ];
@@ -910,10 +910,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0ilmy9wgy57nj3zgal4j4vqx15sc7if7yavvah8wwjnw3h2nbh64";
+      sha256 = "1hacqyck22k7g9qr9n5wwq32vg02hwwjv7kqxrb4xrslb2wg41fn";
       type = "gem";
     };
-    version = "5.0.3";
+    version = "5.0.4";
   };
   devise-two-factor = {
     dependencies = [
@@ -2332,10 +2332,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0i24prs7yy1p1zdps2x1ksb7lmvbn2f0llxwdjdw3z2ksddx136b";
+      sha256 = "012snp6vxhclyjna9srdwzarvz8nvm3g18r4fddidm35il0wm40m";
       type = "gem";
     };
-    version = "0.5.12";
+    version = "0.5.14";
   };
   net-ldap = {
     dependencies = [
@@ -2421,10 +2421,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0mhp90nf3g3yy5vgjnwd34czi6rbi0p7057vgngfmmdkknsxiz9q";
+      sha256 = "1s30b7h7qpyim30m8060xs415mbr3ci7i5hdg09chh1aqfx2qcbq";
       type = "gem";
     };
-    version = "1.19.2";
+    version = "1.19.3";
   };
   oj = {
     dependencies = [

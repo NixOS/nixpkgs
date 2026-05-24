@@ -62,7 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
       "varmod-localtime"
     ]
     # TODO: drop the name-conditioning on stdenv rebuild
-    ++ lib.optional (stdenv.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin") "export"
+    ++ lib.optional (
+      stdenv.hostPlatform.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin"
+    ) "export"
   );
 
   strictDeps = true;

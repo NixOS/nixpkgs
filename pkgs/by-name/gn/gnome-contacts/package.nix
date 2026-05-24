@@ -23,6 +23,8 @@
   meson,
   ninja,
   libadwaita,
+  libglycin,
+  libglycin-gtk4,
   gsettings-desktop-schemas,
   gst_all_1,
   pipewire,
@@ -30,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-contacts";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major finalAttrs.version}/gnome-contacts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JfIcZ7wp133vLZzT4i0oRg0StH/ySKIBdzG1TbSF5K8=";
+    hash = "sha256-KjvqNDFxviRPErfCGkDKOOmpLeqYkDk69eisE5vA2rM=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     folks
     libadwaita
+    libglycin
+    libglycin-gtk4
     libxml2
     gnome-online-accounts
     qrencode

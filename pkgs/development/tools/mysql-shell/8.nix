@@ -75,6 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-literal-operator";
+    }
+    // lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+    };
+
   nativeBuildInputs = [
     pkg-config
     cmake

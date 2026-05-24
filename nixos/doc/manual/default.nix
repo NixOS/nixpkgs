@@ -250,17 +250,17 @@ rec {
             </chapter>
           </book>
         '';
-        passAsFile = [ "doc" ];
+        __structuredAttrs = true;
       }
       ''
         # Generate the epub manual.
         dst=$out/${common.outputPath}
 
-        xsltproc \
+        printf "%s" "$doc" | xsltproc \
           --param chapter.autolabel 0 \
           --nonet --xinclude --output $dst/epub/ \
           ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
-          $docPath
+          -
 
         echo "application/epub+zip" > mimetype
         manual="$dst/nixos-manual.epub"

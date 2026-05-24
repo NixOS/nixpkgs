@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    lib.forEach selectedExtensions (x: x.buildInputs)
+    lib.concatMap (x: x.buildInputs) selectedExtensions
     ++ selectedExtensions
     ++ [ caja ]
     ++ caja.buildInputs;

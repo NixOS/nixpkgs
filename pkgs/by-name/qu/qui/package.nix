@@ -6,7 +6,7 @@
   nixosTests,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   typescript,
@@ -14,12 +14,12 @@
 }:
 buildGo126Module (finalAttrs: {
   pname = "qui";
-  version = "1.18.0";
+  version = "1.19.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rdg8fcoUY7WrNXj+LZyMXx6hFo8+OGrCLjhE3JD1y4o=";
+    hash = "sha256-h6GmxwOxqh88Zy7tFD/GFQ8NrpBcanFPBXGUmfoIe3I=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -29,7 +29,7 @@ buildGo126Module (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_11
       typescript
     ];
 
@@ -42,9 +42,9 @@ buildGo126Module (finalAttrs: {
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
+      pnpm = pnpm_11;
       fetcherVersion = 3;
-      hash = "sha256-hCiIbVroyMhl2xT0WAGbmLSXfUH6RJHlC1g3isMlUJs=";
+      hash = "sha256-OEr5uyMnwP1TkSxRFNaopB9AAx2OVE7lNEzGyQwF6kc=";
     };
 
     postBuild = ''
@@ -56,7 +56,7 @@ buildGo126Module (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-7MzKE3pBvoW/ajB6gHtBBS1M/NuQsRw3ZSNtCJzrEyI=";
+  vendorHash = "sha256-pkktl+0dBSbUuxZ1ycTV0HZl/wO79LtmNaamyZ+Z9lY=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist

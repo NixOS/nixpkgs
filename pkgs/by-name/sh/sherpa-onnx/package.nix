@@ -191,6 +191,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_FALLBACK_LIBRARY_PATH=${lib.getLib onnxruntime}/lib
+  '';
+
   # Use ctest directly because the default `make check` target includes clang-tidy.
   checkPhase = ''
     runHook preCheck
@@ -202,6 +206,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $python
     cp -r ../sherpa-onnx/python/sherpa_onnx $python/
     rm $out/lib/_sherpa_onnx*.so
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -add_rpath ${lib.getLib onnxruntime}/lib \
+        $python/sherpa_onnx/lib/_sherpa_onnx*.so
+    ''}
   '';
 
   passthru = {

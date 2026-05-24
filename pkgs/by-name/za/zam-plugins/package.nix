@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zam-plugins";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "zamaudio";
     repo = "zam-plugins";
     tag = finalAttrs.version;
-    hash = "sha256-pjnhDavKnyQjPF4nUO+j1J+Qtw8yIYMY9A5zBMb4zFU=";
+    hash = "sha256-org2/YQooJoP/vQKaT0r7Kkpw+bGCfk2vKjl8HIYsag=";
     fetchSubmodules = true;
   };
 

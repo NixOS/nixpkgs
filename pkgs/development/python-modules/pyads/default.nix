@@ -44,6 +44,12 @@ buildPythonPackage rec {
   # Test suite has port reuse races and UDP timing issues on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  disabledTests = [
+    # Race over UDP 48899 (no SO_REUSEADDR), occasionally segfaulting on shutdown
+    "test_correct_route"
+    "test_get_ams"
+  ];
+
   pythonImportsCheck = [ "pyads" ];
 
   passthru.updateScript = nix-update-script {

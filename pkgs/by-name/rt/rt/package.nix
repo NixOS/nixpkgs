@@ -184,5 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
   };
 })

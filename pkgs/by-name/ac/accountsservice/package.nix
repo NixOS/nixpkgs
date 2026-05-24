@@ -8,7 +8,7 @@
   shadow,
   gobject-introspection,
   polkit,
-  systemd,
+  systemdLibs,
   coreutils,
   meson,
   mesonEmulatorHook,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     polkit
-    systemd
+    systemdLibs
     libxcrypt
   ];
 

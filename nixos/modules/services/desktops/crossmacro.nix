@@ -64,9 +64,9 @@ in
       // {
         crossmacro = {
           isSystemUser = true;
-          group = "input";
+          group = "crossmacro";
           extraGroups = [
-            "crossmacro"
+            "input"
             "uinput"
           ];
           description = "CrossMacro Input Daemon User";
@@ -93,12 +93,12 @@ in
       serviceConfig = {
         Type = "notify";
         User = "crossmacro";
-        Group = "input";
+        Group = "crossmacro";
         ExecStart = lib.getExe cfg.daemonPackage;
         Restart = "always";
         RestartSec = 5;
         RuntimeDirectory = "crossmacro";
-        RuntimeDirectoryMode = "0755";
+        RuntimeDirectoryMode = "0750";
         CapabilityBoundingSet = [
           "CAP_SYS_ADMIN"
           "CAP_SETUID"

@@ -44,7 +44,7 @@ in
   localSystem,
 
   # The system packages will ultimately be run on.
-  crossSystem ? localSystem,
+  crossSystem ? null,
 
   # Allow a configuration attribute set to be passed in as an argument.
   config ? { },
@@ -63,11 +63,6 @@ in
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
   stdenvStages ? import ../stdenv,
-
-  # Temporary parameter to unify nixpkgs/pkgs evaluation
-  # Internal, do not use this manually!
-  # Will be removed again within the next releases
-  _configDefinitions ? null,
 
   # Ignore unexpected args.
   ...
@@ -114,13 +109,7 @@ let
         then
           x86_64DarwinDeprecationWarning
         else
-          x:
-          x throwIfNot (lib.all lib.isFunction crossOverlays)
-            "All crossOverlays passed to nixpkgs must be functions."
-      )
-      (
-        throwIfNot (_configDefinitions == null || config0 == { })
-          "The `_configDefinitions` argument is an internal interface and must not be combined with `config`."
+          x: x
       );
 
   localSystem = lib.systems.elaborate args.localSystem;
@@ -145,24 +134,20 @@ let
 
   # Allow both:
   # { /* the config */ } and
-  # { lib, pkgs, ... } : { /* the config */ }
+  # { pkgs, ... } : { /* the config */ }
   config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
 
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-    ]
-    ++ (
-      if _configDefinitions != null then
-        map (def: lib.modules.setDefaultModuleLocation def.file def.value) _configDefinitions
-      else
-        [
-          {
-            _file = "nixpkgs.config";
-            config = config1;
-          }
-        ]
-    );
+      (
+        { options, ... }:
+        {
+          _file = "nixpkgs.config";
+          config = config1;
+        }
+      )
+    ];
     class = "nixpkgsConfig";
   };
 

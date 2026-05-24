@@ -47,6 +47,8 @@
   luajit,
   texinfo,
   # for bin.nix
+  gnum4,
+  jdk_headless,
   perlPackages,
   python3Packages,
   pkg-config,
@@ -225,7 +227,7 @@ let
         inherit mirrors pname;
         fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { };
       }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); }
+      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n} or bin.${n}) (args.deps or [ ]); }
     )
   ) overriddenTlpdb;
 
@@ -579,7 +581,10 @@ let
   meta = {
     description = "TeX Live environment";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [
+      veprbl
+      xworld21
+    ];
     license = licenses.scheme-infraonly;
   };
 

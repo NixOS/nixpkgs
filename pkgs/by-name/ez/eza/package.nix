@@ -8,6 +8,7 @@
   pkg-config,
   zlib,
   installShellFiles,
+  versionCheckHook,
   # once eza upstream gets support for setting up a compatibility symlink for exa, we should change
   # the handling here from postInstall to passing the required argument to the builder.
   exaAlias ? true,
@@ -16,6 +17,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eza";
   version = "0.23.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "eza-community";
@@ -56,6 +59,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   + lib.optionalString exaAlias ''
     ln -s eza $out/bin/exa
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Modern, maintained replacement for ls";

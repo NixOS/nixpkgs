@@ -43,7 +43,8 @@ in
             --debug \
             --read-only-dir / \
             --hidden-dir /home \
-            '${test}' \
+            --no-container \
+            -- '${test}' \
       '''')
       benchexec.succeed("grep -s '${echo}' ${wd}/output.log")
       benchexec.succeed("test \"$(grep -Ec '((start|wall|cpu)time|memory)=' ${stdout})\" = 4")

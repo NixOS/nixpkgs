@@ -15,7 +15,6 @@
   libogg,
   libx11,
   opusfile,
-  pcre,
   python3,
   SDL2,
   sqlite,
@@ -62,7 +61,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     libnotify
-    pcre
     python3
     sqlite
   ]

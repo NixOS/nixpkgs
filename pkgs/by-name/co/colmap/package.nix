@@ -100,14 +100,14 @@ let
     }
   ];
 in
-stdenv'.mkDerivation {
-  version = "4.0.3";
+stdenv'.mkDerivation rec {
+  version = "4.0.4";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = "e5b4a3e2276fe0cb81c3643d8ffdf124020c372e";
-    hash = "sha256-VV+ROjhrg7bEMV3QU6r4zCcMzC7tAPwTu6gV6/cmiH0=";
+    tag = version;
+    hash = "sha256-n9YwEqMSIh6vM2MVf7qxxVvDpsTLEsT37xoHiX66bL0=";
   };
 
   cmakeFlags = [

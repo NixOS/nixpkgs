@@ -20,13 +20,13 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "draupnir";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WrMYak6ztIy3KqjcVuN2OmIy1uxlIVNvHPGw7e3LRw0=";
+    hash = "sha256-e6d9z5dkJg4ZpkN+yJFr8J8RWl9tcAhEYTOM+9413Ok=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
-  npmDepsHash = "sha256-CnSeg7sGFzPD+VQl8sWXtiBfuSdeieNhDrLFjWlHcUs=";
+  npmDepsHash = "sha256-DvQM9Kr9Hc7/1OEZadZ1GvpAjfRmbdIcA6UDuFBQ+vo=";
 
   preBuild = ''
     # install proper version and branch info
@@ -44,8 +44,7 @@ buildNpmPackage (finalAttrs: {
     echo "main" > apps/draupnir/branch.txt
 
     # we already set the version and branch above
-    substituteInPlace apps/draupnir/package.json \
-      --replace-fail " && npm run describe-version && npm run describe-branch" ""
+    sed -i "/build:assets/d" apps/draupnir/package.json
   '';
 
   postInstall = ''

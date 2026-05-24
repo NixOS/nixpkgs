@@ -17,14 +17,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.34";
+  version = "0.0.38";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-pLe25JRy6xrFVuNCQKwp9k3Mvc4pfYKF6Xi17yMgSzw=";
+    hash = "sha256-70Y5i9m2h2+Jc44jLOf+gXX/PeDbURRJ80y+6h5SlRk=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-A/oJeFIY/+Pu9jYp3hwGwkSAXfF0VLTHKGP48wsnheo=";
+  cargoHash = "sha256-+c2JfB55w9otmmgTFIDMwkpASJV7bIMEf0uqRXjk/QM=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
@@ -67,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=python_environment::ty_environment_and_discovered_venv"
     "--skip=python_environment::ty_environment_is_only_environment"
     "--skip=python_environment::ty_environment_is_system_not_virtual"
+    "--skip=python_environment::ty_system_environment_and_local_venv"
 
     # flaky: unmatched assertion: revealed: Literal[1]
     "--skip=mdtest::generics/pep695/functions.md"

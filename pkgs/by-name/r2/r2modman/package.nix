@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.15";
+  version = "3.2.16";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AU2fswh2gNJr1JWTHjtxJh/vVwvDqFXjaaF+QaLprFo=";
+    hash = "sha256-ya7VPb+bmOvtXNex9R80N6rZLSCVoyntqCzaHXIwb1M=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches missingHashes;
-    hash = "sha256-6WfpOAt9XRw4fC+Ix9OoDPvg7oIxcdKRX5ttIywG14E=";
+    hash = "sha256-RAQgaxcQl15JqZsLA9ISfOiGgob4yYuc4bhjZFzW8xk=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./steam-launch-fix.patch
 
     # Remove after upstream updates to Yarn 4.14
-    # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L117
+    # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L118
     ./yarn-4.14-support.patch
   ];
 

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skorch-dev";
     repo = "skorch";
     tag = "v${version}";
-    sha256 = "sha256-7cCtrLy80LUlo+og7F98bexDcLim3lY/MVa7HHYlsfE=";
+    sha256 = "sha256-il3S5cfW47tKvMQGr/BfbEjMEMVzBF4gSrQhR1uKxks=";
   };
 
   build-system = [ setuptools ];

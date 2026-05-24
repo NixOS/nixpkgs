@@ -40,17 +40,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "reaper";
-  version = "7.71";
+  version = "7.73";
 
   src = fetchurl {
     url = url_for_platform finalAttrs.version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-78TB6NNr9KemIra8w/87suP9RrlWhrCAW6d5sTrEL4E="
+        "sha256-iEslm5gmkkCwCfwilgXgRrwpj6D6lNypDZnNIv1ZPKw="
       else
         {
-          x86_64-linux = "sha256-OozJHud6PMOkFU2wMmdOYS0PKfyaAV+HHhROJfSr0GM=";
-          aarch64-linux = "sha256-59Divnr+4NVml9sYlFSlL7FLk1uHRVirAThODLbeAjk=";
+          x86_64-linux = "sha256-tXyflaxx00SCqjo7xZFOigMwAc0i/i3Jakwr6BuasbQ=";
+          aarch64-linux = "sha256-+fbpuu0iAqEnchKwkct/FmooE0cpBUkSUyI3HCT+Nwg=";
         }
         .${stdenv.hostPlatform.system};
   };

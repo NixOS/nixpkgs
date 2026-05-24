@@ -56,7 +56,6 @@
   gnome-clocks,
   gnome-settings-daemon,
   gnome-autoar,
-  gnome-tecla,
   bash-completion,
   lcms2,
   libgbm,
@@ -74,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "49.4";
+  version = "50.1";
 
   outputs = [
     "out"
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nW8MovAUDBFPEU9nB0E2EfYU+x6mwxeo0fzEDDxZWwg=";
+    hash = "sha256-G0d2AXLBTz9O3Rya/zZfTeRVg1F78PgN9NOsvU5MspQ=";
   };
 
   patches = [
@@ -91,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
-      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
       unzip = "${lib.getBin unzip}/bin/unzip";
     })
 

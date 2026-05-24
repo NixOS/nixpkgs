@@ -8,23 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare-game";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = "flare-game";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tINIwxyQn8eeJCHwRmAMo2TYRgrgJlGaUrnrgbmM3Jo=";
+    hash = "sha256-IsVfP8wmrublAqoVix7gOA4u8CRmXdyNzagnaXyFsxc=";
   };
 
-  patches = [
-    # cmake-4 compatibility patch
-    (fetchpatch {
-      name = "cmake-4.patch";
-      url = "https://github.com/flareteam/flare-game/commit/5b61dfd69f4ecbaca6439caa9ae41b3168e4d21a.patch";
-      hash = "sha256-5Um6LWAWQyialzO3KSebmLju0VOuz1S5dzavO9EWlLE=";
-    })
-  ];
+  patches = [ ];
 
   nativeBuildInputs = [ cmake ];
 

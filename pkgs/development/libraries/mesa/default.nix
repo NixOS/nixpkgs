@@ -12,7 +12,6 @@
   glslang,
   spirv-tools,
   intltool,
-  jdupes,
   libdisplay-info,
   libdrm,
   libgbm,
@@ -318,7 +317,6 @@ stdenv.mkDerivation {
     python3Packages.mako
     python3Packages.ply
     python3Packages.pyyaml
-    jdupes
     # Use bin output from glslang to not propagate the dev output at
     # the build time with the host glslang.
     (lib.getBin glslang)
@@ -381,9 +379,6 @@ stdenv.mkDerivation {
 
     # Don't depend on build python
     patchShebangs --host --update $out/bin/*
-
-    # NAR doesn't support hard links, so convert them to symlinks to save space.
-    jdupes --hard-links --link-soft --recurse "$out"
 
     # add RPATH here so Zink can find libvulkan.so
     patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so $opencl/lib/libRusticlOpenCL.so

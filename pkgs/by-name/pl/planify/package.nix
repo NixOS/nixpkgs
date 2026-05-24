@@ -24,17 +24,18 @@
   libsoup_3,
   libspelling,
   sqlite,
+  icu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "planify";
-  version = "4.19.0";
+  version = "4.19.3";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-swZ8kpfDLxe48PqHLiCjxYbsS7RILCPTPHybtrJi0rA=";
+    hash = "sha256-811T28jvPTHwNDlR03Ym2f6RPq0N3FLZFqnThBIW1CU=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libspelling
     sqlite
+    icu
   ];
 
   meta = {

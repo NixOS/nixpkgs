@@ -42,16 +42,17 @@ let
       AnalyticsUrl = "https://api.pixieditor.net/analytics/";
     }
   );
+
 in
 buildDotnetModule (finalAttrs: {
   pname = "pixieditor";
-  version = "2.0.1.19";
+  version = "2.1.1.4";
 
   src = fetchFromGitHub {
     owner = "PixiEditor";
     repo = "PixiEditor";
     tag = finalAttrs.version;
-    hash = "sha256-gtbgcgTyPmx8wI0XaZ4pC0s7vR7qZBAQonUObQXAQpk=";
+    hash = "sha256-veTW5JkjGIgviYpnwSJca8uTATf/bq7hTgj7OrNL8m4=";
     fetchSubmodules = true;
   };
 
@@ -67,6 +68,8 @@ buildDotnetModule (finalAttrs: {
     substituteInPlace ./src/PixiEditor.AnimationRenderer.FFmpeg/FFMpegRenderer.cs \
       --replace-fail 'new FFOptions() { BinaryFolder = binaryPath }' 'new FFOptions() { BinaryFolder = "${ffmpeg-headless}/bin" }' \
       --replace-fail 'MakeExecutableIfNeeded(binaryPath);' ' ';
+
+    cp src/nuget.config .
   '';
 
   nativeBuildInputs = [
@@ -74,14 +77,6 @@ buildDotnetModule (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
-  ];
-
-  buildInputs = [
-    (fetchNupkg {
-      pname = "protobuf-net.protogen";
-      version = "3.2.52";
-      hash = "sha256-sKVCXtd5qD86D2FOgjMXh37P6IrcmqmaoJregAhLFGY=";
-    })
   ];
 
   nugetDeps = ./deps.json;
@@ -153,11 +148,6 @@ buildDotnetModule (finalAttrs: {
       extraConfig.SingleMainWindow = "true";
     })
   ];
-
-  postConfigure = ''
-    dotnet build -t:InstallProtogen \
-      src/PixiEditor.Extensions.CommonApi/PixiEditor.Extensions.CommonApi.csproj
-  '';
 
   postInstall = ''
     install -Dm644 ${appSettings} $out/lib/pixieditor/appsettings.json;

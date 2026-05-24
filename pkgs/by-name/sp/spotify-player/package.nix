@@ -135,7 +135,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dit7ya
       xyven1
       _71zenith
       caperren

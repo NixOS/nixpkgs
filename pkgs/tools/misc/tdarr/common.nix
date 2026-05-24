@@ -14,7 +14,6 @@
   libayatana-appindicator,
   wayland,
   libxkbcommon,
-  mesa,
   libxcb,
   leptonica,
   glib,
@@ -101,7 +100,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.66.01";
+  version = "2.74.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -113,16 +112,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
   ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc.lib
     gtk3
     libayatana-appindicator
     wayland
     libxkbcommon
     libxcb
-    mesa
     tesseract4
     leptonica
     glib
@@ -182,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + "";
 
-  desktopItems = lib.optionals stdenv.isLinux [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       desktopName = "Tdarr ${componentUpper} Tray";
       name = "Tdarr ${componentUpper} Tray";

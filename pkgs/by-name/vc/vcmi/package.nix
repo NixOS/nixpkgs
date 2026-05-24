@@ -28,14 +28,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-4Gp/neisH3zpblc/LTQlaWHzXSi6OHzP0IQHI6wzygE=";
+    hash = "sha256-uzdnRKF0xb2B2r6kTzk6OEDGBdOwcu9eGYsvv4ALCF0=";
   };
 
   nativeBuildInputs = [

@@ -6,12 +6,14 @@
 
   # runtime dependencies
   nix-prefetch-git,
+  nix-prefetch-docker,
   git, # for git ls-remote
 }:
 
 let
   runtimePath = lib.makeBinPath [
     nix-prefetch-git
+    nix-prefetch-docker
     git
   ];
 in

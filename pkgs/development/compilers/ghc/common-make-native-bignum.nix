@@ -501,6 +501,11 @@ stdenv.mkDerivation (
     configureFlags = [
       "--datadir=$doc/share/doc/ghc"
     ]
+    # ghc 9.10 and later use c17 by default. we use gnu17 on darwin for older
+    # ghc versions to match this and fix build issues with newer clang.
+    ++ lib.optionals (hostPlatform.isDarwin && lib.versionOlder version "9.10") [
+      "CFLAGS=-std=gnu17"
+    ]
     ++ lib.optionals enableTerminfo [
       "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
       "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"

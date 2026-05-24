@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.37.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z+Wb0xgu15cSSYB3hPhp6qVwUUXmLJcP788LiQLowqs=";
+    hash = "sha256-ZCcrTXVVbB61r2tMTFwN3x5+C1i6T/wn28dviGr5rtM=";
   };
 
-  cargoHash = "sha256-nBbLlM4Y5IOSeGrgiu7Bm9PcTSarXiqFbC2RnTrhWeE=";
+  cargoHash = "sha256-GTWoOaDjXS1Lu2JuWw1A/RYbPreivLYuhHhoWj4bFHM=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
@@ -45,10 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [ gitMinimal ];
 
   checkFlags = [
-    # Expects to run inside a git repository
-    "--skip=git::recover::tests::test_current_or_recover_returns_repo_when_cwd_exists"
-    # Insta snapshot mismatch across git versions
-    "--skip=git::recover::tests::test_hint_for_repo_suggests_switch"
     # Expects `which` on PATH
     "--skip=output::commit_generation::tests::test_command_exists_known_command"
     # Integration tests use insta snapshots with environment-specific paths

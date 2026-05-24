@@ -2001,9 +2001,9 @@
   };
 
   plank = {
-    version = "0.1.0";
+    version = "0.1.1";
     url = "github:plankevm/plank-monorepo";
-    hash = "sha256-B2UmV5i2ELlmzyrR8iFIOQcSpHeRQl4I6lxakMskolg=";
+    hash = "sha256-4r/hYPlVIKzq1/50mivs6CJjObAS5Iq1inwRe1bFlzE=";
     location = "plank-tree-sitter";
     meta = {
       license = lib.licenses.mit;
@@ -2237,9 +2237,9 @@
   };
 
   regex = {
-    version = "0.25.0";
+    version = "1.0.0";
     url = "github:tree-sitter/tree-sitter-regex";
-    hash = "sha256-bR0K6SR19QuQwDUic+CJ69VQTSGqry5a5IOpPTVJFlo=";
+    hash = "sha256-3D+LOWRUamAdbegVfWD5yFcCjBucthPogOL/zWR78PY=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2583,9 +2583,9 @@
   };
 
   t32 = {
-    version = "7.2.6";
+    version = "9.0.0";
     url = "github:xasc/tree-sitter-t32";
-    hash = "sha256-r89C29D8N8E+MJi+RUxTE0+Y/e4ykLzIDaw/AQHegLc=";
+    hash = "sha256-IL+wPbopaiX+pG/9yvkXx0VVPVCSgG05uObw/wsQGAw=";
     meta = {
       maintainers = with lib.maintainers; [
         aciceri

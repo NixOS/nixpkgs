@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -23,16 +22,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "av";
-  version = "16.1.0";
+  version = "17.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
-    tag = "v${version}";
-    hash = "sha256-mz0VI72lqtur5HdCkPNxInk0pUWxji0boIZnfvdrxIs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IS+qSwvpNbhOazkgZh9hzzaTLxSgU7uZjGmaOIkhskc=";
   };
 
   build-system = [
@@ -63,13 +63,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # network access
+    "test_index_entries_len_webm"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "av"
     "av.audio"
     "av.buffer"
-    "av.bytesource"
     "av.codec"
     "av.container"
     "av._core"
@@ -94,8 +98,8 @@ buildPythonPackage rec {
     description = "Pythonic bindings for FFmpeg";
     mainProgram = "pyav";
     homepage = "https://github.com/PyAV-Org/PyAV";
-    changelog = "https://github.com/PyAV-Org/PyAV/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/PyAV-Org/PyAV/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

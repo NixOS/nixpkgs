@@ -1,8 +1,4 @@
 {
-  "activitywatch-status": [
-    "activitywatch-status@cweiske.de",
-    "aw-status@brayo.dev"
-  ],
   "applications-menu": [
     "Applications_Menu@rmy.pobox.com",
     "apps-menu@gnome-shell-extensions.gcampax.github.com"
@@ -16,13 +12,9 @@
     "battery-time@eetumos.github.com",
     "batterytime@typeof.pw"
   ],
-  "eur-usd": [
-    "eur-usd-gshell@vezza.github.com",
-    "usd-mxn-gshell@kinduff.github.com"
-  ],
-  "fuzzy-clock": [
-    "FuzzyClock@fire-man-x",
-    "FuzzyClock@johngoetz"
+  "internet-speed-meter": [
+    "InternetSpeedMeter@alshakib.dev",
+    "speed-meter@mojahid.lunecode.com"
   ],
   "lock-keys": [
     "lockkeys@febueldo.test",
@@ -31,10 +23,6 @@
   "memento-mori": [
     "memento-mori@paveloom",
     "memento-mori@vedeshpadal"
-  ],
-  "mouse-follows-focus": [
-    "mouse-follows-focus@crisidev.org",
-    "mousefollowsfocus@matthes.biz"
   ],
   "nepali-calendar": [
     "nepali-calendar-gs-extension@subashghimire.info.np",
@@ -52,9 +40,18 @@
     "PersianCalendar@oxygenws.com",
     "persian-calendar@iamrezamousavi.gmail.com"
   ],
+  "public-ip-address": [
+    "public-ip-address@fire-man-x",
+    "public-ip-address@theophilediot.github.io"
+  ],
   "system-monitor": [
     "System_Monitor@bghome.gmail.com",
+    "sysmonitor@talhasiddique7",
     "system-monitor@axet.github.com",
     "system-monitor@gnome-shell-extensions.gcampax.github.com"
+  ],
+  "tailscale-qs": [
+    "tailscale-gnome-qs@tailscale-qs.github.io",
+    "tailscale@joaophi.github.com"
   ]
 }

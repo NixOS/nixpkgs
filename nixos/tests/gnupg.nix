@@ -77,7 +77,7 @@
         machine.send_chars("pgp_p4ssphrase")
         machine.wait_until_tty_matches("1", "Passphrases match")
         machine.send_chars("\n")
-        machine.wait_until_tty_matches("1", "public and secret key created")
+        machine.wait_until_tty_matches("1", "secret key created and signed")
 
     with subtest("Confirm the key is in the keyring"):
         machine.wait_until_succeeds(as_alice("gpg --list-secret-keys | grep -q alice@machine"))
@@ -92,7 +92,7 @@
 
         # Note: again, this needs a tty because of pinentry
         machine.send_chars("ssh-add alice\n")
-        machine.wait_until_tty_matches("1", "Enter passphrase")
+        machine.wait_until_tty_matches("1", "passphrase for")
         machine.send_chars("ssh_p4ssphrase\n")
         machine.wait_until_tty_matches("1", "Please enter")
         machine.send_chars("ssh_agent_p4ssphrase")

@@ -27,17 +27,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [ "radicale" ];
 
-  dependencies = with python3Packages; [
-    appdirs
-    etebase
-    etesync
-    flask
-    flask-wtf
-    msgpack
-    (python3Packages.toPythonModule (radicale.override { python3 = python; }))
-    requests
-    requests.optional-dependencies.socks
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      appdirs
+      etebase
+      etesync
+      flask
+      flask-wtf
+      msgpack
+      (python3Packages.toPythonModule (radicale.override { python3 = python; }))
+      requests
+    ]
+    ++ requests.optional-dependencies.socks;
 
   doCheck = false;
 

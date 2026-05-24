@@ -410,7 +410,7 @@ in
             ln -s ${config.hardware.deviceTree.package} $out/dtbs
           ''}
 
-          echo -n "$kernelParams" > $out/kernel-params
+          echo -n "''${kernelParams[@]}" > $out/kernel-params
 
           ${optionalString config.boot.initrd.enable ''
             ln -s ${initrdPath} $out/initrd

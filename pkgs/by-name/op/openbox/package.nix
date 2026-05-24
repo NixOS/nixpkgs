@@ -93,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/openbox-gnome-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
+
+    substituteInPlace "$out/libexec/openbox-autostart" \
+      --replace-fail "$out/etc/xdg/openbox/autostart" "/etc/xdg/openbox/autostart"
   '';
 
   doInstallCheck = true;

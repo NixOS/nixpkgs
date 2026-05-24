@@ -12,7 +12,6 @@
   net-tools,
   nixosTests,
   nodejs_22,
-  replace,
   ruby_3_3,
   stdenv,
   tzdata,
@@ -395,10 +394,10 @@ stdenv.mkDerivation {
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
     # state directory.
-    ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
-    ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
-    ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
-    ${replace}/bin/replace-literal -f -r -e 'require_relative "/home/git/gitlab/lib/gitlab/puma/error_handler"' "require_relative '$out/share/gitlab/lib/gitlab/puma/error_handler'" config
+    find config -type f -exec sed -i -e "s|\.\./\.\./lib|$out/share/gitlab/lib|" {} +
+    find config -type f -exec sed -i -e "s|\.\./lib|$out/share/gitlab/lib|" {} +
+    find config -type f -exec sed -i -e "s|require_relative 'application'|require_relative '$out/share/gitlab/config/application'|" {} +
+    find config -type f -exec sed -i -e "s|require_relative \"/home/git/gitlab/lib/gitlab/puma/error_handler\"|require_relative \"$out/share/gitlab/lib/gitlab/puma/error_handler\"|" {} +
   '';
 
   buildPhase = ''

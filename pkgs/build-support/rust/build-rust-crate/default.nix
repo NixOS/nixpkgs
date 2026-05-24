@@ -255,6 +255,12 @@ lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
       extraRustcOptsForBuildRs,
+      # Extra rustc options for proc-macro crates, replacing
+      # `extraRustcOpts`. Lets callers keep instrumentation flags
+      # (sanitizers, coverage) off host dylibs, mirroring Cargo's
+      # behaviour of not applying RUSTFLAGS to host artifacts.
+      # Default: null (inherit `extraRustcOpts`)
+      extraRustcOptsForProcMacro,
       # The lint level cap passed to rustc via `--cap-lints`.
       # See <https://doc.rust-lang.org/rustc/lints/levels.html#capping-lints>.
       #
@@ -325,6 +331,7 @@ lib.makeOverridable
       buildDependencies_ = buildDependencies;
       processedAttrs = [
         "src"
+        "propagatedBuildInputs"
         "nativeBuildInputs"
         "buildInputs"
         "crateBin"
@@ -352,7 +359,21 @@ lib.makeOverridable
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
       extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
+      extraRustcOptsForProcMacro_ = extraRustcOptsForProcMacro;
       buildTests_ = buildTests;
+      procMacro = lib.attrByPath [ "procMacro" ] false crate;
+      # For proc-macros, prefer the *ForProcMacro variant at each level
+      # (crate attr, override arg) and fall back to extraRustcOpts.
+      crateExtraRustcOpts =
+        if procMacro && crate ? extraRustcOptsForProcMacro then
+          crate.extraRustcOptsForProcMacro
+        else
+          crate.extraRustcOpts or [ ];
+      overrideExtraRustcOpts =
+        if procMacro && extraRustcOptsForProcMacro_ != null then
+          extraRustcOptsForProcMacro_
+        else
+          extraRustcOpts_;
       resolvedLints = crate.lints or lints;
       lintFlags = lintsToRustcFlags resolvedLints;
       resolvedCapLints =
@@ -418,7 +439,8 @@ lib.makeOverridable
         buildInputs =
           lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
           ++ (crate.buildInputs or [ ])
-          ++ buildInputs_;
+          ++ buildInputs_
+          ++ completePropagatedBuildInputs;
         dependencies = map lib.getLib dependencies_;
         buildDependencies = map lib.getLib buildDependencies_;
 
@@ -426,6 +448,16 @@ lib.makeOverridable
         completeBuildDeps = lib.unique (
           buildDependencies
           ++ lib.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
+        );
+
+        # Propagated native build inputs from this crate and all transitive Rust
+        # dependencies. Analogous to completeDeps but for native library deps:
+        # a crate can declare `propagatedBuildInputs` in its override and they
+        # will automatically be added to the buildInputs of every crate that
+        # depends on it, without having to repeat them up the dependency tree.
+        completePropagatedBuildInputs = lib.unique (
+          (crate.propagatedBuildInputs or [ ])
+          ++ lib.concatMap (dep: dep.completePropagatedBuildInputs or [ ]) dependencies
         );
 
         # Create a list of features that are enabled by the crate itself and
@@ -474,7 +506,7 @@ lib.makeOverridable
         crateRustVersion = crate.rust-version or "";
         crateVersion = crate.version;
         crateType =
-          if lib.attrByPath [ "procMacro" ] false crate then
+          if procMacro then
             [ "proc-macro" ]
           else if lib.attrByPath [ "plugin" ] false crate then
             [ "dylib" ]
@@ -485,8 +517,8 @@ lib.makeOverridable
         edition = crate.edition or null;
         codegenUnits = if crate ? codegenUnits then crate.codegenUnits else defaultCodegenUnits;
         extraRustcOpts =
-          lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
-          ++ extraRustcOpts_
+          crateExtraRustcOpts
+          ++ overrideExtraRustcOpts
           ++ lintFlags
           ++ (lib.optional (edition != null) "--edition ${edition}");
         extraRustcOptsForBuildRs =
@@ -586,6 +618,7 @@ lib.makeOverridable
     verbose = crate_.verbose or true;
     extraRustcOpts = [ ];
     extraRustcOptsForBuildRs = [ ];
+    extraRustcOptsForProcMacro = null;
     capLints = null;
     lints = { };
     features = [ ];

@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build system
+  packaging,
   setuptools,
 
   # dependencies
@@ -64,57 +64,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
-  version = "4.9.9";
+  version = "4.9.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
+    hash = "sha256-nq0c5hBTVwkxCRvWxtnfI+AHD+URY+nNfZAurEGaLXk=";
   };
 
-  patches = [
-    # TypeError: Cannot handle this data type: (1, 1, 4), <u2
-    # Issue: https://github.com/tensorflow/datasets/issues/11148
-    # PR: https://github.com/tensorflow/datasets/pull/11149
-    (fetchpatch2 {
-      name = "fix-pillow-12-compat";
-      url = "https://github.com/tensorflow/datasets/pull/11149/commits/21062d65b33978f2263443280c03413add5c0224.patch";
-      hash = "sha256-GWb+1E5lQNhFVp57sqjp+WqzZSva1AGpXe9fbvXXeIA=";
-    })
+  build-system = [
+    packaging
+    setuptools
   ];
-
-  postPatch =
-    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
-    ''
-      substituteInPlace tensorflow_datasets/core/dataset_info.py \
-        --replace-fail \
-          "elif field.label == field.LABEL_REPEATED:" \
-          "elif hasattr(field_value, 'extend'):"
-    ''
-    # mlcroissant 1.1.0 requires leaf fields to define `source` or `value`
-    + ''
-      substituteInPlace tensorflow_datasets/core/utils/croissant_utils_test.py \
-        --replace-fail \
-          "references=mlc.Source(field='splits/name')," \
-          "references=mlc.Source(field='splits/name'), source=mlc.Source(field='splits/name')," \
-        --replace-fail \
-          "references=mlc.Source(field='labels/label')," \
-          "references=mlc.Source(field='labels/label'), source=mlc.Source(field='labels/label'),"
-    ''
-    # TypeError: only 0-dimensional arrays can be converted to Python scalars
-    + ''
-      substituteInPlace tensorflow_datasets/datasets/smallnorb/smallnorb_dataset_builder.py \
-        --replace-fail \
-          "magic = int(np.frombuffer(s, dtype=int32_dtype, count=1))" \
-          "magic = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1)))" \
-        --replace-fail \
-          "ndim = int(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4))" \
-          "ndim = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4)))"
-    '';
-
-  build-system = [ setuptools ];
 
   dependencies = [
     absl-py
@@ -230,9 +194,6 @@ buildPythonPackage (finalAttrs: {
     # Fails with `ValueError: setting an array element with a sequence`
     "tensorflow_datasets/core/dataset_utils_test.py"
     "tensorflow_datasets/core/features/sequence_feature_test.py"
-
-    # Requires `tensorflow_docs` which is not packaged in `nixpkgs` and the test is for documentation anyway.
-    "tensorflow_datasets/scripts/documentation/build_api_docs_test.py"
 
     # Not a test, should not be executed.
     "tensorflow_datasets/testing/test_utils.py"

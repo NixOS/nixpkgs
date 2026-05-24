@@ -91,7 +91,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       rsniezek
-      sebtm
       matteopacini
     ];
     platforms = [

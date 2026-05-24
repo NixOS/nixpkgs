@@ -5,18 +5,19 @@
   setuptools,
   mypy-extensions,
   python,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "librt";
-  version = "0.7.8";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mypyc";
     repo = "librt";
     tag = "v${version}";
-    hash = "sha256-FlLilZQMsXAYfreBAfYoutCEww8IVoU7jjxvvJr8pTk=";
+    hash = "sha256-RZGaOq8hmkwekCs1fKshDrx3vmHdJl/wI3IO9ZLH5rc=";
   };
 
   # https://github.com/mypyc/librt/blob/v0.7.8/.github/workflows/buildwheels.yml#L90-L93
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mypy-extensions
+    pytest
   ];
 
   checkPhase = ''

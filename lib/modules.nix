@@ -589,7 +589,8 @@ let
     in
     modulesPath: initialModules: args: {
       modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
-      # Intentionally not shared with `modules` above: this allows `collected`
+      # Intentionally not shared with `modules` above: this allows
+      # the return value of `collectStructuredModules`
       # to be garbage collected after `filterModules` returns.
       graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
     };
@@ -1432,18 +1433,27 @@ let
   filterOverrides = defs: (filterOverrides' defs).values;
 
   filterOverrides' =
-    defs:
     let
       getPrio =
         def: if def.value._type or "" == "override" then def.value.priority else defaultOverridePriority;
-      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip =
         def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in
-    {
-      values = map strip (filter (def: getPrio def == highestPrio) defs);
-      inherit highestPrio;
-    };
+    defs:
+    # Optimize for the singleton case, equivalent to the `else` clause.
+    if length defs == 1 then
+      {
+        values = map strip defs;
+        highestPrio = getPrio (head defs);
+      }
+    else
+      let
+        highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
+      in
+      {
+        values = concatMap (def: if getPrio def == highestPrio then [ (strip def) ] else [ ]) defs;
+        inherit highestPrio;
+      };
 
   /**
     Sort a list of properties.  The sort priority of a property is
@@ -1716,11 +1726,21 @@ let
 
     `from`
 
-    : 1\. Function argument
+    : The "from" option path as list of strings.
+      Option must not exist in the current module set.
 
     `to`
 
-    : 2\. Function argument
+    : The "to" option path as list of strings.
+      Option must already exist in the current module set.
+
+    # Limitations
+
+    - The "to" option must already be declared.
+    - The "from" option should not be declared, as this function will declare it.
+    - "to" Options whose types don't support merging at any level of their structure (like `types.raw`,
+      or `types.attrsOf types.raw` where the attribute values can't merge) are not well-supported
+      because this function wraps aliased definitions in `mkMerge`.
   */
   mkRenamedOptionModule =
     from: to:

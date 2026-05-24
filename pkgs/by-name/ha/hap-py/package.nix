@@ -67,6 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Insert missing include for uint64_t
     sed -i '/#include <vector>/a #include <cstdint>' src/c++/include/helpers/Roc.hh
+
+    # pipes module was removed in Python 3.13; shlex.quote is the replacement
+    find src/python -name "*.py" -exec sed -i \
+      -e 's/import pipes/import shlex/' \
+      -e 's/pipes\.quote/shlex.quote/g' {} \;
   '';
 
   patches = [

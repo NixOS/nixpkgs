@@ -8,13 +8,7 @@
 
 let
   configd = sourceRelease "configd";
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  dyld = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "dyld";
-    rev = "dyld-1160.6";
-    hash = "sha256-6P/Da6xP19vmaCROoYv9pl7DaW3/U+qZBJT8PD33bn0=";
-  };
+  dyld = sourceRelease "dyld";
   Libinfo = sourceRelease "Libinfo";
   Libnotify = sourceRelease "Libnotify";
 
@@ -51,7 +45,7 @@ mkAppleDerivation {
       --replace-fail '<md5.h>' '<CommonCrypto/CommonDigest.h>'
   '';
 
-  xcodeHash = "sha256-Q5jHee9rxge6HJtf9/sFK15FsS02GQmx7L0BBDiyGIs=";
+  xcodeHash = "sha256-pQ1eFMPnSy8M3pfvv+sPyale9xDlVCMif0EWO8PO7zg=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include -I${configd}/dnsinfo -I${Libinfo}/lookup.subproj -I${Libnotify}";
 

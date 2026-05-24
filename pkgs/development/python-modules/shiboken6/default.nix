@@ -34,9 +34,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs = [
     python.pkgs.qt6.qtbase
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    python.pkgs.qt6.darwinVersionInputs
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin python.pkgs.qt6.darwinVersionInputs;
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"

@@ -4,27 +4,15 @@
 from dataclasses import asdict, dataclass, field
 from enum import StrEnum
 from typing import List
-from subprocess import PIPE, Popen
+import base64
 import json
 import urllib.request
-import re
 import os.path
-
-SRC_NAME = "source"
-
-VERSION_REGEX = re.compile(r"\/([\d.]+)\/")
 
 
 class Platform(StrEnum):
     LINUX = "linux"
     MACOS = "osx"
-
-    def format_type(self):
-        if self.value == Platform.LINUX.value:
-            return "tar.gz"
-        elif self.value == Platform.MACOS.value:
-            return "dmg"
-        raise RuntimeError("Invalid platform")
 
 
 class Branch(StrEnum):
@@ -35,8 +23,6 @@ class Branch(StrEnum):
 
 
 class Kind(StrEnum):
-    # Single tarball or dmg fetched via discord.com/api/download redirect
-    LEGACY = "legacy"
     # Brotli-compressed host + module distros from the distributions API
     DISTRO = "distro"
 
@@ -57,48 +43,8 @@ def serialize_variant(variant: Variant) -> str:
     return f"{variant.platform}-{variant.branch}"
 
 
-def url_for_variant(variant: Variant) -> str:
-    return f"https://discord.com/api/download/{variant.branch.value}?platform={variant.platform.value}&format={variant.platform.format_type()}"
-
-
 def distro_manifest_url_for_variant(variant: Variant) -> str:
     return f"https://updates.discord.com/distributions/app/manifests/latest?channel={variant.branch.value}&platform={variant.platform.value}&arch=x64"
-
-
-def fetch_redirect_url(url: str) -> str:
-    headers = {"user-agent": "Nixpkgs-Discord-Update-Script/0.0.0"}
-    # note that urllib follows redirects by default. So we can extract the final url from the response object
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req) as response:
-        return response.url
-
-
-def version_from_url(url: str) -> str:
-    matches = VERSION_REGEX.search(url)
-    assert matches, f"Url {url} must contain version number"
-    version = matches.group(1)
-    assert version
-    return version
-
-
-def prefetch(url: str) -> str:
-    with Popen(["nix-prefetch-url", "--name", "source", url], stdout=PIPE) as p:
-        assert p.stdout
-        b32_hash = p.stdout.read().decode("utf-8").strip()
-    with Popen(
-        ["nix-hash", "--to-sri", "--type", "sha256", b32_hash], stdout=PIPE
-    ) as p:
-        assert p.stdout
-        sri_hash = p.stdout.read().decode("utf-8").strip()
-    return sri_hash
-
-
-@dataclass
-class LegacySource:
-    version: str
-    url: str
-    hash: str
-    kind: Kind = Kind.LEGACY
 
 
 @dataclass
@@ -133,6 +79,10 @@ def version_triple_to_str(triple: list) -> str:
     return ".".join(str(x) for x in triple)
 
 
+def sri_from_sha256_hex(hex_hash: str) -> str:
+    return "sha256-" + base64.b64encode(bytes.fromhex(hex_hash)).decode("utf-8")
+
+
 def fetch_distro_source(variant: Variant) -> DistroSource:
     manifest = fetch_distro_manifest(variant)
 
@@ -141,46 +91,37 @@ def fetch_distro_source(variant: Variant) -> DistroSource:
         name: DistroModule(
             version=mod["full"]["module_version"],
             url=mod["full"]["url"],
-            hash=prefetch(mod["full"]["url"]),
+            hash=sri_from_sha256_hex(mod["full"]["package_sha256"]),
         )
         for name, mod in manifest["modules"].items()
     }
 
     return DistroSource(
         version=version_triple_to_str(manifest["full"]["host_version"]),
-        distro=DistroRef(url=distro_url, hash=prefetch(distro_url)),
+        distro=DistroRef(
+            url=distro_url,
+            hash=sri_from_sha256_hex(manifest["full"]["package_sha256"]),
+        ),
         modules=modules,
-    )
-
-
-def fetch_legacy_source(variant: Variant) -> LegacySource:
-    url = fetch_redirect_url(url_for_variant(variant))
-    return LegacySource(
-        version=version_from_url(url),
-        url=url,
-        hash=prefetch(url),
     )
 
 
 def main():
     variants: List[Variant] = [
-        Variant(Platform.LINUX, Branch.STABLE, Kind.LEGACY),
+        Variant(Platform.LINUX, Branch.STABLE, Kind.DISTRO),
         Variant(Platform.LINUX, Branch.PTB, Kind.DISTRO),
         Variant(Platform.LINUX, Branch.CANARY, Kind.DISTRO),
         Variant(Platform.LINUX, Branch.DEVELOPMENT, Kind.DISTRO),
-        Variant(Platform.MACOS, Branch.STABLE, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.PTB, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.CANARY, Kind.LEGACY),
-        Variant(Platform.MACOS, Branch.DEVELOPMENT, Kind.LEGACY),
+        Variant(Platform.MACOS, Branch.STABLE, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.PTB, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.CANARY, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.DEVELOPMENT, Kind.DISTRO),
     ]
 
     sources = {}
 
     for v in variants:
-        source = (
-            fetch_distro_source(v) if v.kind == Kind.DISTRO else fetch_legacy_source(v)
-        )
-        sources[serialize_variant(v)] = asdict(source)
+        sources[serialize_variant(v)] = asdict(fetch_distro_source(v))
 
     with open(os.path.join(os.path.dirname(__file__), "sources.json"), "w") as f:
         json.dump(sources, f, indent=2, sort_keys=True)

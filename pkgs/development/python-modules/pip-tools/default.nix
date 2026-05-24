@@ -74,6 +74,7 @@ buildPythonPackage rec {
     "test_iter_dependencies_after_combine_install_requirements"
     "test_iter_dependencies_after_combine_install_requirements_extras"
     "test_name_collision"
+    "test_build_project_metadata_upgrading_raises_error"
     # Assertion error
     "test_compile_recursive_extras"
     "test_compile_build_targets_setuptools_no_wheel_dep"

@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    moveToOutput lib/libhdf4.settings "$dev"
     moveToOutput bin "$bin"
   '';
 

@@ -15,7 +15,7 @@
 }:
 let
   pname = "srctools";
-  version = "2.6.2";
+  version = "2.7.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -23,7 +23,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c+NmrTntpNTEI782aoC4bNpoKpWe4cqSAkxpYS5HH30=";
+    hash = "sha256-Ht+PUHzOjUNlllan1NvmvRRI7TGq3ws8Uwg8G/yJ9ZE=";
   };
 
   postPatch = ''

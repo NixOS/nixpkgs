@@ -59,6 +59,16 @@ buildPythonPackage rec {
     "zstd"
   ];
 
+  # These feature defaults can enable CPU-specific code during the build:
+  # most are detected from the build host CPU, while BMI2 defaults to enabled
+  # on Linux/Darwin. Pin them to keep the output generic and machine-independent.
+  # https://github.com/silx-kit/hdf5plugin/blob/v6.0.0/doc/install.rst#available-options
+  env.HDF5PLUGIN_NATIVE = "False";
+  env.HDF5PLUGIN_SSE2 = "False";
+  env.HDF5PLUGIN_SSSE3 = "False";
+  env.HDF5PLUGIN_AVX2 = "False";
+  env.HDF5PLUGIN_AVX512 = "False";
+
   checkPhase = ''
     python test/test.py
   '';

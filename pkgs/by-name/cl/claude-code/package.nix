@@ -9,6 +9,7 @@
   installShellFiles,
   makeBinaryWrapper,
   autoPatchelfHook,
+  alsa-lib,
   procps,
   ripgrep,
   bubblewrap,
@@ -56,7 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
       --set DISABLE_INSTALLATION_CHECKS 1 \
       --set USE_BUILTIN_RIPGREP 0 \
-      --prefix PATH : ${
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
+      ''}--prefix PATH : ${
         lib.makeBinPath (
           [
             # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)

@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/carltongibson/django-filter";
     changelog = "https://github.com/carltongibson/django-filter/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

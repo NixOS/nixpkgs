@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  fetchFromGitHub,
   setuptools,
   darwin,
   pyobjc-core,
@@ -10,15 +9,9 @@
 
 buildPythonPackage rec {
   pname = "pyobjc-framework-Quartz";
-  version = "11.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ronaldoussoren";
-    repo = "pyobjc";
-    tag = "v${version}";
-    hash = "sha256-2qPGJ/1hXf3k8AqVLr02fVIM9ziVG9NMrm3hN1de1Us=";
-  };
+  inherit (pyobjc-core) version src;
 
   sourceRoot = "${src.name}/pyobjc-framework-Quartz";
 

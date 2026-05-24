@@ -138,6 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableNvidiaCgToolkit ''
       wrapProgram $out/bin/retroarch-cg2glsl \
         --prefix PATH ':' ${lib.makeBinPath [ nvidia_cg_toolkit ]}
+    ''
+    + ''
+      mkdir -p $out/share/icons/hicolor/scalable
+      mv $out/share/{pixmaps,icons/hicolor/scalable/apps}
     '';
 
   preFixup = lib.optionalString (!enableNvidiaCgToolkit) ''

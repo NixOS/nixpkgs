@@ -37,93 +37,94 @@ let
       in
       hostToGuest.${hostPlatform.system} or (throw message);
 
-  baseOS = import ../eval-config.nix {
-    inherit lib;
-    system = null; # use modularly defined system
-    inherit (config.node) specialArgs;
-    modules = [ config.defaults ];
-    baseModules = (import ../../modules/module-list.nix) ++ [
-      ./nixos-test-base.nix
-      {
-        key = "nodes";
-        _module.args = {
-          inherit (config) containers;
-          nodes = config.nodesCompat;
-        };
-      }
-      (
-        { options, ... }:
-        {
-          key = "nodes.nix-pkgs";
-          config = optionalAttrs (!config.node.pkgsReadOnly) (
-            mkIf (!options.nixpkgs.pkgs.isDefined) {
-              # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
-              nixpkgs.system = guestSystem;
+  baseOS =
+    extraBaseModules:
+    import ../eval-config.nix {
+      inherit lib;
+      system = null; # use modularly defined system
+      inherit (config.node) specialArgs;
+      modules = [ config.defaults ];
+      baseModules =
+        (import ../../modules/module-list.nix)
+        ++ [
+          ./nixos-test-base.nix
+          {
+            key = "nodes";
+            _module.args = {
+              inherit (config) containers;
+              nodes = config.nodesCompat;
+            };
+          }
+          (
+            { options, ... }:
+            {
+              key = "nodes.nix-pkgs";
+              config = optionalAttrs (!config.node.pkgsReadOnly) (
+                mkIf (!options.nixpkgs.pkgs.isDefined) {
+                  # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
+                  nixpkgs.system = guestSystem;
+                }
+              );
             }
-          );
-        }
-      )
-      testModuleArgs.config.extraBaseModules
-    ];
-  };
-  baseQemuOS = baseOS.extendModules {
-    modules = [
-      ../../modules/virtualisation/qemu-vm.nix
-      config.nodeDefaults
+          )
+          testModuleArgs.config.extraBaseModules
+        ]
+        ++ extraBaseModules;
+    };
+  baseQemuOS = baseOS [
+    ../../modules/virtualisation/qemu-vm.nix
+    testModuleArgs.config.extraBaseNodeModules
+    config.nodeDefaults
+    {
+      key = "base-qemu";
+      virtualisation.qemu = {
+        inherit (testModuleArgs.config.qemu) package forceAccel;
+      };
+      virtualisation.host.pkgs = hostPkgs;
+    }
+  ];
+  baseNspawnOS = baseOS [
+    ../../modules/virtualisation/nspawn-container
+    config.containerDefaults
+    (
+      { pkgs, ... }:
       {
-        key = "base-qemu";
-        virtualisation.qemu = {
-          inherit (testModuleArgs.config.qemu) package forceAccel;
+        key = "base-nspawn";
+
+        # PAM requires setuid and doesn't work in the build sandbox.
+        # https://github.com/NixOS/nix/blob/959c244a1265f4048390f3ad21679219d7b27a99/src/libstore/unix/build/linux-derivation-builder.cc#L63
+        services.openssh.settings.UsePAM = false;
+
+        # Networking for tests is statically configured by default.
+        # dhcpcd times out after blocking for a long time, which slows down tests.
+        # See https://github.com/NixOS/nixpkgs/pull/478109#discussion_r2867570799
+        networking.useDHCP = lib.mkDefault false;
+
+        # Disable Info manual directory generation to prevent build failures.
+        #
+        # Context: 'install-info' (from texinfo) is triggered during system-path
+        # generation to index manuals, but it requires 'gzip' in the $PATH to
+        # decompress them.
+        # When 'networking.useDHCP' is set to false, transitive dependencies
+        # (like dhcpcd or other network tools) that normally pull 'gzip' into
+        # the system environment are removed. This leaves 'install-info'
+        # stranded without 'gzip', causing the 'system-path' derivation to fail.
+        # Since nspawn containers are typically minimal, disabling 'info'
+        # is a cleaner fix than explicitly adding 'gzip' to systemPackages.
+        documentation.info.enable = lib.mkDefault false;
+
+        # Gross, insecure hack to make login work. See above.
+        security.pam.services.login = {
+          text = ''
+            auth sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+            account sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+            password sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+            session sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
+          '';
         };
-        virtualisation.host.pkgs = hostPkgs;
       }
-      testModuleArgs.config.extraBaseNodeModules
-    ];
-  };
-  baseNspawnOS = baseOS.extendModules {
-    modules = [
-      ../../modules/virtualisation/nspawn-container
-      config.containerDefaults
-      (
-        { pkgs, ... }:
-        {
-          key = "base-nspawn";
-
-          # PAM requires setuid and doesn't work in the build sandbox.
-          # https://github.com/NixOS/nix/blob/959c244a1265f4048390f3ad21679219d7b27a99/src/libstore/unix/build/linux-derivation-builder.cc#L63
-          services.openssh.settings.UsePAM = false;
-
-          # Networking for tests is statically configured by default.
-          # dhcpcd times out after blocking for a long time, which slows down tests.
-          # See https://github.com/NixOS/nixpkgs/pull/478109#discussion_r2867570799
-          networking.useDHCP = lib.mkDefault false;
-
-          # Disable Info manual directory generation to prevent build failures.
-          #
-          # Context: 'install-info' (from texinfo) is triggered during system-path
-          # generation to index manuals, but it requires 'gzip' in the $PATH to
-          # decompress them.
-          # When 'networking.useDHCP' is set to false, transitive dependencies
-          # (like dhcpcd or other network tools) that normally pull 'gzip' into
-          # the system environment are removed. This leaves 'install-info'
-          # stranded without 'gzip', causing the 'system-path' derivation to fail.
-          # Since nspawn containers are typically minimal, disabling 'info'
-          # is a cleaner fix than explicitly adding 'gzip' to systemPackages.
-          documentation.info.enable = lib.mkDefault false;
-
-          # Gross, insecure hack to make login work. See above.
-          security.pam.services.login = {
-            text = ''
-              auth sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
-              account sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
-              password sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
-              session sufficient ${pkgs.linux-pam}/lib/security/pam_permit.so
-            '';
-          };
-        }
-      )
-    ];
-  };
+    )
+  ];
 
   # TODO (lib): Dedup with run.nix, add to lib/options.nix
   mkOneUp = opt: f: lib.mkOverride (opt.highestPrio - 1) (f opt.value);

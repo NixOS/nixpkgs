@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.13.4";
+  version = "5.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = finalAttrs.version;
-    hash = "sha256-Ve7kGCD/4NMAOGTULvCYt1NTicD8+gSgy5eu0dAu5RA=";
+    hash = "sha256-MafEl+5uZS490ZZqi74alOnbLfDyMGb5RK5CtyHUS60=";
   };
 
   pythonRelaxDeps = [
@@ -65,6 +65,11 @@ buildPythonPackage (finalAttrs: {
     "testSplitSPFRecord"
     "testTooManySPFDNSLookups"
     "testTooManySPFVoidDNSLookups"
+    "testDNSSEC"
+    "testDnssecFalseWhenNoKey"
+    "testGetDnskeyCache"
+    "testIncludeMissingSPF"
+    "testKnownGood"
   ];
 
   meta = {

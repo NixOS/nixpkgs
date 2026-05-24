@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       unlicense
     ];
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

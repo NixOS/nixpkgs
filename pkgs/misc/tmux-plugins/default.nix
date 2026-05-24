@@ -44,6 +44,7 @@ let
             pname = namePrefix + pluginName;
 
             strictDeps = true;
+            __structuredAttrs = true;
 
             inherit
               pluginName
@@ -378,6 +379,13 @@ in
       repo = "tmux-gruvbox";
       tag = "v${version}";
       hash = "sha256-TuWPw6sk61k7GnHwN2zH6x6mGurTHiA9f0E6NJfMa6g=";
+    };
+    meta = {
+      homepage = "https://github.com/egel/tmux-gruvbox";
+      description = "Gruvbox colorscheme for Tmux";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ viena ];
     };
   };
 
@@ -1056,6 +1064,49 @@ in
     };
   };
 
+  tmux-sm = mkTmuxPlugin {
+    pluginName = "tmux-sm";
+    version = "0-unstable-2026-05-14";
+    src = fetchFromGitHub {
+      owner = "vimlinuz";
+      repo = "tmux-sm";
+      rev = "97d411a11d124443c982d17fde03c1e09809d7b1";
+      hash = "sha256-7HW/TLP/yyQp4j0/utA0tibTv+suV1B2K56pUS3Z004=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    rtpFilePath = "main.tmux";
+    postInstall = ''
+      chmod +x $target/scripts/session-manager
+      wrapProgram $target/scripts/session-manager \
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            fzf
+            gawk
+            coreutils
+          ]
+        }
+      chmod +x $target/scripts/sessionizer
+      wrapProgram $target/scripts/sessionizer \
+        --prefix PATH : ${
+          with pkgs;
+          lib.makeBinPath [
+            fzf
+            tree
+            findutils
+            coreutils
+          ]
+        }
+    '';
+    meta = {
+      homepage = "https://github.com/vimlinuz/tmux-sm";
+      description = "Fuzzy terminal popup to manage tmux sessions using `fzf`";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ vimlinuz ];
+    };
+  };
+
   tmux-thumbs = pkgs.callPackage ./tmux-thumbs {
     inherit mkTmuxPlugin;
   };
@@ -1072,7 +1123,7 @@ in
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
+      wrapProgram $target/bin/t \
           --prefix PATH : ${
 
             lib.makeBinPath [

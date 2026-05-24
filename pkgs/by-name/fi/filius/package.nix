@@ -10,13 +10,13 @@
 
 maven.buildMavenPackage rec {
   pname = "filius";
-  version = "2.10.1";
+  version = "2.11.0";
 
   src = fetchFromGitLab {
     owner = "filius1";
     repo = "filius";
     tag = "v${version}";
-    hash = "sha256-q6A+S50n09DgwayylAWbUFQ/sqfCVEkIoWCRtZT80M8=";
+    hash = "sha256-l90KnHfndGsEzgJpTNabW0ADJhTYr7z3243TZUJbxNw=";
   };
 
   mvnHash = "sha256-R14EtImJJEC/DhKm7MKWzq9XEOqDGNPtLIaK3OKbyiQ=";

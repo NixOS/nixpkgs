@@ -9,7 +9,7 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+  phpWithPspell = pkgs.php84.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 
   env = {
     ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
@@ -184,28 +184,14 @@ in
         ${cfg.hostName} = {
           forceSSL = lib.mkDefault true;
           enableACME = lib.mkDefault true;
-          root = cfg.package;
+          root = cfg.package + "/public_html";
           locations."/" = {
             index = "index.php";
             priority = 1100;
             extraConfig = ''
               add_header Cache-Control 'public, max-age=604800, must-revalidate';
-              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
-          locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {
-            priority = 3110;
-            extraConfig = ''
-              return 404;
-            '';
-          };
-          locations."~ ^/(CHANGELOG.md|INSTALL|LICENSE|README.md|SECURITY.md|UPGRADING|composer.json|composer.lock)" =
-            {
-              priority = 3120;
-              extraConfig = ''
-                return 404;
-              '';
-            };
           locations."~* \\.php(/|$)" = {
             priority = 3130;
             extraConfig = ''
@@ -213,6 +199,8 @@ in
               fastcgi_param PATH_INFO $fastcgi_path_info;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
+
+              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
         };

@@ -7,7 +7,7 @@
   meson,
   pkg-config,
   inih,
-  systemd,
+  systemdLibs,
   scdoc,
   nix-update-script,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xdg-desktop-portal
     inih
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [ "-Dsd-bus-provider=libsystemd" ];

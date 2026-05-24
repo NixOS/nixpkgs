@@ -1,15 +1,18 @@
 {
   lib,
+  pnpm_10,
   stdenv,
   fetchFromGitHub,
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
   npmHooks,
   nix-update-script,
 }:
 
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgrep";
   version = "0.1.10";
@@ -23,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-T1mbRDBLU4SjZSgqyKgusZe5UV9hI+/bAmBYoAWcWtQ=";
   };

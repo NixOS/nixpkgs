@@ -37,14 +37,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.14.0";
+  version = "3.14.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EMwqo+0mIwjDY3wKW4idiAczSSPIGjTRNIYlqPDwd+w=";
+    hash = "sha256-BaSD21mj7rPV53qFCOxGjGMm+rVzmfCooqcLcvQZa1U=";
   };
 
   build-system = [

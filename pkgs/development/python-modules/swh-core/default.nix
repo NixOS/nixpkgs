@@ -101,7 +101,6 @@ buildPythonPackage (finalAttrs: {
     msgpack
     postgresql
     postgresqlTestHook
-    psycopg.optional-dependencies.pool
     pylzma
     pytestCheckHook
     pytest-aiohttp
@@ -119,7 +118,8 @@ buildPythonPackage (finalAttrs: {
     types-requests
     unzip
     pkgs.zstd
-  ];
+  ]
+  ++ psycopg.optional-dependencies.pool;
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
     # shutil.RegistryError: .tar.zst is already registered for "zstdtar"

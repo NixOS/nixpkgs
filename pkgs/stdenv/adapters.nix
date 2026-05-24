@@ -175,7 +175,7 @@ rec {
   # Puts all the other ones together
   makeStatic =
     stdenv:
-    lib.foldl (lib.flip lib.id) stdenv (
+    lib.foldl' (lib.flip lib.id) stdenv (
       lib.optional stdenv.hostPlatform.isDarwin makeStaticDarwin
 
       ++ [

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch2,
   fetchurl,
   ncurses,
   pkg-config,

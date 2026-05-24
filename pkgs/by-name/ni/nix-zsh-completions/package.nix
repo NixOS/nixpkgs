@@ -39,7 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       olejorgenb
       hedning
       ma27
-      sebtm
     ];
   };
 })

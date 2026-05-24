@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
     homepage = "https://mockoon.com";
     changelog = "https://github.com/mockoon/mockoon/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "mockoon";
     platforms = [ "x86_64-linux" ];
   };

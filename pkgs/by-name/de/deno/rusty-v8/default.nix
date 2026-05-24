@@ -153,6 +153,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "fortify3"
   ];
 
+  # Don't run checks on hydra as they've been observed to be flakey for us and
+  # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
+  # We haven't reproduced it on local machines, could be related to doing other
+  # builds simultaneously.
+  # A build with tests is included as part of `deno.passhtru.tests` via `librusty_v8.passthru.tests`
+  doCheck = false;
+  # Check related config is left in the main package so if someone uses
+  # `overrideAttrs` to always build with tests, it'll all work.
   checkFlags = [
     # These tests probably fail due to a more recent rustc version (upstream: 1.89.0, here: 1.93.0)
     "--skip=ui"
@@ -167,6 +175,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    tests = {
+      build-with-unit-tests = deno.passthru.librusty_v8.overrideAttrs (fa: {
+        doCheck = true;
+      });
+    };
+  };
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
@@ -174,6 +190,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/denoland/rusty_v8";
     license = lib.licenses.mit;
     maintainers = deno.meta.maintainers;
+    maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = deno.meta.platforms;
   };
 })

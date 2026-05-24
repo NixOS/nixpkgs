@@ -17,14 +17,14 @@
   resholve,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "aaxtomp3";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "krumpetpirate";
     repo = "aaxtomp3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7a9ZVvobWH/gPxa3cFiPL+vlu8h1Dxtcq0trm3HzlQg=";
   };
 
@@ -76,4 +76,4 @@ resholve.mkDerivation rec {
     license = lib.licenses.wtfpl;
     maintainers = [ ];
   };
-}
+})

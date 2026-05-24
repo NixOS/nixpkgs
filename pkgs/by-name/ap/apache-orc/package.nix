@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_JAVA" false)
-    (lib.cmakeBool "STOP_BUILD_ON_WARNING" stdenv.isLinux)
+    (lib.cmakeBool "STOP_BUILD_ON_WARNING" stdenv.hostPlatform.isLinux)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [

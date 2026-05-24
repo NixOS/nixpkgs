@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "age-plugin-sss";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "olastor";
     repo = "age-plugin-sss";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QNu2Sp0CxYYXuMzf7X0mMYI677ICu5emOM4F9HlKhHA=";
+    hash = "sha256-XXlnot+oevRJKl0F1uz2DHg3yrtGhlBSlEGOsx/hCMw=";
   };
 
   vendorHash = "sha256-Aw7dwro6adluhQXPlZ9RZVGBAmNw539Z3c+a8TmPTXU=";

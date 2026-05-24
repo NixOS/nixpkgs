@@ -1,6 +1,5 @@
 {
   stdenv,
-  comma,
   fetchFromGitHub,
   installShellFiles,
   fzy,
@@ -8,22 +7,24 @@
   nix-index-unwrapped,
   nix,
   rustPlatform,
-  testers,
+  versionCheckHook,
   buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comma";
-  version = "2.3.3";
+  version = "2.4.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-dNek1a8Yt3icWc8ZpVe1NGuG+eSoTDOmAAJbkYmMocU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XZB0zx4wyNzy0LggAmh2gT2aEWAqVI9NljRoOkeK0c8=";
   };
 
-  cargoHash = "sha256-SJBfWjOVrv2WMIh/cQbaFK8jn3oSbmJpdJM7pkJppDs=";
+  cargoHash = "sha256-lY5HwWZm9X0xusLcC6MciAgSWEskNElrjhe9fexR6g8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -56,9 +57,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage comma.1
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = comma; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/nix-community/comma";

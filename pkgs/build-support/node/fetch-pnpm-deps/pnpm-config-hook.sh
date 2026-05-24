@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+versionAtLeast () {
+    local cur_version=$1 min_version=$2
+    printf "%s\0%s" "$min_version" "$cur_version" | sort -zVC
+}
+
 pnpmConfigHook() {
     echo "Executing pnpmConfigHook"
 
@@ -17,13 +22,18 @@ pnpmConfigHook() {
       exit 1
     fi
 
-    # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
-    # any pnpm command would fail in that directory, the following disables this
-    pushd $HOME
-    pnpm config set manage-package-manager-versions false
+    pushd "$HOME"
+    pnpmVersion=$(pnpm --version)
+
+    if versionAtLeast "$pnpmVersion" "11"; then
+      # pnpm 11 uses a different mechanism to manage package manager versions
+      export pnpm_config_pm_on_fail=ignore
+    else
+      pnpm config set manage-package-manager-versions false
+    fi
     popd
 
-    echo "Found 'pnpm' with version '$(pnpm --version)'"
+    echo "Found 'pnpm' with version '$pnpmVersion'"
 
     fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version" || echo 1)
 
@@ -33,7 +43,9 @@ pnpmConfigHook() {
 
     export STORE_PATH=$(mktemp -d)
     export npm_config_arch="@npmArch@"
+    export pnpm_config_arch="@npmArch@"
     export npm_config_platform="@npmPlatform@"
+    export pnpm_config_platform="@npmPlatform@"
 
     if [[ $fetcherVersion -ge 3 ]]; then
       tar --zstd -xf "$pnpmDeps/pnpm-store.tar.zst" -C "$STORE_PATH"
@@ -42,6 +54,14 @@ pnpmConfigHook() {
     fi
 
     chmod -R +w "$STORE_PATH"
+
+    # Reconstruct the SQLite database from the SQL dump if needed.
+    # The fetch phase stores a text SQL dump instead of the binary db
+    # to ensure reproducibility across platforms.
+    if [ -f "$STORE_PATH/v11/index.db.sql" ]; then
+      sqlite3 "$STORE_PATH/v11/index.db" < "$STORE_PATH/v11/index.db.sql"
+      rm "$STORE_PATH/v11/index.db.sql"
+    fi
 
     pnpm config set store-dir "$STORE_PATH"
 
@@ -77,6 +97,9 @@ pnpmConfigHook() {
         echo '1. Set pnpmDeps.hash to "" (empty string)'
         echo "2. Build the derivation and wait for it to fail with a hash mismatch"
         echo "3. Copy the 'got: sha256-' value back into the pnpmDeps.hash field"
+        echo
+        echo "If you see ERR_PNPM_LOCKFILE_CONFIG_MISMATCH above this, try changing the pnpm version"
+        echo "Found 'pnpm' with version '$pnpmVersion'"
         echo
 
         exit 1

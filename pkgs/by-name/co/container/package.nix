@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "container";
-  version = "0.11.0";
+  version = "0.12.3";
 
   src = fetchurl {
     url = "https://github.com/apple/container/releases/download/${finalAttrs.version}/container-${finalAttrs.version}-installer-signed.pkg";
-    hash = "sha256-kGNqRgOmaeurQZuuHh2dMijAFWxJAiY8ksGdBQMPQEo=";
+    hash = "sha256-g/NjEmrB8GRYjeOc1rR0NA1InBkmSSosTlnE1Uqm2OM=";
   };
 
   nativeBuildInputs = [

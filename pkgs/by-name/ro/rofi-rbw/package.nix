@@ -63,7 +63,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       equirosa
-      dit7ya
     ];
     platforms = lib.platforms.linux;
     mainProgram = "rofi-rbw";

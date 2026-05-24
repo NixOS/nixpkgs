@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "starship.yazi";
-  version = "25.4.8-unstable-2026-03-22";
+  version = "0-unstable-2026-03-22";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";

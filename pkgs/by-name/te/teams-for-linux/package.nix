@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.8.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-kD04SMErq92k+F4/3v6bpoJf2lfaGM6bAn+bCa9ACbA=";
+    hash = "sha256-/e/NpyfcrHsgMf8tJ8VgUyCOrdfAaRH0/+kUqItd1+s=";
   };
 
-  npmDepsHash = "sha256-497bL7l3OIAgkbXP3FkeFFpPz2VtRENrw6sQmJsnXBY=";
+  npmDepsHash = "sha256-RvIjGXhjNqxey3zhACGj7Zd0dnmLb1IqIg/PnfEdjz0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -125,6 +125,7 @@ buildNpmPackage rec {
     description = "Unofficial Microsoft Teams client for Linux";
     mainProgram = "teams-for-linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
+    changelog = "https://github.com/IsmaelMartinez/teams-for-linux/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       muscaln

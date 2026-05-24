@@ -21,7 +21,6 @@
   rustc,
   which,
   zip,
-  xcbuild,
 
   # runtime
   icu75,
@@ -32,6 +31,9 @@
   libiconv,
 }:
 
+let
+  apple-sdk = (if (lib.versionAtLeast version "140") then apple-sdk_15 else apple-sdk_14);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spidermonkey";
   inherit version;
@@ -87,9 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (lib.versionAtLeast version "128") [
     rust-cbindgen
     rustPlatform.bindgenHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
   ];
 
   buildInputs = [
@@ -100,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    (if (lib.versionAtLeast version "140") then apple-sdk_15 else apple-sdk_14)
+    apple-sdk
   ];
 
   depsBuildBuild = [
@@ -128,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1907030
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1957023
     "--includedir=${placeholder "dev"}/include"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    "--with-macos-sdk=${apple-sdk.sdkroot}"
   ]
   ++ [
     "--disable-jemalloc"

@@ -9,21 +9,21 @@
   stdenv,
   versionCheckHook,
   x11Support ? true,
-  zig_0_15,
+  zig_0_16,
 }:
 
 let
-  zig = zig_0_15;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P0yLiRIA0bDMiYfL6Kz2/OXh+nmnbHZnsCbcYGIGnbc=";
+    hash = "sha256-FiHSUqAxJurlQuXEkpglWrd2tCqKZuucB4mipFGI4II=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     linux-pam
   ]
-  ++ (lib.optionals x11Support [ libxcb ]);
-
-  postConfigure = ''
-    ln -s ${
-      callPackage ./deps.nix {
-        inherit zig;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  ++ lib.optionals x11Support [ libxcb ];
 
   zigBuildFlags = [
+    "--system"
+    "${callPackage ./deps.nix { }}"
     "-Denable_x11_support=${lib.boolToString x11Support}"
   ];
 

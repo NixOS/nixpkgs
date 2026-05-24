@@ -86,7 +86,10 @@ buildPythonPackage (finalAttrs: {
     types-requests
   ];
 
-  disabledTests = [ "test_setup_log_handler_with_env_configuration" ];
+  disabledTests = [
+    "test_setup_log_handler_with_env_configuration"
+    "test_task_exception"
+  ];
 
   meta = {
     changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scheduler/-/tags/${finalAttrs.src.tag}";

@@ -5,6 +5,7 @@
   git,
   breezy,
   subversion,
+  installShellFiles,
 }:
 
 with python3Packages;
@@ -26,6 +27,8 @@ buildPythonApplication (finalAttrs: {
     setuptools # pkg_resources is imported during runtime
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   makeWrapperArgs = [
     "--prefix"
     "PATH"
@@ -41,6 +44,11 @@ buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "vcs2l" ];
 
+  postInstall = ''
+    installShellCompletion $out/share/vcs2l-completion/vcs.{bash,fish,zsh}
+    rm -rf $out/share/vcs2l-completion
+  '';
+
   meta = {
     description = "Provides a command line tool to invoke vcs commands on multiple repositories";
     homepage = "https://github.com/ros-infrastructure/vcs2l";
@@ -49,5 +57,6 @@ buildPythonApplication (finalAttrs: {
       esteve
       sivteck
     ];
+    mainProgram = "vcs";
   };
 })

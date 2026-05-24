@@ -24,17 +24,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clonehero";
-  version = "1.0.0.4080";
+  version = "1.1.0.6085";
 
   src = fetchurl {
-    url = "https://github.com/clonehero-game/releases/releases/download/V${finalAttrs.version}/CloneHero-linux.tar.xz";
-    hash = "sha256-YWLV+wgQ9RfKRSSWh/x0PMjB6tFA4YpHb9WtYOOgZZI=";
+    url = "https://github.com/clonehero-game/releases/releases/download/v${finalAttrs.version}-final/Linux.x86_64-Standalone.tar";
+    hash = "sha256-xy7/3SDNgKw67ikA7CtRVK2gNrfjqx4cTDeRUkkSBKo=";
   };
-
-  outputs = [
-    "out"
-    "doc"
-  ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -73,17 +68,20 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 clonehero "$out/bin/clonehero"
-    install -Dm644 UnityPlayer.so "$out/libexec/clonehero/UnityPlayer.so"
+    install -Dm755 clonehero "$out/libexec/clonehero/clonehero"
+    install -Dm644 GameAssembly.so "$out/lib/clonehero/GameAssembly.so"
+    install -Dm644 UnityPlayer.so "$out/lib/clonehero/UnityPlayer.so"
 
-    mkdir -p "$out/share/icons/hicolor/128x128/apps"
+    mkdir -p "$out/share"
     cp -r clonehero_Data "$out/share/clonehero"
-    ln -s "$out/share/clonehero" "$out/bin/clonehero_Data"
-    ln -s "$out/share/clonehero/Resources/UnityPlayer.png" "$out/share/icons/hicolor/128x128/apps/clonehero.png"
     install -Dm644 "$desktopItem/share/applications/clonehero.desktop" "$out/share/applications/clonehero.desktop"
 
-    mkdir -p "$doc/share/doc/clonehero"
-    cp -r CLONE_HERO_MANUAL.{pdf,txt} Custom EULA.txt THIRDPARTY.txt "$doc/share/doc/clonehero"
+    mkdir -p "$out/bin" "$out/share/icons/hicolor/128x128/apps"
+    ln -s "$out/libexec/clonehero/clonehero" "$out/bin/clonehero"
+    ln -s "$out/lib/clonehero/GameAssembly.so" "$out/libexec/clonehero/GameAssembly.so"
+    ln -s "$out/lib/clonehero/UnityPlayer.so" "$out/libexec/clonehero/UnityPlayer.so"
+    ln -s "$out/share/clonehero" "$out/libexec/clonehero/clonehero_Data"
+    ln -s "$out/share/clonehero/Resources/UnityPlayer.png" "$out/share/icons/hicolor/128x128/apps/clonehero.png"
 
     runHook postInstall
   '';
@@ -114,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-needed libXrandr.so.2 \
       --add-needed libXss.so.1 \
       --add-needed libXxf86vm.so.1 \
-      "$out/libexec/clonehero/UnityPlayer.so"
+      "$out/lib/clonehero/UnityPlayer.so"
   '';
 
   meta = {

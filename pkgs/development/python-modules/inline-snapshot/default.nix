@@ -6,7 +6,6 @@
   dirty-equals,
   executing,
   fetchFromGitHub,
-  freezegun,
   hatchling,
   hypothesis,
   isort,
@@ -17,7 +16,6 @@
   pytest-xdist,
   pytestCheckHook,
   rich,
-  time-machine,
   typing-extensions,
 }:
 
@@ -47,7 +45,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    freezegun
     hypothesis
     isort
     pydantic
@@ -55,7 +52,6 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
-    time-machine
   ]
   ++ lib.concatAttrValues optional-dependencies;
 

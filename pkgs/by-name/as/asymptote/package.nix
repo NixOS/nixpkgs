@@ -33,7 +33,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.10";
+  version = "3.11";
   pname = "asymptote";
 
   outputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-0nvo/vJQ1dwzhgK/cj4dCejNHoXBmatMgHQwif2M0sc=";
+    hash = "sha256-U36fImIb+E8J7g1E3EVcTqkboZODDx12JKB9RxDX59E=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source

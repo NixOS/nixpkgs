@@ -186,6 +186,7 @@ stdenv.mkDerivation rec {
     inherit wxGTK python wxPython;
     inherit withNgspice withScripting withI18n;
     inherit debug sanitizeAddress sanitizeThreads;
+    templateDir = template_dir;
   };
 
   inherit pname;

@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "office.yazi";
-  version = "0-unstable-2026-04-22";
+  version = "0-unstable-2025-09-20";
 
   src = fetchFromGitHub {
     owner = "macydnah";

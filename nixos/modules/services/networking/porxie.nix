@@ -76,22 +76,23 @@ in
             default = null;
             apply = v: if v != null then lib.concatStringsSep "," v else null;
             description = ''
-              Blob MIME types that can be served.
+              Blob mimetypes that can be served. Wildcards are supported "*/*", "image/*", etc.
 
-              Validation is done loosely via content inference. Further validation can be done by
-              a layer above this proxy, such as an image transformation service. When inference
-              fails, the blob's type falls back to `application/octet-stream`. When that type is
-              allowed, blobs failing inference can still be served.
+              Validation is done loosely via content sniffing. Further validation can be done by a layer
+              above this proxy, such as an image transformation service. When inference fails, the blob's
+              type falls back to `application/octet-stream`. When that type is allowed, blobs failing
+              inference can still be served.
             '';
           };
           PORXIE_BLOB_MAX_SIZE = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
             description = ''
-              Maximum blob size that can be fetched and served.
+              Maximum blob size that can be served.
 
-              Blobs that exceed this limit will return HTTP 413. The minimum value is 512kb
-              and the maximum is the system's total memory.
+              Blobs that exceed this limit will return HTTP 413.
+
+              The minimum value is 512kb and the maximum is the system's total memory.
             '';
           };
           PORXIE_BLOB_CACHE_HEADER = lib.mkOption {

@@ -34,7 +34,6 @@ in
     ./openbox.nix
     ./pekwm.nix
     ./notion.nix
-    ./ragnarwm.nix
     ./ratpoison.nix
     ./sawfish.nix
     ./smallwm.nix

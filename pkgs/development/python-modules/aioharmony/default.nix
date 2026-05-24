@@ -4,6 +4,7 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   setuptools,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aioharmony";
-  version = "0.5.3";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Harmony-Libs";
     repo = "aioharmony";
     tag = "v${version}";
-    hash = "sha256-H5zVY7LvTP8/CQtUGtXCXxOfG8GFQgdp7BY8jl9X+Gc=";
+    hash = "sha256-163L2ilmfMRL6qsD4RgWEX3kdKK6rnvjw9c78vKBtuE=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
   ];

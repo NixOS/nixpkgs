@@ -76,7 +76,7 @@ makeScopeWithSplicing' {
 
         grantlee = callPackage ../development/libraries/grantlee/5 { };
 
-        herqq = callPackage ../development/libraries/herqq { };
+        herqq = callPackage ../by-name/he/herqq/package.nix { };
 
         kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 

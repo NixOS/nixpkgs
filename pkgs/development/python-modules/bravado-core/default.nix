@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "bravado-core";
-  version = "6.3.1";
+  version = "6.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "bravado-core";
     rev = "v${version}";
-    hash = "sha256-tMrGNezHtmSwuZOdTI+dMIFZ8SWi38LoOWevdwHcKr8=";
+    hash = "sha256-P6R1Pmhddyy1iwQuem8YVDFFrQ4qxHzASZQbqpMZXeI=";
   };
 
   build-system = [ setuptools ];

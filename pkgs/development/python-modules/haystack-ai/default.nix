@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  writableTmpDirAsHomeHook,
   boilerpy3,
   events,
   httpx,
@@ -103,6 +104,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    writableTmpDirAsHomeHook
   ];
 
   propagatedBuildInputs = [
@@ -130,8 +132,6 @@ buildPythonPackage rec {
     tqdm
     transformers
   ];
-
-  env.HOME = "$(mktemp -d)";
 
   optional-dependencies = {
     # all = [

@@ -620,7 +620,7 @@ let
           scons
         ]
         ++ lib.optionals withWayland [ wayland-scanner ]
-        ++ lib.optional (editor && withMono) [
+        ++ lib.optionals (editor && withMono) [
           makeWrapper
           dotnet-sdk
         ]

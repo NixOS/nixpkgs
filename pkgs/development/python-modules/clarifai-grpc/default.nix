@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "12.4.0";
+  version = "12.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";
     tag = version;
-    hash = "sha256-IH09q15Oq6ow2fBehyikfaiAwv8L9aL6c61tUNjbYIc=";
+    hash = "sha256-WQf2GNj4vjoUmRPmEVua0DsXNYpnJDI/oVRz+C9m82k=";
   };
 
   build-system = [ setuptools ];

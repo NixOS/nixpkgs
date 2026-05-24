@@ -1475,7 +1475,6 @@ class NspawnMachine(BaseMachine):
 
         self.start_command = start_command
         self.process = None
-        self.pid = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
 
@@ -1486,15 +1485,25 @@ class NspawnMachine(BaseMachine):
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
-        if self.pid is None:
+        if self.process is None:
             return
 
         if self.machine_sock:
             self.machine_sock.close()
 
-        self.logger.info(f"kill NspawnMachine (pid {self.pid})")
-        assert self.process is not None
+        self.logger.info(f"kill NspawnMachine (pid {self.process.pid})")
         self.process.terminate()
+        # Wait for the wrapper to finish its context-manager cleanups
+        # (veth/bridge/netns teardown) before returning, so the driver's
+        # subsequent vlan teardown does not race against it.
+        try:
+            self.process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            self.logger.error(
+                f"NspawnMachine {self.name} (pid {self.process.pid}) did not exit after SIGTERM; sending SIGKILL"
+            )
+            self.process.kill()
+            self.process.wait()
         self.process = None
 
     def is_up(self) -> bool:
@@ -1683,9 +1692,7 @@ class NspawnMachine(BaseMachine):
             stdout=subprocess.PIPE,
         )
 
-        self.pid = self.process.pid
-
-        self.log(f"systemd-nspawn running (pid {self.pid})")
+        self.log(f"systemd-nspawn running (pid {self.process.pid})")
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()

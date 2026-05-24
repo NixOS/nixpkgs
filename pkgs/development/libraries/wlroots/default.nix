@@ -162,11 +162,6 @@ let
 
 in
 {
-  wlroots_0_18 = generic {
-    version = "0.18.3";
-    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
-  };
-
   wlroots_0_19 = generic {
     version = "0.19.3";
     hash = "sha256-J+wSVUtuizaCyCn523chFbE8VtbPjyu5XYv5eLT+GM0=";

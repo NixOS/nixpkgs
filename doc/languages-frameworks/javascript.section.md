@@ -305,7 +305,7 @@ This package puts the corepack wrappers for pnpm and yarn in your PATH, and they
 
 ### pnpm {#javascript-pnpm}
 
-pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8`, `pnpm_9` and `pnpm_10`, which support different sets of lock file versions.
+pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8`, `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
 
 When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` will prepare the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the fetcher and setup hook above:
 
@@ -313,11 +313,18 @@ When packaging an application that includes a `pnpm-lock.yaml`, you need to fetc
 {
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   stdenv,
 }:
-
+let
+  # It is recommended to pin pnpm to a major version, due to regular breaking changes in the store format
+  # The latest major version is always available under `pkgs.pnpm`
+  # Optionally override pnpm to use a custom nodejs version
+  # Make sure that the same nodejs version is referenced in nativeBuildInputs
+  # pnpm = pnpm_11.override { nodejs = nodejs_24; };
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
   version = "0-unstable-1980-01-01";
@@ -334,7 +341,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
+    inherit pnpm;
+    fetcherVersion = 4;
     hash = "...";
   };
 })
@@ -356,7 +364,7 @@ It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnp
 +let
 +  # Optionally override pnpm to use a custom nodejs version
 +  # Make sure that the same nodejs version is referenced in nativeBuildInputs
-+  # pnpm = pnpm_10.override { nodejs = nodejs_20; };
++  # pnpm = pnpm_10.override { nodejs = nodejs-slim_22; };
 +in
  stdenv.mkDerivation (finalAttrs: {
    pname = "foo";
@@ -376,7 +384,7 @@ It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnp
    pnpmDeps = fetchPnpmDeps {
      inherit (finalAttrs) pname version src;
 +    pnpm = pnpm_10;
-     fetcherVersion = 3;
+     fetcherVersion = 4;
      hash = "...";
    };
  })
@@ -490,7 +498,7 @@ This is the version of the output of `fetchPnpmDeps`. New packages should use `3
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = "..."; # clear this hash and generate a new one
   };
 }
@@ -503,9 +511,12 @@ Changes can include workarounds or bug fixes to existing PNPM issues.
 
 ##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
 
-- 1: Initial version, nothing special. **Deprecated: Scheduled for removal in the 26.11 release.**. New packages must not use this value.
+Version 3 is the recommended value for new packages. Versions 1 and 2 are deprecated and scheduled for removal in the 26.11 release; existing packages must migrate.
+
+- 1: Initial version, nothing special.
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
-- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950). **Recommended**
+- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
+- 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
 
 ### Yarn {#javascript-yarn}
 

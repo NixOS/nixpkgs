@@ -25,16 +25,16 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paddlex";
-  version = "3.4.3";
+  version = "3.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
-    tag = "v${version}";
-    hash = "sha256-XQrRo4B/xn7uBbQv7YjfKaK4DLiTciGnXjb+dL1hkw4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q6JVv+7HC/HtEK/LgKhld29tMrk0KY+h9c5VGDfHyvE=";
   };
 
   build-system = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pyyaml"
+    "numpy"
   ];
 
   dependencies = [
@@ -73,7 +74,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/PaddlePaddle/PaddleX";
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
-    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
+    changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     platforms = [
       "x86_64-linux"
@@ -82,4 +83,4 @@ buildPythonPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

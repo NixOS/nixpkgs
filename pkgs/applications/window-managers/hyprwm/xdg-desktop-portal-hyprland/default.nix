@@ -20,7 +20,6 @@
   qtwayland,
   sdbus-cpp_2,
   slurp,
-  systemd,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -60,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     qtwayland
     sdbus-cpp_2
-    systemd
     wayland
     wayland-protocols
     wayland-scanner

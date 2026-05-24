@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "relative-motions.yazi";
-  version = "25.5.28-unstable-2025-07-09";
+  version = "0-unstable-2025-07-09";
 
   src = fetchFromGitHub {
     owner = "dedukun";

@@ -50,6 +50,7 @@ buildPythonPackage.override { inherit (nixl) stdenv; } (finalAttrs: {
     pytest
     pyyaml
     setuptools
+    torch
     types-pyyaml
   ];
   dontUseMesonConfigure = true;

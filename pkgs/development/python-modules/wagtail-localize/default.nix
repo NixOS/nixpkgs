@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.13";
+  version = "1.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
     owner = "wagtail";
     tag = "v${version}";
-    hash = "sha256-JhLfrK4CBdTR85JuAjf9vGByQVgCIYT3IrM6AYxxNTE=";
+    hash = "sha256-iJwX/N8/aaAjinU1htVasp88fuuZCOomVPgJ1Ymxre4=";
   };
 
   build-system = [ flit-core ];
@@ -56,11 +56,11 @@ buildPythonPackage rec {
     google-cloud-translate
   ];
 
+  # See https://github.com/wagtail/wagtail-localize/issues/922
+  patches = [ ./failing-test.patch ];
+
   checkPhase = ''
     runHook preCheck
-
-    # test_translate_html fails with later Beautifulsoup releases
-    rm wagtail_localize/machine_translators/tests/test_dummy_translator.py
 
     ${python.interpreter} testmanage.py test
 

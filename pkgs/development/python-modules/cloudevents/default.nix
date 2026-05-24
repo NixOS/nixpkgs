@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   deprecation,
   flask,
@@ -39,7 +40,15 @@ buildPythonPackage (finalAttrs: {
     sanic-testing
   ];
 
-  disabledTestPaths = [ "samples/http-image-cloudevents/image_sample_test.py" ];
+  disabledTestPaths = [
+    "samples/http-image-cloudevents/image_sample_test.py"
+  ]
+  # pydantic v1 doesn't work on python 3.14
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "cloudevents/tests/test_pydantic_cloudevent.py"
+    "cloudevents/tests/test_pydantic_conversions.py"
+    "cloudevents/tests/test_pydantic_events.py"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

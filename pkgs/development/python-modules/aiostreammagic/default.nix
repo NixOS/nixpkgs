@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiostreammagic";
-  version = "2.13.0";
+  version = "2.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noahhusby";
     repo = "aiostreammagic";
     tag = finalAttrs.version;
-    hash = "sha256-8Fl+J4qhl6RFP9qTJScNFx2MTp2eGHocJjXUuVjYgq4=";
+    hash = "sha256-yxiK5zB6nYXMJGVrebjdCjDr1wpNPlagusCiyf4TeRA=";
   };
 
   build-system = [ poetry-core ];

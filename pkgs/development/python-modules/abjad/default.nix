@@ -63,6 +63,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://abjad.github.io/";
     changelog = "https://abjad.github.io/appendices/changes.html";
-    maintainers = [ lib.maintainers.davisrichard437 ];
+    maintainers = [ ];
   };
 }

@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
   # build tools
   cargo-tauri,
@@ -23,21 +24,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chiri";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "SapphoSys";
     repo = "chiri";
     tag = "app-v${finalAttrs.version}";
-    hash = "sha256-VrENUwkItT+8C7JowoEfqjIX4RhThTm+4hntdm9ifVk=";
+    hash = "sha256-45a1mmh8dxrWw+UQzJcbPAujFjCYC4ovsGhdAn39LkI=";
   };
 
-  cargoHash = "sha256-2CDwuZiE4b5cBUPZs8l4pf9/FyvtSpRwNwQZ5gp85zc=";
+  cargoHash = "sha256-TLYiCdkF/uX3uIVwplI7L1b7Ta5LTRdKqFlmnvCxFFc=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    hash = "sha256-z2AMfMYNEK4pmjlE5YXn1DRCGyIcOO0EWCFlhXSxwrU=";
+    hash = "sha256-jDSljbGzEGDl0PsnjdmyhIGXX4fUPVeCndv5pUm/utE=";
     fetcherVersion = 3;
   };
 
@@ -102,6 +103,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       '';
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script;
 
   meta = {
     description = "Cross-platform CalDAV task management app";

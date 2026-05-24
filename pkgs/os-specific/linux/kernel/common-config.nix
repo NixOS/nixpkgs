@@ -1371,6 +1371,10 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
+        # Allos PCIe devices report errors with Advanced Error Reporting (AER).
+        PCIEAER = yes;
+        ACPI_APEI_PCIEAER = yes;
+
         # Enable all available thermal governors
         THERMAL_GOV_BANG_BANG = yes;
         THERMAL_GOV_FAIR_SHARE = yes;

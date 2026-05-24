@@ -13,6 +13,9 @@
   urllib3,
   zipfile2,
   tqdm,
+  reportlab,
+  streamlit,
+  boto3,
 }:
 
 buildPythonPackage rec {
@@ -40,6 +43,9 @@ buildPythonPackage rec {
     urllib3
     zipfile2
     tqdm
+    reportlab
+    streamlit
+    boto3
   ];
 
   # WARNING: Running the tests will create experiments, models, assets, etc.

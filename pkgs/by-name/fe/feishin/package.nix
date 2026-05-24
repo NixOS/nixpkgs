@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_39,
+  electron_40,
   dart-sass,
   mpv-unwrapped,
   fetchPnpmDeps,
@@ -25,7 +25,7 @@ let
     hash = "sha256-TSjgjNHhPSZ4k7zZTH5e3FCkl6d7B/2w2WCt0S5OW0g=";
   };
 
-  electron = electron_39;
+  electron = electron_40;
 in
 buildNpmPackage {
   inherit pname version;

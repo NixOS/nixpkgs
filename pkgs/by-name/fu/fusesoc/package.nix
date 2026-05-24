@@ -12,12 +12,12 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fusesoc";
-  version = "2.4.5";
+  version = "2.4.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-VBjJ7wiEz441iVquLMGabtdYbK07+dtHY05x8QzdSL8=";
+    hash = "sha256-d04DFtV71CkrvX51x19cl0KSn2yOCMmYWGRv3AED8Xw=";
   };
 
   build-system = with python3Packages; [

@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "0.7.28.1";
+  version = "0.7.28.2";
 in
 buildDotnetModule {
   pname = "interlude";
@@ -26,7 +26,7 @@ buildDotnetModule {
     repo = "YAVSRG";
     tag = "interlude-v${version}";
     fetchSubmodules = true;
-    hash = "sha256-0Qbnywbq4cs/WPhvCou31FFKdqjRhZ4Aww06D1h5Nx4=";
+    hash = "sha256-39GhnQcp5yaHC2fGnXkjny7e7QphBYih+PUuj3GR6qA=";
   };
 
   patches = [

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pciutils";
-  version = "3.14.0"; # with release-date database
+  version = "3.15.0"; # with release-date database
 
   src = fetchFromGitHub {
     owner = "pciutils";
     repo = "pciutils";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8wSvu8BGzETD1RfwL6/DfSCZcmuj1I+zNH033f48qNQ=";
+    hash = "sha256-fPtOhUz8Hlo0ajCZbNOwT4fiuL8HlFQ7NGk+nQpmKZM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     imagemagick
   ]
-  ++ lib.optional stdenvNoCC.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ++ lib.optional stdenvNoCC.hostPlatform.isDarwin desktopToDarwinBundle;
 
   postPatch = ''
     sed -i "s|<title>.*</title>|<title>PvZ2: Gardendless</title>|" docs/index.html

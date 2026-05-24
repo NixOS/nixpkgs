@@ -8,13 +8,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "qbit-manage";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
     tag = "v${version}";
-    hash = "sha256-cPN4GhB7TuhiGau8Nb9hVNubF6fppyS2tuFGJ+spPaI=";
+    hash = "sha256-+W28F8vI5OLqFd0S6nlqMW/IxJXB4Vl+bCOZAyLGNXY=";
   };
 
   pyproject = true;
@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "croniter"
     "fastapi"
+    "gitpython"
     "requests"
     "uvicorn"
   ];
