@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "avea";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "k0rventen";
     repo = "avea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cBYS8Q70K5MXZ63uI6OGkUsskJ7rkgTBPjlAsxmtmVA=";
+    hash = "sha256-8jDKsEqYDUuB9L2M3da+6xvp6pP7TRHcZwy8w/fOesk=";
   };
 
   build-system = [ setuptools ];
