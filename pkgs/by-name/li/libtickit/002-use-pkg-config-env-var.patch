@@ -1,0 +1,61 @@
+diff --git a/Makefile b/Makefile
+index a5b810f..8b18467 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,18 +19,18 @@ ifeq ($(PROFILE),1)
+   override LDFLAGS+=-pg
+ endif
+ 
+-ifeq ($(shell pkg-config --atleast-version=1.1.0 unibilium && echo 1),1)
+-  override CFLAGS +=$(shell pkg-config --cflags unibilium) -DHAVE_UNIBILIUM
+-  override LDFLAGS+=$(shell pkg-config --libs   unibilium)
+-else ifeq ($(shell pkg-config ncursesw && echo 1),1)
+-  override CFLAGS +=$(shell pkg-config --cflags ncursesw)
+-  override LDFLAGS+=$(shell pkg-config --libs   ncursesw)
++ifeq ($(shell $(PKG_CONFIG) --atleast-version=1.1.0 unibilium && echo 1),1)
++  override CFLAGS +=$(shell $(PKG_CONFIG) --cflags unibilium) -DHAVE_UNIBILIUM
++  override LDFLAGS+=$(shell $(PKG_CONFIG) --libs   unibilium)
++else ifeq ($(shell $(PKG_CONFIG) ncursesw && echo 1),1)
++  override CFLAGS +=$(shell $(PKG_CONFIG) --cflags ncursesw)
++  override LDFLAGS+=$(shell $(PKG_CONFIG) --libs   ncursesw)
+ else
+   override LDFLAGS+=-lncurses
+ endif
+ 
+-override CFLAGS +=$(shell pkg-config --cflags termkey)
+-override LDFLAGS+=$(shell pkg-config --libs   termkey)
++override CFLAGS +=$(shell $(PKG_CONFIG) --cflags termkey)
++override LDFLAGS+=$(shell $(PKG_CONFIG) --libs   termkey)
+ 
+ CFILES=$(sort $(wildcard src/*.c))
+ HFILES=$(sort $(wildcard include/*.h))
+@@ -44,11 +44,11 @@ TESTFILES=$(TESTSOURCES:.c=.t)
+ 
+ EXAMPLESOURCES=$(sort $(wildcard examples/*.c))
+ 
+-ifneq ($(shell pkg-config glib-2.0 && echo 1),1)
++ifneq ($(shell $(PKG_CONFIG) glib-2.0 && echo 1),1)
+   EXAMPLESOURCES:=$(filter-out examples/evloop-glib.c, $(EXAMPLESOURCES))
+ endif
+ 
+-ifneq ($(shell pkg-config libuv && echo 1),1)
++ifneq ($(shell $(PKG_CONFIG) libuv && echo 1),1)
+   EXAMPLESOURCES:=$(filter-out examples/evloop-libuv.c, $(EXAMPLESOURCES))
+ endif
+ 
+@@ -107,11 +107,11 @@ clean: clean-test
+ 	$(LIBTOOL) --mode=clean rm -f $(EXAMPLEOBJECTS) $(EXAMPLES)
+ 	$(LIBTOOL) --mode=clean rm -f $(LIBRARY)
+ 
+-examples/evloop-glib.lo: CFLAGS +=$(shell pkg-config --cflags glib-2.0)
+-examples/evloop-glib:    LDFLAGS+=$(shell pkg-config --libs   glib-2.0)
++examples/evloop-glib.lo: CFLAGS +=$(shell $(PKG_CONFIG) --cflags glib-2.0)
++examples/evloop-glib:    LDFLAGS+=$(shell $(PKG_CONFIG) --libs   glib-2.0)
+ 
+-examples/evloop-libuv.lo: CFLAGS +=$(shell pkg-config --cflags libuv)
+-examples/evloop-libuv:    LDFLAGS+=$(shell pkg-config --libs   libuv)
++examples/evloop-libuv.lo: CFLAGS +=$(shell $(PKG_CONFIG) --cflags libuv)
++examples/evloop-libuv:    LDFLAGS+=$(shell $(PKG_CONFIG) --libs   libuv)
+ 
+ .PHONY: examples
+ examples: $(EXAMPLES)
