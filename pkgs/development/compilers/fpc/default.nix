@@ -1,26 +1,14 @@
 {
   lib,
   stdenv,
-  fetchurl,
   gawk,
-  undmg,
-  cpio,
-  xar,
   fetchFromGitLab,
   libiconv,
+  callPackage,
 }:
 
 let
-  startFPC = import ./binary.nix {
-    inherit
-      stdenv
-      fetchurl
-      undmg
-      cpio
-      xar
-      lib
-      ;
-  };
+  startFPC = callPackage ./binary.nix { };
 in
 
 stdenv.mkDerivation rec {
