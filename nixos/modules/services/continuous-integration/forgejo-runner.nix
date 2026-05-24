@@ -36,20 +36,48 @@ let
 
   instanceLabels =
     instance:
-    instance.labels
-    ++ lib.concatMap (connection: connection.labels or [ ]) (
+    (lib.defaultTo [ ] instance.labels)
+    ++ lib.concatMap (connection: lib.defaultTo [ ] (connection.labels or [ ])) (
       lib.attrValues (instance.settings.server.connections or { })
     );
 
   hasDockerScheme = labels: any (label: hasInfix ":docker:" label) labels;
   hasHostScheme = labels: any (label: hasSuffix ":host" label) labels;
 
-  wantsContainerRuntime = any (instance: hasDockerScheme (instanceLabels instance)) (
-    lib.attrValues cfg.instances
-  );
-
   hasDocker = config.virtualisation.docker.enable;
   hasPodman = config.virtualisation.podman.enable;
+
+  labelsOption = mkOption {
+    type = types.nullOr (types.listOf types.str);
+    default = null;
+    example = literalExpression ''
+      [
+        # provide a debian base with nodejs for actions
+        "debian-latest:docker://node:18-bullseye"
+        # fake the ubuntu name, because node provides no ubuntu builds
+        "ubuntu-latest:docker://node:18-bullseye"
+        # provide native execution on the host
+        #"native:host"
+      ]
+    '';
+    description = ''
+      Labels used to map jobs to their runtime environment. Changing these
+      labels currently requires a new registration token.
+
+      Many common actions require bash, git and nodejs, as well as a filesystem
+      that follows the filesystem hierarchy standard.
+    '';
+  };
+  urlOption = mkOption {
+    type = types.nullOr types.str;
+    default = null;
+    example = "https://forge.example.com";
+    description = ''
+      Base URL of your Forgejo instance.
+
+      Can also be specified in `settings.servier.connections`
+    '';
+  };
 in
 {
   meta.maintainers = teams.forgejo.members;
@@ -67,10 +95,11 @@ in
           { name, ... }:
           {
             options = {
+              labels = labelsOption;
               enable = mkEnableOption "Forgejo Actions Runner instance";
 
               name = mkOption {
-                type = str;
+                type = types.str;
                 example = literalExpression "config.networking.hostName";
                 description = ''
                   The name identifying the runner instance towards the Forgejo instance.
@@ -78,19 +107,10 @@ in
                 default = name;
               };
 
-              url = mkOption {
-                type = nullOr str;
-                default = null;
-                example = "https://forge.example.com";
-                description = ''
-                  Base URL of your Forgejo instance.
-
-                  Can also be specified in `settings.servier.connections`
-                '';
-              };
+              url = urlOption;
 
               registrationTokenFile = mkOption {
-                type = nullOr (either str path);
+                type = types.nullOr (types.either types.str types.path);
                 default = null;
                 description = ''
                   Path to a file containing only the token that will be used to register
@@ -102,8 +122,8 @@ in
                 '';
               };
 
-              credentials = lib.mkOption {
-                type = attrsOf lib.types.path;
+              credentials = mkOption {
+                type = types.attrsOf types.path;
                 default = { };
                 example = {
                   WORKER1_TOKEN = "/run/keys/worker1";
@@ -111,28 +131,10 @@ in
                 description = ''
                   Environment variables with absolute paths to credentials files to load
                   on runner startup.
-                '';
-              };
 
-              labels = mkOption {
-                type = listOf str;
-                default = [ ];
-                example = literalExpression ''
-                  [
-                    # provide a debian base with nodejs for actions
-                    "debian-latest:docker://node:18-bullseye"
-                    # fake the ubuntu name, because node provides no ubuntu builds
-                    "ubuntu-latest:docker://node:18-bullseye"
-                    # provide native execution on the host
-                    #"native:host"
-                  ]
-                '';
-                description = ''
-                  Labels used to map jobs to their runtime environment. Changing these
-                  labels currently requires a new registration token.
+                  Use with Forgejo v15+ pre-registered server connections:
 
-                  Many common actions require bash, git and nodejs, as well as a filesystem
-                  that follows the filesystem hierarchy standard.
+                  `settings.server.connections.<connection>.token_url = "file:$CREDENTIALS_DIRECTORY/WORKER1_TOKEN"`
                 '';
               };
 
@@ -144,13 +146,56 @@ in
 
                 type = types.submodule {
                   freeformType = settingsFormat.type;
+
+                  options.server.connections = mkOption {
+                    type = types.attrsOf (
+                      types.submodule {
+                        freeformType = settingsFormat.type;
+                        options = {
+                          url = urlOption;
+                          labels = labelsOption;
+                          token_url = mkOption {
+                            type = types.either types.str types.path;
+                            description = ''
+                              Path to the Forgejo v15+ pre-registered runner token.
+                              Supports a single placeholder: `$CREDENTIALS_DIRECTORY`
+
+                              Can be combined with `instances.<instance>.credentails`
+
+                              <https://forgejo.org/docs/latest/admin/actions/registration/>
+                            '';
+                          };
+                        };
+                      }
+                    );
+                    default = { };
+                    description = ''
+                      Forgejo v15+ pre-registered server connections.
+
+                      See <https://forgejo.org/docs/latest/admin/actions/registration>
+                    '';
+                    example = literalExpression ''
+                      {
+                        worker1 = {
+                          url = "https://forgejo.mine";
+                          uuid = "4708f0f2-4185-49b4-8552-bc7261ec26aa";
+                          token_url = "file:$CREDENTIALS_DIRECTORY/WORKER1_TOKEN";
+                          labels = [
+                            "debian:docker://docker.io/library/node:lts"
+                            "local/x86_64-linux:host"
+                          ];
+                        };
+                      };
+                    '';
+                  };
+
                 };
 
                 default = { };
               };
 
               hostPackages = mkOption {
-                type = listOf package;
+                type = types.listOf types.package;
                 default = with pkgs; [
                   bash
                   coreutils
@@ -186,22 +231,47 @@ in
   };
 
   config = mkIf (cfg.instances != { }) {
-    assertions = [
-      {
-        assertion = wantsContainerRuntime -> hasDocker || hasPodman;
-        message = "Label configuration on forgejo.runner instance requires either docker or podman.";
-      }
-    ]
-    ++ (lib.foldlAttrs (
-      acc: _: instance:
-      acc
+    assertions = lib.foldlAttrs (
+      acc_inst: _: instance:
+      (lib.foldlAttrs (
+        acc_conn: name: connection:
+        acc_conn
+        ++ [
+          {
+            assertion = connection.url != null;
+            message = "forgejo.runner.instances.${instance.name}.settings.server.connections.${name} requires `url` to be set.";
+          }
+          {
+            assertion = !(connection ? token);
+            message = "forgejo.runner.instances.${instance.name}.settings.server.connections.${name}.token cannot be used, use token_url instead.";
+          }
+          {
+            assertion = connection ? uuid;
+            message = "forgejo.runner.instances.${instance.name}.settings.server.connections.${name}.uuid is required.";
+          }
+        ]
+      ) acc_inst instance.settings.server.connections)
       ++ [
+        {
+          assertion =
+            instance.settings.server.connections != { }
+            -> instance.registrationTokenFile == null && instance.url == null && instance.labels == null;
+          message = "forgejo.runner.instances.${instance.name} cannot contain both url/registrationTokenFile and settings.server.connections";
+        }
         {
           assertion = instance.registrationTokenFile != null -> instance.url != null;
           message = "forgejo.runner.instances.${instance.name}.registrationTokenFile requires `url` to be set.";
         }
+        {
+          assertion = instance.labels != null -> instance.registrationTokenFile != null;
+          message = "forgejo.runner.instances.${instance.name}.labels requires `registrationTokenFile` to be set.";
+        }
+        {
+          assertion = hasDockerScheme (instanceLabels instance) -> hasDocker || hasPodman;
+          message = "forgejo.runner.instances.${instance.name} label configuration requires either docker or podman.";
+        }
       ]
-    ) [ ] cfg.instances);
+    ) [ ] cfg.instances;
 
     systemd.services =
       let
