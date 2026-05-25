@@ -6,7 +6,10 @@ in
 {
   name = "bazarr";
 
-  meta.maintainers = with lib.maintainers; [ connor-grady ];
+  meta.maintainers = with lib.maintainers; [
+    connor-grady
+    diogotcorreia
+  ];
 
   nodes.machine =
     { pkgs, ... }:
