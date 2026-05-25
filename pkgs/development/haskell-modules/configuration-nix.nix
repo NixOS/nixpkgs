@@ -1663,6 +1663,15 @@ builtins.intersectAttrs super {
     (disableCabalFlag "icu")
   ];
 
+  # Tests spawn ghc with -fplugin and need this package's in-place package db.
+  # The trailing colon keeps GHC's default package db in the package path.
+  # https://hydra.nixos.org/build/329190094
+  ghc-typelits-natnormalise = overrideCabal (drv: {
+    preCheck = (drv.preCheck or "") + ''
+      export NIX_GHC_PACKAGE_PATH_FOR_TEST=$PWD/dist/package.conf.inplace/:$packageConfDir:
+    '';
+  }) super.ghc-typelits-natnormalise;
+
   # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
   ihaskell = overrideCabal (drv: {
     # ihaskell's cabal file forces building a shared executable, which we need
