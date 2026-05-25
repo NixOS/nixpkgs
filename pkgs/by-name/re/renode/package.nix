@@ -70,13 +70,13 @@ buildDotnetModule rec {
 
   projectFile = "Renode_NET.sln";
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   nugetDeps = ./deps.json;
 
   patches = [ ./renode-test.patch ];
 
-  dotnetFlags = [ "-p:TargetFrameworks=net9.0" ];
+  dotnetFlags = [ "-p:TargetFrameworks=net10.0" ];
 
   prePatch = ''
     sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${version}.0")/g' src/Renode/Properties/AssemblyInfo.template
@@ -159,7 +159,7 @@ buildDotnetModule rec {
     ln -s $out/lib/*.so src/Infrastructure/src/Emulator/Cores/bin/Release/lib
   '';
 
-  dotnetInstallFlags = [ "-p:TargetFramework=net9.0" ];
+  dotnetInstallFlags = [ "-p:TargetFramework=net10.0" ];
 
   postInstall = ''
     mkdir -p $out/lib/renode
