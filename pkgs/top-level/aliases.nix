@@ -1941,6 +1941,7 @@ mapAliases {
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
+  recapp = throw "'recapp' is unmaintained and has been removed"; # Added 2026-05-25
   recurseIntoAttrs = warnAlias "'recurseIntoAttrs' has been removed from pkgs, use `lib.recurseIntoAttrs` instead" lib.recurseIntoAttrs; # Added 2025-10-30
   redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16
   redoc-cli = throw "'redoc-cli' been removed because it has been marked as broken since at least November 2024. Consider using 'redocly' instead."; # Added 2025-10-01
