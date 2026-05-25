@@ -26,8 +26,8 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
-    version = "10.11.17";
-    srcHash = "sha256-RS/Q3Q2UJjUuQQ8PaaLkVe00ixhZML2jBHeAq0/n/aA=";
+    version = "10.11.18";
+    srcHash = "sha256-oHBuC31mvWiPbL6iOBg7yTxCXQbXmnfsCvSTGdmz+xk=";
     vendorHash = "sha256-zngDxO3UCuB53PMpaE+ga8v2FL5l78BD2NmJsu+zZ00=";
     npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''
@@ -175,13 +175,6 @@ buildMattermost rec {
       revert = true;
     })
   ];
-
-  postPatch = ''
-    if [ "$version" == 10.11.17 ]; then
-      # 25.11 only: tagged and released as 10.11.17 but prints the wrong version
-      substituteInPlace server/public/model/version.go --replace-fail "10.11.16" "10.11.17"
-    fi
-  '';
 
   modRoot = "./server";
   preBuild = ''
