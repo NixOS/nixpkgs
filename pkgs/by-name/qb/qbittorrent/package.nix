@@ -17,6 +17,7 @@
   wrapGAppsHook3,
   zlib,
   nixosTests,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "release-${finalAttrs.version}";
     hash = "sha256-Ha2Pc08gztI9fupQMykVz5wVIyUu9dRtChxjAGSxcOQ=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # fixes crash in https://github.com/qbittorrent/qBittorrent/issues/24038
+      # only appears to surface with alternative UIs
+      name = "fix-accept-encoding.patch";
+      url = "https://github.com/qbittorrent/qBittorrent/commit/b5a44db0a956a796f84622c358f1d57087ed23d2.patch?full_index=1";
+      hash = "sha256-oU+P/syGoIVqJ+5rNEMrRBi+4JVS0bVbgRH0Zpn6FQc=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
