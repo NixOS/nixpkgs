@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flightgear";
-  version = "2024.1.5";
+  version = "2024.1.6-rc1";
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "flightgear";
     tag = finalAttrs.version;
-    hash = "sha256-sORiO0SDChIVWIhGKelm7IE/cZ40gMqlZ1OoZZna7kI=";
+    hash = "sha256-YYWDLCZ+2g4sWrSZJ+EvFCPH/IIYWD0wKzcslqw9VSs=";
   };
 
   nativeBuildInputs = [
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "flightgear";
         repo = "fgdata";
         tag = finalAttrs.version;
-        hash = "sha256-8B5wSYjkWuPEySpqBiprZ+jrHy01HA9+iX70wNAn81s=";
+        hash = "sha256-B7WCEMrHtSW4Yk2HM+ZjgKt5GeQrSmvxKITqAYXKSuw=";
       };
 
       dontUnpack = true;
