@@ -17,6 +17,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonImportsCheck = [ "visitor" ];
+
   meta = {
     homepage = "https://github.com/mbr/visitor";
     description = "Tiny pythonic visitor implementation";
