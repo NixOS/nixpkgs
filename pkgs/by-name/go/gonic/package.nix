@@ -18,13 +18,13 @@
   mpv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gonic";
   version = "0.21.0";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "gonic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+plbpqaWWr3gA3grfl5yawEyrQyw6h6rvATqGxEO09c=";
   };
 
@@ -68,4 +68,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ autrimpo ];
     mainProgram = "gonic";
   };
-}
+})
