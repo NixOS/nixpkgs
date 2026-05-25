@@ -228,7 +228,7 @@ stdenv.mkDerivation (
         // (args.meta or { });
 
     }
-    // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
+    // (optionalAttrs setCOQBIN { env.COQBIN = "${coq}/bin/"; })
     // (optionalAttrs (!args ? installPhase && !args ? useMelquiondRemake) {
       installFlags = coqlib-flags ++ docdir-flags ++ extraInstallFlags;
     })
