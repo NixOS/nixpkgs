@@ -101,15 +101,19 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
     # Caution. Some submodules have different licenses.
-    license = with lib.licenses; [
-      asl20 # cc-runtime
-      bsd0 # freestanding-headers, freestanding-toolchain, limine-protocol, pdgzip
-      bsd2 # limine, flanterm, libfdt, PicoEFI
-      bsd2Patent # PicoEFI
-      bsd3 # PicoEFI
-      bsdAxisNoDisclaimerUnmodified # PicoEFI
-      mit # PicoEFI, stb_image
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        asl20 # cc-runtime
+        bsd0 # freestanding-headers, freestanding-toolchain, limine-protocol, pdgzip
+        bsd2 # limine, flanterm, libfdt, PicoEFI
+        (OR [
+          bsd2Patent # PicoEFI
+          bsd3 # PicoEFI
+          bsdAxisNoDisclaimerUnmodified # PicoEFI
+        ])
+        mit # PicoEFI, stb_image
+      ];
     maintainers = with lib.maintainers; [
       johnrtitor
       lzcunt
