@@ -2,6 +2,15 @@ diff --git a/src/core/server.rs b/src/core/server.rs
 index 45570ea..d459b3e 100644
 --- a/src/core/server.rs
 +++ b/src/core/server.rs
+@@ -67,7 +67,7 @@ pub async fn run_ipc_server() -> Result<JoinHandle<Result<()>>> {
+                 tokio::time::sleep(std::time::Duration::from_millis(25)).await;
+             }
+             if socket_ready {
+-                fs::set_permissions(paths.ipc_path(), Permissions::from_mode(0o777)).await?;
++                fs::set_permissions(paths.ipc_path(), Permissions::from_mode(0o660)).await?;
+             } else {
+                 warn!(
+                     "IPC socket {:?} did not appear before permission update timeout",
 @@ -123,7 +123,7 @@ async fn make_ipc_dir() -> Result<()> {
          // on macOS or the primary group on Linux) to manage the socket's lifecycle. This prevents
          // permission denied errors when the GUI process, running with non-root privileges,
@@ -11,16 +20,25 @@ index 45570ea..d459b3e 100644
      }
      #[cfg(windows)]
      {
+@@ -208,7 +208,7 @@ pub fn spawn_socket_dir_watchdog() {
+                     continue;
+                 }
+                 use std::fs::Permissions;
+                 use std::os::unix::fs::PermissionsExt;
+-                let _ = tokio::fs::set_permissions(dir, Permissions::from_mode(0o777)).await;
++                let _ = tokio::fs::set_permissions(dir, Permissions::from_mode(0o770)).await;
+                 info!("IPC socket directory {:?} recreated", dir);
+             }
+         }
 diff --git a/src/lib.rs b/src/lib.rs
 index a21f89b..81175fc 100644
 --- a/src/lib.rs
 +++ b/src/lib.rs
 @@ -12,7 +12,7 @@ pub use core::{run_ipc_server, stop_ipc_server};
  pub use client::*;
- 
+
  #[cfg(all(unix, not(feature = "test")))]
 -pub static IPC_PATH: &str = "/tmp/verge/clash-verge-service.sock";
 +pub static IPC_PATH: &str = "/run/clash-verge-rev/service.sock";
  #[cfg(all(windows, not(feature = "test")))]
  pub static IPC_PATH: &str = r"\\.\pipe\clash-verge-service";
- 

@@ -1,4 +1,5 @@
 {
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   meta,
@@ -7,25 +8,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-verge-service-ipc";
-  version = "2.1.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service-ipc";
-    # upstream uses branch
-    rev = "a486e7df6ac3d641014085f43bd08e99ff09b5a2";
-    hash = "sha256-WmQ3s6uED4Q1E2ORtjDqdxaUaPD+RIB5x8bYPOuGUSk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XavlZWxuZKCTyIYpuXRvXpXCdakWhbLhOMmOrGBgDRo=";
   };
 
   patches = [
-    # 1. Don't SetGID because the path is managed by systemd in NixOS, and we
-    #    use different IPC path for sidecar mode. We can keep RestrictSUIDSGID
-    #    in systemd serviceConfig.
-    # 2. Set IPC socket path
+    # Let the NixOS module's RuntimeDirectory/Group own socket access policy.
+    # Upstream defaults target installer-managed /tmp paths and broad fallback
+    # permissions, which do not fit the hardened systemd service.
     ./patch-service-directory.patch
   ];
 
-  cargoHash = "sha256-xE8ihRlox7qrmLHEGQ76pbisFj+1bqjwr+tllxLRDoA=";
+  cargoHash = "sha256-WhH2o5wN5vYW8jZl+hWbnk1xqHu61ibAr4+/CI3YKHg=";
 
   buildFeatures = [
     "standalone"
@@ -34,9 +33,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     procps
   ];
-  # build mock_binary for tests
+  # Upstream tests look in target/debug, while Nix builds under the target triple.
   preCheck = ''
-    cargo build --features=test
+    cargo build --features=test --bin mock_binary --bin crash_binary
+    cargo build --features=standalone,test --bin owner_lock_holder
+
+    mkdir -p target/debug
+    for bin in mock_binary crash_binary owner_lock_holder; do
+      ln -sf "../${stdenv.hostPlatform.config}/debug/$bin" "target/debug/$bin"
+    done
   '';
   checkFeatures = [
     "standalone"

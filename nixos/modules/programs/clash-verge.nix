@@ -62,6 +62,10 @@
       systemd.services.clash-verge = lib.mkIf cfg.serviceMode {
         enable = true;
         description = "Clash Verge Service Mode";
+        # service-ipc v2.3 persists desired core/logger state below XDG_STATE_HOME.
+        # The upstream module keeps ProtectSystem=strict, so give it an explicit
+        # systemd-managed state directory instead of relying on /var/lib writes.
+        environment.XDG_STATE_HOME = "/var/lib";
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/clash-verge-service";
           Restart = "on-failure";
@@ -81,6 +85,10 @@
           LockPersonality = true;
           RestrictRealtime = true;
           RuntimeDirectory = "clash-verge-rev";
+          # Keep the runtime socket group-scoped, matching programs.clash-verge.group.
+          RuntimeDirectoryMode = "0770";
+          StateDirectory = "clash-verge-service";
+          StateDirectoryMode = "0750";
           ProtectClock = true;
           MemoryDenyWriteExecute = true;
           RestrictSUIDSGID = true;
