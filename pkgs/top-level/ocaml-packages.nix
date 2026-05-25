@@ -2197,6 +2197,8 @@ let
 
         ulex = callPackage ../development/ocaml-modules/ulex { };
 
+        unidecode = callPackage ../development/ocaml-modules/unidecode { };
+
         unionFind = callPackage ../development/ocaml-modules/unionFind { };
 
         unisim_archisec = callPackage ../development/ocaml-modules/unisim_archisec { };
