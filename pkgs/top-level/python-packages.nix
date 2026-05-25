@@ -4356,11 +4356,15 @@ self: super: with self; {
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
+  django-object-actions = callPackage ../development/python-modules/django-object-actions { };
+
   django-organizations = callPackage ../development/python-modules/django-organizations { };
 
   django-otp = callPackage ../development/python-modules/django-otp { };
 
   django-otp-webauthn = callPackage ../development/python-modules/django-otp-webauthn { };
+
+  django-override-storage = callPackage ../development/python-modules/django-override-storage { };
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
