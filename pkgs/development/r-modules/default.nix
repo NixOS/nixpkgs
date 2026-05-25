@@ -1227,6 +1227,7 @@ let
       xz.dev
       zlib.dev
     ];
+    fs = [ pkgs.libuv ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
