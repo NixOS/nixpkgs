@@ -22,13 +22,13 @@
   shapely,
 }:
 let
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "geoarrow";
     repo = "geoarrow-rs";
     tag = "py-v${version}";
-    hash = "sha256-3/HOQsgQVpEd9iAVvIHvpb0slg55/V6X6KLLvhDUVz4=";
+    hash = "sha256-qQGGG8aGwFR7ApLaQAE0iQSElpSBeRTtbq4+1xbTC/o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
