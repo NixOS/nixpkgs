@@ -11002,6 +11002,8 @@ self: super: with self; {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
+  natto-py = callPackage ../development/python-modules/natto-py { };
+
   natural = callPackage ../development/python-modules/natural { };
 
   naturalsort = callPackage ../development/python-modules/naturalsort { };
@@ -11758,6 +11760,8 @@ self: super: with self; {
   );
 
   opendal = callPackage ../development/python-modules/opendal { };
+
+  openepub = callPackage ../development/python-modules/openepub { };
 
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
@@ -19022,6 +19026,8 @@ self: super: with self; {
   submitit = callPackage ../development/python-modules/submitit { };
 
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
+
+  subtitle-parser = callPackage ../development/python-modules/subtitle-parser { };
 
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
