@@ -9530,8 +9530,6 @@ with pkgs;
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
       { };
 
-  kubeval = callPackage ../applications/networking/cluster/kubeval { };
-
   kubectl-convert = kubectl.convert;
 
   kubectl-view-allocations =
