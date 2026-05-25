@@ -2315,6 +2315,7 @@ mapAliases {
   raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
   react-native-debugger = throw "'react-native-debugger' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-02
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
+  recapp = throw "'recapp' is unmaintained and has been removed"; # Added 2026-05-25
   recurseIntoAttrs = warnAlias "'recurseIntoAttrs' has been removed from pkgs, use `lib.recurseIntoAttrs` instead" lib.recurseIntoAttrs; # Added 2025-10-30
   redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16
   redoc-cli = throw "'redoc-cli' been removed because it has been marked as broken since at least November 2024. Consider using 'redocly' instead."; # Added 2025-10-01
