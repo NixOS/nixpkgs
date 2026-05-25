@@ -39,8 +39,8 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-kwparametrize
     gitMinimal
-  ]
-  ++ finalAttrs.optional-dependencies.color;
+    pygments
+  ];
 
   disabledTestPaths = [
     # Doctest discovery in module files causes conftest issues in the sandbox
