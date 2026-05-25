@@ -111,15 +111,10 @@ in
               exit 1
             fi
 
-            # For fetcherVersion < 3, the pnpm store files are placed directly into $out.
-            # For fetcherVersion >= 3, it is bundled into a compressed tarball within $out,
+            # The pnpm store is bundled into a compressed tarball within $out,
             # without distributing the uncompressed store files.
-            if [[ ${toString fetcherVersion} -ge 3 ]]; then
-              mkdir $out
-              storePath=$(mktemp -d)
-            else
-              storePath=$out
-            fi
+            mkdir $out
+            storePath=$(mktemp -d)
 
             pushd "$HOME"
             pnpmVersion=$(pnpm --version)
@@ -158,10 +153,8 @@ in
                 --registry="$NIX_NPM_REGISTRY" \
                 --frozen-lockfile
 
-            # Store newer fetcherVersion in case pnpmConfigHook also needs it
-            if [[ ${toString fetcherVersion} -gt 1 ]]; then
-              echo ${toString fetcherVersion} > $out/.fetcher-version
-            fi
+            # Record the fetcherVersion in the output for introspection.
+            echo ${toString fetcherVersion} > $out/.fetcher-version
 
             runHook postInstall
           '';
@@ -201,24 +194,20 @@ in
             # * All folders have 555.
             # See https://github.com/NixOS/nixpkgs/pull/350063
             # See https://github.com/NixOS/nixpkgs/issues/422889
-            if [[ ${toString fetcherVersion} -ge 2 ]]; then
-              find $storePath -type f -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 555
-              find $storePath -type f -not -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 444
-              find $storePath -type d -print0 | xargs --no-run-if-empty -0 chmod 555
-            fi
+            find $storePath -type f -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 555
+            find $storePath -type f -not -name "*-exec" -print0 | xargs --no-run-if-empty -0 chmod 444
+            find $storePath -type d -print0 | xargs --no-run-if-empty -0 chmod 555
 
-            if [[ ${toString fetcherVersion} -ge 3 ]]; then
-              (
-                cd $storePath
+            (
+              cd $storePath
 
-                # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
-                tar --sort=name \
-                  --mtime="@$SOURCE_DATE_EPOCH" \
-                  --owner=0 --group=0 --numeric-owner \
-                  --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-                  --zstd -cf $out/pnpm-store.tar.zst .
-              )
-            fi
+              # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
+              tar --sort=name \
+                --mtime="@$SOURCE_DATE_EPOCH" \
+                --owner=0 --group=0 --numeric-owner \
+                --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+                --zstd -cf $out/pnpm-store.tar.zst .
+            )
 
             runHook postFixup
           '';
