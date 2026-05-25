@@ -30263,6 +30263,12 @@
     github = "yarektyshchenko";
     githubId = 185304;
   };
+  yarn = {
+    name = "yarncat";
+    github = "yaaaarn";
+    githubId = 30006414;
+    email = "nix@yarncat.moe";
+  };
   yarny = {
     github = "Yarny0";
     githubId = 41838844;
