@@ -23,7 +23,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "qtile-extras";
-  version = "0.35.0";
+  version = "0.36.0";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile`
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xZ1pxe1EUnnjqz+46R4R9DWKi7M2j1pgvY4uy1dBak8=";
+    hash = "sha256-H2A5Y+ukTkUqjQB5eQVuOMYpf7T8RgQlNlQ25wlWwr8=";
   };
 
   build-system = [ setuptools-scm ];
@@ -72,8 +72,6 @@ buildPythonPackage (finalAttrs: {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
-    # flaky, timing sensitive
-    "test_visualiser"
   ];
 
   disabledTestPaths = [
@@ -82,6 +80,11 @@ buildPythonPackage (finalAttrs: {
     "test/widget/test_upower.py"
     # Marked as broken due to https://github.com/stravalib/stravalib/issues/379
     "test/widget/test_strava.py"
+  ];
+
+  pytestFlags = [
+    "--reruns 3"
+    "--reruns-delay 5"
   ];
 
   preCheck = ''
