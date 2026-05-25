@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       --replace-fail \
         "\$(CODESIGN) --remove-signature" \
         "${./remove-signature.sh}" \
-      --replace "ifneq (\$(CODESIGN),)" "ifeq (\$(OS_TARGET), darwin)" \
-      --replace "-no_uuid" ""
+      --replace-fail "ifneq (\$(CODESIGN),)" "ifeq (\$(OS_TARGET), darwin)" \
+      --replace-fail "-no_uuid" ""
   '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
