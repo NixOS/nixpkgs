@@ -15648,6 +15648,8 @@ self: super: with self; {
 
   pytest-kafka = callPackage ../development/python-modules/pytest-kafka { };
 
+  pytest-kwparametrize = callPackage ../development/python-modules/pytest-kwparametrize { };
+
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
   pytest-lazy-fixtures = callPackage ../development/python-modules/pytest-lazy-fixtures { };
