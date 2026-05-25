@@ -12591,6 +12591,8 @@ self: super: with self; {
 
   piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
 
+  picharsso = callPackage ../development/python-modules/picharsso { };
+
   pick = callPackage ../development/python-modules/pick { };
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
