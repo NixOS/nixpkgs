@@ -47,6 +47,6 @@ buildPythonPackage (finalAttrs: {
     description = "Script to clone virtualenvs";
     mainProgram = "virtualenv-clone";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ skohtv ];
   };
 })
