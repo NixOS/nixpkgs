@@ -45,6 +45,7 @@
   openldap,
   openssl,
   pcre,
+  pcre2,
   pkg-config,
   readline,
   ripgrep,
@@ -431,6 +432,15 @@ in
       {
         name = "PCRE";
         dep = pcre;
+      }
+    ];
+  };
+
+  lrexlib-pcre2 = prev.lrexlib-pcre2.overrideAttrs {
+    externalDeps = [
+      {
+        name = "PCRE2";
+        dep = pcre2;
       }
     ];
   };
