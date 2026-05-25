@@ -135,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       raskin
       kirillrdy
+      philocalyst
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
