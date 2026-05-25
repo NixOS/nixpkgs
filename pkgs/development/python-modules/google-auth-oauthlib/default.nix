@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-auth-oauthlib";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-auth-oauthlib-v${finalAttrs.version}";
-    hash = "sha256-lfB544cDaywiGTV0KlecU7oEl2Gbb4Ou8UCp+YjGtOA=";
+    hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-auth-oauthlib";
