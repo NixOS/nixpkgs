@@ -5,11 +5,21 @@
   rustPlatform,
   pytestCheckHook,
   arro3-core,
+  obstore,
+
+  # tests
   pyarrow,
   pyproj,
   numpy,
   pandas,
   geoarrow-types,
+  geopandas,
+  geodatasets,
+  shapely,
+  pyogrio,
+  pytest-asyncio,
+  arro3-io,
+  arro3-compute,
 }:
 let
   version = "0.6.1";
@@ -101,6 +111,7 @@ let
     dependencies = [
       arro3-core
       pyproj
+      obstore
     ];
   };
 
@@ -114,15 +125,39 @@ let
 
     nativeCheckInputs = [
       pytestCheckHook
+      pytest-asyncio
       geoarrow-types
       pandas
       pyarrow
       numpy
+      geopandas
+      geodatasets
+      shapely
+      pyogrio
+      obstore
+      arro3-io
+      arro3-compute
       geoarrow-rust-core
       geoarrow-rust-io
     ];
 
-    pytestFlags = [ "python" ];
+    # use the latest test folder (skips the tests_old folder)
+    pytestFlags = [ "python/tests" ];
+
+    disabledTests = [
+      # require internet access to download datasets
+      "test_parse_nybb"
+      "test_parse_nybb_chunked"
+      "test_getitem"
+      "test_geo_interface_polygon"
+      "test_parquet_file"
+    ];
+
+    # fix the directory name, as it is named as source for nix build
+    postPatch = ''
+      substituteInPlace python/tests/utils.py \
+        --replace-fail 'while current_dir.stem != "geoarrow-rs":' 'while current_dir.stem != "source":'
+    '';
   };
 in
 {
