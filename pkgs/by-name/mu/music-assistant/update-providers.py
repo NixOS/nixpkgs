@@ -24,6 +24,11 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
 
 {
   version = "{{ version }}";
+  builtins = [
+{%- for builtin in builtins | sort %}
+    "{{ builtin }}"
+{%- endfor %}
+  ];
   providers = {
 {%- for provider in providers | sort(attribute='domain') %}
     {{ provider.domain }} = {% if provider.available %}ps: with ps;{% else %}ps:{% endif %} [
@@ -197,7 +202,7 @@ class Provider:
         return hash(self.domain)
 
 
-async def resolve_providers(manifests) -> Set:
+async def resolve_providers(manifests) -> tuple[Set, Set]:
     errors = []
     providers = set()
     for manifest in manifests:
@@ -227,22 +232,27 @@ async def resolve_providers(manifests) -> Set:
     if errors:
         print("\n - ", end="")
         print("\n - ".join(errors))
-    return providers
+
+    builtins = {manifest.domain for manifest in manifests if manifest.builtin}
+
+    return providers, builtins
 
 
-def render(outpath: str, version: str, providers: Set):
+def render(outpath: str, version: str, providers: Set, builtins: Set):
     env = Environment()
     template = env.from_string(TEMPLATE)
-    template.stream(version=version, providers=providers).dump(outpath)
+    template.stream(version=version, providers=providers, builtins=builtins).dump(
+        outpath
+    )
 
 
 async def main():
     version: str = cast(str, await Nix.eval("music-assistant.version"))
     manifests = await get_provider_manifests(version)
-    providers = await resolve_providers(manifests)
+    providers, builtins = await resolve_providers(manifests)
 
     outpath = os.path.join(ROOT, "pkgs/by-name/mu/music-assistant/providers.nix")
-    render(outpath, version, providers)
+    render(outpath, version, providers, builtins)
 
     run_sync(["nixfmt", outpath])
 

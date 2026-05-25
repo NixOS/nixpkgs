@@ -24,7 +24,8 @@ let
     }
   );
 
-  providerPackages = (import ./providers.nix).providers;
+  providersMeta = import ./providers.nix;
+  providerPackages = providersMeta.providers;
   providerNames = lib.attrNames providerPackages;
   providerDependencies = lib.concatMap (
     provider: (providerPackages.${provider} pythonPackages)
@@ -210,6 +211,7 @@ pythonPackages.buildPythonApplication rec {
       providerPackages
       providerNames
       ;
+    providersBuiltins = providersMeta.builtins;
     tests = nixosTests.music-assistant;
   };
 
