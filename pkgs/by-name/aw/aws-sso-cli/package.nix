@@ -56,6 +56,8 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     homepage = "https://github.com/synfinatic/aws-sso-cli";
     description = "AWS SSO CLI is a secure replacement for using the aws configure sso wizard";
