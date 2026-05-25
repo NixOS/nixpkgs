@@ -7364,6 +7364,8 @@ self: super: with self; {
 
   graspologic-native = callPackage ../development/python-modules/graspologic-native { };
 
+  graylint = callPackage ../development/python-modules/graylint { };
+
   great-expectations = callPackage ../development/python-modules/great-expectations { };
 
   great-tables = callPackage ../development/python-modules/great-tables { };
