@@ -208,7 +208,7 @@ stdenv.mkDerivation (
         // (args.meta or { });
 
     }
-    // (optionalAttrs setROCQBIN { ROCQBIN = "${rocq-core}/bin/"; })
+    // (optionalAttrs setROCQBIN { env.ROCQBIN = "${rocq-core}/bin/"; })
     // (optionalAttrs (!args ? installPhase && !args ? useMelquiondRemake) {
       installFlags = rocqlib-flags ++ docdir-flags ++ extraInstallFlags;
     })
