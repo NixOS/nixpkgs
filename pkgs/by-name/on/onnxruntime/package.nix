@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   abseil-cpp_202508,
+  buildPackages,
   cmake,
   cpuinfo,
   eigen,
@@ -163,7 +164,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     python3Packages.python
-    protobuf
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -240,10 +240,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (darwinMinVersionHook "13.3")
   ];
 
-  nativeCheckInputs = [
-    gtest
-  ]
-  ++ lib.optionals pythonSupport (
+  nativeCheckInputs = lib.optionals pythonSupport (
     with python3Packages;
     [
       onnx
@@ -251,6 +248,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       sympy
     ]
   );
+
+  checkInputs = [
+    gtest
+  ];
 
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
@@ -281,7 +282,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint-src}")
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
     # fails to find protoc on darwin, so specify it
-    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe protobuf))
+    (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe buildPackages.protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
@@ -373,6 +374,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ../include/onnxruntime/core/session/onnxruntime_*.h \
       ../include/onnxruntime/core/providers/coreml/coreml_provider_factory.h
   '';
+
+  strictDeps = true;
 
   # See comments in `cudaPackages.nccl`
   postFixup = lib.optionalString cudaSupport ''
