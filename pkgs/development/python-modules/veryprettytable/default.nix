@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "veryprettytable";
   version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1k1rifz8x6qcicmx2is9vgxcj0qb2f5pvzrp7zhmvbmci3yack3f";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-bkym/Iisrl3hPzf/fYsTCwPJ+ttJR9Eriwybjr6LOcw=";
   };
 
   build-system = [ setuptools ];
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/smeggingsmegger/VeryPrettyTable";
     license = lib.licenses.free;
   };
-}
+})
