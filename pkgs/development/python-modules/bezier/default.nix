@@ -49,6 +49,8 @@ buildPythonPackage rec {
         cmake
         gfortran
       ];
+
+      env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-z,noexecstack";
     };
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=incompatible-pointer-types"

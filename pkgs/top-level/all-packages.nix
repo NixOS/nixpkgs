@@ -6976,8 +6976,6 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
-  podofo = podofo_1_0;
-
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
   poppler_gi = lowPrio (
@@ -10003,13 +10001,6 @@ with pkgs;
   lightdm_qt = lightdm.override { withQt5 = true; };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
-
-  curaengine = callPackage ../applications/misc/curaengine {
-    inherit (python3.pkgs) libarcus;
-    protobuf = protobuf_21;
-  };
-
-  curaPlugins = recurseIntoAttrs (callPackage ../applications/misc/cura/plugins.nix { });
 
   super-slicer-beta = super-slicer.beta;
 
