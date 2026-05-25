@@ -7,8 +7,10 @@ lib.mapAttrs
     name:
     { CPPFLAGS }:
     mkspiffs.overrideAttrs {
-      inherit CPPFLAGS;
-      BUILD_CONFIG_NAME = "-${name}";
+      env = {
+        inherit CPPFLAGS;
+        BUILD_CONFIG_NAME = "-${name}";
+      };
     }
   )
   {
