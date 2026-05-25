@@ -1,8 +1,8 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
+  fetchpatch,
   nix-update-script,
   cmake,
   boost,
@@ -100,15 +100,40 @@ let
     }
   ];
 in
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   version = "4.0.4";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-n9YwEqMSIh6vM2MVf7qxxVvDpsTLEsT37xoHiX66bL0=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  patches =
+    lib.optionals stdenv'.hostPlatform.isAarch64 [
+      # Set SANITIZE_PR for PoissonRecon to fix data races on aarch64
+      # https://github.com/colmap/colmap/pull/4429
+      (fetchpatch {
+        url = "https://github.com/colmap/colmap/commit/e13294e43baae6cf7f4e3ec05a19060e0b230a72.patch";
+        hash = "sha256-hoIjWdrOlXeT78X+g3YCDWaWnmQMzHVQNkdpx5vXpGk=";
+      })
+      (fetchpatch {
+        url = "https://github.com/colmap/colmap/commit/6c5c59f96f9e819bcc57267ef48b193d77707fe0.patch";
+        hash = "sha256-2dAhy3sgxF2SXPAYE/EV1hd61dm05vJ5JJXEjQxEKWM=";
+      })
+    ]
+    ++ lib.optionals (stdenv'.hostPlatform.isLinux && stdenv'.hostPlatform.isAarch64) [
+      # Fix determinism check in rotation_averaging_test
+      # https://github.com/colmap/colmap/pull/4426
+      (fetchpatch {
+        url = "https://github.com/colmap/colmap/commit/d38b65b9312c66e841739989f4a38924d8cb5ec5.patch";
+        hash = "sha256-dbs+TNfa4o5L79+krPpF4VmP8PhFHtzYZehYZbsnx5s=";
+      })
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_ENABLED" true) # We want COLMAP to be able to fetch models like LightGlue.
@@ -117,8 +142,8 @@ stdenv'.mkDerivation rec {
     (lib.cmakeBool "FETCH_FAISS" false)
     (lib.cmakeBool "FETCH_ONNX" false)
     (lib.cmakeBool "TESTS_ENABLED" enableTests)
-    (lib.cmakeFeature "CHOLMOD_INCLUDE_DIR_HINTS" "${suitesparse.dev}/include")
-    (lib.cmakeFeature "CHOLMOD_LIBRARY_DIR_HINTS" "${suitesparse}/lib")
+    (lib.cmakeFeature "CHOLMOD_INCLUDE_DIR_HINTS" "${lib.getDev suitesparse}/include")
+    (lib.cmakeFeature "CHOLMOD_LIBRARY_DIR_HINTS" "${lib.getLib suitesparse}/lib")
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" cudaSupport)
@@ -135,6 +160,7 @@ stdenv'.mkDerivation rec {
     glog
     libGLU
     glew
+    gtest
     qt5.qtbase
     flann
     lz4
@@ -156,18 +182,39 @@ stdenv'.mkDerivation rec {
   ];
 
   doCheck = enableTests;
-  preCheck = lib.optionalString enableTests ''
-    export GTEST_FILTER='-*Gpu*:*GPU*:*OpenGL*' # Disable any test involving OpenGL or GPU, these won't work in the sandbox.
-    export HOME=$PWD
+  preCheck = lib.optionalString enableTests (
+    let
+      disabledTestPatterns = [
+        # Disable any test involving OpenGL or GPU, these won't work in the sandbox.
+        "*Gpu*"
+        "*GPU*"
+        "*OpenGL*"
+      ]
+      ++ lib.optionals stdenv'.hostPlatform.isDarwin [
+        # reconstruction_pruning_test.cc:65: Failure
+        # Expected: (redundant_point3D_ids.size()) > (prev_num_redundant_points3D), actual: 0 vs 0
+        "FindRedundantPoints3D.VaryingCoverageGain"
+      ];
+    in
+    ''
+      export GTEST_FILTER='-${lib.concatStringsSep ":" disabledTestPatterns}'
+    ''
+    + ''
+      export HOME=$PWD
+    ''
     # Pre-fetch the ONNX models into COLMAP's cache dir so we can run their tests.
-    mkdir -p .cache/colmap
-    ${lib.concatMapStringsSep "\n" (model: ''
-      ln -s ${fetchurl model} .cache/colmap/${model.sha256}-${model.name}
-    '') modelsForTesting}
-  '';
+    + ''
+      mkdir -p .cache/colmap
+      ${lib.concatMapStringsSep "\n" (model: ''
+        ln -s ${fetchurl model} .cache/colmap/${model.sha256}-${model.name}
+      '') modelsForTesting}
+    ''
+  );
 
-  passthru.depsAlsoForPycolmap = depsAlsoForPycolmap;
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    depsAlsoForPycolmap = depsAlsoForPycolmap;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
@@ -177,6 +224,8 @@ stdenv'.mkDerivation rec {
     '';
     mainProgram = "colmap";
     homepage = "https://colmap.github.io/index.html";
+    downloadPage = "https://github.com/colmap/colmap";
+    changelog = "https://github.com/colmap/colmap/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     platforms = if cudaSupport then lib.platforms.linux else lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -185,4 +234,4 @@ stdenv'.mkDerivation rec {
       chpatrick
     ];
   };
-}
+})
