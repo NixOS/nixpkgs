@@ -6082,8 +6082,6 @@ self: super: with self; {
 
   fvcore = callPackage ../development/python-modules/fvcore { };
 
-  fvs = callPackage ../development/python-modules/fvs { };
-
   fx2 = callPackage ../development/python-modules/fx2 { };
 
   fxrays = callPackage ../development/python-modules/fxrays { };
