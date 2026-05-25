@@ -34,10 +34,12 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Flexible version handling";
     homepage = "https://github.com/jimporter/verspec";
-    license = with lib.licenses; [
-      bsd2 # and
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        asl20
+      ];
     maintainers = [ ];
   };
 })
