@@ -1,4 +1,5 @@
 {
+  lib,
   addDriverRunpath,
   autoFixElfFiles,
   makeSetupHook,
@@ -10,4 +11,5 @@ makeSetupHook {
     addDriverRunpath
     autoFixElfFiles
   ];
+  meta.license = lib.licenses.mit;
 } ./auto-add-driver-runpath-hook.sh

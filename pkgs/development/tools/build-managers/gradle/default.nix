@@ -28,17 +28,23 @@ let
       inherit (gradle) version;
 
       paths = [
-        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
-          name = "setup-hook.sh";
-          files = [
-            (mitm-cache.setupHook)
-            (replaceVars ./setup-hook.sh {
-              # jdk used for keytool
-              inherit (gradle) jdk;
-              init_script = "${./init-build.gradle}";
-            })
-          ];
-        }))
+        (makeSetupHook
+          {
+            name = "gradle-setup-hook";
+            meta.license = lib.licenses.mit;
+          }
+          (concatTextFile {
+            name = "setup-hook.sh";
+            files = [
+              (mitm-cache.setupHook)
+              (replaceVars ./setup-hook.sh {
+                # jdk used for keytool
+                inherit (gradle) jdk;
+                init_script = "${./init-build.gradle}";
+              })
+            ];
+          })
+        )
         gradle
         mitm-cache
       ];

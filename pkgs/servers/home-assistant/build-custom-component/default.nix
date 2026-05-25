@@ -7,7 +7,7 @@
 
 let
   manifestRequirementsCheckHook = import ./manifest-requirements-check-hook.nix {
-    inherit makeSetupHook;
+    inherit lib makeSetupHook;
     inherit (home-assistant) python;
   };
 in

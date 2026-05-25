@@ -8348,12 +8348,12 @@ final: prev: {
 
   kulala-nvim = buildVimPlugin {
     pname = "kulala.nvim";
-    version = "6.1.0";
+    version = "6.2.0";
     src = fetchFromGitHub {
       owner = "mistweaverco";
       repo = "kulala.nvim";
-      tag = "v6.1.0";
-      hash = "sha256-0wr4MdsKnS6qcmmhhRgPlSEhlyY64zQ+fArbjvdusOE=";
+      tag = "v6.2.0";
+      hash = "sha256-Uh2Lt6VZv5X9eqlbaquL40wNfJX8kON8vU9h+cHhlHg=";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/mistweaverco/kulala.nvim/";
