@@ -83,13 +83,19 @@ stdenv.mkDerivation {
   ++ lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeFeature "OSG_WINDOWING_SYSTEM" "Cocoa");
 
   meta = {
-    description = "3D graphics toolkit";
-    homepage = "http://www.openscenegraph.org/";
+    description = "3D graphics toolkit (FlightGear fork)";
+    homepage = "https://gitlab.com/flightgear/openscenegraph";
+    changelog = "https://gitlab.com/flightgear/openscenegraph/-/commits/release/2024-build";
     maintainers = with lib.maintainers; [
       aanderse
       raskin
     ];
     platforms = with lib.platforms; linux ++ darwin;
-    license = "OpenSceneGraph Public License - free LGPL-based license";
+
+    # This is a fork of openscenegraph, mirrored licenses
+    license = with lib.licenses; [
+      lgpl21Only
+      wxWindowsException31
+    ];
   };
 }
