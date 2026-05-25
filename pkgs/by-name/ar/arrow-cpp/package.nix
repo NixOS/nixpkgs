@@ -68,16 +68,16 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "19dda67f485ffb3ffa92f4c6fa083576ef052d58";
-    hash = "sha256-mna6I/a5ZxMLdWN0QfCsgsre6yMeuSv4syX5ePGLhfg=";
+    rev = "9cfebfef8982fb8612e0a2c59059752bd32321a3";
+    hash = "sha256-mZgiEGlU0oNUVBE56PF60qELQ44zeZEsJZ0AiIXEdkM=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "a3d96a65e11e2bbca7d22a894e8313ede90a33a3";
-    hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
+    rev = "fa255dfacf58c8bab428b5d0117d188acc8ad03f";
+    hash = "sha256-t91KghbR1fnp5m4/jNjc4Eh/nTa/Q6c47/4EaZ8hTuM=";
   };
 
   version = "24.0.0";
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       ARROW_MIMALLOC_URL = fetchFromGitHub {
         owner = "microsoft";
         repo = "mimalloc";
-        tag = "v3.1.5";
-        hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
+        tag = "v3.3.1";
+        hash = "sha256-62orj4WqFCCsrOZyjdF31AcnaSWixdjkudugHlbZgqI=";
       };
 
       ARROW_XSIMD_URL = fetchFromGitHub {
