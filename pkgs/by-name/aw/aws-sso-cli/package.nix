@@ -10,15 +10,15 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "aws-sso-cli";
-  version = "2.1.0";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = "aws-sso-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MomH4Zcc6iyVmLfA0PPsWgEqMBAAaPd+21NX4GdnFk0=";
+    hash = "sha256-JkCHzIbIeFvmXrIkQaybjUtPDzmZ2XPv6tz3fA6ni44=";
   };
-  vendorHash = "sha256-Le5BOD/iBIMQwTNmb7JcW8xJS7WG5isf4HXpJxyvez0=";
+  vendorHash = "sha256-euqhgbyz8H/fQ1RAP0k4GMOjOu7gVeYzQv75tjCh5z0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,13 +46,17 @@ buildGoModule (finalAttrs: {
   checkFlags =
     let
       skippedTests = [
-        "TestAWSConsoleUrl"
         "TestAWSFederatedUrl"
-        "TestServerWithSSL" # https://github.com/synfinatic/aws-sso-cli/issues/1030 -- remove when version >= 2.x
+        "TestAWSConsoleUrlChina"
+        "TestAWSConsoleUrlEU"
+        "TestAWSConsoleUrlUSEast"
+        "TestAWSConsoleUrlUSGov"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDetectShellBash" ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     homepage = "https://github.com/synfinatic/aws-sso-cli";
