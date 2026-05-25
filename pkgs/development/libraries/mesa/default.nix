@@ -408,6 +408,7 @@ stdenv.mkDerivation {
     llvmpipeHook = makeSetupHook {
       name = "llvmpipe-hook";
       substitutions.mesa = mesa;
+      meta.license = lib.licenses.mit;
     } ./llvmpipe-hook.sh;
   };
 }

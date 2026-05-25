@@ -446,6 +446,7 @@ rec {
         vimBinary = "${vim}/bin/vim";
         inherit rtpPath;
       };
+      meta.license = lib.licenses.mit;
     } ../hooks/vim-gen-doc-hook.sh
   ) { };
 
@@ -458,6 +459,7 @@ rec {
         vimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
+      meta.license = lib.licenses.mit;
     } ../hooks/vim-command-check-hook.sh
   ) { };
 
@@ -470,6 +472,7 @@ rec {
         nvimBinary = "${neovim-unwrapped}/bin/nvim";
         inherit rtpPath;
       };
+      meta.license = lib.licenses.mit;
     } ../hooks/neovim-require-check-hook.sh
   ) { };
 
