@@ -4446,7 +4446,11 @@ self: super: with self; {
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
+  django-settings-holder = callPackage ../development/python-modules/django-settings-holder { };
+
   django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
+
+  django-signal-webhooks = callPackage ../development/python-modules/django-signal-webhooks { };
 
   django-silk = callPackage ../development/python-modules/django-silk { };
 
