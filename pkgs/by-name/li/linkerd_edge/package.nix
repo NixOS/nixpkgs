@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "linkerd-edge";
   version = "25.7.4";
   vendorHash = "sha256-6cUWeJA0nxUMd+mrrHccPu9slebwZGUR0yGxev3k4ls=";
@@ -14,8 +14,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "linkerd";
     repo = "linkerd2";
-    rev = "edge-${version}";
-    sha256 = "19s32frf6ymfv88zvinakqh23yp7zlcj6dcyzlkkviayf4gk270x";
+    tag = "edge-${finalAttrs.version}";
+    hash = "sha256-HRwxH3FexT0n/Z41Ixn95/ohIJ7Kxv0R2q5647ITQ6c=";
   };
 
   subPackages = [ "cli" ];
@@ -34,7 +34,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
+    "-X github.com/linkerd/linkerd2/pkg/version.Version=${finalAttrs.src.tag}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -51,7 +51,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/linkerd version --client | grep ${src.rev} > /dev/null
+    $out/bin/linkerd version --client | grep ${finalAttrs.src.tag} > /dev/null
   '';
 
   passthru.updateScript = (./. + "/update-edge.sh");
@@ -65,4 +65,4 @@ buildGoModule rec {
     maintainers = [
     ];
   };
-}
+})
