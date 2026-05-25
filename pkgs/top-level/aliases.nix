@@ -2174,6 +2174,7 @@ mapAliases {
   tclvfs = throw "'tclvfs' has been renamed to/replaced by 'tclPackages.tclvfs'"; # Converted to throw 2025-10-27
   tclx = throw "'tclx' has been renamed to/replaced by 'tclPackages.tclx'"; # Converted to throw 2025-10-27
   tcp-cutter = throw "tcp-cutter has been removed because it fails to compile and the source url is dead"; # Added 2025-05-25
+  tcpkali = throw "'tcpkali' is unmaintained and has been removed"; # Added 2026-05-25
   tcptrace = throw "tcptrace has been removed as it was broken and upstream is gone"; # Added 2026-02-02
   tdesktop = throw "'tdesktop' has been renamed to/replaced by 'telegram-desktop'"; # Converted to throw 2025-10-27
   tdfgo = throw "'tdfgo' has been removed because it was removed from upstream"; # Added 2025-12-18
