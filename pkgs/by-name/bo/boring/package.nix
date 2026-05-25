@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "boring";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "alebeck";
     repo = "boring";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9ei2Kl2590DY0S9jrc+MxsL5srxmwx8wD6uFlVQ6o4o=";
+    hash = "sha256-cyRy7lF2wGupzDnW4zPKEuM0X0aaHrWbF/3p13xb2DA=";
   };
 
   nativeBuildInputs = [

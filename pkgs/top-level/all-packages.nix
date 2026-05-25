@@ -10000,13 +10000,6 @@ with pkgs;
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
-  curaengine = callPackage ../applications/misc/curaengine {
-    inherit (python3.pkgs) libarcus;
-    protobuf = protobuf_21;
-  };
-
-  curaPlugins = recurseIntoAttrs (callPackage ../applications/misc/cura/plugins.nix { });
-
   super-slicer-beta = super-slicer.beta;
 
   super-slicer-latest = super-slicer.latest;
