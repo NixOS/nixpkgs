@@ -4,11 +4,17 @@
   fetchFromGitHub,
   mkfontdir,
   mkfontscale,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "beon";
   version = "2024-02-26";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "noirblancrouge";
@@ -17,20 +23,23 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-jBLVVykHFJamOVF6GSRnQqYixqOrw5K1oV1B3sl4Zoc=";
   };
 
+  dontBuild = true;
+
   nativeBuildInputs = [
     mkfontscale
     mkfontdir
+    installFonts
   ];
 
   installPhase = ''
     runHook preInstall
-
-    install -D -v fonts/ttf/Beon-Regular.ttf $out/share/fonts/truetype/Beon-Regular.ttf
-    cd $out/share/fonts
-    mkfontdir
-    mkfontscale
-
     runHook postInstall
+  '';
+
+  preInstall = "rm -r docs/proof";
+  postInstall = ''
+    mkfontdir $out/share/fonts
+    mkfontscale $out/share/fonts
   '';
 
   meta = {
