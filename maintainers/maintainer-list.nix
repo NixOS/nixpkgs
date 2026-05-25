@@ -5058,12 +5058,6 @@
     github = "cigrainger";
     githubId = 3984794;
   };
-  ciil = {
-    email = "simon@lackerbauer.com";
-    github = "ciil";
-    githubId = 3956062;
-    name = "Simon Lackerbauer";
-  };
   cilki = {
     github = "cilki";
     githubId = 10459406;
