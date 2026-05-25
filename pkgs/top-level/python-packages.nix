@@ -9641,6 +9641,10 @@ self: super: with self; {
 
   mammoth = callPackage ../development/python-modules/mammoth { };
 
+  manage-django-project = callPackage ../development/python-modules/manage-django-project { };
+
+  manageprojects = callPackage ../development/python-modules/manageprojects { };
+
   managesieve = callPackage ../development/python-modules/managesieve { };
 
   mando = callPackage ../development/python-modules/mando { };
