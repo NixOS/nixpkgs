@@ -7,6 +7,7 @@
   udev,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -59,7 +60,10 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) matterjs-server; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Matter server based on Matter.js";
