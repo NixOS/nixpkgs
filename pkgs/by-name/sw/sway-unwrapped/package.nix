@@ -20,7 +20,7 @@
   libinput,
   gdk-pixbuf,
   librsvg,
-  wlroots_0_19,
+  wlroots_0_20,
   wayland-protocols,
   libdrm,
   evdev-proto,
@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
-  version = "1.11";
+  version = "1.12";
 
   inherit
     enableXWayland
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
-    hash = "sha256-xMrexVDpgkGnvAAglshsh7HjvcbU2/Q6JLUd5J487qg=";
+    hash = "sha256-OcF7jOOHhFPhM5APn5riy8S5jsEr9jALCVh9nBtD7Nk=";
   };
 
   patches = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     wayland-protocols
     libdrm
-    (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_20.override { inherit (finalAttrs) enableXWayland; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     evdev-proto
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/swaywm/sway/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ c6rg0 ];
     mainProgram = "sway";
   };
 })
