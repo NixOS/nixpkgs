@@ -11,12 +11,13 @@
   freetype,
   glib,
   gtk3,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxkbcommon,
   libgit2,
   libglvnd,
   libuuid,
@@ -35,12 +36,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.1.24";
+  version = "1.1.58";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-dTJ2YMNZwpZj3ZDWegjFr9aiaUtTpN8gY1wq5SAoVvs=";
+    hash = "sha256-UVbtUnTEyghbmnWErNmZhZ5/PgiLlmLRjZjVIvzMcYo=";
   };
 
   nativeBuildInputs = [
@@ -85,12 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
         freetype
         glib
         gtk3
-        libX11
-        libXcursor
-        libXext
-        libXi
-        libXrandr
-        libXrender
+        libx11
+        libxcursor
+        libxext
+        libxi
+        libxrandr
+        libxrender
+        libxkbcommon
         libglvnd
         libuuid
         libxcb
@@ -123,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
         --set-rpath "${libPath}:$out/lib" \
         $out/lib/libPharoVMCore.so \
         $out/lib/libWinit.so \
+        $out/lib/libWinit30.so \
         $out/lib/libPixels.so
       patchelf --set-rpath $out/lib $out/lib/libssl.so
 

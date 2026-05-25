@@ -10,33 +10,32 @@
   libusb1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bettercap";
-  version = "2.41.0";
+  version = "2.41.7";
 
   src = fetchFromGitHub {
     owner = "bettercap";
     repo = "bettercap";
-    rev = "v${version}";
-    sha256 = "sha256-qQNsdKUiTSXkvfIguR1Rjs3A1WW4G1ernqRWTKBjIVI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-oiJPZW0ywrRlKq9kfKilCxbq9WN5VhhY2T/5iDe78RM=";
   };
 
-  vendorHash = "sha256-OxcBk22TvlcnHqJ0VzuewZtWLm/DPo6Cdq7RKabOg8w=";
+  vendorHash = "sha256-ssNGy40KMJ9P33uEGyYOer92QRS2T6DQlKaf/3XMFwQ=";
 
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libpcap
-      libusb1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libnfnetlink
-      libnetfilter_queue
-    ];
+  buildInputs = [
+    libpcap
+    libusb1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libnfnetlink
+    libnetfilter_queue
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Man in the middle tool";
     longDescription = ''
       BetterCAP is a powerful, flexible and portable tool created to perform various
@@ -44,11 +43,10 @@ buildGoModule rec {
       in realtime, sniff for credentials and much more.
     '';
     homepage = "https://www.bettercap.org/";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ y0no ];
+    license = with lib.licenses; [ gpl3Only ];
     mainProgram = "bettercap";
     # Broken on darwin for Go toolchain > 1.22, with error:
     # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

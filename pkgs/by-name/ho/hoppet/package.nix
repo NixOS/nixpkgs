@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hoppet";
   version = "1.2.0";
 
   src = fetchurl {
-    url = "https://hoppet.hepforge.org/downloads/${pname}-${version}.tgz";
+    url = "https://hoppet.hepforge.org/downloads/hoppet-${finalAttrs.version}.tgz";
     sha256 = "0j7437rh4xxbfzmkjr22ry34xm266gijzj6mvrq193fcsfzipzdz";
   };
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Higher Order Perturbative Parton Evolution Toolkit";
     mainProgram = "hoppet-config";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://hoppet.hepforge.org";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

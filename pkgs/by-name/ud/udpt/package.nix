@@ -4,18 +4,17 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "udpt";
   version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "naim94a";
     repo = "udpt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dWZRl5OiuEmCx7+Id0/feCohH5k/HA47nbPUEo8BBwQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AtqtANpxsmvdEoISyGZKDVR7/IxMBPwGGNelgf7ZlH4=";
 
   postInstall = ''
@@ -30,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ makefu ];
     mainProgram = "udpt-rs";
   };
-}
+})

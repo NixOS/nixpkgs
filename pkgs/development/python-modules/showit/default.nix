@@ -30,10 +30,10 @@ buildPythonPackage {
     pytest test
   '';
 
-  meta = with lib; {
-    description = "simple and sensible display of images";
+  meta = {
+    description = "Simple and sensible display of images";
     homepage = "https://github.com/freeman-lab/showit";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

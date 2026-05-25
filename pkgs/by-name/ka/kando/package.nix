@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   electron,
-  nodejs,
+  nodejs_22,
 
   cmake,
   zip,
@@ -15,45 +15,51 @@
   makeDesktopItem,
 
   libxkbcommon,
-  libX11,
-  libXtst,
-  libXi,
+  libx11,
+  libxtst,
+  libxi,
   wayland,
 }:
 
-buildNpmPackage rec {
+let
+  nodejs = nodejs_22; # npm v11 included in nodejs_24 doesn't work with the current lockfile
+in
+buildNpmPackage.override { inherit nodejs; } rec {
   pname = "kando";
-  version = "1.8.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-4toYogcxvNS+J/OphXM1HtH61FZRmnLsgxOJtJgkVdM=";
+    hash = "sha256-eCR+CL3EMV3eLXzpzKFGuec3YBWDnFjNyTEHpG51PLQ=";
   };
 
-  npmDepsHash = "sha256-lyCIuvyoVhcrNDDg0P3lSY8ru81momG1EKKT5u4yW8Y=";
+  patches = [
+    ./add-deep-link-note.patch
+  ];
+
+  npmDepsHash = "sha256-VsWmM+CSAv3yFVelFNb3kUAeh4t+k04NFXVRz4AwFkI=";
 
   npmFlags = [ "--ignore-scripts" ];
 
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      zip
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    zip
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+    copyDesktopItems
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
-    libX11
-    libXtst
-    libXi
+    libx11
+    libxtst
+    libxi
     wayland
   ];
 
@@ -128,6 +134,7 @@ buildNpmPackage rec {
       genericName = "Pie Menu";
       comment = "The Cross-Platform Pie Menu";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/kando" ];
     })
   ];
 

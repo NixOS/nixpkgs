@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   vscode-utils,
   icu,
@@ -11,12 +12,36 @@
   vscode-extension-update-script,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension rec {
-  mktplcRef = {
+let
+  supported = {
+    x86_64-linux = {
+      hash = "sha256-HQfmDV6rJX6l1pGybe8//2QrTSwE+rlEJOi4/iW69lY=";
+      arch = "linux-x64";
+    };
+    x86_64-darwin = {
+      hash = "sha256-tAZyt2fwB/GOhffY5lhHJTmbXG8UloynPtjoMtWRHok=";
+      arch = "darwin-x64";
+    };
+    aarch64-linux = {
+      hash = "sha256-v7fatW/LMJ8CeSRrE/5b7dLqOrhNhwzUySUxtAMuBUE=";
+      arch = "linux-arm64";
+    };
+    aarch64-darwin = {
+      hash = "sha256-XntiQmvagiSWcfVIp13CDq2RTZ4NhKOzf4QmecZjMIs=";
+      arch = "darwin-arm64";
+    };
+  };
+
+  base =
+    supported.${stdenv.hostPlatform.system}
+      or (throw "unsupported platform ${stdenv.hostPlatform.system}");
+
+in
+vscode-utils.buildVscodeMarketplaceExtension {
+  mktplcRef = base // {
     name = "python";
     publisher = "ms-python";
-    version = "2025.6.1";
-    hash = "sha256-aCutbmWI68IRqAwztQ9USo996zWL29UO2eAC75b3/IY=";
+    version = "2026.4.0";
   };
 
   buildInputs = [ icu ];
@@ -28,22 +53,21 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     jedi-language-server
   ];
 
-  postPatch =
-    ''
-      # remove bundled python deps and use libs from nixpkgs
-      rm -r python_files/lib
-      mkdir -p python_files/lib/python/
-      ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
-      buildPythonPath "$propagatedBuildInputs"
-      for i in python_files/*.py; do
-        patchPythonScript "$i"
-      done
-    ''
-    + lib.optionalString pythonUseFixed ''
-      # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
-      substituteInPlace "./package.json" \
-        --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
-    '';
+  postPatch = ''
+    # remove bundled python deps and use libs from nixpkgs
+    rm -r python_files/lib
+    mkdir -p python_files/lib/python/
+    ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
+    buildPythonPath "$propagatedBuildInputs"
+    for i in python_files/*.py; do
+      patchPythonScript "$i"
+    done
+  ''
+  + lib.optionalString pythonUseFixed ''
+    # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
+    substituteInPlace "./package.json" \
+      --replace-fail "\"default\":\"python\"" "\"default\":\"${python3.interpreter}\""
+  '';
 
   passthru.updateScript = vscode-extension-update-script { };
 
@@ -53,15 +77,9 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     homepage = "https://github.com/Microsoft/vscode-python";
     changelog = "https://github.com/microsoft/vscode-python/releases";
     license = lib.licenses.mit;
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
+    platforms = builtins.attrNames supported;
     maintainers = [
       lib.maintainers.jraygauthier
-      lib.maintainers.jfchevrette
     ];
   };
 }

@@ -7,19 +7,18 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-typify";
-  version = "0.1.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
-    rev = "v${version}";
-    hash = "sha256-vokhWIY5iikTyADrqxp6DIq+tJ+xdFPebDFTddJnstA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ym3xPMn36+Y8dnImmuegjwrARPzozhwI+qhDCXmFsHg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1qxWFyA9xCnyDES27uj7gDc5Nf6qdikNkpuf/DP/NAU=";
+  cargoHash = "sha256-3hh4M5cqwLDHcHI+YGKXQOeTXGcVTec+xk+mZcVp0IU=";
 
   nativeBuildInputs = [
     rustfmt
@@ -47,13 +46,12 @@ rustPlatform.buildRustPackage rec {
       --set RUSTFMT "${lib.getExe rustfmt}"
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
-
   meta = {
     description = "JSON Schema to Rust type converter";
-    mainProgram = "cargo-typify";
     homepage = "https://github.com/oxidecomputer/typify";
+    changelog = "https://github.com/oxidecomputer/typify/blob/${finalAttrs.src.tag}/CHANGELOG.adoc";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ david-r-cox ];
+    maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "cargo-typify";
   };
-}
+})

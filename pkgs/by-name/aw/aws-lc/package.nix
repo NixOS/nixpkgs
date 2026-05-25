@@ -6,17 +6,18 @@
   ninja,
   testers,
   aws-lc,
+  nix-update-script,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.52.0";
+  version = "1.69.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C9xtkE0aUtvhRzsN7T7zeQKX7TwA5E+bFq6qSmU2+C8=";
+    hash = "sha256-ykpPbMONAJK6rEANOn0O7JfIkXPSoPXs1Zr4Bv+eXqQ=";
   };
 
   outputs = [
@@ -53,26 +54,24 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  postFixup = ''
-    for f in $out/lib/crypto/cmake/*/crypto-targets.cmake; do
-      substituteInPlace "$f" \
-        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
-    done
-  '';
+  __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = aws-lc;
-      command = "bssl version";
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = aws-lc;
+        command = "bssl version";
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = aws-lc;
+        moduleNames = [
+          "libcrypto"
+          "libssl"
+          "openssl"
+        ];
+      };
     };
-    pkg-config = testers.hasPkgConfigModules {
-      package = aws-lc;
-      moduleNames = [
-        "libcrypto"
-        "libssl"
-        "openssl"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

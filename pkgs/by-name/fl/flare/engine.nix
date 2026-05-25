@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   SDL2,
   SDL2_image,
@@ -9,18 +10,20 @@
   SDL2_ttf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flare-engine";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = "flare-engine";
-    tag = "v${version}";
-    hash = "sha256-DIzfTqwZJ8NAPB/TWzvPjepHb7hIbIr+Kk+doXJmpLc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QwrSMkJE8dNIODlmdi1c6qgTULhJP9HEV8wI7k5vHAA=";
   };
 
-  patches = [ ./desktop.patch ];
+  patches = [
+    ./desktop.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -40,4 +43,4 @@ stdenv.mkDerivation rec {
     license = [ lib.licenses.gpl3Plus ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,36 +6,36 @@
   wireproxy,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wireproxy";
-  version = "1.0.10";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
-    owner = "pufferffish";
+    owner = "windtf";
     repo = "wireproxy";
-    rev = "v${version}";
-    hash = "sha256-F8WatQsXgq3ex2uAy8eoS2DkG7uClNwZ74eG/mJN83o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-R1G/VtyQsl7yoDwZw+24qTdeq//qYQTQwzAPvH8f+ls=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-uCU5WLCKl5T4I1OccVl7WU0GM/t4RyAEmzHkJ22py30=";
+  vendorHash = "sha256-T6RN7f05bNVL7gfhaAR0+lKZWqXvMcgjiyPldCmmvU4=";
 
   passthru.tests.version = testers.testVersion {
     package = wireproxy;
     command = "wireproxy --version";
-    version = src.rev;
+    version = finalAttrs.src.rev;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wireguard client that exposes itself as a socks5 proxy";
-    homepage = "https://github.com/pufferffish/wireproxy";
-    license = licenses.isc;
-    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    homepage = "https://github.com/windtf/wireproxy";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     mainProgram = "wireproxy";
   };
-}
+})

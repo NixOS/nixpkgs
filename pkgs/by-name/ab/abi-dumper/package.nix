@@ -8,22 +8,22 @@
   vtable-dumper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abi-dumper";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-dumper";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-BefDMeKHx4MNU6SyX5UpQnwdI+zqap7zunsgdWG/2xc=";
   };
 
   patchPhase = ''
     substituteInPlace abi-dumper.pl \
-      --replace eu-readelf ${elfutils}/bin/eu-readelf \
-      --replace vtable-dumper ${vtable-dumper}/bin/vtable-dumper \
-      --replace '"ctags"' '"${ctags}/bin/ctags"'
+      --replace-fail eu-readelf ${elfutils}/bin/eu-readelf \
+      --replace-fail vtable-dumper ${vtable-dumper}/bin/vtable-dumper \
+      --replace-fail '"ctags"' '"${ctags}/bin/ctags"'
   '';
 
   buildInputs = [
@@ -36,12 +36,11 @@ stdenv.mkDerivation rec {
   preBuild = "mkdir -p $out";
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lvc/abi-dumper";
     description = "Dump ABI of an ELF object containing DWARF debug info";
     mainProgram = "abi-dumper";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.bhipple ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -4,19 +4,18 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xplr";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sayanarijit";
     repo = "xplr";
-    rev = "v${version}";
-    hash = "sha256-QeR7KXwRGfAU31ueI6v26pKnoQdj2C7bXlcMP4qKvZg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-qldRH0OSfGBfz84i7CnkzOns+occHoeft8PWgdBOvBA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-UkyRl2eY520JPxtcOl7hvkY3MCH2bi2jL9zCJEdkQmU=";
+  cargoHash = "sha256-EHQhilkyR0XWBqcj5GZz4qI3DdaAfzFXa3Ew4kaAchA=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
   env = lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) {
@@ -42,18 +41,16 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hackable, minimal, fast TUI file explorer";
     mainProgram = "xplr";
     homepage = "https://xplr.dev";
-    changelog = "https://github.com/sayanarijit/xplr/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/sayanarijit/xplr/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       sayanarijit
       suryasr007
-      pyrox0
       mimame
-      figsoda
     ];
   };
-}
+})

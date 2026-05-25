@@ -19,6 +19,7 @@
   udevSupport ? true,
   glibcLocales,
   rsync,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -32,16 +33,15 @@ stdenv.mkDerivation {
     hash = "sha256-L7I80kSG4/ES2tGvHHgvOxJZzF76yeqy2WquKCPhnFk=";
   };
 
-  buildInputs =
-    [
-      acl
-      curl
-      xz
-      zstd
-    ]
-    ++ lib.optionals fuseSupport [ fuse ]
-    ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals udevSupport [ udev ];
+  buildInputs = [
+    acl
+    curl
+    xz
+    zstd
+  ]
+  ++ lib.optionals fuseSupport [ fuse ]
+  ++ lib.optionals selinuxSupport [ libselinux ]
+  ++ lib.optionals udevSupport [ udev ];
   nativeBuildInputs = [
     meson
     ninja
@@ -52,6 +52,9 @@ stdenv.mkDerivation {
   nativeCheckInputs = [
     glibcLocales
     rsync
+  ]
+  ++ lib.optionals udevSupport [
+    udevCheckHook
   ];
 
   postPatch = ''
@@ -61,7 +64,8 @@ stdenv.mkDerivation {
     patchShebangs test/http-server.py
   '';
 
-  PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+  env.PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+
   mesonFlags =
     lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
     ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
@@ -72,12 +76,14 @@ stdenv.mkDerivation {
     export LC_ALL="en_US.utf-8"
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Content-Addressable Data Synchronizer";
     mainProgram = "casync";
     homepage = "https://github.com/systemd/casync";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

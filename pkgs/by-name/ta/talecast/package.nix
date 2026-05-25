@@ -9,16 +9,15 @@
   talecast,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "talecast";
   version = "0.1.39";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RwB+X+i3CEcTyKac81he9/cT2aQ4M7AqgqSDBEvhFJU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-mRoFg1UUPCKWiPxZg+8o2+2K6R+88RI/pdO8OLM4jFk=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -42,4 +41,4 @@ rustPlatform.buildRustPackage rec {
       getchoo
     ];
   };
-}
+})

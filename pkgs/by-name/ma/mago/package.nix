@@ -1,50 +1,59 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   openssl,
-  testers,
-  mago,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mago";
-  version = "0.23.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "carthage-software";
     repo = "mago";
-    tag = version;
-    hash = "sha256-Kdktcq3czn6YdGKoTB7AjCtfDkNTHhee/kVhMzxsuD8=";
+    tag = finalAttrs.version;
+    hash = "sha256-5rdmDbAqqHZU65C+lFHxV7T8//Tw8v8gQKSNbVHSlno=";
+    forceFetchGit = true; # Does not download all files otherwise
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-V7x0n+JcXiSGg8sJBKnsB5/KnfJSadYH0i/dNouhoHc=";
+  cargoHash = "sha256-fOxfQTacb3ap5soCVtJnlFPSl3IH+Ju1pPs8xrFBVCw=";
 
   env = {
     # Get openssl-sys to use pkg-config
     OPENSSL_NO_VENDOR = 1;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [ openssl ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = mago;
-      command = "mago --version";
-      version = "mago ${version}";
-    };
-  };
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mago \
+      --bash <("$out/bin/mago" generate-completions bash) \
+      --zsh <("$out/bin/mago" generate-completions zsh) \
+      --fish <("$out/bin/mago" generate-completions fish)
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
-    changelog = "https://github.com/carthage-software/mago/releases/tag/${version}";
+    changelog = "https://github.com/carthage-software/mago/releases/tag/${finalAttrs.version}";
     description = "Toolchain for PHP that aims to provide a set of tools to help developers write better code";
     homepage = "https://github.com/carthage-software/mago";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = with lib.maintainers; [
+      hythera
+      patka
+    ];
     mainProgram = "mago";
   };
-}
+})

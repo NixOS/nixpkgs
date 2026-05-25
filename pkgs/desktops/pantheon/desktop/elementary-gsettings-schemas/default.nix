@@ -8,6 +8,7 @@
   gnome-settings-daemon,
   gtk3,
   elementary-dock,
+  evolution-data-server,
   gsettings-desktop-schemas,
   extraGSettingsOverrides ? "",
   extraGSettingsOverridePackages ? [ ],
@@ -19,12 +20,14 @@ let
 
   gsettingsOverridePackages = [
     elementary-dock
+    evolution-data-server
     gnome-settings-daemon
     gala
     gsettings-desktop-schemas
     gtk3
     mutter
-  ] ++ extraGSettingsOverridePackages;
+  ]
+  ++ extraGSettingsOverridePackages;
 
 in
 

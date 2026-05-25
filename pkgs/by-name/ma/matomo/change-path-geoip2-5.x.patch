@@ -6,5 +6,5 @@
  return [
 -    'path.geoip2' => Piwik\DI::string('{path.root}/misc/'),
 +    'path.geoip2' => PIWIK_USER_PATH . '/misc/',
-     'geopip2.ispEnabled' => true
+     'geopip2.ispEnabled' => true,
  ];

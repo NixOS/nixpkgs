@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   meson-python,
   packaging,
   cython,
@@ -16,22 +15,15 @@
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.9.0";
+  version = "1.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dipy";
     repo = "dipy";
     tag = version;
-    hash = "sha256-6cpxuk2PL43kjQ+6UGiUHUXC7pC9OlW9kZvGOdEXyzw=";
+    hash = "sha256-vqjd5gd9B630pv6H4MvXnlPwlEhm1o7MbwYD0J7D24o=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy==" "numpy>="
-  '';
 
   build-system = [
     cython
@@ -74,11 +66,11 @@ buildPythonPackage rec {
     "dipy.nn"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dipy.org/";
     description = "Diffusion imaging toolkit for Python";
     changelog = "https://github.com/dipy/dipy/blob/${version}/Changelog";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

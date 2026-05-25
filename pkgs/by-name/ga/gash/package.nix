@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gash";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchurl {
-    url = "mirror://savannah/gash/gash-${finalAttrs.version}.tar.gz";
-    hash = "sha256-VGrsaRBo1nfFjd/BVpXbn4CGFuGfpzMi1Ppno8iXwqk=";
+    url = "mirror://gnu/guix/mirror/gash-${finalAttrs.version}.tar.gz";
+    hash = "sha256-yAwY530BGkSPIcQFmkdCfjTuG0zvcs9OvzkLXXGZ5OQ=";
   };
 
   strictDeps = true;
@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     guile
   ];
 
-  meta = with lib; {
+  meta = {
     description = "POSIX-compatible shell written in Guile Scheme";
     mainProgram = "gash";
     homepage = "https://savannah.nongnu.org/projects/gash/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.all;
   };
 })

@@ -22,7 +22,7 @@ in
       description = ''
         Lazygit configuration.
 
-        See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md for documentation.
+        See <https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md> for documentation.
       '';
     };
   };

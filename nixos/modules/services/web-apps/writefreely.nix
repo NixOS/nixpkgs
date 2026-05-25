@@ -15,12 +15,11 @@ let
     ;
   inherit (lib)
     optional
-    optionals
     optionalAttrs
     optionalString
     ;
 
-  inherit (pkgs) sqlite;
+  inherit (pkgs) sqlite openssl;
 
   format = pkgs.formats.ini {
     mkKeyValue =
@@ -73,6 +72,10 @@ let
       pages_parent_dir = cfg.settings.server.pages_parent_dir or cfg.package.src;
       keys_parent_dir = cfg.settings.server.keys_parent_dir or cfg.stateDir;
     };
+
+    email = cfg.settings.email or { } // {
+      smtp_password = "#smtppass#";
+    };
   };
 
   configFile = format.generate "config.ini" settings;
@@ -105,9 +108,15 @@ let
     db_pass=${
       optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"
     }
+    smtp_pass=${
+      optionalString (
+        cfg.email.smtpPasswordFile != null
+      ) ''$(printf '%s\n' "$(head -n1 ${cfg.email.smtpPasswordFile})" | sed -e 's/[\/&]/\\&/g')''
+    }
 
     cp -f ${configFile} '${cfg.stateDir}/config.ini'
     sed -e "s,#dbpass#,$db_pass,g" -i '${cfg.stateDir}/config.ini'
+    sed -e "s,#smtppass#,$smtp_pass,g" -i '${cfg.stateDir}/config.ini'
     chmod 440 '${cfg.stateDir}/config.ini'
 
     ${text}
@@ -124,7 +133,7 @@ let
           --silent \
           --raw \
           --skip-column-names \
-          --execute "$1" \
+          --execute "$1"
         )
 
         echo $result
@@ -152,12 +161,7 @@ in
   options.services.writefreely = {
     enable = lib.mkEnableOption "Writefreely, build a digital writing community";
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.writefreely;
-      defaultText = lib.literalExpression "pkgs.writefreely";
-      description = "Writefreely package to use.";
-    };
+    package = lib.mkPackageOption pkgs "writefreely" { };
 
     stateDir = mkOption {
       type = types.path;
@@ -297,6 +301,14 @@ in
       };
     };
 
+    email = {
+      smtpPasswordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "The file to load the password for the smtp email server.";
+      };
+    };
+
     nginx = {
       enable = mkOption {
         type = types.bool;
@@ -354,12 +366,15 @@ in
     };
 
     systemd.services.writefreely = {
-      after =
-        [ "network.target" ]
-        ++ optional isSqlite "writefreely-sqlite-init.service"
-        ++ optional isMysql "writefreely-mysql-init.service"
-        ++ optional isMysqlLocal "mysql.service";
+      after = [
+        "network.target"
+      ]
+      ++ optional isSqlite "writefreely-sqlite-init.service"
+      ++ optional isMysql "writefreely-mysql-init.service"
+      ++ optional isMysqlLocal "mysql.service";
       wantedBy = [ "multi-user.target" ];
+
+      path = [ openssl ];
 
       serviceConfig = {
         Type = "simple";

@@ -7,7 +7,7 @@
   rainfrog,
 }:
 let
-  version = "0.3.2";
+  version = "0.3.18";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -17,11 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "achristmascarl";
     repo = "rainfrog";
     tag = "v${version}";
-    hash = "sha256-3oRuJytFGPfWLoxtrpgEwRWAPE8HGct5PqU1mxDinZs=";
+    hash = "sha256-MraqApmj0FFGBbzG+XXjoDHPgJPG8yAMdXyoCZTMpFk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-W/3UNZw3gHVI/3uIzyaDmKGjM8gsfcr86+Vxlfm9Yb4=";
+  cargoHash = "sha256-pPVJgemV7Esg1vYGxCPv8gv0I5DQwA1VtWhcgm5VLFE=";
 
   passthru = {
     tests.version = testers.testVersion {

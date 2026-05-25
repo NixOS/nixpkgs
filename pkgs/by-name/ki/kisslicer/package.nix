@@ -1,6 +1,6 @@
 {
   fetchzip,
-  libX11,
+  libx11,
   libGLU,
   libGL,
   makeWrapper,
@@ -14,7 +14,7 @@ let
     libGLU
     libGL
     stdenv.cc.cc
-    libX11
+    libx11
   ];
 
   inidir = "\\\${XDG_CONFIG_HOME:-\\$HOME/.config}/kisslicer";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU
     libGL
-    libX11
+    libx11
   ];
 
   installPhase = ''
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
       --run "mkdir -p ${inidir}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert STL files into Gcode";
     homepage = "http://www.kisslicer.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.cransom ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.cransom ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -14,7 +14,7 @@
   nodes.client = _: {
     environment.systemPackages = [
       pkgs.sshpass
-      pkgs.libressl.nc
+      pkgs.netcat
     ];
 
   };

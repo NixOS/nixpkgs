@@ -7,46 +7,46 @@
   nix-update-script,
 }:
 let
+  frontend =
+    finalAttrs:
+    buildNpmPackage {
+      inherit (finalAttrs) version;
+      pname = "${finalAttrs.pname}-webapp";
+      src = "${finalAttrs.src}/webapp/frontend";
+
+      npmDepsHash = "sha256-1lOskHEU/3CmhQkUkQExryK6eMOSWvMI+Y+cX4Dlj98=";
+
+      buildPhase = ''
+        runHook preBuild
+        mkdir dist
+        npm run build:prod --offline -- --output-path=dist
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        mkdir $out
+        cp -r dist/* $out
+        runHook postInstall
+      '';
+
+      passthru.updateScript = nix-update-script { };
+    };
+in
+buildGoModule (finalAttrs: {
   pname = "scrutiny";
-  version = "0.8.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
-    tag = "v${version}";
-    hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZQHTwJZBOYJ2De0CmyxXc4Fb2Vt+jKg+YpDDZhSt+cg=";
   };
-
-  frontend = buildNpmPackage {
-    inherit version;
-    pname = "${pname}-webapp";
-    src = "${src}/webapp/frontend";
-
-    npmDepsHash = "sha256-M8P41LPg7oJ/C9abDuNM5Mn+OO0zK56CKi2BwLxv8oQ=";
-
-    buildPhase = ''
-      runHook preBuild
-      mkdir dist
-      npm run build:prod --offline -- --output-path=dist
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      mkdir $out
-      cp -r dist/* $out
-      runHook postInstall
-    '';
-
-    passthru.updatescript = nix-update-script { };
-  };
-in
-buildGoModule rec {
-  inherit pname src version;
 
   subPackages = "webapp/backend/cmd/scrutiny";
 
-  vendorHash = "sha256-SiQw6pq0Fyy8Ia39S/Vgp9Mlfog2drtVn43g+GXiQuI=";
+  vendorHash = "sha256-Em8k2AFoZv4TD4HFkkNIdyPj7IBOFiUIKffkifWfZFY=";
 
   env.CGO_ENABLED = 0;
 
@@ -56,19 +56,22 @@ buildGoModule rec {
 
   postInstall = ''
     mkdir -p $out/share/scrutiny
-    cp -r ${frontend}/* $out/share/scrutiny
+    cp -r ${frontend finalAttrs}/* $out/share/scrutiny
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
-  passthru.updatescript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
     homepage = "https://github.com/AnalogJ/scrutiny";
-    changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${version}";
+    changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      samasaur
+      svistoi
+    ];
     mainProgram = "scrutiny";
     platforms = lib.platforms.linux;
   };
-}
+})

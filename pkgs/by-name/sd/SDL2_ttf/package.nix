@@ -26,15 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      freetype
-      harfbuzz
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-    ];
+  buildInputs = [
+    SDL2
+    freetype
+    harfbuzz
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+  ];
 
   configureFlags = [
     (lib.enableFeature false "harfbuzz-builtin")

@@ -7,13 +7,18 @@
 
 let
   inherit (lib)
+    literalExpression
+    mkDefault
     mkEnableOption
     mkPackageOption
     mkOption
     maintainers
     ;
   inherit (lib.types)
+    addCheck
     bool
+    listOf
+    package
     port
     str
     submodule
@@ -28,6 +33,37 @@ in
       enable = mkEnableOption "Navidrome music server";
 
       package = mkPackageOption pkgs "navidrome" { };
+
+      plugins = mkOption {
+        type = listOf (
+          addCheck package (p: p.isNavidromePlugin or false)
+          // {
+            name = "navidrome plugin";
+            description = "package that is a navidrome plugin";
+          }
+        );
+        default = [ ];
+        description = "List of Navidrome plugins";
+        example = literalExpression ''
+          with pkgs.navidromePlugins; [
+            listenbrainz-daily-playlist
+          ];
+        '';
+      };
+
+      finalPackage = mkOption {
+        type = package;
+        readOnly = true;
+        default = cfg.package.override {
+          inherit (cfg) plugins;
+        };
+        defaultText = literalExpression ''
+          config.services.navidrome.package.override {
+            inherit (config.services.navidrome) plugins;
+          }
+        '';
+        description = "The final navidrome package including all selected plugins.";
+      };
 
       settings = mkOption {
         type = submodule {
@@ -50,6 +86,26 @@ in
               default = false;
               description = "Enable anonymous usage data collection, see <https://www.navidrome.org/docs/getting-started/insights/> for details.";
               type = bool;
+            };
+
+            Plugins = {
+              Enabled = mkOption {
+                default = true;
+                description = ''
+                  Enable plugin support in navidrome.
+                '';
+              };
+              Folder = mkOption {
+                default = "${cfg.finalPackage}/share/plugins";
+                description = ''
+                  The folder containing navidrome plugins.
+
+                  This directory is automatically created from plugins defined in {option}`services.navidrome.plugins`.
+                '';
+                readOnly = true;
+                type = str;
+                defaultText = literalExpression "\"\${config.services.navidrome.finalPackage}/share/plugins\"";
+              };
             };
           };
         };
@@ -78,7 +134,7 @@ in
         description = "Whether to open the TCP port in the firewall";
       };
 
-      environmentFile = lib.mkOption {
+      environmentFile = mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         description = "Environment file, used to set any secret ND_* environment variables.";
@@ -114,7 +170,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = ''
-              ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+              ${getExe cfg.finalPackage} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
             '';
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;
@@ -126,19 +182,19 @@ in
             ReadWritePaths = "";
             BindPaths =
               optional (cfg.settings ? DataFolder) cfg.settings.DataFolder
-              ++ optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder;
-            BindReadOnlyPaths =
-              [
-                # navidrome uses online services to download additional album metadata / covers
-                "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
-                builtins.storeDir
-                "/etc"
-              ]
-              ++ optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder
-              ++ lib.optionals config.services.resolved.enable [
-                "/run/systemd/resolve/stub-resolv.conf"
-                "/run/systemd/resolve/resolv.conf"
-              ];
+              ++ optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder
+              ++ optional (cfg.settings ? Backup.Path) cfg.settings.Backup.Path;
+            BindReadOnlyPaths = [
+              # navidrome uses online services to download additional album metadata / covers
+              "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+              builtins.storeDir
+              "/etc"
+            ]
+            ++ optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder
+            ++ lib.optionals config.services.resolved.enable [
+              "/run/systemd/resolve/stub-resolv.conf"
+              "/run/systemd/resolve/resolv.conf"
+            ];
             CapabilityBoundingSet = "";
             RestrictAddressFamilies = [
               "AF_UNIX"
@@ -161,7 +217,8 @@ in
             ];
             RestrictRealtime = true;
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            # 0.60.0 Taglib introduces WASM JIT that requires this
+            MemoryDenyWriteExecute = false;
             UMask = "0066";
             ProtectHostname = true;
           };
@@ -179,5 +236,8 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
-  meta.maintainers = with maintainers; [ fsnkty ];
+  meta.maintainers = with maintainers; [
+    fsnkty
+    tebriel
+  ];
 }

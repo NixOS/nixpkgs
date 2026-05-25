@@ -7,19 +7,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "findomain";
-  version = "9.0.4";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "findomain";
     repo = "findomain";
-    tag = version;
-    hash = "sha256-5jbKDMULig6j3D5KEQQrHWtsc59x0Tj6n/7kwK/8IME=";
+    tag = finalAttrs.version;
+    hash = "sha256-qMSVj+qhrx1LPuXWXKzo0v4yirNW2x/o/blNkSVU3Tg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-4+nRQ8HL4dQMCgeSOrgkaRj0E4HPAC3Nm82AEr1KWJo=";
+  cargoHash = "sha256-uYhCTjVzkW8menf67pnZfYCMIcNZadoGJvtDmsDDxP8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -41,12 +40,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Findomain/Findomain";
-    changelog = "https://github.com/Findomain/Findomain/releases/tag/${version}";
+    changelog = "https://github.com/Findomain/Findomain/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      figsoda
-    ];
+    maintainers = [ ];
     mainProgram = "findomain";
   };
-}
+})

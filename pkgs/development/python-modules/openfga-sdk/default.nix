@@ -11,23 +11,23 @@
   pytest-asyncio,
   pytest-cov-stub,
   python-dateutil,
-  setuptools,
+  hatchling,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "openfga-sdk";
-  version = "0.9.1";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-+4Np406HAB6uHZhDUUSn9aDbuC4/G172+TZ560rYjlk=";
+    hash = "sha256-OKldYozT/rWa1uU8yXO9UyHaOGsVVCLr62lN9TESY0g=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     mock
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # These fail due to a race condition in the test mocks
@@ -52,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/openfga/python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/openfga/python-sdk/blob/${src.tag}/CHANGELOG.md";
     description = "Fine-Grained Authorization solution for Python";
     homepage = "https://github.com/openfga/python-sdk";
     license = lib.licenses.asl20;

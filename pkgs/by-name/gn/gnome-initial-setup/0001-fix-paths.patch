@@ -25,15 +25,6 @@ index 196abf6..613d0e5 100644
  	g_spawn_command_line_async (commandline, NULL);
  	g_free (commandline);
  
-@@ -831,7 +831,7 @@ cc_input_chooser_class_init (CcInputChooserClass *klass)
-                 g_param_spec_string ("showing-extra", "", "", "",
-                                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
- 
--	signals[CHANGED] = 
-+	signals[CHANGED] =
- 		g_signal_new ("changed",
- 			      G_TYPE_FROM_CLASS (object_class),
- 			      G_SIGNAL_RUN_FIRST,
 diff --git a/gnome-initial-setup/pages/timezone/tz.h b/gnome-initial-setup/pages/timezone/tz.h
 index a2376f8..5cb7bc9 100644
 --- a/gnome-initial-setup/pages/timezone/tz.h

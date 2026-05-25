@@ -4,26 +4,31 @@
   lib,
   flac,
   lame,
-  opusTools,
+  opus-tools,
   vorbis-tools,
   ffmpeg,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flac2all";
-  version = "5.1";
+  version = "5.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "OBjlr7cbSx2WOIfZUNwHy5Hpb2Fmh3vmZdc70JiWsiI=";
+    inherit (finalAttrs) pname version;
+    sha256 = "sha256-UGrkCQcpNzWH2hIRd1oTDryUeDumgHKuuxsbC87xaUI=";
   };
 
   # Not sure why this is needed, but setup.py expects this to be set
   postPatch = ''
-    echo ${version} > ./flac2all_pkg/version
+    echo ${finalAttrs.version} > ./flac2all_pkg/version
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = [
     python3Packages.pyzmq
   ];
 
@@ -35,7 +40,7 @@ python3Packages.buildPythonApplication rec {
           flac
           lame
           # Optional deps depending on encoding types
-          opusTools
+          opus-tools
           vorbis-tools
           ffmpeg
         ]
@@ -49,12 +54,12 @@ python3Packages.buildPythonApplication rec {
     "flac2all_pkg.mp3"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi process, clustered, FLAC to multi codec audio converter with tagging support";
     mainProgram = "flac2all";
     homepage = "https://github.com/ZivaVatra/flac2all";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # TODO: This has only been tested on Linux, but may work on Mac too.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

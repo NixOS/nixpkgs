@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.2";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${finalAttrs.version}.tgz";
+    url = "https://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${finalAttrs.version}.tgz";
     hash = "sha256-dPH+MfYdyHauClcD7N1zwjw4EPdtt9uQGCUh9OomsPw=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://mandoc.bsd.lv/pod2mdoc/";
-    description = "converter from POD into mdoc";
+    description = "Converter from POD into mdoc";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ramkromberg ];

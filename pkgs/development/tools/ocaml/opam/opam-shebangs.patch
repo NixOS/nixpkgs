@@ -2,7 +2,7 @@ diff --git a/src/client/opamInitDefaults.ml b/src/client/opamInitDefaults.ml
 index eca13a7c..1fd66f43 100644
 --- a/src/client/opamInitDefaults.ml
 +++ b/src/client/opamInitDefaults.ml
-@@ -42,16 +42,20 @@ let eval_variables = [
+@@ -38,6 +38,9 @@ let eval_variables =
  let os_filter os =
    FOp (FIdent ([], OpamVariable.of_string "os", None), `Eq, FString os)
  
@@ -12,32 +12,27 @@ index eca13a7c..1fd66f43 100644
  let linux_filter = os_filter "linux"
  let macos_filter = os_filter "macos"
  let openbsd_filter = os_filter "openbsd"
- let freebsd_filter = os_filter "freebsd"
- let netbsd_filter = os_filter "netbsd"
- let dragonflybsd_filter = os_filter "dragonfly"
- let not_open_free_bsd_filter =
-   FNot (FOr (openbsd_filter,  freebsd_filter))
- let win32_filter = os_filter "win32"
+@@ -51,6 +54,7 @@ let win32_filter = os_filter "win32"
  let not_win32_filter =
    FOp (FIdent ([], OpamVariable.of_string "os", None), `Neq, FString "win32")
  let sandbox_filter = FOr (linux_filter, macos_filter)
 +let nixos_filter = os_distribution_filter "nixos"
  
- let gpatch_filter =
-   FOr (FOr (openbsd_filter, netbsd_filter),
-        FOr (freebsd_filter, dragonflybsd_filter))
- let patch_filter = FNot gpatch_filter
-@@ -79,4 +81,9 @@ let wrappers ~sandboxing () =
+ let gtar_filter = openbsd_filter
+ let tar_filter = FNot gtar_filter
+@@ -69,6 +73,11 @@ let sandbox_wrappers =
+ 
+ let wrappers ~sandboxing () =
    let w = OpamFile.Wrappers.empty in
 +  let w = { w with
-+            OpamFile.Wrappers.
-+            pre_build = [[CString "%{hooks}%/shebangs.sh", None], Some nixos_filter];
-+          }
++          OpamFile.Wrappers.
++          pre_build = [[CString "%{hooks}%/shebangs.sh", None], Some nixos_filter];
++        }
 +  in
    if sandboxing then
      List.fold_left OpamFile.Wrappers.(fun w -> function
          | `build wrap_build -> { w with wrap_build }
-@@ -113,6 +122,7 @@ let required_tools ~sandboxing () =
+@@ -147,6 +156,7 @@ let required_packages_for_cygwin =
  let init_scripts () = [
    ("sandbox.sh", OpamScript.bwrap), Some bwrap_filter;
    ("sandbox.sh", OpamScript.sandbox_exec), Some macos_filter;

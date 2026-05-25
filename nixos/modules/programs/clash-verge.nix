@@ -23,6 +23,17 @@
     serviceMode = lib.mkEnableOption "Service Mode";
     tunMode = lib.mkEnableOption "Setcap for TUN Mode. DNS settings won't work on this way";
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
+    group = lib.mkOption {
+      type = lib.types.str;
+      example = "wheel";
+      default = "users";
+      description = ''
+        The group to grant access to clash-verge-rev's service socket.
+
+        For better security, you should set a group that only contains
+        users who need to access clash-verge-rev's service socket.
+      '';
+    };
   };
 
   config =
@@ -54,6 +65,7 @@
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/clash-verge-service";
           Restart = "on-failure";
+          Group = cfg.group;
           ProtectSystem = "strict";
           NoNewPrivileges = true;
           ProtectHostname = true;
@@ -68,12 +80,13 @@
           ProtectControlGroups = true;
           LockPersonality = true;
           RestrictRealtime = true;
+          RuntimeDirectory = "clash-verge-rev";
           ProtectClock = true;
           MemoryDenyWriteExecute = true;
           RestrictSUIDSGID = true;
-          RestrictNamespaces = [ "~user cgroup ipc mnt uts" ];
+          RestrictNamespaces = [ "~user cgroup mnt uts" ];
           RestrictAddressFamilies = [
-            "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_RAW"
+            "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_UNIX"
           ];
           CapabilityBoundingSet = [
             "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD"
@@ -87,8 +100,5 @@
       };
     };
 
-  meta.maintainers = with lib.maintainers; [
-    bot-wxt1221
-    Guanran928
-  ];
+  meta.maintainers = pkgs.clash-verge-rev.meta.maintainers;
 }

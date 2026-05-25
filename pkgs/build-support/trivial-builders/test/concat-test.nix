@@ -8,7 +8,7 @@
 let
   stri = writeText "pathToTest";
   txt1 = stri "abc";
-  txt2 = stri (builtins.toString hello);
+  txt2 = stri (toString hello);
   res = concatText "textToTest" [
     txt1
     txt2

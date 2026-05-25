@@ -12,14 +12,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jpilot";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "juddmon";
     repo = "jpilot";
-    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-ja/P6kq53C7drEPWemGMV5fB4BktHrbrxL39jLEGhRI=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     mainProgram = "jpilot";
     maintainers = with lib.maintainers; [ PapayaJackal ];
   };
-}
+})

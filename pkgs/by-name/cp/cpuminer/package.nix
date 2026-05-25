@@ -9,14 +9,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpuminer";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "pooler";
     repo = "cpuminer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0f44i0z8rid20c2hiyp92xq0q0mjj537r05sa6vdbc0nl0a5q40i";
   };
 
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "CFLAGS=-O3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pooler/cpuminer";
     description = "CPU miner for Litecoin and Bitcoin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "minerd";
   };
-}
+})

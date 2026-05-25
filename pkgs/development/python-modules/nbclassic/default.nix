@@ -12,15 +12,12 @@
   pytest-jupyter,
   pytest-tornasync,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbclassic";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -50,9 +47,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter lab environment notebook server extension";
     homepage = "https://github.com/jupyter/nbclassic";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }

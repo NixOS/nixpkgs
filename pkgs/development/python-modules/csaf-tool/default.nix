@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   packageurl-python,
-  pythonOlder,
   rich,
   setuptools,
   versionCheckHook,
@@ -14,12 +13,10 @@ buildPythonPackage rec {
   version = "0.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "csaf";
-    tag = "${version}";
+    tag = version;
     hash = "sha256-LR6r03z0nvvAQgFHaTWfukoJmLZ6SLPXfbp/G8N/HtM=";
   };
 
@@ -37,11 +34,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "CSAF generator and validator";
     homepage = "https://github.com/anthonyharrison/csaf";
     changelog = "https://github.com/anthonyharrison/csaf/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teatwig ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ teatwig ];
   };
 }

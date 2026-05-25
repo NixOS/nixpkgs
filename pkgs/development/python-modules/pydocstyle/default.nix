@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch2,
   poetry-core,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pydocstyle";
   version = "6.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
@@ -40,7 +37,7 @@ buildPythonPackage rec {
       --replace 'version = "0.0.0-dev"' 'version = "${version}"'
   '';
 
-  propagatedBuildInputs = [ snowballstemmer ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  propagatedBuildInputs = [ snowballstemmer ];
 
   optional-dependencies.toml = [ tomli ];
 
@@ -50,12 +47,12 @@ buildPythonPackage rec {
     "src/tests/test_integration.py" # runs pip install
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python docstring style checker";
     mainProgram = "pydocstyle";
     homepage = "https://github.com/PyCQA/pydocstyle";
     changelog = "https://github.com/PyCQA/pydocstyle/blob/${version}/docs/release_notes.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dzabraev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dzabraev ];
   };
 }

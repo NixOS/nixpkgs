@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   fcitx5,
   fcitx5-qt,
@@ -16,45 +16,43 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-skk";
-  version = "5.1.6";
+  version = "5.1.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-1gfR0wXBXM6Gttwldg2vm8DUUW4OciqKMQkpFQHqLoE=";
+    hash = "sha256-4ApXom3SDwlT55lj0q3u5wBmKRGAzJCvpx1H30z3Ubo=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fcitx5
-      libskk
-    ]
-    ++ lib.optionals enableQt [
-      fcitx5-qt
-      qtbase
-    ];
+  buildInputs = [
+    fcitx5
+    libskk
+  ]
+  ++ lib.optionals enableQt [
+    fcitx5-qt
+    qtbase
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT" enableQt)
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
-    "-DSKK_DEFAULT_PATH=${skkDictionaries.l}/share/skk/SKK-JISYO.L"
+    "-DSKK_PATH=${skkDictionaries.l}/share/skk"
   ];
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Input method engine for Fcitx5, which uses libskk as its backend";
     homepage = "https://github.com/fcitx/fcitx5-skk";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wattmto ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wattmto ];
+    platforms = lib.platforms.linux;
   };
 }

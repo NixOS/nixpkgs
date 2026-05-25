@@ -4,14 +4,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openbsm";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "openbsm";
     repo = "openbsm";
-    rev = lib.toUpper (builtins.replaceStrings [ "." "-" ] [ "_" "_" ] "openbsm-${version}");
+    rev = lib.toUpper (builtins.replaceStrings [ "." "-" ] [ "_" "_" ] "openbsm-${finalAttrs.version}");
     sha256 = "0b98359hd8mm585sh145ss828pg2y8vgz38lqrb7nypapiyqdnd1";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of Sun's Basic Security Module (BSM) security audit API and file format";
     homepage = "http://www.openbsm.org/";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
   };
-}
+})

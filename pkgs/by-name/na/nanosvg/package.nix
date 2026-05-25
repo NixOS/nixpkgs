@@ -8,23 +8,23 @@
 
 stdenv.mkDerivation {
   pname = "nanosvg";
-  version = "0-unstable-2024-12-19";
+  version = "0-unstable-2026-05-18";
 
   src = fetchFromGitHub {
     owner = "memononen";
     repo = "nanosvg";
-    rev = "ea6a6aca009422bba0dbad4c80df6e6ba0c82183";
-    hash = "sha256-QCjfaSm1/hstVGzkJc0gFnYhnU5I3oHSCTkAVG5gTt8=";
+    rev = "48120e91e64b2f409ed600cdfd6d790a49ba11ab";
+    hash = "sha256-onjmiWQPftr4AWySwJOpMLZ3WQGvUp9wj9isdUyNIPc=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Simple stupid SVG parser";
     homepage = "https://github.com/memononen/nanosvg";
-    license = licenses.zlib;
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
   };
 }

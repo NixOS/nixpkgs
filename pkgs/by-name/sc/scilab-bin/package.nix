@@ -7,7 +7,15 @@
   autoPatchelfHook,
   alsa-lib,
   ncurses5,
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxft,
+  libxext,
+  libxcursor,
+  libx11,
 }:
 
 let
@@ -84,23 +92,20 @@ let
       autoPatchelfHook
     ];
 
-    buildInputs =
-      [
-        alsa-lib
-        ncurses5
-        stdenv.cc.cc
-      ]
-      ++ (with xorg; [
-        libX11
-        libXcursor
-        libXext
-        libXft
-        libXi
-        libXrandr
-        libXrender
-        libXtst
-        libXxf86vm
-      ]);
+    buildInputs = [
+      alsa-lib
+      ncurses5
+      stdenv.cc.cc
+      libx11
+      libxcursor
+      libxext
+      libxft
+      libxi
+      libxrandr
+      libxrender
+      libxtst
+      libxxf86vm
+    ];
 
     installPhase = ''
       runHook preInstall

@@ -4,15 +4,23 @@
   cairo,
   callPackage,
   fetchFromGitHub,
+  fontconfig,
   gdk-pixbuf,
   glib,
   gobject-introspection,
   gtk4,
+  libglvnd,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  libxrandr,
   pango,
   pkg-config,
   rustPlatform,
   stdenv,
   testers,
+  wayland,
   wrapGAppsHook4,
   xvfb-run,
   versionCheckHook,
@@ -21,17 +29,16 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "czkawka";
-    version = "9.0.0";
+    version = "11.0.1";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
       tag = self.version;
-      hash = "sha256-ePiHDfQ1QC3nff8uWE0ggiTuulBomuoZ3ta0redUYXY=";
+      hash = "sha256-ke6N3vuKPGolfh6XpAg3/9dtwd09eX53fN2klUwwNwQ=";
     };
 
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-Djvb5Hen6XPm6aJuwa6cGPojz9+kXXidysr3URDwDFM=";
+    cargoHash = "sha256-fx2ZH4I2WYCdMgNoKQuBBEJrPjmgTRPeVM2L+TWYn54=";
 
     nativeBuildInputs = [
       gobject-introspection
@@ -42,10 +49,16 @@ let
     buildInputs = [
       atk
       cairo
+      fontconfig
       gdk-pixbuf
       glib
       gtk4
       pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libglvnd
+      libxkbcommon
+      wayland
     ];
 
     nativeCheckInputs = [ xvfb-run ];
@@ -62,17 +75,41 @@ let
 
     # Desktop items, icons and metainfo are not installed automatically
     postInstall = ''
+      # Czkawka
       install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
+
+      # Krokiet
+      install -Dm444 -t $out/share/applications data/io.github.qarmin.krokiet.desktop
+      install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/io.github.qarmin.krokiet.svg
+      install -Dm444 -t $out/share/metainfo data/io.github.qarmin.krokiet.metainfo.xml
+    '';
+    dontWrapGApps = true;
+
+    postFixup = ''
+      wrapGApp $out/bin/czkawka_gui
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-rpath "${
+        lib.makeLibraryPath [
+          fontconfig
+          libglvnd
+          libx11
+          libxcursor
+          libxi
+          libxrandr
+          libxkbcommon
+          wayland
+        ]
+      }" $out/bin/krokiet
     '';
 
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {

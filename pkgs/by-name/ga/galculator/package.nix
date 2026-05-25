@@ -2,6 +2,7 @@
   lib,
   autoreconfHook,
   fetchFromGitHub,
+  fetchDebianPatch,
   fetchpatch2,
   flex,
   gtk3,
@@ -28,6 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
       name = "fno-common.patch";
       url = "https://github.com/galculator/galculator/commit/501a9e3feeb2e56889c0ff98ab6d0ab20348ccd6.patch";
       hash = "sha256-qVJHcfJTtl0hK8pzSp6MjhYAh1NbIIWr3rBDodIYBvk=";
+    })
+    ./gettext-0.25.patch
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      patch = "0002-Declare-function-parameters-as-required-by-C23.patch";
+      debianRevision = "2.1";
+      hash = "sha256-kwRYYNOo3Z2SjFQzR6Mo+qBgW3LQfhxdE6mMpLGoE44=";
     })
   ];
 
@@ -63,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "galculator";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (gtk3.meta) platforms;
   };
 })

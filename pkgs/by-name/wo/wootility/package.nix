@@ -7,10 +7,10 @@
 
 let
   pname = "wootility";
-  version = "5.0.6";
+  version = "5.3.1";
   src = fetchurl {
     url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
-    sha256 = "sha256-9DFt8Hx39B7hgIQn22TPDva1mpxBYFtddNG+WNeqgF8=";
+    sha256 = "sha256-KRqXjguylH5FjV6j+ckZwXbg6Wm2y0CE9HQaoNgfyc0=";
   };
 in
 
@@ -28,7 +28,7 @@ appimageTools.wrapType2 {
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
       install -Dm444 ${contents}/wootility.desktop -t $out/share/applications
-      install -Dm444 ${contents}/wootility.png -t $out/share/pixmaps
+      install -Dm444 ${contents}/wootility.png -t $out/share/icons
       substituteInPlace $out/share/applications/wootility.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
     '';
@@ -38,9 +38,9 @@ appimageTools.wrapType2 {
   '';
 
   extraPkgs =
-    pkgs: with pkgs; ([
-      xorg.libxkbfile
-    ]);
+    pkgs: with pkgs; [
+      libxkbfile
+    ];
 
   meta = {
     homepage = "https://wooting.io/wootility";

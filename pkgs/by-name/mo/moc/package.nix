@@ -6,6 +6,7 @@
   pkg-config,
   autoreconfHook,
   autoconf-archive,
+  gettext,
   ncurses,
   db,
   popt,
@@ -79,7 +80,9 @@ stdenv.mkDerivation {
     })
 
     ./use-ax-check-compile-flag.patch
-  ] ++ lib.optional pulseSupport ./pulseaudio.patch;
+    ./fix_gettext_0_25.patch
+  ]
+  ++ lib.optional pulseSupport ./pulseaudio.patch;
 
   postPatch = ''
     rm m4/*
@@ -89,42 +92,42 @@ stdenv.mkDerivation {
     pkg-config
     autoreconfHook
     autoconf-archive
+    gettext
   ];
 
-  buildInputs =
-    [
-      ncurses
-      db
-      popt
-      libtool
-    ]
-    # Sound sub-systems
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional jackSupport libjack2
-    # Audio formats
-    ++ lib.optional (aacSupport || mp3Support) libid3tag
-    ++ lib.optional aacSupport faad2
-    ++ lib.optional flacSupport flac
-    ++ lib.optional midiSupport timidity
-    ++ lib.optional modplugSupport libmodplug
-    ++ lib.optional mp3Support libmad
-    ++ lib.optionals musepackSupport [
-      libmpc
-      libmpcdec
-      taglib
-    ]
-    ++ lib.optional vorbisSupport libvorbis
-    ++ lib.optional speexSupport speex
-    ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optional sndfileSupport libsndfile
-    ++ lib.optional wavpackSupport wavpack
-    # Misc
-    ++ lib.optional curlSupport curl
-    ++ lib.optional samplerateSupport libsamplerate
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    ncurses
+    db
+    popt
+    libtool
+  ]
+  # Sound sub-systems
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional jackSupport libjack2
+  # Audio formats
+  ++ lib.optional (aacSupport || mp3Support) libid3tag
+  ++ lib.optional aacSupport faad2
+  ++ lib.optional flacSupport flac
+  ++ lib.optional midiSupport timidity
+  ++ lib.optional modplugSupport libmodplug
+  ++ lib.optional mp3Support libmad
+  ++ lib.optionals musepackSupport [
+    libmpc
+    libmpcdec
+    taglib
+  ]
+  ++ lib.optional vorbisSupport libvorbis
+  ++ lib.optional speexSupport speex
+  ++ lib.optional ffmpegSupport ffmpeg
+  ++ lib.optional sndfileSupport libsndfile
+  ++ lib.optional wavpackSupport wavpack
+  # Misc
+  ++ lib.optional curlSupport curl
+  ++ lib.optional samplerateSupport libsamplerate
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   configureFlags = [
     # Sound sub-systems
@@ -147,21 +150,20 @@ stdenv.mkDerivation {
     # Misc
     (lib.withFeature curlSupport "curl")
     (lib.withFeature samplerateSupport "samplerate")
-    ("--enable-debug=" + (if withDebug then "yes" else "no"))
+    "--enable-debug=${lib.boolToYesNo withDebug}"
     "--disable-cache"
     "--without-rcc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       aethelz
       pSub
-      jagajaga
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "mocp";
   };
 }

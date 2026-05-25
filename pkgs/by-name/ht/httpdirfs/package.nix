@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httpdirfs";
-  version = "1.2.7";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = "httpdirfs";
     tag = finalAttrs.version;
-    hash = "sha256-6TGptKWX0hSNL3Z3ioP7puzozWLiMhCybN7hATQdD/k=";
+    hash = "sha256-dfMavLEBXry1cW4o2yQjuvBbYIvct1GXzACj+9Hh4wE=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=attribute-warning"
+    "-Wno-error=pedantic"
+  ];
+
   passthru = {
     tests.version = testers.testVersion {
       command = "${lib.getExe finalAttrs.finalPackage} --version";
@@ -56,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "httpdirfs";
     maintainers = with lib.maintainers; [
-      sbruder
       schnusch
       anthonyroussel
     ];

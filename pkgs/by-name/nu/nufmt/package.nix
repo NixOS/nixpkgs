@@ -1,27 +1,36 @@
 {
   lib,
   fetchFromGitHub,
-  rustPlatform,
   nix-update-script,
+  rustPlatform,
+  stdenv,
 }:
-
 rustPlatform.buildRustPackage {
   pname = "nufmt";
-  version = "0-unstable-2025-04-28";
+  version = "0-unstable-2026-03-26";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "feafe695659c4d5153018a78fad949d088d8a480";
-    hash = "sha256-4FnZIlZWuvSAXMQbdyONNrgIuMxH5Vq3MFbb8J2CnHM=";
+    rev = "074930a23bc89a5f720a0d46ac2853f3153817c2";
+    hash = "sha256-XqiUPAVM6OuyNo9HbBKW+OKQrE7QbSjDRtyfmIYQRxs=";
   };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-zS4g/uMh1eOoPo/RZfanL6afCEU5cnyzHrIqkvuQVrg=";
+  cargoHash = "sha256-heHFiW1/2qV6BJH7Y0ObSV1sPfVaU0m2KLbASdzca8s=";
+
+  # NOTE: Patch follows similar intention upstream https://github.com/nushell/nufmt/commit/074930a23bc89a5f720a0d46ac2853f3153817c2
+  postPatch = ''
+    substituteInPlace tests/ground_truth.rs --replace-fail \
+      '        let path = PathBuf::from(target_dir).join("debug").join(exe_name);' \
+      '        let path = PathBuf::from(target_dir).join("${stdenv.hostPlatform.rust.rustcTarget}/release").join(exe_name);'
+    substituteInPlace tests/ground_truth.rs --replace-fail \
+      '    let default_path = PathBuf::from("target").join("debug").join(exe_name);' \
+      '    let default_path = PathBuf::from("target").join("${stdenv.hostPlatform.rust.rustcTarget}/release").join(exe_name);'
+  '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
@@ -30,7 +39,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/nushell/nufmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      iogamaster
       khaneliman
     ];
     mainProgram = "nufmt";

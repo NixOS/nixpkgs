@@ -4,82 +4,87 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   httpx,
   langchain-core,
-  syrupy,
-  pytest-benchmark,
-  pytest-codspeed,
+  numpy,
+  pytest-asyncio,
   pytest-recording,
+  pytest-socket,
+  syrupy,
   vcrpy,
 
   # buildInputs
-  pytest,
-
-  # tests
-  numpy,
-  pytest-asyncio,
-  pytest-socket,
   pytestCheckHook,
 
+  # tests
+  pytest-benchmark,
+
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-tests";
-  version = "0.3.20";
+  version = "1.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-tests==${version}";
-    hash = "sha256-RMuxWA/n8d71FReFKO3Y/5P0MYk4aZ5WU2/TRxf9UuE=";
+    tag = "langchain-tests==${finalAttrs.version}";
+    hash = "sha256-zesNbesiLMayvlVrU6NagmE2+o0l6ozwZlOGqvyGpnQ=";
   };
 
-  sourceRoot = "${src.name}/libs/standard-tests";
+  sourceRoot = "${finalAttrs.src.name}/libs/standard-tests";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
+
+  pythonRemoveDeps = [
+    "pytest-benchmark"
+    "pytest-codspeed"
+  ];
 
   pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-    "numpy"
+    "pytest"
+    "syrupy"
+    "vcrpy"
   ];
 
   dependencies = [
     httpx
     langchain-core
+    numpy
     pytest-asyncio
     pytest-benchmark
-    pytest-codspeed
     pytest-recording
     pytest-socket
     syrupy
     vcrpy
   ];
 
-  buildInputs = [ pytest ];
-
   pythonImportsCheck = [ "langchain_tests" ];
 
   nativeBuildInputs = [
-    numpy
     pytestCheckHook
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-tests==([0-9.]+)"
-    ];
+  disabledTestMarks = [
+    "benchmark"
+  ];
+
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-tests==";
+    };
   };
 
   meta = {
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain";
     license = lib.licenses.mit;
@@ -88,4 +93,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

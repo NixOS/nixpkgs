@@ -45,13 +45,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious-plugins";
-  version = "4.4.2";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious-plugins";
     rev = "${pname}-${version}";
-    hash = "sha256-fA7xB04WLlleLIBDEZOVqDQguKAXtTsJoedQ9A/ZHQg=";
+    hash = "sha256-HfO59DOIYsEpBzUyaLYh/gXfz+zvH8lIY2yBVCn3wks=";
   };
 
   patches = [ ./0001-Set-plugindir-to-PREFIX-lib-audacious.patch ];

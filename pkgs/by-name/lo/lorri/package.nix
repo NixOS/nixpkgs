@@ -34,12 +34,13 @@ in
     "doc"
   ];
 
-  useFetchCargoVendor = true;
   inherit cargoHash;
   doCheck = false;
 
-  BUILD_REV_COUNT = src.revCount or 1;
-  RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
+  env = {
+    BUILD_REV_COUNT = src.revCount or 1;
+    RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
+  };
 
   nativeBuildInputs = [ rustPackages.rustfmt ];
 
@@ -65,12 +66,11 @@ in
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Your project's nix-env";
     homepage = "https://github.com/nix-community/lorri";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      grahamc
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       Profpatsch
       nyarly
     ];

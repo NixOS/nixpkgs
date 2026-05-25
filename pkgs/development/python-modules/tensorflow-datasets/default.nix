@@ -3,23 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # build system
+  packaging,
+  setuptools,
+
   # dependencies
+  absl-py,
   array-record,
-  dill,
   dm-tree,
-  future,
+  etils,
   immutabledict,
   importlib-resources,
   numpy,
   promise,
   protobuf,
   psutil,
+  pyarrow,
   requests,
   simple-parsing,
-  six,
   tensorflow-metadata,
   termcolor,
+  toml,
   tqdm,
+  wrapt,
 
   # tests
   apache-beam,
@@ -27,6 +33,7 @@
   click,
   cloudpickle,
   datasets,
+  dill,
   ffmpeg,
   imagemagick,
   jax,
@@ -55,36 +62,46 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
-  version = "4.9.9";
+  version = "4.9.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    tag = "v${version}";
-    hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nq0c5hBTVwkxCRvWxtnfI+AHD+URY+nNfZAurEGaLXk=";
   };
 
+  build-system = [
+    packaging
+    setuptools
+  ];
+
   dependencies = [
+    absl-py
     array-record
-    dill
     dm-tree
-    future
+    etils
     immutabledict
     importlib-resources
     numpy
     promise
     protobuf
     psutil
+    pyarrow
     requests
     simple-parsing
-    six
     tensorflow-metadata
     termcolor
+    toml
     tqdm
-  ];
+    wrapt
+  ]
+  ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.etree;
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -94,6 +111,7 @@ buildPythonPackage rec {
     click
     cloudpickle
     datasets
+    dill
     ffmpeg
     imagemagick
     jax
@@ -120,12 +138,6 @@ buildPythonPackage rec {
     tensorflow
     tifffile
     zarr
-  ];
-
-  pytestFlagsArray = [
-    # AttributeError: 'NoneType' object has no attribute 'Table'
-    "--deselect=tensorflow_datasets/core/file_adapters_test.py::test_read_write"
-    "--deselect=tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
   disabledTests = [
@@ -183,22 +195,23 @@ buildPythonPackage rec {
     "tensorflow_datasets/core/dataset_utils_test.py"
     "tensorflow_datasets/core/features/sequence_feature_test.py"
 
-    # Requires `tensorflow_docs` which is not packaged in `nixpkgs` and the test is for documentation anyway.
-    "tensorflow_datasets/scripts/documentation/build_api_docs_test.py"
-
     # Not a test, should not be executed.
     "tensorflow_datasets/testing/test_utils.py"
 
     # Require `gcld3` and `nltk.punkt` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/text/c4_test.py"
     "tensorflow_datasets/text/c4_utils_test.py"
+
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "tensorflow_datasets/core/file_adapters_test.py::test_read_write"
+    "tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
   meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

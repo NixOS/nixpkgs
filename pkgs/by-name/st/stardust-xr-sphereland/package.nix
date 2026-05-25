@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-sphereland";
   version = "0-unstable-2023-11-07";
 
@@ -17,9 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LKdqTl14cdgD14IwAP34mWdDgREhy1CHOT86HywOxqM=";
   };
 
-  env.STARDUST_RES_PREFIXES = "${src}/res";
+  env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4mESTxfogMQxfDMQRVML752fkinOIqkddW3PHmvxekc=";
 
   buildInputs = [
@@ -41,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

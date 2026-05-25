@@ -8,7 +8,7 @@
   bigstring,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "hidapi";
   version = "1.2.1";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "vbmithr";
     repo = "ocaml-hidapi";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-upygm5G46C65lxaiI6kBOzLrWxzW9qWb6efN/t58SRg=";
   };
 
@@ -32,11 +32,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Bindings to Signal11's hidapi library";
     homepage = "https://github.com/vbmithr/ocaml-hidapi";
-    license = licenses.isc;
-    maintainers = [ maintainers.alexfmpe ];
+    license = lib.licenses.isc;
+    maintainers = [ ];
     mainProgram = "ocaml-hid-enumerate";
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   coreutils,
+  fetchDebianPatch,
   fetchurl,
   libxcrypt,
   pam,
@@ -20,14 +21,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mKyjimHHcTZ3uW8kQmynBTSAwP0HfZGx6ZvJ+SzLgyo=";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchDebianPatch {
+      pname = "otpw";
+      version = "1.5";
+      debianRevision = "6";
+      patch = "gcc15.patch";
+      hash = "sha256-lR/FZannn9YVCTj+DWZvIyu99lmkaUxG48TGzckyolU=";
+    })
+  ];
+
+  postPatch = ''
     sed -i 's/^CFLAGS.*/CFLAGS=-O2 -fPIC/' Makefile
     substituteInPlace otpw-gen.c \
       --replace "head -c 20 /dev/urandom 2>&1" "${coreutils}/bin/head -c 20 /dev/urandom 2>&1" \
       --replace "ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." "${coreutils}/bin/ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." \
       --replace "PATH=/usr/ucb:/bin:/usr/bin;ps lax" "PATH=/usr/ucb:/bin:/usr/bin;${unixtools.procps}/bin/ps lax" \
       --replace "last | head -50" "${util-linux}/bin/last | ${coreutils}/bin/head -50" \
-      --replace "uptime;netstat -n;hostname;date;w" "${coreutils}/bin/uptime; ${unixtools.nettools}/bin/netstat -n; ${unixtools.nettools}/bin/hostname; ${coreutils}/bin/date; ${procps}/bin/w"
+      --replace "uptime;netstat -n;hostname;date;w" "${coreutils}/bin/uptime; ${unixtools.net-tools}/bin/netstat -n; ${unixtools.net-tools}/bin/hostname; ${coreutils}/bin/date; ${procps}/bin/w"
   '';
 
   buildInputs = [

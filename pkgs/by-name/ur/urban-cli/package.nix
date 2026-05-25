@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "urban-cli";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "tfkhdyt";
     repo = "urban-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-URTEhtOiwb3IDyjRUtUmVTaeDXw4Beg0woWdGxeq098=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tfkhdyt ];
     mainProgram = "urban-cli";
   };
-}
+})

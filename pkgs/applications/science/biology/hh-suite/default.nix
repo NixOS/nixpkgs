@@ -41,11 +41,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.cc.isClang openmp ++ lib.optional enableMpi mpi;
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace lib/ffindex/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Remote protein homology detection suite";
     homepage = "https://github.com/soedinglab/hh-suite";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 }

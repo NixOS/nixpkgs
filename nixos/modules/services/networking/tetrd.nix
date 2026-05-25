@@ -14,6 +14,9 @@
       etc."resolv.conf".source = "/etc/tetrd/resolv.conf";
     };
 
+    # Our resolv.conf will override resolvconf's version.
+    networking.resolvconf.enable = false;
+
     systemd = {
       tmpfiles.rules = [ "f /etc/tetrd/resolv.conf - - -" ];
 
@@ -80,23 +83,20 @@
             builtins.storeDir
             "/etc/ssl"
             "/etc/static/ssl"
-            "${pkgs.nettools}/bin/route:/usr/bin/route"
-            "${pkgs.nettools}/bin/ifconfig:/usr/bin/ifconfig"
+            "${pkgs.net-tools}/bin/route:/usr/bin/route"
+            "${pkgs.net-tools}/bin/ifconfig:/usr/bin/ifconfig"
           ];
 
           BindPaths = [
             "/etc/tetrd/resolv.conf:/etc/resolv.conf"
-            "/run"
-            "/var/log"
+            "/run/tetrd:/run"
           ];
 
           CapabilityBoundingSet = [
-            "CAP_DAC_OVERRIDE"
             "CAP_NET_ADMIN"
           ];
 
           AmbientCapabilities = [
-            "CAP_DAC_OVERRIDE"
             "CAP_NET_ADMIN"
           ];
         };

@@ -18,13 +18,20 @@ makeOverridable (
   {
     owner,
     repo,
-    rev,
-    name ? repoRevToNameMaybe repo rev "sourcehut",
+    rev ? null,
+    tag ? null,
+    name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "sourcehut",
     domain ? "sr.ht",
     vc ? "git",
     fetchSubmodules ? false,
     ... # For hash agility
   }@args:
+
+  assert (
+    lib.assertMsg (lib.xor (tag == null) (
+      rev == null
+    )) "fetchFromSourcehut requires one of either `rev` or `tag` to be provided (not both)."
+  );
 
   assert (
     assertOneOf "vc" vc [
@@ -35,22 +42,23 @@ makeOverridable (
 
   let
     urlFor = resource: "https://${resource}.${domain}/${owner}/${repo}";
+    rev' = if tag != null then tag else rev;
     baseUrl = urlFor vc;
-    baseArgs =
-      {
-        inherit name;
-      }
-      // removeAttrs args [
-        "owner"
-        "repo"
-        "rev"
-        "domain"
-        "vc"
-        "name"
-        "fetchSubmodules"
-      ];
+    baseArgs = {
+      inherit name;
+    }
+    // removeAttrs args [
+      "owner"
+      "repo"
+      "rev"
+      "tag"
+      "domain"
+      "vc"
+      "name"
+      "fetchSubmodules"
+    ];
     vcArgs = baseArgs // {
-      inherit rev;
+      rev = rev';
       url = baseUrl;
     };
     fetcher = if fetchSubmodules then vc else "zip";
@@ -70,11 +78,11 @@ makeOverridable (
       zip = {
         fetch = fetchzip;
         arguments = baseArgs // {
-          url = "${baseUrl}/archive/${rev}.tar.gz";
+          url = "${baseUrl}/archive/${rev'}.tar.gz";
           postFetch = optionalString (vc == "hg") ''
             rm -f "$out/.hg_archival.txt"
           ''; # impure file; see #12002
-          passthru = {
+          passthru = (args.passthru or { }) // {
             gitRepoUrl = urlFor "git";
           };
         };
@@ -83,7 +91,7 @@ makeOverridable (
   in
   cases.${fetcher}.fetch cases.${fetcher}.arguments
   // {
-    inherit rev;
+    rev = rev';
     meta.homepage = "${baseUrl}";
   }
 )

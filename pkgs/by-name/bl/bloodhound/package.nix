@@ -33,14 +33,25 @@
   udev,
   unzip,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxkbfile,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "bloodhound";
   version = "4.3.1";
 
   src = fetchzip {
-    url = "https://github.com/BloodHoundAD/BloodHound/releases/download/v${finalAttrs.version}/BloodHound-linux-x64.zip";
+    url = "https://github.com/SpecterOps/BloodHound-Legacy/releases/download/v${finalAttrs.version}/BloodHound-linux-x64.zip";
     hash = "sha256-gGfZ5Mj8rmz3dwKyOitRExkgOmSVDOqKpPxvGlE4izw=";
   };
 
@@ -73,19 +84,19 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     (lib.getLib stdenv.cc.cc)
     udev
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxkbfile
-    xorg.libxshmfence
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxkbfile
+    libxshmfence
   ];
 
   buildInputs = [
@@ -117,14 +128,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Active Directory reconnaissance and attack path management tool";
-    homepage = "https://github.com/BloodHoundAD/BloodHound";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    changelog = "https://github.com/BloodHoundAD/BloodHound/releases/tag/v${finalAttrs.version}";
-    downloadPage = "https://github.com/BloodHoundAD/BloodHound/releases";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ akechishiro ];
+    homepage = "https://github.com/SpecterOps/BloodHound-Legacy";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    changelog = "https://github.com/SpecterOps/BloodHound-Legacy/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/SpecterOps/BloodHound-Legacy/releases";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ akechishiro ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "BloodHound";
   };

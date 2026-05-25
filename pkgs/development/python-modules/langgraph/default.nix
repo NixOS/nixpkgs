@@ -5,25 +5,27 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
   langgraph-checkpoint,
   langgraph-prebuilt,
   langgraph-sdk,
+  pydantic,
   xxhash,
 
   # tests
   aiosqlite,
   dataclasses-json,
+  fakeredis,
   grandalf,
   httpx,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
   psycopg,
-  pydantic,
+  pycryptodome,
   pytest-asyncio,
   pytest-mock,
   pytest-repeat,
@@ -32,36 +34,40 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
+  redisTestHook,
 
   # passthru
   nix-update-script,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph";
-  version = "0.4.1";
+  version = "1.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "${version}";
-    hash = "sha256-bTxtfduuuyRITZqhk15aWwxNwiZ7TMTgBOEPat6zVIc=";
+    tag = finalAttrs.version;
+    hash = "sha256-J899GIBdXHjZVMwZlnn5GH52/TNjzLukc4Xp/qc8NOM=";
   };
 
   postgresqlTestSetupPost = ''
-    substituteInPlace tests/conftest.py \
+    substituteInPlace tests/conftest_store.py \
+      --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5442/\"" "DEFAULT_POSTGRES_URI = \"postgres:///$PGDATABASE\""
+    substituteInPlace tests/conftest_checkpointer.py \
       --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5442/\"" "DEFAULT_POSTGRES_URI = \"postgres:///$PGDATABASE\""
   '';
 
-  sourceRoot = "${src.name}/libs/langgraph";
+  sourceRoot = "${finalAttrs.src.name}/libs/langgraph";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
     langgraph-checkpoint
     langgraph-prebuilt
     langgraph-sdk
+    pydantic
     xxhash
   ];
 
@@ -75,6 +81,9 @@ buildPythonPackage rec {
     pytestCheckHook
     postgresql
     postgresqlTestHook
+    redisTestHook
+    fakeredis
+    langgraph-checkpoint
   ];
 
   checkInputs = [
@@ -87,6 +96,7 @@ buildPythonPackage rec {
     langsmith
     psycopg
     psycopg.pool
+    pycryptodome
     pydantic
     pytest-asyncio
     pytest-mock
@@ -96,9 +106,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # test is flaky due to pydantic error on the exception
-    "test_doesnt_warn_valid_schema"
-    "test_tool_node_inject_store"
+    # Requires `langgraph dev` to be running
+    "test_remote_graph_basic_invoke"
+    "test_remote_graph_stream_messages_tuple"
 
     # Disabling tests that requires to create new random databases
     "test_cancel_graph_astream"
@@ -113,10 +123,7 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
-
-    # pydantic.errors.PydanticForbiddenQualifier,
-    # see https://github.com/langchain-ai/langgraph/issues/4360
-    "test_state_schema_optional_values"
+    "test_interrupt_functional_pydantic"
   ];
 
   disabledTestPaths = [
@@ -126,20 +133,29 @@ buildPythonPackage rec {
     "tests/test_large_cases_async.py"
     "tests/test_pregel.py"
     "tests/test_pregel_async.py"
+    "tests/test_subgraph_persistence.py"
+    "tests/test_subgraph_persistence_async.py"
+    "tests/test_time_travel.py"
+    "tests/test_time_travel_async.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^(\\d+\\.\\d+\\.\\d+)"
-    ];
+  # Since `langgraph` is the only unprefixed package, we have to use an explicit match
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
   };
 
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

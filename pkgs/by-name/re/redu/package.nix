@@ -3,22 +3,23 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
+  restic,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "redu";
-  version = "0.2.13";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "drdo";
     repo = "redu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iea3tt1WB0/5XPNeCAk38/UoCHVSngXfNmfZQyspmsw=";
+    hash = "sha256-ByXQ3tcvXbCUZwZ+e7WJVUUjvhMf0ivJJiswFlLap4I=";
   };
 
-  cargoHash = "sha256-fiMZIFIVeFnBnRBgmdUB8E5A2pM5nrTfUgD1LS6a4LQ=";
+  cargoHash = "sha256-JnjXe2CHO9Namp++UI/V6ND2Y0/WQtaVA2EcUyXUnjQ=";
 
-  env.RUSTC_BOOTSTRAP = 1;
+  buildInputs = [ restic ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/drdo/redu";
     changelog = "https://github.com/drdo/redu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alexfmpe ];
+    maintainers = with lib.maintainers; [
+      alexfmpe
+      drdo
+    ];
     mainProgram = "redu";
   };
 })

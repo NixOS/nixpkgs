@@ -3,26 +3,37 @@
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codebook";
-  version = "0.3.3";
+  version = "0.3.39";
 
   src = fetchFromGitHub {
     owner = "blopker";
     repo = "codebook";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9tXzruyISC+JdzV4aPBB31OCKgZVAO0eU3SsgAZy/+I=";
+    hash = "sha256-u0BFbG7Vq2dIIJIlXe2rlNPD6iUVnb3uM95bLBg9CEU=";
   };
 
   buildAndTestSubdir = "crates/codebook-lsp";
-  cargoHash = "sha256-Bba5v0J5HRaylQRHV41LQ2My0zYybme/AHZ+HDekoHc=";
+  cargoHash = "sha256-Tx2KxtUjQpJa2WDUlFQoNZItKowGv09ZTGytFuxL0yc=";
+
+  env = {
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
 
   # Integration tests require internet access for dictionaries
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Unholy spellchecker for code";

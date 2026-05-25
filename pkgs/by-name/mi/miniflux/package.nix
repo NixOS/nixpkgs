@@ -1,34 +1,37 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "miniflux";
-  version = "2.2.9";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
-    tag = version;
-    hash = "sha256-pp+QaofbU6Vkh2ifQLpUq+dbQTx/jX2JgM/9uji13tU=";
+    tag = finalAttrs.version;
+    hash = "sha256-AF5wiFLXtyf0ZxfVu0zdXcVExm7Zoh/wYS9FuSjfipk=";
   };
 
-  vendorHash = "sha256-6tgZdwr9g/VCnLUEmwAl8vzOzQu6SEGV9PhTp47eXds=";
+  vendorHash = "sha256-9qHe21/Qu2OInjcn4gQOh3LEQ1iqT6rzm8agj+YUD68=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
+  # skip tests that require network access
+  checkFlags = [ "-skip=TestResolvesToPrivateIP" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X miniflux.app/v2/internal/version.Version=${version}"
+    "-X miniflux.app/v2/internal/version.Version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux
@@ -40,11 +43,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist and opinionated feed reader";
+    changelog = "https://miniflux.app/releases/${finalAttrs.version}.html";
     homepage = "https://miniflux.app/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       benpye
       emilylange
@@ -52,4 +56,4 @@ buildGoModule rec {
     ];
     mainProgram = "miniflux";
   };
-}
+})

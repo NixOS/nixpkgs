@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = false;
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/omniorb/omniORBpy-${version}.tar.bz2";
+    url = "https://downloads.sourceforge.net/omniorb/omniORBpy-${version}.tar.bz2";
     hash = "sha256-y1cX1BKhAbr0MPWYysfWkjGITa5DctjirfPd7rxffrs=";
   };
 
@@ -45,14 +45,14 @@ buildPythonPackage rec {
     "omniORB"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python backend for omniorb";
     homepage = "http://omniorb.sourceforge.net";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ nim65s ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 }

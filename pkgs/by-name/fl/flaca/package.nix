@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flaca";
-  version = "3.3.2";
+  version = "3.6.1";
 
   lockFile = fetchurl {
     url = "https://github.com/Blobfolio/flaca/releases/download/v${finalAttrs.version}/Cargo.lock";
-    hash = "sha256-AFEuJQAz+cXUuyLefqsV2VyytJ+sfLrJQSArITqQZZU=";
+    hash = "sha256-GNpL51rx3na+ECHUl0JAUQJBRQQ12Ubg4RIhNfXxMRQ=";
   };
 
   src = fetchFromGitHub {
     owner = "Blobfolio";
     repo = "flaca";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sxBP3L9Abk3/NYkE1UeFFulGEhDe4wKqS71wrX6mA9c=";
+    hash = "sha256-LVk+2zt7Abku3bR5FnpugztMy0A3LmpO2yBkZO1jjxc=";
   };
 
   postUnpack = ''
@@ -27,17 +27,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-i4eYyS3s7q/1PaqwawpWeDbUHUGEvIfN65xfvpLkOpY=";
+  cargoHash = "sha256-73O/h7Cuh+to9MpQ97daPFKI4ACtT0aer3h0EmKKcoA=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to losslessly compress JPEG and PNG images";
     longDescription = "A CLI tool for x86-64 Linux machines that simplifies the task of maximally, losslessly compressing JPEG and PNG images for use in production web environments";
     homepage = "https://github.com/Blobfolio/flaca";
     changelog = "https://github.com/Blobfolio/flaca/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ zzzsy ];
-    platforms = platforms.linux;
-    license = licenses.wtfpl;
+    maintainers = with lib.maintainers; [ zzzsy ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.wtfpl;
     mainProgram = "flaca";
   };
 })

@@ -1,21 +1,19 @@
 {
   lib,
-  fetchFromGitHub,
-  buildOasisPackage,
+  fetchurl,
+  buildDunePackage,
   minisat,
 }:
 
-buildOasisPackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-sat-solvers";
-  version = "0.4";
+  version = "0.8";
 
-  minimumOCamlVersion = "4.03.0";
+  minimalOCamlVersion = "4.05";
 
-  src = fetchFromGitHub {
-    owner = "tcsprojects";
-    repo = "ocaml-sat-solvers";
-    rev = "v${version}";
-    sha256 = "1hxr16cyl1p1k1cik848mqrysq95wxmlykpm93a99pn55mp28938";
+  src = fetchurl {
+    url = "https://github.com/tcsprojects/ocaml-sat-solvers/releases/download/v${finalAttrs.version}/ocaml-sat-solvers-${finalAttrs.version}.tbz";
+    hash = "sha256-1eXzuY6rrrjdEG/XnkJe4o9zAcUvfTVFO1+ZIzcgpOU=";
   };
 
   propagatedBuildInputs = [ minisat ];
@@ -26,4 +24,4 @@ buildOasisPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mgttlinger ];
   };
-}
+})

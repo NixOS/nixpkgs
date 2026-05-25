@@ -14,6 +14,8 @@
 
   droidcam-obs = callPackage ./droidcam-obs { };
 
+  distroav = qt6Packages.callPackage ./distroav { };
+
   input-overlay = qt6Packages.callPackage ./input-overlay.nix { };
 
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
@@ -25,6 +27,8 @@
   obs-aitum-multistream = qt6Packages.callPackage ./obs-aitum-multistream.nix { };
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
+
+  obs-browser-transition = callPackage ./obs-browser-transition.nix { };
 
   obs-color-monitor = qt6Packages.callPackage ./obs-color-monitor.nix { };
 
@@ -48,7 +52,7 @@
 
   obs-markdown = callPackage ./obs-markdown.nix { };
 
-  obs-media-controls = qt6Packages.callPackage ./obs-media-controls.nix { };
+  obs-media-controls = qt6Packages.callPackage ./obs-media-controls { };
 
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
@@ -56,13 +60,11 @@
 
   obs-mute-filter = callPackage ./obs-mute-filter.nix { };
 
-  obs-ndi = qt6Packages.callPackage ./obs-ndi { };
-
   obs-noise = callPackage ./obs-noise.nix { };
 
-  obs-nvfbc = callPackage ./obs-nvfbc.nix { };
-
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
+
+  obs-plugin-countdown = qt6Packages.callPackage ./obs-plugin-countdown.nix { };
 
   obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
 
@@ -94,8 +96,6 @@
 
   obs-tuna = qt6Packages.callPackage ./obs-tuna { };
 
-  obs-urlsource = qt6Packages.callPackage ./obs-urlsource.nix { };
-
   obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vertical-canvas = qt6Packages.callPackage ./obs-vertical-canvas.nix { };
@@ -106,9 +106,9 @@
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };
 
-  obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
+  obs-vnc = callPackage ./obs-vnc.nix { };
 
-  obs-webkitgtk = callPackage ./obs-webkitgtk.nix { };
+  obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 
   pixel-art = callPackage ./pixel-art.nix { };
 

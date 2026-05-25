@@ -8,9 +8,16 @@ DEB_URL=https://sources.debian.org/data/main
 declare -a deb_patches
 mapfile -t deb_patches < $1
 
-# First letter
-deb_prefix="${deb_patches[0]:0:1}"
-prefix="${DEB_URL}/${deb_prefix}/${deb_patches[0]}/debian/patches"
+pkgname="${deb_patches[0]}"
+# See https://sources.debian.org/data/main/ for patterns of prefixes
+if [[ $pkgname == lib* ]]; then
+    sub_prefix="${pkgname:3:1}"
+    deb_prefix="lib${sub_prefix}"
+else
+    deb_prefix="${pkgname:0:1}"
+fi
+
+prefix="${DEB_URL}/${deb_prefix}/${pkgname}/debian/patches"
 
 if [[ -n "$2" ]]; then
     exec 1> $2

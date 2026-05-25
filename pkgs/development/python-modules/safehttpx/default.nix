@@ -4,17 +4,16 @@
   fetchPypi,
   hatchling,
   httpx,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "safehttpx";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s1a/yCzuOiTDlblKLb6rvtYK/xql+jtf6XxPJFbrzkI=";
+    hash = "sha256-2yAcCXjEHt24u0gPPu5Z3WcwT92RZGA16dmnIASanSM=";
   };
 
   build-system = [

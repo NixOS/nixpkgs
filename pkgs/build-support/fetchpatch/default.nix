@@ -17,6 +17,7 @@
   extraPrefix ? null,
   excludes ? [ ],
   includes ? [ ],
+  hunks ? [ ],
   revert ? false,
   postFetch ? "",
   nativeBuildInputs ? [ ],
@@ -43,77 +44,81 @@ lib.throwIfNot (excludes == [ ] || includes == [ ])
   (
     {
       nativeBuildInputs = [ patchutils ] ++ nativeBuildInputs;
-      postFetch =
-        ''
-          tmpfile="$TMPDIR/patch"
+      postFetch = ''
+        tmpfile="$TMPDIR/patch"
 
-          if [ ! -s "$out" ]; then
-            echo "error: Fetched patch file '$out' is empty!" 1>&2
+        if [ ! -s "$out" ]; then
+          echo "error: Fetched patch file '$out' is empty!" 1>&2
+          exit 1
+        fi
+
+        set +e
+        ${decode} < "$out" > "$tmpfile"
+        if [ $? -ne 0 ] || [ ! -s "$tmpfile" ]; then
+            echo 'Failed to decode patch with command "'${lib.escapeShellArg decode}'"' >&2
+            echo 'Fetched file was (limited to 128 bytes):' >&2
+            od -A x -t x1z -v -N 128 "$out" >&2
             exit 1
-          fi
+        fi
+        set -e
+        mv "$tmpfile" "$out"
 
-          set +e
-          ${decode} < "$out" > "$tmpfile"
-          if [ $? -ne 0 ] || [ ! -s "$tmpfile" ]; then
-              echo 'Failed to decode patch with command "'${lib.escapeShellArg decode}'"' >&2
-              echo 'Fetched file was (limited to 128 bytes):' >&2
-              od -A x -t x1z -v -N 128 "$out" >&2
-              exit 1
-          fi
-          set -e
-          mv "$tmpfile" "$out"
-
-          lsdiff \
-            ${lib.optionalString (relative != null) "-p1 -i ${lib.escapeShellArg relative}/'*'"} \
-            "$out" \
-          | sort -u | sed -e 's/[*?]/\\&/g' \
-          | xargs -I{} --delimiter='\n' \
-            filterdiff \
-            --include={} \
-            --strip=${toString stripLen} \
-            ${
-              lib.optionalString (extraPrefix != null) ''
-                --addoldprefix=a/${lib.escapeShellArg extraPrefix} \
-                --addnewprefix=b/${lib.escapeShellArg extraPrefix} \
-              ''
-            } \
-            --clean "$out" > "$tmpfile"
-
-          if [ ! -s "$tmpfile" ]; then
-            echo "error: Normalized patch '$tmpfile' is empty (while the fetched file was not)!" 1>&2
-            echo "Did you maybe fetch a HTML representation of a patch instead of a raw patch?" 1>&2
-            echo "Fetched file was:" 1>&2
-            cat "$out" 1>&2
-            exit 1
-          fi
-
+        lsdiff \
+          ${lib.optionalString (relative != null) "-p1 -i ${lib.escapeShellArg relative}/'*'"} \
+          "$out" \
+        | sort -u | sed -e 's/[*?]/\\&/g' \
+        | xargs -I{} --delimiter='\n' \
           filterdiff \
-            -p1 \
-            ${builtins.toString (builtins.map (x: "-x ${lib.escapeShellArg x}") excludes)} \
-            ${builtins.toString (builtins.map (x: "-i ${lib.escapeShellArg x}") includes)} \
-            "$tmpfile" > "$out"
+          --include={} \
+          --strip=${toString stripLen} \
+          ${
+            lib.optionalString (extraPrefix != null) ''
+              --addoldprefix=a/${lib.escapeShellArg extraPrefix} \
+              --addnewprefix=b/${lib.escapeShellArg extraPrefix} \
+            ''
+          } \
+          --clean "$out" > "$tmpfile"
 
-          if [ ! -s "$out" ]; then
-            echo "error: Filtered patch '$out' is empty (while the original patch file was not)!" 1>&2
-            echo "Check your includes and excludes." 1>&2
-            echo "Normalized patch file was:" 1>&2
-            cat "$tmpfile" 1>&2
-            exit 1
-          fi
-        ''
-        + lib.optionalString revert ''
-          interdiff "$out" /dev/null > "$tmpfile"
-          mv "$tmpfile" "$out"
-        ''
-        + postFetch;
+        if [ ! -s "$tmpfile" ]; then
+          echo "error: Normalized patch '$tmpfile' is empty (while the fetched file was not)!" 1>&2
+          echo "Did you maybe fetch a HTML representation of a patch instead of a raw patch?" 1>&2
+          echo "Fetched file was:" 1>&2
+          cat "$out" 1>&2
+          exit 1
+        fi
+
+        filterdiff \
+          -p1 \
+          ${toString (map (x: "-x ${lib.escapeShellArg x}") excludes)} \
+          ${toString (map (x: "-i ${lib.escapeShellArg x}") includes)} \
+          ${
+            lib.optionalString (hunks != [ ])
+              "-# ${lib.escapeShellArg (lib.concatMapStringsSep "," toString hunks)}"
+          } \
+          "$tmpfile" > "$out"
+
+        if [ ! -s "$out" ]; then
+          echo "error: Filtered patch '$out' is empty (while the original patch file was not)!" 1>&2
+          echo "Check your includes and excludes." 1>&2
+          echo "Normalized patch file was:" 1>&2
+          cat "$tmpfile" 1>&2
+          exit 1
+        fi
+      ''
+      + lib.optionalString revert ''
+        interdiff "$out" /dev/null > "$tmpfile"
+        mv "$tmpfile" "$out"
+      ''
+      + postFetch;
     }
-    // builtins.removeAttrs args [
+    // removeAttrs args [
       "relative"
       "stripLen"
       "decode"
       "extraPrefix"
       "excludes"
       "includes"
+      "hunks"
       "revert"
       "postFetch"
       "nativeBuildInputs"

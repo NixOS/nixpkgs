@@ -1,6 +1,7 @@
 {
   lib,
   runCommand,
+  runCommandCC,
   haskellPackages,
 }:
 
@@ -21,16 +22,19 @@ lib.recurseIntoAttrs {
 
   # See: https://github.com/NixOS/nixpkgs/pull/224542
   regression-224542 =
+    let
+      ghc = haskellPackages.ghcWithPackages (hsPkgs: [
+        hsPkgs.hspec
+      ]);
+    in
     runCommand "regression-224542"
       {
-        buildInputs = [
-          (haskellPackages.ghcWithPackages (hsPkgs: [
-            hsPkgs.hspec
-          ]))
+        nativeBuildInputs = [
+          ghc
         ];
       }
       ''
-        ghc --interactive \
+        ${ghc.targetPrefix}ghc --interactive \
           -Werror=unrecognised-warning-flags \
           -Werror=missed-extra-shared-lib \
           2>&1 \
@@ -43,6 +47,23 @@ lib.recurseIntoAttrs {
           exit 1
         fi
 
+        touch $out
+      '';
+
+  use-llvm =
+    let
+      ghc = (haskellPackages.ghcWithPackages.override { useLLVM = true; }) (_: [ ]);
+    in
+    runCommandCC "ghc-with-packages-use-llvm"
+      {
+        nativeBuildInputs = [ ghc ];
+      }
+      ''
+        echo 'main = pure ()' > test.hs
+        # -ddump-llvm is unnecessary, but nice for visual feedback in the build log
+        ${ghc.targetPrefix}ghc --make -fllvm -keep-llvm-files -ddump-llvm test.hs
+        # Did we actually use the LLVM backend?
+        test -f test.ll
         touch $out
       '';
 }

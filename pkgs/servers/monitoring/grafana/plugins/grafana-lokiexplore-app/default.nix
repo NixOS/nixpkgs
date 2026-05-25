@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-lokiexplore-app";
-  version = "1.0.13";
-  zipHash = "sha256-oTiwvkKiKpeI7MUxyaRuxXot4UhMeSvuJh0N1VIfA5Q=";
-  meta = with lib; {
-    description = "The Grafana Logs Drilldown app offers a queryless experience for browsing Loki logs without the need for writing complex queries.";
-    license = licenses.agpl3Only;
-    teams = [ lib.teams.fslabs ];
-    platforms = platforms.unix;
+  version = "2.0.4";
+  zipHash = "sha256-hne6G+Hmih+SYo4A1Gk7yHRMPA1IoCJoPlclTOpMKJc=";
+  meta = {
+    description = "Browse Loki logs without the need for writing complex queries";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ lpostula ];
+    platforms = lib.platforms.unix;
   };
 }

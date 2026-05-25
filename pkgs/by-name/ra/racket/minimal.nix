@@ -40,17 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite.out
   ];
 
-  patches = lib.optionals isDarwin [
-    /*
-      The entry point binary $out/bin/racket is codesigned at least once. The
-      following error is triggered as a result.
-      (error 'add-ad-hoc-signature "file already has a signature")
-      We always remove the existing signature then call add-ad-hoc-signature to
-      circumvent this error.
-    */
-    ./patches/force-remove-codesign-then-add.patch
-  ];
-
   preConfigure =
     /*
       The configure script forces using `libtool -o` as AR on Darwin. But, the
@@ -67,26 +56,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureScript = "../configure";
 
-  configureFlags =
-    [
-      # > docs failure: ftype-ref: ftype mismatch for #<ftype-pointer>
-      # "--enable-check"
-      "--enable-csonly"
-      "--enable-liblz4"
-      "--enable-libz"
-    ]
-    ++ lib.optional disableDocs "--disable-docs"
-    ++ lib.optionals (!(finalAttrs.dontDisableStatic or false)) [
-      # instead of `--disable-static` that `stdenv` assumes
-      "--disable-libs"
-      # "not currently supported" in `configure --help-cs` but still emphasized in README
-      "--enable-shared"
-    ]
-    ++ lib.optionals isDarwin [
-      "--disable-strip"
-      # "use Unix style (e.g., use Gtk) for Mac OS", which eliminates many problems
-      "--enable-xonx"
-    ];
+  configureFlags = [
+    # > docs failure: ftype-ref: ftype mismatch for #<ftype-pointer>
+    # "--enable-check"
+    "--enable-csonly"
+    "--enable-liblz4"
+    "--enable-libz"
+  ]
+  ++ lib.optional disableDocs "--disable-docs"
+  ++ lib.optionals (!(finalAttrs.dontDisableStatic or false)) [
+    # instead of `--disable-static` that `stdenv` assumes
+    "--disable-libs"
+    # "not currently supported" in `configure --help-cs` but still emphasized in README
+    "--enable-shared"
+  ]
+  ++ lib.optionals isDarwin [
+    "--disable-strip"
+    # "use Unix style (e.g., use Gtk) for Mac OS", which eliminates many problems
+    "--enable-xonx"
+  ];
 
   # The upstream script builds static libraries by default.
   dontAddStaticConfigureFlags = true;
@@ -119,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       }@config:
       assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
       writers.makeScriptWriter (
-        builtins.removeAttrs config [ "libraries" ]
+        removeAttrs config [ "libraries" ]
         // {
           interpreter = "${lib.getExe finalAttrs.finalPackage}";
         }
@@ -172,5 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ rc-zb ];
     mainProgram = "racket";
     platforms = lib.platforms.all;
+    /*
+      > checking size of void *... 0
+      > Something has gone wrong getting the pointer size; see config.log
+    */
+    badPlatforms = lib.platforms.darwin;
   };
 })

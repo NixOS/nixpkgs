@@ -3,24 +3,27 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "elasticsearch_exporter";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "elasticsearch_exporter";
-    rev = "v${version}";
-    hash = "sha256-v6Fi5O/87jhFI1h6qWyWb61X+dTjcqS3Fi9/MPQSr8Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xVDqyYYwzxfFxZ3K2SMFfPoJw47SXS6czsWLC++LOOk=";
   };
 
-  vendorHash = "sha256-NAaVz5AqhfaEiWqBAeQZVWwjMIwX9jEw0oycXq7uLNw=";
+  vendorHash = "sha256-8y0M1b34eJpuHOuXPemhB5kKwBSgU7cMFxOaIZFS/bo=";
 
-  meta = with lib; {
+  meta = {
     description = "Elasticsearch stats exporter for Prometheus";
     mainProgram = "elasticsearch_exporter";
     homepage = "https://github.com/prometheus-community/elasticsearch_exporter";
-    license = licenses.asl20;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
-}
+})

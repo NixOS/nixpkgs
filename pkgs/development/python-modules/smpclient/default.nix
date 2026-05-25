@@ -1,53 +1,57 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
   async-timeout,
   bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   intelhex,
   pyserial,
-  smp,
   pytest-asyncio,
   pytestCheckHook,
+  smp,
 }:
 
 buildPythonPackage rec {
   pname = "smpclient";
-  version = "4.5.0";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpclient";
     tag = version;
-    hash = "sha256-Z0glcCy3JsL45iT8Q82Vtxozi3hv6xaRJvJ3BkHX4PQ=";
+    hash = "sha256-5o2z+cyOVpTNpOdc9GfFNmqcOhbGgbFM0qGng44E1xE=";
   };
 
+  env.HATCH_BUILD_HOOK_VCS_VERSION = version;
+
   build-system = [
-    poetry-core
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     async-timeout
-    bleak
     intelhex
-    pyserial
     smp
   ];
+
+  optional-dependencies = {
+    serial = [ pyserial ];
+    ble = [ bleak ];
+    udp = [ ];
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.all;
 
-  pythonRelaxDeps = [
-    "smp"
-  ];
-
-  pythonImportsCheck = [
-    "smpclient"
-  ];
+  pythonImportsCheck = [ "smpclient" ];
 
   meta = {
     description = "Simple Management Protocol (SMP) Client for remotely managing MCU firmware";

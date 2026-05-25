@@ -13,21 +13,18 @@
   six,
   typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "4.0.4";
+  version = "4.0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
     repo = "atlassian-python-api";
     tag = version;
-    hash = "sha256-iF4gjF/5QbdjJKCWMdElc+gdIy2+D7TV6gpoPZsTv14=";
+    hash = "sha256-8zfM/3apGMo6sTPA5ESu2SkgVOJUA09Wz/pGR12fA7c=";
   };
 
   dependencies = [
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atlassian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Atlassian REST API Wrapper";
     homepage = "https://github.com/atlassian-api/atlassian-python-api";
     changelog = "https://github.com/atlassian-api/atlassian-python-api/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

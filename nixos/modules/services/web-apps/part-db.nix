@@ -149,8 +149,12 @@ in
           "pm.min_spare_servers" = lib.mkDefault 2;
           "pm.max_spare_servers" = lib.mkDefault 4;
           "pm.max_requests" = lib.mkDefault 500;
-        } // cfg.poolConfig;
+        }
+        // cfg.poolConfig;
       };
+
+      # Required for symphony
+      part-db.settings.APP_SHARE_DIR = "/var/lib/part-db/share";
 
       postgresql = mkIf cfg.enablePostgresql {
         enable = true;
@@ -172,13 +176,13 @@ in
           root = "${pkg}/public";
           locations = {
             "/" = {
-              tryFiles = "$uri $uri/ /index.php";
+              tryFiles = "$uri $uri/ /index.php?$query_string";
               index = "index.php";
               extraConfig = ''
                 sendfile off;
               '';
             };
-            "~ \.php$" = {
+            "~ \\.php$" = {
               extraConfig = ''
                 include ${config.services.nginx.package}/conf/fastcgi_params ;
                 fastcgi_param SCRIPT_FILENAME $request_filename;
@@ -195,8 +199,8 @@ in
       services = {
         part-db-migrate = {
           before = [ "phpfpm-part-db.service" ];
-          after = [ "postgresql.service" ];
-          requires = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
+          requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "oneshot";
@@ -216,7 +220,7 @@ in
           after = [ "part-db-migrate.service" ];
           requires = [
             "part-db-migrate.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           # ensure nginx can access the php-fpm socket
           postStart = ''

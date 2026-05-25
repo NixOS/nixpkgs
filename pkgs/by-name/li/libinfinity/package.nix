@@ -29,7 +29,7 @@ let
     pname = "libinfinity";
     version = "0.7.2";
     src = fetchurl {
-      url = "https://github.com/gobby/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
+      url = "https://github.com/gobby/libinfinity/releases/download/${version}/libinfinity-${version}.tar.gz";
       sha256 = "17i3g61hxz9pzl3ryd1yr15142r25m06jfzjrpdy7ic1b8vjjw3f";
     };
 
@@ -48,18 +48,17 @@ let
       docbook_xml_dtd_412
       gobject-introspection
     ];
-    buildInputs =
-      [
-        glib
-        libxml2
-        gsasl
-        libidn
-        gss
-        libintl
-        libdaemon
-      ]
-      ++ lib.optional gtkWidgets gtk3
-      ++ lib.optional avahiSupport avahi;
+    buildInputs = [
+      glib
+      libxml2
+      gsasl
+      libidn
+      gss
+      libintl
+      libdaemon
+    ]
+    ++ lib.optional gtkWidgets gtk3
+    ++ lib.optional avahiSupport avahi;
 
     propagatedBuildInputs = [ gnutls ];
 
@@ -84,6 +83,8 @@ let
       license = lib.licenses.lgpl2Plus;
       maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
+      # The last successful Darwin Hydra build was in 2024
+      broken = stdenv.hostPlatform.isDarwin;
     };
   };
 in

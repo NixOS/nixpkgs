@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "outcome";
   version = "1.3.0.post0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,6 +31,5 @@ buildPythonPackage rec {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ catern ];
   };
 }

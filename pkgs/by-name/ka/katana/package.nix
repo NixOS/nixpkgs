@@ -4,32 +4,31 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "katana";
-  version = "1.1.3";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "katana";
-    tag = "v${version}";
-    hash = "sha256-KwnGEWWrWpano+5gSG0YO4UE2ceKvgXmrtlhlda2xq4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XzJav0YGWBHNSrWiVVFOcHcAIIUjBCIUrbnfUzP9Vco=";
   };
 
-  vendorHash = "sha256-L7ycSzLbZUJ/4E+2lyN52xQFOJoxiRopgTfJkflFP9Q=";
+  vendorHash = "sha256-xvMmBQ7am5uRbVQlAr42TqRLyfxMDF/Gygiud5LnewY=";
 
   subPackages = [ "cmd/katana" ];
 
   ldflags = [
-    "-w"
     "-s"
   ];
 
   meta = {
     description = "Next-generation crawling and spidering framework";
     homepage = "https://github.com/projectdiscovery/katana";
-    changelog = "https://github.com/projectdiscovery/katana/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/katana/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "katana";
   };
-}
+})

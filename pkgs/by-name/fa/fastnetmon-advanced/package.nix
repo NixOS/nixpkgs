@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.371";
+  version = "2.0.372";
 
   src = fetchurl {
     url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-/qCUeo/2AYIT9Yl6QjoTBPfmg8Lk2efDU5Axv4JU+t8=";
+    hash = "sha256-FwYAbTBkk+AciDVxTIimswsB0M3gbzKX+03PD0fLMsY=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fastnetmon.com";
     changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ yureka-wdz ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

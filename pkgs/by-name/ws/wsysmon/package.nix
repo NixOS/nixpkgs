@@ -9,14 +9,14 @@
   spdlog,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wsysmon";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "slyfabi";
     repo = "wsysmon";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-5kfZT+hm064qXoAzi0RdmUqXi8VaXamlbm+FJOrGh3A=";
   };
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     spdlog
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Windows task manager clone for Linux";
     homepage = "https://github.com/SlyFabi/WSysMon";
-    license = [ licenses.mit ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ totoroot ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ totoroot ];
     mainProgram = "WSysMon";
   };
-}
+})

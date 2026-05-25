@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchpatch,
   inkscape,
   poetry-core,
   cssselect,
@@ -25,9 +26,23 @@ buildPythonPackage {
 
   inherit (inkscape) src;
 
+  patches = [
+    # Fix tests with newer libxml2
+    # https://gitlab.com/inkscape/extensions/-/merge_requests/712
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/b04ab718b400778a264f2085bbc779faebc08368.patch";
+      hash = "sha256-BXRcfoeX7X8+x6CuKKBhrnzUHIwgnPay22Z8+rPZS54=";
+      stripLen = 1;
+      extraPrefix = "share/extensions/";
+    })
+  ];
+
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "numpy" ];
+  pythonRelaxDeps = [
+    "lxml"
+    "numpy"
+  ];
 
   dependencies = [
     cssselect
@@ -52,16 +67,15 @@ buildPythonPackage {
     gtk3
   ];
 
-  disabledTests =
-    [
-      "test_extract_multiple"
-      "test_lookup_and"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      "test_image_extract"
-      "test_path_number_nodes"
-      "test_plotter" # Hangs
-    ];
+  disabledTests = [
+    "test_extract_multiple"
+    "test_lookup_and"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    "test_image_extract"
+    "test_path_number_nodes"
+    "test_plotter" # Hangs
+  ];
 
   disabledTestPaths = [
     # Fatal Python error: Segmentation fault

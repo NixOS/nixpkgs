@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libisofs";
-  version = "1.5.6.pl01";
+  version = "1.5.8";
 
   src = fetchFromGitea {
     domain = "dev.lovelyhq.com";
     owner = "libburnia";
     repo = "libisofs";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-U5We19f/X1UKYFacCRl+XRXn67W8cYOBORb2uEjanT4=";
+    hash = "sha256-tOkJfS/utUPn38rn0u5zAo1N4IIkvpejg89Oxw6Xqv4=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to create an ISO-9660 filesystem with extensions like RockRidge or Joliet";
     changelog = "https://dev.lovelyhq.com/libburnia/libisofs/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      abbradar
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

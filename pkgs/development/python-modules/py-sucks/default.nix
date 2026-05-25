@@ -44,7 +44,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     requests-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # assumes $HOME is at a specific place

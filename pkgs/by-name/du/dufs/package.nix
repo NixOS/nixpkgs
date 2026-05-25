@@ -6,25 +6,23 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dufs";
-  version = "0.43.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
-    rev = "v${version}";
-    hash = "sha256-KkuP9UE9VT9aJ50QH1Y/2f+t0tLOMyNovxCaLq0Jz0s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-83lFnT4eRYaBe4e2o6l6AGQycm/oK96n5DXutBNvBsE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OQyMai0METXLSFl09eIk1xnL9QV5cEEiRNVEz1dHg+c=";
+  cargoHash = "sha256-WdjqG2URtloh5OnpBBnEWHD3WKGkCKLDcCyWRVGIXto=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # FIXME: checkPhase on darwin will leave some zombie spawn processes
-  # see https://github.com/NixOS/nixpkgs/issues/205620
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
+
   checkFlags = [
     # tests depend on network interface, may fail with virtual IPs.
     "--skip=validate_printed_urls"
@@ -37,18 +35,17 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/dufs --completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "File server that supports static serving, uploading, searching, accessing control, webdav";
     mainProgram = "dufs";
     homepage = "https://github.com/sigoden/dufs";
-    changelog = "https://github.com/sigoden/dufs/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/sigoden/dufs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       holymonson
     ];
   };
-}
+})

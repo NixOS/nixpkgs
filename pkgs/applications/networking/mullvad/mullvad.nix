@@ -12,9 +12,6 @@
   libmnl,
   libwg,
   darwin,
-  enableOpenvpn ? true,
-  openvpn-mullvad,
-  shadowsocks-rust,
   installShellFiles,
   writeShellScriptBin,
   versionCheckHook,
@@ -30,18 +27,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
-  version = "2025.6";
+  version = "2026.2";
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-WWJcfnp1v1LhEElJQdLx6Gz+bj7MdgbefD6BQ4nihMs=";
+    hash = "sha256-8InCgT7HaM1npn03jEry7jr/JUGS2VNgC2FKpIZZiQw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-r6WogC25hpzw2pHa8RQOhr9SWks9RKKatpVHblfs+Nc=";
+  cargoHash = "sha256-6SsEfCDJ/WipOk6m5CezRmjt8RT4cXAbicgKCOR161w=";
 
   cargoBuildFlags = [
     "-p mullvad-daemon --bin mullvad-daemon"
@@ -50,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     "-p mullvad-problem-report --bin mullvad-problem-report"
     "-p mullvad-exclude --bin mullvad-exclude"
     "-p tunnel-obfuscation --bin tunnel-obfuscation"
-    "-p talpid-openvpn-plugin --lib"
   ];
 
   checkFlags = [
@@ -88,42 +83,21 @@ rustPlatform.buildRustPackage rec {
       --fish $compdir/mullvad.fish
   '';
 
-  postFixup =
-    # Files necessary for OpenVPN tunnels to work.
-    lib.optionalString enableOpenvpn ''
-      mkdir -p $out/share/mullvad
-      cp dist-assets/ca.crt $out/share/mullvad
-      ln -s ${openvpn-mullvad}/bin/openvpn $out/share/mullvad
-      ln -s ${shadowsocks-rust}/bin/sslocal $out/share/mullvad
-      ln -s $out/lib/libtalpid_openvpn_plugin.so $out/share/mullvad
-    ''
-    +
-      # Set the directory where Mullvad will look for its resources by default to
-      # `$out/share`, so that we can avoid putting the files in `$out/bin` --
-      # Mullvad defaults to looking inside the directory its binary is located in
-      # for its resources.
-      ''
-        wrapProgram $out/bin/mullvad-daemon \
-          --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad"
-      '';
-
   __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
     inherit libwg;
-    inherit openvpn-mullvad;
   };
 
   meta = {
     description = "Mullvad VPN command-line client tools";
     homepage = "https://github.com/mullvad/mullvadvpn-app";
-    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/2025.6/CHANGELOG.md";
+    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ cole-h ];
     mainProgram = "mullvad";

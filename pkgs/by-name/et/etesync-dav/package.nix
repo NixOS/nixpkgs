@@ -6,30 +6,40 @@
   fetchFromGitHub,
   radicale,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "etesync-dav";
-  version = "0.34.0";
+  version = "0.35.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etesync-dav";
-    tag = "v${version}";
-    hash = "sha256-+rNqyksOmDUh0OuvgEDWv6tuZQkn1gizz35Ptr6izos=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y4BhU2kSn+RWqc5+pJQFhbwfat9cMWD0ED0EXJp25cY=";
   };
 
-  dependencies = with python3Packages; [
-    appdirs
-    etebase
-    etesync
-    flask
-    flask-wtf
-    msgpack
-    setuptools
-    (python3Packages.toPythonModule (radicale.override { python3 = python; }))
-    requests
-    types-setuptools
-    requests.optional-dependencies.socks
+  patches = [
+    # https://github.com/etesync/etesync-dav/pull/365
+    ./radicale-3-6-compat.patch
   ];
+
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonRelaxDeps = [ "radicale" ];
+
+  dependencies =
+    with python3Packages;
+    [
+      appdirs
+      etebase
+      etesync
+      flask
+      flask-wtf
+      msgpack
+      (python3Packages.toPythonModule (radicale.override { python3 = python; }))
+      requests
+    ]
+    ++ requests.optional-dependencies.socks;
 
   doCheck = false;
 
@@ -43,9 +53,8 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "etesync-dav";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      thyol
       valodim
     ];
     broken = stdenv.hostPlatform.isDarwin; # pyobjc-framework-Cocoa is missing
   };
-}
+})

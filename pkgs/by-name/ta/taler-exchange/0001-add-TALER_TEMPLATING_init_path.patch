@@ -9,14 +9,14 @@ headers, which makes it harder to patch in the correct directory.
 To circumvent this, a similar function that takes the templates path
 directly is added.
 ---
- src/include/taler_templating_lib.h |  9 +++++++++
+ src/include/taler/taler_templating_lib.h |  9 +++++++++
  src/templating/templating_api.c    | 25 +++++++++++++++++++++++++
  2 files changed, 34 insertions(+)
 
-diff --git a/src/include/taler_templating_lib.h b/src/include/taler_templating_lib.h
+diff --git a/src/include/taler/taler_templating_lib.h b/src/include/taler/taler_templating_lib.h
 index 6af6db715..343004ef1 100644
---- a/src/include/taler_templating_lib.h
-+++ b/src/include/taler_templating_lib.h
+--- a/src/include/taler/taler_templating_lib.h
++++ b/src/include/taler/taler_templating_lib.h
 @@ -120,6 +120,16 @@ TALER_TEMPLATING_reply_error (struct MHD_Connection *connection,
  enum GNUNET_GenericReturnValue
  TALER_TEMPLATING_init (const char *subsystem);

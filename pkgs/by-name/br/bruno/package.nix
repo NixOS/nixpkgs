@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  clang_20,
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
+  nodejs_22,
   electron,
   makeWrapper,
   copyDesktopItems,
@@ -19,30 +21,32 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.4.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-fE4WwgdwTB4s8NYQclUeDWJ132HJO0/3Hmesp9yvzGg=";
+    hash = "sha256-YVZPXrYfOFd9lUdZ0rwWnbSDO91Bn1vZyO3AwnE2pZE=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-ZUZZWnp10Z4vQTZTTPenAXXpez6WbmB/S1VBiARuNP4=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-IH2AVyHwMZuyZOUsAP7qoxm5Em32hk90Tp7uvSE9bIE=";
   npmFlags = [ "--legacy-peer-deps" ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      makeWrapper
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildInputs = [
     pixman
@@ -80,7 +84,7 @@ buildNpmPackage rec {
     patchShebangs packages/*/node_modules
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
@@ -98,9 +102,11 @@ buildNpmPackage rec {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-schema-types
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-filestore
     npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
@@ -162,6 +168,11 @@ buildNpmPackage rec {
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+            --prefix LD_LIBRARY_PATH : ${
+              lib.makeLibraryPath [
+                stdenv.cc.cc.lib
+              ]
+            } \
             --set-default ELECTRON_IS_DEV 0 \
             --inherit-argv0
 
@@ -189,6 +200,7 @@ buildNpmPackage rec {
       mattpolzin
       redyf
       water-sucks
+      starsep
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

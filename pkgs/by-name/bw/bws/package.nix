@@ -11,36 +11,33 @@
   perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bws";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "sdk";
-    rev = "bws-v${version}";
-    hash = "sha256-acS4yKppvIBiwBMoa5Ero4G9mUf8OLG/TbrZOolAwuc=";
+    tag = "bws-v${finalAttrs.version}";
+    hash = "sha256-NjnLoa4UjPzTejjEwc5LIrHqeqncXoMICJM2eUesoIM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SJn00C7vkNoghdVPUszep40RSL8fD+/ELUeuf9GBD7c=";
+  cargoHash = "sha256-lfnCUWf9MM1Yynxza7Fz1qxNyDbPNMOcbVHkvZx32bk=";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      perl
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    perl
+  ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   env = {
     PYO3_PYTHON = "${python3}/bin/python3";
@@ -58,18 +55,17 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd bws \
-      --bash <($out/bin/bws completions bash) \
-      --fish <($out/bin/bws completions fish) \
-      --zsh <($out/bin/bws completions zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd bws --"$shell" <($out/bin/bws completions "$shell")
+    done
   '';
 
   meta = {
-    changelog = "https://github.com/bitwarden/sdk/blob/${src.rev}/crates/bws/CHANGELOG.md";
     description = "Bitwarden Secrets Manager CLI";
     homepage = "https://bitwarden.com/help/secrets-manager-cli/";
+    changelog = "https://github.com/bitwarden/sdk-sm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfree; # BITWARDEN SOFTWARE DEVELOPMENT KIT LICENSE AGREEMENT
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "bws";
-    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

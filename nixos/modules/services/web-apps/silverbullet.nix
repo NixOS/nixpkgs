@@ -24,7 +24,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 3000;
         description = "Port to listen on.";
       };

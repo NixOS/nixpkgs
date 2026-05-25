@@ -16,18 +16,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sa0CL47PwYVDykxzF8KeWhz7HXAX6jZ0AcfecD+aFyg=";
   };
 
+  postPatch = ''
+    # Fix for newer C standards
+    substituteInPlace u2ps.h \
+      --replace-fail "typedef unsigned char bool;" "#include <stdbool.h>"
+  '';
+
   buildInputs = [ ghostscript_headless ];
 
-  meta = with lib; {
+  # gcc 15 defaults to C23 where bool is a keyword; u2ps does `typedef unsigned char bool;`
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
+  meta = {
     description = "Unicode text to postscript converter";
     homepage = "https://github.com/arsv/u2ps";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       U2ps is a text to postscript converter similar to a2ps,
       with emphasis on Unicode support.
     '';
     mainProgram = "u2ps";
-    maintainers = [ maintainers.athas ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.athas ];
+    platforms = lib.platforms.unix;
   };
 })

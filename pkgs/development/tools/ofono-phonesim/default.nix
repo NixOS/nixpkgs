@@ -1,13 +1,14 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchzip,
   autoreconfHook,
   pkg-config,
+  wrapQtAppsHook,
   qtbase,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "ofono-phonesim";
   version = "unstable-2019-11-18";
 
@@ -19,6 +20,7 @@ mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -30,12 +32,12 @@ mkDerivation {
     "UIC=${qtbase.dev}/bin/uic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Phone Simulator for modem testing";
     mainProgram = "phonesim";
     homepage = "https://01.org/ofono";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

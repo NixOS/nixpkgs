@@ -6,20 +6,21 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linenoise";
-  version = "1.0-34-g93b2db9";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "antirez";
     repo = "linenoise";
-    rev = "1.0-34-g93b2db9";
-    hash = "sha256-GsrYg16gpjHkkmpCU3yGzqNS/buZl+JoWALLvwzmT4A=";
+    tag = finalAttrs.version;
+    hash = "sha256-lqJ/ecw7Q4QyDVXVFrxHL5EbNZOHpy5WruQn4VNibNA=";
   };
 
   nativeBuildInputs = [
     validatePkgConfig
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,4 +54,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
   };
-}
+})

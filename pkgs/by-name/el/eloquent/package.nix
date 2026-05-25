@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eloquent";
-  version = "1.2";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Eloquent";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-I4AQZl1zoZPhOwDR1uYNJTMRq5vQHPvyimC8OUAe+vY=";
+    hash = "sha256-wY/blD399GhEOdnQf/uVLHSmYUZTO1ZnL6+oOAhVqFA=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sonnyp/eloquent";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ thtrf ];
-    mainProgram = "eloquent";
+    mainProgram = "re.sonny.Eloquent";
     platforms = lib.platforms.linux;
   };
 })

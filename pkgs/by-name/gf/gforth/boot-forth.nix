@@ -16,6 +16,11 @@ stdenv.mkDerivation {
     sha256 = "1c1bahc9ypmca8rv2dijiqbangm1d9av286904yw48ph7ciz4qig";
   };
 
+  patches = [
+    # Newer GCC rejects casting between function pointers omitting parameters
+    ./function-pointers.patch
+  ];
+
   buildInputs = [ m4 ];
 
   configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--build=x86_64-apple-darwin" ];
@@ -23,7 +28,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Forth implementation of the GNU project (outdated version used to bootstrap)";
     homepage = "https://www.gnu.org/software/gforth/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
 }

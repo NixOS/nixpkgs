@@ -12,8 +12,8 @@
         },
         "state": {
           "checkoutState": {
-            "revision": "e394bf350e38cb100b6bc4172834770ede1b7232",
-            "version": "1.0.3"
+            "revision": "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+            "version": "1.2.2"
           },
           "name": "sourceControlCheckout"
         },
@@ -29,8 +29,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.8",
-            "revision": "dccfc2e127a34b89a849407594cf2d604b598ba9"
+            "branch": "release/5.10",
+            "revision": "fd7c2e0d9279edd023ced6b0a590f8407f5472f9"
           },
           "name": "sourceControlCheckout"
         },
@@ -63,8 +63,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "release/5.8",
-            "revision": "ac4871e01ef338cb95b5d28328cab0ec1dfae935"
+            "branch": "release/5.10",
+            "revision": "90bdc2a157ebacc5d3de0c83e085d05d22ca5fa0"
           },
           "name": "sourceControlCheckout"
         },

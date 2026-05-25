@@ -4,7 +4,6 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  habitipy,
   hatch-regex-commit,
   hatchling,
   mashumaro,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "habiticalib";
-  version = "0.3.7";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "habiticalib";
     tag = "v${version}";
-    hash = "sha256-i2yGPTZiinErWK7vX/3mwBtO4rjUhoEORhnXkFplUcM=";
+    hash = "sha256-ZZY7UnA4d4JNHGLMtaEGobAgzAwYDgL2SUGfxGABxTs=";
   };
 
   build-system = [
@@ -36,9 +35,12 @@ buildPythonPackage rec {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "orjson"
+  ];
+
   dependencies = [
     aiohttp
-    habitipy
     mashumaro
     orjson
     pillow
@@ -52,8 +54,6 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
-
   pythonImportsCheck = [ "habiticalib" ];
 
   disabledTests = [
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the Habitica API";
     homepage = "https://github.com/tr4nt0r/habiticalib";
-    changelog = "https://github.com/tr4nt0r/habiticalib/releases/tag/v${version}";
+    changelog = "https://github.com/tr4nt0r/habiticalib/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

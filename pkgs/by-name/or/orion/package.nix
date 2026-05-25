@@ -5,14 +5,14 @@
   gtk-engine-murrine,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "orion";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "Orion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1116yawv3fspkiq1ykk2wj0gza3l04b5nhldy0bayzjaj0y6fd89";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

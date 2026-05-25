@@ -7,7 +7,7 @@ project(
         'werror=true'
     ],
     license: 'Apache-2.0',
-    version: '20210223'
+    version: '1.7'
 )
 
 library(

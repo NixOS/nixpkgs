@@ -7,17 +7,20 @@
   glib,
   pkg-config,
   udev,
+  udevCheckHook,
   libevdev,
   libgudev,
   python3,
   valgrind,
+  libwacom-surface,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
-  version = "2.15.0";
+  version = "2.18.0";
 
   outputs = [
+    "bin"
     "out"
     "dev"
   ];
@@ -26,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${finalAttrs.version}";
-    hash = "sha256-fc7ymkyIJ5BvrPxJg7Vw1h1mBy+icr+5kVDecODxRLQ=";
+    hash = "sha256-habbSnrOr9H6e/eRSQHugJaLRa252GXjZ8wHThpIydU=";
   };
 
   postPatch = ''
@@ -38,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -45,12 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     libevdev
     libgudev
-    (python3.withPackages (
-      pp: with pp; [
-        pp.libevdev
-        pp.pyudev
-      ]
-    ))
+    (python3.withPackages (pp: [
+      pp.libevdev
+      pp.pyudev
+    ]))
   ];
 
   mesonFlags = [
@@ -61,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests are in the `tests` pass-through derivation because one of them is flaky, frequently causing build failures.
   # See https://github.com/NixOS/nixpkgs/issues/328140
   doCheck = false;
+  doInstallCheck = true;
 
   nativeCheckInputs = [
     valgrind
@@ -71,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ];
 
-  passthru = {
+  passthru.tests = {
+    inherit libwacom-surface;
     tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
   };
 
@@ -82,5 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     teams = [ lib.teams.freedesktop ];
     license = lib.licenses.hpnd;
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })

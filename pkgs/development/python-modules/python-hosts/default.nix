@@ -3,22 +3,18 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "1.0.7";
+  version = "1.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    pname = "python_hosts";
-    inherit version;
-    hash = "sha256-TFaZHiL2v/woCWgz3nh/kjUOhbfN1ghnBnJcVcTwSrk=";
+    inherit pname version;
+    hash = "sha256-XiU6aO6EhFVgj1g7TYMdbgg7IvjkU2DFoiwYikrB13A=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +34,7 @@ buildPythonPackage rec {
     "test_import_from_url"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing a hosts file";
     longDescription = ''
       python-hosts is a Python library for managing a hosts file. It enables you to add
@@ -46,7 +42,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jonhadfield/python-hosts";
     changelog = "https://github.com/jonhadfield/python-hosts/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

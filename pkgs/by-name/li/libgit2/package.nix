@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   python3,
@@ -23,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.9.1";
+  version = "1.9.3";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = [
@@ -35,27 +34,26 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-/xI3v7LNhpgfjv/m+sZwYDhhYvS6kQYxiiiG3+EF8Mw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nJrRdPs86oGNL4W2CJb16oSUgfzYr9A2i5sw9BAehME=";
   };
 
-  cmakeFlags =
-    [
-      "-DREGEX_BACKEND=pcre2"
-      "-DUSE_HTTP_PARSER=llhttp"
-      "-DUSE_SSH=ON"
-      (lib.cmakeBool "USE_GSSAPI" withGssapi)
-      "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
-      # For ws2_32, referred to by a `*.pc` file
-      "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
-      # openbsd headers fail with default c90
-      "-DCMAKE_C_STANDARD=99"
-    ];
+  cmakeFlags = [
+    "-DREGEX_BACKEND=pcre2"
+    "-DUSE_HTTP_PARSER=llhttp"
+    "-DUSE_SSH=ON"
+    (lib.cmakeBool "USE_GSSAPI" withGssapi)
+    "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
+    # For ws2_32, referred to by a `*.pc` file
+    "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+    # openbsd headers fail with default c90
+    "-DCMAKE_C_STANDARD=99"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -69,7 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pcre2
     llhttp
-  ] ++ lib.optional withGssapi krb5;
+  ]
+  ++ lib.optional withGssapi krb5;
 
   propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
@@ -93,15 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
-    inherit gitstatus;
+    inherit (gitstatus) romkatv_libgit2;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/libgit2/libgit2/releases/tag/${finalAttrs.src.tag}";
     description = "Linkable library implementation of Git that you can use in your application";
     mainProgram = "git2";
     homepage = "https://libgit2.org/";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 })

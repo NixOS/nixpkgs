@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-cli";
-  version = "1.2.10";
+  version = "1.2.18";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,19 +38,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-dUWwX+0rDQce/AklrBU4ALRSmHbBnbQQGlUtfK+Foeg=";
+        hash = "sha256-+TXQWaZ6+ahXcy8Kibh7VuqaclLglI3FJnW5qMjmuAg=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-a/0H64NSJZG2ixJCeCAp1SD/2l6HGCT1oECTSsgfu2E=";
+        hash = "sha256-9/WBa6qzIc+yulPFVC6tpfdrhxCda23iLmu+Vy99HvQ=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-B5K7CvBVdSpgRfPXxYraPIZwkwW/kxlkPmaDEy1cOuE=";
+        hash = "sha256-5s9FTA3lI6mrt34di80nrP/5oTH2lqz1BwFo2Pd8ErY=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-xstTc8y03uWmN33Oi8h7zmoMm4XtY8kl3taLlaJCYmk=";
+        hash = "sha256-3dwFFYk2WIqQf6sFVc4Jq1Zhgb4Tvvlj0IhQlnyJ6KA=";
       };
     };
 
@@ -78,13 +78,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-cli";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tideways Profiler CLI";
     homepage = "https://tideways.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "tideways";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ shyim ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

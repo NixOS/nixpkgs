@@ -1,23 +1,24 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   gitMinimal,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ko";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = "ko";
-    tag = "v${version}";
-    hash = "sha256-fAdogzNCuz8vHWF1UOFmDKSRXbNvY5knKIhfJzXNGzw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o/Hin6GDFki1ynZ/rDQOhcNUTtQVvXZTAApxAaerRCU=";
   };
 
-  vendorHash = "sha256-R+vGG2u/unXffD/9Aq065zR7Xq9KEWZl4llYFxR0HLU=";
+  vendorHash = "sha256-gYDYKNLTmJT0JvQ4wi/5p/3YmaaS4Re/wFqZxRbRVpg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/google/ko/pkg/commands.Version=${version}"
+    "-X github.com/google/ko/pkg/commands.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
@@ -55,7 +56,7 @@ buildGoModule rec {
     unset GOOS GOARCH GOARM
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ko \
       --bash <($out/bin/ko completion bash) \
       --fish <($out/bin/ko completion fish) \
@@ -64,7 +65,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/ko-build/ko";
-    changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
+    changelog = "https://github.com/ko-build/ko/releases/tag/v${finalAttrs.version}";
     description = "Build and deploy Go applications";
     mainProgram = "ko";
     longDescription = ''
@@ -81,4 +82,4 @@ buildGoModule rec {
       developer-guy
     ];
   };
-}
+})

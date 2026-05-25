@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "bcf";
-  version = "1.9.0";
+  version = "1.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-firmware-tool";
     rev = "v${version}";
-    sha256 = "i28VewTB2XEZSfk0UeCuwB7Z2wz4qPBhzvxJIYkKwJ4=";
+    sha256 = "sha256-xKggVEN3O0umDEt358xc+79/SEVm2peMjfFHGTppTEo=";
   };
 
   postPatch = ''
@@ -46,12 +46,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bcf" ];
   doCheck = false; # Project provides no tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hardwario/bch-firmware-tool";
     description = "HARDWARIO Firmware Tool";
     mainProgram = "bcf";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

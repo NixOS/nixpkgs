@@ -6,9 +6,9 @@
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "4.25.0";
+  version = "4.29.0";
 
-  nugetHash = "sha256-1T6cJKODI5Rm6Ze0f7X/Ecdrrn1NulKSnO3lMW73W0M=";
+  nugetHash = "sha256-Eed1bb9heteWOWmv6NnXPzXbf3t218K/eHufwgtRuzI=";
 
   passthru.tests = testers.testVersion {
     package = finalAttrs.finalPackage;
@@ -18,7 +18,7 @@ buildDotnetGlobalTool (finalAttrs: {
   };
 
   meta = {
-    description = "Fable is an F# to JavaScript compiler";
+    description = "F# to JavaScript compiler";
     mainProgram = "fable";
     homepage = "https://github.com/fable-compiler/fable";
     changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";

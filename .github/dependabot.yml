@@ -4,4 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    labels: [ ]
+    labels: []
+    commit-message:
+      prefix: ".github"

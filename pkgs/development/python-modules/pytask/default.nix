@@ -1,39 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
-  attrs,
   click,
   click-default-group,
+  cloudpickle,
+  git,
+  msgspec,
+  nbmake,
   networkx,
   optree,
   packaging,
+  pexpect,
   pluggy,
+  pytest-xdist,
+  pytestCheckHook,
   rich,
   sqlalchemy,
-  universal-pathlib,
-  pytestCheckHook,
-  nbmake,
-  pexpect,
-  pytest-xdist,
   syrupy,
-  git,
-  tomli,
+  universal-pathlib,
 }:
+
 buildPythonPackage rec {
   pname = "pytask";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytask-dev";
     repo = "pytask";
     tag = "v${version}";
-    hash = "sha256-YJouWQ9Edj27nD72m7EDSH9TXcrsu6X+pGDo5fgGU5U=";
+    hash = "sha256-l7jQAUBb8iW5S8Am2cMCgqYcvtLq8UgEhrCNnSx9N1E=";
   };
 
   build-system = [
@@ -42,26 +41,34 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    attrs
     click
     click-default-group
-    networkx
+    msgspec
     optree
     packaging
     pluggy
     rich
     sqlalchemy
     universal-pathlib
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ msgspec.optional-dependencies.toml;
+
+  optional-dependencies = {
+    dag = [ networkx ];
+  };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    cloudpickle
     git
     nbmake
     pexpect
     pytest-xdist
+    pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [ "--snapshot-warn-unused" ];
 
   # The test suite runs the installed command for e2e tests
   preCheck = ''
@@ -73,13 +80,18 @@ buildPythonPackage rec {
     "test_download_file"
     # Racy
     "test_more_nested_pytree_and_python_node_as_return_with_names"
+    # Timeout
+    "test_pdb_interaction_capturing_twice"
+    "test_pdb_interaction_capturing_simple"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pytask" ];
+
+  meta = {
     description = "Workflow management system that facilitates reproducible data analyses";
     homepage = "https://github.com/pytask-dev/pytask";
-    changelog = "https://github.com/pytask-dev/pytask/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erooke ];
+    changelog = "https://github.com/pytask-dev/pytask/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erooke ];
   };
 }

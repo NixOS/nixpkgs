@@ -1,31 +1,38 @@
 {
   lib,
-  python3Packages,
+  pythonPackages,
   fetchPypi,
   mopidy,
 }:
 
-python3Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-mpris";
   version = "3.0.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-MPRIS";
     hash = "sha256-rHQgNIyludTEL7RDC8dIpyGTMOt1Tazn6i/orKlSP4U=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
-    python3Packages.pydbus
+    pythonPackages.pydbus
   ];
 
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "mopidy_mpris" ];
+
+  meta = {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for controlling Mopidy through D-Bus using the MPRIS specification";
-    license = licenses.asl20;
-    maintainers = [ maintainers.nickhu ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.nickhu ];
   };
-}
+})

@@ -5,14 +5,17 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wcslib";
-  version = "8.4";
+  version = "8.8";
 
   src = fetchurl {
-    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${pname}-${version}.tar.bz2";
-    hash = "sha256-lguERCbRSotTze7XgliqkojN7ZmncywGZ8ZPpqUBJtw=";
+    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-3NW5UuaAFtDiRZ4fD5hmND54uTljXbZEKfz0eOHqS/w=";
   };
+
+  # error: call to undeclared library function 'snprintf'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include stdio.h";
 
   nativeBuildInputs = [ flex ];
 
@@ -40,8 +43,10 @@ stdenv.mkDerivation rec {
       and their conversion to image coordinate systems. This is the
       standard library for this purpose in astronomy.
     '';
-    maintainers = with lib.maintainers; [ hjones2199 ];
+    maintainers = with lib.maintainers; [
+      returntoreality
+    ];
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

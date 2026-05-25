@@ -7,7 +7,6 @@
   oldest-supported-numpy,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pyemd";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,11 +43,11 @@ buildPythonPackage rec {
     "test_emd_samples_3"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";
     homepage = "https://github.com/wmayner/pyemd";
     changelog = "https://github.com/wmayner/pyemd/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

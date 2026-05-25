@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "0wh06nix8bd4w1aq4k2fbbkdq5i30a9lxz3xczf3ff28yy0kfwzm";
   };
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postPatch = ''
     patchShebangs tests
   '';
@@ -42,12 +46,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 out of 46 tests
 
-  meta = with lib; {
+  meta = {
     branch = "2.5.35";
     homepage = "https://flex.sourceforge.net/";
     description = "Fast lexical analyser generator";
     mainProgram = "flex";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
   };
 }

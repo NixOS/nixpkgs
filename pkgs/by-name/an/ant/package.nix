@@ -9,18 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ant";
-  version = "1.10.15";
+  version = "1.10.17";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${finalAttrs.version}-bin.tar.bz2";
-    hash = "sha256-h/SNGLoRwRVojDfvl1g+xv+J6mAz+J2BimckjaRxDEs=";
-  };
-
-  contrib = fetchurl {
-    url = "mirror://sourceforge/ant-contrib/ant-contrib-1.0b3-bin.tar.bz2";
-    sha256 = "1l8say86bz9gxp4yy777z7nm4j6m905pg342li1aphc14p5grvwn";
+    hash = "sha256-UhD8nXfpa/X0Y5KH8pgm2oXlSlQuCkCUY7FkK8PKruc=";
   };
 
   installPhase = ''
@@ -36,10 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/share/ant/{manual,bin,WHATSNEW}
     mkdir $out/share/ant/bin
     mv $out/bin/antRun $out/share/ant/bin/
-
-    # Install ant-contrib.
-    unpackFile $contrib
-    cp -p ant-contrib/ant-contrib-*.jar $out/share/ant/lib/
 
     cat >> $out/bin/ant <<EOF
     #! ${stdenv.shell} -e
@@ -75,9 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     LOCALCLASSPATH="\$ANT_HOME/lib/ant-launcher.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
 
-    exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \
-        -Dant.home=\$ANT_HOME -Dant.library.dir="\$ANT_LIB" \
-        org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \
+    if [ -n "\$ANT_LIB" ]; then
+        ANT_LIB_ARG="-Dant.library.dir=\$ANT_LIB"
+    fi
+
+    exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \\
+        -Dant.home=\$ANT_HOME \''${ANT_LIB_ARG:+"\$ANT_LIB_ARG"} \\
+        org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \\
         -cp "\$CLASSPATH" "\$@"
     EOF
 

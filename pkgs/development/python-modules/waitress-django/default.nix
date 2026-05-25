@@ -22,10 +22,10 @@ buildPythonPackage {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Waitress WSGI server serving django";
     mainProgram = "waitress-serve-django";
-    license = licenses.mit;
-    maintainers = with maintainers; [ basvandijk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ basvandijk ];
   };
 }

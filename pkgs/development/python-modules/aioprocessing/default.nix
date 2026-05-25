@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   flit-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioprocessing";
   version = "2.0.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioprocessing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that integrates the multiprocessing module with asyncio";
     homepage = "https://github.com/dano/aioprocessing";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ uskudnik ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ uskudnik ];
   };
 }

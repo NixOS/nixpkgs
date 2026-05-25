@@ -3,28 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  setuptools,
-  typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "3.0.0";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "dj-database-url";
     tag = "v${version}";
-    hash = "sha256-olE1tufGXOl8rOKN+Pa0eXhYEzeQxTqj50X6AVwYkM8=";
+    hash = "sha256-d9wkxe7xJSTufc2La4W/etPAaW6YF47y0IqPa5YWknY=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.17,<0.10.0" uv_build
+  '';
 
-  dependencies = [
-    django
-    typing-extensions
-  ];
+  build-system = [ uv-build ];
+
+  dependencies = [ django ];
 
   # Tests access a DB via network
   doCheck = false;

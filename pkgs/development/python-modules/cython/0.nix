@@ -14,22 +14,23 @@
 }:
 
 let
-  excludedTests =
-    [ "reimport_from_subinterpreter" ]
-    # cython's testsuite is not working very well with libc++
-    # We are however optimistic about things outside of testsuite still working
-    ++ lib.optionals (stdenv.cc.isClang or false) [
-      "cpdef_extern_func"
-      "libcpp_algo"
-    ]
-    # Some tests in the test suite isn't working on aarch64. Disable them for
-    # now until upstream finds a workaround.
-    # Upstream issue here: https://github.com/cython/cython/issues/2308
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [
-      "future_division"
-      "overflow_check_longlong"
-    ];
+  excludedTests = [
+    "reimport_from_subinterpreter"
+  ]
+  # cython's testsuite is not working very well with libc++
+  # We are however optimistic about things outside of testsuite still working
+  ++ lib.optionals (stdenv.cc.isClang or false) [
+    "cpdef_extern_func"
+    "libcpp_algo"
+  ]
+  # Some tests in the test suite isn't working on aarch64. Disable them for
+  # now until upstream finds a workaround.
+  # Upstream issue here: https://github.com/cython/cython/issues/2308
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
+  ++ lib.optionals stdenv.hostPlatform.isi686 [
+    "future_division"
+    "overflow_check_longlong"
+  ];
 in
 buildPythonPackage rec {
   pname = "cython";
@@ -42,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XsEy2NrG7hq+VXRCRbD4BRaBieU6mVoE0GT52L3mMhs=";
   };
 
@@ -57,7 +58,7 @@ buildPythonPackage rec {
     ncurses
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   patches = [
     # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.

@@ -18,7 +18,7 @@ let
       overlays
       ;
     # Remove config.replaceStdenv to ensure termination.
-    config = builtins.removeAttrs config [ "replaceStdenv" ];
+    config = removeAttrs config [ "replaceStdenv" ];
   };
 
 in
@@ -31,7 +31,10 @@ bootStages
     stdenv =
       assert vanillaPackages.stdenv.hostPlatform == localSystem;
       assert vanillaPackages.stdenv.targetPlatform == localSystem;
-      config.replaceStdenv { pkgs = vanillaPackages; };
+      let
+        fn = config.replaceStdenv or null;
+      in
+      if fn == null then vanillaPackages.stdenv else fn { pkgs = vanillaPackages; };
   })
 
 ]

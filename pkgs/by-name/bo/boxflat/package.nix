@@ -9,18 +9,19 @@
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  udevCheckHook,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "boxflat";
-  version = "1.32.0";
+  version = "1.35.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lawstorant";
     repo = "boxflat";
-    tag = "v${version}";
-    hash = "sha256-zxaBz2ooo+h3a9svtC+j23EhpH8TTQIxjdRDCnhAvJ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R03mQIsa6T1ApV8SMWvilBfiCGcAWvyZ5hDDgAuGd6s=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -41,13 +42,16 @@ python3Packages.buildPythonPackage rec {
     copyDesktopItems
     wrapGAppsHook4
     gobject-introspection
+    udevCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-        --replace-fail "psutil==6.1.0" "psutil" \
-        --replace-fail "evdev==1.7.1" "evdev"
-  '';
+  pythonRelaxDeps = [
+    "psutil"
+    "evdev"
+    "pycairo"
+    "pygobject"
+    "PyYAML"
+  ];
 
   preBuild = ''
     cat > setup.py << EOF
@@ -62,7 +66,7 @@ python3Packages.buildPythonPackage rec {
     setup(
       name='boxflat',
       packages=['boxflat', 'boxflat.panels', 'boxflat.widgets'],
-      version='${version}',
+      version='${finalAttrs.version}',
       install_requires=install_requires,
       entry_points={
         'console_scripts': ['boxflat=boxflat.entrypoint:main']
@@ -113,11 +117,11 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/Lawstorant/boxflat";
-    changelog = "https://github.com/Lawstorant/boxflat/releases/tag/v${version}";
+    changelog = "https://github.com/Lawstorant/boxflat/releases/tag/v${finalAttrs.version}";
     description = "Control your Moza gear settings";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ racci ];
     platforms = lib.platforms.linux;
     mainProgram = "boxflat";
   };
-}
+})

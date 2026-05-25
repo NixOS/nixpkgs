@@ -10,7 +10,6 @@
   pycountry,
   pyicu,
   pytestCheckHook,
-  pythonOlder,
   rapidfuzz,
   rarfile,
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "comicapi";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "comictagger";
@@ -56,14 +53,15 @@ buildPythonPackage rec {
     all = [
       py7zr
       rarfile
-    ] ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
 
     cbr = [ rarfile ];
 
     icu = lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) pyicu;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonRelaxDeps = [ "pycountry" ];
 

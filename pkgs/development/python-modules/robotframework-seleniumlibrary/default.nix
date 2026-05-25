@@ -13,17 +13,17 @@
   robotstatuschecker,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robotframework-seleniumlibrary";
-  version = "6.7.1";
+  version = "6.9.0";
   pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    tag = "v${version}";
-    hash = "sha256-pKAOVycckUCe93wMk9kql1lY6WeUTiS4lk/skDAfKCY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NiB1dJWivyDc1ucldQ2cs3jTWt3hHY6AGsboKPmY+mo=";
   };
 
   build-system = [ setuptools ];
@@ -49,10 +49,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.tag}/docs/SeleniumLibrary-${version}.rst";
+    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${finalAttrs.src.tag}/docs/SeleniumLibrary-${finalAttrs.version}.rst";
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/SeleniumLibrary";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

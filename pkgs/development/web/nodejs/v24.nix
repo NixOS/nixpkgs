@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -14,11 +13,18 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches =
+    if stdenv.buildPlatform.isDarwin then
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+      ]
+    else
+      [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "24.1.0";
-  sha256 = "c8171b2aeccb28c8c5347f273a25adae172fb2a65bc8c975bc22ec58949d0eaf";
+  version = "24.15.0";
+  sha256 = "a4f653d79ed140aaad921e8c22a3b585ca85cfdab80d4030f6309e4663a8a1c8";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -46,19 +52,26 @@ buildNodejs {
     ]
     ++ [
       ./configure-armv6-vfpv2.patch
-      ./disable-darwin-v8-system-instrumentation-node19.patch
-      ./bypass-darwin-xcrun-node16.patch
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
-
-      # Can be removed after https://github.com/NixOS/nixpkgs/pull/403958.
+      ./use-nix-codesign.patch
+      # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+      # OpenSSL reports different errors
+      # https://github.com/nodejs/node/pull/62629
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/9aa57bf8dab2dbfb8b6974fe71d5dbe6daf66244.patch?full_index=1";
-        hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
-        revert = true;
+        url = "https://github.com/nodejs/node/commit/dd25d8f29d3ddadcf5a5ebfdf98ece55f9df96c6.patch?full_index=1";
+        hash = "sha256-6cxRN7TyWmJgUZt3jp2YXbVIjrDb2BNep5LxBOtT3Q0=";
+      })
+
+      # Patch for nghttp2 1.69 support
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
       })
     ]
+    ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts
       (fetchpatch2 {
@@ -66,5 +79,9 @@ buildNodejs {
         hash = "sha256-BBBShQwU20TSY8GtPehQ9i3AH4ZKUGIr8O0bRsgrpNo=";
         revert = true;
       })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
+      # see: https://github.com/nodejs/node/issues/58458
+      ./v24-32bit.patch
     ];
 }

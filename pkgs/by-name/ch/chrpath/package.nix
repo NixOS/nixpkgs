@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chrpath";
   version = "0.18";
 
   src = fetchurl {
-    url = "https://codeberg.org/pere/chrpath/archive/release-${version}.tar.gz";
+    url = "https://codeberg.org/pere/chrpath/archive/release-${finalAttrs.version}.tar.gz";
     hash = "sha256-8JxJ8GGGYMoR/G2VgN3ekExyJNTG0Pby0fm83JECyao=";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to adjust the RPATH or RUNPATH of ELF binaries";
     mainProgram = "chrpath";
     longDescription = ''
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       linker should look for the libraries needed for a program.
     '';
     homepage = "https://codeberg.org/pere/chrpath";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

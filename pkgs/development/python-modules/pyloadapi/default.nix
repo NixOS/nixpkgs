@@ -7,6 +7,7 @@
   hatch-regex-commit,
   hatchling,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dotenv,
   pythonOlder,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyloadapi";
-  version = "1.4.2";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,13 +24,8 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "pyloadapi";
     tag = "v${version}";
-    hash = "sha256-DkYbQB91KYskfm2yDVmR0/MJiixC2C5miHpTq7RpVBU=";
+    hash = "sha256-yNv21WfuAttzPWpmgadClTx9ryMNFjMsPA31w9BGX+U=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=src/pyloadapi/ --cov-report=term-missing" ""
-  '';
 
   build-system = [
     hatch-regex-commit
@@ -41,6 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     python-dotenv
   ];
@@ -52,11 +49,11 @@ buildPythonPackage rec {
     "tests/test_cli.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple wrapper for pyLoad's API";
     homepage = "https://github.com/tr4nt0r/pyloadapi";
     changelog = "https://github.com/tr4nt0r/pyloadapi/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

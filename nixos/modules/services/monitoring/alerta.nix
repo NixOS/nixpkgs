@@ -92,7 +92,7 @@ in
     systemd.services.alerta = {
       description = "Alerta Monitoring System";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      after = [ "network.target" ];
       environment = {
         ALERTA_SVR_CONF_FILE = alertaConf;
       };

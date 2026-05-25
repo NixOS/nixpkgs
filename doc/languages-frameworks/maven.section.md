@@ -1,6 +1,6 @@
 # Maven {#maven}
 
-Maven is a well-known build tool for the Java ecosystem however it has some challenges when integrating into the Nix build system.
+Maven is a well-known build tool for the Java ecosystem; however, it has some challenges when integrating into the Nix build system.
 
 The following provides a list of common patterns with how to package a Maven project (or any JVM language that can export to Maven) as a Nix package.
 
@@ -17,14 +17,14 @@ Consider the following package:
   maven,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "jd-cli";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "intoolswetrust";
     repo = "jd-cli";
-    tag = "jd-cli-${version}";
+    tag = "jd-cli-${finalAttrs.version}";
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
 
@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ majiir ];
   };
-}
+})
 ```
 
 This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stdenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.
@@ -86,7 +86,7 @@ jd-cli.overrideMavenAttrs (old: rec {
   src = fetchFromGitHub {
     owner = old.src.owner;
     repo = old.src.repo;
-    rev = "${old.pname}-${version}";
+    tag = "${old.pname}-${version}";
     # old source hash of 1.2.0 version
     hash = "sha256-US7j6tQ6mh1libeHnQdFxPGoxHzbZHqehWSgCYynKx8=";
   };
@@ -133,7 +133,7 @@ step 2 which will most probably fail the build. The `go-offline` plugin cannot
 handle these so-called [dynamic dependencies](https://github.com/qaware/go-offline-maven-plugin?tab=readme-ov-file#dynamic-dependencies).
 In that case you must add these dynamic dependencies manually with:
 ```nix
-maven.buildMavenPackage rec {
+maven.buildMavenPackage {
   manualMvnArtifacts = [
     # add dynamic test dependencies here
     "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
@@ -354,7 +354,7 @@ Some additional files are deleted that would cause the output hash to change pot
 │       │   ├── classworlds-1.1.jar
 ```
 
-If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over-time your output hash will change since the resolved dependencies may change. Hence this method is less recommended then using `buildMaven`.
+If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over time, your output hash will change since the resolved dependencies may change. Hence this method is less recommended than using `buildMaven`.
 
 ### Building a JAR {#building-a-jar}
 
@@ -374,7 +374,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   buildInputs = [ maven ];
 
   buildPhase = ''
@@ -445,7 +445,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 
@@ -538,7 +538,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "maven-demo";
   version = "1.0";
 
-  src = builtins.fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
+  src = fetchTarball "https://github.com/fzakaria/nixos-maven-example/archive/main.tar.gz";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ maven ];
 

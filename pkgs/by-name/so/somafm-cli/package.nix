@@ -8,14 +8,14 @@
   mpv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "somafm-cli";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "rockymadden";
     repo = "somafm-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1h5p9qsczgfr450sklh2vkllcpzb7nicbs8ciyvkavh3d7hds0yy";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     }";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Listen to SomaFM in your terminal via pure bash";
     homepage = "https://github.com/rockymadden/somafm-cli";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "somafm";
   };
-}
+})

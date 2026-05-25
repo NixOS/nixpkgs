@@ -22,7 +22,7 @@
   # build options
   withStreaming ? true,
   withDaemon ? true,
-  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl
+  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl, gstreamer
   withMediaControl ? true,
   withImage ? true,
   withNotify ? true,
@@ -47,56 +47,53 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
   "gstreamer"
 ];
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotify-player";
-  version = "0.20.5";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
-    tag = "v${version}";
-    hash = "sha256-NlMQgVkMVCVrMv4IyFtPmRkAmf2k4F0dp6e8s63aBHg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LjQGCE4xbD3+k78827u346/qhC6D8vrhyUq6c+8eWSw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-glQh6PzwJp5o35aXRW4+Pq2iSeGg9vjR5fJQomPpSOc=";
+  cargoHash = "sha256-mD1UJn3LjX88Ht6QUpPO9lu9WiCec5+qUphtLoCjiXg=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      rustPlatform.bindgenHook
-      installShellFiles
-      # Tries to access $HOME when installing shell files, and on Darwin
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeBinaryWrapper
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    rustPlatform.bindgenHook
+    installShellFiles
+    # Tries to access $HOME when installing shell files, and on Darwin
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      fontconfig
-    ]
-    ++ lib.optionals withSixel [ libsixel ]
-    ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
-    ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
-    ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
-    ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
-    ++ lib.optionals (withAudioBackend == "rodiojack") [
-      alsa-lib
-      libjack2
-    ]
-    ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
-    ++ lib.optionals (withAudioBackend == "gstreamer") [
-      gst_all_1.gstreamer
-      gst_all_1.gst-devtools
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ];
+  buildInputs = [
+    openssl
+    dbus
+    fontconfig
+  ]
+  ++ lib.optionals withSixel [ libsixel ]
+  ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "pulseaudio") [ libpulseaudio ]
+  ++ lib.optionals (withAudioBackend == "rodio" && stdenv.hostPlatform.isLinux) [ alsa-lib ]
+  ++ lib.optionals (withAudioBackend == "portaudio") [ portaudio ]
+  ++ lib.optionals (withAudioBackend == "jackaudio") [ libjack2 ]
+  ++ lib.optionals (withAudioBackend == "rodiojack") [
+    alsa-lib
+    libjack2
+  ]
+  ++ lib.optionals (withAudioBackend == "sdl") [ SDL2 ]
+  ++ lib.optionals (withAudioBackend == "gstreamer") [
+    gst_all_1.gstreamer
+    gst_all_1.gst-devtools
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
 
   buildNoDefaultFeatures = true;
 
@@ -134,14 +131,14 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal spotify player that has feature parity with the official client";
     homepage = "https://github.com/aome510/spotify-player";
-    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
+    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${finalAttrs.version}";
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dit7ya
       xyven1
       _71zenith
       caperren
+      mattkang
     ];
   };
-}
+})

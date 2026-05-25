@@ -5,15 +5,12 @@
   gevent,
   gevent-websocket,
   versiontools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gevent-socketio";
   version = "0.3.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "socketio" ];
 
-  meta = with lib; {
+  meta = {
     description = "SocketIO server based on the Gevent pywsgi server";
     homepage = "https://github.com/abourget/gevent-socketio";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

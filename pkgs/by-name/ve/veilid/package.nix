@@ -10,19 +10,18 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veilid";
-  version = "0.4.7";
+  version = "0.5.3";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = "veilid";
-    rev = "v${version}";
-    hash = "sha256-SEmXZvv6951Ln87/sRQwr4FgGRSvowGyeyApfF+JnJ4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-qPV5kVp/1ZTLzo8i3DkGLxuoOaMJxZJUEzYGNReJyHY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2fZAds4wNLd/mWh7EWpP2hqspBfAtTHIEe+dFag7Lw4=";
+  cargoHash = "sha256-LjysGZihXoE82224nXNrRWIMe6/POXDqjMO29zg+MMI=";
 
   nativeBuildInputs = [
     capnproto
@@ -34,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     "--workspace"
   ];
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   doCheck = false;
 
@@ -57,14 +56,14 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
     mainProgram = "veilid-server";
     homepage = "https://veilid.com";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       bbigras
       qbit
     ];
   };
-}
+})

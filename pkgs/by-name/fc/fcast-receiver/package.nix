@@ -11,21 +11,21 @@
 
 buildNpmPackage rec {
   pname = "fcast-receiver";
-  version = "2.0.0";
+  version = "2.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "fcast";
-    rev = "4af2a537ef431918a5cf53b3ba18abe6b2d18c1e";
-    hash = "sha256-Y3IyxYLGRi/fLh5A3ap+5x3Wny9WRplaYtBM3R3I8+U=";
+    rev = "520907fbb8e3103d7eab9d925e572a966f4e74f3";
+    hash = "sha256-5ERnlX4Jw6kv0BSNNA2mnJCYoIQJDuUrZVoKIYuWBYA=";
   };
 
   sourceRoot = "${src.name}/receivers/electron";
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-GXlqOukGWtt3KP+xsAiDsUG2Naej0v2RL7Vq3hqcavE=";
+  npmDepsHash = "sha256-EgNpKOjpv7QMsmcVGEpU81UIi/z4vA1S8xXmespx6Ew=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -47,7 +47,7 @@ buildNpmPackage rec {
   ];
 
   postInstall = ''
-    install -Dm644 assets/icons/app/icon.png $out/share/pixmaps/fcast-receiver.png
+    install -Dm644 assets/icons/app/icon.png $out/share/icons/hicolor/512x512/apps/fcast-receiver.png
     ln -s $out/lib/node_modules/fcast-receiver/package.json $out/lib/node_modules/fcast-receiver/dist/package.json
 
     makeWrapper ${electron}/bin/electron $out/bin/fcast-receiver \

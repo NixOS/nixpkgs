@@ -1,99 +1,70 @@
 GIT
-  remote: https://github.com/feedbackmine/language_detector.git
-  revision: 89102790194150b3a8110ce691f9989b8ce70f8d
+  remote: https://github.com/inukshuk/anystyle.git
+  revision: c6f5fb2fa6e8ce9456ad1e1e88d6bba5f3d7731d
   specs:
-    language_detector (0.1.2)
+    anystyle (1.6.0)
+      anystyle-data (~> 1.3)
+      bibtex-ruby (~> 6.0)
+      namae (~> 1.0)
+      wapiti (~> 2.1)
 
 PATH
   remote: .
   specs:
-    anystyle (1.3.10)
-      anystyle-data (~> 1.2)
-      bibtex-ruby (~> 5.0)
+    anystyle-cli (1.5.0)
+      anystyle (~> 1.6)
       gli (~> 2.17)
-      namae (~> 1.0)
-      wapiti (~> 1.0, >= 1.0.2)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.0.3.2)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 0.7, < 2)
-      minitest (~> 5.1)
-      tzinfo (~> 1.1)
-      zeitwerk (~> 2.2, >= 2.2.2)
-    anystyle-data (1.2.0)
-    bibtex-ruby (5.1.4)
+    anystyle-data (1.3.0)
+    bibtex-ruby (6.1.0)
       latex-decode (~> 0.0)
-    builder (3.2.4)
-    byebug (11.1.3)
-    citeproc (1.0.10)
-      namae (~> 1.0)
-    concurrent-ruby (1.1.7)
-    diff-lcs (1.4.4)
-    docile (1.3.2)
-    edtf (3.0.5)
-      activesupport (>= 3.0, < 7.0)
-    gli (2.19.2)
-    gnuplot (2.6.2)
-    i18n (1.8.5)
-      concurrent-ruby (~> 1.0)
-    latex-decode (0.3.1)
-    lmdb (0.5.3)
-    minitest (5.14.1)
-    namae (1.0.1)
-    rake (13.0.1)
-    redis (4.2.1)
-    redis-namespace (1.8.0)
-      redis (>= 3.0.4)
-    rspec (3.9.0)
-      rspec-core (~> 3.9.0)
-      rspec-expectations (~> 3.9.0)
-      rspec-mocks (~> 3.9.0)
-    rspec-core (3.9.2)
-      rspec-support (~> 3.9.3)
-    rspec-expectations (3.9.2)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.9.0)
-    rspec-mocks (3.9.1)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.9.0)
-    rspec-support (3.9.3)
-    ruby-prof (1.4.1)
-    simplecov (0.19.0)
-      docile (~> 1.1)
-      simplecov-html (~> 0.11)
-    simplecov-html (0.12.2)
-    thread_safe (0.3.6)
-    tzinfo (1.2.7)
-      thread_safe (~> 0.1)
-    unicode-scripts (1.6.0)
-    wapiti (1.0.7)
+      racc (~> 1.7)
+    builder (3.3.0)
+    date (3.4.1)
+    debug (1.10.0)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
+    erb (5.0.1)
+    gli (2.22.2)
+      ostruct
+    io-console (0.8.0)
+    irb (1.15.2)
+      pp (>= 0.6.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
+    latex-decode (0.4.0)
+    namae (1.2.0)
+      racc (~> 1.7)
+    ostruct (0.6.1)
+    pp (0.6.2)
+      prettyprint
+    prettyprint (0.2.0)
+    psych (5.2.6)
+      date
+      stringio
+    racc (1.8.1)
+    rdoc (6.14.0)
+      erb
+      psych (>= 4.0.0)
+    reline (0.6.1)
+      io-console (~> 0.5)
+    rexml (3.4.1)
+    stringio (3.1.7)
+    wapiti (2.1.0)
       builder (~> 3.2)
-    yard (0.9.25)
-    zeitwerk (2.4.0)
+      rexml (~> 3.0)
 
 PLATFORMS
+  arm64-darwin-24
   ruby
 
 DEPENDENCIES
   anystyle!
-  bibtex-ruby
-  byebug
-  citeproc
-  edtf
-  gnuplot
-  language_detector!
-  lmdb
-  rake
-  redis
-  redis-namespace
-  rspec (~> 3.0)
-  ruby-prof
-  simplecov
-  unicode-scripts
-  yard
+  anystyle-cli!
+  debug
 
 BUNDLED WITH
-   2.1.4
+   2.5.22

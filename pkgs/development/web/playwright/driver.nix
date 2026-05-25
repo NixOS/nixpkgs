@@ -11,36 +11,28 @@
   callPackage,
   makeFontsConf,
   makeWrapper,
-  runCommand,
   cacert,
 }:
 let
   inherit (stdenv.hostPlatform) system;
 
   throwSystem = throw "Unsupported system: ${system}";
-  suffix =
-    {
-      x86_64-linux = "linux";
-      aarch64-linux = "linux-arm64";
-      x86_64-darwin = "mac";
-      aarch64-darwin = "mac-arm64";
-    }
-    .${system} or throwSystem;
+  browsersJSON = (lib.importJSON ./browsers.json).browsers;
 
-  version = "1.52.0";
+  version = "1.59.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-+2ih1tZHqbNtyabtYi1Sd3f9Qs3Is8zUMNBt6Lo2IKs=";
+    hash = "sha256-kiH1jDyt5xMWc5C2dytoDC9fi1b5tWXZG8S6KEpuotM=";
   };
 
   babel-bundle = buildNpmPackage {
     pname = "babel-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/babel";
-    npmDepsHash = "sha256-sdl+rMCmuOmY1f7oSfGuAAFCiPCFzqkQtFCncL4o5LQ=";
+    npmDepsHash = "sha256-ByCy4go8PM0ksDg+2DcJPyoKG7Z0uIqKM647ZQwYwAE=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -50,7 +42,7 @@ let
     pname = "expect-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/expect";
-    npmDepsHash = "sha256-KwxNqPefvPPHG4vbco2O4G8WlA7l33toJdfNWHMTDOQ=";
+    npmDepsHash = "sha256-PbPCsMqRkfU2c/mCsLSagew84XTgeO6H5+isNZQl2ek=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -60,7 +52,7 @@ let
     pname = "utils-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/utils";
-    npmDepsHash = "sha256-tyk9bv1ethQSm8PKDpLthwsmqJugLIpsUOf9G8TOKRc=";
+    npmDepsHash = "sha256-BTaF1atpK+kG++ZJBUK4r3A7mbN2vv3xpDmb1NiNngE=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -70,7 +62,7 @@ let
     pname = "utils-bundle-core";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/utils";
-    npmDepsHash = "sha256-3hdOmvs/IGAgW7vhldms9Q9/ZQfbjbc+xP+JEtGJ7g8=";
+    npmDepsHash = "sha256-O8X80rTT10ht97towSocANnGwH4fH1f3nZMSl8TOc+Y=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -80,7 +72,7 @@ let
     pname = "zip-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/zip";
-    npmDepsHash = "sha256-62Apz8uX6d4HKDqQxR6w5Vs31tl63McWGPwT6s2YsBE=";
+    npmDepsHash = "sha256-5BHgCelIPh8ljIcdrO4AHafjqfLowDwJcpN+mD13Syw=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -92,7 +84,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-Os/HvvL+CFFb2sM+EDdxF2hN28Sg7oy3vBBfkIipkqs=";
+    npmDepsHash = "sha256-H3kKFthmZH4fqFPQA34w7iw2rubpEKLlJ9jaW6mpuyo=";
 
     nativeBuildInputs = [
       cacert
@@ -103,10 +95,12 @@ let
 
     postPatch = ''
       sed -i '/\/\/ Update test runner./,/^\s*$/{d}' utils/build/build.js
-      sed -i '/\/\/ Update bundles./,/^\s*$/{d}' utils/build/build.js
+      sed -i '/^\/\/ Update bundles\./,/^[[:space:]]*}$/d' utils/build/build.js
       sed -i '/execSync/d' ./utils/generate_third_party_notice.js
-      sed -i '/plugins: /d' ./packages/playwright/bundles/utils/build.js
-      sed -i '/plugins: /d' ./packages/playwright-core/bundles/zip/build.js
+      # The dlopen library check uses ldconfig which doesn't work under Nix.
+      # These libraries are already provided via rpath by autoPatchelfHook and wrapProgram.
+      substituteInPlace packages/playwright-core/src/server/registry/index.ts \
+        --replace-fail "['libGLESv2.so.2', 'libx264.so']" "[]"
       chmod +w packages/playwright/bundles/babel
       ln -s ${babel-bundle}/node_modules packages/playwright/bundles/babel/node_modules
       chmod +w packages/playwright/bundles/expect
@@ -123,9 +117,6 @@ let
       runHook preInstall
 
       shopt -s extglob
-
-      mkdir -p "$out/lib"
-      cp -r packages/playwright/node_modules "$out/lib/node_modules"
 
       mkdir -p "$out/lib/node_modules/playwright"
       cp -r packages/playwright/!(bundles|src|node_modules|.*) "$out/lib/node_modules/playwright"
@@ -151,7 +142,6 @@ let
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         kalekseev
-        marie
       ];
       inherit (nodejs.meta) platforms;
     };
@@ -170,14 +160,19 @@ let
     '';
 
     passthru = {
-      browsersJSON = (lib.importJSON ./browsers.json).browsers;
+      inherit browsersJSON;
+      selectBrowsers = browsers;
       browsers = browsers { };
       browsers-chromium = browsers {
         withFirefox = false;
         withWebkit = false;
         withChromiumHeadlessShell = false;
       };
+      tests.browser-downloads = callPackage ./browser-downloads-test.nix {
+        playwright-core = finalAttrs.finalPackage;
+      };
       inherit components;
+      updateScript = ./update.sh;
     };
   });
 
@@ -208,27 +203,27 @@ let
 
   components = {
     chromium = callPackage ./chromium.nix {
-      inherit suffix system throwSystem;
-      inherit (playwright-core.passthru.browsersJSON.chromium) revision;
+      inherit system throwSystem;
+      inherit (browsersJSON.chromium) revision browserVersion;
       fontconfig_file = makeFontsConf {
         fontDirectories = [ ];
       };
     };
     chromium-headless-shell = callPackage ./chromium-headless-shell.nix {
-      inherit suffix system throwSystem;
-      inherit (playwright-core.passthru.browsersJSON.chromium) revision;
+      inherit system throwSystem;
+      inherit (browsersJSON."chromium-headless-shell") revision browserVersion;
     };
     firefox = callPackage ./firefox.nix {
-      inherit suffix system throwSystem;
-      inherit (playwright-core.passthru.browsersJSON.firefox) revision;
+      inherit system throwSystem;
+      inherit (browsersJSON.firefox) revision;
     };
     webkit = callPackage ./webkit.nix {
-      inherit suffix system throwSystem;
-      inherit (playwright-core.passthru.browsersJSON.webkit) revision;
+      inherit system throwSystem;
+      inherit (browsersJSON.webkit) revision;
     };
     ffmpeg = callPackage ./ffmpeg.nix {
-      inherit suffix system throwSystem;
-      inherit (playwright-core.passthru.browsersJSON.ffmpeg) revision;
+      inherit system throwSystem;
+      inherit (browsersJSON.ffmpeg) revision;
     };
   };
 
@@ -256,8 +251,7 @@ let
         map (
           name:
           let
-            revName = if name == "chromium-headless-shell" then "chromium" else name;
-            value = playwright-core.passthru.browsersJSON.${revName};
+            value = browsersJSON.${name};
           in
           lib.nameValuePair
             # TODO check platform for revisionOverrides

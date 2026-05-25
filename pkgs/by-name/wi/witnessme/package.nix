@@ -70,11 +70,11 @@ python3.pkgs.buildPythonApplication {
     "tests/test_target_parsing.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Web Inventory tool";
     homepage = "https://github.com/byt3bl33d3r/WitnessMe";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "witnessme";
   };
 }

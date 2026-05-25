@@ -18,18 +18,17 @@ let
     HYDRA_DATA = "${baseDir}";
   };
 
-  env =
-    {
-      NIX_REMOTE = "daemon";
-      PGPASSFILE = "${baseDir}/pgpass";
-      NIX_REMOTE_SYSTEMS = lib.concatStringsSep ":" cfg.buildMachinesFiles;
-    }
-    // lib.optionalAttrs (cfg.smtpHost != null) {
-      EMAIL_SENDER_TRANSPORT = "SMTP";
-      EMAIL_SENDER_TRANSPORT_host = cfg.smtpHost;
-    }
-    // hydraEnv
-    // cfg.extraEnv;
+  env = {
+    NIX_REMOTE = "daemon";
+    PGPASSFILE = "${baseDir}/pgpass";
+    NIX_REMOTE_SYSTEMS = lib.concatStringsSep ":" cfg.buildMachinesFiles;
+  }
+  // lib.optionalAttrs (cfg.smtpHost != null) {
+    EMAIL_SENDER_TRANSPORT = "SMTP";
+    EMAIL_SENDER_TRANSPORT_host = cfg.smtpHost;
+  }
+  // hydraEnv
+  // cfg.extraEnv;
 
   serverEnv =
     env
@@ -334,8 +333,8 @@ in
 
     systemd.services.hydra-init = {
       wantedBy = [ "multi-user.target" ];
-      requires = lib.optional haveLocalDB "postgresql.service";
-      after = lib.optional haveLocalDB "postgresql.service";
+      requires = lib.optional haveLocalDB "postgresql.target";
+      after = lib.optional haveLocalDB "postgresql.target";
       environment = env // {
         HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
       };
@@ -361,7 +360,7 @@ in
         ${lib.optionalString haveLocalDB ''
           if ! [ -e ${baseDir}/.db-created ]; then
             runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-            runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -- -O hydra hydra
+            runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
             touch ${baseDir}/.db-created
           fi
           echo "create extension if not exists pg_trgm" | runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
@@ -423,11 +422,11 @@ in
         "network.target"
       ];
       path = [
-        hydra-package
-        pkgs.nettools
-        pkgs.openssh
-        pkgs.bzip2
         config.nix.package
+        hydra-package
+        pkgs.bzip2
+        pkgs.hostname-debian
+        pkgs.openssh
       ];
       restartTriggers = [ hydraConf ];
       environment = env // {
@@ -458,8 +457,8 @@ in
         "network-online.target"
       ];
       path = with pkgs; [
+        hostname-debian
         hydra-package
-        nettools
         jq
       ];
       restartTriggers = [ hydraConf ];

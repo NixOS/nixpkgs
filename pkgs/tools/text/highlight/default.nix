@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   getopt,
   lua,
   boost,
@@ -15,14 +16,22 @@
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.15";
+    version = "4.19";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      hash = "sha256-CpbVm5Z9cKPQdOzBNOXsgrX3rfC6DTVE7xfmOAshbEs=";
+      hash = "sha256-4sPjTLgC4W77alpE/uZHOrnWKVXrWxeCtK70A6G87s8=";
     };
+
+    patches = [
+      (fetchpatch {
+        name = "shellscript-crash-fix.patch";
+        url = "https://gitlab.com/saalen/highlight/-/commit/2c0e95290fe7ca26185851f38ac205d81e4b7015.patch";
+        hash = "sha256-aan2s7wKzBO/QbK+Q+Zq1RiyFORJjEYDcscjCAxMJg8=";
+      })
+    ];
 
     enableParallelBuilding = true;
 
@@ -30,7 +39,8 @@ let
       pkg-config
       swig
       perl
-    ] ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin gcc;
 
     buildInputs = [
       getopt
@@ -39,17 +49,16 @@ let
       libxcrypt
     ];
 
-    postPatch =
-      ''
-        substituteInPlace src/makefile \
-          --replace "shell pkg-config" "shell $PKG_CONFIG"
-        substituteInPlace makefile \
-          --replace 'gzip' 'gzip -n'
-      ''
-      + lib.optionalString stdenv.cc.isClang ''
-        substituteInPlace src/makefile \
-            --replace 'CXX=g++' 'CXX=clang++'
-      '';
+    postPatch = ''
+      substituteInPlace src/makefile \
+        --replace "shell pkg-config" "shell $PKG_CONFIG"
+      substituteInPlace makefile \
+        --replace 'gzip' 'gzip -n'
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace src/makefile \
+          --replace 'CXX=g++' 'CXX=clang++'
+    '';
 
     preConfigure = ''
       makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/ CXX=$CXX AR=$AR"
@@ -71,12 +80,12 @@ let
       make -C extras/swig clean # Clean up intermediate files.
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Source code highlighting tool";
       mainProgram = "highlight";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ willibutz ];
+      platforms = lib.platforms.unix;
+      maintainers = [ ];
     };
   };
 

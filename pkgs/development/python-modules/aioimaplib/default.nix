@@ -7,7 +7,7 @@
   mock,
   poetry-core,
   pyopenssl,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pytz,
 }:
@@ -24,26 +24,30 @@ buildPythonPackage rec {
     hash = "sha256-njzSpKPis033eLoRKXL538ljyMOB43chslio1wodrKU=";
   };
 
+  patches = [
+    # https://github.com/iroco-co/aioimaplib/issues/125
+    ./event-loop.patch
+  ];
+
   build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     imaplib2
     mock
     pyopenssl
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
     pytz
   ];
 
-  disabledTests =
-    [
-      # TimeoutError
-      "test_idle_start__exits_queue_get_without_timeout_error"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Comparison to magic strings
-      "test_idle_loop"
-    ];
+  disabledTests = [
+    # TimeoutError
+    "test_idle_start__exits_queue_get_without_timeout_error"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Comparison to magic strings
+    "test_idle_loop"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -27,8 +27,12 @@ stdenv.mkDerivation {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     export RST2MAN=rst2man
     ./configure
+
+    runHook postConfigure
   '';
 
   installPhase = ''
@@ -41,11 +45,11 @@ stdenv.mkDerivation {
     cp doc/netevent.rst $doc/share/doc/netevent/netevent.rst
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Share linux event devices with other machines";
     homepage = "https://github.com/Blub/netevent";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rgrunbla ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ rgrunbla ];
   };
 }

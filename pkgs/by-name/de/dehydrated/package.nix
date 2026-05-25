@@ -13,14 +13,14 @@
   fetchFromGitHub,
   installShellFiles,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dehydrated";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "lukas2511";
     repo = "dehydrated";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xDDYqP6oxJt0NPgHtHV1xQKUxVc8JQxWekXwxezggtE=";
   };
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Letsencrypt/acme client implemented as a shell-script";
     mainProgram = "dehydrated";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.pstn ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.pstn ];
   };
-}
+})

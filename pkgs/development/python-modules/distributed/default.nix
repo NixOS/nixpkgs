@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  versioneer,
 
   # dependencies
   click,
@@ -26,29 +25,22 @@
   zict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "distributed";
-  version = "2025.3.0";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
-    tag = version;
-    hash = "sha256-+vegdEXhQi3ns5iMs6FavKnAlRNIWCUNyZENVBWZsuQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-lStJwJbhuyPuJ7Nbcm6S6f7tq1T5DtAy8zE1p2Mdrt0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
-    versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+  ];
 
   pythonRelaxDeps = [ "dask" ];
 
@@ -78,8 +70,8 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
-    changelog = "https://github.com/dask/distributed/releases/tag/${src.tag}";
+    changelog = "https://github.com/dask/distributed/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };
-}
+})

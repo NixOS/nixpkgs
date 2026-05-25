@@ -6,22 +6,22 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssw";
   version = "0.10";
 
   src = fetchurl {
-    url = "https://alpha.gnu.org/gnu/ssw/spread-sheet-widget-${version}.tar.gz";
+    url = "https://alpha.gnu.org/gnu/ssw/spread-sheet-widget-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-gGkuw1AnGZXhR9x1mSnN1507ZF5rXvqmtX9NLQXoR+U=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/ssw/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     description = "GNU Spread Sheet Widget";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

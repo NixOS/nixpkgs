@@ -8,15 +8,12 @@
   orjson,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiopyarr";
   version = "23.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tkdrob";
@@ -44,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiopyarr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API client for Lidarr/Radarr/Readarr/Sonarr";
     homepage = "https://github.com/tkdrob/aiopyarr";
     changelog = "https://github.com/tkdrob/aiopyarr/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

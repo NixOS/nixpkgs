@@ -4,8 +4,7 @@
   fetchFromGitHub,
   lib,
   nixosTests,
-  apple-sdk_12,
-  darwinMinVersionHook,
+  ghostunnel,
 }:
 
 buildGoModule rec {
@@ -23,11 +22,6 @@ buildGoModule rec {
 
   deleteVendor = true;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_12
-    (darwinMinVersionHook "12.0")
-  ];
-
   # These tests don't exist for Linux, and on Darwin they attempt to use the macOS Keychain
   # which doesn't work from a nix build. Presumably other platform implementations of the
   # certstore would have similar issues, so it probably makes sense to skip them in
@@ -37,6 +31,13 @@ buildGoModule rec {
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
     podman = nixosTests.podman-tls-ghostunnel;
+  };
+
+  passthru.services.default = {
+    imports = [
+      (lib.modules.importApply ./service.nix { })
+    ];
+    ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
   };
 
   meta = {

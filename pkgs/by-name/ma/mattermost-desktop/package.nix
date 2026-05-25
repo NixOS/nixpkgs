@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_34,
+  electron_40,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +10,21 @@
 }:
 
 let
-  electron = electron_34;
+  electron = electron_40;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "5.11.2";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-03874pV7/GqydMdaSlh3N17LsbHppfPdYJ8nGdbvvbk=";
+    hash = "sha256-EI1bDSiWdLCXlhUk1CmbUyYU7giey366cZLuhs0qtqY=";
   };
 
-  npmDepsHash = "sha256-v6XEJJ9kozkY7HSLNJtM+86+36G7wt8xIFwCyO7x11Y=";
+  npmDepsHash = "sha256-7XUZ2rt2fZiQNpW8iHnNDbCSuK4/srWqIEKOKM6xty8=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -37,6 +37,8 @@ buildNpmPackage rec {
       --replace-fail \
         "const VERSION = childProcess.execSync('git rev-parse --short HEAD', {cwd: __dirname}).toString();" \
         "const VERSION = process.env.version;"
+    substituteInPlace src/common/config/buildConfig.ts \
+      --replace-fail 'enableUpdateNotifications: true,' 'enableUpdateNotifications: false,'
   '';
 
   postBuild = ''
@@ -87,7 +89,7 @@ buildNpmPackage rec {
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+      extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
     };
   };
 
@@ -101,6 +103,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       joko
       liff
+      yayayayaka
     ];
   };
 }

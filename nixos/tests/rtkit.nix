@@ -103,7 +103,7 @@
       Result = namedtuple("Result", ["command", "machine", "status", "out", "value"])
       Value = namedtuple("Value", ["type", "data"])
 
-      def busctl(node: Machine, *args: Any, user: Optional[str] = None) -> Result:
+      def busctl(node: BaseMachine, *args: Any, user: Optional[str] = None) -> Result:
           command = f"busctl --json=short {shlex.join(map(str, args))}"
           if user is not None:
               command = f"su - {user} -c {shlex.quote(command)}"
@@ -121,7 +121,7 @@
           if result.status == 0:
               raise Exception(f"command `{result.command}` unexpectedly succeeded")
 
-      def rtkit_make_process_realtime(node: Machine, pid: int, priority: int, user: Optional[str] = None) -> Result:
+      def rtkit_make_process_realtime(node: BaseMachine, pid: int, priority: int, user: Optional[str] = None) -> Result:
           return busctl(node, "call", "org.freedesktop.RealtimeKit1", "/org/freedesktop/RealtimeKit1", "org.freedesktop.RealtimeKit1", "MakeThreadRealtimeWithPID", "ttu", pid, 0, priority, user=user)
 
       def get_max_realtime_priority() -> int:
@@ -133,7 +133,7 @@
       def parse_chrt(out: str, field: str) -> str:
           return next(map(lambda l: l.split(": ")[1], filter(lambda l: field in l, out.splitlines())))
 
-      def get_pid(node: Machine, unit: str, user: Optional[str] = None) -> int:
+      def get_pid(node: BaseMachine, unit: str, user: Optional[str] = None) -> int:
           node.wait_for_unit(unit, user=user)
           (status, out) = node.systemctl(f"show -P MainPID {unit}", user=user)
           if status == 0:
@@ -142,7 +142,7 @@
               node.log(out)
               raise Exception(f"unable to determine MainPID of {unit} (systemctl exit code {status})")
 
-      def assert_sched(node: Machine, pid: int, policy: Optional[str] = None, priority: Optional[int] = None):
+      def assert_sched(node: BaseMachine, pid: int, policy: Optional[str] = None, priority: Optional[int] = None):
           out = node.succeed(f"chrt -p {pid}")
           node.log(out)
           if policy is not None:

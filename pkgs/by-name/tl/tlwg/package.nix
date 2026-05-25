@@ -7,14 +7,14 @@
   fontforge,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlwg";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "tlwg";
     repo = "fonts-tlwg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "hWiH5KJnYTdcrm+Kzn9HUQry8ry3SKzjA6/0536kCLQ=";
   };
 
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fontforge ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Thai scalable fonts available under free licenses";
     homepage = "https://linux.thai.net/projects/fonts-tlwg";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       publicDomain
       lppl13c
       free
     ];
-    maintainers = [ maintainers.yrashk ];
+    maintainers = [ lib.maintainers.yrashk ];
   };
-}
+})

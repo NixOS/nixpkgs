@@ -5,26 +5,23 @@
   gg,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "color";
   version = "0.2.0";
 
-  useDune2 = true;
-  minimalOCamlVersion = "4.05";
-
   src = fetchurl {
-    url = "https://github.com/anuragsoni/color/releases/download/${version}/color-${version}.tbz";
-    sha256 = "0wg3a36i1a7fnz5pf57qzbdghwr6dzp7nnxyrz9m9765lxsn65ph";
+    url = "https://github.com/anuragsoni/color/releases/download/${finalAttrs.version}/color-${finalAttrs.version}.tbz";
+    hash = "sha256-8BZjdafFnFTTz75be+5vJnP42vr4FHfLt+6oEM1Q43E=";
   };
 
   propagatedBuildInputs = [
     gg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts between different color formats";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://github.com/anuragsoni/color";
   };
-}
+})

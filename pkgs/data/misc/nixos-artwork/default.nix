@@ -1,5 +1,5 @@
-{ callPackage }:
+{ callPackage, lib }:
 
 {
-  wallpapers = callPackage ./wallpapers.nix { };
+  wallpapers = lib.recurseIntoAttrs (callPackage ./wallpapers.nix { });
 }

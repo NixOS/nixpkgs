@@ -3,7 +3,6 @@
   stdenvNoCC,
   gccStdenv,
   lib,
-  recurseIntoAttrs,
   libsForQt5,
   newScope,
   perlPackages,

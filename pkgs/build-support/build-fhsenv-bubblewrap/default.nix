@@ -222,9 +222,14 @@ let
         ro_mounts+=(--ro-bind /etc /.host-etc)
       fi
 
+      declare -A etc_ignored_set
+      for ign in "''${etc_ignored[@]}"; do
+        etc_ignored_set[$ign]=1
+      done
+
       # link selected etc entries from the actual root
       for i in ${escapeShellArgs etcBindEntries}; do
-        if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
+        if [[ -n "''${etc_ignored_set[$i]:-}" ]]; then
           continue
         fi
         if [[ -e $i ]]; then
@@ -232,11 +237,21 @@ let
         fi
       done
 
+      declare -A ignored_set
+      for ign in "''${ignored[@]}"; do
+        ignored_set[$ign]=1
+      done
+
       declare -a auto_mounts
       # loop through all directories in the root
       for dir in /*; do
-        # if it is a directory and it is not ignored
-        if [[ -d "$dir" ]] && [[ ! "''${ignored[@]}" =~ "$dir" ]]; then
+        # if it is a directory and not already provided by the FHS env or
+        # explicitly ignored, bind-mount it into the chroot. Use exact match
+        # via associative array because regex substring matching incorrectly
+        # skips prefixes (e.g. /sb would match /sbin and never get mounted,
+        # breaking --chdir when CWD is on a custom mount like /sb/project).
+        # https://github.com/NixOS/nixpkgs/issues/241151
+        if [[ -d "$dir" ]] && [[ -z "''${ignored_set[$dir]:-}" ]]; then
           # add it to the mount list
           auto_mounts+=(--bind "$dir" "$dir")
         fi
@@ -288,7 +303,7 @@ let
         ${optionalString unshareUts "--unshare-uts"}
         ${optionalString unshareCgroup "--unshare-cgroup"}
         ${optionalString dieWithParent "--die-with-parent"}
-        --ro-bind /nix /nix
+        --bind /nix /nix
         ${optionalString privateTmp "--tmpfs /tmp"}
         # Our glibc will look for the cache in its own path in `/nix/store`.
         # As such, we need a cache to exist there, because pressure-vessel
@@ -350,7 +365,8 @@ runCommandLocal name
 
       meta = {
         mainProgram = executableName;
-      } // meta;
+      }
+      // meta;
     }
   )
   ''

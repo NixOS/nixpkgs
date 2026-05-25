@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hiAndrewQuinn/resorter";
     license = with lib.licenses; [ cc0 ];
     mainProgram = "resorter";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

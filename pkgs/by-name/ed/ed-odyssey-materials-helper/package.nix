@@ -2,32 +2,37 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gradle,
-  jdk23,
-  makeWrapper,
+  gradle_9,
+  jdk25,
   wrapGAppsHook3,
-  libXxf86vm,
-  libXtst,
+  libxxf86vm,
+  libxtst,
   libglvnd,
   glib,
+  alsa-lib,
+  ffmpeg,
+  lsb-release,
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
+  writeText,
 }:
+let
+  gradle = gradle_9;
+in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.178";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-a/nrRw5FjUZBJE0CmSevGAw4LBI/A3jPAEJfg7GY5+U=";
+    hash = "sha256-ljCN2tW7iH+kTiSXwUt+OsAhjYKlAy0W5x/JDmQeR6M=";
   };
 
   nativeBuildInputs = [
     gradle
-    makeWrapper
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -37,6 +42,9 @@ stdenv.mkDerivation rec {
     # so this removes 1) the popup about it when you first start the program, 2) the option in the settings
     # and makes the program always know that it is set up
     ./remove-urlscheme-settings.patch
+
+    ./eula.patch # EULA doesn't apply to nixpkgs build, only the upstream build, don't show it
+    ./disable-broken-features.patch # some features require things not included in the source code, we'll disable/hide those
   ];
   postPatch = ''
     # oslib doesn't seem to do releases and hasn't had a change since 2021, so always use commit d6ee6549bb
@@ -46,9 +54,15 @@ stdenv.mkDerivation rec {
     substituteInPlace application/src/main/java/module-info.java \
       --replace-fail 'requires oslib.master.SNAPSHOT;' 'requires oslib.d6ee6549bb;'
 
-    # remove "new version available" popup
+    # remove "new version available" (not needed) and eddn question (eddn doesn't work in this build) popups
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
-      --replace-fail 'versionPopup();' ""
+      --replace-fail 'versionPopup();' "" \
+      --replace-fail 'eddnPopup();' ""
+
+    substituteInPlace build.gradle bootstrap/build.gradle application/build.gradle \
+      --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
+
+    echo "This nixpkgs-packaged version of Elite Dangerous Odyssey Materials Helper doesn't upload any data." > application/src/main/resources/text/privacy.txt
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -56,9 +70,19 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk25}"
+    "--stacktrace"
+  ];
+
+  gradleInitScript = writeText "empty-init-script.gradle" ""; # fixes build by making it possibly not reproducible, though it still seems to be
 
   gradleBuildTask = "application:jpackage";
+
+  preBuild = ''
+    # required for the program to know its own version
+    gradle $gradleFlags application:generateSecrets
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -75,17 +99,19 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
-    # The logs would go into the current directory, so the wrapper will cd to the config dir first
-    makeShellWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
-      --run 'mkdir -p ~/.config/odyssey-materials-helper/ && cd ~/.config/odyssey-materials-helper/' \
+    makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          libXxf86vm
+          libxxf86vm
           glib
-          libXtst
+          libxtst
           libglvnd
+          alsa-lib
+          ffmpeg
         ]
-      } "''${gappsWrapperArgs[@]}"
+      } \
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]} \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [

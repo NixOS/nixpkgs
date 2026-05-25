@@ -106,9 +106,10 @@ in
           "~@privileged"
         ];
         UMask = "0077";
-      } // lib.optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
+      }
+      // lib.optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
     };
   };
 
-  meta.maintainers = [ lib.maintainers.raroh73 ];
+  meta.maintainers = [ ];
 }

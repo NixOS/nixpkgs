@@ -13,10 +13,10 @@
 }:
 
 let
-  rev = "08bb3693621796b22511e56b8418737bd116d70b"; # should be the HEAD of nodejs/release-keys
+  rev = "7b6eb2d6ab524bb30487f31612cdbeb35ae37533"; # should be the HEAD of nodejs/release-keys
   pubring = fetchurl {
-    url = "https://github.com/nodejs/release-keys/raw/${rev}/gpg/pubring.kbx";
-    hash = "sha256-j7auIjCzRV7GoX8jdtqHFniwmWWTBoRNmRYWWPFSJ/k=";
+    url = "https://github.com/nodejs/release-keys/raw/${rev}/gpg-only-active-keys/pubring.kbx";
+    hash = "sha256-cNpMrJ0Eh8F3bGZAPV9v55mR8bo0+ulkFgN94ZUBl+E=";
   };
 in
 writeScript "update-nodejs" ''
@@ -48,5 +48,5 @@ writeScript "update-nodejs" ''
     gpgv --keyring="${pubring}" --output - | \
     grep -oP "^([0-9a-f]{64})(?=\s+node-v''${version}.tar.xz$)"`
 
-  update-source-version nodejs_${majorVersion} "''${version}" "''${hash_hex}"
+  update-source-version nodejs-slim_${majorVersion} "''${version}" "''${hash_hex}"
 ''

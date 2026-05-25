@@ -2,30 +2,39 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
+
+  # native check inputs
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openscad-lsp";
-  version = "1.2.5";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "Leathong";
     repo = "openscad-LSP";
-    rev = "dc1283df080b981f8da620744b0fb53b22f2eb84";
-    hash = "sha256-IPTBWX0kKmusijg4xAvS1Ysi9WydFaUWx/BkZbMvgJk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vzlwt1lTaZIqHS/+6bVPHjd+Ex3G/YDVNW0JKZ0arnk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qHwtLZUM9FrzDmg9prVtSf19KtEp8cZO/7XoXtZb5IQ=";
+  cargoHash = "sha256-BU3gabsC/5lH59NSSBn2Zr5/egxcHAt7iCAftrOh1ak=";
 
-  # no tests exist
-  doCheck = false;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "LSP (Language Server Protocol) server for OpenSCAD";
     mainProgram = "openscad-lsp";
     homepage = "https://github.com/Leathong/openscad-LSP";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ c-h-johnson ];
+    changelog = "https://github.com/Leathong/openscad-LSP/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      c-h-johnson
+      curious
+    ];
   };
-}
+})

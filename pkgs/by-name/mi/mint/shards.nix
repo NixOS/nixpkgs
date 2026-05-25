@@ -6,8 +6,8 @@
   };
   ameba = {
     url = "https://github.com/crystal-ameba/ameba.git";
-    rev = "v1.6.4";
-    sha256 = "1kzr4ynd4r5w87y2czzrlir1dvqmv43ijm07804kgsy1g20k00fs";
+    rev = "37fe65d0d86477ecd6cf0bab2d519f2235fea6b5";
+    sha256 = "135jlnxqgg5haxfp5wprw3s0hqhhay2k22vgy2fy6vilk8rlcy7w";
   };
   ansi-escapes = {
     url = "https://github.com/gtramontina/ansi-escapes.cr.git";

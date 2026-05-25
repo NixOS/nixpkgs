@@ -1,34 +1,57 @@
 {
   lib,
   stdenv,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   nix-update-script,
   glibcLocales,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
-python3Packages.buildPythonApplication rec {
+
+let
+  python = python3.override {
+    packageOverrides = _final: prev: {
+      # throws a runtime error with textual 8.2.5:
+      # KeyError: 'textual-ansi'
+      textual = prev.textual.overridePythonAttrs (old: rec {
+        version = "8.2.4";
+        src = old.src.override {
+          tag = "v${version}";
+          hash = "sha256-827cm9pcj1o1FYeaoWKCJ6dEyXeDop4kYd205cySTfg=";
+        };
+      });
+    };
+  };
+  python3Packages = python.pkgs;
+in
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.1.2";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
-    tag = "v${version}";
-    hash = "sha256-uHzhAI8ppp6aoveMPcLCQX2slhbor5Qy+IoTui+RP7M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ea8fR+tsur/tIQwfUS88HvjCADv8VgEjHD7JnR44Twk=";
   };
 
   pythonRelaxDeps = [
+    "click"
     "numpy"
     "pyarrow"
+    "questionary"
+    "rich-click"
     "textual"
+    "tomlkit"
+    "tree-sitter"
     "tree-sitter-sql"
   ];
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ hatchling ];
 
   nativeBuildInputs = [ glibcLocales ];
 
@@ -65,26 +88,26 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = with python3Packages; [
     pytest-asyncio
     pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "test_connect_extensions"
-      "test_connect_prql"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      # Test incorrectly tries to load a dylib/so compiled for x86_64
-      "test_load_extension"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "test_connect_extensions"
+    "test_connect_prql"
+
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # AssertionError
+    "test_bad_adapter_opt"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # Test incorrectly tries to load a dylib/so compiled for x86_64
+    "test_load_extension"
+  ];
 
   disabledTestPaths = [
     # Tests requires more setup
@@ -94,10 +117,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
   };
-}
+})

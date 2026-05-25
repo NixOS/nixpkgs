@@ -10,9 +10,11 @@ let
 
   format = pkgs.formats.yaml { };
 
+  autheliaName = name: "authelia" + lib.optionalString (name != "") "-${name}";
+
   autheliaOpts =
     with lib;
-    { name, ... }:
+    { name, config, ... }:
     {
       options = {
         enable = mkEnableOption "Authelia instance";
@@ -23,21 +25,28 @@ let
           description = ''
             Name is used as a suffix for the service name, user, and group.
             By default it takes the value you use for `<instance>` in:
-            {option}`services.authelia.<instance>`
+            {option}`services.authelia.instances.<instance>`
+
+            When set to the empty string `""`, the service name, user, and group
+            will be just `authelia` without a suffix.
           '';
         };
 
         package = mkPackageOption pkgs "authelia" { };
 
         user = mkOption {
-          default = "authelia-${name}";
           type = types.str;
+          defaultText = lib.literalExpression ''
+            if name == "" then "authelia" else "authelia-''${name}"
+          '';
           description = "The name of the user for this authelia instance.";
         };
 
         group = mkOption {
-          default = "authelia-${name}";
           type = types.str;
+          defaultText = lib.literalExpression ''
+            if name == "" then "authelia" else "authelia-''${name}"
+          '';
           description = "The name of the group for this authelia instance.";
         };
 
@@ -48,7 +57,7 @@ let
             as the values will be preserved in your nix store.
             This attribute allows you to configure the location of secret files to be loaded at runtime.
 
-            https://www.authelia.com/configuration/methods/secrets/
+            <https://www.authelia.com/configuration/methods/secrets/>
           '';
           default = { };
           type = types.submodule {
@@ -117,7 +126,7 @@ let
             If you are providing secrets please consider the options under {option}`services.authelia.<instance>.secrets`
             or make sure you use the `_FILE` suffix.
             If you provide the raw secret rather than the location of a secret file that secret will be preserved in the nix store.
-            For more details: https://www.authelia.com/configuration/methods/secrets/
+            For more details: <https://www.authelia.com/configuration/methods/secrets/>
           '';
           default = { };
         };
@@ -128,7 +137,7 @@ let
             There are several values that are defined and documented in nix such as `default_2fa_method`,
             but additional items can also be included.
 
-            https://github.com/authelia/authelia/blob/master/config.template.yml
+            <https://github.com/authelia/authelia/blob/master/config.template.yml>
           '';
           default = { };
           example = ''
@@ -252,6 +261,11 @@ let
           '';
         };
       };
+
+      config = {
+        user = mkDefault (autheliaName config.name);
+        group = mkDefault (autheliaName config.name);
+      };
     };
 
   writeOidcJwksConfigFile =
@@ -270,7 +284,7 @@ let
     lib.updateManyAttrsByPath [
       {
         path = lib.init pathList;
-        update = old: lib.filterAttrs (n: v: n != (lib.last pathList)) old;
+        update = old: lib.removeAttrs old [ (lib.last pathList) ];
       }
     ] set;
 in
@@ -284,7 +298,7 @@ in
         Multi-domain protection currently requires multiple instances of Authelia.
         If you don't require multiple instances of Authelia you can define just the one.
 
-        https://www.authelia.com/roadmap/active/multi-domain-protection/
+        <https://www.authelia.com/roadmap/active/multi-domain-protection/>
       '';
       example = ''
         {
@@ -382,7 +396,7 @@ in
             ExecStart = "${execCommand} ${configArg}";
             Restart = "always";
             RestartSec = "5s";
-            StateDirectory = "authelia-${instance.name}";
+            StateDirectory = autheliaName instance.name;
             StateDirectoryMode = "0700";
 
             # Security options:
@@ -431,11 +445,8 @@ in
           };
         };
       mkInstanceUsersConfig = instance: {
-        groups."authelia-${instance.name}" = lib.mkIf (instance.group == "authelia-${instance.name}") {
-          name = "authelia-${instance.name}";
-        };
-        users."authelia-${instance.name}" = lib.mkIf (instance.user == "authelia-${instance.name}") {
-          name = "authelia-${instance.name}";
+        groups.${autheliaName instance.name} = lib.mkIf (instance.group == autheliaName instance.name) { };
+        users.${autheliaName instance.name} = lib.mkIf (instance.user == autheliaName instance.name) {
           isSystemUser = true;
           group = instance.group;
         };
@@ -468,7 +479,7 @@ in
         map (
           instance:
           lib.mkIf instance.enable {
-            "authelia-${instance.name}" = mkInstanceServiceConfig instance;
+            ${autheliaName instance.name} = mkInstanceServiceConfig instance;
           }
         ) instances
       );
@@ -479,7 +490,7 @@ in
 
   meta.maintainers = with lib.maintainers; [
     jk
-    dit7ya
     nicomem
+    connor-grady
   ];
 }

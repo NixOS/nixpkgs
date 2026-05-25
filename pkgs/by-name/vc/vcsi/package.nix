@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vcsi";
   version = "7.0.16";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "amietn";
     repo = "vcsi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I0o6GX/TNMfU+rQtSqReblRplXPynPF6m2zg0YokmtI=";
   };
 
@@ -39,19 +39,17 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-    ]);
-  versionCheckProgramArg = "--version";
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+  ]);
 
   meta = {
     description = "Create video contact sheets";
     homepage = "https://github.com/amietn/vcsi";
-    changelog = "https://github.com/amietn/vcsi/releases/tag/v${version}";
+    changelog = "https://github.com/amietn/vcsi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dandellion
@@ -59,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "vcsi";
   };
-}
+})

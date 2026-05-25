@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
-  pythonAtLeast,
   keras,
   numpy,
   scipy,
@@ -15,8 +13,6 @@ buildPythonPackage rec {
   pname = "edward";
   version = "1.3.5";
   format = "setuptools";
-
-  disabled = !(isPy27 || pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
@@ -34,10 +30,10 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Probabilistic programming language using Tensorflow";
     homepage = "https://github.com/blei-lab/edward";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

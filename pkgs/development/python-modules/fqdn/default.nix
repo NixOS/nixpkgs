@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fqdn";
   version = "1.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ypcrts";
@@ -24,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fqdn" ];
 
-  meta = with lib; {
+  meta = {
     description = "RFC-compliant FQDN validation and manipulation";
     homepage = "https://github.com/ypcrts/fqdn";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -13,7 +13,7 @@
 stdenv.mkDerivation rec {
   pname = "ocsigen-toolkit";
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "4.1.0";
+  version = "4.2.0";
 
   propagatedBuildInputs = [
     calendar
@@ -40,14 +40,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ocsigen";
-    repo = pname;
-    rev = version;
-    hash = "sha256-1kw2HANajHDdMmjuYNB79ZDqy2Ml02nc5s+cJzIoxQ8=";
+    repo = "ocsigen-toolkit";
+    tag = version;
+    hash = "sha256-wken+5hUewE0Nktl2PY1xMmVveSs8X0ihWD+MK4pzRQ=";
   };
 
   meta = {
     homepage = "http://ocsigen.org/ocsigen-toolkit/";
-    description = " User interface widgets for Ocsigen applications";
+    description = "User interface widgets for Ocsigen applications";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.gal_bolle ];
     inherit (ocaml.meta) platforms;

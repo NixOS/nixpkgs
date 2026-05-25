@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/nbdbtool";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
     description = "Mini PXE server";
+    homepage = "https://netboot.sourceforge.net";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = [
       "x86_64-linux"

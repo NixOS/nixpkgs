@@ -1,38 +1,48 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
   hatchling,
-  pytestCheckHook,
-  pytest-cov-stub,
-  huggingface-hub,
+
+  # dependencies
+  numpy,
+  packaging,
+  prettytable,
+  scikit-learn,
+  tabulate,
+
+  # tests
   matplotlib,
   pandas,
-  scikit-learn,
-  stdenv,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pyyaml,
+  rich,
   streamlit,
-  tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skops";
-  version = "0.11.0";
+  version = "0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
-    tag = "v${version}";
-    hash = "sha256-23Wy/VSd/CvpqT/zDX4ApplfsUwbjOj9q+T8YCKs8X4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AyrsXomc3vpfdqsBL51UmGXsjPsAJ+dx3uf3T8nPk/Y=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
-    huggingface-hub
+    numpy
+    packaging
+    prettytable
     scikit-learn
     tabulate
   ];
@@ -40,36 +50,47 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     matplotlib
     pandas
-    pytestCheckHook
     pytest-cov-stub
+    pytestCheckHook
+    pyyaml
     streamlit
   ];
-  pytestFlagsArray = [ "skops" ];
+
+  optional-dependencies = {
+    rich = [ rich ];
+  };
+
+  enabledTestPaths = [ "skops" ];
+
   disabledTests = [
-    # flaky
-    "test_base_case_works_as_expected"
+    # fairlearn is not available in nixpkgs
+    "TestAddFairlearnMetricFrame"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail in the sandbox with:
+    #   UNEXPECTED EXCEPTION: RuntimeError('*** -[__NSPlaceholderArray initWithObjects:count:]:
+    #   attempt to insert nil object from objects[1]')
+    "skops.card._model_card.Card"
+    "test_add_plot"
+    "test_add_plot_to_existing_section"
+    "test_add_plot_with_alt_text"
+    "test_add_plot_with_description"
+    "test_copy_plots"
+    "test_duplicate_permutation_importances"
+    "test_duplicate_permutation_importances_overwrite"
+    "test_multiple_permutation_importances"
+    "test_permutation_importances"
+    "test_permutation_importances_with_description"
   ];
-  disabledTestPaths =
-    [
-      # try to download data from Huggingface Hub:
-      "skops/hub_utils/tests"
-      "skops/card/tests"
-      # minor output formatting issue
-      "skops/card/_model_card.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Segfaults on darwin
-      "skops/io/tests/test_persist.py"
-    ];
 
   pythonImportsCheck = [ "skops" ];
 
   meta = {
     description = "Library for saving/loading, sharing, and deploying scikit-learn based models";
-    mainProgram = "skops";
     homepage = "https://skops.readthedocs.io/en/stable";
-    changelog = "https://github.com/skops-dev/skops/releases/tag/${src.tag}";
+    changelog = "https://github.com/skops-dev/skops/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bcdarwin ];
+    mainProgram = "skops";
   };
-}
+})

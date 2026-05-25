@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools-scm,
   toml,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pure-eval";
   version = "0.2.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pure_eval" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safely evaluate AST nodes without side effects";
     homepage = "https://github.com/alexmojaki/pure_eval";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

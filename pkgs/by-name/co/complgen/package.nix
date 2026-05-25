@@ -1,29 +1,28 @@
 {
+  fetchFromGitHub,
   lib,
   rustPlatform,
-  fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "complgen";
-  version = "0.4.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "adaszko";
     repo = "complgen";
-    rev = "v${version}";
-    hash = "sha256-RSNOpe2VCNw9TJGD7QuuZT9WOdA6AFFcF9AOg4/+94w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0oC/jpCKM2Y1yag+qIUu+b3sCIPmHs/GUBSPHi7KaVI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0e3PTetpWjagBuagfkdsNfn1k+rEbzOJJONMXv7G96o=";
+  cargoHash = "sha256-skdtXxNUuC7xLtZSol3b1prdN1YT62uvwo+F7rtFVVQ=";
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/adaszko/complgen/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";
-    mainProgram = "complgen";
     homepage = "https://github.com/adaszko/complgen";
-    changelog = "https://github.com/adaszko/complgen/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    mainProgram = "complgen";
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

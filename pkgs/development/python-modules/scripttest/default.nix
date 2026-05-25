@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # Tests are not included. See https://github.com/pypa/scripttest/issues/11
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library for testing interactive command-line applications";
     homepage = "https://pypi.org/project/scripttest/";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

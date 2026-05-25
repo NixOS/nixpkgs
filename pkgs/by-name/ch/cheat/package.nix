@@ -5,15 +5,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cheat";
-  version = "4.4.2";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
-    rev = version;
-    sha256 = "sha256-GUU6VWfTmNS6ny12HnMr3uQmS7HI86Oupcmqx0MVAvE=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-RDfOdyQL9QICXZmgYCmz532iTuPdCW8GixajvEXmaUQ=";
   };
 
   subPackages = [ "cmd/cheat" ];
@@ -44,14 +44,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Create and view interactive cheatsheets on the command-line";
-    maintainers = with maintainers; [ mic92 ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ mic92 ];
+    license = with lib.licenses; [
       gpl3
       mit
     ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     mainProgram = "cheat";
   };
-}
+})

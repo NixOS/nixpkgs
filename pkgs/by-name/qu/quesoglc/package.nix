@@ -8,7 +8,7 @@
   freetype,
   fontconfig,
   fribidi,
-  libX11,
+  libx11,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quesoglc";
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     fribidi
-    libX11
+    libx11
   ];
 
   # required for cross builds
@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://quesoglc.sourceforge.net/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
   };
 })

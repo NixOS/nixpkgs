@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ecsk";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "yukiarrr";
     repo = "ecsk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1nrV7NslOIXQDHsc7c5YfaWhoJ8kfkEQseoVVeENrHM=";
     fetchSubmodules = true;
   };
@@ -27,4 +27,4 @@ buildGoModule rec {
     homepage = "https://github.com/yukiarrr/ecsk";
     maintainers = with lib.maintainers; [ whtsht ];
   };
-}
+})

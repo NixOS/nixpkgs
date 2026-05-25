@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "3.10";
+  version = "3.18";
   srcAll = fetchFromGitHub {
     owner = "WiringPi";
     repo = "WiringPi";
-    rev = version;
-    sha256 = "sha256-OWR+yo+SnYaMd8J+ku9ettZi+rDHcHlGZCoucCiRkCI=";
+    tag = version;
+    hash = "sha256-7zDknn2UUR2Dt3BUJ9YI0LAjRedVyUPJAiIBiRyyphQ=";
   };
   mkSubProject =
     {
@@ -25,6 +25,10 @@ let
       inherit version src;
       sourceRoot = "${src.name}/${subprj}";
       inherit buildInputs;
+
+      # Fix build with gcc 15
+      env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
       # Remove (meant for other OSs) lines from Makefiles
       preInstall = ''
         sed -i "/chown root/d" Makefile
@@ -70,19 +74,22 @@ let
 in
 
 symlinkJoin {
-  name = "wiringpi-${version}";
-  inherit passthru;
+  pname = "wiringpi";
+  inherit passthru version;
   paths = [
     passthru.wiringPi
     passthru.devLib
     passthru.wiringPiD
     passthru.gpio
   ];
-  meta = with lib; {
+  meta = {
     description = "Gordon's Arduino wiring-like WiringPi Library for the Raspberry Pi (Unofficial Mirror for WiringPi bindings)";
     homepage = "https://github.com/WiringPi/WiringPi";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
+      doronbehar
+      ryand56
+    ];
+    platforms = lib.platforms.linux;
   };
 }

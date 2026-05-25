@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 buildPythonPackage rec {
-  name = "bezier";
+  pname = "bezier";
   version = "2024.6.20";
   src = fetchFromGitHub {
     owner = "dhermes";
@@ -49,6 +49,8 @@ buildPythonPackage rec {
         cmake
         gfortran
       ];
+
+      env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-z,noexecstack";
     };
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=incompatible-pointer-types"

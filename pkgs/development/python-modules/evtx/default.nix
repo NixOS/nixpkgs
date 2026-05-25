@@ -4,28 +4,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "evtx";
-  version = "0.8.9";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.11.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omerbenamram";
     repo = "pyevtx-rs";
-    tag = version;
-    hash = "sha256-rxE3Srm+5L9r6uNIeOPBnpQAbS89WCel/U7xgLc2ZDU=";
+    tag = finalAttrs.version;
+    hash = "sha256-oF/Hvox294/Vi7TqaJVAboAFreavnlhmqa5rpVsOv6o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-IqV4BsLE+5Dk3ey4M+h5wxR/SToZTLf8vU0BlWU5e8c=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-4pDLwM1ylZbqymG+cL7QVByc43p8XJi2MKb/cL3aWak=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -39,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evtx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings for evtx";
     homepage = "https://github.com/omerbenamram/pyevtx-rs";
-    changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

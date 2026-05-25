@@ -23,19 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./cmakelists.patch ];
 
-  cmakeFlags =
-    [
-      "-DNCNN_CMAKE_VERBOSE=1" # Only for debugging the build
-      "-DNCNN_SHARED_LIB=1"
-      "-DNCNN_ENABLE_LTO=1"
-      "-DNCNN_VULKAN=1"
-      "-DNCNN_BUILD_EXAMPLES=0"
-      "-DNCNN_BUILD_TOOLS=0"
-      "-DNCNN_SYSTEM_GLSLANG=1"
-      "-DNCNN_PYTHON=0" # Should be an attribute
-    ]
-    # Requires setting `Vulkan_LIBRARY` on Darwin. Otherwise the build fails due to missing symbols.
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DVulkan_LIBRARY=-lvulkan" ];
+  cmakeFlags = [
+    "-DNCNN_CMAKE_VERBOSE=1" # Only for debugging the build
+    "-DNCNN_SHARED_LIB=1"
+    "-DNCNN_ENABLE_LTO=1"
+    "-DNCNN_VULKAN=1"
+    "-DNCNN_BUILD_EXAMPLES=0"
+    "-DNCNN_BUILD_TOOLS=0"
+    "-DNCNN_SYSTEM_GLSLANG=1"
+    "-DNCNN_PYTHON=0" # Should be an attribute
+  ]
+  # Requires setting `Vulkan_LIBRARY` on Darwin. Otherwise the build fails due to missing symbols.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DVulkan_LIBRARY=-lvulkan" ];
 
   nativeBuildInputs = [ cmake ];
 

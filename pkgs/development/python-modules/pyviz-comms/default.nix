@@ -9,15 +9,15 @@
   panel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyviz-comms";
-  version = "3.0.4";
+  version = "3.0.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyviz_comms";
-    inherit version;
-    hash = "sha256-1w4XVV9yYsSISmt7ycoZy4FlB6AyozTZy0EbRUbK/0w=";
+    inherit (finalAttrs) version;
+    hash = "sha256-c9ZrYgOQ2XlZssTYosB3jUH+IFgb5HF/AeRrj66MVpU=";
   };
 
   postPatch = ''
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

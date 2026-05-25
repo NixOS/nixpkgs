@@ -20,6 +20,10 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DENABLE_SHARED=ON" ];
 
+  patches = [
+    ./cmake4.patch
+  ];
+
   meta = {
     description = "Fastest Fourier Transform in the South";
     homepage = "https://github.com/linkotec/ffts";

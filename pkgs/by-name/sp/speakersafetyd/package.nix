@@ -2,52 +2,66 @@
   stdenv,
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   pkg-config,
   alsa-lib,
-  rust,
+  udevCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "1.0.2";
+  version = "2.0.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-3DzBNebg1y/+psD2zOpDsnRJmabQLeO1UMxPq9M0CsU=";
+  src = fetchFromGitHub {
+    owner = "AsahiLinux";
+    repo = "speakersafetyd";
+    tag = finalAttrs.version;
+    hash = "sha256-tHHoVJqWcip5u/e7M9l74opdzfe0Y9Q6ItIT7w7XfA8=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DnOnqi60JsRX8yqEM/5zZ3yX/rk85/ruwL3aW1FRXKg=";
 
-  nativeBuildInputs = [ pkg-config ];
+  cargoHash = "sha256-v0w/eA/qd9xBivgq7BgdaGRGDdX2NA1gbRgv84cB6d4=";
+
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ alsa-lib ];
 
   postPatch = ''
-    substituteInPlace speakersafetyd.service --replace "/usr" "$out"
-    substituteInPlace Makefile --replace "target/release" "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
-    # creating files in /var does not make sense in a nix package
-    substituteInPlace Makefile --replace 'install -dDm0755 $(DESTDIR)/$(VARDIR)/lib/speakersafetyd/blackbox' ""
+    substituteInPlace speakersafetyd.service \
+      --replace-fail "/usr" \
+                     "$out"
+
+    substituteInPlace Makefile \
+      --replace-fail "target/release" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
   installFlags = [
-    "BINDIR=$(out)/bin"
-    "UNITDIR=$(out)/lib/systemd/system"
-    "UDEVDIR=$(out)/lib/udev/rules.d"
-    "SHAREDIR=$(out)/share"
-    "TMPFILESDIR=$(out)/lib/tmpfiles.d"
+    "DESTDIR=$(out)"
+    "BINDIR=bin"
+    "UNITDIR=lib/systemd/system"
+    "UDEVDIR=lib/udev/rules.d"
+    "SHAREDIR=share"
   ];
 
   dontCargoInstall = true;
+  doInstallCheck = true;
 
-  meta = with lib; {
-    description = "Userspace daemon written in Rust that implements an analogue of the Texas Instruments Smart Amp speaker protection model";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Userspace daemon that implements the Smart Amp protection model";
     mainProgram = "speakersafetyd";
     homepage = "https://github.com/AsahiLinux/speakersafetyd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       flokli
       yuka
     ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
-}
+})

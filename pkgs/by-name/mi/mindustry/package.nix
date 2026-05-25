@@ -1,12 +1,11 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   fetchFromGitHub,
-  gradle_8,
+  gradle,
   jdk17,
   zenity,
 
@@ -39,31 +38,31 @@
 
 let
   pname = "mindustry";
-  version = "146";
+  version = "155.4";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
 
   Mindustry = fetchFromGitHub {
+    name = "Mindustry-source";
     owner = "Anuken";
     repo = "Mindustry";
-    rev = "v${version}";
-    hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
+    tag = "v${version}";
+    hash = "sha256-NHI+YLh4ptuAEff6NM9ZgN2haB+iZ9np7nf6iRMzgHw=";
   };
   Arc = fetchFromGitHub {
+    name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
-    rev = "v${version}";
-    hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
+    tag = "v${version}";
+    hash = "sha256-9nUj9aP1yAvZEDBuJPfE4ZzGEbZOSuVK+KbD1kUG+dM=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's arc-core/build.gradle
-    rev = "v0.9";
-    hash = "sha256-6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
+    tag = "2025.12.01";
+    hash = "sha256-I+VZW34eRGn1RJmK8e9nVSXIFSOK/pER+xEhmXeUB4Y=";
   };
 
   desktopItem = makeDesktopItem {
@@ -93,63 +92,29 @@ stdenv.mkDerivation {
     runHook postUnpack
   '';
 
-  patches = [
-    ./0001-fix-include-path-for-SDL2-on-linux.patch
-    # Fix build with gradle 8.8, remove on next Arc release
-    (fetchpatch {
-      url = "https://github.com/Anuken/Arc/commit/2a91c51bf45d700091e397fd0b62384763901ae6.patch";
-      hash = "sha256-sSD78GmF14vBvNe+ajUJ4uIc4p857shTP/UkAK6Pyyg=";
-      extraPrefix = "Arc/";
-      stripLen = 1;
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Arc/commit/d7f8ea858c425410dbd43374271a703d4443b432.patch";
-      hash = "sha256-5LPgBOV0r/dUtpyxitTu3/9tMIqjeIKfGVJi3MEr7fQ=";
-      extraPrefix = "Arc/";
-      stripLen = 1;
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Mindustry/commit/695dad201fb4c2b4252f2ee5abde32e968169ba5.patch";
-      hash = "sha256-bbTjyfUl+XFG/dgD1XPddVKD/ImOP5ARAP3q0FPnt58=";
-      name = "always-use-local-arc-1.patch";
-      stripLen = 1;
-      extraPrefix = "Mindustry/";
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Mindustry/commit/f6082225e859c759c8d9c944250b6ecd490151ed.patch";
-      hash = "sha256-xFHdAUTS1EiHNQqw6qfzYk2LMr/DjeHoEzQfcfOUcFs=";
-      name = "always-use-local-arc-2.patch";
-      stripLen = 1;
-      extraPrefix = "Mindustry/";
-    })
-    (fetchpatch {
-      url = "https://github.com/Anuken/Mindustry/commit/e4eadbbb7f35db3093a0a3d13272bdfbedfaead3.patch";
-      hash = "sha256-L/XQAxh6UgKsTVTgQKDXNRIAdtVtaY4ameT/Yb/+1p8=";
-      name = "always-use-local-arc-3.patch";
-      stripLen = 1;
-      extraPrefix = "Mindustry/";
-    })
-  ];
+  postPatch = ''
+    # Ensure the prebuilt shared objects don't accidentally get shipped
+    rm -r Arc/natives/natives-*/libs/*
+    rm -r Arc/backends/backend-*/libs/*
+    rm -f Arc/arc-core/unsafe/unsafe.jar
 
-  postPatch =
-    ''
-      # Ensure the prebuilt shared objects don't accidentally get shipped
-      rm -r Arc/natives/natives-*/libs/*
-      rm -r Arc/backends/backend-*/libs/*
+    cd Mindustry
 
-      cd Mindustry
+    # Fix duplicate class entries in arc-core jar with newer Gradle
+    substituteInPlace ../Arc/arc-core/build.gradle \
+      --replace-fail 'jar{' 'jar{ duplicatesStrategy = DuplicatesStrategy.EXCLUDE'
 
-      # Remove unbuildable iOS stuff
-      sed -i '/^project(":ios"){/,/^}/d' build.gradle
-      sed -i '/robo(vm|VM)/d' build.gradle
-      rm ios/build.gradle
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86) ''
-      substituteInPlace ../Arc/arc-core/build.gradle \
-        --replace-fail "-msse" ""
-      substituteInPlace ../Arc/backends/backend-sdl/build.gradle \
-        --replace-fail "-m64" ""
-    '';
+    # Remove unbuildable iOS stuff
+    sed -i '/^project(":ios"){/,/^}/d' build.gradle
+    sed -i '/robo(vm|VM)/d' build.gradle
+    rm ios/build.gradle
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86) ''
+    substituteInPlace ../Arc/arc-core/build.gradle \
+      --replace-fail "-msse" ""
+    substituteInPlace ../Arc/backends/backend-sdl/build.gradle \
+      --replace-fail "-m64" ""
+  '';
 
   mitmCache = gradle.fetchDeps {
     inherit pname;
@@ -163,19 +128,18 @@ stdenv.mkDerivation {
     alsa-lib
     glew
   ];
-  nativeBuildInputs =
-    [
-      pkg-config
-      gradle
-      makeWrapper
-      jdk
-    ]
-    ++ lib.optionals enableClient [
-      ant
-      copyDesktopItems
-      curl
-      wget
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    gradle
+    makeWrapper
+    jdk
+  ]
+  ++ lib.optionals enableClient [
+    ant
+    copyDesktopItems
+    curl
+    wget
+  ];
 
   desktopItems = lib.optional enableClient desktopItem;
 
@@ -184,32 +148,39 @@ stdenv.mkDerivation {
     "-Dorg.gradle.java.home=${jdk}"
   ];
 
-  buildPhase =
-    ''
-      runHook preBuild
-    ''
-    + lib.optionalString enableServer ''
-      gradle server:dist
-    ''
-    + lib.optionalString enableClient ''
-      pushd ../Arc
-      gradle jnigenBuild
-      gradle jnigenJarNativesDesktop
-      glewlib=${lib.getLib glew}/lib/libGLEW.so
-      sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-      patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-        --add-needed $glewlib \
-        --add-needed $sdllib
-      # Put the freshly-built libraries where the pre-built libraries used to be:
-      cp arc-core/libs/*/* natives/natives-desktop/libs/
-      cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
-      popd
+  buildPhase = ''
+    runHook preBuild
 
-      gradle desktop:dist
-    ''
-    + ''
-      runHook postBuild
-    '';
+    pushd ../Arc
+    gradle :arc-core:recompileUnsafe
+    popd
+  ''
+  + lib.optionalString enableServer ''
+    gradle server:dist
+  ''
+  + lib.optionalString enableClient ''
+    pushd ../Arc
+    gradle jnigenBuildLinux64
+    # Copy freshly-built libraries to where Gradle resource dirs expect them.
+    # Using jnigenBuildLinux64 skips the postJni tasks, so we copy manually.
+    # arc-core uses relative libsDir, others use absolute which causes path doubling.
+    cp arc-core/libs/linux64/* natives/natives-desktop/libs/
+    cp -r backends/backend-sdl/build/Arc/backends/backend-sdl/libs/* backends/backend-sdl/libs/
+    cp extensions/freetype/build/Arc/extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+    cp extensions/filedialogs/build/Arc/extensions/filedialogs/libs/*/* natives/natives-filedialogs/libs/
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+      --add-needed "$glewlib" \
+      --add-needed "$sdllib"
+    gradle jnigenJarNativesDesktop
+    popd
+
+    gradle desktop:dist
+  ''
+  + ''
+    runHook postBuild
+  '';
 
   installPhase =
     let

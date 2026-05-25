@@ -4,51 +4,52 @@
   ...
 }@args:
 
+let
+  # JDK FX can potentially be different version than regular JDK
+  zuluVersion = if enableJavaFX then "21.50.19" else "21.50.19";
+  jdkVersion = "21.0.11";
+in
 callPackage ./common.nix (
   {
     # Details from https://www.azul.com/downloads/?version=java-21-lts&package=jdk
     # Note that the latest build may differ by platform
     dists = {
       x86_64-linux = {
-        zuluVersion = "21.36.17";
-        jdkVersion = "21.0.4";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-Q2bdM0/a2t5aBRCIzXBlhXamf8N7wdSUsK5VhaU9DcY="
+            "sha256-YG9T25gv8n+LQ5yHPCNnpcv5D5/YVXj6jrB8AWqzbY4="
           else
-            "sha256-MY0MLtPIdvt+oslSlFzc997PtSZMpRrs4VnmNaxT1UQ=";
+            "sha256-vF4zg0Mct/Hc6MJi3UdFAe6b11afHFmotv5cFYmqSlg=";
       };
 
       aarch64-linux = {
-        zuluVersion = "21.36.17";
-        jdkVersion = "21.0.4";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-BzNEcDrQo5yOWnEsJxw9JfXYdZGN6/wxnTDB0qC1i/0="
+            "sha256-yIcj1OeL2mGJwF0SYGYnuc03OvhpIupo/BC8qINnIUs="
           else
-            "sha256-2jwtfbM2cLz2ZTJEGut/M9zw0ifI2v5841zuZ/aCnEw=";
+            "sha256-zUvl6u1Q0rgUhd/iYOL6t+LJCoVL8Rt7+07raTZ1fEo=";
       };
 
       x86_64-darwin = {
-        zuluVersion = "21.36.17";
-        jdkVersion = "21.0.4";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-H3gM2XCCcuUxlAEzX6IO7Cp6NtH85PYHlH54k5XvNAc="
+            "sha256-5/L0FqpL6488uwzimXh9G6Io2cCTnU1+8n/6E+CNDK8="
           else
-            "sha256-XOdaaiR8cCm3TEynz29g/SstaM4eiVb7RI0phDFrX+o=";
+            "sha256-kGmQy+WZcx48jshfem8uctSg+ewcwYtrUqFuHi/Fk00=";
       };
 
       aarch64-darwin = {
-        zuluVersion = "21.36.17";
-        jdkVersion = "21.0.4";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-lLAb8MABo95A5WcayBLNvsBSdVFptnO4EmhX2gjo6r8="
+            "sha256-XEKUQWG187kByQOTpQrD4aCFCo+MyeuGGY2UqDRq/WQ="
           else
-            "sha256-vCdQ+BoWbMbpwwroqrpU8lOoyOydjPwEpVX+IHEse/8=";
+            "sha256-Wc+JaVGh880TKr/B90uk2x+RbsyBs8ACLFwWohrpQK0=";
       };
     };
   }
-  // builtins.removeAttrs args [ "callPackage" ]
+  // removeAttrs args [ "callPackage" ]
 )

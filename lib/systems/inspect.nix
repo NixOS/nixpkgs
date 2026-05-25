@@ -64,6 +64,11 @@ rec {
         bits = 64;
       };
     };
+    isAbiElfv1 = {
+      abi = {
+        abi = "elfv1";
+      };
+    };
     # This ABI is the default in NixOS PowerPC64 BE, but not on mainline GCC,
     # so it sometimes causes issues in certain packages that makes the wrong
     # assumption on the used ABI.
@@ -224,6 +229,16 @@ rec {
         family = "m68k";
       };
     };
+    isArc = {
+      cpu = {
+        family = "arc";
+      };
+    };
+    isSh4 = {
+      cpu = {
+        family = "sh";
+      };
+    };
     isS390 = {
       cpu = {
         family = "s390";
@@ -255,16 +270,16 @@ rec {
         bits = 64;
       };
     };
-    isILP32 =
-      [
-        {
-          cpu = {
-            family = "wasm";
-            bits = 32;
-          };
-        }
-      ]
-      ++ map
+    isILP32 = [
+      {
+        cpu = {
+          family = "wasm";
+          bits = 32;
+        };
+      }
+    ]
+    ++
+      map
         (a: {
           abi = {
             abi = a;
@@ -332,12 +347,15 @@ rec {
       kernel = kernels.windows;
     };
     isCygwin = {
-      kernel = kernels.windows;
-      abi = abis.cygnus;
+      kernel = kernels.cygwin;
     };
     isMinGW = {
       kernel = kernels.windows;
       abi = abis.gnu;
+    };
+    isMsvc = {
+      kernel = kernels.windows;
+      abi = abis.msvc;
     };
     isWasi = {
       kernel = kernels.wasi;
@@ -423,12 +441,24 @@ rec {
       }
     ];
 
+    isUefi = [
+      { kernel = kernels.uefi; }
+    ];
+
     isElf = {
       kernel.execFormat = execFormats.elf;
     };
     isMacho = {
       kernel.execFormat = execFormats.macho;
     };
+    isPE = {
+      kernel.execFormat = execFormats.pe;
+    };
+
+    isEabi = {
+      abi.eabi = true;
+    };
+
   };
 
   # given two patterns, return a pattern which is their logical AND.

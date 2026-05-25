@@ -13,26 +13,31 @@
 
 buildPythonPackage rec {
   pname = "google-geo-type";
-  version = "0.3.12";
+  version = "3.31.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-geo-type-v${version}";
-    hash = "sha256-5PzidE1CWN+pt7+gcAtbuXyL/pq6cnn0MCRkBfmeUSw=";
+    tag = "google-cloud-build-v${version}";
+    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
   };
 
   sourceRoot = "${src.name}/packages/google-geo-type";
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     google-api-core
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   pythonImportsCheck = [ "google.geo.type" ];
 

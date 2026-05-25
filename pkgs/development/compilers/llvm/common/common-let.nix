@@ -12,16 +12,19 @@ rec {
   llvm_meta = {
     license =
       with lib.licenses;
-      [ ncsa ]
-      ++
-        # Contributions after June 1st, 2024 are only licensed under asl20 and
-        # llvm-exception: https://github.com/llvm/llvm-project/pull/92394
-        lib.optionals (lib.versionAtLeast release_version "19") [
-          asl20
-          llvm-exception
-        ];
-    teams = [ lib.teams.llvm ];
-
+      # Contributions after June 1st, 2024 are only licensed under asl20 and
+      # llvm-exception: https://github.com/llvm/llvm-project/pull/92394
+      if lib.versionAtLeast release_version "19" then
+        AND [
+          ncsa
+          (WITH asl20 llvm-exception)
+        ]
+      else
+        ncsa;
+    teams = [
+      lib.teams.llvm
+      lib.teams.security-review
+    ];
     # See llvm/cmake/config-ix.cmake.
     platforms =
       lib.platforms.aarch64
@@ -31,9 +34,11 @@ rec {
       ++ lib.platforms.s390x
       ++ lib.platforms.wasi
       ++ lib.platforms.x86
-      ++ lib.optionals (lib.versionAtLeast release_version "7") lib.platforms.riscv
-      ++ lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k
-      ++ lib.optionals (lib.versionAtLeast release_version "16") lib.platforms.loongarch64;
+      ++ lib.platforms.riscv
+      ++ lib.platforms.m68k
+      ++ lib.platforms.loongarch64;
+
+    identifiers.cpeParts.vendor = "llvm";
   };
 
   releaseInfo =

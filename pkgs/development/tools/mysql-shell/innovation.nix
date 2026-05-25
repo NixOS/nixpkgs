@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "9.2.0";
-  mysqlServerVersion = "9.2.0";
+  mysqlShellVersion = "9.7.0";
+  mysqlServerVersion = "9.7.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-o50R/fbPjRsDtwjVN6kTLeS5mp601hApOTfwaHzTehI=";
+      hash = "sha256-dLV0urxWsOy2MqvTWdITxnlOz0Qq5Ekov8WB+z1iMG0=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-xuKXV8YllhDo7+6i5UYHAH7m7Jn5E/k0YdeN5MZSzl8=";
+      hash = "sha256-s/omxSFTC/n3B8OtYddDqXzCd4GE4b5O8NUKbLdvwRI=";
     })
   ];
 
@@ -73,49 +73,51 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace-fail /usr/bin/libtool libtool
 
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      patch -d .. -p1 < ${./mysql-server-libcxx-21.patch}
+    ''}
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      git
-      bison
-      makeWrapper
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      darwin.DarwinTools
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    git
+    bison
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    darwin.DarwinTools
+  ];
 
-  buildInputs =
-    [
-      curl
-      libedit
-      libssh
-      lz4
-      openssl
-      protobuf
-      readline
-      zlib
-      zstd
-      libevent
-      icu
-      re2
-      ncurses
-      libfido2
-      cyrus_sasl
-      openldap
-      python3
-      antlr.runtime.cpp
-    ]
-    ++ pythonDeps
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
+  buildInputs = [
+    curl
+    libedit
+    libssh
+    lz4
+    openssl
+    protobuf
+    readline
+    zlib
+    zstd
+    libevent
+    icu
+    re2
+    ncurses
+    libfido2
+    cyrus_sasl
+    openldap
+    python3
+    antlr.runtime.cpp
+  ]
+  ++ pythonDeps
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
-  env = {
-    ${if stdenv.cc.isGNU then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=maybe-uninitialized";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized -Wno-error=array-bounds";
   };
 
   preConfigure = ''

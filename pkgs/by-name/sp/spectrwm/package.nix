@@ -4,41 +4,50 @@
   fetchFromGitHub,
   libbsd,
   pkg-config,
-  libXrandr,
-  libXcursor,
-  libXft,
-  libXt,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxrandr,
+  libxcursor,
+  libxft,
+  libxt,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
+  writeShellScript,
+  curl,
+  jq,
+  nix-update,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spectrwm";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "conformal";
     repo = "spectrwm";
     tag = "SPECTRWM_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-Dnn/iIrceiAVuMR8iMGcc7LqNhWC496eT5gNrYOInRU=";
+    hash = "sha256-wuBF+gCoqg5xIcb42rygS+lglghWqoNe0uAzyhe76eI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libXrandr
-    libXcursor
-    libXft
-    libXt
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxrandr
+    libxcursor
+    libxft
+    libxt
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
     libbsd
   ];
 
   sourceRoot = finalAttrs.src.name + (if stdenv.hostPlatform.isDarwin then "/osx" else "/linux");
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.updateScript = writeShellScript "update-spectrwm" ''
+    latestVersion=$(${lib.getExe curl} ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --silent --fail --location https://api.github.com/repos/conformal/spectrwm/releases/latest | ${lib.getExe jq} --raw-output .tag_name | grep -oP '\d+' | paste -sd.)
+    ${lib.getExe nix-update} spectrwm --version=$latestVersion
+  '';
 
   meta = {
     description = "Tiling window manager";

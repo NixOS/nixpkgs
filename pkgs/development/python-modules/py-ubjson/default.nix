@@ -24,14 +24,14 @@ buildPythonPackage rec {
     "test_recursion"
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ubjson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal Binary JSON draft-12 serializer for Python";
     homepage = "https://github.com/Iotic-Labs/py-ubjson";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

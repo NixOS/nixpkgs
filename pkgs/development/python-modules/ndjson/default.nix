@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   six,
   watchdog,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "ndjson";
   version = "0.3.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ndjson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module supports ndjson";
     homepage = "https://github.com/rhgrant10/ndjson";
     changelog = "https://github.com/rhgrant10/ndjson/blob/v${version}/HISTORY.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

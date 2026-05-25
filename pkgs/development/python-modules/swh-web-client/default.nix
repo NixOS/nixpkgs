@@ -18,9 +18,9 @@
   types-requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-web-client";
-  version = "0.9.0";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -28,13 +28,18 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-web-client";
-    tag = "v${version}";
-    hash = "sha256-/h3TaEwo2+B89KFpIKi9LH0tlGplsv3y18pC0TKM0jA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZZptYLC1os2i0NtBD3mp4QaQQRoKxnr9k8gJuqmpizE=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  pythonRelaxDeps = [
+    # we patched click 8.2.1
+    "click"
   ];
 
   dependencies = [
@@ -63,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

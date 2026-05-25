@@ -1,12 +1,18 @@
 {
   lib,
   fetchFromGitHub,
-  flutter332,
-  mesa,
-  libglvnd,
+  flutter341,
   callPackage,
   makeDesktopItem,
   copyDesktopItems,
+
+  # Needed for update script.
+  _experimental-update-script-combinators,
+  gitUpdater,
+  runCommand,
+  sideswap,
+  yq-go,
+  dart,
 }:
 
 let
@@ -14,31 +20,24 @@ let
   libsideswap-client = callPackage ./libsideswap-client.nix { };
 in
 
-flutter332.buildFlutterApplication rec {
+flutter341.buildFlutterApplication (finalAttrs: {
   pname = "sideswap";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "sideswap-io";
     repo = "sideswapclient";
-    tag = "v${version}";
-    hash = "sha256-IUUMlaEIUil07nhjep1I+F1WEWakQZfhy42ZlnyRLcQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E+njx//oCr85nwF8rvuOjDTNvs5177+lh9uy5LEvTVE=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  gitHashes = {
-    sideswap_logger = "sha256-cTJfSODRmIJXctLQ++BfvJ6OKflau94AjQdXg7j95B0=";
-    sideswap_websocket = "sha256-vsG5eUFu/WJvY3y6jaWD/5GfULwpqh3bO4EZmmBSkbs=";
-    window_size = "sha256-+lqY46ZURT0qcqPvHFXUnd83Uvfq79Xr+rw1AHqrpak=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   # Provide OpenGL and libsideswap_client.so for the Flutter application.
   extraWrapProgramArgs = ''
-    --set LD_LIBRARY_PATH ${
+    --prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
-        mesa
-        libglvnd
         libsideswap-client
       ]
     }
@@ -54,11 +53,11 @@ flutter332.buildFlutterApplication rec {
   desktopItems = [
     (makeDesktopItem {
       name = "sideswap";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       desktopName = "SideSwap";
       genericName = "L-USDT Wallet";
       icon = "sideswap";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Finance"
         "Network"
@@ -72,6 +71,56 @@ flutter332.buildFlutterApplication rec {
     copyDesktopItems
   ];
 
+  passthru = {
+    # Expose lib to access it via sideswap.lib from the update script.
+    lib = libsideswap-client;
+
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit (finalAttrs) src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+
+    # Usage: nix-shell maintainers/scripts/update.nix --argstr package sideswap
+    updateScript = _experimental-update-script-combinators.sequence [
+      # Update sideswap to new release.
+      (
+        (gitUpdater { rev-prefix = "v"; })
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+
+      # Update pubspec.lock.json file and related gitHashes attribute.
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "sideswap.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+
+      # Update libsideswap-client sub-package.
+      {
+        command = [ ./update-libsideswap-client.sh ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
+
   meta = {
     description = "Cross‑platform, non‑custodial wallet and atomic swap marketplace for the Liquid Network";
     homepage = "https://sideswap.io/";
@@ -80,4 +129,4 @@ flutter332.buildFlutterApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ starius ];
   };
-}
+})

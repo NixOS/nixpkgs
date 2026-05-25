@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     mainProgram = "clerk";
     maintainers = with lib.maintainers; [
       anderspapitto
-      rewine
+      wineee
     ];
     platforms = lib.platforms.linux;
   };

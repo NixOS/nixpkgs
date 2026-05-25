@@ -24,7 +24,7 @@ let
             DOCKER_HOST = "unix:///run/podman/podman.sock";
           }
         '';
-        description = "woodpecker-agent config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/agent-config)";
+        description = "woodpecker-agent config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/configuration/agent)";
       };
 
       extraGroups = lib.mkOption {
@@ -110,7 +110,10 @@ let
   };
 in
 {
-  meta.maintainers = with lib.maintainers; [ ambroisie ];
+  meta.maintainers = with lib.maintainers; [
+    ambroisie
+    marcusramberg
+  ];
 
   options = {
     services.woodpecker-agents = {

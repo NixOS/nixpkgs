@@ -2,22 +2,28 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  autoconf-archive,
   autoreconfHook,
+  bison,
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "html2text";
-  version = "2.2.3";
+  version = "2.4.0";
 
   src = fetchFromGitLab {
     owner = "grobian";
     repo = "html2text";
-    rev = "v${version}";
-    hash = "sha256-7Ch51nJ5BeRqs4PEIPnjCGk+Nm2ydgJQCtkcpihXun8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-C229ogU2YStXWizb51whQXc6oSkVnclnOeJYlIMvHWM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    bison
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
@@ -29,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eikek ];
   };
-}
+})

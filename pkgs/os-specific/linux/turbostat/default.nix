@@ -16,11 +16,11 @@ stdenv.mkDerivation {
     cd tools/power/x86/turbostat
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Report processor frequency and idle statistics";
     mainProgram = "turbostat";
     homepage = "https://www.kernel.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     cp -r share $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Changes the current Ruby";
     homepage = "https://github.com/postmodern/chruby";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "chruby-exec";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

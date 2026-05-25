@@ -4,26 +4,25 @@
   fetchFromGitLab,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taschenrechner";
-  version = "1.5.0";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.fem-net.de";
     owner = "mabl";
     repo = "taschenrechner";
-    rev = version;
-    hash = "sha256-ZZVghL0R3p5sE8V9Z0MsmTiCacuE2RXohQQEYJYgp/o=";
+    rev = finalAttrs.version;
+    hash = "sha256-lUQmgC3GcLJ2BxE+UOHPBfl8XMclgMrk+rClZI06giE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/tgfHU4/B7tes2jU8L/MbWIG1sTLg9exWhmuSA6Davk=";
+  cargoHash = "sha256-1DNEsVwrGekCuQTgBNAe+j/4JKk0EFgkSklTXAjwFXU=";
 
-  meta = with lib; {
+  meta = {
     description = "Cli-calculator written in Rust";
     homepage = "https://gitlab.fem-net.de/mabl/taschenrechner";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ netali ];
     mainProgram = "taschenrechner";
   };
-}
+})

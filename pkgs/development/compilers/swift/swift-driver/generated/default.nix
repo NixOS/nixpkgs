@@ -2,10 +2,10 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "swift-argument-parser" = "1jph9w7lk9nr20fsv2c8p4hisx3dda817fh7pybd0r0j1jwa9nmw";
-    "swift-llbuild" = "106vnssh6pgy5s9dnq1hi1c9v2wkfydqgncg5dy7c9n23iisjy3s";
-    "swift-system" = "0402hkx2q2dv27gccnn8ma79ngvwiwzkhcv4zlcdldmy6cgi0px7";
-    "swift-tools-support-core" = "1qvblyiazv58qwyxgyk2dh5ymbab3y70vm2q81qs6rmv43hs8ciz";
-    "Yams" = "11abhcfkmqm3cmh7vp7rqzvxd1zj02j2866a2pp6v9m89456xb76";
+    "swift-argument-parser" = "sha256-G4Tz/AdL5WbRq93aJnQhMjHLH7dEuhmXL3PPn+0H6vM=";
+    "swift-llbuild" = "sha256-kUm8/+DWDBhuqU/kJBleqSl8/Vz478pMhx5QK2g7k0o=";
+    "swift-system" = "sha256-p18QHzO+NtoY/WQzOD+PfD+bjqrIWsbeEbsJLPqEAhA=";
+    "swift-tools-support-core" = "sha256-Pqy01AyDg7ZTyDM6lV69e6nhfhxwFTOhGFTfhcA1e9E=";
+    "Yams" = "sha256-5qxuCkmopm3uFcoYJKQA8ofW98f53H1gZaPiOh2DS4U=";
   };
 }

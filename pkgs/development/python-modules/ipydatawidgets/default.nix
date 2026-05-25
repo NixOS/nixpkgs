@@ -13,6 +13,8 @@
 }:
 
 buildPythonPackage rec {
+  __structuredAttrs = true;
+
   pname = "ipydatawidgets";
   version = "4.3.5";
   format = "setuptools";
@@ -43,12 +45,12 @@ buildPythonPackage rec {
   # Tests bind ports
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # https://github.com/vidartf/ipydatawidgets/issues/62
-    "--deselect=ipydatawidgets/tests/test_ndarray_trait.py::test_dtype_coerce"
+    "ipydatawidgets/tests/test_ndarray_trait.py::test_dtype_coerce"
 
     # https://github.com/vidartf/ipydatawidgets/issues/63
-    "--deselect=examples/test.ipynb::Cell\\\ 3"
+    "examples/test.ipynb::Cell 3"
   ];
 
   meta = {

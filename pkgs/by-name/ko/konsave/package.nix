@@ -4,32 +4,35 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "konsave";
   version = "2.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Konsave";
     hash = "sha256-tWarqT2jFgCuSsa2NwMHRaR3/wj0khiRHidvRNMwM8M=";
   };
 
-  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
-  propagatedBuildInputs = with python3Packages; [
-    pyyaml
+  build-system = with python3Packages; [
     setuptools
+    setuptools-scm
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  dependencies = with python3Packages; [
+    pyyaml
+    setuptools # pkg_resources is imported during runtime
+  ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "konsave" ];
+
+  meta = {
     description = "Save Linux Customization";
     mainProgram = "konsave";
-    maintainers = with maintainers; [ MoritzBoehme ];
+    maintainers = with lib.maintainers; [ MoritzBoehme ];
     homepage = "https://github.com/Prayag2/konsave";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
-}
+})

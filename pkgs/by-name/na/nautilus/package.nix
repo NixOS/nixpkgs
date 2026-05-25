@@ -8,6 +8,7 @@
   gi-docgen,
   docbook-xsl-nons,
   gettext,
+  blueprint-compiler,
   desktop-file-utils,
   wayland-scanner,
   wrapGAppsHook4,
@@ -18,16 +19,19 @@
   adwaita-icon-theme,
   gnome-autoar,
   glib-networking,
+  icu,
   shared-mime-info,
   libnotify,
   libexif,
+  libglycin,
+  libglycin-gtk4,
   libjxl,
   libseccomp,
   librsvg,
   webp-pixbuf-loader,
   tinysparql,
   localsearch,
-  gexiv2,
+  gexiv2_0_16,
   libselinux,
   libcloudproviders,
   gdk-pixbuf,
@@ -40,7 +44,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "48.1";
+  version = "50.1";
 
   outputs = [
     "out"
@@ -50,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eZWioXwp1LCav53ZrKFLje597DvXR3bdN5US8ubXNH8=";
+    hash = "sha256-1ieTuWWXcbZqa24FK1Iin4aN2+wTiKC2ae7wvSESEu4=";
   };
 
   patches = [
@@ -59,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     gettext
     gobject-introspection
@@ -72,8 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gexiv2
+    gexiv2_0_16
     glib-networking
+    icu
     gnome-desktop
     adwaita-icon-theme
     gsettings-desktop-schemas
@@ -92,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
     localsearch
     gnome-autoar
+    libglycin
+    libglycin-gtk4
   ];
 
   propagatedBuildInputs = [
@@ -125,12 +133,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "File manager for GNOME";
     homepage = "https://apps.gnome.org/Nautilus/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
     mainProgram = "nautilus";
   };
 })

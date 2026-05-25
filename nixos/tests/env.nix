@@ -1,9 +1,6 @@
 { pkgs, ... }:
 {
   name = "environment";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus ];
-  };
 
   nodes.machine =
     { pkgs, lib, ... }:

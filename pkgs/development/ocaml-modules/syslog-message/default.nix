@@ -27,10 +27,10 @@ buildDunePackage rec {
     qcheck
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Syslog message parser";
     homepage = "https://github.com/verbosemode/syslog-message";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

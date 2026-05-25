@@ -16,14 +16,14 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mimic";
   version = "1.3.0.1";
 
   src = fetchFromGitHub {
     owner = "MycroftAI";
     repo = "mimic1";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1agwgby9ql8r3x5rd1rgx3xp9y4cdg4pi3kqlz3vanv9na8nf3id";
   };
 
@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
     libtool
     icu
     pcre2
-  ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  ]
+  ++ lib.optional pulseaudioSupport libpulseaudio;
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
@@ -68,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.fx-chun ];
   };
-}
+})

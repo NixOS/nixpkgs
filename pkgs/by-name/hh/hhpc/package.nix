@@ -2,34 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libx11,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hhpc";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "aktau";
     repo = "hhpc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1djsw1r38mh6zx0rbyn2cfa931hyddib4fl3i27c4z7xinl709ss";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp hhpc $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hides the mouse pointer in X11";
-    maintainers = with maintainers; [ nico202 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ nico202 ];
+    platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
     mainProgram = "hhpc";
   };
-}
+})

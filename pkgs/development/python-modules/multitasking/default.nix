@@ -2,26 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "multitasking";
-  version = "0.0.11";
-  format = "setuptools";
+  version = "0.0.13";
+  pyproject = true;
 
-  # GitHub source releases aren't tagged
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TWvDzGX5stynL7Wnh4UKiNro9iDCs2rptVJI5RvNYCY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-2Ja134d8nKXu3b8OWZQSRpTWy1NaummPsjNExwJRVaE=";
   };
+
+  build-system = [ setuptools ];
 
   doCheck = false; # No tests included
+
   pythonImportsCheck = [ "multitasking" ];
 
-  meta = with lib; {
+  meta = {
     description = "Non-blocking Python methods using decorators";
     homepage = "https://github.com/ranaroussi/multitasking";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/ranaroussi/multitasking/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

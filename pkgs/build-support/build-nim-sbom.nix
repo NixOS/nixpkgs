@@ -4,7 +4,7 @@
   fetchgit,
   fetchzip,
   runCommand,
-  xorg,
+  lndir,
   nim,
   nimOverrides,
 }:
@@ -70,7 +70,7 @@ let
           "out"
           "src"
         ];
-        nativeBuildInputs = [ xorg.lndir ];
+        nativeBuildInputs = [ lndir ];
       }
       ''
         cat << EOF >> $out

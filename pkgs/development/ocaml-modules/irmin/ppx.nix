@@ -7,13 +7,13 @@
   logs,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_irmin";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    hash = "sha256-kqneegoqNcL+ugw1qAax8N8kwcDRUWTuvz+RkpbSZxU=";
+    url = "https://github.com/mirage/irmin/releases/download/${finalAttrs.version}/irmin-${finalAttrs.version}.tbz";
+    hash = "sha256-CZlvvMLEPhF6m9jpAoxjXoHMyyZNXgLUJauLBrus29s=";
   };
 
   minimalOCamlVersion = "4.10";
@@ -33,4 +33,4 @@ buildDunePackage rec {
       sternenseemann
     ];
   };
-}
+})

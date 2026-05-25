@@ -1,20 +1,21 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   ocamlPackages,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "analysis";
-  version = "1.62.0";
+  version = "1.72.0";
 
   minimalOCamlVersion = "4.10";
 
   src = fetchFromGitHub {
     owner = "rescript-lang";
     repo = "rescript-vscode";
-    rev = version;
-    hash = "sha256-v+qCVge57wvA97mtzbxAX9Fvi7ruo6ZyIC14O8uWl9Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-bGCQ/HC6ItQMR0v0wLsF9pNX/Y1sBnp7E+Am0flWhGk=";
   };
 
   strictDeps = true;
@@ -22,14 +23,22 @@ ocamlPackages.buildDunePackage rec {
     ocamlPackages.cppo
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "([0-9]+\\.[0-9]+\\.[0-9]+)"
+    ];
+  };
+
   meta = {
     description = "Analysis binary for the ReScript VSCode plugin";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
-    maintainers = [
-      lib.maintainers.dlip
-      lib.maintainers.jayesh-bhoot
+    changelog = "https://github.com/rescript-lang/rescript-vscode/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      jayesh-bhoot
+      RossSmyth
     ];
     license = lib.licenses.mit;
     mainProgram = "rescript-editor-analysis";
   };
-}
+})

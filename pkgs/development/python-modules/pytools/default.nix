@@ -6,21 +6,18 @@
   numpy,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   siphash24,
 }:
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2025.1.6";
+  version = "2026.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k44d+Zl7pax3EDSkmw5jgBvZOiuS5qOPQyQVGaH7Mis=";
+    hash = "sha256-e2Q4yl7N7e5C4WyMtwLCrlYqmPsmLawaOwGxIcw0vtU=";
   };
 
   build-system = [ hatchling ];
@@ -41,7 +38,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pytools"
-    "pytools.batchjob"
     "pytools.lex"
   ];
 
@@ -50,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inducer/pytools/";
     changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ artuuge ];
+    maintainers = [ ];
   };
 }

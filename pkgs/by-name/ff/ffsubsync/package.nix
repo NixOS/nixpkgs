@@ -2,18 +2,19 @@
   lib,
   python3,
   fetchFromGitHub,
+  ffmpeg,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ffsubsync";
-  version = "0.4.29";
+  version = "0.4.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
-    tag = version;
-    hash = "sha256-XMFobdr/nzr5pXjz/jWa/Pp14ITdbxAce0Iz+5qcBO4=";
+    tag = finalAttrs.version;
+    hash = "sha256-j9E4h2de2EOtYpuxKFbPOxZ5FBRO0EkbZhJdx5RiPn8=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -23,9 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     charset-normalizer
     faust-cchardet
     ffmpeg-python
-    future
     numpy
-    pkgs.ffmpeg
     pysubs2
     chardet
     rich
@@ -41,6 +40,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ffsubsync" ];
 
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${ffmpeg}/bin"
+  ];
+
   meta = {
     homepage = "https://github.com/smacke/ffsubsync";
     description = "Automagically synchronize subtitles with video";
@@ -48,4 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "ffsubsync";
   };
-}
+})

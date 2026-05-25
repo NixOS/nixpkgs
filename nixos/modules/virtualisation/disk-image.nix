@@ -50,7 +50,7 @@ in
     };
 
     system.nixos.tags = [ cfg.format ] ++ lib.optionals cfg.efiSupport [ "efi" ];
-    image.extension = cfg.format;
+    image.extension = if cfg.format == "raw" then "img" else cfg.format;
     system.build.image = import ../../lib/make-disk-image.nix {
       inherit lib config pkgs;
       inherit (config.virtualisation) diskSize;

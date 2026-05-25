@@ -9,7 +9,7 @@
   corrscope,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "corrscope";
   version = "0.11.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-76qa4jOSncK1eDly/uXJzpWWdsEz7Hg3DyFb7rmrQBc=";
   };
 
@@ -29,19 +29,18 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  buildInputs =
+  buildInputs = [
+    ffmpeg
+  ]
+  ++ (
+    with qt6Packages;
     [
-      ffmpeg
+      qtbase
     ]
-    ++ (
-      with qt6Packages;
-      [
-        qtbase
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        qtwayland
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ]
+  );
 
   dependencies = (
     with python3Packages;
@@ -61,6 +60,10 @@ python3Packages.buildPythonApplication rec {
       appnope
     ]
   );
+
+  pythonRelaxDeps = [
+    "ruamel-yaml"
+  ];
 
   dontWrapQtApps = true;
 
@@ -89,10 +92,10 @@ python3Packages.buildPythonApplication rec {
       Genesis/FM synthesis) which jump around on other oscilloscope programs.
     '';
     homepage = "https://github.com/corrscope/corrscope";
-    changelog = "https://github.com/corrscope/corrscope/releases/tag/${version}";
+    changelog = "https://github.com/corrscope/corrscope/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
     mainProgram = "corr";
   };
-}
+})

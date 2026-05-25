@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hurry-filesize";
   version = "0.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hurry.filesize";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-9TaDKa2++GrM07yUkFIjQLt5JgRVromxpCwQ9jgBuaY=";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hurry.filesize" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python library for human readable file sizes (or anything sized in bytes)";
     homepage = "https://pypi.org/project/hurry.filesize/";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

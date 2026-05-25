@@ -2,30 +2,31 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
   stdenv,
-  apple-sdk_14,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "1fps";
-  version = "0.1.10";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "1fpsvideo";
     repo = "1fps";
-    rev = "v${version}";
-    hash = "sha256-3uPGFxEWmKQxQWPmotZI29GykUGQDjtDjFPps4QMs0M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8dtcW/niwmhVXB2kZdR/RjNg2ArSClL1w4nGI5rP3+Y=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-J3RGQhjpGURmXOwq19BbbNg5ERrUXHnSG5Id6gX7Nug=";
+  vendorHash = "sha256-29x5Lh++NBAsg2O2Vr6pf9iRuVOvow2R5Iqz6twZGXA=";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXi
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
+    libx11
+    libxtst
+    libxi
+  ];
 
   meta = {
     description = "Encrypted Screen Sharing";
@@ -34,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ renesat ];
     mainProgram = "1fps";
   };
-}
+})

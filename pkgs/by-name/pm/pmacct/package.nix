@@ -2,12 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
   libtool,
   libpcap,
   libcdada,
   # Optional Dependencies
+  withKafka ? true,
+  rdkafka,
   withJansson ? true,
   jansson,
   withNflog ? true,
@@ -36,39 +39,47 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3gV6GUhTQnH09NRIJQI0xBn05Bgo3AJsE2cSxNPXITo=";
   };
 
+  patches = [
+    # Fixes GCC15 compatability
+    # Can be removed with the next release
+    # Custom version of https://github.com/pmacct/pmacct/commit/6466578967d3d39c46f7ec10b308bca36568697d.patch
+    # without the copyright date changes.
+    ./gcc15-compat.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     libtool
   ];
-  buildInputs =
-    [
-      libcdada
-      libpcap
-    ]
-    ++ lib.optional withJansson jansson
-    ++ lib.optional withNflog libnetfilter_log
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withPgSQL libpq
-    ++ lib.optionals withMysql [
-      libmysqlclient
-      zlib
-      numactl
-    ]
-    ++ lib.optional gnutlsSupport gnutls;
+  buildInputs = [
+    libcdada
+    libpcap
+  ]
+  ++ lib.optional withKafka rdkafka
+  ++ lib.optional withJansson jansson
+  ++ lib.optional withNflog libnetfilter_log
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withPgSQL libpq
+  ++ lib.optionals withMysql [
+    libmysqlclient
+    zlib
+    numactl
+  ]
+  ++ lib.optional gnutlsSupport gnutls;
 
-  MYSQL_CONFIG = lib.optionalString withMysql "${lib.getDev libmysqlclient}/bin/mysql_config";
+  env.MYSQL_CONFIG = lib.optionalString withMysql "${lib.getDev libmysqlclient}/bin/mysql_config";
 
-  configureFlags =
-    [
-      "--with-pcap-includes=${libpcap}/include"
-    ]
-    ++ lib.optional withJansson "--enable-jansson"
-    ++ lib.optional withNflog "--enable-nflog"
-    ++ lib.optional withSQLite "--enable-sqlite3"
-    ++ lib.optional withPgSQL "--enable-pgsql"
-    ++ lib.optional withMysql "--enable-mysql"
-    ++ lib.optional gnutlsSupport "--enable-gnutls";
+  configureFlags = [
+    "--with-pcap-includes=${libpcap}/include"
+  ]
+  ++ lib.optional withKafka "--enable-kafka"
+  ++ lib.optional withJansson "--enable-jansson"
+  ++ lib.optional withNflog "--enable-nflog"
+  ++ lib.optional withSQLite "--enable-sqlite3"
+  ++ lib.optional withPgSQL "--enable-pgsql"
+  ++ lib.optional withMysql "--enable-mysql"
+  ++ lib.optional gnutlsSupport "--enable-gnutls";
 
   passthru.tests = {
     version = testers.testVersion {

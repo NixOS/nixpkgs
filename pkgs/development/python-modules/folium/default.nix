@@ -1,8 +1,9 @@
 {
   lib,
-  branca,
   buildPythonPackage,
+  branca,
   fetchFromGitHub,
+  fetchpatch2,
   geodatasets,
   geopandas,
   jinja2,
@@ -10,8 +11,8 @@
   numpy,
   pandas,
   pillow,
+  pixelmatch,
   pytestCheckHook,
-  pythonOlder,
   requests,
   selenium,
   setuptools,
@@ -21,17 +22,24 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.19.5";
+  version = "0.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = "folium";
     tag = "v${version}";
-    hash = "sha256-jZrGJWSmQXQNlZYldeNSh5AhlTHow5gxCEkksEoKZ7E=";
+    hash = "sha256-yLF4TdrMVEtWvGXZGbwa3OxCkdXMsN4m45rPrGDHlCU=";
   };
+
+  patches = [
+    # https://github.com/python-visualization/folium/pull/2223
+    (fetchpatch2 {
+      name = "folium-fix-tests-proj-9.8.1";
+      url = "https://github.com/python-visualization/folium/commit/b4ea8aa12d0808536c4f50b63eddd006e68680cb.patch?full_index=1";
+      hash = "sha256-e6PFvK/qAfVTPs8LF2XgojwFJ/s2PDrIuwEkxRUzSkE=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -52,16 +60,16 @@ buildPythonPackage rec {
     nbconvert
     pandas
     pillow
+    pixelmatch
     pytestCheckHook
+    selenium
   ];
 
   disabledTests = [
     # Tests require internet connection
-    "test__repr_png_is_bytes"
-    "test_geojson"
-    "test_heat_map_with_weights"
     "test_json_request"
-    "test_notebook"
+    # no selenium driver
+    "test__repr_png_is_bytes"
     "test_valid_png_size"
     "test_valid_png"
     # pooch tries to write somewhere it can, and geodatasets does not give us an env var to customize this.
@@ -69,7 +77,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Import issue with selenium.webdriver.common.fedcm
+    # Selenium cannot find chrome driver, even with chromedriver package
+    "tests/snapshots/test_snapshots.py"
     "tests/selenium"
   ];
 

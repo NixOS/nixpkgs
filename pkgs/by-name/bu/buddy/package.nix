@@ -5,12 +5,12 @@
   bison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "buddy";
   version = "2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/buddy/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/buddy/buddy-${finalAttrs.version}.tar.gz";
     sha256 = "0dl86l9xkl33wnkz684xa9axhcxx2zzi4q5lii0axnb9lsk81pyk";
   };
 
@@ -20,15 +20,23 @@ stdenv.mkDerivation rec {
     "CFLAGS=-O3"
     "CXXFLAGS=-O3"
   ];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=register";
-  NIX_LDFLAGS = "-lm";
+  env = {
+    NIX_LDFLAGS = "-lm";
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=register";
+  };
+
   doCheck = true;
 
   meta = {
     homepage = "https://sourceforge.net/projects/buddy/";
     description = "Binary decision diagram package";
-    license = "as-is";
+    license = {
+      url = "https://sourceforge.net/p/buddy/gitcode/ci/master/tree/README";
+      fullName = "Buddy License";
+    };
 
     platforms = lib.platforms.unix; # Once had cygwin problems
   };
-}
+})

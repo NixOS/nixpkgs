@@ -7,7 +7,6 @@
   jinja2,
   mako,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlalchemy,
   virtualenv,
@@ -15,16 +14,14 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pecan";
-  version = "1.6.0";
+  version = "1.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-X9RGlYPu0t7Te00QpHDhGl3j88lj3IeYTncuJcVv7T4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-L5+86obo2/Gi0olUIlVHY0oonbcgHndkUWpdzobBFt4=";
   };
 
   build-system = [ setuptools ];
@@ -45,15 +42,18 @@ buildPythonPackage rec {
     webtest
   ];
 
-  pytestFlagsArray = [ "--pyargs pecan" ];
+  pytestFlags = [
+    "--pyargs"
+    "pecan"
+  ];
 
   pythonImportsCheck = [ "pecan" ];
 
-  meta = with lib; {
+  meta = {
     description = "WSGI object-dispatching web framework";
     homepage = "https://www.pecanpy.org/";
-    changelog = "https://github.com/pecan/pecan/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ applePrincess ];
+    changelog = "https://github.com/pecan/pecan/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ applePrincess ];
   };
-}
+})

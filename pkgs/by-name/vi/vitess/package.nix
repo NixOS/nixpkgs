@@ -5,18 +5,18 @@
   sqlite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vitess";
-  version = "22.0.0";
+  version = "23.0.3";
 
   src = fetchFromGitHub {
     owner = "vitessio";
     repo = "vitess";
-    rev = "v${version}";
-    hash = "sha256-YfFGKOYlsCy9mSjtRB+ajmXnXIB8Awjm54DGGhTnu5U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cLpVpdYpMzJX5Y4RBuUp2SbedBHiqG+SRu8Oh+dowFY=";
   };
 
-  vendorHash = "sha256-0rgosDZn/DZcEK8f1JE2ICiOQX1GU2H93EEAlvesNE8=";
+  vendorHash = "sha256-YhWa5eUeMCqmA+8Mi3lxQTSQ29xMpWWAb2BQPN1/+N8=";
 
   buildInputs = [ sqlite ];
 
@@ -27,9 +27,9 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://vitess.io/";
-    changelog = "https://github.com/vitessio/vitess/releases/tag/v${version}";
+    changelog = "https://github.com/vitessio/vitess/releases/tag/v${finalAttrs.version}";
     description = "Database clustering system for horizontal scaling of MySQL";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
   };
-}
+})

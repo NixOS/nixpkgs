@@ -26,6 +26,6 @@ let
 in
 nixosOptionsDoc {
   documentType = "none";
-  options = builtins.removeAttrs configuration.options [ "_module" ];
+  options = removeAttrs configuration.options [ "_module" ];
   transformOptions = opt: opt // { declarations = map transformDeclaration opt.declarations; };
 }

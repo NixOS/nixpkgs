@@ -42,11 +42,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kid3";
-  version = "3.9.6";
+  version = "3.9.7";
 
   src = fetchurl {
     url = "mirror://kde/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zyf/zENpyZQNp7/BL9EN+9pSa4GH5bYmYqvoBp/CbCc=";
+    hash = "sha256-+c/u99Td3nitiXiHbLNSWEOjAlBPVHwiXpwiyB1xB2A=";
   };
 
   nativeBuildInputs = [
@@ -59,34 +59,33 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
+  buildInputs = [
+    chromaprint
+    ffmpeg
+    flac
+    id3lib
+    libogg
+    libvorbis
+    libxslt
+    mp4v2
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    readline
+    taglib
+    zlib
+  ]
+  ++ lib.optionals withKDE (
+    with kdePackages;
     [
-      chromaprint
-      ffmpeg
-      flac
-      id3lib
-      libogg
-      libvorbis
-      libxslt
-      mp4v2
-      qtbase
-      qtdeclarative
-      qtmultimedia
-      readline
-      taglib
-      zlib
+      kconfig
+      kconfigwidgets
+      kcoreaddons
+      kio
+      kxmlgui
+      phonon
     ]
-    ++ lib.optionals withKDE (
-      with kdePackages;
-      [
-        kconfig
-        kconfigwidgets
-        kcoreaddons
-        kio
-        kxmlgui
-        phonon
-      ]
-    );
+  );
 
   cmakeFlags = [
     (lib.cmakeFeature "WITH_APPS" apps)
@@ -139,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
         "kid3"
       else
         "kid3-cli";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

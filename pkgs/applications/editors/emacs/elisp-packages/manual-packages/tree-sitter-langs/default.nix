@@ -31,12 +31,10 @@ let
 
 in
 melpaStablePackages.tree-sitter-langs.overrideAttrs (old: {
-  postPatch =
-    old.postPatch or ""
-    + ''
-      substituteInPlace ./tree-sitter-langs-build.el \
-      --replace "tree-sitter-langs-grammar-dir tree-sitter-langs--dir"  "tree-sitter-langs-grammar-dir \"${grammarDir}/langs\""
-    '';
+  postPatch = old.postPatch or "" + ''
+    substituteInPlace ./tree-sitter-langs-build.el \
+    --replace "tree-sitter-langs-grammar-dir tree-sitter-langs--dir"  "tree-sitter-langs-grammar-dir \"${grammarDir}/langs\""
+  '';
 
   postInstall =
     old.postInstall or ""

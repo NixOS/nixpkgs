@@ -48,10 +48,10 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library that may be linked into a C/C++ program to produce symbolic backtraces";
     homepage = "https://github.com/ianlancetaylor/libbacktrace";
-    maintainers = with maintainers; [ twey ];
-    license = with licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ twey ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }

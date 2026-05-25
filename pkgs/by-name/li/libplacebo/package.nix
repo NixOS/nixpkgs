@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -12,36 +11,25 @@
   shaderc,
   lcms2,
   libGL,
-  libX11,
+  libx11,
   libunwind,
   libdovi,
-  xxHash,
+  xxhash,
   fast-float,
   vulkanSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libplacebo";
-  version = "7.351.0";
+  version = "7.360.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "libplacebo";
-    rev = "v${version}";
-    hash = "sha256-ccoEFpp6tOFdrfMyE0JNKKMAdN4Q95tP7j7vzUj+lSQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h8uMWRe4SysbKNLWdGYxAwj2k7yh4sO62/Ca30mRT3g=";
   };
-
-  patches = [
-    # Breaks mpv vulkan shaders:
-    #   https://code.videolan.org/videolan/libplacebo/-/issues/335
-    (fetchpatch {
-      name = "fix-shaders.patch";
-      url = "https://github.com/haasn/libplacebo/commit/4c6d99edee23284f93b07f0f045cd660327465eb.patch";
-      revert = true;
-      hash = "sha256-zoCgd9POlhFTEOzQmSHFZmJXgO8Zg/f9LtSTSQq5nUA=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -51,35 +39,33 @@ stdenv.mkDerivation rec {
     python3Packages.glad2
   ];
 
-  buildInputs =
-    [
-      shaderc
-      lcms2
-      libGL
-      libX11
-      libunwind
-      libdovi
-      xxHash
-      vulkan-headers
-    ]
-    ++ lib.optionals vulkanSupport [
-      vulkan-loader
-    ]
-    ++ lib.optionals (!stdenv.cc.isGNU) [
-      fast-float
-    ];
+  buildInputs = [
+    shaderc
+    lcms2
+    libGL
+    libx11
+    libunwind
+    libdovi
+    xxhash
+    vulkan-headers
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-loader
+  ]
+  ++ lib.optionals (!stdenv.cc.isGNU) [
+    fast-float
+  ];
 
-  mesonFlags =
-    [
-      (lib.mesonBool "demos" false) # Don't build and install the demo programs
-      (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
-      (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-      (lib.mesonEnable "vk-proc-addr" vulkanSupport)
-      (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
-    ];
+  mesonFlags = [
+    (lib.mesonBool "demos" false) # Don't build and install the demo programs
+    (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+    (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+    (lib.mesonEnable "vk-proc-addr" vulkanSupport)
+    (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
+  ];
 
   postPatch = ''
     substituteInPlace meson.build \
@@ -95,9 +81,9 @@ stdenv.mkDerivation rec {
       MoltenVK).
     '';
     homepage = "https://code.videolan.org/videolan/libplacebo";
-    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
+    changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = with lib.maintainers; [ ProxyVT ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -1,21 +1,23 @@
+{ ... }:
+
 let
   grpcPort = 19090;
   queryPort = 9090;
-  minioPort = 9000;
+  garagePort = 9000;
   pushgwPort = 9091;
   frontPort = 9092;
 
   s3 = {
-    accessKey = "BKIKJAA5BMMU2RHO6IBB";
-    secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
+    accessKey = "GKaaaaaaaaaaaaaaaaaaaaaaaa";
+    secretKey = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   };
 
   objstore.config = {
     type = "S3";
     config = {
       bucket = "thanos-bucket";
-      endpoint = "s3:${toString minioPort}";
-      region = "us-east-1";
+      endpoint = "garage:${toString garagePort}";
+      region = "garage";
       access_key = s3.accessKey;
       secret_key = s3.secretKey;
       insecure = true;
@@ -30,10 +32,9 @@ let
       };
     };
   };
-
 in
-import ./make-test-python.nix {
-  name = "prometheus";
+{
+  name = "thanos";
 
   nodes = {
     prometheus =
@@ -41,7 +42,10 @@ import ./make-test-python.nix {
       {
         virtualisation.diskSize = 2 * 1024;
         virtualisation.memorySize = 2048;
-        environment.systemPackages = [ pkgs.jq ];
+        environment.systemPackages = [
+          pkgs.grpc-health-probe
+          pkgs.jq
+        ];
         networking.firewall.allowedTCPPorts = [ grpcPort ];
         services.prometheus = {
           enable = true;
@@ -135,14 +139,14 @@ import ./make-test-python.nix {
               environment.systemPackages = [ pkgs.yq ];
 
               # This configuration just adds a new prometheus job
-              # to scrape the node_exporter metrics of the s3 machine.
+              # to scrape the node_exporter metrics of the garage machine.
               services.prometheus = {
                 scrapeConfigs = [
                   {
-                    job_name = "s3-node_exporter";
+                    job_name = "garage-node_exporter";
                     static_configs = [
                       {
-                        targets = [ "s3:9100" ];
+                        targets = [ "garage:9100" ];
                       }
                     ];
                   }
@@ -177,6 +181,7 @@ import ./make-test-python.nix {
         virtualisation.diskSize = 2 * 1024;
         virtualisation.memorySize = 2048;
         environment.systemPackages = with pkgs; [
+          grpc-health-probe
           jq
           thanos
         ];
@@ -202,21 +207,30 @@ import ./make-test-python.nix {
         };
       };
 
-    s3 =
+    garage =
       { pkgs, ... }:
       {
-        # Minio requires at least 1GiB of free disk space to run.
+        # Garage requires at least 1GiB of free disk space to run.
         virtualisation = {
           diskSize = 2 * 1024;
         };
-        networking.firewall.allowedTCPPorts = [ minioPort ];
+        networking.firewall.allowedTCPPorts = [ garagePort ];
 
-        services.minio = {
+        services.garage = {
           enable = true;
-          inherit (s3) accessKey secretKey;
-        };
+          package = pkgs.garage_2;
+          settings = {
+            rpc_bind_addr = "127.0.0.1:3901";
+            rpc_public_addr = "127.0.0.1:3901";
+            rpc_secret = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            replication_factor = 1;
 
-        environment.systemPackages = [ pkgs.minio-client ];
+            s3_api = {
+              s3_region = "garage";
+              api_bind_addr = "0.0.0.0:${toString garagePort}";
+            };
+          };
+        };
 
         services.prometheus.exporters.node = {
           enable = true;
@@ -230,17 +244,20 @@ import ./make-test-python.nix {
     ''
       # Before starting the other machines we first make sure that our S3 service is online
       # and has a bucket added for thanos:
-      s3.start()
-      s3.wait_for_unit("minio.service")
-      s3.wait_for_open_port(${toString minioPort})
-      s3.succeed(
-          "mc alias set minio "
-          + "http://localhost:${toString minioPort} "
-          + "${s3.accessKey} ${s3.secretKey} --api s3v4",
-          "mc mb minio/thanos-bucket",
+      garage.start()
+      garage.wait_for_unit("garage.service")
+      garage.wait_for_open_port(3901)
+      garage_node_id = garage.succeed("garage status | tail -n1 | awk '{ print $1 }'")
+      garage.succeed(
+          f"garage layout assign -c 100MB -z garage {garage_node_id}",
+          "garage layout apply --version 1",
+          "garage key import ${s3.accessKey} ${s3.secretKey} --yes",
+          "garage bucket create thanos-bucket",
+          "garage bucket allow --read --write --owner thanos-bucket --key ${s3.accessKey}",
       )
+      garage.wait_for_open_port(${toString garagePort})
 
-      # Now that s3 has started we can start the other machines:
+      # Now that the S3 service has started we can start the other machines:
       for machine in prometheus, query, store:
           machine.start()
 
@@ -249,6 +266,13 @@ import ./make-test-python.nix {
 
       prometheus.wait_for_open_port(${toString queryPort})
       prometheus.succeed("curl -sf http://127.0.0.1:${toString queryPort}/metrics")
+
+      prometheus.wait_until_succeeds("journalctl -o cat -u thanos-sidecar.service | grep 'listening for serving gRPC'")
+
+      store.wait_until_succeeds("journalctl -o cat -u thanos-store.service | grep 'listening for serving gRPC'")
+
+      for machine in prometheus, store:
+        machine.wait_until_succeeds("grpc-health-probe -addr 127.0.0.1:${toString grpcPort}")
 
       # Let's test if pushing a metric to the pushgateway succeeds:
       prometheus.wait_for_unit("pushgateway.service")

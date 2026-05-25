@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jeremija";
     repo = "unipicker";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Br9nCK5eWoSN1i4LM2F31B62L9vuN5KzjS9pC9lq9oM=";
   };
 

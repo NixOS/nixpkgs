@@ -13,14 +13,14 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libofx";
   version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "LibOFX";
     repo = "libofx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
   };
 
@@ -37,13 +37,14 @@ stdenv.mkDerivation rec {
     opensp
     libxml2
     curl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = {
     description = "Opensource implementation of the Open Financial eXchange specification";
     homepage = "https://libofx.sourceforge.net/";
-    license = "LGPL";
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

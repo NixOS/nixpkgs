@@ -7,9 +7,9 @@
   mashumaro,
   orjson,
   poetry-core,
-  pythonOlder,
   pytestCheckHook,
   pytest-aiohttp,
+  pytest-cov-stub,
   syrupy,
   yarl,
 }:
@@ -19,19 +19,12 @@ buildPythonPackage rec {
   version = "0.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "swan-solutions";
     repo = "knocki-homeassistant";
     tag = "v${version}";
     hash = "sha256-85w+fj00VW0miNt+xRMcU6szg/Z7QaeKLGw2BV7X0T4=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "addopts = \"--cov\"" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -46,16 +39,17 @@ buildPythonPackage rec {
     aioresponses
     pytestCheckHook
     pytest-aiohttp
+    pytest-cov-stub
     syrupy
   ];
 
   pythonImportsCheck = [ "knocki" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for Knocki vibration / door sensors";
     homepage = "https://github.com/swan-solutions/knocki-homeassistant";
     changelog = "https://github.com/swan-solutions/knocki-homeassistant/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mindstorms6 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mindstorms6 ];
   };
 }

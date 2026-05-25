@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     ./CVE-2019-5544.patch
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.openslp.org/";
     description = "Open-source implementation of the IETF Service Location Protocol";
-    maintainers = with maintainers; [ ttuegel ];
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     knownVulnerabilities = [

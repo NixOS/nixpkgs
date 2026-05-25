@@ -34,22 +34,27 @@ in
 pypkgs.buildPythonApplication rec {
   pname = "tvnamer";
   version = "3.0.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "dc2ea8188df6ac56439343630466b874c57756dd0b2538dd8e7905048f425f04";
   };
 
-  propagatedBuildInputs = with pypkgs; [ tvdb-api ];
+  build-system = with pypkgs; [ setuptools ];
+
+  dependencies = with pypkgs; [ tvdb-api ];
 
   # no tests from pypi
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "tvnamer" ];
+
+  meta = {
     description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api";
     homepage = "https://github.com/dbr/tvnamer";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "tvnamer";
   };
 }

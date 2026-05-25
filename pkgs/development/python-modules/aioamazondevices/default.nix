@@ -1,42 +1,41 @@
 {
   aiohttp,
-  babel,
   beautifulsoup4,
   buildPythonPackage,
-  colorlog,
   fetchFromGitHub,
   httpx,
+  langcodes,
   lib,
   orjson,
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  yarl,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
   pname = "aioamazondevices";
-  version = "3.0.6";
+  version = "13.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${version}";
-    hash = "sha256-+o3LOp0gSjG1/x5IFA0FK5LQUFG9T6JgDLb104vJcM0=";
+    hash = "sha256-j2xlCI3i+IszpDfOcUiN6yPsMzEQBUwB8Lq6c6Y/QPo=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    babel
     beautifulsoup4
-    colorlog
     httpx
+    langcodes
     orjson
-    yarl
-  ];
+    python-dateutil
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   pythonImportsCheck = [ "aioamazondevices" ];
 

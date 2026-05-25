@@ -4,25 +4,29 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   librsvg,
-  xorg,
+  lndir,
   shared-mime-info,
 }:
 
 timeshift-unwrapped: runtimeDeps:
 stdenvNoCC.mkDerivation {
-  inherit (timeshift-unwrapped) pname version;
+  inherit (timeshift-unwrapped) pname version outputs;
 
   dontUnpack = true;
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    xorg.lndir
+    lndir
   ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p "$out"
-    lndir "${timeshift-unwrapped}" "$out"
+  ''
+  + lib.concatMapStrings (outputName: ''
+    mkdir -p "''$${outputName}"
+    lndir -silent "${timeshift-unwrapped.${outputName}}" "''$${outputName}"
+  '') timeshift-unwrapped.outputs
+  + ''
     runHook postInstall
   '';
 

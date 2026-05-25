@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pytest-raises,
-  pythonOlder,
   respx,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "envoy-reader";
   version = "0.21.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jesserizzo";
@@ -53,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "envoy_reader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to read from Enphase Envoy units";
     homepage = "https://github.com/jesserizzo/envoy_reader";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

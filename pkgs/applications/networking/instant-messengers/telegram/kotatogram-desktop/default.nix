@@ -5,11 +5,23 @@
   fetchpatch,
   libsForQt5,
   yasm,
+  alsa-lib,
+  jemalloc,
+  libopus,
+  libpulseaudio,
   withWebkit ? true,
 }:
 
 let
-  telegram-desktop = libsForQt5.callPackage ../telegram-desktop { inherit stdenv; };
+  telegram-desktop = libsForQt5.callPackage ../telegram-desktop {
+    inherit stdenv;
+    # N/A on Qt5
+    kimageformats = null;
+    unwrapped = libsForQt5.callPackage ../telegram-desktop/unwrapped.nix {
+      inherit stdenv;
+      kcoreaddons = null;
+    };
+  };
   version = "1.4.9";
   tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {
     version = "0-unstable-2024-06-15";
@@ -23,6 +35,9 @@ let
     };
 
     patches = [
+      # fix build with latest glibc
+      # upstream PR: https://github.com/desktop-app/tg_owt/pull/172
+      ./cstring-includes.patch
       (fetchpatch {
         url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
         decode = "base64 -d";
@@ -33,12 +48,14 @@ let
     ];
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
+
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++11-narrowing";
   });
 in
 telegram-desktop.override {
   pname = "kotatogram-desktop";
   inherit withWebkit;
-  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
+  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs (old: {
     pname = "kotatogram-desktop-unwrapped";
     version = "${version}-unstable-2024-09-27";
 
@@ -52,6 +69,7 @@ telegram-desktop.override {
 
     patches = [
       ./macos-qt5.patch
+      ./glib-2.86.patch
       (fetchpatch {
         url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
         stripLen = 1;
@@ -59,6 +77,19 @@ telegram-desktop.override {
         hash = "sha256-8B4h3BTG8dIlt3+uVgBI569E9eCebcor9uohtsrZpnI=";
       })
     ];
+
+    buildInputs =
+      (old.buildInputs or [ ])
+      ++ [
+        libopus
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib
+        jemalloc
+        libpulseaudio
+      ];
+
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-missing-template-arg-list-after-template-kw";
 
     meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";
@@ -74,5 +105,5 @@ telegram-desktop.override {
       maintainers = with lib.maintainers; [ ilya-fedin ];
       mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
     };
-  };
+  });
 }

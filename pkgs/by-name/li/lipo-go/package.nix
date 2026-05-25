@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lipo-go";
-  version = "0.10.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "konoui";
     repo = "lipo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V1KlgCNKvxnY/B8cmiWFdXzHH6k6VmhNMIta3nckXtA=";
+    hash = "sha256-WLk6heSnXZjZ6PZWEiUXxx8M5t8EgjpEsTRLeCTzcr8=";
   };
   vendorHash = "sha256-7M6CRxJd4fgYQLJDkNa3ds3f7jOp3dyloOZtwMtCBQk=";
 

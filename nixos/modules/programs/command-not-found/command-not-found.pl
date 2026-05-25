@@ -10,6 +10,24 @@ my $program = $ARGV[0];
 
 my $dbPath = "@dbPath@";
 
+if (! -e $dbPath) {
+    print STDERR "$program: command not found\n";
+    print STDERR "\n";
+    print STDERR "command-not-found: Missing package database\n";
+    print STDERR "command-not-found is a tool for searching for missing packages.\n";
+    print STDERR "No database was found, this likely means the database hasn't been generated yet.\n";
+    print STDERR "This tool requires nix-channels to generate the database for the `nixos` channel.\n";
+    print STDERR "\n";
+    print STDERR "If you are using nix-channels you can run:\n";
+    print STDERR "    sudo nix-channel --update\n";
+    print STDERR "\n";
+    print STDERR "If you are using flakes, see nix-index and nix-index-database.\n";
+    print STDERR "\n";
+    print STDERR "If you would like to disable this message you can set:\n";
+    print STDERR "    programs.command-not-found.enable = false;\n";
+    exit 127;
+}
+
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbPath", "", "")
     or die "cannot open database `$dbPath'";
 $dbh->{RaiseError} = 0;
@@ -31,10 +49,10 @@ if ($len == 0) {
         if ($ENV{"NIX_AUTO_RUN_INTERACTIVE"} // "") {
             while (1) {
                 print STDERR "'$program' from package '$package' will be run, confirm? [yn]: ";
-                chomp(my $comfirm = <STDIN>);
-                if (lc $comfirm eq "n") {
+                chomp(my $confirm = <STDIN>);
+                if (lc $confirm eq "n") {
                     exit 0;
-                } elsif (lc $comfirm eq "y") {
+                } elsif (lc $confirm eq "y") {
                     last;
                 }
             }

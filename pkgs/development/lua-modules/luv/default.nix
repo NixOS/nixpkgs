@@ -13,7 +13,7 @@
 
 buildLuarocksPackage rec {
   pname = "luv";
-  version = "1.50.0-1";
+  version = "1.52.1-0";
 
   src = fetchFromGitHub {
     owner = "luvit";
@@ -21,7 +21,7 @@ buildLuarocksPackage rec {
     rev = version;
     # Need deps/lua-compat-5.3 only
     fetchSubmodules = true;
-    hash = "sha256-PS3+qpELpX0tr7UqrlnE4NYScJb50j+9J4fbH9CTr/s=";
+    hash = "sha256-mU+Gvlpvp6iZE5IpXfTr+21QQ34vZk+tYhnr0b891qg=";
   };
 
   # to make sure we dont use bundled deps
@@ -29,45 +29,32 @@ buildLuarocksPackage rec {
     rm -rf deps/lua deps/luajit deps/libuv
   '';
 
-  patches =
-    [
-      # Fails with "Uncaught Error: ./tests/test-dns.lua:164: assertion failed!"
-      # and "./tests/test-tty.lua:19: bad argument #1 to 'is_readable' (Expected
-      # uv_stream userdata)"
-      ./disable-failing-tests.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fails with "Uncaught Error: ./tests/test-udp.lua:261: EHOSTUNREACH"
-      ./disable-failing-darwin-tests.patch
-    ];
+  patches = [
+    # Fails with "Uncaught Error: ./tests/test-dns.lua:164: assertion failed!"
+    # and "./tests/test-tty.lua:19: bad argument #1 to 'is_readable' (Expected
+    # uv_stream userdata)"
+    ./disable-failing-tests.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails with "Uncaught Error: ./tests/test-udp.lua:261: EHOSTUNREACH"
+    ./disable-failing-darwin-tests.patch
+  ];
 
   buildInputs = [ libuv ];
   nativeBuildInputs = [ cmake ];
 
-  # Need to specify WITH_SHARED_LIBUV=ON cmake flag, but
-  # Luarocks doesn't take cmake variables from luarocks config.
-  # Need to specify it in rockspec. See https://github.com/luarocks/luarocks/issues/1160.
-  knownRockspec = runCommand "luv-${version}.rockspec" { } ''
-    patch ${src}/luv-scm-0.rockspec -o - > $out <<'EOF'
-    --- a/luv-scm-0.rockspec
-    +++ b/luv-scm-0.rockspec
-    @@ -1,5 +1,5 @@
-     package = "luv"
-    -version = "scm-0"
-    +version = "${version}"
-     source = {
-       url = 'git://github.com/luvit/luv.git'
-     }
-    @@ -24,6 +24,7 @@
-     build =
-       type = 'cmake',
-       variables = {
-    +     WITH_SHARED_LIBUV="ON",
-          CMAKE_C_FLAGS="$(CFLAGS)",
-          CMAKE_MODULE_LINKER_FLAGS="$(LIBFLAG)",
-          LUA_LIBDIR="$(LUA_LIBDIR)",
-    EOF
+  rockspecFilename = "luv-scm-0.rockspec";
+
+  postConfigure = ''
+    mv "$rockspecFilename" "$generatedRockspecFilename"
+    rockspecFilename="$generatedRockspecFilename"
+    substituteInPlace "$rockspecFilename" \
+      --replace-fail 'version = "scm-0"' "version = \"$version\""
   '';
+
+  luarocksConfig.variables = {
+    WITH_SHARED_LIBUV = "ON";
+  };
 
   __darwinAllowLocalNetworking = true;
 
@@ -81,18 +68,23 @@ buildLuarocksPackage rec {
   disabled = luaOlder "5.1";
 
   passthru = {
-    tests.test =
-      runCommand "luv-${version}-test"
-        {
-          nativeBuildInputs = [ (lua.withPackages (ps: [ ps.luv ])) ];
-        }
-        ''
-          lua <<EOF
-          local uv = require("luv")
-          assert(uv.fs_mkdir(assert(uv.os_getenv("out")), 493))
-          print(uv.version_string())
-          EOF
-        '';
+    tests = {
+      test =
+        runCommand "luv-${version}-test"
+          {
+            nativeBuildInputs = [ (lua.withPackages (ps: [ ps.luv ])) ];
+          }
+          ''
+            lua <<EOF
+            local uv = require("luv")
+            assert(uv.fs_mkdir(assert(uv.os_getenv("out")), 493))
+            print(uv.version_string())
+            EOF
+          '';
+
+      # Test libluv too
+      inherit (lua.pkgs) libluv;
+    };
 
     updateScript = nix-update-script { };
   };

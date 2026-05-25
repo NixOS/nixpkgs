@@ -1,51 +1,60 @@
 {
   lib,
+  fetchFromGitHub,
   python,
   buildPythonPackage,
-  fetchFromGitHub,
+  nix-update-script,
   fetchurl,
+  fetchpatch,
+
+  # build-time dependencies
   setuptools,
   cython,
-  bash,
   perl,
-  gnum4,
-  texliveBasic,
+
+  # static libraries
+  pkgsStatic,
+  gmpStatic ? pkgsStatic.gmp,
+  pari,
+  pariStatic_2_15 ? pari.overrideAttrs (
+    finalAttrs: oldAttrs: {
+      version = "2.15.4";
+      src = fetchurl {
+        url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor finalAttrs.version}/pari-${finalAttrs.version}.tar.gz";
+        hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
+      };
+      installTargets = [
+        "install"
+        "install-lib-sta"
+      ];
+    }
+  ),
 }:
 
-let
-  pariVersion = "2.15.4";
-  gmpVersion = "6.3.0";
-
-  pariSrc = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor pariVersion}/pari-${pariVersion}.tar.gz";
-    hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
-  };
-
-  gmpSrc = fetchurl {
-    url = "https://ftp.gnu.org/gnu/gmp/gmp-${gmpVersion}.tar.bz2";
-    hash = "sha256-rCghGnz7YJuuLiyNYFjWbI/pZDT3QM9v4uR7AA0cIMs=";
-  };
-in
 buildPythonPackage rec {
   pname = "cypari";
-  version = "2.5.5";
+  version = "2.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "CyPari";
     tag = "${version}_as_released";
-    hash = "sha256-RJ9O1KsDHmMkTCIFUrcSUkA5ijTsxmoI939QCsCib0Y=";
+    hash = "sha256-pzxnrWkoPW7fpxLbUQ+drIrdrjqaAiNnDfe9ky2IxaA=";
   };
 
-  postPatch = ''
-    substituteInPlace ./setup.py \
-      --replace-fail "/bin/bash" "${lib.getExe bash}"
-    # final character is stripped from PARI error messages for some reason
-    substituteInPlace ./cypari/handle_error.pyx \
-      --replace-fail "not a function in function call" "not a function in function cal"
-    ln -s ${pariSrc} ${pariSrc.name}
-    ln -s ${gmpSrc} ${gmpSrc.name}
+  patches = [
+    (fetchpatch {
+      name = "fix-build-with-cython-3_1.patch";
+      url = "https://github.com/3-manifolds/CyPari/compare/17bf39dc4508f2e46de75b95c65982c627652b60...d6cb914d2bdc74a51cc2a9136204ebf47b3e7369.diff";
+      hash = "sha256-c8sq80mYSMMvgFh7RXYwKcqwI7iVRQsm/8yaIL0+PHQ=";
+    })
+  ];
+
+  preBuild = ''
+    mkdir libcache
+    ln -s ${gmpStatic} libcache/gmp
+    ln -s ${pariStatic_2_15} libcache/pari
   '';
 
   build-system = [
@@ -53,28 +62,33 @@ buildPythonPackage rec {
     cython
   ];
 
-  NIX_LDFLAGS = "-lc";
-
   nativeBuildInputs = [
-    gnum4
     perl
-    texliveBasic
   ];
 
   pythonImportsCheck = [ "cypari" ];
 
   checkPhase = ''
     runHook preCheck
-    rm -r cypari
-    ${python.interpreter} -m cypari.test
+    ${python.interpreter} -P -m cypari.test
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)_as_released"
+    ];
+  };
 
   meta = {
     description = "Sage's PARI extension, modified to stand alone";
     homepage = "https://github.com/3-manifolds/CyPari";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
     changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }

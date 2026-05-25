@@ -5,13 +5,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wiki-js";
-  version = "2.5.307";
+  version = "2.5.312";
 
   src = fetchurl {
-    url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-wElXBEVLqrK+WtsCUw1IefWBqG6d6LP0eVylPb4qXY0=";
+    url = "https://github.com/Requarks/wiki/releases/download/v${finalAttrs.version}/wiki-js.tar.gz";
+    hash = "sha256-J87NrQ+zkUlREe0lGERFFAEW8EFysK5RJhM6OUVI1J0=";
   };
 
   # Unpack the tarball into a subdir. All the contents are copied into `$out`.
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://js.wiki/";
     description = "Modern and powerful wiki app built on Node.js";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ma27 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ ];
   };
-}
+})

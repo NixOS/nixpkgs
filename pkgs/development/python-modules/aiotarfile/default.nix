@@ -1,10 +1,9 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   buildPythonPackage,
-  unittestCheckHook,
   pythonOlder,
+  unittestCheckHook,
   cargo,
   rustc,
   rustPlatform,
@@ -12,21 +11,19 @@
 
 buildPythonPackage rec {
   pname = "aiotarfile";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rhelmot";
     repo = "aiotarfile";
     tag = "v${version}";
-    hash = "sha256-DslG+XxIYb04I3B7m0fmRmE3hFCczF039QhSVdHGPL8=";
+    hash = "sha256-V88cvVw6ss7iiojhlqDd2frG/gCEH0YKTP0IpgeFASw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-e3NbFlBQu9QkGnIwqy2OmlQFVHjlfpMVRFWD2ADGGSc=";
+    hash = "sha256-Yf6N615X9ZB+HDp3xehMc3kjKbdsSbIJrqARRXwCRDQ=";
   };
 
   nativeBuildInputs = [
@@ -40,14 +37,15 @@ buildPythonPackage rec {
 
   unittestFlagsArray = [ "tests/" ]; # Not sure why it isn't autodiscovered
 
-  pythonImportsCheck = [ "aiotarfile" ];
+  # pyo3-asyncio 0.20 segfaults on the python 3.14 interpreter state.
+  doCheck = pythonOlder "3.14";
 
-  passthru.updateScript = nix-update-script { };
+  pythonImportsCheck = [ "aiotarfile" ];
 
   meta = {
     description = "Stream-based, asynchronous tarball processing";
     homepage = "https://github.com/rhelmot/aiotarfile";
-    changelog = "https://github.com/rhelmot/aiotarfile/commits/v{version}";
+    changelog = "https://github.com/rhelmot/aiotarfile/commits/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicoo ];
   };

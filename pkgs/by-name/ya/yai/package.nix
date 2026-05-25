@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yai";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ekkinox";
     repo = "yai";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-MoblXLfptlIYJbXQTpbc8GBo2a3Zgxdvwra8IUEGiZs==";
   };
 
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   ldflags = [
     "-w -s"
-    "-X main.buildVersion=${version}"
+    "-X main.buildVersion=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -26,15 +26,15 @@ buildGoModule rec {
     export USER=test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ekkinox/yai";
     description = "Your AI powered terminal assistant";
     longDescription = ''
       Yai (your AI) is an assistant for your terminal, using OpenAI ChatGPT to build and run commands for you.
       You just need to describe them in your everyday language, it will take care or the rest.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ georgesalkhouri ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ georgesalkhouri ];
     mainProgram = "yai";
   };
-}
+})

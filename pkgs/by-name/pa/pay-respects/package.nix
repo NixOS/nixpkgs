@@ -1,23 +1,38 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.7.6";
+  version = "0.8.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+50MKpZgJqjuUvJeFFv8fMILkJ3cOAN7R7kmlR+98II=";
+    hash = "sha256-z7GQst70KGNTWAd3sb5eoDnMR2RAmw9RNw3qPeoLWSQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TJP+GPkXwPvnBwiF0SCkn8NGz/xyrYjbUZKCbUUSqHQ=";
+  cargoHash = "sha256-d3RCjCxJXb5YLai1ZqWKifbb2nLG5j1psuvAorNgFGg=";
+
+  env = {
+    _DEF_PR_AI_API_KEY = "";
+    _DEF_PR_AI_URL = "";
+    _DEF_PR_AI_MODEL = "";
+  };
+
+  cargoBuildFlags = [
+    "-p pay-respects"
+    "-p pay-respects-module-runtime-rules"
+    "-p pay-respects-module-request-ai"
+  ];
+  cargoTestFlags = [
+    "-p pay-respects"
+    "-p pay-respects-module-runtime-rules"
+    "-p pay-respects-module-request-ai"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -29,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       sigmasquadron
-      bloxx12
+      faukah
       ALameLlama
     ];
     mainProgram = "pay-respects";

@@ -6,6 +6,7 @@
   autoconf,
   automake,
   libtool,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -27,14 +28,18 @@ stdenv.mkDerivation {
     libtool
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=narrowing -DHAVE_GETOPT_H=1";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "ReplayGain for AAC files";
     homepage = "https://github.com/dgilman/aacgain";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.robbinch ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ robbinch ];
     mainProgram = "aacgain";
   };
 }

@@ -1,36 +1,40 @@
 {
-  bash,
-  fetchFromGitHub,
   lib,
   rustPlatform,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
+  bashNonInteractive,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-parallel";
-  version = "1.18.1";
+  version = "1.23.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aaronriekenberg";
     repo = "rust-parallel";
-    rev = "v${version}";
-    hash = "sha256-4f/JE8KWYDdLwx+bCSSbz0Cpfy/g3WIaRzqCvUix4t0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-quLvYnYhu8ZkUT/7v/WjwMLxDlvYcj3hlIYPkv1xogg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wJtXYx2mncOnnUep4CMFt+1mK1vMyhYFCQM/2B9m6zY=";
+  cargoHash = "sha256-m2Galjkr7iFO+s0vYaYAeM5Xrvls6vNVReTbLUUo44I=";
 
-  postPatch = ''
-    substituteInPlace tests/dummy_shell.sh \
-      --replace "/bin/bash" "${bash}/bin/bash"
+  checkInputs = [ bashNonInteractive ];
+
+  # Some test require the output of tracing which for some reason hides info if RUST_LOG is set to "" which it is by default
+  logLevel = "info";
+
+  preCheck = ''
+    patchShebangs ./tests/dummy_shell.sh
   '';
 
-  checkFlags = [
-    "--skip=runs_echo_commands_dry_run"
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-    "--skip=runs_regex_command_with_dollar_signs"
-    "--skip=runs_regex_from_command_line_args_nomatch_1"
-    "--skip=runs_regex_from_input_file_badline_j1"
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rust shell tool to run commands in parallel with a similar interface to GNU parallel";
@@ -38,6 +42,5 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "rust-parallel";
     maintainers = with lib.maintainers; [ sedlund ];
-    platforms = lib.platforms.linux;
   };
-}
+})

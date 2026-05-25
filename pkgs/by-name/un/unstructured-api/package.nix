@@ -101,7 +101,7 @@ let
       pypdfium2
       python-dateutil
       python-docx
-      # python-iso639
+      python-iso639
       python-magic
       python-multipart
       # python-oxmsg
@@ -144,7 +144,7 @@ let
     ++ google-api-core.optional-dependencies.grpc
     ++ unstructured.optional-dependencies.all-docs
   );
-  version = "0.0.85";
+  version = "0.1.2";
   unstructured_api_nltk_data = python3.pkgs.nltk.dataDir (d: [
     d.punkt
     d.averaged-perceptron-tagger
@@ -158,7 +158,7 @@ stdenvNoCC.mkDerivation {
     owner = "Unstructured-IO";
     repo = "unstructured-api";
     rev = version;
-    hash = "sha256-FNcm/7JxQE6ZksFtEgInnUhbKArZoyo9rlxhyHgRG3E=";
+    hash = "sha256-+OAq1cOpv/w2pF2SwP6ByvH8NNaPqOKK/rxclROuHS0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -182,7 +182,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "open-source toolkit designed to make it easy to prepare unstructured data like PDFs, HTML and Word Documents for downstream data science tasks";
+    description = "Open-source toolkit designed to make it easy to prepare unstructured data like PDFs, HTML and Word Documents for downstream data science tasks";
     homepage = "https://github.com/Unstructured-IO/unstructured-api";
     changelog = "https://github.com/Unstructured-IO/unstructured-api/releases/tag/${version}";
     license = lib.licenses.asl20;

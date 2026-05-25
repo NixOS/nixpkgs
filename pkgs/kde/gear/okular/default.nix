@@ -3,12 +3,14 @@
   pkg-config,
   qtspeech,
   qtsvg,
+  plasma-activities,
   poppler,
   libtiff,
   libspectre,
   libzip,
   djvulibre,
   ebook_tools,
+  fetchpatch,
   discount,
 }:
 mkKdeDerivation {
@@ -19,6 +21,8 @@ mkKdeDerivation {
     qtspeech
     qtsvg
 
+    plasma-activities
+
     poppler
     libtiff
     libspectre
@@ -27,5 +31,6 @@ mkKdeDerivation {
     ebook_tools
     discount
   ];
+
   meta.mainProgram = "okular";
 }

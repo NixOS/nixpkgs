@@ -14,15 +14,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pappl";
-  version = "1.4.9";
+  version = "1.4.10";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "pappl";
-    tag = "v${version}";
-    hash = "sha256-XHFYwl129iD5rKC1P/roFlX+03uFE8ofwQRIEkUuOCc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nSjJLmkM730edY+rzxY7JSvwJoQdJiW/XBBsD+TY2ys=";
   };
 
   outputs = [
@@ -34,23 +34,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cups
-      libjpeg
-      libpng
-      libusb1
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # upstream mentions these are not needed for Mac
-      # see: https://github.com/michaelrsweet/pappl#requirements
-      avahi
-      gnutls
-    ]
-    ++ lib.optionals withPAMSupport [
-      pam
-    ];
+  buildInputs = [
+    cups
+    libjpeg
+    libpng
+    libusb1
+    zlib
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # upstream mentions these are not needed for Mac
+    # see: https://github.com/michaelrsweet/pappl#requirements
+    avahi
+    gnutls
+  ]
+  ++ lib.optionals withPAMSupport [
+    pam
+  ];
 
   # testing requires some networking
   # doCheck = true;
@@ -64,11 +63,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C-based framework/library for developing CUPS Printer Applications";
-    changelog = "https://github.com/michaelrsweet/pappl/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/michaelrsweet/pappl/blob/v${finalAttrs.version}/CHANGES.md";
     mainProgram = "pappl-makeresheader";
     homepage = "https://github.com/michaelrsweet/pappl";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux; # should also work for darwin, but requires additional work
     maintainers = [ lib.maintainers.NotAShelf ];
   };
-}
+})

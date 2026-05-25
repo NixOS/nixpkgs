@@ -4,21 +4,21 @@
   coreutils,
   fetchurl,
   zlib,
-  libX11,
-  libXext,
-  libSM,
-  libICE,
+  libx11,
+  libxext,
+  libsm,
+  libice,
   libxkbcommon,
   libxshmfence,
-  libXfixes,
-  libXt,
-  libXi,
-  libXcursor,
-  libXScrnSaver,
-  libXcomposite,
-  libXdamage,
-  libXtst,
-  libXrandr,
+  libxfixes,
+  libxt,
+  libxi,
+  libxcursor,
+  libxscrnsaver,
+  libxcomposite,
+  libxdamage,
+  libxtst,
+  libxrandr,
   alsa-lib,
   dbus,
   cups,
@@ -29,8 +29,8 @@
   libGL,
   freetype,
   fontconfig,
-  libXft,
-  libXrender,
+  libxft,
+  libxrender,
   libxcb,
   expat,
   libuuid,
@@ -47,6 +47,7 @@
   libdrm,
   libgbm,
   vulkan-loader,
+  addDriverRunpath,
   nss,
   nspr,
   patchelf,
@@ -66,7 +67,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.4.3684.46";
+  version = "8.0.4033.26";
 
   suffix =
     {
@@ -79,8 +80,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-vcTuqCZy0OlfO5Iz06QVGJRtT3L55wWdmE9R6Y3P1/k=";
-        x86_64-linux = "sha256-uD2CZ4OEZbLIDgl3VGdHwr0edyJd4Gv/C22Z5wQMYk8=";
+        aarch64-linux = "sha256-WJLEdzqF+HBdSSYLlkbxlSwO9IcYeFh7BTAk+2FQln8=";
+        x86_64-linux = "sha256-6BexB3ZQLNqMPjM9XQgX3RowF+cEJcQmV/Z9QpzhKOE=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -100,63 +101,62 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  buildInputs =
-    [
-      stdenv.cc.cc
-      stdenv.cc.libc
-      zlib
-      libX11
-      libXt
-      libXext
-      libSM
-      libICE
-      libxcb
-      libxkbcommon
-      libxshmfence
-      libXi
-      libXft
-      libXcursor
-      libXfixes
-      libXScrnSaver
-      libXcomposite
-      libXdamage
-      libXtst
-      libXrandr
-      atk
-      at-spi2-atk
-      at-spi2-core
-      alsa-lib
-      dbus
-      cups
-      gtk3
-      gdk-pixbuf
-      libexif
-      ffmpeg
-      systemd
-      libva
-      qt6.qtbase
-      qt6.qtwayland
-      freetype
-      fontconfig
-      libXrender
-      libuuid
-      expat
-      glib
-      nss
-      nspr
-      libGL
-      libxml2
-      pango
-      cairo
-      libdrm
-      libgbm
-      vulkan-loader
-      wayland
-      pipewire
-    ]
-    ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional kerberosSupport libkrb5;
+  buildInputs = [
+    stdenv.cc.cc
+    stdenv.cc.libc
+    zlib
+    libx11
+    libxt
+    libxext
+    libsm
+    libice
+    libxcb
+    libxkbcommon
+    libxshmfence
+    libxi
+    libxft
+    libxcursor
+    libxfixes
+    libxscrnsaver
+    libxcomposite
+    libxdamage
+    libxtst
+    libxrandr
+    atk
+    at-spi2-atk
+    at-spi2-core
+    alsa-lib
+    dbus
+    cups
+    gtk3
+    gdk-pixbuf
+    libexif
+    ffmpeg
+    systemd
+    libva
+    qt6.qtbase
+    qt6.qtwayland
+    freetype
+    fontconfig
+    libxrender
+    libuuid
+    expat
+    glib
+    nss
+    nspr
+    libGL
+    libxml2
+    pango
+    cairo
+    libdrm
+    libgbm
+    vulkan-loader
+    wayland
+    pipewire
+  ]
+  ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional kerberosSupport libkrb5;
 
   libPath =
     lib.makeLibraryPath buildInputs
@@ -165,65 +165,67 @@ stdenv.mkDerivation rec {
     )
     + ":$out/opt/vivaldi/lib";
 
-  buildPhase =
-    ''
-      runHook preBuild
-      echo "Patching Vivaldi binaries"
-      for f in chrome_crashpad_handler vivaldi-bin vivaldi-sandbox ; do
-        patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${libPath}" \
-          opt/vivaldi/$f
-      done
+  buildPhase = ''
+    runHook preBuild
+    echo "Patching Vivaldi binaries"
+    for f in chrome_crashpad_handler vivaldi-bin vivaldi-sandbox ; do
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        opt/vivaldi/$f
+    done
 
-      for f in libGLESv2.so libqt5_shim.so libqt6_shim.so; do
-        patchelf --set-rpath "${libPath}" opt/vivaldi/$f
-      done
-    ''
-    + lib.optionalString proprietaryCodecs ''
-      ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/vivaldi/libffmpeg.so.''${version%\.*\.*}
-    ''
-    + ''
-      echo "Finished patching Vivaldi binaries"
-      runHook postBuild
-    '';
+    for f in libGLESv2.so libqt5_shim.so libqt6_shim.so; do
+      patchelf --set-rpath "${libPath}" opt/vivaldi/$f
+    done
+  ''
+  + lib.optionalString proprietaryCodecs ''
+    ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/vivaldi/libffmpeg.so.''${version%\.*\.*}
+  ''
+  + ''
+    echo "Finished patching Vivaldi binaries"
+    runHook postBuild
+  '';
 
   dontPatchELF = true;
   dontStrip = true;
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p "$out"
-      cp -r opt "$out"
-      mkdir "$out/bin"
-      ln -s "$out/opt/vivaldi/vivaldi" "$out/bin/vivaldi"
-      mkdir -p "$out/share"
-      cp -r usr/share/{applications,xfce4} "$out"/share
-      substituteInPlace "$out"/share/applications/*.desktop \
-        --replace-fail /usr/bin/vivaldi "$out"/bin/vivaldi
-      substituteInPlace "$out"/share/applications/*.desktop \
-        --replace-fail vivaldi-stable vivaldi
-      local d
-      for d in 16 22 24 32 48 64 128 256; do
-        mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
-        ln -s \
-          "$out"/opt/vivaldi/product_logo_''${d}.png \
-          "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
-      done
-      wrapProgram "$out/bin/vivaldi" \
-        --add-flags ${lib.escapeShellArg commandLineArgs} \
-        --prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
-        --prefix LD_LIBRARY_PATH : ${libPath} \
-        --prefix PATH : ${coreutils}/bin \
-        ''${qtWrapperArgs[@]}
-    ''
-    + lib.optionalString enableWidevine ''
-      ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/opt/vivaldi/WidevineCdm
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p "$out"
+    cp -r opt "$out"
+    mkdir "$out/bin"
+    ln -s "$out/opt/vivaldi/vivaldi" "$out/bin/vivaldi"
+    mkdir -p "$out/share"
+    cp -r usr/share/{applications,xfce4} "$out"/share
+    substituteInPlace "$out"/share/applications/*.desktop \
+      --replace-fail /usr/bin/vivaldi "$out"/bin/vivaldi
+    substituteInPlace "$out"/share/applications/*.desktop \
+      --replace-fail vivaldi-stable vivaldi
+    local d
+    for d in 16 24 32 48 64 128 256; do
+      mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
+      ln -s \
+        "$out"/opt/vivaldi/product_logo_''${d}.png \
+        "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
+    done
+    # replace bundled vulkan-loader with the NixOS-patched one to enable Vulkan ICD discovery
+    rm $out/opt/vivaldi/libvulkan.so.1
+    ln -s "${lib.getLib vulkan-loader}/lib/libvulkan.so.1" $out/opt/vivaldi/libvulkan.so.1
+
+    wrapProgram "$out/bin/vivaldi" \
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
+      --prefix XDG_DATA_DIRS : "${addDriverRunpath.driverLink}/share:${gtk3}/share/gsettings-schemas/${gtk3.name}" \
+      --prefix LD_LIBRARY_PATH : ${libPath} \
+      --prefix PATH : ${coreutils}/bin \
+      ''${qtWrapperArgs[@]}
+  ''
+  + lib.optionalString enableWidevine ''
+    ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/opt/vivaldi/WidevineCdm
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   passthru.updateScript = ./update-vivaldi.sh;
 
@@ -236,7 +238,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       marcusramberg
       max06
-      rewine
+      wineee
     ];
     platforms = [
       "x86_64-linux"

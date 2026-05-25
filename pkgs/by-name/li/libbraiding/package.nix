@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   # no tests included for now (2018-08-05), but can't hurt to activate
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/miguelmarco/libbraiding/";
     description = "C++ library for computations on braid groups";
     longDescription = ''
       A library to compute several properties of braids, including centralizer and conjugacy check.
     '';
-    license = licenses.gpl3;
-    teams = [ teams.sage ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.all;
   };
 }

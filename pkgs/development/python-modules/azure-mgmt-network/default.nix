@@ -5,21 +5,19 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-network";
-  version = "28.1.0";
+  version = "30.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_network";
-    inherit version;
-    hash = "sha256-jIS/+17HXG4CROWOzwfADV/EIdYWsMs2nG/lha8zz4c=";
+    inherit (finalAttrs) version;
+    hash = "sha256-mxfCWeY0SAiqqAo0u8SxPxa8ARhd2dsTfqoK4mZkhho=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +26,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    typing-extensions
   ];
 
   # Module has no tests
@@ -37,14 +36,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.network" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/network/azure-mgmt-network";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-network_${version}/sdk/network/azure-mgmt-network/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-network_${finalAttrs.version}/sdk/network/azure-mgmt-network/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       olcai
       maxwilson
     ];
   };
-}
+})

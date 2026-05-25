@@ -13,14 +13,14 @@
 let
   inherit (python3.pkgs) buildPythonApplication pygobject3;
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "gnome-browser-connector";
   version = "42.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-browser-connector/${lib.versions.major version}/gnome-browser-connector-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-browser-connector/${lib.versions.major finalAttrs.version}/gnome-browser-connector-${finalAttrs.version}.tar.xz";
     sha256 = "vZcCzhwWNgbKMrjBPR87pugrJHz4eqxgYQtBHfFVYhI=";
   };
 
@@ -56,14 +56,14 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native host connector for the GNOME Shell browser extension";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-browser-connector";
     longDescription = ''
       To use the integration, install the [browser extension](https://gitlab.gnome.org/GNOME/gnome-browser-extension), and then set `services.gnome.gnome-browser-connector.enable` to `true`.
     '';
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
-}
+})

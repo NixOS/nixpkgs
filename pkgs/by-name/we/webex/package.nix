@@ -33,35 +33,36 @@
   nss,
   pango,
   zlib,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  zstd,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxshmfence,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   p7zip,
-  tbb,
+  onetbb,
   wayland,
-  libXScrnSaver,
+  libxscrnsaver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "45.2.0.31846";
+  version = "46.4.0.34752";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20250225153039/Webex_ubuntu.7z";
-    sha256 = "88b6031d3ea885b750a9e44e3f7b98634e3ecdfb5ca1672ea840ea16a97386ab";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-2004-Gold/20260422175501/Webex_ubuntu.7z";
+    sha256 = "8b0711259237ae1009c05b012d44c5fc4e222005bf26d9ac1b84af063719d09a";
   };
 
   nativeBuildInputs = [
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
     nss
     pango
     zlib
+    zstd
     libdrm
     libgcrypt
     libglvnd
@@ -99,24 +101,24 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     libxcrypt-legacy
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     libxshmfence
-    xcbutil
-    xcbutilimage
-    libXScrnSaver
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
-    tbb
+    libxcb-util
+    libxcb-image
+    libxscrnsaver
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    onetbb
     wayland
   ];
 
@@ -169,14 +171,14 @@ stdenv.mkDerivation rec {
     version=$(jq -r '.version' <<< "$manifest")
     hash=$(jq -r '.checksum' <<< "$manifest")
 
-    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/applications/networking/instant-messengers/webex/default.nix
+    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/by-name/we/webex/package.nix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one app to call, meet, message, and get work done";
     homepage = "https://webex.com/";
     downloadPage = "https://www.webex.com/downloads.html";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ uvnikita ];
     platforms = [ "x86_64-linux" ];
   };

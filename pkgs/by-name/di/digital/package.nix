@@ -10,7 +10,7 @@
 
 let
   pname = "digital";
-  pkgDescription = "A digital logic designer and circuit simulator.";
+  pkgDescription = "Digital logic designer and circuit simulator";
   version = "0.31";
   buildDate = "2024-09-03T14:02:31+02:00"; # v0.31 commit date
 
@@ -68,6 +68,10 @@ maven.buildMavenPackage rec {
     classpath=$(find $mvnDeps/.m2 -name "*.jar" -printf ':%h/%f');
     install -Dm644 target/Digital.jar $out/share/java
 
+    # Install the lib folder containing 74xx series chips and other component libraries
+    # Digital.jar expects to find lib/ in the same directory as the jar file
+    cp -r src/main/dig/lib $out/share/java/
+
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-classpath $out/share/java/${pname}-${version}.jar:''${classpath#:}" \
       --add-flags "-jar $out/share/java/Digital.jar"
@@ -82,12 +86,12 @@ maven.buildMavenPackage rec {
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hneemann/Digital";
     description = pkgDescription;
     mainProgram = "digital";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Dettorer ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Dettorer ];
   };
 }

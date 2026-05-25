@@ -15,7 +15,6 @@ let
     filter
     getVersion
     mkIf
-    mkMerge
     mkOption
     optional
     optionalString
@@ -235,14 +234,13 @@ in
       [
         {
           assertion = !(any badMachine cfg.buildMachines);
-          message =
-            ''
-              At least one system type (via <varname>system</varname> or
-                <varname>systems</varname>) must be set for every build machine.
-                Invalid machine specifications:
-            ''
-            + "      "
-            + (concatStringsSep "\n      " (map (m: m.hostName) (filter (badMachine) cfg.buildMachines)));
+          message = ''
+            At least one system type (via <varname>system</varname> or
+              <varname>systems</varname>) must be set for every build machine.
+              Invalid machine specifications:
+          ''
+          + "      "
+          + (concatStringsSep "\n      " (map (m: m.hostName) (filter badMachine cfg.buildMachines)));
         }
       ];
 

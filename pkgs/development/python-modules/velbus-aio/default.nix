@@ -2,28 +2,27 @@
   lib,
   aiofile,
   backoff,
+  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pyserial,
-  pyserial-asyncio-fast,
+  lxml,
   pytest-asyncio,
   pytestCheckHook,
+  serialx,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "velbus-aio";
-  version = "2025.5.0";
+  version = "2026.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "velbus-aio";
-    tag = version;
-    hash = "sha256-oRcTiFYWVOlM6jHuIUpE4OapWn/4VyWD+MYZI5pgW3s=";
+    tag = finalAttrs.version;
+    hash = "sha256-l77L2JI2jXw+cQw/yO1LvyWBxvUF0IBctM5V02BGtO8=";
     fetchSubmodules = true;
   };
 
@@ -32,26 +31,24 @@ buildPythonPackage rec {
   dependencies = [
     aiofile
     backoff
-    pyserial
-    pyserial-asyncio-fast
+    beautifulsoup4
+    lxml
+    serialx
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "velbusaio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to support the Velbus home automation system";
     homepage = "https://github.com/Cereal2nd/velbus-aio";
-    changelog = "https://github.com/Cereal2nd/velbus-aio/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Cereal2nd/velbus-aio/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

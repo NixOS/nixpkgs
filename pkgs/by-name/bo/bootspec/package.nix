@@ -2,26 +2,28 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootspec";
-  version = "1.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "bootspec";
-    rev = "v${version}";
-    hash = "sha256-0MO+SqG7Gjq+fmMJkIFvaKsfTmC7z3lGfi7bbBv7iBE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FeNBn/HeOanvFSCH9gNBCwlSJx1EhhEdrgX2rbXdZgI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fKbF5SyI0UlZTWsygdE8BGWuOoNSU4jx+CGdJoJFhZs=";
+  cargoHash = "sha256-vJVOseAvIGNxos180Z5OHgo3u/2iyeOgOetXTJxyZx0=";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";
     homepage = "https://github.com/DeterminateSystems/bootspec";
-    license = licenses.mit;
-    teams = [ teams.determinatesystems ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.cole-h ];
+    platforms = lib.platforms.unix;
   };
-}
+})

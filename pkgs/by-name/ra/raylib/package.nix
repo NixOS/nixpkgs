@@ -10,7 +10,7 @@
   libpulseaudio,
   raylib-games,
   libGLU,
-  libX11,
+  libx11,
   platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
   pulseSupport ? stdenv.hostPlatform.isLinux,
   alsaSupport ? false,
@@ -20,10 +20,9 @@
 let
   inherit (lib) optional;
 
-  pname = "raylib";
 in
 
-lib.checkListOfEnum "${pname}: platform"
+lib.checkListOfEnum "raylib: platform"
   [
     "Desktop"
     "Web"
@@ -36,37 +35,37 @@ lib.checkListOfEnum "${pname}: platform"
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
 
-      inherit pname;
-      version = "5.5";
+      pname = "raylib";
+      version = "5.5-unstable-2026-01-20";
 
       src = fetchFromGitHub {
         owner = "raysan5";
         repo = "raylib";
-        rev = finalAttrs.version;
-        hash = "sha256-J99i4z4JF7d6mJNuJIB0rHNDhXJ5AEkG0eBvvuBLHrY=";
+        rev = "c610d228a244f930ad53492604640f39584c66da";
+        hash = "sha256-7Lhgqb7QJwz94M1ZxWgueTwIgSVclGCvHklZXGzoJgQ=";
       };
 
       # autoPatchelfHook is needed for appendRunpaths
       nativeBuildInputs = [
         cmake
-      ] ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
+      ]
+      ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
 
       buildInputs = optional (platform == "Desktop") glfw ++ optional (platform == "SDL") SDL2;
 
       propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         libGLU
-        libX11
+        libx11
       ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
-      cmakeFlags =
-        [
-          "-DCUSTOMIZE_BUILD=ON"
-          "-DPLATFORM=${platform}"
-        ]
-        ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
-        ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
-        ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+      cmakeFlags = [
+        "-DCUSTOMIZE_BUILD=ON"
+        "-DPLATFORM=${platform}"
+      ]
+      ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
+      ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
+      ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
 
       appendRunpaths = optional stdenv.hostPlatform.isLinux (
         lib.makeLibraryPath (optional alsaSupport alsa-lib ++ optional pulseSupport libpulseaudio)
@@ -79,10 +78,12 @@ lib.checkListOfEnum "${pname}: platform"
       meta = {
         description = "Simple and easy-to-use library to enjoy videogames programming";
         homepage = "https://www.raylib.com/";
+        downloadPage = "https://github.com/raysan5/raylib";
         license = lib.licenses.zlib;
         maintainers = [ lib.maintainers.diniamo ];
+        teams = [ lib.teams.ngi ];
         platforms = lib.platforms.all;
-        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
+        changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.src.rev}/CHANGELOG";
       };
     })
   )

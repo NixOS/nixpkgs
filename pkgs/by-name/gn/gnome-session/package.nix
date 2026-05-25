@@ -7,34 +7,27 @@
   ninja,
   pkg-config,
   gnome,
-  adwaita-icon-theme,
+  gobject-introspection,
   glib,
-  gtk3,
   gsettings-desktop-schemas,
   gnome-desktop,
   gnome-settings-daemon,
   gnome-shell,
   dbus,
-  json-glib,
-  libICE,
   xmlto,
   docbook_xsl,
-  docbook_xml_dtd_412,
-  python3,
+  docbook_xml_dtd_45,
   libxslt,
   gettext,
-  makeWrapper,
   systemd,
-  xorg,
-  libepoxy,
-  bash,
   gnome-session-ctl,
+  wrapGAppsNoGuiHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "48.0";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -43,49 +36,37 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major finalAttrs.version}/gnome-session-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3ZCfvFsizb2y/E3xpH140bWUPMxeYeaiChhGJGNHxBc=";
+    hash = "sha256-vncIzZ0mDhrBg4FTE9u2ILGHbq1bo5zn6i5tx629ckY=";
   };
 
   patches = [
-    (replaceVars ./fix-paths.patch {
-      gsettings = "${glib.bin}/bin/gsettings";
-      dbusLaunch = "${dbus.lib}/bin/dbus-launch";
-      bash = "${bash}/bin/bash";
-    })
+    # https://github.com/NixOS/nixpkgs/pull/48517
+    ./nixos_set_environment_done.patch
   ];
 
   nativeBuildInputs = [
+    gobject-introspection.setupHook
     meson
     ninja
     pkg-config
     gettext
-    makeWrapper
     xmlto
     libxslt
     docbook_xsl
-    docbook_xml_dtd_412
-    python3
+    docbook_xml_dtd_45
     dbus # for DTD
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     glib
-    gtk3
-    libICE
     gnome-desktop
-    json-glib
-    xorg.xtrans
-    adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas
     systemd
-    libepoxy
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
     # Use our provided `gnome-session-ctl`
     original="@libexecdir@/gnome-session-ctl"
     replacement="${gnome-session-ctl}/libexec/gnome-session-ctl"
@@ -101,21 +82,16 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir $sessions
     moveToOutput share/wayland-sessions "$sessions"
-    moveToOutput share/xsessions "$sessions"
 
     # Our provided one is being used
     rm -rf $out/libexec/gnome-session-ctl
   '';
 
-  # `bin/gnome-session` will reset the environment when run in wayland, we
-  # therefor wrap `libexec/gnome-session-binary` instead which is the actual
-  # binary needing wrapping
   preFixup = ''
-    wrapProgram "$out/libexec/gnome-session-binary" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : "${gnome-shell}/share" \
+    gappsWrapperArgs+=(
+      --suffix XDG_DATA_DIRS : "${gnome-shell}/share"
       --suffix XDG_CONFIG_DIRS : "${gnome-settings-daemon}/etc/xdg"
+    )
   '';
 
   separateDebugInfo = true;
@@ -126,16 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
     providedSessions = [
       "gnome"
-      "gnome-xorg"
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME session manager";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-session";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-session/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

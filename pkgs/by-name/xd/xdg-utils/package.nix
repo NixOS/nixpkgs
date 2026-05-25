@@ -21,8 +21,8 @@
   glib,
   gnugrep,
   gnused,
+  hostname,
   jq,
-  nettools,
   procps,
   which,
   xdg-user-dirs,
@@ -166,7 +166,7 @@ let
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        hostname
         glib.bin
         "${placeholder "out"}/bin"
       ];
@@ -206,7 +206,7 @@ let
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        hostname
         perl
         procps
       ];
@@ -297,7 +297,7 @@ let
   ];
 in
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-utils";
   version = "1.2.1";
 
@@ -305,7 +305,7 @@ stdenv.mkDerivation (self: {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
@@ -336,11 +336,10 @@ stdenv.mkDerivation (self: {
   passthru.tests.xdg-mime =
     runCommand "xdg-mime-test"
       {
-        nativeBuildInputs = [ self.finalPackage ];
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
         preferLocalBuild = true;
         xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
           "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [
-            "https://staging.cohostcdn.org/attachment/0f5d9832-0cda-4d07-b35f-832b287feb6c/kernelkisser.png"
             "https://static1.e621.net/data/0e/76/0e7672980d48e48c2d1373eb2505db5a.png"
           ];
           "sha256-Si9AtB7J9o6rK/oftv+saST77CNaeWomWU5ECfbRioM=" = [
@@ -364,11 +363,11 @@ stdenv.mkDerivation (self: {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kdecoration,
@@ -23,22 +24,26 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  # kdecoration headers include C++20 spaceship operator
+  env.NIX_CFLAGS_COMPILE = "-std=c++20";
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
   ];
 
   buildInputs = [
+    kcmutils
     kcoreaddons
     kdeclarative
     kdecoration
     libplasma
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plasma 6 applet in order to show window buttons in your panels";
     homepage = "https://github.com/moodyhunter/applet-window-buttons6";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ A1ca7raz ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ A1ca7raz ];
   };
 }

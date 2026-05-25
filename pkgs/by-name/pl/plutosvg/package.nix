@@ -8,16 +8,18 @@
   cmake,
   ninja,
   plutovg,
+  enableFreetype ? false,
+  freetype,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plutosvg";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "sammycage";
     repo = "plutosvg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4JLk4+O9Tf8CGxMP0aDN70ak/8teZH3GWBWlrIkPQm4=";
+    hash = "sha256-+Fo1B9jH/jjcSkrW5Hm6giIYm7zYh7puFFhC6er7XIM=";
   };
 
   outputs = [
@@ -35,13 +37,25 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     validatePkgConfig
   ];
+
   propagatedBuildInputs = [
     plutovg
+  ]
+  ++ lib.optional enableFreetype freetype;
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "PLUTOSVG_ENABLE_FREETYPE" enableFreetype)
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
-
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "plutosvg" ];
+      versionCheck = true;
+    };
+  };
 
   passthru.updateScript = nix-update-script { };
 

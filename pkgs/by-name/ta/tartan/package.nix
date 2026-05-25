@@ -5,7 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  llvmPackages,
+  llvmPackages_20,
   gobject-introspection,
   glib,
   unstableGitUpdater,
@@ -32,8 +32,9 @@ stdenv.mkDerivation {
   buildInputs = [
     gobject-introspection
     glib
-    llvmPackages.libclang
-    llvmPackages.libllvm
+    # https://gitlab.freedesktop.org/tartan/tartan/-/merge_requests/29
+    llvmPackages_20.libclang
+    llvmPackages_20.libllvm
   ];
 
   passthru = {
@@ -43,13 +44,13 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Tools and Clang plugins for developing code with GLib";
     homepage = "https://gitlab.freedesktop.org/tartan/tartan";
     changelog = "https://gitlab.freedesktop.org/tartan/tartan/-/blob/main/NEWS";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jtojnar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jtojnar ];
   };
 }

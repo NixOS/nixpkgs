@@ -13,18 +13,19 @@
   libgee,
   pantheon,
   desktop-file-utils,
-  xorg,
+  libxtst,
+  libx11,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ideogram";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ideogram";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };
 
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     pantheon.granite
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
   ];
 
   postPatch = ''
@@ -56,13 +57,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
     homepage = "https://github.com/cassidyjames/ideogram";
-    license = licenses.gpl2Plus;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.cassidyjames.ideogram";
   };
 
-}
+})

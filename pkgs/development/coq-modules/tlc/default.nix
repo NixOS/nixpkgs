@@ -40,11 +40,11 @@
 
   propagatedBuildInputs = [ stdlib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.chargueraud.org/softs/tlc/";
     description = "Non-constructive library for Coq";
-    license = licenses.free;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }).overrideAttrs
   (

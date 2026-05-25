@@ -13,24 +13,30 @@
   pkg-config,
   fetchFromGitHub,
 }:
-
+let
+  # We pin the nix version to a known working one here as upgrades can likely break the build.
+  # Since the nix language is rather stable we don't always need to have the latest and greatest for unit tests
+  # On each update of nix unit we should re-evaluate what version we need.
+  nixComponents = nixVersions.nixComponents_2_34;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix-unit";
-  version = "2.24.1";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-unit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PcT0jtv2QFaht5eSs1Vq4XGDqtMLdPC49ao9uwGYclE=";
+    hash = "sha256-vZfRXBDC9FTO2Vpz8TroVMqOYqp+hcVk6Nwx6+kRN1Q=";
   };
 
   buildInputs = [
+    nixComponents.nix-main
+    nixComponents.nix-store
+    nixComponents.nix-expr
+    nixComponents.nix-cmd
+    nixComponents.nix-flake
     nlohmann_json
-    # We pin the nix version to a known working one here as upgrades can likely break the build.
-    # Since the nix language is rather stable we don't always need to have the latest and greatest for unit tests
-    # On each update of nix unit we should re-evaluate what version we need.
-    nixVersions.nix_2_24
     boost
   ];
 
@@ -41,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     # nlohmann_json can be only discovered via cmake files
     cmake
-  ] ++ lib.optional stdenv.cc.isClang [ clang-tools ];
+  ]
+  ++ lib.optional stdenv.cc.isClang clang-tools;
 
   postInstall = ''
     wrapProgram "$out/bin/nix-unit" --prefix PATH : ${difftastic}/bin

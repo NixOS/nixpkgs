@@ -32,7 +32,8 @@
   openbox,
   fluxbox,
   enlightenment,
-  xorg,
+  libxft,
+  libxext,
   testers,
 
   gitUpdater,
@@ -43,32 +44,31 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.12.5";
+  version = "1.12.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/imlib2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+iMV8oN5tDCm5mBbQoSwe+BqPvQi1PXhybskcUxM9t0=";
+    hash = "sha256-JQ+XUvadxSLlKagaqpOVcF9/wxL/JFPl3lmsK6HyhY8=";
   };
 
-  buildInputs =
-    [
-      libjpeg
-      libtiff
-      giflib
-      libpng
-      bzip2
-      freetype
-      libid3tag
-    ]
-    ++ optionals x11Support [
-      xorg.libXft
-      xorg.libXext
-    ]
-    ++ optional heifSupport libheif
-    ++ optional svgSupport librsvg
-    ++ optional webpSupport libwebp
-    ++ optional jxlSupport libjxl
-    ++ optional psSupport libspectre;
+  buildInputs = [
+    libjpeg
+    libtiff
+    giflib
+    libpng
+    bzip2
+    freetype
+    libid3tag
+  ]
+  ++ optionals x11Support [
+    libxft
+    libxext
+  ]
+  ++ optional heifSupport libheif
+  ++ optional svgSupport librsvg
+  ++ optional webpSupport libwebp
+  ++ optional jxlSupport libjxl
+  ++ optional psSupport libspectre;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Image manipulation library";
 
     longDescription = ''
@@ -121,9 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
     changelog = "https://git.enlightenment.org/old/legacy-imlib2/raw/tag/v${finalAttrs.version}/ChangeLog";
-    license = licenses.imlib2;
+    license = lib.licenses.imlib2;
     pkgConfigModules = [ "imlib2" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

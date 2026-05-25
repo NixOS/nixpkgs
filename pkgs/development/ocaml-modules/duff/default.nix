@@ -9,7 +9,7 @@
   bigstringaf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "duff";
   version = "0.5";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/duff/releases/download/v${version}/duff-${version}.tbz";
+    url = "https://github.com/mirage/duff/releases/download/v${finalAttrs.version}/duff-${finalAttrs.version}.tbz";
     sha256 = "sha256-+UU89Ko7aFDv6MxvE/BT6+XyER+vF3zqv7sD5dmtbt4=";
   };
 
@@ -37,4 +37,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

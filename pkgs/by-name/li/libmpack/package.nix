@@ -5,13 +5,13 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmpack";
   version = "1.0.5";
   src = fetchFromGitHub {
     owner = "libmpack";
     repo = "libmpack";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0rai5djdkjz7bsn025k5489in7r1amagw1pib0z4qns6b52kiar2";
   };
 
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     "config=release"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple implementation of msgpack in C";
     homepage = "https://github.com/tarruda/libmpack/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -16,7 +16,7 @@ It should have the following properties:
 
 Non-goals are:
 - Efficient:
-  If the abstraction proves itself worthwhile but too slow, it can be still be optimized further.
+  If the abstraction proves itself worthwhile but too slow, it can still be optimized further.
 
 ## Tests
 
@@ -90,7 +90,7 @@ One of the following:
 - `"regular"`, `"symlink"`, `"unknown"` or any other non-`"directory"` string:
   A nested file with its file type.
   These specific strings are chosen to be compatible with `builtins.readDir` for a simpler implementation.
-  Distinguishing between different file types is not strictly necessary for the functionality this library,
+  Distinguishing between different file types is not strictly necessary for the functionality of this library,
   but it does allow nicer printing of file sets.
 
 - `null`:
@@ -127,7 +127,7 @@ Arguments:
 ### Empty file set without a base
 
 There is a special representation for an empty file set without a base path.
-This is used for return values that should be empty but when there's no base path that would makes sense.
+This is used for return values that should be empty but when there's no base path that would make sense.
 
 Arguments:
 - Alternative: This could also be represented using `_internalBase = /.` and `_internalTree = null`.
@@ -166,7 +166,8 @@ Meanwhile `intersection ./foo ./bar` returns the empty file set without a base p
 
 Arguments:
 - Alternative: Use the common prefix of all base paths as the resulting base path
-  - (-) This is unnecessarily strict, because the purpose of the base path is to track the directory under which files _could_ be in the file set. It should be as long as possible.
+  - (-) This is unnecessarily strict, because the purpose of the base path is to track the directory under which files _could_ be in the file set.
+    It should be as long as possible.
     All files contained in `intersection ./foo ./foo/bar` will be under `./foo/bar` (never just under `./foo`), and `intersection ./foo ./bar` will never contain any files (never under `./.`).
     This would lead to `toSource` having to unexpectedly throw errors for cases such as `toSource { root = ./foo; fileset = intersect ./foo base; }`, where `base` may be `./bar` or `./.`.
   - (-) There is no benefit to the user, since base path is not directly exposed in the interface
@@ -263,5 +264,6 @@ Coercing paths that don't exist to file sets always gives an error.
   - (+) This is dangerous, because you wouldn't be protected against typos anymore.
     E.g. when trying to prevent `./secret` from being imported, a typo like `difference ./. ./sercet` would import it regardless.
   - (+) `difference ./. (maybeMissing ./does-not-exist)` can be used to do this more explicitly.
-  - (+) `difference ./. (difference ./foo ./foo/bar)` should report an error when `./foo/bar` does not exist ("double negation"). Unfortunately, the current internal representation does not lend itself to a behavior where both `difference x ./does-not-exists` and double negation are handled and checked correctly.
+  - (+) `difference ./. (difference ./foo ./foo/bar)` should report an error when `./foo/bar` does not exist ("double negation").
+    Unfortunately, the current internal representation does not lend itself to a behavior where both `difference x ./does-not-exists` and double negation are handled and checked correctly.
     This could be fixed, but would require significant changes to the internal representation that are not worth the effort and the risk of introducing implicit behavior.

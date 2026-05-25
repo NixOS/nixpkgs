@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   fetchFromGitHub,
   flask,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "flask-sock";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
@@ -30,17 +27,17 @@ buildPythonPackage rec {
     simple-websocket
   ];
 
-  pytestFlagsArray = [ "tests/test_flask_sock.py" ];
+  enabledTestPaths = [ "tests/test_flask_sock.py" ];
 
   pythonImportsCheck = [ "flask_sock" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket support for Flask";
     homepage = "https://github.com/miguelgrinberg/flask-sock/";
     changelog = "https://github.com/miguelgrinberg/flask-sock/blob/main/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fmhoeger ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fmhoeger ];
   };
 }

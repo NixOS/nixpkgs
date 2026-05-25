@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "starship.yazi";
-  version = "25.4.8-unstable-2025-06-01";
+  version = "0-unstable-2026-03-22";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";
     repo = "starship.yazi";
-    rev = "6a0f3f788971b155cbc7cec47f6f11aebbc148c9";
-    hash = "sha256-q1G0Y4JAuAv8+zckImzbRvozVn489qiYVGFQbdCxC98=";
+    rev = "a83710153ab5625a64ef98d55e6ddad480a3756f";
+    hash = "sha256-CPRVJVunBLwFLCoj+XfoIIwrrwHxqoElbskCXZgFraw=";
   };
 
   meta = {

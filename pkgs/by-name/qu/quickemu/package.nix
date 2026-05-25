@@ -5,6 +5,7 @@
   makeWrapper,
   gitUpdater,
   cdrtools,
+  coreutils,
   curl,
   gawk,
   mesa-demos,
@@ -30,41 +31,41 @@
   installShellFiles,
 }:
 let
-  runtimePaths =
-    [
-      cdrtools
-      curl
-      gawk
-      gnugrep
-      gnused
-      jq
-      pciutils
-      procps
-      python3
-      (qemu.override { smbdSupport = true; })
-      socat
-      swtpm
-      util-linux
-      unzip
-      xrandr
-      zsync
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mesa-demos
-      usbutils
-      xdg-user-dirs
-    ];
+  runtimePaths = [
+    cdrtools
+    coreutils
+    curl
+    gawk
+    gnugrep
+    gnused
+    jq
+    pciutils
+    procps
+    python3
+    (qemu.override { smbdSupport = true; })
+    socat
+    swtpm
+    util-linux
+    unzip
+    xrandr
+    zsync
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mesa-demos
+    usbutils
+    xdg-user-dirs
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7";
+  version = "4.9.9";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
+    tag = finalAttrs.version;
+    hash = "sha256-HFq3oYz6KQcq3P92bTg2O5XFtZZcZBfiCOOJSfnV1ro=";
   };
 
   postPatch = ''

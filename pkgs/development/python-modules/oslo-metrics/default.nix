@@ -19,7 +19,8 @@
 
 buildPythonPackage rec {
   pname = "oslo-metrics";
-  version = "0.11.0";
+  version = "0.14.0";
+  pyproject = true;
 
   src = fetchFromGitea {
     domain = "opendev.org";
@@ -55,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_metrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack library for collecting metrics from Oslo libraries";
     homepage = "https://opendev.org/openstack/oslo.metrics";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

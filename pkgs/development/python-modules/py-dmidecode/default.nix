@@ -4,15 +4,12 @@
   dmidecode,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py-dmidecode";
   version = "0.1.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "py_dmidecode";
@@ -29,12 +26,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dmidecode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library that parses the output of dmidecode";
     homepage = "https://github.com/zaibon/py-dmidecode/";
     changelog = "https://github.com/zaibon/py-dmidecode/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

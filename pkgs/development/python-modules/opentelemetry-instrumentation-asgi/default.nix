@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   asgiref,
   hatchling,
   opentelemetry-api,
@@ -15,8 +14,6 @@ buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-asgi";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-asgi";
 

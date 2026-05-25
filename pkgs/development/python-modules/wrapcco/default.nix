@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wrapcco" ];
 
   meta = {
-    description = "Supercharge Python with C++ extensions!";
+    description = "Supercharge Python with C++ extensions";
     homepage = "https://github.com/H3cth0r/wrapc.co";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ h3cth0r ];

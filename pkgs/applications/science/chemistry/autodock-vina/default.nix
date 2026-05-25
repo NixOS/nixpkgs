@@ -25,13 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then "mac" else "linux"
   }/release";
 
-  buildInputs =
-    [
-      boost'
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glibc.static
-    ];
+  buildInputs = [
+    boost'
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glibc.static
+  ];
 
   makeFlags = [
     "GPP=${stdenv.cc.targetPrefix}c++"
@@ -49,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.boost = boost';
 
-  meta = with lib; {
+  meta = {
     description = "One of the fastest and most widely used open-source docking engines";
     homepage = "https://vina.scripps.edu/";
     changelog = "https://github.com/ccsb-scripps/AutoDock-Vina/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
     mainProgram = "vina";
   };
 })

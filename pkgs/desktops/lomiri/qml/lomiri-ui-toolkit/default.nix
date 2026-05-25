@@ -2,13 +2,20 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   replaceVars,
   testers,
+  bluez,
+  cmake,
   dbus-test-runner,
   dpkg,
   gdb,
   glib,
+  kdePackages,
+  # Used on Qt6
+  ktactilefeedback ? null,
+  libevdev,
   lttng-ust,
   mesa,
   perl,
@@ -17,13 +24,16 @@
   qmake,
   qtbase,
   qtdeclarative,
-  qtfeedback,
-  qtgraphicaleffects,
-  qtpim,
-  qtquickcontrols2,
+  # Used on Qt5
+  qtfeedback ? null,
+  qtgraphicaleffects ? null,
+  qtpim ? null,
+  qtquickcontrols2 ? null,
   qtsvg,
-  qtsystems,
+  qtsystems ? null,
   qttools,
+  qt5compat ? null,
+  spirv-tools,
   suru-icon-theme,
   validatePkgConfig,
   wrapQtAppsHook,
@@ -31,36 +41,65 @@
 }:
 
 let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
   listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
-  qtPluginPaths = listToQtVar qtbase.qtPluginPrefix [
-    qtbase
-    qtpim
-    qtsvg
-  ];
-  qtQmlPaths = listToQtVar qtbase.qtQmlPrefix [
-    qtdeclarative
-    qtfeedback
-    qtgraphicaleffects
-  ];
+  qtPluginPaths = listToQtVar qtbase.qtPluginPrefix (
+    [
+      qtbase
+      qtsvg
+    ]
+    ++ lib.optionals (!withQt6) [
+      # Will prolly want this in the future, but needs porting to Qt6
+      qtpim
+    ]
+  );
+  qtQmlPaths = listToQtVar qtbase.qtQmlPrefix (
+    [
+      qtdeclarative
+    ]
+    ++ lib.optionals withQt6 [
+      # Qt5Compat.GraphicalEffects
+      qt5compat
+
+      # Tactile feedback on Qt6
+      ktactilefeedback
+    ]
+    ++ lib.optionals (!withQt6) [
+      # Deprecated in Qt6
+      qtgraphicaleffects
+
+      # Tactile feedback on Qt5
+      qtfeedback
+    ]
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5110";
+  version = "1.3.5905";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-j2Fowwj+ArdfJacqBSWksPk+wXRoTpL/Jrgme2tUSC8=";
+    hash = "sha256-59Q7Atxt6CfR0LgNa6keGDY+HpV/eOdTngVHcUJEesg=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals (!withQt6) [
     "doc"
   ];
 
   patches = [
+    # Remove when version > 1.3.5905
+    (fetchpatch {
+      name = "0001-lomiri-ui-toolkit-Fix-compatibility-with-Qt-6.11.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/57303d2b01549ef78b029ed05babbc9400e102f3.patch";
+      hash = "sha256-22QSOaYZ+hsctLt8+ffrzBIY3btp+rM6NBsu0gvQMeM=";
+    })
+
     ./2001-Mark-problematic-tests.patch
 
     (replaceVars ./2002-Nixpkgs-versioned-QML-path.patch.in {
@@ -70,62 +109,95 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs documentation/docs.sh tests/
-
-    for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
-      substituteInPlace $subproject/$subproject.pro \
-        --replace-fail "\''$\''$[QT_INSTALL_PREFIX]" "$out" \
-        --replace-warn "\''$\''$[QT_INSTALL_LIBS]" "$out/lib"
-    done
-
-    # Install apicheck tool into bin
-    substituteInPlace apicheck/apicheck.pro \
-      --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
-
-    substituteInPlace documentation/documentation.pro \
-      --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
-      --replace-fail '$$[QT_INSTALL_DOCS]' '$$PREFIX/share/doc/lomiri-ui-toolkit'
-
-    # Causes redefinition error with our own fortify hardening
-    sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
-
-    # Reverse dependencies (and their reverse dependencies too) access the function patched here to register their gettext catalogues,
-    # so hardcoding any prefix here will make only catalogues in that prefix work. APP_DIR envvar will override this, but with domains from multiple derivations being
-    # used in a single application (lomiri-system-settings), that's of not much use either.
-    # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n.cpp#L101-129
-    #
-    # This could be solved with a reference to the prefix of whoever requests the domain, but the call happens via some automatic Qt / QML callback magic,
-    # I'm not sure what the best way of injecting that there would be.
-    # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n_p.h#L34
-    #
-    # Using /run/current-system/sw/share/locale instead of /usr/share/locale isn't a great
-    # solution, but at least it should get us working localisations
+  ''
+  # Reverse dependencies (and their reverse dependencies too) access the function patched here to register their gettext catalogues,
+  # so hardcoding any prefix here will make only catalogues in that prefix work. APP_DIR envvar will override this, but with domains from multiple derivations being
+  # used in a single application (lomiri-system-settings), that's of not much use either.
+  # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n.cpp#L101-129
+  #
+  # This could be solved with a reference to the prefix of whoever requests the domain, but the call happens via some automatic Qt / QML callback magic,
+  # I'm not sure what the best way of injecting that there would be.
+  # https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/blob/dcb3a523c56a400e5c3c163c2836cafca168767e/src/LomiriToolkit/i18n_p.h#L34
+  #
+  # Using /run/current-system/sw/share/locale instead of /usr/share/locale isn't a great
+  # solution, but at least it should get us working localisations
+  + ''
     substituteInPlace src/LomiriToolkit/i18n.cpp \
       --replace-fail "/usr" "/run/current-system/sw"
-
-    # The code here overrides the regular QML import variables so the just-built modules are found & used in the tests
-    # But we need their QML dependencies too, so put them back in there
+  ''
+  # The code here overrides the regular QML import variables so the just-built modules are found & used in the tests
+  # But we need their QML dependencies too, so put them back in there
+  + ''
     substituteInPlace export_qml_dir.sh \
       --replace-fail '_IMPORT_PATH=$BUILD_DIR/qml' '_IMPORT_PATH=$BUILD_DIR/qml:${qtQmlPaths}'
-
-    # These tests try to load Suru theme icons, but override XDG_DATA_DIRS / use full paths to load them
+  ''
+  # These tests try to load Suru theme icons, but override XDG_DATA_DIRS / use full paths to load them
+  + ''
     substituteInPlace \
       tests/unit/visual/tst_visual.cpp \
-      tests/unit/visual/tst_icon.{11,13}.qml \
-      tests/unit/visual/tst_imageprovider.11.qml \
+      tests/unit/visual/tst_icon.qml \
+      tests/unit/visual13/tst_icon.{11,13}.qml \
+      tests/unit/visual/tst_imageprovider.qml \
+      tests/unit/visual13/tst_imageprovider.11.qml \
       --replace-fail '/usr/share' '${suru-icon-theme}/share'
+  ''
+  + lib.optionalString (!withQt6) (
+    ''
+      for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
+        substituteInPlace $subproject/$subproject.pro \
+          --replace-fail "\''$\''$[QT_INSTALL_PREFIX]" "$out"
+      done
+    ''
+    # Install apicheck tool into bin
+    + ''
+      substituteInPlace apicheck/apicheck.pro \
+        --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
+    ''
+    + ''
+      substituteInPlace \
+        src/LomiriMetrics/LomiriMetrics.pro \
+        src/LomiriMetrics/lttng/lttng.pro \
+        --replace-fail '$$[QT_INSTALL_PLUGINS]' "$out/${qtbase.qtPluginPrefix}"
+    ''
+    + ''
+      substituteInPlace features/lomiri_qml_plugin.prf \
+        --replace-fail '$$[QT_INSTALL_QML]' "$out/${qtbase.qtQmlPrefix}"
+    ''
+    + ''
+      substituteInPlace documentation/documentation.pro \
+        --replace-fail '/usr/share/doc' '$$PREFIX/share/doc' \
+        --replace-fail '$$[QT_INSTALL_DOCS]' '$$PREFIX/share/doc/lomiri-ui-toolkit'
+    ''
+    # Causes redefinition error with our own fortify hardening
+    + ''
+      sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
+    ''
+  )
+  + lib.optionalString withQt6 ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/plugins" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}"
   '';
 
-  # With strictDeps, QMake only picks up Qt dependencies from nativeBuildInputs
+  # With strictDeps
+  # - QMake only picks up Qt dependencies from nativeBuildInputs
+  # - Qt6's CMake module seems to struggle with picking up other Qt modules from buildInputs
   strictDeps = false;
 
   nativeBuildInputs = [
     perl
     pkg-config
     python3
-    qmake
     qttools # qdoc, qhelpgenerator
     validatePkgConfig
     wrapQtAppsHook
+  ]
+  ++ lib.optionals withQt6 [
+    cmake
+    spirv-tools
+  ]
+  ++ lib.optionals (!withQt6) [
+    qmake
   ];
 
   buildInputs = [
@@ -133,15 +205,37 @@ stdenv.mkDerivation (finalAttrs: {
     lttng-ust
     qtbase
     qtdeclarative
-    qtpim
+  ]
+  ++ lib.optionals (!withQt6) [
+    # Folded into qtdeclarative in Qt6
     qtquickcontrols2
+
+    # Will prolly want this in the future, but needs porting to Qt6
+    qtpim
     qtsystems
+  ]
+  ++ lib.optionals withQt6 [
+    bluez
+    kdePackages.extra-cmake-modules
+    libevdev
   ];
 
   propagatedBuildInputs = [
-    qtfeedback
-    qtgraphicaleffects
     qtsvg
+  ]
+  ++ lib.optionals withQt6 [
+    # Qt5Compat.GraphicalEffects
+    qt5compat
+
+    # Tactile feedback on Qt6
+    ktactilefeedback
+  ]
+  ++ lib.optionals (!withQt6) [
+    # Deprecated in Qt6
+    qtgraphicaleffects
+
+    # Tactile feedback on Qt5
+    qtfeedback
   ];
 
   nativeCheckInputs = [
@@ -152,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
   ];
 
-  qmakeFlags = [
+  qmakeFlags = lib.optionals (!withQt6) [
     # Ubuntu UITK compatibility, for older / not-yet-migrated applications
     "CONFIG+=ubuntu-uitk-compat"
     "QMAKE_PKGCONFIG_PREFIX=${placeholder "out"}"
@@ -178,12 +272,16 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${qtPluginPaths}
     export XDG_DATA_DIRS=${suru-icon-theme}/share
 
-    tests/xvfb.sh make check ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
+    export UITK_BUILD_ROOT=$PWD
+
+    ${lib.optionalString withQt6 "../"}tests/xvfb.sh make ${
+      if withQt6 then "test" else "check"
+    } ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
 
     runHook postCheck
   '';
 
-  preInstall = ''
+  preInstall = lib.optionalString (!withQt6) ''
     # wrapper script calls qmlplugindump, crashes due to lack of minimal platform plugin
     # Could not find the Qt platform plugin "minimal" in ""
     # Available platform plugins are: wayland-egl, wayland, wayland-xcomposite-egl, wayland-xcomposite-glx.
@@ -196,20 +294,24 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postInstall = ''
-    # Code loads Qt's qt_module.prf, which force-overrides all QMAKE_PKGCONFIG_* variables except PREFIX for QMake-generated pkg-config files
-    for pcFile in Lomiri{Gestures,Metrics,Toolkit}.pc; do
-      substituteInPlace $out/lib/pkgconfig/$pcFile \
-        --replace-fail "${lib.getLib qtbase}/lib" "\''${prefix}/lib" \
-        --replace-fail "${lib.getDev qtbase}/include" "\''${prefix}/include"
-    done
-
-    # These are all dev-related tools, but declaring a bin output also moves around the QML modules
-    moveToOutput "bin" "$dev"
-  '';
+  postInstall =
+    lib.optionalString (!withQt6) ''
+      # Code loads Qt's qt_module.prf, which force-overrides all QMAKE_PKGCONFIG_* variables except PREFIX for QMake-generated pkg-config files
+      for pcFile in Lomiri{Gestures,Metrics,Toolkit}${lib.optionalString withQt6 "-Qt6"}.pc; do
+        substituteInPlace $out/lib/pkgconfig/$pcFile \
+          --replace-fail "${lib.getLib qtbase}/lib" "\''${prefix}/lib" \
+          --replace-fail "${lib.getDev qtbase}/include" "\''${prefix}/include"
+      done
+    ''
+    + ''
+      # These are all dev-related tools, but declaring a bin output also moves around the QML modules
+      moveToOutput "bin" "$dev"
+    '';
 
   postFixup = ''
-    for qtBin in $dev/bin/{apicheck,lomiri-ui-toolkit-launcher}; do
+    for qtBin in ${
+      if withQt6 then "$out/libexec/lomiri-ui-toolkit/qt6" else "$dev/bin"
+    }/apicheck $dev/bin/lomiri-ui-toolkit-launcher${lib.optionalString withQt6 "-qt6"}; do
       wrapQtApp $qtBin
     done
   '';
@@ -244,9 +346,9 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "LomiriGestures"
-      "LomiriMetrics"
-      "LomiriToolkit"
+      "LomiriGestures${lib.optionalString withQt6 "-Qt6"}"
+      "LomiriMetrics${lib.optionalString withQt6 "-Qt6"}"
+      "LomiriToolkit${lib.optionalString withQt6 "-Qt6"}"
     ];
   };
 })

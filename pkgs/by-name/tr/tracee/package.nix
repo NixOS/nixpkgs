@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 
-  clang_14,
+  clang,
   pkg-config,
 
   elfutils,
@@ -17,17 +17,17 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tracee";
-  version = "0.23.1";
+  version = "0.23.2";
 
   # src = /home/tim/repos/tracee;
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "tracee";
     # project has branches and tags of the same name
-    tag = "v${version}";
-    hash = "sha256-9uP0yoW+xRYv7wHuCfUMU8B2oTQjiSW5p/Ty76ni2wo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Rf1pa9e6t002ltg40xZZVpE5OL9Vl02Xcn2Ux0To408=";
   };
   vendorHash = "sha256-2+4UN9WB6eGzedogy5dMvhHj1x5VeUUkDM0Z28wKQgM=";
 
@@ -37,10 +37,13 @@ buildGoModule rec {
 
   enableParallelBuilding = true;
   # needed to build bpf libs
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [
+    "stackprotector"
+    "zerocallusedregs"
+  ];
 
   nativeBuildInputs = [
-    clang_14
+    clang
     pkg-config
   ];
   buildInputs = [
@@ -51,7 +54,7 @@ buildGoModule rec {
   ];
 
   makeFlags = [
-    "RELEASE_VERSION=v${version}"
+    "RELEASE_VERSION=v${finalAttrs.version}"
     "GO_DEBUG_FLAG=-s -w"
     # don't actually need git but the Makefile checks for it
     "CMD_GIT=echo"
@@ -92,14 +95,14 @@ buildGoModule rec {
     integration-test-cli = import ./integration-tests.nix { inherit lib tracee makeWrapper; };
     version = testers.testVersion {
       package = tracee;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
       command = "tracee version";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://aquasecurity.github.io/tracee/latest/";
-    changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${version}";
+    changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${finalAttrs.version}";
     description = "Linux Runtime Security and Forensics using eBPF";
     mainProgram = "tracee";
     longDescription = ''
@@ -109,13 +112,13 @@ buildGoModule rec {
       is delivered as a Docker image that monitors the OS and detects suspicious
       behavior based on a pre-defined set of behavioral patterns.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       # general license
       asl20
       # pkg/ebpf/c/*
       gpl2Plus
     ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with lib.maintainers; [ jk ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -125,4 +128,4 @@ buildGoModule rec {
       "share"
     ];
   };
-}
+})

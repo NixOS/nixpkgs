@@ -6,27 +6,26 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vi-mongo";
-  version = "0.1.28";
+  version = "0.1.30";
 
   src = fetchFromGitHub {
     owner = "kopecmaciej";
     repo = "vi-mongo";
-    tag = "v${version}";
-    hash = "sha256-vqwsFWU/DSxvmlHGG91MK8MqRYmSZrzB1ypjMNug6v0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gNOKWgGRuWUNqBAu5gWx/HFiNfx+HOdi5tYVyXP3dcI=";
   };
 
-  vendorHash = "sha256-Z1qvTde0TtoIKUppfDRcNx9qAFbAqFf3xIOTNQnPQng=";
+  vendorHash = "sha256-QoYjNzWWNrEDS4Xq1NF77iqX5WTNxnVV1UJiYq2slhw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/kopecmaciej/vi-mongo/cmd.version=${version}"
+    "-X=github.com/kopecmaciej/vi-mongo/cmd.version=${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -34,9 +33,9 @@ buildGoModule rec {
   meta = {
     description = "MongoDB TUI manager designed to simplify data visualization and quick manipulation";
     homepage = "https://github.com/kopecmaciej/vi-mongo";
-    changelog = "https://github.com/kopecmaciej/vi-mongo/releases/tag/v${version}";
+    changelog = "https://github.com/kopecmaciej/vi-mongo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "vi-mongo";
   };
-}
+})

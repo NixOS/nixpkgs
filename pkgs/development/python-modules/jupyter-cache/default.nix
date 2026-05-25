@@ -11,15 +11,12 @@
   pyyaml,
   sqlalchemy,
   tabulate,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;
@@ -42,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_cache" ];
 
-  meta = with lib; {
+  meta = {
     description = "Defined interface for working with a cache of jupyter notebooks";
     mainProgram = "jcache";
     homepage = "https://github.com/executablebooks/jupyter-cache";
     changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

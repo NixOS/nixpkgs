@@ -19,19 +19,18 @@ rustPlatform.buildRustPackage {
 
   cargoPatches = [ ./update-cargo-lock-version.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ETbWV5OjRzQuq/rVyu22YRFjeQcuNA1REyzg46s3q5A=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Add torrents to transmission based on RSS list";
     homepage = "https://github.com/herlon214/transmission-rss";
-    maintainers = with maintainers; [ icewind1991 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ icewind1991 ];
+    license = lib.licenses.mit;
     mainProgram = "transmission-rss";
   };
 }

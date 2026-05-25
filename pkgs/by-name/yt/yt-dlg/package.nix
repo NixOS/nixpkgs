@@ -3,14 +3,14 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yt-dlg";
   version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "oleksis";
     repo = "youtube-dl-gui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-W1ZlArmM+Ro5MF/rB88me/PD79dJA4v188mPbMd8Kow=";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "yt-dlg";
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
-}
+})

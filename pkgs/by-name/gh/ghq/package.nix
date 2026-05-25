@@ -1,6 +1,7 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  buildGo126Module,
   fetchFromGitHub,
   installShellFiles,
   testers,
@@ -8,28 +9,28 @@
   ghq,
 }:
 
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "ghq";
-  version = "1.8.0";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
-    tag = "v${version}";
-    sha256 = "sha256-5BN96/RShfJpkfpJe0qrZVDuyFoAV9kgCiBv4REY/5Y=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-z7tLCSThR4EFLk8GnyrB8H6d/9t5AKegVEdzlleCS94=";
   };
 
-  vendorHash = "sha256-jP2Ne/EhmE3tACY1+lHucgBt3VnT4gaQisE3/gVM5Ec=";
+  vendorHash = "sha256-/uk1hf5eXpNULKm7UeVgQ7Lc7YOU+eV9Yd/4lYorz/8=";
 
   doCheck = false;
 
   ldflags = [
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion \
       --bash $src/misc/bash/_ghq \
       --fish $src/misc/fish/ghq.fish \
@@ -50,4 +51,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "ghq";
   };
-}
+})

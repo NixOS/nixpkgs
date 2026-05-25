@@ -15,9 +15,7 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 ```nix
 {
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta.pkgConfigModules = [ "libfoo" ];
 }
@@ -65,7 +63,7 @@ Note the moduleNames used in cmake find_package are case sensitive.
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
 
 You may use Nix to reproducibly build static websites, such as for software documentation.
-Some packages will install documentation in their `out` or `doc` outputs, or maybe you have dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
+Some packages will install documentation in their `out` or `doc` outputs, or maybe you have a dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
 
 If you have a static site that can be built with Nix, you can use `lycheeLinkCheck` to check that the hyperlinks in your site are correct, and do so as part of your Nix workflow and CI.
 
@@ -74,9 +72,7 @@ If you have a static site that can be built with Nix, you can use `lycheeLinkChe
 # Check hyperlinks in the `nix` documentation
 
 ```nix
-testers.lycheeLinkCheck {
-  site = nix.doc + "/share/doc/nix/manual";
-}
+testers.lycheeLinkCheck { site = nix.doc + "/share/doc/nix/manual"; }
 ```
 
 :::
@@ -102,7 +98,7 @@ It has two modes:
 
 : The path to the files to check.
 
-`remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
+`remap` (attribute set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
   The values should be strings, derivations, or path values.
@@ -132,6 +128,13 @@ It has two modes:
   It is automatically [translated](https://nixos.org/manual/nixos/stable/index.html#sec-settings-nix-representable) to TOML.
 
   Example: `{ "include_verbatim" = true; }`
+
+`extraArgs` (list of strings, optional) {#tester-lycheeLinkCheck-param-extraArgs}
+
+: Extra command line arguments to pass to the `lychee` invocation.
+  These are passed in both the offline (build) and [`online`](#tester-lycheeLinkCheck-return) modes.
+
+  Example: `[ "--format" "json" ]`
 
 `lychee` (derivation, optional) {#tester-lycheeLinkCheck-param-lychee}
 
@@ -269,9 +272,7 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-{
-  passthru.tests.version = testers.testVersion { package = hello; };
-}
+{ passthru.tests.version = testers.testVersion { package = hello; }; }
 ```
 
 :::
@@ -411,6 +412,27 @@ The tester produces an empty output and only succeeds when the checks using `exp
 
 Check that two paths have the same contents.
 
+`assertion` (string)
+
+: A message that is printed before the comparison, after `Checking:`.
+
+`expected` (path or value coercible to store path)
+
+: The path to the expected [file system object] content
+
+`actual` (value coercible to store path) <!-- path value is possible, but wrong in practice, but let's not bother readers with our predictions -->
+
+: The path to the actual file system object content to check
+
+`postFailureMessage` (string)
+
+: A message that is printed last if the file system object contents at the two paths don't match exactly.
+
+`checkMetadata` (boolean)
+
+: Whether to fail on metadata differences, such as permissions or ownership.
+  Defaults to `true`.
+
 :::{.example #ex-testEqualContents-toyexample}
 
 # Check that two paths have the same contents
@@ -433,6 +455,11 @@ testers.testEqualContents {
       ''
         sed -e 's/bar/baz/g' $base >$out
       '';
+  # if applicable
+  postFailureMessage = ''
+    The bar-baz replacer produced an unexpected result.
+    If the new behavior is acceptable and validated against the bar-baz specification, run ./adopt-new-bar-baz-result.sh to adjust this test and require the new behavior.
+  '';
 }
 ```
 
@@ -558,7 +585,7 @@ Use the derivation hash to invalidate the output via name, for testing.
 
 Type: `(a@{ name, ... } -> Derivation) -> a -> Derivation`
 
-Normally, fixed output derivations can and should be cached by their output hash only, but for testing we want to re-fetch everytime the fetcher changes.
+Normally, fixed output derivations can and should be cached by their output hash only, but for testing we want to re-fetch every time the fetcher changes.
 
 Changes to the fetcher become apparent in the drvPath, which is a hash of how to fetch, rather than a fixed store path.
 By inserting this hash into the name, we can make sure to re-run the fetcher every time the fetcher changes.
@@ -592,7 +619,7 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 
 This is a wrapper around `pkgs.runCommandWith`, which
 - produces a fixed-output derivation, enabling the command(s) to access the network ;
-- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
+- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs change.
 
 It accepts the following attributes:
 - the derivation's `name` ;
@@ -701,3 +728,5 @@ Notable attributes:
  * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
  * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+
+[file system object]: https://nix.dev/manual/nix/latest/store/file-system-object

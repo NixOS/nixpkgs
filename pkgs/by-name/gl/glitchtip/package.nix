@@ -1,10 +1,7 @@
 {
   lib,
-  python313,
+  python314,
   fetchFromGitLab,
-  fetchFromGitHub,
-  fetchPypi,
-  rustPlatform,
   callPackage,
   stdenv,
   makeWrapper,
@@ -12,40 +9,10 @@
 }:
 
 let
-  python = python313.override {
+  python = python314.override {
     self = python;
     packageOverrides = final: prev: {
-      django = final.django_5_2;
-      django-csp = prev.django-csp.overridePythonAttrs rec {
-        version = "4.0";
-        src = fetchPypi {
-          inherit version;
-          pname = "django_csp";
-          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
-        };
-      };
-      django-ninja-cursor-pagination = prev.django-ninja-cursor-pagination.overridePythonAttrs {
-        # checks are failing with django 5
-        doCheck = false;
-      };
-      symbolic = prev.symbolic.overridePythonAttrs rec {
-        version = "10.2.1";
-        src = fetchFromGitHub {
-          owner = "getsentry";
-          repo = "symbolic";
-          tag = version;
-          hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
-          # the `py` directory is not included in the tarball, so we fetch the source via git instead
-          forceFetchGit = true;
-        };
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          inherit src postPatch;
-          hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
-        };
-        postPatch = ''
-          ln -s ${./symbolic_Cargo.lock} Cargo.lock
-        '';
-      };
+      django = final.django_6;
     };
   };
 
@@ -54,15 +21,15 @@ let
     [
       aiohttp
       anonymizeip
+      arro3-core
+      arro3-io
       boto3
       brotli
-      celery
-      celery-batches
+      cxxfilt
       django
       django-allauth
       django-anymail
       django-cors-headers
-      django-csp
       django-environ
       django-extensions
       django-import-export
@@ -72,27 +39,34 @@ let
       django-organizations
       django-postgres-partition
       django-prometheus
-      django-redis
       django-storages
+      django-vcache
+      django-vtasks
+      duckdb
       google-cloud-logging
-      gunicorn
+      granian
+      mcp
+      minidump
       orjson
       psycopg
       pydantic
       sentry-sdk
       symbolic
       user-agents
-      uvicorn
+      uuid6
       uwsgi-chunked
       whitenoise
     ]
-    ++ celery.optional-dependencies.redis
+    ++ django-allauth.optional-dependencies.headless-spec
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
-    ++ django-redis.optional-dependencies.hiredis
     ++ django-storages.optional-dependencies.boto3
     ++ django-storages.optional-dependencies.azure
     ++ django-storages.optional-dependencies.google
+    ++ django-vtasks.optional-dependencies.valkey
+    ++ granian.optional-dependencies.reload
+    ++ granian.optional-dependencies.uvloop
+    ++ mcp.optional-dependencies.cli
     ++ psycopg.optional-dependencies.c
     ++ psycopg.optional-dependencies.pool
     ++ pydantic.optional-dependencies.email;
@@ -102,15 +76,23 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.0.4";
+  version = "6.1.6";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ihefyunZc191w9cn7iSqblNA4V4hELi9jwxfFrjPvu0=";
+    hash = "sha256-BUWLN3+ob934MgIoDLirY0O8fn6G3zmGA5wuVGPPp7w=";
   };
+
+  postPatch = ''
+    echo 'import os
+    ALLAUTH_TRUSTED_CLIENT_IP_HEADER = os.getenv(
+        "ALLAUTH_TRUSTED_CLIENT_IP_HEADER",
+        None
+    )' >> glitchtip/settings.py
+  '';
 
   propagatedBuildInputs = pythonPackages;
 

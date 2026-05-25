@@ -45,6 +45,8 @@ stdenv.mkDerivation {
     )
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildPhase = ''
     runHook preBuild
     for makefile in "''${makeFiles[@]}"; do
@@ -69,7 +71,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform port of Hexen II game";
     longDescription = ''
@@ -79,8 +81,8 @@ stdenv.mkDerivation {
       support for many operating systems and architectures, and documentation among many others.
     '';
     homepage = "https://uhexen2.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ xdhampus ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ xdhampus ];
+    platforms = lib.platforms.all;
   };
 }

@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "konnected" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async Python library for interacting with Konnected home automation controllers";
     homepage = "https://github.com/konnected-io/konnected-py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

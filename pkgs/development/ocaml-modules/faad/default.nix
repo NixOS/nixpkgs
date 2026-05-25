@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "faad";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-faad";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3ayKZhgJAgsoOqn0InSrM5f3TImRHOQMtWETICo4t3o=";
   };
 
@@ -22,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ faad2 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-faad";
     description = "Bindings for the faad library which provides functions for decoding AAC audio files";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

@@ -3,12 +3,12 @@
   stdenv,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psftools";
-  version = "1.1.2";
+  version = "1.1.3";
   src = fetchurl {
-    url = "https://www.seasip.info/Unix/PSF/${pname}-${version}.tar.gz";
-    sha256 = "sha256-d/XlKPqYy9x8KNT+8G6zv9ST/uU53Tg4pYrlA17Jh94=";
+    url = "https://www.seasip.info/Unix/PSF/psftools-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-uiPWgJblAMKpM79L1FrJg4RzJ0D/XenkfUXNTmvq9B8=";
   };
   outputs = [
     "out"
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.seasip.info/Unix/PSF";
     description = "Conversion tools for .PSF fonts";
     longDescription = ''
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
       and PSF2 (any width) formats are supported; the default output
       format is PSF2.
     '';
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kaction ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

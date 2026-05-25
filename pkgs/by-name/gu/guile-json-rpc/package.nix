@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   guile,
   pkg-config,
   guile-srfi-145,
@@ -9,14 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-json-rpc";
-  version = "0.4.5a";
+  version = "0.6.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "rgherdt";
     repo = "scheme-json-rpc";
     tag = finalAttrs.version;
-    hash = "sha256-sTJxPxHKovMOxfu5jM/6EpB9RFpG+9E3388xeE2Fpgw=";
+    hash = "sha256-3Wb3ZtcFQCOESe0Yq4cEG2jJ4+dOjlf9LKrclHhpkbU=";
   };
 
   strictDeps = true;

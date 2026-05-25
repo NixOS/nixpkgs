@@ -6,22 +6,21 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfinity";
-  version = "0.2.13";
+  version = "0.3.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-yBWhY4Uta/K/Ka5DzhpZUiv0Y3Yfn4dI4ZARpJqTqY8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-5UhKL6lXli1mGorThv3SFclVKDATmxklZQ+S5hwqQgc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ifVhVFiTO1CVpWo6B9OZXJwuc40IRkSc4ncMXG+5DnE=";
+  cargoHash = "sha256-ZzVGr/Zj+WKKAUqJEbDZgEL7fHzRiI/aSF6e5sLZY+o=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   # Requires network and fs access
   checkFlags = [
@@ -39,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "rustfinity";
   };
-}
+})

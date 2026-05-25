@@ -18,7 +18,6 @@
 
   # tests
   black,
-  coverage,
   ipykernel,
   pytest-cov-stub,
   pytest-regressions,
@@ -38,6 +37,12 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-LoK0wb7rAbVbgyURCbSfckWvJDef3tPY+7V4YU1IBRU=";
   };
+
+  postPatch = ''
+    # we disable the tests relying on coverage for unrelated reasons
+    substituteInPlace tests/test_execution.py \
+      --replace-fail "from coverage import CoverageData" ""
+  '';
 
   build-system = [
     flit-core
@@ -62,7 +67,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     black
-    coverage
     ipykernel
     pytest-cov-stub
     pytest-regressions
@@ -70,23 +74,22 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # AssertionError: FILES DIFFER:
-      "test_diff_to_string"
+  disabledTests = [
+    # AssertionError: FILES DIFFER:
+    "test_diff_to_string"
 
-      # pytest_notebook.execution.CoverageError: An error occurred while executing coverage start-up
-      # TypeError: expected str, bytes or os.PathLike object, not NoneType
-      "test_execute_notebook_with_coverage"
-      "test_regression_coverage"
+    # pytest_notebook.execution.CoverageError: An error occurred while executing coverage start-up
+    # TypeError: expected str, bytes or os.PathLike object, not NoneType
+    "test_execute_notebook_with_coverage"
+    "test_regression_coverage"
 
-      # pytest_notebook.nb_regression.NBRegressionError
-      "test_regression_regex_replace_pass"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AssertionError: FILES DIFFER:
-      "test_documentation"
-    ];
+    # pytest_notebook.nb_regression.NBRegressionError
+    "test_regression_regex_replace_pass"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError: FILES DIFFER:
+    "test_documentation"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -21,7 +21,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     bc
     nukeReferences
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
   hardeningDisable = [
     "pic"
     "format"
@@ -34,15 +35,14 @@ stdenv.mkDerivation {
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  makeFlags =
-    [
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-      ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
-      ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ];
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
+    ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
@@ -54,11 +54,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
     homepage = "https://github.com/morrownr/8812au-20210820";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ moni ];
+    broken = kernel.kernelOlder "5.10" || kernel.kernelAtLeast "6.15";
   };
 }

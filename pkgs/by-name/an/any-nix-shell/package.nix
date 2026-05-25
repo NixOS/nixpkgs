@@ -8,14 +8,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "any-nix-shell";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "haslersn";
     repo = "any-nix-shell";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t6+LKSGWmkHQhfqw/4Ztz4QgDXQ2RZr9R/mMEEA3jlY=";
   };
 
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "fish, xonsh and zsh support for nix-shell";
+    description = "Fish, xonsh and zsh support for nix-shell";
     license = lib.licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";
     maintainers = with lib.maintainers; [ haslersn ];
     mainProgram = "any-nix-shell";
   };
-}
+})

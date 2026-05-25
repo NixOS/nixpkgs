@@ -1,10 +1,5 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
 
   # dependencies
   pytorch-lightning,
@@ -17,6 +12,7 @@
 buildPythonPackage {
   pname = "lightning";
   pyproject = true;
+  __structuredAttrs = true;
 
   inherit (pytorch-lightning)
     version
@@ -32,7 +28,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  # Some packages are not in NixPkgs; other tests try to build distributed
+  # Some packages are not in nixpkgs; other tests try to build distributed
   # models, which doesn't work in the sandbox.
   doCheck = false;
 

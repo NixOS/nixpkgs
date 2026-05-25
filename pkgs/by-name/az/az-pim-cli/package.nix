@@ -4,18 +4,19 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
-  testers,
 }:
 buildGoModule (finalAttrs: {
   pname = "az-pim-cli";
-  version = "1.6.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "netr0m";
     repo = "az-pim-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gf4VscHaUr3JtsJO5PAq1nyPeJxIwGPaiH/QdXKpvQ0=";
+    hash = "sha256-2WhinTxFCNLgw2TejoulhGXJwnUHP/CyC/Gwedv/8Xw=";
   };
 
   patches = [
@@ -23,7 +24,7 @@ buildGoModule (finalAttrs: {
     ./version-build-info.patch
   ];
 
-  vendorHash = "sha256-PHrpUlAG/PBe3NKUGBQ1U7dCcqkSlErWX2dp9ZPB3+8=";
+  vendorHash = "sha256-K4tv3IlVygV/aDR9twh60FX8pe4f0sXxoGNIsIV2oUA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,21 +44,22 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/az-pim-cli completion zsh)
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      command = "HOME=$TMPDIR az-pim-cli version";
-      package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
-    };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "List and activate Azure Entra ID Privileged Identity Management roles from the CLI";
     homepage = "https://github.com/netr0m/az-pim-cli";
     changelog = "https://github.com/netr0m/az-pim-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
     mainProgram = "az-pim-cli";
   };
 })

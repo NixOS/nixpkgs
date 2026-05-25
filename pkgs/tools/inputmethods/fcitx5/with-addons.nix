@@ -8,28 +8,33 @@
   libsForQt5,
   qt6Packages,
   fcitx5-gtk,
+  librsvg,
   addons ? [ ],
 }:
 
 symlinkJoin {
   name = "fcitx5-with-addons-${fcitx5.version}";
 
-  paths =
-    [
-      fcitx5
-      libsForQt5.fcitx5-qt
-      qt6Packages.fcitx5-qt
-      fcitx5-gtk
-    ]
-    ++ lib.optionals withConfigtool [
-      fcitx5-configtool
-    ]
-    ++ addons;
+  paths = [
+    fcitx5
+    libsForQt5.fcitx5-qt
+    qt6Packages.fcitx5-qt
+    fcitx5-gtk
+  ]
+  ++ lib.optionals withConfigtool [
+    fcitx5-configtool
+  ]
+  ++ addons;
+
+  buildInputs = [
+    librsvg
+  ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/fcitx5 \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5" \
       --suffix XDG_DATA_DIRS : "$out/share" \
       --suffix PATH : "$out/bin" \

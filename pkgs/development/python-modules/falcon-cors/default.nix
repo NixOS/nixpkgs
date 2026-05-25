@@ -6,14 +6,15 @@
   falcon,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "falcon-cors";
   version = "1.1.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lwcolton";
     repo = "falcon-cors";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jlEWP7gXbWfdY4coEIM6NWuBf4LOGbUAFMNvqip/FcA=";
   };
 
@@ -33,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

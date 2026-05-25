@@ -3,25 +3,20 @@
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
-  nodejs,
   php,
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodePackages,
-  python3,
-  pkg-config,
-  libsass,
-  stdenv,
+  grunt-cli,
   fetchzip,
 }:
 let
-  version = "1.6.2";
+  version = "1.7.1";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    hash = "sha256-ME8ornP2uevvH8DzuI25Z8OV0EP98CBgbunvb2Hbr9M=";
+    hash = "sha256-DpQazuLOJnNGrrQo7l6uQReoKZEd5es2DT0a50NuQB0=";
   };
 in
 php.buildComposerProject2 (finalAttrs: {
@@ -32,44 +27,28 @@ php.buildComposerProject2 (finalAttrs: {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
     tag = "v${version}";
-    hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
+    hash = "sha256-Nci5GaCMYIjewq0W5emE6TDgc6JPz4bVVF3okNtHUag=";
   };
 
-  vendorHash = "sha256-eq3YKIZZzZihDYgFH3YTETHvNG6hAE/oJ5Ul2XRMn4U=";
+  # Composer.lock validation currently fails for unknown reason
+  composerStrictValidation = true;
 
-  buildInputs = [ libsass ];
+  vendorHash = "sha256-adKvKWo55SSbEKpgMJzR9vJQA8DnNXOTfSzp7t8s2Nk=";
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
     yarnInstallHook
     # Needed for executing package.json scripts
-    nodePackages.grunt-cli
-    pkg-config
-    (python3.withPackages (ps: with ps; [ distutils ]))
-    stdenv.cc
+    grunt-cli
   ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-KVlqC9zSijPP4/ifLBHD04fm6IQJpil0Gy9M3FNvUUw=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-rJlOYMnzFKui+caIFD4d82Q/RcDYnadeJ1G56fcNNQY=";
   };
 
-  # Upstream composer.json file is missing the name, description and license fields
-  composerStrictValidation = false;
-
   postBuild = ''
-    # Building node-sass dependency
-    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
-    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
-    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
-    export npm_config_nodedir=${nodejs}
-
-    pushd node_modules/node-sass
-    LIBSASS_EXT=auto yarn run build --offline
-    popd
-
-    # Running package.json scripts
     grunt build
   '';
 

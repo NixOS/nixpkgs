@@ -54,9 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${axios} ThirdPartyDownloads/axios-0.19.0.tar.gz
     ln -s ${font-awesome} ThirdPartyDownloads/Font-Awesome-4.7.0.tar.gz
     ln -s ${babel-polyfill} ThirdPartyDownloads/babel-polyfill-6.26.0.min.js.gz
-  '';
 
-  SourceRoot = "${finalAttrs.src.name}/Build";
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  NIX_LDFLAGS = lib.strings.concatStringsSep " " [
+  env.NIX_LDFLAGS = toString [
     "-L${lib.getLib gtest}"
     "-lgtest"
   ];
@@ -93,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Plugin that extends Orthanc with support for the DICOMweb protocols";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      drupol
       dvcorreia
     ];
     platforms = lib.platforms.linux;

@@ -9,9 +9,12 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncpp";
-  version = "1.9.6";
+  version = "1.9.7";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -21,8 +24,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
-    rev = version;
-    sha256 = "sha256-3msc3B8NyF8PUlNaAHdUDfCpcUmz8JVW2X58USJ5HRw=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-rf8d2UNTVEZhuiyChK2XnUbfGDvsfXnKADhaSp8qBwQ=";
   };
 
   /*
@@ -30,13 +33,9 @@ stdenv.mkDerivation rec {
     --reflink=auto flag, which is used in the default unpackPhase for dirs
   */
   unpackPhase = ''
-    cp -a ${src} ${src.name}
-    chmod -R +w ${src.name}
-    export sourceRoot=${src.name}
-  '';
-
-  postPatch = lib.optionalString secureMemory ''
-    sed -i 's/#define JSONCPP_USING_SECURE_MEMORY 0/#define JSONCPP_USING_SECURE_MEMORY 1/' include/json/version.h
+    cp -a ${finalAttrs.src} ${finalAttrs.src.name}
+    chmod -R +w ${finalAttrs.src.name}
+    export sourceRoot=${finalAttrs.src.name}
   '';
 
   nativeBuildInputs = [
@@ -45,26 +44,26 @@ stdenv.mkDerivation rec {
     validatePkgConfig
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DBUILD_OBJECT_LIBS=OFF"
-      "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
-      "-DBUILD_STATIC_LIBS=${if enableStatic then "ON" else "OFF"}"
-    ]
-    # the test's won't compile if secureMemory is used because there is no
-    # comparison operators and conversion functions between
-    # std::basic_string<..., Json::SecureAllocator<char>> vs.
-    # std::basic_string<..., [default allocator]>
-    ++ lib.optional (
-      (stdenv.buildPlatform != stdenv.hostPlatform) || secureMemory
-    ) "-DJSONCPP_WITH_TESTS=OFF";
+  cmakeFlags = [
+    "-DJSONCPP_USE_SECURE_MEMORY=${if secureMemory then "ON" else "OFF"}"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_OBJECT_LIBS=OFF"
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
+    "-DBUILD_STATIC_LIBS=${if enableStatic then "ON" else "OFF"}"
+  ]
+  # the test's won't compile if secureMemory is used because there is no
+  # comparison operators and conversion functions between
+  # std::basic_string<..., Json::SecureAllocator<char>> vs.
+  # std::basic_string<..., [default allocator]>
+  ++ lib.optional (
+    (stdenv.buildPlatform != stdenv.hostPlatform) || secureMemory
+  ) "-DJSONCPP_WITH_TESTS=OFF";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "C++ library for interacting with JSON";
-    maintainers = with maintainers; [ ttuegel ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
-}
+})

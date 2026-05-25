@@ -11,20 +11,24 @@
   libtiff,
   python3,
   autoreconfHook,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jbig2enc";
-  version = "0.30";
+  version = "0.31";
 
   src = fetchFromGitHub {
     owner = "agl";
     repo = "jbig2enc";
-    rev = version;
-    hash = "sha256-B19l2NdMq+wWKQ5f/y5aoPiBtQnn6sqpaIoyIq+ugTg=";
+    rev = finalAttrs.version;
+    hash = "sha256-UafMDNEMr+8keSgIXBNxnhR24qRrx7F0+ShleF/G2AQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     leptonica
@@ -58,4 +62,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/agl/jbig2enc";
     mainProgram = "jbig2";
   };
-}
+})

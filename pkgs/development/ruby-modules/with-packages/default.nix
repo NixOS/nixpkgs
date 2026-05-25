@@ -77,9 +77,9 @@ let
       name = "${ruby.name}-with-packages";
       nativeBuildInputs = [ makeBinaryWrapper ];
       buildInputs = [
-        selected
         ruby
-      ];
+      ]
+      ++ selected;
 
       dontUnpack = true;
 
@@ -96,6 +96,8 @@ let
         inherit wrappedRuby;
         gems = selected;
       };
+
+      meta.mainProgram = "ruby";
     };
 
 in

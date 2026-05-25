@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.4.1";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EISP9qxzMraOZb+MLolme2tisHWq0nI0d0Smm/HIrX4=";
+    hash = "sha256-2Rh5MP+4yCLFJZW2SUi0c0ZpTuKknicCQgtY90PXhvU=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "kd-tree implementation for fast nearest neighbour search in Python";
     homepage = "https://github.com/storpipfugl/pykdtree";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

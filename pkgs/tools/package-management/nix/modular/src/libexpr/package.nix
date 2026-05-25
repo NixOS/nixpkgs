@@ -12,6 +12,7 @@
   nix-fetchers,
   boost,
   boehmgc,
+  libcpuid,
   nlohmann_json,
   toml11,
 
@@ -45,30 +46,21 @@ mkMesonLibrary (finalAttrs: {
 
   buildInputs = [
     toml11
-  ];
+  ]
+  ++ lib.optional ((lib.versionAtLeast version "2.35pre") && stdenv.hostPlatform.isx86_64) libcpuid;
 
   propagatedBuildInputs = [
     nix-util
     nix-store
     nix-fetchers
-  ] ++ finalAttrs.passthru.externalPropagatedBuildInputs;
-
-  # Hack for sake of the dev shell
-  passthru.externalPropagatedBuildInputs = [
     boost
     nlohmann_json
-  ] ++ lib.optional enableGC boehmgc;
+  ]
+  ++ lib.optional enableGC boehmgc;
 
   mesonFlags = [
     (lib.mesonEnable "gc" enableGC)
   ];
-
-  env = {
-    # Needed for Meson to find Boost.
-    # https://github.com/NixOS/nixpkgs/issues/86131.
-    BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-  };
 
   meta = {
     platforms = lib.platforms.unix ++ lib.platforms.windows;

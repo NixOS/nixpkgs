@@ -7,13 +7,13 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ethtool";
-  version = "6.14";
+  version = "7.0";
 
   src = fetchurl {
-    url = "mirror://kernel/software/network/ethtool/ethtool-${version}.tar.xz";
-    hash = "sha256-kzi7AOSSh407vjzSiU5g2zWBNjTCCNsLIPXH7oTaabE=";
+    url = "mirror://kernel/software/network/ethtool/ethtool-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Zgv5clp4cTQ6DSMgaKdjT7z7abbC+O/0VYJ/rvsM0WI=";
   };
 
   nativeBuildInputs = [
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for controlling network drivers and hardware";
     homepage = "https://www.kernel.org/pub/software/network/ethtool/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "ethtool";
   };
-}
+})

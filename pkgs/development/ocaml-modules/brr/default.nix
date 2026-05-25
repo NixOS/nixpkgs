@@ -10,12 +10,12 @@
   js_of_ocaml-toplevel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-brr";
-  version = "0.0.7";
+  version = "0.0.8";
   src = fetchurl {
-    url = "https://erratique.ch/software/brr/releases/brr-${version}.tbz";
-    hash = "sha256-rcWuW6avI/RJZNAlxKOsPSEtDQZ1hb51oKpSk3iG7oY=";
+    url = "https://erratique.ch/software/brr/releases/brr-${finalAttrs.version}.tbz";
+    hash = "sha256-g4ROHy9rHlaEFi5+euyRuEKK5HwKJWPmFkdvFhdIYgg=";
   };
   buildInputs = [
     ocaml
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
-}
+})

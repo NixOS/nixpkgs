@@ -49,7 +49,7 @@ buildGoModule rec {
     "-X github.com/trezor/blockbook/common.buildDate=unknown"
   ];
 
-  CGO_LDFLAGS = [
+  env.CGO_LDFLAGS = toString [
     "-L${lib.getLib stdenv.cc.cc}/lib"
     "-lrocksdb"
     "-lz"
@@ -76,14 +76,14 @@ buildGoModule rec {
     smoke-test = nixosTests.blockbook-frontend;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       mmahut
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "blockbook";
   };
 }

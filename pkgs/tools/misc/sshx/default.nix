@@ -27,8 +27,6 @@ let
           cargoHash
           ;
 
-        useFetchCargoVendor = true;
-
         nativeBuildInputs = [ protobuf ];
 
         cargoBuildFlags = [
@@ -45,7 +43,6 @@ let
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [
             pinpox
-            kranzes
           ];
           mainProgram = pname;
         };

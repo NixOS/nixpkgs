@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  music-assistant,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "music-assistant-frontend";
-  version = "2.14.9";
+  version = "2.17.146";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UEGRZBegoAnls5xAyVgjisD0B8nu8kXp1XHI4A114lw=";
+    pname = "music_assistant_frontend";
+    inherit version;
+    hash = "sha256-VU2SXL6SLFiKntmJJtCabBOYOeImYFPHYxvMPmnhmEc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "~=" ">="
-  '';
 
   build-system = [ setuptools ];
 
@@ -31,6 +28,6 @@ buildPythonPackage rec {
     description = "Music Assistant frontend";
     homepage = "https://github.com/music-assistant/frontend";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    inherit (music-assistant.meta) maintainers;
   };
 }

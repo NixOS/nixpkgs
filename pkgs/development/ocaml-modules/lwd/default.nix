@@ -5,24 +5,21 @@
   seq,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lwd";
-  version = "0.3";
-
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
+  version = "0.5";
 
   src = fetchurl {
-    url = "https://github.com/let-def/lwd/releases/download/v${version}/lwd-${version}.tbz";
-    sha256 = "sha256-H/vyW2tn2OBuWwcmPs8NcINXgFe93MSxRd8dzeoXARI=";
+    url = "https://github.com/let-def/lwd/releases/download/v${finalAttrs.version}/lwd-${finalAttrs.version}.tbz";
+    hash = "sha256-YAZjeLuhAxUCB3RrBul4u70g5TEqT2C7Z09YbYyPZOY=";
   };
 
   propagatedBuildInputs = [ seq ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight reactive documents";
-    license = licenses.mit;
-    maintainers = [ maintainers.alizter ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/let-def/lwd";
   };
-}
+})

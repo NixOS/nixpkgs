@@ -18,10 +18,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "stdiomask" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for masking passwords";
     homepage = "https://github.com/asweigart/stdiomask";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,7 +6,8 @@
   openal,
   openjdk17,
   stdenv,
-  xorg,
+  libxxf86vm,
+  xrandr,
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXxf86vm
+    libxxf86vm
     openal
     libGL
   ];
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${
         lib.makeBinPath [
           openjdk
-          xorg.xrandr
+          xrandr
         ]
       } \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
@@ -98,14 +99,15 @@ stdenv.mkDerivation rec {
     update-source-version ${pname} "$version" --file=./pkgs/by-name/st/starsector/package.nix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-world single-player space-combat, roleplaying, exploration, and economic game";
     homepage = "https://fractalsoftworks.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       bbigras
       rafaelrc
+      sigmasquadron
     ];
   };
 }

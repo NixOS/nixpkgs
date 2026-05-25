@@ -1,11 +1,9 @@
 # breakpointHook {#breakpointhook}
 
-This hook makes a build pause instead of stopping when a failure occurs. It prevents Nix from cleaning up the build environment immediately and allows the user to attach to the build environment. Upon a build error, it will print instructions that can be used to enter the environment for debugging. breakpointHook is only available on Linux. To use it, add `breakpointHook` to `nativeBuildInputs` in the package to be inspected.
+This hook makes a build pause instead of stopping when a failure occurs. It prevents Nix from cleaning up the build environment immediately and allows the user to attach to the build environment. Upon a build error, it will print instructions that can be used to enter the environment for debugging. The `breakpointHook` is only available on Linux. To use it, add `breakpointHook` to `nativeBuildInputs` in the package to be inspected.
 
 ```nix
-{
-  nativeBuildInputs = [ breakpointHook ];
-}
+{ nativeBuildInputs = [ breakpointHook ]; }
 ```
 
 When a build failure occurs, an instruction will be printed showing how to attach to the build sandbox.

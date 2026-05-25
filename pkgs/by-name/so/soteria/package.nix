@@ -4,33 +4,32 @@
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
+  nix-update-script,
   cairo,
   gdk-pixbuf,
+  gettext,
   glib,
   gtk4,
   pango,
   polkit,
 }:
-let
-  version = "0.1.2";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "soteria";
-  inherit version;
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "imvaskel";
     repo = "soteria";
-    tag = "v${version}";
-    hash = "sha256-i7g2my0hP54Tj86UVEEFQIb5ih26djKgLg++I1n9Sfs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g6DGb8PWfc5YyjUpO9q3q0MxcPUbMjatOi6POFcZEE4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Z9ycfFhnff0z2ZG+tqf+qGUL7gDJQ+kC+e+WZ21qN1Y=";
+  cargoHash = "sha256-6Pk60J2RAInRgCiIk9thZRwwAyCQvychh5nVHmKU7Iw=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
+    gettext
   ];
 
   buildInputs = [
@@ -41,14 +40,21 @@ rustPlatform.buildRustPackage {
     pango
   ];
 
-  # From upstream packaging:
-  #  Takes advantage of nixpkgs manually editing PACKAGE_PREFIX by grabbing it from
-  #  the binary itself.
-  #  https://github.com/NixOS/nixpkgs/blob/9b5328b7f761a7bbdc0e332ac4cf076a3eedb89b/pkgs/development/libraries/polkit/default.nix#L142
-  #  https://github.com/polkit-org/polkit/blob/d89c3604e2a86f4904566896c89e1e6b037a6f50/src/polkitagent/polkitagentsession.c#L599
   preBuild = ''
-    export POLKIT_AGENT_HELPER_PATH="$(strings ${polkit.out}/lib/libpolkit-agent-1.so | grep "polkit-agent-helper-1")"
+    export SOTERIA_DEFAULT_LOCALE_DIR=$out/share/locale
   '';
+
+  postInstall = ''
+    mkdir -p $SOTERIA_DEFAULT_LOCALE_DIR
+    for file in po/*.po; do
+      lang=''${file%.*}
+      lang=''${lang#po/}
+      mkdir -p "$SOTERIA_DEFAULT_LOCALE_DIR/$lang/LC_MESSAGES"
+      msgfmt "$file" -o "$SOTERIA_DEFAULT_LOCALE_DIR/$lang/LC_MESSAGES/soteria.mo"
+    done
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Polkit authentication agent written in GTK designed to be used with any desktop environment";
@@ -60,4 +66,4 @@ rustPlatform.buildRustPackage {
     ];
     inherit (polkit.meta) platforms;
   };
-}
+})

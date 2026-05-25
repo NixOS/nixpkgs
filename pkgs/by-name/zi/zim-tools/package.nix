@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   meson,
   ninja,
   pkg-config,
@@ -15,15 +16,15 @@
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zim-tools";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "zim-tools";
-    tag = version;
-    hash = "sha256-gcCo3u1pLm1CnTF3CATOri5+zat839zUbmQnMOVjanI=";
+    tag = finalAttrs.version;
+    hash = "sha256-8+/3+FOq35FSYzpQdpqs5MTMtUO5SYbKLPECFi+IIKw=";
   };
 
   patches = [
@@ -32,6 +33,12 @@ stdenv.mkDerivation rec {
     # https://github.com/openzim/libzim/pull/936
     ./fix_build_with_icu76.patch
   ];
+
+  postPatch = ''
+    # Disable werror, since the use of deprecated functions in libzim causes the build to fail
+    substituteInPlace meson.build \
+      --replace-fail "'werror=true', " ""
+  '';
 
   nativeBuildInputs = [
     meson
@@ -52,6 +59,8 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ gtest ];
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Various ZIM command line tools";
     homepage = "https://github.com/openzim/zim-tools";
@@ -59,4 +68,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

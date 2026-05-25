@@ -1,22 +1,24 @@
 diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
-index cda6c7f..32d807a 100644
+index 648b6578..4833b9c2 100644
 --- a/scwx-qt/scwx-qt.cmake
 +++ b/scwx-qt/scwx-qt.cmake
-@@ -601,6 +601,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
-                                      Boost::json
+@@ -776,6 +776,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
                                       Boost::timer
+                                      Boost::atomic
                                       QMapLibre::Core
 +                                     QMapLibre::Widgets
                                       $<$<CXX_COMPILER_ID:MSVC>:opengl32>
+                                      $<$<CXX_COMPILER_ID:MSVC>:SetupAPI>
                                       Fontconfig::Fontconfig
-                                      GeographicLib::GeographicLib
-@@ -615,40 +616,13 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+@@ -793,18 +794,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
  target_link_libraries(supercell-wx PRIVATE scwx-qt
                                             wxdata)
  
--# Set DT_RUNPATH for Linux targets
--set_target_properties(MLNQtCore    PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib") # QMapLibre::Core
--set_target_properties(supercell-wx PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib")
+-if (LINUX)
+-    # Set DT_RUNPATH for Linux targets
+-    set_target_properties(MLNQtCore    PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib") # QMapLibre::Core
+-    set_target_properties(supercell-wx PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib")
+-endif()
 -
  install(TARGETS supercell-wx
 -                MLNQtCore # QMapLibre::Core
@@ -26,7 +28,8 @@ index cda6c7f..32d807a 100644
 -                               "^(/usr)?/lib/.*\\.so(\\..*)?"
          RUNTIME
            COMPONENT supercell-wx
-         LIBRARY
+         BUNDLE
+@@ -819,24 +809,6 @@ install(TARGETS supercell-wx
            COMPONENT supercell-wx
            OPTIONAL)
  
@@ -48,6 +51,6 @@ index cda6c7f..32d807a 100644
 -install(SCRIPT ${deploy_script_scwx}
 -        COMPONENT supercell-wx)
 -
- if (MSVC)
-     set(CPACK_PACKAGE_NAME                "Supercell Wx")
-     set(CPACK_PACKAGE_VENDOR              "Dan Paulat")
+ if (APPLE)
+     # Install additional script to fix up the bundle
+     install(CODE [[

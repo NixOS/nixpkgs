@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcuboot-imgtool";
-  version = "2.1.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "imgtool";
-    hash = "sha256-T3+831PETqqmImUEUQzLUvfvAMmXUDz5STSzMMlge2A=";
+    hash = "sha256-7y2x2eP2K5vJQlqOhsTqchLBZPChbpI9VSUPDYdDNC4=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -28,11 +28,11 @@ python3Packages.buildPythonApplication rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MCUboot's image signing and key management";
     homepage = "https://github.com/mcu-tools/mcuboot/tree/main/scripts";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "imgtool";
   };
-}
+})

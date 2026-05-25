@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   pcre2,
   sqlite,
@@ -25,24 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lnav";
-  version = "0.12.4";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XS3/km2sJwRnWloLKu9X9z07+qBFRfUsaRpZVYjoclI=";
+    hash = "sha256-BP4QiGO6x2o+9hRvoB4gz1IfQbr/yLVHgT9PWX/k/3c=";
   };
-
-  patches = [
-    # fixes lnav in tmux by patching vendored dependency notcurses
-    # https://github.com/tstack/lnav/issues/1390
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/tstack/lnav/commit/5e0bfa483714f05397265a690960d23ae22e1838.patch";
-      hash = "sha256-dArPJik9KVI0KQjGw8W11oqGrbsBCNOr93gaH3yDPpo=";
-    })
-  ];
 
   enableParallelBuilding = true;
 
@@ -52,46 +41,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      zlib
-      curl.dev
-      re2c
-    ]
-    ++ lib.optionals prqlSupport [
-      cargo
-      rustPlatform.cargoSetupHook
-      rustc
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    zlib
+    curl.dev
+    re2c
+  ]
+  ++ lib.optionals prqlSupport [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      pcre2
-      readline
-      sqlite
-      curl
-      libarchive
-      libunistring
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gpm
-    ];
+  buildInputs = [
+    bzip2
+    pcre2
+    readline
+    sqlite
+    curl
+    libarchive
+    libunistring
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gpm
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = "${finalAttrs.src}/src/third-party/prqlc-c";
-    hash = "sha256-svi+C3ELw6Ly0mtji8xOv+DDqR0z5shFNazHa3kDQVg=";
+    src = "${finalAttrs.src}/src/third-party/lnav-rs-ext";
+    hash = "sha256-Dy+V45X27dy2TN3JRic6nLmmG11I1Pw7m+vYKYJMnQs=";
   };
 
-  cargoRoot = "src/third-party/prqlc-c";
+  cargoRoot = "src/third-party/lnav-rs-ext";
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v(\\d+(?:\\.\\d+)*)$" ];
+  };
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "https://github.com/tstack/lnav";

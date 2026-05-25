@@ -52,12 +52,11 @@ let
         dontPatch = true;
         dontConfigure = true;
         dontBuild = true;
-        installPhase =
-          ''
-            mkdir -p "$out"
+        installPhase = ''
+          mkdir -p "$out"
 
-          ''
-          + concatStringsSep "\n" commands;
+        ''
+        + concatStringsSep "\n" commands;
       }
       // derivationArgs
     );

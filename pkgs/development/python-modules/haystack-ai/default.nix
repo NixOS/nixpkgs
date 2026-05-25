@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  writableTmpDirAsHomeHook,
   boilerpy3,
   events,
   httpx,
@@ -42,7 +43,7 @@
   pylint,
   pytest,
   pytest-asyncio,
-  pytest-cov-stub,
+  pytest-cov,
   # , pytest-custom-exit-code
   python-multipart,
   reno,
@@ -68,7 +69,7 @@
   seqeval,
   pdf2image,
   pytesseract,
-  faiss,
+  faiss-cpu,
   # , faiss-gpu
   pinecone-client,
   onnxruntime,
@@ -91,23 +92,19 @@
 
 buildPythonPackage rec {
   pname = "haystack-ai";
-  version = "2.9.0";
+  version = "2.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "haystack";
     tag = "v${version}";
-    hash = "sha256-h/4KskpzO3+e6aLQlBb8yitmfdbdc+J6Hz6TMs8bnr8=";
+    hash = "sha256-QqQTlyVUJU90lzMUe43Qd0WXXaxUi/53apvz/GlrsY0=";
   };
 
   nativeBuildInputs = [
     hatchling
-  ];
-
-  pythonRemoveDeps = [
-    # We call it faiss, not faiss-cpu.
-    "faiss-cpu"
+    writableTmpDirAsHomeHook
   ];
 
   propagatedBuildInputs = [
@@ -135,8 +132,6 @@ buildPythonPackage rec {
     tqdm
     transformers
   ];
-
-  env.HOME = "$(mktemp -d)";
 
   optional-dependencies = {
     # all = [
@@ -167,7 +162,7 @@ buildPythonPackage rec {
       pylint
       pytest
       pytest-asyncio
-      pytest-cov-stub
+      pytest-cov
       # pytest-custom-exit-code
       python-multipart
       reno
@@ -210,7 +205,7 @@ buildPythonPackage rec {
       pdf2image
       pytesseract
     ];
-    only-faiss = [ faiss ];
+    only-faiss = [ faiss-cpu ];
     # only-faiss-gpu = [
     #   faiss-gpu
     # ];
@@ -257,16 +252,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "haystack" ];
 
-  meta = with lib; {
+  meta = {
     description = "LLM orchestration framework to build customizable, production-ready LLM applications";
     longDescription = ''
       LLM orchestration framework to build customizable, production-ready LLM applications. Connect components (models, vector DBs, file converters) to pipelines or agents that can interact with your data. With advanced retrieval methods, it's best suited for building RAG, question answering, semantic search or conversational agent chatbots
     '';
     changelog = "https://github.com/deepset-ai/haystack/releases/tag/${src.tag}";
     homepage = "https://github.com/deepset-ai/haystack";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
     # https://github.com/deepset-ai/haystack/issues/5304
-    broken = versionAtLeast pydantic.version "2";
+    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

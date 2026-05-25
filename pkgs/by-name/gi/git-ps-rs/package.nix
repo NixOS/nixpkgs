@@ -7,18 +7,17 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-ps-rs";
   version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4lk6AHquWKgDk0pBaswbVShZbUDA3wO6cPakhrvrwac=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QYkEBqDwspdhSliwLwMWmybS9nd41DCjGNURnMzLzBM=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     dbus
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for working with a stack of patches";
     mainProgram = "gps";
     homepage = "https://git-ps.sh/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alizter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alizter ];
   };
-}
+})

@@ -45,7 +45,7 @@
 }@args:
 
 let
-  sandboxPathsTests = builtins.map (path: "[[ ! -e '${path}' ]]") sandboxPaths;
+  sandboxPathsTests = map (path: "[[ ! -e '${path}' ]]") sandboxPaths;
   sandboxPathsTest = lib.concatStringsSep " || " sandboxPathsTests;
   sandboxPathsList = lib.concatStringsSep " " sandboxPaths;
 
@@ -71,7 +71,7 @@ let
         passthru.runScript = runScript;
       }
       (
-        builtins.removeAttrs args [
+        removeAttrs args [
           "lib"
           "stdenv"
           "writeShellScript"
@@ -92,7 +92,7 @@ let
 
     ${prepareRunCommands}
 
-    sudo nix-build --option extra-sandbox-paths '${sandboxPathsList}' ${lib.escapeShellArgs nixFlags} -A ${testPath} "$@"
+    sudo --preserve-env=NIXPKGS_ALLOW_UNFREE nix-build --option extra-sandbox-paths '${sandboxPathsList}' ${lib.escapeShellArgs nixFlags} -A ${testPath} "$@"
   '';
 in
 # The main output is the run script, inject the derivation for the actual test

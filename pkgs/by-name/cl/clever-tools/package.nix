@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs_22,
   installShellFiles,
   makeWrapper,
   stdenv,
@@ -11,27 +11,33 @@
 buildNpmPackage rec {
   pname = "clever-tools";
 
-  version = "3.13.0";
+  version = "4.10.0";
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "CleverCloud";
     repo = "clever-tools";
     rev = version;
-    hash = "sha256-E6MD/fQO7cpczaaTbkZOf/lMOywUUXBP9uUVfTH+Iv8=";
+    hash = "sha256-EgGjlZ6Awg7SEC3ljPqii3wpq2SlXN/gARUJBSFcX0k=";
   };
 
-  npmDepsHash = "sha256-Q66Gq8LvZEoRVpwzwbK4D9KLVNk6Rc5SztFGwQUuePI=";
+  npmDepsHash = "sha256-1v9c1525J7aS89PDdl6hWbYdn/DIM3G1BxFbpxu/F7E=";
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
   ];
 
+  buildPhase = ''
+    runHook preBuild
+    node scripts/bundle-cjs.js ${version} false
+    runHook postBuild
+  '';
+
   installPhase = ''
     mkdir -p $out/bin $out/lib/clever-tools
-    cp build/clever.cjs $out/lib/clever-tools/clever.cjs
+    cp build/${version}/clever.cjs $out/lib/clever-tools/clever.cjs
 
     makeWrapper ${nodejs}/bin/node $out/bin/clever \
       --add-flags "$out/lib/clever-tools/clever.cjs" \
@@ -52,6 +58,6 @@ buildNpmPackage rec {
     description = "Deploy on Clever Cloud and control your applications, add-ons, services from command line";
     license = lib.licenses.asl20;
     mainProgram = "clever";
-    teams = [ lib.teams.clevercloud ];
+    maintainers = [ lib.maintainers.floriansanderscc ];
   };
 }

@@ -3,27 +3,27 @@
   fetchYarnDeps,
   fixup-yarn-lock,
   callPackage,
-  nodejs_20,
+  nodejs_22,
   yarn,
 }:
 let
   common = callPackage ./common.nix { };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tandoor-recipes-frontend";
   inherit (common) version;
 
-  src = "${common.src}/vue";
+  src = "${common.src}/vue3";
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${common.src}/vue/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = common.yarnHash;
   };
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_20
-    (yarn.override { nodejs = nodejs_20; })
+    nodejs_22
+    (yarn.override { nodejs = nodejs_22; })
   ];
 
   configurePhase = ''
@@ -50,8 +50,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    cp -R ../cookbook/static/vue/ $out
-    cp webpack-stats.json $out
+    cp -R ../cookbook/static/vue3/ $out
     echo "${common.version}" > "$out/version"
 
     runHook postInstall
@@ -60,4 +59,4 @@ stdenv.mkDerivation {
   meta = common.meta // {
     description = "Tandoor Recipes frontend";
   };
-}
+})

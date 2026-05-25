@@ -28,7 +28,7 @@ buildPythonPackage rec {
     celery
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   nativeCheckInputs = [
     pytest-django
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "djcelery_email" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pmclanahan/django-celery-email";
     description = "Django email backend that uses a celery task for sending the email";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

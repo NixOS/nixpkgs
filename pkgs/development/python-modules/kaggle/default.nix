@@ -2,50 +2,51 @@
   bleach,
   buildPythonPackage,
   certifi,
-  charset-normalizer,
   fetchPypi,
   hatchling,
-  idna,
+  kagglesdk,
   lib,
+  packaging,
   python-dateutil,
   python-slugify,
   requests,
-  setuptools,
   six,
-  text-unidecode,
   tqdm,
   urllib3,
-  webencodings,
   protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.7.4.5";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HZghvWpqFHB0HHbSZJWhhHW1p7/gyAsZGRJUsnNdQd0=";
+    hash = "sha256-MzXaV1KuKEPDqgUjt6ftkajdVQXBnLQDH51XZRw0YQY=";
   };
 
   build-system = [ hatchling ];
 
+  pythonRemoveDeps = [
+    "black"
+    "mypy"
+    "types-requests"
+    "types-tqdm"
+  ];
+
   dependencies = [
     bleach
     certifi
-    charset-normalizer
-    idna
+    kagglesdk
+    packaging
+    protobuf
     python-dateutil
     python-slugify
     requests
-    setuptools
     six
-    text-unidecode
     tqdm
     urllib3
-    webencodings
-    protobuf
   ];
 
   # Tests try to access the network.
@@ -57,11 +58,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "kaggle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
     mainProgram = "kaggle";
     homepage = "https://github.com/Kaggle/kaggle-api";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

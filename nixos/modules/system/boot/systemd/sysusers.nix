@@ -31,9 +31,9 @@ let
     ${lib.concatLines (
       lib.mapAttrsToList (
         groupname: opts:
-        ''g ${groupname} ${
+        "g ${groupname} ${
           if opts.gid == null then "/var/lib/nixos/gid/${groupname}" else toString opts.gid
-        }''
+        }"
       ) userCfg.groups
     )}
 
@@ -81,23 +81,22 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    assertions =
-      [
-        {
-          assertion = config.system.activationScripts.users == "";
-          message = "system.activationScripts.users has to be empty to use systemd-sysusers";
-        }
-      ]
-      ++ (lib.mapAttrsToList (username: opts: {
-        assertion = opts.enable -> !opts.isNormalUser;
-        message = "${username} is a normal user. systemd-sysusers doesn't create normal users, only system users.";
-      }) userCfg.users)
-      ++ lib.mapAttrsToList (username: opts: {
-        assertion =
-          (opts.password == opts.initialPassword || opts.password == null)
-          && (opts.hashedPassword == opts.initialHashedPassword || opts.hashedPassword == null);
-        message = "user '${username}' uses password or hashedPassword. systemd-sysupdate only supports initial passwords. It'll never update your passwords.";
-      }) systemUsers;
+    assertions = [
+      {
+        assertion = config.system.activationScripts.users == "";
+        message = "system.activationScripts.users has to be empty to use systemd-sysusers";
+      }
+    ]
+    ++ (lib.mapAttrsToList (username: opts: {
+      assertion = opts.enable -> !opts.isNormalUser;
+      message = "${username} is a normal user. systemd-sysusers doesn't create normal users, only system users.";
+    }) userCfg.users)
+    ++ lib.mapAttrsToList (username: opts: {
+      assertion =
+        (opts.password == opts.initialPassword || opts.password == null)
+        && (opts.hashedPassword == opts.initialHashedPassword || opts.hashedPassword == null);
+      message = "user '${username}' uses password or hashedPassword. systemd-sysupdate only supports initial passwords. It'll never update your passwords.";
+    }) systemUsers;
 
     systemd = {
 
@@ -153,7 +152,7 @@ in
           # systemd-sysusers cannot find it when we also pass another flag.
           ExecStart = lib.mkIf immutableEtc [
             ""
-            "${config.systemd.package}/bin/systemd-sysusers --root ${builtins.dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
+            "${config.systemd.package}/bin/systemd-sysusers --root ${dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
           ];
 
           # Make the source files writable before executing sysusers.
@@ -184,9 +183,9 @@ in
     };
 
     environment.etc = lib.mkMerge [
-      ({
+      {
         "sysusers.d".source = sysusersConfig;
-      })
+      }
 
       # Statically create the symlinks to immutablePasswordFilesLocation when
       # using an immutable /etc because we will not be able to do it at

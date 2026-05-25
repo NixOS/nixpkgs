@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Xonsh Python mode completions using jedi";
     homepage = "https://github.com/xonsh/xontrib-jedi";
-    changelog = "https://github.com/xonsh/xontrib-jedi.releases/tag/${version}";
+    changelog = "https://github.com/xonsh/xontrib-jedi/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ greg ];
   };

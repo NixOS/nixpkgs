@@ -31,14 +31,13 @@ mkPulumiPackage rec {
   '';
   fetchSubmodules = true;
   __darwinAllowLocalNetworking = true;
-  meta = with lib; {
+  meta = {
     description = "Native Azure Pulumi Provider";
     mainProgram = "pulumi-resource-azure-native";
     homepage = "https://github.com/pulumi/pulumi-azure-native";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       veehaitch
-      trundle
     ];
   };
 }

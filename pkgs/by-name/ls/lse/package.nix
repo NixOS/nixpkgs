@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lse";
   version = "4.14nw";
 
   src = fetchFromGitHub {
     owner = "diego-treitos";
     repo = "linux-smart-enumeration";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qGLmrbyeyhHG6ONs7TJLTm68xpvxB1iAnMUApfTSqEk=";
   };
 
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Linux enumeration tool with verbosity levels";
     homepage = "https://github.com/diego-treitos/linux-smart-enumeration";
-    changelog = "https://github.com/diego-treitos/linux-smart-enumeration/releases/tag/${version}";
+    changelog = "https://github.com/diego-treitos/linux-smart-enumeration/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "lse.sh";
     platforms = lib.platforms.all;
   };
-}
+})

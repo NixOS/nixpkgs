@@ -10,9 +10,14 @@
   callPackage,
   enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit),
   pkgsCross,
-  x86_64PkgsCrossToolchain ? pkgsCross.gnu64,
-  aarch64PkgsCrossToolchain ? pkgsCross.aarch64-multiplatform,
-  riscv64PkgsCrossToolchain ? pkgsCross.riscv64,
+  x86_64PkgsCrossToolchain ? if stdenv.hostPlatform.isMusl then pkgsCross.musl64 else pkgsCross.gnu64,
+  aarch64PkgsCrossToolchain ?
+    if stdenv.hostPlatform.isMusl then
+      pkgsCross.aarch64-multiplatform-musl
+    else
+      pkgsCross.aarch64-multiplatform,
+  riscv64PkgsCrossToolchain ?
+    if stdenv.hostPlatform.isMusl then pkgsCross.riscv64-musl else pkgsCross.riscv64,
 }:
 
 # There's no support for `aarch64` or `riscv64` for freebsd nor for openbsd on nix.
@@ -23,8 +28,7 @@ assert
     inherit (lib) intersectLists platforms concatStringsSep;
     workingPlatforms = intersectLists platforms.linux (with platforms; x86_64 ++ aarch64 ++ riscv64);
   in
-  (enableCrossCompilation -> !(isLinux && is64bit))
-  -> builtins.throw ''
+  lib.assertMsg (enableCrossCompilation -> isLinux && is64bit) ''
     The cross-compilation toolchains may only be enabled on the following platforms:
     ${concatStringsSep "\n" workingPlatforms}
   '';
@@ -76,7 +80,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "0.24.2";
+  version = "0.26.0.1";
 
   outputs = [
     "out"
@@ -86,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = finalAttrs.version;
-    hash = "sha256-61lckI0F+Ez5LR/8g6ftS0W7Q/+EU/1flTDFleBg6pc=";
+    tag = finalAttrs.version;
+    hash = "sha256-ypu3GXO2hTGg26l0+FUzEMK/+HiylJIWQxe9UbhKXz4=";
   };
 
   patches = [
@@ -122,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
     "QBEFLAGS=-t${qbePlatform}"
@@ -134,7 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
     "HAREPATH=$(SRCDIR)/hare/stdlib"
-  ] ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
+  ]
+  ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
 
   enableParallelBuilding = true;
 
@@ -170,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://harelang.org/";
     description = "Systems programming language designed to be simple, stable, and robust";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "hare";
     inherit (harec.meta) platforms badPlatforms;
   };

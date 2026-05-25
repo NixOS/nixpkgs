@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "broom";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "a-camarillo";
     repo = "broom";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-a2hUgYpiKm/dZWLRuCZKuGStmZ/7jDtLRAjd/B57Vxw=";
   };
 
@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive CLI tool for managing local git branches";
     homepage = "https://github.com/a-camarillo/broom";
-    license = licenses.mit;
-    maintainers = with maintainers; [ a-camarillo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ a-camarillo ];
     mainProgram = "broom";
   };
-}
+})

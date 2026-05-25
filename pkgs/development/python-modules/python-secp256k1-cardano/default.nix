@@ -2,28 +2,30 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   pkg-config,
   cffi,
   secp256k1,
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "python-secp256k1-cardano";
-  version = "0.2.3";
-
-  format = "setuptools";
+  version = "0.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "python-secp256k1";
-    rev = "5a8f761a4b9a1594653cc4deebadc3398b07533c"; # No tags in repo
-    hash = "sha256-6bE4/G2gW2F8h5FWtI3TZ6FtijsB/slvFT/SIVv7VIY=";
+    tag = finalAttrs.version;
+    hash = "sha256-vYCg/VpuB0tR8LKT6AjAMXZGQDQkw1GjY5qIvPU1jVE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cffi
     secp256k1
   ];
@@ -43,6 +45,6 @@ buildPythonPackage {
     homepage = "https://github.com/OpShin/python-secp256k1";
     description = "Fork of python-secp256k1, fixing the commit hash of libsecp256k1 to a Cardano compatible version";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ t4ccer ];
+    maintainers = with lib.maintainers; [ aciceri ];
   };
-}
+})

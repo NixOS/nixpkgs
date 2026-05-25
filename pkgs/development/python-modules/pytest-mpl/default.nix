@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   setuptools-scm,
   pytest,
@@ -14,12 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mpl";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-++8F1+ZktLM0UvtpisGI5SJ5HzJ9405+o329/p1SysY=";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "pytest-mpl";
+    tag = "v${version}";
+    hash = "sha256-9fMhVgeEL4bjNIegmJV7lisrdzp27h0syn9pMwzX4Gg=";
   };
 
   build-system = [
@@ -56,10 +58,10 @@ buildPythonPackage rec {
       --replace-fail "DEFAULT_TOLERANCE = 10 if WIN else 2" "DEFAULT_TOLERANCE = 10"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to help with testing figures output from Matplotlib";
     homepage = "https://github.com/matplotlib/pytest-mpl";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

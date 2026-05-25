@@ -2,42 +2,50 @@
   stdenvNoCC,
   lib,
   opencloud,
-  pnpm_10,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencloud-idp-web";
 
-  inherit (opencloud) version src;
+  inherit (opencloud) src version;
 
   pnpmRoot = "services/idp";
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
-    hash = "sha256-gFhWDYk3DcwUowZ9AQjCqHZL1oniK3YCNiG1cDGabYg=";
+    fetcherVersion = 3;
+    hash = "sha256-E0bP15T2Ekj992Y1xFXL/4rko34AY+I5Lbn+blJhXYg=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildPhase = ''
     runHook preBuild
+
     cd $pnpmRoot
     pnpm build
     mkdir -p assets/identifier/static
     cp -v src/images/favicon.svg assets/identifier/static/favicon.svg
     cp -v src/images/icon-lilac.svg assets/identifier/static/icon-lilac.svg
+
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir $out
     cp -r assets $out
+
     runHook postInstall
   '';
 

@@ -28,7 +28,7 @@
   python3,
   stdenv,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
   # Boolean guard flags
   alsaSupport ? stdenv.hostPlatform.isLinux,
@@ -38,6 +38,10 @@
   spellcheckSupport ? true,
   useBundledLuaJIT ? false,
 }:
+
+let
+  luajit' = luajit.override { enable52Compat = true; };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
@@ -56,34 +60,33 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wxGTK32
+    wxwidgets_3_2
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      boost
-      expat
-      ffmpeg
-      ffms
-      fftw
-      fontconfig
-      freetype
-      fribidi
-      harfbuzz
-      icu
-      libGL
-      libass
-      libuchardet
-      wxGTK32
-      zlib
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
-    ++ lib.optionals portaudioSupport [ portaudio ]
-    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-    ++ lib.optionals spellcheckSupport [ hunspell ]
-    ++ lib.optionals (!useBundledLuaJIT) [ luajit ];
+  buildInputs = [
+    boost
+    expat
+    ffmpeg
+    ffms
+    fftw
+    fontconfig
+    freetype
+    fribidi
+    harfbuzz
+    icu
+    libGL
+    libass
+    libuchardet
+    wxwidgets_3_2
+    zlib
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
+  ++ lib.optionals portaudioSupport [ portaudio ]
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals spellcheckSupport [ hunspell ]
+  ++ lib.optionals (!useBundledLuaJIT) [ luajit' ];
 
   mesonFlags = [
     (lib.mesonEnable "alsa" alsaSupport)

@@ -1,10 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  crewai,
   fetchFromGitHub,
   hatchling,
   jsonref,
   langchain,
+  langchain-anthropic,
   langgraph,
   llama-index,
   mcp,
@@ -12,18 +14,20 @@
   pytestCheckHook,
   python-dotenv,
   smolagents,
+  soundfile,
+  torchaudio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mcpadapt";
-  version = "0.1.9";
+  version = "0.1.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grll";
     repo = "mcpadapt";
-    tag = "v${version}";
-    hash = "sha256-sczXScP1wDUntAwVEfiGfJe0ghBpqPQH1YaXhFGj97Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mUwGKr+QBkqMKhfEEIlF/jZDW7enKYdngNIoxG5hMU4=";
   };
 
   build-system = [ hatchling ];
@@ -35,12 +39,18 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    audio = [
+      torchaudio
+      soundfile
+    ];
+    crewai = [ crewai ];
     langchain = [
       langchain
-      # langchain-anthropic
+      langchain-anthropic
       langgraph
     ];
     llamaindex = [ llama-index ];
+    smolagents = [ smolagents ];
   };
 
   pythonImportsCheck = [ "mcpadapt" ];
@@ -51,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "MCP servers tool";
     homepage = "https://github.com/grll/mcpadapt";
-    changelog = "https://github.com/grll/mcpadapt/releases/tag/${src.tag}";
+    changelog = "https://github.com/grll/mcpadapt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

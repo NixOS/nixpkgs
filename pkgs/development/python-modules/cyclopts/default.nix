@@ -1,38 +1,46 @@
 {
   lib,
+  stdenv,
   attrs,
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  bash,
+  fish,
+  hatch-vcs,
+  hatchling,
+  markdown,
+  mkdocs,
+  pexpect,
   pydantic,
+  pymdown-extensions,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
-  rich-rst,
   rich,
+  rich-rst,
+  sphinx,
+  syrupy,
   trio,
+  zsh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "3.16.2";
+  version = "4.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
-    tag = "v${version}";
-    hash = "sha256-rwlJk19DLmiD7gAbknrRgcw+t3+mEfqth5P+aQB7eMM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tDDYVqhjvTRQ0rTvib4ek49zEnEefkKoq1t/3C/PRlQ=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -45,27 +53,53 @@ buildPythonPackage rec {
   optional-dependencies = {
     trio = [ trio ];
     yaml = [ pyyaml ];
+    mkdocs = [
+      mkdocs
+      markdown
+      pymdown-extensions
+    ];
   };
 
   nativeCheckInputs = [
+    pexpect
     pydantic
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
-    pyyaml
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    syrupy
+
+    # integrations
+    sphinx
+    bash
+    fish
+    zsh
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
-    # Assertion error
-    "test_pydantic_error_msg"
-  ];
+    # Building docs
+    "build_succeeds"
+    # https://github.com/BrianPugh/cyclopts/issues/820
+    "test_behavior[fish-literal-positional]"
+    "test_behavior[fish-multi-positional-second]"
+    "test_behavior[fish-equals-form-option-value]"
+    "test_behavior[fish-multi-positional-third]"
+  ]
+  # https://github.com/BrianPugh/cyclopts/issues/821
+  ++ lib.lists.optional (
+    stdenv.hostPlatform.system == "aarch64-linux"
+  ) "test_collection_option_repeats";
 
-  meta = with lib; {
+  meta = {
     description = "Module to create CLIs based on Python type hints";
     homepage = "https://github.com/BrianPugh/cyclopts";
-    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/BrianPugh/cyclopts/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fab
+      PerchunPak
+    ];
   };
-}
+})

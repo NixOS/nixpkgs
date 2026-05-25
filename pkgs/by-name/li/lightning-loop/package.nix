@@ -1,39 +1,48 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lightning-loop";
-  version = "0.31.1-beta";
+  version = "0.33.0-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "loop";
-    rev = "v${version}";
-    hash = "sha256-OJWf96Dq06U56dIMMocGYgyZdu94VM3A6ViJZR+gbxQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LfVC/s7VNc3LvypjdSFo0s2Ssmhk1Lzm9ojWGqaNCmI=";
   };
 
-  vendorHash = "sha256-TnnYjTbN6zuXUbZbh1sK9bmjR7FleFqNFrqwBTllypY=";
+  vendorHash = "sha256-pzcOKYw2kXfGUOBZmuUYuEfRUY8f1PSj30tvhttEwAk=";
 
   subPackages = [
     "cmd/loop"
     "cmd/loopd"
   ];
 
+  env.CGO_ENABLED = 0;
+
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  postInstall = ''
+    installManPage docs/loop.1
+  '';
+
+  meta = {
     description = "Lightning Loop Client";
     homepage = "https://github.com/lightninglabs/loop";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       proofofkeags
-      prusnak
+      starius
     ];
   };
-}
+})

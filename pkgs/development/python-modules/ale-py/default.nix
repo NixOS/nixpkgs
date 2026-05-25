@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     tag = "v${version}";
-    hash = "sha256-VrPc3i1VYuThKdQn/wimNzMHNmPIAdTxbh2tuJb4YJY=";
+    hash = "sha256-4IkjW8HX21uBEHFtb3qETxco6FfDMgLbG1BDHWwvn58=";
   };
 
   build-system = [
@@ -51,25 +51,23 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs =
-    [
-      SDL2
-      zlib
-    ]
-    ++ lib.optionals withVectorEnv [
-      opencv
-    ];
+  buildInputs = [
+    SDL2
+    zlib
+  ]
+  ++ lib.optionals withVectorEnv [
+    opencv
+  ];
 
-  dependencies =
-    [
-      gymnasium
-      importlib-resources
-      numpy
-      typing-extensions
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      jax
-    ];
+  dependencies = [
+    gymnasium
+    importlib-resources
+    numpy
+    typing-extensions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    jax
+  ];
 
   postPatch =
     # Relax the pybind11 version
@@ -92,14 +90,13 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  nativeCheckInputs =
-    [
-      gymnasium
-      pytestCheckHook
-    ]
-    + lib.optionals withVectorEnv [
-      opencv-python
-    ];
+  nativeCheckInputs = [
+    gymnasium
+    pytestCheckHook
+  ]
+  + lib.optionals withVectorEnv [
+    opencv-python
+  ];
 
   disabledTests = [
     # Fatal Python error: Aborted

@@ -8,34 +8,37 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lowfi";
-  version = "1.6.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "lowfi";
-    tag = version;
-    hash = "sha256-t3Lbqrcmh0XSOO+hc4UsWhKi4zToORFQo0A4G32aeOw=";
+    tag = finalAttrs.version;
+    hash = "sha256-RSdfZ0GrNhPcqDWutJW0VlplbpBNBCpSvw91fpl0d4E=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-waQcxdVXZZ09wuLWUNL4nRUHF1rIDI8lAfYc/1bxMl0=";
+  cargoHash = "sha256-OAg3ZpBmuINkc6KZJGKvYFnpv9hVbwlnOEP5ICtYh28=";
 
-  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
+  buildFeatures = [ "scrape" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
+
+  checkFlags = [
+    # Skip this test as it doesn't work in the nix sandbox
+    "--skip=tests::tracks::list::download"
+  ];
 
   meta = {
     description = "Extremely simple lofi player";
@@ -44,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ zsenai ];
     mainProgram = "lowfi";
   };
-}
+})

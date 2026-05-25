@@ -47,7 +47,7 @@ in
 {
   options = {
     services.freeciv = {
-      enable = lib.mkEnableOption ''freeciv'';
+      enable = lib.mkEnableOption "freeciv";
       settings = lib.mkOption {
         description = ''
           Parameters of freeciv-server.

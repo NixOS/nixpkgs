@@ -3,16 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sockio";
   version = "0.15.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
@@ -23,8 +21,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov-config=.coveragerc --cov sockio" "" \
-      --replace "--cov-report html --cov-report term" "" \
       --replace "--durations=2 --verbose" ""
   '';
 
@@ -32,6 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -72,10 +69,10 @@ buildPythonPackage rec {
     "tests/test_py2.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Modbus protocol";
     homepage = "https://tiagocoutinho.github.io/sockio/";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

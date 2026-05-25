@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "upa";
     repo = "mscp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5lX0b3JfjmQh/HlESRMNxqCe2qFRAEZoazysoy252dY=";
     fetchSubmodules = true;
   };
@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/upa/mscp";
     mainProgram = "mscp";
     license = lib.licenses.gpl3Only;
-    teams = [ lib.teams.deshaw ];
     platforms = lib.platforms.unix;
   };
 })

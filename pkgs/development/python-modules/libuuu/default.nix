@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "libuuu";
-  version = "1.5.202";
+  version = "1.5.243";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bwAFApnfu0p1qHZWcSrJmXPZTkpw9HFhbG7BnASbeBI=";
+    hash = "sha256-k7DFVrqkHzPLjZMdWyLdfawyOSw+L7Bi4oRdeJo6lxw=";
   };
 
   build-system = [
@@ -59,10 +59,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/nxp-imx/mfgtools/tree/master/wrapper";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # The pypi archive does not contain the pre-built library for these platforms
-      "aarch64-linux"
-      "x86_64-darwin"
-    ];
   };
 }

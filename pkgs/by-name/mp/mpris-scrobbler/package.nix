@@ -15,27 +15,26 @@
   xdg-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpris-scrobbler";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "mariusor";
     repo = "mpris-scrobbler";
-    rev = "v${version}";
-    sha256 = "sha256-qjd/8Ro4wERvp8RDxyZiqWqVKwA0CX1LaoZAquw9asA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Ro2Eop4CGvcT1hiCYxxmECFp5oefmAnBT9twnVfpsvY=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace src/signon.c \
-        --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace meson.build \
-        --replace "-Werror=format-truncation=0" "" \
-        --replace "-Wno-stringop-overflow" ""
-    '';
+  postPatch = ''
+    substituteInPlace src/signon.c \
+      --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace meson.build \
+      --replace "-Werror=format-truncation=0" "" \
+      --replace "-Wno-stringop-overflow" ""
+  '';
 
   nativeBuildInputs = [
     m4
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dversion=${version}"
+    "-Dversion=${finalAttrs.version}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -76,12 +75,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic scrobbler for ListenBrainz, libre.fm, & last.fm";
     homepage = "https://github.com/mariusor/mpris-scrobbler";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emantor ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = lib.platforms.unix;
     mainProgram = "mpris-scrobbler";
   };
-}
+})

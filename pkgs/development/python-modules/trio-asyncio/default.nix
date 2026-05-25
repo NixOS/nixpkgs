@@ -7,24 +7,24 @@
   trio,
   outcome,
   sniffio,
-  exceptiongroup,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "trio-asyncio";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # https://github.com/python-trio/trio-asyncio/issues/160
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio-asyncio";
     tag = "v${version}";
-    hash = "sha256-6c+4sGEpCVC8wxBg+dYgkOwRAUOi/DTITrDx3M2koyE=";
+    hash = "sha256-7kp99tdJhExjg8WsfBtXJyFrKnSAtTF1fhPFxCU7eI8=";
   };
 
   postPatch = ''
@@ -39,14 +39,12 @@ buildPythonPackage rec {
     trio
     outcome
     sniffio
-  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
-    "-W"
-    "ignore::RuntimeWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::RuntimeWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -63,14 +61,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trio_asyncio" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-trio/trio-asyncio/blob/v${version}/docs/source/history.rst";
     description = "Re-implementation of the asyncio mainloop on top of Trio";
     homepage = "https://github.com/python-trio/trio-asyncio";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

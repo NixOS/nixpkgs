@@ -1,18 +1,32 @@
+let
+  autoCalledPackages = import ./by-name-overlay.nix ../os-specific/darwin/by-name;
+in
+
 {
   lib,
-  buildPackages,
-  pkgs,
-  targetPackages,
+  buildEnv,
+  cctools,
   generateSplicesForMkScope,
+  libc,
+  llvmPackages,
   makeScopeWithSplicing',
+  pkgs,
+  preLibcHeaders,
   stdenv,
+  targetPackages,
+  wrapBintoolsWith,
   config,
 }:
 
 let
   aliases =
-    self: super:
-    lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib self super pkgs);
+    final: prev:
+    lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib final prev pkgs);
+
+  autoCalledPackagesWithAliases = lib.composeManyExtensions [
+    autoCalledPackages
+    aliases
+  ];
 
   mkBootstrapStdenv =
     stdenv:
@@ -29,34 +43,29 @@ in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "darwin";
-  f = lib.extends aliases (
+  extra = self: {
+    inherit (llvmPackages) clang-unwrapped;
+
+    # This is an internal helper for building source-release packages.
+    # It’s not intended for use outside of the Darwin package set.
+    mkAppleDerivation = self.callPackage ../os-specific/darwin/mk-apple-derivation { };
+  };
+  f = lib.extends autoCalledPackagesWithAliases (
     self:
-    let
-      inherit (self) mkDerivation callPackage;
-
-      # Open source packages that are built from source
-      apple-source-packages = lib.packagesFromDirectoryRecursive {
-        callPackage = self.callPackage;
-        directory = ../os-specific/darwin/apple-source-releases;
-      };
-
-      # Must use pkgs.callPackage to avoid infinite recursion.
-      impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
-    in
-
-    impure-cmds
-    // apple-source-packages
-    // {
-
+    lib.recurseIntoAttrs {
       inherit (self.adv_cmds) ps;
 
-      binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-        inherit (pkgs) cctools;
-        inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
+      # Removes propagated packages from the stdenv, so those packages can be built without depending upon themselves.
+      bootstrapStdenv = mkBootstrapStdenv stdenv;
+
+      # Note: Not in `package.nix` because it messes up the overrides.
+      binutils = wrapBintoolsWith {
+        libc = targetPackages.libc or libc;
+        bintools = self.binutils-unwrapped;
       };
 
-      binutils = pkgs.wrapBintoolsWith {
-        inherit (targetPackages) libc;
+      binutilsNoLibc = wrapBintoolsWith {
+        libc = targetPackages.preLibcHeaders or preLibcHeaders;
         bintools = self.binutils-unwrapped;
       };
 
@@ -74,11 +83,11 @@ makeScopeWithSplicing' {
       # the former to build at least the stage1 compiler,
       # and the latter at least to be detectable
       # as the target for the final compiler.
-      binutilsDualAs-unwrapped = pkgs.buildEnv {
+      binutilsDualAs-unwrapped = buildEnv {
         name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
         paths = [
           self.binutils-unwrapped
-          (lib.getOutput "gas" pkgs.cctools)
+          (lib.getOutput "gas" cctools)
         ];
       };
 
@@ -86,44 +95,12 @@ makeScopeWithSplicing' {
         bintools = self.binutilsDualAs-unwrapped;
       };
 
-      binutilsNoLibc = pkgs.wrapBintoolsWith {
-        libc = targetPackages.preLibcHeaders;
-        bintools = self.binutils-unwrapped;
-      };
-
-      # Removes propagated packages from the stdenv, so those packages can be built without depending upon themselves.
-      bootstrapStdenv = mkBootstrapStdenv pkgs.stdenv;
-
-      libSystem = callPackage ../os-specific/darwin/libSystem { };
-
-      DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
-
-      libunwind = callPackage ../os-specific/darwin/libunwind { };
-
-      sigtool = callPackage ../os-specific/darwin/sigtool { };
-
-      signingUtils = callPackage ../os-specific/darwin/signing-utils { };
-
-      autoSignDarwinBinariesHook = pkgs.makeSetupHook {
-        name = "auto-sign-darwin-binaries-hook";
-        propagatedBuildInputs = [ self.signingUtils ];
-      } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
-
-      iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
-        buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
-        targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
-        inherit (pkgs.llvmPackages) clang-unwrapped;
-      };
-
-      lsusb = callPackage ../os-specific/darwin/lsusb { };
-
-      openwith = callPackage ../os-specific/darwin/openwith { };
-
-      trash = callPackage ../os-specific/darwin/trash { };
+      sourceRelease = self.callPackage ../os-specific/darwin/sourceRelease { };
 
       inherit (self.file_cmds) xattr;
 
-      inherit (pkgs.callPackages ../os-specific/darwin/xcode { })
+      # Note: Not in `packages.nix` because it’s a package set not a derivation.
+      inherit (self.callPackage ../os-specific/darwin/xcode { })
         xcode_8_1
         xcode_8_2
         xcode_9_1
@@ -170,15 +147,30 @@ makeScopeWithSplicing' {
         xcode_16_1
         xcode_16_2
         xcode_16_3
+        xcode_16_4
+        xcode_26
+        xcode_26_Apple_silicon
+        xcode_26_0_1
+        xcode_26_0_1_Apple_silicon
+        xcode_26_1
+        xcode_26_1_Apple_silicon
+        xcode_26_1_1
+        xcode_26_1_1_Apple_silicon
+        xcode_26_2
+        xcode_26_2_Apple_silicon
+        xcode_26_3
+        xcode_26_3_Apple_silicon
+        xcode_26_4
+        xcode_26_4_Apple_silicon
+        xcode_26_4_1
+        xcode_26_4_1_Apple_silicon
+        xcode_26_5
+        xcode_26_5_Apple_silicon
         xcode
         requireXcode
         ;
 
-      xcodeProjectCheckHook = pkgs.makeSetupHook {
-        name = "xcode-project-check-hook";
-        propagatedBuildInputs = [ pkgs.pkgsBuildHost.openssl ];
-      } ../os-specific/darwin/xcode-project-check-hook/setup-hook.sh;
-
+      # Note: Not in `package.nix` because it references files outside of the package.
       # See doc/packages/darwin-builder.section.md
       linux-builder = lib.makeOverridable (
         { modules }:
@@ -189,7 +181,8 @@ makeScopeWithSplicing' {
             configuration = {
               imports = [
                 ../../nixos/modules/profiles/nix-builder-vm.nix
-              ] ++ modules;
+              ]
+              ++ modules;
 
               # If you need to override this, consider starting with the right Nixpkgs
               # in the first place, ie change `pkgs` in `pkgs.darwin.linux-builder`.
@@ -210,7 +203,6 @@ makeScopeWithSplicing' {
       linux-builder-x86_64 = self.linux-builder.override {
         modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
       };
-
     }
   );
 }

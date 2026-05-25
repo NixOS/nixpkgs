@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bonsai";
-  version = "1.2.1";
+  version = "1.5.1";
 
   src = fetchFromSourcehut {
     owner = "~stacyharper";
     repo = "bonsai";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WAne0628lELQanUv2lg8Y9QEikZVAT7Xtkndhs8Ozjw=";
+    hash = "sha256-cAlTppDNXXZaL5bG+h4jANfFg2OBd0WqEmDBmY5IvZ8=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hareThirdParty.hare-json
   ];
 
-  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   enableParallelBuilding = true;
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Finite State Machine structured as a tree";
     homepage = "https://git.sr.ht/~stacyharper/bonsai";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ colinsane ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ colinsane ];
+    platforms = lib.platforms.linux;
     mainProgram = "bonsaictl";
   };
 })

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -9,7 +10,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymonctl";
   version = "0.92";
   pyproject = true;
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "PyMonCtl";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eFB+HqYBud836VNEA8q8o1KQKA+GHwSC0YfU1KCbDXw=";
   };
 
@@ -38,5 +39,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     description = "Cross-Platform toolkit to get info on and control monitors connected";
     maintainers = with lib.maintainers; [ sigmanificient ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

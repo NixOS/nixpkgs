@@ -6,15 +6,12 @@
   pycryptodomex,
   pysnmp-pyasn1,
   pysnmp-pysmi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmplib";
   version = "5.0.24";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysnmp";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnmp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of v1/v2c/v3 SNMP engine";
     homepage = "https://github.com/pysnmp/pysnmp";
     changelog = "https://github.com/pysnmp/pysnmp/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

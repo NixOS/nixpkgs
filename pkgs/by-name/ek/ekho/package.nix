@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-O0"
     "-I${lib.getDev utf8cpp}/include/utf8cpp"
   ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = [ ];
     mainProgram = "ekho";
   };
 })

@@ -16,17 +16,17 @@
   appstream,
   blueprint-compiler,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "giara";
   version = "1.1.0";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "giara";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-FTy0ElcoTGXG9eV85pUrF35qKDKOfYIovPtjLfTJVOg=";
   };
 
@@ -67,12 +67,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace "item { custom: profile; }" 'item { custom: "profile"; }'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
-    maintainers = with maintainers; [ dasj19 ];
+    maintainers = with lib.maintainers; [ dasj19 ];
     homepage = "https://gitlab.gnome.org/World/giara";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "giara";
   };
-}
+})

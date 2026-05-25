@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  utils,
   pkgs,
   ...
 }:
@@ -12,18 +13,19 @@ let
   cfg = config.services.displayManager.ly;
   xEnv = config.systemd.services.display-manager.environment;
 
-  ly = cfg.package;
+  ly = cfg.package.override { x11Support = cfg.x11Support; };
 
   iniFmt = pkgs.formats.iniWithGlobalSection { };
 
   inherit (lib)
-    concatMapStrings
     attrNames
+    concatMapStrings
     getAttr
     mkIf
     mkOption
     mkEnableOption
     mkPackageOption
+    optionalAttrs
     ;
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
@@ -36,18 +38,22 @@ let
   defaultConfig = {
     shutdown_cmd = "/run/current-system/systemd/bin/systemctl poweroff";
     restart_cmd = "/run/current-system/systemd/bin/systemctl reboot";
-    tty = 2;
     service_name = "ly";
     path = "/run/current-system/sw/bin";
     term_reset_cmd = "${pkgs.ncurses}/bin/tput reset";
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
-    mcookie_cmd = "/run/current-system/sw/bin/mcookie";
     waylandsessions = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
-    wayland_cmd = dmcfg.sessionData.wrapper;
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
-    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
+    xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
-    x_cmd_setup = dmcfg.sessionData.wrapper;
+    setup_cmd = dmcfg.sessionData.wrapper;
+    brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
+    brightness_down_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s 10%-";
+  }
+  // optionalAttrs dmcfg.autoLogin.enable {
+    auto_login_service = "ly-autologin";
+    auto_login_session = dmcfg.sessionData.autologinSession;
+    auto_login_user = dmcfg.autoLogin.user;
   };
 
   finalConfig = defaultConfig // cfg.settings;
@@ -59,17 +65,16 @@ in
   options = {
     services.displayManager.ly = {
       enable = mkEnableOption "ly as the display manager";
+      x11Support = mkOption {
+        description = "Whether to enable support for X11";
+        type = lib.types.bool;
+        default = true;
+      };
 
       package = mkPackageOption pkgs [ "ly" ] { };
 
       settings = mkOption {
-        type =
-          with lib.types;
-          attrsOf (oneOf [
-            str
-            int
-            bool
-          ]);
+        type = with lib.types; attrsOf iniFmt.lib.types.atom;
         default = { };
         example = {
           load = false;
@@ -86,17 +91,73 @@ in
 
     assertions = [
       {
-        assertion = !dmcfg.autoLogin.enable;
+        assertion = dmcfg.autoLogin.enable -> dmcfg.sessionData.autologinSession != null;
         message = ''
-          ly doesn't support auto login.
+          ly auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
     ];
 
-    security.pam.services.ly = {
-      startSession = true;
-      unixAuth = true;
-      enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+    security.pam.services = {
+      ly = {
+        startSession = true;
+        unixAuth = true;
+        enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+      };
+    }
+    // optionalAttrs dmcfg.autoLogin.enable {
+      ly-autologin = {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "nologin";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
+            }
+            {
+              name = "ly-normal-user";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
+              settings.quiet = true;
+              args = lib.mkBefore [
+                "uid"
+                ">="
+                "1000"
+              ];
+            }
+            {
+              name = "permit";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
+            }
+          ];
+
+          account = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
+
+          password = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
+
+          session = utils.pam.autoOrderRules [
+            {
+              name = "ly";
+              control = "include";
+              modulePath = "ly";
+            }
+          ];
+        };
+      };
     };
 
     environment = {
@@ -111,12 +172,18 @@ in
 
       displayManager = {
         enable = true;
-        execCmd = "exec /run/current-system/sw/bin/ly";
+        generic = {
+          enable = true;
+          execCmd = "exec /run/current-system/sw/bin/ly";
+        };
+
+        # Set this here instead of 'defaultConfig' so users get eval
+        # errors when they change it.
+        ly.settings.tty = 1;
       };
 
       xserver = {
-        # To enable user switching, allow ly to allocate TTYs/displays dynamically.
-        tty = null;
+        # To enable user switching, allow ly to allocate displays dynamically.
         display = null;
       };
     };
@@ -128,10 +195,7 @@ in
         after = [
           "systemd-user-sessions.service"
           "plymouth-quit-wait.service"
-          "getty@tty${toString finalConfig.tty}.service"
         ];
-
-        conflicts = [ "getty@tty7.service" ];
 
         serviceConfig = {
           Type = "idle";
@@ -144,5 +208,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ vonfry ];
+  meta.maintainers = with lib.maintainers; [
+    vonfry
+    zacharyarnaise
+  ];
 }

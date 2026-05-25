@@ -24,7 +24,7 @@ let
       cp $src $out/lib/dotnet/keepass/
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Enables KeePass to display data as QR code images";
       longDescription = ''
         KeePassQRCodeView is a plugin for KeePass 2.x which shows QR codes for entry fields.
@@ -36,14 +36,14 @@ let
         "i686-linux"
         "x86_64-linux"
       ];
-      license = licenses.mit;
-      maintainers = with maintainers; [ nazarewk ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ nazarewk ];
     };
   };
 in
 # Mono is required to compile plugin at runtime, after loading.
 buildEnv {
-  name = drv.name;
+  inherit (drv) pname version;
   paths = [
     mono
     drv

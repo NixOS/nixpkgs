@@ -17,12 +17,12 @@ assert lib.asserts.assertMsg (
 # the FMUs.
 stdenv.mkDerivation (finalAttrs: {
   pname = "reference-fmus";
-  version = "0.0.38";
+  version = "0.0.39";
   src = fetchFromGitHub {
     owner = "modelica";
     repo = "reference-fmus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FeDKYcm9K670q1FGqy41Tp2Ag8p2JidH4z78zpHOngw=";
+    hash = "sha256-3bjqfEyPhqVrJOHHhniacyUAo82InCd6LLx3tyC8DYg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFMI_VERSION=${toString FMIVersion}"
     (lib.cmakeBool "WITH_FMUSIM" false)
   ];
-  CFLAGS = lib.optionalString (FMIVersion == 3) "-Wno-stringop-truncation";
+
+  env = lib.optionalAttrs (FMIVersion == 3) {
+    CFLAGS = "-Wno-stringop-truncation";
+  };
 
   meta = {
     # CMakeLists.txt explicitly states support for aarch64-darwin, but

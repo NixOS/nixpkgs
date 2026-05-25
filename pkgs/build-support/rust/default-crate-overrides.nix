@@ -53,6 +53,12 @@
     buildInputs = [ alsa-lib ];
   };
 
+  # Force using the cmake backend. At least on Darwin, the build else gets confused and fails.
+  aws-lc-sys = prev: {
+    nativeBuildInputs = [ cmake ];
+    env.AWS_LC_SYS_CMAKE_BUILDER = 1;
+  };
+
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
   };
@@ -100,16 +106,15 @@
   };
 
   evdev-sys = attrs: {
-    nativeBuildInputs =
-      [
-        pkg-config
-      ]
-      ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
-        python3
-        autoconf
-        automake
-        libtool
-      ];
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
+      python3
+      autoconf
+      automake
+      libtool
+    ];
     buildInputs = [ libevdev ];
 
     # This prevents libevdev's build.rs from trying to `git fetch` when HOST!=TARGET
@@ -397,14 +402,12 @@
   proc-macro-crate =
     attrs:
     lib.optionalAttrs (lib.versionAtLeast attrs.version "2.0") {
-      postPatch =
-        (attrs.postPatch or "")
-        + ''
-          substituteInPlace \
-            src/lib.rs \
-            --replace-fail \
-            'env::var("CARGO")' \
-            'Ok::<_, core::convert::Infallible>("${lib.getBin buildPackages.cargo}/bin/cargo")'
-        '';
+      postPatch = (attrs.postPatch or "") + ''
+        substituteInPlace \
+          src/lib.rs \
+          --replace-fail \
+          'env::var("CARGO")' \
+          'Ok::<_, core::convert::Infallible>("${lib.getBin buildPackages.cargo}/bin/cargo")'
+      '';
     };
 }

@@ -21,15 +21,15 @@
   sox,
   hackrfSupport ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trunk-recorder";
-  version = "5.0.2";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "robotastic";
     repo = "trunk-recorder";
-    rev = "v${version}";
-    hash = "sha256-UTowlW2xKJllYlEvfEVQEyjNmFX3oafKJThIYDx7dkc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2qy6krI5NglkC+bUFfJaEuHIcBoYJrxBRnFs8O0NcZA=";
   };
 
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
@@ -40,20 +40,19 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    [
-      boost
-      curl
-      gmp
-      gnuradio
-      gnuradioPackages.osmosdr
-      openssl
-      spdlog
-      uhd
-      volk
-    ]
-    ++ lib.optionals hackrfSupport [ hackrf ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ mpir ];
+  buildInputs = [
+    boost
+    curl
+    gmp
+    gnuradio
+    gnuradioPackages.osmosdr
+    openssl
+    spdlog
+    uhd
+    volk
+  ]
+  ++ lib.optionals hackrfSupport [ hackrf ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ mpir ];
 
   postPatch = ''
     # fix broken symlink
@@ -73,9 +72,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Record calls from trunked radio systems";
     homepage = "https://trunkrecorder.com/";
-    changelog = "https://github.com/robotastic/trunk-recorder/releases/tag/v${version}";
+    changelog = "https://github.com/robotastic/trunk-recorder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ PapayaJackal ];
     mainProgram = "trunk-recorder";
   };
-}
+})

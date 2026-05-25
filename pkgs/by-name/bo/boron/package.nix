@@ -5,12 +5,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boron";
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/urlan/files/Boron/boron-${version}.tar.gz";
+    url = "https://sourceforge.net/projects/urlan/files/Boron/boron-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-50HKcK2hQpe9k9RIoVa/N5krTRKlW9AsGYTmHITx7Nc=";
   };
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     make -C test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://urlan.sourceforge.net/boron/";
     description = "Scripting language and C library useful for building DSLs";
     mainProgram = "boron";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mausch ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mausch ];
   };
-}
+})

@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adw-gtk3";
-  version = "6.2";
+  version = "6.5";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "adw-gtk3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YYaqSEnIYHHkY4L3UhFBkR3DehoB6QADhSGOP/9NKx8=";
+    hash = "sha256-7tCmtSauWUEoQUvOVnL4Zq+Om+9bHUCl1mDUejxjP78=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ciferkey
       Gliczy
-      normalcea
     ];
   };
 })

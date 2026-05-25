@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -16,28 +15,19 @@
   transformers,
 
   # optional-dependencies
-  diffusers,
-  h5py,
-  onnx,
-  onnxruntime,
-  protobuf,
-  tensorflow,
-  tf2onnx,
-  timm,
+  optimum-onnx,
 }:
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.25.3";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
     tag = "v${version}";
-    hash = "sha256-SVyGtWFI5GjfxbaVKICf+QSSMYI62dDVMzphu8TngvY=";
+    hash = "sha256-nA73afFr9wqJWmobBw5hOIjRvQ6I8QvVZoRJnYnXzUc=";
   };
 
   build-system = [ setuptools ];
@@ -50,32 +40,16 @@ buildPythonPackage rec {
     packaging
     torch
     transformers
-  ] ++ transformers.optional-dependencies.sentencepiece;
+  ];
 
   optional-dependencies = {
+    onnx = [
+      optimum-onnx
+    ];
     onnxruntime = [
-      onnx
-      datasets
-      protobuf
-      onnxruntime
-    ];
-    exporters = [
-      onnx
-      timm
-      onnxruntime
-      protobuf
-    ];
-    exporters-tf = [
-      onnx
-      timm
-      h5py
-      tf2onnx
-      onnxruntime
-      numpy
-      datasets
-      tensorflow
-    ];
-    diffusers = [ diffusers ];
+      optimum-onnx
+    ]
+    ++ optimum-onnx.optional-dependencies.onnxruntime;
     intel = [
       # optimum-intel
     ];
@@ -92,7 +66,6 @@ buildPythonPackage rec {
       # optimum-graphcore
     ];
     habana = [
-      transformers
       # optimum-habana
     ];
     neuron = [
@@ -112,7 +85,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "optimum" ];
 
   meta = {
-    description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
+    description = "Accelerate training and inference of Transformers and Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
     changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";

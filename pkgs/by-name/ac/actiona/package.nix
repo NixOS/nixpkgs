@@ -23,12 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Jmgr";
     repo = "actiona";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sJlzrrpmo2CbzChCtiyxqDtjoN58BN4Ptjm4sH83zAw=";
     fetchSubmodules = true;
   };
 
-  patches = lib.optionals (!textToSpeechSupport) [
+  patches = [
+    # Meet Qt 6.10 requirement for explicit find_package of private targets
+    ./fix-qt6-10-private-targets.diff
+  ]
+  ++ lib.optionals (!textToSpeechSupport) [
     # Removes TTS support
     ./disable-tts.patch
   ];
@@ -44,12 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bluez
     libnotify
-    opencv
+    # NOTE: Specifically not using lib.getOutput here because it would select the out output of opencv, which changes
+    # semantics since make-derivation uses lib.getDev on the dependency arrays, which won't touch derivations with
+    # specified outputs.
+    (opencv.cxxdev or opencv)
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qttools
     qt6.qt5compat
-  ] ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
+  ]
+  ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
 
   meta = {
     description = "Cross-platform automation tool";

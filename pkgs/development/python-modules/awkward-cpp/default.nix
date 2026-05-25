@@ -2,22 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   cmake,
   ninja,
   pybind11,
   scikit-build-core,
+
+  # dependencies
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awkward-cpp";
-  version = "46";
+  version = "52";
   pyproject = true;
 
   src = fetchPypi {
     pname = "awkward_cpp";
-    inherit version;
-    hash = "sha256-uCvstlozKAxsJzNu5cA3xbfjlL5SVlqjHgh8pUrc5Z4=";
+    inherit (finalAttrs) version;
+    hash = "sha256-7xQesgVE3yYblzyYbPrle+MpAiBhvoaBdQat1nZZcnU=";
   };
 
   build-system = [
@@ -39,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

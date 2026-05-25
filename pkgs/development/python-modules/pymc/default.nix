@@ -20,25 +20,22 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "5.23.0";
+  version = "6.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
-    tag = "v${version}";
-    hash = "sha256-Hlj5kOSMz8uoqeBkLiq9kT6CZrb2XJW9mas45G2EZB4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-djioOgEtfKxXcbxYJGjPjCQOxcXi54xXNowJJhUWjE4=";
   };
 
   build-system = [
     setuptools
     versioneer
-  ];
-
-  pythonRelaxDeps = [
-    "pytensor"
   ];
 
   dependencies = [
@@ -63,11 +60,10 @@ buildPythonPackage rec {
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc";
-    changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
+    changelog = "https://github.com/pymc-devs/pymc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nidabdella
-      ferrine
     ];
   };
-}
+})

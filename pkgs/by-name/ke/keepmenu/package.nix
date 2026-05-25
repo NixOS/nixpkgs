@@ -8,15 +8,15 @@
   xvfb-run,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "keepmenu";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "keepmenu";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Kzt2RqyYvOWnbkflwTHzlnpUaruVQvdGys57DDpH9o8=";
   };
 
@@ -52,12 +52,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "keepmenu" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/firecat53/keepmenu";
     description = "Dmenu/Rofi frontend for Keepass databases";
     mainProgram = "keepmenu";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ elliot ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ elliot ];
+    platforms = lib.platforms.linux;
   };
-}
+})

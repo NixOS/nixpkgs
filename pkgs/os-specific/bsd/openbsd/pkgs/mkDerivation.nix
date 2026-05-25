@@ -72,7 +72,8 @@ lib.makeOverridable (
         install
         tsort
         lorder
-      ] ++ (attrs.extraNativeBuildInputs or [ ]);
+      ]
+      ++ (attrs.extraNativeBuildInputs or [ ]);
 
       HOST_SH = stdenv'.shell;
 
@@ -87,10 +88,10 @@ lib.makeOverridable (
 
       strictDeps = true;
 
-      meta = with lib; {
-        maintainers = with maintainers; [ ericson2314 ];
-        platforms = platforms.openbsd;
-        license = licenses.bsd2;
+      meta = {
+        maintainers = with lib.maintainers; [ ericson2314 ];
+        platforms = lib.platforms.openbsd;
+        license = lib.licenses.bsd2;
       };
     }
     // lib.optionalAttrs stdenv'.hasCC {
@@ -102,6 +103,6 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }
-    // (builtins.removeAttrs attrs [ "extraNativeBuildInputs" ])
+    // (removeAttrs attrs [ "extraNativeBuildInputs" ])
   )
 )

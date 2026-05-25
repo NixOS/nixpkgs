@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "fixtures";
-  version = "4.2.4.post1";
+  version = "4.2.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A0xL0d6qYKW/y2CM5T2Z6Dkr9HyRplNgWuvdagUkjy4=";
+    hash = "sha256-6hRlZKZmYQbEgffDX5ek1lSFyEsMyGpQdZcWS2zA2Ek=";
   };
 
   build-system = [
@@ -31,7 +31,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.streams;
+  ]
+  ++ optional-dependencies.streams;
 
   meta = {
     description = "Reusable state for writing clean tests and more";

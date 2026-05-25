@@ -14,16 +14,16 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "livi";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "guidog";
     repo = "livi";
     domain = "gitlab.gnome.org";
-    rev = "v${version}";
-    hash = "sha256-cPnmKepXPeA3h0VYHypEPHAOclhVseokL1NsCKxGJ78=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2hDQS5f+KAWal8AbtB4IV4/B6Rq+n1vAcWA9eoDS3y4=";
   };
   nativeBuildInputs = [
     meson
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/guidog/livi";
-    changelog = "https://gitlab.gnome.org/guidog/livi/-/blob/v${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/guidog/livi/-/blob/v${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Small video player targeting mobile devices (also named μPlayer)";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "livi";
     maintainers = with lib.maintainers; [ mksafavi ];
   };
-}
+})

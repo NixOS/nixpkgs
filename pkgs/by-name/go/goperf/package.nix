@@ -7,22 +7,22 @@
   sd,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goperf";
-  version = "0-unstable-2025-05-05";
+  version = "0-unstable-2026-05-12";
 
   src = fetchgit {
     url = "https://go.googlesource.com/perf";
-    rev = "a54a20dddd9743f7ac60d2d506e561eaeafd4831";
-    hash = "sha256-+d8s9kEzBJ/21U2x8ZuiGdQrspFIJEmrjxmzNahC/V0=";
+    rev = "3cf34090a3db6bb64df2259e30021db7ff5d9595";
+    hash = "sha256-2dz8GCzmyS8LkN1zzyCO8cn/NBKmPhIqFRfILc9/lVo=";
   };
 
-  vendorHash = "sha256-nqK6xMKYe4uMXvcqopTAV66qklWUq1TzsP8V67TGJJU=";
+  vendorHash = "sha256-H9aP7PGzq5gmFvlYrkrOFfqCSdlpoQkIkTwKMgwr2hs=";
 
   passthru.updateScript = writeShellScript "update-goperf" ''
     export UPDATE_NIX_ATTR_PATH=goperf
     ${lib.escapeShellArgs (unstableGitUpdater {
-      inherit (src) url;
+      inherit (finalAttrs.src) url;
     })}
     set -x
     oldhash="$(nix-instantiate . --eval --strict -A "goperf.goModules.drvAttrs.outputHash" | cut -d'"' -f2)"
@@ -31,11 +31,11 @@ buildGoModule rec {
     ${lib.getExe sd} --string-mode "$oldhash" "$newhash" "$fname"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tools and packages for analyzing Go benchmark results";
     homepage = "https://cs.opensource.google/go/x/perf";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

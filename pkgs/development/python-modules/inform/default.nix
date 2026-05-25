@@ -8,27 +8,24 @@
   hypothesis,
   num2words,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inform";
-  version = "1.34";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.36";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
-    tag = "v${version}";
-    hash = "sha256-s4aaCCRwAUL/rISLNEEYfbXnNTS7MeQ1DfjRK1EPk6U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x2xLEcywMaYhq/SWPVu48zTHJW3/MWujjr4y6/uEClU=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arrow
     six
   ];
@@ -39,14 +36,15 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  disabledTests =
-    [ "test_prostrate" ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # doctest runs one more test than expected
-      "test_inform"
-    ];
+  disabledTests = [
+    "test_prostrate"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # doctest runs one more test than expected
+    "test_inform"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Print and logging utilities";
     longDescription = ''
       Inform is designed to display messages from programs that are typically
@@ -54,8 +52,8 @@ buildPythonPackage rec {
       allow you to simply and cleanly print different types of messages.
     '';
     homepage = "https://inform.readthedocs.io";
-    changelog = "https://github.com/KenKundert/inform/blob/${src.tag}/doc/releases.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    changelog = "https://github.com/KenKundert/inform/blob/${finalAttrs.src.tag}/doc/releases.rst";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
-}
+})

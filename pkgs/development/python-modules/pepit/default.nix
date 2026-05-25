@@ -13,15 +13,20 @@
 
 buildPythonPackage rec {
   pname = "pepit";
-  version = "0.3.2";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PerformanceEstimation";
     repo = "PEPit";
-    rev = version;
-    hash = "sha256-Gdymdfi0Iv9KXBNSbAEWGYIQ4k5EONnbyWs+99L5D/A=";
+    tag = version;
+    hash = "sha256-PCWYfJ1h4P0X4KLNdIivLrPVAR7205K1Ii5ROuGHULo=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
+  '';
 
   build-system = [
     setuptools

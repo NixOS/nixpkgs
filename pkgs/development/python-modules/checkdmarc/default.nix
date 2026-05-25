@@ -6,32 +6,33 @@
   expiringdict,
   fetchFromGitHub,
   hatchling,
+  importlib-resources,
   pem,
   publicsuffixlist,
   pyleri,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   timeout-decorator,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.8.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "5.15.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
-    tag = version;
-    hash = "sha256-mdEfVfqK277A8QUc8rpLxS2pfdyg4Z5XqWpWkh9mFLk=";
+    tag = finalAttrs.version;
+    hash = "sha256-MafEl+5uZS490ZZqi74alOnbLfDyMGb5RK5CtyHUS60=";
   };
 
-  pythonRelaxDeps = [ "xmltodict" ];
+  pythonRelaxDeps = [
+    "cryptography"
+    "xmltodict"
+  ];
 
   build-system = [ hatchling ];
 
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     cryptography
     dnspython
     expiringdict
+    importlib-resources
     pem
     publicsuffixlist
     pyleri
@@ -52,7 +54,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "checkdmarc" ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   disabledTests = [
     # Tests require network access
@@ -63,14 +65,19 @@ buildPythonPackage rec {
     "testSplitSPFRecord"
     "testTooManySPFDNSLookups"
     "testTooManySPFVoidDNSLookups"
+    "testDNSSEC"
+    "testDnssecFalseWhenNoKey"
+    "testGetDnskeyCache"
+    "testIncludeMissingSPF"
+    "testKnownGood"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for SPF and DMARC DNS records";
-    mainProgram = "checkdmarc";
     homepage = "https://github.com/domainaware/checkdmarc";
-    changelog = "https://github.com/domainaware/checkdmarc/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/domainaware/checkdmarc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "checkdmarc";
   };
-}
+})

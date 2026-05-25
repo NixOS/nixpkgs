@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytest,
-  pythonOlder,
   xclip,
   xvfb-run,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyclip";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spyoungtech";
@@ -28,12 +25,13 @@ buildPythonPackage rec {
       --replace docs/README.md README.md
   '';
 
-  nativeCheckInputs =
-    [ pytest ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xclip
-      xvfb-run
-    ];
+  nativeCheckInputs = [
+    pytest
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xclip
+    xvfb-run
+  ];
 
   checkPhase = ''
     runHook preCheck
@@ -41,12 +39,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  # Tests require `pbcopy` and `pbpaste` on darwin, which are dependencies that are not
+  # available in the build environemt.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform clipboard utilities supporting both binary and text data";
     mainProgram = "pyclip";
     homepage = "https://github.com/spyoungtech/pyclip";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

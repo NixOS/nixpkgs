@@ -1,8 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
-  unzip,
+  fetchzip,
   boost,
   curl,
   hwloc,
@@ -27,30 +26,41 @@ let
       x86_64-darwin = "makemac";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
+
+  docDir = "share/mprime/doc";
+  ccArch = stdenv.hostPlatform.gcc.arch or "x86-64";
+
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mprime";
-  version = "30.8b15";
+  version = "31.04b02";
 
-  src = fetchurl {
-    url = "https://www.mersenne.org/ftp_root/gimps/p95v${
-      lib.replaceStrings [ "." ] [ "" ] version
+  src = fetchzip {
+    url = "https://download.mersenne.ca/gimps/v31/31.04/p95v${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.source.zip";
-    hash = "sha256-CNYorZStHV0aESGX9LfLZ4oD5PFR2UOFLN1MiLaKw58=";
+    hash = "sha256-W8ic709bgm9KbVxe1fvIEC8J8LrwwMfAajX1bKhv6EM=";
+    stripRoot = false;
   };
 
   postPatch = ''
     sed -i ${srcDir}/makefile \
       -e 's/^LFLAGS =.*//'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace ${srcDir}/makefile \
-      --replace '-Wl,-Bstatic'  "" \
-      --replace '-Wl,-Bdynamic' ""
+      --replace-fail '-Wl,-Bstatic'  "" \
+      --replace-fail '-Wl,-Bdynamic' ""
+  ''
+  + ''
+    # The program refers the user to these files, make them easier to find and open
+    substituteInPlace ${srcDir}/menu.c \
+      --replace-fail "stress.txt" "$out/${docDir}/stress.txt" \
+      --replace-fail "readme.txt" "$out/${docDir}/readme.txt"
+    substituteInPlace commonb.c \
+      --replace-fail "stress.txt" "$out/${docDir}/stress.txt" \
+      --replace-fail "readme.txt" "$out/${docDir}/readme.txt"
   '';
-
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ unzip ];
 
   buildInputs = [
     boost
@@ -59,18 +69,33 @@ stdenv.mkDerivation rec {
     gmp
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      # The following is needed because compiling with stdenv.hostPlatform.gcc.arch
+      # set to something like "znver1" causes fatal errors during runtime due to
+      # rounding issues
+      lib.optional (stdenv.hostPlatform.isx86_64 && ccArch != "x86-64") "-march=x86-64"
+    );
+  };
+
   enableParallelBuilding = true;
 
   buildPhase = ''
-    make -C gwnum -f ${gwnum}
-    make -C ${srcDir}
+    runHook preBuild
+    make -C gwnum -f ${gwnum} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
+    make -C ${srcDir} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 -t $out/bin ${srcDir}/mprime
+
+    install -Dm444 -t $out/${docDir} license.txt readme.txt stress.txt undoc.txt
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mersenne prime search / System stability tester";
     longDescription = ''
       MPrime is the Linux command-line interface version of Prime95, to be run
@@ -81,13 +106,14 @@ stdenv.mkDerivation rec {
     homepage = "https://www.mersenne.org/";
     # Unfree, because of a license requirement to share prize money if you find
     # a suitable prime. http://www.mersenne.org/legal/#EULA
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     # Untested on linux-32 and osx. Works in theory.
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "x86_64-darwin"
     ];
+    maintainers = with lib.maintainers; [ dstremur ];
     mainProgram = "mprime";
   };
-}
+})

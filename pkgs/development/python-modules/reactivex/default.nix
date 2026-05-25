@@ -2,30 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "reactivex";
-  version = "4.0.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "RxPY";
     tag = "v${version}";
-    hash = "sha256-W1qYNbYV6Roz1GJtP/vpoPD6KigWaaQOWe1R5DZHlUw=";
+    hash = "sha256-napPfp72gqy43UmkPu1/erhjmJbZypHZQikmjIFVBqA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    # Upstream PR: https://github.com/ReactiveX/RxPY/pull/728
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/ReactiveX/RxPY/commit/78f4a594ca2b0e27ad93ec0e1b1c0d56d5d6540d.patch";
+      hash = "sha256-1GQm/4BTd5ZnIqfEUSb0Ja3w0y1R9EoFpzwua7gpIzo=";
+    })
+  ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -40,10 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reactivex" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ReactiveX/RxPY/releases/tag/${src.tag}";
     description = "Library for composing asynchronous and event-based programs";
     homepage = "https://github.com/ReactiveX/RxPY";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

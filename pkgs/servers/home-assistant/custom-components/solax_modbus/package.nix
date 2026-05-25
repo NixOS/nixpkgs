@@ -8,20 +8,14 @@
 buildHomeAssistantComponent rec {
   owner = "wills106";
   domain = "solax_modbus";
-  version = "2025.04.4";
+  version = "2026.05.2";
 
   src = fetchFromGitHub {
     owner = "wills106";
     repo = "homeassistant-solax-modbus";
     tag = version;
-    hash = "sha256-fgvhF+1fz3pNOZJQjf/iF2Lh9j6mMkUXjgLyCja84K0=";
+    hash = "sha256-MDeS4gWpXbXD9z4OnZDHZ0jPlCDnJ0QpAvWgesRG3hM=";
   };
-
-  postPatch = ''
-    substituteInPlace custom_components/solax_modbus/payload.py --replace-fail \
-      'from pymodbus.utilities import (' \
-      'from pymodbus.pdu.pdu import ('
-  '';
 
   dependencies = [ pymodbus ];
 

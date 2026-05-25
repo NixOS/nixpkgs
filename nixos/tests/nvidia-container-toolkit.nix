@@ -85,6 +85,7 @@ let
       '';
       meta.mainProgram = "nvidia-ctk";
     };
+    suppressNvidiaDriverAssertion = true;
   };
 in
 {
@@ -100,7 +101,10 @@ in
     {
       environment.systemPackages = with pkgs; [ jq ];
       virtualisation.diskSize = lib.mkDefault 10240;
-      virtualisation.containers.enable = lib.mkDefault true;
+      virtualisation.containers = {
+        containersConf.settings.engine.cdi_spec_dirs = [ "/var/run/cdi" ];
+        enable = lib.mkDefault true;
+      };
       hardware = {
         inherit nvidia-container-toolkit;
         nvidia = {
@@ -113,8 +117,8 @@ in
   nodes = {
     no-gpus = {
       virtualisation.containers.enable = false;
-      hardware.graphics.enable = false;
     };
+
     one-gpu =
       { pkgs, ... }:
       {
@@ -142,7 +146,7 @@ in
       one_gpu.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")
       one_gpu.succeed("cat /var/run/cdi/nvidia-container-toolkit.json | jq")
       one_gpu.succeed("podman load < ${testContainerImage}")
-      print(one_gpu.succeed("podman run --pull=never --device=nvidia.com/gpu=all -v /run/opengl-driver:/run/opengl-driver:ro cdi-test:latest"))
+      one_gpu.succeed("podman run --pull=never --device=nvidia.com/gpu=all -v /run/opengl-driver:/run/opengl-driver:ro cdi-test:latest")
 
     # Issue: https://github.com/NixOS/nixpkgs/issues/319201
     with subtest("The generated CDI spec skips specified non-existant paths in the host"):

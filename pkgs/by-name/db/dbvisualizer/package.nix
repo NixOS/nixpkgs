@@ -8,12 +8,18 @@
   stdenv,
 }:
 
+# nixpkgs-update: no auto update
+# NOTE: Do not update to interim patch versions. The download URL will get shut
+# down after a while. Dbvisualizer discontinues download
+# URLs for all but the last patch version per minor version.
+# Example: v25.3.2 gets shut down after v25.3.3 gets released.
+
 let
   pname = "dbvisualizer";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "25.1.4";
+  version = "25.3.3";
 
   src =
     let
@@ -21,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://www.dbvis.com/product_download/dbvis-${finalAttrs.version}/media/dbvis_linux_${underscoreVersion}.tar.gz";
-      hash = "sha256-oEp0+HCfI//ukcqxVX5j6ep25TsuOHplHteWnrzlLu8=";
+      hash = "sha256-rvS2NczwmT1+/JIfpLI518I0/2AaIJEQAOwmKUK2FQs=";
     };
 
   strictDeps = true;
@@ -64,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "The universal database tool";
+    description = "Universal database tool";
     homepage = "https://www.dbvis.com/";
     maintainers = with lib.maintainers; [ boldikoller ];
     license = lib.licenses.unfree;

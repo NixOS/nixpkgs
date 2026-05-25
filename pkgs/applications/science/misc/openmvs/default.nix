@@ -1,7 +1,6 @@
 {
   lib,
   boost,
-  breakpad,
   ceres-solver,
   cgal,
   cmake,
@@ -9,13 +8,16 @@
   fetchFromGitHub,
   glfw,
   gmp,
+  libjxl,
   libjpeg,
   libpng,
   libtiff,
   mpfr,
+  nanoflann,
   opencv,
   openmp,
   pkg-config,
+  python3Packages,
   stdenv,
   vcg,
   zstd,
@@ -27,32 +29,42 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  version = "2.2.0";
+  version = "2.4.0";
   pname = "openmvs";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
     rev = "v${version}";
-    hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
+    hash = "sha256-0tL2tqHYBQMGL9k+NqTUxieWuDP3YB6X9DcXYnlGWWg=";
     fetchSubmodules = true;
   };
 
   # SSE is enabled by default
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = [
+    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3Packages.python))
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'FIND_PACKAGE(Boost REQUIRED COMPONENTS iostreams program_options system serialization OPTIONAL_COMPONENTS ''${Boost_EXTRA_COMPONENTS})' \
+      'FIND_PACKAGE(Boost REQUIRED COMPONENTS iostreams program_options serialization OPTIONAL_COMPONENTS ''${Boost_EXTRA_COMPONENTS})'
+  '';
 
   buildInputs = [
     boostWithZstd
-    breakpad
     ceres-solver
     cgal
     eigen
     glfw
     gmp
+    libjxl
     libjpeg
     libpng
     libtiff
     mpfr
+    nanoflann
     opencv
     openmp
     vcg
@@ -61,6 +73,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3Packages.python
   ];
 
   postInstall = ''
@@ -70,9 +83,14 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
   checkPhase = ''
     runHook preCheck
-    ctest
+    ${lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
+      export KMP_AFFINITY=disabled
+      export OMP_PROC_BIND=false
+    ''}
+    ctest --output-on-failure
     runHook postCheck
   '';
 
@@ -81,6 +99,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cdcseacave/openMVS";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bouk ];
+    maintainers = with lib.maintainers; [
+      bouk
+      miniharinn
+    ];
   };
 }

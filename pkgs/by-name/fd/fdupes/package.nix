@@ -9,14 +9,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fdupes";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
     repo = "fdupes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-epregz+i2mML5zCQErQDJFUFUxnUoqcBlUPGPJ4tcmc=";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Identifies duplicate files residing within specified directories";
     longDescription = ''
       fdupes searches the given path for duplicate files.
@@ -38,9 +38,8 @@ stdenv.mkDerivation rec {
       followed by a byte-by-byte comparison.
     '';
     homepage = "https://github.com/adrianlopezroche/fdupes";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.maggesi ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "fdupes";
   };
-}
+})

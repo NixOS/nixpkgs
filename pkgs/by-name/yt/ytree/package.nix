@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytree";
-  version = "2.06";
+  version = "2.12";
 
   src = fetchurl {
     url = "https://han.de/~werner/ytree-${finalAttrs.version}.tar.gz";
-    hash = "sha256-QRqI779ZnnytVUC7A7Zt0zyWexRwBnp+CVQcNvnvWeY=";
+    hash = "sha256-I2bS1fwfZERgMjhj5b6ZdFhLybLWbXJHFlqP8aCZERQ=";
   };
 
   patches = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Curses-based file manager similar to DOS Xtree(TM)";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "ytree";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

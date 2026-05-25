@@ -27,34 +27,32 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.15.0";
+  version = "3.23.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8f+EphnooB/9KY9M+mi8xBUX/cH7EvoyHlD/4RjgeaA=";
+    hash = "sha256-HMHZQP9GY9iMm+vDeIhavv4akmM0IUbpDtWHyzHG7KE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-48QDMJrxm+9psSeCRG7rsNPwxv+FKLrkLMvIvwsV3GQ=";
+  cargoHash = "sha256-zlxhlgcTtSYvvGqSpQIg6f10cQZhF6s4UNrCZr8RIdY=";
 
   buildFeatures = lib.optionals withSound [
     "sound"
   ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals withSound [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withSound [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postInstall =
@@ -79,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Background rust code checker";
     mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
-    changelog = "https://github.com/Canop/bacon/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/bacon/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       FlorianFranzen

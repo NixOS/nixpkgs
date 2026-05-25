@@ -1,7 +1,7 @@
 {
   aiohttp,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   hatchling,
   lib,
   yarl,
@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "eheimdigital";
-  version = "1.2.0";
+  version = "1.6.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "autinerd";
     repo = "eheimdigital";
     tag = version;
-    hash = "sha256-Jg5jVJAH6y2yrospcPJwHc/B0yd5ZRSXC6T7gYk7Sxs=";
+    hash = "sha256-BXezA2wFP3KeAVwnZC9WYIIXeADHUmSJHTRfZE6Rk48=";
   };
 
   build-system = [ hatchling ];
@@ -32,9 +32,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/autinerd/eheimdigital/releases/tag/${src.tag}";
+    changelog = "https://codeberg.org/autinerd/eheimdigital/releases/tag/${src.tag}";
     description = "Offers a Python API for the EHEIM Digital smart aquarium devices";
-    homepage = "https://github.com/autinerd/eheimdigital";
+    homepage = "https://codeberg.org/autinerd/eheimdigital";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

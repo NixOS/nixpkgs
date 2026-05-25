@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jpype1";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "originell";
     repo = "jpype";
     tag = "v${version}";
-    hash = "sha256-Q5/umU7JHiro+7YuC6nVG9ocpQ/Yc4LGa5+7SGGARTo=";
+    hash = "sha256-CDiVQugxLgmUwAG0e0ryamWvrjUaJxJrU0YSFIIWS1I=";
   };
 
   build-system = [ setuptools ];
@@ -55,13 +55,13 @@ buildPythonPackage rec {
     "jpype.types"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/originell/jpype/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Python to Java bridge";
   };
 }

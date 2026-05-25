@@ -1,12 +1,13 @@
 {
   lib,
   perlPackages,
+  libiec61850,
   nix,
   dmidecode,
   pciutils,
   usbutils,
   iproute2,
-  nettools,
+  net-tools,
   fetchFromGitHub,
   makeWrapper,
   versionCheckHook,
@@ -15,13 +16,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "glpi-agent";
-  version = "1.14";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "glpi-project";
     repo = "glpi-agent";
     tag = version;
-    hash = "sha256-6q+JcTFZlZjtMaQKUvCwE9Sjw9662ZXl78kha0tEFv4=";
+    hash = "sha256-ug3/ullvEn98UUg4fzDQl5PjVFlbgbaIiz0tuWz9XeA=";
   };
 
   postPatch = ''
@@ -101,11 +102,12 @@ perlPackages.buildPerlPackage rec {
         sed -e "s|./lib|$out/lib|" -i "$cur"
         wrapProgram "$cur" --prefix PATH : ${
           lib.makeBinPath [
+            libiec61850
             nix
             dmidecode
             pciutils
             usbutils
-            nettools
+            net-tools
             iproute2
           ]
         }
@@ -118,7 +120,6 @@ perlPackages.buildPerlPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

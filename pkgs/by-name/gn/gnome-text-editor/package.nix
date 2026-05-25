@@ -12,7 +12,6 @@
   wrapGAppsHook4,
   ninja,
   gnome,
-  cairo,
   icu,
   itstool,
   libadwaita,
@@ -24,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-text-editor";
-  version = "48.2";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major finalAttrs.version}/gnome-text-editor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/B9dR1vdJ9TAQ5pbj+ENbkAbQvHbo9BLdWeDkDbuICs=";
+    hash = "sha256-ncKZ2k2qCFQjtdSNtZ8AIa1V50FDpcuKsuX/4Xln9Fs=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cairo
     icu
     glib
     gsettings-desktop-schemas
@@ -60,13 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-text-editor";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-text-editor/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Text Editor for GNOME";
     mainProgram = "gnome-text-editor";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 })

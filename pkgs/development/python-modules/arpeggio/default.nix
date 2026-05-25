@@ -7,23 +7,23 @@
 
 buildPythonPackage rec {
   pname = "arpeggio";
-  version = "2.0.2";
+  version = "2.0.3";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Arpeggio";
     inherit version;
-    hash = "sha256-x5CysG4ibS3UaOT7+1t/UGzsZkFgMf3hRBzx3ioLpwA=";
+    hash = "sha256-noWtNc/GyThnaBfHrpoQAKfHKjTHHbDGhxNsRg0SuF4=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "arpeggio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Recursive descent parser with memoization based on PEG grammars (aka Packrat parser)";
     homepage = "https://github.com/textX/Arpeggio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

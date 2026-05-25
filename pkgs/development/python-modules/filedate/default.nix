@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit.py" ];
+  enabledTestPaths = [ "tests/unit.py" ];
 
   disabledTests = [ "test_created" ];
 

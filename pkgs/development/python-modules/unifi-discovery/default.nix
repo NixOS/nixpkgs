@@ -7,28 +7,21 @@
   poetry-core,
   pyroute2,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unifi-discovery";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "unifi-discovery";
-    tag = "v${version}";
-    hash = "sha256-Ea+zxV2GUAaG/BxO103NhOLzzr/TNJaOsynDad2/2VA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pn8WRsYGbBy4EwQ1DufY2WbbVM65dM4h8ZReG+qkr6k=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=unifi_discovery --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -40,19 +33,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "unifi_discovery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to discover Unifi devices";
     homepage = "https://github.com/bdraco/unifi-discovery";
-    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
-}
+})

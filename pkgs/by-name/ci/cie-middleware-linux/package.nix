@@ -15,7 +15,7 @@
   libxml2,
   openssl,
   pcsclite,
-  podofo,
+  podofo_0_10,
   ghostscript,
 }:
 
@@ -26,7 +26,7 @@ let
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = "cie-middleware-linux";
-    rev = version;
+    tag = version;
     hash = "sha256-2UMKxanF35oBNBtIqfU46QUYJwXiTU1xCrCMqzqetgI=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   buildInputs = [
     cryptopp
     fontconfig
-    podofo
+    podofo_0_10
     openssl
     pcsclite
     curl
@@ -120,19 +120,19 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/cieid" \
       --add-flags "-Djna.library.path='$out/lib:${libraries}'" \
-      --add-flags '-Dawt.useSystemAAFontSettings=on' \
+      --add-flags "-Dawt.useSystemAAFontSettings=gasp" \
       --add-flags "-cp $out/share/cieid/cieid.jar" \
       --add-flags "app.m0rf30.cieid.MainApplication"
 
     # Install other files
     install -Dm644 data/app.m0rf30.cieid.desktop -t "$out/share/applications"
-    install -Dm755 data/app.m0rf30.cieid.svg -t "$out/share/pixmaps"
+    install -Dm755 data/app.m0rf30.cieid.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm644 LICENSE "$out/share/licenses/cieid/LICENSE"
   '';
 
   preGradleUpdate = "cd ../..";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/M0Rf30/cie-middleware-linux";
     description = "Middleware for the Italian Electronic Identity Card (CIE)";
     longDescription = ''
@@ -143,8 +143,8 @@ stdenv.mkDerivation {
       distributed by the Italian government, is essentially lacking a build
       system and is in violation of the license of the PoDoFo library.
     '';
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

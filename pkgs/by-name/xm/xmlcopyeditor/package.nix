@@ -10,7 +10,7 @@
   libxml2,
   libxslt,
   pcre2,
-  wxGTK32,
+  wxwidgets_3_2,
   xercesc,
 }:
 
@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/wraplibxml.cpp \
       --replace-fail "xmlErrorPtr err" "const xmlError *err"
+  ''
+  # error: invalid type argument of unary '*' (have 'long int')
+  + ''
+    substituteInPlace src/wraplibxml.cpp \
+      --replace-fail "initGenericErrorDefaultFunc ( NULL )" "xmlSetGenericErrorFunc( nullptr , nullptr )"
   '';
 
   nativeBuildInputs = [
@@ -44,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libxslt
     pcre2
-    wxGTK32
+    wxwidgets_3_2
     xercesc
   ];
 
@@ -57,10 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xml-copy-editor.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      candeira
-      wegank
-    ];
+    maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "xmlcopyeditor";
   };
 })

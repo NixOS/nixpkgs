@@ -3,27 +3,26 @@
   lib,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
   kdePackages,
   qt6,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "ruqola";
-  version = "2.5.1";
+  pname = "ruqola";
+  version = "2.7.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "ruqola";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Oeea+IX2H9UvLZnq6X4AjwH5O4VPCg/RHRwohidPalo=";
+    hash = "sha256-6ModByNU47fWsUUp7TTqgStFViTZy5ZXPYcrj0Rwrpc=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     qt6.wrapQtAppsHook
   ];
 
@@ -50,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qtnetworkauth
+    qt6.qtspeech
     qt6.qtwebsockets
   ];
 

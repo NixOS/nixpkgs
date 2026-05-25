@@ -3,18 +3,17 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "htmx-lsp2";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "uros-5";
     repo = "htmx-lsp2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Okd4jPCZvVDWIXj7aRLRnrUOT0mD3rBr6VDEgoWXRZE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-NDse9cgwnPDziVgPz7KBwoZcttypSB98EGoK4zN4tG4=";
 
   meta = {
@@ -24,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ adamjhf ];
     mainProgram = "htmx-lsp2";
   };
-}
+})

@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fstrm";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/WFP2g3Vuf/qaY8pprY8XFAlpEE+0SJUlFNWfa+7ZlE=";
   };
 
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Frame Streams implementation in C";
     homepage = "https://github.com/farsightsec/fstrm";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
-}
+})

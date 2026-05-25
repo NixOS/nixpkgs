@@ -8,29 +8,25 @@
 
   # dependencies
   boto3,
-  mlflow,
+  mlflow-skinny,
 
   # tests
   pytestCheckHook,
   scikit-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sagemaker-mlflow";
-  version = "0.1.0";
+  version = "0.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-mlflow";
-    tag = "v${version}";
-    hash = "sha256-1bonIqZ+cFxCOxoFWn1MLBOIiB1wUX69/lUTPPupJaw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QE40ZBW7N3GPC+eJqj5uzS3L+A6Wu2/LgHOiUsEXKMw=";
   };
-
-  postPatch = ''
-    substituteInPlace VERSION \
-      --replace-fail "${version}.dev0" "${version}"
-  '';
 
   build-system = [
     setuptools
@@ -38,12 +34,10 @@ buildPythonPackage rec {
 
   dependencies = [
     boto3
-    mlflow
+    mlflow-skinny
   ];
 
-  pythonImportsCheck = [
-    "sagemaker_mlflow"
-  ];
+  pythonImportsCheck = [ "sagemaker_mlflow" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -62,13 +56,25 @@ buildPythonPackage rec {
     "test_log_artifact"
     "test_presigned_url"
     "test_presigned_url_with_fields"
+
+    # Exercises a `sqlite://` model-registry store, only available with the
+    # sqlalchemy backend of the full `mlflow` package (not `mlflow-skinny`).
+    "test_store_instantiation_none"
+  ];
+
+  disabledTestPaths = [
+    # `from mlflow.models import infer_signature` fails to import at collection
+    # time: `infer_signature` is only available in the full `mlflow` package,
+    # not in `mlflow-skinny`. Also see:
+    # https://github.com/aws/sagemaker-mlflow/issues/16
+    "test/integration/tests/test_model_registry.py"
   ];
 
   meta = {
     description = "MLFlow plugin for SageMaker";
     homepage = "https://github.com/aws/sagemaker-mlflow";
-    changelog = "https://github.com/aws/sagemaker-mlflow/releases/tag/v${version}";
+    changelog = "https://github.com/aws/sagemaker-mlflow/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

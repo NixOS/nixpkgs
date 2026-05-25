@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   dataclasses-json,
   pycryptodome,
@@ -13,26 +12,19 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysiaalarm";
-  version = "3.1.1";
+  version = "3.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q42bsBeAwU9lt7wtYGFJv23UBND+aMXZJlSWyTfZDQE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-9icZnEpSaezVj9EH5s1u2mB2h9jP/oZcpkVE0WFM4W8=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "==" ">="
-  '';
 
   build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dataclasses-json
     pycryptodome
     pytz
@@ -50,11 +42,11 @@ buildPythonPackage rec {
     "pysiaalarm.aio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for creating a client that talks with SIA-based alarm systems";
     homepage = "https://github.com/eavanvalkenburg/pysiaalarm";
-    changelog = "https://github.com/eavanvalkenburg/pysiaalarm/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/eavanvalkenburg/pysiaalarm/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

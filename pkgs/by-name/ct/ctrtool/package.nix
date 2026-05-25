@@ -5,18 +5,18 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctrtool";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "jakcron";
     repo = "Project_CTR";
-    rev = "ctrtool-v${version}";
-    sha256 = "HqqeQCEUof4EBUhuUAdTruMFgYIoXhtAN3yuWW6tD+Y=";
+    rev = "ctrtool-v${finalAttrs.version}";
+    sha256 = "GvEzv97DqCsaDWVqDpajQRWYe+WM8xCYmGE0D3UcSrM=";
   };
 
-  sourceRoot = "${src.name}/ctrtool";
+  sourceRoot = "${finalAttrs.src.name}/ctrtool";
 
   enableParallelBuilding = true;
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "ctrtool-v"; };
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     description = "Tool to extract data from a 3ds rom";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.marius851000 ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ marius851000 ];
     mainProgram = "ctrtool";
   };
 
-}
+})

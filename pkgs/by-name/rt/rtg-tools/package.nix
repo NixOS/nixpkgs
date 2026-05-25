@@ -11,14 +11,14 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtg-tools";
   version = "3.13";
 
   src = fetchFromGitHub {
     owner = "RealTimeGenomics";
     repo = "rtg-tools";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vPzKrgnX6BCQmn9aOVWWpFLC6SbPBHZhZ+oL1LCbvmo=";
   };
 
@@ -50,20 +50,24 @@ stdenv.mkDerivation rec {
        --replace-fail 'RTG_JAVA="java"' 'RTG_JAVA="${lib.getExe jdk}"' \
       --replace-fail uname ${lib.getExe' coreutils "uname"} \
       --replace-fail awk ${lib.getExe gawk} \
-      --replace-fail "hostname -s" "${lib.getExe hostname} -s"
+      --replace-fail "hostname -s" "${lib.getExe hostname} -s" \
+      --replace-fail dirname ${lib.getExe' coreutils "dirname"} \
+      --replace-fail readlink ${lib.getExe' coreutils "readlink"} \
+      --replace-fail cat ${lib.getExe' coreutils "cat"}
 
-    sed -i '/USER_JAVA_OPTS=$RTG_JAVA_OPTS/a mkdir -p $HOME/.config/rtg-tools'  installer/rtg
+    sed -i '/# Now write the selection to local config/i mkdir -p $HOME/.config/rtg-tools' installer/rtg
   '';
 
   checkPhase = ''
     ant runalltests
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RealTimeGenomics/rtg-tools";
     description = "Useful utilities for dealing with VCF files and sequence data, especially vcfeval";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ apraga ];
+    maintainers = with lib.maintainers; [ apraga ];
+    mainProgram = "rtg";
   };
-}
+})

@@ -11,6 +11,7 @@
   versionCheckHook,
   pytestCheckHook,
   pytest-asyncio,
+  python-dotenv,
   websockets,
   httpx,
   sniffio,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.3.2";
+  version = "2.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-qJ65ILj7xLqOWmpn1UzNQHUnzFg714gntVSmYHpI65I=";
+    hash = "sha256-KId5e1ITRCkLNmvY5q/ZT18INzS8Uh9HFCzfKEablOY=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -34,12 +35,12 @@ buildPythonPackage rec {
   # and allow the final application to make the allocator decision
   # via LD_PRELOAD or similar.
   patches = [
-    ./no-alloc.patch
+    ./no-alloc.patch # with --unified=1 context
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-swfqKp8AsxNAUc7dlce6J4dNQbNGWrCcUDc31AhuMmI=";
+    hash = "sha256-rR65e05uWmag+21n1YA1TILYU6ArajW2+QVOfGn4zGo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    dotenv = [ python-dotenv ];
     pname = [ setproctitle ];
     reload = [ watchfiles ];
     # rloop = [ rloop ]; # not packaged
@@ -77,11 +79,23 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
+
+  disabledTests = [
+    # SSLCertVerificationError: certificate verify failed: certificate has expired
+    "test_asgi_ws_scope"
+    "test_rsgi_ws_scope"
+  ];
+
+  # This is a measure of last resort. Granian tests fully lock up
+  # on shutdown in >90% of cases, which makes the whole thing
+  # impossible to build without restarting it double digits
+  # numbers of times. The issue has not been fully identified,
+  # and upstream claims it does not exist.
+  # FIXME: root cause and fix this.
+  doCheck = false;
 
   pythonImportsCheck = [ "granian" ];
-
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

@@ -9,19 +9,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.4.1";
+        version = "1.5.0";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           tag = "v${version}";
-          hash = "sha256-1deSlDNk8ZI/z1eWmslesXO0ypCoMxCJMdihFPCSPIc=";
+          hash = "sha256-zx3NPuwz3ZNJeYw4CG1/q8uwbGpA7G1/hvw6VmoCNkg=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-HP5XJ74ELaZT/bZgAPqe7vBPvJhHwyZVSNrUa+KToIE=";
+        vendorHash = "sha256-ZyYGCGZHHy1YYE7O9fN1qFQbLshsRFBSrNLt1GXNyU8=";
 
         extraDescription = " (previously known as Singularity)";
         extraMeta.homepage = "https://apptainer.org";
@@ -46,19 +46,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.3.1";
+        version = "4.4.1";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           tag = "v${version}";
-          hash = "sha256-hkUM9K0AweRpLa+LZ7XOI/oDk72EKWzVN5h4Kz2w2B0=";
+          hash = "sha256-lFnxh+cs5y6F/1f5uyQ3vA1E8uBKJOyOYbJy6081I5U=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-hAVynmVXPmQPo+Kd2ajBSU+UqBpvJ5TokOJXZwySr+w=";
+        vendorHash = "sha256-uqEzYj8JmZWi2Rceh+JMJ5kzUmJ4T3JAt0rto1NewlM=";
 
         extraConfigureFlags = [
           # Do not build squashfuse from the Git submodule sources, use Nixpkgs provided version

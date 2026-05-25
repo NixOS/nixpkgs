@@ -29,15 +29,19 @@
   poppler-utils,
   pytest-playwright,
   playwright-driver,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
   markdown,
   nh3,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildPythonPackage rec {
   pname = "django-filingcabinet";
-  version = "0.17-unstable-2025-04-10";
+  version = "0.17-unstable-2025-08-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,8 +49,8 @@ buildPythonPackage rec {
     repo = "django-filingcabinet";
     # No release tagged yet on GitHub
     # https://github.com/okfde/django-filingcabinet/issues/69
-    rev = "64b7b4ad804067e2f16e8a0f165c139e3ffe5fb5";
-    hash = "sha256-48Peui/5N/GfzWS1EJ5uKeKEoPjX+fPEXzG2owxsDaE=";
+    rev = "e1713921d6d14e0abc8b81315545d7fb6f08c39f";
+    hash = "sha256-R/JNI+PZb0H09ZoYCGV3nbAowkf/YlKia4xkgAgqoNM=";
   };
 
   postPatch = ''
@@ -60,7 +64,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   dependencies = [
@@ -92,9 +97,15 @@ buildPythonPackage rec {
     #annotate = [ fcdocs-annotate ];
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-uMO2iEOi9ACYdIM8Thf7+y1KpHQEqVxO3yxZ8RaGFXA=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-p+RpEDVbdYmeSD4bB0oUMrTpsVDGYkqME13awnoTNd0=";
   };
 
   postBuild = ''
@@ -124,13 +135,12 @@ buildPythonPackage rec {
     "test_document_viewer"
   ];
 
-  preCheck =
-    ''
-      export DJANGO_SETTINGS_MODULE="test_project.settings"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
-      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-    '';
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE="test_project.settings"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+  '';
 
   pythonImportsCheck = [ "filingcabinet" ];
 

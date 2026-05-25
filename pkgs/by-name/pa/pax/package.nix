@@ -5,18 +5,20 @@
   musl-fts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pax";
   version = "20240817";
 
   src = fetchurl {
-    url = "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${version}.tgz";
+    url = "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${finalAttrs.version}.tgz";
     sha256 = "sha256-6VXV06+Xrt4KP0Y6mlm4Po0Qg6rxQutvOIxUmn0YLms=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-lfts";
+  };
 
   buildPhase = ''
     sh Build.sh -r -tpax
@@ -29,11 +31,11 @@ stdenv.mkDerivation rec {
     install -Dm444 mans/pax{,cpio,tar}.1 -t $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "POSIX standard archive tool from MirBSD";
     homepage = "https://www.mirbsd.org/pax.htm";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,6 +6,7 @@ let
   common = {
     services.userborn.enable = true;
     boot.initrd.systemd.enable = true;
+    networking.useNetworkd = true;
     system.etc.overlay = {
       enable = true;
       mutable = false;
@@ -20,7 +21,7 @@ in
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
   nodes.machine =
-    { config, ... }:
+    { pkgs, ... }:
     {
       imports = [ common ];
 
@@ -37,7 +38,7 @@ in
         inheritParentConfig = false;
         configuration = {
           nixpkgs = {
-            inherit (config.nixpkgs) hostPlatform;
+            inherit pkgs;
           };
           imports = [ common ];
 

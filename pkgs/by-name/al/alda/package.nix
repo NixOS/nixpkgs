@@ -10,17 +10,17 @@
 }:
 let
   pname = "alda";
-  version = "2.3.1";
+  version = "2.3.2";
   src = fetchFromGitHub {
     owner = "alda-lang";
     repo = "alda";
     tag = "release-${version}";
-    hash = "sha256-//VfegK8wkGKSpvtsNTEQqbVJkcucNiamoNIXaEBLb8=";
+    hash = "sha256-qOEYBWU9xL62MyLSsJ0wtNea2eRhd/3ZT27j3gmNzQI=";
   };
   license = lib.licenses.epl20;
 
   alda_client = buildGoModule {
-    pname = "${pname}-client";
+    pname = "alda-client";
     inherit version src;
 
     sourceRoot = "${src.name}/client";
@@ -51,7 +51,7 @@ let
     };
   };
   alda_player = stdenv.mkDerivation {
-    pname = "${pname}-player";
+    pname = "alda-player";
     inherit version src;
 
     sourceRoot = "${src.name}/player";

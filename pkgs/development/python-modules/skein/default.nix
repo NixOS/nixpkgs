@@ -33,7 +33,8 @@ buildPythonPackage rec {
     cryptography
     grpcio
     pyyaml
-  ] ++ lib.optionals (!pythonOlder "3.12") [ setuptools ];
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [ setuptools ];
   buildInputs = [ grpcio-tools ];
 
   preBuild = ''
@@ -42,17 +43,16 @@ buildPythonPackage rec {
     ln -s ${skeinJar} skein/java/skein.jar
   '';
 
-  postPatch =
-    ''
-      substituteInPlace skein/core.py --replace "'yarn'" "'${hadoop}/bin/yarn'" \
-        --replace "else 'java'" "else '${hadoop.jdk}/bin/java'"
-      # Remove vendorized versioneer
-      rm versioneer.py
-    ''
-    + lib.optionalString (!pythonOlder "3.12") ''
-      substituteInPlace skein/utils.py \
-        --replace-fail "distutils" "setuptools._distutils"
-    '';
+  postPatch = ''
+    substituteInPlace skein/core.py --replace "'yarn'" "'${hadoop}/bin/yarn'" \
+      --replace "else 'java'" "else '${hadoop.jdk}/bin/java'"
+    # Remove vendorized versioneer
+    rm versioneer.py
+  ''
+  + lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace skein/utils.py \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
 
   build-system = [ versioneer ];
 
@@ -77,8 +77,8 @@ buildPythonPackage rec {
       alexbiehl
       illustris
     ];
-    # https://github.com/NixOS/nixpkgs/issues/48663#issuecomment-1083031627
-    # replace with https://github.com/NixOS/nixpkgs/pull/140325 once it is merged
-    broken = lib.traceIf isPy27 "${pname} not supported on ${python.executable}" isPy27;
+    problems = lib.optionalAttrs isPy27 {
+      broken.message = "${pname} not supported on ${python.executable}";
+    };
   };
 }

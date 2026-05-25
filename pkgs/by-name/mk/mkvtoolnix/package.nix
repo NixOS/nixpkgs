@@ -1,15 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   autoreconfHook,
   rake,
   boost,
   cmark,
   docbook_xsl,
-  expat,
-  file,
   flac,
   fmt,
   gettext,
@@ -26,7 +24,6 @@
   pugixml,
   qt6,
   utf8cpp,
-  xdg-utils,
   zlib,
   nix-update-script,
   withGUI ? true,
@@ -52,14 +49,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "92.0";
+  version = "98.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-3yiQRGkjvOz80G6s39JHzqytxvGDmV9Lqs5bMxTAejo=";
+    hash = "sha256-gLs2+hbWFhhpabdknwoozH8WHgVNSR0VjnrmwQA7xrc=";
   };
 
   passthru = {
@@ -67,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       extraArgs = [ "--version-regex=release-(.*)" ];
     };
   };
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -76,32 +74,29 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     rake
-  ] ++ optionals withGUI [ qt6.wrapQtAppsHook ];
+  ]
+  ++ optionals withGUI [ qt6.wrapQtAppsHook ];
 
   # qtbase and qtmultimedia are needed without the GUI
-  buildInputs =
-    [
-      boost
-      expat
-      file
-      flac
-      fmt
-      gmp
-      libdvdread
-      libebml
-      libmatroska
-      libogg
-      libvorbis
-      nlohmann_json
-      pugixml
-      qt6.qtbase
-      qt6.qtmultimedia
-      utf8cpp
-      xdg-utils
-      zlib
-    ]
-    ++ optionals withGUI [ cmark ]
-    ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
+  buildInputs = [
+    boost
+    flac
+    fmt
+    gmp
+    libdvdread
+    libebml
+    libmatroska
+    libogg
+    libvorbis
+    nlohmann_json
+    pugixml
+    qt6.qtbase
+    qt6.qtmultimedia
+    utf8cpp
+    zlib
+  ]
+  ++ optionals withGUI [ cmark ]
+  ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''
@@ -143,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     mainProgram = if withGUI then "mkvtoolnix-gui" else "mkvtoolnix";
     maintainers = with lib.maintainers; [
-      codyopel
       rnhmjoj
     ];
     platforms = lib.platforms.unix;

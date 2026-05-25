@@ -41,10 +41,6 @@ let
   # if the overlay has to be applied multiple times
   packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
 in
-# TODO: Consider optimising this using `builtins.deepSeq packageFiles`,
-# which could free up the above thunks and reduce GC times.
-# Currently this would be hard to measure until we have more packages
-# and ideally https://github.com/NixOS/nix/pull/8895
 self: super:
 {
   # This attribute is necessary to allow CI to ensure that all packages defined in `pkgs/by-name`

@@ -1,14 +1,16 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchFromGitHub,
+  cython,
   djvulibre,
+  setuptools,
   ghostscript_headless,
   pkg-config,
   unittestCheckHook,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "python-djvulibre";
   version = "0.9.3";
   pyproject = true;
@@ -21,14 +23,14 @@ python3Packages.buildPythonPackage rec {
   };
 
   build-system = [
-    python3Packages.cython
+    cython
     djvulibre
     ghostscript_headless
     pkg-config
-    python3Packages.setuptools
+    setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     djvulibre
     ghostscript_headless
   ];
@@ -45,11 +47,11 @@ python3Packages.buildPythonPackage rec {
     "-v"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python support for the DjVu image format";
     homepage = "https://github.com/FriedrichFroebel/python-djvulibre";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     changelog = "https://github.com/FriedrichFroebel/python-djvulibre/releases/tag/${src.tag}";
-    maintainers = with maintainers; [ dansbandit ];
+    maintainers = with lib.maintainers; [ dansbandit ];
   };
 }

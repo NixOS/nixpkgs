@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       "riscv64-linux"
       "s390x-linux"
       # Upstream package supports sparc, but nix does not
-    ] ++ lib.platforms.darwin; # Work on MacOS X mentioned: https://randombytes.cr.yp.to/download.html
+    ]
+    ++ lib.platforms.darwin; # Work on MacOS X mentioned: https://randombytes.cr.yp.to/download.html
   };
 })

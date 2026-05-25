@@ -5,13 +5,14 @@
   fetchFromGitHub,
   fetchurl,
   gitUpdater,
+  imagemagick,
 }:
 
 let
   p = python3.pkgs;
   self = p.buildPythonApplication rec {
     pname = "backgroundremover";
-    version = "0.3.0";
+    version = "0.3.4";
     pyproject = true;
 
     build-system = [
@@ -21,8 +22,8 @@ let
     src = fetchFromGitHub {
       owner = "nadermx";
       repo = "backgroundremover";
-      rev = "v${version}";
-      hash = "sha256-fWazMDjc+EoXvO7Iq+zwtJaMEU64ajpO6JtlvU5T0nc=";
+      tag = "v${version}";
+      hash = "sha256-7C31wlokX3M4csZ4ZbOqxowQvh8DMQJJcENKgQWNTa8=";
     };
 
     models = runCommand "background-remover-models" { } ''
@@ -36,9 +37,6 @@ let
       rm -rf *dist
       substituteInPlace backgroundremover/bg.py backgroundremover/u2net/detect.py \
         --replace-fail 'os.path.expanduser(os.path.join("~", ".u2net", model_name + ".pth"))' "os.path.join(\"$models\", model_name + \".pth\")"
-
-      substituteInPlace backgroundremover/bg.py \
-        --replace-fail 'import moviepy.editor' 'import moviepy'
     '';
 
     pythonRelaxDeps = [
@@ -87,11 +85,15 @@ let
           in
           runCommand "backgroundremover-image-test.png"
             {
-              buildInputs = [ self ];
+              buildInputs = [
+                self
+                imagemagick
+              ];
             }
             ''
+              convert ${demoImage} input.png
               export NUMBA_CACHE_DIR=$(mktemp -d)
-              backgroundremover -i ${demoImage} -o $out
+              backgroundremover -i input.png -o $out
             '';
       };
       updateScript = gitUpdater { rev-prefix = "v"; };

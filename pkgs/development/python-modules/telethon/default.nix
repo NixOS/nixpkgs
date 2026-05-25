@@ -1,32 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
+  pythonAtLeast,
   openssl,
   rsa,
   pyaes,
   cryptg,
-  pythonOlder,
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "telethon";
-  version = "1.37.0";
+  version = "1.42.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  src = fetchFromGitHub {
-    owner = "LonamiWebs";
+  src = fetchFromCodeberg {
+    owner = "Lonami";
     repo = "Telethon";
-    tag = "v${version}";
-    hash = "sha256-P7FP+Wqi3dqbBCFpI9aCDvK4k3mWv8076RO6MXg+jFQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NMHJkSTGR3/tck0k97EfVN9f85PAWst+EZ6G7Tgrt5s=";
   };
 
-  patchPhase = ''
+  disabled = pythonAtLeast "3.14";
+
+  postPatch = ''
     substituteInPlace telethon/crypto/libssl.py --replace-fail \
       "ctypes.util.find_library('ssl')" "'${lib.getLib openssl}/lib/libssl.so'"
   '';
@@ -47,18 +47,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # https://github.com/LonamiWebs/Telethon/issues/4254
-    "test_all_methods_present"
-    "test_private_get_extension"
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   meta = {
-    homepage = "https://github.com/LonamiWebs/Telethon";
+    homepage = "https://codeberg.org/Lonami/Telethon";
     description = "Full-featured Telegram client library for Python 3";
     license = lib.licenses.mit;
+    changelog = "https://codeberg.org/Lonami/Telethon/blob/${finalAttrs.src.tag}/readthedocs/misc/changelog.rst";
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

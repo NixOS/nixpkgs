@@ -6,23 +6,23 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tscli";
-  version = "0.0.7";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "jaxxstorm";
     repo = "tscli";
-    tag = "v${version}";
-    hash = "sha256-o08ynbx+Pclme+xS00jx7096D2jHnvJg28UISZayxKY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vCRRPVQIMpVZr45dwKNCcA53j5lkGY8FvfXLmy/H5G8=";
   };
 
-  vendorHash = "sha256-+4PFwEib/8o+1mk5SOkIZkK7W1elIFToU1DI9P8s1Y8=";
+  vendorHash = "sha256-sVpwrdA30QklyFVdg+F1k27fbJFWIVCAJi+NN0XVQOw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-X=github.com/jaxxstorm/tscli/pkg/version.Version=${version}"
+    "-X=github.com/jaxxstorm/tscli/pkg/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -35,9 +35,9 @@ buildGoModule rec {
   meta = {
     description = "CLI tool to interact with the Tailscale API";
     homepage = "https://github.com/jaxxstorm/tscli";
-    changelog = "https://github.com/jaxxstorm/tscli/releases/tag/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jaxxstorm/tscli/releases/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "tscli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

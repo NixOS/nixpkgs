@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   git,
+  versionCheckHook,
 }:
 
 let
@@ -16,6 +17,7 @@ let
           inherit pname version;
           hash = "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
         };
+        patches = [ ];
         build-system = old.build-system or [ ] ++ (with python.pkgs; [ setuptools ]);
         doCheck = false;
       });
@@ -23,26 +25,29 @@ let
   };
 in
 
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awsebcli";
-  version = "3.24.1";
+  version = "3.27.2";
   pyproject = true;
+  doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
-    tag = version;
-    hash = "sha256-t6dqiC9zY3Apcc4F/x5c/QhsNKGBZxIY20a50wCEER8=";
+    tag = finalAttrs.version;
+    hash = "sha256-hTRgNqccwbXxpS4F+JD2h19N/U671NjCBEMiDp6Jbio=";
   };
 
   pythonRelaxDeps = [
     "botocore"
     "colorama"
     "pathspec"
+    "packaging"
     "PyYAML"
     "six"
     "termcolor"
     "urllib3"
+    "wcwidth"
   ];
 
   dependencies = with python.pkgs; [
@@ -54,12 +59,12 @@ python.pkgs.buildPythonApplication rec {
     fabric
     pathspec
     pyyaml
-    future
     requests
     semantic-version
     setuptools
     tabulate
     termcolor
+    wcwidth
     websocket-client
   ];
 
@@ -68,9 +73,10 @@ python.pkgs.buildPythonApplication rec {
     mock
     pytest-socket
     pytestCheckHook
+    versionCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/unit"
   ];
 
@@ -93,12 +99,18 @@ python.pkgs.buildPythonApplication rec {
     "test_aws_eb_profile_environment_variable_found__profile_exists_in_credentials_file"
   ];
 
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
   meta = {
     description = "Command line interface for Elastic Beanstalk";
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
-    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
-}
+})

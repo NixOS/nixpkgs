@@ -35,11 +35,11 @@ buildDubPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for converting C and Objective-C headers to D modules";
     homepage = "https://github.com/jacob-carlborg/dstep";
-    license = licenses.boost;
+    license = lib.licenses.boost;
     mainProgram = "dstep";
-    maintainers = with maintainers; [ imrying ];
+    maintainers = with lib.maintainers; [ imrying ];
   };
 }

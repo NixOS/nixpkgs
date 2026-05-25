@@ -13,14 +13,14 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "styx";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "styx-static";
     repo = "styx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-f6iA/nHpKnm3BALoQq8SzdcSzJLCFSferEf69SpgD2Y=";
   };
 
@@ -75,13 +75,13 @@ stdenv.mkDerivation rec {
     cp -r themes/* $themes
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nix based static site generator";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     homepage = "https://styx-static.github.io/styx-site/";
     downloadPage = "https://github.com/styx-static/styx/";
-    platforms = platforms.all;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     mainProgram = "styx";
   };
-}
+})

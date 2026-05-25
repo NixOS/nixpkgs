@@ -8,14 +8,15 @@
   canto-daemon,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.9.9";
+  pyproject = true;
   pname = "canto-curses";
 
   src = fetchFromGitHub {
     owner = "themoken";
     repo = "canto-curses";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1vzb9n1j4gxigzll6654ln79lzbrrm6yy0lyazd9kldyl349b8sr";
   };
 
@@ -25,6 +26,10 @@ python3Packages.buildPythonApplication rec {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/canto-curses/-/raw/6daa56bc5baebb2444c368a8208666ef484a6fc0/fix-build.patch";
       hash = "sha256-2TMNmwjUAGyenSDqxfI+U2hNeDZaj2CivfTfpX7CKgY=";
     })
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   buildInputs = [
@@ -50,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.devhell ];
   };
-}
+})

@@ -2,27 +2,27 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
-  version = "0.5.0";
+  version = "0.8.3";
 
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [ pkg-config ];
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
-    tag = "v${version}";
-    hash = "sha256-eMuuEqHBiwgz7DKimYuK9MUPT4vnOU8rLOIIq8zsTao=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sRKQALNYUmzxaqYJCWR8b3yvqg8e4EHe1Cm7vqRx8hU=";
+    fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-yzuyenWAdj5tEdUFGxSfBU4m3w1YCCrnbajPMYMGSkI=";
+  cargoHash = "sha256-enePrsTLpiTDxqnFFD38N4amOKY5oHHctPl9RFj2eRo=";
 
   buildAndTestSubdir = "worker-build";
-
-  # missing some module upstream to run the tests
-  doCheck = false;
 
   meta = {
     description = "Tool to be used as a custom build command for a Cloudflare Workers `workers-rs` project";
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

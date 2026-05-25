@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "mgba";
-  version = "0-unstable-2025-05-18";
+  version = "0-unstable-2026-04-03";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mgba";
-    rev = "c9bbf28b091c4c104485092279c7a6b114b2e8ff";
-    hash = "sha256-yCRM2qkacGbFVr6x0ZHBCZ8xAMruFENBdcnNKzK0sY4=";
+    rev = "6dce57eef127dc4cc292644f38196e0e7c58590c";
+    hash = "sha256-sLxQ7NG5ypSQACo1Q/9/FwQKCpZsIU0Y35dLa8uhOVs=";
   };
 
   meta = {

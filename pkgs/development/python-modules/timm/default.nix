@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -18,20 +19,32 @@
   expecttest,
   pytestCheckHook,
   pytest-timeout,
-  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timm";
-  version = "1.0.15";
+  version = "1.0.27";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
-    tag = "v${version}";
-    hash = "sha256-TXc+D8GRrO46q88fOH44ZHKOGnCdP47ipEcobnGTxWU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tur4niy89MyMJ8TD7+zBY6x/tmvtYDkruksf65KdTkE=";
   };
+
+  # Fix torch 2.11.0 compatibility
+  # AttributeError: 'AdamWLegacy' object has no attribute '_cuda_graph_capture_health_check'
+  postPatch = ''
+    substituteInPlace \
+      timm/optim/adopt.py \
+      timm/optim/adamw.py \
+      timm/optim/nadamw.py \
+      --replace-fail \
+        "_cuda_graph_capture_health_check" \
+        "_accelerator_graph_capture_health_check"
+  '';
 
   build-system = [ pdm-backend ];
 
@@ -49,22 +62,26 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests =
-    lib.optionals
-      (
-        # RuntimeError: Dynamo is not supported on Python 3.13+
-        (pythonAtLeast "3.13")
+    lib.optionals (pythonAtLeast "3.14") [
+      # RuntimeError: torch.compile is not supported on Python 3.14+
+      "test_kron"
 
-        # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-        # CppCompileError: C++ compile error
-        # OpenMP support not found.
-        || stdenv.hostPlatform.isDarwin
-      )
-      [
-        "test_kron"
-      ];
+      # AttributeError: 'LsePlus2d' object has no attribute '__annotations__'. Did you mean: '__annotate_func__'?
+      "test_torchscript"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # assert nan < 71.5658950805664
+      "test_optim_factory"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+      # CppCompileError: C++ compile error
+      # OpenMP support not found.
+      "test_kron"
+    ];
 
   disabledTestPaths = [
     # Takes too long and also tries to download models
@@ -79,8 +96,8 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch image models, scripts, and pretrained weights";
     homepage = "https://huggingface.co/docs/timm/index";
-    changelog = "https://github.com/huggingface/pytorch-image-models/blob/v${version}/README.md#whats-new";
+    changelog = "https://github.com/huggingface/pytorch-image-models/blob/${finalAttrs.src.tag}/README.md#whats-new";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

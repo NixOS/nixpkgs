@@ -143,9 +143,20 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable && cfg.stateful) {
-    systemd.services =
-      {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      warnings = [
+        ''
+          The `security.dhparams` module is deprecated and scheduled for removal in NixOS 26.11.
+          Generating your own params has been shown to be problematic in RFC 7919 (2016).
+
+          Remove any uses of DHE and migrate to ECDHE (RFC 8422, 2018) and
+          Hybrid PQ (draft-ietf-tls-ecdhe-mlkem, 2026) key exchange algorithms.
+        ''
+      ];
+    })
+    (lib.mkIf (cfg.enable && cfg.stateful) {
+      systemd.services = {
         dhparams-init = {
           description = "Clean Up Old Diffie-Hellman Parameters";
 
@@ -195,6 +206,7 @@ in
           description = "Generate Diffie-Hellman Parameters for ${name}";
           after = [ "dhparams-init.service" ];
           before = [ "${name}.service" ];
+          requiredBy = [ "${name}.service" ];
           wantedBy = [ "multi-user.target" ];
           unitConfig.ConditionPathExists = "!${path}";
           serviceConfig.Type = "oneshot";
@@ -205,7 +217,7 @@ in
           '';
         }
       ) cfg.params;
-  };
+    })
+  ];
 
-  meta.maintainers = with lib.maintainers; [ ekleog ];
 }

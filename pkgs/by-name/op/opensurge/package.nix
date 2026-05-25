@@ -8,7 +8,7 @@
   libglvnd,
   surgescript,
   physfs,
-  xorg,
+  libx11,
   versionCheckHook,
   nix-update-script,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
     physfs
     surgescript
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [
@@ -51,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     mainProgram = "opensurge";
     description = "Fun 2D retro platformer inspired by Sonic games and a game creation system";
@@ -59,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/alemart/opensurge/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = [ ];
   };
 })

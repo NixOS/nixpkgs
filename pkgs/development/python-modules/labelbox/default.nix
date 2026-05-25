@@ -20,6 +20,7 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  pyyaml,
   requests,
   shapely,
   strenum,
@@ -29,14 +30,14 @@
 }:
 
 let
-  version = "6.10.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    tag = "v.${version}";
-    hash = "sha256-EstHsY9yFeUhQAx3pgvKk/o3EMkr3JeHDDg/p6meDIE=";
+    tag = "v${version}";
+    hash = "sha256-3xsV7X5M6s1wXYrThFC2SdvWgXAt1Hlw4OGQB/bKCCY=";
   };
 
   lbox-clients = buildPythonPackage {
@@ -48,11 +49,6 @@ let
 
     build-system = [ hatchling ];
 
-    postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace "--durations=20 --cov=lbox.example" "--durations=20"
-    '';
-
     dependencies = [
       google-api-core
       requests
@@ -60,6 +56,7 @@ let
 
     nativeCheckInputs = [
       pytestCheckHook
+      pytest-cov-stub
     ];
 
     doCheck = true;
@@ -91,6 +88,7 @@ buildPythonPackage rec {
     tqdm
     geojson
     mypy
+    pyyaml
   ];
 
   optional-dependencies = {
@@ -115,7 +113,8 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.data;
+  ]
+  ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access

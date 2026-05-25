@@ -4,29 +4,34 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libX11,
-  libXcomposite,
-  libXft,
-  libXmu,
-  libXrandr,
-  libXext,
-  libXScrnSaver,
+  libx11,
+  libxcomposite,
+  libxft,
+  libxmu,
+  libxrandr,
+  libxext,
+  libxscrnsaver,
   pam,
   apacheHttpd,
   pamtester,
-  xscreensaver,
   coreutils,
   makeWrapper,
+
+  # boolean flags
+  withXscreensaver ? true,
+  xscreensaver ? null,
+  withDocs ? false,
+  pandoc ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsecurelock";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OPasi5zmvmcWnVCj/dU2KprzNmar51zDElD23750yk4=";
   };
 
@@ -34,16 +39,19 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     makeWrapper
+  ]
+  ++ lib.optionals withDocs [
+    pandoc
   ];
 
   buildInputs = [
-    libX11
-    libXcomposite
-    libXft
-    libXmu
-    libXrandr
-    libXext
-    libXScrnSaver
+    libx11
+    libxcomposite
+    libxft
+    libxmu
+    libxrandr
+    libxext
+    libxscrnsaver
     pam
     apacheHttpd
     pamtester
@@ -51,12 +59,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-pam-service-name=login"
+  ]
+  ++ lib.optionals withXscreensaver [
     "--with-xscreensaver=${xscreensaver}/libexec/xscreensaver"
   ];
 
   preConfigure = ''
     cat > version.c <<'EOF'
-      const char *const git_version = "${version}";
+      const char *const git_version = "${finalAttrs.version}";
     EOF
   '';
 
@@ -64,12 +74,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/libexec/xsecurelock/saver_blank --prefix PATH : ${coreutils}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X11 screen lock utility with security in mind";
     homepage = "https://github.com/google/xsecurelock";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
     mainProgram = "xsecurelock";
   };
-}
+})

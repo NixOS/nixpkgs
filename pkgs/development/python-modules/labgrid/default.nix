@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   grpcio,
   grpcio-tools,
   grpcio-reflection,
@@ -29,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "25.0";
+  version = "25.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     tag = "v${version}";
-    hash = "sha256-Czq8Wx8ThKLcR8GjdlRND+Y1nY1PTl6wDkz9ml83DBk=";
+    hash = "sha256-cLofkkp2T6Y9nQ5LIS7w9URZlt8DQNN8dm3NnrvcKWY=";
   };
 
   # Remove after package bump
@@ -52,6 +53,11 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/Emantor/labgrid/commit/f0b672afe1e8976c257f0adff9bf6e7ee9760d6f.patch";
       sha256 = "sha256-M7rg+W9SjWDdViWyWe3ERzbUowxzf09c4w1yG3jQGak=";
+    })
+    # Fix test_help under python 3.14 argparse colored output.
+    (fetchpatch2 {
+      url = "https://github.com/labgrid-project/labgrid/commit/417ace60b9dc043767afb312113a02bcb0807b17.patch?full_index=1";
+      hash = "sha256-QCkO/PQbosqUldzJiOyF6BHvyzZI06CGs9IxHPPa6Ek=";
     })
   ];
 
@@ -90,18 +96,26 @@ buildPythonPackage rec {
     pytest-dependency
   ];
 
-  disabledtests = [
+  disabledTests = [
     # flaky, timing sensitive
     "test_timing"
+
+    # flaky, depends on ssh connection
+    "test_argument_device_expansion"
+    "test_argument_file_expansion"
+    "test_local_managedfile"
+
+    # flaky: teardown race on x86_64-linux
+    "test_remoteplace_target"
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Embedded control & testing library";
     homepage = "https://github.com/labgrid-project/labgrid";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -179,16 +179,15 @@ in
               "framerate=${toString instance.input.framerate}/1"
             ];
 
-            outputPipeline =
-              [
-                "appsrc name=appsrc ${appsrcOptions}"
-                "videoconvert"
-              ]
-              ++ optionals (instance.input.format != instance.output.format) [
-                "video/x-raw,format=${instance.output.format}"
-                "queue"
-              ]
-              ++ [ "v4l2sink name=v4l2sink device=$(cat $V4L2_DEVICE_FILE)" ];
+            outputPipeline = [
+              "appsrc name=appsrc ${appsrcOptions}"
+              "videoconvert"
+            ]
+            ++ optionals (instance.input.format != instance.output.format) [
+              "video/x-raw,format=${instance.output.format}"
+              "queue"
+            ]
+            ++ [ "v4l2sink name=v4l2sink device=$(cat $V4L2_DEVICE_FILE)" ];
           in
           ''
             exec ${pkgs.v4l2-relayd}/bin/v4l2-relayd -i "${instance.input.pipeline}" -o "${concatStringsSep " ! " outputPipeline}"
@@ -222,6 +221,11 @@ in
       boot = mkIf ((length enabledInstances) > 0) {
         extraModulePackages = [ kernelPackages.v4l2loopback ];
         kernelModules = [ "v4l2loopback" ];
+        # Prevent v4l2loopback from auto-creating a device at load time. An
+        # unconfigured device has a degenerate framerate range that breaks
+        # GStreamer caps negotiation. All devices are created at runtime via
+        # v4l2loopback-ctl add in each instance's preStart instead.
+        extraModprobeConfig = "options v4l2loopback devices=0";
       };
 
       systemd.services = mkInstanceServices enabledInstances;

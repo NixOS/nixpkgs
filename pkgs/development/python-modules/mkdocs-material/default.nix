@@ -1,6 +1,7 @@
 {
   lib,
   babel,
+  backrefs,
   buildPythonPackage,
   cairosvg,
   colorama,
@@ -20,35 +21,33 @@
   pillow,
   pygments,
   pymdown-extensions,
-  pythonOlder,
   regex,
   requests,
   trove-classifiers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-material";
-  version = "9.6.4";
+  version = "9.7.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
-    tag = version;
-    hash = "sha256-Di+m06LuS5mXzvmz8Cvby49HguUPbXEJf9PnR8fQ5jw=";
+    tag = finalAttrs.version;
+    hash = "sha256-qQtVnWNSh7rJhVyufkebEq6n4lpBI3tZxHRT07AIZFA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-requirements-txt
     hatch-nodejs-version
     hatchling
     trove-classifiers
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
+    backrefs
     colorama
     jinja2
     markdown
@@ -60,6 +59,8 @@ buildPythonPackage rec {
     regex
     requests
   ];
+
+  pythonRelaxDeps = [ "backrefs" ];
 
   optional-dependencies = {
     recommended = [
@@ -82,12 +83,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.tag}/CHANGELOG";
+  meta = {
+    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Material for mkdocs";
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      dandellion
+      jaysa68
+    ];
   };
-}
+})

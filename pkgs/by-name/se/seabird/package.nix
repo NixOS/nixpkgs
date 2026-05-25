@@ -13,18 +13,18 @@
   vte-gtk4,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "seabird";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
-    rev = "v${version}";
-    hash = "sha256-y+QIBqU3kAxedhWLnu07m9HQOCgHfOvVscIxxWtUcZo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-z+XEOqr7JX376AyGr0zx3AV3P+YqFbyspXMoxidCWY0=";
   };
 
-  vendorHash = "sha256-4o9z4XjtW7kNHAb8L0kuq9rgQzTwvAAXcl6+RIGjmqI=";
+  vendorHash = "sha256-hPvMSAHWtcJULE9t8TKx8r0OpI9V287UPVACeORqOHA=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -49,7 +49,7 @@ buildGoModule rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'
+    substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${finalAttrs.version}"'
   '';
 
   preBuild = ''
@@ -57,16 +57,16 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -Dm644 internal/icon/seabird.svg $out/share/pixmaps/dev.skynomads.Seabird.svg
+    install -Dm644 internal/icon/seabird.svg $out/share/icons/hicolor/scalable/dev.skynomads.Seabird.svg
   '';
 
   desktopItems = [ "dev.skynomads.Seabird.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Native Kubernetes desktop client";
     homepage = "https://getseabird.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nicolas-goudry ];
     mainProgram = "seabird";
   };
-}
+})

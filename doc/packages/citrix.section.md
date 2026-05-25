@@ -8,7 +8,7 @@ The tarball archive needs to be downloaded manually, as the license agreements o
 
 ## Citrix Self-service {#sec-citrix-selfservice}
 
-The [self-service](https://support.citrix.com/article/CTX200337) is an application managing Citrix desktops and applications. Please note that this feature only works with at least citrix_workspace_20_06_0 and later versions.
+The [self-service](https://support.citrix.com/article/CTX200337) is an application for managing Citrix desktops and applications. Please note that this feature only works with at least `citrix_workspace_20_06_0` and later versions.
 
 In order to set this up, you first have to [download the `.cr` file from the Netscaler Gateway](https://its.uiowa.edu/support/article/102186). After that, you can configure the `selfservice` like this:
 
@@ -19,7 +19,7 @@ $ selfservice
 
 ## Custom certificates {#sec-citrix-custom-certs}
 
-The `Citrix Workspace App` in `nixpkgs` trusts several certificates [from the Mozilla database](https://curl.haxx.se/docs/caextract.html) by default. However, several companies using Citrix might require their own corporate certificate. On distros with imperative packaging, these certs can be stored easily in [`$ICAROOT`](https://citrix.github.io/receiver-for-linux-command-reference/), however this directory is a store path in `nixpkgs`. In order to work around this issue, the package provides a simple mechanism to add custom certificates without rebuilding the entire package using `symlinkJoin`:
+The `Citrix Workspace App` in `nixpkgs` trusts several certificates [from the Mozilla database](https://curl.haxx.se/docs/caextract.html) by default. However, several companies using Citrix might require their own corporate certificate. On distros with imperative packaging, these certs can be stored easily in [`$ICAROOT`](https://citrix.github.io/receiver-for-linux-command-reference/), however, this directory is a store path in `nixpkgs`. In order to work around this issue, the package provides a simple mechanism to add custom certificates without rebuilding the entire package using `symlinkJoin`:
 
 ```nix
 with import <nixpkgs> { config.allowUnfree = true; };

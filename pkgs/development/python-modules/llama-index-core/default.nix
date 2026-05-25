@@ -12,7 +12,7 @@
   fsspec,
   hatchling,
   jsonpath-ng,
-  llamaindex-py-client,
+  llama-index-workflows,
   nest-asyncio,
   networkx,
   nltk-data,
@@ -24,33 +24,31 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyvis,
   pyyaml,
   requests,
   spacy,
   sqlalchemy,
   tenacity,
+  tinytag,
   tiktoken,
   tree-sitter,
   typing-inspect,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-core";
-  version = "0.12.37";
+  version = "0.14.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
-    tag = "v${version}";
-    hash = "sha256-M6DiCJZu9mtb8NxzEiBsbpLJmpStNScTtHdr70H7Dvk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xcssJPBXq3bjSD13nsR6jRTmTWPVks8aKHZCZ3lSKY4=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   # When `llama-index` is imported, it uses `nltk` to look for the following files and tries to
   # download them if they aren't present.
@@ -66,7 +64,10 @@ buildPythonPackage rec {
     cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    "setuptools"
+    "tenacity"
+  ];
 
   build-system = [ hatchling ];
 
@@ -80,7 +81,7 @@ buildPythonPackage rec {
     filetype
     fsspec
     jsonpath-ng
-    llamaindex-py-client
+    llama-index-workflows
     nest-asyncio
     networkx
     nltk
@@ -94,6 +95,7 @@ buildPythonPackage rec {
     spacy
     sqlalchemy
     tenacity
+    tinytag
     tiktoken
     typing-inspect
   ];
@@ -129,6 +131,10 @@ buildPythonPackage rec {
     "tests/text_splitter/"
     "tests/token_predictor/"
     "tests/tools/"
+    "tests/schema/"
+    "tests/multi_modal_llms/"
+    "tests/prompts/"
+    "tests/base/llms/"
   ];
 
   disabledTests = [
@@ -144,6 +150,8 @@ buildPythonPackage rec {
     "test_from_persist_dir"
     "test_mimetype_raw_data"
     "test_multiple_documents_context"
+    "test_predict_and_call_via_react_agent"
+    "test_resource"
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"
     "test_SimpleDirectoryReader"
@@ -151,11 +159,11 @@ buildPythonPackage rec {
     "test_str"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
-    changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/run-llama/llama_index/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

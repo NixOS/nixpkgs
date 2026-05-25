@@ -9,7 +9,6 @@ let
   cfg = config.services.zabbixAgent;
 
   inherit (lib)
-    mkDefault
     mkEnableOption
     mkPackageOption
     mkIf
@@ -18,9 +17,7 @@ let
     ;
   inherit (lib)
     attrValues
-    concatMapStringsSep
     literalExpression
-    optionalString
     types
     ;
   inherit (lib.generators) toKeyValue;
@@ -59,9 +56,9 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = with pkgs; [ nettools ];
-        defaultText = literalExpression "with pkgs; [ nettools ]";
-        example = literalExpression "with pkgs; [ nettools mysql ]";
+        default = with pkgs; [ net-tools ];
+        defaultText = literalExpression "with pkgs; [ net-tools ]";
+        example = literalExpression "with pkgs; [ net-tools mysql ]";
         description = ''
           Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.

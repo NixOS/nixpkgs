@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "flink";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://apache/flink/${pname}-${version}/${pname}-${version}-bin-scala_2.12.tgz";
-    sha256 = "sha256-BP5b6YQaENMODhzWguxNAVqGYD9xDy+FfEPHW+rpeq0=";
+    sha256 = "sha256-tmx9xuGVNyCd3DlDDWvn54XUjcB41rLSaapgFQlbSF8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed stream processing framework";
     mainProgram = "flink";
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       mbode
       autophagy
     ];

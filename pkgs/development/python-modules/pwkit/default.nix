@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pwkit";
-  version = "1.2.2";
+  version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pkgw";
     repo = "pwkit";
     tag = "pwkit@${version}";
-    hash = "sha256-FEMPHdXj2XCV5fCcdJsVpDMsJntP6zp1yFkjv1ov478=";
+    hash = "sha256-lEa1AWBhevCOBiAJd0Q0VWDtjSK5O89LYTNnLxKfD8U=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwkit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous science/astronomy tools";
     homepage = "https://github.com/pkgw/pwkit/";
     changelog = "https://github.com/pkgw/pwkit/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

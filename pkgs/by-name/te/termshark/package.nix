@@ -6,14 +6,14 @@
   wireshark-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "termshark";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "gcla";
     repo = "termshark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qq7BDGprRkWKRMJiVnqPeTwtHd3tea9dPE8RIPL2YVI=";
   };
 
@@ -25,18 +25,18 @@ buildGoModule rec {
   doCheck = false;
 
   postFixup = ''
-    wrapProgram $out/bin/termshark --prefix PATH : ${lib.makeBinPath [ wireshark-cli ]}
+    wrapProgram $out/bin/termshark --suffix PATH : ${lib.makeBinPath [ wireshark-cli ]}
   '';
 
   ldflags = [
-    "-X github.com/gcla/termshark.Version=${version}"
+    "-X github.com/gcla/termshark.Version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://termshark.io/";
     description = "Terminal UI for wireshark-cli, inspired by Wireshark";
     mainProgram = "termshark";
-    license = licenses.mit;
-    maintainers = with maintainers; [ winpat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ winpat ];
   };
-}
+})

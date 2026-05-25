@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwhich";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "vtjnash";
     repo = "libwhich";
-    rev = "v${version}";
-    sha256 = "sha256-JNIWdI12sL3TZqVA3GeH0KbgqFDbMsEdecea3392Goc=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Or436P5O7k/KGhEyDMjag+s9uxstq7k780Cl7sZYFjs=";
   };
 
   installPhase = ''
     install -Dm755 -t $out/bin libwhich
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Like `which`, for dynamic libraries";
     mainProgram = "libwhich";
     homepage = "https://github.com/vtjnash/libwhich";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

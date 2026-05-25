@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "albucore";
   version = "0.0.24";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "albumentations-team";
@@ -39,6 +36,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "albucore" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # albumentations doesn't support newer versions of albucore
+  # and has been archived upstream in favor of relicensed `albumentationsx`
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "High-performance image processing library to optimize and extend Albumentations with specialized functions for image transformations";

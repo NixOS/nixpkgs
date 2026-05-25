@@ -12,6 +12,42 @@ let
   enabledInstances = lib.filterAttrs (_: conf: conf.enable) cfg.instances;
   instanceName = name: if name == "" then "anubis" else "anubis-${name}";
 
+  # Only generates a custom policy file when the user has explicitly customized
+  # something (extraBots, settings, or disabled default bot rules). When nothing
+  # is customized, returns null so Anubis uses its built-in botPolicies.yaml
+  # which includes sensible defaults for thresholds, status_codes, store, etc.
+  mkPolicyFile =
+    name: instance:
+    let
+      hasCustomization =
+        !instance.policy.useDefaultBotRules
+        || instance.policy.extraBots != [ ]
+        || instance.policy.settings != { };
+      bots =
+        (lib.optional instance.policy.useDefaultBotRules {
+          import = "(data)/meta/default-config.yaml";
+        })
+        ++ instance.policy.extraBots;
+      policyContent = {
+        inherit bots;
+      }
+      // instance.policy.settings;
+    in
+    if hasCustomization then
+      jsonFormat.generate "${instanceName name}-policy.json" policyContent
+    else
+      null;
+
+  unixAddr = network: addr: lib.strings.optionalString (network == "unix") addr;
+  unixSocketAddrs =
+    settings:
+    lib.filter (x: x != "") [
+      (unixAddr settings.BIND_NETWORK settings.BIND)
+      (unixAddr settings.METRICS_BIND_NETWORK settings.METRICS_BIND)
+    ];
+  instanceUsesUnixSockets = instance: lib.length (unixSocketAddrs instance.settings) > 0;
+  runtimeDirectoryPrefix = name: "/run/anubis/${instanceName name}/";
+
   commonSubmodule =
     isDefault:
     let
@@ -30,6 +66,10 @@ let
     in
     { name, ... }:
     {
+      imports = [
+        (lib.mkRenamedOptionModule [ "botPolicy" ] [ "policy" "settings" ])
+      ];
+
       options = {
         enable = lib.mkEnableOption "this instance of Anubis" // {
           default = true;
@@ -55,18 +95,71 @@ let
           type = types.str;
         };
 
-        botPolicy = lib.mkOption {
-          default = null;
+        policy = lib.mkOption {
+          default = { };
           description = ''
-            Anubis policy configuration in Nix syntax. Set to `null` to use the baked-in policy which should be
-            sufficient for most use-cases.
-
-            This option has no effect if `settings.POLICY_FNAME` is set to a different value, which is useful for
-            importing an existing configuration.
+            Anubis policy configuration.
 
             See [the documentation](https://anubis.techaro.lol/docs/admin/policies) for details.
           '';
-          type = types.nullOr jsonFormat.type;
+          type = types.submodule {
+            options = {
+              useDefaultBotRules = mkDefaultOption "policy.useDefaultBotRules" {
+                type = types.bool;
+                default = true;
+                description = ''
+                  Whether to include Anubis's default bot detection rules via the
+                  `(data)/meta/default-config.yaml` import.
+
+                  Set to `false` to define your own bot rules from scratch using
+                  {option}`extraBots`.
+                '';
+              };
+
+              extraBots = mkDefaultOption "policy.extraBots" {
+                type = types.listOf jsonFormat.type;
+                default = [ ];
+                example = lib.literalExpression ''
+                  [
+                    {
+                      name = "my-bot";
+                      user_agent_regex = "MyBot/.*";
+                      action = "ALLOW";
+                    }
+                  ]
+                '';
+                description = ''
+                  Additional bot rules appended to the policy.
+
+                  When {option}`useDefaultBotRules` is `true`, these rules are added after
+                  Anubis's default rules. When `false`, only these rules are used.
+                '';
+              };
+
+              settings = mkDefaultOption "policy.settings" {
+                type = jsonFormat.type;
+                default = { };
+                example = lib.literalExpression ''
+                  {
+                    dnsbl = false;
+                    store = {
+                      backend = "bbolt";
+                      parameters.path = "/var/lib/anubis/data.bdb";
+                    };
+                  }
+                '';
+                description = ''
+                  Additional policy settings merged into the policy file.
+
+                  Common settings include `dnsbl`, `store`, `logging`, `thresholds`,
+                  `impressum`, `openGraph`, and `statusCodes`.
+
+                  See [the documentation](https://anubis.techaro.lol/docs/admin/policies) for
+                  available options.
+                '';
+              };
+            };
+          };
         };
 
         extraFlags = mkDefaultOption "extraFlags" {
@@ -165,8 +258,8 @@ let
                 POLICY_FNAME = mkDefaultOption "settings.POLICY_FNAME" {
                   default = null;
                   description = ''
-                    The bot policy file to use. Leave this as `null` to respect the value set in
-                    {option}`services.anubis.instances.<name>.botPolicy`.
+                    The policy file to use. Leave this as `null` to use the policy generated from
+                    {option}`services.anubis.instances.<name>.policy`.
                   '';
                   type = types.nullOr types.path;
                 };
@@ -182,9 +275,12 @@ let
     options = {
       # see other options above
       BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}.sock";
+        default = "${runtimeDirectoryPrefix name}anubis.sock";
         description = ''
           The address that Anubis listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for syntax.
+          When using unix sockets:
+          - use the prefix "${runtimeDirectoryPrefix ""}" if the instance name is the empty string,
+          - "${runtimeDirectoryPrefix "<name>"}" otherwise.
 
           Defaults to Unix domain sockets. To use TCP sockets, set this to a TCP address and `BIND_NETWORK` to `"tcp"`.
         '';
@@ -192,10 +288,13 @@ let
         type = types.str;
       };
       METRICS_BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}-metrics.sock";
+        default = "${runtimeDirectoryPrefix name}anubis-metrics.sock";
         description = ''
           The address Anubis' metrics server listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for
           syntax.
+          When using unix sockets:
+          - use the prefix "${runtimeDirectoryPrefix ""}" if the instance name is the empty string,
+          - "${runtimeDirectoryPrefix "<name>"}" otherwise.
 
           The metrics server is enabled by default and may be disabled. However, due to implementation details, this is
           only possible by setting a command line flag. See {option}`services.anubis.defaultOptions.extraFlags` for an
@@ -245,6 +344,25 @@ in
   };
 
   config = lib.mkIf (enabledInstances != { }) {
+    assertions =
+      let
+        validInstanceUnixSocketAddrs =
+          name: instance:
+          lib.all (lib.hasPrefix (runtimeDirectoryPrefix name)) (unixSocketAddrs instance.settings);
+      in
+      [
+        {
+          assertion = lib.all (attrs: validInstanceUnixSocketAddrs attrs.name attrs.value) (
+            lib.attrsToList enabledInstances
+          );
+          message = ''
+            When using unix sockets in services.anubis.instances.<name>.settings.BIND and services.anubis.instances.<name>.settings.METRICS_BIND:
+              - use the prefix "${runtimeDirectoryPrefix ""}" if the instance name is the empty string,
+              - "${runtimeDirectoryPrefix "<name>"}" otherwise.
+          '';
+        }
+      ];
+
     users.users = lib.mkIf (cfg.defaultOptions.user == "anubis") {
       anubis = {
         isSystemUser = true;
@@ -265,7 +383,16 @@ in
         wants = [ "network-online.target" ];
 
         environment = lib.mapAttrs (lib.const (lib.generators.mkValueStringDefault { })) (
-          lib.filterAttrs (_: v: v != null) instance.settings
+          lib.filterAttrs (_: v: v != null) (
+            instance.settings
+            // {
+              POLICY_FNAME =
+                if instance.settings.POLICY_FNAME != null then
+                  instance.settings.POLICY_FNAME
+                else
+                  mkPolicyFile name instance;
+            }
+          )
         );
 
         serviceConfig = {
@@ -276,20 +403,7 @@ in
           ExecStart = lib.concatStringsSep " " (
             (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
           );
-          RuntimeDirectory =
-            if
-              lib.any (lib.hasPrefix "/run/anubis") (
-                with instance.settings;
-                [
-                  BIND
-                  METRICS_BIND
-                ]
-              )
-            then
-              "anubis"
-            else
-              null;
-
+          RuntimeDirectory = if instanceUsesUnixSockets instance then "anubis/${instanceName name}" else null;
           # hardening
           NoNewPrivileges = true;
           CapabilityBoundingSet = null;

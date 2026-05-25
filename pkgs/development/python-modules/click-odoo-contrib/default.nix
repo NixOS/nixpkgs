@@ -2,23 +2,21 @@
   buildPythonPackage,
   click-odoo,
   fetchPypi,
-  importlib-resources,
   lib,
   manifestoo-core,
   nix-update-script,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "click-odoo-contrib";
-  version = "1.20";
-  format = "pyproject";
+  version = "1.23.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "click_odoo_contrib";
     inherit version;
-    hash = "sha256-TRh7ffdW7ZBDlj7RPgEbtzEuHkTe99L6GYuOLgeEumg=";
+    hash = "sha256-3xw3AstUtX99lT+rPOvBGSSqjAyxt752LibBMMbXSoU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -26,16 +24,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click-odoo
     manifestoo-core
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   passthru.updateScript = nix-update-script { };
 
   pythonImportsCheck = [ "click_odoo_contrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of community-maintained scripts for Odoo maintenance";
     homepage = "https://github.com/acsone/click-odoo-contrib";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

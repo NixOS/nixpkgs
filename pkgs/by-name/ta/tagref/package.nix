@@ -4,26 +4,25 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tagref";
-  version = "1.10.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "tagref";
-    rev = "v${version}";
-    sha256 = "sha256-ANQxW5Qznu2JbiazFElB1sxpX4BwPgk6SVGgYpJ6DUw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-tsiotSQsf3wlp5wlzV0MHavCieW9LMb3Ei+eKve0O/4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XQ0/J8o9yqEGWH1Cy5VDkpsK60SS6JhYxMNsI08uI6U=";
+  cargoHash = "sha256-3nGdM3Qv3y5byQI1Txv0VNi2cQZ7RP5tEXFWuom2SOY=";
 
-  meta = with lib; {
+  meta = {
     description = "Manage cross-references in your code";
     homepage = "https://github.com/stepchowfun/tagref";
-    license = licenses.mit;
-    maintainers = [ maintainers.yusdacra ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.yusdacra ];
+    platforms = lib.platforms.unix;
     mainProgram = "tagref";
   };
-}
+})

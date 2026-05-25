@@ -7,6 +7,9 @@
   # patch
   coreutils,
 
+  # build system
+  setuptools,
+
   # propagates
   autobahn,
   msgpack,
@@ -15,15 +18,15 @@
   # tests
   parameterized,
   psutil,
-  setuptools-trial,
 
   # passthru
   nixosTests,
 }:
 
-buildPythonPackage ({
+buildPythonPackage {
   pname = "buildbot_worker";
   inherit (buildbot) src version;
+  pyproject = true;
 
   postPatch = ''
     cd worker
@@ -32,11 +35,9 @@ buildPythonPackage ({
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
-  nativeBuildInputs = [
-    setuptools-trial
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     autobahn
     msgpack
     twisted
@@ -51,10 +52,10 @@ buildPythonPackage ({
     smoke-test = nixosTests.buildbot;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    teams = [ teams.buildbot ];
-    license = licenses.gpl2;
+    teams = [ lib.teams.buildbot ];
+    license = lib.licenses.gpl2;
   };
-})
+}

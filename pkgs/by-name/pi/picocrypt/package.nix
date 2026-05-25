@@ -6,7 +6,7 @@
   copyDesktopItems,
   makeDesktopItem,
 
-  xorg,
+  libxxf86vm,
   glfw,
   gtk3,
   pkg-config,
@@ -15,18 +15,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "picocrypt";
-  version = "1.48";
+  version = "1.49";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
     tag = finalAttrs.version;
-    hash = "sha256-Gvh6t/jFRBCX+I9CYkXV265PiRSSvH6qAgkU0fA/v4A=";
+    hash = "sha256-B10PP/V8xvYbA6rQHWdav/KtQKecNUmwvj9qMYqml8E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-HvtQFoAK4+DX2Mwzf5f39tTnxJcH7Dox/otlvPVczeA=";
+  vendorHash = "sha256-0fEy/YuZa7dENfL3y+NN4SLWYwOLmXqHHJEiU37AkX4=";
 
   ldflags = [
     "-s"
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     ++ glfw.propagatedBuildInputs or [ ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gtk3
-      xorg.libXxf86vm
+      libxxf86vm
     ];
 
   nativeBuildInputs = [

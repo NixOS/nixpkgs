@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "frser-sqlite-datasource";
-  version = "3.5.0";
-  zipHash = "sha256-BwAurFpMyyR318HMzVXCnOEQWM8W2vPPisXhhklFLBY=";
-  meta = with lib; {
-    description = "This is a Grafana backend plugin to allow using an SQLite database as a data source. The SQLite database needs to be accessible to the filesystem of the device where Grafana itself is running.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+  version = "4.0.2";
+  zipHash = "sha256-soRmlYBhFhUoQmSGJC6mMP+UH7nqKzBTVItOk2WFggs=";
+  meta = {
+    description = "Use a SQLite database as a data source in Grafana";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

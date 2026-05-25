@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   cmake,
   fetchFromGitHub,
   glfw3,
@@ -8,21 +7,27 @@
   pkg-config,
   rustPlatform,
   wayland,
+  libgbm,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "woomer";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "coffeeispower";
     repo = "woomer";
-    tag = version;
-    hash = "sha256-puALhN54ma2KToXUF8ipaYysyayjaSp+ISZ3AgQvniw=";
+    tag = finalAttrs.version;
+    hash = "sha256-LcL43Wq+5d7HPsm2bEK0vZsjP/dixtNhMKywXMi4ODw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VQee/2adBvJpJDihWuo22JNyDKLkZ9PrVqWPB/gJ9Sw=";
+  cargoPatches = [
+    # fix compilation on aarch64
+    # remove when https://github.com/coffeeispower/woomer/pull/30 is merged
+    ./unbreak-aarch64-linux.patch
+  ];
+
+  cargoHash = "sha256-mSyTQU/PtibkepFrYh6nrRtnsd1jONaPXt9Y5SiE3/U=";
 
   strictDeps = true;
 
@@ -35,6 +40,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glfw3
     wayland
+    libgbm
   ];
 
   # `raylib-sys` wants to compile examples that don't exist in its crate
@@ -58,7 +64,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Zoomer application for Wayland inspired by tsoding's boomer";
     homepage = "https://github.com/coffeeispower/woomer";
-    changelog = "https://github.com/coffeeispower/woomer/releases/tag/${version}";
+    changelog = "https://github.com/coffeeispower/woomer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "woomer";
@@ -69,8 +75,5 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/waycrate/wayshot/blob/cb6bd68dbbe6ab70a5d8fe3bd04cc154f0631cd8/libwayshot/src/screencopy.rs#L11
     # https://github.com/nix-rust/nix/blob/0e4353a368abfcedea4ebe4345cf7604bb61d238/src/sys/mod.rs#L40-L44
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    # TODO: Remove after upstream is no longer affected by
-    # https://github.com/raylib-rs/raylib-rs/issues/74
-    broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

@@ -28,25 +28,23 @@ let
       # We compare the changed sources from a previous build with the current and create a patch.
       # Afterwards we clean the build directory and copy the previous output files (including the sources).
       # The source difference patch is then applied to get the latest changes again to allow short build times.
-      preBuild =
-        (old.preBuild or "")
-        + ''
-          set +e
-          sourceDifferencePatchFile=$(${mktemp}/bin/mktemp)
-          diff -ur ${checkpointArtifacts}/sources ./ > "$sourceDifferencePatchFile"
-          set -e
-          shopt -s dotglob
-          rm -r *
-          ${rsync}/bin/rsync \
-            --checksum --times --atimes --chown=$USER:$USER --chmod=+w \
-            -r ${checkpointArtifacts}/outputs/ .
-          patch -p 1 -i "$sourceDifferencePatchFile"
-          rm "$sourceDifferencePatchFile"
-        '';
+      preBuild = (old.preBuild or "") + ''
+        set +e
+        sourceDifferencePatchFile=$(${mktemp}/bin/mktemp)
+        diff -ur ${checkpointArtifacts}/sources ./ > "$sourceDifferencePatchFile"
+        set -e
+        shopt -s dotglob
+        rm -r *
+        ${rsync}/bin/rsync \
+          --checksum --times --atimes --chown=$USER:$USER --chmod=+w \
+          -r ${checkpointArtifacts}/outputs/ .
+        patch -p 1 -i "$sourceDifferencePatchFile"
+        rm "$sourceDifferencePatchFile"
+      '';
     });
 in
 
-rec {
+{
   inherit mkCheckpointBuild;
   /*
     Prepare a derivation for local builds.
@@ -77,12 +75,10 @@ rec {
       # directory before build, but after patch phases.
       # This way, the same derivation can be used multiple times and only changes are detected.
       # Additionally, removed files are handled correctly in later builds.
-      preBuild =
-        (old.preBuild or "")
-        + ''
-          mkdir -p $out/sources
-          cp -r ./* $out/sources/
-        '';
+      preBuild = (old.preBuild or "") + ''
+        mkdir -p $out/sources
+        cp -r ./* $out/sources/
+      '';
 
       # After the build, the build directory is copied again
       # to get the output files.

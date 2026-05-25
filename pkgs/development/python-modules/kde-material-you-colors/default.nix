@@ -8,18 +8,20 @@
   numpy,
   pillow,
   materialyoucolor,
+  python-magic,
+  pywal16,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kde-material-you-colors";
-  version = "1.10.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kde-material-you-colors";
-    tag = "v${version}";
-    hash = "sha256-qT2F3OtRzYagbBH/4kijuy4udD6Ak74WacIhfzaNWqo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sN7u3jePevJnTHhQL6eAYKU2AD2QNW7VYuEHLN5RsK8=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +30,8 @@ buildPythonPackage rec {
     numpy
     pillow
     materialyoucolor
+    python-magic
+    pywal16
   ];
 
   pythonImportsCheck = [ "kde_material_you_colors" ];
@@ -38,7 +42,7 @@ buildPythonPackage rec {
     homepage = "https://store.kde.org/p/2136963";
     description = "Automatic color scheme generator from your wallpaper for KDE Plasma powered by Material You";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ issai ];
     mainProgram = "kde-material-you-colors";
   };
-}
+})

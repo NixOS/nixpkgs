@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -14,6 +14,7 @@
   # tests
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
+  langgraph-sdk,
   postgresql,
   postgresqlTestHook,
   psycopg,
@@ -21,32 +22,34 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  syrupy,
   xxhash,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-prebuilt";
-  version = "0.1.8";
+  version = "1.0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "prebuilt==${version}";
-    hash = "sha256-mYcj7HRbB5H6G0CVLOICKgdtR5Wlv9WeTIBjQJqlhOE=";
+    tag = "prebuilt==${finalAttrs.version}";
+    hash = "sha256-J899GIBdXHjZVMwZlnn5GH52/TNjzLukc4Xp/qc8NOM=";
   };
 
-  sourceRoot = "${src.name}/libs/prebuilt";
+  sourceRoot = "${finalAttrs.src.name}/libs/prebuilt";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-sdk
   ];
 
   skipPythonImportsCheck = true; # This will be packaged with langgraph
@@ -66,38 +69,41 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+    syrupy
     xxhash
   ];
 
   preCheck = ''
-    export PYTHONPATH=${src}/libs/langgraph:$PYTHONPATH
+    export PYTHONPATH=${finalAttrs.src}/libs/langgraph:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestDeprecationWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::pytest.PytestDeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
     # psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 5442 failed: Connection refused
     # Is the server running on that host and accepting TCP/IP connections?
     "tests/test_react_agent.py"
+
+    # Utilities to import
+    "tests/conftest.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "prebuilt==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "prebuilt==";
+    };
   };
 
   meta = {
     description = "Prebuilt agents add-on for Langgraph. Should always be bundled with langgraph";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

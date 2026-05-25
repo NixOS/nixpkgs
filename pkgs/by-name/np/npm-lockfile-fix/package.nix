@@ -5,33 +5,38 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "npm-lockfile-fix";
   version = "0.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeslie0";
     repo = "npm-lockfile-fix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P93OowrVkkOfX5XKsRsg0c4dZLVn2ZOonJazPmHdD7g=";
   };
 
-  propagatedBuildInputs = [
-    python3.pkgs.requests
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
+    requests
   ];
 
   doCheck = false; # no tests
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Add missing integrity and resolved fields to a package-lock.json file";
     homepage = "https://github.com/jeslie0/npm-lockfile-fix";
     mainProgram = "npm-lockfile-fix";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lucasew
       felschr
     ];
   };
-}
+})

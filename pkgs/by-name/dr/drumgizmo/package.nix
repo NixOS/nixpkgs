@@ -7,10 +7,10 @@
   expat,
   glib,
   libjack2,
-  libXext,
-  libX11,
+  libxext,
+  libx11,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsmf,
   libsndfile,
   lv2,
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       patch = "0005-fix_ftbfs_with_gcc13.patch";
       hash = "sha256-y5NDZ+3t6GkBeF/5UY8dwtH8k0cuM+5SGBGPSV7AX7M=";
     })
+    ./fix-non-ascii.patch
   ];
 
   configureFlags = [ "--enable-lv2" ];
@@ -46,21 +47,21 @@ stdenv.mkDerivation rec {
     expat
     glib
     libjack2
-    libXext
-    libX11
+    libxext
+    libx11
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsmf
     libsndfile
     lv2
     zita-resampler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LV2 sample based drum plugin";
     homepage = "https://www.drumgizmo.org";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.nico202 ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

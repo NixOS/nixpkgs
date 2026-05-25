@@ -2,15 +2,19 @@
   lib,
   stdenvNoCC,
   writeScript,
-  callPackages,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchurl,
   installShellFiles,
   nodejs,
   testers,
+  buildPackages,
+  bashNonInteractive,
+  tests,
+
   withNode ? true,
   version,
   hash,
-  buildPackages,
 }:
 let
   majorVersion = lib.versions.major version;
@@ -23,29 +27,38 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://registry.npmjs.org/pnpm/-/pnpm-${finalAttrs.version}.tgz";
     inherit hash;
   };
-  # Remove binary files from src, we don't need them, and this way we make sure
-  # our distribution is free of binaryNativeCode
-  preConfigure = ''
-    rm -r dist/reflink.*node dist/vendor
-  '';
-
-  buildInputs = lib.optionals withNode [ nodejs ];
 
   nativeBuildInputs = [
     installShellFiles
     nodejs
   ];
 
-  installPhase = ''
-    runHook preInstall
+  buildInputs = [
+    bashNonInteractive # needed for node-gyp wrapper script
+  ]
+  ++ lib.optionals withNode [ nodejs ];
 
-    install -d $out/{bin,libexec}
-    cp -R . $out/libexec/pnpm
-    ln -s $out/libexec/pnpm/bin/pnpm.cjs $out/bin/pnpm
-    ln -s $out/libexec/pnpm/bin/pnpx.cjs $out/bin/pnpx
-
-    runHook postInstall
+  # Remove binary files from src, we don't need them, and this way we make sure
+  # our distribution is free of binaryNativeCode
+  postUnpack = ''
+    rm -r package/dist/reflink.*node package/dist/vendor
   '';
+
+  installPhase =
+    let
+      # Use ESM pnpm for versions > 11
+      ext = if lib.versionOlder finalAttrs.version "11" then "cjs" else "mjs";
+    in
+    ''
+      runHook preInstall
+
+      install -d $out/{bin,libexec}
+      cp -R . $out/libexec/pnpm
+      ln -s $out/libexec/pnpm/bin/pnpm.${ext} $out/bin/pnpm
+      ln -s $out/libexec/pnpm/bin/pnpx.${ext} $out/bin/pnpx
+
+      runHook postInstall
+    '';
 
   postInstall =
     if lib.toInt (lib.versions.major version) < 9 then
@@ -71,17 +84,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru =
     let
-      fetchDepsAttrs = callPackages ./fetch-deps {
-        pnpm = buildPackages."pnpm_${lib.versions.major version}";
-      };
+      pnpm' = buildPackages."pnpm_${lib.versions.major version}";
     in
     {
-      inherit (fetchDepsAttrs) fetchDeps configHook;
-      inherit majorVersion;
+      fetchDeps =
+        lib.warn
+          "pnpm.fetchDeps: The package attribute is deprecated. Use the top-level fetchPnpmDeps attribute instead"
+          (
+            { ... }@args:
+            fetchPnpmDeps (
+              args
+              // {
+                pnpm = pnpm';
+              }
+            )
+          );
+      configHook =
+        lib.warn
+          "pnpm.configHook: The package attribute is deprecated. Use the top-level pnpmConfigHook attribute instead"
+          (
+            pnpmConfigHook.overrideAttrs (prevAttrs: {
+              propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [
+                pnpm'
+              ];
+            })
+          );
+      inherit nodejs majorVersion;
 
-      tests.version = lib.optionalAttrs withNode (
-        testers.testVersion { package = finalAttrs.finalPackage; }
-      );
+      tests = {
+        inherit (tests) pnpm;
+        version = lib.optionalAttrs withNode (testers.testVersion { package = finalAttrs.finalPackage; });
+      };
       updateScript = writeScript "pnpm-update-script" ''
         #!/usr/bin/env nix-shell
         #!nix-shell -i bash -p curl jq common-updater-scripts
@@ -91,7 +124,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
         }
 
-        latestTag=$(curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | jq -r --arg major "v${majorVersion}" '[.[].tag_name | select(startswith($major))][0]')
+        latestTag=$(
+          curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | \
+          jq -r --arg major "v${majorVersion}" \
+            '[.[] | select(.tag_name | startswith($major)) | select(.prerelease == false)][0].tag_name'
+        )
 
         # Exit if there is no tag with this major version
         if [ "$latestTag" = "null" ]; then
@@ -104,6 +141,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         update-source-version pnpm_${majorVersion} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
       '';
     };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  dontBuild = true;
+  dontConfigure = true;
 
   meta = {
     description = "Fast, disk space efficient package manager for JavaScript";

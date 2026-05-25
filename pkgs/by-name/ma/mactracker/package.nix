@@ -11,16 +11,16 @@
   common-updater-scripts,
   versionCheckHook,
   writeShellScript,
-  xcbuild,
+  re-plistbuddy,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mactracker";
-  version = "7.13.5";
+  version = "8.2.1";
 
   src = fetchurl {
     url = "https://mactracker.ca/downloads/Mactracker_${finalAttrs.version}.zip";
-    hash = "sha256-VCcpEgMWo5U3BJpDSc0mQUIlmPuTKD7JBcmmKmYNf1Y=";
+    hash = "sha256-c78Bj63nJ+/qejUiD7hBEJlxubmIc+wElazwHGRRyfI=";
   };
 
   dontPatch = true;
@@ -58,13 +58,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''
-    ${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1"
+    ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleVersion" "$1"
   '';
   versionCheckProgramArg = [ "${placeholder "out"}/Applications/Mactracker.app/Contents/Info.plist" ];
   doInstallCheck = true;
 
   meta = {
-    description = "Mactracker provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
+    description = "Provides detailed information on every Apple Macintosh, iPod, iPhone, iPad, and Apple Watch ever made";
     homepage = "https://mactracker.ca";
     changelog = "https://mactracker.ca/releasenotes-mac.html";
     license = lib.licenses.unfree;

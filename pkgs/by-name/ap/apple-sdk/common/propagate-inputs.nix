@@ -56,18 +56,19 @@ self: super: {
       darwin.libsbuf
       # Shipped with the SDK only as a library with no headers
       (lib.getLib darwin.libutil)
-      # Required by some SDK headers
-      cupsHeaders
     ]
     # x86_64-darwin links the object files from Csu when targeting very old releases
     ++ lib.optionals stdenvNoCC.hostPlatform.isx86_64 [ darwin.Csu ];
 
   # The Darwin module for Swift requires certain headers to be included in the SDK (and not just be propagated).
-  buildPhase =
-    super.buildPhase or ""
-    + ''
-      for header in '${lib.getDev libiconv}/include/'* '${lib.getDev ncurses}/include/'*; do
-        ln -s "$header" "usr/include/$(basename "$header")"
-      done
-    '';
+  buildPhase = super.buildPhase or "" + ''
+    for header in '${lib.getDev libiconv}/include/'* '${lib.getDev ncurses}/include/'* '${cupsHeaders}/include/'*; do
+      ln -s "$header" "usr/include/$(basename "$header")"
+    done
+  '';
+
+  # Exported to allow the headers to pass the requisites check in the stdenv bootstrap.
+  passthru = (super.passthru or { }) // {
+    cups-headers = cupsHeaders;
+  };
 }

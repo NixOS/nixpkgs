@@ -3,7 +3,6 @@
   cinnamon-desktop,
   cinnamon-settings-daemon,
   cinnamon-translations,
-  dbus-glib,
   glib,
   gsettings-desktop-schemas,
   gtk3,
@@ -18,7 +17,13 @@
   systemd,
   wrapGAppsHook3,
   xapp,
-  xorg,
+  libxtst,
+  libxrender,
+  libxext,
+  libxcomposite,
+  libxau,
+  libx11,
+  xtrans,
   libexecinfo,
   pango,
 }:
@@ -32,20 +37,16 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-session";
-  version = "6.4.0";
+  version = "6.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-session";
-    rev = version;
-    hash = "sha256-4uTKcmwfEytoAy4CFiOedYJqmPtBFBHk0P1gEGgm6pU=";
+    tag = finalAttrs.version;
+    hash = "sha256-fmeLywpM4QhgyiX68E+4vosUK2WKGVJ1Cx8pYdOnb+k=";
   };
-
-  patches = [
-    ./0001-Use-dbus_glib-instead-of-elogind.patch
-  ];
 
   buildInputs = [
     # meson.build
@@ -54,22 +55,20 @@ stdenv.mkDerivation rec {
     glib
     libcanberra
     pango
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
     xapp
-    xorg.libXau
-    xorg.libXcomposite
+    libxau
+    libxcomposite
 
     systemd
 
-    xorg.libXtst
-    xorg.libXrender
-    xorg.xtrans
+    libxtst
+    libxrender
+    xtrans
 
     # other (not meson.build)
     cinnamon-settings-daemon
-    dbus-glib
-    glib
     gsettings-desktop-schemas
     pythonEnv # for cinnamon-session-quit
   ];
@@ -102,11 +101,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "Cinnamon session manager";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

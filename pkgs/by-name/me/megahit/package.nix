@@ -7,14 +7,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "megahit";
   version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "voutcn";
     repo = "megahit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1r5d9nkdmgjsbrpj43q9hy3s8jwsabaz3ji561v18hy47v58923c";
   };
 
@@ -34,11 +34,17 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
     "-DSTATIC_BUILD=ON"
   ];
-  meta = with lib; {
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://github.com/voutcn/megahit";
-    maintainers = with maintainers; [ luispedro ];
+    maintainers = with lib.maintainers; [ luispedro ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

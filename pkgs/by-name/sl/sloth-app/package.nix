@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sloth-app";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchurl {
     url = "https://github.com/sveinbjornt/Sloth/releases/download/${finalAttrs.version}/sloth-${finalAttrs.version}.zip";
-    hash = "sha256-LGaL7+NqoPqXZdYWq9x+yNEZFlZZmsZw+qcELC4rdjY=";
+    hash = "sha256-K8DweBFAILEQyqri6NO+p5qRam+BHjIk1tl43gcseNs=";
   };
 
   dontUnpack = true;

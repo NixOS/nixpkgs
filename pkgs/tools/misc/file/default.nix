@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  file,
+  buildPackages,
   zlib,
   libgnurx,
   updateAutotoolsGnuConfigScriptsHook,
@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file";
-  version = "5.46";
+  version = "5.47";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
       "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-ycx3x8VgxUMTXtxVWvYJ1WGdvvARmX6YjOQKPXXYYIg=";
+    hash = "sha256-RWcv7BZctMwTWKLXa11X0ih23Ll6sWlCesOFy+HVWXo=";
   };
 
   outputs = [
@@ -32,28 +32,42 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  patches = [
+    # Fixes `cat archive.zip | file -` just showing a generic "data" type. See:
+    # - https://bugs.astron.com/view.php?id=764
+    # - https://github.com/file/file/commit/12b76648185104ce9118d8b5fa57aa34a77ad084
+    # Vendored patch because using fetchpatch is impossible for a package in
+    # this part of the bootstrap chain.
+    ./0001-PR-745-streamout-Don-t-flush-when-trying-to-set-nega.patch
+    # Fixes breakage of python3Packages.python-magic and xdg-utils
+    ./0002-PR-725-inliniac-Revert-previous-and-always-set-offse.patch
+  ];
+
   strictDeps = true;
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
-  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
+  ];
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW libgnurx;
 
   # https://bugs.astron.com/view.php?id=382
   doCheck = !stdenv.buildPlatform.isMusl;
 
-  makeFlags = lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
+  # In native builds, it will use the newly-compiled file instead.
+  makeFlags = lib.optional (
+    !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
+  ) "FILE_COMPILE=${lib.getExe buildPackages.file}";
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://darwinsys.com/file";
     description = "Program that shows the type of files";
-    maintainers = with maintainers; [ doronbehar ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    license = lib.licenses.bsd2;
     pkgConfigModules = [ "libmagic" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "file";
   };
 })

@@ -14,39 +14,36 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-update";
-  version = "16.2.1";
+  version = "20.0.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-Vl5ClzS3OULsd+3dlaN5iZPw2YZeBSPHWFOS+izmr7Q=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-J/FujtsQF8WfHFoHJ3r2M+vv8WVh4cxDFw07JntnW2g=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Yq2jT8YnWPsNe7akShsj0nWxXXpgNvX1A95x7O8LOes=";
+  cargoHash = "sha256-bH8Mg7QQbbXlF7fxwWEFYmYQD1CmDM+g4GhFPZwLy/M=";
 
-  nativeBuildInputs =
-    [
-      cmake
-      installShellFiles
-      pkg-config
-      ronn
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+    pkg-config
+    ronn
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
-  buildInputs =
-    [
-      libgit2
-      libssh2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    libgit2
+    libssh2
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
@@ -66,13 +63,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
-    changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
+    changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gerschtli
-      Br1ght0ne
       johntitor
       matthiasbeyer
     ];
   };
-}
+})

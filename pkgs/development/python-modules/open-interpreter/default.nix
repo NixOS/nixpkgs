@@ -57,6 +57,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "anthropic"
     "google-generativeai"
+    "html2text"
     "psutil"
     "rich"
     "starlette"
@@ -111,6 +112,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    broken = true;
     description = "OpenAI's Code Interpreter in your terminal, running locally";
     homepage = "https://github.com/KillianLucas/open-interpreter";
     license = lib.licenses.mit;

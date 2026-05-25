@@ -32,15 +32,15 @@ let
     text = (
       lib.generators.toINI { } {
         Environment = {
-          DFLAGS = ''-I@out@/include/dmd -L-L@out@/lib -fPIC ${
+          DFLAGS = "-I@out@/include/dmd -L-L@out@/lib -fPIC ${
             lib.optionalString (!targetPackages.stdenv.cc.isClang) "-L--export-dynamic"
-          }'';
+          }";
         };
       }
     );
   };
 
-  bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
+  bits = toString stdenv.hostPlatform.parsed.cpu.bits;
   osname = if stdenv.hostPlatform.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name;
 
   pathToDmd = "\${NIX_BUILD_TOP}/dmd/generated/${osname}/release/${bits}/dmd";
@@ -94,61 +94,58 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ];
 
-  postPatch =
-    ''
-      patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
+  postPatch = ''
+    patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
 
-      rm dmd/compiler/test/runnable/gdb1.d
-      rm dmd/compiler/test/runnable/gdb10311.d
-      rm dmd/compiler/test/runnable/gdb14225.d
-      rm dmd/compiler/test/runnable/gdb14276.d
-      rm dmd/compiler/test/runnable/gdb14313.d
-      rm dmd/compiler/test/runnable/gdb14330.d
-      rm dmd/compiler/test/runnable/gdb15729.sh
-      rm dmd/compiler/test/runnable/gdb4149.d
-      rm dmd/compiler/test/runnable/gdb4181.d
-      rm dmd/compiler/test/compilable/ddocYear.d
+    rm dmd/compiler/test/runnable/gdb1.d
+    rm dmd/compiler/test/runnable/gdb10311.d
+    rm dmd/compiler/test/runnable/gdb14225.d
+    rm dmd/compiler/test/runnable/gdb14276.d
+    rm dmd/compiler/test/runnable/gdb14313.d
+    rm dmd/compiler/test/runnable/gdb14330.d
+    rm dmd/compiler/test/runnable/gdb15729.sh
+    rm dmd/compiler/test/runnable/gdb4149.d
+    rm dmd/compiler/test/runnable/gdb4181.d
+    rm dmd/compiler/test/compilable/ddocYear.d
 
-      # Disable tests that rely on objdump whitespace until fixed upstream:
-      #   https://issues.dlang.org/show_bug.cgi?id=23317
-      rm dmd/compiler/test/runnable/cdvecfill.sh
-      rm dmd/compiler/test/compilable/cdcmp.d
-    ''
-    + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
-      rm dmd/compiler/test/dshell/test6952.d
-    ''
-    + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
-      substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
-    '';
+    # Disable tests that rely on objdump whitespace until fixed upstream:
+    #   https://issues.dlang.org/show_bug.cgi?id=23317
+    rm dmd/compiler/test/runnable/cdvecfill.sh
+    rm dmd/compiler/test/compilable/cdcmp.d
+  ''
+  + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
+    rm dmd/compiler/test/dshell/test6952.d
+  ''
+  + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
+    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
+  '';
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      which
-      installShellFiles
-    ]
-    ++ lib.optionals (lib.versionOlder version "2.088.0") [
-      git
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    which
+    installShellFiles
+  ]
+  ++ lib.optionals (lib.versionOlder version "2.088.0") [
+    git
+  ];
 
   buildInputs = [
     curl
     tzdata
   ];
 
-  nativeCheckInputs =
-    [
-      gdb
-    ]
-    ++ lib.optionals (lib.versionOlder version "2.089.0") [
-      unzip
-    ];
+  nativeCheckInputs = [
+    gdb
+  ]
+  ++ lib.optionals (lib.versionOlder version "2.089.0") [
+    unzip
+  ];
 
   buildFlags = [
     "BUILD=release"
@@ -229,15 +226,15 @@ stdenv.mkDerivation (finalAttrs: {
     inherit dmdBootstrap;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
     changelog = "https://dlang.org/changelog/${finalAttrs.version}.html";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
-    license = licenses.boost;
+    license = lib.licenses.boost;
     mainProgram = "dmd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lionello
       dukc
       jtbx

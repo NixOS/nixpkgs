@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   pkg-config,
   pcsclite,
@@ -11,20 +11,18 @@
   openpgp-card-tools,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openpgp-card-tools";
-  version = "0.11.9";
+  version = "0.11.12";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "openpgp-card";
     repo = "openpgp-card-tools";
-    rev = "v${version}";
-    hash = "sha256-kT/egkOBOomUX+fwT3OeRSZOnGeuFRLKKAXtW8nN4rw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vnyDgFs195QMZtcjBu/fOj5YnqpF1jyCS0KzR1k2HWM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mZZ8veY3iqsgScfFAGYo496qxTew24R5NxYf3WjnHco=";
+  cargoHash = "sha256-T0ehazHODSMpQqVx/6rQS+1cWNaYaojLyiHOYwchuwY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,14 +48,14 @@ rustPlatform.buildRustPackage rec {
     installManPage ./man/*.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for inspecting and configuring OpenPGP cards";
     homepage = "https://codeberg.org/openpgp-card/openpgp-card-tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # OR
       mit
     ];
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "oct";
   };
-}
+})

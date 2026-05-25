@@ -10,16 +10,16 @@
   stdenv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdfarranger";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdfarranger";
     repo = "pdfarranger";
-    tag = version;
-    hash = "sha256-//JjIPDeyI+JZoFT2GU+wCP+tkKCchgS9ftMT5rUEOM=";
+    tag = finalAttrs.version;
+    hash = "sha256-lZuzFGRk19opLJ2pnh8s/VwdzDLtGwTchFh0ZuLezU4=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface";
     mainProgram = "pdfarranger";
     maintainers = with lib.maintainers; [
@@ -64,6 +64,6 @@ python3Packages.buildPythonApplication rec {
       endle
     ];
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${src.tag}";
+    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  pythonAtLeast,
   poetry-core,
   lxml,
   docopt-ng,
@@ -43,13 +44,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # pathname2url now emits RFC 1738 authority-prefixed file URLs for absolute paths
+    "test_file_url_roundtrip"
+  ];
+
   pythonImportsCheck = [ "rnginline" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library and command-line tool for loading multi-file RELAX NG schemas from arbitary URLs, and flattening them into a single RELAX NG schema";
     homepage = "https://github.com/h4l/rnginline";
     changelog = "https://github.com/h4l/rnginline/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lesuisse ];
   };
 }

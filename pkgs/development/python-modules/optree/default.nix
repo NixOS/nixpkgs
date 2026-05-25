@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   lib,
   cmake,
   setuptools,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "optree";
-  version = "0.14.1";
+  version = "0.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "metaopt";
     repo = "optree";
     tag = "v${version}";
-    hash = "sha256-5PIe/mXPNohwM0oNT/zSPmNUycjXuujtIFCki5t7V1I=";
+    hash = "sha256-i/vn9Lo5UiY3+1Mh6FMSMjEyDcs8dtWSL3ESZ8CyHPw=";
   };
 
   dontUseCmakeConfigure = true;
@@ -41,6 +38,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Fails because the 'test_treespec' module can't be found
     "test_treespec_pickle_missing_registration"
+    # optree import during tests raises CalledProcessError
+    "test_warn_deprecated_import"
+    "test_import_no_warnings"
+    "test_treespec_construct"
   ];
   pythonImportsCheck = [ "optree" ];
 

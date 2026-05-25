@@ -46,16 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      gtk3
-      libxkbcommon
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals withGtkLayerShell [
-      gtk-layer-shell
-    ];
+  buildInputs = [
+    gtk3
+    libxkbcommon
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals withGtkLayerShell [
+    gtk-layer-shell
+  ];
 
   strictDeps = true;
 
@@ -82,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ mit ];
     mainProgram = "wlogout";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-editing-services";
-  version = "1.26.0";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -32,33 +32,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-editing-services/gst-editing-services-${finalAttrs.version}.tar.xz";
-    hash = "sha256-r1sn9ck2MCc3IQDKwLrxkFUoBynfHMWN1ORU72mOsf8=";
+    hash = "sha256-o26HkAtErBYIYS8tYW/AMvnX2SAyfE0jGv+2/pNJcU0=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      gobject-introspection
-      python3
-      flex
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    python3
+    flex
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-      libxml2
-      gst-devtools
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    bash-completion
+    libxml2
+    gst-devtools
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     gst-plugins-base
@@ -67,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 
   postPatch = ''
@@ -74,16 +73,20 @@ stdenv.mkDerivation (finalAttrs: {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for creation of audio/video non-linear editors";
     mainProgram = "ges-launch-1.0";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

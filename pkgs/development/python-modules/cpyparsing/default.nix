@@ -5,20 +5,17 @@
   cython,
   pexpect,
   python,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cpyparsing";
-  version = "2.4.7.2.4.1";
+  version = "2.4.7.2.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2RfwGnSz/GFPk565n8MooIybHeWAlWYMDylZd0S/HTA=";
+    hash = "sha256-5pSZ+fhMiUIe1kLAvlyyfmcKWxtO2m0h9kQY2LrxOjg=";
   };
 
   nativeBuildInputs = [
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cPyparsing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cython PyParsing implementation";
     homepage = "https://github.com/evhub/cpyparsing";
     changelog = "https://github.com/evhub/cpyparsing/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fabianhjr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fabianhjr ];
   };
 }

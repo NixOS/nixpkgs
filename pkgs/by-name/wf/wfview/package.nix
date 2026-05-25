@@ -29,22 +29,21 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-hard-encodings.patch
   ];
 
-  buildInputs =
-    [
-      eigen
-      hidapi
-      libopus
-      portaudio
-      rtaudio
-      qt6.qtbase
-      qt6.qtserialport
-      qt6.qtmultimedia
-      qt6.qtwebsockets
-      qt6Packages.qcustomplot
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-    ];
+  buildInputs = [
+    eigen
+    hidapi
+    libopus
+    portaudio
+    rtaudio
+    qt6.qtbase
+    qt6.qtserialport
+    qt6.qtmultimedia
+    qt6.qtwebsockets
+    qt6Packages.qcustomplot
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+  ];
 
   nativeBuildInputs = with qt6; [
     wrapQtAppsHook

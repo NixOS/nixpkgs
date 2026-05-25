@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pycryptodomex,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "motionblinds";
-  version = "0.6.27";
+  version = "0.6.30";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "motion-blinds";
     tag = version;
-    hash = "sha256-kvCvgSoiyDCDmEG8goM3hYXpvb5CO7nqz0/CKPBlZ2g=";
+    hash = "sha256-xV9od7xTKBBE4f4Mqg57Mp0MXO8/lG+bBKzG+jv6gf4=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "motionblinds" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interfacing with Motion Blinds";
     homepage = "https://github.com/starkillerOG/motion-blinds";
-    changelog = "https://github.com/starkillerOG/motion-blinds/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/starkillerOG/motion-blinds/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

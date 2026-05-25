@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spedread";
-  version = "2.5.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Darazaki";
     repo = "Spedread";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0VQdiosYd4HBFM1A9jvtQulvgiRwMoClXAVwLhGh6xU=";
+    hash = "sha256-IZhvKZ4kllL6ItUn47+EnUwVPKXC0mz2Mvsg/7CT5Qw=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Rapid word display tool for improved reading focus and reduced eye movement";
     homepage = "https://github.com/Darazaki/Spedread";
-    changelog = "https://github.com/Darazaki/Spedread/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Darazaki/Spedread/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ thtrf ];
     platforms = lib.platforms.linux;

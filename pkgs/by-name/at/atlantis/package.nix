@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlantis";
-  version = "0.34.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2xgU3H6X9EcbySV9RXN5oCn+7EkfdwebeYsL5+Vl69E=";
+    hash = "sha256-btCfoku8LgsZEJ/aza75wg8spacYEeliXVmjMZYkO3M=";
   };
 
   ldflags = [
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  vendorHash = "sha256-1xII3GIQQCku3UzwPJnJu//zAJGuGCOSETR6sU4lPR8=";
+  vendorHash = "sha256-ilKrQulEmsyv8w2ENjhfICoiXOexjUZXeb3cPeqcTqw=";
 
   subPackages = [ "." ];
 
@@ -35,6 +35,8 @@ buildGoModule (finalAttrs: {
     description = "Terraform Pull Request Automation";
     mainProgram = "atlantis";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jpotier ];
+    maintainers = with lib.maintainers; [
+      tebriel
+    ];
   };
 })

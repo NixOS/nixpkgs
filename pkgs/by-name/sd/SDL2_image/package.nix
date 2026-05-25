@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_image";
-  version = "2.8.8";
+  version = "2.8.12";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${finalAttrs.version}.tar.gz";
-    hash = "sha256-IhO1b9r/IiDQ44yOQgy+GoPIc3QZDLqMcK8hVgl84wo=";
+    hash = "sha256-OT9e+1BTbsE8pPSv+2nMmWbTw/lp5sXnAfrd+fl4U4E=";
   };
 
   nativeBuildInputs = [
@@ -31,34 +31,32 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      SDL2
-      libtiff
-      libwebp
-      zlib
-    ]
-    ++ lib.optionals (!enableSTB) [
-      libjpeg
-      libpng
-    ];
+  buildInputs = [
+    SDL2
+    libtiff
+    libwebp
+    zlib
+  ]
+  ++ lib.optionals (!enableSTB) [
+    libjpeg
+    libpng
+  ];
 
-  configureFlags =
-    [
-      # Disable dynamically loaded dependencies
-      (lib.enableFeature false "jpg-shared")
-      (lib.enableFeature false "png-shared")
-      (lib.enableFeature false "tif-shared")
-      (lib.enableFeature false "webp-shared")
-      (lib.enableFeature enableSTB "stb-image")
-      (lib.enableFeature enableSdltest "sdltest")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Don't use native macOS frameworks
-      # Caution: do not set this as (!stdenv.hostPlatform.isDarwin) since it would be true
-      # outside Darwin - and ImageIO does not exist outside Darwin
-      (lib.enableFeature false "imageio")
-    ];
+  configureFlags = [
+    # Disable dynamically loaded dependencies
+    (lib.enableFeature false "jpg-shared")
+    (lib.enableFeature false "png-shared")
+    (lib.enableFeature false "tif-shared")
+    (lib.enableFeature false "webp-shared")
+    (lib.enableFeature enableSTB "stb-image")
+    (lib.enableFeature enableSdltest "sdltest")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Don't use native macOS frameworks
+    # Caution: do not set this as (!stdenv.hostPlatform.isDarwin) since it would be true
+    # outside Darwin - and ImageIO does not exist outside Darwin
+    (lib.enableFeature false "imageio")
+  ];
 
   strictDeps = true;
 

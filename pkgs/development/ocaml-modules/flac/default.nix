@@ -8,16 +8,9 @@
   flac,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "flac";
-  version = "0.5.1";
-
-  src = fetchFromGitHub {
-    owner = "savonet";
-    repo = "ocaml-flac";
-    rev = "v${version}";
-    sha256 = "sha256-68zunpRIX4lrRsKJhDF3Sre6Rp3g+ntP19ObFqG57jE=";
-  };
+  inherit (ogg) version src;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];
@@ -26,10 +19,10 @@ buildDunePackage rec {
     flac.dev
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-flac";
     description = "Bindings for flac";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

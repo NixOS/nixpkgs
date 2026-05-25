@@ -5,7 +5,7 @@
   fetchpatch,
   pkg-config,
   SDL2,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     SDL2
   ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://panthema.net/2013/sound-of-sorting/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "sound-of-sorting";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (SDL2.meta) platforms;
   };
 })

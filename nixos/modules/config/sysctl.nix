@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   sysctlOption = lib.mkOptionType {
@@ -61,23 +66,58 @@ in
 
   config = {
 
-    environment.etc."sysctl.d/60-nixos.conf".text = lib.concatStrings (
-      lib.mapAttrsToList (
-        n: v: lib.optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
-      ) config.boot.kernel.sysctl
-    );
+    environment.etc = {
+      "sysctl.d/55-nixos-aslr-entropy.conf".source =
+        pkgs.runCommand "55-nixos-aslr-entropy.conf"
+          {
+            inherit (config.boot.kernelPackages.kernel) configfile;
+          }
+          (
+            ''
+              mmap_rnd_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
+              if [[ -z "$mmap_rnd_bits_max" ]]; then
+                echo "Unable to determine mmap_rnd_bits_max. Check your kernel configfile is valid."
+                exit 1
+              fi
+              echo "vm.mmap_rnd_bits=$mmap_rnd_bits_max" >> $out
+            ''
+            # HAVE_ARCH_MMAP_RND_COMPAT_BITS is not defined on 32-bit architectures or LoongArch64
+            + lib.optionalString (with pkgs.stdenv.hostPlatform; (!is32bit && !isLoongArch64)) ''
+              mmap_rnd_compat_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
+              if [[ -z "$mmap_rnd_compat_bits_max" ]]; then
+                echo "Unable to determine mmap_rnd_compat_bits_max. Check your kernel configfile is valid."
+                exit 1
+              fi
+              echo "vm.mmap_rnd_compat_bits=$mmap_rnd_compat_bits_max" >> $out
+            ''
+          );
+      "sysctl.d/60-nixos.conf".text = lib.concatStrings (
+        lib.mapAttrsToList (
+          n: v: lib.optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
+        ) config.boot.kernel.sysctl
+      );
+    };
 
     systemd.services.systemd-sysctl = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."sysctl.d/60-nixos.conf".source ];
     };
 
-    # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
-    # users as these make it easier to exploit kernel vulnerabilities.
-    boot.kernel.sysctl."kernel.kptr_restrict" = lib.mkDefault 1;
+    # NixOS wide defaults
+    boot.kernel.sysctl = {
+      # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
+      # users as these make it easier to exploit kernel vulnerabilities.
+      "kernel.kptr_restrict" = lib.mkDefault 1;
 
-    # Improve compatibility with applications that allocate
-    # a lot of memory, like modern games
-    boot.kernel.sysctl."vm.max_map_count" = lib.mkDefault 1048576;
+      # Improve compatibility with applications that allocate
+      # a lot of memory, like modern games
+      "vm.max_map_count" = lib.mkDefault 1048576;
+
+      # The default max inotify watches is 8192.
+      # Nowadays most apps require a good number of inotify watches,
+      # the value below is used by default on several other distros.
+      "fs.inotify.max_user_instances" = lib.mkDefault 524288;
+      "fs.inotify.max_user_watches" = lib.mkDefault 524288;
+    };
   };
 }

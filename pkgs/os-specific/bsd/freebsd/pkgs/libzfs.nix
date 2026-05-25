@@ -63,20 +63,21 @@ mkDerivation {
   # If we don't specify an object directory then
   # make will try to put openzfs objects in nonexistent directories.
   # This one seems to work
-  preBuild =
-    ''
-      export MAKEOBJDIRPREFIX=$BSDSRCDIR/obj
-    ''
-    + lib.flip lib.concatMapStrings libs (libname: ''
-      echo "building dependency ${libname}"
-      make -C $BSDSRCDIR/cddl/lib/${libname} $makeFlags
-      make -C $BSDSRCDIR/cddl/lib/${libname} $makeFlags install
-    '');
+  preBuild = ''
+    export MAKEOBJDIRPREFIX=$BSDSRCDIR/obj
+  ''
+  + lib.flip lib.concatMapStrings libs (libname: ''
+    echo "building dependency ${libname}"
+    make -C $BSDSRCDIR/cddl/lib/${libname} $makeFlags
+    make -C $BSDSRCDIR/cddl/lib/${libname} $makeFlags install
+  '');
 
   outputs = [
     "out"
     "debug"
   ];
+
+  MK_TESTS = "no";
 
   meta = {
     platforms = lib.platforms.freebsd;

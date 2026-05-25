@@ -9,6 +9,7 @@
   texinfo,
   common-updater-scripts,
   writers,
+  re-plistbuddy,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   # use pregenerated nib files because generating them requires XCode
   postPatch = ''
     cp -r ${./mac/Main.nib} macosx/Main.nib
@@ -32,11 +37,8 @@ stdenv.mkDerivation rec {
     chmod -R u+w macosx/*.nib
     # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
     cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
-  '';
-
-  # Unfortunately, PlistBuddy from xcbuild is not compatible enough pinentry-mac’s build process.
-  sandboxProfile = ''
-    (allow process-exec (literal "/usr/libexec/PlistBuddy"))
+    substituteInPlace macosx/copyInfoPlist.sh \
+      --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
   '';
 
   strictDeps = true;
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     makeBinaryWrapper
     texinfo
+    re-plistbuddy
   ];
 
   configureFlags = [
@@ -97,7 +100,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Pinentry for GPG on Mac";
     license = lib.licenses.gpl2Plus;
-    homepage = "https://github.com/GPGTools/pinentry-mac";
+    homepage = "https://github.com/GPGTools/pinentry";
     platforms = lib.platforms.darwin;
     mainProgram = "pinentry-mac";
   };

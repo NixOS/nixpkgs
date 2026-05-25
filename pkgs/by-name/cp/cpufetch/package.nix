@@ -5,15 +5,15 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpufetch";
-  version = "1.06";
+  version = "1.07";
 
   src = fetchFromGitHub {
     owner = "Dr-Noob";
     repo = "cpufetch";
-    rev = "v${version}";
-    sha256 = "sha256-sE3i2rw8W362BExFEImjw/t17qX8D4/0Ty8jG63bjbk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-qmT7WBWKtSWGIK/dEd3/bF1bBjqSjfkP99htfnlFLCw=";
   };
 
   nativeBuildInputs = [
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     description = "Simplistic yet fancy CPU architecture fetching tool";
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/Dr-Noob/cpufetch";
-    changelog = "https://github.com/Dr-Noob/cpufetch/releases/tag/v${version}";
+    changelog = "https://github.com/Dr-Noob/cpufetch/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "cpufetch";
   };
-}
+})

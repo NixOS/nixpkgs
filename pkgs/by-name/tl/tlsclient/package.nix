@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlsclient";
-  version = "1.6.6";
+  version = "1.7";
 
   src = fetchFromSourcehut {
     owner = "~moody";
     repo = "tlsclient";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nUvOmEwdMKuPM9KaMGxmW0Lvo3968wjDc95pLB17YnM=";
+    hash = "sha256-oClIbswConBrmU0hpIVcS2L0DVF2/xdnbAv3X0RvNZ0=";
   };
 
   strictDeps = true;
@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "tlsclient command line utility";
     longDescription = "unix port of 9front's tlsclient(1) and rcpu(1)";
     homepage = "https://git.sr.ht/~moody/tlsclient";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moody ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moody ];
     mainProgram = "tlsclient";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "gelasio";
-  version = "unstable-2022-06-09";
+  version = "0-unstable-2025-06-30";
 
   src = fetchFromGitHub {
     owner = "SorkinType";
     repo = "Gelasio";
-    rev = "a75c6d30a35f74cdbaea1813bdbcdb64bb11d3d5";
-    hash = "sha256-ncm0lSDPPPREdxTx3dGl6OGBn4FGAjFTlQpA6oDCdMI=";
+    rev = "4d7a1d2c662582095982a3851e50d7f1e034255b";
+    hash = "sha256-GfJjpiTBayNfGULf3vqFOvQw9rqXIe8JJmF3fI9Km+Y=";
   };
 
   dontBuild = true;
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Font which is metric-compatible with Microsoft's Georgia";
     longDescription = ''
       Gelasio is an original typeface which is metrics compatible with Microsoft's
@@ -34,8 +34,8 @@ stdenvNoCC.mkDerivation {
       Medium, medium Italic, SemiBold and SemiBold Italic have now been added as well.
     '';
     homepage = "https://github.com/SorkinType/Gelasio";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ colemickens ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ colemickens ];
   };
 }

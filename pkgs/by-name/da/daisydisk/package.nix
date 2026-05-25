@@ -8,14 +8,13 @@
   common-updater-scripts,
   writeShellApplication,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "daisydisk";
-  version = "4.31";
+  version = "4.33.3";
 
   src = fetchzip {
     url = "https://daisydiskapp.com/download/DaisyDisk.zip";
-    hash = "sha256-z0F1sHihmXR5hN/AwrxLr9ZxfcCN+OSeWvWBe+qwWMU=";
+    hash = "sha256-2QhaY4oQV+bkvcyC88Zsk7eZJ6dySsb5G2+juH8HNjI=";
     stripRoot = false;
   };
 

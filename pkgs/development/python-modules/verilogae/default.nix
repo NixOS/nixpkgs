@@ -2,40 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
+  nix-update-script,
   setuptools-rust,
   rustPlatform,
   cargo,
   rustc,
-  autoPatchelfHook,
   pkg-config,
-  llvmPackages_15,
+  llvmPackages,
   libxml2,
   ncurses,
   zlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = llvmPackages.stdenv; } rec {
   pname = "verilogae";
-  version = "1.0.0";
+  version = "24.0.0mob-unstable-2025-07-21";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pascalkuthe";
-    repo = "OpenVAF";
-    rev = "VerilogAE-v${version}";
-    hash = "sha256-TILKKmgSyhyxp88sdflDXAoH++iP6CMpdoXN1/1fsjU=";
+    owner = "OpenVAF";
+    repo = "OpenVAF-Reloaded";
+    rev = "d878f5519b1767b64c6ebeb4d67e29e7cd46e60b";
+    hash = "sha256-TDE2Ewokhm2KSKe+sunUbV8KD3kaTSd5dB3CLCWGJ9U=";
   };
 
+  # segfault in pythonImportsCheckPhase
+  disabled = pythonAtLeast "3.14";
+
   postPatch = ''
-    substituteInPlace openvaf/llvm/src/initialization.rs \
-      --replace-fail "i8" "libc::c_char"
     substituteInPlace openvaf/osdi/build.rs \
       --replace-fail "-fPIC" ""
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-/gSqaxqOZUkUmJJ5PGMkAG/5PSeAjwDjT2ce+tL7xmY";
+    hash = "sha256-5SLrVL3h6+tptHv3GV7r8HUTrYQC9VdF68O2/Uct3xA=";
   };
 
   nativeBuildInputs = [
@@ -44,15 +46,13 @@ buildPythonPackage rec {
     rustPlatform.bindgenHook
     cargo
     rustc
-    autoPatchelfHook
     pkg-config
-    llvmPackages_15.clang
-    llvmPackages_15.llvm
+    llvmPackages.llvm
   ];
 
   buildInputs = [
     libxml2.dev
-    llvmPackages_15.libclang
+    llvmPackages.libclang
     ncurses
     zlib
   ];
@@ -63,15 +63,20 @@ buildPythonPackage rec {
 
   hardeningDisable = [ "pic" ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = {
     description = "Verilog-A tool useful for compact model parameter extraction";
     homepage = "https://man.sr.ht/~dspom/openvaf_doc/verilogae/";
+    downloadPage = "https://github.com/OpenVAF/OpenVAF-Reloaded";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       jasonodoom
       jleightcap
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 }

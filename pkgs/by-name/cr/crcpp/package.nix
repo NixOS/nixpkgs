@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crcpp";
-  version = "1.2.0.0";
+  version = "1.2.1.0";
 
   src = fetchFromGitHub {
     owner = "d-bahr";
     repo = "CRCpp";
-    rev = "release-${version}";
-    sha256 = "sha256-OY8MF8fwr6k+ZSA/p1U+9GnTFoMSnUZxKVez+mda2tA=";
+    rev = "release-${finalAttrs.version}";
+    sha256 = "sha256-9oAG2MCeSsgA9x1mSU+xiKHUlUuPndIqQJnkrItgsAA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/d-bahr/CRCpp";
-    changelog = "https://github.com/d-bahr/CRCpp/releases/tag/release-${version}";
+    changelog = "https://github.com/d-bahr/CRCpp/releases/tag/release-${finalAttrs.version}";
     description = "Easy to use and fast C++ CRC library";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
   };
-}
+})

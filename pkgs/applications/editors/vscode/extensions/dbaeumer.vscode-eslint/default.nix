@@ -1,30 +1,15 @@
 {
-  jq,
   lib,
-  moreutils,
   vscode-utils,
-  eslint,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-eslint";
     publisher = "dbaeumer";
-    version = "3.0.13";
-    hash = "sha256-l5VvhQPxPaQsPhXUbFW2yGJjaqnNvijn4QkXPjf1WXo=";
+    version = "3.0.24";
+    hash = "sha256-ZQVzpSSLf3tpO4QtLjbCOje3L5/EqzT9A9IOssl6e54=";
   };
-
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-
-  buildInputs = [ eslint ];
-
-  postInstall = ''
-    cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."eslint.nodePath".default = "${eslint}/lib/node_modules"' package.json | sponge package.json
-  '';
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/dbaeumer.vscode-eslint/changelog";

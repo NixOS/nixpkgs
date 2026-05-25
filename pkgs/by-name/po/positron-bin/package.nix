@@ -18,11 +18,14 @@
   patchelf,
   openssl,
   stdenv,
-  xorg,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
 }:
 let
   pname = "positron-bin";
-  version = "2025.05.0-75";
+  version = "2026.02.1-5";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -30,36 +33,42 @@ stdenv.mkDerivation {
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${version}.dmg";
-        hash = "sha256-dmRYKysQJYrNWyGvH9DsNIC0tIHYNix7QWagVtuGx1g=";
+        url = "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${version}-arm64.dmg";
+        hash = "sha256-wQ/ctA9q8i5hyi86VKF8cC/mDHVU1DRt1vnFBKdAAJI=";
+      }
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
+        hash = "sha256-AW4jueFtdvrmIAm+d5/qjyViaSpue51dbyU4NYs3vaE=";
       }
     else
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-dmJrDE3g44aoCsVBvSDDFLt38uIqxzaXPBhcmu/U5Oo=";
+        url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
+        hash = "sha256-aTVzJCsMARXciasGv7l/syFb3V81Ii6gVl6sBrEPFzM=";
       };
 
-  buildInputs =
-    [ makeShellWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      libglvnd
-      libxkbcommon
-      libgbm
-      musl
-      nss
-      stdenv.cc.cc
-      openssl
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libxkbfile
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      blas
-      patchelf
-    ];
+  buildInputs = [
+    makeShellWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    libglvnd
+    libxkbcommon
+    libgbm
+    musl
+    nss
+    stdenv.cc.cc
+    openssl
+    libx11
+    libxcomposite
+    libxdamage
+    libxkbfile
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    blas
+    patchelf
+  ];
 
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -124,15 +133,19 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Positron, a next-generation data science IDE";
     homepage = "https://github.com/posit-dev/positron";
-    license = licenses.elastic20;
-    maintainers = with maintainers; [
+    license = lib.licenses.elastic20;
+    maintainers = with lib.maintainers; [
       b-rodrigues
       detroyejr
     ];
     mainProgram = "positron";
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 }

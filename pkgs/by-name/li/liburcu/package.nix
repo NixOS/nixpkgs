@@ -3,15 +3,16 @@
   stdenv,
   fetchurl,
   perl,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.15.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.15.6";
   pname = "liburcu";
 
   src = fetchurl {
-    url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-    hash = "sha256-WfNvK4vaG3Ygp+ztJjTybFSURIGKgxMCWjuwnAdmph0=";
+    url = "https://lttng.org/files/urcu/userspace-rcu-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-hQsZIJbrEevyxw6Pl7x9p0ee5B2hvr60TjmGkIusQU8=";
   };
 
   outputs = [
@@ -22,13 +23,20 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ perl ];
 
+  enableParallelBuilding = true;
+
   preCheck = "patchShebangs tests/unit";
   doCheck = true;
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.lttng.org/userspace-rcu.git";
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Userspace RCU (read-copy-update) library";
     homepage = "https://lttng.org/urcu";
-    changelog = "https://github.com/urcu/userspace-rcu/raw/v${version}/ChangeLog";
+    changelog = "https://github.com/urcu/userspace-rcu/raw/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl21Plus;
     # https://git.liburcu.org/?p=userspace-rcu.git;a=blob;f=include/urcu/arch.h
     platforms = lib.intersectLists lib.platforms.unix (
@@ -45,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
   };
 
-}
+})

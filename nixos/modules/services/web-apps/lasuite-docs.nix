@@ -8,6 +8,7 @@
 let
   inherit (lib)
     getExe
+    hasAttr
     mapAttrs
     match
     mkEnableOption
@@ -17,6 +18,7 @@ let
     types
     optional
     optionalString
+    escapeShellArg
     ;
 
   cfg = config.services.lasuite-docs;
@@ -76,6 +78,20 @@ let
     SystemCallArchitectures = "native";
     UMask = "0077";
   };
+
+  # Convert environment variables to be used as systemd-run arguments
+  envArgs = lib.concatStringsSep " " (
+    lib.mapAttrsToList (name: value: "-E ${escapeShellArg "${name}=${value}"}") pythonEnvironment
+  );
+
+  # Easier usage of django manage.py stuff
+  manage = pkgs.writeShellScriptBin "lasuite-docs-manage" ''
+    exec ${lib.getExe' config.systemd.package "systemd-run"} \
+      -p User=${commonServiceConfig.User} -p DynamicUser=yes \
+      -p StateDirectory=${commonServiceConfig.StateDirectory} --working-directory=${commonServiceConfig.WorkingDirectory} \
+      --quiet --collect --pipe --pty \
+      ${envArgs} ${lib.getExe cfg.backendPackage} "$@"
+  '';
 in
 {
   options.services.lasuite-docs = {
@@ -194,7 +210,7 @@ in
         description = ''
           Configuration options of collaboration server.
 
-          See https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md
+          See <https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md>
         '';
       };
     };
@@ -327,7 +343,7 @@ in
       description = ''
         Configuration options of docs.
 
-        See https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md
+        See <https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md>
 
         `REDIS_URL` and `CELERY_BROKER_URL` are set if `services.lasuite-docs.redis.createLocally` is true.
         `DB_HOST` is set if `services.lasuite-docs.postgresql.createLocally` is true.
@@ -346,14 +362,75 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ manage ];
+
+    # Some settings options in LaSuite has been renamed in 5.0.0
+    # Show warnings if those settings are not renamed
+    # TODO: remove it when the retrocompatibility options will be gone
+    warnings =
+      (optional (hasAttr "AI_API_KEY" cfg.settings) "AI_API_KEY has been renamed as OPENAI_SDK_API_KEY in LaSuite Docs")
+      ++ (optional (hasAttr "AI_API_KEY_FILE" cfg.settings) "AI_API_KEY_FILE has been renamed as OPENAI_SDK_API_KEY_FILE in LaSuite Docs")
+      ++ (optional (hasAttr "AI_BASE_URL" cfg.settings) "AI_BASE_URL has been renamed as OPENAI_SDK_BASE_URL in LaSuite Docs");
+
+    systemd.services.lasuite-docs-postgresql-setup = mkIf cfg.postgresql.createLocally {
+      wantedBy = [ "lasuite-docs.target" ];
+      requiredBy = [ "lasuite-docs.service" ];
+      before = [ "lasuite-docs.service" ];
+      after = [ "postgresql-setup.service" ];
+
+      serviceConfig = {
+        Slice = "system-lasuite-docs.slice";
+        Type = "oneshot";
+        User = "postgres";
+
+        # lasuite-docs user cannot create a C function as it is unsafe.
+        ExecStart = ''
+          ${lib.getExe' config.services.postgresql.package "psql"} --port=${toString config.services.postgresql.settings.port} -d lasuite-docs -c "CREATE OR REPLACE FUNCTION public.immutable_unaccent(regdictionary, text) RETURNS text LANGUAGE c IMMUTABLE PARALLEL SAFE STRICT AS '$libdir/unaccent', 'unaccent_dict';"
+        '';
+
+        # hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = "0077";
+      };
+
+    };
+
     systemd.services.lasuite-docs = {
       description = "Docs from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.target")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
-        (optional cfg.postgresql.createLocally "postgresql.service")
+        (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wantedBy = [ "multi-user.target" ];
 
@@ -362,10 +439,6 @@ in
           touch .version
         fi
 
-        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
-          ${getExe cfg.backendPackage} migrate
-          echo -n "${cfg.backendPackage.version}" > .version
-        fi
         ${optionalString (cfg.secretKeyPath == null) ''
           if [[ ! -f /var/lib/lasuite-docs/django_secret_key ]]; then
             (
@@ -374,6 +447,10 @@ in
             )
           fi
         ''}
+        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
+          ${getExe cfg.backendPackage} migrate
+          echo -n "${cfg.backendPackage.version}" > .version
+        fi
       '';
 
       environment = pythonEnvironment;
@@ -391,17 +468,19 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-celery = {
       description = "Docs Celery broker from SuiteNumérique";
-      after =
-        [ "network.target" ]
-        ++ (optional cfg.postgresql.createLocally "postgresql.service")
-        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after = [
+        "network.target"
+      ]
+      ++ (optional cfg.postgresql.createLocally "postgresql.target")
+      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
-        (optional cfg.postgresql.createLocally "postgresql.service")
+        (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wantedBy = [ "multi-user.target" ];
 
@@ -420,7 +499,8 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-collaboration-server = {
@@ -432,7 +512,8 @@ in
 
       serviceConfig = {
         ExecStart = getExe cfg.collaborationServer.package;
-      } // commonServiceConfig;
+      }
+      // commonServiceConfig;
     };
 
     services.postgresql = mkIf cfg.postgresql.createLocally {
@@ -464,6 +545,11 @@ in
           tryFiles = "$uri /docs/[id]/index.html";
         };
 
+        locations."~ '^/user-reconciliations/(active|inactive)/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/?$'" =
+          {
+            tryFiles = "$uri /user-reconciliations/$1/[id]/index.html";
+          };
+
         locations."/api" = {
           proxyPass = "http://${cfg.bind}";
           recommendedProxySettings = true;
@@ -472,6 +558,10 @@ in
         locations."/admin" = {
           proxyPass = "http://${cfg.bind}";
           recommendedProxySettings = true;
+        };
+
+        locations."/static/" = {
+          alias = "${cfg.backendPackage}/share/static/";
         };
 
         locations."/collaboration/ws/" = {

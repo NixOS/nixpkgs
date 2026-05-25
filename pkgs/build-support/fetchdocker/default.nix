@@ -29,10 +29,10 @@ assert null == lib.findFirst (c: "/" == c) null (lib.stringToCharacters imageNam
 
 let
   # Abuse paths to collapse possible double slashes
-  repoTag0 = builtins.toString (/. + "/${stripScheme registry}/${repository}/${imageName}");
+  repoTag0 = toString (/. + "/${stripScheme registry}/${repository}/${imageName}");
   repoTag1 = lib.removePrefix "/" repoTag0;
 
-  layers = builtins.map stripNixStore imageLayers;
+  layers = map stripNixStore imageLayers;
 
   manifest = writeText "manifest.json" (
     builtins.toJSON [

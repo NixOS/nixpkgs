@@ -5,7 +5,7 @@
   pytestCheckHook,
   crc,
   setuptools,
-  pytest-asyncio,
+  pytest-asyncio_0,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0
   ];
 
   meta = {
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Python library for interacting with Aprilaire thermostats";
     homepage = "https://github.com/chamberlain2007/pyaprilaire";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

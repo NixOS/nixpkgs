@@ -18,16 +18,16 @@
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "8.0.4";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    hash = "sha256-JZcdAo6d7huwDQ9hJE8oT5FH0ZQjg0DhoglOkhOyk1o=";
+    hash = "sha256-eNgnjErPi5q9yA/2iEg3+CoN2xbopmFOpbgU/7GhoAQ=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   postPatch = ''
     # Dependencies already bundled with Python
@@ -54,12 +54,12 @@ buildPythonApplication rec {
     emoji
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
     mainProgram = "matrix-commander";
     homepage = "https://github.com/8go/matrix-commander";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.seb314 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.seb314 ];
   };
 }

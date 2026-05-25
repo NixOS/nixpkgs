@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   google-api-core,
   google-auth,
   mock,
-  nix-update-script,
   proto-plus,
   protobuf,
   pytest-asyncio,
@@ -13,28 +13,33 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-netapp";
-  version = "0.3.23";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    rev = "google-cloud-netapp-v${version}";
-    hash = "sha256-ietiyPCghGUD1jlGdZMhVgVozAlyfdvYgkV6NNlzLQg=";
+    tag = "google-cloud-netapp-v${finalAttrs.version}";
+    hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
   };
 
-  sourceRoot = "${src.name}/packages/google-cloud-netapp";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-netapp";
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -47,18 +52,19 @@ buildPythonPackage rec {
     "google.cloud.netapp_v1"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "google-cloud-netapp-v([0-9.]+)"
-    ];
+  passthru = {
+    # builkupdater selects wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "google-cloud-netapp-v";
+    };
   };
 
   meta = {
     description = "Python Client for NetApp API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-netapp";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-netapp-v${version}/packages/google-cloud-netapp/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-cloud-netapp/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

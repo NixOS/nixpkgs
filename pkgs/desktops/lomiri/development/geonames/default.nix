@@ -22,26 +22,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geonames";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/geonames";
-    rev = finalAttrs.version;
-    hash = "sha256-AhRnUoku17kVY0UciHQXFDa6eCH6HQ4ZGIOobCaGTKQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-jXjhhCrY0tURd4N4D5weCJEckS5cctUfBgpGLTkC2cI=";
   };
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withExamples [
-      "bin"
-    ]
-    ++ lib.optionals withDocumentation [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withExamples [
+    "bin"
+  ]
+  ++ lib.optionals withDocumentation [
+    "devdoc"
+  ];
 
   postPatch = ''
     patchShebangs src/generate-locales.sh tests/setup-test-env.sh
@@ -49,27 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      gettext
-      glib # glib-compile-resources
-      pkg-config
-      validatePkgConfig
-    ]
-    ++ lib.optionals withDocumentation [
-      docbook-xsl-nons
-      docbook_xml_dtd_45
-      gtk-doc
-    ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    glib # glib-compile-resources
+    pkg-config
+    validatePkgConfig
+  ]
+  ++ lib.optionals withDocumentation [
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    gtk-doc
+  ];
 
-  buildInputs =
-    [
-      glib
-    ]
-    ++ lib.optionals withExamples [
-      gtk3
-    ];
+  buildInputs = [
+    glib
+  ]
+  ++ lib.optionals withExamples [
+    gtk3
+  ];
 
   # Tests need to be able to check locale
   LC_ALL = lib.optionalString finalAttrs.finalPackage.doCheck "en_US.UTF-8";
@@ -82,18 +79,17 @@ stdenv.mkDerivation (finalAttrs: {
     "LD=${stdenv.cc.targetPrefix}cc"
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "WANT_DOC" withDocumentation)
-      (lib.cmakeBool "WANT_DEMO" withExamples)
-      (lib.cmakeBool "WANT_TESTS" finalAttrs.finalPackage.doCheck)
-      # Keeps finding & using glib-compile-resources from buildInputs otherwise
-      (lib.cmakeFeature "CMAKE_PROGRAM_PATH" (lib.makeBinPath [ buildPackages.glib.dev ]))
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      # only for cross without native execute support because the canExecute "emulator" call has a format that I can't get CMake to accept
-      (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "WANT_DOC" withDocumentation)
+    (lib.cmakeBool "WANT_DEMO" withExamples)
+    (lib.cmakeBool "WANT_TESTS" finalAttrs.finalPackage.doCheck)
+    # Keeps finding & using glib-compile-resources from buildInputs otherwise
+    (lib.cmakeFeature "CMAKE_PROGRAM_PATH" (lib.makeBinPath [ buildPackages.glib.dev ]))
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # only for cross without native execute support because the canExecute "emulator" call has a format that I can't get CMake to accept
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+  ];
 
   preInstall = lib.optionalString withDocumentation ''
     # gtkdoc-mkhtml generates images without write permissions, errors out during install
@@ -103,22 +99,26 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Parse and query the geonames database dump";
     mainProgram = "geonames-demo";
     homepage = "https://gitlab.com/ubports/development/core/geonames";
     changelog = "https://gitlab.com/ubports/development/core/geonames/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.all;
     # Cross requires hostPlatform emulation during build
     # https://gitlab.com/ubports/development/core/geonames/-/issues/1
     broken =
-      stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.emulatorAvailable buildPackages;
+      !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
+      && !stdenv.hostPlatform.emulatorAvailable buildPackages;
     pkgConfigModules = [
       "geonames"
     ];

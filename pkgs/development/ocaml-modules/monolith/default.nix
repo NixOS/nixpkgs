@@ -4,7 +4,7 @@
   fetchFromGitLab,
   afl-persistent,
   pprint,
-  version ? "20250314",
+  version ? "20250922",
 }:
 
 buildDunePackage {
@@ -18,7 +18,7 @@ buildDunePackage {
     owner = "fpottier";
     repo = "monolith";
     tag = version;
-    hash = "sha256-hIB3QSOLARumRgpUroTFUzSreHw7kMikGde+mB28sGM=";
+    hash = "sha256-uYUbrWSE99556jiCgDUc8xDaob3rFPXLBMPM3lN6Xh8=";
   };
 
   propagatedBuildInputs = [

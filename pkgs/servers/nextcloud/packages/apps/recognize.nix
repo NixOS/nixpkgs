@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  nodejs,
+  nodejs_22,
   node-pre-gyp,
   node-gyp,
   python3,
@@ -15,16 +15,17 @@
   ncVersion,
 }:
 let
+  nodejs = nodejs_22;
   latestVersionForNc = {
-    "31" = {
-      version = "9.0.0";
-      appHash = "sha256-hhHWCzaSfV41Ysuq4WXjy63mflgEsb2qdGapHE8fuA8=";
-      modelHash = "sha256-WzK9StICup/YuRcuM575DiPYHsvXGt9CRrAoBVGbXHI=";
+    "32" = {
+      version = "10.0.7";
+      appHash = "sha256-quuH9ZNQhvlJ6SsFeboVIrMtF9K6ckpQkXb9OXDvFm8=";
+      modelHash = "sha256-Q862f4mNWE6V4ZUpfNFZrs4kwRF/29uETCroyie0+zA=";
     };
-    "30" = {
-      version = "8.2.0";
-      appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
-      modelHash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
+    "33" = {
+      version = "11.0.1";
+      appHash = "sha256-x3LXZKDWmzCYLTaNqSvgu4Gvrn6w2c/jifNCx1oaw1U=";
+      modelHash = "sha256-Yx/NJwtD4ltETpkzlcadZsFKqEmMneoZaXiHVSB1WoE=";
     };
   };
   currentVersionInfo =
@@ -35,39 +36,34 @@ stdenv.mkDerivation rec {
   pname = "nextcloud-app-recognize";
   inherit (currentVersionInfo) version;
 
-  srcs =
-    [
-      (fetchurl {
-        inherit version;
-        url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
-        hash = currentVersionInfo.appHash;
-      })
+  srcs = [
+    (fetchurl {
+      url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
+      hash = currentVersionInfo.appHash;
+    })
 
-      (fetchurl {
-        inherit version;
-        url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
-        hash = currentVersionInfo.modelHash;
-      })
-    ]
-    ++ lib.optionals useLibTensorflow [
-      (fetchurl rec {
-        # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
-        version = "2.9.1";
-        url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-${version}.tar.gz";
-        hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
-      })
-    ];
+    (fetchurl {
+      url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
+      hash = currentVersionInfo.modelHash;
+    })
+  ]
+  ++ lib.optionals useLibTensorflow [
+    (fetchurl {
+      # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
+      url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz";
+      hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
+    })
+  ];
 
-  unpackPhase =
-    ''
-      # Merge the app and the models from github
-      tar -xzpf "${builtins.elemAt srcs 0}" recognize;
-      tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
-    ''
-    + lib.optionalString useLibTensorflow ''
-      # Place the tensorflow lib at the right place for building
-      tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
-    '';
+  unpackPhase = ''
+    # Merge the app and the models from github
+    tar -xzpf "${builtins.elemAt srcs 0}" recognize
+    tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
+  ''
+  + lib.optionalString useLibTensorflow ''
+    # Place the tensorflow lib at the right place for building
+    tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
+  '';
 
   postPatch = ''
     # Make it clear we are not reading the node in settings
@@ -81,12 +77,15 @@ stdenv.mkDerivation rec {
       --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
-
-
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
     ln -s ${lib.getExe ffmpeg-headless} recognize/node_modules/ffmpeg-static/ffmpeg
+
+    substituteInPlace recognize/lib/Classifiers/Classifier.php \
+      --replace-fail \
+        'taskset' \
+        '${lib.getExe' util-linux "taskset"}'
   '';
 
   nativeBuildInputs = lib.optionals useLibTensorflow [
@@ -98,30 +97,39 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = lib.optionalString useLibTensorflow ''
+    runHook preBuild
+
     cd recognize
 
     # Install tfjs dependency
     export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
     node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}
+    rm -r ./build-tmp-napi-v*/
     cd -
 
     # Test tfjs returns exit code 0
     node src/test_libtensorflow.js
     cd ..
+
+    runHook postBuild
   '';
+
   installPhase = ''
+    runHook preInstall
+
     approot="$(dirname $(dirname $(find -path '*/appinfo/info.xml' | head -n 1)))"
-    if [ -d "$approot" ];
-    then
+    if [ -d "$approot" ]; then
       mv "$approot/" $out
       chmod -R a-w $out
     fi
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ beardhatcode ];
+  meta = {
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ beardhatcode ];
     longDescription = ''
       Nextcloud app that does Smart media tagging and face recognition with on-premises machine learning models.
       This app goes through your media collection and adds fitting tags, automatically categorizing your photos and music.

@@ -15,20 +15,24 @@
   dialog,
   dbiSupport ? false,
   libdbi ? null,
-  libdbiDrivers ? null,
+  libdbi-drivers ? null,
   postgresSupport ? false,
   libpq ? null,
+  libgudev,
+  glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gammu";
-  version = "1.42.0";
+  version = "1.43.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "gammu";
-    rev = version;
-    sha256 = "sha256-aeaGHVxOMiXRU6RHws+oAnzdO9RY1jw/X/xuGfSt76I=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-+mZBELwFUEL4S3IUIIa83TaNIYQxjQE1TvWhXTcIfYc=";
   };
 
   patches = [
@@ -44,29 +48,36 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    # Fix build with CMake 4
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   strictDeps = true;
 
-  buildInputs =
-    [
-      bash
-      bluez
-      libusb1
-      curl
-      gettext
-      sqlite
-      libiconv
-    ]
-    ++ lib.optionals dbiSupport [
-      libdbi
-      libdbiDrivers
-    ]
-    ++ lib.optionals postgresSupport [ libpq ];
+  buildInputs = [
+    bash
+    bluez
+    libusb1
+    curl
+    gettext
+    glib
+    sqlite
+    libiconv
+    libgudev
+  ]
+  ++ lib.optionals dbiSupport [
+    libdbi
+    libdbi-drivers
+  ]
+  ++ lib.optionals postgresSupport [ libpq ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.coroa ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

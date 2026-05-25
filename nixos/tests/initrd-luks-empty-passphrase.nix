@@ -14,13 +14,9 @@ in
 {
   name = "initrd-luks-empty-passphrase";
 
-  _module.args.systemdStage1 = lib.mkDefault false;
-
   nodes.machine =
     { pkgs, ... }:
     {
-      imports = lib.optionals (!systemdStage1) [ ./common/auto-format-root-device.nix ];
-
       virtualisation = {
         emptyDiskImages = [ 512 ];
         useBootLoader = true;
@@ -30,13 +26,12 @@ in
         # the new root device is /dev/vdb
         # an empty 512MiB drive, containing no Nix store.
         mountHostNixStore = true;
-        fileSystems."/".autoFormat = lib.mkIf systemdStage1 true;
       };
 
       boot.loader.systemd-boot.enable = true;
-      boot.initrd.systemd = lib.mkIf systemdStage1 {
-        enable = true;
-        emergencyAccess = true;
+      boot.initrd.systemd = {
+        enable = systemdStage1;
+        emergencyAccess = lib.mkIf systemdStage1 true;
       };
       environment.systemPackages = with pkgs; [ cryptsetup ];
 
@@ -90,6 +85,8 @@ in
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
     machine.succeed("echo "" | cryptsetup luksFormat /dev/vdb --batch-mode")
+    machine.succeed("echo "" | cryptsetup luksOpen /dev/vdb cryptroot")
+    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks-wrong-keyfile.conf")
     machine.succeed("sync")
     machine.crash()

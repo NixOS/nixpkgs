@@ -23,19 +23,19 @@ let
     }
     .${system} or throwSystem;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flywheel-cli";
   version = "16.2.0";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/flywheel-dist/cli/${version}/fw-${os}_amd64-${version}.zip";
+    url = "https://storage.googleapis.com/flywheel-dist/cli/${finalAttrs.version}/fw-${os}_amd64-${finalAttrs.version}.zip";
     inherit sha256;
   };
 
   nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
-    unzip ${src}
+    unzip ${finalAttrs.src}
   '';
 
   installPhase = ''
@@ -44,16 +44,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library and command line interface for interacting with a Flywheel site";
     mainProgram = "fw";
     homepage = "https://gitlab.com/flywheel-io/public/python-cli";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ rbreslow ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rbreslow ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
     ];
   };
-}
+})

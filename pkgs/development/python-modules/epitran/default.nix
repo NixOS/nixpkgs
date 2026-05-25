@@ -6,7 +6,9 @@
   unittestCheckHook,
 
   setuptools,
+  setuptools-scm,
 
+  jamo,
   regex,
   panphon,
   marisa-trie,
@@ -15,19 +17,23 @@
 
 buildPythonPackage rec {
   pname = "epitran";
-  version = "1.24";
+  version = "1.35.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmort27";
     repo = "epitran";
-    tag = version;
-    hash = "sha256-AH4q8J5oMaUVJ559qe/ZlJXlCcGdxWnxMhnZKCH5Rlk=";
+    tag = "v${version}";
+    hash = "sha256-XXEZEptrVH+wfWm85B8yZ+RI+6AUZjWFKMjst/V7aE0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
+    jamo
     regex
     panphon
     marisa-trie
@@ -47,11 +53,11 @@ buildPythonPackage rec {
     "epitran.vector"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for transcribing languages into IPA";
     homepage = "https://github.com/dmort27/epitran";
-    changelog = "https://github.com/dmort27/epitran/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    changelog = "https://github.com/dmort27/epitran/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

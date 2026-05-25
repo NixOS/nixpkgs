@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Zero-configuration fan daemon for ThinkPads";
     mainProgram = "zcfan";
     homepage = "https://github.com/cdown/zcfan";
-    changelog = "https://github.com/cdown/zcfan/tags/${finalAttrs.version}";
+    changelog = "https://github.com/cdown/zcfan/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch

@@ -9,39 +9,39 @@
   pkg-config,
   nixVersions,
   nix-update-script,
-  enableNixImport ? true,
+  enableNixImport ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.11.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
-    owner = "tweag";
+    owner = "nickel-lang";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-I7cLVrkJhB3aJeE/A3tpFEUj0AkvcONSXD8NtnE5eQ0=";
+    hash = "sha256-G+ik4tMr+WsDpiEFYv80ruBR/SpeEg9agUWqgXrq7UI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DzSfwBVeRT/GAXWyZKZjlDvj95bQzrkqIgZZ2EZw7eQ=";
+  cargoHash = "sha256-E3UBkLxd7AC/Pk1Zgy+KvHTPXgATqIr7lZXPB8vlSWs=";
 
   cargoBuildFlags = [
-    "-p nickel-lang-cli"
-    "-p nickel-lang-lsp"
+    "--package"
+    "nickel-lang-cli"
+    "--package"
+    "nickel-lang-lsp"
   ];
 
-  nativeBuildInputs =
-    [
-      python3
-      gitMinimal
-    ]
-    ++ lib.optionals enableNixImport [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    python3
+    gitMinimal
+  ]
+  ++ lib.optionals enableNixImport [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_24
+    nixVersions.nix_2_28
     boost
   ];
 
@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -94,11 +93,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
+    changelog = "https://github.com/nickel-lang/nickel/blob/${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       felschr
       matthiasbeyer
+      yannham
     ];
     mainProgram = "nickel";
   };

@@ -9,7 +9,6 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   python-dateutil,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "graphene";
   version = "3.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
@@ -44,15 +41,15 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "graphene" ];
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL Framework for Python";
     homepage = "https://github.com/graphql-python/graphene";
     changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

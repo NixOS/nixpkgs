@@ -2,13 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
-
-  # dependencies
-  importlib-metadata,
 
   # tests
   pytestCheckHook,
@@ -30,8 +26,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
-
   nativeCheckInputs = [
     pytestCheckHook
     pypng
@@ -45,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "segno" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/heuer/segno/releases/tag/${src.tag}";
     description = "QR Code and Micro QR Code encoder";
     mainProgram = "segno";
     homepage = "https://github.com/heuer/segno/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

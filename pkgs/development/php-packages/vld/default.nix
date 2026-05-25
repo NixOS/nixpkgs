@@ -6,15 +6,18 @@
   php,
 }:
 
+let
+  version = "0.19.1";
+in
 buildPecl {
   pname = "vld";
-  version = "0.18.0-unstable-2024-08-22";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "derickr";
     repo = "vld";
-    rev = "dc56f73a25b0230745afb5523871f2e8dd33fccd";
-    hash = "sha256-pQ1KIdGtV7bN5nROOJHR7C1eFMqVioTNLPAsJzH86NI=";
+    tag = version;
+    hash = "sha256-fNmDH5jUwwYYgIpDSvb+NVcg+q97QzKCcx1uaMBwDrs=";
   };
 
   # Tests relies on PHP 7.0
@@ -26,7 +29,7 @@ buildPecl {
     description = "Vulcan Logic Dumper hooks into the Zend Engine and dumps all the opcodes (execution units) of a script";
     homepage = "https://github.com/derickr/vld";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     broken = lib.versionOlder php.version "8.2";
   };
 }

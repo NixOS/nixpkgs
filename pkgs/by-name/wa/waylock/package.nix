@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   libxkbcommon,
   pam,
   pkg-config,
@@ -10,23 +10,24 @@
   wayland,
   wayland-scanner,
   wayland-protocols,
-  zig_0_14,
+  zig_0_16,
 }:
-
+let
+  zig = zig_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "1.4.0";
+  version = "1.6.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ifreund";
     repo = "waylock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lshXVqSn50AujTjIJIcbyhe5GeLLMdmF+Vh3/QvZt00=";
+    hash = "sha256-A/XPgoon1J+fmEVUGuqvqbimRRDfLPkzkMYipPaKrfo=";
   };
 
   postPatch = ''
-    substituteInPlace build.zig --replace-fail "1.4.0-dev" "1.4.0"
+    substituteInPlace build.zig --replace-fail "1.4.0-dev" "${finalAttrs.version}"
   '';
 
   deps = callPackage ./build.zig.zon.nix { };
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     scdoc
     wayland-scanner
-    zig_0_14.hook
+    zig
   ];
 
   buildInputs = [

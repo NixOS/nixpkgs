@@ -1,8 +1,5 @@
 {
-  jq,
   lib,
-  moreutils,
-  prettier,
   vscode-utils,
 }:
 
@@ -10,21 +7,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "prettier-vscode";
     publisher = "esbenp";
-    version = "11.0.0";
-    hash = "sha256-pNjkJhof19cuK0PsXJ/Q/Zb2H7eoIkfXJMLZJ4lDn7k=";
+    version = "12.4.0";
+    hash = "sha256-RtIqVns16+W9/9coBFd0LNZ+ZdfhslC7d1qyvoZHmkI=";
   };
-
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-
-  buildInputs = [ prettier ];
-
-  postInstall = ''
-    cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."prettier.prettierPath".default = "${prettier}"' package.json | sponge package.json
-  '';
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";

@@ -17,15 +17,15 @@ in
 
 python3'.pkgs.buildPythonApplication rec {
   pname = "opshin";
-  version = "0.24.2";
+  version = "0.24.3";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "opshin";
     tag = version;
-    hash = "sha256-L0vWEXlghXssT9oUw5AYG3/4ALoB/NH90JV8Kdl2n30=";
+    hash = "sha256-2HfX4yNCVILGuztxwA1L+In+ZiSXLDaO+K9ccgHn3zw=";
   };
 
   propagatedBuildInputs = with python3'.pkgs; [
@@ -39,11 +39,11 @@ python3'.pkgs.buildPythonApplication rec {
     ordered-set
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple pythonic programming language for Smart Contracts on Cardano";
     homepage = "https://opshin.dev";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aciceri ];
     mainProgram = "opshin";
   };
 }

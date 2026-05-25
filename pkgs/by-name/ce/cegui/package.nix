@@ -22,30 +22,32 @@ stdenv.mkDerivation {
     hash = "sha256-9lZ7eBwmxZ33XNDJXQ2lbCcH5JyH0KoY1mj/g+2HOJs=";
   };
 
+  patches = [
+    ./cmake-minimum-required.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs =
-    [
-      ogre
-      freetype
-      boost
-      expat
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    ogre
+    freetype
+    boost
+    expat
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
-  cmakeFlags =
-    [
-      "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-    ];
+  cmakeFlags = [
+    "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     branch = "v0";
@@ -57,11 +59,11 @@ stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cegui.org.uk/";
     description = "C++ Library for creating GUIs";
     mainProgram = "CEGUISampleFramework-0.9999";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

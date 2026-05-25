@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -51,6 +50,9 @@
       ];
 
       boot.initrd.systemd = {
+        storePaths = lib.mkIf config.system.etc.overlay.mutable [
+          "${config.system.nixos-init.package}/bin/clear-etc-opaque"
+        ];
         mounts = [
           {
             where = "/run/nixos-etc-metadata";
@@ -103,20 +105,18 @@
             );
             requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
-            requires =
-              [
-                config.boot.initrd.systemd.services.initrd-find-etc.name
-              ]
-              ++ lib.optionals config.system.etc.overlay.mutable [
-                config.boot.initrd.systemd.services."rw-etc".name
-              ];
-            after =
-              [
-                config.boot.initrd.systemd.services.initrd-find-etc.name
-              ]
-              ++ lib.optionals config.system.etc.overlay.mutable [
-                config.boot.initrd.systemd.services."rw-etc".name
-              ];
+            requires = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ]
+            ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
+            ];
+            after = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ]
+            ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
+            ];
             unitConfig = {
               RequiresMountsFor = [
                 "/sysroot/nix/store"
@@ -133,28 +133,30 @@
               before = [ "initrd-fs.target" ];
               unitConfig = {
                 DefaultDependencies = false;
-                RequiresMountsFor = "/sysroot";
+                RequiresMountsFor = [
+                  "/sysroot"
+                  # Needed so we can clear stale opaque markers from the
+                  # upperdir based on the contents of the new metadata layer
+                  # before the overlay is mounted.
+                  "/run/nixos-etc-metadata"
+                ];
               };
               serviceConfig = {
                 Type = "oneshot";
-                ExecStart = ''
-                  /bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work
-                '';
+                ExecStart = [
+                  "/bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work"
+                  "${config.system.nixos-init.package}/bin/clear-etc-opaque /run/nixos-etc-metadata /sysroot/.rw-etc/upper"
+                ];
               };
             };
           })
           {
             initrd-find-etc = {
               description = "Find the path to the etc metadata image and based dir";
-              requires = [
-                config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-              ];
-              after = [
-                config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-              ];
               before = [ "shutdown.target" ];
               conflicts = [ "shutdown.target" ];
               requiredBy = [ "initrd.target" ];
+              path = [ config.system.nixos-init.package ];
               unitConfig = {
                 DefaultDependencies = false;
                 RequiresMountsFor = "/sysroot/nix/store";
@@ -162,20 +164,8 @@
               serviceConfig = {
                 Type = "oneshot";
                 RemainAfterExit = true;
+                ExecStart = "${config.system.nixos-init.package}/bin/find-etc";
               };
-
-              script = # bash
-                ''
-                  set -uo pipefail
-
-                  closure="$(realpath /nixos-closure)"
-
-                  metadata_image="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-metadata-image")"
-                  ln -s "/sysroot$metadata_image" /etc-metadata-image
-
-                  basedir="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-basedir")"
-                  ln -s "/sysroot$basedir" /etc-basedir
-                '';
             };
           }
         ];

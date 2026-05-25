@@ -12,16 +12,19 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "yafc-ce";
-  version = "2.11.1";
+  version = "2.18.1";
 
   src = fetchFromGitHub {
-    owner = "shpaass";
+    owner = "Yafc-CE";
     repo = "yafc-ce";
-    rev = finalAttrs.version;
-    hash = "sha256-n6twiCIQ1nMSidfmdl2py5wHvx4kk6skK0f8chXTCjQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MdaYAustOMFO2rim0o2FnEhFWINa9E1jEvIQS9SnEHY=";
   };
 
-  projectFile = [ "Yafc/Yafc.csproj" ];
+  projectFile = [
+    "Yafc.I18n.Generator/Yafc.I18n.Generator.csproj"
+    "Yafc/Yafc.csproj"
+  ];
   testProjectFile = [ "Yafc.Model.Tests/Yafc.Model.Tests.csproj" ];
   nugetDeps = ./deps.json;
 
@@ -44,9 +47,9 @@ buildDotnetModule (finalAttrs: {
 
       YAFC Community Edition is an updated and actively-maintained version of the original YAFC.
     '';
-    homepage = "https://github.com/shpaass/yafc-ce";
-    downloadPage = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
-    changelog = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/Yafc-CE/yafc-ce";
+    downloadPage = "https://github.com/Yafc-CE/yafc-ce/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Yafc-CE/yafc-ce/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       diamond-deluxe

@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "protolint";
-  version = "0.55.6";
+  version = "0.56.4";
 
   src = fetchFromGitHub {
     owner = "yoheimuta";
     repo = "protolint";
     rev = "v${version}";
-    hash = "sha256-RTej9zVQz6GESAoAAChidiolGEoHabUYlEZSV2gc8KQ=";
+    hash = "sha256-2R+TW8z3XgjavK19PGy9hMpN8WOSeWbb/vcSWbbBmJc=";
   };
 
   vendorHash = "sha256-RS0t7n6pLYVKHluQtXsMjYL1SvN7IZFdKmkxOI8wFoE=";
@@ -35,11 +35,11 @@ buildGoModule rec {
       "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.revision=${rev}"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable linter and fixer to enforce Protocol Buffer style and conventions";
     homepage = "https://github.com/yoheimuta/protolint";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "protolint";
   };

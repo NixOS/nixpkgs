@@ -9,7 +9,7 @@
   curl,
   dbus-glib,
   gtk3,
-  libXtst,
+  libxtst,
   libva,
   pciutils,
   pipewire,
@@ -22,7 +22,6 @@ let
   binaryName = "librewolf";
 
   mozillaPlatforms = {
-    i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
     aarch64-linux = "linux-arm64";
   };
@@ -37,19 +36,18 @@ let
 
   pname = "librewolf-bin-unwrapped";
 
-  version = "139.0-1";
+  version = "150.0.2-1";
 in
 
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://gitlab.com/api/v4/projects/44042130/packages/generic/librewolf/${version}/librewolf-${version}-${arch}-package.tar.xz";
+    url = "https://codeberg.org/api/packages/librewolf/generic/librewolf/${version}/librewolf-${version}-${arch}-package.tar.xz";
     hash =
       {
-        i686-linux = "sha256-nWJRYEmjX8aE9zSuLU1FMg4FeZuDiC1eu+nxIRPhlNE=";
-        x86_64-linux = "sha256-2PmN18Rda0KeguQRsd5sZr3TRS8cEkTY21WhxxahCFc=";
-        aarch64-linux = "sha256-EzgGhIrS/D6IEylrhX0uvpSkWte/mHMyUYjXsm0PUn8=";
+        x86_64-linux = "sha256-KMpSMcLJ/wkySo2gbiECJfH2/hcxdTSLXwKcZLMkvhk=";
+        aarch64-linux = "sha256-Dxs7eRN6nj3e/6pQ3z0d27tnTtD6CefhUxPZGwTVL+Y=";
       }
       .${stdenv.hostPlatform.system} or throwSystem;
   };
@@ -65,7 +63,7 @@ stdenv.mkDerivation {
     adwaita-icon-theme
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   runtimeDependencies = [
@@ -113,5 +111,8 @@ stdenv.mkDerivation {
     mainProgram = "librewolf";
     hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      "librewolf-bin lacks maintenance in nixpkgs, consider using an alternative"
+    ];
   };
 }

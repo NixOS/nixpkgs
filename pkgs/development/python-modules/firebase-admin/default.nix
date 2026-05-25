@@ -1,32 +1,35 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   cachecontrol,
   cryptography,
   google-api-python-client,
   google-cloud-firestore,
   google-cloud-storage,
+  h2,
+  httpx,
   pyjwt,
   requests,
+  respx,
   pytestCheckHook,
   pytest-asyncio,
   pytest-localserver,
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firebase-admin";
-  version = "6.8.0";
+  version = "7.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-admin-python";
-    tag = "v${version}";
-    hash = "sha256-N8DidHocdIV5qFEPZIqWZPfxvIfJzd/+jXGk/OZBT1s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RaoBR9NVFdpIXuSVQScAySWpUOumV+flkfKMBGOFs6w=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +40,7 @@ buildPythonPackage rec {
     google-api-python-client
     google-cloud-firestore
     google-cloud-storage
+    httpx
     pyjwt
     requests
   ];
@@ -46,6 +50,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-localserver
     pytest-mock
+    h2
+    respx
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -64,11 +70,11 @@ buildPythonPackage rec {
   meta = {
     description = "Firebase Admin Python SDK";
     homepage = "https://github.com/firebase/firebase-admin-python";
-    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jhahn
       sarahec
     ];
   };
-}
+})

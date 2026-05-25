@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -11,7 +11,7 @@
   aiohttp,
   dataclasses-json,
   httpx-sse,
-  langchain,
+  langchain-classic,
   langchain-core,
   langsmith,
   numpy,
@@ -36,43 +36,37 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.24";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-community";
     tag = "libs/community/v${version}";
-    hash = "sha256-4Rcczuz7tCb10HPvO15n48DBKjVBLXNPdRfD4lRKNGk=";
+    hash = "sha256-N92YDmej2shQQlktr0veFOKyGFWemFj0hdJIYu1rYSc=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
   build-system = [ pdm-backend ];
 
+  # Only needed for mixed python 3.12/3.13 builds
   pythonRelaxDeps = [
-    # Each component release requests the exact latest langchain and -core.
-    # That prevents us from updating individual components.
-    "langchain"
-    "langchain-core"
     "numpy"
-    "pydantic-settings"
-    "tenacity"
-  ];
-
-  pythonRemoveDeps = [
-    "bs4"
   ];
 
   dependencies = [
     aiohttp
     dataclasses-json
     httpx-sse
-    langchain
+    langchain-classic
     langchain-core
     langsmith
     numpy
@@ -102,7 +96,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/unit_tests"
   ];
 
@@ -114,24 +108,33 @@ buildPythonPackage rec {
     # flaky
     "test_llm_caching"
     "test_llm_caching_async"
+    # Triggered by https://github.com/Mause/duckdb_engine/issues/1379
+    "test_table_info"
+    "test_sql_database_run"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_no_dynamic__all__"
   ];
 
   disabledTestPaths = [
     # depends on Pydantic v1 notations, will not load
     "tests/unit_tests/document_loaders/test_gitbook.py"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    # https://docs.pytest.org/en/stable/deprecations.html#applying-a-mark-to-a-fixture-function
+    "tests/unit_tests/document_loaders/test_hugging_face.py"
+    "tests/unit_tests/indexes/test_sql_record_manager.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "libs/community/v([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libs/community/v";
   };
 
   meta = {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain-community";
-    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/libs%2Fcommunity%2fv${version}";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

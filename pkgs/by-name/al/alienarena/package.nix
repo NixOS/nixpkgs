@@ -7,8 +7,8 @@
   libjpeg,
   libogg,
   libvorbis,
-  libX11,
-  libXxf86vm,
+  libx11,
+  libxxf86vm,
   openal,
   pkg-config,
   stdenv,
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     libjpeg
     libogg
     libvorbis
-    libX11
-    libXxf86vm
+    libx11
+    libxxf86vm
     openal
   ];
 
@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://alienarena.org";
     # Engine is under GPLv2, everything else is under
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };

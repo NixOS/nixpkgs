@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-1p";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "Enzime";
     repo = "age-plugin-1p";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QYHHD7wOgRxRVkUOjwMz5DV8oxlb9mmb2K4HPoISguU=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Use SSH keys from 1Password with age";
     mainProgram = "age-plugin-1p";
     homepage = "https://github.com/Enzime/age-plugin-1p";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Enzime ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Enzime ];
   };
-}
+})

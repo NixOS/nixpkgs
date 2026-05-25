@@ -41,7 +41,7 @@ drvArgs:
             base=$(basename "${finalAttrs.vocabName}")
             root=''${fname%$base}
             root=''${root:-.}
-            find "$root" -mindepth 1 -maxdepth 1 -type -d \
+            find "$root" -mindepth 1 -maxdepth 1 -type d \
                 -not \( -name bin -or -name doc -or -name lib \) -exec \
                 cp -r -t "$out/lib/factor/${finalAttrs.vocabRoot}" {} \+
         else

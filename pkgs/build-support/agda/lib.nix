@@ -6,8 +6,8 @@
     * The resulting path may not be normalized.
     *
     * Examples:
-    * interfaceFile pkgs.agda.version "./Everything.agda" == "_build/2.6.4.3/agda/./Everything.agdai"
-    * interfaceFile pkgs.agda.version "src/Everything.lagda.tex" == "_build/2.6.4.3/agda/src/Everything.agdai"
+    * interfaceFile pkgs.agda.version "./Foo.agda" == "_build/AGDA_VERSION/agda/./Foo.agdai"
+    * interfaceFile pkgs.agda.version "src/Foo.lagda.tex" == "_build/AGDA_VERSION/agda/src/Foo.agdai"
   */
   interfaceFile =
     agdaVersion: agdaFile:
@@ -21,5 +21,10 @@
     Takes an arbitrary derivation and says whether it is an agda library package
     *  that is not marked as broken.
   */
-  isUnbrokenAgdaPackage = pkg: pkg.isAgdaDerivation or false && !pkg.meta.broken;
+  isUnbrokenAgdaPackage =
+    pkg:
+    let
+      r = builtins.tryEval (pkg.isAgdaDerivation or false && !pkg.meta.broken);
+    in
+    r.success && r.value;
 }

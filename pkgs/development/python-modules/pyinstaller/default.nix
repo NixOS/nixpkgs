@@ -5,7 +5,7 @@
   fetchPypi,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # native dependencies
   zlib,
@@ -25,15 +25,15 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller";
-  version = "6.14.0";
+  version = "6.18.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zFXNwhSRci10Ez41qzY6iGebN+4tdvnYCty8Cuhi1jA=";
+    hash = "sha256-zcUHVCeDURytSFb85YL9w36fKWZcpZaInGY8g+yMbsk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   buildInputs = [ zlib.dev ];
 
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A tool to bundle a python application with dependencies into a single package";
+    description = "Tool to bundle a python application with dependencies into a single package";
     homepage = "https://pyinstaller.org/";
     changelog = "https://pyinstaller.org/en/v${version}/CHANGES.html";
     downloadPage = "https://pypi.org/project/pyinstaller/";

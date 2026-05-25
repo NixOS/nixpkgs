@@ -14,7 +14,7 @@
   libpng,
   librealsense,
   libxml2,
-  libX11,
+  libx11,
   nlohmann_json,
   #ogre,
   openblas,
@@ -24,7 +24,7 @@
   stdenv,
   texliveSmall,
   v4l-utils,
-  xorg,
+  libpthread-stubs,
   zbar,
   zlib,
 }:
@@ -70,31 +70,30 @@ stdenv.mkDerivation (finalAttrs: {
     texliveSmall
   ];
 
-  buildInputs =
-    [
-      eigen
-      lapack
-      libdc1394
-      libdmtx
-      libglvnd
-      libjpeg
-      libpng
-      librealsense
-      libX11
-      libxml2
-      nlohmann_json
-      #ogre
-      openblas
-      opencv
-      python3Packages.numpy
-      xorg.libpthreadstubs
-      zbar
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      coin3d
-      v4l-utils
-    ];
+  buildInputs = [
+    eigen
+    lapack
+    libdc1394
+    libdmtx
+    libglvnd
+    libjpeg
+    libpng
+    librealsense
+    libx11
+    libxml2
+    nlohmann_json
+    #ogre
+    openblas
+    opencv
+    python3Packages.numpy
+    libpthread-stubs
+    zbar
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    coin3d
+    v4l-utils
+  ];
 
   doCheck = true;
 

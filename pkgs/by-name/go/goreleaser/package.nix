@@ -1,30 +1,30 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   installShellFiles,
   buildPackages,
   testers,
   goreleaser,
 }:
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "goreleaser";
-  version = "2.9.0";
+  version = "2.15.4";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "goreleaser";
-    rev = "v${version}";
-    hash = "sha256-2nen0Bd7jBlRz9AbcQAiK1GdT0ZkP9gBu3TfbpXIX6M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KpOttfnlVB+4YHg/SHqJHjQtK7DDO2yh6WH1kQFe/tE=";
   };
 
-  vendorHash = "sha256-RN06Smr6HQGOUV3hQKxAbueDwI8ZlrnaF3vwrSesGOM=";
+  vendorHash = "sha256-I4y+0yT6/SFvJbJTByHn/EPQ3rNzpUEb4/7gtF+i80o=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.builtBy=nixpkgs"
   ];
 
@@ -53,18 +53,18 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = goreleaser;
     command = "goreleaser -v";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Deliver Go binaries as fast and easily as possible";
     homepage = "https://goreleaser.com";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sarcasticadmin
       techknowlogick
       caarlos0
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "goreleaser";
   };
-}
+})

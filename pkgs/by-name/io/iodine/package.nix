@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   zlib,
-  nettools,
+  net-tools,
   nixosTests,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ zlib ];
 
-  env.NIX_CFLAGS_COMPILE = ''-DIFCONFIGPATH="${nettools}/bin/" -DROUTEPATH="${nettools}/bin/"'';
+  env.NIX_CFLAGS_COMPILE = ''-DIFCONFIGPATH="${net-tools}/bin/" -DROUTEPATH="${net-tools}/bin/"'';
 
   installFlags = [ "prefix=\${out}" ];
 

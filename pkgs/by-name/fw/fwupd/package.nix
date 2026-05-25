@@ -3,6 +3,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
 
   # runPythonCommand
   runCommand,
@@ -16,9 +17,6 @@
   pkg-config,
   pkgsBuildBuild,
 
-  # propagatedBuildInputs
-  json-glib,
-
   # nativeBuildInputs
   ensureNewerSourcesForZipFilesHook,
   gettext,
@@ -26,7 +24,6 @@
   gobject-introspection,
   meson,
   ninja,
-  protobufc,
   shared-mime-info,
   vala,
   wrapGAppsNoGuiHook,
@@ -40,15 +37,16 @@
   fwupd-efi,
   gnutls,
   gusb,
-  libarchive,
   libcbor,
   libdrm,
   libgudev,
   libjcat,
   libmbim,
+  libmnl,
   libqmi,
   libuuid,
   libxmlb,
+  libxml2,
   modemmanager,
   pango,
   polkit,
@@ -131,7 +129,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.9";
+  version = "2.1.1";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -149,41 +147,54 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-Izh6PHMgUsOeez9uWSLoA2GhvawYQlEZo480vovxn38=";
+    hash = "sha256-pb5BBA+3KTeZZ8WyNDaY9EKNTxp4MT/3G/MEgQ+Nysk=";
   };
 
   patches = [
     # Install plug-ins and libfwupdplugin to $out output,
     # they are not really part of the library.
-    ./install-fwupdplugin-to-out.patch
+    ./0001-Install-fwupdplugin-to-out.patch
 
     # Installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
-    ./installed-tests-path.patch
+    ./0002-Add-output-for-installed-tests.patch
 
     # Since /etc is the domain of NixOS, not Nix,
     # we cannot install files there.
     # Let’s install the files to $prefix/etc
     # while still reading them from /etc.
     # NixOS module for fwupd will take take care of copying the files appropriately.
-    ./add-option-for-installation-sysconfdir.patch
+    ./0003-Add-option-for-installation-sysconfdir.patch
 
     # EFI capsule is located in fwupd-efi now.
-    ./efi-app-path.patch
+    ./0004-Get-the-efi-app-from-fwupd-efi.patch
+
+    # FIXME: remove patches that fix CI on aarch64 after next release
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/b3d721360faa4de7dd6960d8f9f8f13aa310715f.patch";
+      sha256 = "sha256-x37QCK7XBzUUjUj1m3jaNe1qvaqtszB9DGFyF8gC3Ig=";
+      name = "fix-mtdram-test-for-missing-kernel-module.patch";
+    })
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/9ad8b76dc6c5af005a2c712ae3a6f352b51e9eea.patch";
+      sha256 = "sha256-h9zLTHeJbfDoamdfICKc0ohQ51yJC4I/CK0SQ4H6rRk=";
+      name = "fix-test_get_devices-on-non-x86-architectures.patch";
+    })
   ];
 
-  postPatch =
-    ''
-      patchShebangs \
-        contrib/generate-version-script.py \
-        contrib/generate-man.py \
-        po/test-deps
-    ''
-    # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
-    + ''
-      substituteInPlace plugins/redfish/meson.build \
-        --replace-fail "get_option('tests')" "false"
-    '';
+  postPatch = ''
+    patchShebangs \
+      generate-build/generate-version-script.py \
+      generate-build/generate-man.py \
+      po/test-deps \
+      plugins/uefi-capsule/tests/grub2-mkconfig \
+      plugins/uefi-capsule/tests/grub2-reboot
+  ''
+  # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
+  + ''
+    substituteInPlace plugins/redfish/meson.build \
+      --replace-fail "get_option('tests')" "false"
+  '';
 
   strictDeps = true;
 
@@ -192,88 +203,83 @@ stdenv.mkDerivation (finalAttrs: {
     (pkgsBuildBuild.callPackage ./build-time-python.nix { })
   ];
 
-  propagatedBuildInputs = [
-    json-glib
+  nativeBuildInputs = [
+    ensureNewerSourcesForZipFilesHook # required for firmware zipping
+    gettext
+    gi-docgen
+    gobject-introspection
+    libxml2
+    meson
+    ninja
+    pkg-config
+    shared-mime-info
+    vala
+    wrapGAppsNoGuiHook
+
+    # jcat-tool at buildtime requires a home directory
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
-  nativeBuildInputs =
-    [
-      ensureNewerSourcesForZipFilesHook # required for firmware zipping
-      gettext
-      gi-docgen
-      gobject-introspection
-      meson
-      ninja
-      pkg-config
-      protobufc # for protoc
-      shared-mime-info
-      vala
-      wrapGAppsNoGuiHook
+  buildInputs = [
+    bash-completion
+    curl
+    elfutils
+    fwupd-efi
+    gnutls
+    gusb
+    libcbor
+    libdrm
+    libgudev
+    libjcat
+    libmbim
+    libmnl
+    libqmi
+    libuuid
+    libxmlb
+    modemmanager
+    pango
+    polkit
+    readline
+    sqlite
+    tpm2-tss
+    valgrind
+    xz # for liblzma
+  ]
+  ++ lib.optionals haveFlashrom [
+    flashrom
+  ];
 
-      # jcat-tool at buildtime requires a home directory
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
-
-  buildInputs =
-    [
-      bash-completion
-      curl
-      elfutils
-      fwupd-efi
-      gnutls
-      gusb
-      libarchive
-      libcbor
-      libdrm
-      libgudev
-      libjcat
-      libmbim
-      libqmi
-      libuuid
-      libxmlb
-      modemmanager
-      pango
-      polkit
-      protobufc
-      readline
-      sqlite
-      tpm2-tss
-      valgrind
-      xz # for liblzma
-    ]
-    ++ lib.optionals haveFlashrom [
-      flashrom
-    ];
-
-  mesonFlags =
-    [
-      (lib.mesonEnable "docs" true)
-      # We are building the official releases.
-      (lib.mesonEnable "supported_build" true)
-      (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
-      (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
-      (lib.mesonOption "efi_os_dir" "nixos")
-      (lib.mesonEnable "plugin_modem_manager" true)
-      (lib.mesonBool "vendor_metadata" true)
-      (lib.mesonBool "plugin_uefi_capsule_splash" false)
-      # TODO: what should this be?
-      (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
-      (lib.mesonEnable "umockdev_tests" false)
-      # We do not want to place the daemon into lib (cyclic reference)
-      "--libexecdir=${placeholder "out"}/libexec"
-    ]
-    ++ lib.optionals (!enablePassim) [
-      (lib.mesonEnable "passim" false)
-    ]
-    ++ lib.optionals (!haveFlashrom) [
-      (lib.mesonEnable "plugin_flashrom" false)
-    ];
+  mesonFlags = [
+    (lib.mesonEnable "docs" true)
+    # We are building the official releases.
+    (lib.mesonEnable "supported_build" true)
+    (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
+    (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
+    (lib.mesonOption "efi_os_dir" "nixos")
+    (lib.mesonEnable "plugin_modem_manager" true)
+    # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
+    # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
+    (lib.mesonEnable "hsi" isx86)
+    (lib.mesonBool "vendor_metadata" true)
+    (lib.mesonBool "plugin_uefi_capsule_splash" false)
+    # TODO: what should this be?
+    (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
+    (lib.mesonEnable "umockdev_tests" false)
+    # We do not want to place the daemon into lib (cyclic reference)
+    "--libexecdir=${placeholder "out"}/libexec"
+  ]
+  ++ lib.optionals (!enablePassim) [
+    (lib.mesonEnable "passim" false)
+  ]
+  ++ lib.optionals (!haveFlashrom) [
+    (lib.mesonEnable "plugin_flashrom" false)
+  ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
@@ -305,7 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
     addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
 
     echo "12345678901234567890123456789012" > machine-id
-    export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
+    export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id)
   '';
 
   postInstall = ''
@@ -354,11 +360,9 @@ stdenv.mkDerivation (finalAttrs: {
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
-      "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
-      "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd/LVFS-CA-2025PQ.pem"
       "pki/fwupd/LVFS-CA.pem"
-      "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
-      "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd-metadata/LVFS-CA-2025PQ.pem"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
     ];
@@ -396,7 +400,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://fwupd.org/";
     changelog = "https://github.com/fwupd/fwupd/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ rvdp ];
+    maintainers = with lib.maintainers; [
+      rvdp
+      johnazoidberg
+    ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };

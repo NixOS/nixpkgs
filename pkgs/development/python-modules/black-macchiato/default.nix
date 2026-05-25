@@ -2,23 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   black,
   fetchpatch,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "black-macchiato";
   version = "1.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wbolster";
     repo = "black-macchiato";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0lc9w50nlbmlzj44krk7kxcia202fhybbnwfh77xixlc7vb4rayl";
   };
 
@@ -30,20 +28,21 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ black ];
+  build-system = [ setuptools ];
+
+  dependencies = [ black ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    black
   ];
 
   pythonImportsCheck = [ "black" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is a small utility built on top of the black Python code formatter to enable formatting of partial files";
     mainProgram = "black-macchiato";
     homepage = "https://github.com/wbolster/black-macchiato";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jperras ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jperras ];
   };
-}
+})

@@ -1,38 +1,38 @@
 {
+  fetchFromGitHub,
   renode,
-  fetchurl,
-  writeScript,
+  lib,
 }:
+let
+  normalizedVersion =
+    v:
+    let
+      parts = lib.splitString "-" v;
+      result = builtins.head parts;
+    in
+    result;
+in
+renode.overrideAttrs (old: rec {
+  pname = "renode-unstable";
+  version = "1.16.1-unstable-2026-04-29";
 
-renode.overrideAttrs (
-  finalAttrs: _: {
-    pname = "renode-unstable";
-    version = "1.15.3+20250507git91a4bb342";
+  src = fetchFromGitHub {
+    owner = "renode";
+    repo = "renode";
+    rev = "67b2b9ce5e6162e60b4b46a21e0e5b696a3cdb45";
+    hash = "sha256-MPcSEijyfC49l96G7y220eljpEdz03uv9LrDm/LXHA0=";
+    fetchSubmodules = true;
+  };
 
-    src = fetchurl {
-      url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
-      hash = "sha256-x0g7wsaDCi3QUTEQcw/gGtzkWTmJB7ZZVqCE9fOyCFI=";
-    };
+  nugetDeps = ./deps.json;
 
-    passthru.updateScript =
-      let
-        versionRegex = "[0-9\\.\\+]+[^\\+]*.";
-      in
-      writeScript "${finalAttrs.pname}-updater" ''
-        #!/usr/bin/env nix-shell
-        #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused pup
+  prePatch = ''
+    sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${normalizedVersion version}.0")/g' src/Renode/Properties/AssemblyInfo.template
+    sed -i 's/AssemblyInformationalVersion("%INFORMATIONAL_VERSION%")/AssemblyInformationalVersion("${src.rev}")/g' src/Renode/Properties/AssemblyInfo.template
+    mv src/Renode/Properties/AssemblyInfo.template src/Renode/Properties/AssemblyInfo.cs
+  '';
 
-        latestVersion=$(
-          curl -sS https://builds.renode.io \
-            | pup 'a text{}' \
-            | egrep 'renode-${versionRegex}\.linux-dotnet\.tar\.gz' \
-            | head -n1 \
-            | sed -e 's,renode-\(.*\)\.linux-dotnet\.tar\.gz,\1,g'
-        )
-
-        update-source-version ${finalAttrs.pname} "$latestVersion" \
-          --file=pkgs/by-name/re/${finalAttrs.pname}/package.nix \
-          --system=x86_64-linux
-      '';
-  }
-)
+  passthru = old.passthru // {
+    updateScript = ./update.sh;
+  };
+})

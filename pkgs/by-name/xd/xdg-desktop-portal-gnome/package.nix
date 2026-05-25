@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-gnome";
-  version = "48.0";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/xdg-desktop-portal-gnome/${lib.versions.major finalAttrs.version}/xdg-desktop-portal-gnome-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zRWsouE2TaMI6zeWu4rkpXfmDKT+EgBrMVIyz9GciGE=";
+    hash = "sha256-zu7y+2izSz9mo97wozKiKnCvJyZB+2xQBlt6L949V1k=";
   };
 
   nativeBuildInputs = [
@@ -73,11 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Backend implementation for xdg-desktop-portal for the GNOME desktop environment";
     homepage = "https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome";
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
   };
 })

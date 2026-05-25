@@ -15,13 +15,13 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -31,19 +31,20 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.31.3";
+  version = "3.0.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
-    tag = "rel-${version}";
+    tag = "rel-${finalAttrs.version}";
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-tvK8UzJZvX9X2NKgqkyhi0ZzAb38Lu0ULze4L1Z3YfU=";
+    hash = "sha256-JPBNqgNrd892aVVEVipehMjZwQ4fktf9/gM/eAohD3Y=";
   };
 
   build-system = [
@@ -58,8 +59,10 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
+    setuptools
   ];
 
   nativeCheckInputs = [
@@ -73,6 +76,8 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  pytestFlags = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [ "pytensor" ];
 
   # Ensure that the installed package is used instead of the source files from the current workdir
@@ -81,6 +86,14 @@ buildPythonPackage rec {
   '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Numerical assertion error
+    # tests.unittest_tools.WrongValue: WrongValue
+    "test_op_sd"
+    "test_op_ss"
+
+    # AssertionError: equal_computations failed
+    "test_infer_shape_db_handles_xtensor_lowering"
+
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
     "add"
@@ -121,6 +134,7 @@ buildPythonPackage rec {
     "test_modes"
     "test_mul_s_v_grad"
     "test_multiple_outputs"
+    "test_nnet"
     "test_not_inplace"
     "test_numba_Cholesky_grad"
     "test_numba_pad"
@@ -151,7 +165,6 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sparse/sandbox/"
   ];
 
   passthru.updateScript = nix-update-script {
@@ -165,11 +178,10 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${version}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
-}
+})

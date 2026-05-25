@@ -4,11 +4,20 @@
   appimageTools,
   fetchurl,
   _7zz,
+  writeShellScript,
+  nix-update,
+  common-updater-scripts,
 }:
 
 let
   pname = "quba";
-  version = "1.4.2";
+  version = "1.5.0";
+
+  passthru.updateScript = writeShellScript "update-quiet" ''
+    ${lib.getExe nix-update} --system=x86_64-linux quba
+    hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw --file . quba.src.url --system aarch64-darwin)))
+    ${lib.getExe' common-updater-scripts "update-source-version"} quba $(nix eval --raw --file . quba.version) $hash --system=aarch64-darwin --ignore-same-version
+  '';
 
   meta = {
     description = "Viewer for electronic invoices";
@@ -22,16 +31,17 @@ let
 
   src = fetchurl {
     url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}.AppImage";
-    hash = "sha256-3goMWN5GeQaLJimUKbjozJY/zJmqc9Mvy2+6bVSt1p0=";
+    hash = "sha256-xB1r8DNFOFQQx+MeGC1mWhf7PuMavM7DyYRBlEjAZ8k=";
   };
 
-  appimageContents = appimageTools.extractType1 { inherit pname version src; };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-  linux = appimageTools.wrapType1 {
+  linux = appimageTools.wrapType2 {
     inherit
       pname
       version
       src
+      passthru
       meta
       ;
 
@@ -44,11 +54,16 @@ let
   };
 
   darwin = stdenvNoCC.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      passthru
+      meta
+      ;
 
     src = fetchurl {
       url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}-universal.dmg";
-      hash = "sha256-q7va2D9AT0BoPhfkub/RFQxGyF12uFaCDpSYIxslqMc=";
+      hash = "sha256-niuU1zkxNRmCYxzto3g6i6Z3k5KCAgVIVQMgOLZJnSE=";
     };
 
     unpackCmd = "7zz x -bd -osource -xr'!*/Applications' -xr'!*com.apple.provenance' $curSrc";

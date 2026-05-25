@@ -13,12 +13,12 @@ let
       file = pkgs.writeText "rule" (builtins.toJSON cfg);
     }
   );
-
 in
 {
   options = {
     services.opensnitch = {
       enable = lib.mkEnableOption "Opensnitch application firewall";
+      package = lib.mkPackageOption pkgs "opensnitch" { };
 
       rules = lib.mkOption {
         default = { };
@@ -52,49 +52,41 @@ in
         };
       };
 
+      upstreamDefaults = lib.mkOption {
+        description = ''
+          Whether to base the config declared in {option}`services.opensnitch.settings` on the upstream example config (<https://github.com/evilsocket/opensnitch/blob/master/daemon/data/default-config.json>)
+
+          Disable this if you want to declare your opensnitch config from scratch.
+        '';
+        type = lib.types.bool;
+        default = true;
+      };
+
+      configFile = lib.mkOption {
+        description = ''
+          Path to JSON config file. See: <https://github.com/evilsocket/opensnitch/blob/master/daemon/data/default-config.json>
+          If this option is set, it will override any configuration done in options.services.opensnitch.settings.
+        '';
+        example = "/etc/opensnitchd/default-config.json";
+        type = lib.types.path;
+        default =
+          let
+            generatedConfig = format.generate "config.json" cfg.settings;
+          in
+          if cfg.upstreamDefaults then
+            pkgs.runCommand "opensnitch-config.json" { } ''
+              ${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${cfg.package}/etc/opensnitchd/default-config.json ${format.generate "config.json" cfg.settings} >"$out"
+            ''
+          else
+            generatedConfig;
+        defaultText = lib.literalMD "JSON file generated from {option}`services.opensnitch.settings`";
+      };
+
       settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType = format.type;
 
           options = {
-            Server = {
-
-              Address = lib.mkOption {
-                type = lib.types.str;
-                description = ''
-                  Unix socket path (unix:///tmp/osui.sock, the "unix:///" part is
-                  mandatory) or TCP socket (192.168.1.100:50051).
-                '';
-              };
-
-              LogFile = lib.mkOption {
-                type = lib.types.path;
-                description = ''
-                  File to write logs to (use /dev/stdout to write logs to standard
-                  output).
-                '';
-              };
-
-            };
-
-            DefaultAction = lib.mkOption {
-              type = lib.types.enum [
-                "allow"
-                "deny"
-              ];
-              description = ''
-                Default action whether to block or allow application internet
-                access.
-              '';
-            };
-
-            InterceptUnknown = lib.mkOption {
-              type = lib.types.bool;
-              description = ''
-                Whether to intercept spare connections.
-              '';
-            };
-
             ProcMonitorMethod = lib.mkOption {
               type = lib.types.enum [
                 "ebpf"
@@ -102,22 +94,9 @@ in
                 "ftrace"
                 "audit"
               ];
+              default = "ebpf";
               description = ''
                 Which process monitoring method to use.
-              '';
-            };
-
-            LogLevel = lib.mkOption {
-              type = lib.types.enum [
-                0
-                1
-                2
-                3
-                4
-              ];
-              description = ''
-                Default log level from 0 to 4 (debug, info, important, warning,
-                error).
               '';
             };
 
@@ -126,29 +105,12 @@ in
                 "iptables"
                 "nftables"
               ];
+              default = if config.networking.nftables.enable then "nftables" else "iptables";
+              defaultText = lib.literalExpression ''if config.networking.nftables.enable then "nftables" else "iptables"'';
               description = ''
                 Which firewall backend to use.
               '';
             };
-
-            Stats = {
-
-              MaxEvents = lib.mkOption {
-                type = lib.types.int;
-                description = ''
-                  Max events to send to the GUI.
-                '';
-              };
-
-              MaxStats = lib.mkOption {
-                type = lib.types.int;
-                description = ''
-                  Max stats per item to keep in backlog.
-                '';
-              };
-
-            };
-
             Ebpf.ModulesPath = lib.mkOption {
               type = lib.types.nullOr lib.types.path;
               default =
@@ -158,12 +120,21 @@ in
                   null;
               defaultText = lib.literalExpression ''
                 if cfg.settings.ProcMonitorMethod == "ebpf" then
-                  "\\$\\{config.boot.kernelPackages.opensnitch-ebpf\\}/etc/opensnitchd"
+                  "''${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd"
                 else null;
               '';
               description = ''
                 Configure eBPF modules path. Used when
                 `settings.ProcMonitorMethod` is set to `ebpf`.
+              '';
+            };
+
+            Audit.AudispSocketPath = lib.mkOption {
+              type = lib.types.path;
+              default = "/run/audit/audispd_events";
+              description = ''
+                Configure audit socket path. Used when
+                `settings.ProcMonitorMethod` is set to `audit`.
               '';
             };
 
@@ -188,30 +159,21 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    # pkg.opensnitch is referred to elsewhere in the module so we don't need to worry about it being garbage collected
-    services.opensnitch.settings = lib.mapAttrs (_: v: lib.mkDefault v) (
-      builtins.fromJSON (
-        builtins.unsafeDiscardStringContext (
-          builtins.readFile "${pkgs.opensnitch}/etc/opensnitchd/default-config.json"
-        )
-      )
-    );
+    security.auditd = lib.mkIf (cfg.settings.ProcMonitorMethod == "audit") {
+      enable = true;
+      plugins.af_unix.active = true;
+    };
 
     systemd = {
-      packages = [ pkgs.opensnitch ];
+      packages = [ cfg.package ];
       services.opensnitchd = {
         wantedBy = [ "multi-user.target" ];
+        path = lib.optionals (cfg.settings.ProcMonitorMethod == "audit") [ pkgs.audit ];
         serviceConfig = {
-          ExecStart =
-            let
-              preparedSettings = removeAttrs cfg.settings (
-                lib.optional (cfg.settings.ProcMonitorMethod != "ebpf") "Ebpf"
-              );
-            in
-            [
-              ""
-              "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" preparedSettings}"
-            ];
+          ExecStart = [
+            ""
+            "${lib.getExe' cfg.package "opensnitchd"} --config-file ${cfg.configFile}"
+          ];
         };
         preStart = lib.mkIf (cfg.rules != { }) (
           let
@@ -245,11 +207,14 @@ in
       };
       tmpfiles.rules = [
         "d ${cfg.settings.Rules.Path} 0750 root root - -"
-        "L+ /etc/opensnitchd/system-fw.json - - - - ${pkgs.opensnitch}/etc/opensnitchd/system-fw.json"
+        "L+ /etc/opensnitchd/system-fw.json - - - - ${cfg.package}/etc/opensnitchd/system-fw.json"
       ];
     };
 
   };
 
-  meta.maintainers = with lib.maintainers; [ onny ];
+  meta.maintainers = with lib.maintainers; [
+    onny
+    grimmauld
+  ];
 }

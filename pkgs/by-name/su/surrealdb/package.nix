@@ -6,35 +6,60 @@
   openssl,
   rocksdb,
   testers,
-  surrealdb,
   protobuf,
+  backend ? "rocksdb",
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "surrealdb";
-  version = "2.3.3";
+let
+  hasRocksDB = backend == "rocksdb";
+in
+assert lib.assertMsg (builtins.elem backend [
+  "rocksdb"
+  "surrealkv"
+]) "surrealdb: backend must be one of [ \"rocksdb\" \"surrealkv\" ]";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = if hasRocksDB then "surrealdb" else "surrealdb-surrealkv";
+  version = "2.6.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
-    tag = "v${version}";
-    hash = "sha256-1qdO9uRuR/s7j58HjA9k3XQWoqdPMRVcReTqIWTdWGc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Dd6tabpSTh7IN9PLE4Zt/s1G7mNUwYfy+nEZpPTy8a8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OfSSrHwjqIZ8DYE2XAPnHBsPy4ILS+57hLXJdDgafGk=";
+  cargoHash = "sha256-lebSQPGnxW+3a7vWw3R7QYtHx04/DsRK/n8c/UT3FZo=";
 
-  # error: linker `aarch64-linux-gnu-gcc` not found
+  # Upstream hard-codes `aarch64-linux-gnu-gcc` in `.cargo/config.toml`.
+  # Remove it so Cargo uses nixpkgs' wrapped C toolchain instead.
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "allocator"
+    "allocation-tracking"
+    "http"
+    "scripting"
+    "storage-mem"
+    "storage-surrealcs"
+    # Keep this enabled for the default RocksDB build to preserve upstream's
+    # default storage feature set. It can be dropped if `pkgs.surrealdb` is
+    # intentionally slimmed to RocksDB-only in a later change.
+    "storage-surrealkv"
+  ]
+  ++ lib.optional hasRocksDB "storage-rocksdb";
 
-  ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-
-  RUSTFLAGS = "--cfg surrealdb_unstable";
+  env = {
+    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC_INCLUDE = "${protobuf}/include";
+  }
+  // lib.optionalAttrs hasRocksDB {
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -55,19 +80,23 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
-    package = surrealdb;
+    package = finalAttrs.finalPackage;
     command = "surreal version";
   };
 
-  meta = with lib; {
-    description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";
+  meta = {
+    description =
+      if hasRocksDB then
+        "Scalable, distributed, collaborative, document-graph database, for the realtime web"
+      else
+        "SurrealDB with the SurrealKV storage backend";
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       sikmir
       happysalada
       siriobalmelli
     ];
   };
-}
+})

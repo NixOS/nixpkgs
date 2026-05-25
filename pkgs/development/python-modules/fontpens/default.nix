@@ -24,27 +24,28 @@ buildPythonPackage rec {
 
   # can't run normal tests due to circular dependency with fontParts
   doCheck = false;
-  pythonImportsCheck =
-    [ "fontPens" ]
-    ++ (builtins.map (s: "fontPens." + s) [
-      "angledMarginPen"
-      "digestPointPen"
-      "flattenPen"
-      "guessSmoothPointPen"
-      "marginPen"
-      "penTools"
-      "printPen"
-      "printPointPen"
-      "recordingPointPen"
-      "thresholdPen"
-      "thresholdPointPen"
-      "transformPointPen"
-    ]);
+  pythonImportsCheck = [
+    "fontPens"
+  ]
+  ++ (map (s: "fontPens." + s) [
+    "angledMarginPen"
+    "digestPointPen"
+    "flattenPen"
+    "guessSmoothPointPen"
+    "marginPen"
+    "penTools"
+    "printPen"
+    "printPointPen"
+    "recordingPointPen"
+    "thresholdPen"
+    "thresholdPointPen"
+    "transformPointPen"
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Collection of classes implementing the pen protocol for manipulating glyphs";
     homepage = "https://github.com/robotools/fontPens";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

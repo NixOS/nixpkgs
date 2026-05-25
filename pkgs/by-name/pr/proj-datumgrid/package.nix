@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proj-datumgrid";
   version = "world-1.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "proj-datumgrid";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "132wp77fszx33wann0fjkmi1isxvsb0v9iw0gd9sxapa9h6hf3am";
   };
 
-  sourceRoot = "${src.name}/scripts";
+  sourceRoot = "${finalAttrs.src.name}/scripts";
 
   buildPhase = ''
     $CC nad2bin.c -o nad2bin
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     cp nad2bin $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Repository for proj datum grids";
     homepage = "https://proj4.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "nad2bin";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

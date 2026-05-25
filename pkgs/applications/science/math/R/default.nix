@@ -4,9 +4,9 @@
   fetchurl,
   bzip2,
   gfortran,
-  libX11,
-  libXmu,
-  libXt,
+  libx11,
+  libxmu,
+  libxt,
   libjpeg,
   libpng,
   libtiff,
@@ -16,7 +16,6 @@
   perl,
   readline,
   tcl,
-  texlive,
   texliveSmall,
   tk,
   xz,
@@ -27,7 +26,6 @@
   icu,
   pkg-config,
   bison,
-  imake,
   which,
   jdk,
   blas,
@@ -47,7 +45,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.0";
+  version = "4.5.3";
 
   src =
     let
@@ -55,19 +53,17 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      sha256 = "sha256-OzPqET4NHdyXk4dNWUnOwsc4b2bkq/sc75rsIoRsPOE=";
+      hash = "sha256-qlwe1Ck8cnGsUT1lRnA1asDopq1eQr4BQ2XREVC1uPI=";
     };
 
   outputs = [
     "out"
+    "man"
     "tex"
   ];
 
-  dontUseImakeConfigure = true;
-
   nativeBuildInputs = [
     bison
-    imake
     perl
     pkg-config
     tzdata
@@ -76,10 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     gfortran
-    libX11
-    libXmu
-    libXt
-    libXt
+    libx11
+    libxmu
+    libxt
+    libxt
     libjpeg
     libpng
     libtiff
@@ -130,46 +126,46 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontDisableStatic = static;
 
-  preConfigure =
-    ''
-      configureFlagsArray=(
-        --disable-lto
-        --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-        --with-blas="-L${blas}/lib -lblas"
-        --with-lapack="-L${lapack}/lib -llapack"
-        --with-readline
-        --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
-        --with-cairo
-        --with-libpng
-        --with-jpeglib
-        --with-libtiff
-        --with-ICU
-        ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
-        ${lib.optionalString enableMemoryProfiling "--enable-memory-profiling"}
-        ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
-        AR=$(type -p ar)
-        AWK=$(type -p gawk)
-        CC=$(type -p cc)
-        CXX=$(type -p c++)
-        FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-        JAVA_HOME="${jdk}"
-        RANLIB=$(type -p ranlib)
-        CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
-        r_cv_have_curl728=yes
-        R_SHELL="${stdenv.shell}"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      --disable-R-framework
-      --without-x
-      OBJC="clang"
-      CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
-      LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
-    ''
-    + ''
-      )
-      echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
-      echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
-    '';
+  preConfigure = ''
+    configureFlagsArray=(
+      --disable-lto
+      --with${lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
+      --with-blas="-L${blas}/lib -lblas"
+      --with-lapack="-L${lapack}/lib -llapack"
+      --with-readline
+      --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
+      --with-cairo
+      --with-libpng
+      --with-jpeglib
+      --with-libtiff
+      --with-ICU
+      ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
+      ${lib.optionalString enableMemoryProfiling "--enable-memory-profiling"}
+      ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
+      AR=$(type -p ar)
+      AWK=$(type -p gawk)
+      CC=$(type -p cc)
+      CXX=$(type -p c++)
+      FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
+      JAVA_HOME="${jdk}"
+      RANLIB=$(type -p ranlib)
+      CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
+      r_cv_have_curl728=yes
+      R_SHELL="${stdenv.shell}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    --disable-R-framework
+    --without-x
+    --without-static-cairo
+    OBJC="clang"
+    CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
+  ''
+  + ''
+    )
+    echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
+    echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
+  '';
 
   installTargets = [
     "install"
@@ -201,29 +197,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  # make tex output available to texlive.combine
-  passthru.pkgs = [ finalAttrs.finalPackage.tex ];
-  passthru.tlType = "run";
   # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
-  passthru.tlDeps = with texlive; [
-    amsfonts
-    amsmath
-    fancyvrb
-    graphics
-    hyperref
-    iftex
-    jknapltx
-    latex
-    lm
-    tools
-    upquote
-    url
+  passthru.tlDeps = ps: [
+    ps.amsfonts
+    ps.amsmath
+    ps.fancyvrb
+    ps.graphics
+    ps.hyperref
+    ps.iftex
+    ps.jknapltx
+    ps.latex
+    ps.lm
+    ps.tools
+    ps.upquote
+    ps.url
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
-    license = licenses.gpl2Plus;
+    mainProgram = "R";
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -245,9 +239,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     pkgConfigModules = [ "libR" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
 
-    maintainers = with maintainers; [ jbedo ];
-    teams = [ teams.sage ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    teams = [ lib.teams.sage ];
   };
 })

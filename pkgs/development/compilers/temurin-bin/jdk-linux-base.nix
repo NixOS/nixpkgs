@@ -17,7 +17,11 @@
   fontconfig,
   freetype,
   libffi,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   zlib,
   # runtime dependencies
   cups,
@@ -32,15 +36,14 @@
 
 let
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
-  runtimeDependencies =
-    [
-      cups
-    ]
-    ++ lib.optionals gtkSupport [
-      cairo
-      glib
-      gtk3
-    ];
+  runtimeDependencies = [
+    cups
+  ]
+  ++ lib.optionals gtkSupport [
+    cairo
+    glib
+    gtk3
+  ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
   validCpuTypes = builtins.attrNames lib.systems.parse.cpuTypes;
   providedCpuTypes = builtins.filter (arch: builtins.elem arch validCpuTypes) (
@@ -64,13 +67,14 @@ let
       fontconfig
       freetype
       (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libx11
+      libxext
+      libxi
+      libxrender
+      libxtst
       zlib
-    ] ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;
+    ]
+    ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -129,16 +133,19 @@ let
       home = result;
     };
 
-    meta = with lib; {
-      license = licenses.gpl2Classpath;
-      sourceProvenance = with sourceTypes; [
+    meta = {
+      license = with lib.licenses; [
+        gpl2
+        classpathException20
+      ];
+      sourceProvenance = with lib.sourceTypes; [
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ];
-      teams = [ teams.java ];
+      platforms = map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
+      maintainers = with lib.maintainers; [ taku0 ];
+      teams = [ lib.teams.java ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

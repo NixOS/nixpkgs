@@ -7,6 +7,7 @@
   gst_all_1,
   wayland,
   pkg-config,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,13 +36,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ (with libsForQt5; [
-      qmake
-      qttools
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ]);
 
   preConfigure = ''
     mkdir build
@@ -72,8 +74,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/qgroundcontrol
     cp -rv resources/ $out/share/qgroundcontrol
 
-    mkdir -p $out/share/pixmaps
-    cp -v resources/icons/qgroundcontrol.png $out/share/pixmaps
+    install -D resources/icons/qgroundcontrol.png -t $out/share/icons/hicolor/128x128/apps
 
     runHook postInstall
   '';
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mavlink";
     repo = "qgroundcontrol";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-wjrfwE97J+UzBPIARQ6cPadN6xIdqR8i+ZKbtiDproM=";
     fetchSubmodules = true;
   };
@@ -95,10 +96,12 @@ stdenv.mkDerivation rec {
     ./disable-bad-message.patch
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = "https://qgroundcontrol.com/";
-    changelog = "https://github.com/mavlink/qgroundcontrol/blob/master/ChangeLog.md";
+    changelog = "https://github.com/mavlink/qgroundcontrol/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

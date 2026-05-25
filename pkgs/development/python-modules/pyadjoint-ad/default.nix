@@ -4,20 +4,21 @@
   fetchFromGitHub,
   setuptools,
   scipy,
+  sympy,
   checkpoint-schedules,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyadjoint-ad";
-  version = "2025.04.0";
+  version = "2025.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfin-adjoint";
     repo = "pyadjoint";
-    tag = version;
-    hash = "sha256-ZNd8aJJ87OfQakScrkYqhCAh7qGctW/uqIoQjX5VEhI=";
+    tag = finalAttrs.version;
+    hash = "sha256-UI1eRB9hy4lb/s18NjaAyjH3HvDwRbRzk0ZuWxf1Uuc=";
   };
 
   build-system = [
@@ -26,12 +27,11 @@ buildPythonPackage rec {
 
   dependencies = [
     scipy
+    sympy
     checkpoint-schedules
   ];
 
   pythonImportsCheck = [
-    # The firedrake_adjoint module is deprecated and requires a cyclic dependency of firedrake
-    # "firedrake_adjoint"
     "numpy_adjoint"
     "pyadjoint"
     "pyadjoint.optimization"
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/pyadjoint"
   ];
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ qbisi ];
   };
-}
+})

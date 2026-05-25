@@ -6,23 +6,23 @@
   files-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "files-cli";
-  version = "2.15.16";
+  version = "2.15.297";
 
   src = fetchFromGitHub {
     repo = "files-cli";
     owner = "files-com";
-    rev = "v${version}";
-    hash = "sha256-5PLR6If13f6n6v4MuT9XUCIr2QfW6aZ97lvSoLrO+wM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oXgAQikdzzcp0SxYSerqXvjZ4/hI8Wt9ZJio7tHlt38=";
   };
 
-  vendorHash = "sha256-IbOxMNmOOH2qUFlpyhwVdWFcD9gfMxKSF5paZ9L6qYM=";
+  vendorHash = "sha256-SYi7Pq+vIMp0SH434cp0zJLV7ZkzODW3+FIarnX4ezs=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -39,16 +39,16 @@ buildGoModule rec {
     version = testers.testVersion {
       package = files-cli;
       command = "files-cli -v";
-      version = "files-cli version ${version}";
+      version = "files-cli version ${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Files.com Command Line App for Windows, Linux, and macOS";
     homepage = "https://developers.files.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kashw2 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "files-cli";
   };
 
-}
+})

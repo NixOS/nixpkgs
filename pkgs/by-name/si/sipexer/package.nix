@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sipexer";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "miconda";
     repo = "sipexer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7L29nyFOc/5XAHpzGsFSngxMTwwIDkmwhIKIjHYGszc=";
   };
 
@@ -20,9 +20,9 @@ buildGoModule rec {
   meta = {
     description = "Modern and flexible SIP CLI tool";
     homepage = "https://github.com/miconda/sipexer";
-    changelog = "https://github.com/miconda/sipexer/releases/tag/v${version}";
+    changelog = "https://github.com/miconda/sipexer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ astro ];
     mainProgram = "sipexer";
   };
-}
+})

@@ -28,6 +28,9 @@
   wrapQtAppsHook,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-url-dispatcher";
   version = "0.1.4";
@@ -45,24 +48,23 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
 
-      substituteInPlace gui/lomiri-url-dispatcher-gui.desktop.in.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_DATADIR@/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg' 'lomiri-url-dispatcher-gui'
+    substituteInPlace gui/lomiri-url-dispatcher-gui.desktop.in.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_DATADIR@/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg' 'lomiri-url-dispatcher-gui'
 
-      substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
-        --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
+    substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
+      --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
 
-      # Update URI handler database whenever new url-handler is installed system-wide
-      substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/test-sql.sh
-    '';
+    # Update URI handler database whenever new url-handler is installed system-wide
+    substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/test-sql.sh
+  '';
 
   strictDeps = true;
 
@@ -94,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     libapparmor
     lomiri-app-launch
     lomiri-ui-toolkit
-    qtdeclarative
     sqlite
     systemd
     libxkbcommon
@@ -129,13 +130,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/lomiri-url-dispatcher-dump \
       --prefix PATH : ${lib.makeBinPath [ sqlite ]}
-
+  ''
+  # https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/work_items/13
+  + lib.optionalString withQt6 ''
+    rm $out/bin/lomiri-url-dispatcher-gui
+    rm -r $out/share/lomiri-url-dispatcher/gui
+  ''
+  + lib.optionalString (!withQt6) ''
     mkdir -p $out/share/icons/hicolor/scalable/apps
     ln -s $out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg $out/share/icons/hicolor/scalable/apps/
 
     # Calls qmlscene from PATH, needs Qt plugins & QML components
     qtWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ qtdeclarative.dev ]}
+      --prefix PATH : ${lib.makeBinPath [ (if withQt6 then qtdeclarative.out else qtdeclarative.dev) ]}
     )
     wrapQtApp $out/bin/lomiri-url-dispatcher-gui
   '';
@@ -158,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       lgpl3Only

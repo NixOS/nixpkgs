@@ -8,7 +8,7 @@
   setuptools-scm,
 
   # tests
-  pytestCheckHook,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,14 +31,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   pythonImportsCheck = [ "makefun" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/smarie/python-makefun";
     description = "Small library to dynamically create python functions";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

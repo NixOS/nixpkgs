@@ -4,16 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "forbidden";
-  version = "13.2";
+  version = "13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivan-sincek";
     repo = "forbidden";
-    tag = "v${version}";
-    hash = "sha256-DQ8zjiLTgBBoqp8AP5BYULz4KGnVEt8e7bkfYRGWvFw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eOf74JWDzYz73axY9+6bRcSfJAdHMh3H4+cuUojSU4A=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -39,9 +39,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to bypass 4xx HTTP response status code";
     homepage = "https://github.com/ivan-sincek/forbidden";
-    changelog = "https://github.com/ivan-sincek/forbidden/releases/tag/${src.tag}";
+    changelog = "https://github.com/ivan-sincek/forbidden/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "forbidden";
   };
-}
+})

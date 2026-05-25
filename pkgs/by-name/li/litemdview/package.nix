@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gtkmm3,
   autoreconfHook,
   pkg-config,
@@ -12,13 +12,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "litemdview";
   version = "0.0.32";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "g0tsu";
     repo = "litemdview";
     rev = "litemdview-${finalAttrs.version}";
     hash = "sha256-XGjP+7i3mYCEzPYwVY+75DARdXJFY4vUWHFpPeoNqAE=";
   };
+
+  patches = [
+    ./fix-gcc15.patch
+  ];
 
   buildInputs = [
     gtkmm3

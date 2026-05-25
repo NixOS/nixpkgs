@@ -22,15 +22,18 @@ let
   chunkserver =
     { pkgs, ... }:
     {
-      virtualisation.emptyDiskImages = [ 4096 ];
-      boot.initrd.postDeviceCommands = ''
-        ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
-      '';
+      virtualisation.emptyDiskImages = [
+        {
+          size = 4096;
+          driveConfig.deviceExtraOpts.serial = "data";
+        }
+      ];
 
       fileSystems = pkgs.lib.mkVMOverride {
         "/data" = {
-          device = "/dev/disk/by-label/data";
+          device = "/dev/disk/by-id/virtio-data";
           fsType = "ext4";
+          autoFormat = true;
         };
       };
 

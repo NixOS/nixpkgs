@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.26.0";
+  version = "1.26.11";
 
   outputs = [
     "out"
@@ -37,52 +37,43 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7/M9fcKSuwdKJ4jqiHtigzmP/e+vpJ+30I7+ZlimVkg=";
+    hash = "sha256-Vl9IU4jJSYr+v3gAQYPN/xATEhEoZBqlbtql6pRBK+I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src cargoRoot;
+    inherit (finalAttrs)
+      src
+      cargoRoot
+      ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-p26jeKRDSPTgQzf4ckhLPSFa8RKsgkjUEXJG8IlPPZo=";
+    hash = "sha256-sqN1IBkbrT3pQqUQKU2pr8G1t4kNMKk0NR7NH7dTvAE=";
   };
-
-  patches = [
-    # Fix Requires in gstreamer-validate-1.0.pc
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8661
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/13c0f44dd546cd058c39f32101a361b3a7746f73.patch";
-      stripLen = 2;
-      hash = "sha256-CpBFTmdn+VO6ZeNe6NZR6ELvakZqQdaF3o3G5TSDuUU=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      rustPlatform.cargoSetupHook
-      rustc
-      cargo
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      cairo
-      python3
-      json-glib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    cairo
+    python3
+    json-glib
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     gstreamer
@@ -125,11 +116,15 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
+  meta = {
     description = "Integration testing infrastructure for the GStreamer framework";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

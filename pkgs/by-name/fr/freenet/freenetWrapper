@@ -14,4 +14,9 @@ cp -u -- @seednodes@/seednodes.fref $FREENET_HOME/seednodes.fref
 chmod u+rw -- $FREENET_HOME/seednodes.fref
 
 cd -- $FREENET_HOME
-exec @jre@/bin/java -Xmx1024M freenet.node.NodeStarter "$@"
+# The `--add-opens` lines are needed to get the WebOfTrust plugin to work.
+exec @jre@/bin/java -Xmx1024M \
+  --add-opens java.base/java.lang=ALL-UNNAMED \
+  --add-opens java.base/java.nio=ALL-UNNAMED \
+  --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
+  freenet.node.NodeStarter "$@"

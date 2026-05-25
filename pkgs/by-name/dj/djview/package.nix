@@ -8,13 +8,13 @@
   pkg-config,
   djvulibre,
   libsForQt5,
-  xorg,
+  libxt,
   libtiff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "djview";
-  version = "4.12";
+  version = "4.12.3";
 
   outputs = [
     "out"
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
-    hash = "sha256-VnPGqLfhlbkaFyCyQJGRW4FF3jSHnbEVi8k2sQDq8+M=";
+    url = "mirror://sourceforge/djvu/djview-${finalAttrs.version}.tar.gz";
+    hash = "sha256-F7+5cxq4Bw4BI1OB8I5XsSMf+19J6wMYc+v6GJza9H0=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     djvulibre
     libsForQt5.qtbase
-    xorg.libXt
+    libxt
     libtiff
   ];
 
@@ -61,15 +61,20 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p ${Applications}
       cp -a src/djview.app -t ${Applications}
+
+      mkdir -p $out/bin
+      pushd $out/bin
+      ln -sf ../Applications/djview.app/Contents/MacOS/djview
+      popd
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable DjVu viewer (Qt5)";
     mainProgram = "djview";
     homepage = "https://djvu.sourceforge.net/djview4.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       Anton-Latukha
       bryango
     ];
@@ -95,4 +100,4 @@ stdenv.mkDerivation rec {
       Has CGI-style arguments to configure the view of document (see man).
     '';
   };
-}
+})

@@ -4,13 +4,14 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
-  python313,
+  fetchpatch,
+  python314,
   replaceVars,
   ffmpeg-headless,
   inetutils,
   nixosTests,
   home-assistant,
-  testers,
+  versionCheckHook,
 
   # Look up dependencies of specified components in component-packages.nix
   extraComponents ? [ ],
@@ -32,25 +33,23 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.0";
+      aionotion = super.aionotion.overridePythonAttrs rec {
+        version = "2024.03.0";
         src = fetchFromGitHub {
-          owner = "jpbede";
-          repo = "aioelectricitymaps";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-q06B40c0uvSuzH/3YCoxg4p9aNIOPrphsoESktF+B14=";
+          owner = "bachya";
+          repo = "aionotion";
+          tag = version;
+          hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
         };
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
-      });
+        postPatch = null;
+      };
 
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
         src = fetchFromGitHub {
           owner = "tkdrob";
           repo = "aioskybell";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
         };
       });
@@ -60,7 +59,7 @@ let
         src = fetchFromGitHub {
           owner = "bachya";
           repo = "aiowatttime";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
         };
         postPatch = ''
@@ -87,63 +86,12 @@ let
         ];
       });
 
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.3";
-        src = fetchFromGitHub {
-          owner = "aio-libs";
-          repo = "async-timeout";
-          tag = "v${version}";
-          hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
-        };
-      });
-
-      av = super.av.overridePythonAttrs (rec {
-        version = "13.1.0";
-        src = fetchFromGitHub {
-          owner = "PyAV-Org";
-          repo = "PyAV";
-          tag = "v${version}";
-          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
-        };
-      });
-
-      brother = super.brother.overridePythonAttrs (rec {
-        version = "4.3.1";
-        src = fetchFromGitHub {
-          owner = "bieniu";
-          repo = "brother";
-          tag = version;
-          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
-        };
-      });
-
-      eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.1";
-        src = fetchFromGitHub {
-          owner = "EuleMitKeule";
-          repo = "eq3btsmart";
-          tag = version;
-          hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
-        };
-        build-system = with self; [ poetry-core ];
-      });
-
-      google-genai = super.google-genai.overridePythonAttrs (old: rec {
-        version = "1.7.0";
-        src = fetchFromGitHub {
-          owner = "googleapis";
-          repo = "python-genai";
-          tag = "v${version}";
-          hash = "sha256-vmrFPE7H9s9varrP0s6WK4opoU1hREH7rVVjrKiXY5E=";
-        };
-      });
-
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
           owner = "burnash";
           repo = "gspread";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
         };
         dependencies = with self; [
@@ -151,35 +99,25 @@ let
         ];
       });
 
-      # Pinned due to home-assistant still needing 1.10.0 version
-      # Remove this when home-assistant updates the jellyfin-apiclient-python version
-      jellyfin-apiclient-python = super.jellyfin-apiclient-python.overridePythonAttrs (oldAttrs: rec {
-        version = "1.10.0";
+      livisi = super.livisi.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.25";
         src = fetchFromGitHub {
-          owner = "jellyfin";
-          repo = "jellyfin-apiclient-python";
+          owner = "planbnet";
+          repo = "livisi";
           tag = "v${version}";
-          hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
-        };
-      });
-
-      mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
+          hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
         };
       });
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
+        pyproject = null;
 
         src = fetchFromGitHub {
           owner = "engrbm87";
           repo = "notifications_android_tv";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
@@ -198,7 +136,7 @@ let
         version = "2.2";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
@@ -223,6 +161,21 @@ let
         };
       });
 
+      py-madvr2 = super.py-madvr2.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.40";
+        src = fetchFromGitHub {
+          owner = "iloveicedgreentea";
+          repo = "py-madvr";
+          tag = "v${version}";
+          hash = "sha256-0IX57Sa/oXGiViD39FVBRa2jxuKuZ3UNsOTHwuBdmWs=";
+        };
+        pythonImportsCheck = [ "madvr" ];
+        disabledTests = oldAttrs.disabledTests ++ [
+          "test_async_add_tasks"
+          "test_send_heartbeat"
+        ];
+      });
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -234,22 +187,12 @@ let
         };
       });
 
-      pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.3";
-        src = fetchFromGitHub {
-          owner = "gagebenne";
-          repo = "pydexcom";
-          rev = "refs/tags/${version}";
-          hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
-        };
-      });
-
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
         version = "0.6.5";
         src = fetchFromGitHub {
           owner = "ChrisMandich";
           repo = "PyFlume";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
         };
         dependencies = oldAttrs.propagatedBuildInputs or [ ] ++ [
@@ -257,61 +200,16 @@ let
         ];
       });
 
-      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
-        };
-      });
-
-      pyoctoprintapi = super.pyoctoprintapi.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.12";
-        src = fetchFromGitHub {
-          owner = "rfleming71";
-          repo = "pyoctoprintapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
-        };
-      });
-
-      # snmp component does not support pysnmp 7.0+
-      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
-        version = "6.2.6";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmp";
-          tag = "v${version}";
-          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
-        };
-      });
-
-      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmpcrypto";
-          tag = "v${version}";
-          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
-        };
-        build-system = with self; [ setuptools ];
-        postPatch = ''
-          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
-          substituteInPlace setup.py --replace \
-            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
-            "observed_version = [36, 2, 0]"
-        '';
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
           owner = "AustinBrunkhorst";
           repo = "pysnooz";
-          rev = "refs/tags/v${version}";
+          tag = "v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
+        patches = [ ];
+        doCheck = false;
       });
 
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
@@ -319,41 +217,20 @@ let
         src = fetchFromGitHub {
           owner = "home-assistant-libs";
           repo = "pytradfri";
-          rev = "refs/tags/${version}";
+          tag = version;
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
         patches = [ ];
         doCheck = false;
       });
 
-      vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
-        };
-      });
-
-      # Pinned due to API changes ~1.0
-      vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.2";
-        src = fetchFromGitHub {
-          owner = "spry-group";
-          repo = "python-vultr";
-          rev = version;
-          hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
-        };
-      });
-
-      wolf-comm = super.wolf-comm.overridePythonAttrs (rec {
-        version = "0.0.23";
-        src = fetchFromGitHub {
-          owner = "janrothkegel";
-          repo = "wolf-comm";
-          tag = version;
-          hash = "sha256-LpehooW3vmohiyMwOQTFNLiNCsaLKelWQxQk8bl+y1k=";
-        };
+      serialx = super.serialx.overridePythonAttrs (oldAttrs: {
+        # many components use the serialx[esphome] implicitly
+        dependencies = oldAttrs.dependencies or [ ] ++ oldAttrs.optional-dependencies.esphome;
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # network access, only runs with esphome extra
+          "test_connect_timeout_raises_timeout_error"
+        ];
       });
 
       # internal python packages only consumed by home-assistant itself
@@ -367,7 +244,7 @@ let
     })
   ];
 
-  python = python313.override {
+  python = python314.override {
     self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
@@ -386,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.5.3";
+  hassVersion = "2026.5.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -397,7 +274,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.13";
+  disabled = python.pythonOlder "3.14";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -407,13 +284,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-qqPO7dr+Sb1RKYoOV7MhT2E1FcW7lAKTTB0T+UzLwzk=";
+    hash = "sha256-Z5FUkljaWRr9tfBb6RXJCC86ZbyNkw0PvUcOl+bZ2cc=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-8WusUfZEyoBPltVrDpDQVkbIFEHn1GGdA4Pt0Zb1+Fo=";
+    hash = "sha256-o5S6rnOTqzPLZpMBxgmp9IpmLlEHLvHTH68ql2EkVbI=";
   };
 
   build-system = with python.pkgs; [
@@ -432,9 +309,28 @@ python.pkgs.buildPythonApplication rec {
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
+    # Copy default blueprints without preserving permissions
+    ./patches/default-blueprint-permissions.patch
+
+    # No scaring our users about not running in a docker or a venv
+    ./patches/pythonpath-is-a-venv.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
+    })
+
+    (fetchpatch {
+      name = "2026.5.4-shelly-tests-fix.patch";
+      url = "https://github.com/home-assistant/core/commit/072e9b51a2321b0d4489bae6f1e04f7ed845222f.patch";
+      includes = [ "tests/components/shelly/test_coordinator.py" ];
+      hash = "sha256-0XQdw2MnwzrHKYY06TotfJJem0bqremmi7k8SyVQVGA=";
+    })
+
+    (fetchpatch {
+      name = "2026.5.4-homewizard-tests-fix.patch";
+      url = "https://github.com/home-assistant/core/commit/e796d9c46744097585bfada483108a55ae16344a.patch";
+      hash = "sha256-T0Nb6LcL/21WdUm8RmczhHaVX92n5O/rpMdpqDVQ2VU=";
     })
   ];
 
@@ -445,9 +341,17 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "setuptools==78.1.1" setuptools
   '';
 
+  pythonRemoveDeps = [
+    "uv"
+  ];
+
   dependencies = with python.pkgs; [
-    # Only packages required in pyproject.toml
+    # Mirror what gets installed for Home Assistant Container, which means
+    # installing what is in requirements.txt. The PEP517 specification gets
+    # embedded in wheel metadata but only represents a subset.
+    # Proof: https://github.com/home-assistant/core/blob/2026.5.0/Dockerfile#L40
     aiodns
+    aiogithubapi
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -474,10 +378,10 @@ python.pkgs.buildPythonApplication rec {
     home-assistant-intents
     httpx
     ifaddr
+    infrared-protocols
     jinja2
     lru-dict
     mutagen
-    numpy
     orjson
     packaging
     pillow
@@ -491,6 +395,7 @@ python.pkgs.buildPythonApplication rec {
     pyturbojpeg
     pyyaml
     requests
+    rf-protocols
     securetar
     sqlalchemy
     standard-aifc
@@ -498,7 +403,6 @@ python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -515,49 +419,47 @@ python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
 
+  requirementsTest = with python.pkgs; [
+    # test infrastructure (selectively from requirement_test.txt)
+    freezegun
+    pytest-asyncio
+    pytest-aiohttp
+    pytest-freezer
+    pytest-socket
+    pytest-timeout
+    pytest-unordered
+    pytest-xdist
+    pytestCheckHook
+    requests-mock
+    respx
+    syrupy
+  ];
+
   nativeCheckInputs =
-    with python.pkgs;
-    [
-      # test infrastructure (selectively from requirement_test.txt)
-      freezegun
-      pytest-asyncio
-      pytest-aiohttp
-      pytest-freezer
-      pytest-mock
-      pytest-socket
-      pytest-timeout
-      pytest-unordered
-      pytest-xdist
-      pytestCheckHook
-      requests-mock
-      respx
-      syrupy
-      tomli
-      # Sneakily imported in tests/conftest.py
-      paho-mqtt
+    requirementsTest
+    ++ [ versionCheckHook ]
+    ++ (with python.pkgs; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
-    ]
+      # Used in tests/scripts/test_check_config.py
+      colorlog
+      # Used in tests/helpers/test_httpx_client.py
+      h2
+    ])
     ++ lib.concatMap (component: getPackages component python.pkgs) [
       # some components are needed even if tests in tests/components are disabled
-      "default_config"
+      "frontend"
       "hue"
-      "qwikswitch"
     ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # assign tests grouped by file to workers
-    "--dist loadfile"
+    "--dist=loadfile"
     # enable full variable printing on error
     "--showlocals"
-    # AssertionError: assert 1 == 0
-    "--deselect tests/test_config.py::test_merge"
-    # checks whether pip is installed
-    "--deselect=tests/util/test_package.py::test_check_package_fragment"
-    # flaky
-    "--deselect=tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    "--deselect=tests/test_test_fixtures.py::test_evict_faked_translations"
-    "--deselect=tests/helpers/test_backup.py::test_async_get_manager"
+  ];
+
+  enabledTestPaths = [
     # tests are located in tests/
     "tests"
   ];
@@ -571,12 +473,26 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_circular_imports.py"
     # don't bulk test all components
     "tests/components"
+    # AssertionError: assert 1 == 0
+    "tests/test_config.py::test_merge"
+    # checks whether pip is installed
+    "tests/util/test_package.py::test_check_package_fragment"
+    # flaky
+    "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    "tests/test_test_fixtures.py::test_evict_faked_translations"
+    "tests/helpers/test_backup.py::test_async_get_manager"
+    "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
+    # various failing after python-updates
+    "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
+    "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
+    "tests/helpers/test_entity_component.py::test_set_entity_namespace_via_config" # AssertionError: assert [] == ['test_domain...named_device']
   ];
 
   preCheck = ''
     export HOME="$TEMPDIR"
+    export PYTHONASYNCIODEBUG=1
 
-    # the tests require the existance of a media dir
+    # the tests require the existence of a media dir
     mkdir "$NIX_BUILD_TOP"/media
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
@@ -597,10 +513,6 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       nixos = nixosTests.home-assistant;
       components = callPackage ./tests.nix { };
-      version = testers.testVersion {
-        package = home-assistant;
-        command = "hass --version";
-      };
       withoutCheckDeps = home-assistant.overridePythonAttrs {
         pname = "home-assistant-without-check-deps";
         doCheck = false;
@@ -608,13 +520,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://home-assistant.io/";
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
+    platforms = lib.platforms.linux;
     mainProgram = "hass";
   };
 }

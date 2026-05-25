@@ -1,60 +1,61 @@
 {
   lib,
   fetchFromGitHub,
-  buildNpmPackage,
+  fetchNpmDeps,
+  npmHooks,
   rustPlatform,
   pkg-config,
   openssl,
+  nodejs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
-  version = "0.12.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
-    rev = "v${version}";
-    hash = "sha256-2vY68PUoHDyyH3hJ/Fvjxbof7RzWFWYTg1UhsjWNpww=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UwO/pdop4grOuVEq0pSt9DXEQLCXKFrm9HhfQISdBXg=";
   };
 
-  cargoHash = "sha256-H4soSp9fDwrqcv3eL5WqGYHWAt07gyVLoEVp1VbYchQ=";
+  cargoHash = "sha256-VobG+Ux56TNM3U2Y51/x59rpg27b2FZXTqpRcKttCEc=";
+
+  # Build without the self-updating feature
+  buildNoDefaultFeatures = true;
 
   nativeBuildInputs = [
     pkg-config
     openssl
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   buildInputs = [
     openssl
   ];
 
-  postPatch = ''
-    rm -rf "ui/public"
-    ln -s ${passthru.ui} "ui/public"
-  '';
+  env.OPENSSL_NO_VENDOR = 1;
 
-  OPENSSL_NO_VENDOR = 1;
-
-  passthru.ui = buildNpmPackage {
-    name = "ui";
-    src = "${src}/ui";
-    npmDepsHash = "sha256-zx8G6Raop1EZAVy1YCF5ag5aL9NutRxbPfTARmjP2SY=";
-    makeCacheWritable = true;
-    npmFlags = [ "--legacy-peer-deps" ];
-    installPhase = ''
-      runHook preInstall
-      mv public/ $out
-      runHook postInstall
-    '';
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-tBOBa2plgJ0dG5eDD9Yc9YS+Dh6rhBdqU6JiZUjTUY4=";
   };
 
+  preBuild = ''
+    npm run build-css
+  '';
+
   meta = {
-    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${version}";
+    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${finalAttrs.version}";
     description = "Suite of tools to create shopping lists and maintain recipes";
     homepage = "https://cooklang.org/";
     license = lib.licenses.mit;
     mainProgram = "cook";
-    maintainers = [ lib.maintainers.emilioziniades ];
+    maintainers = [
+      lib.maintainers.emilioziniades
+      lib.maintainers.ginkogruen
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -4,18 +4,17 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "river-bsp-layout";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "areif-dev";
     repo = "river-bsp-layout";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/R9v3NGsSG4JJtdk0sJX7ahRolRmJMwMP48JRmLffXc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kfeRGT/qgZRPfXl03JYRF1CVPIIiGPIdxLORiA6QWu4=";
 
   meta = {
@@ -26,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "river-bsp-layout";
     platforms = lib.platforms.linux;
   };
-}
+})

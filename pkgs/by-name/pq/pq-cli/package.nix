@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pq-cli";
   version = "1.0.2-unstable-2025-04-10";
   pyproject = true;
@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "urwid"
     "urwid-readline"
   ];
 
@@ -38,9 +39,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Progress Quest: the CLI edition";
     homepage = "https://github.com/rr-/pq-cli";
-    changelog = "https://github.com/rr-/pq-cli/releases/tag/${version}";
+    changelog = "https://github.com/rr-/pq-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "pqcli";
   };
-}
+})

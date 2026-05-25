@@ -8,14 +8,14 @@
   installTool ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "azimuth";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "mdsteele";
     repo = "azimuth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1znfvpmqiixd977jv748glk5zc4cmhw5813zp81waj07r9b0828r";
   };
 
@@ -30,13 +30,14 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace data/azimuth.desktop \
       --replace Exec=azimuth "Exec=$out/bin/azimuth" \
-      --replace "Version=%AZ_VERSION_NUMBER" "Version=${version}"
+      --replace "Version=%AZ_VERSION_NUMBER" "Version=${finalAttrs.version}"
   '';
 
   makeFlags = [
     "BUILDTYPE=release"
     "INSTALLDIR=$(out)"
-  ] ++ (if installTool then [ "INSTALLTOOL=true" ] else [ "INSTALLTOOL=false" ]);
+  ]
+  ++ (if installTool then [ "INSTALLTOOL=true" ] else [ "INSTALLTOOL=false" ]);
 
   enableParallelBuilding = true;
 
@@ -59,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
   };
 
-}
+})

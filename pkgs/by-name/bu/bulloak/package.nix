@@ -29,25 +29,26 @@ let
     };
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bulloak";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "alexfertel";
     repo = "bulloak";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8Qp8ceafAkw7Tush/dvBl27q5oNDzbOqyvSLXhjf4fo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-yaRaB3U8Wxhp7SK5E44CF8AudhG7ar7L5ey+CRVfYqc=";
 
   # tests run in CI on the source repo
   doCheck = false;
 
   # provide the list of solc versions to the `svm-rs-builds` dependency
-  SVM_RELEASES_LIST_JSON = solc-versions.${stdenv.hostPlatform.system};
+  env.SVM_RELEASES_LIST_JSON =
+    solc-versions.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   meta = {
     description = "Solidity test generator based on the Branching Tree Technique";
@@ -59,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bulloak";
     maintainers = with lib.maintainers; [ beeb ];
   };
-}
+})

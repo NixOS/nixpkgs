@@ -83,12 +83,14 @@ stdenv.mkDerivation rec {
     install -Dm0644 ../misc/conf_examples/Logger.xml $out/share/examples/edge_conf/Logger.xml
   '';
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Open-source streaming video service with sub-second latency";
     mainProgram = "OvenMediaEngine";
     homepage = "https://ovenmediaengine.com";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ lukegb ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ lukegb ];
+    platforms = lib.platforms.linux;
   };
 }

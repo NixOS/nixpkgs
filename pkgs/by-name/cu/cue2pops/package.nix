@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     # Upstream license is unclear.
     # <https://github.com/ErikAndren/cue2pops-mac/issues/2#issuecomment-673983298>
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "cue2pops";
   };

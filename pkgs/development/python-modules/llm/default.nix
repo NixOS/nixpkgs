@@ -4,8 +4,8 @@
   callPackage,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
   setuptools,
   click-default-group,
@@ -24,6 +24,7 @@
   pytest-asyncio,
   pytest-httpx,
   pytest-recording,
+  sqlite,
   sqlite-utils,
   syrupy,
   llm-echo,
@@ -75,16 +76,19 @@ let
       llm-gemini ? false,
       llm-gguf ? false,
       llm-git ? false,
+      llm-github-copilot ? false,
       llm-grok ? false,
       llm-groq ? false,
       llm-hacker-news ? false,
       llm-jq ? false,
       llm-llama-server ? false,
+      llm-lmstudio ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
       llm-openrouter ? false,
       llm-pdf-to-images ? false,
+      llm-perplexity ? false,
       llm-sentence-transformers ? false,
       llm-templates-fabric ? false,
       llm-templates-github ? false,
@@ -163,21 +167,29 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.26";
+    version = "0.30";
     pyproject = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-KTlNajuZrR0kBX3LatepsNM3PfRVsQn+evEfXTu6juE=";
+      hash = "sha256-+8fwx7sS1vFSTqb+p2uDLqWW/UIx8WoW3kYJihznRRg=";
     };
 
-    patches = [ ./001-disable-install-uninstall-commands.patch ];
+    patches = [
+      ./001-disable-install-uninstall-commands.patch
+    ]
+    # See https://github.com/NixOS/nixpkgs/issues/476258 and https://github.com/simonw/llm/pull/1334
+    # TODO: Remove when sqlite 3.52.x is released.
+    ++ lib.optionals (sqlite.version == "3.51.1") [
+      (fetchpatch {
+        url = "https://github.com/simonw/llm/commit/6e24b883c3e3c4ddd2ec9006714d0a9ec17b59da.patch";
+        hash = "sha256-4AKQdZCr6qxuWnjWoSW6I44hPL5e7tnvREx2Ns0WwNc=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace llm/cli.py \
@@ -218,9 +230,23 @@ let
       cp ${llm-echo.src}/llm_echo.py llm_echo.py
     '';
 
-    pytestFlagsArray = [
+    pytestFlags = [
       "-svv"
+    ];
+
+    enabledTestPaths = [
       "tests/"
+    ];
+
+    disabledTests = [
+      # AssertionError: The following responses are mocked but not requested:
+      # - Match POST request on https://api.openai.com/v1/chat/completions
+      # https://github.com/simonw/llm/issues/1292
+      "test_gpt4o_mini_sync_and_async"
+
+      # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr
+      # https://github.com/simonw/llm/issues/1293
+      "test_embed_multi_files_encoding"
     ];
 
     pythonImportsCheck = [ "llm" ];
@@ -233,7 +259,7 @@ let
       };
 
       # include tests for all the plugins
-      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests) withPluginsArgNames);
+      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests or { }) withPluginsArgNames);
     };
 
     meta = {

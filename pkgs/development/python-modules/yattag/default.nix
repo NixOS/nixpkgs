@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yattag";
   version = "1.16.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,10 +16,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yattag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to generate HTML or XML";
     homepage = "https://www.yattag.org/";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
 }

@@ -39,7 +39,7 @@ in
     };
 
     style = mkOption {
-      type = with types; nullOr str;
+      type = with types; nullOr lines;
       default = null;
       description = ''
         CSS Stylesheet for gtklock.

@@ -1,18 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  nettools,
+  net-tools,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytap2";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "johnthagen";
@@ -21,17 +18,17 @@ buildPythonPackage rec {
     hash = "sha256-GN8yFnS7HVgIP73/nVtYnwwhCBI9doGHLGSOaFiWIdw=";
   };
 
-  propagatedBuildInputs = [ nettools ];
+  propagatedBuildInputs = [ net-tools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytap2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Object-oriented wrapper around the Linux Tun/Tap device";
     homepage = "https://github.com/johnthagen/pytap2";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

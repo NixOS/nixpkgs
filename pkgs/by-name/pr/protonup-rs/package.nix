@@ -6,15 +6,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protonup-rs";
-  version = "0.9.0";
+  version = "0.12.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-OVdoXe83lH6wjYb36tT4P3sG1w6NdWhRYC0L3v8USs4=";
+    hash = "sha256-tudrn2BeTB7+3DQmVxCMv+5vpIv3BwJ8sJqKwX+vHQU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qESp4z3HRe414Ro04NuiVNy0j/zJUmII4Gbacs3Bc48=";
+  cargoHash = "sha256-kgSMfEQHxOWBQSb1PMYU4HmYzQwrECiFAKKwq4d6vwc=";
 
   checkFlags = [
     # Requires internet access

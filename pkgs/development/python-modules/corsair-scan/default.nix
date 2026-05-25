@@ -5,24 +5,22 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
   tldextract,
   urllib3,
   validators,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "corsair-scan";
   version = "0.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Santandersecurityresearch";
     repo = "corsair_scan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-s94ZiTL7tBrhUaeB/O3Eh8o8zqtfdt0z8LKep1bZWiY=";
   };
 
@@ -31,7 +29,9 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     validators
     requests
     urllib3
@@ -52,12 +52,12 @@ buildPythonPackage rec {
     "test_corsair_scan_origin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to check for Cross-Origin Resource Sharing (CORS) misconfigurations";
     mainProgram = "corsair";
     homepage = "https://github.com/Santandersecurityresearch/corsair_scan";
-    changelog = "https://github.com/Santandersecurityresearch/corsair_scan/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Santandersecurityresearch/corsair_scan/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

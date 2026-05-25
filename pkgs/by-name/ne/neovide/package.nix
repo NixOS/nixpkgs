@@ -16,7 +16,11 @@
   cctools,
   SDL2,
   fontconfig,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
   stdenv,
   libglvnd,
   libxkbcommon,
@@ -26,54 +30,54 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "neovide";
-  version = "0.15.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     tag = finalAttrs.version;
-    hash = "sha256-MLiLddF53OXDPYuJbTAscezxN09mxZkuSOZtQz07JSE=";
+    hash = "sha256-mzlyw9NIBb35QJ5L7+ZxgJ5IUoHznAUQOLA0SglJ3bw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1ni8AZIwAz5R2Ejt9Fj5qmybvL4KZV/M3BMqQx4HFLU=";
+  cargoHash = "sha256-WVNmG+KJK93yLrL2/KPc2czAxwt5brKxRkrPB7Bv46M=";
 
-  SKIA_SOURCE_DIR =
-    let
-      repo = fetchFromGitHub {
-        owner = "rust-skia";
-        repo = "skia";
-        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        tag = "m135-0.83.1";
-        hash = "sha256-TSGPJl9DfWQtrkNIhv40s8VcuudCjbiSh+QjLc0hKN4=";
-      };
-      # The externals for skia are taken from skia/DEPS
-      externals = linkFarm "skia-externals" (
-        lib.mapAttrsToList (name: value: {
-          inherit name;
-          path = fetchgit value;
-        }) (lib.importJSON ./skia-externals.json)
-      );
-    in
-    runCommand "source" { } ''
-      cp -R ${repo} $out
-      chmod -R +w $out
-      ln -s ${externals} $out/third_party/externals
-    '';
+  env = {
+    SKIA_SOURCE_DIR =
+      let
+        repo = fetchFromGitHub {
+          owner = "rust-skia";
+          repo = "skia";
+          # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+          tag = "m145-0.92.0";
+          hash = "sha256-9N780AwheKBJRcZC4l/uWFNq+oOyoNp4M6dJAVVAFeo=";
+        };
+        # The externals for skia are taken from skia/DEPS
+        externals = linkFarm "skia-externals" (
+          lib.mapAttrsToList (name: value: {
+            inherit name;
+            path = fetchgit value;
+          }) (lib.importJSON ./skia-externals.json)
+        );
+      in
+      runCommand "source" { } ''
+        cp -R ${repo} $out
+        chmod -R +w $out
+        ln -s ${externals} $out/third_party/externals
+      '';
 
-  SKIA_GN_COMMAND = "${gn}/bin/gn";
-  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+    SKIA_GN_COMMAND = "${gn}/bin/gn";
+    SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+  };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-      python3 # skia
-      removeReferencesTo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools.libtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3 # skia
+    removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -89,11 +93,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
         [
           libglvnd
           libxkbcommon
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXrandr
-          xorg.libXi
+          libx11
+          libxcursor
+          libxext
+          libxrandr
+          libxi
         ]
         ++ lib.optionals enableWayland [ wayland ]
       );
@@ -122,16 +126,17 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
       install -m444 -Dt $out/share/applications assets/neovide.desktop
     '';
 
-  disallowedReferences = [ finalAttrs.SKIA_SOURCE_DIR ];
+  disallowedReferences = [ finalAttrs.env.SKIA_SOURCE_DIR ];
 
   meta = {
-    description = "Neovide is a simple, no-nonsense, cross-platform graphical user interface for Neovim";
+    description = "Simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://neovide.dev/";
     changelog = "https://github.com/neovide/neovide/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ck3d
+      caverav
     ];
     platforms = lib.platforms.unix;
   };

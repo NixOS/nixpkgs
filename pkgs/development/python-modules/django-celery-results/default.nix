@@ -4,15 +4,12 @@
   buildPythonPackage,
   celery,
   django,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-celery-results";
   version = "2.6.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "django_celery_results";
@@ -33,11 +30,11 @@ buildPythonPackage rec {
   # Tests need access to a database.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Celery result back end with django";
     homepage = "https://github.com/celery/django-celery-results";
-    changelog = "https://github.com/celery/django-celery-results/blob/v{version}/Changelog";
-    license = licenses.bsd3;
+    changelog = "https://github.com/celery/django-celery-results/blob/v${version}/Changelog";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

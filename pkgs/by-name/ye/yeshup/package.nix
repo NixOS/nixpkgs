@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "yeshup";
-  version = "unstable-2013-10-29";
+  version = "0-unstable-2013-10-29";
 
   src = fetchFromGitHub {
     owner = "RhysU";
@@ -20,11 +20,11 @@ stdenv.mkDerivation {
     cp -v yeshup $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RhysU/yeshup";
-    platforms = platforms.linux;
-    license = licenses.cc-by-sa-30; # From Stackoverflow answer
-    maintainers = with maintainers; [ obadz ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.cc-by-sa-30; # From Stackoverflow answer
+    maintainers = with lib.maintainers; [ obadz ];
     mainProgram = "yeshup";
   };
 }

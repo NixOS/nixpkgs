@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "bbc";
     repo = "audiowaveform";
-    rev = version;
-    sha256 = "sha256-GrYShlLUD2vZYN6sJy4FnAMPiV36rOAxZUrK0mxJCRk=";
+    tag = version;
+    sha256 = "sha256-7pcYxl6m7mkoXGawA3gr8NTfkJlkgl+DtK79CA8dRec=";
   };
 
   cmakeFlags = [

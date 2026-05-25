@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   colorama,
   coverage,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "green";
   version = "4.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,15 +36,15 @@ buildPythonPackage rec {
   checkPhase = ''
     $out/bin/green -tvvv \
       green.test.test_version \
-      green.test.test_cmdline \
+      green.test.test_cmdline
   '';
 
   pythonImportsCheck = [ "green" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python test runner";
     homepage = "https://github.com/CleanCut/green";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

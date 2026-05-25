@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  anyio,
   gobject-introspection,
   gtk3,
   imagemagick,
@@ -10,24 +11,28 @@
   pulseaudio,
   pytest-asyncio,
   pytest-lazy-fixture,
+  pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   qtile,
   requests,
   setuptools-scm,
-  xorgserver,
+  xorg-server,
+  nixosTests,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile-extras";
-  version = "0.31.0";
+  version = "0.36.0";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile`
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
-    tag = "v${version}";
-    hash = "sha256-87xdSw4JKQyb/jpfTUkFDjHvKgPKzu+rKLGeaAzP8NI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H2A5Y+ukTkUqjQB5eQVuOMYpf7T8RgQlNlQ25wlWwr8=";
   };
 
   build-system = [ setuptools-scm ];
@@ -35,17 +40,20 @@ buildPythonPackage rec {
   dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
+    anyio
     gobject-introspection
     imagemagick
     keyring
     pulseaudio
     pytest-asyncio
     pytest-lazy-fixture
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     python-dateutil
     qtile
     requests
-    xorgserver
+    xorg-server
     # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
 
@@ -64,8 +72,6 @@ buildPythonPackage rec {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
-    # flaky, timing sensitive
-    "test_visualiser"
   ];
 
   disabledTestPaths = [
@@ -76,6 +82,11 @@ buildPythonPackage rec {
     "test/widget/test_strava.py"
   ];
 
+  pytestFlags = [
+    "--reruns 3"
+    "--reruns-delay 5"
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
     export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
@@ -84,11 +95,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtile_extras" ];
 
-  meta = with lib; {
+  passthru.tests.qtile-extras = nixosTests.qtile-extras;
+
+  meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.rev}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arjan-s ];
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${finalAttrs.src.tag}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arjan-s ];
   };
-}
+})

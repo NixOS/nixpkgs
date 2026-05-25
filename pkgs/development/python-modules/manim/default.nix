@@ -5,8 +5,7 @@
   texliveInfraOnly,
 
   # build-system
-  poetry-core,
-  setuptools,
+  hatchling,
 
   # buildInputs
   cairo,
@@ -37,6 +36,8 @@
   tqdm,
   typing-extensions,
   watchdog,
+  pythonAtLeast,
+  audioop-lts,
 
   # optional-dependencies
   jupyterlab,
@@ -183,40 +184,32 @@ let
       cbfonts-fd
     ]
   );
-  # https://github.com/ManimCommunity/manim/pull/4037
-  av_13_1 = av.overridePythonAttrs (rec {
-    version = "13.1.0";
-    src = fetchFromGitHub {
-      owner = "PyAV-Org";
-      repo = "PyAV";
-      tag = "v${version}";
-      hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
-    };
-  });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manim";
   pyproject = true;
-  version = "0.19.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
-    tag = "v${version}";
-    hash = "sha256-eQgp/GwKsfQA1ZgqfB3HF2ThEgH3Fbn9uAtcko9pkjs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rfPqKPbxT8UsxSin4DquDjPMAUEYmKixx2fBlr5mz8U=";
   };
 
   build-system = [
-    poetry-core
-    setuptools
+    hatchling
   ];
 
   patches = [ ./pytest-report-header.patch ];
 
   buildInputs = [ cairo ];
 
+  pythonRelaxDeps = [
+    "skia-pathops"
+  ];
   dependencies = [
-    av_13_1
+    av
     beautifulsoup4
     click
     cloup
@@ -241,6 +234,9 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     watchdog
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
   ];
 
   optional-dependencies = {
@@ -270,7 +266,6 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
@@ -286,9 +281,12 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
-    changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      ivyfanchiang
+    ];
   };
-}
+})

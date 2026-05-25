@@ -5,37 +5,37 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
-  typing-extensions,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "6.0.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-X/v1AOSZq3kSsbptJs7yZIDZrkEVMgGbt41yViGW4Hs=";
+    pname = "azure_mgmt_monitor";
+    inherit version;
+    hash = "sha256-t19TZEHUMPaf+HOhZG5fXbyzCAoQdopZ0K3AFUFiOBY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     isodate
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Monitor Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

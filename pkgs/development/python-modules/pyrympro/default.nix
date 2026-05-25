@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrympro";
   version = "0.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "OnFreund";
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrympro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Read Your Meter Pro";
     homepage = "https://github.com/OnFreund/pyrympro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

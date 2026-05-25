@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast and effective C++ file optimizer";
     homepage = "https://github.com/fhanau/Efficient-Compression-Tool";
-    changelog = "https://github.com/fhanau/Efficient-Compression-Tool/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/fhanau/Efficient-Compression-Tool/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jwillikers

@@ -26,9 +26,9 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wget2";
-  version = "2.2.0";
+  version = "2.2.1";
 
   outputs = [
     "out"
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "gnuwget";
     repo = "wget2";
-    tag = "v${version}";
-    hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-od5Zyeod3auMY3u0IxMEMHnGeKGzEgMk+W5jjMQqSXc=";
   };
 
   # wget2_noinstall contains forbidden reference to /build/
@@ -59,23 +59,22 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs =
-    [
-      brotli
-      bzip2
-      gpgme
-      libhsts
-      libidn2
-      libpsl
-      nghttp2
-      pcre2
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals sslSupport [
-      openssl
-    ];
+  buildInputs = [
+    brotli
+    bzip2
+    gpgme
+    libhsts
+    libidn2
+    libpsl
+    nghttp2
+    pcre2
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals sslSupport [
+    openssl
+  ];
 
   # TODO: include translation files
   autoreconfPhase = ''
@@ -98,10 +97,9 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = "--version";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
-  meta = with lib; {
+  meta = {
     description = "Successor of GNU Wget, a file and recursive website downloader";
     longDescription = ''
       Designed and written from scratch it wraps around libwget, that provides the basic
@@ -112,11 +110,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/gnuwget/wget2";
     # wget2 GPLv3+; libwget LGPLv3+
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "wget2";
   };
-}
+})

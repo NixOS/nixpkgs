@@ -20,7 +20,7 @@
   libjpeg,
   libuuid,
   libuv,
-  libX11,
+  libx11,
   lua5_4,
   lzfse,
   opencl-headers,
@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.37";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "vengi-voxel";
     repo = "vengi";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Pm3vGS6u//iktkj/2RR7xaCTt8fevCWm0a1Hlfkxry8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2ZiRN+59oJL0Bgd0D78w8FLoBCwzVTlo0SgsMJY8Jxk=";
   };
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -60,26 +60,25 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      libbfd
-      libdwarf
-      backward-cpp
-      curl
-      enet
-      freetype
-      glm
-      libjpeg
-      libuuid
-      libuv
-      lua5_4
-      lzfse
-      SDL2
-      libX11
-      SDL2_mixer
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
+  buildInputs = [
+    libbfd
+    libdwarf
+    backward-cpp
+    curl
+    enet
+    freetype
+    glm
+    libjpeg
+    libuuid
+    libuv
+    lua5_4
+    lzfse
+    SDL2
+    libx11
+    SDL2_mixer
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
 
   # error: "The plain signature for target_link_libraries has already been used"
   doCheck = false;
@@ -116,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     run-voxedit = nixosTests.vengi-tools;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools from the vengi voxel engine, including a thumbnailer, a converter, and the VoxEdit voxel editor";
     longDescription = ''
       Tools from the vengi C++ voxel game engine. It includes a voxel editor
@@ -128,10 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://vengi-voxel.github.io/vengi/";
     downloadPage = "https://github.com/vengi-voxel/vengi/releases";
     license = [
-      licenses.mit
-      licenses.cc-by-sa-30
+      lib.licenses.mit
+      lib.licenses.cc-by-sa-30
     ];
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
+    # Segfaults when building shaders
+    broken = stdenv.hostPlatform.isLinux;
   };
 })

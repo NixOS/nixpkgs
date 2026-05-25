@@ -19,18 +19,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ticktick";
-  version = "6.0.30";
+  version = "8.0.10";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "${baseUrl}/linux/linux_deb_x64/ticktick-${finalAttrs.version}-amd64.deb";
-        hash = "sha256-xTNQby3KZlo3QQM5FqEKXYzAYq6jgWwN7zjYF2l6+78=";
+        hash = "sha256-5zIhLpoqZM8+RC4YBhdDyMq2aEg31O8U6Q5gD8Bo9es=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "${baseUrl}/linux/linux_deb_arm64/ticktick-${finalAttrs.version}-arm64.deb";
-        hash = "sha256-MlWOCkk0dyYV4iyPTs/Jtq+E9Qpsizoe2XGmPljrahA=";
+        hash = "sha256-R9dMGUiSXX/CRfVXoW3w2Gk1UfknfmNWoIqkhL/FRJs=";
       }
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -77,11 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful to-do & task management app with seamless cloud synchronization across all your devices";
     homepage = "https://ticktick.com/home/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       hbjydev
       jonocodes
     ];
@@ -89,6 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

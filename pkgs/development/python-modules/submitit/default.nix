@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   cloudpickle,
   flit-core,
   typing-extensions,
@@ -12,23 +11,20 @@
 
 buildPythonPackage rec {
   pname = "submitit";
-  version = "1.5.2";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "submitit";
     tag = version;
-    hash = "sha256-PDQLzqQjoBAZM9FKsoRby26Pbh4nik3SltIHUw/xWcY=";
+    hash = "sha256-Q/2mC7viLYl8fx7dtQueZqT191EbERZPfN0WkTS/U1w=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     cloudpickle
-    flit-core
     typing-extensions
   ];
 
@@ -43,13 +39,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests are broken
-    "test_snapshot"
-    "test_snapshot_excludes"
-    "test_job_use_snapshot_cwd"
-    "test_job_use_snapshot_modules"
-    "test_nested_pickling"
     "test_setup"
-    "test_requeuing"
   ];
 
   meta = {
@@ -57,6 +47,6 @@ buildPythonPackage rec {
     description = "Python 3.8+ toolbox for submitting jobs to Slurm";
     homepage = "https://github.com/facebookincubator/submitit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ lib.maintainers.nickcao ];
   };
 }

@@ -1,28 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   py,
   pytest,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-random-order";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RHLX008fHF86NZxP/FwT7QZSMvMeyhnIhEwatAbnkIA=";
+  src = fetchFromGitHub {
+    owner = "jbasko";
+    repo = "pytest-random-order";
+    tag = "v${version}";
+    hash = "sha256-c282PrdXxG7WChnkpLWe059OmtTOl1Mn6yWgMRfCjBA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
 
@@ -34,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "random_order" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jbasko/pytest-random-order";
     description = "Randomise the order of tests with some control over the randomness";
     changelog = "https://github.com/jbasko/pytest-random-order/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

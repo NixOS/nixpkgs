@@ -6,16 +6,16 @@
 }:
 
 let
-  cfg = config.programs.river;
+  cfg = config.programs.river-classic;
 
   wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
-  options.programs.river = {
-    enable = lib.mkEnableOption "river, a dynamic tiling Wayland compositor";
+  options.programs.river-classic = {
+    enable = lib.mkEnableOption "river-classic, a dynamic tiling Wayland compositor";
 
     package =
-      lib.mkPackageOption pkgs "river" {
+      lib.mkPackageOption pkgs "river-classic" {
         nullable = true;
         extraDescription = ''
           If the package is not overridable with `xwaylandSupport`, then the module option
@@ -51,7 +51,7 @@ in
         with pkgs; [ swaylock foot dmenu ];
       '';
       example = lib.literalExpression ''
-        with pkgs; [ termite rofi light ]
+        with pkgs; [ alacritty rofi light ]
       '';
       description = ''
         Extra packages to be installed system wide. See
@@ -60,6 +60,22 @@ in
       '';
     };
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "river" "enable" ] [ "programs" "river-classic" "enable" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "river" "package" ]
+      [ "programs" "river-classic" "package" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "river" "xwayland" "enable" ]
+      [ "programs" "river-classic" "xwayland" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "river" "extraPackages" ]
+      [ "programs" "river-classic" "extraPackages" ]
+    )
+  ];
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [

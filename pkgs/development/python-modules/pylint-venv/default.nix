@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylint-venv";
   version = "3.0.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "pylint-venv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dJWVfltze4zT0CowBZSn3alqR2Y8obKUCmO8Nfw+ahs=";
   };
 
@@ -27,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_venv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to make pylint respect virtual environments";
     homepage = "https://github.com/jgosmann/pylint-venv/";
-    changelog = "https://github.com/jgosmann/pylint-venv/blob/v${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jgosmann/pylint-venv/blob/v${finalAttrs.version}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

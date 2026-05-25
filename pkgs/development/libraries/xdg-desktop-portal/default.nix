@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchFromGitLab,
   flatpak,
   fuse3,
   bubblewrap,
@@ -32,20 +33,31 @@
   enableSystemd ? true,
 }:
 
+let
+  # Update this revision when updating this package, found in https://github.com/flatpak/xdg-desktop-portal/blob/master/subprojects/libglnx.wrap
+  libglnxSrc = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libglnx";
+    rev = "ccea836b799256420788c463a638ded0636b1632";
+    hash = "sha256-H8Bg9QCSkt/aBOaHLyHYC2ei6OU7UpcLq8zLurkYOuA=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.20.3";
+  version = "1.20.4";
 
   outputs = [
     "out"
     "installedTests"
   ];
+  separateDebugInfo = true;
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     tag = finalAttrs.version;
-    hash = "sha256-ntTGEsk8GlXkp3i9RtF+T7jqnNdL2GVbu05d68WVTYc=";
+    hash = "sha256-wLQgJsVicOb8G7M5Qwd+t90UgNYTD04bZ5Ki85Alr1w=";
   };
 
   patches = [
@@ -81,29 +93,28 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsNoGuiHook
   ];
 
-  buildInputs =
-    [
-      flatpak
-      fuse3
-      bubblewrap
-      glib
-      gsettings-desktop-schemas
-      json-glib
-      pipewire
-      gst_all_1.gst-plugins-base
-      libgudev
+  buildInputs = [
+    flatpak
+    fuse3
+    bubblewrap
+    glib
+    gsettings-desktop-schemas
+    json-glib
+    pipewire
+    gst_all_1.gst-plugins-base
+    libgudev
 
-      # For icon validator
-      gdk-pixbuf
-      librsvg
-      bash
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableSystemd [
-      systemdMinimal # libsystemd
-    ];
+    # For icon validator
+    gdk-pixbuf
+    librsvg
+    bash
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableSystemd [
+    systemdMinimal # libsystemd
+  ];
 
   nativeCheckInputs = [
     dbus
@@ -126,26 +137,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ umockdev ];
 
-  mesonFlags =
-    [
-      "--sysconfdir=/etc"
-      "-Dinstalled-tests=true"
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "-Ddocumentation=disabled" # pulls in a whole lot of extra stuff
-      (lib.mesonEnable "systemd" enableSystemd)
-    ]
-    ++ lib.optionals (!enableGeoLocation) [
-      "-Dgeoclue=disabled"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dtests=disabled"
-    ];
+  mesonFlags = [
+    "--sysconfdir=/etc"
+    "-Dinstalled-tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Ddocumentation=disabled" # pulls in a whole lot of extra stuff
+    (lib.mesonEnable "systemd" enableSystemd)
+  ]
+  ++ lib.optionals (!enableGeoLocation) [
+    "-Dgeoclue=disabled"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dtests=disabled"
+  ];
 
   strictDeps = true;
 
   doCheck = true;
 
   postPatch = ''
+    mkdir -p subprojects/libglnx
+    cp -r ${libglnxSrc}/* subprojects/libglnx/
+
     # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
     substituteInPlace meson.build \
       --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
@@ -180,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
       installedTests = nixosTests.installed-tests.xdg-desktop-portal;
 
       validate-icon = runCommand "test-icon-validation" { } ''
-        ${finalAttrs.finalPackage}/libexec/xdg-desktop-portal-validate-icon --ruleset=desktop --sandbox --path=${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
+        ${finalAttrs.finalPackage}/libexec/xdg-desktop-portal-validate-icon --ruleset=desktop --sandbox --path=${../../../by-name/zy/zynaddsubfx/ZynLogo.svg} > "$out"
         grep format=svg "$out"
       '';
     };

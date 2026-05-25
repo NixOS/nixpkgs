@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Practical calculating tool and programming language";
     homepage = "https://frinklang.org/";
-    license = licenses.unfree;
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
-    maintainers = [ maintainers.stefanfehrenbach ];
+    license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    maintainers = [ lib.maintainers.stefanfehrenbach ];
   };
 
   passthru.tests = {

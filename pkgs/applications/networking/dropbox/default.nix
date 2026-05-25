@@ -1,38 +1,15 @@
 {
-  stdenv,
   lib,
   buildFHSEnv,
   writeScript,
   makeDesktopItem,
 }:
 
-let
-  platforms = [
-    "i686-linux"
-    "x86_64-linux"
-  ];
-in
-
-assert lib.elem stdenv.hostPlatform.system platforms;
-
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version =
-    {
-      x86_64-linux = "217.4.4417";
-      i686-linux = "206.3.6386";
-    }
-    .${stdenv.hostPlatform.system};
-
-  arch =
-    {
-      x86_64-linux = "x86_64";
-      i686-linux = "x86";
-    }
-    .${stdenv.hostPlatform.system};
-
-  installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
+  version = "246.4.3513";
+  installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.x86_64-${version}.tar.gz";
 
   desktopItem = makeDesktopItem {
     name = "dropbox";
@@ -64,23 +41,20 @@ buildFHSEnv {
   unsharePid = false;
 
   targetPkgs =
-    pkgs:
-    with pkgs;
-    with xorg;
-    [
-      libICE
-      libSM
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrender
-      libXmu
-      libXxf86vm
+    pkgs: with pkgs; [
+      libice
+      libsm
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrender
+      libxmu
+      libxxf86vm
       libGL
       libxcb
-      xkeyboardconfig
+      xkeyboard-config
       curl
       dbus
       firefox-bin
@@ -89,13 +63,14 @@ buildFHSEnv {
       gcc
       glib
       gnutar
+      gtk3
       libxml2
       libxslt
       procps
       zlib
       libgbm
       libxshmfence
-      libpthreadstubs
+      libpthread-stubs
       libappindicator
     ];
 
@@ -140,10 +115,7 @@ buildFHSEnv {
     homepage = "https://www.dropbox.com/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ ttuegel ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = [ "x86_64-linux" ];
     mainProgram = "dropbox";
   };
 }

@@ -12,6 +12,7 @@
   dbus-python,
 
   # checks
+  doCheck ? true,
   dbus,
   gobject-introspection,
   pygobject3,
@@ -30,14 +31,14 @@ let
 in
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.34.2";
+  version = "0.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "python-dbusmock";
     tag = version;
-    hash = "sha256-7h5SIcgWcbzInmCkbGz/ulfPJvqPPguWLJY+AXJuo0c=";
+    hash = "sha256-Q149NcbpbIgXCd7WujALC9I9vAM/tZh+enTJh0d84Kg=";
   };
 
   build-system = [
@@ -46,6 +47,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ dbus-python ];
+
+  inherit doCheck;
 
   nativeCheckInputs = [
     dbus
@@ -65,12 +68,12 @@ buildPythonPackage rec {
     "test_session_service_activation"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${src.tag}";
     description = "Mock D-Bus objects for tests";
     homepage = "https://github.com/martinpitt/python-dbusmock";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ callahad ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ callahad ];
+    platforms = lib.platforms.linux;
   };
 }

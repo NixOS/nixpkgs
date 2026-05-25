@@ -8,12 +8,12 @@
   hidapi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libu2f-host";
   version = "1.1.10";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.xz";
+    url = "https://developers.yubico.com/libu2f-host/Releases/libu2f-host-${finalAttrs.version}.tar.xz";
     sha256 = "0vrivl1dwql6nfi48z6dy56fwy2z13d7abgahgrs2mcmqng7hra2";
   };
 
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "C library and command-line tool that implements the host-side of the U2F protocol";
     homepage = "https://developers.yubico.com/libu2f-host";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl21Plus
     ];
     mainProgram = "u2f-host";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

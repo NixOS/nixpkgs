@@ -5,9 +5,6 @@ let
 in
 {
   name = "iscsi";
-  meta = {
-    maintainers = pkgs.lib.teams.deshaw.members;
-  };
 
   nodes = {
     target =
@@ -150,12 +147,12 @@ in
         boot.initrd.network.enable = true;
         boot.loader.grub.enable = false;
 
-        boot.kernelParams = lib.mkOverride 5 ([
+        boot.kernelParams = lib.mkOverride 5 [
           "boot.shell_on_fail"
           "console=tty1"
           "ip=192.168.1.1:::255.255.255.0::ens9:none"
           "ip=192.168.2.1:::255.255.255.0::ens10:none"
-        ]);
+        ];
 
         # defaults to true, puts some code in the initrd that tries to mount an overlayfs on /nix/store
         virtualisation.writableStore = false;
@@ -189,6 +186,7 @@ in
         boot.initrd.extraFiles."etc/multipath/wwids".source =
           pkgs.writeText "wwids" "/3600140592b17c3f6b404168b082ceeb7/";
 
+        boot.initrd.systemd.enable = false;
         boot.iscsi-initiator = {
           discoverPortal = "target";
           name = initiatorName;

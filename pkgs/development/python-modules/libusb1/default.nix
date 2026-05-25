@@ -33,13 +33,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "usb1/testUSB1.py" ];
+  enabledTestPaths = [ "usb1/testUSB1.py" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       prusnak
       rnhmjoj
     ];

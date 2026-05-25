@@ -4,10 +4,10 @@ Some packages rely on
 [FUSE](https://www.kernel.org/doc/html/latest/filesystems/fuse.html) to provide
 support for additional filesystems not supported by the kernel.
 
-In general, FUSE software are primarily developed for Linux but many of them can
+In general, FUSE software is primarily developed for Linux but many of them can
 also run on macOS. Nixpkgs supports FUSE packages on macOS, but it requires
 [macFUSE](https://osxfuse.github.io) to be installed outside of Nix. macFUSE
-currently isn't packaged in Nixpkgs mainly because it includes a kernel
+currently isn't packaged in Nixpkgs, mainly because it includes a kernel
 extension, which isn't supported by Nix outside of NixOS.
 
 If a package fails to run on macOS with an error message similar to the
@@ -24,7 +24,7 @@ packages on macOS:
     checking for fuse.h... no
     configure: error: No fuse.h found.
 
-This happens on autoconf based projects that use `AC_CHECK_HEADERS` or
+This happens on autoconf-based projects that use `AC_CHECK_HEADERS` or
 `AC_CHECK_LIBS` to detect libfuse, and will occur even when the `fuse` package
 is included in `buildInputs`. It happens because libfuse headers throw an error
 on macOS if the `FUSE_USE_VERSION` macro is undefined. Many projects do define

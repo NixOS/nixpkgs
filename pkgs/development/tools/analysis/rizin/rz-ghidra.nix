@@ -28,38 +28,36 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      openssl
-      pugixml
-      rizin
-    ]
-    ++ lib.optionals enableCutterPlugin [
-      cutter
-      qt5compat
-      qtbase
-      qtsvg
-    ];
+  buildInputs = [
+    openssl
+    pugixml
+    rizin
+  ]
+  ++ lib.optionals enableCutterPlugin [
+    cutter
+    qt5compat
+    qtbase
+    qtsvg
+  ];
 
   dontWrapQtApps = true;
 
-  cmakeFlags =
-    [
-      "-DUSE_SYSTEM_PUGIXML=ON"
-    ]
-    ++ lib.optionals enableCutterPlugin [
-      "-DBUILD_CUTTER_PLUGIN=ON"
-      "-DCUTTER_INSTALL_PLUGDIR=share/rizin/cutter/plugins/native"
-    ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_PUGIXML=ON"
+  ]
+  ++ lib.optionals enableCutterPlugin [
+    "-DBUILD_CUTTER_PLUGIN=ON"
+    "-DCUTTER_INSTALL_PLUGDIR=share/rizin/cutter/plugins/native"
+  ];
 
-  meta = with lib; {
+  meta = {
     # errors out with undefined symbols from Cutter
     broken = enableCutterPlugin && stdenv.hostPlatform.isDarwin;
     description = "Deep ghidra decompiler and sleigh disassembler integration for rizin";
     homepage = finalAttrs.src.meta.homepage;
     changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ chayleaf ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ chayleaf ];
     inherit (rizin.meta) platforms;
   };
 })

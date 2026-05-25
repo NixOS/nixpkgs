@@ -1,38 +1,36 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   qcs-api-client-common,
   quil,
   rustPlatform,
-  libiconv,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.21.18";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
-    tag = "python/v${version}";
-    hash = "sha256-uN9SQnQR5y4gyJeQI5H04hT1OL1ZQBwCdz8GkNMMTLY=";
+    tag = "lib/v${version}";
+    hash = "sha256-ZxfDOcfTMyBvS5IRU2c61TOxwnM8hW4hTTjI4JlbBJk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-PqQMG8RKF8Koz796AeoG/X9SeL1TruwOVPqwfKuq984=";
+    hash = "sha256-Tx3qmBXUZZWNrkQybKNc/gmF/3Jfip+bgF9PSTEXntM=";
   };
 
-  buildAndTestSubdir = "crates/python";
+  buildAndTestSubdir = "crates/lib";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -47,10 +45,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     tracing-opentelemetry = [ opentelemetry-api ];
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
 
   nativeCheckInputs = [
     opentelemetry-sdk
@@ -72,8 +66,12 @@ buildPythonPackage rec {
     "test_qvm_tracing"
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "lib/v";
+  };
+
   meta = {
-    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/crates/python/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/${buildAndTestSubdir}/CHANGELOG.md";
     description = "Python interface for the QCS Rust SDK";
     homepage = "https://github.com/rigetti/qcs-sdk-rust/tree/main/crates/python";
     license = lib.licenses.asl20;

@@ -25,20 +25,20 @@
   libdrm,
   libglvnd,
   libkrb5,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
   libxshmfence,
-  libXtst,
+  libxtst,
   libgbm,
   nspr,
   nss,
@@ -79,6 +79,11 @@
   bzip2,
   libcap,
 
+  # Fonts (See issue #463615)
+  makeFontsConf,
+  noto-fonts-cjk-sans,
+  noto-fonts-cjk-serif,
+
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
@@ -94,8 +99,13 @@
   addDriverRunpath,
   undmg,
 
-  # For QT support
+  # Enables Chrome's "Use QT" appearance to introspect the user's Plasma theme
+  plasmaSupport ? false,
   qt6,
+  kdePackages,
+
+  # Create a symlink at $out/bin/google-chrome
+  withSymlink ? true,
 }:
 
 let
@@ -103,79 +113,82 @@ let
 
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-    ]
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional libvaSupport libva
-    ++ [
-      gtk3
-      gtk4
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    bzip2
+    cairo
+    coreutils
+    cups
+    curl
+    dbus
+    expat
+    flac
+    fontconfig
+    freetype
+    gcc-unwrapped.lib
+    gdk-pixbuf
+    glib
+    harfbuzz
+    icu
+    libcap
+    libdrm
+    liberation_ttf
+    libexif
+    libglvnd
+    libkrb5
+    libpng
+    libx11
+    libxcb
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxkbcommon
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
+    libgbm
+    nspr
+    nss
+    opusWithCustomModes
+    pango
+    pciutils
+    pipewire
+    snappy
+    speechd-minimal
+    systemd
+    util-linux
+    vulkan-loader
+    wayland
+    wget
+  ]
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional libvaSupport libva
+  ++ [
+    gtk3
+    gtk4
+  ]
+  ++ lib.optionals plasmaSupport [
+    qt6.qtbase
+    qt6.qtwayland
+    kdePackages.plasma-integration
+    kdePackages.breeze
+  ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "137.0.7151.103";
+    version = "148.0.7778.178";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-fodxvhsZXB5qyQf05Id5DDtoAyh7Y5m+b1p5DgTNfM4=";
+      hash = "sha256-3iuKxcuwt/+BIcUqC715hbeRLhUjepNU1GbB3daIokI=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -207,6 +220,13 @@ let
     rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
     binpath = lib.makeBinPath deps;
 
+    fontsConf = makeFontsConf {
+      fontDirectories = [
+        noto-fonts-cjk-sans
+        noto-fonts-cjk-serif
+      ];
+    };
+
     installPhase = ''
       runHook preInstall
 
@@ -231,9 +251,6 @@ let
         --replace-fail /usr/bin/google-chrome-$dist $exe
       substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
         --replace-fail /opt/google/$appname/google-$appname $exe
-      substituteInPlace $out/share/menu/google-$appname.menu \
-        --replace-fail /opt $out/share \
-        --replace-fail $out/share/google/$appname/google-$appname $exe
 
       for icon_file in $out/share/google/chrome*/product_logo_[0-9]*.png; do
         num_and_suffix="''${icon_file##*logo_}"
@@ -250,13 +267,18 @@ let
 
       # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
-        --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
-        --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ${lib.optionalString plasmaSupport ''
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.plasma-integration}/lib/qt-6/plugins" \
+          --prefix QT_PLUGIN_PATH  : "${kdePackages.breeze}/lib/qt-6/plugins" \
+          --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
+        ''} \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
+        --set FONTCONFIG_FILE "${finalAttrs.fontsConf}" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
@@ -272,15 +294,19 @@ let
 
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "137.0.7151.104";
+    version = "148.0.7778.179";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/din3a4gpe3yt7dv7nagbwgsv5a_137.0.7151.104/GoogleChrome-137.0.7151.104.dmg";
-      hash = "sha256-zS8h03FYAAoj9bHcm/P3d70W2hhRfqw+wsioHgmBKg8=";
+      url = "http://dl.google.com/release2/chrome/adxxii2zvsza6zjfnjbfh6fn4tqq_148.0.7778.179/GoogleChrome-148.0.7778.179.dmg";
+      hash = "sha256-QBHyF222wnaEmI79CQFOXQl5WkRNwneCYd/JFNMEEWU=";
     };
 
     dontPatch = true;
@@ -309,18 +335,21 @@ let
         --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
     '';
+
+    postInstall = lib.optionalString withSymlink ''
+      ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
+    '';
   });
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://chromereleases.googleblog.com/";
     description = "Freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      jnsgruk
-      johnrtitor
+      iedame
+      mdaniels5757
     ];
     platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

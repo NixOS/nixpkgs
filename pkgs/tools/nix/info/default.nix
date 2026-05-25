@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     ]
     ++ (lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ])
   );
-  is_darwin = if stdenv.hostPlatform.isDarwin then "yes" else "no";
+  is_darwin = lib.boolToYesNo stdenv.hostPlatform.isDarwin;
 
   sandboxtest = ./sandbox.nix;
   relaxedsandboxtest = ./relaxedsandbox.nix;

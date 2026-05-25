@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "emcee";
-  version = "0.4.5";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "loopwork-ai";
+    owner = "mattt";
     repo = "emcee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qiH9Om1ChuMpU3CFQkOdJj1uITSI7hojRtXkRF9GSC0=";
+    hash = "sha256-czOUhaPBxzuqZ72Y3TuzZ8r0Ab3OqGbDPZipkcak3Cw=";
   };
 
-  vendorHash = "sha256-TU6Z06b+ZkiaK2ArNKIhHMwBludThpSo4RLZO/sirK4=";
+  vendorHash = "sha256-e8LPcKue7rhAh03uCRG0VTcwwyj3kDOBoeo3t7Hwvi0=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
@@ -29,7 +29,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -42,8 +41,8 @@ buildGoModule (finalAttrs: {
       You can use emcee to connect Claude Desktop
       and other apps to external tools and data services, similar to ChatGPT plugins.
     '';
-    homepage = "https://github.com/loopwork-ai/emcee";
-    changelog = "https://github.com/loopwork-ai/emcee/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/mattt/emcee";
+    changelog = "https://github.com/mattt/emcee/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "emcee";

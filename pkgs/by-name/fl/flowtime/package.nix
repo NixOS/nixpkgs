@@ -16,14 +16,14 @@
   appstream-glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flowtime";
   version = "6.5";
 
   src = fetchFromGitHub {
     owner = "Diego-Ivan";
     repo = "Flowtime";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J0Pscv0ZOpA/LV2mPTLOmDPQpfZhizTghatGnrJHToE=";
   };
 
@@ -38,26 +38,24 @@ stdenv.mkDerivation rec {
     appstream-glib
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      libxml2
-      libportal-gtk4
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-    ]);
+  buildInputs = [
+    libadwaita
+    libxml2
+    libportal-gtk4
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Get what motivates you done, without losing concentration";
     mainProgram = "flowtime";
     homepage = "https://github.com/Diego-Ivan/Flowtime";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      foo-dogsquared
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       pokon548
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

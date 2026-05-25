@@ -10,10 +10,10 @@
   libextractor,
   libglvnd,
   libGLU,
-  libX11,
-  libXext,
-  libXrender,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrender,
+  libxrandr,
   ffmpeg,
   avahi,
   wayland,
@@ -71,10 +71,10 @@ let
       libglvnd
       libGLU
       libvdpau
-      libXext
-      libXrandr
-      libXrender
-      libX11
+      libxext
+      libxrandr
+      libxrender
+      libx11
       vdr
       xine-lib
       avahi
@@ -86,11 +86,11 @@ let
       self
     ];
 
-    meta = with lib; {
+    meta = {
       homepage = "https://sourceforge.net/projects/xineliboutput/";
       description = "Xine-lib based software output device for VDR";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
   };

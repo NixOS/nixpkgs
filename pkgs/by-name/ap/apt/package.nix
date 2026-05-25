@@ -25,23 +25,24 @@
   triehash,
   udev,
   w3m,
-  xxHash,
+  xxhash,
   xz,
   zstd,
   withDocs ? true,
   withNLS ? true,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "3.1.0";
+  version = "3.3.1";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "apt";
     rev = finalAttrs.version;
-    hash = "sha256-Yw72q6o1Q6HPEMbgd/WE6erPqMDfyn2Ax5n1O9BVmRU=";
+    hash = "sha256-93DR4MfKuJ4sF1BHCZyyR04v+WIoEMBW+GvLy7OhuWk=";
   };
 
   # cycle detection; lib can't be split
@@ -52,46 +53,44 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      dpkg # dpkg-architecture
-      gettext # msgfmt
-      gtest
-      (lib.getBin libxslt)
-      pkg-config
-      triehash
-      perlPackages.perl
-    ]
-    ++ lib.optionals withDocs [
-      docbook_xml_dtd_45
-      doxygen
-      perlPackages.Po4a
-      w3m
-    ];
+  nativeBuildInputs = [
+    cmake
+    dpkg # dpkg-architecture
+    gettext # msgfmt
+    gtest
+    (lib.getBin libxslt)
+    pkg-config
+    triehash
+    perlPackages.perl
+  ]
+  ++ lib.optionals withDocs [
+    docbook_xml_dtd_45
+    doxygen
+    perlPackages.Po4a
+    w3m
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      curl
-      db
-      dpkg
-      gnutls
-      gtest
-      libgcrypt
-      libgpg-error
-      libseccomp
-      libtasn1
-      lz4
-      p11-kit
-      udev
-      xxHash
-      xz
-      zstd
-    ]
-    ++ lib.optionals withNLS [
-      gettext
-    ];
+  buildInputs = [
+    bzip2
+    curl
+    db
+    dpkg
+    gnutls
+    gtest
+    libgcrypt
+    libgpg-error
+    libseccomp
+    libtasn1
+    lz4
+    p11-kit
+    udev
+    xxhash
+    xz
+    zstd
+  ]
+  ++ lib.optionals withNLS [
+    gettext
+  ];
 
   cmakeFlags = [
     (lib.cmakeOptionType "filepath" "BERKELEY_INCLUDE_DIRS" "${lib.getDev db}/include")
@@ -103,13 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_DOC" withDocs)
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://salsa.debian.org/apt-team/apt";
     description = "Command-line package management tools used on Debian-based systems";
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${finalAttrs.version}/debian/changelog";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "apt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ VZstless ];
     platforms = lib.platforms.linux;
   };
 })

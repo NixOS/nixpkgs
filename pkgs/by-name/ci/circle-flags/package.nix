@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "circle-flags";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "HatScripts";
     repo = "circle-flags";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/+f5MDRW+tRH+jMtl3XuVPBShgy2PlD3NY+74mJa2Qk=";
+    hash = "sha256-Wa59G8ov/S89BABtpey/ueplztiYIUXrSDg72wG74jQ=";
   };
 
   installPhase = ''
@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/HatScripts/circle-flags";
     description = "Collection of 400+ minimal circular SVG country and state flags";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bobby285271 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    platforms = lib.platforms.all;
   };
 })

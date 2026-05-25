@@ -29,26 +29,27 @@
   noiseprotocol,
 
   # tests
-  nettools,
+  net-tools,
   unixtools,
-  magic-wormhole-transit-relay,
+  hypothesis,
   magic-wormhole-mailbox-server,
+  magic-wormhole-transit-relay,
   pytestCheckHook,
   pytest-twisted,
 
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole";
-  version = "0.19.2";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
-    tag = version;
-    hash = "sha256-5Tipcood5RktXY05p20hQpWhSMMnZm67I4iybjV8TcA=";
+    tag = finalAttrs.version;
+    hash = "sha256-aY8dI5K2qroY+Nbc00R5XK0AjHpdnXFYWABgPqf8gQ8=";
   };
 
   postPatch =
@@ -60,7 +61,7 @@ buildPythonPackage rec {
     ''
     # fix the location of the ifconfig binary
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
+      sed -i -e "s|'ifconfig'|'${net-tools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
     '';
 
   build-system = [
@@ -68,25 +69,24 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  dependencies =
-    [
-      attrs
-      autobahn
-      automat
-      click
-      cryptography
-      humanize
-      iterable-io
-      pynacl
-      qrcode
-      spake2
-      tqdm
-      twisted
-      txtorcon
-      zipstream-ng
-    ]
-    ++ autobahn.optional-dependencies.twisted
-    ++ twisted.optional-dependencies.tls;
+  dependencies = [
+    attrs
+    autobahn
+    automat
+    click
+    cryptography
+    humanize
+    iterable-io
+    pynacl
+    qrcode
+    spake2
+    tqdm
+    twisted
+    txtorcon
+    zipstream-ng
+  ]
+  ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     dilation = [ noiseprotocol ];
@@ -96,36 +96,37 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  nativeCheckInputs =
-    [
-      magic-wormhole-mailbox-server
-      magic-wormhole-transit-relay
-      pytestCheckHook
-      pytest-twisted
-    ]
-    ++ optional-dependencies.dilation
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
-
-  pytestFlagsArray = [ "src/wormhole/test" ];
+  nativeCheckInputs = [
+    hypothesis
+    magic-wormhole-mailbox-server
+    magic-wormhole-transit-relay
+    pytestCheckHook
+    pytest-twisted
+  ]
+  ++ finalAttrs.finalPackage.optional-dependencies.dilation
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
-    installShellCompletion --cmd ${meta.mainProgram} \
+
+    # https://github.com/magic-wormhole/magic-wormhole/issues/619
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
       --bash wormhole_complete.bash \
       --fish wormhole_complete.fish \
       --zsh wormhole_complete.zsh
+    rm $out/wormhole_complete.*
   '';
 
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
+    changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${finalAttrs.src.rev}/NEWS.md";
     description = "Securely transfer data between computers";
     homepage = "https://magic-wormhole.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
     mainProgram = "wormhole";
   };
-}
+})

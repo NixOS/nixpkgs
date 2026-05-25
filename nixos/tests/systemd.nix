@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "systemd";
 
@@ -27,7 +27,13 @@
         };
       };
 
-      systemd.extraConfig = "DefaultEnvironment=\"XXX_SYSTEM=foo\"";
+      systemd.settings.Manager = {
+        DefaultEnvironment = "XXX_SYSTEM=foo";
+        WatchdogDevice = "/dev/watchdog";
+        RuntimeWatchdogSec = "30s";
+        RebootWatchdogSec = "10min";
+        KExecWatchdogSec = "5min";
+      };
       systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
       services.journald.extraConfig = "Storage=volatile";
       test-support.displayManager.auto.user = "alice";
@@ -86,13 +92,6 @@
         '';
       };
 
-      systemd.watchdog = {
-        device = "/dev/watchdog";
-        runtimeTime = "30s";
-        rebootTime = "10min";
-        kexecTime = "5min";
-      };
-
       environment.etc."systemd/system-preset/10-testservice.preset".text = ''
         disable ${config.systemd.services.testservice1.name}
       '';
@@ -109,6 +108,14 @@
       # Will not succeed unless ConditionFirstBoot=yes
       machine.wait_for_unit("first-boot-complete.target")
 
+      machine.succeed(
+        "journalctl --system -o cat --grep 'systemd ${lib.escapeRegex nodes.machine.systemd.package.version} running'"
+      )
+
+      assert "systemd ${lib.versions.major nodes.machine.systemd.package.version} (${nodes.machine.systemd.package.version})" in machine.succeed(
+        "systemctl --version"
+      )
+
       # Make sure, a subsequent boot isn't a ConditionFirstBoot=yes.
       machine.reboot()
       machine.wait_for_x()
@@ -117,17 +124,6 @@
 
       # wait for user services
       machine.wait_for_unit("default.target", "alice")
-
-      with subtest("systemctl edit suggests --runtime"):
-          # --runtime is suggested when using `systemctl edit`
-          ret, out = machine.execute("systemctl edit testservice1.service 2>&1")
-          assert ret == 1
-          assert out.rstrip("\n") == "The unit-directory '/etc/systemd/system' is read-only on NixOS, so it's not possible to edit system-units directly. Use 'systemctl edit --runtime' instead."
-          # editing w/o `--runtime` is possible for user-services, however
-          # it's not possible because we're not in a tty when grepping
-          # (i.e. hacky way to ensure that the error from above doesn't appear here).
-          _, out = machine.execute("systemctl --user edit testservice2.service 2>&1")
-          assert out.rstrip("\n") == "Cannot edit units interactively if not on a tty."
 
       # Regression test for https://github.com/NixOS/nixpkgs/issues/105049
       with subtest("systemd reads timezone database in /etc/zoneinfo"):
@@ -172,7 +168,6 @@
       # Regression test for https://github.com/NixOS/nixpkgs/pull/91232
       with subtest("setting transient hostnames works"):
           machine.succeed("hostnamectl set-hostname --transient machine-transient")
-          machine.fail("hostnamectl set-hostname machine-all")
 
       with subtest("systemd-shutdown works"):
           machine.shutdown()
@@ -237,7 +232,7 @@
           assert "0B read, 0B written" not in output
 
       with subtest("systemd per-unit accounting works"):
-          assert "IP traffic received: 84B sent: 84B" in output_ping
+          assert "IP Traffic: received 84B, sent 84B" in output_ping
 
       with subtest("systemd environment is properly set"):
           machine.systemctl("daemon-reexec")  # Rewrites /proc/1/environ

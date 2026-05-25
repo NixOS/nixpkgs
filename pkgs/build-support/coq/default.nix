@@ -6,6 +6,7 @@
   which,
   fetchzip,
   fetchurl,
+  dune,
 }@args:
 
 let
@@ -97,6 +98,7 @@ let
       "dropAttrs"
       "dropDerivationAttrs"
       "keepAttrs"
+      "enableParallelBuilding"
     ]
     ++ dropAttrs
   ) keepAttrs;
@@ -190,7 +192,7 @@ stdenv.mkDerivation (
       nativeBuildInputs =
         args.overrideNativeBuildInputs or (
           [ which ]
-          ++ optional useDune coq.ocamlPackages.dune_3
+          ++ optional useDune dune
           ++ optionals (useDune || mlPlugin) [
             coq.ocamlPackages.ocaml
             coq.ocamlPackages.findlib
@@ -200,7 +202,10 @@ stdenv.mkDerivation (
         );
       buildInputs =
         args.overrideBuildInputs or ([ coq ] ++ (args.buildInputs or [ ]) ++ extraBuildInputs);
-      inherit enableParallelBuilding;
+      enableParallelBuilding =
+        lib.warnIf (args ? enableParallelBuilding && args.enableParallelBuilding == true)
+          "mkCoqDerivation: enableParallelBuilding is enabled by default; remove the explicit setting"
+          enableParallelBuilding;
 
       meta =
         (

@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mozilla/zilla-slab";
     description = "Zilla Slab fonts";
     longDescription = ''
@@ -36,8 +36,8 @@ stdenvNoCC.mkDerivation rec {
       sophisticated industrial look and a friendly
       approachability in all weights.
     '';
-    license = licenses.ofl;
-    maintainers = with maintainers; [ caugner ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ caugner ];
+    platforms = lib.platforms.all;
   };
 }

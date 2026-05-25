@@ -51,4 +51,14 @@
   "test_file_change_many_times_is_first_result"
   "test_newer_change_can_beat_frequent_change_in_past"
   "test_commit_messages_with_three_or_more_colons"
+
+  # Compatibility issue with click 8.2
+  # https://github.com/kantord/SeaGOAT/issues/1021
+  "test_seagoat_warns_on_incomplete_accuracy[99]"
+  "test_seagoat_warns_on_incomplete_accuracy[100]"
+  "test_server_error_handling[File Not Found on Server-500]"
+  "test_server_error_handling[Database Connection Failed-503]"
+  "test_server_does_not_exist_error"
+  "test_no_network_to_update"
+  "test_server_shows_error_when_folder_is_not_a_git_repo"
 ]

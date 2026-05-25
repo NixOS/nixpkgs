@@ -31,6 +31,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonw/llm-jq";
     changelog = "https://github.com/simonw/llm-jq/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ josh ];
+    maintainers = with lib.maintainers; [
+      erethon
+      josh
+      philiptaron
+    ];
   };
 }

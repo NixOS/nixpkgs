@@ -1,4 +1,4 @@
-# This module defines a NixOS configuration with the Plasma 5 desktop.
+# This module defines a NixOS configuration with the Plasma 6 desktop.
 # It's used by the graphical installation CD.
 
 { pkgs, ... }:
@@ -6,11 +6,11 @@
 {
   services.xserver = {
     enable = true;
-    desktopManager.plasma5.enable = true;
+    desktopManager.plasma6.enable = true;
   };
 
   services = {
-    displayManager.sddm.enable = true;
+    displayManager.plasma-login-manager.enable = true;
     libinput.enable = true; # for touchpad support on many laptops
   };
 

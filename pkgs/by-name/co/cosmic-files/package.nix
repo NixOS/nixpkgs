@@ -12,27 +12,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.7";
+  version = "1.0.13";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-bI5yTpqU2N6hFwI9wi4b9N5onY5iN+8YDM3bSgdYxjQ=";
+    hash = "sha256-/5PPDs2rDEGOMShclh+ZnX28zuF3MbQ7W+Rze1xIPu4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7AOdSk9XIXFCDyCus3XgOK3ZBVa4CvX+NFM0jHf7Wbs=";
+  cargoHash = "sha256-1sY/V+/hd4vzjiufdLR8BIG5FC0F2sLbe8M2VqbinEU=";
 
-  env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-04-22";
-    VERGEN_GIT_SHA = finalAttrs.src.tag;
-  };
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     just
     libcosmicAppHook
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [ glib ];
@@ -45,11 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
-    "--set"
-    "applet-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary
@@ -73,17 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     defaultCargoTestFlags="$cargoTestFlags"
 
-    # Some tests with the `compio` runtime expect io_uring support but that
-    # is disabled in the Nix sandbox and the tests fail because they can't
-    # run in the sandbox. Ideally, the `compio` crate should fallback to a
-    # non-io_uring runtime but for some reason, that doesn't happen.
-    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files -- \
-      --skip operation::tests::copy_dir_to_same_location \
-      --skip operation::tests::copy_file_to_same_location \
-      --skip operation::tests::copy_file_with_diff_name_to_diff_dir \
-      --skip operation::tests::copy_file_with_extension_to_same_loc \
-      --skip operation::tests::copy_to_diff_dir_doesnt_dupe_files \
-      --skip operation::tests::copying_file_multiple_times_to_same_location"
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files"
     runHook cargoCheckHook
 
     cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
@@ -101,10 +86,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

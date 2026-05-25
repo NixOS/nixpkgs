@@ -1,6 +1,22 @@
-{ fetchFromGitHub, libgit2, ... }:
+{
+  lib,
+  fetchFromGitHub,
+  libgit2,
+  ...
+}:
 
 libgit2.overrideAttrs (oldAttrs: {
+  pname = "romkatv_libgit2";
+
+  src = fetchFromGitHub {
+    owner = "romkatv";
+    repo = "libgit2";
+    rev = "tag-2ecf33948a4df9ef45a66c68b8ef24a5e60eaac6";
+    hash = "sha256-Bm3Gj9+AhNQMvkIqdrTkK5D9vrZ1qq6CS8Wrn9kfKiw=";
+  };
+
+  patches = [ ];
+
   cmakeFlags = oldAttrs.cmakeFlags ++ [
     "-DBUILD_CLAR=OFF"
     "-DBUILD_SHARED_LIBS=OFF"
@@ -13,16 +29,9 @@ libgit2.overrideAttrs (oldAttrs: {
     "-DZERO_NSEC=ON"
   ];
 
-  src = fetchFromGitHub {
-    owner = "romkatv";
-    repo = "libgit2";
-    rev = "tag-2ecf33948a4df9ef45a66c68b8ef24a5e60eaac6";
-    hash = "sha256-Bm3Gj9+AhNQMvkIqdrTkK5D9vrZ1qq6CS8Wrn9kfKiw=";
-  };
-
   # this is a heavy fork of the original libgit2
   # the original checkPhase does not work for this fork
   doCheck = false;
 
-  patches = [ ];
+  meta = lib.removeAttrs oldAttrs.meta [ "changelog" ];
 })

@@ -3,20 +3,21 @@
   stdenv,
   fetchFromGitHub,
   nixVersions,
+  nixComponents ? nixVersions.nixComponents_2_30,
   cmake,
   pkg-config,
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-plugins";
-  version = "15.0.0";
+  version = "16.0.1";
 
   src = fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-plugins";
-    rev = version;
-    hash = "sha256-C4VqKHi6nVAHuXVhqvTRRyn0Bb619ez4LzgUWPH1cbM=";
+    rev = finalAttrs.version;
+    hash = "sha256-1P5oVXSx/hGK5MB2grxWtmqsKGtTEmT1XD5+NSsLFUw=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +26,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    nixVersions.nix_2_24
+    nixComponents.nix-expr
+    nixComponents.nix-main
+    nixComponents.nix-store
+    nixComponents.nix-cmd
     boost
   ];
 
@@ -35,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

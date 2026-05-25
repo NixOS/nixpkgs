@@ -2,22 +2,22 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   libjpeg,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.0.23";
   pname = "flmsg";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/flmsg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3eR0wrzkNjlqm5xW5dtgihs33cVUmZeS0/rf+xnPeRY=";
   };
 
   buildInputs = [
-    fltk13
+    fltk_1_3
     libjpeg
   ];
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "flmsg";
   };
-}
+})

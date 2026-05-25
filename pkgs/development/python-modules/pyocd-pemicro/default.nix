@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools-scm,
   pyocd,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyocd-pemicro";
   version = "1.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyocd";

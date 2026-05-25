@@ -5,16 +5,17 @@
   lib,
   pam,
   libxslt,
-  libXext,
-  libXcursor,
-  libXmu,
+  libxext,
+  libxcursor,
+  libxmu,
   glib,
-  libXrandr,
+  libxrandr,
   dbus,
   xz,
   pkg-config,
   which,
-  xorg,
+  xorg-server,
+  xrandr,
   yasm,
   patchelf,
   makeself,
@@ -23,6 +24,7 @@
   virtualboxVersion,
   virtualboxSubVersion,
   virtualboxSha256,
+  platform,
 }:
 
 let
@@ -47,19 +49,20 @@ stdenv.mkDerivation (finalAttrs: {
     which
     yasm
     makeself
-    xorg.xorgserver
+    xorg-server
     openssl
     linuxHeaders
     xz
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
   buildInputs = [
     dbus
     libxslt
-    libXext
-    libXcursor
+    libxext
+    libxcursor
     pam
-    libXmu
-    libXrandr
+    libxmu
+    libxrandr
   ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -81,15 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++17 \1"@' \
         -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
+    ls kBuild/bin/linux.${platform}/k* tools/linux.${platform}/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker}
 
     substituteInPlace ./include/VBox/dbus-calls.h --replace-fail libdbus-1.so.3 ${dbus.lib}/lib/libdbus-1.so.3
 
     substituteInPlace ./src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibDrmClient.cpp --replace-fail /usr/bin/VBoxDRMClient /run/current-system/sw/bin/VBoxDRMClient
     substituteInPlace ./src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibDrmClient.cpp --replace-fail /usr/bin/VBoxClient /run/current-system/sw/bin/VBoxClient
-    substituteInPlace ./src/VBox/Additions/x11/VBoxClient/display.cpp --replace-fail /usr/X11/bin/xrandr ${xorg.xrandr}/bin/xrandr
-    substituteInPlace ./src/VBox/Additions/x11/vboxvideo/Makefile.kmk --replace-fail /usr/include/xorg "${xorg.xorgserver.dev}/include/xorg "
+    substituteInPlace ./src/VBox/Additions/x11/VBoxClient/display.cpp --replace-fail /usr/X11/bin/xrandr ${xrandr}/bin/xrandr
+    substituteInPlace ./src/VBox/Additions/x11/vboxvideo/Makefile.kmk --replace-fail /usr/include/xorg "${xorg-server.dev}/include/xorg "
   '';
 
   configurePhase = ''
@@ -165,11 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out
-    cp -rv ./out/linux.${
-      if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-    }/${buildType}/bin/additions/VBoxGuestAdditions-${
-      if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-    }.tar.bz2 $out/
+    cp -rv ./out/linux.${platform}/${buildType}/bin/additions/VBoxGuestAdditions-${platform}.tar.bz2 $out/
 
     runHook postInstall
   '';

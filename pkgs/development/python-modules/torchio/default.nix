@@ -5,11 +5,13 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   deprecated,
-  matplotlib,
+  einops,
+  humanize,
+  jaxtyping,
   nibabel,
   numpy,
   packaging,
@@ -20,31 +22,40 @@
   tqdm,
   typer,
 
+  # optional dependencies
+  colorcet,
+  matplotlib,
+  monai,
+  pandas,
+  ffmpeg-python,
+  scikit-learn,
+
   # tests
-  humanize,
   parameterized,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.6";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-240MM9w0AdhaUp70JrkmKGQI1abrFrbfybCF4wYX8fg=";
+    hash = "sha256-b6ED3IyQgC0A0dqYiXC0GTf6ZqwE1Ka7ojM7OJu1xfI=";
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   dependencies = [
     deprecated
+    einops
     humanize
+    jaxtyping
     nibabel
     numpy
     packaging
@@ -56,21 +67,37 @@ buildPythonPackage rec {
     typer
   ];
 
+  optional-dependencies =
+    let
+      extras = {
+        csv = [ pandas ];
+        monai = [ monai ];
+        plot = [
+          colorcet
+          matplotlib
+        ];
+        video = [ ffmpeg-python ];
+        sklearn = [ scikit-learn ];
+      };
+    in
+    extras // { all = lib.concatLists (lib.attrValues extras); };
+
   nativeCheckInputs = [
     matplotlib
     parameterized
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.monai
+  ++ optional-dependencies.sklearn;
 
-  disabledTests =
-    [
-      # tries to download models:
-      "test_load_all"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-      "test_queue_multiprocessing"
-    ];
+  disabledTests = [
+    # tries to download models:
+    "test_load_all"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "test_queue_multiprocessing"
+  ];
 
   pythonImportsCheck = [
     "torchio"
@@ -79,8 +106,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "https://torchio.readthedocs.io";
-    changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://docs.torchio.org";
+    changelog = "https://github.com/TorchIO-project/torchio/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bcdarwin ];
   };

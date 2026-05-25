@@ -1,6 +1,6 @@
 # Rust {#rust}
 
-To install the rust compiler and cargo put
+To install the Rust compiler and cargo, put
 
 ```nix
 {
@@ -14,7 +14,7 @@ To install the rust compiler and cargo put
 into your `configuration.nix` or bring them into scope with `nix-shell -p rustc cargo`.
 
 For other versions such as daily builds (beta and nightly),
-use either `rustup` from nixpkgs (which will manage the rust installation in your home directory),
+use either `rustup` from Nixpkgs (which will manage the rust installation in your home directory),
 or use [community maintained Rust toolchains](#using-community-maintained-rust-toolchains).
 
 ## `buildRustPackage`: Compiling Rust applications with Cargo {#compiling-rust-applications-with-cargo}
@@ -62,24 +62,20 @@ hash using `nix-hash --to-sri --type sha256 "<original sha256>"`.
 :::
 
 ```nix
-{
-  cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
-}
+{ cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8="; }
 ```
 
-If this method does not work, you can resort to copying the `Cargo.lock` file into nixpkgs
+If this method does not work, you can resort to copying the `Cargo.lock` file into Nixpkgs
 and importing it as described in the [next section](#importing-a-cargo.lock-file).
 
-Both types of hashes are permitted when contributing to nixpkgs. The
+Both types of hashes are permitted when contributing to Nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
 expression and building the package once. The correct checksum can
 then be taken from the failed build. A fake hash can be used for
 `cargoHash` as follows:
 
 ```nix
-{
-  cargoHash = lib.fakeHash;
-}
+{ cargoHash = lib.fakeHash; }
 ```
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
@@ -253,12 +249,12 @@ rustPlatform.buildRustPackage {
 ### Cross compilation {#cross-compilation}
 
 By default, Rust packages are compiled for the host platform, just like any
-other package is.  The `--target` passed to rust tools is computed from this.
+other package is. The `--target` passed to Rust tools is computed from this.
 By default, it takes the `stdenv.hostPlatform.config` and replaces components
 where they are known to differ. But there are ways to customize the argument:
 
  - To choose a different target by name, define
-   `stdenv.hostPlatform.rust.rustcTarget` as that name (a string), and that
+   `stdenv.hostPlatform.rust.rustcTargetSpec` as that name (a string), and that
    name will be used instead.
 
    For example:
@@ -266,7 +262,7 @@ where they are known to differ. But there are ways to customize the argument:
    ```nix
    import <nixpkgs> {
      crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rust.rustcTarget = "thumbv7em-none-eabi";
+       rust.rustcTargetSpec = "thumbv7em-none-eabi";
      };
    }
    ```
@@ -278,22 +274,24 @@ where they are known to differ. But there are ways to customize the argument:
    ```
 
  - To pass a completely custom target, define
-   `stdenv.hostPlatform.rust.rustcTarget` with its name, and
-   `stdenv.hostPlatform.rust.platform` with the value.  The value will be
-   serialized to JSON in a file called
-   `${stdenv.hostPlatform.rust.rustcTarget}.json`, and the path of that file
-   will be used instead.
+   `stdenv.hostPlatform.rust.rustcTargetSpec` with the path to the custom
+   target specification JSON file.
+
+   Note that some tools like Cargo and some crates like `cc` make use of the
+   file name of the target JSON.  Therefore, do not use
+   `./path/to/target-spec.json` directly, because it will be renamed by Nix.
+   Instead, place it a directory and use `"${./path/to/dir}/target-spec.json"`.
+   The directory should contain only this one file, to avoid unrelated changes
+   causing unnecessary rebuilds.
 
    For example:
 
    ```nix
    import <nixpkgs> {
-     crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rust.rustcTarget = "thumb-crazy";
-       rust.platform = {
-         foo = "";
-         bar = "";
-       };
+     crossSystem = {
+       config = "mips64el-unknown-linux-gnuabi64";
+       # gcc = ...; # Config for C compiler omitted
+       rust.rustcTargetSpec = "${./rust}/mips64el_mips3-unknown-linux-gnuabi64.json";
      };
    }
    ```
@@ -301,11 +299,8 @@ where they are known to differ. But there are ways to customize the argument:
    will result in:
 
    ```shell
-   --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}
+   --target /nix/store/...-rust/mips64el_mips3-unknown-linux-gnuabi64.json
    ```
-
-Note that currently custom targets aren't compiled with `std`, so `cargo test`
-will fail. This can be ignored by adding `doCheck = false;` to your derivation.
 
 ### Running package tests {#running-package-tests}
 
@@ -421,7 +416,7 @@ Otherwise, some steps may fail because of the modified directory structure of `t
 ### Building a crate with an absent or out-of-date Cargo.lock file {#building-a-crate-with-an-absent-or-out-of-date-cargo.lock-file}
 
 `buildRustPackage` needs a `Cargo.lock` file to get all dependencies in the
-source code in a reproducible way. If it is missing or out-of-date one can use
+source code in a reproducible way. If it is missing or out of date, one can use
 the `cargoPatches` attribute to update or add it.
 
 ```nix
@@ -478,11 +473,7 @@ and fetches every dependency as a separate fixed-output derivation.
 `importCargoLock` can be used as follows:
 
 ```nix
-{
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
-}
+{ cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; }; }
 ```
 
 If the `Cargo.lock` file includes git dependencies, then their output
@@ -745,6 +736,35 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+### Compiling `wasm32-wasip1` package {#compiling-wasm32-wasip1-package}
+
+```nix
+pkgsCross.wasi32.callPackage (
+  {
+    fetchFromGitHub,
+    rustPlatform,
+    lld,
+  }:
+  rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "zellij-harpoon";
+    version = "0.3.0";
+
+    src = fetchFromGitHub {
+      owner = "Nacho114";
+      repo = "harpoon";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-JmYcbzxIF6qZs2/RKuspHqNpyDibGp9CVQJj47y/BOQ=";
+    };
+
+    cargoHash = "sha256-lsv5Wssakni18jif++fPo3Z5WyBtvPsGpWwG3abR7jQ=";
+
+    # these two lines are currently required
+    env.RUSTFLAGS = "-C linker=wasm-ld";
+    nativeBuildInputs = [ lld ];
+  })
+) { }
+```
+
 ## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
 
 ### Simple operation {#simple-operation}
@@ -851,6 +871,47 @@ general. A number of other parameters can be overridden:
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
+- Extra arguments passed to `rustc` when the crate is a proc-macro,
+  replacing `extraRustcOpts`. Useful to keep instrumentation flags
+  (sanitizers, coverage) off host dylibs. Defaults to `null`, which
+  inherits `extraRustcOpts`:
+
+  ```nix
+  (myProcMacro { }).override { extraRustcOptsForProcMacro = [ ]; }
+  ```
+
+- The lint level cap passed to `rustc`. Defaults to `null`, which
+  auto-resolves to `"allow"` (silences all lints) when `lints` is
+  empty, or `"forbid"` (no cap) when `lints` is set. Because `rustc`
+  only honours the first `--cap-lints` it receives, this cannot be
+  changed via `extraRustcOpts`; use this attribute instead. Useful
+  when overriding the `rust` attribute to point at `clippy-driver`,
+  since clippy lints are also capped by this flag:
+
+  ```nix
+  (hello { }).override { capLints = "warn"; }
+  ```
+
+- Lint configuration mirroring Cargo.toml's `[lints]` table. Keys are
+  tool names (`rust`, `clippy`, `rustdoc`); values map lint names to
+  either a level string (`"allow"`, `"warn"`, `"deny"`, `"forbid"`) or
+  `{ level = "..."; priority = <int>; }`. Lower priorities are emitted
+  first so that more specific lints can override them. Setting a
+  non-empty `lints` raises the default `capLints` to `"forbid"` so the
+  lints actually apply:
+
+  ```nix
+  (hello { }).override {
+    lints.rust = {
+      unsafe_code = "forbid";
+      unused = {
+        level = "deny";
+        priority = -1;
+      };
+    };
+  }
+  ```
+
 - Phases, just like in any other derivation, can be specified using
   the following attributes: `preUnpack`, `postUnpack`, `prePatch`,
   `patches`, `postPatch`, `preConfigure` (in the case of a Rust crate,
@@ -915,7 +976,7 @@ $ cargo test
 ## Using community maintained Rust toolchains {#using-community-maintained-rust-toolchains}
 
 ::: {.note}
-The following projects cannot be used within Nixpkgs since [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs.
+The following projects cannot be used within Nixpkgs, since [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs.
 To package things that require Rust nightly, `RUSTC_BOOTSTRAP = true;` can sometimes be used as a hack.
 :::
 
@@ -928,7 +989,7 @@ Despite their names, both projects provides a similar set of packages and overla
 Oxalica's overlay allows you to select a particular Rust version without you providing a hash or a flake input,
 but comes with a larger git repository than fenix.
 
-Fenix also provides rust-analyzer nightly in addition to the Rust toolchains.
+Fenix also provides `rust-analyzer` nightly in addition to the Rust toolchains.
 
 Both oxalica's overlay and fenix better integrate with nix and cache optimizations.
 Because of this and ergonomics, either of those community projects
@@ -1000,8 +1061,8 @@ let
     cargo = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
     rustc = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
   };
-in
 
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "14.1.1";

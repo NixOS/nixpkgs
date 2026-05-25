@@ -8,13 +8,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmigemo";
   version = "0.1.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "09j68kvcskav2cqb7pj12caksmj4wh2lhjp0csq00xpn0wqal4vk";
   };
 
@@ -32,15 +32,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/" ];
+  enabledTestPaths = [ "test/" ];
 
   pythonImportsCheck = [ "cmigemo" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/mooz/python-cmigemo";
     description = "Pure python binding for C/Migemo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ illustris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ illustris ];
   };
-}
+})

@@ -31,11 +31,8 @@
       gui =
         { ... }:
         common {
-          services.xserver = {
-            enable = true;
-            desktopManager.plasma5.enable = true;
-            desktopManager.plasma5.runUsingSystemd = true;
-          };
+          services.xserver.enable = true;
+          services.desktopManager.plasma6.enable = true;
 
           services.displayManager = {
             sddm.enable = true;
@@ -73,8 +70,9 @@
 
       with subtest("GUI"):
         gui.wait_for_x()
-        gui.wait_for_file("/tmp/xauth_*")
-        gui.succeed("xauth merge /tmp/xauth_*")
+        gui.wait_for_file("/run/user/1000/xauth_*")
+        gui.wait_until_succeeds("test -s /run/user/1000/xauth_*")
+        gui.succeed("xauth merge /run/user/1000/xauth_*")
         gui.wait_for_window("^Desktop ")
         gui.wait_for_unit("maestral.service", "${user.name}")
     '';

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "click-aliases";
-  version = "1.0.5";
+  version = "1.0.6";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = "click-aliases";
     rev = "v${version}";
-    hash = "sha256-vR5MUbgQfgownnq/VuEB/Jreibh/SB8wbDWGOmareRU=";
+    hash = "sha256-nHUvzUiWc7Fq22PPsodIDOwU1INy2CQfztD0ceguhEo=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_aliases" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/click-contrib/click-aliases";
     description = "Enable aliases for click";
-    license = licenses.mit;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

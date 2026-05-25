@@ -10,7 +10,7 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
-  libX11,
+  libx11,
   freetype,
   zlib,
   debug,
@@ -32,7 +32,7 @@ let
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-    libX11
+    libx11
     freetype
   ];
 
@@ -66,24 +66,26 @@ stdenv.mkDerivation {
     patchShebangs lang/compile_mo.sh
   '';
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "LANGUAGES=all"
-      (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
-    ]
-    ++ optionals (!debug) [
-      "RELEASE=1"
-    ]
-    ++ optionals tiles [
-      "TILES=1"
-      "SOUND=1"
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      "NATIVE=osx"
-      "CLANG=1"
-      "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
-    ];
+  # remove once on O.I/ahead of upstream commit 15b3cb0
+  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-Wno-missing-noreturn";
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LANGUAGES=all"
+    (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
+  ]
+  ++ optionals (!debug) [
+    "RELEASE=1"
+  ]
+  ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
+    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
 
   postInstall = optionalString tiles (
     if !stdenv.hostPlatform.isDarwin then patchDesktopFile else installMacOSAppLauncher
@@ -97,7 +99,7 @@ stdenv.mkDerivation {
     isCurses = !tiles;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free, post apocalyptic, zombie infested rogue-like";
     mainProgram = "cataclysm-tiles";
     longDescription = ''
@@ -124,11 +126,11 @@ stdenv.mkDerivation {
       than their original form.
     '';
     homepage = "https://cataclysmdda.org/";
-    license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = with lib.maintainers; [
       mnacamura
       DeeUnderscore
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -2,18 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   alsa-lib,
   autoreconfHook,
   ffmpeg,
   fluidsynth,
   freetype,
   glib,
+  libGL,
   libicns,
   libpcap,
   libpng,
   libslirp,
   libxkbfile,
-  libXrandr,
+  libxrandr,
   makeWrapper,
   ncurses,
   pkg-config,
@@ -27,63 +29,61 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2025.05.03";
+  version = "2026.05.02";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-VYJn1ddDkSHpWVsE7NunwRvuAVRqbvCNw/TzkWe8TLQ=";
+    hash = "sha256-4P6NH3LZgnV3CpakdKQhW+29hQl2Q30N5fScZgdk84E=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
   # iconutil is unavailable, replace with png2icns from libicns
   # Patch bad hardcoded compiler
   # Don't mess with codesign, doesn't seem to work?
-  postPatch =
-    ''
-      substituteInPlace Makefile.am \
-        --replace-fail 'sips' '## sips' \
-        --replace-fail 'iconutil -c icns -o contrib/macos/dosbox.icns src/dosbox.iconset' 'png2icns contrib/macos/dosbox.icns contrib/macos/dosbox-x.png' \
-        --replace-fail 'g++' "$CXX" \
-        --replace-fail 'codesign' '## codesign'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      patchShebangs appbundledeps.py
-    '';
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace-fail 'sips' '## sips' \
+      --replace-fail 'iconutil -c icns -o contrib/macos/dosbox.icns src/dosbox.iconset' 'png2icns contrib/macos/dosbox.icns contrib/macos/dosbox-x.png' \
+      --replace-fail 'g++' "$CXX" \
+      --replace-fail 'codesign' '## codesign'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    patchShebangs appbundledeps.py
+  '';
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      makeWrapper
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libicns
-      python3
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
+    python3
+  ];
 
-  buildInputs =
-    [
-      ffmpeg
-      fluidsynth
-      freetype
-      glib
-      libpcap
-      libpng
-      libslirp
-      ncurses
-      SDL2
-      SDL2_net
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libxkbfile
-      libXrandr
-    ];
+  buildInputs = [
+    ffmpeg
+    fluidsynth
+    freetype
+    glib
+    libpcap
+    libpng
+    libslirp
+    ncurses
+    SDL2
+    SDL2_net
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libGL
+    libxkbfile
+    libxrandr
+  ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";
@@ -113,10 +113,16 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    # Version output on stderr, program returns status code 1
-    command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      # Version output on stderr, program returns status code 1
+      command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "dosbox-x-v";
+      ignoredVersions = "-osfree$";
+    };
   };
 
   meta = {

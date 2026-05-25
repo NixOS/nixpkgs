@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   godot_4,
   makeWrapper,
   just,
@@ -10,15 +10,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "find-billy";
   version = "1.1.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "Find-Billy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jKN3lEnLy0aN98S8BN3dcoOgc0RrxNoqfQdeCawKQaU=";
   };
 
@@ -69,14 +68,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "2 dimensional Pixel Art Jump & Run";
     homepage = "https://codeberg.org/annaaurora/Find-Billy";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.annaaurora ];
+    maintainers = [ lib.maintainers.annaaurora ];
   };
-}
+})

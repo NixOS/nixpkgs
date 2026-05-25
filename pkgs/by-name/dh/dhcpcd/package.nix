@@ -13,29 +13,28 @@
   enablePrivSep ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dhcpcd";
-  version = "10.1.0";
+  version = "10.3.1";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
-    rev = "v${version}";
-    sha256 = "sha256-Qtg9jOFMR/9oWJDmoNNcEAMxG6G1F187HF4MMBJIoTw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-L2rR6/qMHWVth2GR3VAoBZmhA6lmCLddbi0VvEG5r70=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
-    ]
-    ++ lib.optionals withUdev [
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      freebsd.libcapsicum
-      freebsd.libcasper
-    ];
+  buildInputs = [
+    runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
+  ]
+  ++ lib.optionals withUdev [
+    udev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libcapsicum
+    freebsd.libcasper
+  ];
 
   postPatch = ''
     substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
     "--dbdir=/var/lib/dhcpcd"
     "--with-default-hostname=nixos"
     (lib.enableFeature enablePrivSep "privsep")
-  ] ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
+  ]
+  ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -71,12 +71,12 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = "https://roy.marples.name/projects/dhcpcd";
-    platforms = platforms.linux ++ platforms.freebsd ++ platforms.openbsd;
-    license = licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "dhcpcd";
   };
-}
+})

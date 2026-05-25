@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dalfox";
-  version = "2.11.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "dalfox";
-    tag = "v${version}";
-    hash = "sha256-EM5T8uBMSkjxd7wTaMFPpbErAhcN2oLaV2g8MAxb0lQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GAlLmgIs2r8VCm69MuFPuQERHSZYAE/Zz8/y4ewYJME=";
   };
 
-  vendorHash = "sha256-EgNE3Z/NZ1lV0BPVe4MhB9bIYSMLftzYfmw65ktSo7A=";
+  vendorHash = "sha256-UmQGsuLOpUJpGnWBot6YjG56LLNYHjm9mCejhEzkoBk=";
 
   ldflags = [
     "-w"
@@ -28,9 +28,9 @@ buildGoModule rec {
   meta = {
     description = "Tool for analysing parameter and XSS scanning";
     homepage = "https://github.com/hahwul/dalfox";
-    changelog = "https://github.com/hahwul/dalfox/releases/tag/v${version}";
+    changelog = "https://github.com/hahwul/dalfox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dalfox";
   };
-}
+})

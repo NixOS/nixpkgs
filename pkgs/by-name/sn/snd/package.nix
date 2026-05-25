@@ -7,37 +7,39 @@
   fftw,
   gsl,
   motif,
-  xorg,
+  libxt,
+  libxpm,
+  libxft,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snd";
-  version = "25.4";
+  version = "26.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
-    hash = "sha256-lXcyeqLzd4a5HLm12Y6QMIzaFF3penyZri+yC2Iej4I=";
+    url = "mirror://sourceforge/snd/snd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-QKXyNUX2UuVWXJRXZCkwmIysZg5tKPAShTnZTGUdp7Q=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fftw
-      gsl
-      motif
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ (with xorg; [
-      libXext
-      libXft
-      libXpm
-      libXt
-    ]);
+  buildInputs = [
+    fftw
+    gsl
+    motif
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ [
+    libxext
+    libxft
+    libxpm
+    libxt
+  ];
 
   configureFlags = [
     "--with-motif"
@@ -45,12 +47,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Sound editor";
     homepage = "https://ccrma.stanford.edu/software/snd/";
-    platforms = platforms.unix;
-    license = licenses.free;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
     maintainers = [ ];
     mainProgram = "snd";
   };
-}
+})

@@ -1,35 +1,39 @@
 {
   lib,
-  buildPackages,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
-  maturin,
-  pythonOlder,
-  poetry-core,
-  protobuf,
-  python-dateutil,
-  rustc,
   rustPlatform,
-  setuptools,
-  setuptools-rust,
+  buildPackages,
+
+  # build-system
+  maturin,
+
+  # dependencies
+  nexusrpc,
+  protobuf,
   types-protobuf,
   typing-extensions,
+
+  # nativeBuildInputs
+  cargo,
+  rustc,
+
+  # passthru
+  nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.12.0";
+  version = "1.27.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-u74zbzYNVxMi0sdiPlBoEU+wAa24JmMksz7hGvraDeM=";
+    tag = version;
     fetchSubmodules = true;
+    hash = "sha256-AwWcZJlYysGfNuhM2jgCWoT1MblNt6oof4/uMOsdCMk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -39,33 +43,33 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-OIapL1+g6gIgyVzdB68PuK2K2RIr01DSm/UbCdt9kNY=";
+    hash = "sha256-aWceWxm53DbFv9O7jboPv0oSnRbVx6tObSTlD28fIHc=";
   };
 
   cargoRoot = "temporalio/bridge";
 
   build-system = [
     maturin
-    poetry-core
   ];
 
-  preBuild = ''
-    export PROTOC=${buildPackages.protobuf}/bin/protoc
-  '';
+  env.PROTOC = "${lib.getExe buildPackages.protobuf}";
 
   dependencies = [
+    nexusrpc
     protobuf
     types-protobuf
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.11") python-dateutil;
+  ];
 
   nativeBuildInputs = [
     cargo
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     rustc
-    setuptools
-    setuptools-rust
+  ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
   pythonImportsCheck = [
@@ -74,6 +78,11 @@ buildPythonPackage rec {
     "temporalio.client"
     "temporalio.worker"
   ];
+
+  passthru = {
+    tests = { inherit (nixosTests) temporal; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Temporal Python SDK";

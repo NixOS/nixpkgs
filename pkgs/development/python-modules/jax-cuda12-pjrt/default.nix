@@ -13,7 +13,6 @@
 }:
 let
   inherit (jaxlib) version;
-  inherit (cudaPackages) cudaAtLeast;
 
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
@@ -32,7 +31,7 @@ let
   );
 
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax-cuda12-pjrt";
   inherit version;
   pyproject = false;
@@ -45,14 +44,14 @@ buildPythonPackage rec {
     dist = "py3";
     platform =
       {
-        x86_64-linux = "manylinux2014_x86_64";
-        aarch64-linux = "manylinux2014_aarch64";
+        x86_64-linux = "manylinux_2_27_x86_64";
+        aarch64-linux = "manylinux_2_27_aarch64";
       }
       .${stdenv.hostPlatform.system};
     hash =
       {
-        x86_64-linux = "sha256-TJfRClqawJ+gAVaMrDtxUBTo27ws2GdjdT9Y5acwwzM=";
-        aarch64-linux = "sha256-lnB2z7by4zlZ5zdmY1maoMEcwO3o8vUaIG2godQixrs=";
+        x86_64-linux = "sha256-MJUVRT9Zyq2Vv3bIvGScJLwOPRLQe68895K+CCq97js=";
+        aarch64-linux = "sha256-NqwxbFiKDgjrZPhoJwUmrco4VtS3CxN2C36bc76F0s8=";
       }
       .${stdenv.hostPlatform.system};
   };
@@ -101,6 +100,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken = !(cudaAtLeast "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
-}
+})

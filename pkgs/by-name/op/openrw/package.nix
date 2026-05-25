@@ -16,28 +16,35 @@
   libGL,
   libGLU,
   libmad,
-  libX11,
+  libx11,
   openal,
 
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
-  version = "0-unstable-2025-01-09";
+  version = "0-unstable-2025-06-18";
   pname = "openrw";
 
   src = fetchFromGitHub {
     owner = "rwengine";
     repo = "openrw";
-    rev = "556cdfbbf1fb5b3ddef5e43f36e97976be0252fc";
+    rev = "5c5f266b71aa55aeec8cb4d823f19e7c4348f3bd";
     fetchSubmodules = true;
-    hash = "sha256-NYn89KGMITccVdqGo7NUS45HxXGurR9QDbVKEagjFqk=";
+    hash = "sha256-2fQQL0JoV8YukU+VW2iWS4DpBi1j361SfiXRHRmocRg=";
   };
 
-  postPatch = lib.optional (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
-    substituteInPlace cmake_configure.cmake \
-      --replace-fail 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
-  '';
+  postPatch =
+    lib.optionalString (stdenv.cc.isClang && (lib.versionAtLeast stdenv.cc.version "9")) ''
+      substituteInPlace cmake_configure.cmake \
+        --replace-fail 'target_link_libraries(rw_interface INTERFACE "stdc++fs")' ""
+    ''
+    + ''
+      # boost 1.89 removed the boost_system stub library
+      substituteInPlace CMakeLists.txt --replace-fail \
+        'find_package(Boost COMPONENTS program_options system REQUIRED)' \
+        'find_package(Boost COMPONENTS program_options REQUIRED)'
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +60,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     libmad
-    libX11
+    libx11
     openal
   ];
 

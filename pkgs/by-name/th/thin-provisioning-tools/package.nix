@@ -7,29 +7,32 @@
   fetchFromGitHub,
   nixosTests,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thin-provisioning-tools";
-  version = "1.1.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
-    rev = "v${version}";
-    hash = "sha256-gpUiLUdg+EpVkJzDg43gI5oXhy611QwndwZZVVgg4Lg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hRGelBHFbyWHwV3fRecGXIEhoDzVQ+Rdj/VHGxcDH1k=";
   };
 
-  nativeBuildInputs = [
+  strictDeps = true;
+  depsBuildBuild = [
     pkg-config
+    lvm2
+    udev
+  ];
+  nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
   buildInputs = [
-    udev
     lvm2
+    udev
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cjNgp+StWkqtR1Y4caLv8EWhHsinSpbc/hgUUG7CGtE=";
+  cargoHash = "sha256-y3uvPwLps8edzO9GtJ1CpB55kieclk06PjOYsYs64go=";
 
   passthru.tests = {
     inherit (nixosTests.lvm2) lvm-thinpool-linux-latest;
@@ -63,11 +66,11 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/pdata_tools $out/bin/thin_trim
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jthornber/thin-provisioning-tools/";
     description = "Suite of tools for manipulating the metadata of the dm-thin device-mapper target";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

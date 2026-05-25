@@ -7,22 +7,22 @@
   transaction,
   zope-testrunner,
   python,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "6.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "6.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4YdG+GQYaaIPRTKMm1+X3GxxoRlZYDVq72O3X1yNRF8=";
+    hash = "sha256-Fga9/6erKMaACYRUC2le7oSPbhWwFF2Fj/SwxiZOjtI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     persistent
     zope-interface
   ];
@@ -34,7 +34,9 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
+
     ${python.interpreter} -m zope.testrunner --test-path=src --auto-color --auto-progress
+
     runHook postCheck
   '';
 
@@ -45,10 +47,11 @@ buildPythonPackage rec {
     "BTrees.IFBTree"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Scalable persistent components";
     homepage = "http://packages.python.org/BTrees";
-    license = licenses.zpl21;
+    changelog = "https://github.com/zopefoundation/BTrees/blob/${version}/CHANGES.rst";
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

@@ -90,7 +90,7 @@ in
       description = "Home directory for writable storage";
     };
 
-    database = mkOption rec {
+    database = mkOption {
       type =
         with types;
         attrsOf (oneOf [
@@ -212,26 +212,25 @@ in
         Group = cfg.group;
       };
       path = [ config.services.phpfpm.phpPackage ];
-      script =
-        ''
-          mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
-          mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
-          cd ${cfg.stateDir}
-          cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
-          ln -sf ${cfg.package}/share/php/flarum/vendor .
-          ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
-        ''
-        + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
-          if [ ! -f config.php ]; then
-            php flarum install --file=${flarumInstallConfig}
-          fi
-        ''
-        + ''
-          if [ -f config.php ]; then
-            php flarum migrate
-            php flarum cache:clear
-          fi
-        '';
+      script = ''
+        mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
+        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
+        cd ${cfg.stateDir}
+        cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
+        ln -sf ${cfg.package}/share/php/flarum/vendor .
+        ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
+      ''
+      + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
+        if [ ! -f config.php ]; then
+          php flarum install --file=${flarumInstallConfig}
+        fi
+      ''
+      + ''
+        if [ -f config.php ]; then
+          php flarum migrate
+          php flarum cache:clear
+        fi
+      '';
     };
   };
 

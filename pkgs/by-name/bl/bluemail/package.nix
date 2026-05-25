@@ -9,7 +9,7 @@
   gtk3,
   alsa-lib,
   nss,
-  libXdamage,
+  libxdamage,
   libdrm,
   libgbm,
   libxshmfence,
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     nss
-    libXdamage
+    libxdamage
     libdrm
     libgbm
     libxshmfence
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
     mv * $out/opt/bluemail
     ln -s $out/opt/bluemail/bluemail $out/bin/bluemail
 
-    mkdir -p $out/share/icons/hicolor/1024x1024/apps
-    ln -s $out/opt/bluemail/resources/assets/icons/bluemailx-icon.png $out/share/icons/hicolor/1024x1024/apps/bluemail.png
+    mkdir -p $out/share/icons
+    ln -s $out/opt/bluemail/resources/assets/icons/bluemailx-icon.png $out/share/icons/bluemail.png
 
     runHook postInstall
   '';
@@ -115,14 +115,14 @@ stdenv.mkDerivation rec {
       ''${gappsWrapperArgs[@]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform email and calendar app, with AI features and a modern design";
     homepage = "https://bluemail.me";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     # Vendored copy of Electron.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = [ ];
     mainProgram = "bluemail";
   };
 }

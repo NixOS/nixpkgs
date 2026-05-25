@@ -7,12 +7,12 @@
 
   # build inputs
   cargo,
+  openssl,
   pkg-config,
   protobuf,
   rustc,
   rustPlatform,
-  pkgs, # zstd hidden by python3Packages.zstd
-  openssl,
+  zstd-c,
 
   # dependencies
   bcrypt,
@@ -33,8 +33,9 @@
   orjson,
   overrides,
   posthog,
-  pulsar-client,
+  pybase64,
   pydantic,
+  pydantic-settings,
   pypika,
   pyyaml,
   requests,
@@ -58,28 +59,28 @@
   pytestCheckHook,
   sqlite,
   starlette,
+  writableTmpDirAsHomeHook,
 
   # passthru
   nixosTests,
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.0.12";
+  version = "1.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
-    tag = version;
-    hash = "sha256-Q4PhJTRNzJeVx6DIPWirnI9KksNb8vfOtqb/q9tSK3c=";
+    tag = finalAttrs.version;
+    hash = "sha256-bxRRpwd7pmE+/JMARaqjuE+xFh8Qx70Aon2w56sOi1I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}-vendor";
-    hash = "sha256-+Ea2aRrsBGfVCLdOF41jeMehJhMurc8d0UKrpR6ndag=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-0vuXMxwbbpfMA0UcHcLieTJK6u67o6EYdJLH5Q+wtc8=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -88,24 +89,34 @@ buildPythonPackage rec {
     hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
   };
 
-  patches = [
-    # The fastapi servers can't set up their networking in the test environment, so disable for testing
-    ./disable-fastapi-fixtures.patch
-  ];
-
-  postPatch = ''
+  postPatch =
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
-    substituteInPlace pyproject.toml \
-      --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
-  '';
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
+    ''
+    # Flip anonymized telemetry to opt in versus current opt-in out for privacy
+    + ''
+      substituteInPlace chromadb/config.py \
+        --replace-fail "anonymized_telemetry: bool = True" \
+                       "anonymized_telemetry: bool = False"
+    ''
+    # error: queries overflow the depth limit!
+    # https://github.com/chroma-core/chroma/issues/6891
+    # https://github.com/chroma-core/chroma/issues/6892
+    # https://github.com/chroma-core/chroma/issues/6687
+    + ''
+      sed -i '1i #![recursion_limit = "256"]' rust/blockstore/src/lib.rs
+      sed -i '1i #![recursion_limit = "256"]' rust/index/src/lib.rs
+      sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
+    '';
 
   pythonRelaxDeps = [
     "fastapi"
+    "posthog"
   ];
 
-  build-system = [
-    rustPlatform.maturinBuildHook
-  ];
+  build-system = [ rustPlatform.maturinBuildHook ];
 
   nativeBuildInputs = [
     cargo
@@ -117,7 +128,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-    pkgs.zstd
+    zstd-c
   ];
 
   dependencies = [
@@ -139,8 +150,9 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
-    pulsar-client
+    pybase64
     pydantic
+    pydantic-settings
     pypika
     pyyaml
     requests
@@ -167,81 +179,95 @@ buildPythonPackage rec {
     pytestCheckHook
     sqlite
     starlette
+    writableTmpDirAsHomeHook
   ];
 
   # Disable on aarch64-linux due to broken onnxruntime
   # https://github.com/microsoft/onnxruntime/issues/10038
-  pythonImportsCheck = lib.optionals (stdenv.hostPlatform.system != "aarch64-linux") [ "chromadb" ];
+  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "chromadb" ];
 
   # Test collection breaks on aarch64-linux
-  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
+  doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
+    SWAGGER_UI_DOWNLOAD_URL = "file://${finalAttrs.swagger-ui}";
   };
 
-  pytestFlagsArray = [
-    "-x" # these are slow tests, so stop on the first failure
+  pytestFlags = [
     "-v"
-    "-W"
-    "ignore:DeprecationWarning"
-    "-W"
-    "ignore:PytestCollectionWarning"
+    "-Wignore:DeprecationWarning"
+    "-Wignore:PytestCollectionWarning"
   ];
 
+  # Skip the distributed and integration tests
+  # See https://github.com/chroma-core/chroma/issues/5315
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
-    export HOME=$(mktemp -d)
+    export CHROMA_RUST_BINDINGS_TEST_ONLY=1
   '';
 
+  enabledTestPaths = [
+    "chromadb/test"
+  ];
+
   disabledTests = [
-    # Tests are flaky / timing sensitive
-    "test_fastapi_server_token_authn_allows_when_it_should_allow"
-    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
-
-    # Issue with event loop
-    "test_http_client_bw_compatibility"
-
-    # httpx ReadError
-    "test_not_existing_collection_delete"
-
-    # Tests launch a server and try to connect to it
-    # These either have https connection errors or name resolution errors
+    # Failure in name resolution
     "test_collection_query_with_invalid_collection_throws"
     "test_collection_update_with_invalid_collection_throws"
     "test_default_embedding"
-    "test_invalid_index_params"
-    "test_peek"
     "test_persist_index_loading"
-    "test_query_id_filtering_e2e"
-    "test_query_id_filtering_medium_dataset"
-    "test_query_id_filtering_small_dataset"
+
+    # Deadlocks intermittently
+    "test_app"
+
+    # Depends on specific floating-point precision
+    "test_base64_conversion_is_identity_f16"
+
+    # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
 
-    # Apparent race condition with sqlite
-    # See https://github.com/chroma-core/chroma/issues/4661
-    "test_multithreaded_get_or_create"
+    # https://github.com/chroma-core/chroma/issues/6029
+    "test_embedding_function_config_roundtrip"
+
+    # Requires network access
+    "test_persistent_client_close"
+    "test_persistent_client_context_manager"
+    "test_ephemeral_client_close"
+    "test_ephemeral_client_context_manager"
+    "test_client_close_idempotent"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.
+    "test_add_then_delete_n_minus_1"
   ];
 
   disabledTestPaths = [
     # Tests require network access
-    "bin/rust_python_compat_test.py"
-    "chromadb/test/configurations/test_collection_configuration.py"
-    "chromadb/test/ef/test_default_ef.py"
-    "chromadb/test/ef/test_onnx_mini_lm_l6_v2.py"
-    "chromadb/test/ef/test_voyageai_ef.py"
-    "chromadb/test/property/"
+    "chromadb/test/distributed"
+    "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
-    "chromadb/test/stress/"
-    "chromadb/test/test_api.py"
+    "chromadb/test/stress"
+    "chromadb/test/api/test_schema_e2e.py"
 
-    # Tests time out (waiting for server)
-    "chromadb/test/test_cli.py"
+    # Excessively slow
+    "chromadb/test/property/test_add.py"
+    "chromadb/test/property/test_persist.py"
 
-    # Cannot find protobuf file while loading test
-    "chromadb/test/distributed/test_log_failover.py"
+    # ValueError: An instance of Chroma already exists for ephemeral with different settings
+    "chromadb/test/test_chroma.py"
+
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    # https://github.com/chroma-core/chroma/issues/6659
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_host_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_port_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client[async_client]"
+
+    # ValueError: Could not connect to a Chroma server.
+    "chromadb/test/property/test_add_mcmr.py::test_add_small[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_medium[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_large[single-region]"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -255,7 +281,7 @@ buildPythonPackage rec {
       # we have to update both the python hash and the cargo one,
       # so use nix-update-script
       extraArgs = [
-        "--versionRegex"
+        "--version-regex"
         "([0-9].+)"
       ];
     };
@@ -264,7 +290,7 @@ buildPythonPackage rec {
   meta = {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
-    changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
+    changelog = "https://github.com/chroma-core/chroma/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
@@ -272,4 +298,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "chroma";
   };
-}
+})

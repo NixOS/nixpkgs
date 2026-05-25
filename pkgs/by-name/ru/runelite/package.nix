@@ -6,7 +6,7 @@
   maven,
   jdk17,
   jre,
-  xorg,
+  libxxf86vm,
   gitUpdater,
   libGL,
 }:
@@ -34,6 +34,7 @@ maven.buildMavenPackage rec {
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
     categories = [ "Game" ];
+    startupWMClass = "net-runelite-client-RuneLite";
   };
 
   # tests require internet :(
@@ -52,7 +53,7 @@ maven.buildMavenPackage rec {
     makeWrapper ${jre}/bin/java $out/bin/runelite \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          xorg.libXxf86vm
+          libxxf86vm
           libGL
         ]
       }" \

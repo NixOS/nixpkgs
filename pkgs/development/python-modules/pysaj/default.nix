@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysaj";
   version = "0.0.16";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fredericvl";
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysaj" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with SAJ inverters";
     homepage = "https://github.com/fredericvl/pysaj";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

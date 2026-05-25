@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-yaml";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter-grammars";
     repo = "tree-sitter-yaml";
     tag = "v${version}";
-    hash = "sha256-23/zcjnQUQt32N2EdQMzWM9srkXfQxlBvOo7FWH6rnw=";
+    hash = "sha256-BX6TOfAZLW+0h2TNsgsLC9K2lfirraCWlBN2vCKiXQ4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-Rxjimtp5Lg0x8wgWvyyCepMJipPdc0TplxznrF9COtM=";
+    hash = "sha256-mrLuGmauboKHHk0zADPXpwgZfc83syXk0jmD93Y9Jq4=";
   };
 
   build-system = [

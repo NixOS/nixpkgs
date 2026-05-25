@@ -5,22 +5,27 @@
   fetchNpmDeps,
   jq,
   moreutils,
+  nodejs_22,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "glitchtip-frontend";
-  version = "5.0.4";
+  version = "6.1.6";
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2XZCIIWQAM2Nk8/JTs5MzUJJOvJS+wrsa2m/XiC9FHM=";
+    hash = "sha256-CDszzMDvjC8GOg/Nuh1G2Vwq75tOrwBithYOTNubQhM=";
   };
 
+  nodejs = nodejs_22;
+
   npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-iJFEeUaPP6ZnntoZ2X0TyR6f923zPuzzZNW/zkd8M7E=";
+    npmDepsFetcherVersion = 3;
+    hash = "sha256-pakglYUPHTB872cVG1IZ3WyYXR5+fFYQr5zvTh2IrMo=";
   };
 
   postPatch = ''

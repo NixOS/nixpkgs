@@ -5,14 +5,14 @@
     "hash": "sha256-v7ZoEFZyhF8VcRZj1uim4HNiRsG+XdJ4x/dwPBIWUz8="
   },
   {
-    "pname": "coverlet.collector",
-    "version": "6.0.0",
-    "hash": "sha256-IEmweTMapcPhFHpmJsPXfmMhravYOrWupgjeOvMmQ4o="
-  },
-  {
     "pname": "Dapper",
     "version": "2.1.28",
     "hash": "sha256-qCbqEwIB/j6HToEPpDEdQGGIPGQNmrULrCHnEGZSd5c="
+  },
+  {
+    "pname": "FCastSenderSDKDotnet",
+    "version": "0.0.7",
+    "hash": "sha256-/eHsYJd+7cqDVMW+XiKBPBrjR+eVLUpYazb96Bh3fac="
   },
   {
     "pname": "Fizzler",
@@ -45,16 +45,6 @@
     "hash": "sha256-BsitQQnUSm1YupzI5N/LFx0kPFdk1FP8VdM1S3uttvs="
   },
   {
-    "pname": "Microsoft.AspNetCore.App.Ref",
-    "version": "8.0.16",
-    "hash": "sha256-nV9G5UWIh4A/4vsgmARABY9lM2nzpWevsETKuHfhz9o="
-  },
-  {
-    "pname": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-    "version": "8.0.16",
-    "hash": "sha256-QcnhPjQNVZGAyh5O74sV94u3DHCQDHjg5U2CXrTykw4="
-  },
-  {
     "pname": "Microsoft.ClearScript.Core",
     "version": "7.4.5",
     "hash": "sha256-6wRLv+fbo2SF9irQ8BwmUR7JcQAlyEk1Dov+teSXY+E="
@@ -68,6 +58,11 @@
     "pname": "Microsoft.ClearScript.V8.ICUData",
     "version": "7.4.5",
     "hash": "sha256-54bbiVJoXDrePISZHuEcOax+kgyaIftL684bt3EgYy8="
+  },
+  {
+    "pname": "Microsoft.ClearScript.V8.Native.linux-arm64",
+    "version": "7.4.5",
+    "hash": "sha256-pufUKVsXaKOc7FoKxHwtvMDzx2etOLOzTXvWhBRy1Ho="
   },
   {
     "pname": "Microsoft.ClearScript.V8.Native.linux-x64",
@@ -86,11 +81,6 @@
   },
   {
     "pname": "Microsoft.ClearScript.V8.Native.win-x64",
-    "version": "7.4.3",
-    "hash": "sha256-8lRSVozrki7h64MIgP6v0VWEV1fR1op+hjHd8S4nJ88="
-  },
-  {
-    "pname": "Microsoft.ClearScript.V8.Native.win-x64",
     "version": "7.4.5",
     "hash": "sha256-WF4K7g1w510viiXHJJjKQrsD/mvb99tF76yBCljN1Qw="
   },
@@ -98,11 +88,6 @@
     "pname": "Microsoft.CodeCoverage",
     "version": "17.3.2",
     "hash": "sha256-APxmbKMNQKWuFQMJjkVr2zIqv/bLUTMm5NRGVLegBbg="
-  },
-  {
-    "pname": "Microsoft.CodeCoverage",
-    "version": "17.6.0",
-    "hash": "sha256-sYk+9Gj1M1HI6yEB8ZJQ4fiqGjYos+orebV8blFDSQs="
   },
   {
     "pname": "Microsoft.CSharp",
@@ -130,26 +115,6 @@
     "hash": "sha256-1fZ/rrSbuyYUfvwyA3otFQdL0Y/H48goAVyhiLs1oF4="
   },
   {
-    "pname": "Microsoft.NET.Test.Sdk",
-    "version": "17.6.0",
-    "hash": "sha256-pogseJyMGIikTZORsDXKwyAhRPTkxiOAAV+ceR6/3K4="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Host.linux-x64",
-    "version": "8.0.16",
-    "hash": "sha256-j1xxV7RXTrmmqHEaEXtPAz2FQoQiK7RO7a7GRwKCW90="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Ref",
-    "version": "8.0.16",
-    "hash": "sha256-ARNf4NsLtYpChsiMv015znXluW7EDWnnw+32I1lu7zU="
-  },
-  {
-    "pname": "Microsoft.NETCore.App.Runtime.linux-x64",
-    "version": "8.0.16",
-    "hash": "sha256-rDkCCwXkHMDQAQj33BDPitTucHYPx3V85kE9L+CwSRA="
-  },
-  {
     "pname": "Microsoft.NETCore.Platforms",
     "version": "1.1.0",
     "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
@@ -165,19 +130,9 @@
     "hash": "sha256-wdLQSEjvFjApEKU82Ev+y1kHVxeIlrjkuj3wNktGQy8="
   },
   {
-    "pname": "Microsoft.TestPlatform.ObjectModel",
-    "version": "17.6.0",
-    "hash": "sha256-weQPisiWSuM5VEeZco4S0QHEXd2bZZwlbyHoaCET4uc="
-  },
-  {
     "pname": "Microsoft.TestPlatform.TestHost",
     "version": "17.3.2",
     "hash": "sha256-ySBqawHGZ/Dwoj2UnAzk1Ezxt4qR1AuEY73U/buqNiE="
-  },
-  {
-    "pname": "Microsoft.TestPlatform.TestHost",
-    "version": "17.6.0",
-    "hash": "sha256-Ee2SKz5/571l1aYP0b/Gfamsz+v6cjzyu2sKTC6Ld5s="
   },
   {
     "pname": "Microsoft.Win32.Primitives",
@@ -190,19 +145,9 @@
     "hash": "sha256-xpt9NDMDkoV/SzTWLgpKbqMOnhbUKZlBrdFwMGwpzHA="
   },
   {
-    "pname": "MSTest.TestAdapter",
-    "version": "3.0.4",
-    "hash": "sha256-cxynZ6I681YIclJeGtv1OiAxMOdx7FDyVIzNOg10Tgo="
-  },
-  {
     "pname": "MSTest.TestFramework",
     "version": "2.2.10",
     "hash": "sha256-PEoY4N5F+xhQa6wXiX8SaVHAxw9C7fN+zSNfoModt0g="
-  },
-  {
-    "pname": "MSTest.TestFramework",
-    "version": "3.0.4",
-    "hash": "sha256-aJqGvGfM2fl2dG05PFgPth/1qMhVpDRBMWuNu4yt4Dc="
   },
   {
     "pname": "NETStandard.Library",

@@ -9,14 +9,12 @@
   poetry-core,
   pypdf,
   python-slugify,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "comicon";
   version = "1.5.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
@@ -38,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "ebooklib"
     "lxml"
     "pillow"
     "pypdf"

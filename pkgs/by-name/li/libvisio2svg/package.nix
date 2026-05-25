@@ -11,15 +11,15 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvisio2svg";
-  version = "0.5.5";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "kakwa";
     repo = "libvisio2svg";
-    rev = version;
-    sha256 = "14m37mmib1596c76j9w178jqhwxyih2sy5w5q9xglh8cmlfn1hfx";
+    tag = finalAttrs.version;
+    hash = "sha256-Qpkt7HyicK1lGVrXkcaHabXkIwUhEKUAc84rGmbHE/E=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -35,13 +35,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and tools to convert Microsoft Visio documents (VSS and VSD) to SVG";
     homepage = "https://github.com/kakwa/libvisio2svg";
-    maintainers = with maintainers; [ erdnaxe ];
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ erdnaxe ];
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

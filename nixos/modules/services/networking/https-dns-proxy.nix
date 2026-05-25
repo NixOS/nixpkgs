@@ -9,7 +9,6 @@ let
   inherit (lib)
     concatStringsSep
     mkEnableOption
-    mkIf
     mkOption
     types
     ;
@@ -136,7 +135,7 @@ in
       wants = [ "nss-lookup.target" ];
       before = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = rec {
+      serviceConfig = {
         Type = "exec";
         DynamicUser = true;
         ProtectHome = "tmpfs";

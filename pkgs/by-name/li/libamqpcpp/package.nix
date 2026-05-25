@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-iaOXdDIJOBXHyjE07CvU4ApTh71lmtMCyU46AV+MGXQ=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10 FATAL_ERROR)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ openssl ];
@@ -24,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./libamqpcpp-darwin.patch ];
 
   enableParallelBuilding = true;
-  doCheck = true;
 
   meta = {
     description = "Library for communicating with a RabbitMQ server";

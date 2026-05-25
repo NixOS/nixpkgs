@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,19 +16,13 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-pEISoFEsv8SJOGa2ud/nV1yvl8T9kakfKENu3mfYA5A=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxgw/FusionKai";
     description = "Simplified Chinese font derived from LXGW WenKai GB, iansui and Klee One";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ hellodword ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ hellodword ];
   };
 }

@@ -1,4 +1,5 @@
 {
+  lib,
   buildDunePackage,
   ppx_deriving,
   ppxlib,

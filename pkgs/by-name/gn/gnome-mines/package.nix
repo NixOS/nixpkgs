@@ -14,18 +14,17 @@
   gettext,
   itstool,
   libxml2,
-  libgnome-games-support_2_0,
   libgee,
   desktop-file-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-mines";
-  version = "48.1";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mines/${lib.versions.major finalAttrs.version}/gnome-mines-${finalAttrs.version}.tar.xz";
-    hash = "sha256-70stLd477GFBV+3eTZGJzGr+aSlSot1VsocOLmLtgQQ=";
+    hash = "sha256-nTpEEi0Er3h8ZKhp75DdVOp1AOW0i+RXxtZNmydz+58=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    libgnome-games-support_2_0
     librsvg
     libgee
   ];
@@ -54,12 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-mines";
     description = "Clear hidden mines from a minefield";
     mainProgram = "gnome-mines";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 })

@@ -66,7 +66,14 @@ postgresqlBuildExtension (finalAttrs: {
     # "Our soft policy for Postgres version compatibility is to support Citus'
     # latest release with Postgres' 3 latest releases."
     # https://www.citusdata.com/updates/v12-0/#deprecated_features
-    broken = lib.versionOlder postgresql.version "15";
+    broken =
+      lib.versionOlder postgresql.version "15"
+      ||
+        # PostgreSQL 18 support issue upstream: https://github.com/citusdata/citus/issues/7978
+        # Check after next package update.
+        lib.warnIf (finalAttrs.version != "13.0.3") "Is postgresql18Packages.citus still broken?" (
+          lib.versionAtLeast postgresql.version "18"
+        );
     description = "Distributed PostgreSQL as an extension";
     homepage = "https://www.citusdata.com/";
     changelog = "https://github.com/citusdata/citus/blob/${finalAttrs.src.rev}/CHANGELOG.md";

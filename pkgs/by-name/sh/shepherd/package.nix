@@ -9,19 +9,19 @@
   yarn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shepherd";
   version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "NerdWalletOSS";
     repo = "shepherd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LY8Vde4YpGuKnQ5UnSOpsQDY7AOyZRziUrfZb5dRiX4=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-tJXJ8ePr5ArAV+0JcuJsTo/B2PUcgsXfZrSDCpna/9k=";
   };
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/NerdWalletOSS/shepherd/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/NerdWalletOSS/shepherd/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Utility for applying code changes across many repositories";
     homepage = "https://github.com/NerdWalletOSS/shepherd";
     license = lib.licenses.asl20;
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dbirks ];
     platforms = lib.platforms.all;
   };
-}
+})

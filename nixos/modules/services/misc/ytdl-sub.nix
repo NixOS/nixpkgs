@@ -11,6 +11,7 @@ let
 
   settingsFormat = pkgs.formats.yaml { };
 in
+
 {
   meta.maintainers = with lib.maintainers; [ defelo ];
 
@@ -44,6 +45,14 @@ in
                 description = "How often to run ytdl-sub. See {manpage}`systemd.time(7)` for the format.";
                 default = null;
                 example = "0/6:0";
+              };
+
+              readWritePaths = lib.mkOption {
+                type = lib.types.listOf lib.types.path;
+                description = ''
+                  List of paths that ytdl-sub can write to.
+                '';
+                default = [ ];
               };
 
               config = lib.mkOption {
@@ -127,6 +136,7 @@ in
               ProtectKernelTunables = true;
               ProtectProc = "invisible";
               ProtectSystem = "strict";
+              ReadWritePaths = instance.readWritePaths;
               RestrictAddressFamilies = [
                 "AF_INET"
                 "AF_INET6"
@@ -148,8 +158,6 @@ in
       };
     };
 
-    users.groups = lib.mkIf (cfg.group == "ytdl-sub") {
-      ytdl-sub = { };
-    };
+    users.groups = lib.mkIf (cfg.group == "ytdl-sub") { ytdl-sub = { }; };
   };
 }

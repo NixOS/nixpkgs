@@ -10,12 +10,12 @@
   libidn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gloox";
   version = "1.0.28";
 
   src = fetchurl {
-    url = "https://camaya.net/download/gloox-${version}.tar.bz2";
+    url = "https://camaya.net/download/gloox-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-WRvRLCSe3gtQoe9rmawN6O+cG6T9Lhhvl6dAIVzFlmw=";
   };
 
@@ -32,12 +32,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional sslSupport openssl
     ++ lib.optional idnSupport libidn;
 
-  meta = with lib; {
+  meta = {
     description = "Portable high-level Jabber/XMPP library for C++";
     mainProgram = "gloox-config";
     homepage = "http://camaya.net/gloox";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

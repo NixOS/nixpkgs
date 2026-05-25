@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "8.0.3";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-e8eYBGQ+qTXsp+E3l0g5UI1nYD75z0ibTtzm0WbqlU4=";
+    sha256 = "sha256-y5qMZoVqFpE3d6PRKDO1ldMULCaH3S4phJgAMhY2dSg=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Onboarding app for new users designed for elementary OS";
     homepage = "https://github.com/elementary/onboarding";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.onboarding";
   };
 }

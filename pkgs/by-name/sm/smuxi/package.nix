@@ -38,31 +38,31 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    [
-      autoconf
-      automake
-      itstool
-      intltool
-      gettext
-      mono
-      stfl
-    ]
-    ++ lib.optionals (guiSupport) [
-      gtk-sharp-2_0
-      # loaded at runtime by GTK#
-      gdk-pixbuf
-      pango
-    ];
+  buildInputs = [
+    autoconf
+    automake
+    itstool
+    intltool
+    gettext
+    mono
+    stfl
+  ]
+  ++ lib.optionals guiSupport [
+    gtk-sharp-2_0
+    # loaded at runtime by GTK#
+    gdk-pixbuf
+    pango
+  ];
 
   preConfigure = ''
-    NOCONFIGURE=1 NOGIT=1 ./autogen.sh
+    NOCONFIGURE=1 NOGIT=1 ACLOCAL_FLAGS="-I ${gettext}/share/gettext/m4" ./autogen.sh
   '';
 
   configureFlags = [
     "--disable-frontend-gnome"
     "--enable-frontend-stfl"
-  ] ++ lib.optional guiSupport "--enable-frontend-gnome";
+  ]
+  ++ lib.optional guiSupport "--enable-frontend-gnome";
 
   postInstall = ''
     makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-message-buffer" \

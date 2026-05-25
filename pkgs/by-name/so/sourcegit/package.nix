@@ -8,30 +8,34 @@
   makeDesktopItem,
   libicns,
 
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libGL,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
 
   git,
   xdg-utils,
+
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "sourcegit";
-  version = "2025.19";
+  version = "2026.10";
 
   src = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4DZ4fZPvDHmpKtre6Gl7YtjmFN+tglAW9+Axld+m7dM=";
+    hash = "sha256-9uVU+m+GZKlBlF3jlhmk+f/afMjhgt9JzzLJoHtPeT4=";
+    fetchSubmodules = true;
   };
 
   patches = [ ./fix-darwin-git-path.patch ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nugetDeps = ./deps.json;
 
@@ -50,13 +54,15 @@ buildDotnetModule (finalAttrs: {
   ];
 
   # these are dlopen-ed at runtime
-  # libXi is needed for right-click support
+  # libxi is needed for right-click support
+  # libGL is needed for GPU-accelerated rendering (without it, Avalonia falls back to software rendering)
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libGL
+    libxcursor
+    libxext
+    libxi
+    libxrandr
   ];
 
   # Note: users can use `.overrideAttrs` to append to this list
@@ -78,6 +84,7 @@ buildDotnetModule (finalAttrs: {
       exec = "SourceGit";
       icon = "SourceGit";
       desktopName = "SourceGit";
+      categories = [ "Development" ];
       terminal = false;
       comment = finalAttrs.meta.description;
     })
@@ -105,6 +112,8 @@ buildDotnetModule (finalAttrs: {
       mkdir -p $out/Applications/SourceGit.app/Contents/MacOS
       ln -s $out/bin/SourceGit $out/Applications/SourceGit.app/Contents/MacOS/SourceGit
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/sourcegit-scm/sourcegit/releases/tag/${finalAttrs.src.tag}";

@@ -1,10 +1,10 @@
 # Neovim {#neovim}
 
-Install `neovim-unwrapped` to get a barebone neovim to configure imperatively.
+Install `neovim-unwrapped` to get a bare-bones Neovim to configure imperatively.
 This is the closest to what you encounter on other distributions.
 
-`neovim` is a wrapper around neovim with some extra configuration to for
-instance set the various language providers like python.
+`neovim` is a wrapper around Neovim with some extra configuration, for
+instance, to set the various language providers like Python.
 The wrapper can be further configured to include your favorite plugins and
 configurations for a reproducible neovim across machines.
 See the next section for more details.
@@ -20,9 +20,12 @@ You can configure the former via:
 
 ```nix
 neovim.override {
+  withPython3 = true; # see `:h g:python3_host_prog`
+  withNodeJs = false;
+  withRuby = false;
   configure = {
     customRC = ''
-      # here your custom configuration goes!
+      # here your custom viml configuration goes!
     '';
     packages.myVimPackage = with pkgs.vimPlugins; {
       # See examples below on how to use custom packages.
@@ -44,7 +47,7 @@ neovim-qt.override {
   neovim = neovim.override {
     configure = {
       customRC = ''
-        # your custom configuration
+        # your custom viml configuration
       '';
     };
   };
@@ -52,7 +55,7 @@ neovim-qt.override {
 ```
 
 You can use the new unstable wrapper but the interface may change:
-- `autoconfigure`: certain plugins need a custom configuration to work with nix.
+- `autoconfigure`: certain plugins need a custom configuration to work with Nix.
 For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs historically patched these in the plugins with several drawbacks: harder maintenance and making upstream work harder. Per convention, these mandatory bits of configuration are bookmarked in nixpkgs in `passthru.initLua`. Enabling `autoconfigure` automatically adds the snippets required for the plugins to work.
 - `autowrapRuntimeDeps`: Appends plugin's runtime dependencies to `PATH`. For instance, `rest.nvim` requires `curl` to work. Enabling `autowrapRuntimeDeps` adds it to the `PATH` visible by your Neovim wrapper (but not your global `PATH`).
 - `luaRcContent`: Extra lua code to add to the generated `init.lua`.
@@ -61,6 +64,9 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
   generated Neovim configuration via the `$VIMINIT` environment variable, i.e. : `export VIMINIT='lua dofile("/nix/store/…-init.lua")'`. This has side effects like preventing Neovim from sourcing your `init.lua` in `$XDG_CONFIG_HOME/nvim` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#startup) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse the generated vimscript init code via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
+- `extraLuaPackages`: A function passed on to `lua.withPackages`
+- `withPython3`, `withNodeJs`, `withRuby` control when to enable neovim
+  providers (see `:h provider`).
 
 ```
 wrapNeovimUnstable neovim-unwrapped {
@@ -85,6 +91,10 @@ wrapNeovimUnstable neovim-unwrapped {
     (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
     hex-nvim
   ];
+  extraLuaPackages = lp: [ lp.mpack ];
+  withPython3 = true;
+  withNodeJs = false;
+  withRuby = false;
 }
 ```
 
@@ -96,7 +106,7 @@ neovim.overrideAttrs (oldAttrs: {
 })
 ```
 
-### Specificities for some plugins {#neovim-plugin-specificities}
+## Specificities for some plugins {#neovim-plugin-specificities}
 
 ### Plugin optional configuration {#neovim-plugin-required-snippet}
 
@@ -105,31 +115,70 @@ patch those plugins but expose the necessary configuration under
 `PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
 needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
 
-#### LuaRocks based plugins {#neovim-luarocks-based-plugins}
+### Plugin license overrides {#neovim-plugin-license-overrides}
 
-In order to automatically handle plugin dependencies, several neovim plugins
+Generated Vim and Neovim plugins get their `meta.license` from GitHub license metadata when possible.
+Some upstream repositories do not expose a license file that GitHub can detect, or only mention the license in a README.
+In those cases, add a manual `meta.license` override in [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+
+For example, if upstream documents that a plugin uses the Vim license but GitHub does not detect it:
+
+```nix
+{
+  foo-nvim = super.foo-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      # README says this plugin is distributed under the Vim license.
+      license = lib.licenses.vim;
+    };
+  });
+}
+```
+
+## LuaRocks based plugins {#neovim-luarocks-based-plugins}
+
+In order to automatically handle plugin dependencies, several Neovim plugins
 upload their package to [LuaRocks](https://www.luarocks.org). This means less work for nixpkgs maintainers in the long term as dependencies get updated automatically.
-This means several neovim plugins are first packaged as nixpkgs [lua
+This means several Neovim plugins are first packaged as nixpkgs [lua
 packages](#packaging-a-library-on-luarocks), and converted via `buildNeovimPlugin` in
-a vim plugin. This conversion is necessary because neovim expects lua folders to be
-top-level while luarocks installs them in various subfolders by default.
+a vim plugin. This conversion is necessary because Neovim expects lua folders to be
+top-level while LuaRocks installs them in various subfolders by default.
 
 For instance:
 ```nix
 {
-  rtp-nvim = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.rtp-nvim;
-  };
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rtp-nvim; };
 }
 ```
 To update these packages, you should use the lua updater rather than vim's.
 
-#### Treesitter {#neovim-plugin-treesitter}
+## Treesitter {#neovim-plugin-treesitter}
 
-By default `nvim-treesitter` encourages you to download, compile and install
-the required Treesitter grammars at run time with `:TSInstall`. This works
-poorly on NixOS.  Instead, to install the `nvim-treesitter` plugins with a set
-of precompiled grammars, you can use the `nvim-treesitter.withPlugins` function:
+[Treesitter](https://tree-sitter.github.io/) provides syntax parsing for Neovim, enabling features like:
+Advanced syntax highlighting, Code folding, Indentation and more.
+
+Most Neovim users manage treesitter through the `nvim-treesitter` plugin, which provides:
+
+- Commands for managing grammars and queries,
+  e.g. `:TSInstall`, which downloads, compiles and installs them at runtime.
+- A custom indentation implementation ([`:h indentexpr`](https://neovim.io/doc/user/options.html#'indentexpr'))
+  for languages with `indents.scm` queries.
+
+These features build on top of treesitter functionality that is built into Neovim.
+
+In nixpkgs, grammars and queries are precompiled and packaged separately. This means:
+
+- You can use treesitter features **without** installing `nvim-treesitter`.
+- You only need `nvim-treesitter` if you want its custom indentation implementation.
+- Plugins that depend on grammars can reference them directly.
+
+### Treesitter setup using `nvim-treesitter` {#neovim-plugin-nvim-treesitter}
+
+::: {.tip}
+Choose this approach if you want to use `nvim-treesitter`'s custom indentation expression.
+:::
+
+To install `nvim-treesitter` combined with a set of precompiled grammars,
+you can use the `nvim-treesitter.withPlugins` function:
 
 ```nix
 (pkgs.neovim.override {
@@ -150,11 +199,128 @@ of precompiled grammars, you can use the `nvim-treesitter.withPlugins` function:
 
 To enable all grammars packaged in nixpkgs, use `pkgs.vimPlugins.nvim-treesitter.withAllGrammars`.
 
+For how to configure `nvim-treesitter` and set up syntax highlighting, indentation, folding, etc.,
+please refer to the `:help nvim-treesitter-quickstart` plugin documentation.
 
-### Testing Neovim plugins {#testing-neovim-plugins}
+::: {.note}
+When using Nix-managed grammars, `:checkhealth nvim-treesitter` will report no installed languages.
+This is expected behavior because:
+- The `nvim-treesitter` health check searches its configured install directory.
+- Nix installs grammars to the Nix store and adds them to the `runtimepath` instead.
 
-#### neovimRequireCheck {#testing-neovim-plugins-neovim-require-check}
-`neovimRequireCheck` is a simple test which checks if Neovim can requires lua modules without errors. This is often enough to catch missing dependencies.
+**To verify Nix-managed parsers and queries**, use `:checkhealth vim.treesitter` instead.
+:::
+
+### Treesitter setup using standalone grammars and queries {#neovim-plugin-treesitter-standalone}
+
+::: {.tip}
+Choose this approach if you
+- Want minimal dependencies.
+- Don't need `nvim-treesitter`'s custom indentation expression.
+:::
+
+You can install the standalone parsers and queries directly without installing `nvim-treesitter`:
+
+```nix
+(pkgs.neovim.override {
+  configure = {
+    packages.myPlugins =
+      with pkgs.vimPlugins;
+      let
+        # Select the grammars you need
+        treesitter-grammars = with nvim-treesitter-parsers; [
+          nix
+          python
+        ];
+        # Queries are needed for treesitter based syntax highlighting and folds.
+        treesitter-queries = map (p: p.associatedQuery) treesitter-grammars;
+      in
+      {
+        start = [
+          # regular plugins
+        ]
+        ++ treesitter-grammars
+        ++ treesitter-queries;
+      };
+  };
+})
+```
+
+You can enable treesitter features for installed grammars in a `FileType` autocommand
+or in an `ftplugin/<language>.lua` script, e.g.
+
+```lua
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'rust', 'javascript', 'zig' },
+  callback = function(ev)
+    local bufnr = ev.buf
+
+    -- Enable treesitter syntax highlighting and parsing for the current buffer
+    -- (Requires queries to be installed)
+    vim.treesitter.start(bufnr)
+
+    -- Enable treesitter based code folding
+    -- (folds are window-scoped, not buffer-scoped)
+    -- (Requires queries to be installed)
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.wo.foldmethod = 'expr'
+  end,
+})
+```
+
+### Treesitter grammars as plugin dependencies {#neovim-plugin-treesitter-grammar-dependencies}
+
+Some Neovim plugins (like `neotest` adapters, `markdoc-nvim`, `hurl-nvim`) depend on treesitter grammars.
+These dependencies are usually declared in plugin overrides.
+
+::: {.important}
+Some plugin READMEs may suggest that they depend on `nvim-treesitter`.
+**This is almost always not the case.**
+
+`nvim-treesitter` no longer provides a Lua module API for other plugins to use.
+In the vast majority of cases, these plugins:
+- **Depend on parsers** (not on `nvim-treesitter` or its queries).
+- **Bundle their own queries** (either as `*.scm` files or hardcoded in the Lua sources).
+:::
+
+To add grammars as a plugin dependency, add an [override](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix):
+
+```nix
+{
+  foo-nvim = super.foo-nvim.overrideAttrs {
+    dependencies = with self.nvim-treesitter-parsers; [
+      markdown
+      markdown_inline
+      html
+    ];
+  };
+}
+```
+
+If a plugin actually does depend on the `nvim-treesitter` legacy module API, you can add
+`nvim-treesitter-legacy` as a dependency:
+
+```nix
+{
+  foo-legacy-nvim = super.foo-legacy-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter-legacy
+      nvim-treesitter-parsers.nix
+    ];
+  };
+}
+```
+
+::: {.caution}
+`nvim-treesitter-legacy` exists for the purpose of easing transition and will be removed in 26.11.
+If a Neovim configuration contains both `nvim-treesitter` and `nvim-treesitter-legacy`, it will fail to evaluate.
+:::
+
+## Testing Neovim plugins {#testing-neovim-plugins}
+
+### neovimRequireCheck {#testing-neovim-plugins-neovim-require-check}
+
+`neovimRequireCheck` is a simple test which checks if Neovim can require lua modules without errors. This is often enough to catch missing dependencies.
 
 It accepts a single string for a module, or a list of module strings to test.
 - `nvimRequireCheck = MODULE;`
@@ -173,7 +339,7 @@ To only check a specific module, add it manually to the plugin definition [overr
   };
 }
 ```
-Some plugins will have lua modules that require a user configuration to function properly or can contain optional lua modules that we dont want to test requiring.
+Some plugins will have lua modules that require a user configuration to function properly or can contain optional lua modules that we don't want to test by requiring.
 We can skip specific modules using `nvimSkipModules`. Similar to `nvimRequireCheck`, it accepts a list of strings.
 - `nvimSkipModules = [ MODULE1 MODULE2 ];`
 

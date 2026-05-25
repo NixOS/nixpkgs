@@ -1,10 +1,13 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  sound-theme-freedesktop,
   rustPlatform,
   libcosmicAppHook,
+  just,
   pulseaudio,
+  pipewire,
+  libinput,
   udev,
   nix-update-script,
   nixosTests,
@@ -12,29 +15,44 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
-  version = "1.0.0-alpha.7";
+  version = "1.0.13";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-POjuxrNBajp4IOw7YwF2TS4OfoM8Hxo1fO48nkhKj8U=";
+    hash = "sha256-zQL4kr7QpGKHD8Jwqv5h/U+QrCiHW5MEYTz+2/Oo1zY=";
   };
 
-  postPatch = ''
-    substituteInPlace src/components/app.rs \
-      --replace-fail '/usr/share/sounds/freedesktop/stereo/audio-volume-change.oga' '${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/audio-volume-change.oga'
-  '';
+  cargoHash = "sha256-1YRWWI2qhCI0GrxBAAkGT/AbtkTHgdbYsG8obriZ+zg=";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kfExKggQo3MoTXw1JbKWjLu5kwYF0n7DzSQcG6e1+QQ=";
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
-  nativeBuildInputs = [ libcosmicAppHook ];
+  nativeBuildInputs = [
+    just
+    libcosmicAppHook
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = [
     pulseaudio
     udev
+    libinput
+    pipewire
+  ];
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
@@ -48,10 +66,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

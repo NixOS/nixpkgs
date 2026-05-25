@@ -6,15 +6,12 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiooui";
   version = "0.1.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
@@ -41,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiooui" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async OUI lookups";
     homepage = "https://github.com/Bluetooth-Devices/aiooui";
     changelog = "https://github.com/Bluetooth-Devices/aiooui/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

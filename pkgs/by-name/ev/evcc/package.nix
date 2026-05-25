@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  buildGo124Module,
+  buildGo126Module,
   fetchFromGitHub,
   fetchNpmDeps,
   cacert,
   git,
-  go_1_24,
+  go_1_26,
   gokrazy,
   enumer,
   mockgen,
@@ -17,42 +17,30 @@
 }:
 
 let
-  version = "0.204.2";
+  version = "0.307.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-e0z1DUXEYbfSIcJBI2gpxY2hb0Tak3sFoYOi5WdsQPY=";
+    hash = "sha256-G6+8cJF+So9kePDpNlFGuvsTU5+KXg9dlgaMnElWwL8=";
   };
 
-  vendorHash = "sha256-dBOZ5kYQxVTWB1CTTF3L+FIsuLnVQmA7Vjid7CdJbeo=";
+  vendorHash = "sha256-ie5wCRgGj8DeotYD/GrDP9qTnonTJsMqj1fBqHNR84M=";
 
-  commonMeta = with lib; {
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
-  };
-
-  decorate = buildGo124Module {
-    pname = "evcc-decorate";
-    inherit version src vendorHash;
-
-    subPackages = "cmd/decorate";
-
-    meta = commonMeta // {
-      description = "EVCC decorate helper";
-      homepage = "https://github.com/evcc-io/evcc/tree/master/cmd/decorate";
-    };
+  commonMeta = {
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 in
 
-buildGo124Module rec {
+buildGo126Module rec {
   pname = "evcc";
   inherit version src vendorHash;
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-Hyx9jUVF6aCPD89cxQx7dl77lCfDxcOIZVhSXx0+q0U=";
+    hash = "sha256-CtZoPtpENUfaVvs2zozBWsMYD8ZJFAXig7sYcNNLwzY=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +50,8 @@ buildGo124Module rec {
 
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      decorate
       enumer
-      go_1_24
+      go_1_26
       gokrazy
       git
       cacert
@@ -72,7 +59,7 @@ buildGo124Module rec {
     ];
 
     preBuild = ''
-      make assets
+      GOFLAGS="-mod=mod" make assets
     '';
   };
 
@@ -83,7 +70,6 @@ buildGo124Module rec {
 
   ldflags = [
     "-X github.com/evcc-io/evcc/util.Version=${version}"
-    "-X github.com/evcc-io/evcc/util.Commit=${src.tag}"
     "-s"
     "-w"
   ];
@@ -98,15 +84,15 @@ buildGo124Module rec {
     let
       skippedTests = [
         # network access
-        "TestOctopusConfigParse"
-        "TestTemplates"
         "TestOcpp"
+        "TestOctopusConfigParse"
+        "TestSessionHandlerTimezoneFilter"
+        "TestTemplates"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
-    inherit decorate;
     tests = {
       inherit (nixosTests) evcc;
     };

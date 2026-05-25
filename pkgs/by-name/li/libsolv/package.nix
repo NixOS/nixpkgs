@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   pkg-config,
@@ -17,34 +18,41 @@
   withConda ? true,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.7.33";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.7.37";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
-    rev = version;
-    hash = "sha256-jOYz0p5oWMnPtQbpkCIUgw6e0W5PfR6teA9IdjYSghk=";
+    rev = finalAttrs.version;
+    hash = "sha256-hiumMnTJ3eP+acH2V0eNTM71Fw//IWQPechCA0+kH1s=";
   };
 
-  cmakeFlags =
-    [
-      "-DENABLE_COMPLEX_DEPS=true"
-      (lib.cmakeBool "ENABLE_CONDA" withConda)
-      "-DENABLE_LZMA_COMPRESSION=true"
-      "-DENABLE_BZIP2_COMPRESSION=true"
-      "-DENABLE_ZSTD_COMPRESSION=true"
-      "-DENABLE_ZCHUNK_COMPRESSION=true"
-      "-DWITH_SYSTEM_ZCHUNK=true"
-    ]
-    ++ lib.optionals withRpm [
-      "-DENABLE_COMPS=true"
-      "-DENABLE_PUBKEY=true"
-      "-DENABLE_RPMDB=true"
-      "-DENABLE_RPMDB_BYRPMHEADER=true"
-      "-DENABLE_RPMMD=true"
-    ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-9149";
+      url = "https://github.com/openSUSE/libsolv/commit/210386037c892a720972ad35a3d8f7073b4d763b.patch";
+      hash = "sha256-ju3xn78UGMR5usq1e1ovFTWnKW1TPDA77sNGx8yc8Z8=";
+    })
+  ];
+
+  cmakeFlags = [
+    "-DENABLE_COMPLEX_DEPS=true"
+    (lib.cmakeBool "ENABLE_CONDA" withConda)
+    "-DENABLE_LZMA_COMPRESSION=true"
+    "-DENABLE_BZIP2_COMPRESSION=true"
+    "-DENABLE_ZSTD_COMPRESSION=true"
+    "-DENABLE_ZCHUNK_COMPRESSION=true"
+    "-DWITH_SYSTEM_ZCHUNK=true"
+  ]
+  ++ lib.optionals withRpm [
+    "-DENABLE_COMPS=true"
+    "-DENABLE_PUBKEY=true"
+    "-DENABLE_RPMDB=true"
+    "-DENABLE_RPMDB_BYRPMHEADER=true"
+    "-DENABLE_RPMMD=true"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -59,13 +67,14 @@ stdenv.mkDerivation rec {
     zstd
     expat
     db
-  ] ++ lib.optional withRpm rpm;
+  ]
+  ++ lib.optional withRpm rpm;
 
-  meta = with lib; {
+  meta = {
     description = "Free package dependency solver";
     homepage = "https://github.com/openSUSE/libsolv";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
-}
+})

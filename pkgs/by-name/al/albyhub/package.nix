@@ -5,12 +5,10 @@
   fetchYarnDeps,
   fixup-yarn-lock,
   nodejs,
-  pkgs,
   yarn,
   stdenv,
   makeWrapper,
   callPackage,
-  go,
 }:
 
 let
@@ -21,18 +19,18 @@ let
 
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "albyhub";
-  version = "1.17.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
-    tag = "v${version}";
-    hash = "sha256-ZDTCA3nMJEA8I7PeSgwQAe+wU8Wk0GaH3ItQLzPhOBQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xP/J9zdh4sZ1x+JUpOf12ft8f2II2Mn1Q7/gnMuFzy8=";
   };
 
-  vendorHash = "sha256-4e75SqQiRUEEjtDZKDZsGSRavZFh5ulJdMz0Ne7gME0=";
+  vendorHash = "sha256-nzdHXY14o4D8NrcXu2JvDagvIfemfVAaGU3IDifhyW0=";
   proxyVendor = true; # needed for secp256k1-zkp CGO bindings
 
   nativeBuildInputs = [
@@ -48,15 +46,15 @@ buildGoModule rec {
   ];
 
   frontendYarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/frontend/yarn.lock";
-    hash = "sha256-SStTJGqeqPvXBKjFMPjKEts+jg6A9Vaqi+rZkr/ytdc=";
+    yarnLock = finalAttrs.src + "/frontend/yarn.lock";
+    hash = "sha256-BeuTBLJ/Iakd4jhIkI2+oHc4MFy6DSn8QcygTHEMmQo=";
   };
 
   preBuild = ''
     export HOME=$TMPDIR
     pushd frontend
       fixup-yarn-lock yarn.lock
-      yarn config set yarn-offline-mirror "${frontendYarnOfflineCache}"
+      yarn config set yarn-offline-mirror "${finalAttrs.frontendYarnOfflineCache}"
       yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules
       yarn --offline build:http
@@ -68,7 +66,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/getAlby/hub/version.Tag=v${version}"
+    "-X github.com/getAlby/hub/version.Tag=v${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -95,4 +93,5 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bleetube ];
     mainProgram = "albyhub";
   };
-}
+})
+# nixpkgs-update: no auto update

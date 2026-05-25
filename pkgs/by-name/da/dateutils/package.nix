@@ -6,12 +6,12 @@
   tzdata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.4.11";
   pname = "dateutils";
 
   src = fetchurl {
-    url = "https://bitbucket.org/hroptatyr/dateutils/downloads/dateutils-${version}.tar.xz";
+    url = "https://bitbucket.org/hroptatyr/dateutils/downloads/dateutils-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-uP6gsJcUu63yArmzQ0zOa1nCgueGkmjQwIuFiA/btEY=";
   };
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Bunch of tools that revolve around fiddling with dates and times in the command line";
     homepage = "http://www.fresse.org/dateutils/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.paperdigits ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.paperdigits ];
   };
-}
+})

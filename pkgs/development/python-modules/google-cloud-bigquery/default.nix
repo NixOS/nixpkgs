@@ -32,18 +32,18 @@
   mock,
   psutil,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.31.0";
+  version = "3.40.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery";
     inherit version;
-    hash = "sha256-uJ3HFtvkq9t6T4c/cFAQAoe8mFFOBhTF1UzWqOn7CZE=";
+    hash = "sha256-s8yxHK8AKfFbKVaVGPZnVT/gj28UWblZAgyD+72PLmg=";
   };
 
   build-system = [ setuptools ];
@@ -58,7 +58,8 @@ buildPythonPackage rec {
     protobuf
     python-dateutil
     requests
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     bqstorage = [
@@ -75,19 +76,18 @@ buildPythonPackage rec {
     ipython = [ ipython ];
   };
 
-  nativeCheckInputs =
-    [
-      freezegun
-      google-cloud-datacatalog
-      google-cloud-storage
-      google-cloud-testutils
-      mock
-      psutil
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.pandas
-    ++ optional-dependencies.ipython;
+  nativeCheckInputs = [
+    freezegun
+    google-cloud-datacatalog
+    google-cloud-storage
+    google-cloud-testutils
+    mock
+    psutil
+    pytest-xdist
+    pytest8_3CheckHook
+  ]
+  ++ optional-dependencies.pandas
+  ++ optional-dependencies.ipython;
 
   # prevent google directory from shadowing google imports
   preCheck = ''
@@ -109,6 +109,8 @@ buildPythonPackage rec {
     "test_list_rows_scalars_extreme"
     "test_session"
     "test_to_arrow_query_with_empty_result"
+    "test_list_rows_pico"
+    "test_list_rows_pico_truncate"
 
     # Mocking of _ensure_bqstorage_client fails
     "test_to_arrow_ensure_bqstorage_client_wo_bqstorage"

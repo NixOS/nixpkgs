@@ -24,6 +24,8 @@
   bintrans,
   xargs-j,
   kldxref,
+  ctfconvert,
+  ctfmerge,
 }:
 let
   baseConfigFile =
@@ -45,36 +47,27 @@ let
       "sys"
       "include"
     ];
-    postPatch =
-      ''
-        for f in sys/conf/kmod.mk sys/contrib/dev/acpica/acpica_prep.sh; do
-          substituteInPlace "$f" --replace-warn 'xargs -J' 'xargs-j '
-        done
+    postPatch = ''
+      for f in sys/contrib/dev/acpica/acpica_prep.sh; do
+        substituteInPlace "$f" --replace-warn 'xargs -J' 'xargs-j '
+      done
 
-        for f in sys/conf/*.mk; do
-          substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
-        done
-
-        sed -i sys/${hostArchBsd}/conf/${baseConfig} \
-          -e 's/WITH_CTF=1/WITH_CTF=0/' \
-          -e '/KDTRACE/d'
-      ''
-      + lib.optionalString (baseConfigFile != null) ''
-        cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
-      '';
+      for f in sys/conf/*.mk; do
+        substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
+      done
+    ''
+    + lib.optionalString (baseConfigFile != null) ''
+      cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
+    '';
   };
 
   # Kernel modules need this for kern.opts.mk
-  env =
-    {
-      MK_CTF = "no";
+  env = lib.flip lib.mapAttrs' extraFlags (
+    name: value: {
+      name = "MK_${lib.toUpper name}";
+      value = lib.boolToYesNo value;
     }
-    // (lib.flip lib.mapAttrs' extraFlags (
-      name: value: {
-        name = "MK_${lib.toUpper name}";
-        value = if value then "yes" else "no";
-      }
-    ));
+  );
 in
 mkDerivation rec {
   pname = "sys";
@@ -98,6 +91,8 @@ mkDerivation rec {
     bintrans
     xargs-j
     kldxref
+    ctfconvert
+    ctfmerge
   ];
 
   # --dynamic-linker /red/herring is used when building the kernel.
@@ -116,16 +111,23 @@ mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-fno-stack-protector"
     "-Wno-unneeded-internal-declaration" # some openzfs code trips this
+    "-Wno-default-const-init-field-unsafe" # added in clang 21
+    "-Wno-uninitialized-const-pointer" # added in clang 21
+    "-Wno-format" # error: passing 'printf' format string where 'freebsd_kprintf' format string is expected
+    "-Wno-sometimes-uninitialized" # this one is actually kind of concerning but it does trip
+    "-Wno-unused-function"
   ];
 
   inherit env;
   passthru.env = env;
 
-  KODIR = "${builtins.placeholder "out"}/kernel";
-  KMODDIR = "${builtins.placeholder "out"}/kernel";
-  DTBDIR = "${builtins.placeholder "out"}/dbt";
+  makeFlags = [ "XARGS_J=xargs-j" ];
 
-  KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
+  KODIR = "${placeholder "out"}/kernel";
+  KMODDIR = "${placeholder "out"}/kernel";
+  DTBDIR = "${placeholder "out"}/dbt";
+
+  KERN_DEBUGDIR = "${placeholder "debug"}/lib/debug";
   KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
   KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
 

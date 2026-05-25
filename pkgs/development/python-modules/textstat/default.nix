@@ -2,21 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nltk,
   setuptools,
   pyphen,
   pytestCheckHook,
   pytest,
 }:
-buildPythonPackage rec {
-  version = "0.7.4";
+buildPythonPackage (finalAttrs: {
+  version = "0.7.13";
   pname = "textstat";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "textstat";
     repo = "textstat";
-    rev = version;
-    hash = "sha256-UOCWsIdoVGxmkro4kNBYNMYhA3kktngRDxKjo6o+GXY=";
+    tag = finalAttrs.version;
+    hash = "sha256-VMWwhwyGMFaKNLHoDG3gw1/jzSYCDBH3Yq4pE4JZTTo=";
   };
 
   build-system = [
@@ -31,15 +32,18 @@ buildPythonPackage rec {
   dependencies = [
     setuptools
     pyphen
+    nltk
   ];
 
   pythonImportsCheck = [
     "textstat"
   ];
 
-  pytestFlagsArray = [
-    "test.py"
+  enabledTestPaths = [
+    "tests/"
   ];
+
+  env.NLTK_DATA = nltk.data.cmudict;
 
   meta = {
     description = "Python package to calculate readability statistics of a text object";
@@ -47,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

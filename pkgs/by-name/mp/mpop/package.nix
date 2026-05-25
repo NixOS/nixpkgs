@@ -18,12 +18,12 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
   "no"
 ];
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpop";
   version = "1.4.21";
 
   src = fetchurl {
-    url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
+    url = "https://marlam.de/mpop/releases/mpop-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-TKDR4NATZv4+DPSQ2I0VTfURJ4+1lWOHE748pnVmWFU=";
   };
 
@@ -42,12 +42,13 @@ stdenv.mkDerivation rec {
     (lib.withFeature idnSupport "idn")
     (lib.withFeature gsaslSupport "gsasl")
     "--with-tls=${sslLibrary}"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-macosx-keyring";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-macosx-keyring";
 
-  meta = with lib; {
+  meta = {
     description = "POP3 mail retrieval agent";
     homepage = "https://marlam.de/mpop";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

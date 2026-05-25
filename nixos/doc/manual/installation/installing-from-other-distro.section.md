@@ -35,14 +35,14 @@ The first steps to all these are the same:
 
     ```ShellSession
     $ nix-channel --list
-    nixpkgs https://nixos.org/channels/nixpkgs-unstable
+    nixpkgs https://channels.nixos.org/nixpkgs-unstable
     ```
 
     As that channel gets released without running the NixOS tests, it
     will be safer to use the `nixos-*` channels instead:
 
     ```ShellSession
-    $ nix-channel --add https://nixos.org/channels/nixos-<version> nixpkgs
+    $ nix-channel --add https://channels.nixos.org/nixos-<version> nixpkgs
     ```
 
     Where `<version>` corresponds to the latest version available on [channels.nixos.org](https://channels.nixos.org/).
@@ -149,6 +149,10 @@ The first steps to all these are the same:
     `NIXOS_LUSTRATE`:
     :::
 
+    ::: {.warning}
+    The lustrate process will not work if the [](#opt-boot.initrd.systemd.enable) option is set to `true`, which is now the default. Setting this to `false` is deprecated and scheduled for removal in NixOS 26.11, along with `NIXOS_LUSTRATE`. Other installation methods, such as the one outlined above, or installing from [kexec](#sec-booting-via-kexec), are recommended instead.
+    :::
+
     Generate your NixOS configuration:
 
     ```ShellSession
@@ -167,11 +171,6 @@ The first steps to all these are the same:
     If the current system and NixOS's bootloader configuration don't agree on where the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition) is to be mounted, you'll need to manually alter the mount point in `hardware-configuration.nix` before building the system closure.
     :::
 
-    ::: {.note}
-    The lustrate process will not work if the [](#opt-boot.initrd.systemd.enable) option is set to `true`.
-    If you want to use this option, wait until after the first boot into the NixOS system to enable it and rebuild.
-    :::
-
     You'll likely want to set a root password for your first boot using
     the configuration files because you won't have a chance to enter a
     password until after you reboot. You can initialize the root password
@@ -180,9 +179,7 @@ The first steps to all these are the same:
     `sudo passwd -l root` if you use `sudo`)
 
     ```nix
-    {
-      users.users.root.initialHashedPassword = "";
-    }
+    { users.users.root.initialHashedPassword = ""; }
     ```
 
 1.  Build the NixOS closure and install it in the `system` profile:

@@ -10,16 +10,16 @@
   pefile,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "virt-firmware";
-  version = "24.7";
+  version = "25.12";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "kraxel";
     repo = "virt-firmware";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uVLq4vbnvK1RCA3tpLgwKb/qzysLsOo3p/6gQ2Prmu0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sopmWZ8CdLuc0R+QN7MSoqT9kURzOyh9CgbreKuvANw=";
   };
 
   build-system = [ setuptools ];
@@ -38,16 +38,17 @@ buildPythonPackage rec {
     pkgs.systemd
   ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
 
   pythonImportsCheck = [ "virt.firmware.efi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for virtual machine firmware volumes";
     homepage = "https://gitlab.com/kraxel/virt-firmware";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    changelog = "https://gitlab.com/kraxel/virt-firmware/-/tags/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       raitobezarius
     ];
   };
-}
+})

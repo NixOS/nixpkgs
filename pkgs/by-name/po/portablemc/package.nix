@@ -1,97 +1,139 @@
 {
   lib,
   stdenv,
-  python3Packages,
   fetchFromGitHub,
-  installShellFiles,
-  jre,
 
-  libX11,
-  libXext,
-  libXcursor,
-  libXrandr,
-  libXxf86vm,
-  libpulseaudio,
+  rustPlatform,
+  pkg-config,
+  openssl,
+
+  makeWrapper,
+
+  addDriverRunpath,
+  alsa-lib,
+  glfw3-minecraft,
   libGL,
-  glfw,
+  libjack2,
+  libpulseaudio,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
+  libxxf86vm,
   openal,
+  pipewire,
   udev,
+  vulkan-loader,
 
   textToSpeechSupport ? stdenv.hostPlatform.isLinux,
   flite,
+
+  pciutils,
+  xrandr,
+
+  jdk25,
+  jdk21,
+  jdk17,
+  jdk8,
+
+  # can be overriden to reduce the closure size
+  jvms ? [
+    jdk25
+    jdk21
+    jdk17
+    jdk8
+  ],
+
+  additionalLibs ? [ ],
+  additionalPrograms ? [ ],
 }:
 
 let
   # Copied from the `prismlauncher` package
   runtimeLibs = [
-    libX11
-    libXext
-    libXcursor
-    libXrandr
-    libXxf86vm
-
-    # lwjgl
-    libpulseaudio
-    libGL
-    glfw
-    openal
     (lib.getLib stdenv.cc.cc)
+    ## native versions
+    glfw3-minecraft
+    openal
 
-    # oshi
-    udev
-  ] ++ lib.optional textToSpeechSupport flite;
+    ## openal
+    alsa-lib
+    libjack2
+    libpulseaudio
+    pipewire
+
+    ## glfw
+    libGL
+    libx11
+    libxcursor
+    libxext
+    libxrandr
+    libxxf86vm
+
+    udev # oshi
+
+    vulkan-loader # VulkanMod's lwjgl
+  ]
+  ++ lib.optional textToSpeechSupport flite
+  ++ additionalLibs;
+
+  # Copied from the `prismlauncher` package
+  runtimePrograms = [
+    pciutils # need lspci
+    xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
+  ]
+  ++ additionalPrograms;
+
 in
-python3Packages.buildPythonApplication rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "portablemc";
-  version = "4.4.1";
-  pyproject = true;
-
-  disabled = python3Packages.pythonOlder "3.8";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
-    owner = "mindstorm38";
+    owner = "theorzr";
     repo = "portablemc";
-    tag = "v${version}";
-    hash = "sha256-KE1qf6aIcDjwKzrdKDUmriWfAt+vuriew6ixHKm0xs8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P/ah7pwOdbgRDgpvhEDcNA1RiDzG2nYZCR13vzljLd8=";
   };
 
-  patches = [
-    # Use the jre package provided by nixpkgs by default
-    ./use-builtin-java.patch
-  ];
+  dontUnpack = true;
 
-  nativeBuildInputs = [ installShellFiles ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Ub9XVc6gcu6fEiOheew9Uh3LqdaSzVKITboDTK+MQUI=";
+  };
 
-  build-system = [ python3Packages.poetry-core ];
+  unwrapped = rustPlatform.buildRustPackage {
+    name = "portablemc-${finalAttrs.version}-unwrapped";
+    inherit (finalAttrs) src cargoDeps;
 
-  dependencies = [ python3Packages.certifi ];
+    nativeBuildInputs = [ pkg-config ];
 
-  # Note: Tests use networking, so we don't run them
+    buildInputs = [ openssl ];
+  };
 
-  postInstall = ''
-    installShellCompletion --cmd portablemc \
-        --bash <($out/bin/portablemc show completion bash) \
-        --zsh <($out/bin/portablemc show completion zsh)
-  '';
+  strictDeps = true;
+  nativeBuildInputs = [ makeWrapper ];
 
-  preFixup = ''
-    makeWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeLibs}
-      --prefix PATH : ${lib.makeBinPath [ jre ]}
-    )
+  installPhase = ''
+    runHook preInstall
+
+    makeWrapper "$unwrapped/bin/portablemc" "$out/bin/portablemc" \
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        --prefix LD_LIBRARY_PATH : "${addDriverRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}" \
+        --prefix PATH : "${lib.makeBinPath runtimePrograms}" \
+      ''} \
+      --prefix PATH : ${lib.makeBinPath jvms}
+
+    runHook postInstall
   '';
 
   meta = {
-    homepage = "https://github.com/mindstorm38/portablemc";
-    description = "Fast, reliable and cross-platform command-line Minecraft launcher and API for developers";
-    longDescription = ''
-      A fast, reliable and cross-platform command-line Minecraft launcher and API for developers.
-      Including fast and easy installation of common mod loaders such as Fabric, Forge, NeoForge and Quilt.
-      This launcher is compatible with the standard Minecraft directories.
-    '';
-    changelog = "https://github.com/mindstorm38/portablemc/releases/tag/v${version}";
+    homepage = "https://github.com/theorzr/portablemc";
+    description = "Cross platform command line utility for launching Minecraft quickly and reliably with included support for Mojang versions and popular mod loaders";
+    changelog = "https://github.com/theorzr/portablemc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     mainProgram = "portablemc";
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

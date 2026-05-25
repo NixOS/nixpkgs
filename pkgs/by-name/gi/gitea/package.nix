@@ -9,44 +9,60 @@
   compressDrvWeb,
   gitea,
   gzip,
+  nodejs,
   openssh,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
+  stdenv,
   sqliteSupport ? true,
   nixosTests,
-  buildNpmPackage,
 }:
 
 let
-  frontend = buildNpmPackage {
+  pnpm = pnpm_10;
+
+  frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    npmDepsHash = "sha256-+o7/A+Pqr8LZi+q0fOajQgLkWqquBrJSf0dpEXEJtwM=";
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      inherit pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-Qo0DLuZv+2GVLsBfCv/6CC9E/qhSE4HwV4StQL4HX4Y=";
+    };
 
-    # use webpack directly instead of 'make frontend' as the packages are already installed
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
     buildPhase = ''
-      BROWSERSLIST_IGNORE_OLD_DATA=true npx webpack
+      make frontend
     '';
 
     installPhase = ''
       mkdir -p $out
       cp -R public $out/
     '';
-  };
+  });
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.24.0";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${gitea.version}";
-    hash = "sha256-lKeqoNL6RMjhm9egk6upbovJaWwm3r2kxi0Z9bjNxtI=";
+    hash = "sha256-S7KV7soOnVQbw+2Ru7+DOL3Q4uWmSSdR6K90yofQlqw=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-nC8y3skBhnOo7Ki9nc7Ni6UpheArB8bGK4AR/1Gdjr0=";
+  vendorHash = "sha256-7+M1n8RSgB3gZ/2na4RF9kYOf90H0bnsJZMDKpgAy64=";
 
   outputs = [
     "out"
@@ -58,10 +74,17 @@ buildGoModule rec {
   # go-modules derivation doesn't provide $data
   # so we need to wait until it is built, and then
   # at that time we can then apply the substituteInPlace
-  overrideModAttrs = _: { postPatch = null; };
+  overrideModAttrs = _: {
+    postPatch = ''
+      substituteInPlace go.mod \
+        --replace-fail "go 1.26.3" "go 1.26"
+    '';
+  };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
+    substituteInPlace go.mod \
+      --replace-fail "go 1.26.3" "go 1.26"
   '';
 
   subPackages = [ "." ];
@@ -107,11 +130,11 @@ buildGoModule rec {
     tests = nixosTests.gitea;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       techknowlogick
       SuperSandro2000
     ];

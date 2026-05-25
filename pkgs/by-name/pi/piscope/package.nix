@@ -23,9 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VDrx/RLSpMhyD64PmdeWVacb9LleHakcy7D6zFxeyhw=";
   };
   # Fix FHS paths
-  postConfigure = ''
+  postPatch = ''
     substituteInPlace piscope.c \
-      --replace /usr/share/piscope $out/share/piscope
+      --replace-fail /usr/share/piscope $out/share/piscope
   '';
 
   nativeBuildInputs = [

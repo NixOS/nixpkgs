@@ -3,22 +3,35 @@
   rustPlatform,
   fetchFromGitLab,
   pkg-config,
+  stdenv,
+
+  # Linux-only
   vulkan-loader,
   alsa-lib,
   udev,
-  shaderc,
-  xorg,
+  libxcb,
   libxkbcommon,
+  autoPatchelfHook,
+  libx11,
+  libxi,
+  libxcursor,
+  libxrandr,
+  wayland,
+
+  # Both platforms
+  shaderc,
+
+  # macOS-only
+  desktopToDarwinBundle,
 }:
 
 let
   # Note: use this to get the release metadata
   # https://gitlab.com/api/v4/projects/10174980/repository/tags/v{version}
-  version = "0.16.0";
-  date = "2023-03-30-03:28";
-  rev = "80fe5ca64b40fbf3e0e393a44f8880a79a6a5380";
+  version = "0.18.0";
+  timestamp = "1769191511";
+  rev = "1d12f35edd6cdbfc1fb921c167cdd7beeeffe248";
 in
-
 rustPlatform.buildRustPackage {
   pname = "veloren";
   inherit version;
@@ -27,33 +40,50 @@ rustPlatform.buildRustPackage {
     owner = "veloren";
     repo = "veloren";
     inherit rev;
-    hash = "sha256-h2hLO227aeK2oEFfdGMgmtMkA9cn9AgQ9w6myb+8W8c=";
+    hash = "sha256-tngIwFq18kvOU2XwCQoeLWjiVDjrJgOf3XIYz2J2cWs=";
   };
 
   cargoPatches = [
-    ./fix-on-rust-stable.patch
     ./fix-assets-path.patch
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3XHuAgue0Id1oxCJ8NLZ4wYjMfND+C1iIW+AnMKXd54=";
+  cargoHash = "sha256-1qLE1UeP2i0xaOGLniZzdjIkBbme6rctGfcO9Kfoh5E=";
 
   postPatch = ''
     # Force vek to build in unstable mode
-    cat <<'EOF' | tee "$cargoDepsCopy"/vek-*/build.rs
+    tee "$cargoDepsCopy"/*/vek-*/build.rs > /dev/null <<'EOF'
     fn main() {
       println!("cargo:rustc-check-cfg=cfg(nightly)");
       println!("cargo:rustc-cfg=nightly");
     }
     EOF
+
+    # Fix assets path
+    substituteAllInPlace common/assets/src/lib.rs
+
+    # Do not use mold, it produces broken binaries
+    substituteInPlace .cargo/config.toml --replace-fail mold gold
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
+
   buildInputs = [
+    shaderc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     udev
-    xorg.libxcb
+    libxcb
     libxkbcommon
+    stdenv.cc.cc # libgcc_s.so.1
   ];
 
   buildNoDefaultFeatures = true;
@@ -64,8 +94,7 @@ rustPlatform.buildRustPackage {
     RUSTC_BOOTSTRAP = true;
 
     # Set version info, required by veloren-common
-    NIX_GIT_TAG = "v${version}";
-    NIX_GIT_HASH = "${lib.substring 0 7 rev}/${date}";
+    VELOREN_GIT_VERSION = "/${lib.substring 0 8 rev}/${timestamp}";
 
     # Save game data under user's home directory,
     # otherwise it defaults to $out/bin/../userdata
@@ -78,36 +107,41 @@ rustPlatform.buildRustPackage {
   # Some tests require internet access
   doCheck = false;
 
-  postFixup = ''
-    # Add required but not explicitly requested libraries
-    patchelf --add-rpath '${
-      lib.makeLibraryPath [
-        xorg.libX11
-        xorg.libXi
-        xorg.libXcursor
-        xorg.libXrandr
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.makeLibraryPath (
+      [
+        libx11
+        libxi
+        libxcursor
+        libxrandr
+        libxkbcommon
         vulkan-loader
       ]
-    }' "$out/bin/veloren-voxygen"
-  '';
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform wayland) [
+        wayland
+      ]
+    ))
+  ];
 
   postInstall = ''
     # Icons
     install -Dm644 assets/voxygen/net.veloren.veloren.desktop -t "$out/share/applications"
-    install -Dm644 assets/voxygen/net.veloren.veloren.png "$out/share/pixmaps"
-    install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml "$out/share/metainfo"
+    install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/icons/hicolor/256x256/apps"
+    install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml -t "$out/share/metainfo"
+
     # Assets directory
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open world, open source voxel RPG";
     homepage = "https://www.veloren.net";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     mainProgram = "veloren-voxygen";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       rnhmjoj
+      philocalyst
       tomodachi94
     ];
   };

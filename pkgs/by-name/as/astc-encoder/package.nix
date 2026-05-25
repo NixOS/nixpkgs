@@ -45,15 +45,15 @@ let
       (head isas);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "astc-encoder";
   version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
-    rev = version;
-    sha256 = "sha256-15fX+3wzDoVzvQAhneeGajMsFXqSwmYtlsi3qrNFNus=";
+    tag = finalAttrs.version;
+    hash = "sha256-15fX+3wzDoVzvQAhneeGajMsFXqSwmYtlsi3qrNFNus=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -87,9 +87,9 @@ stdenv.mkDerivation rec {
       and HDR mode and can read various image formats. Run `astcenc
       -help` to see all the options.
     '';
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dasisdormax ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dasisdormax ];
     broken = !stdenv.hostPlatform.is64bit;
   };
-}
+})

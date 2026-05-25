@@ -14,22 +14,22 @@
   giflib,
   glib,
   imlib2,
-  libICE,
-  libSM,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXrandr,
+  libice,
+  libsm,
+  libx11,
+  libxcomposite,
+  libxdamage,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxft,
+  libxinerama,
+  libxpm,
+  libxrandr,
   libjpeg,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libsndfile,
   libtiff,
   libxcb,
@@ -41,13 +41,13 @@
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.7.5";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     tag = finalAttrs.version;
-    hash = "sha256-YGEgAO/H21yfv75LnCKYqCRtQtV6bqA7HRFXxDIll/c=";
+    hash = "sha256-CbIQICov0h3lBDT54dEODkINNXou6CUEhRQAPZwfYK0=";
   };
 
   strictDeps = true;
@@ -71,22 +71,22 @@ gccStdenv.mkDerivation (finalAttrs: {
     giflib
     glib
     imlib2
-    libICE
-    libSM
-    libX11
-    libXcomposite
-    libXdamage
-    libXdmcp
-    libXext
-    libXfixes
-    libXft
-    libXinerama
-    libXpm
-    libXrandr
+    libice
+    libsm
+    libx11
+    libxcomposite
+    libxdamage
+    libxdmcp
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxpm
+    libxrandr
     libjpeg
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libsndfile
     libtiff
     libxcb

@@ -139,7 +139,7 @@ in
       default = defaultSettings;
       description = ''
         Configuration to be written to the libncf-nci configuration files.
-        To understand the configuration format, refer to https://github.com/NXPNFCLinux/linux_libnfc-nci/tree/master/conf.
+        To understand the configuration format, refer to <https://github.com/NXPNFCLinux/linux_libnfc-nci/tree/master/conf>.
       '';
       type = lib.types.attrs;
     };
@@ -154,13 +154,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages =
-      [
-        pkgs.libnfc-nci
-      ]
-      ++ lib.optionals cfg.enableIFD [
-        pkgs.ifdnfc-nci
-      ];
+    environment.systemPackages = [
+      pkgs.libnfc-nci
+    ]
+    ++ lib.optionals cfg.enableIFD [
+      pkgs.ifdnfc-nci
+    ];
 
     environment.etc = {
       "libnfc-nci.conf".text = generateSettings "nci";
@@ -184,6 +183,11 @@ in
 
     boot.kernelModules = [
       "nxp-pn5xx"
+    ];
+
+    # libnfc-nci calls sched_setscheduler via pthread_setschedparam, which would be blocked by upstream SystemCallFilter=~@resources
+    systemd.services.pcscd.serviceConfig.SystemCallFilter = lib.mkIf cfg.enableIFD [
+      "sched_setscheduler"
     ];
 
     services.pcscd.readerConfigs = lib.mkIf cfg.enableIFD [

@@ -10,7 +10,7 @@ let
   ghcVersion = "ghc910";
   haskellPackages = haskell.packages.${ghcVersion};
 
-  overrides = rec {
+  overrides = {
     version = "${raw-pkg.version}-unstable-2024-12-09";
 
     postPatch = ''

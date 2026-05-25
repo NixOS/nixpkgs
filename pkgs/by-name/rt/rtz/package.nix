@@ -8,18 +8,17 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtz";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "twitchax";
     repo = "rtz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V7N9NFIc/WWxLaahkjdS47Qj8sc3HRdKSkrBqi1ngA8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Lm81Qnu3ZQw43fCcQOR63EV1aYXuPyR9Gy+F6BCiwUw=";
 
   nativeBuildInputs = [
@@ -34,12 +33,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "web" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to easily work with timezone lookups via a binary, a library, or a server";
     homepage = "https://github.com/twitchax/rtz";
-    changelog = "https://github.com/twitchax/rtz/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/twitchax/rtz/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "rtz";
   };
-}
+})

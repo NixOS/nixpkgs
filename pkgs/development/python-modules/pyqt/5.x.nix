@@ -17,7 +17,6 @@
   enableVerbose ? true,
   withConnectivity ? false,
   withMultimedia ? false,
-  withWebKit ? false,
   withWebSockets ? false,
   withLocation ? false,
   withSerialPort ? false,
@@ -29,7 +28,7 @@
 buildPythonPackage rec {
   pname = "pyqt5";
   version = "5.15.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = isPy27;
 
@@ -118,32 +117,32 @@ buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ libsForQt5.qmake ]
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ libsForQt5.qmake ]
+  ++ [
+    setuptools
+    lndir
+    sip
+  ]
+  ++ (
+    with pkgsBuildTarget.targetPackages.libsForQt5;
+    [ ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
     ++ [
-      setuptools
-      lndir
-      sip
+      qtbase
+      qtsvg
+      qtdeclarative
+      qtwebchannel
     ]
-    ++ (
-      with pkgsBuildTarget.targetPackages.libsForQt5;
-      [ ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
-      ++ [
-        qtbase
-        qtsvg
-        qtdeclarative
-        qtwebchannel
-      ]
-      ++ lib.optional withConnectivity qtconnectivity
-      ++ lib.optional withMultimedia qtmultimedia
-      ++ lib.optional withWebKit qtwebkit
-      ++ lib.optional withWebSockets qtwebsockets
-      ++ lib.optional withLocation qtlocation
-      ++ lib.optional withSerialPort qtserialport
-      ++ lib.optional withTools qttools
-    );
+    ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withTools qttools
+  );
 
   buildInputs =
     with libsForQt5;
@@ -155,7 +154,6 @@ buildPythonPackage rec {
       pyqt-builder
     ]
     ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
@@ -169,7 +167,6 @@ buildPythonPackage rec {
   passthru = {
     inherit sip pyqt5-sip;
     multimediaEnabled = withMultimedia;
-    webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;
     connectivityEnabled = withConnectivity;
     locationEnabled = withLocation;
@@ -182,27 +179,24 @@ buildPythonPackage rec {
   # Checked using pythonImportsCheck
   doCheck = false;
 
-  pythonImportsCheck =
-    [
-      "PyQt5"
-      "PyQt5.QtCore"
-      "PyQt5.QtQml"
-      "PyQt5.QtWidgets"
-      "PyQt5.QtGui"
-    ]
-    ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-    ++ lib.optional withWebKit "PyQt5.QtWebKit"
-    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
-    ++ lib.optional withLocation "PyQt5.QtPositioning"
-    ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
-    ++ lib.optional withTools "PyQt5.QtDesigner";
+  pythonImportsCheck = [
+    "PyQt5"
+    "PyQt5.QtCore"
+    "PyQt5.QtQml"
+    "PyQt5.QtWidgets"
+    "PyQt5.QtGui"
+  ]
+  ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+  ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+  ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
+  ++ lib.optional withLocation "PyQt5.QtPositioning"
+  ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
+  ++ lib.optional withTools "PyQt5.QtDesigner";
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Qt5";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [ sander ];
   };
 }

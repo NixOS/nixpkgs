@@ -8,12 +8,12 @@
 }:
 
 let
-  version = "3.1.9";
+  version = "3.2.0";
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
-    rev = "v${version}";
-    hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
+    tag = "v${version}";
+    hash = "sha256-T3e0qoVD98u2lgCmQvof2SOqV8WkBkZrhnccURlJqsA=";
     fetchSubmodules = true;
   };
 
@@ -23,62 +23,44 @@ let
 
     sourceRoot = "${src.name}/svg-flatten";
 
-    postPatch = ''
-      substituteInPlace Makefile \
-        --replace "$(INSTALL) $(BUILDDIR)/$(BINARY) $(PREFIX)/bin" \
-        "$(INSTALL) $(BUILDDIR)/$(BINARY) $(PREFIX)/bin/svg-flatten" \
-    '';
-
-    installPhase = ''
-      runHook preInstall
+    preInstall = ''
       mkdir -p $out/bin
-      PREFIX=$out make install
-      runHook postInstall
     '';
 
-    meta = with lib; {
-      description = "svg-flatten SVG downconverter";
+    installFlags = [ "PREFIX=$(out)" ];
+
+    meta = {
+      description = "SVG-flatten SVG downconverter";
       homepage = "https://github.com/jaseg/gerbolyze";
-      license = with licenses; [ agpl3Plus ];
-      maintainers = with maintainers; [ wulfsta ];
+      license = with lib.licenses; [ agpl3Plus ];
+      maintainers = with lib.maintainers; [ wulfsta ];
       mainProgram = "svg-flatten";
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit version src;
   pname = "gerbolyze";
+  pyproject = true;
 
-  format = "setuptools";
+  build-system = with python3Packages; [ uv-build ];
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
+  pythonRemoveDeps = [
+    # we already provide svg-flatten through a binary on the PATH
+    "resvg-wasi"
+    "svg-flatten-wasi"
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.beautifulsoup4
-    python3Packages.click
-    python3Packages.numpy
-    python3Packages.scipy
-    python3Packages.python-slugify
-    python3Packages.lxml
-    python3Packages.gerbonara
+  dependencies = with python3Packages; [
+    beautifulsoup4
+    click
+    numpy
+    python-slugify
+    lxml
+    gerbonara
     resvg
-    svg-flatten
   ];
-
-  preConfigure = ''
-    # setup.py tries to execute a call to git in a subprocess, this avoids it.
-    substituteInPlace setup.py \
-      --replace "version = get_version()," \
-                "version = '${version}'," \
-
-    # setup.py tries to execute a call to git in a subprocess, this avoids it.
-    substituteInPlace setup.py \
-      --replace "long_description=format_readme_for_pypi()," \
-                "long_description='\n'.join(Path('README.rst').read_text().splitlines()),"
-  '';
 
   pythonImportsCheck = [ "gerbolyze" ];
 
@@ -88,16 +70,30 @@ python3Packages.buildPythonApplication rec {
     svg-flatten
   ];
 
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        resvg
+        svg-flatten
+      ]
+    }"
+  ];
+
+  preCheck = ''
+    substituteInPlace tests/test_integration.py \
+      --replace-fail "'gerbolyze'" "'${placeholder "out"}/bin/gerbolyze'"
+  '';
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Directly render SVG overlays into Gerber and Excellon files";
     homepage = "https://github.com/jaseg/gerbolyze";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ wulfsta ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ wulfsta ];
     mainProgram = "gerbolyze";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

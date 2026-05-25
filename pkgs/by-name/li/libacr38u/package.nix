@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     makeFlagsArray=(usbdropdir="$out/pcsc/drivers");
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ACR38U smartcard reader driver for pcsclite";
     longDescription = ''
       A PC/SC IFD handler implementation for the ACS ACR38U
@@ -48,8 +48,8 @@ stdenv.mkDerivation {
       The package is based on the debian package libacr38u.
     '';
     homepage = "https://www.acs.com.hk";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ berce ];
-    platforms = with platforms; unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ berce ];
+    platforms = with lib.platforms; unix;
   };
 }

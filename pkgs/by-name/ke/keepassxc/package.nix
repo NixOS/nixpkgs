@@ -10,8 +10,8 @@
   botan3,
   curl,
   darwinMinVersionHook,
-  libXi,
-  libXtst,
+  libxi,
+  libxtst,
   libargon2,
   libusb1,
   minizip,
@@ -30,31 +30,46 @@
   withKeePassNetworking ? true,
   withKeePassSSHAgent ? true,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
+  withKeePassYubiKey ? true,
 
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepassxc";
-  version = "2.7.10";
+  version = "2.7.12";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     tag = finalAttrs.version;
-    hash = "sha256-FBoqCYNM/leN+w4aV0AJMx/G0bjHbI9KVWrnmq3NfaI=";
+    hash = "sha256-eg8jRaSJdRBpEOHQ8E3jXcdwRzsnyq6r4RLyltdpIB8=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-old-style-cast"
-    "-Wno-error"
-    "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
-  ]);
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-old-style-cast"
+        "-Wno-error"
+        "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
+      ];
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_LDFLAGS = toString [
+        "-rpath"
+        "${libargon2}/lib"
+      ];
+    };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
+  patches = [ ./darwin-remove-macdeployqt.patch ];
 
-  patches = [ ./darwin.patch ];
+  # Upstream develops against a build of PCSC from Xcode.
+  # The types are incompatible with nixpkgs pcsclite.
+  # https://github.com/NixOS/nixpkgs/issues/520227
+  postPatch = ''
+    substituteInPlace src/keys/drivers/YubiKeyInterfacePCSC.cpp \
+      --replace-fail "typedef uint32_t RETVAL;" "typedef int32_t RETVAL;"
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
@@ -109,16 +124,16 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
     libsForQt5.qttools
     pkg-config
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
-  preFixup =
-    ''
-      qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
-    '';
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
+  '';
 
   postInstall = lib.concatLines [
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -135,36 +150,34 @@ stdenv.mkDerivation (finalAttrs: {
     '')
   ];
 
-  buildInputs =
-    [
-      botan3
-      curl
-      libXi
-      libXtst
-      libargon2
-      libsForQt5.kio
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-      minizip
-      pcsclite
-      qrencode
-      readline
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libsForQt5.qtmacextras
+  buildInputs = [
+    botan3
+    curl
+    libxi
+    libxtst
+    libargon2
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    minizip
+    pcsclite
+    qrencode
+    readline
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libsForQt5.qtmacextras
 
-      apple-sdk_15
-      # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
-      # https://developer.apple.com/documentation/screencapturekit
-      (darwinMinVersionHook "12.3")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libusb1
-    ]
-    ++ lib.optionals withKeePassX11 [
-      libsForQt5.qtx11extras
-    ];
+    apple-sdk_15
+    # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
+    # https://developer.apple.com/documentation/screencapturekit
+    (darwinMinVersionHook "12.3")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libusb1
+  ]
+  ++ lib.optionals withKeePassX11 [
+    libsForQt5.qtx11extras
+  ];
 
   passthru = {
     tests = {
@@ -187,8 +200,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";
     maintainers = with lib.maintainers; [
-      blankparticle
       sigmasquadron
+      ryand56
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

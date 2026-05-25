@@ -6,22 +6,22 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubecm";
-  version = "0.33.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "sunny0826";
     repo = "kubecm";
-    rev = "v${version}";
-    hash = "sha256-osyxgwJIHsnTW8uDKPFO174ImUntKHmW61v6KPY1E9M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5wTxVzpvwD6jx6Cfa0ChIi8wQCrnqzZM2jvwGpQdq50=";
   };
 
-  vendorHash = "sha256-rSha+Fd8vohRnLjECqRn3Zg4DYxGgXc4M7mUAgvW+Gw=";
+  vendorHash = "sha256-TyJpFN8JEWpzCHKUX3iYUHhTOOAp5I1YEzhUkWPXx8A=";
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/sunny0826/kubecm/version.Version=${version}"
+    "-X github.com/sunny0826/kubecm/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -35,14 +35,14 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Manage your kubeconfig more easily";
     homepage = "https://github.com/sunny0826/kubecm/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       qjoly
       sailord
     ];
     mainProgram = "kubecm";
   };
-}
+})

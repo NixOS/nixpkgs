@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 
+  hardeningDisable = [
+    # causes tests tset_ld & tsprintf to fail
+    "trivialautovarinit"
+  ];
+
   configureFlags =
     lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe"
     ++ lib.optional stdenv.hostPlatform.is64bit "--with-pic"
@@ -45,7 +50,8 @@ stdenv.mkDerivation rec {
       # Without this, the `tget_set_d128` test experiences a link
       # error due to missing `__dpd_trunctdkf`.
       "--disable-decimal-float"
-    ];
+    ]
+    ++ lib.optional stdenv.hostPlatform.isPE "LDFLAGS=-Wl,-no-undefined";
 
   doCheck = true; # not cross;
 

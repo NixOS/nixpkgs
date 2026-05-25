@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   aiohttp,
   yarl,
@@ -22,11 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-s4bE8ACFCfpNq+HGEO8fv3VCGPI4OOdR5A7RjY2bTKY=";
   };
 
-  postPatch = ''
-    # TypeError: 'Timeout' object does not support the context manager protocol
-    substituteInPlace directv/directv.py \
-      --replace-fail "with async_timeout.timeout" "async with async_timeout.timeout"
-  '';
+  patches = [
+    # https://github.com/ctalkington/python-directv/pull/365
+    (fetchpatch {
+      name = "replace-async-timeout-with-asyncio.timeout.patch";
+      url = "https://github.com/ctalkington/python-directv/commit/a161454b09e144de15883d25378fbb13069e241b.patch";
+      hash = "sha256-jI+ALoQ0EDUQCSQp90SE+e3sGMWLwojNtLevAbgoScc=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

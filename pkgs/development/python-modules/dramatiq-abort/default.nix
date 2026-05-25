@@ -4,7 +4,7 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   dramatiq,
   redis,
   setuptools,
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
     gevent = [ gevent ];
     redis = [ redis ];
   };
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     redis
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "dramatiq_abort" ];

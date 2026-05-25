@@ -43,34 +43,35 @@ lib.checkListOfEnum "where-is-my-sddm-theme: variant" validVariants variants
       hash = "sha256-+R0PX84SL2qH8rZMfk3tqkhGWPR6DpY1LgX9bifNYCg=";
     };
 
-    propagatedUserEnvPkgs =
-      [ ]
-      ++ lib.optionals (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects ]
+    dontWrapQtApps = true;
+
+    propagatedBuildInputs =
+      # avoid .dev outputs propagation
+      lib.optionals (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects.out ]
       ++ lib.optionals (lib.elem "qt6" variants) [
-        qt6.qt5compat
-        qt6.qtsvg
+        qt6.qt5compat.out
+        qt6.qtsvg.out
       ];
 
-    installPhase =
+    installPhase = ''
+      mkdir -p $out/share/sddm/themes/
+    ''
+    + lib.optionalString (lib.elem "qt6" variants) (
       ''
-        mkdir -p $out/share/sddm/themes/
+        cp -r where_is_my_sddm_theme/ $out/share/sddm/themes/
       ''
-      + lib.optionalString (lib.elem "qt6" variants) (
-        ''
-          cp -r where_is_my_sddm_theme/ $out/share/sddm/themes/
-        ''
-        + lib.optionalString (lib.isAttrs themeConfig) ''
-          ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme/theme.conf.user
-        ''
-      )
-      + lib.optionalString (lib.elem "qt5" variants) (
-        ''
-          cp -r where_is_my_sddm_theme_qt5/ $out/share/sddm/themes/
-        ''
-        + lib.optionalString (lib.isAttrs themeConfig) ''
-          ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme_qt5/theme.conf.user
-        ''
-      );
+      + lib.optionalString (lib.isAttrs themeConfig) ''
+        ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme/theme.conf.user
+      ''
+    )
+    + lib.optionalString (lib.elem "qt5" variants) (
+      ''
+        cp -r where_is_my_sddm_theme_qt5/ $out/share/sddm/themes/
+      ''
+      + lib.optionalString (lib.isAttrs themeConfig) ''
+        ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme_qt5/theme.conf.user
+      ''
+    );
 
     meta = {
       description = "Most minimalistic SDDM theme among all themes";

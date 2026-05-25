@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "geek-life";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "ajaxray";
     repo = "geek-life";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7B/4pDOVXef2MaWKvzkUZH0/KM/O1gJjI3xPjEXqc/E=";
   };
 
@@ -21,11 +21,11 @@ buildGoModule rec {
     mv $out/bin/app $out/bin/geek-life
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ajaxray/geek-life";
     description = "Todo List / Task Manager for Geeks in command line";
-    maintainers = with maintainers; [ noisersup ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ noisersup ];
+    license = lib.licenses.mit;
     mainProgram = "geek-life";
   };
-}
+})

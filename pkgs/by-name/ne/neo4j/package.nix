@@ -4,19 +4,19 @@
   fetchurl,
   nixosTests,
   makeWrapper,
-  openjdk17,
+  openjdk21,
   which,
   gawk,
   bashNonInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neo4j";
-  version = "5.26.1";
+  version = "2026.02.2";
 
   src = fetchurl {
-    url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    hash = "sha256-RiCUpsUxUaMSz1a4ptNQ8rp99ffj0r4DPggt8RgSj7U=";
+    url = "https://neo4j.com/artifact.php?name=neo4j-community-${finalAttrs.version}-unix.tar.gz";
+    hash = "sha256-TpVibiE0ijAQl5mkRjnCFpvCTifhoTcZcv8lg8PYSTw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
             "$out/bin/$NEO4J_SCRIPT" \
             --prefix PATH : "${
               lib.makeBinPath [
-                openjdk17
+                openjdk21
                 which
                 gawk
               ]
             }" \
-            --set JAVA_HOME "${openjdk17}"
+            --set JAVA_HOME "${openjdk21}"
     done
 
     patchShebangs $out/share/neo4j/bin/neo4j-admin
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.nixos = nixosTests.neo4j;
 
-  meta = with lib; {
+  meta = {
     description = "Highly scalable, robust (fully ACID) native graph database";
     homepage = "https://neo4j.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

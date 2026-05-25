@@ -60,12 +60,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  MKLROOT = "${mkl}";
-  clBLAS = "${clblas}";
+  env = {
+    MKLROOT = mkl;
+    clBLAS = clblas;
 
-  # Otherwise build looks for it in /run/opengl-driver/etc/OpenCL/vendors,
-  # which is not available.
-  OPENCL_VENDOR_PATH = "${intel-ocl}/etc/OpenCL/vendors";
+    # Otherwise build looks for it in /run/opengl-driver/etc/OpenCL/vendors,
+    # which is not available.
+    OPENCL_VENDOR_PATH = "${intel-ocl}/etc/OpenCL/vendors";
+  };
 
   preBuild = ''
     # By default it tries to use GPU, and thus fails for CPUs
@@ -74,11 +76,11 @@ stdenv.mkDerivation rec {
     cp ${incfile} make.inc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Matrix Algebra on GPU and Multicore Architectures, OpenCL port";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://icl.cs.utk.edu/magma/index.html";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ volhovm ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ volhovm ];
   };
 }

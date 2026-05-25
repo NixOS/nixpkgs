@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygments_style_github" ];
 
-  meta = with lib; {
+  meta = {
     description = "Port of the github color scheme for pygments";
     homepage = "https://github.com/hugomaiavieira/pygments-style-github";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ drupol ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

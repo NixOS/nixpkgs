@@ -4,7 +4,7 @@
   fetchFromGitHub,
   unstableGitUpdater,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   libsForQt5,
   mkcal,
   pkg-config,
@@ -31,19 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
   ];
 
-  buildInputs =
-    [
-      mkcal
-    ]
-    ++ (with libsForQt5; [
-      kcalendarcore
-      qtbase
-      qtpim
-    ]);
+  buildInputs = [
+    kdePackages.extra-cmake-modules
+    mkcal
+  ]
+  ++ (with libsForQt5; [
+    __internalKF5.kcalendarcore
+    qtbase
+    qtpim
+  ]);
 
   nativeCheckInputs = [
     tzdata

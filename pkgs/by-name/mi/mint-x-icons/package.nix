@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-x-icons";
-  version = "1.7.2";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-x-icons";
     rev = version;
-    hash = "sha256-9oXMMLVjirzRVJ0Pmd/1LjeeNUgYMKaGeih3eQA7k5U=";
+    hash = "sha256-gGldt2tGko3IukpKjn0xGAe4cL21YPCECJfcOX5F8n0=";
   };
 
   propagatedBuildInputs = [
@@ -48,11 +48,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/mint-x-icons";
     description = "Mint/metal theme based on mintified versions of Clearlooks Revamp, Elementary and Faenza";
-    license = licenses.gpl3Plus; # from debian/copyright
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Plus; # from debian/copyright
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

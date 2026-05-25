@@ -11,6 +11,7 @@
   kimageformats,
   wrapGAppsHook3,
   wrapQtAppsHook,
+  geoclue2,
   glib-networking,
   webkitgtk_4_1,
   withWebkit ? true,
@@ -21,33 +22,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit unwrapped;
 
-  nativeBuildInputs =
-    [
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withWebkit [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals withWebkit [
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      qtbase
-      qtimageformats
-      qtsvg
-      kimageformats
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-    ++ lib.optionals withWebkit [
-      glib-networking
-    ];
+  buildInputs = [
+    qtbase
+    qtimageformats
+    qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    kimageformats
+    qtwayland
+  ]
+  ++ lib.optionals withWebkit [
+    glib-networking
+  ];
 
   qtWrapperArgs = lib.optionals (stdenv.hostPlatform.isLinux && withWebkit) [
     "--prefix"
     "LD_LIBRARY_PATH"
     ":"
-    (lib.makeLibraryPath [ webkitgtk_4_1 ])
+    (lib.makeLibraryPath [
+      geoclue2
+      webkitgtk_4_1
+    ])
   ];
 
   dontUnpack = true;

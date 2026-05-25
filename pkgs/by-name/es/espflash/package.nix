@@ -4,21 +4,20 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
-  udev,
   stdenv,
   nix-update-script,
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espflash";
-  version = "3.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
-    tag = "v${version}";
-    hash = "sha256-8qFq+OyidW8Bwla6alk/9pXLe3zayHkz5LsqI3jwgY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SXXFXwr+oO+BbBQ/BZgCKhbdcaybVr1JY66q+xM2Quc=";
   };
 
   nativeBuildInputs = [
@@ -27,18 +26,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ];
+  buildInputs = [ openssl ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WEPSXgHR7wA2zWbc8ogVxDRtXcmR20R14Qwo2VqPLrQ=";
-  checkFlags = [
-    "--skip cli::monitor::external_processors"
+  cargoHash = "sha256-ZAp9hEzDrzjYSJLKeMCjAoiybOqPdDLqIGOvBTCr5uU=";
+
+  cargoBuildFlags = [
+    "--exclude=xtask"
+    "--workspace"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -53,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Serial flasher utility for Espressif SoCs and modules based on esptool.py";
     homepage = "https://github.com/esp-rs/espflash";
-    changelog = "https://github.com/esp-rs/espflash/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/esp-rs/espflash/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "espflash";
     license = with lib.licenses; [
       mit # or
@@ -61,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

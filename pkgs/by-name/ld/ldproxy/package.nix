@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldproxy";
   version = "0.31.4";
 
@@ -13,11 +13,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "embuild";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YH2CPb3uBlPncd+KkP25xhCVvDB7HDxJuSqWOJ1LT3k=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/WBhgPyd5hR3DBYvV8pd7uZb6FeD3yiDe3wOKtyFRG8=";
 
   # However we are only interested in building the specific crate located at `/ldproxy`
@@ -27,11 +26,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Linker Proxy: a simple tool to forward linker arguments to the actual linker executable";
     homepage = "https://github.com/esp-rs/embuild";
-    changelog = "https://github.com/esp-rs/embuild/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/esp-rs/embuild/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = with lib.maintainers; [ vpochapuis ];
   };
-}
+})

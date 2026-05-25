@@ -5,7 +5,6 @@
   gevent,
   preggy,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyvows";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pyVows";

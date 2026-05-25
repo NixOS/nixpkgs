@@ -1,6 +1,7 @@
 {
   lib,
   buildDunePackage,
+  ocaml,
   fetchurl,
   ppxlib,
   alcotest,
@@ -9,15 +10,35 @@
   yaml,
 }:
 
-buildDunePackage rec {
-  pname = "ppx_deriving_yaml";
-  version = "0.3.0";
+let
+  param =
+    if lib.versionAtLeast ppxlib.version "0.36" then
+      {
+        version = "0.4.1";
+        hash = "sha256-3CvvMEOq/3I3WJ6X5EyopiaMjshZoEMPk2K4Lx0ldSo=";
+      }
+    else
+      {
+        version = "0.4.0";
+        hash = "sha256-MVwCFAZY9Ui1gOckfbbj882w2aloHCGmJhpL1BDUEAg=";
+      };
+in
 
-  minimalOCamlVersion = "4.08";
+buildDunePackage (finalAttrs: {
+  pname = "ppx_deriving_yaml";
+  inherit (param) version;
+
+  env =
+    # Fix build with gcc15
+    lib.optionalAttrs
+      (lib.versions.majorMinor ocaml.version == "4.13" || lib.versions.majorMinor ocaml.version == "5.0")
+      {
+        NIX_CFLAGS_COMPILE = "-std=gnu11";
+      };
 
   src = fetchurl {
-    url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${version}/ppx_deriving_yaml-${version}.tbz";
-    hash = "sha256-HLY0ozmy6zY0KjXkwP3drTdz857PvLS/buN1nB+xf1s=";
+    url = "https://github.com/patricoferris/ppx_deriving_yaml/releases/download/v${finalAttrs.version}/ppx_deriving_yaml-${finalAttrs.version}.tbz";
+    inherit (param) hash;
   };
 
   propagatedBuildInputs = [
@@ -27,7 +48,10 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ alcotest ];
+  checkInputs = [
+    alcotest
+    mdx
+  ];
   nativeCheckInputs = [ mdx.bin ];
 
   meta = {
@@ -36,4 +60,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

@@ -4,8 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
-  setuptools,
+  hatchling,
 
   # dependencies
   asgiref,
@@ -19,12 +18,14 @@
   # check inputs
   pytestCheckHook,
   django-guardian,
+  django-model-utils,
   django-mptt,
   django-polymorphic,
   django-tree-queries,
   factory-boy,
   pillow,
   psycopg2,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-django,
   pytest-mock,
@@ -33,19 +34,23 @@
 
 buildPythonPackage rec {
   pname = "strawberry-django";
-  version = "0.57.1";
+  version = "0.75.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
-    tag = "v${version}";
-    hash = "sha256-nwqb9AVNQNIRdjYcutTaI3YfwuMDLP4mUirSXFq+WnI=";
+    tag = version;
+    hash = "sha256-vosD0JZYZzzl6Mp+AAxdXVox/7ay4FqnwqE6f1lSw3s=";
   };
 
+  postPatch = ''
+    # django.core.exceptions.ImproperlyConfigured: You're using the staticfiles app without having set the required STATIC_URL setting.
+    echo 'STATIC_URL = "static/"' >> tests/django_settings.py
+  '';
+
   build-system = [
-    poetry-core
-    setuptools
+    hatchling
   ];
 
   dependencies = [
@@ -59,24 +64,25 @@ buildPythonPackage rec {
     enum = [ django-choices-field ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
+  nativeCheckInputs = [
+    pytestCheckHook
 
-      django-guardian
-      django-mptt
-      django-polymorphic
-      django-tree-queries
-      factory-boy
-      pillow
-      psycopg2
-      pytest-cov-stub
-      pytest-django
-      pytest-mock
-      pytest-snapshot
-    ]
-    ++ optional-dependencies.debug-toolbar
-    ++ optional-dependencies.enum;
+    django-guardian
+    django-model-utils
+    django-mptt
+    django-polymorphic
+    django-tree-queries
+    factory-boy
+    pillow
+    psycopg2
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-django
+    pytest-mock
+    pytest-snapshot
+  ]
+  ++ optional-dependencies.debug-toolbar
+  ++ optional-dependencies.enum;
 
   pythonImportsCheck = [ "strawberry_django" ];
 

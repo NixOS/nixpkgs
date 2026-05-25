@@ -38,7 +38,7 @@ in
 
 stdenv.mkDerivation {
   pname = if tde2eOnly then "tde2e" else "tdlib";
-  version = "1.8.49";
+  version = "1.8.63";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "51743dfd01dff6179e2d8f7095729caa4e2222e9";
-    hash = "sha256-duD8a/fppkmaKrvkHnbSxRnCLS60aNVcgaYyCoHzKgE=";
+    rev = "f06b0bac65278b03d26414c096080e7bfecfef52";
+    hash = "sha256-SzUDAZqdEIrIj1qUUD0MvzbCYxKLJwoX2+T0chud/rQ=";
   };
 
   buildInputs = [
@@ -80,29 +80,28 @@ stdenv.mkDerivation {
   ];
 
   # https://github.com/tdlib/td/issues/1974
-  postPatch =
-    ''
-      substituteInPlace CMake/GeneratePkgConfig.cmake \
-        --replace 'function(generate_pkgconfig' \
-                  'include(GNUInstallDirs)
-                   function(generate_pkgconfig' \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-      sed -i "/vptr/d" test/CMakeLists.txt
-    '';
+  postPatch = ''
+    substituteInPlace CMake/GeneratePkgConfig.cmake \
+      --replace 'function(generate_pkgconfig' \
+                'include(GNUInstallDirs)
+                 function(generate_pkgconfig' \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    sed -i "/vptr/d" test/CMakeLists.txt
+  '';
 
   passthru.updateScript = lib.getExe updateScript;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
-    license = [ licenses.boost ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.boost ];
+    platforms = lib.platforms.unix;
     maintainers = [
-      maintainers.vyorkin
-      maintainers.vonfry
+      lib.maintainers.vyorkin
+      lib.maintainers.vonfry
     ];
   };
 }

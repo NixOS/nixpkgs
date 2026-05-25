@@ -5,18 +5,23 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-musicbox-webclient";
   version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimusicbox";
-    repo = pname;
-    rev = "v${version}";
+    repo = "mopidy-musicbox-webclient";
+    tag = "v${finalAttrs.version}";
     sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
   ];
 
@@ -25,8 +30,8 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "Mopidy frontend extension and web client with additional features for Pi MusicBox";
     homepage = "https://github.com/pimusicbox/mopidy-musicbox-webclient";
-    changelog = "https://github.com/pimusicbox/mopidy-musicbox-webclient/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/pimusicbox/mopidy-musicbox-webclient/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

@@ -12,13 +12,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Since then, `dust` has been freed up, allowing this package to take that attribute.
   # However in order for tools like `nix-env` to detect package updates, keep `du-dust` for pname.
   pname = "du-dust";
-  version = "1.2.1";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "bootandy";
     repo = "dust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Mk2gPlnm2kTRbn74T1YDH/DnjAyhFZQFK83OQaDNeo=";
+    hash = "sha256-80UcDIXnRvpmIcpDGwrMo9KGgPVafuUOIBIozDHctTo=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -26,8 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-IZv4XQmBvxUp5k5bn5B4qTJAVBrRO0OZaUlqCni6NpI=";
+  cargoHash = "sha256-dXlyoBYsgnyKvoNh60uR1itDB/fqzIQtZ1R/gv28CMY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -49,18 +48,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/dust";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "du + rust = dust. Like du but more intuitive";
+    description = "du, but more intuitive";
     homepage = "https://github.com/bootandy/dust";
     changelog = "https://github.com/bootandy/dust/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      aaronjheng
       defelo
     ];
     mainProgram = "dust";

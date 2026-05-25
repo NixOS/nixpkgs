@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   babl,
+  bash-completion,
   cfitsio,
   gegl,
   gtk3,
@@ -33,6 +34,7 @@
   librsvg,
   libwmf,
   zlib,
+  xz,
   libzip,
   ghostscript,
   aalib,
@@ -40,21 +42,24 @@
   python3,
   libexif,
   gettext,
+  glibcLocales,
   wrapGAppsHook3,
   libxslt,
   gobject-introspection,
   vala,
   gi-docgen,
   perl,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
-  xorg,
+  libxpm,
+  libxmu,
   glib-networking,
   json-glib,
   libmypaint,
   llvmPackages,
   gexiv2,
   harfbuzz,
+  makeFontsConf,
   mypaint-brushes1,
   libwebp,
   libheif,
@@ -66,6 +71,8 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
+  fetchpatch,
+  qoi,
 }:
 
 let
@@ -77,17 +84,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.4";
+  version = "3.0.8";
 
   outputs = [
     "out"
     "dev"
     "devdoc"
+    "man"
   ];
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jKouwnW/CTJldWVKwnavwIP4SR58ykXRnPKeaWrsqyU=";
+    hash = "sha256-/rSYrMAbJoJ8/x/5Wqj7gs3Wpg16v3c8/NGavq/KM4Y=";
   };
 
   patches = [
@@ -110,100 +118,127 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
+
+    # Allow calling tests from other directories.
+    # Required for the next patch.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/fd58ab3bee7a79cb0a7870c6858f3b64c84a7917.patch";
+      hash = "sha256-fpysKWwt5rilqp7ukdWx7kutkDquL/6YhYjR1zQfu/Q=";
+    })
+
+    # Do not go through ui for save-and-export test.
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/608ad0a528b5b31101c021d96aeb95558d207497.patch";
+      hash = "sha256-0oA5u+uAT0l3WT90fy0RGOR8xy/fGIHevBb69oUzfGs=";
+      excludes = [
+        # Other changes would prevent deletion, removing it from build is sufficient.
+        "app/tests/test-save-and-export.c"
+      ];
+    })
+
+    # Disable broken UI tests.
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/c34fe3e94f1019eafcb38edf1c07bff12a57431e.patch";
+      hash = "sha256-yVauEpoGEOIfCXnGnWMGWjXbIDizDhJ3hipeCy3XSBM=";
+    })
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      wrapGAppsHook3
-      libxslt # for xsltproc
-      gobject-introspection
-      perl
-      vala
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    glibcLocales
+    wrapGAppsHook3
+    libxslt # for xsltproc
+    gobject-introspection
+    perl
+    vala
 
-      # for docs
-      gi-docgen
+    # for docs
+    gi-docgen
 
-      # for tests
-      desktop-file-utils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      xvfb-run
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+    # for tests
+    desktop-file-utils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+    xvfb-run
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      appstream-glib # for library
-      babl
-      cfitsio
-      gegl
-      gtk3
-      glib
-      gdk-pixbuf
-      pango
-      cairo
-      libarchive
-      gexiv2
-      harfbuzz
-      isocodes
-      freetype
-      fontconfig
-      lcms
-      libpng
-      libiff
-      libilbm
-      libjpeg
-      libjxl
-      poppler
-      poppler_data
-      libtiff
-      openexr
-      libmng
-      librsvg
-      libwmf
-      zlib
-      libzip
-      ghostscript
-      aalib
-      shared-mime-info
-      json-glib
-      libwebp
-      libheif
-      python
-      libexif
-      xorg.libXpm
-      xorg.libXmu
-      glib-networking
-      libmypaint
-      mypaint-brushes1
+  buildInputs = [
+    appstream # for library
+    babl
+    bash-completion
+    cfitsio
+    gegl
+    gtk3
+    glib
+    gdk-pixbuf
+    pango
+    cairo
+    libarchive
+    gexiv2
+    harfbuzz
+    isocodes
+    freetype
+    fontconfig
+    lcms
+    libpng
+    libiff
+    libilbm
+    libjpeg
+    libjxl
+    poppler
+    poppler_data
+    libtiff
+    openexr
+    libmng
+    librsvg
+    libwmf
+    zlib
+    xz
+    libzip
+    ghostscript
+    aalib
+    shared-mime-info
+    json-glib
+    libwebp
+    libheif
+    python
+    libexif
+    libxpm
+    libxmu
+    glib-networking
+    libmypaint
+    mypaint-brushes1
+    qoi
 
-      # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
-      adwaita-icon-theme
+    # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
+    adwaita-icon-theme
 
-      # for Lua plug-ins
-      (luajit.withPackages (pp: [
-        pp.lgi
-      ]))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
+    # for Lua plug-ins
+    (luajit.withPackages (pp: [
+      pp.lgi
+    ]))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
 
-      # for JavaScript plug-ins
-      gjs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libgudev
-    ];
+    # for JavaScript plug-ins
+    gjs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libgudev
+  ];
 
   propagatedBuildInputs = [
     # needed by gimp-3.0.pc
@@ -213,21 +248,20 @@ stdenv.mkDerivation (finalAttrs: {
     gexiv2
   ];
 
-  mesonFlags =
-    [
-      "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-      "-Dicc-directory=/run/current-system/sw/share/color/icc"
-      "-Dcheck-update=no"
-      (lib.mesonEnable "gudev" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "headless-tests" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "linux-input" stdenv.hostPlatform.isLinux)
-      # Not very important to do downstream, save a dependency.
-      "-Dappdata-test=disabled"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Dalsa=disabled"
-      "-Djavascript=disabled"
-    ];
+  mesonFlags = [
+    "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "-Dicc-directory=/run/current-system/sw/share/color/icc"
+    "-Dcheck-update=no"
+    (lib.mesonEnable "gudev" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "headless-tests" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "linux-input" stdenv.hostPlatform.isLinux)
+    # Not very important to do downstream, save a dependency.
+    "-Dappdata-test=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dalsa=disabled"
+    "-Djavascript=disabled"
+  ];
 
   doCheck = true;
 
@@ -239,6 +273,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Check if librsvg was built with --disable-pixbuf-loader.
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+
+    # Silence fontconfig warnings about missing config during tests
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [ ];
+    };
   };
 
   postPatch = ''
@@ -249,6 +288,16 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
     patchShebangs \
       plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+
+    # Use Python from environment not from Meson.
+    # https://gitlab.gnome.org/GNOME/gimp/-/merge_requests/2607
+    substituteInPlace meson.build \
+      --replace-fail "import('python').find_installation()" "import('python').find_installation('python3')"
+
+    # Broken test
+    # https://github.com/NixOS/nixpkgs/pull/484971#issuecomment-3846759517
+    substituteInPlace app/tests/meson.build \
+      --replace-fail "{${"\n"}    'name': 'save-and-export',${"\n"}  }${"\n"}" ""
   '';
 
   preBuild =
@@ -315,12 +364,15 @@ stdenv.mkDerivation (finalAttrs: {
     gtk = gtk3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
-    maintainers = with maintainers; [ jtojnar ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/12522
+    broken = stdenv.hostPlatform.isBigEndian;
     mainProgram = "gimp";
   };
 })

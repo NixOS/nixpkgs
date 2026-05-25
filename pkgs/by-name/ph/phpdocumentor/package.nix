@@ -8,16 +8,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.7.1";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ylwv+tW5Lyx1rooUy7wjinsutGpbLvIvXuLDGWLv24g=";
+    hash = "sha256-sieLh5CG0ev4wMco+VG9A+2GxxalN7/FLGz+IDEgH4g=";
   };
 
-  vendorHash = "sha256-oPhe4yfOdsguXS3dF62mTr0+J1pfphsVJkMKR++c8go=";
+  vendorHash = "sha256-hz0Fw1gR2mPGdmVi4i7yjmAJiQTfkxDUC3D2ylNpdbU=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -30,8 +30,6 @@ php.buildComposerProject2 (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -40,6 +38,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://phpdoc.org";
     license = lib.licenses.mit;
     mainProgram = "phpdoc";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ lib.maintainers.patka ];
   };
 })

@@ -24,22 +24,21 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs =
-    [
-      qtbase
-    ]
-    ++ lib.optionals (qtVersion == "5") [
-      qtx11extras
-    ];
+  buildInputs = [
+    qtbase
+  ]
+  ++ lib.optionals (qtVersion == "5") [
+    qtx11extras
+  ];
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Free Pascal Qt${qtVersion} binding library";
     homepage =
       "https://wiki.freepascal.org/Qt${qtVersion}_Interface"
       + lib.optionalString (qtVersion == "5") "#libqt5pas";
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [ sikmir ];
     inherit (lazarus.meta) license platforms;
   };
 }

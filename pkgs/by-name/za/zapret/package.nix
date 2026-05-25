@@ -8,15 +8,12 @@
   zlib,
   libnetfilter_queue,
   libnfnetlink,
-
-  iptables,
-  nftables,
-  gawk,
+  libmnl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "71";
+  version = "72.12";
 
   src = fetchFromGitHub {
     owner = "bol-van";
@@ -30,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cwwj0xGEiR3sg2WheurtQo6Hy5JAARcZJNHEHMfAoOE=";
+    hash = "sha256-UWkLi/wWihtdLyk77cQ90xZ31vho1PjPfFQ6bQWrIUs=";
   };
 
   buildInputs = [
@@ -38,12 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libnetfilter_queue
     libnfnetlink
-  ];
-
-  nativeBuildInputs = [
-    iptables
-    nftables
-    gawk
+    libmnl
   ];
 
   preBuild = ''
@@ -75,9 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r $src/docs/* $out/usr/share/docs
 
-    mkdir -p $out/usr/share/zapret/{common,ipset}
+    mkdir -p $out/usr/share/zapret/{common,files/fake,ipset}
 
     cp $src/common/* $out/usr/share/zapret/common
+    cp $src/files/fake/* $out/usr/share/zapret/files/fake
     cp $src/ipset/* $out/usr/share/zapret/ipset
 
     rm -f $out/usr/share/zapret/ipset/zapret-hosts-user-exclude.txt.default

@@ -4,18 +4,17 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "conserve";
   version = "24.8.0";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "conserve";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rdZTx0wFFtWt3EcpvWHY6m+8TEHEj53vhVpdRp5wbos=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-r14ApN9kGWIyeNlbqrb+vOvvmH2n+O5ovvtSVNTMASo=";
 
   checkFlags = [
@@ -25,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=chgrp_reported_as_changed"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Robust portable backup tool in Rust";
     homepage = "https://github.com/sourcefrog/conserve";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "conserve";
   };
-}
+})

@@ -8,15 +8,12 @@
   pyfume,
   setuptools,
   scipy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fuzzytm";
   version = "2.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "FuzzyTM";
@@ -39,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "FuzzyTM" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Fuzzy Topic Models";
     homepage = "https://github.com/ERijck/FuzzyTM";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

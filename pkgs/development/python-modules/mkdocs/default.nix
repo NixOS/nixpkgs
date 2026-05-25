@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # buildtime
   hatchling,
@@ -12,7 +11,6 @@
   # runtime deps
   click,
   ghp-import,
-  importlib-metadata,
   jinja2,
   markdown,
   markupsafe,
@@ -39,8 +37,6 @@ buildPythonPackage rec {
   version = "1.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "mkdocs";
@@ -48,11 +44,17 @@ buildPythonPackage rec {
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
+  patches = [
+    # https://github.com/mkdocs/mkdocs/pull/4065
+    ./click-8.3.0-compat.patch
+  ];
+
   build-system = [
     hatchling
     # babel, setuptools required as "build hooks"
     babel
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
 
   dependencies = [
     click
@@ -68,7 +70,7 @@ buildPythonPackage rec {
     pyyaml
     pyyaml-env-tag
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     i18n = [ babel ];
@@ -77,7 +79,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     unittestCheckHook
     mock
-  ] ++ optional-dependencies.i18n;
+  ]
+  ++ optional-dependencies.i18n;
 
   unittestFlagsArray = [
     "-v"
@@ -88,7 +91,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
     description = "Project documentation with Markdown / static website generator";
     mainProgram = "mkdocs";
@@ -101,8 +104,8 @@ buildPythonPackage rec {
       MkDocs can also be used to generate general-purpose websites.
     '';
     homepage = "http://mkdocs.org/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rkoe ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rkoe ];
   };
 }

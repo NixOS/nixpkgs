@@ -5,7 +5,7 @@
   babel,
   buildPythonPackage,
   dnspython,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lxml,
   multidict,
   pyasn1-modules,
@@ -13,7 +13,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   sortedcollections,
@@ -25,10 +24,7 @@ buildPythonPackage rec {
   version = "0.13.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jssfr";
     repo = "aioxmpp";
     tag = "v${version}";
@@ -75,28 +71,27 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "benchmarks" ];
 
-  disabledTests =
-    [
-      # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
-      "test_convert_field_datetime_default_locale"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # asyncio issues
-      "test_is_abstract"
-      "Testbackground"
-      "TestCapturingXSO"
-      "Testcheck_x509"
-      "TestClient"
-      "TestIntegerType"
-      "TestStanzaStream"
-      "TestStanzaToken"
-      "TestXMLStream"
-    ];
+  disabledTests = [
+    # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
+    "test_convert_field_datetime_default_locale"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # asyncio issues
+    "test_is_abstract"
+    "Testbackground"
+    "TestCapturingXSO"
+    "Testcheck_x509"
+    "TestClient"
+    "TestIntegerType"
+    "TestStanzaStream"
+    "TestStanzaToken"
+    "TestXMLStream"
+  ];
 
   meta = {
     description = "Pure-python XMPP library for asyncio";
     homepage = "https://codeberg.org/jssfr/aioxmpp";
-    changelog = "https://codeberg.org/jssfr/aioxmpp/blob/${src.rev}/docs/api/changelog.rst";
+    changelog = "https://codeberg.org/jssfr/aioxmpp/src/tag/${src.tag}/docs/api/changelog.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

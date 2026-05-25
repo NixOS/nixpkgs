@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mesos-dns";
-  version = "0.9.3";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "m3scluster";
     repo = "mesos-dns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/zcjQ2AxZ17rAxrRmfztj5gH1pu2QswJgaCE022FieU=";
+    hash = "sha256-922FWRqKGBFB8zQf9nAtlym3b7Fjcg+uaIqEKeRZSro=";
   };
 
-  vendorHash = "sha256-TSw6ui5nGHRJiT/W+iszKA0rtgUIf73yDJaHkUgqowk=";
+  vendorHash = "sha256-l1y3CaGG1ykJnGit81D+E+jB4RUYneQzRMTvOPCH+jk=";
 
   subPackages = [ "." ];
 
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/m3scluster/mesos-dns/releases/tag/v${finalAttrs.version}";
     description = "DNS-based service discovery for Mesos";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = [ ];
     mainProgram = "mesos-dns";
   };
 })

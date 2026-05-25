@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pyproject = true;
   inherit (basemap) version src;
 
-  sourceRoot = "${src.name}/packages/basemap_data_hires";
+  sourceRoot = "${src.name}/data/basemap_data_hires";
 
   build-system = [
     setuptools
@@ -26,5 +26,6 @@ buildPythonPackage rec {
     description = "High-resolution data assets for matplotlib basemap";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ moraxyc ];
+    teams = with lib.teams; [ geospatial ];
   };
 }

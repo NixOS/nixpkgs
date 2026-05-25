@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "3.0.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MuZDe/j04sE8tX6658zYwbebwGYp7r3wVBbumoBJ2WQ=";
+    hash = "sha256-uw/bo+Y24KIgKH+hfc4iUboH8jJKeaoQGHBv6KjZixU=";
   };
 
   build-system = [ setuptools ];
@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for common list functions related to partitioning lists";
     homepage = "https://github.com/lapets/parts";
     changelog = "https://github.com/lapets/parts/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

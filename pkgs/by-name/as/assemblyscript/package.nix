@@ -6,21 +6,21 @@
 
 buildNpmPackage rec {
   pname = "assemblyscript";
-  version = "0.27.35";
+  version = "0.28.13";
 
   src = fetchFromGitHub {
     owner = "AssemblyScript";
     repo = "assemblyscript";
     rev = "v${version}";
-    hash = "sha256-Wop7S7GvvXFcONER+TYIygLkAZpCdhMlPz3hhWSOZro=";
+    hash = "sha256-AN9W6IYmMFFiD1Au3uW+7jr2xOwVcOGd5e61cqVNnbs=";
   };
 
-  npmDepsHash = "sha256-DisQ5T5gEHkCZNBInN12uTquwrg3n/sOmNVz/iSI1Mw=";
+  npmDepsHash = "sha256-5s420YWTc4bZ5oZRBjinw4lAfMTPrnrIWx4IM3Ysuqo=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AssemblyScript/assemblyscript";
     description = "TypeScript-like language for WebAssembly";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

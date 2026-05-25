@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
   loguru,
   platformdirs,
@@ -19,13 +19,14 @@
   pytestCheckHook,
   responses,
   uvicorn,
+
+  withTui ? true,
 }:
 
 buildPythonPackage rec {
   pname = "aria2p";
   version = "0.12.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pawamoy";
@@ -43,7 +44,8 @@ buildPythonPackage rec {
     setuptools # for pkg_resources
     toml
     websocket-client
-  ];
+  ]
+  ++ lib.optionals withTui optional-dependencies.tui;
 
   optional-dependencies = {
     tui = [
@@ -64,7 +66,8 @@ buildPythonPackage rec {
     responses
     psutil
     uvicorn
-  ] ++ optional-dependencies.tui;
+  ]
+  ++ optional-dependencies.tui;
 
   disabledTests = [
     # require a running display server
@@ -79,12 +82,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aria2p" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pawamoy/aria2p";
     changelog = "https://github.com/pawamoy/aria2p/blob/${src.tag}/CHANGELOG.md";
     description = "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
     mainProgram = "aria2p";
-    license = licenses.isc;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ koral ];
+    badPlatforms = [
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

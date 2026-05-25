@@ -2,45 +2,54 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  autoreconfHook,
+  cmake,
   pkg-config,
   boost,
   glibmm,
   gtkmm2,
   gerbv,
+  geos,
   librsvg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcb2gcode";
-  version = "2.5.0";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "pcb2gcode";
     repo = "pcb2gcode";
-    rev = "v${version}";
-    hash = "sha256-c5YabBqZn6ilIkF3lifTsYyLZMsZN21jDj1hNu0PRAc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tuVEtynzC9VBBm5tNNkdSr8Rrj3Oy5QOI6jNTmsIXbs=";
   };
 
+  patches = [
+    ./boost-1.89.patch
+  ];
+
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
     pkg-config
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "PCB2GCODE_COMPILE_WARNING_AS_ERROR" false)
+  ];
+
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    export CXXFLAGS="$CXXFLAGS -fpermissive -Wno-error=c++20-extensions -Wno-error=invalid-constexpr"
+  '';
 
   buildInputs = [
     boost
     glibmm
     gtkmm2
     gerbv
+    geos
     librsvg
   ];
 
-  postPatch = ''
-    substituteInPlace ./Makefile.am \
-    --replace '`git describe --dirty --always --tags`' '${version}'
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for isolation, routing and drilling of PCBs";
     longDescription = ''
       pcb2gcode is a command-line software for the isolation, routing and drilling of PCBs.
@@ -48,8 +57,8 @@ stdenv.mkDerivation rec {
       It also includes an Autoleveller, useful for the automatic dynamic calibration of the milling depth.
     '';
     homepage = "https://github.com/pcb2gcode/pcb2gcode";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kritnich ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kritnich ];
+    platforms = lib.platforms.unix;
   };
-}
+})

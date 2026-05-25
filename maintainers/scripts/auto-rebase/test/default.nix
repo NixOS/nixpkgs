@@ -9,7 +9,7 @@ let
     stdenvNoCC
     gitMinimal
     treefmt
-    nixfmt-rfc-style
+    nixfmt
     ;
 in
 
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     gitMinimal
     treefmt
-    nixfmt-rfc-style
+    nixfmt
   ];
   patchPhase = ''
     patchShebangs .

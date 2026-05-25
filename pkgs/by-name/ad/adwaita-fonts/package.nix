@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adwaita-fonts";
-  version = "48.2";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/adwaita-fonts/${lib.versions.major finalAttrs.version}/adwaita-fonts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FW9+kvL4LlJ/xzwwnbsjfApKXDqVvF7pSl77aUfFU+A=";
+    hash = "sha256-TJJ/v+7BxQOAG6UQwslOAFTILFIs97oNO+XU1B/PXIY=";
   };
 
   nativeBuildInputs = [
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Adwaita Sans, a variation of Inter, and Adwaita Mono, Iosevka customized to match Inter";
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-fonts";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.qxrein ];
     teams = [ lib.teams.gnome ];
   };

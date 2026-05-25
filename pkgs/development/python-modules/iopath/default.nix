@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   tqdm,
   portalocker,
@@ -18,8 +17,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -56,11 +53,11 @@ buildPythonPackage {
     aws = [ boto3 ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python library that provides common I/O interface across different storage backends";
     homepage = "https://github.com/facebookresearch/iopath";
     changelog = "https://github.com/facebookresearch/iopath/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

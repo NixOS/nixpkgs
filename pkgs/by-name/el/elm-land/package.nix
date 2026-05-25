@@ -7,7 +7,7 @@
   writeShellScript,
   nix-update,
   elm2nix,
-  nixfmt-rfc-style,
+  nixfmt,
 }:
 
 buildNpmPackage rec {
@@ -40,7 +40,6 @@ buildNpmPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = writeShellScript "update-elm-land" ''
@@ -53,7 +52,7 @@ buildNpmPackage rec {
     cp "$(nix-build -A "$UPDATE_NIX_ATTR_PATH".src)/projects/cli/src/codegen/elm.json" elm.json
     trap 'rm -rf elm.json registry.dat &> /dev/null' EXIT
     ${lib.getExe elm2nix} convert > pkgs/by-name/el/elm-land/elm-srcs.nix
-    ${lib.getExe nixfmt-rfc-style} pkgs/by-name/el/elm-land/elm-srcs.nix
+    ${lib.getExe nixfmt} pkgs/by-name/el/elm-land/elm-srcs.nix
     ${lib.getExe elm2nix} snapshot
     cp registry.dat pkgs/by-name/el/elm-land/registry.dat
   '';

@@ -23,7 +23,6 @@ let
       name = "hostname-${fqdn}";
       meta = with pkgs.lib.maintainers; {
         maintainers = [
-          primeos
           blitz
         ];
       };
@@ -43,8 +42,6 @@ let
         { nodes, ... }:
         ''
           start_all()
-
-          machine = ${hostName}
 
           machine.systemctl("start network-online.target")
           machine.wait_for_unit("network-online.target")

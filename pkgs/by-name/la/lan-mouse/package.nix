@@ -6,8 +6,8 @@
   glib,
   gtk4,
   libadwaita,
-  libX11,
-  libXtst,
+  libx11,
+  libxtst,
   pkg-config,
   wrapGAppsHook4,
 }:
@@ -43,11 +43,10 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk4
     libadwaita
-    libX11
-    libXtst
+    libx11
+    libxtst
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+UXRBYfbkb114mwDGj36oG5ZT3TQtcEzsbyZvtWTMxM=";
 
   postInstall = ''

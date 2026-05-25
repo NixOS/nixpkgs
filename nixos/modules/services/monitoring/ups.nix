@@ -359,7 +359,7 @@ let
           {
             MINSUPPLIES = 1;
             MONITOR = <generated from config.power.ups.upsmon.monitor>
-            NOTIFYCMD = "''${pkgs.nut}/bin/upssched";
+            NOTIFYCMD = "''${cfg.package}/bin/upssched";
             POWERDOWNFLAG = "/run/killpower";
             SHUTDOWNCMD = "''${pkgs.systemd}/bin/shutdown now";
           }
@@ -396,7 +396,7 @@ let
             type
           ]
         );
-        NOTIFYCMD = lib.mkDefault "${pkgs.nut}/bin/upssched";
+        NOTIFYCMD = lib.mkDefault "${cfg.package}/bin/upssched";
         POWERDOWNFLAG = lib.mkDefault "/run/killpower";
         SHUTDOWNCMD = lib.mkDefault "${pkgs.systemd}/bin/shutdown now";
       };
@@ -458,6 +458,8 @@ in
         support for Power Devices, such as Uninterruptible Power
         Supplies, Power Distribution Units and Solar Controllers
       '';
+
+      package = lib.mkPackageOption pkgs "nut" { };
 
       mode = lib.mkOption {
         default = "standalone";
@@ -577,7 +579,7 @@ in
     ];
 
     # For interactive use.
-    environment.systemPackages = [ pkgs.nut ];
+    environment.systemPackages = [ cfg.package ];
     environment.variables = envVars;
 
     networking.firewall = lib.mkIf cfg.openFirewall {
@@ -606,8 +608,8 @@ in
         serviceConfig = {
           Type = "forking";
           ExecStartPre = "${createUpsmonConf}";
-          ExecStart = "${pkgs.nut}/sbin/upsmon -u ${cfg.upsmon.user}";
-          ExecReload = "${pkgs.nut}/sbin/upsmon -c reload";
+          ExecStart = "${cfg.package}/sbin/upsmon -u ${cfg.upsmon.user}";
+          ExecReload = "${cfg.package}/sbin/upsmon -c reload";
           LoadCredential = lib.mapAttrsToList (
             name: monitor: "upsmon_password_${name}:${monitor.passwordFile}"
           ) cfg.upsmon.monitor;
@@ -633,8 +635,8 @@ in
           Type = "forking";
           ExecStartPre = "${createUpsdUsers}";
           # TODO: replace 'root' by another username.
-          ExecStart = "${pkgs.nut}/sbin/upsd -u root";
-          ExecReload = "${pkgs.nut}/sbin/upsd -c reload";
+          ExecStart = "${cfg.package}/sbin/upsd -u root";
+          ExecReload = "${cfg.package}/sbin/upsd -c reload";
           LoadCredential = lib.mapAttrsToList (
             name: user: "upsdusers_password_${name}:${user.passwordFile}"
           ) cfg.users;
@@ -655,7 +657,7 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         # TODO: replace 'root' by another username.
-        ExecStart = "${pkgs.nut}/bin/upsdrvctl -u root start";
+        ExecStart = "${cfg.package}/bin/upsdrvctl -u root start";
         Slice = "system-ups.slice";
       };
       environment = envVars;
@@ -677,8 +679,7 @@ in
       environment = envVars;
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.nut}/bin/upsdrvctl shutdown";
-        Slice = "system-ups.slice";
+        ExecStart = "${cfg.package}/bin/upsdrvctl shutdown";
       };
     };
 
@@ -702,14 +703,14 @@ in
       "nut/upsmon.conf".source = "/run/nut/upsmon.conf";
     };
 
-    power.ups.schedulerRules = lib.mkDefault "${pkgs.nut}/etc/upssched.conf.sample";
+    power.ups.schedulerRules = lib.mkDefault "${cfg.package}/etc/upssched.conf.sample";
 
     systemd.tmpfiles.rules = [
       "d /var/state/ups -"
       "d /var/lib/nut 700"
     ];
 
-    services.udev.packages = [ pkgs.nut ];
+    services.udev.packages = [ cfg.package ];
 
     users.users.nutmon = lib.mkIf (cfg.upsmon.user == "nutmon") {
       isSystemUser = true;

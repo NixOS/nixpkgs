@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.5";
+  version = "4.2.9";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-PjgglP4mKW1eOJ7QgUmc4KNsp/d9ubJBWr4CLcQAyRA=";
+    hash = "sha256-Z3eg3xNGFpvzvDp9ldYwh0JnrqfoaZQ7jc58hcZo+Qo=";
   };
 
   outputs = [
@@ -37,19 +37,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-    ]
-    ++ lib.optionals enableHEIFCodec [
-      libheif
-    ]
-    ++ lib.optionals enableJPGCodec [
-      libjpeg
-    ]
-    ++ lib.optionals enableOpenGL [
-      libglut
-      libGL
-    ];
+  buildInputs = [
+  ]
+  ++ lib.optionals enableHEIFCodec [
+    libheif
+  ]
+  ++ lib.optionals enableJPGCodec [
+    libjpeg
+  ]
+  ++ lib.optionals enableOpenGL [
+    libglut
+    libGL
+  ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...
@@ -96,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ mit ];
     mainProgram = "jasper";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

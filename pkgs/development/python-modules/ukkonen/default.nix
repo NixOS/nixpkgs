@@ -4,33 +4,36 @@
   fetchFromGitHub,
   cffi,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ukkonen";
-  version = "1.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "ukkonen";
-    rev = "v${version}";
-    sha256 = "jG6VP/P5sadrdrmneH36/ExSld9blyMAAG963QS9+p0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vXyOLAiY92Df7g57quiSnOz8yhaIsm8MTB6Fbiv6axQ=";
   };
 
-  nativeBuildInputs = [ cffi ];
+  build-system = [
+    cffi
+    setuptools
+  ];
+
+  dependencies = [ cffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ukkonen" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of bounded Levenshtein distance (Ukkonen)";
     homepage = "https://github.com/asottile/ukkonen";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

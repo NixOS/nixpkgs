@@ -11,7 +11,7 @@ buildPythonPackage {
   inherit (sanic-testing) version;
 
   src = sanic-testing.testsout;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;

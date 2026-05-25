@@ -3,12 +3,14 @@
   mkCoqDerivation,
   coq,
   coq-elpi,
+  stdlib,
   version ? null,
 }:
 
 mkCoqDerivation {
   pname = "trakt";
   owner = "ecranceMERCE";
+  opam-name = "rocq-trakt";
 
   release."1.0".sha256 = "sha256-Qhw5fWFYxUFO2kIWWz/og+4fuy9aYG27szfNk3IglhY=";
   release."1.1".sha256 = "sha256-JmrtM9WcT8Bfy0WZCw8xdubuMomyXmfLXJwpnCNrvsg=";
@@ -36,12 +38,17 @@ mkCoqDerivation {
       ]
       null;
 
-  propagatedBuildInputs = [ coq-elpi ];
+  propagatedBuildInputs = [
+    coq-elpi
+    stdlib
+  ];
 
-  meta = with lib; {
+  useDuneifVersion = v: v != null && (v == "dev" || lib.versions.isGt "1.2.1" v);
+
+  meta = {
     description = "Generic goal preprocessing tool for proof automation tactics in Coq";
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

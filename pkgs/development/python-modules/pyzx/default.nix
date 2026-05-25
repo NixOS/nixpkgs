@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyzx";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zxcalc";

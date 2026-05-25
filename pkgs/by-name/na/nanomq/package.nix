@@ -13,6 +13,7 @@
   zeromq,
   flex,
   bison,
+  nix-update-script,
 
   # for tests
   python3,
@@ -26,7 +27,7 @@ let
   # bit absurd - repo doesn't even have a license.
   idl-serial = stdenv.mkDerivation {
     pname = "idl-serial";
-    version = "unstable-2023-09-28";
+    version = "0-unstable-2023-09-28";
 
     src = fetchFromGitHub {
       owner = "nanomq";
@@ -49,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.23.6";
+  version = "0.24.11";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     tag = finalAttrs.version;
-    hash = "sha256-Fy/9ASpQ/PHGItYhad69DdHWqCr/Wa+Xdm53Q573Pfc=";
+    hash = "sha256-I2SLc/KbkBvqbbWuLr8ARmmg4DeE7ZbTqcM1tw8WhwQ=";
     fetchSubmodules = true;
   };
 
@@ -120,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   passthru.tests = {
     withInstallChecks = finalAttrs.finalPackage.overrideAttrs (_: {
       doInstallCheck = true;
@@ -132,5 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2026-22040"
+      "CVE-2025-68699"
+    ];
   };
 })

@@ -6,14 +6,14 @@
   plan9port,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "edwood";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "rjkroege";
     repo = "edwood";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jKDwNq/iMFqVpPq14kZa+T5fES54f4BAujXUwGlbiTE=";
   };
 
@@ -39,14 +39,14 @@ buildGoModule rec {
 
   doCheck = false; # Tests has lots of hardcoded mess.
 
-  meta = with lib; {
+  meta = {
     description = "Go version of Plan9 Acme Editor";
     homepage = "https://github.com/rjkroege/edwood";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ];
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "edwood";
   };
-}
+})

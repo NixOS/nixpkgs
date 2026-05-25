@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "ruamel-yaml";
-  version = "0.18.10";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "ruamel.yaml";
+    pname = "ruamel_yaml";
     inherit version;
-    hash = "sha256-IMhqsprCFT+ApCjhJUqK32htM4PfBEkFFMo7eaNi21g=";
+    hash = "sha256-U+tmzSeEnv+Wjr+PC/YfRs2sLaHR81dt1MzumyXDGZM=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruamel.yaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
     homepage = "https://sourceforge.net/projects/ruamel-yaml/";
     changelog = "https://sourceforge.net/p/ruamel-yaml/code/ci/default/tree/CHANGES";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

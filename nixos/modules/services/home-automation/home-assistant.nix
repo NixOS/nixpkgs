@@ -30,6 +30,7 @@ let
     mapAttrsToList
     mergeAttrsList
     mkEnableOption
+    mkDefault
     mkIf
     mkMerge
     mkOption
@@ -70,11 +71,15 @@ let
   # Filter null values from the configuration, so that we can still advertise
   # optional options in the config attribute.
   filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) (
-    recursiveUpdate customLovelaceModulesResources (cfg.config or { })
+    recursiveUpdate (customLovelaceModulesResources // themesConfig) (cfg.config or { })
   );
   configFile = renderYAMLFile "configuration.yaml" filteredConfig;
 
-  lovelaceConfigFile = renderYAMLFile "ui-lovelace.yaml" cfg.lovelaceConfig;
+  lovelaceConfigFile =
+    if cfg.lovelaceConfig != null then
+      renderYAMLFile "ui-lovelace.yaml" cfg.lovelaceConfig
+    else
+      cfg.lovelaceConfigFile;
 
   # Components advertised by the home-assistant package
   availableComponents = cfg.package.availableComponents;
@@ -138,13 +143,146 @@ let
     paths = cfg.customLovelaceModules;
   };
 
-  # Create parts of the lovelace config that reference lovelave modules as resources
+  # Create parts of the lovelace config that reference lovelace modules as resources
   customLovelaceModulesResources = {
     lovelace.resources = map (card: {
       url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
       type = "module";
     }) cfg.customLovelaceModules;
   };
+
+  # Create a directory that holds all lovelace themes
+  themesDir = pkgs.buildEnv {
+    name = "home-assistant-themes";
+    paths = cfg.themes;
+  };
+
+  # Auto-inject frontend.themes include directive when themes are used.
+  themesConfig =
+    if cfg.themes != [ ] then
+      {
+        frontend.themes = "!include_dir_merge_named ${themesDir}/themes";
+      }
+    else
+      { };
+
+  componentsUsingBluetooth = [
+    # Components that require the AF_BLUETOOTH address family
+    "august"
+    "august_ble"
+    "airthings_ble"
+    "aranet"
+    "bluemaestro"
+    "bluetooth"
+    "bluetooth_adapters"
+    "bluetooth_le_tracker"
+    "bluetooth_tracker"
+    "bthome"
+    "default_config"
+    "eufylife_ble"
+    "esphome"
+    "fjaraskupan"
+    "gardena_bluetooth"
+    "govee_ble"
+    "homekit_controller"
+    "inkbird"
+    "improv_ble"
+    "keymitt_ble"
+    "ld2410_ble"
+    "leaone"
+    "led_ble"
+    "medcom_ble"
+    "melnor"
+    "moat"
+    "mopeka"
+    "motionblinds_ble"
+    "oralb"
+    "private_ble_device"
+    "qingping"
+    "rapt_ble"
+    "ruuvi_gateway"
+    "ruuvitag_ble"
+    "sensirion_ble"
+    "sensorpro"
+    "sensorpush"
+    "shelly"
+    "snooz"
+    "switchbot"
+    "thermobeacon"
+    "thermopro"
+    "tilt_ble"
+    "xiaomi_ble"
+    "yalexs_ble"
+  ];
+  componentsUsingPacketCapture = [
+    "default_config" # includes dhcp
+    "dhcp"
+  ];
+  componentsUsingPing = [
+    # Components that require the capset syscall for the ping wrapper
+    "ping"
+    "wake_on_lan"
+  ];
+  componentsUsingSerialDevices = [
+    # Components that require access to serial devices (/dev/tty*)
+    # List generated from home-assistant documentation:
+    #   git clone https://github.com/home-assistant/home-assistant.io/
+    #   cd source/_integrations
+    #   rg "/dev/tty" -l | cut -d'/' -f3 | cut -d'.' -f1 | sort
+    # And then extended by references found in the source code, these
+    # mostly the ones using config flows already.
+    "acer_projector"
+    "alarmdecoder"
+    "aurora_abb_powerone"
+    "blackbird"
+    "bryant_evolution"
+    "crownstone"
+    "deconz"
+    "dsmr"
+    "edl21"
+    "elkm1"
+    "elv"
+    "enocean"
+    "homeassistant_hardware"
+    "homeassistant_yellow"
+    "firmata"
+    "flexit"
+    "gpsd"
+    "insteon"
+    "kwb"
+    "lacrosse"
+    "landisgyr_heat_meter"
+    "modbus"
+    "modem_callerid"
+    "mysensors"
+    "nad"
+    "numato"
+    "nut"
+    "opentherm_gw"
+    "otbr"
+    "rainforst_raven"
+    "rflink"
+    "rfxtrx"
+    "scsgate"
+    "serial"
+    "serial_pm"
+    "sms"
+    "upb"
+    "usb"
+    "velbus"
+    "w800rf32"
+    "zha"
+    "zwave"
+    "zwave_js"
+
+    # Custom components, maintained manually.
+    "amshan"
+    "benqprojector"
+  ];
+  componentsUsingInputDevices = [
+    # Components that require access to input devices (/dev/input/*)
+    "keyboard_remote"
+  ];
 in
 {
   imports = [
@@ -167,7 +305,7 @@ in
 
   meta = {
     buildDocsInSandbox = false;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 
   options.services.home-assistant = {
@@ -231,18 +369,17 @@ in
 
     extraComponents = mkOption {
       type = types.listOf (types.enum availableComponents);
-      default =
-        [
-          # List of components required to complete the onboarding
-          "default_config"
-          "met"
-          "esphome"
-        ]
-        ++ optionals pkgs.stdenv.hostPlatform.isAarch [
-          # Use the platform as an indicator that we might be running on a RaspberryPi and include
-          # relevant components
-          "rpi_power"
-        ];
+      default = [
+        # List of components required to complete the onboarding
+        "default_config"
+        "met"
+        "esphome"
+      ]
+      ++ optionals pkgs.stdenv.hostPlatform.isAarch [
+        # Use the platform as an indicator that we might be running on a RaspberryPi and include
+        # relevant components
+        "rpi_power"
+      ];
       example = literalExpression ''
         [
           "analytics"
@@ -316,7 +453,35 @@ in
         Available cards can be found below `pkgs.home-assistant-custom-lovelace-modules`.
 
         ::: {.note}
-        Automatic loading only works with lovelace in `yaml` mode.
+        When non-empty, `lovelace.resource_mode` is automatically set to `"yaml"`
+        so that resources are loaded from the YAML configuration.
+        :::
+      '';
+    };
+
+    themes = mkOption {
+      type = types.listOf (
+        types.addCheck types.package (p: p.isHomeAssistantTheme or false)
+        // {
+          name = "home-assistant-theme";
+          description = "package that is a Home Assistant theme";
+        }
+      );
+      default = [ ];
+      example = literalExpression ''
+        with pkgs.home-assistant-themes; [
+          material-you-theme
+        ];
+      '';
+      description = ''
+        List of themes to load.
+
+        Available themes can be found below `pkgs.home-assistant-themes`.
+
+        ::: {.note}
+        When `themes` is set, the module takes authoritative control
+        over the `frontend.themes` setting in
+        {option}`services.home-assistant.config`.
         :::
       '';
     };
@@ -425,20 +590,57 @@ in
 
             lovelace = {
               # https://www.home-assistant.io/lovelace/dashboards/
-              mode = mkOption {
-                type = types.enum [
-                  "yaml"
-                  "storage"
-                ];
-                default = if cfg.lovelaceConfig != null then "yaml" else "storage";
+              dashboards.nixos-lovelace = mkOption {
+                type = types.nullOr format.type;
+                default =
+                  if cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null then
+                    {
+                      mode = "yaml";
+                      filename = "ui-lovelace.yaml";
+                      title = "Overview";
+                      icon = "mdi:view-dashboard";
+                      show_in_sidebar = true;
+                    }
+                  else
+                    null;
                 defaultText = literalExpression ''
-                  if cfg.lovelaceConfig != null
-                    then "yaml"
-                  else "storage";
+                  if cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null then {
+                    mode = "yaml";
+                    filename = "ui-lovelace.yaml";
+                    title = "Overview";
+                    icon = "mdi:view-dashboard";
+                    show_in_sidebar = true;
+                  } else null
                 '';
-                example = "yaml";
                 description = ''
-                  In what mode should the main Lovelace panel be, `yaml` or `storage` (UI managed).
+                  Default NixOS-managed Lovelace dashboard. Automatically populated
+                  when {option}`lovelaceConfig` or {option}`lovelaceConfigFile` is set.
+
+                  Additional dashboards can be defined under
+                  `config.lovelace.dashboards.<name>`.
+
+                  See <https://www.home-assistant.io/lovelace/dashboards/> for details.
+                '';
+              };
+
+              resource_mode = mkOption {
+                type = types.nullOr (
+                  types.enum [
+                    "yaml"
+                    "storage"
+                  ]
+                );
+                default = if cfg.customLovelaceModules != [ ] then "yaml" else null;
+                defaultText = literalExpression ''
+                  if cfg.customLovelaceModules != [ ] then "yaml" else null
+                '';
+                description = ''
+                  Set to `"yaml"` to load Lovelace resources from YAML configuration,
+                  or `"storage"` to manage them through the UI. See
+                  <https://www.home-assistant.io/dashboards/dashboards/#resource_mode>.
+
+                  Automatically set to `"yaml"` when {option}`customLovelaceModules`
+                  is non-empty.
                 '';
               };
             };
@@ -506,9 +708,19 @@ in
       '';
       description = ''
         Your {file}`ui-lovelace.yaml` as a Nix attribute set.
-        Setting this option will automatically set `lovelace.mode` to `yaml`.
+        Setting this option will automatically configure a Lovelace dashboard in YAML mode.
 
         Beware that setting this option will delete your previous {file}`ui-lovelace.yaml`
+      '';
+    };
+
+    lovelaceConfigFile = mkOption {
+      default = null;
+      type = types.nullOr types.path;
+      example = "/path/to/ui-lovelace.yaml";
+      description = ''
+        Your {file}`ui-lovelace.yaml` managed as configuration file.
+        Setting this option will automatically configure a Lovelace dashboard in YAML mode.
       '';
     };
 
@@ -549,6 +761,16 @@ in
       '';
       description = ''
         The Home Assistant package to use.
+      '';
+    };
+
+    finalPackage = mkOption {
+      default = package;
+      internal = true;
+      readOnly = true;
+      type = types.package;
+      description = ''
+        The final Home Assistant package which is being used in the service.
       '';
     };
 
@@ -595,10 +817,31 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings = optionals (cfg.config ? lovelace.mode) [
+      ''
+        services.home-assistant.config.lovelace.mode is deprecated.
+        Home Assistant 2026.8 renames the legacy top-level `lovelace.mode`
+        setting in favour of per-dashboard configuration.
+
+        Use `services.home-assistant.config.lovelace.dashboards` and
+        `services.home-assistant.config.lovelace.resource_mode` instead.
+
+        See https://www.home-assistant.io/dashboards/dashboards/ for details.
+      ''
+    ];
+
     assertions = [
       {
         assertion = cfg.openFirewall -> cfg.config != null;
         message = "openFirewall can only be used with a declarative config";
+      }
+      {
+        assertion = !(cfg.lovelaceConfig != null && cfg.lovelaceConfigFile != null);
+        message = "Only one of `lovelaceConfig` or `lovelaceConfigFile` can be configured at the same time.";
+      }
+      {
+        assertion = cfg.themes != [ ] -> !(hasAttrByPath [ "frontend" "themes" ] (cfg.config or { }));
+        message = "`services.home-assistant.themes` and `services.home-assistant.config.frontend.themes` cannot both be set. When `themes` is non-empty the module sets `frontend.themes` authoritatively.";
       }
     ];
 
@@ -610,9 +853,12 @@ in
         "home-assistant/configuration.yaml".source = configFile;
       })
 
-      (mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
-        "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
-      })
+      (mkIf
+        ((cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) && !cfg.lovelaceConfigWritable)
+        {
+          "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
+        }
+      )
     ];
 
     systemd.services.home-assistant = {
@@ -623,11 +869,11 @@ in
 
         # prevent races with database creation
         "mysql.service"
-        "postgresql.service"
+        "postgresql.target"
       ];
       reloadTriggers =
         optionals (cfg.config != null) [ configFile ]
-        ++ optionals (cfg.lovelaceConfig != null) [ lovelaceConfigFile ];
+        ++ optionals (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) [ lovelaceConfigFile ];
 
       preStart =
         let
@@ -680,6 +926,7 @@ in
               ln -fns "''${paths[@]}" "${cfg.configDir}/custom_components/"
             done
           '';
+
           removeBlueprints = ''
             # remove blueprints symlinked in from below the /nix/store
             readarray -d "" blueprints < <(find "${cfg.configDir}/blueprints" -maxdepth 2 -type l -print0)
@@ -726,6 +973,10 @@ in
               "CAP_NET_ADMIN"
               "CAP_NET_RAW"
             ]
+            ++ optionals (any useComponent componentsUsingPacketCapture) [
+              # Raw packet capture using AF_PACKET
+              "CAP_NET_RAW"
+            ]
             ++ optionals (useComponent "emulated_hue") [
               # Alexa looks for the service on port 80
               # https://www.home-assistant.io/integrations/emulated_hue
@@ -738,115 +989,6 @@ in
               "CAP_NET_RAW"
             ]
           );
-          componentsUsingBluetooth = [
-            # Components that require the AF_BLUETOOTH address family
-            "august"
-            "august_ble"
-            "airthings_ble"
-            "aranet"
-            "bluemaestro"
-            "bluetooth"
-            "bluetooth_adapters"
-            "bluetooth_le_tracker"
-            "bluetooth_tracker"
-            "bthome"
-            "default_config"
-            "eufylife_ble"
-            "esphome"
-            "fjaraskupan"
-            "gardena_bluetooth"
-            "govee_ble"
-            "homekit_controller"
-            "inkbird"
-            "improv_ble"
-            "keymitt_ble"
-            "ld2410_ble"
-            "leaone"
-            "led_ble"
-            "medcom_ble"
-            "melnor"
-            "moat"
-            "mopeka"
-            "motionblinds_ble"
-            "oralb"
-            "private_ble_device"
-            "qingping"
-            "rapt_ble"
-            "ruuvi_gateway"
-            "ruuvitag_ble"
-            "sensirion_ble"
-            "sensorpro"
-            "sensorpush"
-            "shelly"
-            "snooz"
-            "switchbot"
-            "thermobeacon"
-            "thermopro"
-            "tilt_ble"
-            "xiaomi_ble"
-            "yalexs_ble"
-          ];
-          componentsUsingPing = [
-            # Components that require the capset syscall for the ping wrapper
-            "ping"
-            "wake_on_lan"
-          ];
-          componentsUsingSerialDevices = [
-            # Components that require access to serial devices (/dev/tty*)
-            # List generated from home-assistant documentation:
-            #   git clone https://github.com/home-assistant/home-assistant.io/
-            #   cd source/_integrations
-            #   rg "/dev/tty" -l | cut -d'/' -f3 | cut -d'.' -f1 | sort
-            # And then extended by references found in the source code, these
-            # mostly the ones using config flows already.
-            "acer_projector"
-            "alarmdecoder"
-            "aurora_abb_powerone"
-            "blackbird"
-            "bryant_evolution"
-            "crownstone"
-            "deconz"
-            "dsmr"
-            "edl21"
-            "elkm1"
-            "elv"
-            "enocean"
-            "homeassistant_hardware"
-            "homeassistant_yellow"
-            "firmata"
-            "flexit"
-            "gpsd"
-            "insteon"
-            "kwb"
-            "lacrosse"
-            "landisgyr_heat_meter"
-            "modbus"
-            "modem_callerid"
-            "mysensors"
-            "nad"
-            "numato"
-            "nut"
-            "opentherm_gw"
-            "otbr"
-            "rainforst_raven"
-            "rflink"
-            "rfxtrx"
-            "scsgate"
-            "serial"
-            "serial_pm"
-            "sms"
-            "upb"
-            "usb"
-            "velbus"
-            "w800rf32"
-            "zha"
-            "zwave"
-            "zwave_js"
-
-            # Custom components, maintained manually.
-            "amshan"
-            "benqprojector"
-          ];
         in
         {
           ExecStart = escapeSystemdExecArgs (
@@ -877,13 +1019,15 @@ in
           # Hardening
           AmbientCapabilities = capabilities;
           CapabilityBoundingSet = capabilities;
-          DeviceAllow = (
+          DeviceAllow =
             optionals (any useComponent componentsUsingSerialDevices) [
               "char-ttyACM rw"
               "char-ttyAMA rw"
               "char-ttyUSB rw"
             ]
-          );
+            ++ optionals (any useComponent componentsUsingInputDevices) [
+              "char-input rw"
+            ];
           DevicePolicy = "closed";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -913,37 +1057,44 @@ in
               allowPaths = if isList value then value else singleton value;
             in
             [ "${cfg.configDir}" ] ++ allowPaths;
-          RestrictAddressFamilies =
-            [
-              "AF_INET"
-              "AF_INET6"
-              "AF_NETLINK"
-              "AF_UNIX"
-            ]
-            ++ optionals (any useComponent componentsUsingBluetooth) [
-              "AF_BLUETOOTH"
-            ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+            "AF_UNIX"
+          ]
+          ++ optionals (any useComponent componentsUsingBluetooth) [
+            "AF_BLUETOOTH"
+          ]
+          ++ optionals (any useComponent componentsUsingPacketCapture) [
+            "AF_PACKET"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SupplementaryGroups = optionals (any useComponent componentsUsingSerialDevices) [
-            "dialout"
-          ];
-          SystemCallArchitectures = "native";
-          SystemCallFilter =
-            [
-              "@system-service"
-              "~@privileged"
+          SupplementaryGroups =
+            optionals (any useComponent componentsUsingSerialDevices) [
+              "dialout"
             ]
-            ++ optionals (any useComponent componentsUsingPing) [
-              "capset"
-              "setuid"
+            ++ optionals (any useComponent componentsUsingInputDevices) [
+              "input"
             ];
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ]
+          ++ optionals (any useComponent componentsUsingPing) [
+            "capset"
+            "setuid"
+          ];
           UMask = "0077";
         };
-      path = [
-        pkgs.unixtools.ping # needed for ping
-      ];
+      path =
+        with pkgs;
+        lib.optionals (useComponent "go2rtc") [ pkgs.go2rtc ]
+        ++ lib.optionals (useComponent "picotts") [ pkgs.picotts ]
+        ++ lib.optionals (any useComponent componentsUsingPing) [ unixtools.ping ];
     };
 
     systemd.targets.home-assistant = rec {

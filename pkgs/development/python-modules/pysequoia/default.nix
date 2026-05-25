@@ -8,17 +8,17 @@
 
 buildPythonPackage rec {
   pname = "pysequoia";
-  version = "0.1.28";
-  format = "pyproject";
+  version = "0.1.34";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ixTszL2IN50SDYTDZqzlMI1nY6yNkEUnK5VxCoAG0jk=";
+    hash = "sha256-pUJ+fMaV1NlcpOzcBqCdeYCe/XYd1Y9XdwKa1hBbU8k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-cq55j3wNcV8CRbnqZPV8zrRzvUud5RXJDX1oh7WZoiU=";
+    hash = "sha256-qEn8+CySPwAV0zqbF4ooGsaXil7g6QJew7M+fbKsRqQ=";
   };
 
   nativeBuildInputs = [

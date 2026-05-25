@@ -13,7 +13,6 @@
   pyemd,
   pyphen,
   pytestCheckHook,
-  pythonOlder,
   requests,
   scikit-learn,
   scipy,
@@ -24,7 +23,6 @@
 buildPythonPackage rec {
   pname = "textacy";
   version = "0.13.0";
-  disabled = pythonOlder "3.7";
   pyproject = true;
 
   src = fetchPypi {
@@ -52,7 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Almost all tests have to deal with downloading a dataset, only test pure tests
     "tests/test_constants.py"
     "tests/preprocessing/test_normalize.py"
@@ -63,9 +61,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textacy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Higher-level text processing, built on spaCy";
     homepage = "https://textacy.readthedocs.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

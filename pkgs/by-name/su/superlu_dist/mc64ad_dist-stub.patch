@@ -13,19 +13,30 @@ mc64ad_dist.c was removed (DFSG nonfree), create stubs
 +
 +/* only mc64id_dist and mc64ad_dist are referenced by SuperLU-Dist code */
 +
-+/* Subroutine */ int_t mc64id_dist(int_t *icntl)
++/* Subroutine */ int mc64id_dist(int *icntl)
 +{
 +    fprintf(stderr, "SuperLU-Dist: MC64 functionality not available.\n(It uses code under a non-free HSL licence which does not permit redistribution).\nAborting mc64id_dist.\n");
 +    abort();
 +    return 0;
 +}
 +
-+int_t mc64ad_dist(int_t *job, int_t *n, int_t *ne, int_t *
-+	ip, int_t *irn, double *a, int_t *num, int_t *cperm,
-+	int_t *liw, int_t *iw, int_t *ldw, double *dw, int_t *
-+	icntl, int_t *info)
++int mc64ad_dist(int *job, int *n, int_t *ne, int_t *
++	ip, int_t *irn, double *a, int *num, int_t *cperm,
++	int_t *liw, int_t *iw, int_t *ldw, double *dw, int *
++	icntl, int *info)
 +{
 +    fprintf(stderr, "SuperLU-Dist: MC64 functionality not available.\n(It uses code under a non-free HSL licence which does not permit redistribution).\nAborting mc64ad_dist.\n");
 +    abort();
 +    return 0;
 +}
+--- a/SRC/prec-independent/util.c
++++ b/SRC/prec-independent/util.c
+@@ -217,7 +217,7 @@ void set_default_options_dist(superlu_dist_options_t *options)
+ #else
+     options->ColPerm = MMD_AT_PLUS_A;
+ #endif
+-    options->RowPerm = LargeDiag_MC64;
++    options->RowPerm = NOROWPERM;
+     options->ReplaceTinyPivot = NO;
+     options->IterRefine = SLU_DOUBLE;
+     options->Trans = NOTRANS;

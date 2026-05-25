@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oauth2l";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "oauth2l";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jD8VFyAq6qcQhgvMmJj3D1xWGUvq3tMISbztLf1a72I=";
   };
 
@@ -29,11 +29,11 @@ buildGoModule rec {
   # tests fail on linux for some reason
   doCheck = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI for interacting with Google API authentication";
     homepage = "https://github.com/google/oauth2l";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "oauth2l";
   };
-}
+})

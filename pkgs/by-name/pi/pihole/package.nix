@@ -1,5 +1,6 @@
 {
   lib,
+  nixosTests,
   fetchFromGitHub,
   makeBinaryWrapper,
   installShellFiles,
@@ -19,7 +20,7 @@
   locale,
   ncurses,
   netcat,
-  nettools,
+  net-tools,
   pihole-ftl,
   procps,
   resholve,
@@ -27,18 +28,17 @@
   systemd,
   util-linux,
   stateDir ? "/etc/pihole",
-  ...
 }:
 
-(resholve.mkDerivation rec {
+(resholve.mkDerivation (finalAttrs: {
   pname = "pihole";
-  version = "6.1";
+  version = "6.4";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "pi-hole";
-    tag = "v${version}";
-    hash = "sha256-aEnv8Lhb5vf0yDyuriVTaUY1wcdVmTdqoK+KDHvT/Lw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aBQO+wAqeuXc9ekByVFlOZQ9SBCGsozGdoS8r1qhGuk=";
   };
 
   patches = [
@@ -46,8 +46,6 @@
     ./0001-Remove-sudo.patch
     # Disable unsupported subcommands, particularly those for imperatively installing/upgrading Pi-hole
     ./0002-Remove-unsupported-commands.patch
-    # Fix a readonly variable error caused by defining a shadowing local variable
-    ./0003-Fix-redefinition-of-readonly-variable-utilsfile.patch
   ];
 
   nativeBuildInputs = [
@@ -58,29 +56,29 @@
   installPhase = ''
     runHook preInstall
 
-    readonly scriptsDir=$out/usr/share/pihole
+    readonly scriptsDir=$out/share/pihole
 
     install -Dm 555 -t $out/bin pihole
     install -Dm 555 -t $scriptsDir/advanced/Scripts gravity.sh
 
-    # The installation script is sourced by advanced/Scripts/piholeARPTable.sh etc
+    # The installation script is sourced by advanced/Scripts/piholeDebug.sh etc
     cp --parents -r -t $scriptsDir/ 'automated install/' advanced/{Scripts,Templates}/
 
     installShellCompletion --bash --name pihole.bash \
-      advanced/bash-completion/pihole
+      advanced/bash-completion/pihole.bash
 
     runHook postInstall
   '';
 
   solutions.default =
     let
-      out = builtins.placeholder "out";
-      scriptsDir = "${out}/usr/share/pihole/advanced/Scripts";
+      out = placeholder "out";
+      scriptsDir = "${out}/share/pihole/advanced/Scripts";
     in
     {
       scripts =
         let
-          relativeScripts = "usr/share/pihole/advanced/Scripts";
+          relativeScripts = "share/pihole/advanced/Scripts";
         in
         [
           "bin/pihole"
@@ -88,10 +86,10 @@
           "${relativeScripts}/database_migration/gravity-db.sh"
           "${relativeScripts}/gravity.sh"
           "${relativeScripts}/list.sh"
-          "${relativeScripts}/piholeARPTable.sh"
           "${relativeScripts}/piholeCheckout.sh"
           "${relativeScripts}/piholeDebug.sh"
           "${relativeScripts}/piholeLogFlush.sh"
+          "${relativeScripts}/piholeNetworkFlush.sh"
           "${relativeScripts}/query.sh"
           "${relativeScripts}/update.sh"
           "${relativeScripts}/updatecheck.sh"
@@ -102,7 +100,7 @@
       inputs = [
         # TODO: see if these inputs can help resholving
         "bin"
-        "usr/share/pihole/advanced/Scripts"
+        "share/pihole/advanced/Scripts"
 
         bash
         coreutils
@@ -119,7 +117,7 @@
         locale
         ncurses
         netcat
-        nettools
+        net-tools
         pihole-ftl
         procps
         sqlite
@@ -131,6 +129,7 @@
           "/etc/os-release"
           "/etc/pihole/versions"
           "/etc/pihole/setupVars.conf"
+          "/opt/pihole/utils.sh"
         ];
         external = [
           # Used by chronometer.sh to get GPU information on Raspberry Pis
@@ -151,16 +150,16 @@
       };
       fix = {
         "$PI_HOLE_BIN_DIR" = [ "${out}/bin" ];
-        "$PI_HOLE_FILES_DIR" = [ "${out}/usr/share/pihole" ];
+        "$PI_HOLE_FILES_DIR" = [ "${out}/share/pihole" ];
         "$PI_HOLE_INSTALL_DIR" = [ scriptsDir ];
-        "$PI_HOLE_LOCAL_REPO" = [ "${out}/usr/share/pihole" ];
+        "$PI_HOLE_LOCAL_REPO" = [ "${out}/share/pihole" ];
         "$PI_HOLE_SCRIPT_DIR" = [ scriptsDir ];
         "$colfile" = [ "${scriptsDir}/COL_TABLE" ];
         "$coltable" = [ "${scriptsDir}/COL_TABLE" ];
         "$PIHOLE_COLTABLE_FILE" = [ "${scriptsDir}/COL_TABLE" ];
         "$utilsfile" = [ "${scriptsDir}/utils.sh" ];
         "$apifile" = [ "${scriptsDir}/api.sh" ];
-        "$piholeGitDir" = [ "${out}/usr/share/pihole" ];
+        "$piholeGitDir" = [ "${out}/share/pihole" ];
         "$PIHOLE_COMMAND" = [ "pihole" ];
       };
       keep = {
@@ -169,7 +168,7 @@
           "$setupVars" # Global config file
           "$PIHOLE_SETUP_VARS_FILE"
           "$versionsfile" # configuration file, doesn't exist on NixOS
-          "${out}/usr/share/pihole/automated install/basic-install.sh"
+          "${out}/share/pihole/automated install/basic-install.sh"
           "${scriptsDir}/COL_TABLE"
           "${scriptsDir}/database_migration/gravity-db.sh"
           "${scriptsDir}/gravity.sh"
@@ -180,6 +179,7 @@
           "/etc/pihole/versions"
           "/etc/pihole/setupVars.conf"
           "$cachedVersions"
+          "/opt/pihole/utils.sh"
         ];
 
         "$PIHOLE_SETUP_VARS_FILE" = true;
@@ -192,9 +192,9 @@
         "${scriptsDir}/api.sh" = true;
         "${scriptsDir}/gravity.sh" = true;
         "${scriptsDir}/list.sh" = true;
-        "${scriptsDir}/piholeARPTable.sh" = true;
         "${scriptsDir}/piholeDebug.sh" = true;
         "${scriptsDir}/piholeLogFlush.sh" = true;
+        "${scriptsDir}/piholeNetworkFlush.sh" = true;
         "${scriptsDir}/query.sh" = true;
         "${scriptsDir}/uninstall.sh" = true;
         "${scriptsDir}/update.sh" = true;
@@ -214,8 +214,8 @@
         # both quoted and escaped. Resholve apparently requires matching the
         # literal path, so we need to provide a version with and without the
         # backslash.
-        "'${out}/usr/share/pihole/automated\\ install/basic-install.sh'" = true;
-        "'${out}/usr/share/pihole/automated install/basic-install.sh'" = true;
+        "'${out}/share/pihole/automated\\ install/basic-install.sh'" = true;
+        "'${out}/share/pihole/automated install/basic-install.sh'" = true;
 
         "/etc/.pihole" = true; # Patched with an override
         "/etc/os-release" = true;
@@ -233,25 +233,26 @@
 
   meta = {
     description = "Black hole for Internet advertisements";
+    homepage = "https://pi-hole.net";
+    changelog = "https://github.com/pi-hole/pi-hole/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = lib.platforms.linux;
     mainProgram = "pihole";
   };
 
-  passthru = {
-    stateDir = stateDir;
-  };
-}).overrideAttrs
+  passthru.tests = nixosTests.pihole-ftl;
+
+  passthru = { inherit stateDir; };
+})).overrideAttrs
   (old: {
     # Resholve can't fix the hardcoded absolute paths, so substitute them before resholving
-    preFixup =
-      ''
-        scriptsDir=$out/usr/share/pihole
+    preFixup = ''
+      scriptsDir=$out/share/pihole
 
-        substituteInPlace $out/bin/pihole $scriptsDir/advanced/Scripts/*.sh \
-          --replace-quiet /etc/.pihole $scriptsDir \
-          --replace-quiet /opt/pihole $scriptsDir/advanced/Scripts
-      ''
-      + old.preFixup;
+      substituteInPlace $out/bin/pihole $scriptsDir/advanced/Scripts/*.sh \
+        --replace-quiet /etc/.pihole $scriptsDir \
+        --replace-quiet /opt/pihole $scriptsDir/advanced/Scripts
+    ''
+    + old.preFixup;
   })

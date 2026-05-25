@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "klog-time-tracker";
-  version = "6.5";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "jotaen";
     repo = "klog";
-    rev = "v${version}";
-    hash = "sha256-xwVbI4rXtcZrnTvp0vdHMbYRoWCsxIuGZF922eC/sfw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sqHtxaArJ+gStZwZ/bE/luJa7JphbrNgAES0nTKFYTE=";
   };
 
-  vendorHash = "sha256-QOS+D/zD5IlJBlb7vrOoHpP/7xS9En1/MFNwLSBrXOg=";
+  vendorHash = "sha256-TyUGsJNWNEMPGg35oXorNFQ1Hjy9u3qRUVYXeabKDAM=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for time tracking in a human-readable, plain-text file format";
     homepage = "https://klog.jotaen.net";
-    license = licenses.mit;
-    maintainers = [ maintainers.blinry ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.blinry ];
     mainProgram = "klog";
   };
-}
+})

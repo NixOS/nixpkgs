@@ -17,7 +17,7 @@
   zlib,
   tcl,
   tk,
-  xorg,
+  libxmu,
   libjpeg,
   ffmpeg,
   catch2,
@@ -35,24 +35,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2501";
+  version = "6.2.2505";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IzYulT3bo7XZiEEy8vNCct0zqHCnbQaH+y4fHMorzZw=";
+    hash = "sha256-MPnibhDzNjqmpW5C76KdeYoZGfKLU0KJ20EnjrK1S+Y=";
   };
 
   patches = [
-    # disable some platform specified code used by downstream ngsolve
-    # can be enabled with -march=armv8.3-a+simd when compiling ngsolve
-    # note compiling netgen itself is not influenced by this feature
-    (fetchpatch2 {
-      url = "https://github.com/NGSolve/netgen/pull/197/commits/1d93dfba00f224787cfc2cde1af2ab5d7f5b87f7.patch";
-      hash = "sha256-3Nom4uGhGLtSGn/k+qKKSxVxrGtGTHqPtcNn3D/gkZU";
-    })
-
     (fetchpatch2 {
       url = "${patchSource}/use-local-catch2.patch";
       hash = "sha256-h4ob8tl6mvGt5B0qXRFNcl9MxPXxRhYw+PrGr5iRGGk=";
@@ -69,38 +61,50 @@ stdenv.mkDerivation (finalAttrs: {
       url = "${patchSource}/include_stdlib.patch";
       hash = "sha256-W+NgGBuy/UmzVbPTSqR8FRUlyN/9dl9l9e9rxKklmIc=";
     })
+    # Fix build with pybind11 3.x.
+    (fetchpatch2 {
+      url = "https://github.com/NGSolve/netgen/commit/ceacae3844ed2f0c48c8b6a3a82904b16c594f41.patch?full_index=1";
+      hash = "sha256-uSlkKxuOoUt4n601vadEZogSF47zdWNOIk1Nr9Ra3AU=";
+    })
+    ./ensure_python_before_getting_gil.patch
+    ./macos_use_tk_default_color_map.patch
   ];
 
   # when generating python stub file utilizing system python pybind11_stubgen module
   # cmake need to inherit pythonpath
-  postPatch =
-    ''
-      sed -i '/-DBDIR=''\'''${CMAKE_CURRENT_BINARY_DIR}/a\
-      -DNETGEN_VERSION_GIT=''\'''${NETGEN_VERSION_GIT}
-      ' CMakeLists.txt
+  postPatch = ''
+    sed -i '/-DBDIR=''\'''${CMAKE_CURRENT_BINARY_DIR}/a\
+    -DNETGEN_VERSION_GIT=''\'''${NETGEN_VERSION_GIT}
+    ' CMakeLists.txt
 
-      substituteInPlace python/CMakeLists.txt \
-        --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
-                       ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
+    substituteInPlace python/CMakeLists.txt \
+      --replace-fail ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}' \
+                     ''\'''${CMAKE_INSTALL_PREFIX}/''${NG_INSTALL_DIR_PYTHON}:$ENV{PYTHONPATH}'
 
-      substituteInPlace ng/ng.tcl ng/onetcl.cpp \
-        --replace-fail "libnggui" "$out/lib/libnggui"
+    substituteInPlace ng/ng.tcl ng/onetcl.cpp \
+      --replace-fail "libnggui" "$out/lib/libnggui"
 
-      substituteInPlace ng/Togl2.1/CMakeLists.txt \
-        --replace-fail "/usr/bin/gcc" "$CC"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      # mesh generation differs on x86_64 and aarch64 platform
-      # test_tutorials will fail on aarch64 platform
-      rm tests/pytest/test_tutorials.py
-    '';
+    substituteInPlace ng/Togl2.1/CMakeLists.txt \
+      --replace-fail "/usr/bin/gcc" "$CC"
+
+    # Fix UB when size == 0, otherwise test_archive will fail when hardening enable glibcxxassertions
+    substituteInPlace libsrc/core/archive.hpp \
+      --replace-fail "Do(&v[0], size);" "Do(v.data(), size);"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    # mesh generation differs on x86_64 and aarch64 platform
+    # test_tutorials will fail on aarch64 platform
+    rm tests/pytest/test_tutorials.py
+  '';
 
   nativeBuildInputs = [
     libicns
     imagemagick
     cmake
     python3Packages.pybind11-stubgen
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+    python3Packages.pythonImportsCheckHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     metis
@@ -109,15 +113,15 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
     tk
     libGLU
-    xorg.libXmu
+    libxmu
     libjpeg
     ffmpeg
     mpi
+    python3Packages.pybind11
   ];
 
   propagatedBuildInputs = with python3Packages; [
     packaging
-    pybind11
     mpi4py
     numpy
   ];
@@ -160,10 +164,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm $out/bin/{Netgen1,startup.sh}
-      mkdir -p $out/Applications/netgen.app/Contents/{MacOS,Resouces}
+      mkdir -p $out/Applications/netgen.app/Contents/{MacOS,Resources}
       substituteInPlace $out/Info.plist --replace-fail "Netgen1" "netgen"
       mv $out/Info.plist $out/Applications/netgen.app/Contents
-      mv $out/Netgen.icns $out/Applications/netgen.app/Contents/Resouces
+      mv $out/Netgen.icns $out/Applications/netgen.app/Contents/Resources
       ln -s $out/bin/netgen $out/Applications/netgen.app/Contents/MacOS/netgen
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -194,7 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pytest
     python3Packages.pytest-check
     python3Packages.pytest-mpi
-    python3Packages.pythonImportsCheckHook
     mpiCheckPhaseHook
   ];
 

@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vY0tqCkz6PN00Qbip5ViO64L3C06fJ4JjFuIk0TWgCo=";
   };
 
+  patches = [
+    ./yajl-cmake4-compat.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
@@ -26,6 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
+
+  postFixup = ''
+    moveToOutput bin "''${!outputBin}"
+  '';
 
   meta = {
     description = "Yet Another JSON Library";
@@ -37,6 +51,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     pkgConfigModules = [ "yajl" ];
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ maggesi ];
   };
 })

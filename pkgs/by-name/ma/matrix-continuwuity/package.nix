@@ -10,52 +10,57 @@
   nix-update-script,
   testers,
   matrix-continuwuity,
-  enableBlurhashing ? true,
-  # upstream continuwuity enables jemalloc by default, so we follow suit
-  enableJemalloc ? true,
-  rust-jemalloc-sys,
-  enableLiburing ? stdenv.hostPlatform.isLinux,
+  rust-jemalloc-sys-unprefixed,
   liburing,
   nixosTests,
 }:
 let
-  rust-jemalloc-sys' = rust-jemalloc-sys.override {
-    unprefixed = !stdenv.hostPlatform.isDarwin;
-  };
-  rocksdb' = rocksdb.override {
-    inherit enableLiburing;
-    # rocksdb does not support prefixed jemalloc, which is required on darwin
-    enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
-    jemalloc = rust-jemalloc-sys';
-  };
+  rocksdb' =
+    (rocksdb.override {
+      # rocksdb does not support prefixed jemalloc, which is required on darwin
+      enableJemalloc = !stdenv.hostPlatform.isDarwin;
+      jemalloc = rust-jemalloc-sys-unprefixed;
+    }).overrideAttrs
+      (
+        final: old: {
+          version = "10.10.1";
+          src = fetchFromGitea {
+            domain = "forgejo.ellis.link";
+            owner = "continuwuation";
+            repo = "rocksdb";
+            rev = "10.10.fb";
+            hash = "sha256-1ef75IDMs5Hba4VWEyXPJb02JyShy5k4gJfzGDhopRk=";
+          };
+
+          patches = [ ];
+        }
+      );
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.5";
+  version = "0.5.9";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Oq2scBu3Ewao828BT1QGffqIqF5WoH9HMXEXKg1YU0o=";
+    hash = "sha256-4zs26kTqwkJV7x+Sm12LnR02bbyH0f6Itbz7bDKUyts=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bjjGR3++CaDEtlsQj9GgdViCEB5l72sI868uTFBtIwg=";
+  cargoHash = "sha256-T11ESuNg3BS54LtNJfhOoIgiyVL7VsdP4OeDI2nVBIk=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      zstd
-    ]
-    ++ lib.optional enableJemalloc rust-jemalloc-sys'
-    ++ lib.optional enableLiburing liburing;
+  buildInputs = [
+    bzip2
+    zstd
+    rust-jemalloc-sys-unprefixed
+    liburing
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -63,43 +68,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ROCKSDB_LIB_DIR = "${rocksdb'}/lib";
   };
 
-  buildNoDefaultFeatures = true;
-  # See https://forgejo.ellis.link/continuwuation/continuwuity/src/branch/main/Cargo.toml
-  # for available features.
-  # We enable all default features except jemalloc, blurhashing, and io_uring, which
-  # we guard behind our own (default-enabled) flags.
-  buildFeatures =
-    [
-      "brotli_compression"
-      "direct_tls"
-      "element_hacks"
-      "gzip_compression"
-      "media_thumbnail"
-      "release_max_log_level"
-      "systemd"
-      "url_preview"
-      "zstd_compression"
-    ]
-    ++ lib.optional enableBlurhashing "blurhashing"
-    ++ lib.optional enableJemalloc [
-      "jemalloc"
-      "jemalloc_conf"
-    ]
-    ++ lib.optional enableLiburing "io_uring";
-
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
-    tests =
-      {
-        version = testers.testVersion {
-          inherit (finalAttrs) version;
-          package = matrix-continuwuity;
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) matrix-continuwuity;
+    tests = {
+      version = testers.testVersion {
+        inherit (finalAttrs) version;
+        package = matrix-continuwuity;
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) matrix-continuwuity;
+    };
   };
 
   meta = {
@@ -108,6 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://forgejo.ellis.link/continuwuation/continuwuity/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      bartoostveen
       nyabinary
       snaki
     ];

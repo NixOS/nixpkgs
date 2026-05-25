@@ -67,7 +67,10 @@ stdenv.mkDerivation rec {
         - A81
         - A81H
         - C80
+        - C801
         - C80H
+        - C80S1
+        - C80Y1
         - D80
         - D80 Pro
         - Y8

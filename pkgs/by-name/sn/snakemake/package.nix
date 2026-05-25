@@ -6,18 +6,20 @@
   stress,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  snakemake,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "9.5.1";
+  version = "9.21.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
-    tag = "v${version}";
-    hash = "sha256-cSFqPSLeM7hw1bxQZ2FhlHUP+O3iyrwBz4+Jz90Zck8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+EO+BTMkui0mJvEf0TOaCRBH8MzLsit8xK+71gujHt0=";
   };
 
   postPatch = ''
@@ -33,6 +35,10 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools-scm ];
 
+  pythonRelaxDeps = [
+    "packaging"
+    "sqlmodel"
+  ];
   dependencies = with python3Packages; [
     appdirs
     conda-inject
@@ -53,18 +59,23 @@ python3Packages.buildPythonApplication rec {
     requests
     reretry
     smart-open
-    snakemake-interface-executor-plugins
     snakemake-interface-common
+    snakemake-interface-executor-plugins
     snakemake-interface-logger-plugins
-    snakemake-interface-storage-plugins
     snakemake-interface-report-plugins
+    snakemake-interface-scheduler-plugins
+    snakemake-interface-storage-plugins
+    sqlmodel
     stopit
     tabulate
+    tenacity
     throttler
     toposort
     wrapt
     yte
   ];
+
+  pythonImportsCheck = [ "snakemake" ];
 
   # See
   # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
@@ -80,15 +91,17 @@ python3Packages.buildPythonApplication rec {
       requests-mock
       snakemake-executor-plugin-cluster-generic
       snakemake-storage-plugin-fs
+      snakemake-storage-plugin-http
+      snakemake-storage-plugin-s3
       stress
-      versionCheckHook
       polars
     ])
-    ++ [ writableTmpDirAsHomeHook ];
+    ++ [
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
-  versionCheckProgramArg = "--version";
-
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/tests.py"
     "tests/test_expand.py"
     "tests/test_io.py"
@@ -97,85 +110,92 @@ python3Packages.buildPythonApplication rec {
     "tests/test_api.py"
   ];
 
-  disabledTests =
-    [
-      # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
-      "test_ancient"
-      "test_conda_create_envs_only"
-      "test_env_modules"
-      "test_generate_unit_tests"
-      "test_modules_prefix"
-      "test_strict_mode"
-      # Requires perl
-      "test_shadow"
-      # Require peppy and eido
-      "test_peppy"
-      "test_modules_peppy"
-      "test_pep_pathlib"
+  disabledTests = [
+    # AssertionError: expected file "onerror_module2.log" not produced
+    "test_module_onerror"
 
-      # CalledProcessError
-      "test_filegraph" # requires graphviz
-      "test_github_issue1384"
+    # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
+    "test_ancient"
+    "test_conda_create_envs_only"
+    "test_env_modules"
+    "test_generate_unit_tests"
+    "test_modules_prefix"
+    "test_strict_mode"
+    # Requires perl
+    "test_shadow"
+    # Require peppy and eido
+    "test_peppy"
+    "test_modules_peppy"
+    "test_pep_pathlib"
 
-      # AssertionError: assert 127 == 1
-      "test_issue1256"
-      "test_issue2574"
+    # CalledProcessError
+    "test_filegraph" # requires graphviz
+    "test_github_issue1384"
 
-      # Require `snakemake-storage-plugin-fs` (circular dependency)
-      "test_default_storage"
-      "test_default_storage_local_job"
-      "test_deploy_sources"
-      "test_output_file_cache_storage"
-      "test_storage"
+    # AssertionError: assert 127 == 1
+    "test_issue1256"
+    "test_issue2574"
 
-      # Tries to access internet
-      "test_report_after_run"
+    # Tries to access internet
+    "test_report_after_run"
 
-      # Needs stress-ng
-      "test_benchmark"
-      "test_benchmark_jsonl"
+    # Needs stress-ng
+    "test_benchmark"
+    "test_benchmark_jsonl"
 
-      # Needs unshare
-      "test_nodelocal"
+    # Needs unshare
+    "test_nodelocal"
 
-      # Requires snakemake-storage-plugin-http
-      "test_keep_local"
-      "test_retrieve"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Unclear failure:
-      # AssertionError: expected successful execution
-      # `__darwinAllowLocalNetworking` doesn't help
-      "test_excluded_resources_not_submitted_to_cluster"
-      "test_group_job_resources_with_pipe"
-      "test_group_jobs_resources"
-      "test_group_jobs_resources_with_limited_resources"
-      "test_group_jobs_resources_with_max_threads"
-      "test_issue850"
-      "test_issue860"
-      "test_multicomp_group_jobs"
-      "test_queue_input"
-      "test_queue_input_dryrun"
-      "test_queue_input_forceall"
-      "test_resources_submitted_to_cluster"
-      "test_scopes_submitted_to_cluster"
+    # Requires conda
+    "test_jupyter_notebook"
+    "test_jupyter_notebook_nbconvert"
+    "test_jupyter_notebook_draft"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Unclear failure:
+    # AssertionError: expected successful execution
+    # `__darwinAllowLocalNetworking` doesn't help
+    "test_excluded_resources_not_submitted_to_cluster"
+    "test_group_job_resources_with_pipe"
+    "test_group_jobs_resources"
+    "test_group_jobs_resources_with_limited_resources"
+    "test_group_jobs_resources_with_max_threads"
+    "test_issue850"
+    "test_issue860"
+    "test_multicomp_group_jobs"
+    "test_queue_input"
+    "test_queue_input_dryrun"
+    "test_queue_input_forceall"
+    "test_resources_submitted_to_cluster"
+    "test_scopes_submitted_to_cluster"
 
-      # Issue with /dev/stderr in sandbox
-      "test_protected_symlink_output"
+    # Issue with /dev/stderr in sandbox
+    "test_protected_symlink_output"
 
-      # Unclear issue:
-      #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
-      # but pulp solver is not default
-      "test_access_patterns"
-    ];
+    # Unclear issue:
+    #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
+    # but pulp solver is not default
+    "test_access_patterns"
 
-  pythonImportsCheck = [ "snakemake" ];
+    # Hangs with no sandbox, skips due to no network with sandbox relaxed/on
+    "test_modules_meta_wrapper"
+
+    # Hangs
+    # https://github.com/snakemake/snakemake/issues/3939
+    "test_issue1331"
+  ];
+
+  # Circular dependencies
+  doCheck = false;
+  passthru.tests.pytest = snakemake.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     homepage = "https://snakemake.github.io";
     license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
-    changelog = "https://github.com/snakemake/snakemake/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/snakemake/snakemake/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
@@ -190,4 +210,4 @@ python3Packages.buildPythonApplication rec {
       veprbl
     ];
   };
-}
+})

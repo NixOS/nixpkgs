@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation {
   version = "5.4";
 
   src = fetchurl {
-    url = "http://pecita.eu/b/Pecita.otf";
+    url = "https://pecita.eu/b/Pecita.otf";
     hash = "sha256-D9IZ+p4UFHUNt9me7D4vv0x6rMK9IaViKPliCEyX6t4=";
   };
 
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pecita.eu/police-en.php";
     description = "Handwritten font with connected glyphs";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
   };
 }

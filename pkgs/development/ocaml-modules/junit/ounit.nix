@@ -4,7 +4,7 @@
   ounit2,
 }:
 
-buildDunePackage ({
+buildDunePackage {
   pname = "junit_ounit";
 
   inherit (junit) src version meta;
@@ -15,4 +15,4 @@ buildDunePackage ({
   ];
 
   doCheck = true;
-})
+}

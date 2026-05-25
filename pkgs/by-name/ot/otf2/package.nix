@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "http://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-${finalAttrs.version}/otf2-${finalAttrs.version}.tar.gz";
+    url = "https://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-${finalAttrs.version}/otf2-${finalAttrs.version}.tar.gz";
     hash = "sha256-Wk4BOlGsTteU/jXFW3AM1yA0b9p/M+yEx2uGpfuICm4=";
   };
 
@@ -34,14 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  configureFlags =
-    [
-      (lib.enableFeature finalAttrs.finalPackage.doCheck "backend-test-runs")
-      (lib.withFeature true "custom-compilers")
-    ]
-    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-      "ac_scorep_cross_compiling=yes"
-    ];
+  configureFlags = [
+    (lib.enableFeature finalAttrs.finalPackage.doCheck "backend-test-runs")
+    (lib.withFeature true "custom-compilers")
+  ]
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    "ac_scorep_cross_compiling=yes"
+  ];
 
   nativeBuildInputs = [
     which # used in configure script

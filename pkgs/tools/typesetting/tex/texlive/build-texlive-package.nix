@@ -54,6 +54,7 @@
   hasRunfiles ? (sha512 ? run),
   hasTlpkg ? false,
   hasCatalogue ? true,
+  hasJar ? false,
   catalogue ? pname,
   extraNativeBuildInputs ? [ ],
   ...
@@ -62,28 +63,39 @@
 let
   # common metadata
   name = "${pname}-${version}${extraVersion}";
-  meta =
-    {
-      license = map (x: lib.licenses.${x}) license;
-      # TeX Live packages should not be installed directly into the user profile
-      outputsToInstall = [ ];
-      longDescription = ''
-        This package cannot be installed or used directly. Please use `texlive.withPackages (ps: [ ps.${lib.strings.escapeNixIdentifier pname} ])`.
-      '';
-      # discourage nix-env from matching this package
-      priority = 10;
-      platforms = lib.platforms.all;
-      # These create a large number of jobs, which puts load on Hydra
-      # without any appreciable benefit (as the combined packages already
-      # cause them all to be built and cached anyway).
-      hydraPlatforms = [ ];
-    }
-    // lib.optionalAttrs (args ? shortdesc) {
-      description = args.shortdesc;
-    }
-    // lib.optionalAttrs hasCatalogue {
-      homepage = "https://ctan.org/pkg/${catalogue}";
-    };
+  meta = {
+    license = map (x: lib.licenses.${x}) license;
+    # TeX Live packages should not be installed directly into the user profile
+    outputsToInstall = [ ];
+    longDescription = ''
+      This package cannot be installed or used directly. Please use `texlive.withPackages (ps: [ ps.${lib.strings.escapeNixIdentifier pname} ])`.
+    '';
+    # discourage nix-env from matching this package
+    priority = 10;
+    platforms = lib.platforms.all;
+    # These create a large number of jobs, which puts load on Hydra
+    # without any appreciable benefit (as the combined packages already
+    # cause them all to be built and cached anyway).
+    hydraPlatforms = [ ];
+    maintainers = with lib.maintainers; [ xworld21 ];
+  }
+  // lib.optionalAttrs (args ? shortdesc) {
+    description = args.shortdesc;
+  }
+  // lib.optionalAttrs hasCatalogue {
+    homepage = "https://ctan.org/pkg/${catalogue}";
+  }
+  // lib.optionalAttrs (mainProgram != null) {
+    inherit mainProgram;
+  }
+  // lib.optionalAttrs hasJar {
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+  };
+
+  # if binfiles contains exactly one entry, use it as mainProgram, but allow overrides via args.mainProgram
+  mainProgram =
+    args.mainProgram
+      or (if builtins.length (args.binfiles or [ ]) == 1 then builtins.head args.binfiles else null);
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
   hasDocfiles = sha512 ? doc;
@@ -103,22 +115,21 @@ let
     ++ lib.optional hasInfo "info";
   outputDrvs = lib.getAttrs outputs containers;
 
-  passthru =
-    {
-      # metadata
-      inherit pname;
-      revision = toString revision + extraRevision;
-      version = version + extraVersion;
-      # containers behave like specified outputs
-      outputSpecified = true;
-    }
-    // lib.optionalAttrs (args ? deps) { tlDeps = args.deps; }
-    // lib.optionalAttrs (args ? fontMaps) { inherit (args) fontMaps; }
-    // lib.optionalAttrs (args ? formats) { inherit (args) formats; }
-    // lib.optionalAttrs (args ? hyphenPatterns) { inherit (args) hyphenPatterns; }
-    // lib.optionalAttrs (args ? postactionScript) { inherit (args) postactionScript; }
-    // lib.optionalAttrs hasSource { inherit (containers) texsource; }
-    // lib.optionalAttrs (!hasRunfiles) { tex = fakeTeX; };
+  passthru = {
+    # metadata
+    inherit pname;
+    revision = toString revision + extraRevision;
+    version = version + extraVersion;
+    # containers behave like specified outputs
+    outputSpecified = true;
+  }
+  // lib.optionalAttrs (args ? deps) { tlDeps = args.deps; }
+  // lib.optionalAttrs (args ? fontMaps) { inherit (args) fontMaps; }
+  // lib.optionalAttrs (args ? formats) { inherit (args) formats; }
+  // lib.optionalAttrs (args ? hyphenPatterns) { inherit (args) hyphenPatterns; }
+  // lib.optionalAttrs (args ? postactionScript) { inherit (args) postactionScript; }
+  // lib.optionalAttrs hasSource { inherit (containers) texsource; }
+  // lib.optionalAttrs (!hasRunfiles) { tex = fakeTeX; };
 
   # build run, doc, source, tlpkg containers
   mkContainer =

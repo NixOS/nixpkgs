@@ -7,12 +7,12 @@
   zopfli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gif2apng";
   version = "1.9";
 
   src = fetchzip {
-    url = "mirror://sourceforge/gif2apng/gif2apng-${version}-src.zip";
+    url = "mirror://sourceforge/gif2apng/gif2apng-${finalAttrs.version}-src.zip";
     stripRoot = false;
     hash = "sha256-rt1Vp4hjeFAVWJOU04BdU2YvBwECe9Q1c7EpNpIN+uE=";
   };
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 
-  NIX_CFLAGS_COMPILE = "-DENABLE_LOCAL_ZOPFLI";
+  env.NIX_CFLAGS_COMPILE = "-DENABLE_LOCAL_ZOPFLI";
 
   installPhase = ''
     runHook preInstall
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gif2apng.sourceforge.net/";
     description = "Simple program that converts animations from GIF to APNG format";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
-}
+})

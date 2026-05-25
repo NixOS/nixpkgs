@@ -8,42 +8,36 @@
   setuptools,
 
   # dependencies
-  diskcache,
   guidance-stitch,
+  jinja2,
   llguidance,
   numpy,
-  ordered-set,
-  platformdirs,
   psutil,
   pydantic,
-  referencing,
   requests,
-  tiktoken,
 
   # optional-dependencies
   openai,
-  jsonschema,
-  fastapi,
-  uvicorn,
 
   # tests
   huggingface-hub,
+  jsonschema,
   pytestCheckHook,
   tokenizers,
   torch,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "guidance";
-  version = "0.2.1";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
-    tag = version;
-    hash = "sha256-FBnND9kCIVmE/IEz3TNOww8x0EAH6TTBYfKTprqSbDg=";
+    tag = finalAttrs.version;
+    hash = "sha256-g0Vb5qcEvGY4S/LzhQvYtLiN1gIDBhPIgdzenSYX7zQ=";
   };
 
   build-system = [
@@ -56,38 +50,33 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    diskcache
     guidance-stitch
+    jinja2
     llguidance
     numpy
-    ordered-set
-    platformdirs
     psutil
     pydantic
-    referencing
     requests
-    tiktoken
   ];
 
   optional-dependencies = {
-    azureai = [ openai ];
-    openai = [ openai ];
-    schemas = [ jsonschema ];
-    server = [
-      fastapi
-      uvicorn
+    azureai = [
+      # azure-ai-inference
+      openai
     ];
+    openai = [ openai ];
   };
 
   nativeCheckInputs = [
     huggingface-hub
+    jsonschema
     pytestCheckHook
     tokenizers
     torch
     writableTmpDirAsHomeHook
-  ] ++ optional-dependencies.schemas;
+  ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # require network access
@@ -118,8 +107,8 @@ buildPythonPackage rec {
   meta = {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/v${version}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

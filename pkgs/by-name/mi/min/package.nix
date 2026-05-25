@@ -31,7 +31,7 @@ buildNimPackage (finalAttrs: {
       -exec sed 's|{\.passL:.*\.}|discard|g' -i {} \;
   '';
 
-  NIX_LDFLAGS = [ "-lpcre" ];
+  env.NIX_LDFLAGS = toString [ "-lpcre" ];
 
   meta = {
     description = "Functional, concatenative programming language with a minimalist syntax";
@@ -39,7 +39,6 @@ buildNimPackage (finalAttrs: {
     changelog = "https://github.com/h3rald/min/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "min";
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 
 })

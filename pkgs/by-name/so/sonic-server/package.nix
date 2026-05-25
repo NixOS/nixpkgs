@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-PTujR3ciLRvbpiqStNMx3W5fkUdW2dsGmCj/iFRTKJM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-RO4wY7FMwczZeR4GOxA3mwfBJZKPToOJJKGZb48yHJA=";
 
   nativeBuildInputs = [
@@ -31,6 +30,10 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/main.rs \
       --replace-fail "./config.cfg" "$out/etc/sonic/config.cfg"
   '';
+
+  # Fix GCC 15 compatibility
+  # error: unknown type name 'uint32_t'
+  env.CXXFLAGS = "-include cstdint";
 
   postInstall = ''
     install -Dm444 -t $out/etc/sonic config.cfg
@@ -62,9 +65,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     mainProgram = "sonic";
-    maintainers = with lib.maintainers; [
-      pleshevskiy
-      anthonyroussel
-    ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

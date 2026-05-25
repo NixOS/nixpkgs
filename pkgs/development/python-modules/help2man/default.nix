@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "help2man" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert --help and --version to man page";
     homepage = "https://github.com/Freed-Wu/help2man";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "help2man";
   };
 }

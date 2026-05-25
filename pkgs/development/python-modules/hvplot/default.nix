@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   bokeh,
@@ -26,18 +27,19 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.11.2";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "hvplot";
     tag = "v${version}";
-    hash = "sha256-3zACW2RDRhdGi5RBPOVQJJHT78DwcgHaCHp27gIEnjA=";
+    hash = "sha256-hJ9lgpM3AVyDeFxobUKDNYO39NKEejSDywOgnHPEm2c=";
   };
 
   build-system = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -92,8 +94,8 @@ buildPythonPackage rec {
   meta = {
     description = "High-level plotting API for the PyData ecosystem built on HoloViews";
     homepage = "https://hvplot.pyviz.org";
-    changelog = "https://github.com/holoviz/hvplot/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/hvplot/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ locnide ];
   };
 }

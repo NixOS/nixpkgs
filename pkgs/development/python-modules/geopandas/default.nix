@@ -1,11 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  writableTmpDirAsHomeHook,
 
   packaging,
   pandas,
@@ -26,23 +26,21 @@
   xyzservices,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geopandas";
-  version = "1.0.1";
+  version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    tag = "v${version}";
-    hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-66FbHNewpSEVZ9RwngK7E4bcELa9Z2OQ9xVP9+fgeHQ=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     pandas
     pyogrio
@@ -73,28 +71,24 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ] ++ optional-dependencies.all;
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Requires network access
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [ "geopandas" ];
+  enabledTestPaths = [ "geopandas" ];
 
   pythonImportsCheck = [ "geopandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    changelog = "https://github.com/geopandas/geopandas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

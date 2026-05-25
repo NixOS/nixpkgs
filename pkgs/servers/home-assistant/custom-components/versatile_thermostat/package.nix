@@ -2,26 +2,33 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   lib,
+  numpy,
+  scipy,
   gitUpdater,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "jmcollin78";
   domain = "versatile_thermostat";
-  version = "7.3.1";
+  version = "9.3.3";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
-    rev = "refs/tags/${version}";
-    hash = "sha256-sRmf+6rOWnbLZaO5kJw+9Udsyj6fX2BeFh8tN9xkZRk=";
+    tag = version;
+    hash = "sha256-TiaJFFx3nEUYHVB5Ka71MaP8pngcPSdHxt920NSCQ8c=";
   };
+
+  dependencies = [
+    numpy
+    scipy
+  ];
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(Alpha|Beta|alpha|beta).*"; };
 
   meta = {
     changelog = "https://github.com/jmcollin78/versatile_thermostat/releases/tag/${version}";
-    description = "A full-featured thermostat";
+    description = "Full-featured thermostat";
     homepage = "https://github.com/jmcollin78/versatile_thermostat";
     maintainers = with lib.maintainers; [ pwoelfel ];
     license = lib.licenses.mit;

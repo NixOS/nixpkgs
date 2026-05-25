@@ -14,13 +14,13 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opkg";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchurl {
-    url = "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
-    hash = "sha256-2XP9DxVo9Y+H1q7NmqlePh9gIUpFzuJnBL+P51fFRWc=";
+    url = "https://git.yoctoproject.org/opkg/snapshot/opkg-${finalAttrs.version}.tar.gz";
+    hash = "sha256-3vDW6VtBBr4HTA/OWgyqDo1zfyH+Mfvu8ViFl7rTlmY=";
   };
 
   nativeBuildInputs = [
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight package management system based upon ipkg";
     homepage = "https://git.yoctoproject.org/cgit/cgit.cgi/opkg/";
-    changelog = "https://git.yoctoproject.org/opkg/tree/NEWS?h=v${version}";
+    changelog = "https://git.yoctoproject.org/opkg/tree/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

@@ -37,10 +37,6 @@ pkgs.haskell.packages.ghc96.override {
 
         inherit fetchElmDeps;
         elmVersion = elmPkgs.elm.version;
-
-        # Fix TLS issues
-        # see https://github.com/elm/compiler/pull/2325
-        tls = self.callPackage ./tls-1.9.0.nix { };
       };
     in
     elmPkgs

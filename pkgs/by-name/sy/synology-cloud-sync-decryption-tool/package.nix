@@ -1,12 +1,13 @@
 {
   lib,
   writeScript,
+  stdenv,
   qt5,
   fetchurl,
   autoPatchelfHook,
 }:
 
-qt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "synology-cloud-sync-decryption-tool";
   version = "027";
 
@@ -15,7 +16,10 @@ qt5.mkDerivation rec {
     sha256 = "sha256-EWxADvkfhnMwHIauJj3pH6SvSkkrc4cwAhsf1pWOOWQ=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    qt5.wrapQtAppsHook
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -38,12 +42,12 @@ qt5.mkDerivation rec {
     update-source-version synology-cloud-sync-decryption-tool "$version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop tool to decrypt data encrypted by Cloud Sync";
     homepage = "https://kb.synology.com/en-global/DSM/help/SynologyCloudSyncDecryptionTool/synologycloudsyncdecryptiontool";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ kalbasit ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ kalbasit ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SynologyCloudSyncDecryptionTool";
   };

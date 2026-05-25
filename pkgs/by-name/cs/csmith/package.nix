@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  cmake,
   m4,
   makeWrapper,
   libbsd,
@@ -10,25 +11,32 @@
 
 stdenv.mkDerivation rec {
   pname = "csmith";
-  version = "2.3.0";
+  version = "2.3.0-unstable-2026-03-01";
 
-  src = fetchurl {
-    url = "https://embed.cs.utah.edu/csmith/${pname}-${version}.tar.gz";
-    sha256 = "1mb5zgixsyf86slggs756k8a5ddmj980md3ic9sa1y75xl5cqizj";
+  src = fetchFromGitHub {
+    owner = "csmith-project";
+    repo = "csmith";
+    rev = "0cdc710315cfee9035e22ef4363ca479270d1934";
+    hash = "sha256-m0xdGtccxGFMHFYRCultkEfMEs9ju8ccx7kZbxNTapE=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
+    cmake
     m4
     makeWrapper
   ];
-  buildInputs =
-    [ libbsd ]
-    ++ (with perlPackages; [
-      perl
-      SysCPU
-    ]);
+  buildInputs = [
+    libbsd
+  ]
+  ++ (with perlPackages; [
+    perl
+    SysCPU
+  ]);
 
-  CXXFLAGS = "-std=c++98";
+  env.CXXFLAGS = "-std=c++98";
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
@@ -49,11 +57,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Random generator of C programs";
     homepage = "https://embed.cs.utah.edu/csmith";
     # Officially, the license is this: https://github.com/csmith-project/csmith/blob/master/COPYING
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     longDescription = ''
       Csmith is a tool that can generate random C programs that statically and
       dynamically conform to the C99 standard. It is useful for stress-testing
@@ -62,6 +70,6 @@ stdenv.mkDerivation rec {
       to find and report more than 400 previously unknown compiler bugs.
     '';
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

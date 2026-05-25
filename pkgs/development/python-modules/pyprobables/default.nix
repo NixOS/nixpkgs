@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyprobables";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "barrust";
     repo = "pyprobables";
     tag = "v${version}";
-    hash = "sha256-yJUYGfy+d+Xfk1DUDvBeWk0EcNPuW4DcUHx3G3jzEdc=";
+    hash = "sha256-wUeNmkDzDBXGtMBplS2Hv6rK+M3eijVpYtHMhjIpsy8=";
   };
 
   build-system = [ setuptools ];
@@ -27,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "probables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Probabilistic data structures";
     homepage = "https://github.com/barrust/pyprobables";
-    changelog = "https://github.com/barrust/pyprobables/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/barrust/pyprobables/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

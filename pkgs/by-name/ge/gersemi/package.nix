@@ -4,18 +4,23 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gersemi";
-  version = "0.19.3";
+  version = "0.23.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";
     repo = "gersemi";
-    tag = version;
-    hash = "sha256-CVb6ibO5+Tp0o+nB+bo9G9OKyB4L05wN1QiB9J4bOqY=";
+    tag = finalAttrs.version;
+    hash = "sha256-sXgu3KscRi/3Myg/4jarMZ4W7/CaQTmyxxbcu8/0o6Y=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     appdirs
     colorama
     lark
@@ -29,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ xeals ];
     mainProgram = "gersemi";
   };
-}
+})

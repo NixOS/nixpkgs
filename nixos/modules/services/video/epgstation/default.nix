@@ -306,7 +306,7 @@ in
       group = config.users.groups.epgstation.name;
       isSystemUser = true;
 
-      # NPM insists on creating ~/.npm
+      # npm insists on creating ~/.npm
       home = "/var/cache/epgstation";
     };
 
@@ -378,10 +378,11 @@ in
       inherit description;
 
       wantedBy = [ "multi-user.target" ];
-      after =
-        [ "network.target" ]
-        ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
-        ++ lib.optional config.services.mysql.enable "mysql.service";
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
+      ++ lib.optional config.services.mysql.enable "mysql.service";
 
       environment.NODE_ENV = "production";
 

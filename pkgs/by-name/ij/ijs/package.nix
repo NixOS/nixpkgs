@@ -17,13 +17,13 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--enable-shared" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openprinting.org/download/ijs/";
     description = "Raster printer driver architecture";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = platforms.all;
-    maintainers = [ maintainers.abbradar ];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

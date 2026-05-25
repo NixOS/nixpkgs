@@ -20,7 +20,7 @@ let
 
   /**
     A basic filter for `cleanSourceWith` that removes
-    directories of version control system, backup files (*~)
+    directories of version control system, backup files (`*~`)
     and some generated files.
 
     # Inputs
@@ -42,7 +42,16 @@ let
       # Filter out version control software files/directories
       (
         baseName == ".git"
-        || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")
+        ||
+          type == "directory"
+          && (
+            baseName == ".svn"
+            || baseName == "CVS"
+            || baseName == ".hg"
+            || baseName == ".jj"
+            || baseName == ".pijul"
+            || baseName == "_darcs"
+          )
       )
       ||
         # Filter out editor backup / swap files.
@@ -63,7 +72,7 @@ let
     );
 
   /**
-    Filters a source tree removing version control files and directories using cleanSourceFilter.
+    Filters a source tree removing version control files and directories using `cleanSourceFilter`.
 
     # Inputs
 
@@ -122,7 +131,7 @@ let
       # that src.filter is called lazily.
       # For implementing a filter, see
       # https://nixos.org/nix/manual/#builtin-filterSource
-      # Type: A function (path -> type -> bool)
+      # Type: A function (Path -> Type -> Bool)
       filter ? _path: _type: true,
       # Optional name to use as part of the store path.
       # This defaults to `src.name` or otherwise `"source"`.
@@ -149,7 +158,7 @@ let
     # Type
 
     ```
-    sources.trace :: sourceLike -> Source
+    sources.trace :: SourceLike -> Source
     ```
   */
   trace =
@@ -191,7 +200,7 @@ let
     ## `sourceByRegex` usage example
 
     ```nix
-    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    src = sourceByRegex ./my-subproject [".*\\.py$" "^database\\.sql$"]
     ```
 
     :::
@@ -232,7 +241,7 @@ let
     # Type
 
     ```
-    sourceLike -> [String] -> Source
+    sourceFilesBySuffices :: SourceLike -> [String] -> Source
     ```
 
     # Examples
@@ -302,7 +311,13 @@ let
           fileName = path + "/${file}";
           packedRefsName = path + "/packed-refs";
           absolutePath =
-            base: path: if lib.hasPrefix "/" path then path else toString (/. + "${base}/${path}");
+            base: path:
+            if lib.hasPrefix "/" path then
+              path
+            else if lib.hasPrefix "/" base then
+              "${base}/${path}"
+            else
+              "/${base}/${path}";
         in
         if
           pathIsRegularFile path
@@ -500,22 +515,6 @@ let
 
 in
 {
-
-  pathType =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathType has been moved to lib.filesystem.pathType."
-      lib.filesystem.pathType;
-
-  pathIsDirectory =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsDirectory has been moved to lib.filesystem.pathIsDirectory."
-      lib.filesystem.pathIsDirectory;
-
-  pathIsRegularFile =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsRegularFile has been moved to lib.filesystem.pathIsRegularFile."
-      lib.filesystem.pathIsRegularFile;
-
   inherit
     pathIsGitRepo
     commitIdFromGitRepo
@@ -536,4 +535,6 @@ in
 
     trace
     ;
+
+  inherit (builtins) filterSource;
 }

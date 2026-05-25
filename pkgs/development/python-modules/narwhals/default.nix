@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   dask,
   duckdb,
   fetchFromGitHub,
+  fetchpatch2,
   hatchling,
   hypothesis,
   ibis-framework,
@@ -21,15 +23,35 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.40.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-cCgWKH4DzENTI1vwxOU+GRp/poUe55XqSPY8UHYy9PI=";
+    hash = "sha256-k7CeM8Q4JgKbkLisAaVrljro4diOf0K0immek6AI0vM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-dask-deprecationwarning.patch";
+      url = "https://github.com/narwhals-dev/narwhals/commit/254655af21872e8127f7fee9a9afbfb279f1eda2.patch?full_index=1";
+      # Exclude unrelated change to non-test code.
+      includes = [ "pyproject.toml" ];
+      hash = "sha256-tgz0b08P36CENOYFBILbicHhdB4BytXgFQk3nIxpw0A=";
+    })
+    (fetchpatch2 {
+      name = "fix-dask-deprecationwarning.patch";
+      url = "https://github.com/narwhals-dev/narwhals/commit/b92d5a840e08bdf7806947ffde27de856900c5ab.patch?full_index=1";
+      hash = "sha256-2lct6/MfViKnRjpEehNKqF6zdZVIkXi7tYxycDh/Hn8=";
+    })
+    (fetchpatch2 {
+      name = "ignore-polars-deprecation-warning-in-tests.patch";
+      url = "https://github.com/narwhals-dev/narwhals/commit/fb798716eb5f8835096d8f88d422baae2b22b3ce.patch?full_index=1";
+      hash = "sha256-pWi0y4S48aADJ1MA3kB9FsLuoA+HfZp5+AgEn69pUuA=";
+    })
+  ];
 
   build-system = [ hatchling ];
 
@@ -55,7 +77,8 @@ buildPythonPackage rec {
     hypothesis
     pytest-env
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "narwhals" ];
 
@@ -67,11 +90,31 @@ buildPythonPackage rec {
     # Timezone issue
     "test_to_datetime"
     "test_unary_two_elements"
+    # Test requires pyspark binary
+    "test_datetime_w_tz_pyspark"
+    "test_convert_time_zone_to_connection_tz_pyspark"
+    "test_replace_time_zone_to_connection_tz_pyspark"
+    "test_lazy"
+    # Incompatible with ibis 11
+    "test_unique_3069"
+    # DuckDB 1.4.x compatibility - empty result schema handling with PyArrow
+    "test_skew_expr"
+    # ibis improvements cause strict XPASS failures (tests expected to fail now pass)
+    "test_empty_scalar_reduction_with_columns"
+    "test_collect_empty"
+    "test_first_last_expr_over_order_by"
+    "test_first_expr_broadcasting"
+    # sqlframe improvements cause strict XPASS failures (tests expected to fail now pass)
+    "test_unique_expr"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Segfault in included polars/lazyframe
+    "tests/tpch_q1_test.py"
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

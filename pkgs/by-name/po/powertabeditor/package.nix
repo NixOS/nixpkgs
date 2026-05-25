@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "powertabeditor";
-  version = "2.0.21";
+  version = "2.0.22";
 
   src = fetchFromGitHub {
     owner = "powertab";
     repo = "powertabeditor";
     tag = finalAttrs.version;
-    hash = "sha256-mYFguVcF7Xb6rXIIMXAUzRYddlvQDRj7zu6on7GGGeA=";
+    hash = "sha256-VqTtzAWNghMoiYH0QVerQRdqVltZUz0Wgs5t3SvjyN4=";
   };
 
   nativeBuildInputs = [

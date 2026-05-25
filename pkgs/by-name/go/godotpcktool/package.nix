@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "godotpcktool";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "hhyyrylainen";
     repo = "GodotPckTool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jQ6LypQEz7r04lS4Zmu0EvpV/IYM79pmUlaykVUd+po=";
+    hash = "sha256-H0v432PyKscazR9PN5d+MmYZ8ND497m3RHmWpw16UY4=";
     fetchSubmodules = true;
   };
 

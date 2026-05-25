@@ -8,23 +8,21 @@
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "4.2.0";
+  version = "5.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "accuweather";
     tag = version;
-    hash = "sha256-Ria725YXHgVLH3jOK5lV9Ux9UfUJtgF+/QMC3lJ/Dcg=";
+    hash = "sha256-IXsf78AN5Gl6itQBfxwMEWE0ggoUohD0RgMgsgLaXOI=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     orjson
+    yarl
   ];
 
   nativeCheckInputs = [
@@ -47,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for getting weather data from AccuWeather servers";
     homepage = "https://github.com/bieniu/accuweather";
-    changelog = "https://github.com/bieniu/accuweather/releases/tag/${version}";
+    changelog = "https://github.com/bieniu/accuweather/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };

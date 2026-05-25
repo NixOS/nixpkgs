@@ -8,15 +8,12 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiorecollect";
   version = "2023.12.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
@@ -50,7 +47,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorecollect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Recollect Waste API";
     longDescription = ''
       aiorecollect is a Python asyncio-based library for the ReCollect
@@ -60,7 +57,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bachya/aiorecollect";
     changelog = "https://github.com/bachya/aiorecollect/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

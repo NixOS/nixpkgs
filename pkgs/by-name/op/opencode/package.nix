@@ -1,60 +1,193 @@
 {
   lib,
+  stdenvNoCC,
+  bun,
   fetchFromGitHub,
-  buildGoModule,
-  versionCheckHook,
+  makeBinaryWrapper,
+  models-dev,
+  nodejs,
   nix-update-script,
+  ripgrep,
+  sysctl,
+  installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.0.52";
+  version = "1.15.10";
 
   src = fetchFromGitHub {
-    owner = "sst";
+    owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wniGu8EXOI2/sCI7gv2luQgODRdes7tt1CoJ6Gs09ig=";
+    hash = "sha256-qp67k8Z+VA81uukZYuu3yqqmg/L8pkxYZQrJBoE25tU=";
   };
 
-  vendorHash = "sha256-pnev0o2/jirTqG67amCeI49XUdMCCulpGq/jYqGqzRY=";
+  node_modules = stdenvNoCC.mkDerivation {
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/sst/opencode/internal/version.Version=${finalAttrs.version}"
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install \
+        --cpu="*" \
+        --frozen-lockfile \
+        --filter ./ \
+        --filter ./packages/app \
+        --filter ./packages/desktop \
+        --filter ./packages/opencode \
+        --filter ./packages/shared \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
+
+      bun --bun ./nix/scripts/canonicalize-node-modules.ts
+      bun --bun ./nix/scripts/normalize-bun-binaries.ts
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+      runHook postInstall
+    '';
+
+    # NOTE: Required else we get errors that our fixed-output derivation references store paths
+    dontFixup = true;
+
+    outputHash = "sha256-r3S0HHNk4TeTHEd8vbvgF+AXl5lJAyrTq+u2T3W0PdA=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
+  nativeBuildInputs = [
+    bun
+    nodejs
+    installShellFiles
+    makeBinaryWrapper
+    writableTmpDirAsHomeHook
   ];
 
-  checkFlags =
-    let
-      skippedTests = [
-        # permission denied
-        "TestBashTool_Run"
-        "TestSourcegraphTool_Run"
-        "TestLsTool_Run"
+  postPatch = ''
+    # NOTE: Relax Bun version check to be a warning instead of an error
+    substituteInPlace packages/script/src/index.ts \
+      --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+                     'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+  '';
 
-        # Difference with snapshot
-        "TestGetContextFromPaths"
-      ];
-    in
-    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+  configurePhase = ''
+    runHook preConfigure
 
-  nativeCheckInputs = [
+    cp -R ${finalAttrs.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
+
+    runHook postConfigure
+  '';
+
+  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+  env.OPENCODE_DISABLE_MODELS_FETCH = true;
+  env.OPENCODE_VERSION = finalAttrs.version;
+  env.OPENCODE_CHANNEL = "stable";
+
+  buildPhase = ''
+    runHook preBuild
+
+    cd ./packages/opencode
+    bun --bun ./script/build.ts --single --skip-install
+    bun --bun ./script/schema.ts config.json tui.json
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
+    wrapProgram $out/bin/opencode \
+     --prefix PATH : ${
+       lib.makeBinPath (
+         [
+           ripgrep
+         ]
+         ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+           sysctl
+         ]
+       )
+     }
+
+    install -Dm644 config.json $out/share/opencode/config.json
+    install -Dm644 tui.json $out/share/opencode/tui.json
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+    installShellCompletion --cmd opencode \
+      --bash <($out/bin/opencode completion) \
+      --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
+  '';
+
+  nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "OPENCODE_DISABLE_MODELS_FETCH"
   ];
   versionCheckProgramArg = "--version";
-  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    jsonschema = {
+      config = "${placeholder "out"}/share/opencode/config.json";
+      tui = "${placeholder "out"}/share/opencode/tui.json";
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "node_modules"
+      ];
+    };
+  };
 
   meta = {
-    description = "Powerful terminal-based AI assistant providing intelligent coding assistance";
-    homepage = "https://github.com/opencode-ai/opencode";
-    changelog = "https://github.com/sst/opencode/releases/tag/v${finalAttrs.version}";
-    mainProgram = "opencode";
+    description = "AI coding agent built for the terminal";
+    homepage = "https://github.com/anomalyco/opencode";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      zestsystem
+      delafthi
+      DuskyElf
+      graham33
+      superherointj
     ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
+    mainProgram = "opencode";
   };
 })

@@ -3,22 +3,32 @@
   stdenv,
   fetchFromGitLab,
   fetchYarnDeps,
+  yarn,
   yarnConfigHook,
   yarnInstallHook,
-  nodejs,
+  nodejs_22,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+let
+  # The latest nodejs is always used in yarn, leading to build issues when it's
+  # different from the pinned one.
+  nodejs = nodejs_22;
+  yarnConfigHook' = yarnConfigHook.override {
+    yarn = yarn.override { inherit nodejs; };
+  };
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "gancio-plugin-telegram-bridge";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "bcn.convocala";
     repo = "gancio-plugin-telegram-bridge";
-    rev = "v${version}";
-    hash = "sha256-URiyV7bl8t25NlVJM/gEqPB67TZ4vQdfu4mvHITteSQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-J7FIfJjounrq/hPQk58mYXigjD7BZQWoE4aGi0eJ4sY=";
   };
 
   # upstream doesn't provide a yarn.lock file
@@ -28,11 +38,11 @@ stdenv.mkDerivation rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    hash = "sha256-BcRVmVA5pnFzpg2gN/nKLzENnoEdwrE0EgulDizq8Ok=";
+    hash = "sha256-3842mgKcsa0FIAFdClVorYFKWODiQJm7ytw2bkJ1WG4=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
+    yarnConfigHook'
     yarnInstallHook
     nodejs
   ];
@@ -54,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jbgi ];
   };
-}
+})

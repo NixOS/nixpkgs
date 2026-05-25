@@ -1,18 +1,19 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "libgen-cli";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = "libgen-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EicXsxAvVe/umpcOn4dVlTexaAol1qYPg/h5MU5dysM=";
   };
 
@@ -29,14 +30,14 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd libgen-cli \
       --bash <($out/bin/libgen-cli completion bash) \
       --fish <($out/bin/libgen-cli completion fish) \
       --zsh <($out/bin/libgen-cli completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ciehanski/libgen-cli";
     description = "CLI tool used to access the Library Genesis dataset; written in Go";
     longDescription = ''
@@ -44,8 +45,8 @@ buildGoModule rec {
       quickly query the Library Genesis dataset and download any of its
       contents.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zaninime ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zaninime ];
     mainProgram = "libgen-cli";
   };
-}
+})

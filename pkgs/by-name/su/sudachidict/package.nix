@@ -7,20 +7,20 @@
 
 let
   pname = "sudachidict";
-  version = "20241021";
+  version = "20260116";
 
   srcs = {
     core = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-core.zip";
-      hash = "sha256-wLcRhR4TCazRxDMKXYZ8T5Vn+rnY6aJmwExIpTIAyeE=";
+      hash = "sha256-ngu93F5AQjQibIuNzLtVdokvzddhLbz850njAWDGBMk=";
     };
     small = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-small.zip";
-      hash = "sha256-Qhp9seFCnLnLLWoQ2izDVKcdca+xZE1s+SCqfj0d3sU=";
+      hash = "sha256-+JL1U0YQqdovQxIWEUq7ks1oaSMlI3SgG9sEqGG8YxE=";
     };
     full = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-full.zip";
-      hash = "sha256-8nlUDGHUKrZ0ZFEnnL4rHiu2ybyW25G6Bm6vF4smxWE=";
+      hash = "sha256-uZYAxZUfkwQxHV5QbldU4VoHdUyBU4agcl8Yhnqf+sg=";
     };
   };
 in
@@ -47,6 +47,7 @@ lib.checkListOfEnum "${pname}: dict-type" [ "core" "full" "small" ] [ dict-type 
 
     passthru = {
       dict-type = dict-type;
+      updateScript = ./update.sh;
     };
 
     meta = {

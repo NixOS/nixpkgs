@@ -35,15 +35,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional withCurl curl
     ++ lib.optional withNcurses ncurses;
 
-  postPatch =
-    ''
-      cp -r ${imgui.src}/* third-party/imgui/imgui
-      chmod -R u+w third-party/imgui
-    ''
-    + lib.optionalString (lib.versionAtLeast imgui.version "1.90.1") ''
-      substituteInPlace src/imtui-impl-{emscripten,ncurses}.cpp \
-        --replace "ImGuiKey_KeyPadEnter" "ImGuiKey_KeypadEnter"
-    '';
+  postPatch = ''
+    cp -r ${imgui.src}/* third-party/imgui/imgui
+    chmod -R u+w third-party/imgui
+  ''
+  + lib.optionalString (lib.versionAtLeast imgui.version "1.90.1") ''
+    substituteInPlace src/imtui-impl-{emscripten,ncurses}.cpp \
+      --replace "ImGuiKey_KeyPadEnter" "ImGuiKey_KeypadEnter"
+  '';
 
   cmakeFlags = [
     "-DEMSCRIPTEN:BOOL=${if withEmscripten then "ON" else "OFF"}"
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
     "-DIMTUI_INSTALL_IMGUI_HEADERS:BOOL=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Immediate mode text-based user interface library";
     longDescription = ''
       ImTui is an immediate mode text-based user interface library. Supports 256
@@ -62,8 +61,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://imtui.ggerganov.com";
     changelog = "https://github.com/ggerganov/imtui/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

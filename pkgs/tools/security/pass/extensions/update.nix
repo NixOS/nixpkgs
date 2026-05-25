@@ -24,15 +24,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pass extension that provides an easy flow for updating passwords";
     homepage = "https://github.com/roddhjav/pass-update";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      lovek323
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fpletz
       tadfisher
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

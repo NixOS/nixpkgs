@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   libGL,
@@ -9,30 +10,29 @@
   libgbm,
   pango,
   udev,
-  shaderc,
   libglvnd,
   vulkan-loader,
   autoPatchelfHook,
+  installShellFiles,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
-    rev = "v${version}";
-    sha256 = "sha256-wrA/UGxhIUMc2T+0/UNKS9iN44pe9ap2l+xL8ZE5jsI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-JOt3xEONGDmLovk72hX0d3De01zTd51d2/J4HziBE9I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2LfEktaHB+uIQSWeSFG+v7+7wfkGlDz54m7P4KttPLI=";
-
-  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  cargoHash = "sha256-wK9v3YwP067etFAu6Ca9Sts+QrD4uL48chbL6tZKFkk=";
 
   nativeBuildInputs = [
     autoPatchelfHook
+    installShellFiles
     pkgconf
   ];
 
@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     pango
     udev
     libinput
-    shaderc
   ];
 
   runtimeDependencies = [
@@ -54,14 +53,26 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -D etc/jay.portal $out/share/xdg-desktop-portal/portals/jay.portal
     install -D etc/jay-portals.conf $out/share/xdg-desktop-portal/jay-portals.conf
+    install -D etc/jay.desktop $out/share/wayland-sessions/jay.desktop
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jay \
+      --bash <("$out/bin/jay" generate-completion bash) \
+      --zsh <("$out/bin/jay" generate-completion zsh) \
+      --fish <("$out/bin/jay" generate-completion fish)
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    providedSessions = [ "jay" ];
+  };
+
+  meta = {
     description = "Wayland compositor written in Rust";
     homepage = "https://github.com/mahkoh/jay";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "jay";
   };
-}
+})

@@ -7,12 +7,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mujs";
   version = "1.3.6";
 
   src = fetchurl {
-    url = "https://mujs.com/downloads/mujs-${version}.tar.gz";
+    url = "https://mujs.com/downloads/mujs-${finalAttrs.version}.tar.gz";
     hash = "sha256-fPOl5iLP9BkD7/8DNFGPyUrwYyVnUsOLpGGKUZHkTxg=";
   };
 
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     url = "git://git.ghostscript.com/mujs.git";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mujs.com/";
     description = "Lightweight, embeddable Javascript interpreter";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
-    license = licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
+    license = lib.licenses.isc;
   };
-}
+})

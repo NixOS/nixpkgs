@@ -5,17 +5,18 @@
   pkg-config,
   lib,
   udev,
+  udevCheckHook,
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-streamdeck";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ryankurte";
     repo = "rust-streamdeck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9FuTnRQHKYJzMqhhgyTVq2R+drn4HAr3GDNjQgc3r+w=";
   };
 
@@ -29,12 +30,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OiXpG45jwWydbpRHnbIlECOaa75CzUOmdWxZ3WE5+hY=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ udev ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   postInstall = ''
     install -Dm444 40-streamdeck.rules -t $out/lib/udev/rules.d/
@@ -49,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.gdifolco ];
     mainProgram = "streamdeck-cli";
   };
-}
+})

@@ -5,12 +5,12 @@
   pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vlock";
   version = "2.2.2";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/v/vlock/vlock_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/v/vlock/vlock_${finalAttrs.version}.orig.tar.gz";
     sha256 = "1b9gv7hmlb8swda5bn40lp1yki8b8wv29vdnhcjqfl6ir98551za";
   };
 
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual console locking program";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "vlock";
   };
-}
+})

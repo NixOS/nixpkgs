@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # Can't build distribute, see https://github.com/NixOS/nixpkgs/pull/49340
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Video game rating system";
     homepage = "https://trueskill.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

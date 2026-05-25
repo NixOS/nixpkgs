@@ -16,28 +16,30 @@
   # run the compiled `generate-book` utility to prepare the files for mdbook
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  version = "1.51.0";
+in
+rustPlatform.buildRustPackage {
+  inherit version;
   pname = "just";
-  version = "1.40.0";
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals installManPages [
-      "man"
-    ]
-    ++ lib.optionals withDocumentation [ "doc" ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals installManPages [
+    "man"
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-pmuwZoBIgUsKWFTXo8HYHVxrDWPMO8cumD/UHajFS6A=";
+    hash = "sha256-urD9R/qn7rwtzaVP65angk7z4bwxlP3w5G5Aa5tVmuw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mQQGxtSgNuRbz/83eWru+dmtWiLSKdVH+3z88BNugQE=";
+  cargoHash = "sha256-war9yybsyfsm/wNlY+/fiN8pxxQwNLMogqe5u+jHNaw=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -49,6 +51,7 @@ rustPlatform.buildRustPackage rec {
     export USER=just-user
     export USERNAME=just-user
     export JUST_CHOOSER="${coreutils}/bin/cat"
+    export XDG_RUNTIME_DIR=$(mktemp -d)
 
     # Prevent string.rs from being changed
     cp tests/string.rs $TMPDIR/string.rs
@@ -66,13 +69,10 @@ rustPlatform.buildRustPackage rec {
     patchShebangs tests
   '';
 
-  patches = [
-    ./fix-just-path-in-tests.patch
-  ];
-
   cargoBuildFlags = [
     "--package=just"
-  ] ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
+  ]
+  ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
 
   checkFlags = [
     "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell
@@ -90,8 +90,8 @@ rustPlatform.buildRustPackage rec {
       # No linkcheck in sandbox
       echo 'optional = true' >> book/en/book.toml
       mdbook build book/en
-      mkdir -p $doc/share/doc/$name
-      mv ./book/en/build/html $doc/share/doc/$name
+      mkdir -p $doc/share/doc/$name/html
+      mv ./book/en/build/* $doc/share/doc/$name/html
     ''
     + lib.optionalString installManPages ''
       $out/bin/just --man > ./just.1
@@ -116,6 +116,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       xrelkd
       jk
+      ryan4yin
     ];
     mainProgram = "just";
   };

@@ -1,26 +1,30 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
+  buildGo126Module,
+  stdenvNoCC,
+  nodejs,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
-
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.2.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LydP89zyqMGpWbC7nEAyPMx0ARDrYh4qL9sH1i8a88M=";
+    hash = "sha256-rWU1jldmdtXDcHrFty/Pmll1xFUQnLFF12j833M05rQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-U7FKU5WkU1EoXav+Q1i04uRSxBux/o4/9UzajT/hV/g=";
+  vendorHash = "sha256-nr9L7FVUQYzn+bLtvqKGsYydVCjW/fl53Od9lzRv8gk=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -32,26 +36,53 @@ buildGoModule (finalAttrs: {
     cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
   '';
 
+  checkFlags = [
+    # requires networking
+    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+  ];
+
+  # required for TestIsURLPrivate
+  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
   '';
 
-  frontend = buildNpmPackage {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
+
+  frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
 
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    npmDepsHash = "sha256-+KmNWKe5k/WuQL9B6XYZWDCLICyGWIg/vHLZr9T7SOc=";
-    npmFlags = [ "--legacy-peer-deps" ];
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm_10
+    ];
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-DVNzFFHMMasKEx+adAhisE32qtirBhJlfMHKrOVl1dM=";
+    };
 
     env.BUILD_OUTPUT_PATH = "dist";
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm --filter pocket-id-frontend build
+
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/lib/pocket-id-frontend
-      cp -r dist $out/lib/pocket-id-frontend/dist
+      cp -r frontend/dist $out/lib/pocket-id-frontend/dist
 
       runHook postInstall
     '';
@@ -78,6 +109,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
+      tmarkus
       ymstnt
     ];
     platforms = lib.platforms.unix;

@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-polystat-panel";
-  version = "2.1.14";
-  zipHash = "sha256-W6qx3b8rmIQV6Sm2rUsCDKrWi69N2S31hbmuqjYt25M=";
-  meta = with lib; {
+  version = "2.1.16";
+  zipHash = "sha256-Lxug7dL33I5VDtwE5cZLa6LyCOMF244ETYY/ORvndTc=";
+  meta = {
     description = "Hexagonal multi-stat panel for Grafana";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lukegb ];
+    platforms = lib.platforms.unix;
   };
 }

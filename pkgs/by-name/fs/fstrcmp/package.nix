@@ -8,12 +8,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fstrcmp";
   version = "0.7";
 
   src = fetchzip {
-    url = "https://sourceforge.net/projects/fstrcmp/files/fstrcmp/${version}/fstrcmp-${version}.D001.tar.gz";
+    url = "https://sourceforge.net/projects/fstrcmp/files/fstrcmp/${finalAttrs.version}/fstrcmp-${finalAttrs.version}.D001.tar.gz";
     sha256 = "0yg3y3k0wz50gmhgigfi2dx725w1gc8snb95ih7vpcnj6kabgz9a";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Make fuzzy comparisons of strings and byte arrays";
     mainProgram = "fstrcmp";
     longDescription = ''
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://fstrcmp.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/fstrcmp/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.sephalon ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.sephalon ];
+    platforms = lib.platforms.unix;
   };
-}
+})

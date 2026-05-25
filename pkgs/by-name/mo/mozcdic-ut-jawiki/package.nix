@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT Jawiki Dictionary is a dictionary generated from the Japanese Wikipedia for Mozc.";
+    description = "Dictionary generated from the Japanese Wikipedia for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-jawiki";
     license = with lib.licenses; [
       asl20

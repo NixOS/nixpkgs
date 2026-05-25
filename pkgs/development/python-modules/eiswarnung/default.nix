@@ -8,22 +8,19 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eiswarnung";
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/61qrRfD7/gaEcvFot34HYXOVLWwTDi/fvcgHDTv9u0=";
   };
 
@@ -31,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"'
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
   '';
 
   pythonRelaxDeps = [ "pytz" ];
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eiswarnung" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for getting Eiswarning API forecasts";
     homepage = "https://github.com/klaasnicolaas/python-eiswarnung";
-    changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,15 +6,12 @@
   cython,
   pdm-backend,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "editdistance";
   version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "roy-ht";
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "editdistance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the edit distance (Levenshtein distance)";
     homepage = "https://github.com/roy-ht/editdistance";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

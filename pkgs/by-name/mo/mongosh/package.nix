@@ -2,39 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch,
-  libmongocrypt,
-  krb5,
-  testers,
-  nix-update-script,
+  nodejs_22,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   pname = "mongosh";
-  version = "2.5.1";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
-
-    # Tracking a few commits ahead of 2.5.1 to ensure the package-lock.json patch below applies
-    #tag = "v${finalAttrs.version}";
-    rev = "2163e8b10a77af18e0cedfa164526506c051593e";
-
-    hash = "sha256-DYX8NqAISwzBpdilcv3YVrL72byXMeC4z/nLqd2nf2c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CHHGQYJBv1sVo2LT9jxx+c15TU8ecG9R5DVQOA9yG+A=";
   };
 
-  patches = [
-    # https://github.com/mongodb-js/mongosh/pull/2452
-    (fetchpatch {
-      url = "https://github.com/mongodb-js/mongosh/commit/30f66260fce3e1744298d086bd2b54b2d2bfffbb.patch";
-      hash = "sha256-c2QM/toeoagfhvuh4r+/5j7ZyV6DEr9brA9mXpEy1kM=";
-    })
+  npmDepsHash = "sha256-FlVKJqXiDW3FdBrm2lN2vw+xFkvm7J1FgCEI6rFfR4o=";
 
+  patches = [
     ./disable-telemetry.patch
   ];
 
-  npmDepsHash = "sha256-6uXEKAAGXxaODjXIszYml5Af4zSuEzy/QKdMgSzLD84=";
   npmFlags = [
     "--omit=optional"
     "--ignore-scripts"
@@ -50,14 +37,14 @@ buildNpmPackage (finalAttrs: {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    updateScript = nix-update-script { };
+    # Version testing is skipped because upstream often forgets to update the version.
+
+    updateScript = ./update.sh;
   };
 
   meta = {
     homepage = "https://www.mongodb.com/try/download/shell";
+    changelog = "https://github.com/mongodb-js/mongosh/releases/tag/v${finalAttrs.version}";
     description = "MongoDB Shell";
     maintainers = with lib.maintainers; [ aaronjheng ];
     license = lib.licenses.asl20;

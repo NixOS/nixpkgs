@@ -22,18 +22,17 @@ let
   ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ff2mpv-rust";
   version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "ryze312";
     repo = "ff2mpv-rust";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-kJpKcwwwGjFYE7R4ZhkEGK44QqxsUEB/Scj0RoySta4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-O8OAynSdZdtqNS+wAQ1oAs2HjueC41O8RFqESRHr+6o=";
 
   postInstall = ''
@@ -53,11 +52,11 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native messaging host for ff2mpv written in Rust";
     homepage = "https://github.com/ryze312/ff2mpv-rust";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ryze ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ryze ];
     mainProgram = "ff2mpv-rust";
   };
-}
+})

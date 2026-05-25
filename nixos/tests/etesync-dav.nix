@@ -2,8 +2,8 @@
 {
 
   name = "etesync-dav";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ _3699n ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes.machine =

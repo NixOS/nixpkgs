@@ -2,30 +2,37 @@
   lib,
   rustPlatform,
   fetchCrate,
-  qt6,
+
+  fontconfig,
   libGL,
+  pkg-config,
+  qt6,
+
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-viewer";
-  version = "1.11.0";
+  version = "1.16.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Yez8GbER6ylkozQP5oQ0m0u+x/T5qQVPRt0S/NRFT60=";
+    hash = "sha256-/hv/5qd0JhV2H91VWjzUh4cOPOLj6/fsXHSwdDSnfCc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vWTj6cJgvg10NaLw9WfHXmiG8hg7mUIH/Gj3JVvWCuA=";
+  cargoHash = "sha256-9x33UuQGFfHFEsTdSjNnfBlgER4fBIfAmemeWSes304=";
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
+    fontconfig
     libGL
   ];
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
 
   # There are no tests
   doCheck = false;
@@ -38,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Viewer for .slint files from the Slint Project";
     mainProgram = "slint-viewer";
     homepage = "https://crates.io/crates/slint-viewer";
+    changelog = "https://github.com/slint-ui/slint/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ dtomvan ];

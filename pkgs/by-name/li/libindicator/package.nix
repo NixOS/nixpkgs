@@ -10,12 +10,12 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libindicator-gtk${gtkVersion}";
   version = "12.10.1";
 
   src = fetchurl {
-    url = "https://launchpad.net/libindicator/${lib.versions.majorMinor version}/${version}/+download/libindicator-${version}.tar.gz";
+    url = "https://launchpad.net/libindicator/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.version}/+download/libindicator-${finalAttrs.version}.tar.gz";
     sha256 = "b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f";
   };
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 8 out of 8 tests
 
-  meta = with lib; {
+  meta = {
     description = "Set of symbols and convenience functions for Ayatana indicators";
     homepage = "https://launchpad.net/libindicator";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
   };
-}
+})

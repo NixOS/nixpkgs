@@ -9,23 +9,20 @@
   # tests
   pytestCheckHook,
   wcag-contrast-ratio,
-  pythonOlder,
 }:
 
 let
-  pygments = buildPythonPackage rec {
+  pygments = buildPythonPackage (finalAttrs: {
     pname = "pygments";
-    version = "2.19.1";
+    version = "2.20.0";
     pyproject = true;
 
-    disabled = pythonOlder "3.8"; # 2.18.0 requirement
-
     src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-YcFtKoV23AZJ2fOeCJtfArzSf7oQ2PtNzCgXP3pFFR8=";
+      inherit (finalAttrs) pname version;
+      hash = "sha256-Z1fNA3aAU/+Z8wOcGjbWwKoLJjQ4/KsXUgswowOoK18=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [ hatchling ];
 
     # circular dependencies if enabled by default
     doCheck = false;
@@ -49,13 +46,16 @@ let
     };
 
     meta = {
-      changelog = "https://github.com/pygments/pygments/releases/tag/${version}";
+      changelog = "https://github.com/pygments/pygments/releases/tag/${finalAttrs.version}";
       homepage = "https://pygments.org/";
       description = "Generic syntax highlighter";
       mainProgram = "pygmentize";
       license = lib.licenses.bsd2;
-      maintainers = with lib.maintainers; [ sigmanificient ];
+      maintainers = with lib.maintainers; [
+        sigmanificient
+        ryand56
+      ];
     };
-  };
+  });
 in
 pygments

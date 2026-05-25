@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pyprind";
   version = "2.11.3";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPrind";
@@ -24,10 +25,10 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Progress Bar and Percent Indicator Utility";
     homepage = "https://github.com/rasbt/pyprind";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

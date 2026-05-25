@@ -3,7 +3,6 @@
   lib,
   libusb-compat-0_1,
   stdenv,
-  ...
 }:
 
 stdenv.mkDerivation {

@@ -3,8 +3,9 @@
 # succeeds, and all other jobs have finished (they may fail).
 
 {
+  lib ? (import ../lib),
   nixpkgs ? {
-    outPath = (import ../lib).cleanSource ./..;
+    outPath = lib.cleanSource ./..;
     revCount = 56789;
     shortRev = "gfedcba";
   },
@@ -26,9 +27,9 @@ let
     set:
     if builtins.isAttrs set then
       if (set.type or "") == "derivation" then
-        set // { meta = builtins.removeAttrs (set.meta or { }) [ "maintainers" ]; }
+        set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
-        pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
+        lib.mapAttrs (n: v: removeMaintainers v) set
     else
       set;
 
@@ -43,12 +44,12 @@ rec {
     }
   );
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (
+  nixpkgs = removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
     }
-  )) [ "unstable" ];
+  );
 
   tested =
     let
@@ -57,16 +58,16 @@ rec {
       onSystems =
         systems: x:
         map (system: "${x}.${system}") (
-          pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
+          lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
         );
     in
     pkgs.releaseTools.aggregate {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ ];
+        maintainers = [ ];
       };
-      constituents = pkgs.lib.concatLists [
+      constituents = lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
@@ -98,11 +99,28 @@ rec {
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
-        (onFullSupported "nixos.tests.gitlab")
+        (onFullSupported "nixos.tests.gitlab.gitlab")
         (onFullSupported "nixos.tests.gnome")
-        (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
+        (onSystems [ "aarch64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleUefiSystemdBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSimple")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvolDefault")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvolEscape")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.btrfsSubvols")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.luksroot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.lvm")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBootZfs")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBootFat")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.separateBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleLabels")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleProvided")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simpleUefiSystemdBoot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.simple")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.swraid")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.installer-systemd-stage-1.zfsroot")
+        (onSystems [ "x86_64-linux" ] "nixos.tests.nixos-rebuild-specialisations")
+        # Scripted stage 1 installer tests, remove in 26.11
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSimple")
         (onSystems [ "x86_64-linux" ] "nixos.tests.installer.btrfsSubvolDefault")
@@ -144,7 +162,7 @@ rec {
         (onFullSupported "nixos.tests.networking.scripted.macvlan")
         (onFullSupported "nixos.tests.networking.scripted.privacy")
         (onFullSupported "nixos.tests.networking.scripted.routes")
-        (onFullSupported "nixos.tests.networking.scripted.sit")
+        (onFullSupported "nixos.tests.networking.scripted.sit-fou")
         (onFullSupported "nixos.tests.networking.scripted.static")
         (onFullSupported "nixos.tests.networking.scripted.virtual")
         (onFullSupported "nixos.tests.networking.scripted.vlan")
@@ -158,7 +176,7 @@ rec {
         #(onFullSupported "nixos.tests.networking.networkd.macvlan")
         (onFullSupported "nixos.tests.networking.networkd.privacy")
         (onFullSupported "nixos.tests.networking.networkd.routes")
-        (onFullSupported "nixos.tests.networking.networkd.sit")
+        (onFullSupported "nixos.tests.networking.networkd.sit-fou")
         (onFullSupported "nixos.tests.networking.networkd.static")
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
@@ -166,12 +184,14 @@ rec {
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems [ "x86_64-linux" ] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
+        (onFullSupported "nixos.tests.systemd-initrd-networkd-ssh")
+        # Scripted stage 1 SSH test, remove in 26.11
         (onFullSupported "nixos.tests.initrd-network-ssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")
         (onFullSupported "nixos.tests.php.pcre")
-        (onFullSupported "nixos.tests.plasma5")
+        (onFullSupported "nixos.tests.plasma6")
         (onSystems [ "x86_64-linux" ] "nixos.tests.podman")
         (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")
         (onFullSupported "nixos.tests.predictable-interface-names.predictable")
@@ -182,7 +202,8 @@ rec {
         (onFullSupported "nixos.tests.proxy")
         (onFullSupported "nixos.tests.sddm.default")
         (onFullSupported "nixos.tests.shadow")
-        (onFullSupported "nixos.tests.simple")
+        (onFullSupported "nixos.tests.simple-container")
+        (onFullSupported "nixos.tests.simple-vm")
         (onFullSupported "nixos.tests.sway")
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")
@@ -191,6 +212,8 @@ rec {
         (onFullSupported "nixpkgs.jdk")
         (onSystems [ "x86_64-linux" ] "nixpkgs.mesa_i686") # i686 sanity check + useful
         [
+          # Include all release-critical jobs from nixpkgs-unstable channel
+          "nixpkgs.unstable"
           "nixpkgs.tarball"
           "nixpkgs.release-checks"
         ]

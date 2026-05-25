@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "3.4.1";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-kms-v${version}";
-    hash = "sha256-5PzidE1CWN+pt7+gcAtbuXyL/pq6cnn0MCRkBfmeUSw=";
+    hash = "sha256-JR3fcwCuMZkHyJHnMt4EGvTZZ7MLgQrgxCaTlJZ1zYE=";
   };
 
   sourceRoot = "${src.name}/packages/google-cloud-kms";
@@ -34,7 +34,10 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   nativeCheckInputs = [
     mock
@@ -57,6 +60,9 @@ buildPythonPackage rec {
   passthru.updateScript = gitUpdater {
     rev-prefix = "google-cloud-kms-v";
   };
+
+  # picks the wrong tag
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Cloud Key Management Service (KMS) API API client library";

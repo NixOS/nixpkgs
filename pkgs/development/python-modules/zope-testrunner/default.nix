@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "zope-testrunner";
-  version = "6.6.1";
+  version = "8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.testrunner";
     tag = version;
-    hash = "sha256-cvZXQzbIUBq99P0FYSydG1tLNBMFTTvuMvqWGaNFhJc=";
+    hash = "sha256-MqlS/VkLAv9M1WtJ6t2nPMZPH+Cz5wfy2VhtCx/Fwmw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
   build-system = [ setuptools ];

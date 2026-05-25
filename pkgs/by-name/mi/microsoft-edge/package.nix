@@ -6,8 +6,7 @@
   patchelf,
   bintools,
   dpkg,
-
-  # Linked dynamic libraries.
+  # Linked dynamic libraries
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -26,20 +25,20 @@
   libdrm,
   libglvnd,
   libkrb5,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
   libxshmfence,
-  libXtst,
+  libxtst,
   libgbm,
   nspr,
   nss,
@@ -47,21 +46,16 @@
   pipewire,
   vulkan-loader,
   wayland, # ozone/wayland
-
   # Command line programs
   coreutils,
-
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
-
   # Will crash without.
   systemd,
-
   # Loaded at runtime.
   libexif,
   pciutils,
-
-  # Additional dependencies according to other distros.
+  # Additional dependencies according to other distros
   ## Ubuntu
   curl,
   liberation_ttf,
@@ -79,111 +73,108 @@
   ## Gentoo
   bzip2,
   libcap,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
-
   adwaita-icon-theme,
   gsettings-desktop-schemas,
-
   # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
   libva,
   libvaSupport ? true,
-
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
-
   # For QT support
   qt6,
-
   # Edge AAD sync
   cacert,
   libsecret,
-
   # Edge Specific
   libuuid,
+
+  # Fonts (See issue #463615)
+  makeFontsConf,
+  noto-fonts-cjk-sans,
+  noto-fonts-cjk-serif,
+
+  # Create a symlink at $out/bin/microsoft-edge-stable
+  withSymlink ? true,
 }:
-
 let
-
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cacert
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-      libsecret
-      libuuid
-      gtk3
-      gtk4
-      qt6.qtbase
-      qt6.qtwayland
-    ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals libvaSupport [ libva ];
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    bzip2
+    cacert
+    cairo
+    coreutils
+    cups
+    curl
+    dbus
+    expat
+    flac
+    fontconfig
+    freetype
+    gcc-unwrapped.lib
+    gdk-pixbuf
+    glib
+    harfbuzz
+    icu
+    libcap
+    libdrm
+    liberation_ttf
+    libexif
+    libglvnd
+    libkrb5
+    libpng
+    libx11
+    libxcb
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxkbcommon
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
+    libgbm
+    nspr
+    nss
+    opusWithCustomModes
+    pango
+    pciutils
+    pipewire
+    snappy
+    speechd-minimal
+    systemd
+    util-linux
+    vulkan-loader
+    wayland
+    wget
+    libsecret
+    libuuid
+    gtk3
+    gtk4
+    qt6.qtbase
+    qt6.qtwayland
+  ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ]
+  ++ lib.optionals libvaSupport [ libva ];
 in
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "137.0.3296.68";
+  version = "148.0.3967.70";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-dgmQF6zpd8dAYKoTSiidk8VU6dZ/ZWEDlYD91IPaDEE=";
+    hash = "sha256-rwG3zPxMHjC00P591/CZIWRIHb4td4q3Rfz4fvf89k0=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -209,6 +200,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
   binpath = lib.makeBinPath deps;
 
+  fontsConf = makeFontsConf {
+    fontDirectories = [
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+    ];
+  };
+
   installPhase = ''
     runHook preInstall
 
@@ -233,9 +231,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail /usr/bin/microsoft-edge-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/microsoft-edge.xml \
       --replace-fail /opt/microsoft/msedge $exe
-    substituteInPlace $out/share/menu/microsoft-edge.menu \
-      --replace-fail /opt $out/share \
-      --replace-fail $out/share/microsoft/$appname/microsoft-edge $exe
 
     for icon_file in $out/share/microsoft/msedge/product_logo_[0-9]*.png; do
       num_and_suffix="''${icon_file##*logo_}"
@@ -259,6 +254,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
+      --set FONTCONFIG_FILE "${finalAttrs.fontsConf}" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set CHROME_WRAPPER  "microsoft-edge-$dist" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
@@ -276,6 +272,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
 
+    ${lib.optionalString withSymlink ''
+      ln -s $out/bin/microsoft-edge $out/bin/microsoft-edge-stable
+    ''}
+
     runHook postInstall
   '';
 
@@ -292,6 +292,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ulrikstrid
       maeve-oake
       leleuvilela
+      bricklou
+      jonhermansen
+      iedame
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

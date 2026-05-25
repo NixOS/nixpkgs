@@ -7,25 +7,27 @@
   bison,
   flex,
   pkg-config,
+  pythonSupport ? false,
+  swig ? null,
+  python ? null,
+  enableDocs ? false,
   doxygen,
   graphviz,
   mscgen,
   asciidoc,
   sourceHighlight,
-  pythonSupport ? false,
-  swig ? null,
-  python ? null,
+  python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnl";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
-    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-GuYV2bUOhLedB/o9Rz6Py/G5HBK2iNefwrlkZJXgbnI=";
+    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-K77WamOf+/3PNXe/hI+OYg0EBgBqvDfNDamXYXcK7P8=";
   };
 
   outputs = [
@@ -33,9 +35,13 @@ stdenv.mkDerivation rec {
     "dev"
     "out"
     "man"
-  ] ++ lib.optional pythonSupport "py";
+  ]
+  ++ lib.optional pythonSupport "py"
+  ++ lib.optional enableDocs "doc";
 
   enableParallelBuilding = true;
+
+  configureFlags = [ (lib.enableFeature enableDocs "doc") ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -43,17 +49,33 @@ stdenv.mkDerivation rec {
     flex
     pkg-config
     file
+  ]
+  ++ lib.optionals pythonSupport [
+    swig
+  ]
+  ++ lib.optionals enableDocs [
     doxygen
     graphviz
     mscgen
     asciidoc
     sourceHighlight
-  ] ++ lib.optional pythonSupport swig;
+    python3Packages.pygments
+  ];
 
-  postBuild = lib.optionalString (pythonSupport) ''
+  postBuild = lib.optionalString pythonSupport ''
     cd python
     ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
     cd -
+  '';
+
+  postInstall = lib.optionalString enableDocs ''
+    patchShebangs doc
+    # See tools/build_release.sh
+    make -C doc
+    make -C doc gendoc
+    make -C doc dist
+    mkdir -p $doc/share/doc/libnl
+    cp doc/libnl-doc-${finalAttrs.version}.tar.gz $doc/share/doc/libnl
   '';
 
   postFixup = lib.optionalString pythonSupport ''
@@ -64,11 +86,12 @@ stdenv.mkDerivation rec {
     inherit pythonSupport;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.infradead.org/~tgr/libnl/";
     description = "Linux Netlink interface library suite";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libnl_project" finalAttrs.version;
   };
-}
+})

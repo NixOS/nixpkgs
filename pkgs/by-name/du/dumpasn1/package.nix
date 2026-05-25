@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r40czSLdjCYbt73zK7exCoP/kMq6+pyJfz9LKJLLaXM=";
   };
 
-  CFLAGS = ''-DDUMPASN1_CONFIG_PATH='"$(out)/etc/"' '';
+  env.CFLAGS = ''-DDUMPASN1_CONFIG_PATH='"$(out)/etc/"' '';
 
   makeFlags = [ "prefix=$(out)" ];
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./configpath.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Display and debug ASN.1 data";
     homepage = "https://github.com/katexochen/dumpasn1";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "dumpasn1";
-    maintainers = with maintainers; [ katexochen ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ katexochen ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   roadrecon,
   roadlib,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "roadtools";
   version = "0.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Azure AD tooling framework";
     homepage = "https://github.com/dirkjanm/ROADtools";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

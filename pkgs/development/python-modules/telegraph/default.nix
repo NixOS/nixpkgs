@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   httpx,
   pytestCheckHook,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "telegraph";
   version = "2.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "telegraph";
@@ -30,17 +27,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [ "test_get_page" ];
 
   pythonImportsCheck = [ "telegraph" ];
 
-  meta = with lib; {
+  meta = {
     description = "Telegraph API wrapper";
     homepage = "https://github.com/python273/telegraph";
     changelog = "https://github.com/python273/telegraph/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gp2112 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gp2112 ];
   };
 }

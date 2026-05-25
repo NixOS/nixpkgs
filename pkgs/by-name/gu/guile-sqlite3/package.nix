@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://notabug.org/guile-sqlite3/guile-sqlite3";
     description = "Guile bindings for the SQLite3 database engine";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (guile.meta) platforms;
   };
 })

@@ -6,21 +6,21 @@
   scikit-learn,
   pandas,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   pytz,
 }:
 
 buildPythonPackage rec {
   pname = "sklearn-compat";
-  version = "0.1.3";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sklearn-compat";
     repo = "sklearn-compat";
     tag = version;
-    hash = "sha256-9Py5VKDej7xDMdWVujkS/ooxOkEcjPJNlBHkbe/rycE=";
+    hash = "sha256-7YgNXYm/uMPRRZ1ApHQ8PPyeNBURuwHao5GSXJFCYZ0=";
   };
 
   build-system = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     pytz
   ];

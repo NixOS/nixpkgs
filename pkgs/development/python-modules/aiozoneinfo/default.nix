@@ -6,7 +6,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   tzdata,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aiozoneinfo";
   version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiozoneinfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to fetch zoneinfo with asyncio";
     homepage = "https://github.com/bluetooth-devices/aiozoneinfo";
     changelog = "https://github.com/bluetooth-devices/aiozoneinfo/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

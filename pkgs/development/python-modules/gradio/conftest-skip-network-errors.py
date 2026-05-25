@@ -43,6 +43,7 @@ def deny_network_access(*a, **kw):
 
 import httpx
 import requests
+import safehttpx
 import socket
 import urllib
 import urllib3
@@ -54,6 +55,7 @@ httpx.Request = deny_network_access
 requests.get = deny_network_access
 requests.head = deny_network_access
 requests.post = deny_network_access
+safehttpx.get = deny_network_access
 socket.socket.connect = deny_network_access
 urllib.request.Request = deny_network_access
 urllib.request.urlopen = deny_network_access

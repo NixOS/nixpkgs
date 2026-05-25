@@ -64,26 +64,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags =
-    [
-      "--bundled-libraries=NONE"
-      "--builtin-libraries=replace"
-      "--without-ldb-lmdb"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-compile"
-      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-    ];
+  wafConfigureFlags = [
+    "--bundled-libraries=NONE"
+    "--builtin-libraries=replace"
+    "--without-ldb-lmdb"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+  ];
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
-
-  # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://reviews.llvm.org/D135402
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
   stripDebugList = [
     "bin"
@@ -95,12 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "LDAP-like embedded database";
     homepage = "https://ldb.samba.org/";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     pkgConfigModules = [ "ldb" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

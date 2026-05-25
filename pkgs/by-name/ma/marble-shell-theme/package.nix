@@ -14,13 +14,13 @@ assert lib.assertMsg (colors != [ ]) "The `colors` list can not be empty";
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marble-shell-theme";
-  version = "48.0.1";
+  version = "48.3.2";
 
   src = fetchFromGitHub {
     owner = "imarkoff";
     repo = "Marble-shell-theme";
     tag = finalAttrs.version;
-    hash = "sha256-t/p8/Phl+DXbSVT8l3fonZQeoUTtrcfe4HiKB3D8KXw=";
+    hash = "sha256-EYQmtVq852YG4Pmk6Nj4RF+aZUJmIZwhegHIR+Xxu8A=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     homepage = "https://github.com/imarkoff/Marble-shell-theme";
     changelog = "https://github.com/imarkoff/Marble-shell-theme/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

@@ -1,16 +1,38 @@
 # snippets that can be shared by multiple fetchers (pkgs/build-support)
 { lib }:
 let
-  commonH = hashTypes: rec {
-    hashNames = [ "hash" ] ++ hashTypes;
-    hashSet = lib.genAttrs hashNames (lib.const { });
-  };
+  commonH =
+    let
+      defaultHashNames = [ "hash" ];
+    in
+    hashTypes: rec {
+      hashNames = defaultHashNames ++ hashTypes;
+      hashSet = genAttrs hashNames (const { });
+    };
 
   fakeH = {
     hash = lib.fakeHash;
     sha256 = lib.fakeSha256;
     sha512 = lib.fakeSha512;
   };
+
+  defaultHashTypes = [ "sha256" ];
+
+  inherit (lib)
+    concatMapStringsSep
+    head
+    length
+    throwIf
+    ;
+  inherit (lib.attrsets)
+    attrsToList
+    intersectAttrs
+    genAttrs
+    removeAttrs
+    optionalAttrs
+    ;
+
+  inherit (lib.trivial) const functionArgs setFunctionArgs;
 in
 rec {
 
@@ -43,8 +65,22 @@ rec {
 
     All other attributes in the set remain as-is.
 
-    # Example
+    # Type
+    ```
+    normalizeHash :: { hashTypes :: [String]; required :: Bool; } -> AttrSet -> AttrSet
+    ```
 
+    # Arguments
+
+    hashTypes
+    : the set of attribute names accepted as hash inputs, in addition to `hash`
+
+    required
+    : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
+
+    # Example
+    ::: {.example}
+    ## `lib.fetchers.normalizeHash` usage example
     ```nix
     normalizeHash { } { hash = ""; foo = "bar"; }
     =>
@@ -72,43 +108,18 @@ rec {
       outputHashAlgo = "sha512";
     }
     ```
-
-    # Type
-    ```
-    normalizeHash :: { hashTypes :: List String, required :: Bool } -> AttrSet -> AttrSet
-    ```
-
-    # Arguments
-
-    hashTypes
-    : the set of attribute names accepted as hash inputs, in addition to `hash`
-
-    required
-    : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
+    :::
   */
   normalizeHash =
     {
-      hashTypes ? [ "sha256" ],
+      hashTypes ? defaultHashTypes,
       required ? true,
     }:
     let
-      inherit (lib)
-        concatMapStringsSep
-        head
-        tail
-        throwIf
-        ;
-      inherit (lib.attrsets)
-        attrsToList
-        intersectAttrs
-        removeAttrs
-        optionalAttrs
-        ;
-
       inherit (commonH hashTypes) hashNames hashSet;
     in
     args:
-    if args ? "outputHash" then
+    if args ? outputHash then
       args
     else
       let
@@ -120,7 +131,7 @@ rec {
           in
           if hashesAsNVPairs == [ ] then
             throwIf required "fetcher called without `hash`" null
-          else if tail hashesAsNVPairs != [ ] then
+          else if length hashesAsNVPairs != 1 then
             throw "fetcher called with mutually-incompatible arguments: ${
               concatMapStringsSep ", " (a: a.name) hashesAsNVPairs
             }"
@@ -155,7 +166,7 @@ rec {
 
     # Type
     ```
-    withNormalizedHash :: { hashTypes :: List String } -> (AttrSet -> T) -> (AttrSet -> T)
+    withNormalizedHash :: { hashTypes :: [String]; } -> (AttrSet -> a) -> (AttrSet -> a)
     ```
 
     # Arguments
@@ -188,15 +199,20 @@ rec {
     and is implemented somewhat more efficiently.
   */
   withNormalizedHash =
+    let
+      removedAttributes = [
+        "outputHash"
+        "outputHashAlgo"
+      ];
+    in
     {
-      hashTypes ? [ "sha256" ],
+      hashTypes ? defaultHashTypes,
     }:
+    let
+      inherit (commonH hashTypes) hashSet;
+    in
     fetcher:
     let
-      inherit (lib.attrsets) genAttrs intersectAttrs removeAttrs;
-      inherit (lib.trivial) const functionArgs setFunctionArgs;
-
-      inherit (commonH hashTypes) hashSet;
       fArgs = functionArgs fetcher;
 
       normalize = normalizeHash {
@@ -209,10 +225,7 @@ rec {
     assert intersectAttrs fArgs hashSet == { };
 
     setFunctionArgs (args: fetcher (normalize args)) (
-      removeAttrs fArgs [
-        "outputHash"
-        "outputHashAlgo"
-      ]
+      removeAttrs fArgs removedAttributes
       // {
         hash = fArgs.outputHash;
       }

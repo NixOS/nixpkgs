@@ -34,10 +34,10 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio support for PEP-567 contextvars backport";
     homepage = "https://github.com/fantix/aiocontextvars";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

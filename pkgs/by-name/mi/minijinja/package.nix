@@ -4,19 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "minijinja";
-  version = "2.10.2";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "minijinja";
-    rev = version;
-    hash = "sha256-JPR9FRMVQH7DdYyFfh75g1BYDg8R9xCnigirGe8Xx1o=";
+    rev = finalAttrs.version;
+    hash = "sha256-8EEhtdfTU+q9TON6InIv0gdAS154745NeQX2TE513J0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EInDnhUD29nZUOr2nBT4SuweMVad+RsS5eS767CvjRk=";
+  cargoHash = "sha256-uCyG+gT8zltsqwfwsQguoUvIEs5zLG70nBJC7txRLsI=";
 
   # The tests relies on the presence of network connection
   doCheck = false;
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mitsuhiko/minijinja";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ psibi ];
-    changelog = "https://github.com/mitsuhiko/minijinja/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mitsuhiko/minijinja/blob/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "minijinja-cli";
   };
-}
+})

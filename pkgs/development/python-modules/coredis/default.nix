@@ -1,9 +1,12 @@
 {
   lib,
   async-timeout,
+  beartype,
   buildPythonPackage,
-  setuptools,
-  versioneer,
+  hatchling,
+  hatch-mypyc,
+  hatch-vcs,
+  types-deprecated,
   deprecated,
   fetchFromGitHub,
   packaging,
@@ -18,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.22.0";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "coredis";
     tag = version;
-    hash = "sha256-EMiZkKUcVbinWtYimNSQ715PH7pCrXpNKqseLFCu/48=";
+    hash = "sha256-84mFHEPvCv7c1u2giTwTmC+56KCB/3snl8vJ4c+sE2s=";
   };
 
   postPatch = ''
@@ -38,12 +41,15 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
-    versioneer
+    hatchling
+    hatch-mypyc
+    hatch-vcs
+    types-deprecated
   ];
 
   dependencies = [
     async-timeout
+    beartype
     deprecated
     packaging
     pympler
@@ -60,7 +66,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "coredis" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # All other tests require Docker
     "tests/test_lru_cache.py"
     "tests/test_parsers.py"
@@ -73,6 +79,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/alisaifee/coredis";
     changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
-    teams = [ lib.teams.wdz ];
   };
 }

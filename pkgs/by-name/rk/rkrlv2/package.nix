@@ -6,31 +6,40 @@
   lv2,
   fftw,
   cmake,
-  libXpm,
-  libXft,
+  libxpm,
+  libxft,
   libjack2,
   libsamplerate,
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rkrlv2";
   version = "beta_3";
 
   src = fetchFromGitHub {
     owner = "ssj71";
     repo = "rkrlv2";
-    rev = version;
-    sha256 = "WjpPNUEYw4aGrh57J+7kkxKFXgCJWNaWAmueFbNUJJo=";
+    tag = finalAttrs.version;
+    hash = "sha256-WjpPNUEYw4aGrh57J+7kkxKFXgCJWNaWAmueFbNUJJo=";
   };
+
+  postPatch = ''
+    substituteInPlace ./CMakeLists.txt lv2/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6)" \
+      "cmake_minimum_required(VERSION 4.0)"
+  '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    libXft
-    libXpm
+    libxft
+    libxpm
     lv2
     fftw
     libjack2
@@ -38,12 +47,12 @@ stdenv.mkDerivation rec {
     libsndfile
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rakarrak effects ported to LV2";
     homepage = "https://github.com/ssj71/rkrlv2";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.joelmo ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.joelmo ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isAarch64; # g++: error: unrecognized command line option '-mfpmath=sse'
   };
-}
+})

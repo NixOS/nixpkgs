@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_net";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_net";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-sEcKn/apA6FcR7ijb7sfuvP03ZdVfjkNZTXsasK8fAI=";
+    hash = "sha256-FDJT5RPoquC527K0wG9IPouea6P3lwhHPqj29sZXMuw=";
   };
 
   outputs = [

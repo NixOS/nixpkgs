@@ -33,11 +33,10 @@ stdenv.mkDerivation rec {
     zlib
     libgpg-error
   ];
-  configureFlags =
-    [
-      "--enable-introspection=yes"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
+  configureFlags = [
+    "--enable-introspection=yes"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
 
   postPatch = ''
     substituteInPlace tests/testsuite.c \
@@ -58,11 +57,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jstedfast/gmime/";
     description = "C/C++ library for creating, editing and parsing MIME messages and structures";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -20,23 +20,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      qt6.wrapQtAppsHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      qt6.qtdeclarative
-      qt6.qtsvg
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    qt6.qtdeclarative
+    qt6.qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)

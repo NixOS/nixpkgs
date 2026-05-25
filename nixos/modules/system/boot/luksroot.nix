@@ -163,8 +163,7 @@ let
         optionalString (dev.header != null) "--header=${dev.header}"
       }";
       fido2luksCredentials =
-        dev.fido2.credentials
-        ++ optional (dev.fido2.credential != null) dev.fido2.credential;
+        dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
     in
     ''
       # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
@@ -215,7 +214,7 @@ let
 
                       # and try reading it from /dev/console with a timeout
                       IFS= read -t 1 -r passphrase
-                      if [ -n "$passphrase" ]; then
+                      if [ $? = 0 ]; then
                          ${
                            if luks.reusePassphrases then
                              ''
@@ -233,7 +232,7 @@ let
                   fi
               done
               echo -n "Verifying passphrase for ${dev.device}..."
-              echo -n "$passphrase" | ${csopen} --key-file=-
+              echo "$passphrase" | ${csopen}
               if [ $? == 0 ]; then
                   echo " - success"
                   ${
@@ -603,13 +602,24 @@ let
             ++ optional (v.header != null) "header=${v.header}"
             ++ optional (v.keyFileOffset != null) "keyfile-offset=${toString v.keyFileOffset}"
             ++ optional (v.keyFileSize != null) "keyfile-size=${toString v.keyFileSize}"
-            ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${builtins.toString v.keyFileTimeout}s"
+            ++ optional (v.keyFileTimeout != null) "keyfile-timeout=${toString v.keyFileTimeout}s"
             ++ optional (v.tryEmptyPassphrase) "try-empty-password=true";
         in
         "${n} ${v.device} ${if v.keyFile == null then "-" else v.keyFile} ${lib.concatStringsSep "," opts}"
       ) luks.devices
     )
   );
+
+  systemdStage1HardwareKeyAssertionMessage = opt: ''
+    ${opt} is deprecated, and it is unsupported with systemd stage 1. Support will be removed in 26.11 along with scripted stage 1. Hardware keys in systemd stage 1 are supported with systemd-cryptsetup(8). To migrate, enroll a key in a LUKS slot with systemd-cryptenroll(1). Usually, systemd will automatically detect the configuration at runtime, but if necessary, configure the corresponding crypttab(5) options with boot.initrd.luks.devices.<name>.crypttabExtraOpts.
+
+    Note: After migrating to a new LUKS slot, the old LUKS slot used for the scripted stage 1 implementation should be removed, otherwise it could interfere with falling back to a passphrase prompt in the event the hardware key fails.
+
+    See:
+    - https://www.freedesktop.org/software/systemd/man/systemd-cryptsetup.html
+    - https://www.freedesktop.org/software/systemd/man/systemd-cryptenroll.html
+    - https://www.freedesktop.org/software/systemd/man/crypttab.html
+  '';
 
 in
 {
@@ -636,7 +646,6 @@ in
       type = types.listOf types.str;
       default = [
         "aes"
-        "aes_generic"
         "blowfish"
         "twofish"
         "serpent"
@@ -648,6 +657,8 @@ in
         "sha512"
         "af_alg"
         "algif_skcipher"
+        "cryptd"
+        "input_leds" # for capslock LED on most keyboards in case decryption requires password
       ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -998,7 +1009,6 @@ in
                   type = with types; listOf singleLineStr;
                   default = [ ];
                   example = [ "_netdev" ];
-                  visible = false;
                   description = ''
                     Only used with systemd stage 1.
 
@@ -1104,24 +1114,17 @@ in
           -> all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (attrValues luks.devices);
         message = "boot.initrd.luks.devices.<name>.preOpenCommands and postOpenCommands is not supported by systemd stage 1. Please bind a service to cryptsetup.target or cryptsetup-pre.target instead.";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
-        message = "systemd stage 1 does not support GPG smartcards yet.";
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.gpgSupport";
       }
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
-        message = ''
-          systemd stage 1 does not support configuring FIDO2 unlocking through `boot.initrd.luks.fido2Support`.
-          Use systemd-cryptenroll(1) to configure FIDO2 support, and set
-          `boot.initrd.luks.devices.''${DEVICE}.crypttabExtraOpts` as appropriate per crypttab(5)
-          (e.g. `fido2-device=auto`).
-        '';
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.fido2Support";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
-        message = "systemd stage 1 does not support Yubikeys yet.";
+        message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.yubikeySupport";
       }
     ];
 
@@ -1133,17 +1136,14 @@ in
     ];
 
     # Some modules that may be needed for mounting anything ciphered
-    boot.initrd.availableKernelModules =
-      [
-        "dm_mod"
-        "dm_crypt"
-        "cryptd"
-        "input_leds"
-      ]
-      ++ luks.cryptoModules
-      # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
-      # remove once 'modprobe --show-depends xts' shows ecb as a dependency
-      ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
+    boot.initrd.availableKernelModules = [
+      "dm_mod"
+      "dm_crypt"
+    ]
+    ++ luks.cryptoModules
+    # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
+    # remove once 'modprobe --show-depends xts' shows ecb as a dependency
+    ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands =
@@ -1225,14 +1225,13 @@ in
         "cryptsetup.target"
         "remote-cryptsetup.target"
       ];
-      storePaths =
-        [
-          "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
-          "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
-        ]
-        ++ lib.optionals config.boot.initrd.systemd.tpm2.enable [
-          "${config.boot.initrd.systemd.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
-        ];
+      storePaths = [
+        "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
+        "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
+      ]
+      ++ lib.optionals config.boot.initrd.systemd.tpm2.enable [
+        "${config.boot.initrd.systemd.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
+      ];
 
     };
     # We do this because we need the udev rules from the package
@@ -1252,7 +1251,7 @@ in
         devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices;
       in
       mkIf (clevis.enable && systemd.enable) (
-        (mapAttrs' (
+        mapAttrs' (
           name: _:
           nameValuePair "cryptsetup-clevis-${name}" {
             wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
@@ -1265,7 +1264,8 @@ in
             after = [
               "systemd-modules-load.service"
               "tpm2.target"
-            ] ++ optional clevis.useTang "network-online.target";
+            ]
+            ++ optional clevis.useTang "network-online.target";
             script = ''
               mkdir -p /clevis-${name}
               mount -t ramfs none /clevis-${name}
@@ -1283,7 +1283,7 @@ in
               ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
             };
           }
-        ) devicesWithClevis)
+        ) devicesWithClevis
       );
 
     environment.systemPackages = [ pkgs.cryptsetup ];

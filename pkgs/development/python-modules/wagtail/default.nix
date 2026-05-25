@@ -1,7 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # frontend
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
 
   # build-system
   setuptools,
@@ -18,6 +23,7 @@
   djangorestframework,
   draftjs-exporter,
   laces,
+  modelsearch,
   openpyxl,
   permissionedforms,
   pillow,
@@ -29,21 +35,41 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wagtail";
-  version = "6.4.1";
+  version = "7.4.1";
   pyproject = true;
 
-  # The GitHub source requires some assets to be compiled, which in turn
-  # requires fixing the upstream package lock. We need to use the PyPI release
-  # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zsPm1JIKbRePoetvSvgLNw/dVXDtkkuXkQThV/EMoJc=";
+  src = fetchFromGitHub {
+    owner = "wagtail";
+    repo = "wagtail";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Ar8lg340rafaRNgcohEBuloU/dJC+ODTzAMmrPS/PU=";
   };
+
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+    nodejs
+  ];
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-Z2VOMqsNIBybJpfYxAq2dkmS2vwd8Yuhu7MCFyqNxdI=";
+  };
+
+  preBuild = ''
+    # upstream only provides a hook for sdists, not wheels
+    # https://github.com/wagtail/wagtail/blob/v7.3/setup.py#L22
+    npm run build
+  '';
 
   build-system = [
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "django-tasks"
+    "modelsearch"
   ];
 
   dependencies = [
@@ -58,13 +84,15 @@ buildPythonPackage rec {
     djangorestframework
     draftjs-exporter
     laces
+    modelsearch
     openpyxl
     permissionedforms
     pillow
     requests
     telepath
     willow
-  ] ++ willow.optional-dependencies.heif;
+  ]
+  ++ willow.optional-dependencies.heif;
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)
@@ -78,8 +106,8 @@ buildPythonPackage rec {
     description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
-    changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";
+    changelog = "https://github.com/wagtail/wagtail/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

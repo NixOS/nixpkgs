@@ -7,39 +7,51 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wamr";
-  version = "2.2.0";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
-    rev = "WAMR-${finalAttrs.version}";
-    hash = "sha256-Rhn26TRyjkR30+zyosfooOGjhvG+ztYtJVQlRfzWEFo=";
+    tag = "WAMR-${finalAttrs.version}";
+    hash = "sha256-pNudBKnhdR/Ye0m2tVZB/wSfJZYK8+gdCpCp0rDp0o4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  cmakeFlags = [
+    "-DWAMR_BUILD_SIMD=0"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
   ];
 
-  sourceRoot =
+  postPatch =
     let
-      platform =
-        if stdenv.hostPlatform.isLinux then
-          "linux"
-        else if stdenv.hostPlatform.isDarwin then
-          "darwin"
-        else
-          throw "unsupported platform";
+      # Can't use `sourceRoot` because we need the entire
+      # source tree to be writable, as the CMake scripts
+      # write to it.
+      sourceDir =
+        let
+          platform =
+            if stdenv.hostPlatform.isLinux then
+              "linux"
+            else if stdenv.hostPlatform.isDarwin then
+              "darwin"
+            else
+              throw "unsupported platform";
+        in
+        "product-mini/platforms/${platform}";
     in
-    "${finalAttrs.src.name}/product-mini/platforms/${platform}";
+    ''
+      cd ${sourceDir}
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "WebAssembly Micro Runtime";
     homepage = "https://github.com/bytecodealliance/wasm-micro-runtime";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "iwasm";
-    maintainers = with maintainers; [ ereslibre ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ereslibre ];
+    platforms = lib.platforms.unix;
   };
 })

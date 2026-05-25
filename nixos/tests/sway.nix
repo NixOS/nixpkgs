@@ -2,10 +2,7 @@
 {
   name = "sway";
   meta = {
-    maintainers = with lib.maintainers; [
-      primeos
-      synthetica
-    ];
+    maintainers = [ ];
   };
 
   # testScriptWithTypes:49: error: Cannot call function of unknown type
@@ -151,7 +148,7 @@
       machine.send_chars("test-x11\n")
       machine.wait_for_file("/tmp/test-x11-exit-ok")
       print(machine.succeed("cat /tmp/test-x11.out"))
-      machine.copy_from_vm("/tmp/test-x11.out")
+      machine.copy_from_machine("/tmp/test-x11.out")
       machine.screenshot("alacritty_glinfo")
       machine.succeed("pkill alacritty")
 
@@ -163,7 +160,7 @@
       machine.send_chars("test-wayland\n")
       machine.wait_for_file("/tmp/test-wayland-exit-ok")
       print(machine.succeed("cat /tmp/test-wayland.out"))
-      machine.copy_from_vm("/tmp/test-wayland.out")
+      machine.copy_from_machine("/tmp/test-wayland.out")
       machine.screenshot("foot_wayland_info")
       machine.send_key("alt-shift-q")
       machine.wait_until_fails("pgrep foot")
@@ -181,14 +178,18 @@
       machine.send_key("alt-shift-q")
       machine.wait_until_fails("pgrep --exact gpg")
 
-      # Test swaynag:
-      def get_height():
-          return [node['rect']['height'] for node in walk(swaymsg(type="get_tree")) if node['focused']][0]
 
-      before = get_height()
-      machine.send_key("alt-shift-e")
-      retry(lambda _: get_height() < before)
-      machine.screenshot("sway_exit")
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
+        # Test swaynag:
+        # Broken on aarch64-linux, see https://github.com/NixOS/nixpkgs/issues/416217
+        def get_height():
+            return [node['rect']['height'] for node in walk(swaymsg(type="get_tree")) if node['focused']][0]
+
+        before = get_height()
+        machine.send_key("alt-shift-e")
+        retry(lambda _: get_height() < before)
+        machine.screenshot("sway_exit")
+      ''}
 
       swaymsg("exec swaylock")
       machine.wait_until_succeeds("pgrep -xf swaylock")

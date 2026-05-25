@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
             # Increase header size to be able to inject extra RPATHs. Otherwise
             # x86_64-darwin build fails as:
             #    https://cache.nixos.org/log/g5wyq9xqshan6m3kl21bjn1z88hx48rh-stdenv-bootstrap-tools.drv
-            NIX_LDFLAGS = (prevAttrs.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
+            env = prevAttrs.env // {
+              NIX_LDFLAGS =
+                (prevAttrs.env.NIX_LDFLAGS or prevAttrs.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
+            };
           });
 
       # Avoid messing with libkrb5 and libnghttp2.
@@ -128,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Copy coreutils, bash, etc.
       cp ${getBin coreutils_}/bin/* $out/bin
-      (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
+      (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk shuf who whoami shred users && rm -f runcon)
 
       cp -d ${getBin bashNonInteractive}/bin/{ba,}sh $out/bin
       cp -d ${getBin diffutils}/bin/* $out/bin
@@ -230,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
           rpath='@loader_path/..'
           ;;
         *)
-          echo unkown executable $1 >&2
+          echo unknown executable $1 >&2
           exit 1
           ;;
         esac

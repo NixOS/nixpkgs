@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,18 +8,18 @@
   roxctl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "roxctl";
-  version = "4.7.3";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
-    rev = version;
-    sha256 = "sha256-ZN9BkIgVJ4p78zfNPqRCmUCHg0KpaphfQM6HPvnx0pY=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-awu4KWcljQAMm/zHA4bDguwngRIosNjHPJZvBnxXGjE=";
   };
 
-  vendorHash = "sha256-eTxcJnAZUKk6VDQhbjxnsiQWEpM2jA228SAhrCqjbF4=";
+  vendorHash = "sha256-VwtFK5AAPIVF34WQ8pPHTDyMdUs8cAhNX5ytHBkWSug=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,10 +28,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${version}"
+    "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd roxctl \
       --bash <($out/bin/roxctl completion bash) \
       --fish <($out/bin/roxctl completion fish) \
@@ -42,11 +43,11 @@ buildGoModule rec {
     command = "roxctl version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line client of the StackRox Kubernetes Security Platform";
     mainProgram = "roxctl";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://www.stackrox.io";
-    maintainers = with maintainers; [ stehessel ];
+    maintainers = with lib.maintainers; [ stehessel ];
   };
-}
+})

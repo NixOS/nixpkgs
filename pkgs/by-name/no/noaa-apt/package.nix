@@ -12,14 +12,14 @@
   pango,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noaa-apt";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "martinber";
     repo = "noaa-apt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wmjglF2+BFmlTfvqt90nbCxuldN8AEFXj7y9tgTvA2Y=";
   };
 
@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-du44N+G9/nN5YuOpkWXvr1VaSQfjCpZYJ8yDc48ATIU=";
 
   preBuild = ''
@@ -65,7 +64,7 @@ rustPlatform.buildRustPackage rec {
       tmarkus
     ];
     platforms = lib.platforms.all;
-    changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${version}";
+    changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${finalAttrs.version}";
     mainProgram = "noaa-apt";
   };
-}
+})

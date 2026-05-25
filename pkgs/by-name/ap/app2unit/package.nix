@@ -2,28 +2,60 @@
   lib,
   stdenvNoCC,
   dash,
+  xdg-terminal-exec,
+  scdoc,
   fetchFromGitHub,
+  nix-update-script,
+  installShellFiles,
+  withTerminalSupport ? true,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "app2unit";
-  version = "0-unstable-2025-05-09";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
-    rev = "7b9672a2dc16bdfbe7b7b7c27043529ca3bcb6ae";
-    sha256 = "03dnx5v75530fwppfgpjl6xzzmdbk73ymrlix129d9n5sqrz9wgk";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-upYW+aTJ6LCHrI0+IOYnA98uDLKPxu/wCi7uUWe/Geg=";
   };
+
+  passthru.updateScript = nix-update-script { };
+
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+  ];
+
+  buildPhase = ''
+    scdoc < app2unit.1.scd > app2unit.1
+  '';
 
   installPhase = ''
     install -Dt $out/bin app2unit
-    ln -s $out/bin/app2unit $out/bin/app2unit-open
+    installManPage app2unit.1
+
+    for link in \
+      app2unit-open \
+      app2unit-open-scope \
+      app2unit-open-service \
+      app2unit-term \
+      app2unit-term-scope \
+      app2unit-term-service
+    do
+      ln -s $out/bin/app2unit $out/bin/$link
+    done
   '';
 
   dontPatchShebangs = true;
   postFixup = ''
     substituteInPlace $out/bin/app2unit \
       --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
+  ''
+  + lib.optionalString withTerminalSupport ''
+    substituteInPlace $out/bin/app2unit \
+      --replace-fail 'A2U__TERMINAL_HANDLER=xdg-terminal-exec' \
+                     'A2U__TERMINAL_HANDLER=${lib.getExe xdg-terminal-exec}'
   '';
 
   meta = {
@@ -34,4 +66,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ fazzi ];
     platforms = lib.platforms.linux;
   };
-}
+})

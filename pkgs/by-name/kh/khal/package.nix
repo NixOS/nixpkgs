@@ -5,18 +5,19 @@
   glibcLocales,
   installShellFiles,
   python3Packages,
+  sphinxHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "khal";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
-    tag = "v${version}";
-    hash = "sha256-pbBdScyYQMdT2NjCk2dKPkR75Zcizzco2IkXpHkgPR8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ltb2c9p/kD0PtYnLxRIm/SNlg+W+Vca6JSA7BahZ9uQ=";
   };
 
   build-system = with python3Packages; [
@@ -27,6 +28,9 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
+    sphinxHook
+    python3Packages.sphinx-rtd-theme
+    python3Packages.sphinxfeed-lsaffre
   ];
 
   dependencies = with python3Packages; [
@@ -54,24 +58,22 @@ python3Packages.buildPythonApplication rec {
     vdirsyncer
   ];
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
+
   postInstall = ''
     # shell completions
     installShellCompletion --cmd khal \
       --bash <(_KHAL_COMPLETE=bash_source $out/bin/khal) \
       --zsh <(_KHAL_COMPLETE=zsh_source $out/bin/khal) \
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
-
-    # man page
-    PATH="${
-      python3Packages.python.withPackages (
-        ps: with ps; [
-          sphinx
-          sphinxcontrib-newsfeed
-        ]
-      )
-    }/bin:$PATH" \
-      make -C doc man
-    installManPage doc/build/man/khal.1
 
     # .desktop file
     install -Dm755 misc/khal.desktop -t $out/share/applications
@@ -91,8 +93,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "CLI calendar application";
     homepage = "https://lostpackets.de/khal/";
-    changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
+    changelog = "https://github.com/pimutils/khal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ antonmosich ];
   };
-}
+})

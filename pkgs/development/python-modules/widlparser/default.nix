@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # build inputs
   setuptools,
   setuptools-scm,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "widlparser";
-  version = "1.1.5";
+  version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "plinss";
     repo = "widlparser";
-    rev = "v${version}";
-    hash = "sha256-G5N29K0/ByfKwP1XfxZH9u/5x361JD/8qAD6eZaySnU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vnXel2LT8dYjTypJf6TTB8btkdGC0ljeLJuY7WUE55I=";
   };
 
   build-system = [
@@ -32,7 +29,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "widlparser" ];
 
-  # https://github.com/plinss/widlparser/blob/v1.1.5/.github/workflows/test.yml
+  # https://github.com/plinss/widlparser/blob/v1.5.0/.github/workflows/test.yml
   checkPhase = ''
     runHook preCheck
 
@@ -42,10 +39,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stand-alone WebIDL Parser in Python";
     homepage = "https://github.com/plinss/widlparser";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

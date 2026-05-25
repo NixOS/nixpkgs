@@ -1,18 +1,25 @@
 let
-  pkgs = import ../../../. { };
+  # Use CI-pinned (Hydra-cached) packages and formatter,
+  # rather than the local nixpkgs checkout.
+  inherit (import ../../../ci { }) pkgs fmt;
+  inherit (pkgs) mkShellNoCC sbcl;
 in
-pkgs.mkShell {
-  nativeBuildInputs = [
-    (pkgs.sbcl.withPackages (
-      ps: with ps; [
-        alexandria
-        str
-        dexador
-        cl-ppcre
-        sqlite
-        arrow-macros
-        jzon
-      ]
+mkShellNoCC {
+  packages = [
+    fmt.pkg
+    (sbcl.withPackages (
+      ps:
+      builtins.attrValues {
+        inherit (ps)
+          alexandria
+          str
+          dexador
+          cl-ppcre
+          sqlite
+          arrow-macros
+          jzon
+          ;
+      }
     ))
   ];
 }

@@ -8,10 +8,17 @@
   src,
 }:
 
+let
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/tilt-dev/tilt/blob/master/web/package.json#L94
+    ./yarn-4.14-support.patch
+  ];
+in
 stdenvNoCC.mkDerivation {
   pname = "tilt-assets";
   src = "${src}/web";
-  inherit version;
+  inherit version patches;
 
   nativeBuildInputs = [
     nodejs
@@ -21,6 +28,8 @@ stdenvNoCC.mkDerivation {
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "tilt-assets-deps";
     src = "${src}/web";
+
+    inherit patches;
 
     nativeBuildInputs = [ yarn-berry ];
 
@@ -68,7 +77,7 @@ stdenvNoCC.mkDerivation {
     dontInstall = true;
 
     outputHashAlgo = "sha256";
-    outputHash = "sha256-1poTBB9cm0EHeIvXhan6/kaxr22LXvhHD4Y+JBocioE=";
+    outputHash = "sha256-3P42xJ1tBVRpe1hNDy4ax9bUmiaPnSZolTGmsKpzYUA=";
     outputHashMode = "recursive";
   };
 
@@ -98,11 +107,11 @@ stdenvNoCC.mkDerivation {
     cp -r build/. $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assets needed for Tilt";
     homepage = "https://tilt.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anton-dessiatov ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

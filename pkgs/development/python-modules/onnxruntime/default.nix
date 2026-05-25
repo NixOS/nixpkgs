@@ -2,14 +2,17 @@
   lib,
   stdenv,
   buildPythonPackage,
-  autoPatchelfHook,
   onnxruntime,
+  autoPatchelfHook,
+
+  # buildInputs
+  onednn,
+  re2,
+
+  # dependencies
   coloredlogs,
   numpy,
   packaging,
-  oneDNN,
-  re2,
-
 }:
 
 # onnxruntime requires an older protobuf.
@@ -35,6 +38,10 @@ buildPythonPackage {
     chmod +w dist
   '';
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_LDFLAGS = "-z,noexecstack";
+  };
+
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
@@ -45,39 +52,48 @@ buildPythonPackage {
   ];
 
   # Libraries are not linked correctly.
-  buildInputs =
+  buildInputs = [
+    onednn
+    re2
+    onnxruntime.protobuf
+
+    # https://github.com/NixOS/nixpkgs/pull/357656 patches the onnx lib to ${pkgs.onnxruntime}/lib
+    # but these files are copied into this package too. If the original non-python onnxruntime
+    # package is GC-ed, cuda support in this python package will break.
+    # Two options, rebuild onnxruntime twice with the different paths hard-coded, or just hold a runtime
+    # dependency between the two. Option 2, because onnxruntime takes forever to build with cuda support.
+    onnxruntime
+  ]
+  ++ lib.optionals onnxruntime.passthru.cudaSupport (
+    with onnxruntime.passthru.cudaPackages;
     [
-      oneDNN
-      re2
-      onnxruntime.protobuf
-
-      # https://github.com/NixOS/nixpkgs/pull/357656 patches the onnx lib to ${pkgs.onnxruntime}/lib
-      # but these files are copied into this package too. If the original non-python onnxruntime
-      # package is GC-ed, cuda support in this python package will break.
-      # Two options, rebuild onnxruntime twice with the different paths hard-coded, or just hold a runtime
-      # dependency between the two. Option 2, because onnxruntime takes forever to build with cuda support.
-      onnxruntime
+      libcublas # libcublasLt.so.XX libcublas.so.XX
+      libcurand # libcurand.so.XX
+      libcufft # libcufft.so.XX
+      cudnn # libcudnn.soXX
+      cuda_cudart # libcudart.so.XX
     ]
-    ++ lib.optionals onnxruntime.passthru.cudaSupport (
-      with onnxruntime.passthru.cudaPackages;
-      [
-        libcublas # libcublasLt.so.XX libcublas.so.XX
-        libcurand # libcurand.so.XX
-        libcufft # libcufft.so.XX
-        cudnn # libcudnn.soXX
-        cuda_cudart # libcudart.so.XX
-        nccl # libnccl.so.XX
-      ]
-    );
+    ++ lib.optionals onnxruntime.passthru.ncclSupport [
+      nccl # libnccl.so.XX
+    ]
+  );
 
-  propagatedBuildInputs = [
+  dependencies = [
     coloredlogs
-    # flatbuffers
     numpy
     packaging
-    # protobuf
-    # sympy
   ];
+
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # While this problem has existed for a while, it started occuring at import time since the update
+  # of onnxruntime to 1.23.1 (https://github.com/NixOS/nixpkgs/pull/450587)
+  pythonImportsCheck =
+    lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64))
+      [
+        "onnxruntime"
+      ];
 
   meta = onnxruntime.meta;
 }

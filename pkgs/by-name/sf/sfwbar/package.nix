@@ -11,23 +11,23 @@
   libpulseaudio,
   libmpdclient,
   libxkbcommon,
+  pipewire,
   alsa-lib,
   makeWrapper,
   docutils,
   wayland-scanner,
+  wrapGAppsHook3,
 }:
-let
-  version = "1.0_beta16";
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfwbar";
-  inherit version;
+  version = "1.0_beta17";
 
   src = fetchFromGitHub {
     owner = "LBCrion";
     repo = "sfwbar";
-    rev = "v${version}";
-    hash = "sha256-jMEbw3Xla2cod/oKFQ4bD3sTHi7DZ0deG0H0Yt0Y7ck=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xenXcGo5kdntOsSOlXaYA9WZ9Ed0hncGlb5Jgv6rbio=";
   };
 
   buildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation {
     libpulseaudio
     libmpdclient
     libxkbcommon
+    pipewire
     alsa-lib
     docutils # for rst2man
   ];
@@ -47,17 +48,13 @@ stdenv.mkDerivation {
     pkg-config
     makeWrapper
     wayland-scanner
+    wrapGAppsHook3
   ];
-
-  postFixup = ''
-    wrapProgram $out/bin/sfwbar \
-      --suffix XDG_DATA_DIRS : $out/share
-  '';
 
   meta = {
     homepage = "https://github.com/LBCrion/sfwbar";
     description = "Flexible taskbar application for wayland compositors, designed with a stacking layout in mind";
-    changelog = "https://github.com/LBCrion/sfwbar/releases/tag/v${version}";
+    changelog = "https://github.com/LBCrion/sfwbar/releases/tag/v${finalAttrs.version}";
     mainProgram = "sfwbar";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -66,4 +63,4 @@ stdenv.mkDerivation {
     ];
     license = lib.licenses.gpl3Only;
   };
-}
+})

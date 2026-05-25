@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview4
   ];
 
+  mesonFlags = [
+    # Work around https://gitlab.gnome.org/GNOME/gupnp-tools/-/issues/29
+    "-Dc_args=-Wno-error=deprecated-declarations"
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gupnp-tools";
@@ -49,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Set of utilities and demos to work with UPnP";
     homepage = "https://gitlab.gnome.org/GNOME/gupnp-tools";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

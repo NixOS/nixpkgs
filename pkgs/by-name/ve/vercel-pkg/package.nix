@@ -9,19 +9,19 @@
   yarn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pkg";
   version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "pkg";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-h3rHR3JE9hVcd3oiE7VL2daYXGTQo7NcOHGC6pmE/xs=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-KesP3X7LwZ7KSIxcCPXdn/sWcX9TJlwT9z/SdotS2ZQ=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ cmcdragonkai ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lineedit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Readline library based on prompt_toolkit which supports multiple modes";
     homepage = "https://github.com/randy3k/lineedit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ savyajha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ savyajha ];
   };
 }

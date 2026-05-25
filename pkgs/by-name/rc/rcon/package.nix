@@ -10,14 +10,14 @@
   pcre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rcon";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "n0la";
     repo = "rcon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
   };
 
@@ -33,12 +33,19 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     homepage = "https://github.com/n0la/rcon";
     description = "Source RCON client for command line";
-    maintainers = with maintainers; [ f4814n ];
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ f4814n ];
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.bsd2;
     mainProgram = "rcon";
   };
-}
+})

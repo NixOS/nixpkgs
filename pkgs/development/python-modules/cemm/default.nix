@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "cemm";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -33,6 +30,12 @@ buildPythonPackage rec {
       name = "remove-setuptools-dependency.patch";
       url = "https://github.com/klaasnicolaas/python-cemm/commit/1e373dac078f18563264e6733baf6a93962cac4b.patch";
       hash = "sha256-DVNn4BZwi8yNpKFmzt7YSYhzzB4vaAyrd/My8TtYzj0=";
+    })
+    # https://github.com/klaasnicolaas/python-cemm/pull/568
+    (fetchpatch {
+      name = "replace-async_timeout.patch";
+      url = "https://github.com/klaasnicolaas/python-cemm/commit/a818e7ccf196cd5cd4c3e6bf503fb932993281ca.patch";
+      hash = "sha256-MwPxK+TRZVvf0sS6HS3+CRRY7dDr1qwCCJ+arQ26gWU=";
     })
   ];
 
@@ -59,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cemm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with CEMM devices";
     homepage = "https://github.com/klaasnicolaas/python-cemm";
-    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

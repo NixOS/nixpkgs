@@ -1,47 +1,35 @@
 {
-  lib,
   fetchFromGitHub,
-  stdenv,
-  rustPlatform,
-  openssl,
-  pkg-config,
-  testers,
-  tmux-sessionizer,
   installShellFiles,
+  lib,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  versionCheckHook,
 }:
-let
-
-  name = "tmux-sessionizer";
-  version = "0.4.5";
-
-in
-rustPlatform.buildRustPackage {
-  pname = name;
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "tmux-sessionizer";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "jrmoulton";
-    repo = name;
-    rev = "v${version}";
-    hash = "sha256-uoSm9oWZSiqwsg7dVVMay9COL5MEK3a5Pd+D66RzzPM=";
+    repo = "tmux-sessionizer";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tJ8aKajSWc62BZ8hb3u+OQtlu04z8Ala5nAK5H4Byp4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fd0IEORqnqxKN9zisXTT0G8CwRNVsGd3HZmCVY5DKsM=";
+  cargoHash = "sha256-AJqlzLr6MDFfPssSFMxslxFFuPVxoQGcuG7sZeu+8pg=";
 
-  passthru.tests.version = testers.testVersion {
-    package = tmux-sessionizer;
-    version = version;
-  };
-
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  doInstallCheck = true;
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
-  buildInputs = [ openssl ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tms \
@@ -50,14 +38,14 @@ rustPlatform.buildRustPackage {
       --zsh <(COMPLETE=zsh $out/bin/tms)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fastest way to manage projects as tmux sessions";
     homepage = "https://github.com/jrmoulton/tmux-sessionizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       vinnymeller
       mrcjkb
     ];
     mainProgram = "tms";
   };
-}
+})

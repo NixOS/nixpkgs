@@ -1,27 +1,28 @@
 {
   callPackage,
-  kernel ? null,
-  stdenv,
   lib,
   nixosTests,
+  stdenv,
+  fetchpatch,
   ...
 }@args:
 
-let
-  stdenv' = if kernel == null then stdenv else kernel.stdenv;
-in
 callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_2_3";
-  # check the release notes for compatible kernels
-  kernelCompatible = kernel: kernel.kernelOlder "6.15";
+
+  kernelMinSupportedMajorMinor = "4.18";
+  kernelMaxSupportedMajorMinor = "7.0";
 
   # this package should point to the latest release.
-  version = "2.3.2";
+  version = "2.3.7";
 
   tests = {
-    inherit (nixosTests.zfs) installer series_2_3;
+    inherit (nixosTests.zfs) series_2_3;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
+    inherit (nixosTests.zfs) installer;
   };
 
   maintainers = with lib.maintainers; [
@@ -29,5 +30,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-+DqpIgHCVi0fDOqvKwaGXIiiXw8xEnlv2tgRwgLX9G8=";
+  hash = "sha256-67Yo5bAJP3dXC94xybrC4xhwz7pGtrp0MUT9P6OInog=";
 }

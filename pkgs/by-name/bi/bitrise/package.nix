@@ -4,23 +4,28 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bitrise";
-  version = "2.31.2";
+  version = "2.40.0";
 
   src = fetchFromGitHub {
     owner = "bitrise-io";
     repo = "bitrise";
-    rev = "v${version}";
-    hash = "sha256-WMvk5VEXc0cEWVdop50mSlAJKP8RhRijCia0fgBG79M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-jY1aJAk3O7jAfQAYPpQIgUD+CMxcBAggE0bvWeAEgDk=";
   };
 
   # many tests rely on writable $HOME/.bitrise and require network access
   doCheck = false;
 
+  # resolves error: main module (github.com/bitrise-io/bitrise/v2) does not contain package github.com/bitrise-io/bitrise/v2/integrationtests/config
+  excludedPackages = [
+    "./integrationtests"
+  ];
+
   vendorHash = null;
   ldflags = [
-    "-X github.com/bitrise-io/bitrise/version.Commit=${src.rev}"
+    "-X github.com/bitrise-io/bitrise/version.Commit=${finalAttrs.src.rev}"
     "-X github.com/bitrise-io/bitrise/version.BuildNumber=0"
   ];
   env.CGO_ENABLED = 0;
@@ -36,4 +41,4 @@ buildGoModule rec {
     mainProgram = "bitrise";
     maintainers = with lib.maintainers; [ ofalvai ];
   };
-}
+})

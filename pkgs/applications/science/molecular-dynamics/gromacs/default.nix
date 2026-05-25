@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   cmake,
   hwloc,
   fftw,
@@ -20,7 +21,7 @@
   cpuAcceleration ? null,
 }:
 
-# CUDA is only implemented for single precission
+# CUDA is only implemented for single precision
 assert enableCuda -> singlePrec;
 
 let
@@ -40,6 +41,8 @@ let
       "SSE4.1"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       "SSE4.1"
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then
+      "ARM_NEON_ASIMD"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "ARM_NEON_ASIMD"
     else
@@ -53,8 +56,8 @@ let
       }
     else
       {
-        version = "2025.2";
-        hash = "sha256-DfCfnUWpnvAOZrm6qUk6J+kGgTdjo7bHZyIXxmtD6hE=";
+        version = "2026.1";
+        hash = "sha256-2VoxP1bbfgXuOiHlD1gv3uUXbC9guQC6skYf2Vxegb4=";
       };
 
 in
@@ -67,7 +70,17 @@ stdenv.mkDerivation rec {
     inherit (source) hash;
   };
 
-  patches = [ (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch) ];
+  patches = [
+    # Fix pkg-config paths for the version-specific gromacs variant.
+    (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch)
+  ]
+  ++ lib.optional enablePlumed (
+    # Backport gcc 15 cstdint include fix.
+    fetchpatch2 {
+      url = "https://gitlab.com/gromacs/gromacs/-/commit/e0180bc37f3111d7dcaffca3854c088ed910c3b4.diff";
+      hash = "sha256-TvTzfb/RETAzFpYfFFr6/L5GV1Pile16gVJhNigwAB4=";
+    }
+  );
 
   postPatch = lib.optionalString enablePlumed ''
     plumed patch -p -e gromacs-${source.version}
@@ -79,75 +92,74 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optional enablePlumed plumed
-    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optional enablePlumed plumed
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
-  buildInputs =
-    [
-      fftw
-      perl
-      hwloc
-      blas
-      lapack
-    ]
-    ++ lib.optional enableMpi mpi
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_cccl
-      cudaPackages.cuda_cudart
-      cudaPackages.libcufft
-      cudaPackages.cuda_profiler_api
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  buildInputs = [
+    fftw
+    perl
+    hwloc
+    blas
+    lapack
+  ]
+  ++ lib.optional enableMpi mpi
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cccl
+    cudaPackages.cuda_cudart
+    cudaPackages.libcufft
+    cudaPackages.cuda_profiler_api
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "GMX_HWLOC" true)
-      "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
-      "-DGMX_OPENMP:BOOL=TRUE"
-      "-DBUILD_SHARED_LIBS=ON"
-    ]
-    ++ (
-      if singlePrec then
-        [
-          "-DGMX_DOUBLE=OFF"
-        ]
-      else
-        [
-          "-DGMX_DOUBLE=ON"
-          "-DGMX_DEFAULT_SUFFIX=OFF"
-        ]
-    )
-    ++ (
-      if enableMpi then
-        [
-          "-DGMX_MPI:BOOL=TRUE"
-          "-DGMX_THREAD_MPI:BOOL=FALSE"
-        ]
-      else
-        [
-          "-DGMX_MPI:BOOL=FALSE"
-        ]
-    )
-    ++ lib.optionals enableCuda [
-      "-DGMX_GPU=CUDA"
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
+  cmakeFlags = [
+    (lib.cmakeBool "GMX_HWLOC" true)
+    "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
+    "-DGMX_OPENMP:BOOL=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
+  ]
+  ++ (
+    if singlePrec then
+      [
+        "-DGMX_DOUBLE=OFF"
+      ]
+    else
+      [
+        "-DGMX_DOUBLE=ON"
+        "-DGMX_DEFAULT_SUFFIX=OFF"
+      ]
+  )
+  ++ (
+    if enableMpi then
+      [
+        "-DGMX_MPI:BOOL=TRUE"
+        "-DGMX_THREAD_MPI:BOOL=FALSE"
+      ]
+    else
+      [
+        "-DGMX_MPI:BOOL=FALSE"
+      ]
+  )
+  ++ lib.optionals enableCuda [
+    "-DGMX_GPU=CUDA"
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
 
-      # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
-      (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
-    ];
+    # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
+    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
+  ];
 
   postInstall = ''
     moveToOutput share/cmake $dev
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gromacs.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -168,8 +180,8 @@ stdenv.mkDerivation rec {
 
       See: https://www.gromacs.org/about.html for details.
     '';
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

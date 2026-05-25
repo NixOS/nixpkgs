@@ -8,11 +8,11 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.115.1";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-JLX1EbtrvkQPLGXlvn2pv1p1nT2mJ/yng4VumxV2z6E=";
+    hash = "sha256-diyjhQCA+rF9E8QdTbwJqUKE0N6wdlcN9Oamr81LsOc=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -37,11 +37,11 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "App for Ledger hardware wallets";
     homepage = "https://www.ledger.com/ledger-live/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       andresilva
       thedavidmeister
       nyanloutre
@@ -50,6 +50,6 @@ appimageTools.wrapType2 rec {
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ledger-live-desktop";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

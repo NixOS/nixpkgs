@@ -8,13 +8,13 @@
   protobufc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libivykis";
 
   version = "0.43.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libivykis/${version}/ivykis-${version}.tar.gz";
+    url = "mirror://sourceforge/libivykis/${finalAttrs.version}/ivykis-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-k+PpsjdpVDfNY9SqSKjZ39izm8KKGSpXcNETxP6Qme8=";
   };
 
@@ -27,14 +27,20 @@ stdenv.mkDerivation rec {
     protobufc
   ];
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
+  meta = {
     homepage = "https://libivykis.sourceforge.net/";
     description = ''
       A thin wrapper over various OS'es implementation of I/O readiness
       notification facilities
     '';
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

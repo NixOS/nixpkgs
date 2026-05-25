@@ -3,11 +3,11 @@
   lib,
   fetchurl,
   zlib,
-  libXext,
-  libX11,
-  libXrender,
-  libXtst,
-  libXi,
+  libxext,
+  libx11,
+  libxrender,
+  libxtst,
+  libxi,
   freetype,
   alsa-lib,
   jdk21,
@@ -62,14 +62,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "olvid";
-  version = "2.4.2";
+  version = "2.7.0";
 
   dontUnpack = true;
   dontWrapGApps = true;
 
   src = fetchurl {
     url = "https://static.olvid.io/linux/${repo}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eL6XLdEwb3txgN7/YZv1vQGI4pznZb/CrjYY+QZlr5I=";
+    hash = "sha256-5qpsi31Z2aDIlEZ/lhsj8VjxSwfVvAOiwPbSWcRdby0=";
   };
 
   nativeBuildInputs = [
@@ -80,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     zlib
-    libXext
-    libX11
-    libXrender
-    libXtst
-    libXi
+    libxext
+    libx11
+    libxrender
+    libxtst
+    libxi
     freetype
     alsa-lib
   ];
@@ -106,12 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure french messenger";
     homepage = "https://www.olvid.io";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "olvid";
-    maintainers = with maintainers; [ rookeur ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ rookeur ];
+    platforms = lib.platforms.linux;
   };
 })

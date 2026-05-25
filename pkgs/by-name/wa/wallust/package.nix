@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   nix-update-script,
   imagemagick,
@@ -9,18 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wallust";
-  version = "3.3.0";
+  version = "3.5.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "explosion-mental";
     repo = "wallust";
     rev = finalAttrs.version;
-    hash = "sha256-n3FXPlm8nructXh+Wc7BgJvxas6OFHEPbTe2QWjEpsg=";
+    hash = "sha256-ZgkeM9gMw9TB5NR+xyxBepKHO16bLVVFJN4IY39gllg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LIHSnRPrx4gHZkpKEEZ1Um609i3vv0JGXLpbiSD08P4=";
+  cargoHash = "sha256-XrIi+8p2OZ7O6MTgqKbgN/9gLUbvB7uN9Yr2X1BYHIU=";
 
   nativeBuildInputs = [
     makeWrapper

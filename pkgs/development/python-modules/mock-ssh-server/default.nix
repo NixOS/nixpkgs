@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   paramiko,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "mock-ssh-server";
   version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carletes";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mockssh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python mock SSH server for testing purposes";
     homepage = "https://github.com/carletes/mock-ssh-server";
     changelog = "https://github.com/carletes/mock-ssh-server/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

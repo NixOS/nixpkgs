@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "cherrypy-cors";
   version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "CORS support for CherryPy";
     homepage = "https://github.com/cherrypy/cherrypy-cors";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpts ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpts ];
   };
 }

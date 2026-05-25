@@ -4,18 +4,18 @@
   buildGoModule,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hysteria";
-  version = "2.6.2";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = "hysteria";
-    rev = "app/v${version}";
-    hash = "sha256-r8A1kY5zVIYLH4BmTF8BF135K5zQNBN0cvQpWI9SR2I=";
+    rev = "app/v${finalAttrs.version}";
+    hash = "sha256-pWiEY1H9iX5aX2nR/K8fNKeAbzLOCZhEe5KLk4arot4=";
   };
 
-  vendorHash = "sha256-TWGHOn64QvIiH5gr+il98IdO7cheAjQs/VFVwm2jKWU=";
+  vendorHash = "sha256-IFC/LMI28cGfUTtgTYf045OAEaMdPgd1bzhdSngQlrA=";
   proxyVendor = true;
 
   ldflags =
@@ -25,7 +25,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${cmd}.appVersion=${version}"
+      "-X ${cmd}.appVersion=${finalAttrs.version}"
       "-X ${cmd}.appType=release"
     ];
 
@@ -38,12 +38,12 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Feature-packed proxy & relay utility optimized for lossy, unstable connections";
     homepage = "https://github.com/apernet/hysteria";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "hysteria";
   };
-}
+})

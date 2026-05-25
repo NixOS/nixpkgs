@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-DxTZaq2SlEmy9k7iAdjctpPkk+2rIaF+xEcfXj/ERWw=";
   };
 
+  postPatch = ''
+    rm config.h.in
+  '';
+
   meta = {
     description = "Islamic command-line tools for prayer times and hijri dates";
     longDescription = ''

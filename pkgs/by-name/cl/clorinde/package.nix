@@ -8,24 +8,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clorinde";
-  version = "0.16.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "halcyonnouveau";
     repo = "clorinde";
     tag = "clorinde-v${finalAttrs.version}";
-    hash = "sha256-ze/PEML1buh3HlVgz6ifMPWfZnr6eT3VpIXf7jR68jw=";
+    hash = "sha256-eqLY3iOunTdTZn7lfM8lLYk2e6EI1jW81BnRg/NaGuY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-dp5m/PLVG8xUM6LCq48NKK0P8di44keB/YZ9ocfL0Bg=";
+  cargoHash = "sha256-OacfUdCtRyewr8OZFBh6NphccDwQ6diWA5JqPhtMi54=";
 
   cargoBuildFlags = [ "--package=clorinde" ];
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {

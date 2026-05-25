@@ -2,13 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
   gettext,
   itstool,
-  python3,
   wrapGAppsHook4,
   cairo,
   gdk-pixbuf,
@@ -26,23 +24,14 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simple-scan";
-  version = "46.0";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${lib.versions.major version}/simple-scan-${version}.tar.xz";
-    hash = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
+    url = "mirror://gnome/sources/simple-scan/${lib.versions.major finalAttrs.version}/simple-scan-${finalAttrs.version}.tar.xz";
+    hash = "sha256-zDK1Ya4icYLTGpRGZjLjEXI3VuOskFOMPH4qLJqqSgk=";
   };
-
-  patches = [
-    # simple-scan: Use RDNN app ID
-    # https://gitlab.gnome.org/GNOME/simple-scan/-/issues/390
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/simple-scan/-/commit/c09a6def153e52494072a36233c7e7b3307b67bf.patch";
-      hash = "sha256-deyssrsVwPAfT5ru6c0LFwR2pEFnZ0v8wMqoi96tw8s=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -50,7 +39,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    python3
     wrapGAppsHook4
     libxml2
     gobject-introspection # For setup hook
@@ -69,10 +57,6 @@ stdenv.mkDerivation rec {
     packagekit
     sane-backends
   ];
-
-  postPatch = ''
-    patchShebangs data/meson_compile_gschema.py
-  '';
 
   doCheck = true;
 
@@ -94,9 +78,9 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
-    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

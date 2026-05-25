@@ -92,6 +92,18 @@ in
                   "127.0.0.1:''${config.services.omnom.port}"
                 '';
               };
+              # NOTE: this can't be empty, because it will be overwritten by
+              # Omnom's internal default config.
+              base_url = lib.mkOption {
+                type = lib.types.str;
+                internal = true;
+                default = "http://127.0.0.1:${toString cfg.port}/";
+                description = "Full server URL.";
+                example = "https://local.omnom/xy/";
+                defaultText = lib.literalExpression ''
+                  "http://''${config.services.omnom.settings.server.address}/"
+                '';
+              };
               secure_cookie = lib.mkOption {
                 type = lib.types.bool;
                 default = true;
@@ -103,14 +115,6 @@ in
                 type = lib.types.str;
                 default = "fs";
                 description = "Storage type.";
-              };
-              root = lib.mkOption {
-                type = lib.types.path;
-                default = "${cfg.dataDir}/static/data";
-                defaultText = lib.literalExpression ''
-                  "''${config.services.omnom.dataDir}/static/data"
-                '';
-                description = "Where the snapshots are saved.";
               };
             };
             smtp = {
@@ -142,6 +146,24 @@ in
                 description = "Connection timeout duration in seconds.";
               };
             };
+            activitypub = {
+              pubkey = lib.mkOption {
+                type = lib.types.path;
+                default = "${cfg.dataDir}/public.pem";
+                defaultText = lib.literalExpression ''
+                  "''${config.services.omnom.dataDir}/public.pem"
+                '';
+                description = "ActivityPub public key. Will be generated, by default.";
+              };
+              privkey = lib.mkOption {
+                type = lib.types.path;
+                default = "${cfg.dataDir}/private.pem";
+                defaultText = lib.literalExpression ''
+                  "''${config.services.omnom.dataDir}/private.pem"
+                '';
+                description = "ActivityPub private key. Will be generated, by default.";
+              };
+            };
           };
         };
         default = { };
@@ -150,21 +172,18 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.omnom = {
+      settings.app = {
+        static_dir = "${cfg.dataDir}/static";
+        template_dir = "${cfg.package}/share/templates";
+      };
+    };
+
     assertions = [
       {
         assertion = !lib.hasAttr "password" cfg.settings.smtp;
         message = ''
           `services.omnom.settings.smtp.password` must be defined in `services.omnom.passwordFile`.
-        '';
-      }
-      {
-        assertion = !(cfg.settings.storage.root != "${cfg.dataDir}/static/data");
-        message = ''
-          For Omnom to access the snapshots, it needs the storage root
-          directory to be inside the service's working directory.
-
-          As such, `services.omnom.settings.storage.root` must be the same as
-          `''${services.omnom.dataDir}/static/data`.
         '';
       }
     ];
@@ -224,10 +243,10 @@ in
       in
       {
         "${cfg.dataDir}"."d" = settings;
-        "${cfg.dataDir}/templates"."L+" = settings // {
-          argument = "${cfg.package}/share/templates";
+        "${cfg.settings.app.static_dir}"."C" = settings // {
+          argument = "${cfg.package}/share/static";
         };
-        "${cfg.settings.storage.root}"."d" = settings;
+        "${cfg.settings.app.static_dir}/data"."d" = settings;
       };
 
     networking.firewall = lib.mkIf cfg.openFirewall {

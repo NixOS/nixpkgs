@@ -9,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-youtube";
-  version = "1.4.1";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
   nativeBuildInputs = [ flit-core ];
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "sphinx-contrib";
     repo = "youtube";
     tag = "v${version}";
-    hash = "sha256-XuOfZ77tg9akmgTuMQN20OhgkFbn/6YzT46vpTsXxC8=";
+    hash = "sha256-vzF1SC4fUIeR0OYesOq60eWjlX+N+YYA/h7mNfxWEtk=";
   };
 
   propagatedBuildInputs = [
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Youtube extension for Sphinx";
     homepage = "https://github.com/sphinx-contrib/youtube";
-    maintainers = with maintainers; [ gador ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ gador ];
+    license = lib.licenses.bsd3;
   };
 }

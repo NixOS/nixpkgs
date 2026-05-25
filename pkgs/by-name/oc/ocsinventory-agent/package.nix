@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   makeWrapper,
-  shortenPerlShebang,
   coreutils,
   dmidecode,
   findutils,
@@ -43,7 +42,7 @@ perlPackages.buildPerlPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs =
     with perlPackages;
@@ -78,27 +77,23 @@ perlPackages.buildPerlPackage rec {
 
   postInstall =
     let
-      runtimeDependencies =
-        [
-          coreutils # uname, cut, df, stat, uptime
-          findutils # find
-          inetutils # ifconfig
-          ipmitool # ipmitool
-          nmap # nmap
-          pciutils # lspci
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          dmidecode # dmidecode
-          iproute2 # ip
-          lvm2 # pvs
-          usbutils # lsusb
-          util-linux # last, lsblk, mount
-        ];
+      runtimeDependencies = [
+        coreutils # uname, cut, df, stat, uptime
+        findutils # find
+        inetutils # ifconfig
+        ipmitool # ipmitool
+        nmap # nmap
+        pciutils # lspci
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        dmidecode # dmidecode
+        iproute2 # ip
+        lvm2 # pvs
+        usbutils # lsusb
+        util-linux # last, lsblk, mount
+      ];
     in
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/ocsinventory-agent
     ''
-    + ''
       wrapProgram $out/bin/ocsinventory-agent --prefix PATH : ${lib.makeBinPath runtimeDependencies}
     '';
 

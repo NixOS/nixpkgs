@@ -3,55 +3,77 @@
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
+  makeDesktopItem,
+
+  copyDesktopItems,
+  cctools,
+  makeWrapper,
+  nodejs-slim,
   yarnConfigHook,
   yarnBuildHook,
-  nodejs,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
   wrapGAppsHook3,
-  electron,
+  xcbuild,
+
+  electron_41,
+
+  nix-update-script,
 }:
 
+let
+  # don't use latest electron to avoid going over the supported abi numbers
+  electron = electron_41;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.7.4";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
-    owner = "troyeguo";
+    owner = "koodo-reader";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rLW5FS8xM7Z49AaLq0KzBCoRgAVxwTDCHQFdIaEyygA=";
+    hash = "sha256-GWhofLT5p8Li0aErJlUQ6E5xSkK4CnnM7UwGDJQBq9I=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-58mxYt2wD6SGzhvo9c44CPmdX+/tLnbJCMPafo4txbY=";
+  patches = [
+    ./bump-abi-compat.patch
+  ];
+
+  yarnOfflineCache = fetchYarnDeps {
+    inherit (finalAttrs) src patches;
+    hash = "sha256-HRWp/lXXPSw2OdvBaEX0W3hnxL9NvIjIk62Dj+rKm1g=";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      yarnConfigHook
-      yarnBuildHook
-      nodejs
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      copyDesktopItems
-      wrapGAppsHook3
-    ];
-
-  dontWrapGApps = true;
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs-slim
+    nodejs-slim.npm
+    (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
+    yarnConfigHook
+    yarnBuildHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    copyDesktopItems
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  # disable code signing on Darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
   postBuild = ''
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
+
+    # we need to build cpu-features with the non-electron headers first
+    export npm_config_nodedir=${nodejs-slim}
+    npm rebuild --verbose cpu-features
+
+    export npm_config_nodedir=${electron.headers}
+    # Explicitly set identity to null to avoid signing on darwin
     yarn --offline run electron-builder --dir \
+      -c.mac.identity=null \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
   '';
@@ -75,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  dontWrapGApps = true;
 
   # we use makeShellWrapper instead of the makeBinaryWrapper provided by wrapGAppsHook for proper shell variable expansion
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -100,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
         "image/vnd.djvu"
         "application/x-mobipocket-ebook"
         "application/vnd.amazon.ebook"
-        "application/vnd.amazon.ebook"
         "application/x-cbz"
         "application/x-cbr"
         "application/x-cbt"
@@ -112,14 +135,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/koodo-reader/koodo-reader/releases/tag/${finalAttrs.src.tag}";
     description = "Cross-platform ebook reader";
     longDescription = ''
       A modern ebook manager and reader with sync and backup capacities
       for Windows, macOS, Linux and Web
     '';
-    homepage = "https://github.com/troyeguo/koodo-reader";
+    homepage = "https://github.com/koodo-reader/koodo-reader";
     license = lib.licenses.agpl3Only;
     mainProgram = "koodo-reader";
     maintainers = with lib.maintainers; [ tomasajt ];

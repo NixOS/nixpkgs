@@ -21,9 +21,9 @@ buildPythonPackage rec {
     mock
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/azaghal/pydenticon";
     description = "Library for generating identicons. Port of Sigil (https://github.com/cupcake/sigil) with enhancements";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }

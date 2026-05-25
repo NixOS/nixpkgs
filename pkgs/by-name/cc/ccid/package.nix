@@ -1,25 +1,27 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   flex,
-  gitUpdater,
   libusb1,
   meson,
   ninja,
+  nix-update-script,
   pcsclite,
   perl,
   pkg-config,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccid";
-  version = "1.6.2";
+  version = "1.7.1";
 
-  src = fetchurl {
-    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.xz";
-    hash = "sha256-QZWEEJUBV+Yi+dkcnnjHtwjbdOIvcRkMWB0k0gVk1Ek=";
+  src = fetchFromGitHub {
+    owner = "LudovicRousseau";
+    repo = "CCID";
+    tag = finalAttrs.version;
+    hash = "sha256-5GkpsrjGFfiGDNIhU9zsx0p7/MSVra1fse9yFhjGSFU=";
   };
 
   postPatch = ''
@@ -31,6 +33,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     (lib.mesonBool "serial" true)
+    # Upstream tries to install udev outside of PREFIX. It's easier to disable
+    # this and install it ourself than to patch meson.build.
+    (lib.mesonBool "udev-rules" false)
   ];
 
   # error: call to undeclared function 'InterruptRead';
@@ -53,33 +58,45 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     install -Dm 0444 -t $out/lib/udev/rules.d ../src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
       --replace-fail "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
+    # Disable reference to binary that we don't build.
+    substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
+      --replace-fail 'ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"' \
+                     '# disabled: ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"'
   '';
 
   # The resulting shared object ends up outside of the default paths which are
   # usually getting stripped.
   stripDebugList = [ "pcsc" ];
 
-  passthru.updateScript = gitUpdater {
-    url = "https://salsa.debian.org/rousseau/CCID.git";
-  };
+  passthru.updateScript = nix-update-script { };
 
-  installCheckPhase = ''
-    [ -f $out/etc/reader.conf.d/libccidtwin ]
-    [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
-    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
-    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Linux/libccid.so ]
-    [ -f $out/pcsc/drivers/serial/libccidtwin.so ]
-  '';
+  installCheckPhase =
+    let
+      platform = if stdenv.hostPlatform.isLinux then "Linux" else "MacOS";
+    in
+    lib.optionalString (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) ''
+      runHook preInstallCheck
 
-  meta = with lib; {
+      [ -f $out/etc/reader.conf.d/libccidtwin ]
+      [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
+      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
+      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/${platform}/libccid${stdenv.hostPlatform.extensions.sharedLibrary} ]
+      [ -f $out/pcsc/drivers/serial/libccidtwin${stdenv.hostPlatform.extensions.sharedLibrary} ]
+
+      runHook postInstallCheck
+    '';
+
+  meta = {
     description = "PC/SC driver for USB CCID smart card readers";
     homepage = "https://ccid.apdu.fr/";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.anthonyroussel ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.anthonyroussel ];
+    platforms = lib.platforms.unix;
   };
-}
+})

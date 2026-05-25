@@ -1,38 +1,64 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  undmg,
+  stdenv,
+  fetchFromGitHub,
+  apple-sdk,
+  darwin,
+  xcbuildHook,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caffeine";
-  version = "1.1.3";
+  version = "1.1.4";
 
-  src = fetchurl {
-    url = "https://github.com/IntelliScape/caffeine/releases/download/${finalAttrs.version}/Caffeine.dmg";
-    hash = "sha256-JA5auDKiXtCvQ67/0dZtxmPf6nwlJdkYwhTWEHmBoDs=";
+  src = fetchFromGitHub {
+    owner = "IntelliScape";
+    repo = "caffeine";
+    tag = finalAttrs.version;
+    hash = "sha256-AmBPY5ZVWBq2ZesNvvJ/Do5XgPjb5R1ESNJm7tx0M6k=";
   };
 
-  sourceRoot = ".";
+  # xcbuild routes image.png resources through CopyPNGFile, which requires the
+  # Apple-only copypng tool that is unavailable in the nixpkgs toolchain.
+  # Treat these PNGs as generic files so xcbuild copies them directly.
+  postPatch = ''
+    substituteInPlace Caffeine.xcodeproj/project.pbxproj \
+      --replace-fail \
+        "lastKnownFileType = image.png;" \
+        "lastKnownFileType = file;"
+  '';
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [
+    xcbuildHook
+    darwin.autoSignDarwinBinariesHook
+  ];
+
+  buildInputs = [
+    apple-sdk
+  ];
+
+  xcbuildFlags = [
+    "-target Caffeine"
+    "-configuration Release"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/Applications
-    cp -r *.app $out/Applications
+    cp -r Products/Release/Caffeine.app $out/Applications
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Don't let your Mac fall asleep";
     homepage = "https://intelliscapesolutions.com/apps/caffeine";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = [ "x86_64-darwin" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = [
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

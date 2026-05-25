@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jcrona";
     repo = "tamatool";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VDmpIBuMWg3TwfCf9J6/bi/DaWip6ESAQWvGh2SH+A8=";
     fetchSubmodules = true;
   };
@@ -70,12 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform Tamagotchi P1 explorer";
     homepage = "https://github.com/jcrona/tamatool";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "tamatool";
   };
 })

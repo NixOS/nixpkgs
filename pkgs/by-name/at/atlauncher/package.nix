@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   gradle_8,
+  jdk17_headless,
   jre,
   lib,
   makeWrapper,
@@ -16,7 +17,9 @@
   libglvnd,
   libpulseaudio,
   udev,
-  xorg,
+  libxxf86vm,
+  libxcursor,
+  libx11,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
@@ -24,19 +27,20 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.38.2";
+  version = "3.4.40.4";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x8ch8BdUckweuwEvsOxYG2M5UmbW4fRjF/jJ6feIjIA=";
+    hash = "sha256-pRYXzFUbVXYwD7edhBoVcVo/QDo6QSJJQd58Hf3rBGo=";
   };
 
-  postPatch = ''
-    # exclude UI tests
-    sed -i "/test {/a\    exclude '**/BasicLauncherUiTest.class'" build.gradle
-  '';
+  patches = [
+    # Launch4j does not publish the Linux workdir artifact selected on aarch64.
+    # Nixpkgs only needs the cross-platform jar, so remove the Windows exe task.
+    ./remove-launch4j.patch
+  ];
 
   nativeBuildInputs = [
     gradle
@@ -53,24 +57,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   gradleBuildTask = "shadowJar";
 
   gradleFlags = [
-    "--exclude-task"
-    "createExe"
+    "-Dorg.gradle.java.home=${jdk17_headless.home}"
   ];
 
   installPhase =
     let
-      runtimeLibraries =
-        [
-          libglvnd
-          libpulseaudio
-          udev
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXxf86vm
-        ]
-        ++ lib.optional gamemodeSupport gamemode.lib
-        ++ lib.optional textToSpeechSupport flite
-        ++ additionalLibs;
+      runtimeLibraries = [
+        libglvnd
+        libpulseaudio
+        udev
+        libx11
+        libxcursor
+        libxxf86vm
+      ]
+      ++ lib.optional gamemodeSupport gamemode.lib
+      ++ lib.optional textToSpeechSupport flite
+      ++ additionalLibs;
     in
     ''
       runHook preInstall
@@ -94,7 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''
       install -D -m444 ${packagingDir}/atlauncher.desktop -t $out/share/applications
       install -D -m444 ${packagingDir}/atlauncher.metainfo.xml -t $out/share/metainfo
-      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/pixmaps
+      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/icons/hicolor/128x128/apps
       install -D -m444 ${packagingDir}/atlauncher.svg -t $out/share/icons/hicolor/scalable/apps
     '';
 

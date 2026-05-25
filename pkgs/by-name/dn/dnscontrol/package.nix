@@ -1,24 +1,24 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  dnscontrol,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnscontrol";
-  version = "4.21.0";
+  version = "4.39.0";
 
   src = fetchFromGitHub {
-    owner = "StackExchange";
+    owner = "DNSControl";
     repo = "dnscontrol";
-    tag = "v${version}";
-    hash = "sha256-M1Ertf/0GBICci8CV/LyfuubsVTvQ1dql7hDKuHGM6k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2pesk5yT7YPROZiX7bqjRhQi4bk3YS0nxSkP+RjZ1so=";
   };
 
-  vendorHash = "sha256-BTysXvuE+LOHkUhsV+p8+5VOFcMUidz2i7uo2fdzyXg=";
+  vendorHash = "sha256-pzdOW+L/w74ANaCKXWQviBMDlSTOfebAVE7Cdd+lZLo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,11 +26,10 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=main.version=${version}"
+    "-X=github.com/DNSControl/dnscontrol/v${lib.versions.major finalAttrs.version}/pkg/version.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dnscontrol \
       --bash <($out/bin/dnscontrol shell-completion bash) \
       --zsh <($out/bin/dnscontrol shell-completion zsh)
@@ -41,19 +40,21 @@ buildGoModule rec {
     rm pkg/spflib/flatten_test.go pkg/spflib/parse_test.go
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      command = "${lib.getExe dnscontrol} version";
-      package = dnscontrol;
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
     homepage = "https://dnscontrol.org/";
-    changelog = "https://github.com/StackExchange/dnscontrol/releases/tag/v${version}";
+    changelog = "https://github.com/DNSControl/dnscontrol/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      zowoq
+    ];
     mainProgram = "dnscontrol";
   };
-}
+})

@@ -4,7 +4,7 @@
   lib,
   bluez,
   libevdev,
-  libX11,
+  libx11,
   pkg-config,
   qtbase,
   udev,
@@ -14,14 +14,13 @@
 qtModule {
   pname = "qtsystems";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "bin"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "bin"
+  ];
 
   propagatedBuildInputs = [
     qtbase
@@ -35,19 +34,18 @@ qtModule {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     bluez
     libevdev
-    libX11
+    libx11
     udev
   ];
 
-  qmakeFlags =
-    [
-      "CONFIG+=git_build"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "CONFIG+=ofono"
-      "CONFIG+=udisks"
-      "CONFIG+=upower"
-    ];
+  qmakeFlags = [
+    "CONFIG+=git_build"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "CONFIG+=ofono"
+    "CONFIG+=udisks"
+    "CONFIG+=upower"
+  ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapQtApp $bin/bin/servicefw

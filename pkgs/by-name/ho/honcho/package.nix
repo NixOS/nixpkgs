@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "honcho";
   version = "2.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nickstenning";
     repo = "honcho";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hXPoqxK9jzCn7KrQ6zH0E/3YVC60OSoiUx6654+bhhw=";
   };
 
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "honcho";
   };
-}
+})

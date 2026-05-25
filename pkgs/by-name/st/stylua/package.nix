@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
   # lua54 implies lua52/lua53
   features ? [
     "lua54"
@@ -10,19 +12,18 @@
   ],
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stylua";
-  version = "2.1.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = "stylua";
-    rev = "v${version}";
-    sha256 = "sha256-yVie8/aey77WbeUGM6rzuKBKLmAH1Jhhj9Y7LxbvIUw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-C0X7IdYqs/hhSX96XWVyk7rfQNd9DjYxYgHL34cI+3g=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ow8lldu36qBHcXFgeBhHo2u+sSAFCEFbxUk2oZI7sj4=";
+  cargoHash = "sha256-m31oocBkx4i2KxM0YC1omVWtypFi7iEoDVlXgT93iSI=";
 
   # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
   postPatch = ''
@@ -31,12 +32,20 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = features;
 
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Opinionated Lua code formatter";
     homepage = "https://github.com/johnnymorganz/stylua";
-    changelog = "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/johnnymorganz/stylua/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      LunNova
+      figsoda
+    ];
     mainProgram = "stylua";
   };
-}
+})

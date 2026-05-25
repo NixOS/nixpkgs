@@ -4,18 +4,16 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "hashcons";
-  version = "1.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "backtracking";
-    repo = "ocaml-${pname}";
+    repo = "ocaml-hashcons";
     rev = "d733325eeb55878bed285120c2c088daf78f0e2b";
-    sha256 = "0h4pvwj34pndaw3pajkhl710ywwinhc9pqimgllfmkl37wz2d8zq";
+    hash = "sha256-+KMmPj+DzuoofTXimxi0kXMPwqFwSnUHV81eMiTfl0A=";
   };
-
-  useDune2 = true;
 
   doCheck = true;
 
@@ -24,4 +22,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

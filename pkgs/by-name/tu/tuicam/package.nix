@@ -9,18 +9,17 @@
   clang,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuicam";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "hlsxx";
     repo = "tuicam";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ry64sd0OYGqbiVqveU05gsmf1c9kQy2QMN9Z5seMedc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-z+5fVSl9zFdOFNCCf49iVltAm+rZcJtLsz+zLCUlC6o=";
 
   nativeBuildInputs = [
@@ -43,10 +42,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal-based camera with switchable modes";
     homepage = "https://github.com/hlsxx/tuicam";
-    changelog = "https://github.com/hlsxx/tuicam/releases/tag/v${version}";
+    changelog = "https://github.com/hlsxx/tuicam/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ FKouhai ];
     platforms = lib.platforms.linux;
     mainProgram = "tuicam";
   };
-}
+})

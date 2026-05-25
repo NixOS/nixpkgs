@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "fx2";
-  version = "0.13";
+  version = "0.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "libfx2";
     rev = "v${version}";
-    hash = "sha256-PtWxjT+97+EeNMN36zOT1+ost/w3lRRkaON3Cl3dpp4=";
+    hash = "sha256-uMgf1VL3yvkLUfRlBn9NKcerfHfcFg9yEgHGWmwyh8I=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +44,11 @@ buildPythonPackage rec {
   # installCheckPhase tries to run build_ext again and there are no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Chip support package for Cypress EZ-USB FX2 series microcontrollers";
     mainProgram = "fx2tool";
     homepage = "https://github.com/whitequark/libfx2";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

@@ -1,34 +1,35 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "leetgo";
-  version = "1.4.13";
+  version = "1.4.17";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "leetgo";
-    rev = "v${version}";
-    hash = "sha256-KEfRsaBsMCKO66HW71gNzHzZkun1yo6a05YqAvafomM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FxXU1A9pnVMzD0fTo2QgZvZYC40UwHlJja69WCCXD0k=";
   };
 
-  vendorHash = "sha256-pdGsvwEppmcsWyXxkcDut0F2Ak1nO42Hnd36tnysE9w=";
+  vendorHash = "sha256-ODSzzEj7r8itbsEeXutLyXxGZ/7q7BZbGQ1kRN4RSfc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/j178/leetgo/constants.Version=${version}"
+    "-X=github.com/j178/leetgo/constants.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetgo \
       --bash <($out/bin/leetgo completion bash) \
       --fish <($out/bin/leetgo completion fish) \
@@ -38,9 +39,9 @@ buildGoModule rec {
   meta = {
     description = "Command-line tool for LeetCode";
     homepage = "https://github.com/j178/leetgo";
-    changelog = "https://github.com/j178/leetgo/releases/tag/v${version}";
+    changelog = "https://github.com/j178/leetgo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "leetgo";
   };
-}
+})

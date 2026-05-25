@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jmQ88flSMrS0CB7GNj1Ee60HZgroDKTwLk0i/kg6gVM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5ORjyzCkX3j62pL4S8CqSXExZUjTIO0db99oIuczEY0=";
 
   nativeBuildInputs = [
@@ -36,11 +35,11 @@ rustPlatform.buildRustPackage {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "NIST-based CVE lookup store and API powered by Rust";
     homepage = "https://github.com/Exein-io/kepler";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kepler";
   };
 }

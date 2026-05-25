@@ -74,10 +74,10 @@ buildPythonPackage rec {
     ln -s ${kernelSpecFile} $out/share/jupyter/kernels/ansible/kernel.json
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ansible kernel for Jupyter";
     homepage = "https://github.com/ansible/ansible-jupyter-kernel";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

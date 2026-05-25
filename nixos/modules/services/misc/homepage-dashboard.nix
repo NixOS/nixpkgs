@@ -10,6 +10,14 @@ let
   settingsFormat = pkgs.formats.yaml { };
 in
 {
+  imports = [
+    (lib.mkChangedOptionModule
+      [ "services" "homepage-dashboard" "environmentFile" ]
+      [ "services" "homepage-dashboard" "environmentFiles" ]
+      (config: [ config.services.homepage-dashboard.environmentFile ])
+    )
+  ];
+
   options = {
     services.homepage-dashboard = {
       enable = lib.mkEnableOption "Homepage Dashboard, a highly customizable application dashboard";
@@ -23,7 +31,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 8082;
         description = "Port for Homepage to bind to.";
       };
@@ -41,10 +49,10 @@ in
         '';
       };
 
-      environmentFile = lib.mkOption {
-        type = lib.types.str;
+      environmentFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         description = ''
-          The path to an environment file that contains environment variables to pass
+          A list of paths to environment files that contain environment variables to pass
           to the homepage-dashboard service, for the purpose of passing secrets to
           the service.
 
@@ -52,7 +60,7 @@ in
 
           <https://gethomepage.dev/installation/docker/#using-environment-secrets>
         '';
-        default = "";
+        default = [ ];
       };
 
       customCSS = lib.mkOption {
@@ -191,6 +199,16 @@ in
         default = { };
       };
 
+      proxmox = lib.mkOption {
+        inherit (settingsFormat) type;
+        description = ''
+          Homepage proxmox configuration.
+
+          See <https://gethomepage.dev/configs/proxmox/>.
+        '';
+        default = { };
+      };
+
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         description = ''
@@ -215,6 +233,7 @@ in
       "homepage-dashboard/services.yaml".source = settingsFormat.generate "services.yaml" cfg.services;
       "homepage-dashboard/settings.yaml".source = settingsFormat.generate "settings.yaml" cfg.settings;
       "homepage-dashboard/widgets.yaml".source = settingsFormat.generate "widgets.yaml" cfg.widgets;
+      "homepage-dashboard/proxmox.yaml".source = settingsFormat.generate "proxmox.yaml" cfg.proxmox;
     };
 
     systemd.services.homepage-dashboard = {
@@ -232,7 +251,7 @@ in
 
       serviceConfig = {
         Type = "simple";
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = cfg.environmentFiles;
         StateDirectory = "homepage-dashboard";
         CacheDirectory = "homepage-dashboard";
         ExecStart = lib.getExe cfg.package;

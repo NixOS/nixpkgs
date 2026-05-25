@@ -4,6 +4,7 @@
   fetchPypi,
   numpy,
   scipy,
+  setuptools,
   protobuf,
   onnx,
   scikit-learn,
@@ -13,15 +14,17 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skl2onnx";
-  version = "1.18.0";
-  format = "setuptools";
+  version = "1.20.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OepK4wxcGCNVoYJEZwExWCFERODOCxjzMzi9gn1PsA8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-x06oJ9kroYb+ZZaV6PyYnNl7/DIO3OPTK5k2pYeNoQo=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -48,8 +51,11 @@ buildPythonPackage rec {
   # Core dump
   doCheck = false;
 
+  pythonImportsCheck = [ "skl2onnx" ];
+
   meta = {
     description = "Convert scikit-learn models to ONNX";
+    changelog = "https://github.com/onnx/sklearn-onnx/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ asl20 ];
   };
-}
+})

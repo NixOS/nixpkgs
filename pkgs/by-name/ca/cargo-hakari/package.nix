@@ -6,55 +6,47 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-hakari";
-  version = "0.9.35";
+  version = "0.9.38";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
-    tag = "cargo-hakari-${version}";
-    hash = "sha256-+IjtK4kSm2vThgIxDsBLpoh0j9cDhhEqI6Hr2BmC7hc=";
+    tag = "cargo-hakari-${finalAttrs.version}";
+    hash = "sha256-joTDNEIlNDtRBFV6QL2yqM3VWbZ05nF235U3F8lekeE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-yAk0hMB3OEaaIuNqiJtl1K5P19pOGtiyt4cvU+Nb814=";
+  cargoHash = "sha256-JmRq6Hoss99tOymMQvrBZevrf56+nSS70AZb2XeqZSc=";
 
   cargoBuildFlags = [
     "-p"
     "cargo-hakari"
   ];
-  cargoTestFlags = [
-    "-p"
-    "cargo-hakari"
-  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Manage workspace-hack packages to speed up builds in large workspaces";
-    mainProgram = "cargo-hakari";
     longDescription = ''
       cargo hakari is a command-line application to manage workspace-hack crates.
       Use it to speed up local cargo build and cargo check commands by 15-95%,
       and cumulatively by 20-25% or more.
     '';
     homepage = "https://crates.io/crates/cargo-hakari";
-    changelog = "https://github.com/guppy-rs/guppy/blob/cargo-hakari-${version}/tools/cargo-hakari/CHANGELOG.md";
+    changelog = "https://github.com/guppy-rs/guppy/blob/cargo-hakari-${finalAttrs.version}/tools/cargo-hakari/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       macalinao
       nartsiss
     ];
+    mainProgram = "cargo-hakari";
   };
-}
+})

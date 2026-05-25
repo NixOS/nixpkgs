@@ -10,14 +10,14 @@
   avahi,
   jack2,
   libxcb,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
+  libxxf86vm,
   libglvnd,
   zenity,
 }:
@@ -28,14 +28,14 @@ let
     avahi
     jack2
     libxcb
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxxf86vm
     libglvnd
   ];
 
@@ -46,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "touchosc";
-  version = "1.4.0.230";
+  version = "1.4.9.248";
 
   suffix =
     {
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-RXv5j542pLApvp5y9EG6I/WWywoCFZx/F71mKusBSv4=";
-        armv7l-linux = "sha256-5ySPBbB51tQjrhLpHzoEb5EPDv4nDGJL/hKQOSl3/YI=";
-        x86_64-linux = "sha256-v7ePfkKxM/yu3KVQfDaK3dMij2TNfLY34ox5/dHJgGI=";
+        aarch64-linux = "sha256-IKk688XFTx1rHEF03uHZ3cN60GwwIlf/FK4mJ0c/PqM=";
+        armv7l-linux = "sha256-li1BLZ6/6OJzsCIN2T3V4vEVXfa9GH6PiFkm6lUl4Ec=";
+        x86_64-linux = "sha256-NM9v+wyLNnwNw4qY6jDPB9ig/GZfzzrDshMSmi/yvCM=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -101,11 +101,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hexler.net/touchosc";
     description = "Next generation modular control surface";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ ];
     platforms = [
       "aarch64-linux"

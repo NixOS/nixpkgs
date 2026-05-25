@@ -31,7 +31,7 @@ in
   options.services.netbird.server.signal = {
     enable = mkEnableOption "Netbird's Signal Service";
 
-    package = mkPackageOption pkgs "netbird" { };
+    package = mkPackageOption pkgs "netbird-signal" { };
 
     enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird signal service";
 
@@ -145,7 +145,7 @@ in
 
           grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-          grpc_pass grpc://localhost:${builtins.toString cfg.port};
+          grpc_pass grpc://localhost:${toString cfg.port};
           grpc_read_timeout 1d;
           grpc_send_timeout 1d;
           grpc_socket_keepalive on;

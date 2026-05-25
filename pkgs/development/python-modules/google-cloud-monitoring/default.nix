@@ -10,21 +10,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-monitoring";
-  version = "2.27.1";
+  version = "2.30.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_monitoring";
-    inherit version;
-    hash = "sha256-9HAJAKZYzWybf3FLsp0Af6zvDPDWKNAHVpnDpzvOilU=";
+    inherit (finalAttrs) version;
+    hash = "sha256-qVMKqaokbEkIEN+nvjLWfoNA0ZEIrMmcvALR7UlPunY=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +30,10 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   optional-dependencies = {
     pandas = [ pandas ];
@@ -44,7 +44,8 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytest-asyncio
-  ] ++ optional-dependencies.pandas;
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # Test requires credentials
@@ -58,11 +59,11 @@ buildPythonPackage rec {
     "google.cloud.monitoring_v3"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stackdriver Monitoring API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring";
-    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${version}/packages/google-cloud-monitoring";
-    license = licenses.asl20;
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${finalAttrs.version}/packages/google-cloud-monitoring";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -20,21 +20,24 @@
   gdk-pixbuf,
   geoclue2,
   gst_all_1,
+  icu,
   libgweather,
   libadwaita,
+  vorbis-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-clocks";
-  version = "48.0";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major finalAttrs.version}/gnome-clocks-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YW7h+3UwCx8muXZiGelUdRNgyg+g9JExG8+DvzgIfGI=";
+    hash = "sha256-vxZ/f0T08vtCTUcWZSybofKeFuSQceJqG7gz+NznlMY=";
   };
 
   nativeBuildInputs = [
     vala
+    vorbis-tools
     meson
     ninja
     pkg-config
@@ -45,24 +48,24 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  buildInputs =
-    [
-      gtk4
-      glib
-      gsettings-desktop-schemas
-      gdk-pixbuf
-      gnome-desktop
-      geocode-glib_2
-      geoclue2
-      libgweather
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      # GStreamer plugins needed for Alarms
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    gtk4
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    gnome-desktop
+    geocode-glib_2
+    geoclue2
+    icu
+    libgweather
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    # GStreamer plugins needed for Alarms
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   doCheck = true;
 

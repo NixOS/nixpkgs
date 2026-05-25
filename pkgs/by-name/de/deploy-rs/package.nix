@@ -6,23 +6,25 @@
 
 rustPlatform.buildRustPackage {
   pname = "deploy-rs";
-  version = "0-unstable-2024-06-12";
+  version = "0-unstable-2026-02-02";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "3867348fa92bc892eba5d9ddb2d7a97b9e127a8a";
-    hash = "sha256-FaGrf7qwZ99ehPJCAwgvNY5sLCqQ3GDiE/6uLhxxwSY=";
+    rev = "77c906c0ba56aabdbc72041bf9111b565cdd6171";
+    hash = "sha256-hwsYgDnby50JNVpTRYlF3UR/Rrpt01OrxVuryF40CFY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-e+Exc0lEamAieZ7QHJBYvmnmM/9YHdLRD3La4U5FRMo=";
+  cargoHash = "sha256-9O93YTEz+e2oxenE0gwxsbz55clbKo9+37yVOqz7ErE=";
 
   meta = {
     description = "Multi-profile Nix-flake deploy tool";
     homepage = "https://github.com/serokell/deploy-rs";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ teutat3s ];
+    maintainers = with lib.maintainers; [
+      teutat3s
+      jk
+    ];
     mainProgram = "deploy";
   };
 }

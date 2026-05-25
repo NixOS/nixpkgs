@@ -5,17 +5,27 @@
   gmp,
   mpfr,
   boost,
-  version ? "1.6.0",
+  flex,
+  bison,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gappa";
-  inherit version;
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${version}.tar.gz";
-    hash = "sha256-aNht0Ttv+gzS9eLzu4PQitRK/zQN9QQ4YOEjQ2d9xIM=";
+    url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${finalAttrs.version}.tar.gz";
+    hash = "sha256-dA1gOwRkW7lEo04bMldFHX0Chs8gMbd0Yl4/HhYK4qo";
   };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   buildInputs = [
     gmp
@@ -23,8 +33,32 @@ stdenv.mkDerivation {
     boost.dev
   ];
 
-  buildPhase = "./remake";
-  installPhase = "./remake install";
+  # For darwin sandboxed builds
+  postPatch = ''
+    substituteInPlace remake.cpp \
+      --replace 'tempnam(NULL, "rmk-")' 'tempnam(".", "rmk-")'
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    ./remake
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    ./remake install
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gappa.gitlabpages.inria.fr/";
@@ -37,4 +71,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ vbgl ];
     platforms = lib.platforms.all;
   };
-}
+})

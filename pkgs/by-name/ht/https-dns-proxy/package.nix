@@ -5,13 +5,10 @@
   cmake,
   gtest,
   c-ares,
-  curlHTTP3,
+  curl,
   libev,
 }:
 
-let
-  curl' = curlHTTP3;
-in
 stdenv.mkDerivation rec {
   pname = "https-dns-proxy";
   # there are no stable releases (yet?)
@@ -38,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     c-ares
-    curl'
+    curl
     libev
   ];
 
@@ -54,11 +51,11 @@ stdenv.mkDerivation rec {
   # for when that happens despite there being none as of right now
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "DNS to DNS over HTTPS (DoH) proxy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
     mainProgram = "https_dns_proxy";
   };
 }

@@ -5,19 +5,18 @@
   php,
   versionCheckHook,
 }:
-
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpactor";
-  version = "2025.04.17.0";
+  version = "2025.12.21.1";
 
   src = fetchFromGitHub {
     owner = "phpactor";
     repo = "phpactor";
-    rev = finalAttrs.version;
-    hash = "sha256-HJH+31qAE4shamRl1/+TRtje0ZzOtPV7l++NIaacmxE=";
+    tag = finalAttrs.version;
+    hash = "sha256-9hkYU/Mhxl49tIZa3Vyj3kXftNIgZXUlH1T6/4obM7I=";
   };
 
-  vendorHash = "sha256-qdR8/ME9H7gusALjXXbKl8hj20N704Nw1tC3V9xTcEY=";
+  vendorHash = "sha256-XsybPL391WGHztWPaZAN1l2hWQMQ0tklZ9yjkKjGzsI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +27,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpactor/phpactor/releases/tag/${finalAttrs.version}";
@@ -36,6 +34,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/phpactor/phpactor";
     license = lib.licenses.mit;
     mainProgram = "phpactor";
-    teams = [ lib.teams.php ];
+    maintainers = [ lib.maintainers.patka ];
   };
 })

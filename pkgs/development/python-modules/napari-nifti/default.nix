@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   medvol,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "napari-nifti";
   version = "0.0.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";

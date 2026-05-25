@@ -30,32 +30,7 @@ evalConfigArgs@{
   check ? true,
   prefix ? [ ],
   lib ? import ../../lib,
-  extraModules ?
-    let
-      e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-    in
-    lib.optional (e != "") (
-      lib.warn
-        ''
-          The NIXOS_EXTRA_MODULE_PATH environment variable is deprecated and will be
-          removed in NixOS 25.05.
-          We recommend a workflow where you update the expression files instead, but
-          if you wish to continue to use this variable, you may do so with a module like:
-
-          {
-            imports = [
-              (builtins.getEnv "NIXOS_EXTRA_MODULE_PATH")
-            ];
-          }
-
-          This has the benefit that your configuration hints at the
-          non-standard workflow.
-        ''
-        # NOTE: this import call is unnecessary and it even removes the file name
-        #       from error messages.
-        import
-        e
-    ),
+  extraModules ? [ ],
 }:
 
 let
@@ -129,7 +104,7 @@ let
     in
     locatedModules ++ legacyModules;
 
-  noUserModules = evalModulesMinimal ({
+  noUserModules = evalModulesMinimal {
     inherit prefix specialArgs;
     modules =
       baseModules
@@ -138,7 +113,7 @@ let
         pkgsModule
         modulesModule
       ];
-  });
+  };
 
   # Extra arguments that are useful for constructing a similar configuration.
   modulesModule = {

@@ -23,13 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     openssl
     libuuid
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
 
   meta = {
     description = "Legacy library for support of the Expert Witness Compression Format";
     homepage = "https://sourceforge.net/projects/libewf/";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

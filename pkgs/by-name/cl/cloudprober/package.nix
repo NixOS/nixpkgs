@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudprober";
-  version = "0.14.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "cloudprober";
     repo = "cloudprober";
-    tag = "v${version}";
-    hash = "sha256-t32mALyxtapPSzf/pNG0MGS2jjq0Dwm31qQZAlZI5zE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dMogW0NQAMiSBC7//7gGmadvK5vS2H+170aW0RK58fU=";
   };
 
-  vendorHash = "sha256-u/glcoLlNXDEWFblnuvRHK9mUNCXTsfcWR+FDsJeOOA=";
+  vendorHash = "sha256-YEueI/Ms350bNkKPmLNzLljr9FDL0R7zACF4HQwHLdk=";
 
   checkFlags =
     let
@@ -31,9 +31,9 @@ buildGoModule rec {
   meta = {
     description = "Monitor availability and performance of various components of your system";
     homepage = "https://cloudprober.org/";
-    changelog = "https://github.com/cloudprober/cloudprober/releases/tag/v${version}";
+    changelog = "https://github.com/cloudprober/cloudprober/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xgwq ];
     mainProgram = "cloudprober";
   };
-}
+})

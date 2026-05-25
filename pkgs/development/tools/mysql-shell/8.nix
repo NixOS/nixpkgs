@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "8.4.4";
-  mysqlServerVersion = "8.4.4";
+  mysqlShellVersion = "8.4.9";
+  mysqlServerVersion = "8.4.9";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-+ykO90iJRDQIUknDG8pSrHGFMSREarIYuzvFAr8AgqU=";
+      hash = "sha256-5KqLOeQtH+B48zu9c2lfrCtU28e7E38L2+Y/e+GgLWs=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-wl57vU3YbWvtmzew801k8WHohY6Fjy59Uyy2pdYaHuw=";
+      hash = "sha256-btYUh/akFRCSOXDL1C5xuXLysHS1lm4H74kqY+4zyiQ=";
     })
   ];
 
@@ -75,44 +75,50 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      git
-      bison
-      makeWrapper
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      darwin.DarwinTools
-    ];
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-literal-operator -Wno-error=nonnull";
+    }
+    // lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+    };
 
-  buildInputs =
-    [
-      curl
-      libedit
-      libssh
-      lz4
-      openssl
-      protobuf
-      readline
-      zlib
-      zstd
-      libevent
-      icu
-      re2
-      ncurses
-      libfido2
-      cyrus_sasl
-      openldap
-      python3
-      antlr.runtime.cpp
-    ]
-    ++ pythonDeps
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    git
+    bison
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    darwin.DarwinTools
+  ];
+
+  buildInputs = [
+    curl
+    libedit
+    libssh
+    lz4
+    openssl
+    protobuf
+    readline
+    zlib
+    zstd
+    libevent
+    icu
+    re2
+    ncurses
+    libfido2
+    cyrus_sasl
+    openldap
+    python3
+    antlr.runtime.cpp
+  ]
+  ++ pythonDeps
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
   preConfigure = ''
     # Build MySQL

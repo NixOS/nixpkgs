@@ -24,12 +24,12 @@ buildPythonPackage rec {
   # no unit tests in the upstream
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python package which creates simple interactive menus on the command line";
     mainProgram = "simple-term-menu";
     homepage = "https://github.com/IngoMeyer441/simple-term-menu";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/IngoMeyer441/simple-term-menu/releases/tag/v${version}";
-    maintainers = with maintainers; [ smrehman ];
+    maintainers = with lib.maintainers; [ smrehman ];
   };
 }

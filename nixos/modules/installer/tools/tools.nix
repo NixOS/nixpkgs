@@ -68,18 +68,15 @@ let
   };
 
   nixos-install = pkgs.nixos-install.override { };
-  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package; };
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
-    withNgSuffix = false;
-    withReexec = true;
   };
 
   defaultFlakeTemplate = ''
     {
       inputs = {
         # This is pointing to an unstable release.
-        # If you prefer a stable release instead, you can this to the latest number shown here: https://nixos.org/download
+        # If you prefer a stable release instead, you can change the word unstable to the latest number shown here: https://nixos.org/download
         # i.e. nixos-24.11
         # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
         nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -108,9 +105,9 @@ let
 
     $bootLoaderConfig
       # networking.hostName = "nixos"; # Define your hostname.
-      # Pick only one of the below networking options.
-      # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-      # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+      # Configure network connections interactively with nmcli or nmtui.
+      networking.networkmanager.enable = true;
 
       # Set your time zone.
       # time.timeZone = "Europe/Amsterdam";
@@ -279,14 +276,6 @@ in
     '';
   };
 
-  options.system.rebuild.enableNg = lib.mkEnableOption "" // {
-    default = true;
-    description = ''
-      Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
-      Python-based re-implementation of the original in Bash.
-    '';
-  };
-
   imports =
     let
       mkToolModule =
@@ -317,7 +306,10 @@ in
         name = "nixos-install";
         package = config.system.build.nixos-install;
       })
-      (mkToolModule { name = "nixos-option"; })
+      (mkToolModule {
+        name = "nixos-option";
+        package = pkgs.nixos-option.override { nix = config.nix.package; };
+      })
       (mkToolModule {
         name = "nixos-rebuild";
         package = config.system.build.nixos-rebuild;
@@ -326,23 +318,19 @@ in
         name = "nixos-version";
         package = nixos-version;
       })
+      (lib.mkRemovedOptionModule [ "system" "rebuild" "enableNg" ] ''
+        The Bash implementation of nixos-rebuild has been removed in favor of the new Python implementation.
+        If you have any issues with the new implementation, please create an issue in GitHub and tag the maintainers of 'nixos-rebuild-ng'.
+      '')
     ];
 
   config = {
     documentation.man.man-db.skipPackages = [ nixos-version ];
 
-    warnings = lib.optional (!config.system.disableInstallerTools && !config.system.rebuild.enableNg) ''
-      The Bash implementation of nixos-rebuild will be deprecated and removed in the 26.05 release of NixOS.
-      Please migrate to the newer implementation by removing 'system.rebuild.enableNg = false' from your configuration.
-      If you are unable to migrate due to any issues with the new implementation, please create an issue and tag the maintainers of 'nixos-rebuild-ng'.
-    '';
-
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
       inherit nixos-generate-config nixos-install;
-      nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
-      nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-      nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
+      nixos-rebuild = nixos-rebuild-ng;
     };
   };
 }

@@ -58,11 +58,11 @@ buildGoModule rec {
       --set-default GOMUKS_SOUND_CRITICAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://maunium.net/go/gomuks/";
     description = "Terminal based Matrix client written in Go";
     mainProgram = "gomuks";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ chvp ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ chvp ];
   };
 }

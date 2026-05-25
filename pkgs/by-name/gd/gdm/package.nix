@@ -11,8 +11,8 @@
   json-glib,
   itstool,
   accountsservice,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxcb,
   gnome,
   systemd,
@@ -25,12 +25,13 @@
   audit,
   gobject-introspection,
   plymouth,
+  polkit,
   coreutils,
-  xorgserver,
-  xwayland,
+  xorg-server,
   dbus,
   nixos-icons,
   runCommand,
+  udevCheckHook,
 }:
 
 let
@@ -43,7 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "48.0";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -52,18 +53,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-G8Btr/CT7HteN+y0+S5do0dKGxugdu25FR7pZ9HDCt8=";
+    hash = "sha256-ZG9T1o8tLRRxRv+uuFBH3ti4E9yxwQTY8Ow2ymCetb8=";
   };
 
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
-    "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
-    "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
+    "-Dinitial-vt=1"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.mesonOption "run-dir" "/run/gdm")
   ];
 
   nativeBuildInputs = [
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -83,13 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     gtk3
     keyutils
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxcb
     libgudev
     libselinux
     pam
     plymouth
+    polkit
     systemd
   ];
 
@@ -108,10 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
       inherit
         coreutils
         plymouth
-        xorgserver
-        xwayland
         dbus
         ;
+      xorgserver = xorg-server;
     })
 
     # The following patches implement certain environment variables in GDM which are set by
@@ -132,17 +134,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Upstream checks some common paths to find an `X` binary. We already know it.
-    echo #!/bin/sh > build-aux/find-x-server.sh
-    echo "echo ${lib.getBin xorgserver}/bin/X" >> build-aux/find-x-server.sh
-    patchShebangs build-aux/find-x-server.sh
-
     # Reverts https://gitlab.gnome.org/GNOME/gdm/-/commit/b0f802e36ff948a415bfd2bccaa268b6990515b7
     # The gdm-auth-config tool is probably not too useful for NixOS, but we still want the dconf profile
     # installed (mostly just because .passthru.tests can make use of it).
     substituteInPlace meson.build \
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
+
+    # Disable userdb dynamic users for now
+    substituteInPlace meson.build \
+      --replace-fail 'have_userdb = libsystemd_dep' 'have_userdb = false #'
   '';
+
+  doInstallCheck = true;
 
   preInstall = ''
     install -D ${override} "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"
@@ -181,9 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript { packageName = "gdm"; };
 
-    # Used in GDM NixOS module
-    # Don't remove.
-    initialVT = "7";
     dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
     dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
 
@@ -198,12 +198,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program that manages graphical display servers and handles graphical user logins";
     homepage = "https://gitlab.gnome.org/GNOME/gdm";
     changelog = "https://gitlab.gnome.org/GNOME/gdm/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

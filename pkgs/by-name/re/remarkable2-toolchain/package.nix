@@ -8,12 +8,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "remarkable2-toolchain";
   version = "3.1.2";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa7hf-neon-rm11x-toolchain-${version}.sh";
+    url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa7hf-neon-rm11x-toolchain-${finalAttrs.version}.sh";
     sha256 = "sha256-JKMDRbkvoxwHiTm/o4JdLn3Mm2Ld1LyxTnCCwvnxk4c=";
     executable = true;
   };
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     ENVCLEANED=1 $src -y -d $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolchain for cross-compiling to reMarkable 2 tablets";
     homepage = "https://remarkable.engineering/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ tadfisher ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ tadfisher ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

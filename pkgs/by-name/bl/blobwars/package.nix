@@ -12,12 +12,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blobwars";
   version = "2.00";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/blobwars/blobwars-${finalAttrs.version}.tar.gz";
     sha256 = "c406279f6cdf2aed3c6edb8d8be16efeda0217494acd525f39ee2bd3e77e4a99";
   };
 
@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
     find $out/share/games/blobwars/. -type f -exec chmod 644 {} +
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Platform action game featuring a blob with lots of weapons";
     mainProgram = "blobwars";
     homepage = "https://www.parallelrealities.co.uk/games/metalBlobSolid/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       free
     ];
-    maintainers = with maintainers; [ iblech ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,28 +1,37 @@
 {
   lib,
-  python3Packages,
+  pythonPackages,
   fetchPypi,
   mopidy,
 }:
 
-python3Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-somafm";
   version = "2.0.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-SomaFM";
     sha256 = "DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
   };
 
-  propagatedBuildInputs = [ mopidy ];
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
+    mopidy
+  ];
 
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "mopidy_somafm" ];
+
+  meta = {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for playing music from SomaFM";
-    license = licenses.mit;
-    maintainers = [ maintainers.nickhu ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.nickhu ];
   };
-}
+})

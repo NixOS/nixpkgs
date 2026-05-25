@@ -72,7 +72,7 @@ let
       };
 
       prefixLength = mkOption {
-        type = with types; nullOr (addCheck int (n: n >= 0 && n <= 128));
+        type = with types; nullOr (ints.between 0 128);
         default = null;
         description = ''
           The prefix length of the subnet.
@@ -227,7 +227,7 @@ in
 
                   debugLevel = mkOption {
                     default = 0;
-                    type = types.addCheck types.int (l: l >= 0 && l <= 5);
+                    type = types.ints.between 0 5;
                     description = ''
                       The amount of debugging information to add to the log. 0 means little
                       logging while 5 is the most logging. {command}`man tincd` for
@@ -376,11 +376,11 @@ in
           network: data:
           flip mapAttrs' data.hosts (
             host: text:
-            nameValuePair ("tinc/${network}/hosts/${host}") ({
+            nameValuePair "tinc/${network}/hosts/${host}" {
               mode = "0644";
               user = "tinc-${network}";
               inherit text;
-            })
+            }
           )
           // {
             "tinc/${network}/tinc.conf" = {
@@ -399,7 +399,7 @@ in
 
       systemd.services = flip mapAttrs' cfg.networks (
         network: data:
-        nameValuePair ("tinc.${network}") (
+        nameValuePair "tinc.${network}" (
           let
             version = getVersion data.package;
           in
@@ -481,11 +481,11 @@ in
 
       users.users = flip mapAttrs' cfg.networks (
         network: _:
-        nameValuePair ("tinc-${network}") ({
+        nameValuePair "tinc-${network}" {
           description = "Tinc daemon user for ${network}";
           isSystemUser = true;
           group = "tinc-${network}";
-        })
+        }
       );
       users.groups = flip mapAttrs' cfg.networks (network: _: nameValuePair "tinc-${network}" { });
     }

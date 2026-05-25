@@ -2,14 +2,14 @@
   lib,
   runCommand,
   treefmt,
-  nixfmt-rfc-style,
+  nixfmt,
   nixfmt-tree,
   git,
   writableTmpDirAsHomeHook,
 
   settings ? { },
   runtimeInputs ? [ ],
-  nixfmtPackage ? nixfmt-rfc-style,
+  nixfmtPackage ? nixfmt,
 
   # NOTE: `runtimePackages` is deprecated. Use `nixfmtPackage` and/or `runtimeInputs`.
   runtimePackages ? [ nixfmtPackage ],
@@ -95,7 +95,7 @@ treefmtWithConfig.overrideAttrs {
       You can achieve similar results by manually configuring `treefmt`:
       ```nix
       pkgs.treefmt.withConfig {
-        runtimeInputs = [ pkgs.nixfmt-rfc-style ];
+        runtimeInputs = [ pkgs.nixfmt ];
 
         settings = {
           # Log level for files treefmt won't format

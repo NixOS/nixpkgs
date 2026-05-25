@@ -2,20 +2,21 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
 }:
 
 let
   config-module = "git-get/pkg/cfg";
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-get";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "grdl";
     repo = "git-get";
-    rev = "v${version}";
-    hash = "sha256-v98Ff7io7j1LLzciHNWJBU3LcdSr+lhwYrvON7QjyCI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xnmFqNIabiTyf9ZPKlm5S42rfFUXnTp/jLDDY51eoMw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -27,7 +28,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-C+XOjMDMFneKJNeBh0KWPx8yM7XiiIpTlc2daSfhZhY=";
+  vendorHash = "sha256-8DLS1pSyh1OgnULMvAppl/+D2yfyi/dcZs08S1IMzaE=";
 
   doCheck = false;
 
@@ -40,18 +41,21 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X ${config-module}.version=v${version}"
+    "-X ${config-module}.version=v${finalAttrs.version}"
   ];
 
   preInstall = ''
-    mv "$GOPATH/bin/get" "$GOPATH/bin/git-get"
-    mv "$GOPATH/bin/list" "$GOPATH/bin/git-list"
+    mv "$GOPATH/bin/cmd" "$GOPATH/bin/git-get"
+    ln -s ./git-get "$GOPATH/bin/git-list"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Better way to clone, organize and manage multiple git repositories";
     homepage = "https://github.com/grdl/git-get";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sumnerevans ];
+    mainProgram = "git-get";
   };
-}
+})

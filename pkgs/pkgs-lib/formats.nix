@@ -1,11 +1,16 @@
 { lib, pkgs }:
 let
   inherit (lib)
+    boolToString
     concatStringsSep
     escape
+    filterAttrs
     flatten
+    hasPrefix
     id
     isAttrs
+    isBool
+    isDerivation
     isFloat
     isInt
     isList
@@ -16,8 +21,11 @@ let
     optionalAttrs
     optionalString
     pipe
-    types
     singleton
+    strings
+    toPretty
+    types
+    versionAtLeast
     warn
     ;
 
@@ -32,6 +40,7 @@ let
     ;
 
   inherit (lib.types)
+    serializableValueWith
     attrsOf
     atom
     bool
@@ -122,23 +131,7 @@ optionalAttrs allowAliases aliases
     { }:
     {
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "JSON value";
-            };
-        in
-        valueType;
+      type = types.json;
 
       generate =
         name: value:
@@ -148,11 +141,13 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ jq ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              jq . "$valuePath"> $out
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              jq . "$valuePath" > $out
             ''
         ) { };
 
@@ -171,31 +166,42 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ remarshal_0_17 ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2yaml "$valuePath" "$out"
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML value";
-            };
-        in
-        valueType;
+      type = serializableValueWith { typeName = "YAML 1.1"; };
+
+    };
+
+  yaml_1_2 =
+    { }:
+    {
+      generate =
+        name: value:
+        pkgs.callPackage (
+          { runCommand, remarshal }:
+          runCommand name
+            {
+              nativeBuildInputs = [ remarshal ];
+              value = builtins.toJSON value;
+              preferLocalBuild = true;
+              __structuredAttrs = true;
+            }
+            ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              json2yaml "$valuePath" "$out"
+            ''
+        ) { };
+
+      type = serializableValueWith { typeName = "YAML 1.2"; };
 
     };
 
@@ -378,10 +384,22 @@ optionalAttrs allowAliases aliases
     let
       mkValueString = mkValueStringDefault { };
       mkKeyValue = k: v: if v == null then "# ${k} is unset" else "${k} = ${mkValueString v}";
+
+      rawFormat = ini {
+        listsAsDuplicateKeys = true;
+        inherit mkKeyValue;
+      };
     in
-    ini {
-      listsAsDuplicateKeys = true;
-      inherit mkKeyValue;
+    rawFormat
+    // {
+      generate =
+        name: value:
+        lib.warn
+          "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
+          rawFormat.generate
+          name
+          value;
+      __functor = self: { }: rawFormat;
     };
 
   keyValue =
@@ -444,23 +462,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ]
-            // {
-              description = "TOML value";
-            };
-        in
-        valueType;
+      type = types.toml;
 
       generate =
         name: value:
@@ -470,10 +472,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ remarshal ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2toml "$valuePath" "$out"
             ''
         ) { };
@@ -493,23 +497,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "CDN value";
-            };
-        in
-        valueType;
+      type = serializableValueWith { typeName = "CDN"; };
 
       generate =
         name: value:
@@ -519,10 +507,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ json2cdn ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2cdn "$valuePath" > $out
             ''
         ) { };
@@ -661,7 +651,7 @@ optionalAttrs allowAliases aliases
               description = "Elixir value";
             };
         in
-        attrsOf (attrsOf (valueType));
+        attrsOf (attrsOf valueType);
 
       lib =
         let
@@ -754,12 +744,12 @@ optionalAttrs allowAliases aliases
         pkgs.runCommand name
           {
             value = toConf value;
-            passAsFile = [ "value" ];
             nativeBuildInputs = [ elixir ];
             preferLocalBuild = true;
+            __structuredAttrs = true;
           }
           ''
-            cp "$valuePath" "$out"
+            printf "%s" "$value" > "$out"
             mix format "$out"
           '';
     };
@@ -803,14 +793,14 @@ optionalAttrs allowAliases aliases
               inherit indentWidth;
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
               value = toLua { inherit asBindings multiline; } value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
               ${optionalString (!asBindings) ''
                 echo -n 'return ' >> $out
               ''}
-              cat $valuePath >> $out
+              printf "%s" "$value" >> $out
               stylua \
                 --no-editorconfig \
                 --line-endings Unix \
@@ -824,28 +814,117 @@ optionalAttrs allowAliases aliases
       lib.mkRaw = lib.mkLuaInline;
     };
 
+  nixConf =
+    {
+      package,
+      version,
+      extraOptions ? "",
+      checkAllErrors ? true,
+      checkConfig ? true,
+    }:
+    let
+      isNixAtLeast = versionAtLeast version;
+    in
+    assert isNixAtLeast "2.2";
+    {
+      type =
+        let
+          atomType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            path
+            package
+          ]);
+        in
+        attrsOf atomType;
+      generate =
+        name: value:
+        let
+
+          # note that list type has been omitted here as the separator varies, see `nix.settings.*`
+          mkValueString =
+            v:
+            if v == null then
+              ""
+            else if isInt v then
+              toString v
+            else if isBool v then
+              boolToString v
+            else if isFloat v then
+              strings.floatToString v
+            else if isDerivation v then
+              toString v
+            else if builtins.isPath v then
+              toString v
+            else if isString v then
+              v
+            else if strings.isConvertibleWithToString v then
+              toString v
+            else
+              abort "The nix conf value: ${toPretty { } v} can not be encoded";
+
+          mkKeyValue = k: v: "${escape [ "=" ] k} = ${mkValueString v}";
+
+          mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
+
+          isExtra = key: hasPrefix "extra-" key;
+
+        in
+        pkgs.writeTextFile {
+          inherit name;
+          # workaround for https://github.com/NixOS/nix/issues/9487
+          # extra-* settings must come after their non-extra counterpart
+          text = ''
+            # WARNING: this file is generated from the nix.* options in
+            # your NixOS configuration, typically
+            # /etc/nixos/configuration.nix.  Do not edit it!
+            ${mkKeyValuePairs (filterAttrs (key: _: !(isExtra key)) value)}
+            ${mkKeyValuePairs (filterAttrs (key: _: isExtra key) value)}
+            ${extraOptions}
+          '';
+          checkPhase = lib.optionalString checkConfig (
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then
+              ''
+                echo "Ignoring validation for cross-compilation"
+              ''
+            else
+              let
+                showCommand = if isNixAtLeast "2.20pre" then "config show" else "show-config";
+              in
+              ''
+                echo "Validating generated nix.conf"
+                ln -s $out ./nix.conf
+                set -e
+                set +o pipefail
+                NIX_CONF_DIR=$PWD \
+                  ${package}/bin/nix ${showCommand} ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
+                    ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
+                  |& sed -e 's/^warning:/error:/' \
+                  | (! grep '${if checkAllErrors then "^error:" else "^error: unknown setting"}')
+                set -o pipefail
+              ''
+          );
+        };
+    };
+
   # Outputs a succession of Python variable assignments
   # Useful for many Django-based services
   pythonVars =
     { }:
     {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              float
-              int
-              path
-              str
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "Python value";
-            };
-        in
-        attrsOf valueType;
+      type = attrsOf (serializableValueWith {
+        typeName = "Python";
+      });
+
+      lib = {
+        mkRaw = value: {
+          inherit value;
+          _type = "raw";
+        };
+      };
+
       generate =
         name: value:
         pkgs.callPackage (
@@ -860,24 +939,51 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              value = builtins.toJSON value;
-              pythonGen = ''
+              imports = builtins.toJSON (value._imports or [ ]);
+              value = builtins.toJSON (removeAttrs value [ "_imports" ]);
+              pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
 
+                def recursive_repr(value: any) -> str:
+                    if type(value) is list:
+                        return '\n'.join([
+                            "[",
+                            *[recursive_repr(x) + "," for x in value],
+                            "]",
+                        ])
+                    elif type(value) is dict and value.get("_type") == "raw":
+                        return value.get("value")
+                    elif type(value) is dict:
+                        return '\n'.join([
+                            "{",
+                            *[f"'{k.replace('\''', '\\\''')}': {recursive_repr(v)}," for k, v in value.items()],
+                            "}",
+                        ])
+                    else:
+                        return repr(value)
+
+                with open(os.environ["importsPath"], "r") as f:
+                    imports = json.load(f)
+                    if imports is not None:
+                        for i in imports:
+                            print(f"import {i}")
+                        print()
+
                 with open(os.environ["valuePath"], "r") as f:
                     for key, value in json.load(f).items():
-                        print(f"{key} = {repr(value)}")
+                        print(f"{key} = {recursive_repr(value)}")
               '';
-              passAsFile = [
-                "value"
-                "pythonGen"
-              ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              export importsPath="$TMPDIR/imports"
+              printf "%s" "$imports" > "$importsPath"
+              export valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               cat "$valuePath"
-              python3 "$pythonGenPath" > $out
+              python3 "$pythonGen" > $out
               black $out
             ''
         ) { };
@@ -890,41 +996,24 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type =
-          let
-            valueType =
-              nullOr (oneOf [
-                bool
-                int
-                float
-                str
-                path
-                (attrsOf valueType)
-                (listOf valueType)
-              ])
-              // {
-                description = "XML value";
-              };
-          in
-          valueType;
+        type = serializableValueWith { typeName = "XML"; };
 
         generate =
           name: value:
           pkgs.callPackage (
             {
               runCommand,
-              python3,
               libxml2Python,
+              python3Packages,
             }:
             runCommand name
               {
                 nativeBuildInputs = [
-                  python3
-                  python3.pkgs.xmltodict
+                  python3Packages.xmltodict
                   libxml2Python
                 ];
                 value = builtins.toJSON value;
-                pythonGen = ''
+                pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
@@ -934,19 +1023,66 @@ optionalAttrs allowAliases aliases
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
-                passAsFile = [
-                  "value"
-                  "pythonGen"
-                ];
                 preferLocalBuild = true;
+                __structuredAttrs = true;
               }
               ''
-                python3 "$pythonGenPath" > $out
+                export valuePath="$TMPDIR/value"
+                printf "%s" "$value" > "$valuePath"
+                python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''
           ) { };
       }
     else
       throw "pkgs.formats.xml: Unknown format: ${format}";
+
+  plist =
+    {
+      escape ? true,
+    }:
+    {
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "Property list (plist) value";
+            };
+        in
+        valueType;
+
+      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+    };
+
+  hcl1 =
+    args:
+    let
+      # Helper function to recursively transform values for HCL1 canonicalization
+      # Rule: If an attribute value is an attribute set, wrap it in a list
+      transform =
+        value:
+        if isAttrs value && !isDerivation value then
+          # If it's an attribute set, transform it recursively and wrap in a list
+          [ (mapAttrs (name: transform) value) ]
+        else if isList value then
+          # If it's already a list, transform each element
+          map transform value
+        else
+          value;
+      jsonFormat = json { };
+    in
+    jsonFormat
+    // {
+      generate = name: value: jsonFormat.generate name (mapAttrs (_: transform) value);
+    };
 
 }

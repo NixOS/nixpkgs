@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cxxtools";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "maekitalo";
     repo = "cxxtools";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-AiMVmtvI20nyv/nuHHxGH4xFnlc9AagVkKlnRlaYCPM=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

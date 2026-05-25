@@ -4,22 +4,29 @@
   fetchPypi,
   setuptools,
   protobuf,
+  grpcio,
+  grpcio-tools,
 }:
 
 buildPythonPackage rec {
   pname = "nominal-api-protos";
-  version = "0.708.0";
+  version = "0.1073.0";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
   src = fetchPypi {
     inherit version;
     pname = "nominal_api_protos";
-    hash = "sha256-EYyBRmmCq4OA6xgf4JpajUtlJClkxxPn48Wmmy2mqN4=";
+    hash = "sha256-jI7V34IyfY6bwzUvcOi6tdQI+OkJRMdhmNq0rosMjR4=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ protobuf ];
+  dependencies = [
+    protobuf
+    grpcio
+    grpcio-tools
+  ];
 
   pythonImportsCheck = [ "nominal_api_protos" ];
 

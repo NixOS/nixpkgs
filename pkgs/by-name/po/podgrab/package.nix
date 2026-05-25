@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "podgrab";
-  version = "unstable-2021-04-14";
+  version = "0-unstable-2021-04-14";
 
   src = fetchFromGitHub {
     owner = "akhilrex";
@@ -26,11 +26,11 @@ buildGoModule {
 
   passthru.tests = { inherit (nixosTests) podgrab; };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted podcast manager to download episodes as soon as they become live";
     mainProgram = "podgrab";
     homepage = "https://github.com/akhilrex/podgrab";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

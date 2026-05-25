@@ -25,16 +25,23 @@ in
 stdenv.mkDerivation (
   rec {
     pname = "libgpg-error";
-    version = "1.51";
+    version = "1.59";
 
     src = fetchurl {
-      url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-      hash = "sha256-vg8bLba5Pu1VNpzfefGfcnUMjHw5/CC1d+ckVFQn5rI=";
+      url = "mirror://gnupg/libgpg-error/libgpg-error-${version}.tar.bz2";
+      hash = "sha256-oZvFCH/ZcCbZPLS0XVFjjRolICpeH7w5BXmfQkz6YTQ=";
     };
 
     postPatch = ''
       sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+    ''
+    # libgpg-error insists on having these generated files. They should be fairly ABI stable,
+    # so add one for FreeBSD.
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-freebsd") ''
+      cp ${./lock-obj-pub.x86_64-unknown-freebsd.h} src/syscfg/lock-obj-pub.freebsd.h
     '';
+
+    hardeningDisable = [ "strictflexarrays3" ];
 
     configureFlags = [
       # See https://dev.gnupg.org/T6257#164567
@@ -87,7 +94,7 @@ stdenv.mkDerivation (
 
       license = lib.licenses.lgpl2Plus;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ ];
     };
   }
   // genPosixLockObjOnlyAttrs

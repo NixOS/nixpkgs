@@ -6,15 +6,15 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "conmon-rs";
-  version = "0.6.6";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "conmon-rs";
-    rev = "v${version}";
-    hash = "sha256-1kGAUAmiPI9zE8LE7G2r0Gy0YM+BUy2MxY7IQOu2ZDQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3+W+keg+4XwbtQDps/9FRVPtX3yuR2sQbkoSusDiLmA=";
   };
 
   nativeBuildInputs = [
@@ -23,13 +23,13 @@ rustPlatform.buildRustPackage rec {
   ];
   doCheck = false;
 
-  cargoVendorDir = ".cargo-vendor";
+  cargoHash = "sha256-shfufw5Ompcp8rv5tnuojEP7t7r7eGTvomPVoFv2AFE=";
 
-  meta = with lib; {
+  meta = {
     description = "OCI container runtime monitor written in Rust";
     homepage = "https://github.com/containers/conmon-rs";
-    license = licenses.asl20;
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
   };
-}
+})

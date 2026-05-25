@@ -48,8 +48,6 @@ let
   ) (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
 
   vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
-  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
-  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkListenInfo =
     hostOpts:
@@ -78,60 +76,54 @@ let
   enableUserDir = any (vhost: vhost.enableUserDir) vhosts;
 
   # NOTE: generally speaking order of modules is very important
-  modules =
-    [
-      # required apache modules our httpd service cannot run without
-      "authn_core"
-      "authz_core"
-      "log_config"
-      "mime"
-      "autoindex"
-      "negotiation"
-      "dir"
-      "alias"
-      "rewrite"
-      "unixd"
-      "slotmem_shm"
-      "socache_shmcb"
-      "mpm_${cfg.mpm}"
-    ]
-    ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
-    ++ optional enableHttp2 "http2"
-    ++ optional enableSSL "ssl"
-    ++ optional enableUserDir "userdir"
-    ++ optional cfg.enableMellon {
-      name = "auth_mellon";
-      path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so";
-    }
-    ++ optional cfg.enablePHP {
-      name = phpModuleName;
-      path = "${php}/modules/lib${phpModuleName}.so";
-    }
-    ++ optional cfg.enablePerl {
-      name = "perl";
-      path = "${mod_perl}/modules/mod_perl.so";
-    }
-    ++ cfg.extraModules;
+  modules = [
+    # required apache modules our httpd service cannot run without
+    "authn_core"
+    "authz_core"
+    "log_config"
+    "mime"
+    "autoindex"
+    "negotiation"
+    "dir"
+    "alias"
+    "rewrite"
+    "unixd"
+    "slotmem_shm"
+    "socache_shmcb"
+    "mpm_${cfg.mpm}"
+  ]
+  ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
+  ++ optional enableHttp2 "http2"
+  ++ optional enableSSL "ssl"
+  ++ optional enableUserDir "userdir"
+  ++ optional cfg.enableMellon {
+    name = "auth_mellon";
+    path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so";
+  }
+  ++ optional cfg.enablePHP {
+    name = phpModuleName;
+    path = "${php}/modules/lib${phpModuleName}.so";
+  }
+  ++ optional cfg.enablePerl {
+    name = "perl";
+    path = "${mod_perl}/modules/mod_perl.so";
+  }
+  ++ cfg.extraModules;
 
-  loggingConf = (
-    if cfg.logFormat != "none" then
-      ''
-        ErrorLog ${cfg.logDir}/error.log
+  loggingConf = ''
+    ErrorLog ${if cfg.logFormat != "none" then "${cfg.logDir}/error.log" else "/dev/null"}
+    ${optionalString (cfg.logLevel != null) "LogLevel ${cfg.logLevel}"}
 
-        LogLevel notice
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+    LogFormat "%{Referer}i -> %U" referer
+    LogFormat "%{User-agent}i" agent
+    ${optionalString (
+      cfg.logFormat == "custom"
+    ) "LogFormat ${lib.strings.escapeNixString cfg.customLogFormat} custom"}
 
-        LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-        LogFormat "%h %l %u %t \"%r\" %>s %b" common
-        LogFormat "%{Referer}i -> %U" referer
-        LogFormat "%{User-agent}i" agent
-
-        CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
-      ''
-    else
-      ''
-        ErrorLog /dev/null
-      ''
-  );
+    CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
+  '';
 
   browserHacks = ''
     <IfModule mod_setenvif.c>
@@ -232,7 +224,7 @@ let
                     RewriteEngine on
                     RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge [NC]
                     RewriteCond %{HTTPS} off
-                    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+                    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
                 </IfModule>
               ''
             else
@@ -585,12 +577,67 @@ in
       };
 
       logFormat = mkOption {
-        type = types.str;
+        type = types.enum [
+          "combined"
+          "common"
+          "referer"
+          "agent"
+          "custom"
+          "none"
+        ];
         default = "common";
-        example = "combined";
+        example = "custom";
         description = ''
-          Log format for log files. Possible values are: combined, common, referer, agent, none.
-          See <https://httpd.apache.org/docs/2.4/logs.html> for more details.
+          Selects the access log format written to log files.
+
+          The values `combined`, `common`, `referer`, and `agent` correspond to predefined Apache HTTPD log formats.
+          Setting the value to `custom` enables the use of a user-defined format string specified via `customLogFormat`.
+          The value `none` disables access logging entirely.
+
+          Further details on Apache log formats are available at <https://httpd.apache.org/docs/2.4/logs.html>.
+        '';
+      };
+
+      customLogFormat = mkOption {
+        type = types.str;
+        default = null;
+        example = ''%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b'';
+        description = ''
+          Defines a custom Apache HTTPD access log format string.
+
+          This option is only consulted when `logFormat` is set to `custom`.
+          The value must be a valid Apache `LogFormat` specification and will be registered under the symbolic name `custom`.
+
+          See <https://httpd.apache.org/docs/2.4/logs.html#formats> for the formal definition of log format directives.
+        '';
+      };
+
+      logLevel = mkOption {
+        type =
+          with types;
+          nullOr (enum [
+            "emerg"
+            "alert"
+            "crit"
+            "error"
+            "warn"
+            "notice"
+            "info"
+            "debug"
+            "trace1"
+            "trace2"
+            "trace3"
+            "trace4"
+            "trace5"
+            "trace6"
+            "trace7"
+            "trace8"
+          ]);
+        default = "notice";
+        example = "crit";
+        description = ''
+          Controls the verbosity of the ErrorLog.
+          See <https://httpd.apache.org/docs/2.4/mod/core.html#loglevel> for more details.
         '';
       };
 
@@ -707,14 +754,14 @@ in
       };
 
       maxClients = mkOption {
-        type = types.int;
+        type = types.ints.positive;
         default = 150;
         example = 8;
         description = "Maximum number of httpd processes (prefork)";
       };
 
       maxRequestsPerChild = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 500;
         description = ''
@@ -742,51 +789,51 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions =
-      [
-        {
-          assertion = all (hostOpts: !hostOpts.enableSSL) vhosts;
-          message = ''
-            The option `services.httpd.virtualHosts.<name>.enableSSL` no longer has any effect; please remove it.
-            Select one of `services.httpd.virtualHosts.<name>.addSSL`, `services.httpd.virtualHosts.<name>.forceSSL`,
-            or `services.httpd.virtualHosts.<name>.onlySSL`.
-          '';
-        }
-        {
-          assertion = all (
-            hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)
-          ) vhosts;
-          message = ''
-            Options `services.httpd.virtualHosts.<name>.addSSL`,
-            `services.httpd.virtualHosts.<name>.onlySSL` and `services.httpd.virtualHosts.<name>.forceSSL`
-            are mutually exclusive.
-          '';
-        }
-        {
-          assertion = all (hostOpts: !(hostOpts.enableACME && hostOpts.useACMEHost != null)) vhosts;
-          message = ''
-            Options `services.httpd.virtualHosts.<name>.enableACME` and
-            `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
-          '';
-        }
-        {
-          assertion = cfg.enablePHP -> php.ztsSupport;
-          message = ''
-            The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
-            ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
-          '';
-        }
-      ]
-      ++ map (
-        name:
-        mkCertOwnershipAssertion {
-          cert = config.security.acme.certs.${name};
-          groups = config.users.groups;
-          services = [
-            config.systemd.services.httpd
-          ] ++ lib.optional (vhostCertNames != [ ]) config.systemd.services.httpd-config-reload;
-        }
-      ) vhostCertNames;
+    assertions = [
+      {
+        assertion = all (hostOpts: !hostOpts.enableSSL) vhosts;
+        message = ''
+          The option `services.httpd.virtualHosts.<name>.enableSSL` no longer has any effect; please remove it.
+          Select one of `services.httpd.virtualHosts.<name>.addSSL`, `services.httpd.virtualHosts.<name>.forceSSL`,
+          or `services.httpd.virtualHosts.<name>.onlySSL`.
+        '';
+      }
+      {
+        assertion = all (
+          hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)
+        ) vhosts;
+        message = ''
+          Options `services.httpd.virtualHosts.<name>.addSSL`,
+          `services.httpd.virtualHosts.<name>.onlySSL` and `services.httpd.virtualHosts.<name>.forceSSL`
+          are mutually exclusive.
+        '';
+      }
+      {
+        assertion = all (hostOpts: !(hostOpts.enableACME && hostOpts.useACMEHost != null)) vhosts;
+        message = ''
+          Options `services.httpd.virtualHosts.<name>.enableACME` and
+          `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
+        '';
+      }
+      {
+        assertion = cfg.enablePHP -> php.ztsSupport;
+        message = ''
+          The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
+          ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
+        '';
+      }
+    ]
+    ++ map (
+      name:
+      mkCertOwnershipAssertion {
+        cert = config.security.acme.certs.${name};
+        groups = config.users.groups;
+        services = [
+          config.systemd.services.httpd
+        ]
+        ++ lib.optional (vhostCertNames != [ ]) config.systemd.services.httpd-config-reload;
+      }
+    ) vhostCertNames;
 
     warnings = mapAttrsToList (name: hostOpts: ''
       Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
@@ -850,16 +897,15 @@ in
       };
     };
 
-    services.httpd.phpOptions =
-      ''
-        ; Don't advertise PHP
-        expose_php = off
-      ''
-      + optionalString (config.time.timeZone != null) ''
+    services.httpd.phpOptions = ''
+      ; Don't advertise PHP
+      expose_php = off
+    ''
+    + optionalString (config.time.timeZone != null) ''
 
-        ; Apparently PHP doesn't use $TZ.
-        date.timezone = "${config.time.timeZone}"
-      '';
+      ; Apparently PHP doesn't use $TZ.
+      date.timezone = "${config.time.timeZone}"
+    '';
 
     services.httpd.extraModules = mkBefore [
       # HTTP authentication mechanisms: basic and digest.
@@ -916,12 +962,14 @@ in
     systemd.services.httpd = {
       description = "Apache HTTPD";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
-      after =
-        [ "network.target" ]
-        ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
-      before = map (certName: "acme-${certName}.service") dependentCertNames;
+      wants = concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames);
+      after = [
+        "network.target"
+      ]
+      # Ensure httpd runs with baseline certificates in place.
+      ++ map (certName: "acme-${certName}.service") vhostCertNames;
+      # Ensure httpd runs (with current config) before the actual ACME jobs run
+      before = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
       restartTriggers = [ cfg.configFile ];
 
       path = [
@@ -961,19 +1009,17 @@ in
 
     # postRun hooks on cert renew can't be used to restart Apache since renewal
     # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
-    # which allows the acme-finished-$cert.target to signify the successful updating
+    # which allows the acme-order-renew-$cert.service to signify the successful updating
     # of certs end-to-end.
     systemd.services.httpd-config-reload =
       let
-        sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
-        sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+        sslServices = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
       in
       mkIf (vhostCertNames != [ ]) {
         wantedBy = sslServices ++ [ "multi-user.target" ];
         # Before the finished targets, after the renew services.
         # This service might be needed for HTTP-01 challenges, but we only want to confirm
         # certs are updated _after_ config has been reloaded.
-        before = sslTargets;
         after = sslServices;
         restartTriggers = [ cfg.configFile ];
         # Block reloading if not all certs exist yet.

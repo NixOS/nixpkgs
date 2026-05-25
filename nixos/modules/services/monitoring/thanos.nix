@@ -774,10 +774,8 @@ in
     };
 
     query-frontend = paramsToOptions params.query-frontend // {
-      enable = mkEnableOption (
-        "the Thanos query frontend implements a service deployed in front of queriers to
-          improve query parallelization and caching."
-      );
+      enable = mkEnableOption "the Thanos query frontend implements a service deployed in front of queriers to
+          improve query parallelization and caching.";
       arguments = mkArgumentsOption "query-frontend";
     };
 
@@ -800,9 +798,7 @@ in
     };
 
     receive = paramsToOptions params.receive // {
-      enable = mkEnableOption (
-        "the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb"
-      );
+      enable = mkEnableOption "the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb";
       arguments = mkArgumentsOption "receive";
     };
   };

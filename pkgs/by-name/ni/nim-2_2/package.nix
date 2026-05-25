@@ -48,8 +48,8 @@ let
           runHook preBuild
           cat >> config/config.nims << WTF
 
-          switch("os", "${nimUnwrapped.passthru.nimTarget.os}")
-          switch("cpu", "${nimUnwrapped.passthru.nimTarget.cpu}")
+          switch("os", "${stdenv.targetPlatform.nim.os}")
+          switch("cpu", "${stdenv.targetPlatform.nim.cpu}")
           switch("define", "nixbuild")
 
           # Configure the compiler using the $CC set by Nix at build time
@@ -63,8 +63,8 @@ let
 
           mv config/nim.cfg config/nim.cfg.old
           cat > config/nim.cfg << WTF
-          os = "${nimUnwrapped.passthru.nimTarget.os}"
-          cpu =  "${nimUnwrapped.passthru.nimTarget.cpu}"
+          os = "${stdenv.targetPlatform.nim.os}"
+          cpu =  "${stdenv.targetPlatform.nim.cpu}"
           define:"nixbuild"
           WTF
 
@@ -104,38 +104,37 @@ let
         # Use the custom configuration
       ];
 
-      installPhase =
-        ''
-          runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-          mkdir -p $out/bin $out/etc
+        mkdir -p $out/bin $out/etc
 
-          cp -r config $out/etc/nim
+        cp -r config $out/etc/nim
 
-          for binpath in ${nimUnwrapped}/bin/nim?*; do
-            local binname=`basename $binpath`
-            makeWrapper \
-              $binpath $out/bin/${targetPlatformConfig}-$binname \
-              $wrapperArgs
-            ln -s $out/bin/${targetPlatformConfig}-$binname $out/bin/$binname
-          done
-
+        for binpath in ${nimUnwrapped}/bin/nim?*; do
+          local binname=`basename $binpath`
           makeWrapper \
-            ${nimUnwrapped}/nim/bin/nim $out/bin/${targetPlatformConfig}-nim \
-            --set-default CC $(command -v $CC) \
-            --set-default CXX $(command -v $CXX) \
+            $binpath $out/bin/${targetPlatformConfig}-$binname \
             $wrapperArgs
-          ln -s $out/bin/${targetPlatformConfig}-nim $out/bin/nim
+          ln -s $out/bin/${targetPlatformConfig}-$binname $out/bin/$binname
+        done
 
-          makeWrapper \
-            ${nimUnwrapped}/bin/testament $out/bin/${targetPlatformConfig}-testament \
-            $wrapperArgs
-          ln -s $out/bin/${targetPlatformConfig}-testament $out/bin/testament
+        makeWrapper \
+          ${nimUnwrapped}/nim/bin/nim $out/bin/${targetPlatformConfig}-nim \
+          --set-default CC $(command -v $CC) \
+          --set-default CXX $(command -v $CXX) \
+          $wrapperArgs
+        ln -s $out/bin/${targetPlatformConfig}-nim $out/bin/nim
 
-        ''
-        + ''
-          runHook postInstall
-        '';
+        makeWrapper \
+          ${nimUnwrapped}/bin/testament $out/bin/${targetPlatformConfig}-testament \
+          $wrapperArgs
+        ln -s $out/bin/${targetPlatformConfig}-testament $out/bin/testament
+
+      ''
+      + ''
+        runHook postInstall
+      '';
 
       passthru = nimUnwrapped.passthru // {
         inherit wrapNim;

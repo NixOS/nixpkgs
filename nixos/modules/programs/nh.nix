@@ -10,7 +10,9 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     NotAShelf
+    mdaniels5757
     viperML
+    faukah
   ];
 
   options.programs.nh = {
@@ -74,12 +76,6 @@ in
         [ ];
 
     assertions = [
-      # Not strictly required but probably a good assertion to have
-      {
-        assertion = cfg.clean.enable -> cfg.enable;
-        message = "programs.nh.clean.enable requires programs.nh.enable";
-      }
-
       {
         assertion = (cfg.flake != null) -> !(lib.hasSuffix ".nix" cfg.flake);
         message = "nh.flake must be a directory, not a nix file";
@@ -99,6 +95,7 @@ in
         script = "exec ${lib.getExe cfg.package} clean all ${cfg.clean.extraArgs}";
         startAt = cfg.clean.dates;
         path = [ config.nix.package ];
+        after = [ "multi-user.target" ];
         serviceConfig.Type = "oneshot";
       };
 

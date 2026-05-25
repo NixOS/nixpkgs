@@ -4,8 +4,8 @@
   fetchFromGitHub,
   graphql-core,
   pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
+  pytest8_3CheckHook,
+  pythonAtLeast,
   setuptools,
 }:
 
@@ -14,7 +14,8 @@ buildPythonPackage rec {
   version = "0.18.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # Hasn't been updated in two years
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "wyfo";
@@ -37,16 +38,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    pytest8_3CheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "apischema" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON (de)serialization, GraphQL and JSON schema generation using typing";
     homepage = "https://github.com/wyfo/apischema";
     changelog = "https://github.com/wyfo/apischema/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -17,11 +17,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-djprzmogT1OEf0/+twdxzx30YaMNzFjXkZd4IDsH8oo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ZIRwp5AJugMDxg3DyFIH5VlD0m4Si2tJdspKE5QEB4M=";
 
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -32,9 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://git.sr.ht/~ireas/rusty-man";
     changelog = "https://git.sr.ht/~ireas/rusty-man/tree/v${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      figsoda
-      defelo
-    ];
+    maintainers = with lib.maintainers; [ defelo ];
   };
 })

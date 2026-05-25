@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "6.0.1";
-  format = "pyproject";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     tag = version;
-    hash = "sha256-+O6bIbIpEMRUhzGUOQtBlHB//DaXaaOTjqMBTFvYnLk=";
+    hash = "sha256-GN76dLk+Ju+Do/BymIuHD/9KAjYZ3sKvfz2cvNEnF5U=";
   };
 
   build-system = [
@@ -49,10 +49,10 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  pytestFlagsArray = [
-    "--ignore=tests/benchmark/" # requires pytest-benchmark
-    "--ignore=tests/integration/" # pulls in 10 other packages
-    "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
+  disabledTestPaths = [
+    "tests/benchmark/" # requires pytest-benchmark
+    "tests/integration/" # pulls in 10 other packages
+    "tests/unit/profiles/test_black.py" # causes infinite recursion to include black
   ];
 
   disabledTests = [
@@ -77,11 +77,11 @@ buildPythonPackage rec {
     "test_isort_should_warn_on_empty_custom_config_issue_1433"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utility / library to sort Python imports";
     homepage = "https://github.com/PyCQA/isort";
-    license = licenses.mit;
-    maintainers = with maintainers; [ couchemar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ couchemar ];
     mainProgram = "isort";
   };
 }

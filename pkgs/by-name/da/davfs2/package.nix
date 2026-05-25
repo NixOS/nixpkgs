@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  autoreconfHook,
+  autoreconfHook269,
   neon,
   procps,
   replaceVars,
@@ -12,15 +12,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "davfs2";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/davfs2-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-KY7dDGdzy+JY4VUqQxrK6msu7bcIeImnNdrviIX8saw=";
+    sha256 = "sha256-pTaBYetQVWUdfl6BgMFgbaleeMlBtruKkobfeSPPy6k=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoreconfHook269
   ];
 
   buildInputs = [

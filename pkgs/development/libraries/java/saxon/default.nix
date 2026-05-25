@@ -44,43 +44,46 @@ let
 
         sourceRoot = ".";
 
-        installPhase =
-          ''
-            runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-            install -Dm444 -t $out/share/java/ *.jar
-            mv doc $out/share
+          install -Dm444 -t $out/share/java/ *.jar
+          mv doc $out/share
 
-            mkdir -p $out/bin
-            makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
-              --add-flags "-jar $out/share/java/${jar'}.jar"
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
-            mv lib $out/share/java
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
-            makeWrapper ${lib.getExe jre} $out/bin/transform \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+          mkdir -p $out/bin
+          makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+            --add-flags "-jar $out/share/java/${jar'}.jar"
 
-            makeWrapper ${lib.getExe jre} $out/bin/query \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
-          ''
-          + "runHook postInstall";
+          # Other distributions like debian distribute it as saxon*-xslt,
+          # this makes compilling packages that target other distros easier.
+          ln -s $out/bin/${mainProgram} $out/bin/${mainProgram}-xslt
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
+          mv lib $out/share/java
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
+          makeWrapper ${lib.getExe jre} $out/bin/transform \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+
+          makeWrapper ${lib.getExe jre} $out/bin/query \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
+        ''
+        + "runHook postInstall";
 
         passthru = lib.optionalAttrs (updateScript != null) {
           inherit updateScript;
         };
 
-        meta = with lib; {
+        meta = {
           inherit description license mainProgram;
           homepage =
             if versionAtLeast finalAttrs.version "11" then
               "https://www.saxonica.com/products/latest.xml"
             else
               "https://www.saxonica.com/products/archive.xml";
-          sourceProvenance = with sourceTypes; [ binaryBytecode ];
-          maintainers = with maintainers; [ rvl ];
-          platforms = platforms.all;
+          sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+          maintainers = with lib.maintainers; [ rvl ];
+          platforms = lib.platforms.all;
         };
       }
     );
@@ -127,7 +130,9 @@ in
     pname = "saxon";
     version = "6.5.3";
     src = fetchurl {
-      url = "mirror://sourceforge/saxon/saxon${dashify version}.zip";
+      url = "mirror://sourceforge/saxon/OldFiles/${version}/saxon${
+        builtins.replaceStrings [ "." ] [ "_" ] version
+      }.zip";
       hash = "sha256-Q28wzqyUCPBJ2C3a8acdG2lmeee8GeEAgg9z8oUfvlA=";
     };
     description = "XSLT 1.0 processor";
@@ -174,11 +179,11 @@ in
 
   saxon_11-he = common rec {
     pname = "saxon-he";
-    version = "11.6";
+    version = "11.7";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      sha256 = "/AVX5mtZSO6Is19t3+FlEvtIBsnwB3MIWAPCht8Aqnw=";
+      sha256 = "MGzhUW9ZLVvTSqEdpAZWAiwTYxCZxbn26zESDmIe4Vo=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
@@ -186,11 +191,11 @@ in
 
   saxon_12-he = common rec {
     pname = "saxon-he";
-    version = "12.6";
+    version = "12.9";
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      hash = "sha256-y7ZlfaBhwVVHatnkOjVkpMySjUlR6+7S6v5aCqdOKu4=";
+      hash = "sha256-8olb7zeUESxlChWL4nw5qG6IwXF+u44OiAZ9HwdjXRI=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 3.1, and XQuery 3.1";

@@ -4,8 +4,8 @@ let
 in
 {
   name = "docling-serve";
-  meta = with lib.maintainers; {
-    maintainers = [ drupol ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {

@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
         curl -Lo $tmp/I.Ming.ttf https://raw.githubusercontent.com/ichitenfont/I.Ming/$version/$version/I.Ming-$version.ttf
         install -DT -m444 $tmp/I.Ming.ttf $tmp/share/fonts/truetype/I.Ming/I.Ming.ttf
         rm $tmp/I.Ming.ttf
-        hash=$(nix hash path --type sha256 --base32 --sri $tmp)
+        hash=$(nix --extra-experimental-features nix-command hash path --type sha256 --base32 --sri $tmp)
         sed -i -E \
           -e "s/version = \"[0-9.]+\"/version = \"$version\"/" \
           -e "s|hash = \".*\"|hash = \"$hash\"|" \
@@ -44,11 +44,11 @@ stdenvNoCC.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source Pan-CJK serif typeface";
     homepage = "https://github.com/ichitenfont/I.Ming";
-    license = licenses.ipa;
-    platforms = platforms.all;
-    maintainers = [ maintainers.linsui ];
+    license = lib.licenses.ipa;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.linsui ];
   };
 }

@@ -31,7 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/redcode-labs/GodSpeed/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    teams = [ lib.teams.redcodelabs ];
     mainProgram = "godspeed";
     broken = stdenv.hostPlatform.isDarwin;
   };

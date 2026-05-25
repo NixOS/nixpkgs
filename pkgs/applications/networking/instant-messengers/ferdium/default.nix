@@ -2,7 +2,7 @@
   lib,
   mkFranzDerivation,
   fetchurl,
-  xorg,
+  libxshmfence,
   stdenv,
 }:
 
@@ -15,31 +15,31 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
     {
-      amd64-linux_hash = "sha256-e5O8cvQqvymHQiu7kY1AhKfoVOsDLYK8hDX+PKgZPFs=";
-      arm64-linux_hash = "sha256-UskXFGxAFOrAK8bIXRHSwN0G1lakGyuRGXTYYRFKHaw=";
+      amd64-linux_hash = "sha256-1jXo8MMk2EEkLo0n4ICmGJteKProLYKkMF//g63frHs=";
+      arm64-linux_hash = "sha256-jYDGVZhL0bswowm1H/4aa35lNJalil6ymV34NQM5Gfc=";
     }
     ."${arch}-linux_hash";
 in
 mkFranzDerivation rec {
   pname = "ferdium";
   name = "Ferdium";
-  version = "7.0.1";
+  version = "7.1.1";
   src = fetchurl {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-${arch}.deb";
     inherit hash;
   };
 
-  extraBuildInputs = [ xorg.libxshmfence ];
+  extraBuildInputs = [ libxshmfence ];
 
   passthru = {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "All your services in one place built by the community";
     homepage = "https://ferdium.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ magnouvean ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ magnouvean ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

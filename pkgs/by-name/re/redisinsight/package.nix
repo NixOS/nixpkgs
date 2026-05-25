@@ -9,7 +9,7 @@
   copyDesktopItems,
   dart-sass,
   makeWrapper,
-  nodejs_20,
+  nodejs-slim_20,
   pkg-config,
   yarnConfigHook,
 
@@ -19,17 +19,17 @@
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs-slim_20;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
-  version = "2.68.0";
+  version = "2.70.0";
 
   src = fetchFromGitHub {
     owner = "RedisInsight";
     repo = "RedisInsight";
     rev = finalAttrs.version;
-    hash = "sha256-rXp3C/Ui3vMBscsxlwU9fRF1bmvMrvXLtmJfGzfh1Rk=";
+    hash = "sha256-b97/hBhXqSFDzcyrQKu5Ebu1Ud3wpWEjyzUehj0PP9w=";
   };
 
   patches = [
@@ -42,27 +42,28 @@ stdenv.mkDerivation (finalAttrs: {
   baseOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-base-offline-cache";
     inherit (finalAttrs) src patches;
-    hash = "sha256-ORVftwl/8Yrug2MeqWfZTsHNTRJlpKGn2P7JCHUf3do=";
+    hash = "sha256-m3relh3DZGReEi4dVOJcIXU9QVClisXw+f7K5i25x24=";
   };
 
   innerOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-inner-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight";
-    hash = "sha256-yFfkpWV/GD2CcAzb0D3lNZwmqzEN6Bi1MjPyRwClaQ0=";
+    hash = "sha256-rqmrETlc2XoZDM4GP1+qI4eK4oGmtpmc6TVvAam2+W8=";
   };
 
   apiOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-api-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight/api";
-    hash = "sha256-go7IR1UsW8TrWjaFSlC6/biUvb9cHo3PgJa16tF0XHo=";
+    hash = "sha256-KFtmq3iYAnsAi5ysvGCzBk9RHV7EE7SIPbzPza7vBdA=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
     nodejs
+    nodejs.npm
     (nodejs.python.withPackages (ps: [ ps.setuptools ]))
     pkg-config
     yarnConfigHook

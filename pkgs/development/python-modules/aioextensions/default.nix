@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  pythonOlder,
 
   # Python dependencies
   uvloop,
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "aioextensions";
   version = "21.7.2261349";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,10 +26,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High performance functions to work with the async IO";
     homepage = "https://kamadorueda.github.io/aioextensions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

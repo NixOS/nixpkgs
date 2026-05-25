@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "protoscope";
-  version = "unstable-2022-11-09";
+  version = "0-unstable-2022-11-09";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
@@ -27,6 +27,6 @@ buildGoModule {
     mainProgram = "protoscope";
     homepage = "https://github.com/protocolbuffers/protoscope";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = [ ];
   };
 }

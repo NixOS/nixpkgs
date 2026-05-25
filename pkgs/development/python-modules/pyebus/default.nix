@@ -4,15 +4,12 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyebus";
   version = "1.4.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -28,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyebus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic Interface to EBUS Daemon (ebusd)";
     homepage = "https://github.com/c0fec0de/pyebus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

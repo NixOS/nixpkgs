@@ -10,6 +10,7 @@
   XCTest,
   sqlite,
   ncurses,
+  clang,
   replaceVars,
 }:
 let
@@ -40,9 +41,10 @@ stdenv.mkDerivation {
   ];
 
   patches = [
-    ./patches/nix-resource-root.patch
     ./patches/disable-catalyst.patch
-    ./patches/linux-fix-linking.patch
+    (replaceVars ./patches/linux-fix-linking.patch {
+      inherit clang;
+    })
     # TODO: Replace with branch patch once merged:
     # https://github.com/apple/swift-driver/pull/1197
     (fetchpatch {
@@ -55,18 +57,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  configurePhase =
-    generated.configure
-    + ''
-      swiftpmMakeMutable swift-tools-support-core
-      patch -p1 -d .build/checkouts/swift-tools-support-core -i ${
-        fetchpatch {
-          url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-          hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-          includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-        }
-      }
-    '';
+  configurePhase = generated.configure;
 
   # TODO: Tests depend on indexstore-db being provided by an existing Swift
   # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.

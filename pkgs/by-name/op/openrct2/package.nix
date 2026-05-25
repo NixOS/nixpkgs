@@ -22,64 +22,68 @@
   libiconv,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libvorbis,
   libzip,
+  makeWrapper,
   nlohmann_json,
   openssl,
   pkg-config,
   speexdsp,
+  versionCheckHook,
   zlib,
+
+  withDiscordRpc ? false,
+  # Paths to RCT1 and RCT2 installs can be specified to have them added as a wrapped argument
+  rct1Path ? null,
+  rct2Path ? null,
 }:
 
 let
-  openrct2-version = "0.4.22";
-
-  # Those versions MUST match the pinned versions within the CMakeLists.txt
-  # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.6.1";
-  openmsx-version = "1.6";
-  opensfx-version = "1.0.5";
-  title-sequences-version = "0.4.14";
+  objects-version = "1.7.9";
+  openmusic-version = "1.6.1";
+  opensfx-version = "1.0.6";
+  title-sequences-version = "0.4.26";
 
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
-    hash = "sha256-aCkYZjDlLDMrakhH67k2xUmlIvytr49eXkV5xMkaRFA=";
+    hash = "sha256-VUYe0gxugvFOmiec2ERlSwJkmZu5QDTVj6kS/e4m6tY=";
   };
-  openmsx = fetchurl {
-    url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmsx-version}/openmusic.zip";
-    hash = "sha256-8JfTpMzTn3VG+X2z7LG4vnNkj1O3p1lbhszL3Bp1V+Q=";
+  openmusic = fetchurl {
+    url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmusic-version}/openmusic.zip";
+    hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
   };
   opensfx = fetchurl {
     url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${opensfx-version}/opensound.zip";
-    hash = "sha256-qVIUi+FkwSjk/TrqloIuXwUe3ZoLHyyE3n92KM47Lhg=";
+    hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
   };
   title-sequences = fetchurl {
     url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${title-sequences-version}/title-sequences.zip";
-    hash = "sha256-FA33FOgG/tQRzEl2Pn8WsPzypIelcAHR5Q/Oj5FIqfM=";
+    hash = "sha256-2ruXh7FXY0L8pN2fZLP4z6BKfmzpwruWEPR7dikFyFg=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
-  version = openrct2-version;
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
-    rev = "v${openrct2-version}";
-    hash = "sha256-dFELAfJIgizM0nRc4SMrFGIqFQo/ImTtR89GVkb4/TQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5GPepF013XhymzlgfYjlB/XPE2/w18/kv3IDgJ4vPuY=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     unzip
+    makeWrapper
+    versionCheckHook
   ];
 
   buildInputs = [
     SDL2
     curl
-    discord-rpc
     duktape
     expat
     flac
@@ -93,26 +97,28 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libvorbis
     libzip
     nlohmann_json
     openssl
     speexdsp
     zlib
-  ];
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
 
   cmakeFlags = [
-    "-DDOWNLOAD_OBJECTS=OFF"
-    "-DDOWNLOAD_OPENMSX=OFF"
-    "-DDOWNLOAD_OPENSFX=OFF"
-    "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
+    (lib.cmakeBool "DOWNLOAD_OBJECTS" false)
+    (lib.cmakeBool "DOWNLOAD_OPENMUSIC" false)
+    (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
+    (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
+    (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
   ];
 
   postUnpack = ''
     mkdir -p $sourceRoot/data/{object,sequence}
     unzip -o ${objects} -d $sourceRoot/data/object
-    unzip -o ${openmsx} -d $sourceRoot/data
+    unzip -o ${openmusic} -d $sourceRoot/data
     unzip -o ${opensfx} -d $sourceRoot/data
     unzip -o ${title-sequences} -d $sourceRoot/data/sequence
   '';
@@ -127,27 +133,58 @@ stdenv.mkDerivation (finalAttrs: {
     # Verify that the correct version of each third party repository is used.
     (
       let
-        versionCheck = cmakeKey: version: ''
-          grep -q '^set(${cmakeKey}_VERSION "${version}")$' CMakeLists.txt \
-            || (echo "${cmakeKey} differs from expected version!"; exit 1)
+        versionCheck = assetKey: url: ''
+          grep -qF '"${url}"' assets.json \
+            || (echo "${assetKey} differs from expected version!"; exit 1)
         '';
       in
-      (versionCheck "OBJECTS" objects-version)
-      + (versionCheck "OPENMSX" openmsx-version)
-      + (versionCheck "OPENSFX" opensfx-version)
-      + (versionCheck "TITLE_SEQUENCE" title-sequences-version)
+      (versionCheck "objects" objects.url)
+      + (versionCheck "openmusic" openmusic.url)
+      + (versionCheck "opensfx" opensfx.url)
+      + (versionCheck "title-sequences" title-sequences.url)
     );
 
+  doInstallCheck = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/openrct2 \
+      ${lib.optionalString (rct1Path != null) "--add-flags '--rct1-data-path=\"${rct1Path}\"'"} \
+      ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
+  '';
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
-    homepage = "https://openrct2.io/";
+    description = "Open source re-implementation of RollerCoaster Tycoon 2";
+    longDescription = ''
+      OpenRCT2 is an open source re-implementation of RollerCoaster Tycoon 2, a
+      construction and management simulation video game that simulates amusement
+      park management.
+
+      The original RCT2 game data is required to play.
+
+      The path to an existing RCT1 or RCT2 installation can be provided at
+      build time via the rct1Path and rct2Path arguments respectively:
+
+        openrct2.override {
+          rct1Path = "/path/to/rct1";
+          rct2Path = "/path/to/rct2";
+        };
+
+      Alternatively, if no paths are provided, the game will prompt for the
+      RCT2 data on first launch. For RCT1, you will then need to go to
+      the game settings and specify the path to the data directory.
+    '';
+    homepage = "https://openrct2.io";
+    changelog = "https://github.com/OpenRCT2/OpenRCT2/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      oxzi
       keenanweaver
       kylerisse
     ];
+    mainProgram = "openrct2";
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

@@ -26,17 +26,16 @@ stdenv.mkDerivation {
     })
   ];
 
-  postPatch =
-    ''
-      # Fix compiler error that wants a string literal as format string for `wprintw`
-      substituteInPlace sel_file.c \
-        --replace-fail 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Fix compiler error on Darwin: conflicting types for 'strdup'
-      substituteInPlace sel_file.c \
-        --replace-fail 'char *strdup(char *);' ' '
-    '';
+  postPatch = ''
+    # Fix compiler error that wants a string literal as format string for `wprintw`
+    substituteInPlace sel_file.c \
+      --replace-fail 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix compiler error on Darwin: conflicting types for 'strdup'
+    substituteInPlace sel_file.c \
+      --replace-fail 'char *strdup(char *);' ' '
+  '';
 
   buildInputs = [ ncurses ];
 
@@ -46,12 +45,12 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Visual hexadecimal difference editor";
     homepage = "http://tboudet.free.fr/hexdiff/";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "hexdiff";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

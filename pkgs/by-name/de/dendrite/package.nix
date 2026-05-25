@@ -9,18 +9,18 @@
   postgresqlTestHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "matrix-dendrite";
-  version = "0.14.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "dendrite";
-    rev = "v${version}";
-    hash = "sha256-b/kybHF9WcP88kQuG7LB0/pgflYUeWNqEHfUyKfUCIU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VxQ5fuGzkEL371TmnDQ0wNqqmfzupmsTX/v+eFthj8E=";
   };
 
-  vendorHash = "sha256-380xuwMD9gxrjUsLfO8R08wruyWZwjRhiIDmSc/FGwA=";
+  vendorHash = "sha256-QUztOoOesECAhwh4whzvrc43rJxjtPaEICUHno2DId0=";
 
   subPackages = [
     # The server
@@ -68,9 +68,8 @@ buildGoModule rec {
   meta = {
     homepage = "https://element-hq.github.io/dendrite";
     description = "Second-generation Matrix homeserver written in Go";
-    changelog = "https://github.com/element-hq/dendrite/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/dendrite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
-    teams = [ lib.teams.matrix ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "stachenov";
-    repo = pname;
+    repo = "quazip";
     rev = "v${version}";
     sha256 = "sha256-AOamvy2UgN8n7EZ8EidWkVzRICzEXMmvZsB18UwxIVo=";
   };
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides access to ZIP archives from Qt programs";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     homepage = "https://stachenov.github.io/quazip/"; # Migrated from http://quazip.sourceforge.net/
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

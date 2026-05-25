@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pretend";
   version = "1.0.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alex";
@@ -24,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretend" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for stubbing";
     homepage = "https://github.com/alex/pretend";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

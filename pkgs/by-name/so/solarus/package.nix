@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
+  nix-update-script,
   cmake,
   ninja,
   luajit,
@@ -22,22 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus";
-  version = "2.0.0";
+  version = "2.0.4";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = "solarus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kfg4pFZrEhsIU4RQlOox3hMpk2PXbOzrkwDElPGnDjA=";
+    hash = "sha256-dgsRxP0tZQjwlQhgEd8RwPtO/oU62xyy8WrHECBRMjQ=";
   };
-
-  patches = [
-    # https://gitlab.com/solarus-games/solarus/-/merge_requests/1570
-    (fetchpatch {
-      url = "https://gitlab.com/solarus-games/solarus/-/commit/8e1eee51cbfa5acf2511b059739153065b0ba21d.patch";
-      hash = "sha256-KevGavtUhpHRt85WLh9ApmZ8a+NeWB1zDDHKGT08yhQ=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -70,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit solarus-quest-editor solarus-launcher;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Zelda-like ARPG game engine";

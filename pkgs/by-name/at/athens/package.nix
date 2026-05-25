@@ -1,23 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  testers,
-  athens,
+  # Requires Go 1.26, drop when that's the default.
+  buildGo126Module,
+  nix-update-script,
+  versionCheckHook,
+  applyPatches,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "athens";
-  version = "0.16.0";
+  version = "0.17.1";
 
-  src = fetchFromGitHub {
-    owner = "gomods";
-    repo = "athens";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vynO6J69VTJ/CYp/W7BNzFWMLQG8PHXfS90uCCIp8rA=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "gomods";
+      repo = "athens";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-hNk0hW7R7HdE4Wt1KuKSIUarRGKbtbFqQbfls1HXTqI=";
+    };
+    # Trim the patch version, not needed anyway.
+    postPatch = ''
+      sed -i 's/go 1.26.2/go 1.26/' go.mod
+    '';
   };
 
-  vendorHash = "sha256-XM/ft+1u4KH77uOEh6ZO2YKy7jK2UUn+w7CDZeYqjFc=";
+  vendorHash = "sha256-he7GNkCfqLgOXuCTahvqOnwW5TpbYjlCMfMGfKGwYZ4=";
 
   env.CGO_ENABLED = "0";
   ldflags = [
@@ -31,9 +39,10 @@ buildGoModule (finalAttrs: {
     mv $out/bin/proxy $out/bin/athens
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = athens; };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Go module datastore and proxy";

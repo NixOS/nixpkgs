@@ -47,27 +47,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtdeclarative
+  buildInputs = [
+    qtbase
+    qtdeclarative
 
-      # QML
-      libusermetrics
-      lomiri-content-hub
-      lomiri-thumbnailer
-      lomiri-ui-toolkit
-      mediascanner2
-      qtmultimedia
-      qtsystems
-    ]
-    # QtMultimedia playback support
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # QML
+    libusermetrics
+    lomiri-content-hub
+    lomiri-thumbnailer
+    lomiri-ui-toolkit
+    mediascanner2
+    qtmultimedia
+    qtsystems
+  ]
+  # QtMultimedia playback support
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   dontWrapGApps = true;
 
@@ -99,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Default Music application for Ubuntu devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-music-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-music-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only

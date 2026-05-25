@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xcrawl3r";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "hueristiq";
     repo = "xcrawl3r";
-    tag = version;
-    hash = "sha256-Ojm5cBeXRtDGQfbDweLlD1V12PYJHxVbO2g1X1Wt/B8=";
+    tag = finalAttrs.version;
+    hash = "sha256-alrsEJZ7lyf7emYfJArn4VOnmLQFbWxL2eslEw+v4rY=";
   };
 
-  vendorHash = "sha256-rBKpYB7t9zdduqZA1VwCBp+kXpB8nABhTo+IaoOE8bE=";
+  vendorHash = "sha256-Ukz+fQuJp72Rhs/h+6kYp6rZgRFnAShO9+qGYuIjDh0=";
 
   ldflags = [
     "-s"
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "CLI utility to recursively crawl webpages";
     homepage = "https://github.com/hueristiq/xcrawl3r";
-    changelog = "https://github.com/hueristiq/xcrawl3r/releases/tag/${version}";
+    changelog = "https://github.com/hueristiq/xcrawl3r/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xcrawl3r";
   };
-}
+})

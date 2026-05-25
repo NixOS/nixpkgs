@@ -5,8 +5,10 @@
   cargo,
   meson,
   ninja,
+  perl,
   pkg-config,
   gst_all_1,
+  openssl,
   protobuf,
   libspelling,
   libsecret,
@@ -14,7 +16,7 @@
   gtksourceview5,
   rustPlatform,
   rustc,
-  appstream-glib,
+  appstream,
   blueprint-compiler,
   desktop-file-utils,
   wrapGAppsHook4,
@@ -22,27 +24,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.16.2";
+  version = "0.20.5";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-H7lh3yjAC4xSv5NsLo3q4bEzuLgEh/UExwCw3BJWUeQ=";
+    hash = "sha256-ZxUIqfEQe7tv6HBwOMLKruYDNJLlRie3nztwVER6sAE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-x1Yyr6Mwd1fYylrhRflpnzkBKG6Zm8R5UO/jcqP+aKE=";
+    hash = "sha256-dNcHPLoKbHFj73Xtb4Ud42xKmmLy9eADUnsqPj9+l8Y=";
   };
 
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
+    appstream # for appstream-util
     blueprint-compiler
     desktop-file-utils # for update-desktop-database
     meson
     ninja
+    perl
     pkg-config
     wrapGAppsHook4
     rustPlatform.cargoSetupHook
@@ -55,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libsecret
     libspelling
+    openssl
     protobuf
 
     # To reproduce audio messages

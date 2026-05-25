@@ -3,34 +3,55 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  git,
   openssl,
   docker,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wrkflw";
-  version = "0.4.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "bahdotsh";
     repo = "wrkflw";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-b2g6sY+YBZfD5D+fmbpz+hKZvKKwjCCuygxk2pyYaR8=";
+    hash = "sha256-2k2U90Sqe0AOmOMDfy9CPwlHx6pACZ4dKNO7P5IdRvo=";
   };
 
-  cargoHash = "sha256-iCagvOIc1Gsox6yQDfOrSTXaM30Q93CwHZdDZOi4kK0=";
+  cargoHash = "sha256-fp+JFrIcnWXA9SyyVrjX/0nJdLnbySAN0c1VrTeRmMA=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    git
+  ];
   buildInputs = [
     openssl
     docker
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  # Prepare the necessary environment for the tests
+  preCheck = ''
+    git init -b main
+    git add .
+    git -c user.name="John Smith" -c user.email=john.smith@example.com commit -m "initial commit"
+  '';
 
-  passthru.updateScript = nix-update-script { };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  __darwinAllowLocalNetworking = true;
+  sandboxProfile = ''
+    (allow mach-lookup
+      (global-name "com.apple.SystemConfiguration.configd")
+      (global-name "com.apple.FSEvents"))
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Validate and execute GitHub Actions workflows locally";
@@ -38,8 +59,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/bahdotsh/wrkflw/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      awwpotato
+      da157
       FKouhai
+      tebriel
     ];
     mainProgram = "wrkflw";
   };

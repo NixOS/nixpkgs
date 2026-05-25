@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "3.0.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-oauth-toolkit";
     tag = version;
-    hash = "sha256-Ya0KlX+vtLXN2Fgk0Gv7KemJCUTwkaH+4GQA1ByUlBY=";
+    hash = "sha256-jUIZfLi8Xm9v40k1hefKv96z2pXch+9V+xMaZSUW1pw=";
   };
 
   build-system = [ setuptools ];
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-oauth-toolkit";
     changelog = "https://github.com/jazzband/django-oauth-toolkit/django-filer/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

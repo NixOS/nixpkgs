@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "paralus-cli";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     repo = "cli";
     owner = "paralus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cVrT8wU9MJgc/hzMVe1b0lzm7f+0Prv9w1IjMOAh69E=";
   };
 
@@ -20,11 +20,11 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.buildNum=${version}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.buildNum=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface tool for Paralus";
     longDescription = ''
       Paralus is a free, open source tool that enables controlled, audited access to Kubernetes infrastructure.
@@ -32,8 +32,8 @@ buildGoModule rec {
       with your RBAC and SSO. Ships as a GUI, API, and CLI.
     '';
     homepage = "https://www.paralus.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kashw2 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "paralus";
   };
-}
+})

@@ -8,34 +8,26 @@ supporting features.
 Use the `android-studio-full` attribute for a very complete Android SDK, including system images:
 
 ```nix
-{
-  buildInputs = [ android-studio-full ];
-}
+{ buildInputs = [ android-studio-full ]; }
 ```
 
 This is identical to:
 
 ```nix
-{
-  buildInputs = [ androidStudioPackages.stable.full ];
-}
+{ buildInputs = [ androidStudioPackages.stable.full ]; }
 ```
 
-Alternatively, you can pass composeAndroidPackages to the `withSdk` passthru:
+Alternatively, you can pass composeAndroidPackages to the `withSdk` passthrough:
 
 ```nix
 {
   buildInputs = [
-    (android-studio.withSdk
-      (androidenv.composeAndroidPackages {
-        includeNDK = true;
-      }).androidsdk
-    )
+    (android-studio.withSdk (androidenv.composeAndroidPackages { includeNDK = true; }).androidsdk)
   ];
 }
 ```
 
-These will export `ANDROID_SDK_ROOT` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
+These will export `ANDROID_HOME` and `ANDROID_NDK_ROOT` to the SDK and NDK directories
 in the specified Android build environment.
 
 ## Deploying an Android SDK installation with plugins {#deploying-an-android-sdk-installation-with-plugins}
@@ -58,9 +50,7 @@ let
       "arm64-v8a"
     ];
     includeNDK = true;
-    includeExtras = [
-      "extras;google;auto"
-    ];
+    includeExtras = [ "extras;google;auto" ];
   };
 in
 androidComposition.androidsdk
@@ -307,7 +297,7 @@ Note that running Android Studio with ANDROID_HOME set will automatically write 
 `local.properties` file with `sdk.dir` set to $ANDROID_HOME if one does not already
 exist. If you are using the NDK as well, you may have to add `ndk.dir` to this file.
 
-An example shell.nix that does all this for you is provided in examples/shell.nix.
+An example `shell.nix` that does all this for you is provided in `examples/shell.nix`.
 This shell.nix includes a shell hook that overwrites local.properties with the correct
 sdk.dir and ndk.dir values. This will ensure that the SDK and NDK directories will
 both be correct when you run Android Studio inside nix-shell.
@@ -318,7 +308,7 @@ Ensure that your buildToolsVersion and ndkVersion match what is declared in andr
 If you are using cmake, make sure its declared version is correct too.
 
 Otherwise, you may get cryptic errors from aapt2 and the Android Gradle plugin warning
-that it cannot install the build tools because the SDK directory is not writeable.
+that it cannot install the build tools because the SDK directory is not writable.
 
 ```gradle
 android {

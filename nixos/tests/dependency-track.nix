@@ -5,7 +5,10 @@ in
 {
   name = "dependency-track";
   meta = {
-    maintainers = pkgs.lib.teams.cyberus.members;
+    maintainers = with pkgs.lib.maintainers; [
+      e1mo
+      xanderio
+    ];
   };
 
   nodes = {
@@ -37,9 +40,14 @@ in
         };
         services.dependency-track = {
           enable = true;
+
+          # The Java VM defaults (correctly) to tiny heap on this tiny
+          # VM, but that's not enough to start dependency-track.
+          javaArgs = [ "-Xmx4G" ];
+
           port = dependencyTrackPort;
           nginx.domain = "localhost";
-          database.passwordFile = "${pkgs.writeText "dbPassword" ''hunter2'THE'''H''''E''}";
+          database.passwordFile = "${pkgs.writeText "dbPassword" "hunter2'THE''H'''E"}";
         };
       };
   };

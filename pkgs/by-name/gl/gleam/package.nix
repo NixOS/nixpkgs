@@ -1,11 +1,12 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   git,
   pkg-config,
   openssl,
-  erlang_27,
+  erlang,
   nodejs,
   bun,
   deno,
@@ -15,31 +16,57 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.11.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oxzFAqPZ+ZHd/+GwofDg0gA4NIFYWi2v8fOjMn8ixSU=";
+    hash = "sha256-/AYtZ/nd0PIAaf9z/Uk8tw9ziczczerQO8D3g7n5sJo=";
   };
 
-  cargoHash = "sha256-9kk7w85imYIhywBuAgJS8wYAIEM3hXoHymGgMMmrgnI=";
+  cargoHash = "sha256-3B8RSow/aLzv0wl+eMCnS42+DnUa6NdG2TuR7aAJCA8=";
 
   nativeBuildInputs = [
-    git
     pkg-config
-    erlang_27
+    erlang
+  ];
+
+  buildInputs = [ openssl ];
+
+  nativeCheckInputs = [
+    # used by several tests
+    git
+
+    # js runtimes used for integration tests
     nodejs
     bun
     deno
   ];
 
-  buildInputs = [ openssl ];
-
   checkFlags = [
     # Makes a network request
     "--skip=tests::echo::echo_dict"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Snapshot tests fail because a warning is shown on stdout
+    # warn: CPU lacks AVX support, strange crashes may occur. Reinstall Bun or use *-baseline build:
+    #   https://github.com/oven-sh/bun/releases/download/bun-v1.3.1/bun-darwin-x64-baseline.zip
+    "--skip=tests::echo::echo_bitarray"
+    "--skip=tests::echo::echo_bool"
+    "--skip=tests::echo::echo_charlist"
+    "--skip=tests::echo::echo_circular_reference"
+    "--skip=tests::echo::echo_custom_type"
+    "--skip=tests::echo::echo_float"
+    "--skip=tests::echo::echo_function"
+    "--skip=tests::echo::echo_importing_module_named_inspect"
+    "--skip=tests::echo::echo_int"
+    "--skip=tests::echo::echo_list"
+    "--skip=tests::echo::echo_nil"
+    "--skip=tests::echo::echo_singleton"
+    "--skip=tests::echo::echo_string"
+    "--skip=tests::echo::echo_tuple"
+    "--skip=tests::echo::echo_with_message"
   ];
 
   doInstallCheck = true;
@@ -51,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Statically typed language for the Erlang VM";
     mainProgram = "gleam";
     homepage = "https://gleam.run/";
-    changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/changelog/v${lib.versions.majorMinor finalAttrs.version}.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       philtaken

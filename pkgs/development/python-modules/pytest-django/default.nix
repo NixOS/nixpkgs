@@ -10,15 +10,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-django";
-  version = "4.10.0";
+  version = "4.11.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_django";
-    inherit version;
-    hash = "sha256-EJGyDqFJH9BKMQ/Jqv9MAbToRQ47FXaHYl4WprXzo2Y=";
+    inherit (finalAttrs) version;
+    hash = "sha256-qUkUGh7hA8sOeiDxRR01X4P15KXQe91Nz90f0P8ieZE=";
   };
 
   build-system = [
@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    changelog = "https://github.com/pytest-dev/pytest-django/blob/v${version}/docs/changelog.rst";
+  meta = {
+    changelog = "https://github.com/pytest-dev/pytest-django/blob/v${finalAttrs.version}/docs/changelog.rst";
     description = "Pytest plugin for testing of Django applications";
     homepage = "https://pytest-django.readthedocs.org/en/latest/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

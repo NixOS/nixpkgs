@@ -6,6 +6,7 @@
   buildPackages,
   freebsd-lib,
   vtfontcvt,
+  elfcopy,
 }:
 let
   hostArchBsd = freebsd-lib.mkBsdArch stdenv;
@@ -21,29 +22,38 @@ mkDerivation {
     "lib/libc"
     "lib/liblua"
     "libexec/flua"
-    "lib/flua"
+    #"lib/flua"
     "stand"
     "sys"
   ];
-  extraNativeBuildInputs = [ vtfontcvt ];
+  extraNativeBuildInputs = [
+    vtfontcvt
+    elfcopy
+  ];
 
   makeFlags = [
     "STRIP=-s" # flag to install, not command
     "MK_MAN=no"
     "MK_TESTS=no"
     "OBJCOPY=${lib.getBin buildPackages.binutils-unwrapped}/bin/${buildPackages.binutils-unwrapped.targetPrefix}objcopy"
-  ] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
 
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [
+    "stackprotector"
+    "fortify"
+  ];
 
   # ???
   preBuild = ''
-    NIX_CFLAGS_COMPILE+=" -I${include}/include -I$BSDSRCDIR/sys/sys -I$BSDSRCDIR/sys/${hostArchBsd}/include"
+    NIX_CFLAGS_COMPILE+=" -I${include}/include -I$BSDSRCDIR/sys/sys -I$BSDSRCDIR/sys/${hostArchBsd}/include -fno-stack-protector"
     export NIX_CFLAGS_COMPILE
 
     make -C $BSDSRCDIR/stand/libsa $makeFlags
+    make -C $BSDSRCDIR/stand/libsa32 $makeFlags
     make -C $BSDSRCDIR/stand/ficl $makeFlags
     make -C $BSDSRCDIR/stand/liblua $makeFlags
+    make -C $BSDSRCDIR/stand/liblua32 $makeFlags
   '';
 
   postPatch = ''

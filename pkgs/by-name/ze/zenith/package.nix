@@ -1,32 +1,28 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   nvidiaSupport ? false,
   makeWrapper,
 }:
 
-assert nvidiaSupport -> stdenv.hostPlatform.isLinux;
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenith";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = "zenith";
-    rev = version;
-    hash = "sha256-y+/s0TDVAFGio5uCzHjf+kHFZB0G8dDgTt2xaqSSz1c=";
+    rev = finalAttrs.version;
+    hash = "sha256-NOQ+LqymP1VQ80up6XR7kBYRfWey82wbDbGkf1NsQhc=";
   };
 
   # remove cargo config so it can find the linker on aarch64-linux
   postPatch = ''
-    rm .cargo/config
+    rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-xfp+nR4ihaTO4AZHizYg4qqf9MR030Qb5bN2nzhbytQ=";
+  cargoHash = "sha256-OABHxLLysx/atZBWCMJCcypugzs5OFtRp2KW3dkp2DE=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
 
@@ -37,14 +33,14 @@ rustPlatform.buildRustPackage rec {
       --suffix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "Sort of like top or htop but with zoom-able charts, network, and disk usage"
       + lib.optionalString nvidiaSupport ", and NVIDIA GPU usage";
     mainProgram = "zenith";
     homepage = "https://github.com/bvaisvil/zenith";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = if nvidiaSupport then lib.platforms.linux else lib.platforms.unix;
   };
-}
+})

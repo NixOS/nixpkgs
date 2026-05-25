@@ -23,6 +23,10 @@ let
   };
 in
 {
+  icu78 = make-icu {
+    version = "78.3";
+    hash = "sha256-Oi56R2BLpwLzRYeDCOb+/sphLuiVz0pfIi55Vfq/4MA=";
+  };
   icu77 = make-icu {
     version = "77.1";
     hash = "sha256-WI5DH3cyfDkDH/u4hDwOO8EiwhE3RIX6h9xfP6/yQGE=";
@@ -54,10 +58,6 @@ in
   icu70 = make-icu {
     version = "70.1";
     hash = "sha256-jSBUKMF78Tu1NTAGae0oszihV7HAGuZtMdDT4tR8P9U=";
-  };
-  icu69 = make-icu {
-    version = "69.1";
-    hash = "sha256-TLp7es0dPELES7DBS+ZjcJjH+vKzMM6Ha8XzuRXQl0U=";
   };
   icu67 = make-icu {
     version = "67.1";

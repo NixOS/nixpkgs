@@ -12,19 +12,18 @@
   udev,
   vulkan-loader,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ashell";
-  version = "0.4.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "MalpenZibo";
     repo = "ashell";
-    tag = version;
-    hash = "sha256-J97MRYYkNx8Ze4vcxZTDVOSQLCANyIBcDtqZEsEZ80w=";
+    tag = finalAttrs.version;
+    hash = "sha256-X9TU866PAzaf52qKsCpeJvwE0suu1lJndHNQdPg51HM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XDcCCKq/NOzaKTDwVu0GCeGV70IlJ2TvD0w8ib+lEhg=";
+  cargoHash = "sha256-nhYbehlgB8pzMoj39G0BHRca9mIT+0QjUaebCx+DDE0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,7 +42,8 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     pipewire
     udev
-  ] ++ runtimeDependencies;
+  ]
+  ++ finalAttrs.runtimeDependencies;
 
   meta = {
     description = "Ready to go Wayland status bar for Hyprland";
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ justdeeevin ];
     platforms = lib.platforms.linux;
   };
-}
+})

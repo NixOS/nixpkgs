@@ -24,7 +24,7 @@ buildNpmPackage rec {
   };
 
   makeCacheWritable = true; # sharp tries to build stuff in node_modules
-  ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
   npmDepsHash = "sha256-jvGvhgNhY+wz/DFS7NDtmzKXbhHbNF3i0qVQoFFeB0M=";
 
@@ -34,7 +34,8 @@ buildNpmPackage rec {
     makeWrapper
     electron
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook; # for onnx libs
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook; # for onnx libs
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc) # for libstdc++.so, required by onnxruntime

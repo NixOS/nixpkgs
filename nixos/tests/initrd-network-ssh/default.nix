@@ -1,10 +1,11 @@
+# This tests SSH in scripted stage 1. Remove in 26.11.
+
 import ../make-test-python.nix (
   { lib, pkgs, ... }:
 
   {
     name = "initrd-network-ssh";
     meta.maintainers = with lib.maintainers; [
-      willibutz
       emily
     ];
 
@@ -15,6 +16,7 @@ import ../make-test-python.nix (
           boot.kernelParams = [
             "ip=${config.networking.primaryIPAddress}:::255.255.255.0::eth1:none"
           ];
+          boot.initrd.systemd.enable = false;
           boot.initrd.network = {
             enable = true;
             ssh = {

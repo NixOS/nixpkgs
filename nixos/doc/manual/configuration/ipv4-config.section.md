@@ -6,10 +6,12 @@ manually as follows:
 
 ```nix
 {
-  networking.interfaces.eth0.ipv4.addresses = [ {
-    address = "192.168.1.2";
-    prefixLength = 24;
-  } ];
+  networking.interfaces.eth0.ipv4.addresses = [
+    {
+      address = "192.168.1.2";
+      prefixLength = 24;
+    }
+  ];
 }
 ```
 
@@ -24,17 +26,22 @@ servers:
 ```
 
 ::: {.note}
-Statically configured interfaces are set up by the systemd service
-`interface-name-cfg.service`. The default gateway and name server
-configuration is performed by `network-setup.service`.
+Addresses and routes for statically configured interfaces and the default
+gateway are set up by systemd services named
+`network-addresses-<interface>.service`. The name servers configuration,
+instead, is performed by `network-local-commands.service` using resolvconf.
+:::
+
+::: {.note}
+If needed, for example if addresses/routes were added/removed,
+you can reset the network configuration by running
+`systemctl restart networking-scripted.target`
 :::
 
 The host name is set using [](#opt-networking.hostName):
 
 ```nix
-{
-  networking.hostName = "cartman";
-}
+{ networking.hostName = "cartman"; }
 ```
 
 The default host name is `nixos`. Set it to the empty string (`""`) to

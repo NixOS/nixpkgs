@@ -3,24 +3,34 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tdl";
-  version = "0.18.5";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
-    rev = "v${version}";
-    hash = "sha256-PVd9aYo4ALgzovNOfAUQkAaAbWNLeqF+UEPlL9iGhAs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xDCvZ6a7xW5kJ+3nsCQGASypzrosjihI0hlSobBWwj0=";
   };
 
-  vendorHash = "sha256-IJPGkQxUGk7v+8J37vLTbLSGxYOcfgNDywnGzTxbk3w=";
+  vendorHash = "sha256-dMuDmW3WtXU1Awuw7KKSCk1o/GKpBfsrqfvb3wVNGWw=";
+
+  postPatch = ''
+    rm go.work go.work.sum
+    go mod edit -replace github.com/iyear/tdl/core=./core
+    go mod edit -replace github.com/iyear/tdl/extension=./extension
+  '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/iyear/tdl/pkg/consts.Version=${version}"
+    "-X=github.com/iyear/tdl/pkg/consts.Version=${finalAttrs.version}"
   ];
+
+  env.GOGC = "50";
+
+  buildFlags = [ "-p=1" ];
 
   # Filter out the main executable
   subPackages = [ "." ];
@@ -28,11 +38,11 @@ buildGoModule rec {
   # Requires network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Telegram downloader/tools written in Golang";
     homepage = "https://github.com/iyear/tdl";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Ligthiago ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "tdl";
   };
-}
+})

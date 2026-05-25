@@ -8,12 +8,12 @@
   libsamplerate,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-oss";
   version = "1.1.8";
 
   src = fetchurl {
-    url = "mirror://alsa/oss-lib/alsa-oss-${version}.tar.bz2";
+    url = "mirror://alsa/oss-lib/alsa-oss-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ZK3O9ZJ+hI0uAk5kxL+FtvOVlk2ZdOxhkFrky4011o4=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture alsa-oss emulation";
     mainProgram = "aoss";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
-}
+})

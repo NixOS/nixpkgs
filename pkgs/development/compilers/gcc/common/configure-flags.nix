@@ -20,10 +20,11 @@
   enablePlugin,
   disableGdbPlugin ? !enablePlugin,
   enableShared,
+  enableDefaultPie,
+  targetPrefix,
 
   langC,
   langCC,
-  langD ? false,
   langFortran,
   langAda ? false,
   langGo,
@@ -31,7 +32,8 @@
   langObjCpp,
   langJit,
   langRust ? false,
-  disableBootstrap ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform),
+  hostIsTarget,
+  disableBootstrap ? (!hostIsTarget),
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
@@ -47,7 +49,6 @@ assert !enablePlugin -> disableGdbPlugin;
 
 let
   inherit (stdenv)
-    buildPlatform
     hostPlatform
     targetPlatform
     ;
@@ -55,13 +56,8 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
 
-  crossMingw = (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
-  crossDarwin =
-    (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.libc == "libSystem";
-
-  targetPrefix = lib.optionalString (
-    !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  crossMingw = !hostIsTarget && targetPlatform.isMinGW;
+  crossDarwin = !hostIsTarget && targetPlatform.libc == "libSystem";
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
@@ -69,7 +65,6 @@ let
       "--with-as=${
         if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools
       }/bin/${targetPlatform.config}-as"
-      "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (
       if withoutTargetLibc then
@@ -84,6 +79,11 @@ let
           "--disable-libatomic" # requires libc
           "--disable-decimal-float" # requires libc
           "--disable-libmpx" # requires libc
+          "--disable-hosted-libstdcxx" # requires libc
+          "--disable-libstdcxx-backtrace"
+          "--disable-linux-futex"
+          "--disable-libvtv"
+          "--disable-libitm"
         ]
         ++ lib.optionals crossMingw [
           "--with-headers=${lib.getDev libcCross}/include"
@@ -203,7 +203,6 @@ let
         lib.concatStringsSep "," (
           lib.optional langC "c"
           ++ lib.optional langCC "c++"
-          ++ lib.optional langD "d"
           ++ lib.optional langFortran "fortran"
           ++ lib.optional langAda "ada"
           ++ lib.optional langGo "go"
@@ -227,6 +226,9 @@ let
         ]
       else
         [ "--disable-multilib" ]
+        # SH targets need m4 and m4-nofpu variants (the kernel uses -m4-nofpu).
+        # An empty list disables -m4-nofpu entirely.
+        ++ lib.optional targetPlatform.isSh4 "--with-multilib-list=m4,m4-nofpu"
     )
     ++ lib.optional (!enableShared) "--disable-shared"
     ++ lib.singleton (lib.enableFeature enablePlugin "plugin")
@@ -244,22 +246,20 @@ let
     ++ lib.optional (isl != null) "--with-isl=${isl}"
 
     # Ada options, gcc can't build the runtime library for a cross compiler
-    ++ lib.optional langAda (
-      if lib.systems.equals hostPlatform targetPlatform then "--enable-libada" else "--disable-libada"
-    )
+    ++ lib.optional langAda (if hostIsTarget then "--enable-libada" else "--disable-libada")
 
     ++ import ../common/platform-flags.nix {
       inherit (stdenv) targetPlatform;
       inherit lib;
     }
-    ++ lib.optionals (!lib.systems.equals targetPlatform hostPlatform) crossConfigureFlags
+    ++ lib.optionals (!hostIsTarget) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
     # Platform-specific flags
     ++ lib.optional (
-      lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
+      hostIsTarget && targetPlatform.isx86_32
     ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
+    ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isCygwin) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long"
       "--enable-libssp"
@@ -274,30 +274,18 @@ let
       lib.optional (targetPlatform.libc == "musl")
         # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
         "--disable-libmpx"
-    ++ lib.optionals (lib.systems.equals targetPlatform hostPlatform && targetPlatform.libc == "musl") [
+    ++ lib.optionals (hostIsTarget && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
     ]
+    ++ lib.optionals enableDefaultPie [
+      "--enable-default-pie"
+    ]
     ++ lib.optionals langJit [
       "--enable-host-shared"
     ]
-    ++ lib.optionals (langD) [
-      "--with-target-system-zlib=yes"
-    ]
-    # On mips64-unknown-linux-gnu libsanitizer defines collide with
-    # glibc's definitions and fail the build. It was fixed in gcc-13+.
-    ++
-      lib.optionals
-        (
-          targetPlatform.isMips
-          && targetPlatform.parsed.abi.name == "gnu"
-          && lib.versions.major version == "12"
-        )
-        [
-          "--disable-libsanitizer"
-        ]
     ++ lib.optionals targetPlatform.isAlpha [
       # Workaround build failures like:
       #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]

@@ -10,27 +10,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.6.1";
+  version = "18.15.2";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aRaUiGH2CTPtmbfrtLlNfoQzQWG817eazWctqwRlOCE=";
+    hash = "sha256-EzN42LMe21XqxlAwhAdk1bO4nsV2WumuBKjazHcoe+4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-umagQYzOMr3Jh1RewjT0aX5FpYxs9N/70NZXoGaAfi4=";
+  cargoHash = "sha256-QMLEbki3QhAxEd0Wuzfs7UN1O/MaEQ/ggxA6cFGDL6U=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
+    "ai"
     "client"
-    "sync"
-    "server"
     "clipboard"
     "daemon"
+    "hex"
+    "sync"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -42,13 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) atuin;
-    };
-    updateScript = nix-update-script { };
-  };
-
   checkFlags = [
     # tries to make a network access
     "--skip=registration"
@@ -57,10 +50,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
-    "--skip=store::var::tests::build_vars"
-    # Tries to touch files
-    "--skip=build_aliases"
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) atuin atuin-programs;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
@@ -70,6 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       SuperSandro2000
       sciencentistguy
       _0x4A6F
+      rvdp
     ];
     mainProgram = "atuin";
   };

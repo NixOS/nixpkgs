@@ -9,7 +9,11 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+  phpWithPspell = pkgs.php84.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+
+  env = {
+    ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+  };
 in
 {
   options.services.roundcube = {
@@ -68,7 +72,7 @@ in
         '';
         description = ''
           Password file for the postgresql connection.
-          Must be formatted according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
+          Must be formatted according to PostgreSQL .pgpass standard (see <https://www.postgresql.org/docs/current/libpq-pgpass.html>)
           but only one line, no comments and readable by user `nginx`.
           Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
         '';
@@ -100,7 +104,8 @@ in
     maxAttachmentSize = lib.mkOption {
       type = lib.types.int;
       default = 18;
-      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.37)}M";
+      apply =
+        configuredMaxAttachmentSize: "${toString (builtins.ceil (configuredMaxAttachmentSize * 1.37))}M";
       description = ''
         The maximum attachment size in MB.
         [upstream issue comment]: https://github.com/roundcube/roundcubemail/issues/7979#issuecomment-808879209
@@ -129,7 +134,7 @@ in
   config = lib.mkIf cfg.enable {
     # backward compatibility: if password is set but not passwordFile, make one.
     services.roundcube.database.passwordFile = lib.mkIf (!localDB && cfg.database.password != "") (
-      lib.mkDefault ("${pkgs.writeText "roundcube-password" cfg.database.password}")
+      lib.mkDefault "${pkgs.writeText "roundcube-password" cfg.database.password}"
     );
     warnings =
       lib.optional (!localDB && cfg.database.password != "")
@@ -179,7 +184,7 @@ in
         ${cfg.hostName} = {
           forceSSL = lib.mkDefault true;
           enableACME = lib.mkDefault true;
-          root = cfg.package;
+          root = cfg.package + "/public_html";
           locations."/" = {
             index = "index.php";
             priority = 1100;
@@ -187,19 +192,6 @@ in
               add_header Cache-Control 'public, max-age=604800, must-revalidate';
             '';
           };
-          locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {
-            priority = 3110;
-            extraConfig = ''
-              return 404;
-            '';
-          };
-          locations."~ ^/(CHANGELOG.md|INSTALL|LICENSE|README.md|SECURITY.md|UPGRADING|composer.json|composer.lock)" =
-            {
-              priority = 3120;
-              extraConfig = ''
-                return 404;
-              '';
-            };
           locations."~* \\.php(/|$)" = {
             priority = 3130;
             extraConfig = ''
@@ -207,6 +199,8 @@ in
               fastcgi_param PATH_INFO $fastcgi_path_info;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
+
+              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
         };
@@ -244,14 +238,14 @@ in
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
       phpOptions = ''
-        error_log = 'stderr'
+        error_log = '/dev/stderr'
         log_errors = on
         post_max_size = ${cfg.maxAttachmentSize}
         upload_max_filesize = ${cfg.maxAttachmentSize}
       '';
       settings = lib.mapAttrs (name: lib.mkDefault) {
-        "listen.owner" = "nginx";
-        "listen.group" = "nginx";
+        "listen.owner" = config.services.nginx.user;
+        "listen.group" = config.services.nginx.group;
         "listen.mode" = "0660";
         "pm" = "dynamic";
         "pm.max_children" = 75;
@@ -262,7 +256,7 @@ in
         "catch_workers_output" = true;
       };
       phpPackage = phpWithPspell;
-      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+      phpEnv = env;
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
@@ -272,16 +266,20 @@ in
     ];
 
     systemd.services.roundcube-setup = lib.mkMerge [
-      (lib.mkIf (cfg.database.host == "localhost") {
-        requires = [ "postgresql.service" ];
-        after = [ "postgresql.service" ];
+      (lib.mkIf localDB {
+        requires = [ "postgresql.target" ];
+        after = [ "postgresql.target" ];
       })
       {
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        path = [ config.services.postgresql.package ];
+        environment = env;
+
+        path = [
+          (if localDB then config.services.postgresql.package else pkgs.postgresql)
+        ];
         script =
           let
             psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} psql ${

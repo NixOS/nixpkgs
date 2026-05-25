@@ -1,57 +1,49 @@
 {
   lib,
-  aiomisc-pytest,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
   pamqp,
+  uv-build,
   yarl,
-  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "aiormq";
-  version = "6.8.1";
+  version = "9.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiormq";
     tag = version;
-    hash = "sha256-3+PoDB5Owy8BWBUisX0i1mV8rqs5K9pBFQwup8vKxlg=";
+    hash = "sha256-GFeOwjSQ1+nxP9hgNoELoEInTmhhO0JnNeoe2qfWNcg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "uv_build>=0.10.4,<0.11.0" uv_build
+  '';
 
   pythonRelaxDeps = [ "pamqp" ];
 
-  propagatedBuildInputs = [
+  build-system = [ uv-build ];
+
+  dependencies = [
     pamqp
     yarl
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ aiomisc-pytest ];
-
-  # Tests attempt to connect to a RabbitMQ server
-  disabledTestPaths = [
-    "tests/test_channel.py"
-    "tests/test_connection.py"
-  ];
+  # Tests require running a RabbitMQ server.
+  # They rely on having AMQP_URL set or running Docker.
+  doCheck = false;
 
   pythonImportsCheck = [ "aiormq" ];
 
-  meta = with lib; {
+  meta = {
     description = "AMQP 0.9.1 asynchronous client library";
     homepage = "https://github.com/mosquito/aiormq";
     changelog = "https://github.com/mosquito/aiormq/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

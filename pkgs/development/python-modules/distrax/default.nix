@@ -2,39 +2,48 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  absl-py,
   chex,
+  jax,
   jaxlib,
   numpy,
   tensorflow-probability,
+
+  # tests
   dm-haiku,
   pytest-xdist,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "distrax";
-  version = "0.1.5";
+  version = "0.1.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "distrax";
-    tag = "v${version}";
-    hash = "sha256-A1aCL/I89Blg9sNmIWQru4QJteUTN6+bhgrEJPmCrM0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MZGaK55FHQPVwgzZ2RPOohYgotw+o1ca0k6bLd/sjFQ=";
   };
 
-  patches = [
-    # TODO: remove at the next release (already on master)
-    (fetchpatch {
-      name = "fix-jax-0.6.0-compat";
-      url = "https://github.com/google-deepmind/distrax/commit/c02708ac46518fac00ab2945311e0f2ee32c672c.patch";
-      hash = "sha256-hFNXKoA1b5I6dzhwTRXp/SnkHv89GI6tYwlnBBHwG78=";
-    })
+  build-system = [
+    flit-core
   ];
 
+  pythonRemoveDeps = [
+    "tfp-nightly"
+  ];
   dependencies = [
+    absl-py
     chex
+    jax
     jaxlib
     numpy
     tensorflow-probability
@@ -49,6 +58,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "distrax" ];
 
   disabledTests = [
+    # execnet.gateway_base.DumpError: can't serialize <class 'method'>
+    "test_raises_on_invalid_input_shape"
+
     # Flaky: AssertionError: 1 not less than 0.7000000000000001
     "test_von_mises_sample_uniform_ks_test"
 
@@ -116,7 +128,7 @@ buildPythonPackage rec {
   meta = {
     description = "Probability distributions in JAX";
     homepage = "https://github.com/deepmind/distrax";
-    changelog = "https://github.com/google-deepmind/distrax/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/distrax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
     badPlatforms = [
@@ -124,4 +136,4 @@ buildPythonPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

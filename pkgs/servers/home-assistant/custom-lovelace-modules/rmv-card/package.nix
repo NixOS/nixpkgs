@@ -29,11 +29,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Custom card for the RMV component";
     homepage = "https://github.com/custom-cards/rmv-card";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.all;
   };
 }

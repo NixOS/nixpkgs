@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  apple-sdk_11,
   cmake,
   pkg-config,
   ninja,
@@ -14,24 +13,23 @@
   freetype,
   jsoncpp,
   libusb1,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
-  libXScrnSaver,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libxscrnsaver,
   libGL,
   libxcb,
   vst2-sdk,
-  xcbutil,
+  libxcb-util,
   libxkbcommon,
-  xcbutilkeysyms,
-  xcb-util-cursor,
+  libxcb-keysyms,
+  libxcb-cursor,
   gtk3,
   webkitgtk_4_1,
   python3,
   curl,
-  pcre,
   mount,
   zenity,
   # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
@@ -47,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BespokeSynth";
     repo = "bespokesynth";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ad8wdLos3jM0gRMpcfRKeaiUxJsPGqWd/7XeDz87ToQ=";
     fetchSubmodules = true;
   };
@@ -68,14 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "Release";
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BESPOKE_SYSTEM_PYBIND11" true)
-      (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
-    ]
-    ++ lib.optionals enableVST2 [
-      (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst2-sdk}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BESPOKE_SYSTEM_PYBIND11" true)
+    (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
+  ]
+  ++ lib.optionals enableVST2 [
+    (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst2-sdk}")
+  ];
 
   strictDeps = true;
 
@@ -87,45 +84,40 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      # library & headers
-      (python3.withPackages (
-        ps: with ps; [
-          pybind11
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
-      libX11
-      libXrandr
-      libXinerama
-      libXext
-      libXcursor
-      libXScrnSaver
-      curl
-      gtk3
-      webkitgtk_4_1
-      freetype
-      libGL
-      libusb1
-      alsa-lib
-      libjack2
-      zenity
-      alsa-tools
-      libxcb
-      xcbutil
-      libxkbcommon
-      xcbutilkeysyms
-      xcb-util-cursor
-      pcre
-      mount
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    jsoncpp
+    # library & headers
+    (python3.withPackages (
+      ps: with ps; [
+        pybind11
+      ]
+    ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
+    libxscrnsaver
+    curl
+    gtk3
+    webkitgtk_4_1
+    freetype
+    libGL
+    libusb1
+    alsa-lib
+    libjack2
+    zenity
+    alsa-tools
+    libxcb
+    libxcb-util
+    libxkbcommon
+    libxcb-keysyms
+    libxcb-cursor
+    mount
+  ];
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
@@ -152,14 +144,14 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${
-    lib.makeLibraryPath ([
-      libX11
-      libXrandr
-      libXinerama
-      libXext
-      libXcursor
-      libXScrnSaver
-    ])
+    lib.makeLibraryPath [
+      libx11
+      libxrandr
+      libxinerama
+      libxext
+      libxcursor
+      libxscrnsaver
+    ]
   }";
 
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath

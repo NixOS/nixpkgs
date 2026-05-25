@@ -17,12 +17,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unscii";
   version = "2.1";
 
   src = fetchurl {
-    url = "http://viznut.fi/${pname}/${pname}-${version}-src.tar.gz";
+    url = "http://viznut.fi/unscii/unscii-${finalAttrs.version}-src.tar.gz";
     sha256 = "0msvqrq7x36p76a2n5bzkadh95z954ayqa08wxd017g4jpa1a4jd";
   };
 
@@ -80,8 +80,12 @@ stdenv.mkDerivation rec {
     description = "Bitmapped character-art-friendly Unicode fonts";
     # Basically GPL2+ with font exception — because of the Unifont-augmented
     # version. The reduced version is public domain.
-    license = "http://unifoundry.com/LICENSE.txt";
+    license = with lib.licenses; [
+      gpl2Plus
+      fontException
+      ofl
+    ];
     maintainers = [ lib.maintainers.raskin ];
     homepage = "http://viznut.fi/unscii/";
   };
-}
+})

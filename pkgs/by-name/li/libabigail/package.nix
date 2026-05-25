@@ -10,7 +10,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libabigail";
   version = "2.5";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.xz";
+    url = "https://mirrors.kernel.org/sourceware/libabigail/libabigail-${finalAttrs.version}.tar.xz";
     hash = "sha256-fPxOmwCuONh/sMY76rsyucv5zkEOUs7rWtWzxb6xEfM=";
   };
 
@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       llvm-exception
     ];
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

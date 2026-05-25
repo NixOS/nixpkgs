@@ -99,7 +99,7 @@ let
     let
       # only formatters that were not requested
       unwanted = lib.pipe knownFormatters [
-        (lib.filterAttrs (fmt: _: !(lib.elem fmt supportedFormatters)))
+        (fmts: lib.removeAttrs fmts supportedFormatters)
         lib.attrsToList
       ];
       # all flags to disable

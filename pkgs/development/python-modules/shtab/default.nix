@@ -4,30 +4,23 @@
   fetchFromGitHub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   setuptools,
   setuptools-scm,
   bashInteractive,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shtab";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "shtab";
-    tag = "v${version}";
-    hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VK3+JLb9Lh+YHixMa1Hjm5bYJ9vSmMPIkN6c3DeHDo8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
-  '';
 
   nativeBuildInputs = [
     setuptools
@@ -38,16 +31,17 @@ buildPythonPackage rec {
     bashInteractive
     pytest-timeout
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "shtab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for shell tab completion of Python CLI applications";
     mainProgram = "shtab";
     homepage = "https://docs.iterative.ai/shtab/";
-    changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/shtab/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

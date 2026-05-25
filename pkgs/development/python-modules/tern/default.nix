@@ -11,7 +11,6 @@
   packageurl-python,
   pbr,
   prettytable,
-  pythonOlder,
   pyyaml,
   regex,
   requests,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "tern";
   version = "2.12.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -56,12 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tern" ];
 
-  meta = with lib; {
+  meta = {
     description = "Software composition analysis tool and Python library that generates a Software Bill of Materials for container images and Dockerfiles";
     mainProgram = "tern";
     homepage = "https://github.com/tern-tools/tern";
     changelog = "https://github.com/tern-tools/tern/releases/tag/v${version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     "scoredir=$(TMPDIR)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://linux.tlk.fr/games/Powermanga/";
     downloadPage = "https://linux.tlk.fr/games/Powermanga/download/";
     description = "Arcade 2D shoot-em-up game";
@@ -53,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
       the levels, you will destroy enemy spaceships and bosses, collect gems to
       power up your ship and get special powers, helpers and weapons.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

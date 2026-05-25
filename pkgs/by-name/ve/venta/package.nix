@@ -9,14 +9,14 @@
   marwaita,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "venta";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "venta";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "14ckkvyarq1xmf48fh47by5h3jnkmksj2n4y6zvx3aw7pfg2jc51";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gtk theme based on windows 10 style";
     homepage = "https://www.pling.com/p/1386774/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

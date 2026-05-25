@@ -13,12 +13,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "serf";
   version = "1.3.10";
 
   src = fetchurl {
-    url = "mirror://apache/serf/${pname}-${version}.tar.bz2";
+    url = "mirror://apache/serf/serf-${finalAttrs.version}.tar.bz2";
     hash = "sha256-voHvCLqiUW7Np2p3rffe97wyJ+61eLmjO0X3tB3AZOY=";
   };
 
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     aprutil
     zlib
     libiconv
-  ] ++ lib.optional (!stdenv.hostPlatform.isCygwin) libkrb5;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isCygwin) libkrb5;
 
   patches = [
     ./scons.patch
@@ -45,28 +46,26 @@ stdenv.mkDerivation rec {
 
   prefixKey = "PREFIX=";
 
-  preConfigure =
-    ''
-      appendToVar sconsFlags "APR=$(echo ${apr.dev}/bin/*-config)"
-      appendToVar sconsFlags "APU=$(echo ${aprutil.dev}/bin/*-config)"
-      appendToVar sconsFlags "CC=$CC"
-      appendToVar sconsFlags "OPENSSL=${openssl}"
-      appendToVar sconsFlags "ZLIB=${zlib}"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isCygwin) ''
-      appendToVar sconsFlags "GSSAPI=${libkrb5.dev}"
-    '';
+  preConfigure = ''
+    appendToVar sconsFlags "APR=$(echo ${apr.dev}/bin/*-config)"
+    appendToVar sconsFlags "APU=$(echo ${aprutil.dev}/bin/*-config)"
+    appendToVar sconsFlags "CC=$CC"
+    appendToVar sconsFlags "OPENSSL=${openssl}"
+    appendToVar sconsFlags "ZLIB=${zlib}"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isCygwin) ''
+    appendToVar sconsFlags "GSSAPI=${libkrb5.dev}"
+  '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP client library based on APR";
     homepage = "https://serf.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      orivej
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

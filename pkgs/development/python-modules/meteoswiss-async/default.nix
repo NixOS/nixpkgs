@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "meteoswiss-async";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "albertomontesg";

@@ -15,10 +15,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "RJVB";
-    repo = pname;
-    rev = "v${version}";
+    repo = "afsctool";
+    tag = "v${version}";
     hash = "sha256-cZ0P9cygj+5GgkDRpQk7P9z8zh087fpVfrYXMRRVUAI=";
   };
+
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -30,11 +34,11 @@ stdenv.mkDerivation rec {
     sparsehash
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility that allows end-users to leverage HFS+/APFS compression";
-    license = licenses.unfree;
-    maintainers = [ maintainers.viraptor ];
-    platforms = platforms.darwin;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ viraptor ];
+    platforms = lib.platforms.darwin;
     homepage = "https://github.com/RJVB/afsctool";
   };
 }

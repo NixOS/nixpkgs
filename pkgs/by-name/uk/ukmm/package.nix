@@ -9,27 +9,29 @@
   libglvnd,
   libxkbcommon,
   openssl,
+  makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ukmm";
-  version = "0.15.0";
+  version = "0.17.0-1";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = "ukmm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NZN+T2N+N+oxrjBRvVbRWbB2KY5im9SN7gPHzfvovl8=";
+    hash = "sha256-iNqWNF+X5qFRNpo7OXxCNCP8HR28EukgMAx8a025Ai8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-eDYCF+bYh0T/SSrQKjCqZvSd28CSxvGkpHgmBCHLoig=";
+  cargoHash = "sha256-3qg5yTzalaKoOXYb1yo0K3AT6itJP1DErEQ2S8EfLNg=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -41,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
     "--push-state"
     "--no-as-needed"
     "-lEGL"
@@ -70,13 +72,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  postInstall = ''
+    install -Dm444 assets/ukmm.png  $out/share/icons/hicolor/256x256/apps/ukmm.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ukmm";
+      exec = "ukmm %u";
+      mimeTypes = [ "x-scheme-handler/bcml" ];
+      icon = "ukmm";
+      desktopName = "UKMM";
+      categories = [
+        "Game"
+        "Utility"
+      ];
+      comment = "Breath of the Wild Mod Manager";
+    })
+  ];
+
+  meta = {
     description = "New mod manager for The Legend of Zelda: Breath of the Wild";
     homepage = "https://github.com/NiceneNerd/ukmm";
     changelog = "https://github.com/NiceneNerd/ukmm/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "ukmm";
   };

@@ -3,40 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  py-radix-sr,
+  py-radix,
+  versionCheckHook,
   pytestCheckHook,
-  mock,
 }:
 
 buildPythonPackage rec {
   pname = "aggregate6";
-  version = "1.0.12";
+  version = "1.0.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "job";
     repo = "aggregate6";
     rev = version;
-    hash = "sha256-tBo9LSmEu/0KPSeg17dlh7ngUvP9GyW6b01qqpr5Bx0=";
+    hash = "sha256-GXIZ2aNZUeiVkhmo2jdwIEk9jL/in2KuuKgi//TQGq0=";
   };
-
-  patches = [ ./0001-setup-remove-nose-coverage.patch ];
-
-  # py-radix-sr is a fork, with fixes
-  postPatch = ''
-    substituteInPlace setup.py --replace-fail 'py-radix==0.10.0' 'py-radix-sr'
-  '';
 
   build-system = [ setuptools ];
 
-  dependencies = [ py-radix-sr ];
+  dependencies = [ py-radix ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
+    versionCheckHook
   ];
 
   pythonImportsCheck = [ "aggregate6" ];
+  versionCheckProgramArg = "-V";
 
   meta = {
     description = "IPv4 and IPv6 prefix aggregation tool";
@@ -44,6 +38,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/job/aggregate6";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ marcel ];
-    teams = [ lib.teams.wdz ];
   };
 }

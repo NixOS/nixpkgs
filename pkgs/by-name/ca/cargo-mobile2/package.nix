@@ -8,31 +8,22 @@
   makeWrapper,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-mobile2";
-  version = "0.20.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.22.4";
+
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "cargo-mobile2";
-    rev = "cargo-mobile2-v${version}";
-    hash = "sha256-gKqGmd34nNKMc3fl5lMH09oOGnmRaMDBwsbHhAeUMBc=";
+    rev = "cargo-mobile2-v${finalAttrs.version}";
+    hash = "sha256-DjoWjdgfNHLZkaWUjPq4tNrmHsifKKhBaRjK25WRdiE=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QEZe+7/i0XygXxs7pwdS9WtYbE2pfrUuRQC0dm+WqTo=";
-
-  preBuild = ''
-    mkdir -p $out/share/
-    # during the install process tauri-mobile puts templates and commit information in CARGO_HOME
-    export CARGO_HOME=$out/share/
-  '';
+  cargoHash = "sha256-m+9wPfheH9t7zxTsW7vHe4td/gyeC/nXFDHRGjK5XBg=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [
@@ -41,6 +32,12 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
+  preBuild = ''
+    mkdir -p $out/share/
+    # during the install process tauri-mobile puts templates and commit information in CARGO_HOME
+    export CARGO_HOME=$out/share/
+  '';
+
   preFixup = ''
     for bin in $out/bin/cargo-*; do
       wrapProgram $bin \
@@ -48,13 +45,13 @@ rustPlatform.buildRustPackage {
     done
   '';
 
-  meta = with lib; {
-    description = "Rust on mobile made easy!";
+  meta = {
+    description = "Rust on mobile made easy";
     homepage = "https://tauri.app/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

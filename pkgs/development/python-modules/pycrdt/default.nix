@@ -6,27 +6,29 @@
   # nativeBuildInputs
   rustPlatform,
 
-  # tests
+  # dependencies
   anyio,
+
+  # tests
   objsize,
   pydantic,
   pytestCheckHook,
   trio,
-  y-py,
 
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycrdt";
-  version = "0.12.20";
+  version = "0.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt";
-    tag = version;
-    hash = "sha256-kSwmQf46c5UJD75cfJxR3EfxFXExHhLXB+xdExr4lCk=";
+    tag = finalAttrs.version;
+    hash = "sha256-gfXdH/V2ZwxfxMFoA20cMv0ilgxuCULl4EFl2vqStqI=";
   };
 
   postPatch = ''
@@ -50,12 +52,10 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
     trio
-    y-py
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestUnknownMarkWarning" # requires unpackaged pytest-mypy-testing
+  pytestFlags = [
+    "-Wignore::pytest.PytestUnknownMarkWarning" # requires unpackaged pytest-mypy-testing
   ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "CRDTs based on Yrs";
     homepage = "https://github.com/jupyter-server/pycrdt";
-    changelog = "https://github.com/jupyter-server/pycrdt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/pycrdt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

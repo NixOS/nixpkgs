@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
     tag = "v${version}";
-    hash = "sha256-NNaspGNfrtZqo9sUOJVyYlJT7dhr/nzueuaqewUMlpM=";
+    hash = "sha256-6CCaHnpZEU7krLzkRKRF4Iui7Vd7AOfIn1fTzIdxPtw=";
   };
 
   pythonRelaxDeps = [
@@ -48,15 +48,15 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   pythonImportsCheck = [ "hdate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Jewish/Hebrew date and Zmanim";
     homepage = "https://github.com/py-libhdate/py-libhdate";
     changelog = "https://github.com/py-libhdate/py-libhdate/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

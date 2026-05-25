@@ -6,6 +6,7 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
     };
@@ -19,7 +20,6 @@ let
   inherit (lib)
     addMetaAttrs
     any
-    derivations
     filter
     flip
     genAttrs
@@ -27,8 +27,6 @@ let
     hydraJob
     id
     isDerivation
-    lists
-    maintainers
     mapAttrs
     mapAttrs'
     mapAttrsRecursive

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  blueprint-compiler,
   cargo,
   desktop-file-utils,
   glib,
@@ -16,25 +17,28 @@
   libadwaita,
   libpanel,
   vte-gtk4,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pods";
-  version = "2.1.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = "pods";
-    tag = "v${version}";
-    hash = "sha256-S84Qb+hySjIxcznuA7Sh8n9XFvdZpf32Yznb1Sj+owY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JWOxp3J+7k0ikdFJ8SDFcspuM5SO5rQm5/21G4FAAag=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-UBInZdoluWXq1jm2rhS5wBwXQ/zYFPSEeWhpSmkc2aY=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-UkXBlqFmODlJEm2NBHdKoO5Yc086NAHjo9HOuWb3Jq0=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     glib
     gtk4
@@ -55,13 +59,18 @@ stdenv.mkDerivation rec {
     vte-gtk4
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
-    changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
+    changelog = "https://github.com/marhkb/pods/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ iamanaws ];
     platforms = lib.platforms.linux;
     mainProgram = "pods";
   };
-}
+})

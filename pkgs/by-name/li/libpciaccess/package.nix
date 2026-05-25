@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpciaccess";
-  version = "0.18.1";
+  version = "0.19";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libpciaccess-${finalAttrs.version}.tar.xz";
-    hash = "sha256-SvQ0RLOK21VF0O0cLORtlgjMR7McI4f8UYFlZ2Wm+nY=";
+    hash = "sha256-PFWqhsguVKTjEJeG8EY1MNU7NrbRz9FGFkVPmF3SqkM=";
   };
 
   strictDeps = true;
@@ -29,12 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs =
-    [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isNetBSD [
-      netbsd.libarch
-      netbsd.libpci
-    ];
+  buildInputs = [
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isNetBSD [
+    netbsd.libarch
+    netbsd.libpci
+  ];
 
   mesonFlags = [
     (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")

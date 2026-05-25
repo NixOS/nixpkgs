@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   cctools,
-  libiconv,
   llvmPackages,
   ninja,
   openssl,
@@ -15,27 +14,28 @@
   gitUpdater,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
-  llvmPackagesCuda ? llvmPackages,
   pythonSupport ? false,
 }:
 let
   stdenv = if cudaSupport then cudaPackages.backendStdenv else llvmPackages.stdenv;
+  buildPythonBindingsEnv = python3Packages.python.withPackages (
+    ps: with ps; [
+      cython
+      numpy
+    ]
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.7";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I3geFdVQ1Pm61eRXi+ueaxel3QRb8EJV9f4zV2Q7kk4=";
+    hash = "sha256-z68vflYgO3cWeOkb417Gyco1Fqb98ulyRgI+OS+B4is=";
   };
-
-  patches = [
-    ./remove-conan.patch
-  ];
 
   postPatch = ''
     substituteInPlace cmake/common.cmake \
@@ -44,11 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     shopt -s globstar
     for cmakelists in **/CMakeLists.*; do
-      sed -i "s/OpenSSL::OpenSSL/OpenSSL::SSL/g" $cmakelists
-      ${lib.optionalString (cudaPackages.cudaOlder "11.8") ''
-        sed -i 's/-gencode=arch=compute_89,code=sm_89//g' $cmakelists
-        sed -i 's/-gencode=arch=compute_90,code=sm_90//g' $cmakelists
-      ''}
+      sed -i "s/openssl::openssl/OpenSSL::SSL/g" $cmakelists
     done
   '';
 
@@ -57,35 +53,30 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      llvmPackages.bintools
-      ninja
-      (python3Packages.python.withPackages (ps: with ps; [ six ]))
-      ragel
-      yasm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    buildPythonBindingsEnv
+    cmake
+    llvmPackages.bintools
+    ninja
+    ragel
+    yasm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-      cudaPackages.libcublas
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+    cudaPackages.libcublas
+  ];
 
   env = {
     PROGRAM_VERSION = finalAttrs.version;
@@ -93,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     # catboost requires clang 14+ for build, but does clang 12 for cuda build.
     # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
     # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
-    CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackagesCuda.stdenv.cc}/bin/cc";
+    CUDAHOSTCXX = lib.optionalString cudaSupport "${stdenv.cc}/bin/cc";
     NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-fuse-ld=lld";
     NIX_LDFLAGS = "-lc -lm";
     NIX_CFLAGS_COMPILE = toString (
@@ -108,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
     (lib.cmakeFeature "CATBOOST_COMPONENTS" "app;libs${lib.optionalString pythonSupport ";python-package"}")
     (lib.cmakeBool "HAVE_CUDA" cudaSupport)
-  ];
+  ]
+  ++ lib.optional pythonSupport (
+    lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"
+  );
 
   installPhase = ''
     runHook preInstall
@@ -141,7 +135,10 @@ stdenv.mkDerivation (finalAttrs: {
       natsukium
     ];
     mainProgram = "catboost";
-    # /nix/store/hzxiynjmmj35fpy3jla7vcqwmzj9i449-Libsystem-1238.60.2/include/sys/_types/_mbstate_t.h:31:9: error: unknown type name '__darwin_mbstate_t'
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    broken =
+      # See: <https://github.com/catboost/catboost/issues/2755>
+      cudaSupport
+      # /nix/store/hzxiynjmmj35fpy3jla7vcqwmzj9i449-Libsystem-1238.60.2/include/sys/_types/_mbstate_t.h:31:9: error: unknown type name '__darwin_mbstate_t'
+      || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
   };
 })

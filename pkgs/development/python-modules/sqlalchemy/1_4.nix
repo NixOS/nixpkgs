@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "1.4.54";
+  version = "1.4.54-unstable-2025-08-16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-6qAjyqMVrugABHssAQuql3z1YHTAOSm5hARJuJXJJvo=";
+    rev = "1712b81a5b8d9d3abd5a85fbb089470f0bc38cdd";
+    hash = "sha256-BqhH6CqvWQvUllCh0JAIM/K+W3KtLIRe30WGJrqafoI=";
   };
 
   postPatch = ''
@@ -77,7 +77,8 @@ buildPythonPackage rec {
     aiosqlite = [
       aiosqlite
       typing-extensions
-    ] ++ self.asyncio;
+    ]
+    ++ self.asyncio;
     sqlcipher = [
       # TODO: sqlcipher3
     ];
@@ -98,12 +99,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }";
+  meta = {
+    changelog =
+      let
+        shortVersion = lib.replaceString "." "" (lib.versions.majorMinor version);
+      in
+      "https://github.com/sqlalchemy/sqlalchemy/blob/${src.rev}/doc/build/changelog/changelog_${shortVersion}.rst";
     description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

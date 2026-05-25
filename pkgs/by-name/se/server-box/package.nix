@@ -1,50 +1,48 @@
 {
   lib,
-  flutter329,
+  flutter341,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
   makeDesktopItem,
   runCommand,
-  yq,
-  server-box,
+  yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
+  dart,
 }:
 
-flutter329.buildFlutterApplication {
-  pname = "server-box";
-  version = "1.0.1130-unstable-2025-04-25";
+let
+  version = "1.0.1409";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
-    rev = "8f09085cf30f9b48209c7c3c1e9dceac5aa5eeeb";
-    hash = "sha256-D2FzL34FV+7FnxyEVi/Rm2qO3c9eQmCjlH/4pMWlU5s=";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-+m44q4KhnJCcWG/i1KnNVYes3Uh1ZZwjzyIfnFW1Pm8=";
   };
+in
+flutter341.buildFlutterApplication {
+  pname = "server-box";
+  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    circle_chart = "sha256-BcnL/hRf+Yv2U8Nkl7pc8BtncBW+M2by86jO5IbFIRk=";
-    computer = "sha256-qaD6jn78zDyZBktwJ4WTQa8oCvCWQJOBDaozBVsXNb8=";
-    dartssh2 = "sha256-bS916CwUuOKhRyymtmvMxt7vGXmlyiLep4AZsxRJ6iU=";
-    fl_build = "sha256-CSKe2yEIisftM0q79HbDTghShirWg02zi9v+hD5R57g=";
-    fl_lib = "sha256-+eHUpn89BI7k/MbCp09gUWGMlqLBrxOy9PgL9uXnkDI=";
-    plain_notification_token = "sha256-Cy1/S8bAtKCBnjfDEeW4Q2nP4jtwyCstAC1GH1efu8I=";
-    watch_connectivity = "sha256-9TyuElr0PNoiUvbSTOakdw1/QwWp6J2GAwzVHsgYWtM=";
-    xterm = "sha256-LTCMaGVqehL+wFSzWd63KeTBjjU4xCyuhfD9QmQaP0Q=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [
     copyDesktopItems
     autoPatchelfHook
   ];
 
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "server-box";
-      exec = "server-box";
+      exec = "ServerBox";
       icon = "server-box";
       genericName = "ServerBox";
       desktopName = "ServerBox";
@@ -59,31 +57,48 @@ flutter329.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm0644 assets/app_icon.png $out/share/pixmaps/server-box.png
+    install -D --mode=0644 assets/app_icon.png $out/share/icons/hicolor/512x512/apps/server-box.png
   '';
 
   passthru = {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          nativeBuildInputs = [ yq ];
-          inherit (server-box) src;
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "server-box.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "server-box.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
     ];
   };
 
   meta = {
     description = "Server status & toolbox";
-    homepage = "https://github.com/lollipopkit/flutter_server_box";
+    homepage = "https://serverbox.lpkt.cn";
+    downloadPage = "https://serverbox.lpkt.cn/installation";
+    changelog = "https://github.com/lollipopkit/flutter_server_box/releases/tag/${src.tag}";
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ulysseszhan ];
   };
 }

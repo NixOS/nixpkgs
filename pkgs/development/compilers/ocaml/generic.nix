@@ -3,6 +3,7 @@
   major_version,
   patch_version,
   patches ? [ ],
+  doCheck ? true,
   ...
 }@args:
 let
@@ -22,7 +23,7 @@ in
   buildEnv,
   libunwind,
   fetchpatch,
-  libX11,
+  libx11,
   xorgproto,
   useX11 ? safeX11 stdenv && lib.versionOlder version "4.09",
   aflSupport ? false,
@@ -72,7 +73,7 @@ let
   x11env = buildEnv {
     name = "x11env";
     paths = [
-      libX11
+      libx11
       xorgproto
     ];
   };
@@ -83,12 +84,22 @@ let
 in
 
 stdenv.mkDerivation (
+  finalArgs:
   args
   // {
 
     inherit pname version src;
 
     patches = map fetchpatch' patches;
+
+    # https://github.com/ocaml/ocaml/issues/14543
+    postPatch =
+      if stdenv.cc.isClang then
+        ''
+          rm testsuite/tests/basic/trigraph.ml
+        ''
+      else
+        null;
 
     strictDeps = true;
 
@@ -115,8 +126,16 @@ stdenv.mkDerivation (
         "-host ${stdenv.hostPlatform.config}"
         "-target ${stdenv.targetPlatform.config}"
       ]
-      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
+      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers")
+      ++ optional finalArgs.doCheck "--enable-ocamltest";
+
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
+
+    env =
+      lib.optionalAttrs (lib.versionOlder version "4.14" || lib.versions.majorMinor version == "5.0")
+        {
+          NIX_CFLAGS_COMPILE = "-std=gnu11";
+        };
 
     # on aarch64-darwin using --host and --target causes the build to invoke
     # `aarch64-apple-darwin-clang` while using assembler. However, such binary
@@ -134,8 +153,7 @@ stdenv.mkDerivation (
         ];
     # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
     hardeningDisable =
-      lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie"
-      ++ lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
+      lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
       ++ lib.optionals (args ? hardeningDisable) args.hardeningDisable;
 
     # Older versions have some race:
@@ -162,7 +180,7 @@ stdenv.mkDerivation (
     buildInputs =
       optional (lib.versionOlder version "4.07") ncurses
       ++ optionals useX11 [
-        libX11
+        libx11
         xorgproto
       ];
     depsBuildBuild = lib.optionals (!stdenv.hostPlatform.isDarwin) [ binutils ];
@@ -190,14 +208,19 @@ stdenv.mkDerivation (
       nativeCompilers = useNativeCompilers;
     };
 
-    meta = with lib; {
+    checkTarget = "tests";
+    inherit doCheck;
+
+    meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
-      license = with licenses; [
+      license = with lib.licenses; [
         qpl # compiler
         lgpl2 # library
       ];
       description = "OCaml is an industrial-strength programming language supporting functional, imperative and object-oriented styles";
+
+      maintainers = [ lib.maintainers.georgyo ];
 
       longDescription = ''
         OCaml is a general purpose programming language with an emphasis on expressiveness and safety. Developed for more than 20 years at Inria by a group of leading researchers, it has an advanced type system that helps catch your mistakes without getting in your way. It's used in environments where a single mistake can cost millions and speed matters, is supported by an active community, and has a rich set of libraries and development tools. It's widely used in teaching for its power and simplicity.
@@ -216,7 +239,7 @@ stdenv.mkDerivation (
         Learn more at: https://ocaml.org/learn/description.html
       '';
 
-      platforms = with platforms; linux ++ darwin;
+      platforms = with lib.platforms; linux ++ darwin;
       broken =
         stdenv.hostPlatform.isAarch64
         && lib.versionOlder version (if stdenv.hostPlatform.isDarwin then "4.10" else "4.02");

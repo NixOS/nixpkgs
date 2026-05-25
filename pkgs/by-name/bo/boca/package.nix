@@ -13,14 +13,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "BoCA";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "enzo1982";
     repo = "boca";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HIYUMFj5yiEC+liZLMXD9otPyoEb1sxHlECTYtYXc2I=";
   };
 
@@ -42,11 +42,10 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Component library used by the fre:ac audio converter";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/enzo1982/boca";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

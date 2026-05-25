@@ -54,8 +54,8 @@ in
 
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
-  stdenvNoCC ? (
-    stdenv.override {
+  stdenvNoCC ? stdenv.override (
+    {
       cc = null;
       hasCC = false;
     }
@@ -85,36 +85,6 @@ in
 }@args:
 
 let
-  # This is a function from parsed platforms (like
-  # stdenv.hostPlatform.parsed) to parsed platforms.
-  makeMuslParsedPlatform =
-    parsed:
-    # The following line guarantees that the output of this function
-    # is a well-formed platform with no missing fields.  It will be
-    # uncommented in a separate PR, in case it breaks the build.
-    #(x: lib.trivial.pipe x [ (x: builtins.removeAttrs x [ "_type" ]) lib.systems.parse.mkSystem ])
-    (
-      parsed
-      // {
-        abi =
-          {
-            gnu = lib.systems.parse.abis.musl;
-            gnueabi = lib.systems.parse.abis.musleabi;
-            gnueabihf = lib.systems.parse.abis.musleabihf;
-            gnuabin32 = lib.systems.parse.abis.muslabin32;
-            gnuabi64 = lib.systems.parse.abis.muslabi64;
-            gnuabielfv2 = lib.systems.parse.abis.musl;
-            gnuabielfv1 = lib.systems.parse.abis.musl;
-            # The following two entries ensure that this function is idempotent.
-            musleabi = lib.systems.parse.abis.musleabi;
-            musleabihf = lib.systems.parse.abis.musleabihf;
-            muslabin32 = lib.systems.parse.abis.muslabin32;
-            muslabi64 = lib.systems.parse.abis.muslabi64;
-          }
-          .${parsed.abi.name} or lib.systems.parse.abis.musl;
-      }
-    );
-
   stdenvAdapters =
     self: super:
     let
@@ -134,8 +104,7 @@ let
       inherit lib;
       inherit (self) config;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) jq shellcheck-minimal;
-      inherit (self.pkgsBuildHost.xorg) lndir;
+      inherit (self.pkgsBuildHost) jq shellcheck-minimal lndir;
     };
 
   stdenvBootstappingAndPlatforms =
@@ -186,20 +155,27 @@ let
           overlays
           ;
       } res self super;
+
+      conflictingAttrs = lib.intersectAttrs res super;
     in
+    assert lib.assertMsg (conflictingAttrs == { })
+      "The following attributes were defined both in `pkgs/top-level/all-packages.nix` and elsewhere, most likely in `pkgs/by-name/`: ${lib.concatStringsSep ", " (lib.attrNames conflictingAttrs)}";
     res;
 
   aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
 
-  variants = import ./variants.nix {
-    inherit
-      lib
-      nixpkgsFun
-      stdenv
-      overlays
-      makeMuslParsedPlatform
-      ;
-  };
+  variants =
+    self: super:
+    lib.optionalAttrs config.allowVariants (
+      import ./variants.nix {
+        inherit
+          lib
+          nixpkgsFun
+          stdenv
+          overlays
+          ;
+      } self super
+    );
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
@@ -236,45 +212,49 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux =
-      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then
+      let
+        isSupported = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
+      in
+      if !config.allowAliases || isSupported then
         nixpkgsFun {
           overlays = [
-            (self': super': {
-              pkgsi686Linux = super';
-            })
-          ] ++ overlays;
-          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.i686;
+            (
+              self': super':
+              {
+                pkgsi686Linux = super';
               }
-            );
+              // lib.optionalAttrs (!isSupported) {
+                # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
+                # when used on a non x86_64-linux platform in CI.
+                # TODO: Remove this, once pkgsi686Linux can become a variant.
+                stdenv = super'.stdenv // {
+                  mkDerivation =
+                    args:
+                    (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
+                      meta = prevAttrs.meta or { } // {
+                        broken = true;
+                      };
+                    });
+                };
+              }
+            )
+          ]
+          ++ overlays;
+          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+            config =
+              if isSupported then
+                lib.systems.parse.tripleFromSystem (
+                  stdenv.hostPlatform.parsed
+                  // {
+                    cpu = lib.systems.parse.cpuTypes.i686;
+                  }
+                )
+              else
+                "i686-unknown-linux-gnu";
           };
         }
       else
         throw "i686 Linux package set can only be used with the x86 family.";
-
-    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin =
-      if stdenv.hostPlatform.isDarwin then
-        nixpkgsFun {
-          overlays = [
-            (self': super': {
-              pkgsx86_64Darwin = super';
-            })
-          ] ++ overlays;
-          localSystem = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.x86_64;
-              }
-            );
-          };
-        }
-      else
-        throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
     # If already linux: the same package set unaltered
     # Otherwise, return a natively built linux package set for the current cpu architecture string.
@@ -292,7 +272,10 @@ let
     # in one go when calling Nixpkgs, for performance and simplicity.
     appendOverlays =
       extraOverlays:
-      if extraOverlays == [ ] then self else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+      if extraOverlays == [ ] then
+        self.__splicedPackages
+      else
+        nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -305,17 +288,24 @@ let
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = nixpkgsFun ({
+    pkgsStatic = nixpkgsFun {
       overlays = [
-        (self': super': {
-          pkgsStatic = super';
-        })
-      ] ++ overlays;
+        (
+          self': super':
+          {
+            pkgsStatic = super';
+          }
+          // lib.optionalAttrs super'.stdenv.hostPlatform.isMusl {
+            pkgsMusl = super';
+          }
+        )
+      ]
+      ++ overlays;
       crossSystem = {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
           if stdenv.hostPlatform.isLinux then
-            makeMuslParsedPlatform stdenv.hostPlatform.parsed
+            lib.systems.parse.mkMuslSystem stdenv.hostPlatform.parsed
           else
             stdenv.hostPlatform.parsed
         );
@@ -323,7 +313,7 @@ let
           lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; }
           // stdenv.hostPlatform.gcc or { };
       };
-    });
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.

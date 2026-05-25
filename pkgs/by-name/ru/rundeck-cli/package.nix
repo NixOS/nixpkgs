@@ -2,24 +2,31 @@
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
-  jdk11,
-  unzip,
+  makeBinaryWrapper,
+  jre11_minimal,
+  jdk11_headless,
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  jre11_minimal_headless = jre11_minimal.override {
+    jdk = jdk11_headless;
+    modules = [
+      "java.logging"
+    ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck-cli";
-  version = "2.0.8";
+  version = "2.0.10";
 
   src = fetchurl {
     url = "https://github.com/rundeck/rundeck-cli/releases/download/v${finalAttrs.version}/rundeck-cli-${finalAttrs.version}-all.jar";
-    hash = "sha256-mpy4oS7zCUdt4Q+KQPrGGbw6Gzmh1Msygl+NXDmFhDw=";
+    hash = "sha256-RiGWsscenvNpKr+yOHpy2F7dPZ3M/R9SWD+EKF7nq18=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk11 ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
+  buildInputs = [ jre11_minimal_headless ];
 
   dontUnpack = true;
 
@@ -30,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/rundeck-cli/rundeck-cli.jar
 
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe jdk11} $out/bin/rd \
+    makeWrapper ${lib.getExe jre11_minimal_headless} $out/bin/rd \
       --add-flags "-jar $out/share/rundeck-cli/rundeck-cli.jar"
 
     runHook postInstall
@@ -40,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rd";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

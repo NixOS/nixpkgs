@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "language-tags";
   version = "1.2.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OnroerendErfgoed";
     repo = "language-tags";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-T9K290seKhQLqW36EfA9kn3WveKCmyjN4Mx2j50qIEk=";
   };
 
@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "language_tags" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dealing with IANA language tags in Python";
     homepage = "https://language-tags.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

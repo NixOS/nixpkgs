@@ -2,7 +2,6 @@
   appstream,
   buildNpmPackage,
   cargo,
-  cmake,
   desktop-file-utils,
   fetchFromGitHub,
   gtk4,
@@ -40,27 +39,29 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "delineate";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Delineate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dFGh7clxc6UxQRTsNKrggWDvL3CPmzJmrvO1jqMVoTg=";
+    hash = "sha256-rYA5TKHX3QJHcUhaTFDpcXQ6tdaG3MbX8buvzV0V5iY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-RtQnpbjULtnvlc71L4KIKPES0WRSY2GoaIwt8UvlYOA=";
+    hash = "sha256-6XBg9kbIr5k+TMQ/TE/qsAA5rKIevU9M1m+jsPrqfYw=";
   };
 
-  patches = [
-    ./graphview-dir.patch
-  ];
+  # rename $out/src -> $out/opt
+  postPatch = ''
+    substituteInPlace ./meson.build --replace-fail \
+      "graphviewsrcdir = prefix / 'src/delineate/graph_view'" \
+      "graphviewsrcdir = prefix / 'opt/delineate/graph_view'"
+  '';
 
   nativeBuildInputs = [
     cargo
-    cmake
     desktop-file-utils
     gtk4
     meson
@@ -78,8 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     webkitgtk_6_0
   ];
-
-  dontUseCmakeConfigure = true;
 
   postInstall = ''
     ln -s ${d3-graphviz}/lib/node_modules/d3-graphviz $out/opt/delineate/graph_view/d3-graphviz

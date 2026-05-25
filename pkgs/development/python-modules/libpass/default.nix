@@ -14,21 +14,17 @@
 
 buildPythonPackage rec {
   pname = "libpass";
-  version = "1.9.0";
+  version = "1.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThirVondukr";
     repo = "passlib";
     tag = version;
-    hash = "sha256-Q5OEQkty0/DugRvF5LA+PaDDlF/6ysx4Nel5K2kH5s4=";
+    hash = "sha256-fzI9HpGE3wNK41ZSOeA5NAr5T4r3Jzdqe5+SHoWVXUs=";
   };
 
   build-system = [ hatchling ];
-
-  dependencies = [
-    typing-extensions
-  ];
 
   optional-dependencies = {
     argon2 = [ argon2-cffi ];
@@ -40,9 +36,19 @@ buildPythonPackage rec {
     pytest-archon
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "passlib" ];
+
+  disabledTestPaths = [
+    # https://github.com/notypecheck/passlib/issues/18
+    "tests/test_handlers_bcrypt.py::bcrypt_bcrypt_test::test_70_hashes"
+    "tests/test_handlers_bcrypt.py::bcrypt_bcrypt_test::test_77_fuzz_input"
+    "tests/test_handlers_django.py::django_bcrypt_test::test_77_fuzz_input"
+    "tests/test_handlers_bcrypt.py::bcrypt_bcrypt_test::test_secret_w_truncate_size"
+    "tests/test_handlers_django.py::django_bcrypt_test::test_secret_w_truncate_size"
+  ];
 
   disabledTests = [
     # timming sensitive

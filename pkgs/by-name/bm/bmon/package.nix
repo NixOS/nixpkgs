@@ -10,14 +10,14 @@
   libnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bmon";
   version = "4.0";
 
   src = fetchFromGitHub {
     owner = "tgraf";
     repo = "bmon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ilba872c09mnlvylslv4hqv6c9cz36l76q74rr99jvis1dg69gf";
   };
 
@@ -39,25 +39,26 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libconfuse
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libnl;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libnl;
 
   preConfigure = ''
     # Must be an absolute path
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network bandwidth monitor";
     homepage = "https://github.com/tgraf/bmon";
     # Licensed under BSD and MIT
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.BSD
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.MIT
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
       pSub
     ];
     mainProgram = "bmon";
   };
-}
+})

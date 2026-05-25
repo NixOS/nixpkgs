@@ -5,7 +5,7 @@ let
 in
 {
   name = "jackett";
-  meta.maintainers = with lib.maintainers; [ etu ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { pkgs, ... }:

@@ -4,19 +4,20 @@
   fetchFromGitHub,
   lib,
   mashumaro,
+  numpy,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "onedrive-personal-sdk";
-  version = "0.0.14";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "onedrive-personal-sdk";
     tag = "v${version}";
-    hash = "sha256-WdnkIMmTzvid2bl7n9NHMtF153O91hutMib8bs5BgIs=";
+    hash = "sha256-V95lfq8GnuitdFbY8MPpX0kyvj8Gx24W2NFeKp0FsSo=";
   };
 
   build-system = [ setuptools ];
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     mashumaro
+    numpy
   ];
 
   pythonImportsCheck = [ "onedrive_personal_sdk" ];

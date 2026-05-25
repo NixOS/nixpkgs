@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   cmake,
   ninja,
@@ -19,21 +18,19 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pillow-jpls";
   version = "1.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "planetmarshall";
     repo = "pillow-jpls";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Rc4/S8BrYoLdn7eHDBaoUt1Qy+h0TMAN5ixCAuRmfPU=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   dontUseCmakeConfigure = true;
 
@@ -65,23 +62,22 @@ buildPythonPackage rec {
     pyproject-metadata
   ];
 
-  pypaBuildFlags = [
-    "-C"
-    "cmake.args=--preset=sysdeps"
+  cmakeFlags = [
+    "--preset=sysdeps"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Prevent importing from build during test collection:
-  preCheck = ''rm -rf pillow_jpls'';
+  preCheck = "rm -rf pillow_jpls";
 
   pythonImportsCheck = [ "pillow_jpls" ];
 
-  meta = with lib; {
+  meta = {
     description = "JPEG-LS plugin for the Python Pillow library";
     homepage = "https://github.com/planetmarshall/pillow-jpls";
-    changelog = "https://github.com/planetmarshall/pillow-jpls/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/planetmarshall/pillow-jpls/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

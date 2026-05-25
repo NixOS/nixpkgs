@@ -11,7 +11,9 @@
   findutils,
   gawk,
   getopt,
+  gettext,
   ghostscript_headless,
+  git-latexdiff,
   gnugrep,
   gnumake,
   gnupg,
@@ -23,10 +25,10 @@
   python3,
   ruby,
   zip,
+  luajit,
+  texinfo,
 }:
-
 oldTlpdb:
-
 let
   tlpdbVersion = tlpdb."00texlive.config";
 
@@ -54,13 +56,12 @@ let
   );
 
   orig = removeFormatLinks (removeAttrs oldTlpdb [ "00texlive.config" ]);
-
 in
 lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
-  context-texlive.scriptsFolder = "context-texlive/stubs-mkiv/unix";
+  context-legacy.scriptsFolder = "context/ruby";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -88,6 +89,7 @@ lib.recursiveUpdate orig rec {
   crossrefware.extraBuildInputs = [
     (perl.withPackages (
       ps: with ps; [
+        JSON
         LWP
         URI
       ]
@@ -111,6 +113,9 @@ lib.recursiveUpdate orig rec {
     ))
   ];
   exceltex.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ SpreadsheetParseExcel ])) ];
+  latexdiff.extraBuildInputs = [
+    (perl.withPackages (ps: with ps; [ EncodeLocale ]))
+  ];
   latex-git-log.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ IPCSystemSimple ])) ];
   latexindent.extraBuildInputs = [
     (perl.withPackages (
@@ -155,7 +160,9 @@ lib.recursiveUpdate orig rec {
   dtxgen.extraBuildInputs = [
     coreutils
     getopt
+    gettext
     gnumake
+    texinfo
     zip
   ];
   dviljk.extraBuildInputs = [ coreutils ];
@@ -251,11 +258,6 @@ lib.recursiveUpdate orig rec {
     "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
   };
 
-  context-legacy.binlinks = {
-    texexec = tl.context-legacy.tex + "/scripts/context/ruby/texexec.rb";
-    texmfstart = tl.context-legacy.tex + "/scripts/context/ruby/texmfstart.rb";
-  };
-
   dvipdfmx.binlinks = {
     # even though 'ebb' was removed from the Makefile, this symlink is still
     # part of the binary container of dvipdfmx
@@ -304,6 +306,10 @@ lib.recursiveUpdate orig rec {
 
   cjk-gs-integrate.postFixup = ''
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath cjk-gs-integrate.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/cjk-gs-integrate
+  '';
+
+  context-legacy.postFixup = ''
+    sed -i 's!File.dirname(\$0)!'"'"'${tl.context-legacy.tex}/scripts/context/ruby'"'"'!' "$out"/bin/*
   '';
 
   cyrillic-bin.postFixup = ''
@@ -431,22 +437,6 @@ lib.recursiveUpdate orig rec {
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
   '';
 
-  # readd functions moved to 'tools.pm' not shipped to CTAN
-  eolang.postUnpack =
-    let
-      patch = fetchpatch {
-        name = "eolang-without-tools-pm.patch";
-        url = "https://github.com/objectionary/eolang.sty/commit/2c3bf97dd85e1748b2028ffa056a75c0d9432f88.patch";
-        includes = [ "eolang.pl" ];
-        hash = "sha256-ZQtGjqzfhX5foRWuiWQaomN8nOOEj394HdCDrb2sdzA=";
-      };
-    in
-    ''
-      if [[ -d "$out"/scripts/eolang ]] ; then
-        patch -d "$out/scripts/eolang" -i "${patch}"
-      fi
-    '';
-
   # find files in script directory, not binary directory
   # add runtime dependencies to PATH
   epspdf.postFixup = ''
@@ -470,9 +460,33 @@ lib.recursiveUpdate orig rec {
     substituteInPlace "$out"/bin/latexindent --replace-fail 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
   '';
 
+  # l3build ignores the TEXMFCNF variable to prevent user customisations from affecting the build
+  # but we rely on TEXMFCNF to find the system texmf.cnf, so we must inject its path into l3build
+  # WARNING: this relies on the system texmf.cnf being in $TEXMFSYSVAR/web2c
+  l3build.postUnpack = ''
+    if [[ -f "$out"/scripts/l3build/l3build-aux.lua ]] ; then
+      substituteInPlace "$out"/scripts/l3build/l3build-aux.lua --replace-fail '" TEXMFCNF=."' '" TEXMFCNF=." .. os_pathsep .. kpse.var_value("TEXMFSYSVAR") .. "/web2c"'
+    fi
+  '';
+
   # find files in script directory, not in binary directory
   minted.postFixup = ''
     substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
+  '';
+
+  # find files in source container, fix incompatibilities with snobol4
+  texaccents.postFixup = ''
+    sed -i '1s!$! -I${tl.texaccents.texsource}/source/support/texaccents!' "$out"/bin/*
+  '';
+  texaccents.postUnpack = ''
+    if [[ -f "$out"/source/support/texaccents/grepl.inc ]] ; then
+      sed -i 's!^-include "repl.inc"!-include "repl.sno"!' "$out"/source/support/texaccents/grepl.inc
+    elif [[ -f "$out"/scripts/texaccents/texaccents.sno ]] ; then
+      sed -i -e 's!^-include "host.inc"!-include "host.sno"!' \
+        -e 's/host(2,2)/host(2,host(3))/g' \
+        -e 's/host(2,3)/host(2,host(3) + 1)/g' \
+        "$out"/scripts/texaccents/texaccents.sno
+    fi
   '';
 
   # flag lua dependency
@@ -520,6 +534,13 @@ lib.recursiveUpdate orig rec {
   '';
 
   #### dependency changes
+
+  # Since 2025 OpTeX is based on luahbtex
+  optex.deps = (orig.optex.deps or [ ]) ++ [ "luahbtex" ];
+
+  # Since the packaging change for ConTeXt, context-legacy is missing the xetex dependency
+  context-legacy.deps = (orig.context-legacy.deps or [ ]) ++ [ "xetex" ];
+
   # it seems to need it to transform fonts
   xdvi.deps = (orig.xdvi.deps or [ ]) ++ [ "metafont" ];
 
@@ -534,10 +555,21 @@ lib.recursiveUpdate orig rec {
 
   #### misc
 
+  # replace tex4ht.jar with our rebuilt version
+  tex4ht.deps = (orig.tex4ht.deps or [ ]) ++ [ "tex4htJar" ];
+  tex4ht.postUnpack = ''
+    [[ ! -d "$out"/tex4ht/bin ]] || rm -fr "$out"/tex4ht/bin
+  '';
+  tex4ht.hasJar = false;
+
+  # Use top-level git-latexdiff's version and src. NOTE that this derivation is
+  # still different from top-level's `git-latexdiff`, due to __structuredAttrs
+  # enabled unconditionally. Still though this derivation produces a funcitonal
+  # binary.
+  inherit git-latexdiff;
+
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
-  luajittex.binfiles = lib.optionals (
-    !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV
-  ) orig.luajittex.binfiles;
+  luajittex.binfiles = lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) orig.luajittex.binfiles;
 
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";
@@ -575,8 +607,11 @@ lib.recursiveUpdate orig rec {
     extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
     # add license of tlmgr and TeXLive::* perl packages and of bin.core
-    license =
-      [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
+    license = [
+      "gpl2Plus"
+    ]
+    ++ lib.toList bin.core.meta.license.shortName
+    ++ orig."texlive.infra".license or [ ];
 
     scriptsFolder = "texlive";
     extraBuildInputs = [

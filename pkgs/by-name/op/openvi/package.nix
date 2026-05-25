@@ -2,24 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pkg-config,
   ncurses,
   perl,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvi";
-  version = "7.6.31";
+  version = "7.7.32";
 
   src = fetchFromGitHub {
     owner = "johnsonjh";
     repo = "OpenVi";
-    rev = version;
-    hash = "sha256-RqmulYHQFZmTHQAYgZmB8tAG6mSquNODmssfKB8YqDU=";
+    tag = finalAttrs.version;
+    hash = "sha256-kLULaKEefMpNLANnVdWAZeH+2KY5gEWGce6vJ/R7HAI=";
   };
 
+  patches = [
+    # fix build w/ glibc 2.42 (https://github.com/johnsonjh/OpenVi/pull/46)
+    (fetchpatch {
+      url = "https://github.com/johnsonjh/OpenVi/commit/67c76961f512bfe95616fe25b32928db0aab9326.patch";
+      hash = "sha256-GOair/unxROEPvtTekGuKacKwOctPyoRdvilqdVLjrY=";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    ncurses
     perl
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ncurses
   ];
 
   makeFlags = [
@@ -29,6 +44,12 @@ stdenv.mkDerivation rec {
     # silently fail the chown command
     "IUSGR=$(USER)"
   ];
+
+  # Don't include ncurses header, but link against ncurses
+  # openvi requires GNU ncurses symbols, but ncurses headers
+  # is incompatible with macOS wchar.h, resulting in
+  # "error: expected function body after function declarator"
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L${lib.getLib ncurses}/lib -lncursesw";
 
   enableParallelBuilding = true;
 
@@ -40,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "ovi";
   };
-}
+})

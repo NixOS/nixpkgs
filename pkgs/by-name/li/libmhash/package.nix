@@ -4,18 +4,21 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mhash";
   version = "0.9.9.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/mhash/mhash-${finalAttrs.version}.tar.bz2";
     sha256 = "1w7yiljan8gf1ibiypi6hm3r363imm3sxl1j8hapjdq3m591qljn";
   };
 
   dontDisableStatic = true;
 
   patches = [ ./autotools-define-conflict-debian-fix.patch ];
+
+  # Fix build with gcc15
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
 
   meta = {
     description = "Hash algorithms library";
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
       which are based on hash algorithms.
     '';
     homepage = "https://mhash.sourceforge.net";
-    license = "LGPL";
+    license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

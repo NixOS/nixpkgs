@@ -9,7 +9,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spacy-curated-transformers";
   version = "2.1.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spacy-curated-transformers";
-    tag = "release-v${version}";
+    tag = "release-v${finalAttrs.version}";
     hash = "sha256-Y3puV9fDN5mAugLPmXuoIbwUBpSMcmkq+oXAyYdmQew=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "spaCy entry points for Curated Transformers";
     homepage = "https://github.com/explosion/spacy-curated-transformers";
-    changelog = "https://github.com/explosion/spacy-curated-transformers/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/spacy-curated-transformers/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danieldk ];
   };
-}
+})

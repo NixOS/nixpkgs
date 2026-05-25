@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-51QdzV4eYnA+pC1b7TagSF1g+n67IvZw3euJyI3ZRtM=";
-  useFetchCargoVendor = true;
 
   env = {
     SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";

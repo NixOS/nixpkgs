@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "elm-review";
-  version = "2.13.2";
+  version = "2.13.5";
 
   src = fetchFromGitHub {
     owner = "jfmengels";
     repo = "node-elm-review";
     rev = "v${version}";
-    hash = "sha256-HQ7ilGfw/sMXMQVoJQAj31LbyJfdCfbrZ22gTh1vbD8=";
+    hash = "sha256-IjaPJ9ic/5Z8pdtziNwLqzXfnSmgkurjC6afmNIX4LU=";
   };
 
-  npmDepsHash = "sha256-YuN04MAKSu4InfGIS0EIZiNpSbLHA7/WzJiMFWY0Tqk=";
+  npmDepsHash = "sha256-eY9U9mLVL9tizN8touWQfLqFAJJ8pHaSHVD//cvNdhE=";
 
   postPatch = ''
     sed -i "s/elm-tooling install/echo 'skipping elm-tooling install'/g" package.json
@@ -32,7 +32,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/jfmengels/node-elm-review/blob/v${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jfmengels/node-elm-review/blob/main/CHANGELOG.md";
     description = "Analyzes Elm projects, to help find mistakes before your users find them";
     mainProgram = "elm-review";
     homepage = "https://github.com/jfmengels/node-elm-review";

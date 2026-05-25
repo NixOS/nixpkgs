@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyheos";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pyheos";
     tag = version;
-    hash = "sha256-waOeUAvQtx8klFVGnMHi6/OI2s6fxgVjB8aBlaKtklQ=";
+    hash = "sha256-CqUeDIHRD+stIVr9nMqfKUExVHPq8gbIzsZg8U36E7I=";
   };
 
   build-system = [ setuptools ];
@@ -29,15 +29,14 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  disabledTests =
-    [
-      # accesses network
-      "test_connect_timeout"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # OSError: could not bind on any address out of [('127.0.0.2', 1255)]
-      "test_failover"
-    ];
+  disabledTests = [
+    # accesses network
+    "test_connect_timeout"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: could not bind on any address out of [('127.0.0.2', 1255)]
+    "test_failover"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

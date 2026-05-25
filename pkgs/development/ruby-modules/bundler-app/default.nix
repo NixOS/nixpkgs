@@ -57,14 +57,15 @@ let
     ]
     // {
       inherit preferLocalBuild allowSubstitutes; # pass the defaults
-      inherit (basicEnv) version;
+      inherit (basicEnv) version pname;
 
       nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != [ ]) [ makeWrapper ];
 
       meta = {
         mainProgram = pname;
         inherit (ruby.meta) platforms;
-      } // meta;
+      }
+      // meta;
       passthru =
         basicEnv.passthru
         // {
@@ -100,5 +101,6 @@ runCommand basicEnv.name cmdArgs ''
         lib.optionalString (basicEnv.gemType == "git" || basicEnv.gemType == "url") "bundler/"
       }gems/${basicEnv.name} \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) -print -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
     done
+    compressManPages "''${!outputMan}"
   ''}
 ''

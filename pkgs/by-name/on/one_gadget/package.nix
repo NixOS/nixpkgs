@@ -1,6 +1,6 @@
 {
   lib,
-  binutils,
+  binutils-unwrapped,
   bundlerApp,
   bundlerUpdateScript,
   makeWrapper,
@@ -14,20 +14,22 @@ bundlerApp {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/one_gadget --prefix PATH : ${binutils}/bin
+    wrapProgram $out/bin/one_gadget --prefix PATH : ${
+      binutils-unwrapped.override { withAllTargets = true; }
+    }/bin
   '';
 
   passthru.updateScript = bundlerUpdateScript "one_gadget";
 
-  meta = with lib; {
+  meta = {
     description = "Best tool for finding one gadget RCE in libc.so.6";
     homepage = "https://github.com/david942j/one_gadget";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       artemist
       nicknovitski
     ];
     mainProgram = "one_gadget";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

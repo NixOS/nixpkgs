@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "filtron";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "filtron";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RihxlJvbHq5PaJz89NHl/wyXrKjSiC4XYAs7LSKAo6E=";
   };
 
@@ -36,12 +36,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reverse HTTP proxy to filter requests by different rules";
     homepage = "https://github.com/asciimoo/filtron";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.dasj19 ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.dasj19 ];
+    platforms = lib.platforms.linux;
     mainProgram = "filtron";
   };
-}
+})

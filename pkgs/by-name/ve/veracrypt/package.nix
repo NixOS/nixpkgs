@@ -6,7 +6,7 @@
   makeself,
   yasm,
   fuse,
-  wxGTK32,
+  wxwidgets_3_2,
   lvm2,
   replaceVars,
   e2fsprogs,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fuse
     lvm2
-    wxGTK32
+    wxwidgets_3_2
     pcsclite
   ];
 
@@ -74,10 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20 # and
       unfree # TrueCrypt License version 3.0
     ];
-    maintainers = with lib.maintainers; [
-      dsferruzza
-      ryand56
-    ];
+    maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.linux;
   };
 })

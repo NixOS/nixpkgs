@@ -19,21 +19,21 @@ let
   cloudflareZlib = fetchFromGitHub {
     owner = "ningfei";
     repo = "zlib";
-    # HEAD revision of the gcc.amd64 branch on 2025-01-05. Reminder to update
+    # HEAD revision of the gcc.amd64 branch on 2025-10-15. Reminder to update
     # whenever bumping package version.
-    rev = "1cb075520d254005cde193982f1856b877fd39d8";
-    hash = "sha256-1+V7XwYOYqSzcFK86V+gDILGwAqKGQ+HSlXphWtqSvk=";
+    rev = "7d9d0b20249fd459c69e4b98bc569b7157f3018c";
+    hash = "sha256-WnD9pOnM6J3nCLBKYb28+JaIy0z/9csbn+AsyWZQnLs=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.20241211";
+  version = "1.0.20250506";
   pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NpvtMCcyVfYlnvXjyvTDsa71IxUhi8FepX82qRSG7TA=";
+    hash = "sha256-KtUWrm3Nq3khDxpaQ4W57y+h/gPeEMwfzBv4XYkAhoA=";
   };
 
   patches = lib.optionals withCloudflareZlib [

@@ -15,10 +15,10 @@ buildPythonPackage rec {
   };
 
   doCheck = false;
-  meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/rfc3987";
-    license = licenses.gpl3Plus;
+  meta = {
+    homepage = "https://pypi.org/project/rfc3987/";
+    license = lib.licenses.gpl3Plus;
     description = "Parsing and validation of URIs (RFC 3986) and IRIs (RFC 3987)";
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with lib.maintainers; [ vanschelven ];
   };
 }

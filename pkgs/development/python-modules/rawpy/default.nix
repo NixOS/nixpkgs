@@ -22,16 +22,16 @@
   scikit-image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rawpy";
-  version = "0.24.0";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
-    tag = "v${version}";
-    hash = "sha256-u/KWbviyhbMts40Gc/9shXSESwihWZQQaf3Z44gMgvs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/pD3t6sP/SctjzjiOo2e937NEetvkcC5wB/RWi8UXI0=";
   };
 
   build-system = [
@@ -74,6 +74,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # rawpy._rawpy.LibRawFileUnsupportedError: b'Unsupported file format or not RAW file'
+    "testCropSizeSigma"
     "testFoveonFileOpenAndPostProcess"
     "testThumbExtractBitmap"
   ];
@@ -87,4 +88,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

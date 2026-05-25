@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   agate,
@@ -13,6 +13,7 @@
   dbt-adapters,
   dbt-common,
   dbt-extractor,
+  dbt-protos,
   dbt-semantic-interfaces,
   jinja2,
   logbook,
@@ -34,26 +35,19 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbt-core";
-  version = "1.10.0b2";
+  version = "1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    tag = "v${version}";
-    hash = "sha256-MTrdpbPqdakFDmLKRFJ23u9hLgGhZ5T+r4om9HPBjkw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+7q332Te3R6g8HvT1Gwa7vHo8OBmT0/E/CzunBYIvZk=";
   };
 
-  postPatch = ''
-    substituteInPlace dbt/utils/artifact_upload.py \
-      --replace-fail \
-        "from pydantic import BaseSettings" \
-        "from pydantic_settings import BaseSettings"
-  '';
-
-  sourceRoot = "${src.name}/core";
+  sourceRoot = "${finalAttrs.src.name}/core";
 
   pythonRelaxDeps = [
     "agate"
@@ -66,11 +60,12 @@ buildPythonPackage rec {
     "pathspec"
     "protobuf"
     "pydantic"
+    "sqlparse"
     "urllib3"
   ];
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
@@ -80,6 +75,7 @@ buildPythonPackage rec {
     dbt-adapters
     dbt-common
     dbt-extractor
+    dbt-protos
     dbt-semantic-interfaces
     jinja2
     logbook
@@ -96,7 +92,8 @@ buildPythonPackage rec {
     snowplow-tracker
     sqlparse
     typing-extensions
-  ] ++ mashumaro.optional-dependencies.msgpack;
+  ]
+  ++ mashumaro.optional-dependencies.msgpack;
 
   # tests exist for the dbt tool but not for this package specifically
   doCheck = false;
@@ -124,12 +121,11 @@ buildPythonPackage rec {
         ])
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mausch
-      tjni
     ];
     mainProgram = "dbt";
   };
-}
+})

@@ -36,7 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--enable-silent-rules"
-  ] ++ (lib.optional enableSetPAG "--enable-setpag");
+  ]
+  ++ (lib.optional enableSetPAG "--enable-setpag");
 
   preBuild = ''
     for f in k5start krenew; do
@@ -54,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     outputsToInstall = [
       "out"
       "man"
     ];
     description = "Modified version of kerberos tools that support automatic ticket refresh";
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

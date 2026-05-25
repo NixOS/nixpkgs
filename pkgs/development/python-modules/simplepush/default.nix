@@ -4,7 +4,6 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "simplepush";
   version = "2.2.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simplepush";
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplepush" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to send push notifications via Simplepush";
     homepage = "https://github.com/simplepush/simplepush-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

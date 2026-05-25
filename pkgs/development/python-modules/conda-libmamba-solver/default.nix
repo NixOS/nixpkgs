@@ -1,22 +1,25 @@
 {
-  lib,
+  boltons,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
-  boltons,
+  lib,
+  libmambapy,
+  msgpack,
+  requests,
+  zstandard,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "conda-libmamba-solver";
-  version = "25.4.0";
+  version = "26.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    inherit pname version;
     owner = "conda";
     repo = "conda-libmamba-solver";
-    tag = version;
-    hash = "sha256-DnRy5ntSjKADeHbqvLJz62WlLbM94U7urZLJg+Tpqbw=";
+    tag = finalAttrs.version;
+    hash = "sha256-8+BIUQp2tg50P0UDjzBvywg8/mDelDYMtp/ejEcMH20=";
   };
 
   build-system = [
@@ -26,6 +29,10 @@ buildPythonPackage rec {
 
   dependencies = [
     boltons
+    libmambapy
+    msgpack
+    requests
+    zstandard
   ];
 
   # this package depends on conda for the import to run successfully, but conda depends on this package to execute.
@@ -39,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];
   };
-}
+})

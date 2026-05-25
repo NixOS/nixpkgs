@@ -33,10 +33,7 @@ You may also want to consider [dockerTools](#sec-pkgs-dockerTools) for your cont
 The following derivation will construct a flat-file binary cache containing the closure of `hello`.
 
 ```nix
-{ mkBinaryCache, hello }:
-mkBinaryCache {
-  rootPaths = [ hello ];
-}
+{ mkBinaryCache, hello }: mkBinaryCache { rootPaths = [ hello ]; }
 ```
 
 Build the cache on a machine.

@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     # Original site is no longer available
-    url = "http://deb.debian.org/debian/pool/main/l/lcab/lcab_${finalAttrs.version}.orig.tar.gz";
+    url = "https://deb.debian.org/debian/pool/main/l/lcab/lcab_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-Bl8sF5O2XyhHHA9xt88SCnBk8o0cRLB8q/SewOl/H8g=";
   };
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Create cabinet (.cab) archives";
     homepage = "http://ohnopub.net/~ohnobinki/lcab";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
     mainProgram = "lcab";
   };
 })

@@ -10,6 +10,10 @@
   libaio,
   libbsd,
   libuuid,
+  nasm,
+  autoconf,
+  automake,
+  libtool,
   numactl,
   openssl,
   pkg-config,
@@ -18,27 +22,29 @@
   libpcap,
   libnl,
   elfutils,
+  fetchurl,
   jansson,
   ensureNewerSourcesForZipFilesHook,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdk";
 
-  version = "24.09";
+  version = "26.01";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
-    rev = "v${version}";
-    hash = "sha256-27mbIycenOk51PLQrAfU1cZcjiWddNtxoyC6Q9wxqFg=";
+    tag = "v${version}";
+    hash = "sha256-E52VozjnoGnIC7viXrsualaaKXiUU9Fx8zGylTjBzX0=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     python3
     python3.pkgs.pip
-    python3.pkgs.setuptools
+    python3.pkgs.hatchling
     python3.pkgs.wheel
     python3.pkgs.wrapPython
     pkg-config
@@ -61,6 +67,10 @@ stdenv.mkDerivation rec {
     ncurses
     zlib
     zstd
+    nasm
+    autoconf
+    automake
+    libtool
   ];
 
   propagatedBuildInputs = [
@@ -69,17 +79,53 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-
-    # can be removed again with next release, check is already in master
-    substituteInPlace module/scheduler/dpdk_governor/dpdk_governor.c \
-      --replace-fail "<rte_power.h>" " <rte_power_cpufreq.h>"
+    # Override uv pip install command to use hatchling directly without downloading dependencies
+    substituteInPlace python/Makefile \
+      --replace-fail "uv pip install --prefix=\$(CONFIG_PREFIX)" \
+                     "python3 -m pip install --no-deps --no-build-isolation --prefix=\$(CONFIG_PREFIX)"
   '';
 
   enableParallelBuilding = true;
 
+  # Required for the vendored isa-l version to find nasm
+  preConfigure = ''
+    export AS=nasm
+  '';
+
   configureFlags = [
     "--with-dpdk=${dpdk}"
-  ];
+    "--with-crypto"
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--with-shared";
+
+  # spdk does shenanigans with patchelf, so we need to stop them from messing with rpath
+  preInstall = ''
+    patchelf() { true; }
+    export -f patchelf
+  '';
+
+  postInstall = ''
+    unset patchelf
+
+    # Clean up rpaths to remove /build references to the vendored isa-l and isa-l_crypto libs
+    for f in $(find $out/lib $out/bin -executable -type f 2>/dev/null); do
+      if patchelf --print-rpath "$f" 2>/dev/null | grep /build; then
+        echo "Stripping rpath of $f"
+        newrp=$(patchelf --print-rpath "$f" | sed -r "s|/build[^:]*:||g")
+        patchelf --set-rpath "$newrp" "$f"
+      fi
+    done
+
+    # SPDK scripts assume that they can read the includes also relative to the scripts.
+    # Therefore we are not copying them into $out/share.
+    mkdir $out/scripts
+    cp  ./scripts/common.sh ./scripts/setup.sh $out/scripts
+    cat > $out/bin/spdk-setup << EOF
+    #!${runtimeShell}
+    exec $out/scripts/setup.sh "\$@"
+    EOF
+    chmod +x  $out/bin/spdk-setup
+  '';
 
   postCheck = ''
     python3 -m spdk
@@ -87,17 +133,19 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapPythonPrograms
+    ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      # .pc files are not working properly with static linking and might just confuse other build systems
+      rm $out/lib/*.a
+    ''}
   '';
 
   env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
-  # otherwise does not find strncpy when compiling
-  env.NIX_LDFLAGS = "-lbsd";
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [ ths-on ];
   };
 }

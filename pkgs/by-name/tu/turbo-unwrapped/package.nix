@@ -2,9 +2,9 @@
   lib,
   stdenv,
   capnproto,
-  extra-cmake-modules,
   fetchFromGitHub,
   fontconfig,
+  installShellFiles,
   llvmPackages,
   nix-update-script,
   openssl,
@@ -17,27 +17,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.5.3";
+  version = "2.9.14";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QcyRuLd+nMoCyrtX1j+8vFtsgVKC2KsQBAUjsvfG+rM=";
+    hash = "sha256-4854TMHj6mqzWnCcSwRcbkBQQlLaevwP63gk9IXBUhA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-zEkpWu/L5plFCnvliAtfu19ljB4pnrEesVQZOycOKRk=";
+  cargoHash = "sha256-3iFUpt33oyMnY/NomIz0mvYqRPK1ltyr8wSd9DMfB/Q=";
 
-  nativeBuildInputs =
-    [
-      capnproto
-      extra-cmake-modules
-      pkg-config
-      protobuf
-    ]
-    # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-    ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
+  nativeBuildInputs = [
+    capnproto
+    installShellFiles
+    pkg-config
+    protobuf
+  ]
+  # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
+  ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
   buildInputs = [
     fontconfig
@@ -54,6 +52,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd turbo \
+      --bash <($out/bin/turbo completion bash) \
+      --fish <($out/bin/turbo completion fish) \
+      --zsh <($out/bin/turbo completion zsh)
+  '';
+
   env = {
     # nightly features are used
     RUSTC_BOOTSTRAP = 1;
@@ -62,8 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
-        "--version-regex"
-        "v(\\d+\\.\\d+\\.\\d+)$"
+        "--use-github-releases"
       ];
     };
   };
@@ -74,8 +78,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dlip
       getchoo
+      hythera
     ];
     mainProgram = "turbo";
   };

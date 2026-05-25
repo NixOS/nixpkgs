@@ -20,10 +20,10 @@ buildKodiAddon rec {
     pythonPath = "lib";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/XBMC-Addons/script.module.xbmcswift2";
     description = "Framework to ease development of Kodi addons";
-    license = licenses.gpl3Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.kodi ];
   };
 }

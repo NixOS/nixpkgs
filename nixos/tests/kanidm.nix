@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ kanidmPackage, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   serverDomain = certs.domain;
@@ -8,32 +8,37 @@ let
   };
 
   # copy certs to store to work around mount namespacing
-  certsPath = pkgs.runCommandNoCC "snakeoil-certs" { } ''
+  certsPath = pkgs.runCommand "snakeoil-certs" { } ''
     mkdir $out
     cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
     cp ${certs."${serverDomain}".key} $out/snakeoil.key
   '';
 in
 {
-  name = "kanidm";
+  name = "kanidm-${kanidmPackage.version}";
   meta.maintainers = with pkgs.lib.maintainers; [
+    adamcstephens
     Flakebi
     oddlama
   ];
+
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm_1_10;
 
   nodes.server =
     { pkgs, ... }:
     {
       services.kanidm = {
-        package = pkgs.kanidm_1_6;
-        enableServer = true;
-        serverSettings = {
-          origin = "https://${serverDomain}";
-          domain = serverDomain;
-          bindaddress = "[::]:443";
-          ldapbindaddress = "[::1]:636";
-          tls_chain = "${certsPath}/snakeoil.crt";
-          tls_key = "${certsPath}/snakeoil.key";
+        package = kanidmPackage;
+        server = {
+          enable = true;
+          settings = {
+            origin = "https://${serverDomain}";
+            domain = serverDomain;
+            bindaddress = "[::]:443";
+            ldapbindaddress = "[::1]:636";
+            tls_chain = "${certsPath}/snakeoil.crt";
+            tls_key = "${certsPath}/snakeoil.key";
+          };
         };
       };
 
@@ -44,10 +49,10 @@ in
 
       users.users.kanidm.shell = pkgs.bashInteractive;
 
-      environment.systemPackages = with pkgs; [
-        kanidm
-        openldap
-        ripgrep
+      environment.systemPackages = [
+        kanidmPackage
+        pkgs.openldap
+        pkgs.ripgrep
       ];
     };
 
@@ -55,20 +60,24 @@ in
     { nodes, ... }:
     {
       services.kanidm = {
-        package = pkgs.kanidm_1_6;
-        enableClient = true;
-        clientSettings = {
-          uri = "https://${serverDomain}";
-          verify_ca = true;
-          verify_hostnames = true;
+        package = kanidmPackage;
+        client = {
+          enable = true;
+          settings = {
+            uri = "https://${serverDomain}";
+            verify_ca = true;
+            verify_hostnames = true;
+          };
         };
-        enablePam = true;
-        unixSettings = {
-          pam_allowed_login_groups = [ "shell" ];
+        unix = {
+          enable = true;
+          settings.kanidm.pam_allowed_login_groups = [ "shell" ];
         };
       };
 
       networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ serverDomain ];
+
+      programs.fish.enable = true;
 
       security.pki.certificateFiles = [ certs.ca.cert ];
     };
@@ -83,7 +92,7 @@ in
       # We need access to the config file in the test script.
       filteredConfig = pkgs.lib.converge (pkgs.lib.filterAttrsRecursive (
         _: v: v != null
-      )) nodes.server.services.kanidm.serverSettings;
+      )) nodes.server.services.kanidm.server.settings;
       serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
     in
     ''
@@ -119,7 +128,7 @@ in
           client.wait_for_unit("getty@tty1.service")
           client.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
           client.succeed("kanidm person create testuser TestUser")
-          client.succeed("kanidm person posix set --shell \"$SHELL\" testuser")
+          client.succeed("kanidm person posix set --shell \"/run/current-system/sw/bin/fish\" testuser")
           client.send_chars("kanidm person posix set-password testuser\n")
           client.wait_until_tty_matches("1", "Enter new")
           client.send_chars("${testCredentials.password}\n")
@@ -143,8 +152,10 @@ in
           client.wait_until_tty_matches("2", "Password: ")
           client.send_chars("${testCredentials.password}\n")
           client.wait_until_succeeds("systemctl is-active user@$(id -u testuser).service")
-          client.send_chars("touch done\n")
-          client.wait_for_file("/home/testuser@${serverDomain}/done")
+          client.send_chars("echo -n $SHELL > shell\n")
+          client.wait_for_file("/home/testuser@${serverDomain}/shell")
+          user_shell = client.succeed("cat /home/testuser@${serverDomain}/shell").strip()
+          assert user_shell == "/run/current-system/sw/bin/fish", f"Invalid user shell, expected /run/current-system/sw/bin/fish, got {user_shell}"
 
       server.shutdown()
       client.shutdown()

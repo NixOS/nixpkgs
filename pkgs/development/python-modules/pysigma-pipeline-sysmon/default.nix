@@ -5,36 +5,33 @@
   poetry-core,
   pysigma,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-sysmon";
-  version = "1.0.4";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-sysmon";
     tag = "v${version}";
-    hash = "sha256-/WBHu1pFEiVPJQ97xEwjJJ92h9kHzTBPgmfQrR+RZjA=";
+    hash = "sha256-W0KNsawcJ1XmQ2Tmh+aD8EUL2LenCQUEUgx9shQhRDQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ pysigma ];
+  dependencies = [ pysigma ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sigma.pipelines.sysmon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support Sysmon pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon";
-    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

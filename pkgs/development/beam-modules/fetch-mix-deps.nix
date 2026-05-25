@@ -16,6 +16,7 @@
   sha256 ? "",
   src,
   mixEnv ? "prod",
+  mixTarget ? "host",
   debug ? false,
   meta ? { },
   patches ? [ ],
@@ -52,16 +53,20 @@ stdenvNoCC.mkDerivation (
       git
     ];
 
-    MIX_ENV = mixEnv;
-    MIX_DEBUG = if debug then 1 else 0;
-    DEBUG = if debug then 1 else 0; # for rebar3
-    # the api with `mix local.rebar rebar path` makes a copy of the binary
-    MIX_REBAR = "${rebar}/bin/rebar";
-    MIX_REBAR3 = "${rebar3}/bin/rebar3";
-    # there is a persistent download failure with absinthe 1.6.3
-    # those defaults reduce the failure rate
-    HEX_HTTP_CONCURRENCY = 1;
-    HEX_HTTP_TIMEOUT = 120;
+    env = {
+      MIX_ENV = mixEnv;
+      MIX_TARGET = mixTarget;
+      MIX_DEBUG = if debug then 1 else 0;
+      DEBUG = if debug then 1 else 0; # for rebar3
+      # the api with `mix local.rebar rebar path` makes a copy of the binary
+      MIX_REBAR = "${rebar}/bin/rebar";
+      MIX_REBAR3 = "${rebar3}/bin/rebar3";
+      # there is a persistent download failure with absinthe 1.6.3
+      # those defaults reduce the failure rate
+      HEX_HTTP_CONCURRENCY = 1;
+      HEX_HTTP_TIMEOUT = 120;
+    }
+    // (attrs.env or { });
 
     configurePhase =
       attrs.configurePhase or ''

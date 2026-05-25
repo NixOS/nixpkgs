@@ -2,11 +2,14 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "andcli";
-  version = "2.1.3";
+  version = "2.6.2";
 
   subPackages = [ "cmd/andcli" ];
 
@@ -14,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "tjblackheart";
     repo = "andcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MfhChaowSkCggeyubYdlcmU3+dd+yXlVrgdr85xjlI8=";
+    hash = "sha256-EtfsSLyZs5hADJRE5xvn2mu6A04Sz9e21Y4+VkopCY0=";
   };
 
-  vendorHash = "sha256-C5XW3nxTUjcH6YaFYSxuKdtMF5SvrbOjErWIQXNwSJA=";
+  vendorHash = "sha256-CHWypAA2BpHop5LGkjZVTBL4dGzWfrwDJcFrtGTBAb4=";
 
   ldflags = [
     "-s"
@@ -26,7 +29,14 @@ buildGoModule (finalAttrs: {
     "-X github.com/tjblackheart/andcli/v2/internal/buildinfo.AppVersion=${finalAttrs.src.tag}"
   ];
 
-  # As stated in #404465 the versionCheckHook does not work so it is not used here
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/tjblackheart/andcli";

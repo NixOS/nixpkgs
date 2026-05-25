@@ -11,12 +11,12 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ubuntu-themes";
   version = "24.04";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/ubuntu-themes/${version}-0ubuntu1/ubuntu-themes_${version}.orig.tar.gz";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/ubuntu-themes/${finalAttrs.version}-0ubuntu1/ubuntu-themes_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-/SMwwDaSUe86SXNe7U9Sh7SzzlC4yOXVA+urAIxeDxk=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

@@ -3,17 +3,23 @@
   stdenvNoCC,
   fetchFromGitHub,
   nix-update-script,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
-  version = "3.006";
+  version = "3.021";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nNl2IC/KqYO6uS6ah0qWgesqm2cG8cIix/MhxbkOeAM=";
+    hash = "sha256-v9wE9caI9HTCfO01Yf+s6KajF7WpnL12nu+IuOV7T+w=";
   };
 
   dontConfigure = true;
@@ -21,17 +27,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  nativeBuildInputs = [ installFonts ];
+
+  # installFonts adds a hook to `postInstall` that installs fonts
+  # into the correct directories
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp -R $src/fonts/ttf/*.ttf $out/share/fonts/truetype
-
     runHook postInstall
   '';
 
   meta = {
-    description = "Lora is a well-balanced contemporary serif with roots in calligraphy";
+    description = "Lora Font: well-balanced contemporary serif with roots in calligraphy";
     homepage = "https://github.com/cyrealtype/lora";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

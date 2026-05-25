@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ckan";
-  version = "1.36.0";
+  version = "1.36.4";
 
   src = fetchurl {
     url = "https://github.com/KSP-CKAN/CKAN/releases/download/v${version}/ckan.exe";
-    hash = "sha256-Tw8s86FtBz/92uq2imFZm4n88NCCpePTpydoAoYsE3U=";
+    hash = "sha256-d0gILN/PLbtfUCJhsYr8hQAxk4lMYEJ9BLCseo3+994=";
   };
 
   icon = fetchurl {
@@ -78,16 +78,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Mod manager for Kerbal Space Program";
     mainProgram = "ckan";
     homepage = "https://github.com/KSP-CKAN/CKAN";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Baughn
-      ymarkus
       nullcube
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

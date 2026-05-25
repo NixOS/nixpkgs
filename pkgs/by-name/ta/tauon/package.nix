@@ -17,7 +17,7 @@
   librsvg,
   libsamplerate,
   libvorbis,
-  xorg,
+  libxcursor,
   mpg123,
   opusfile,
   pango,
@@ -32,13 +32,15 @@ let
   # fork of pypresence, to be reverted if/when there's an upstream release
   lynxpresence = python3Packages.buildPythonPackage rec {
     pname = "lynxpresence";
-    version = "4.4.1";
-    format = "setuptools";
+    version = "4.6.2";
+    pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-y/KboyhEGs9RvyKayEIQu2+WaiQNOdsHDl1/pEoqEkQ=";
+      hash = "sha256-w4WShLTTSf4JGQVL4lTkbOLL8C7cjnf8WwHyfwKK2zA=";
     };
+
+    build-system = with python3Packages; [ setuptools ];
 
     doCheck = false; # tests require internet connection
     pythonImportsCheck = [ "lynxpresence" ];
@@ -46,14 +48,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
-  version = "8.0.1";
+  version = "9.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-m94/zdlJu/u/dchIXhqB47bkl6Uej2hVr8R6RNg8Vaw=";
+    hash = "sha256-Z/+8UCtwvY9000b1Y+HaTIehK8axzyR+eeeBPhllS4U=";
   };
 
   postUnpack = ''
@@ -64,10 +66,6 @@ python3Packages.buildPythonApplication rec {
     ln -s ${miniaudio.src} source/src/phazor/miniaudio
   '';
 
-  patches = [
-    ./install_mode_true.patch
-  ];
-
   postPatch = ''
     substituteInPlace src/tauon/t_modules/t_phazor.py \
       --replace-fail 'base_path = Path(pctl.install_directory).parent.parent / "build"' 'base_path = Path("${placeholder "out"}/${python3Packages.python.sitePackages}")'
@@ -76,6 +74,8 @@ python3Packages.buildPythonApplication rec {
   pythonRemoveDeps = [
     "opencc"
     "tekore"
+    # Whether or not it is enabled (withDiscordRPC), it isn't present during build.
+    "pypresence"
   ];
 
   nativeBuildInputs = [
@@ -103,6 +103,7 @@ python3Packages.buildPythonApplication rec {
     opusfile
     pango
     pipewire
+    python3Packages.pyopengl
     wavpack
   ];
 
@@ -123,6 +124,7 @@ python3Packages.buildPythonApplication rec {
       pychromecast
       pylast
       pygobject3
+      pyopengl
       pysdl3
       requests
       send2trash
@@ -141,7 +143,7 @@ python3Packages.buildPythonApplication rec {
           libopenmpt
           pulseaudio
         ]
-        ++ lib.optional stdenv.hostPlatform.isLinux xorg.libXcursor
+        ++ lib.optional stdenv.hostPlatform.isLinux libxcursor
       )
     }"
     "--prefix PYTHONPATH : $out/share/tauon"

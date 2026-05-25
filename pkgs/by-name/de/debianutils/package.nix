@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "debianutils";
-  version = "5.23.1";
+  version = "5.23.2";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "debianutils";
     rev = "debian/${finalAttrs.version}";
-    hash = "sha256-kQFl57kusyL3kGG9pJ8j2AsKBH4245xiPoDUYHjjv1g=";
+    hash = "sha256-28pl0uua4gX65uZP1td87HfojKLvkjJbo8KPqpgg/0g=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       smail
     ];
     mainProgram = "ischroot";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

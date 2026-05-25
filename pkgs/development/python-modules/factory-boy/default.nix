@@ -8,7 +8,6 @@
   flask-sqlalchemy,
   mongoengine,
   pytestCheckHook,
-  pythonOlder,
   mongomock,
   sqlalchemy,
   sqlalchemy-utils,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "factory-boy";
   version = "3.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "factory_boy";
@@ -55,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "factory" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to create factories for complex objects";
     homepage = "https://github.com/rbarrois/factory_boy";
     changelog = "https://github.com/FactoryBoy/factory_boy/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

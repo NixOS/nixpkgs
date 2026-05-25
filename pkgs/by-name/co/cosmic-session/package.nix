@@ -6,24 +6,25 @@
   just,
   dbus,
   stdenv,
-  xdg-desktop-portal-cosmic,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.0-alpha.7";
+  version = "1.0.13";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-vozm4vcXV3RB9Pk6om1UNCfGh80vIVJvSwbzwGDQw3Y=";
+    hash = "sha256-FphY53MaOUUR2oQfZak3HbT+kvysUnw2AIc4L9O+TcU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-68budhhbt8wPY7sfDqwIs4MWB/NBXsswK6HbC2AnHqE=";
+  cargoHash = "sha256-5dLG40X+yxJo566guyHqOCLNp+uNSE+HONS8GIDm58A=";
+
+  separateDebugInfo = true;
 
   postPatch = ''
     substituteInPlace data/start-cosmic \
@@ -32,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace data/cosmic.desktop \
       --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
   '';
+
+  __structuredAttrs = true;
 
   buildInputs = [ bash ];
   nativeBuildInputs = [ just ];
@@ -50,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
+  env.ORCA = "orca"; # get orca from $PATH
 
   passthru = {
     providedSessions = [ "cosmic" ];
@@ -61,6 +64,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-noxwayland
         cosmic-autologin-noxwayland
         ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
     };
   };
 

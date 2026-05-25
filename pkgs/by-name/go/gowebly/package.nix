@@ -1,23 +1,28 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  makeWrapper,
+  air,
+  nodejs,
+  bun,
+  templ,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "gowebly";
-  version = "3.0.3";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "gowebly";
     repo = "gowebly";
     tag = "v${version}";
-    hash = "sha256-iCdChT/eAWfeZyl5W1UHIjET3MGUD1YakjTToSS7iGs=";
+    hash = "sha256-/MB8YuqeZUb9P6RPO2sgwtYShaNkEFckiVBtnHRPkc4=";
   };
 
-  vendorHash = "sha256-mFCNrcdwSExjVym4BN1Yb/lsfQHxCDrlWoa9vyQ74ko=";
+  vendorHash = "sha256-8i1o0Dn4xJ1P3CrYDW0X8epiIpjmIac6gENBYi/bmQo=";
 
   env.CGO_ENABLED = 0;
 
@@ -25,6 +30,22 @@ buildGo124Module rec {
     "-s"
     "-w"
   ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/gowebly \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          air
+          templ
+          bun
+          nodejs
+        ]
+      }
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "doctor";

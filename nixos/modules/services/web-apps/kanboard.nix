@@ -76,7 +76,7 @@ in
       example = lib.literalExpression ''
         {
           enableACME = true;
-          forceHttps = true;
+          forceSSL = true;
         }
       '';
     };
@@ -123,7 +123,7 @@ in
           "pm" = "dynamic";
           "php_admin_value[error_log]" = "stderr";
           "php_admin_flag[log_errors]" = true;
-          "listen.owner" = "nginx";
+          "listen.owner" = config.services.nginx.user;
           "catch_workers_output" = true;
           "pm.max_children" = "32";
           "pm.start_servers" = "2";
@@ -157,7 +157,6 @@ in
           locations."~ \\.(js|css|ttf|woff2?|png|jpe?g|svg)$".extraConfig = ''
             add_header Cache-Control "public, max-age=15778463";
             add_header X-Content-Type-Options nosniff;
-            add_header X-XSS-Protection "1; mode=block";
             add_header X-Robots-Tag none;
             add_header X-Download-Options noopen;
             add_header X-Permitted-Cross-Domain-Policies none;

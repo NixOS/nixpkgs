@@ -8,19 +8,18 @@
   cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fh";
-  version = "0.1.24";
+  version = "0.1.27";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
-    rev = "v${version}";
-    hash = "sha256-t7IZlG7rKNbkt2DIU5H0/B0+b4e9YEVJx14ijpOycCw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EUCV7/J9wJRroCGW5JqonFJIqcvJEBAwB7l3eWYxiSk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-IXzqcIVk7F/MgWofzlwEkXfu7s8e7GdjYhdFbXUTeeo=";
+  cargoHash = "sha256-HOQqUNd0I85lAD6YVWT9baEj31JpjIgq9Ujfn4ys/3o=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,20 +37,19 @@ rustPlatform.buildRustPackage rec {
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd fh \
-      --bash <($out/bin/fh completion bash) \
-      --fish <($out/bin/fh completion fish) \
-      --zsh <($out/bin/fh completion zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd fh --"$shell" <("$out/bin/fh" completion "$shell")
+    done
   '';
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
-    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "fh";
   };
-}
+})

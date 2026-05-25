@@ -5,6 +5,7 @@
   replaceVars,
   accountsservice,
   adwaita-icon-theme,
+  blueprint-compiler,
   colord,
   colord-gtk4,
   cups,
@@ -27,6 +28,7 @@
   gsettings-desktop-schemas,
   gsound,
   gst_all_1,
+  gtk3,
   gtk4,
   ibus,
   json-glib,
@@ -42,7 +44,6 @@
   libsecret,
   libsoup_3,
   libwacom,
-  libXi,
   libxml2,
   libxslt,
   meson,
@@ -63,23 +64,24 @@
   tinysparql,
   localsearch,
   tzdata,
-  udisks2,
+  udisks,
   upower,
   wayland-scanner,
   libepoxy,
+  gmobile,
   gnome-user-share,
   gnome-remote-desktop,
   wrapGAppsHook4,
-  xorgserver,
+  xorg-server,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "48.1";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AYPbNlqqj4W0SyPMnK5nXRyDNgSf7BGoym6pvb6MSP4=";
+    hash = "sha256-64MkkdCI5PdCbopZKxBCikWlc2wL/+IQXFHExow6Ud0=";
   };
 
   patches = [
@@ -91,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     docbook-xsl-nons
     gettext
     libxslt
@@ -114,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gcr_4
+    gmobile
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
@@ -123,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
+    gtk3 # org.gtk.Settings.FileChooser schema (datetime panel sets clock-format)
     gtk4
     ibus
     json-glib
@@ -138,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libsoup_3
     libwacom
-    libXi
     libxml2
     modemmanager
     mutter # schemas for the keybindings
@@ -147,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     tinysparql
     localsearch # for search locations dialog
-    udisks2
+    udisks
     upower
     # For animations in Mouse panel.
     gst_all_1.gst-plugins-base
@@ -159,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3 # for test-networkmanager-service.py
     python3.pkgs.python-dbusmock
     setxkbmap
-    xorgserver # for Xvfb
+    xorg-server # for Xvfb
   ];
 
   doCheck = true;
@@ -208,11 +212,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to configure the GNOME desktop";
     mainProgram = "gnome-control-center";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

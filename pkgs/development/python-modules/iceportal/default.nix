@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   httpx,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "iceportal";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iceportal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for getting data from the ICE Portal";
     homepage = "https://github.com/home-assistant-ecosystem/python-iceportal";
     changelog = "https://github.com/home-assistant-ecosystem/python-iceportal/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

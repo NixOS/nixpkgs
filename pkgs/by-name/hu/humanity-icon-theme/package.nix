@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.6.16";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${version}.tar.xz";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/humanity-icon-theme_${version}.tar.xz";
     sha256 = "sha256-AyHl4zMyFE2/5Cui3Y/SB1yEUuyafDdybFPrafo4Ki0=";
   };
 
@@ -44,11 +44,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Humanity icons from Ubuntu";
     homepage = "https://launchpad.net/humanity/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

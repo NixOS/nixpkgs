@@ -7,22 +7,21 @@
   meson,
   ninja,
   pkg-config,
-  runtimeShell,
   installShellFiles,
 
   android-tools,
   ffmpeg,
   libusb1,
-  SDL2,
+  sdl3,
 }:
 
 let
-  version = "3.2";
+  version = "4.0";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    hash = "sha256-uSDg6gGTa/JIL0ui+phcIsE8YhmZ49M7RbqlrPweo9A=";
+    hash = "sha256-hJJL1WSh62CJyHLHUh+WgFiXf5H1/wJRSox0r/MhDzo=";
   };
 in
 stdenv.mkDerivation rec {
@@ -33,16 +32,8 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     tag = "v${version}";
-    hash = "sha256-k53iyCD/f4bsntqqEdmcgHL963BL17vidkgB6AcXkeE=";
+    hash = "sha256-o8jZXVwNub8KU7k2BjC9jvpX4Y7bKFySBUYw/dVHck0=";
   };
-
-  #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
-  #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
-  #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
-  postPatch = ''
-    substituteInPlace app/src/display.c \
-      --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
-  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -54,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg
-    SDL2
+    sdl3
     libusb1
   ];
 
@@ -63,18 +54,13 @@ stdenv.mkDerivation rec {
     echo -n > server/meson.build
   '';
 
-  postInstall =
-    ''
-      mkdir -p "$out/share/scrcpy"
-      ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
+  postInstall = ''
+    mkdir -p "$out/share/scrcpy"
+    ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
-      # runtime dep on `adb` to push the server
-      wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $out/share/applications/scrcpy-console.desktop \
-        --replace "/bin/bash" "${runtimeShell}"
-    '';
+    # runtime dep on `adb` to push the server
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
+  '';
 
   meta = {
     description = "Display and control Android devices over USB or TCP/IP";

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "colcon-parallel-executor";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-parallel-executor";
     tag = version;
-    hash = "sha256-uhVl1fqoyMF/L98PYCmM6m7+52c4mWj2qlna5sz/RxE=";
+    hash = "sha256-JjpVhBpkVNFOsTnY8vEqIre4Hzwg+eDYwrR2iaIC5TA=";
   };
   build-system = [ setuptools ];
 

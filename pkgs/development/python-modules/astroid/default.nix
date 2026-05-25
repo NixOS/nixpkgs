@@ -2,46 +2,50 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
-  typing-extensions,
   pip,
   pylint,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "astroid";
-  version = "3.3.8"; # Check whether the version is compatible with pylint
+  version = "4.0.3"; # Check whether the version is compatible with pylint
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "astroid";
-    tag = "v${version}";
-    hash = "sha256-KKQuLomCHhVYMX1gE9WuqbXOfsf2izGlLE0Ml62gY3k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5p1xY6EWviSgmrLVOx3w7RcG/Vpx+sUtVndoxXrIFTQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pip
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html.
+    "test_identify_old_namespace_package_protocol"
+  ];
+
+  disabledTestPaths = [
+    # requires mypy
+    "tests/test_raw_building.py"
+  ];
+
   passthru.tests = {
     inherit pylint;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/PyCQA/astroid/blob/v${version}/ChangeLog";
+  meta = {
+    changelog = "https://github.com/PyCQA/astroid/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

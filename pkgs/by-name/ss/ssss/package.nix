@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ssss";
   version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "MrJoy";
     repo = "ssss";
-    rev = "releases%2Fv${version}";
+    rev = "releases%2Fv${finalAttrs.version}";
     sha256 = "18r1hwch6nq6gjijavr4pvrxz2plrlrvdx8ssqhdj2vmqvlqwbvd";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     installManPage ssss.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shamir Secret Sharing Scheme";
     homepage = "http://point-at-infinity.org/ssss/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

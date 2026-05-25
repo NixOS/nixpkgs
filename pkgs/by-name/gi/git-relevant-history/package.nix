@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   python3,
   git,
   git-filter-repo,
@@ -8,7 +9,8 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "git-relevant-history";
-  version = "2022-09-15";
+  version = "1.0.0-unstable-2022-09-15";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "rainlabs-eu";
     repo = "git-relevant-history";
@@ -21,12 +23,14 @@ python3.pkgs.buildPythonApplication {
     python3.pkgs.docopt
   ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
+  meta = {
     description = "Extract only relevant history from git repo";
     homepage = "https://github.com/rainlabs-eu/git-relevant-history";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bendlas ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bendlas ];
     mainProgram = "git-relevant-history";
   };
 }

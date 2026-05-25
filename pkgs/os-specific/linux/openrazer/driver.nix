@@ -5,6 +5,7 @@
   kernelModuleMakeFlags,
   stdenv,
   lib,
+  udevCheckHook,
   util-linux,
 }:
 
@@ -19,11 +20,13 @@ stdenv.mkDerivation (
     pname = "openrazer";
     version = "${common.version}-${kernel.version}";
 
-    nativeBuildInputs = kernel.moduleBuildDependencies;
+    nativeBuildInputs = [ udevCheckHook ] ++ kernel.moduleBuildDependencies;
 
     makeFlags = kernelModuleMakeFlags ++ [
       "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ];
+
+    doInstallCheck = true;
 
     installPhase = ''
       runHook preInstall

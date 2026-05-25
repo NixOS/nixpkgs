@@ -4,34 +4,31 @@
   fetchFromGitHub,
   cairocffi,
   cffi,
-  strenum,
   psutil,
   xcffib,
-  pdm-backend,
+  uv-build,
   pyside6,
   pyvirtualdisplay,
   pytestCheckHook,
   qtile,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile-bonsai";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aravinda0";
     repo = "qtile-bonsai";
-    tag = "v${version}";
-    hash = "sha256-1wiBrLQDdQGsoZAT5XUzmuloVo90y+GZu1bqPrbQl48=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JCElI4Ymr99p9dj++N9lyTFNmikntBwwImYREXFsUo0=";
   };
 
   build-system = [
-    pdm-backend
+    uv-build
   ];
 
   dependencies = [
-    strenum
     psutil
   ];
 
@@ -44,6 +41,11 @@ buildPythonPackage rec {
     qtile
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'uv_build>=0.8.13,<0.9.0' 'uv_build'
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -58,7 +60,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qtile_bonsai" ];
 
   meta = {
-    changelog = "https://github.com/aravinda0/qtile-bonsai/releases/tag/${version}";
+    changelog = "https://github.com/aravinda0/qtile-bonsai/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/aravinda0/qtile-bonsai";
     description = "Flexible layout for the qtile tiling window manager";
     license = lib.licenses.mit;
@@ -67,4 +69,4 @@ buildPythonPackage rec {
       sigmanificient
     ];
   };
-}
+})

@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonAtLeast,
 
   # nativeBuildInputs
   pkg-config,
@@ -13,6 +14,7 @@
   protobuf,
 
   # dependencies
+  lance-namespace,
   numpy,
   pyarrow,
 
@@ -30,28 +32,29 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "0.29.0";
+  version = "6.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    tag = "v${version}";
-    hash = "sha256-lEGxutBKbRFqr9Uhdv2oOXCdb8Y2quqLoSoJ0F+F3h0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n9x4Q1UlIuVWcDTdJd72JyQk/nuFMsWfzK2OmoO9wbU=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-NZeFgEWkiDewWI5R+lpBsMTU7+7L7oaHefSGAS+CoFU=";
+    hash = "sha256-b2O38ZKks6oiBAtUx0fTtFSy5nbsZCZD/BmeJY5zda8=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +76,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pyarrow" ];
 
   dependencies = [
+    lance-namespace
     numpy
     pyarrow
   ];
@@ -92,39 +96,101 @@ buildPythonPackage rec {
     polars
     pytestCheckHook
     tqdm
-  ] ++ optional-dependencies.torch;
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.torch;
 
   preCheck = ''
     cd python/tests
   '';
 
-  disabledTests =
-    [
-      # Writes to read-only build directory
-      "test_add_data_storage_version"
-      "test_fix_data_storage_version"
-      "test_fts_backward_v0_27_0"
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    "-Wignore::DeprecationWarning"
+  ];
 
-      # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
-      "test_table_loading"
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "torch_tests/test_bench_utils.py"
+    "torch_tests/test_distance.py"
+    "torch_tests/test_torch_kmeans.py"
+  ];
 
-      # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
-      # ModuleNotFoundError: No module named 'lance'
-      "test_tracing"
+  disabledTests = [
+    # Failed: DID NOT RAISE <class 'RuntimeError'>
+    "test_create_index_progress_callback_error_before_completion_propagates"
 
-      # Flaky (AssertionError)
-      "test_index_cache_size"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
-      "test_merge_insert_large"
-    ];
+    # Hangs indefinitely
+    "test_all_permutations"
+
+    # Writes to read-only build directory
+    "test_add_data_storage_version"
+    "test_fix_data_storage_version"
+    "test_fts_backward_v0_27_0"
+
+    # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
+    "test_table_loading"
+
+    # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
+    # ModuleNotFoundError: No module named 'lance'
+    "test_lance_log_file"
+    "test_lance_log_file_invalid_path"
+    "test_lance_log_file_with_directory_creation"
+    "test_timestamp_precision"
+    "test_tracing"
+
+    # Flaky (AssertionError)
+    "test_index_cache_size"
+
+    # OSError: LanceError(IO): Failed to initialize default tokenizer:
+    # An invalid argument was passed:
+    # 'LinderaError { kind: Parse, source: failed to build tokenizer: LinderaError(kind=Io, source=No such file or directory (os error 2)) }', /build/source/rust/lance-index/src/scalar/inverted/tokenizer/lindera.rs:63:21
+    "test_lindera_load_config_fallback"
+
+    # OSError: LanceError(IO): Failed to load tokenizer config
+    "test_indexed_filter_with_fts_index_with_lindera_ipadic_jp_tokenizer"
+    "test_lindera_ipadic_jp_tokenizer_bin_user_dict"
+    "test_lindera_ipadic_jp_tokenizer_csv_user_dict"
+    "test_lindera_load_config_priority"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
+    "test_merge_insert_large"
+
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_index_cast_centroids"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Build hangs after all the tests are run due to a torch subprocess not exiting
+    "test_multiprocess_loading"
+
+    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
+    # OpenMP support not found
+    # TODO: figure out why this only happens on python 3.13 and not 3.14
+    "test_cosine_distance"
+    "test_ground_truth"
+    "test_index_cast_centroids"
+    "test_index_with_no_centroid_movement"
+    "test_l2_distance"
+    "test_l2_distance_f16_bf16_cpu"
+    "test_pairwise_cosine"
+    "test_torch_index_with_nans"
+    "test_torch_kmeans_nans"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "test_create_index_unsupported_accelerator"
+    "test_index_cast_centroids"
+    "test_index_with_no_centroid_movement"
+    "test_torch_index_with_nans"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python wrapper for Lance columnar format";
     homepage = "https://github.com/lancedb/lance";
-    changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
+    changelog = "https://github.com/lancedb/lance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

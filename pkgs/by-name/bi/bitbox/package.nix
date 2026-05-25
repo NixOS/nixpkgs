@@ -8,6 +8,7 @@
   go,
   libsForQt5,
   qt6,
+  udevCheckHook,
 }:
 
 let
@@ -20,14 +21,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.47.3";
+  version = "4.50.1";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Rxlj9Xm78xI61ynOonokxii2jnemumWy6fX+82bDp+w=";
+    hash = "sha256-ZK1US/RF67QPyV0xRVIw4mecNZM/82GhWvjhJ47rKHU=";
   };
 
   postPatch = ''
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "${src.name}/frontends/web";
-    npmDepsHash = "sha256-eazc3OIusY8cbaF8RJOrVcyWPQexcz6lZYLLCpB1mHc=";
+    npmDepsHash = "sha256-kIYyUeaTgj4dJXfAJ1+3WDIYSADFcs5ypRGTODlxwDI=";
     installPhase = "cp -r build $out";
   };
 
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     cp frontends/qt/build/BitBox $out/bin/bitbox
     cp frontends/qt/build/assets.rcc $out/bin
     cp frontends/qt/server/libserver.so $out/lib
-    install -Dt $out/lib/udev/rules.d ${./rules.d}/*
+    install -m 644 -Dt $out/lib/udev/rules.d ${./rules.d}/*
 
     runHook postInstall
   '';
@@ -83,7 +84,10 @@ stdenv.mkDerivation rec {
     go
     qt6.wrapQtAppsHook
     rcc
+    udevCheckHook
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Companion app for the BitBox02 hardware wallet";

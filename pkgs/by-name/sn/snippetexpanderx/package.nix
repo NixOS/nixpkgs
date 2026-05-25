@@ -12,16 +12,16 @@
   gtk3,
   ibus,
   libgee,
-  xorg,
+  libx11,
   snippetexpanderd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit (snippetexpanderd) src version;
 
   pname = "snippetexpanderx";
 
-  sourceRoot = "${src.name}/cmd/snippetexpanderx";
+  sourceRoot = "${finalAttrs.src.name}/cmd/snippetexpanderx";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     libgee
-    xorg.libX11
+    libx11
     snippetexpanderd
   ];
 
-  makeFlags = [ "VERSION=${src.rev}" ];
+  makeFlags = [ "VERSION=${finalAttrs.src.rev}" ];
 
   installPhase = ''
     runHook preInstall
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
     description = "Your little expandable text snippet helper auto expander daemon";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderx";
   };
-}
+})

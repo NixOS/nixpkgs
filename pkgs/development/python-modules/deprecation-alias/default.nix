@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A wrapper around ‘deprecation’ providing support for deprecated aliases.";
+    description = "Wrapper around ‘deprecation’ providing support for deprecated aliases";
     homepage = "https://github.com/domdfcoding/deprecation-alias";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

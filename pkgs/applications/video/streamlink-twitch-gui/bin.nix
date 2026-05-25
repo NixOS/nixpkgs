@@ -24,7 +24,18 @@
   libgbm,
   nss,
   nspr,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
   streamlink,
 }:
 let
@@ -53,7 +64,7 @@ stdenv.mkDerivation rec {
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = with xorg; [
+  nativeBuildInputs = [
     at-spi2-core
     atk
     alsa-lib
@@ -72,18 +83,18 @@ stdenv.mkDerivation rec {
     nss
     nspr
     libuuid
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXScrnSaver
-    libXtst
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
     makeWrapper
     wrapGAppsHook3
   ];
@@ -131,15 +142,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Twitch.tv browser for Streamlink";
     longDescription = "Browse Twitch.tv and watch streams in your videoplayer of choice";
     homepage = "https://streamlink.github.io/streamlink-twitch-gui/";
     downloadPage = "https://github.com/streamlink/streamlink-twitch-gui/releases";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     mainProgram = "streamlink-twitch-gui";
-    maintainers = with maintainers; [ rileyinman ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

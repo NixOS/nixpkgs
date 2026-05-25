@@ -5,7 +5,17 @@
   wrapGAppsHook3,
   autoPatchelfHook,
   dpkg,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
   atk,
   glib,
   pango,
@@ -26,6 +36,8 @@
   libgbm,
   libglvnd,
   libappindicator-gtk3,
+  pipewire,
+  libpulseaudio,
 }:
 
 # Helper function for building a derivation for Franz and forks.
@@ -40,7 +52,7 @@
   ...
 }@args:
 let
-  cleanedArgs = builtins.removeAttrs args [
+  cleanedArgs = removeAttrs args [
     "pname"
     "name"
     "version"
@@ -69,19 +81,19 @@ stdenv.mkDerivation (
     ];
     buildInputs =
       extraBuildInputs
-      ++ (with xorg; [
-        libXi
-        libXcursor
-        libXdamage
-        libXrandr
-        libXcomposite
-        libXext
-        libXfixes
-        libXrender
-        libX11
-        libXtst
-        libXScrnSaver
-      ])
+      ++ [
+        libxi
+        libxcursor
+        libxdamage
+        libxrandr
+        libxcomposite
+        libxext
+        libxfixes
+        libxrender
+        libx11
+        libxtst
+        libxscrnsaver
+      ]
       ++ [
         libgbm
         gtk3
@@ -99,6 +111,8 @@ stdenv.mkDerivation (
         cups
         expat
         stdenv.cc.cc
+        pipewire
+        libpulseaudio
       ];
     runtimeDependencies = [
       libglvnd
@@ -106,6 +120,8 @@ stdenv.mkDerivation (
       (lib.getLib udev)
       libnotify
       libappindicator-gtk3
+      pipewire
+      libpulseaudio
     ];
 
     installPhase = ''
@@ -126,7 +142,7 @@ stdenv.mkDerivation (
       wrapProgramShell $out/opt/${name}/${pname} \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
         --suffix PATH : ${xdg-utils}/bin \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \
         "''${gappsWrapperArgs[@]}"
     '';
   }

@@ -4,25 +4,24 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starlark-rust";
   version = "0.13.0";
 
   src = fetchCrate {
     pname = "starlark_bin";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-1M3p5QHMOBgmdEyr31Bhv7X8UdUmoeL0o1hWaw2tahQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-BSXbFKR4AOKhssj+m5PIfgaoeRVDK+KRkApi8FUa8jg=";
 
   meta = {
     description = "Rust implementation of the Starlark language";
     homepage = "https://github.com/facebook/starlark-rust";
-    changelog = "https://github.com/facebook/starlark-rust/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/facebook/starlark-rust/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "starlark";
   };
-}
+})

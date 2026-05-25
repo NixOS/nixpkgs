@@ -66,7 +66,7 @@ in
     src = fetchFromGitHub {
       owner = "lausser";
       repo = "check_mssql_health";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-K6sGrms9z59a9rkZNulwKBexGF2Nkqqak/cRg12ynxc=";
       fetchSubmodules = true;
     };
@@ -82,7 +82,7 @@ in
     src = fetchFromGitHub {
       owner = "lausser";
       repo = "check_nwc_health";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-r8Cb9RnEohNp0GxMAIaj7e08dTWZhuV1jz4/b8tuJ6k=";
       fetchSubmodules = true;
     };
@@ -98,7 +98,7 @@ in
     src = fetchFromGitHub {
       owner = "lausser";
       repo = "check_ups_health";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-ZGSTPVJObP49/tDASOCh4wVdMKajheHD+xVTiFf101k=";
       fetchSubmodules = true;
     };

@@ -4,8 +4,8 @@
   cctools,
   darwin,
   dotnetCorePackages,
-  fetchFromGitLab,
-  libX11,
+  fetchFromForgejo,
+  libx11,
   libgdiplus,
   moltenvk,
   ffmpeg,
@@ -17,33 +17,37 @@
   vulkan-loader,
   glew,
   libGL,
-  libICE,
-  libSM,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libice,
+  libsm,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   udev,
   SDL2,
   SDL2_mixer,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 buildDotnetModule rec {
   pname = "ryubing";
-  version = "1.2.86";
+  version = "1.3.3";
 
-  src = fetchFromGitLab {
+  src = fetchFromForgejo {
     domain = "git.ryujinx.app";
-    owner = "Ryubing";
-    repo = "Ryujinx";
+    owner = "projects";
+    repo = "Ryubing";
     tag = version;
-    hash = "sha256-Goxg2+zaKaqbGv5q/ril4TBtfTbPEYEwQQ/M6NlEpus=";
+    hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin [
-    cctools
-    darwin.sigtool
-  ];
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isLinux wrapGAppsHook3
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      darwin.sigtool
+    ];
 
   enableParallelBuilding = false;
 
@@ -52,35 +56,35 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  runtimeDeps =
-    [
-      libX11
-      libgdiplus
-      SDL2_mixer
-      openal
-      libsoundio
-      sndio
-      vulkan-loader
-      ffmpeg
+  runtimeDeps = [
+    libx11
+    libgdiplus
+    SDL2_mixer
+    openal
+    libsoundio
+    sndio
+    vulkan-loader
+    ffmpeg
 
-      # Avalonia UI
-      glew
-      libICE
-      libSM
-      libXcursor
-      libXext
-      libXi
-      libXrandr
+    # Avalonia UI
+    glew
+    libice
+    libsm
+    libxcursor
+    libxext
+    libxi
+    libxrandr
+    gtk3
 
-      # Headless executable
-      libGL
-      SDL2
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
-      udev
-      pulseaudio
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
+    # Headless executable
+    libGL
+    SDL2
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    udev
+    pulseaudio
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin moltenvk;
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";
@@ -96,7 +100,7 @@ buildDotnetModule rec {
     "Ryujinx"
   ];
 
-  makeWrapperArgs = [
+  makeWrapperArgs = lib.optional stdenv.hostPlatform.isLinux [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
     "--set SDL_VIDEODRIVER x11"
   ];
@@ -127,9 +131,10 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ryujinx.app";
-    changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
+    # historical changelog https://git.ryujinx.app/projects/Ryubing/wiki/Changelog
+    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${src.tag}";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,
@@ -139,8 +144,8 @@ buildDotnetModule rec {
       2017. The project has since been abandoned on October 1st 2024 and QoL
       updates are now managed under a fork.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       artemist
       willow

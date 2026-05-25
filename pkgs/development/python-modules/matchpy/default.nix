@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "matchpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for pattern matching on symbolic expressions";
     homepage = "https://github.com/HPAC/matchpy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

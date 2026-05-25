@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "0.52.24";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.gz";
+    url = "https://releases.pagure.org/newt/newt-${version}.tar.gz";
     sha256 = "sha256-Xe1+Ih+F9kJSHEmxgmyN4ZhFqjcrr11jClF3S1RPvbs=";
   };
 
@@ -34,18 +34,23 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python3 ];
-  buildInputs =
+  buildInputs = [
+    slang
+    popt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gettext # for darwin with clang
+  ];
+
+  env.NIX_LDFLAGS = toString (
     [
-      slang
-      popt
+      "-lncurses"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gettext # for darwin with clang
-    ];
-
-  NIX_LDFLAGS =
-    "-lncurses"
-    + lib.optionalString stdenv.hostPlatform.isDarwin " -L${python3}/lib -lpython${python3.pythonVersion}";
+      "-L${python3}/lib"
+      "-lpython${python3.pythonVersion}"
+    ]
+  );
 
   preConfigure = ''
     # If CPP is set explicitly, configure and make will not agree about which
@@ -78,11 +83,9 @@ stdenv.mkDerivation rec {
           ... which is implemented by `runCommand`,
           ... which has a custom builder and does not run $preDistPhases
       */
-      postBuild =
-        postBuild
-        + ''
-          runPhase pythonImportsCheckPhase
-        '';
+      postBuild = postBuild + ''
+        runPhase pythonImportsCheckPhase
+      '';
     }
   );
 
