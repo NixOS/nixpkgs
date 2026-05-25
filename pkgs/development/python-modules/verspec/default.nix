@@ -4,17 +4,20 @@
   fetchPypi,
   pretend,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "verspec";
   version = "0.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-xFBMppeyBWzbS/pxIUYfWg6BgJJVtBwD3aS6gjY3wB4=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pretend
