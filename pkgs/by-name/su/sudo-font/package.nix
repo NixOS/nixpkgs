@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sudo-font";
-  version = "3.4";
+  version = "3.6";
 
   outputs = [
     "out"
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://github.com/jenskutilek/sudo-font/releases/download/v${finalAttrs.version}/sudo.zip";
-    hash = "sha256-sSLY94wY9+AYAqWDq+Xy+KctUfJVS0jeS3baF8mLO9I=";
+    hash = "sha256-4jw1MGxV/a78U7jAfnRLxfZFOqDzyTctCaqKT/s1mMU=";
   };
 
   nativeBuildInputs = [ installFonts ];
