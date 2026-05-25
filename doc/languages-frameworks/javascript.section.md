@@ -342,7 +342,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = "...";
   };
 })
@@ -384,7 +384,7 @@ It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnp
    pnpmDeps = fetchPnpmDeps {
      inherit (finalAttrs) pname version src;
 +    pnpm = pnpm_10;
-     fetcherVersion = 3;
+     fetcherVersion = 4;
      hash = "...";
    };
  })
@@ -498,7 +498,7 @@ This is the version of the output of `fetchPnpmDeps`. New packages should use `3
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = "..."; # clear this hash and generate a new one
   };
 }
@@ -516,6 +516,7 @@ Version 3 is the recommended value for new packages. Versions 1 and 2 are deprec
 - 1: Initial version, nothing special.
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
+- 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
 
 ### Yarn {#javascript-yarn}
 

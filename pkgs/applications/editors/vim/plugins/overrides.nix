@@ -28,6 +28,7 @@
   htop,
   jq,
   khard,
+  kulala-core,
   languagetool,
   libgit2,
   llvmPackages,
@@ -369,6 +370,10 @@ assertNoAdditions {
       license = lib.licenses.gpl2Only;
     };
   });
+
+  blink-calc = super.blink-calc.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
 
   blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
     dependencies = [ self.blink-cmp ];
@@ -1946,16 +1951,17 @@ assertNoAdditions {
     in
     {
       dependencies = [ kulala-http-grammar ];
-      buildInputs = [ curl ];
 
       postPatch = ''
         substituteInPlace lua/kulala/config/defaults.lua \
-          --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
+          --replace-fail 'path = nil' 'path = "${lib.getExe kulala-core}"'
       '';
 
       nvimSkipModules = [
         # Requires some extra work to get CLI working in nixpkgs
         "cli.kulala_cli"
+        # Legacy parser module; active parsing is handled by kulala-core
+        "kulala.parser.treesitter"
       ];
     }
   );

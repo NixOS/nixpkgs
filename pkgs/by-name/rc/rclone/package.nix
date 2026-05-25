@@ -8,16 +8,14 @@
   versionCheckHook,
   makeWrapper,
   enableCmount ? true,
-  fuse,
   fuse3,
-  macfuse-stubs,
   librclone,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "rclone";
-  version = "1.74.1";
+  version = "1.74.2";
 
   outputs = [
     "out"
@@ -28,10 +26,10 @@ buildGoModule (finalAttrs: {
     owner = "rclone";
     repo = "rclone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KbaOIrz7v3NheTcPQ8ZoZP5HSAY/THmywLxU3WdD4xA=";
+    hash = "sha256-ynPRzzS0aoEbDiCgeIyi2Ce3+NHjQcazm7KJeK6cdiM=";
   };
 
-  vendorHash = "sha256-snYmkzE+ao8Qxz4uA04LFPWqzf601EtnTk/LAeYNhyk=";
+  vendorHash = "sha256-fiZyN94l0Eq3BjJzW3lF5ld37VBurWjtr1v5kVWCc/Q=";
 
   subPackages = [ "." ];
 
@@ -40,11 +38,9 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optional enableCmount (
-    if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse
-  );
+  buildInputs = lib.optional enableCmount fuse3;
 
-  tags = lib.optionals enableCmount [ "cmount" ];
+  tags = [ "fuse3" ] ++ lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [
     "-s"
@@ -54,7 +50,7 @@ buildGoModule (finalAttrs: {
 
   postConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace vendor/github.com/winfsp/cgofuse/fuse/host_cgo.go \
-        --replace-fail '"libfuse.so.2"' '"${lib.getLib fuse}/lib/libfuse.so.2"'
+        --replace-fail "fuse.h" "fuse3/fuse.h"
   '';
 
   postInstall =

@@ -7616,6 +7616,11 @@
     githubId = 54573;
     name = "Edward Amsden";
   };
+  eana = {
+    github = "eana";
+    githubId = 18534280;
+    name = "Jonas Eana";
+  };
   earldouglas = {
     email = "james@earldouglas.com";
     github = "earldouglas";
@@ -28527,6 +28532,12 @@
     github = "u2x1";
     githubId = 30677291;
     name = "u2x1";
+  };
+  u3kkasha = {
+    email = "fida.waseque@gmail.com";
+    github = "u3kkasha";
+    githubId = 146055002;
+    name = "Fida Waseque Choudhury";
   };
   uakci = {
     name = "uakci";

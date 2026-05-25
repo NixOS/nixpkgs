@@ -14,6 +14,7 @@
   libxxf86vm,
   versionCheckHook,
   netbird-management,
+  netbird-proxy,
   netbird-relay,
   netbird-signal,
   netbird-ui,
@@ -60,6 +61,11 @@ let
     relay = {
       module = "relay";
       binaryName = "netbird-relay";
+      license = lib.licenses.agpl3Only;
+    };
+    proxy = {
+      module = "proxy/cmd/proxy";
+      binaryName = "netbird-proxy";
       license = lib.licenses.agpl3Only;
     };
   };
@@ -149,6 +155,7 @@ buildGoModule (finalAttrs: {
         netbird-signal
         netbird-ui
         netbird-upload
+        netbird-proxy
         ;
     };
     updateScript = nix-update-script { };

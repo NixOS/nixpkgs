@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for the remote Jenkins API";
-    homepage = "https://pypi.python.org/pypi/python-jenkins";
+    homepage = "https://pypi.org/project/python-jenkins/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gador ];
   };

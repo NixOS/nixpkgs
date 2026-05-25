@@ -7,7 +7,7 @@
 
   meta.maintainers = with lib.maintainers; [ hexa ];
 
-  nodes.machine = {
+  containers.machine = {
     services.postfix.enable = true;
     services.postfix-tlspol.enable = true;
 
