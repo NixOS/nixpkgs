@@ -49,6 +49,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Simple wrapper client for the Vilfo router API";
     homepage = "https://github.com/ManneW/vilfo-api-client-python";
+    changelog = "https://github.com/ManneW/vilfo-api-client-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
