@@ -51,6 +51,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [ "pygreat" ];
+
   pythonRemoveDeps = [ "future" ];
 
   dependencies = [
