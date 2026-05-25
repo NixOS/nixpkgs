@@ -11,12 +11,13 @@
   mock,
   pytest-asyncio_0,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "volvooncall";
   version = "0.10.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "molobrakos";
@@ -24,6 +25,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-xr3g93rt3jvxVZrZY7cFh5eBP3k0arsejsgvx8p5EV4=";
   };
+
+  build-system = [ setuptools ];
 
   patches = [
     # Remove asynctest, https://github.com/molobrakos/volvooncall/pull/92
@@ -34,7 +37,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
   optional-dependencies = {
     console = [
