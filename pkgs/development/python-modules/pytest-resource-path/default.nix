@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-resource-path";
-  version = "1.4.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";
     repo = "pytest-resource-path";
     tag = "v${version}";
-    hash = "sha256-f0jN6V6tQRbr/DHOKKTrFCb1EBUUxZAQRckMy2iiVqI=";
+    hash = "sha256-Y/mB5Gmkt3Rt8rRBOFZrWIREnpEiSxf/MChqymXDNws=";
   };
 
   build-system = [ setuptools ];
