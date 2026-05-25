@@ -92,5 +92,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ connor-grady ];
+  meta.maintainers = with lib.maintainers; [
+    connor-grady
+    diogotcorreia
+  ];
 }
