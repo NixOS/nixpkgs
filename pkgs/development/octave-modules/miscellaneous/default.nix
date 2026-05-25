@@ -6,6 +6,8 @@
   # Build-time dependencies
   ncurses, # >= 5
   units,
+  pkg-config,
+  autoreconfHook,
 }:
 
 buildOctavePackage rec {
@@ -19,6 +21,11 @@ buildOctavePackage rec {
     sha256 = "sha256-IF5kBd7RD2+gooRTNtv2XDPJcpIZlsu8QXlO3f3nD/Q=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+
   buildInputs = [
     ncurses
   ];
@@ -26,6 +33,17 @@ buildOctavePackage rec {
   propagatedBuildInputs = [
     units
   ];
+
+  # autoreconfHook provides an autoreconfPhase that is run as a
+  # preconfigurePhase, which means it runs AFTER the source is un-tarred, and
+  # before buildOctavePackage's buildPhase re-tars it up into a format for later
+  # consumption by Octave's "pkg build" command.
+  preAutoreconf = ''
+    pushd src
+  '';
+  postAutoreconf = ''
+    popd
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
