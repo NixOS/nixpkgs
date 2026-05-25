@@ -2,6 +2,8 @@
 # declarations of individual contracts follow the type in `./definition-type.nix`.
 { lib, ... }:
 lib.mapAttrs (
-  _: path:
-  lib.evalOption (lib.mkOption { type = lib.contract.definitionType; }) (import path { inherit lib; })
+  _name: path:
+  lib.evalOption (lib.mkOption {
+    type = lib.contract.definitionType;
+  }) (import path { inherit lib; })
 ) { fileSecrets = ./file-secrets.nix; }

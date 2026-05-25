@@ -887,6 +887,10 @@ checkConfigError 'contracts\.noProvider: an instance is .want.ed but routed to n
 checkConfigOutput '^6$' config.result.dupAgree ./contracts-provider-selection.nix
 checkConfigOutput '^6$' config.result.dupAgreeThunks ./contracts-provider-selection.nix
 
+# contracts: deployer write at a `providerOptions` leaf must not mask consumer wants
+# (regression for the `_requests` re-application at `mkDefault` in mkProviderType).
+checkConfigOutput '^12$' config.contracts.wantForwarding.results.consumer.instance.value ./contracts-partial-overrides.nix
+
 # contracts: mkContract propagates request option defaults via extendSubmodule
 checkConfigOutput '^42$' config.result ./contracts-mkcontract.nix
 
