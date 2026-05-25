@@ -3,6 +3,9 @@
   lib,
   fetchurl,
   buildFHSEnv,
+  symlinkJoin,
+  runCommand,
+  extraFontPackages ? [ ],
   # Alphabetic ordering below
   alsa-lib,
   at-spi2-atk,
@@ -65,9 +68,26 @@ let
   #
   # into `~/.local/share/fonts/`, otherwise the default template fonts, and
   # things like bullet points, will not look as expected.
+  #
+  # To make fonts packaged with Nix available to OnlyOffice, add the packages using the `extraFontPackages' attribute:
+  # (onlyoffice-desktopeditors.override { extraFontPackages = [ pkgs.font-bh-ttf ]; })
 
   # TODO: Find out which of these fonts we'd be allowed to distribute along
   #       with this package, or how to make this easier for users otherwise.
+
+  onlyoffice-fonts = symlinkJoin {
+    name = "onlyoffice-fonts";
+    paths = [ noto-fonts-cjk-sans ] ++ extraFontPackages;
+  };
+
+  fontsDir = runCommand "onlyoffice-fonts-dir" { } ''
+    font_regexp='.*\.\(ttf\|ttc\|otf\)?'
+    mkdir -p $out
+
+    find ${onlyoffice-fonts} -type l -regex "$font_regexp" -print0 | while IFS= read -r -d "" file; do
+      cp -L "$file" $out/
+    done
+  '';
 
   runtimeLibs = lib.makeLibraryPath [
     curl
@@ -173,14 +193,12 @@ in
 
 # In order to download plugins, OnlyOffice uses /usr/bin/curl so we have to wrap it.
 # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
-# Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
   inherit (derivation) pname version;
 
   targetPkgs = pkgs': [
     curl
     derivation
-    noto-fonts-cjk-sans
     libGL
   ];
 
@@ -192,6 +210,11 @@ buildFHSEnv {
     cp -r ${derivation}/share/applications $out/share
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
         --replace-fail "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
+  '';
+
+  extraBuildCommands = ''
+    mkdir -p $out/usr/share/
+    ln -s ${fontsDir} $out/usr/share/fonts
   '';
 
   passthru.updateScript = ./update.sh;
