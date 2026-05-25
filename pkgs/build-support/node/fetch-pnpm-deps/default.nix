@@ -249,5 +249,6 @@ in
       npmArch = stdenvNoCC.targetPlatform.node.arch;
       npmPlatform = stdenvNoCC.targetPlatform.node.platform;
     };
+    meta.license = lib.licenses.mit;
   } ./pnpm-config-hook.sh;
 }

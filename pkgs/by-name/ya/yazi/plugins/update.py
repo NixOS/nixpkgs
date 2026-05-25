@@ -567,7 +567,7 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     }
 
 
-def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
+def update_all_plugins(nixpkgs_dir: str, commit: bool = False) -> list[dict[str, str]]:
     """Update all available Yazi plugins
 
     Returns:
@@ -602,6 +602,8 @@ def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
                 if update_info:
                     updated_count += 1
                     updated_plugins.append(update_info)
+                    if commit:
+                        commit_plugin_change(nixpkgs_dir, update_info)
             except KeyboardInterrupt:
                 print("\nUpdate process interrupted by user")
                 sys.exit(1)
@@ -630,47 +632,58 @@ def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
     return updated_plugins
 
 
-def commit_changes(updated_plugins: list[dict[str, str]]) -> None:
-    """Commit all changes after updating plugins"""
+def get_compare_url(plugin: dict[str, str]) -> str | None:
+    if plugin["old_commit"] == "unknown" or plugin["new_commit"] is None:
+        return None
+
+    owner = plugin["owner"].strip()
+    repo = plugin["repo"].strip()
+    return f"https://github.com/{owner}/{repo}/compare/{plugin['old_commit']}...{plugin['new_commit']}"
+
+
+def commit_plugin_change(nixpkgs_dir: str, plugin: dict[str, str]) -> None:
+    """Commit the updated file for one plugin."""
+    plugin_path = f"pkgs/by-name/ya/yazi/plugins/{plugin['name']}/default.nix"
+
+    try:
+        subprocess.run(["git", "add", "--", plugin_path], cwd=nixpkgs_dir, check=True)
+        diff_result = subprocess.run(
+            ["git", "diff", "--cached", "--quiet", "--", plugin_path],
+            cwd=nixpkgs_dir,
+            check=False,
+        )
+        if diff_result.returncode == 0:
+            print(f"No changes to commit for {plugin['name']}")
+            return
+        if diff_result.returncode != 1:
+            raise RuntimeError(f"Could not inspect staged changes for {plugin['name']}")
+
+        subject = f"yaziPlugins.{plugin['name']}: {plugin['old_version']} → {plugin['new_version']}"
+        commit_args = ["git", "commit", "--no-verify", "-m", subject]
+
+        compare_url = get_compare_url(plugin)
+        if compare_url:
+            commit_args.extend(["-m", f"Compare: {compare_url}"])
+
+        commit_args.extend(["--", plugin_path])
+
+        subprocess.run(commit_args, cwd=nixpkgs_dir, check=True)
+        print(f"\nCommitted {plugin['name']} with message:\n{subject}")
+        if compare_url:
+            print(f"\nCompare: {compare_url}")
+    except Exception as e:
+        print(f"Error committing changes for {plugin['name']}: {e}")
+        raise
+
+
+def commit_changes(nixpkgs_dir: str, updated_plugins: list[dict[str, str]]) -> None:
+    """Commit one change per updated plugin."""
     if not updated_plugins:
         print("No plugins were updated, skipping commit")
         return
 
-    try:
-        status_output = run_command("git status --porcelain", capture_output=True)
-        if not status_output:
-            print("No changes to commit")
-            return
-
-        current_date = run_command("date +%Y-%m-%d", capture_output=True)
-
-        def get_compare_url(plugin: dict[str, str]) -> str | None:
-            if plugin["old_commit"] != "unknown":
-                owner = plugin['owner'].strip()
-                repo = plugin['repo'].strip()
-                return f"https://github.com/{owner}/{repo}/compare/{plugin['old_commit']}...{plugin['new_commit']}"
-            return None
-
-        if len(updated_plugins) == 1:
-            plugin = updated_plugins[0]
-            commit_message = f"yaziPlugins.{plugin['name']}: {plugin['old_version']} -> {plugin['new_version']}"
-            compare_url = get_compare_url(plugin)
-            if compare_url:
-                commit_message += f"\n\nCompare: {compare_url}"
-        else:
-            commit_message = f"yaziPlugins: update on {current_date}\n\n"
-            for plugin in sorted(updated_plugins, key=lambda x: x['name']):
-                commit_message += f"- {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}\n"
-                compare_url = get_compare_url(plugin)
-                if compare_url:
-                    commit_message += f"  Compare: {compare_url}\n"
-
-        run_command("git add pkgs/by-name/ya/yazi/plugins/", capture_output=False)
-
-        subprocess.run(["git", "commit", "--no-verify", "-m", commit_message], check=True)
-        print(f"\nCommitted changes with message:\n{commit_message}")
-    except Exception as e:
-        print(f"Error committing changes: {e}")
+    for plugin in updated_plugins:
+        commit_plugin_change(nixpkgs_dir, plugin)
 
 
 def main():
@@ -688,7 +701,7 @@ def main():
 
     if args.all:
         print("Updating all Yazi plugins...")
-        updated_plugins = update_all_plugins(nixpkgs_dir)
+        updated_plugins = update_all_plugins(nixpkgs_dir, args.commit)
 
     elif args.plugin:
         plugin_name = args.plugin
@@ -713,8 +726,8 @@ def main():
             parser.print_help()
             sys.exit(0)
 
-    if args.commit and updated_plugins:
-        commit_changes(updated_plugins)
+    if args.commit and updated_plugins and not args.all:
+        commit_changes(nixpkgs_dir, updated_plugins)
 
 
 if __name__ == "__main__":
