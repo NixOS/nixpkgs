@@ -511,10 +511,10 @@ Changes can include workarounds or bug fixes to existing PNPM issues.
 
 ##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
 
-Version 3 is the recommended value for new packages. Versions 1 and 2 are deprecated and scheduled for removal in the 26.11 release; existing packages must migrate.
+Version 3 is the minimum supported value. Versions 1 and 2 were removed in the 26.11 release; packages that still use them fail to evaluate and must migrate to `fetcherVersion = 3` (or later) and regenerate their hashes.
 
-- 1: Initial version, nothing special.
-- 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
+- 1: Initial version, nothing special. (removed in 26.11)
+- 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975) (removed in 26.11)
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 - 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
 
