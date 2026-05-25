@@ -56,7 +56,7 @@ in
   behaviorTest =
     {
       name,
-      providerRoot,
+      wantPath,
       extraModules ? [ ],
     }:
     {
@@ -89,11 +89,9 @@ in
           };
 
           config = lib.mkMerge [
-            (lib.setAttrByPath providerRoot {
-              request = {
-                inherit (config.test) owner group mode;
-              };
-            })
+            (lib.setAttrByPath (
+              [ "contracts" "fileSecrets" "want" ] ++ wantPath ++ [ "request" ]
+            ) { inherit (config.test) owner group mode; })
             (lib.mkIf (config.test.owner != "root") {
               users.users.${config.test.owner}.isNormalUser = true;
             })
@@ -107,7 +105,9 @@ in
         { nodes, ... }:
         let
           cfg = nodes.machine;
-          inherit (lib.getAttrFromPath providerRoot nodes.machine) result;
+          result = lib.getAttrFromPath (
+            [ "contracts" "fileSecrets" "results" ] ++ wantPath
+          ) nodes.machine;
         in
         ''
           owner = machine.succeed("stat -c '%U' ${result.path}").strip()
