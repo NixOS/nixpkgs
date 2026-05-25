@@ -1340,7 +1340,14 @@ rec {
 
     :::
   */
-  genAttrs = names: f: genAttrs' names (n: nameValuePair n (f n));
+  genAttrs =
+    names: f:
+    listToAttrs (
+      map (name: {
+        inherit name;
+        value = f name;
+      }) names
+    );
 
   /**
     Like `genAttrs`, but allows the name of each attribute to be specified in addition to the value.
