@@ -153,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "shairport-sync";
     maintainers = with lib.maintainers; [
-      lnl7
       jordanisaacs
     ];
     platforms = lib.platforms.unix;
