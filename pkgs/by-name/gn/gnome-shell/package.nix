@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     gi-docgen
+    gjs # provides gjs at build time for meson find_program
     wrapGAppsHook4
     sassc
     desktop-file-utils
@@ -252,6 +253,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "gnome-shell";
     };
   };
+
+  strictDeps = true;
 
   meta = {
     description = "Core user interface for the GNOME 3 desktop";
