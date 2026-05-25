@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "vincenty";
   version = "0.1.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maurycyp";
@@ -15,6 +16,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "1li8gv0zb1pdbxdybgaykm38lqbkb5dr7rph6zs1k4k3sh15ldw3";
   };
+
+  build-system = [ setuptools ];
 
   # no tests implemented
   doCheck = false;
