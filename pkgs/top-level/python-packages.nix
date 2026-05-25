@@ -13607,6 +13607,8 @@ self: super: with self; {
 
   pybtex-docutils = callPackage ../development/python-modules/pybtex-docutils { };
 
+  pybuildkite = callPackage ../development/python-modules/pybuildkite { };
+
   pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs.buildPackages) meson; };
