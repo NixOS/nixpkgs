@@ -173,7 +173,10 @@ in
         # breaks pyopenssl's cffi calls, used in remote access feature
         # not compatible with llvmlite which is required by numba -> librosa
         MemoryDenyWriteExecute = false;
-        ProcSubset = "pid";
+        # required for torch to properly detect the supported engines
+        # allows Music-Assistant to warn, if x86_64-v2 cpu features are missing
+        BindReadOnlyPaths = [ "/proc/cpuinfo" ];
+        ProcSubset = "all";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
