@@ -22001,6 +22001,12 @@
     githubId = 1601039;
     name = "Cale Black";
   };
+  port22exposed = {
+    email = "contact@port22.exposed";
+    github = "port22exposed";
+    githubId = 191940431;
+    name = "charli";
+  };
   portothree = {
     name = "Gustavo Porto";
     email = "gus@p8s.co";
