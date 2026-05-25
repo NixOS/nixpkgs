@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "virtualenv-clone";
   version = "0.5.7";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "edwardgeorge";
     repo = "virtualenv-clone";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
   };
 
@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tests/__init__.py \
-      --replace-fail "'virtualenv'" "'${virtualenv}/bin/virtualenv'" \
+      --replace-fail "'virtualenv'" "'${lib.getExe virtualenv}'" \
       --replace-fail "'3.9', '3.10']" "'3.9', '3.10', '3.11', '3.12', '3.13', '3.14']" # if the Python version used isn't in this list, tests fail
 
     substituteInPlace tests/test_virtualenv_sys.py \
-      --replace-fail "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+      --replace-fail "'virtualenv'" "'${lib.getExe virtualenv}'"
 
     # PermissionError: [Errno 13] Permission denied: '/tmp/test_fixup_pth_file.pth'
     # Unable to reproduce.
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
