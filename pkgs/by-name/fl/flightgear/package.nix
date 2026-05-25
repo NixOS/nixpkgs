@@ -131,7 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Flight simulator";
+    description = "A free and highly sophisticated flight simulator";
+    homepage = "https://www.flightgear.org/";
+    changelog = "https://www.flightgear.org/download/releases/2024-1-5"; # TODO: Use finalattrs when back on stable tracking
     maintainers = with lib.maintainers; [
       raskin
       kirillrdy
