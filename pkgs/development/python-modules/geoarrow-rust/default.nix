@@ -8,18 +8,18 @@
   obstore,
 
   # tests
-  pyarrow,
-  pyproj,
+  arro3-compute,
+  arro3-io,
+  geoarrow-types,
+  geodatasets,
+  geopandas,
   numpy,
   pandas,
-  geoarrow-types,
-  geopandas,
-  geodatasets,
-  shapely,
+  pyarrow,
   pyogrio,
+  pyproj,
   pytest-asyncio,
-  arro3-io,
-  arro3-compute,
+  shapely,
 }:
 let
   version = "0.6.1";
@@ -110,8 +110,8 @@ let
     pythonImportsCheck = [ "geoarrow.rust.io" ];
     dependencies = [
       arro3-core
-      pyproj
       obstore
+      pyproj
     ];
   };
 
@@ -124,21 +124,21 @@ let
     dontInstall = true;
 
     nativeCheckInputs = [
-      pytestCheckHook
-      pytest-asyncio
-      geoarrow-types
-      pandas
-      pyarrow
-      numpy
-      geopandas
-      geodatasets
-      shapely
-      pyogrio
-      obstore
-      arro3-io
       arro3-compute
+      arro3-io
       geoarrow-rust-core
       geoarrow-rust-io
+      geoarrow-types
+      geodatasets
+      geopandas
+      numpy
+      obstore
+      pandas
+      pyarrow
+      pyogrio
+      pytest-asyncio
+      pytestCheckHook
+      shapely
     ];
 
     # use the latest test folder (skips the tests_old folder)
