@@ -18,6 +18,7 @@
   pydantic,
   pytest-asyncio,
   pytest-httpserver,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.20.5";
+  version = "4.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     tag = "v${version}";
-    hash = "sha256-3CJLD/bew9qx2aDrIwcaMlgwCe8E4bj3ZDh5t0v8Pf8=";
+    hash = "sha256-nGYslKyIQWAwhu5Fa23jXtgBN9q4jjrmBhWv4EO3Vn8=";
   };
 
   pythonRelaxDeps = [
@@ -71,8 +72,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-httpserver
     pytest-asyncio
+    pytest-httpserver
+    pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
@@ -99,9 +101,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [
     "test"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    "mock_tests" # mock gRPC/HTTP servers fail to bind ports in the Darwin sandbox
+  ];
+
+  disabledTestPaths = [
+    "mock_tests" # mock gRPC/HTTP servers fail to bind ports
   ];
 
   __darwinAllowLocalNetworking = true;
