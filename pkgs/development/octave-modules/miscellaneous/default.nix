@@ -10,13 +10,13 @@
 
 buildOctavePackage rec {
   pname = "miscellaneous";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "octave-miscellaneous";
     tag = "release-${version}";
-    sha256 = "sha256-IF5kBd7RD2+gooRTNtv2XDPJcpIZlsu8QXlO3f3nD/Q=";
+    sha256 = "sha256-LuqRQefT2Z73113C18YSNvd9OBSr8GFBVVRZw/ucB7k=";
   };
 
   buildInputs = [
