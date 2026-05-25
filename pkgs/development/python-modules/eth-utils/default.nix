@@ -28,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-U1RSKaLw/gDg4lMjkTwR/Wfb5wqQctML9CDZBILMBys=";
   };
 
+  postPatch = ''
+    # type inference test output expectation changed slightly (don't ask me when it started...)
+    sed -i 's/builtins\.//g' tests/core/functional-utils/test_type_inference.py
+  '';
+
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
