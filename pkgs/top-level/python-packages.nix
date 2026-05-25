@@ -18965,6 +18965,8 @@ self: super: with self; {
 
   somweb = callPackage ../development/python-modules/somweb { };
 
+  sonic-client = callPackage ../development/python-modules/sonic-client { };
+
   sonos-websocket = callPackage ../development/python-modules/sonos-websocket { };
 
   sopel = callPackage ../development/python-modules/sopel { };
