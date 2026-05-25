@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3YJ56WxmTSNSSe8KhX0SLhMt1MXyDa1XAgUsyHHbLtI=";
 
+  __structuredAttrs = true;
+
   meta = with lib; {
     description = "TUI package manager for NixOS that wires selections into your flake + home-manager config";
     homepage = "https://github.com/SINGH-RAJVEER/nix-box";
