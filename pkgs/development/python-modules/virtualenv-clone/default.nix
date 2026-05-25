@@ -4,12 +4,13 @@
   fetchFromGitHub,
   virtualenv,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv-clone";
   version = "0.5.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "edwardgeorge";
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
   };
+
+  build-system = [ setuptools ];
 
   postPatch = ''
     substituteInPlace tests/__init__.py \
@@ -35,7 +38,7 @@ buildPythonPackage rec {
         "pth = '$(mktemp -d)/test_fixup_pth_file.pth'"
   '';
 
-  propagatedBuildInputs = [ virtualenv ];
+  dependencies = [ virtualenv ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
