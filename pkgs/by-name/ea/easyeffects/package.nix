@@ -114,8 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp'
     onetbb
     webrtc-audio-processing
-    x42-plugins
     zita-convolver
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [
+    x42-plugins
   ];
 
   preFixup =
@@ -124,8 +126,10 @@ stdenv.mkDerivation (finalAttrs: {
         calf # compressor exciter, bass enhancer and others
         lsp-plugins # delay, limiter, multiband compressor
         mda_lv2 # loudness
-        x42-plugins # autotune
         zam-plugins # maximizer
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isx86 [
+        x42-plugins # autotune
       ];
 
       ladspaPlugins = [
