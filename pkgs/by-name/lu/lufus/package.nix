@@ -14,7 +14,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     owner = "Hogjects";
     repo = "Lufus";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-3i0CnhGvLTXutz8CQoH5q4PwZ23lAwnUo8H5TRJx+KE=";
+    hash = "sha256-3i0CnhGvLTXutz8CQoH5q4PwZ23lAwnUo8H5TRJx+KE=";
   };
 
   propagatedBuildInputs = with python313Packages; [
@@ -45,8 +45,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
       --prefix PYTHONPATH : "$out/${python313Packages.python.sitePackages}:${python313Packages.makePythonPath finalAttrs.propagatedBuildInputs}"
 
     install -Dm644 src/lufus/gui/assets/lufus.png -t $out/share/icons/hicolor/64x64/apps
-
-    copyDesktopItems
   '';
 
   desktopItems = [
@@ -64,7 +62,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
   ];
 
   meta = {
-    description = "A rufus clone written in py and designed to work with linux";
+    description = "Rufus clone written in py and designed to work with linux";
     homepage = "https://github.com/Hogjects/Lufus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Simon-Weij ];
