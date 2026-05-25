@@ -19013,6 +19013,8 @@ self: super: with self; {
 
   stups-zign = callPackage ../development/python-modules/stups-zign { };
 
+  sty = callPackage ../development/python-modules/sty { };
+
   stytra = callPackage ../development/python-modules/stytra { };
 
   subarulink = callPackage ../development/python-modules/subarulink { };
