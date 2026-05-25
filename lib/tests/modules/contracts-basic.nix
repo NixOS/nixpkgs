@@ -1,5 +1,4 @@
-# Tests the basic want -> instances -> results round-trip without mkContract or
-# mkProviderType (neither exists at the commit where this test is introduced).
+# Tests the basic want -> instances -> results round-trip.
 # The contract type is defined inline; instances are wired manually rather than
 # through a provider reference, so no defaultProvider is needed.
 {
@@ -43,7 +42,7 @@ in
     # Consumer: one instance with a request.
     contracts.basic.want.consumer.x.request.value = 5;
 
-    # Provider: wire instances directly (no mkProviderType yet at this commit).
+    # Provider: wire instances directly
     contracts.basic.instances.consumer.x = {
       result.value = 6;
     };

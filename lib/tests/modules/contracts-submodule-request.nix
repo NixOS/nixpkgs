@@ -48,7 +48,7 @@ let
   };
 
   evaluated = lib.evalOption (mkOption { type = lib.contract.definitionType; }) connectionContractDef;
-  inherit (evaluated) mkProviderType;
+  inherit (evaluated) _mkProviderType;
 in
 {
   imports = [ lib.contract.module ];
@@ -60,7 +60,7 @@ in
 
   options.services.urlbuilder.connection = mkOption {
     default = config.contracts.connection.requests;
-    type = mkProviderType {
+    type = _mkProviderType {
       fulfill =
         { name, connection }:
         {
