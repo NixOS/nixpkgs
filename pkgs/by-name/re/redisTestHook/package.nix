@@ -16,4 +16,5 @@ makeSetupHook {
     simple = callPackage ./test.nix { };
     python3-valkey = python3Packages.valkey;
   };
+  meta.license = lib.licenses.mit;
 } ./redis-test-hook.sh

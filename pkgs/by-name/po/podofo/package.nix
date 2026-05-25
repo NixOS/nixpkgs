@@ -5,7 +5,6 @@
   cmake,
   fontconfig,
   freetype,
-  libidn,
   libjpeg,
   libpng,
   libtiff,
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podofo";
-  version = "0.10.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "podofo";
     repo = "podofo";
     rev = finalAttrs.version;
-    hash = "sha256-DlCKQYlsgTfnZACk6yTeoIiaOL5AtICcHjRd8jl0RkI=";
+    hash = "sha256-gzkIMyGV3nmOrGX2PDLrA9NHbtAwk74vcyrQ+yc5TOw=";
   };
 
   outputs = [
@@ -39,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libidn
     libjpeg
     libpng
     libtiff
@@ -49,13 +47,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DPODOFO_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
-    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+    (lib.cmakeBool "PODOFO_BUILD_STATIC" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_NAME_DIR" true)
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/podofo/podofo";
     description = "Library to work with the PDF file format";
+    changelog = "https://github.com/podofo/podofo/blob/${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.all;
     license = with lib.licenses; [
       gpl2Plus
