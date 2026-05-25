@@ -91,4 +91,6 @@ in
       bazarr = { };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ connor-grady ];
 }

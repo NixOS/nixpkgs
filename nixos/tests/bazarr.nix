@@ -6,6 +6,8 @@ in
 {
   name = "bazarr";
 
+  meta.maintainers = with lib.maintainers; [ connor-grady ];
+
   nodes.machine =
     { pkgs, ... }:
     {
