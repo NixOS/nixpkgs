@@ -5565,6 +5565,8 @@ self: super: with self; {
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
+  fica = callPackage ../development/python-modules/fica { };
+
   fickling = callPackage ../development/python-modules/fickling { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
@@ -10409,6 +10411,8 @@ self: super: with self; {
 
   mpris-api = callPackage ../development/python-modules/mpris-api { };
 
+  mpris-server = callPackage ../development/python-modules/mpris-server { };
+
   mprisify = callPackage ../development/python-modules/mprisify { };
 
   mpv = callPackage ../development/python-modules/mpv { inherit (pkgs) mpv; };
@@ -12113,6 +12117,8 @@ self: super: with self; {
   otr = callPackage ../development/python-modules/otr { };
 
   ots-python = callPackage ../development/python-modules/ots-python { };
+
+  otter-grader = callPackage ../development/python-modules/otter-grader { };
 
   otxv2 = callPackage ../development/python-modules/otxv2 { };
 

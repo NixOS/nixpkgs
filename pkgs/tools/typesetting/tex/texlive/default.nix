@@ -233,7 +233,7 @@ let
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
-    inherit bin tl;
+    inherit tl;
     inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
@@ -243,10 +243,7 @@ let
       makeFontsConf
       makeWrapper
       runCommand
-      writeShellScript
-      writeText
       toTLPkgSets
-      bash
       perl
       coreutils
       gawk
@@ -260,19 +257,31 @@ let
   # respecting specified outputs
   toTLPkgList =
     drv:
+    let
+      drvWithoutDeps = removeAttrs drv [ "tlDeps" ];
+      drvWithDeps =
+        if (drv ? tlDeps) then
+          drv // { tlDeps = if builtins.isFunction drv.tlDeps then drv.tlDeps tl else drv.tlDeps; }
+        else
+          drv;
+    in
     if drv.outputSpecified or false then
       let
         tlType = drv.tlType or tlOutToType.${drv.tlOutputName or drv.outputName} or null;
       in
-      lib.optional (tlType != null) (drv // { inherit tlType; })
+      lib.optional (tlType != null) (drvWithDeps // { inherit tlType; })
     else
-      [ (drv.tex // { tlType = "run"; }) ]
+      lib.optional (drv ? tex) (drvWithDeps.tex // { tlType = "run"; })
       ++ lib.optional (drv ? texdoc) (
-        drv.texdoc // { tlType = "doc"; } // lib.optionalAttrs (drv ? man) { hasManpages = true; }
+        drvWithoutDeps.texdoc
+        // {
+          tlType = "doc";
+        }
+        // lib.optionalAttrs (drv ? man) { hasManpages = true; }
       )
-      ++ lib.optional (drv ? texsource) (drv.texsource // { tlType = "source"; })
-      ++ lib.optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; })
-      ++ lib.optional (drv ? out) (drv.out // { tlType = "bin"; });
+      ++ lib.optional (drv ? texsource) (drvWithoutDeps.texsource // { tlType = "source"; })
+      ++ lib.optional (drv ? tlpkg) (drvWithDeps.tlpkg // { tlType = "tlpkg"; })
+      ++ lib.optional (drv ? out) (drvWithDeps.out // { tlType = "bin"; });
   tlOutToType = {
     out = "bin";
     tex = "run";
@@ -315,8 +324,8 @@ let
     inherit
       buildTeXEnv
       lib
+      tl
       toTLPkgList
-      toTLPkgSets
       ;
   };
 
