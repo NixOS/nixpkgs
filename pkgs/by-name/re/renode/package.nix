@@ -6,11 +6,10 @@
   fetchFromGitHub,
   fetchpatch,
   gcc,
-  glibcLocales,
+  glibcLocalesUtf8,
   gtk3-x11,
   gtk3,
   lib,
-  mono,
   python3Packages,
 }:
 
@@ -68,9 +67,16 @@ buildDotnetModule rec {
     fetchSubmodules = true;
   };
 
+  disallowedReferences = [
+    cmake
+    gcc
+    dotnet-sdk
+  ];
+
   projectFile = "Renode_NET.sln";
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nugetDeps = ./deps.json;
 
@@ -100,17 +106,12 @@ buildDotnetModule rec {
     sed -i 's/AssemblyVersion("1.0.*")/AssemblyVersion("1.0.0.0")/g' lib/AntShell/AntShell/Properties/AssemblyInfo.cs lib/CxxDemangler/CxxDemangler/Properties/AssemblyInfo.cs
   '';
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-
   nativeBuildInputs = [
     cmake
     gcc
   ];
   runtimeDeps = [
     gtk3
-    mono
   ];
 
   dontUseCmakeConfigure = true;
@@ -162,15 +163,17 @@ buildDotnetModule rec {
   dotnetInstallFlags = [ "-p:TargetFramework=net10.0" ];
 
   postInstall = ''
+    rm -rf build output/properties.csproj
+    find . -type d -name obj -exec rm -rf {} +
     mkdir -p $out/lib/renode
     mv * .renode-root $out/lib/renode
 
     makeWrapper "$out/lib/renode/renode-test" "$out/bin/renode-test" \
-      --prefix PATH : "$out/lib/renode:${lib.makeBinPath [ dotnet-sdk ]}" \
+      --prefix PATH : "$out/lib/renode:${lib.makeBinPath [ dotnet-runtime ]}" \
       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
       --prefix PYTHONPATH : "${pythonLibs}" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+      --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
   '';
 
   postFixup = ''
