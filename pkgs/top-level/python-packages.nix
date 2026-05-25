@@ -41,6 +41,14 @@ self: super: with self; {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  abx-dl = callPackage ../development/python-modules/abx-dl { };
+
+  abx-plugins = callPackage ../development/python-modules/abx-plugins { };
+
+  abxbus = callPackage ../development/python-modules/abxbus { };
+
+  abxpkg = callPackage ../development/python-modules/abxpkg { };
+
   accelerate = callPackage ../development/python-modules/accelerate { };
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
