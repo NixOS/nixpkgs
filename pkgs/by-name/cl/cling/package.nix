@@ -99,7 +99,7 @@ let
       "-DLLVM_ENABLE_LIBCXXABI=ON"
     ];
 
-    CPPFLAGS = if useLLVMLibcxx then [ "-stdlib=libc++" ] else [ ];
+    env.CPPFLAGS = if useLLVMLibcxx then [ "-stdlib=libc++" ] else [ ];
 
     postInstall = ''
       mkdir -p $out/share/Jupyter
