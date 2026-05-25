@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  env.NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
   cmakeFlags = [ "-DBUILD_OUT_OF_TREE=On" ];
 
