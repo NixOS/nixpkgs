@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "linkerd-stable";
   version = "2.14.9";
   vendorHash = "sha256-bGl8IZppwLDS6cRO4HmflwIOhH3rOhE/9slJATe+onI=";
@@ -14,8 +14,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "linkerd";
     repo = "linkerd2";
-    rev = "stable-${version}";
-    sha256 = "135x5q0a8knckbjkag2xqcr76zy49i57zf2hlsa70iknynq33ys7";
+    tag = "stable-${finalAttrs.version}";
+    hash = "sha256-R/sxsPV2RnCUplC4f0pMxH9zMsNdPDXlmsxOpAAuvYw=";
   };
 
   subPackages = [ "cli" ];
@@ -34,7 +34,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
+    "-X github.com/linkerd/linkerd2/pkg/version.Version=${finalAttrs.src.tag}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -51,7 +51,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/linkerd version --client | grep ${src.rev} > /dev/null
+    $out/bin/linkerd version --client | grep ${finalAttrs.src.tag} > /dev/null
   '';
 
   passthru.updateScript = (./. + "/update-stable.sh");
@@ -65,4 +65,4 @@ buildGoModule rec {
     maintainers = [
     ];
   };
-}
+})
