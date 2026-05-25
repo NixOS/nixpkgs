@@ -8,12 +8,13 @@
   semver,
   pytestCheckHook,
   responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "vilfo-api-client";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ManneW";
@@ -22,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-ZlmriBd+M+54ux/UNYa355mkz808/NxSz7IzmWouA0c=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "get-mac" "getmac"
@@ -29,7 +32,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     getmac
     requests
     semver
