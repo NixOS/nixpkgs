@@ -370,10 +370,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Set of integrated tools for the R language";
     homepage = "https://www.rstudio.com/";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
-      ciil
-      tomasajt
-    ];
+    maintainers = [ lib.maintainers.tomasajt ];
     mainProgram = "rstudio" + lib.optionalString server "-server";
     # rstudio-server on darwin is only partially supported by upstream
     platforms = lib.platforms.linux ++ lib.optionals (!server) lib.platforms.darwin;

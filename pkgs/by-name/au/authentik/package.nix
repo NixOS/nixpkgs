@@ -20,13 +20,13 @@
 let
   nodejs = nodejs_24;
 
-  version = "2025.12.4";
+  version = "2025.12.5";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-alTyrMBbjZbw4jhEna8saabf93sqSrZCu+Z5xH3pZ7M=";
+    hash = "sha256-LPGAhbtmuztDQ4CVhUXb+vBU5HjvNZ7JicI5r3lr1QQ=";
   };
 
   meta = {
@@ -52,7 +52,7 @@ let
     src = fetchFromGitHub {
       owner = "goauthentik";
       repo = "client-go";
-      tag = "v3.${version}";
+      tag = "v3.2025.12.4";
       hash = "sha256-+/CfOE2HkBU+ZddvdXGenB/z8xNFk8cujpZpMXyh3cY=";
     };
 
@@ -137,8 +137,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-GL5FPIBnoEXYtw8DPJpRPe3tT3qioN4AdoeOmCoiYsM=";
-        "x86_64-linux" = "sha256-AnceTipq6uUvTbOAZanVshAbAJ9LS1kwImbttTOcWxc=";
+        "aarch64-linux" = "sha256-smm9x29z7gOI7Wq0NvP45KHtBbT6p1lH6IjEf9LRuGs=";
+        "x86_64-linux" = "sha256-K86wnn50svP+QG3i0mggH8RQgfoIqEmyQTouz35xzw8=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
@@ -208,8 +208,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-eZZ5Ynj81KwFsU5emPtYZ2CxO8MFvWbJnCHs+L88KQQ=";
-        "x86_64-linux" = "sha256-yUAyyO1NFav1EptrRYGSzC8dxCxYVj0FmzHk8IckFZM=";
+        "aarch64-linux" = "sha256-J9wGQe7iMfKznNk3woqi0VNVNA/dE6TGi2f44DOlG1c=";
+        "x86_64-linux" = "sha256-9Q590Rw0mk3q5osxOKGWU7+XtKwkTyA+CLC2LxAA/3g=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
