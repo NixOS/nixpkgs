@@ -9540,7 +9540,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/kubectl-view-allocations
       { };
 
-  linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_stable = linkerd;
 
   kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
