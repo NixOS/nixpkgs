@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "openspecfun";
   version = "0.5.7";
   src = fetchFromGitHub {
-    owner = "JuliaLang";
+    owner = "JuliaMath";
     repo = "openspecfun";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-fx9z6bbU2V4x6Pr7/vmlSxkWxZ6qTYuPxnfqKLv08CA=";
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Collection of special mathematical functions";
-    homepage = "https://github.com/JuliaLang/openspecfun";
+    homepage = "https://github.com/JuliaMath/openspecfun";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ttuegel ];
     platforms = lib.platforms.all;

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.70.0";
 
   src = fetchFromGitHub {
-    owner = "RedisInsight";
+    owner = "redis";
     repo = "RedisInsight";
     rev = finalAttrs.version;
     hash = "sha256-b97/hBhXqSFDzcyrQKu5Ebu1Ud3wpWEjyzUehj0PP9w=";
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Developer GUI for Redis";
-    homepage = "https://github.com/RedisInsight/RedisInsight";
+    homepage = "https://github.com/redis/RedisInsight";
     license = lib.licenses.sspl;
     maintainers = with lib.maintainers; [
       tomasajt

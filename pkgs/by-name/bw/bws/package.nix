@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "bitwarden";
-    repo = "sdk";
+    repo = "sdk-sm";
     tag = "bws-v${finalAttrs.version}";
     hash = "sha256-NjnLoa4UjPzTejjEwc5LIrHqeqncXoMICJM2eUesoIM=";
   };
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Bitwarden Secrets Manager CLI";
     homepage = "https://bitwarden.com/help/secrets-manager-cli/";
-    changelog = "https://github.com/bitwarden/sdk-sm/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/bitwarden/sdk-sm-sm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfree; # BITWARDEN SOFTWARE DEVELOPMENT KIT LICENSE AGREEMENT
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "bws";

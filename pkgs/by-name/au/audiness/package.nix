@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "audiusGmbH";
+    owner = "audius";
     repo = "audiness";
     tag = finalAttrs.version;
     hash = "sha256-row372NA8/DJbI6WJyGmKrlfuCsxUa5inhMljRzShT8=";

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "AJenbo";
+    owner = "PHPantom-dev";
     repo = "phpantom_lsp";
     tag = finalAttrs.version;
     hash = "sha256-ZmtOdoxXkwn2IDg7RyQ9KG0RNz5mrGDMcESfcOSR3Ig=";
@@ -57,9 +57,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/AJenbo/phpantom_lsp/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/PHPantom-dev/phpantom_lsp/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, lightweight PHP language server written in Rust";
-    homepage = "https://github.com/AJenbo/phpantom_lsp";
+    homepage = "https://github.com/PHPantom-dev/phpantom_lsp";
     license = lib.licenses.mit;
     mainProgram = "phpantom_lsp";
     maintainers = with lib.maintainers; [ nanoyaki ];

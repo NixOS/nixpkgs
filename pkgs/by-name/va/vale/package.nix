@@ -16,7 +16,7 @@ buildGoModule rec {
   subPackages = [ "cmd/vale" ];
 
   src = fetchFromGitHub {
-    owner = "errata-ai";
+    owner = "vale-cli";
     repo = "vale";
     tag = "v${version}";
     hash = "sha256-cjJ1LDTIaEJaaQigcofi+CfsSVWf3IRsUmxh/T9W7ec=";
@@ -61,7 +61,7 @@ buildGoModule rec {
       ```
     '';
     homepage = "https://vale.sh/";
-    changelog = "https://github.com/errata-ai/vale/releases/tag/v${version}";
+    changelog = "https://github.com/vale-cli/vale/releases/tag/v${version}";
     mainProgram = "vale";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];

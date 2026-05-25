@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "martinmoene";
+    owner = "nonstd-lite";
     repo = "scope-lite";
     tag = "v${finalAttrs.version}";
     hash = "sha256-EZ+bBnMPpgATANa+al5SnVEfUFYc0TkaPTLNHD6zcWU=";
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Migration path to C++ library extensions scope_exit, scope_fail, scope_success, unique_resource";
     license = lib.licenses.boost;
     maintainers = [ lib.maintainers.shlevy ];
-    homepage = "https://github.com/martinmoene/scope-lite";
+    homepage = "https://github.com/nonstd-lite/scope-lite";
     platforms = lib.platforms.all;
   };
 })

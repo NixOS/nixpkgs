@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   src = fetchFromGitHub {
-    owner = "audiohacked";
+    owner = "hyperkineticnerd";
     repo = "OpenCorsairLink";
     rev = "46dbf206e19a40d6de6bd73142ed93bdb26c5c1a";
     sha256 = "1nizicl0mc9pslc6065mnrs0fnn8sh7ca8iiw7w9ix57zrhabpld";
@@ -31,14 +31,14 @@ stdenv.mkDerivation {
     # Pull upstream fix for -fno-common toolchain
     (fetchpatch {
       name = "fno-common.patch";
-      url = "https://github.com/audiohacked/OpenCorsairLink/commit/d600c7ff032a3911d30b039844a31f0b3acfe26a.patch";
+      url = "https://github.com/hyperkineticnerd/OpenCorsairLink/commit/d600c7ff032a3911d30b039844a31f0b3acfe26a.patch";
       sha256 = "030rwka5bvf79x6ir18vqb09izhz1crp94x5gqjxwv3b20vvv4kx";
     })
   ];
 
   meta = {
     description = "Linux and Mac OS support for the CorsairLink Devices";
-    homepage = "https://github.com/audiohacked/OpenCorsairLink";
+    homepage = "https://github.com/hyperkineticnerd/OpenCorsairLink";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = [ ];

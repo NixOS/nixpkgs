@@ -17,16 +17,16 @@ buildNpmPackage {
   dontNpmBuild = true;
 
   src = fetchFromGitHub {
-    owner = "mafintosh";
+    owner = "holepunchto";
     repo = "hyperssh";
     rev = "v5.0.3";
     hash = "sha256-vjPSNcQRsqu0ee0hownEE9y8dFf9dqaL7alGRc9WjcI=2";
   };
 
   patches = [
-    # TODO: remove after this is merged: https://github.com/mafintosh/hyperssh/pull/16
+    # TODO: remove after this is merged: https://github.com/holepunchto/hyperssh/pull/16
     (fetchurl {
-      url = "https://github.com/mafintosh/hyperssh/commit/ad1d0e06a133e71c9df9f59dd5f805c49f46ec70.patch";
+      url = "https://github.com/holepunchto/hyperssh/commit/ad1d0e06a133e71c9df9f59dd5f805c49f46ec70.patch";
       hash = "sha256-fUjgHHbZHgqokNg2fVVZCjoDA3LqSJiFzBwgA8Tt1m4=";
     })
   ];
@@ -50,7 +50,7 @@ buildNpmPackage {
 
   meta = {
     description = "Run SSH over hyperswarm";
-    homepage = "https://github.com/mafintosh/hyperssh";
+    homepage = "https://github.com/holepunchto/hyperssh";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ davhau ];
     mainProgram = "hyperssh";

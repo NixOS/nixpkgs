@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "danielzfranklin";
+    owner = "dzfranklin";
     repo = "cargo-rr";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-t8pRqeOdaRVG0titQhxezT2aDjljSs//MnRTTsJ73Yo=";
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";
     mainProgram = "cargo-rr";
-    homepage = "https://github.com/danielzfranklin/cargo-rr";
+    homepage = "https://github.com/dzfranklin/cargo-rr";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       otavio

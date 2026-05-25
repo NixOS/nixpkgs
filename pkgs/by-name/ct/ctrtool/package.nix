@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "jakcron";
+    owner = "3DSGuy";
     repo = "Project_CTR";
     rev = "ctrtool-v${finalAttrs.version}";
     sha256 = "GvEzv97DqCsaDWVqDpajQRWYe+WM8xCYmGE0D3UcSrM=";

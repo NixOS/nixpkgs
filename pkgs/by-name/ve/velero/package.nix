@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "1.18.0";
 
   src = fetchFromGitHub {
-    owner = "vmware-tanzu";
+    owner = "velero-io";
     repo = "velero";
     tag = "v${finalAttrs.version}";
     hash = "sha256-LhoJDIK0S3w2RTpMC7QDcU1nHMUk4rNZSCY/1Wfiaqc=";
@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
     "velero-restic-restore-helper"
   ];
 
-  doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
+  doCheck = false; # Tests expect a running cluster see https://github.com/velero-io/velero/tree/main/test/e2e
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/velero version --client-only | grep ${finalAttrs.version} > /dev/null
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";
-    changelog = "https://github.com/vmware-tanzu/velero/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/velero-io/velero/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mbode

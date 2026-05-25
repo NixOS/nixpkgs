@@ -10,7 +10,7 @@ buildDotnetModule rec {
   version = "2.6.0";
 
   src = fetchFromGitHub {
-    owner = "dgarage";
+    owner = "btcpayserver";
     repo = "NBXplorer";
     tag = "v${version}";
     hash = "sha256-X1+UdsKVOC3QpES22p0MG1Rz1oresilBM+b/4I1nCyI=";

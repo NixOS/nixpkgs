@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = "linux-sgx";
+    repo = "confidential-computing.sgx";
     rev = "sgx_${versionTag}";
     hash = "sha256-hNmh4IgNJDNqt2xF8zBnD/x+saMyMk5hZLA3aOqzqEA=";
     fetchSubmodules = true;
@@ -270,7 +270,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Intel SGX Architectural Enclave Service Manager";
-    homepage = "https://github.com/intel/linux-sgx";
+    homepage = "https://github.com/intel/confidential-computing.sgx";
     maintainers = with lib.maintainers; [
       phlip9
       veehaitch

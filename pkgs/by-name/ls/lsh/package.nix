@@ -8,16 +8,16 @@ buildGoModule (finalAttrs: {
   version = "1.5.8";
   src = fetchFromGitHub {
     owner = "latitudesh";
-    repo = "lsh";
+    repo = "cli";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-BFhVCrl2LS5s38WBtkTjZ+IYCO9VQgIVmel3xwzaBI8=";
   };
   vendorHash = "sha256-vAZYd4fbXsZRqDvSQ1Y+lk3RVY06PqxdJF9DofTa6sQ=";
   subPackages = [ "." ];
   meta = {
-    changelog = "https://github.com/latitudesh/lsh/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/latitudesh/cli/releases/tag/v${finalAttrs.version}";
     description = "Command-Line Interface for Latitude.sh";
-    homepage = "https://github.com/latitudesh/lsh";
+    homepage = "https://github.com/latitudesh/cli";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dzmitry-lahoda ];
   };

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ether";
-    repo = "etherpad-lite";
+    repo = "etherpad";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8DCgbfp3ttpMTXS9SNkN1R63LZHaklsNHViRhmWVFuk=";
   };
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       It provides full data export capabilities, and runs on your server, under your control.
     '';
     homepage = "https://etherpad.org/";
-    changelog = "https://github.com/ether/etherpad-lite/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ether/etherpad/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       erdnaxe
       f2k1de

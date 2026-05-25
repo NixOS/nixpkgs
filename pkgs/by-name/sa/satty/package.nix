@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.20.1";
 
   src = fetchFromGitHub {
-    owner = "gabm";
+    owner = "Satty-org";
     repo = "Satty";
     rev = "v${finalAttrs.version}";
     hash = "sha256-pR3Mc5Eue4YcIMcrzkyDhZPpovRFa8TW1PjL/ysH/7s=";
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Screenshot annotation tool inspired by Swappy and Flameshot";
-    homepage = "https://github.com/gabm/Satty";
+    homepage = "https://github.com/Satty-org/Satty";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       pinpox

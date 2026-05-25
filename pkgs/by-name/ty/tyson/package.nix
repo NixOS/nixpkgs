@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "0.1.1-unstable-2024-04-10";
 
   src = fetchFromGitHub {
-    owner = "jetpack-io";
+    owner = "jetify-com";
     repo = "tyson";
     rev = "d6b38819db9b260928b29f4d39bf4c72841c6a01";
     hash = "sha256-NoQJBEedV3NDNQ4PVvvjjsO7N+rq40LWKp962P+naEY=";

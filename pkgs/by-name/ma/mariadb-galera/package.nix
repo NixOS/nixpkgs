@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "26.4.24";
 
   src = fetchFromGitHub {
-    owner = "codership";
+    owner = "mariadb-corporation";
     repo = "galera";
     tag = "release_${finalAttrs.version}";
     hash = "sha256-mpf+YY0m+UwvemdZt6SfRP9IJlq5IZtlOJMucADc1oM=";

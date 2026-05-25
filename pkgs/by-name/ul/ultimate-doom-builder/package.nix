@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0-unstable-2026-02-01";
 
   src = fetchFromGitHub {
-    owner = "jewalky";
+    owner = "UltimateDoomBuilder";
     repo = "UltimateDoomBuilder";
     rev = "9d7a12b1164dc53964b594395f9d5d825a43ac12";
     hash = "sha256-FwGfrvF+UrmEw1lvcU4qL9OOP0n/ZmQTsIjQIxRvkmg=";
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    homepage = "https://github.com/jewalky/UltimateDoomBuilder";
+    homepage = "https://github.com/UltimateDoomBuilder/UltimateDoomBuilder";
     description = "Advanced Doom map editor based on Doom Builder 2 with Mono support";
     mainProgram = "ultimate-doom-builder";
     longDescription = ''

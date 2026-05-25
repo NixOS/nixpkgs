@@ -13,7 +13,7 @@ buildGo125Module (finalAttrs: {
   version = "0.7.1";
 
   src = fetchFromGitHub {
-    owner = "sourcegraph";
+    owner = "scip-code";
     repo = "scip";
     tag = "v${finalAttrs.version}";
     hash = "sha256-lpzGrTvWUXUFfmyn5z4rsqJEcAOA8D1qfN1assRAdn4=";
@@ -45,8 +45,8 @@ buildGo125Module (finalAttrs: {
   meta = {
     description = "SCIP Code Intelligence Protocol CLI";
     mainProgram = "scip";
-    homepage = "https://github.com/sourcegraph/scip";
-    changelog = "https://github.com/sourcegraph/scip/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/scip-code/scip";
+    changelog = "https://github.com/scip-code/scip/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

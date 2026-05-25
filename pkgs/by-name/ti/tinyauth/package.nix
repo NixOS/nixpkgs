@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   version = "5.0.7";
 
   src = fetchFromGitHub {
-    owner = "steveiliop56";
+    owner = "tinyauthapp";
     repo = "tinyauth";
     tag = "v${finalAttrs.version}";
     hash = "sha256-VeII5jSNUJpGZgqons1o1fp6KXxDOBhSMciSqtQfaC4=";
@@ -27,8 +27,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/steveiliop56/tinyauth/internal/config.Version=v${finalAttrs.version}"
-    "-X github.com/steveiliop56/tinyauth/internal/config.CommitHash=${finalAttrs.src.rev}"
+    "-X github.com/tinyauthapp/tinyauth/internal/config.Version=v${finalAttrs.version}"
+    "-X github.com/tinyauthapp/tinyauth/internal/config.CommitHash=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
@@ -95,7 +95,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Simple authentication middleware for web apps";
     homepage = "https://tinyauth.app";
-    changelog = "https://github.com/steveiliop56/tinyauth/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/tinyauthapp/tinyauth/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "tinyauth";
     maintainers = with lib.maintainers; [

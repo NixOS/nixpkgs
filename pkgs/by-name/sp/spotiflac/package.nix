@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "afkarxyz";
+    owner = "spotbye";
     repo = "SpotiFLAC";
     tag = "v${finalAttrs.version}";
     hash = "sha256-2bCKsgrJH8jfggluNdNqX+LdG8NLcsuhrJwkaRTXAOs=";
@@ -101,8 +101,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Get Spotify tracks in true FLAC from Tidal, Qobuz & Amazon Music — no account required";
-    homepage = "https://github.com/afkarxyz/SpotiFLAC/";
-    changelog = "https://github.com/afkarxyz/SpotiFLAC/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/spotbye/SpotiFLAC/";
+    changelog = "https://github.com/spotbye/SpotiFLAC/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "spotiflac";

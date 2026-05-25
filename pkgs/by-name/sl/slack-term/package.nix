@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "erroneousboat";
+    owner = "jpbruinsslot";
     repo = "slack-term";
     rev = "v${finalAttrs.version}";
     sha256 = "1fbq7bdhy70hlkklppimgdjamnk0v059pg73xm9ax1f4616ki1m6";
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Slack client for your terminal";
-    homepage = "https://github.com/erroneousboat/slack-term";
+    homepage = "https://github.com/jpbruinsslot/slack-term";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "slack-term";

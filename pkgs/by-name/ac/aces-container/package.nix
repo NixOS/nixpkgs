@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "ampas";
+    owner = "aces-aswf";
     repo = "aces_container";
     tag = "v${finalAttrs.version}";
     hash = "sha256-luMqXqlJ6UzoawEDmbK38lm3GHosaZm/mFJntBF54Y4=";
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Reference Implementation of SMPTE ST2065-4";
-    homepage = "https://github.com/ampas/aces_container";
+    homepage = "https://github.com/aces-aswf/aces_container";
     license = lib.licenses.ampas;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "aces-container";

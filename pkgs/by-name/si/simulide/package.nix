@@ -41,7 +41,7 @@ let
       release = "RC1";
       rev = "da3a925491fab9fa2a8633d18e45f8e1b576c9d2";
       src = fetchFromGitHub {
-        owner = "eeTools";
+        owner = "Arcachofo";
         repo = "SimulIDE-dev";
         hash = "sha256-6Gh0efBizDK1rUNkyU+/ysj7QwkAs3kTA1mQZYFb/pI=";
         inherit rev;

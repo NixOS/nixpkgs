@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "posativ";
+    owner = "isso-comments";
     repo = "isso";
     tag = finalAttrs.version;
     hash = "sha256-8kXqqiMXxF0wCJ+AzYT8j0rjuhlXO3F6UJbump672b4=";
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postPatch = ''
-    # Remove when https://github.com/posativ/isso/pull/973 is available.
+    # Remove when https://github.com/isso-comments/isso/pull/973 is available.
     substituteInPlace isso/tests/test_comments.py \
       --replace "self.client.delete_cookie('localhost.local', '1')" "self.client.delete_cookie(key='1', domain='localhost')"
   '';

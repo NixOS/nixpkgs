@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "AprilRobotics";
-    repo = "AprilTags";
+    repo = "apriltag";
     tag = "v${finalAttrs.version}";
     hash = "sha256-pBUjRKfP884+bNgV5B4b8TiuhyZ9p/jIluxs+idv/28=";
   };

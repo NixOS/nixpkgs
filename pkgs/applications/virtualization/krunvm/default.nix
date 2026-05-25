@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "0.2.4";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "krunvm";
     rev = "v${version}";
     hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CLI-based utility for creating microVMs from OCI images";
-    homepage = "https://github.com/containers/krunvm";
+    homepage = "https://github.com/libkrun/krunvm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = libkrun.meta.platforms;

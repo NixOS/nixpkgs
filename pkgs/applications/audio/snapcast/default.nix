@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.35.0";
 
   src = fetchFromGitHub {
-    owner = "badaix";
+    owner = "snapcast";
     repo = "snapcast";
     rev = "v${finalAttrs.version}";
     hash = "sha256-kUw4yQpCxgjP4hH2Lpxc7l+ufhYSKs7xL80aJuPrqOo=";
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Synchronous multi-room audio player";
-    homepage = "https://github.com/badaix/snapcast";
+    homepage = "https://github.com/snapcast/snapcast";
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl3Plus;

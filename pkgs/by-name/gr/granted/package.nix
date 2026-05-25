@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
   version = "0.38.0";
 
   src = fetchFromGitHub {
-    owner = "common-fate";
+    owner = "fwdcloudsec";
     repo = "granted";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-xHpYtHG0fJ/VvJ/4lJ90ept3yGzJRnmtFQFbYxJtxwY=";
@@ -87,8 +87,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Easiest way to access your cloud";
-    homepage = "https://github.com/common-fate/granted";
-    changelog = "https://github.com/common-fate/granted/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/fwdcloudsec/granted";
+    changelog = "https://github.com/fwdcloudsec/granted/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jlbribeiro

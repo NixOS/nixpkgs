@@ -9,7 +9,7 @@ buildGoModule rec {
   version = "2.4.5";
 
   src = fetchFromGitHub {
-    owner = "blackbinn";
+    owner = "ffx64";
     repo = "wprecon";
     rev = version;
     hash = "sha256-23zJD3Nnkeko+J2FjPq5RA5dIjORMXvwt3wtAYiVlQs=";
@@ -24,9 +24,9 @@ buildGoModule rec {
 
   meta = {
     description = "WordPress vulnerability recognition tool";
-    homepage = "https://github.com/blackbinn/wprecon";
+    homepage = "https://github.com/ffx64/wprecon";
     # License Zero Noncommercial Public License 2.0.1
-    # https://github.com/blackbinn/wprecon/blob/master/LICENSE
+    # https://github.com/ffx64/wprecon/blob/master/LICENSE
     license = with lib.licenses; [ unfree ];
     maintainers = with lib.maintainers; [ fab ];
   };

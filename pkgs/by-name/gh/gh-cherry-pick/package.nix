@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "PerchunPak";
-    repo = "gh-cherry-pick";
+    repo = "ghcherry";
     tag = "v${finalAttrs.version}";
     hash = "sha256-a2vhQ9upJYc+t4Juq+eukNc7dzq6MafNxDUULPZs9sQ=";
   };
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Cherry-pick commits across GitHub repositories using only the GitHub API";
-    homepage = "https://github.com/PerchunPak/gh-cherry-pick";
+    homepage = "https://github.com/PerchunPak/ghcherry";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.PerchunPak ];
     mainProgram = "gh-cherry-pick";

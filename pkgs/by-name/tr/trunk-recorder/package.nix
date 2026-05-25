@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.1.1";
 
   src = fetchFromGitHub {
-    owner = "robotastic";
+    owner = "TrunkRecorder";
     repo = "trunk-recorder";
     rev = "v${finalAttrs.version}";
     hash = "sha256-2qy6krI5NglkC+bUFfJaEuHIcBoYJrxBRnFs8O0NcZA=";
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Record calls from trunked radio systems";
     homepage = "https://trunkrecorder.com/";
-    changelog = "https://github.com/robotastic/trunk-recorder/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/TrunkRecorder/trunk-recorder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ PapayaJackal ];
     mainProgram = "trunk-recorder";

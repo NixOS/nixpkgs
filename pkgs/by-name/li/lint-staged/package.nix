@@ -11,7 +11,7 @@ buildNpmPackage rec {
   version = "17.0.5";
 
   src = fetchFromGitHub {
-    owner = "okonet";
+    owner = "lint-staged";
     repo = "lint-staged";
     rev = "v${version}";
     hash = "sha256-W9OW4ylRhgeUq7AlJlSkfN0IKv8Us6IEhmfE08UXzH8=";

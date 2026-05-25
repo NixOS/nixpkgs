@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   version = "unstable-2018-01-04";
 
   src = fetchFromGitHub {
-    owner = "wormt";
+    owner = "positively-charged";
     repo = "bcc";
     rev = "d58b44d9f18b28fd732c27113e5607a454506d19";
     sha256 = "1m83ip40ln61qrvb1fbgaqbld2xip9n3k817lwkk1936pml9zcrq";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Compiler for Doom/Hexen scripts (ACS, BCS)";
     mainProgram = "bcc";
-    homepage = "https://github.com/wormt/bcc";
+    homepage = "https://github.com/positively-charged/bcc";
     license = lib.licenses.mit;
   };
 }

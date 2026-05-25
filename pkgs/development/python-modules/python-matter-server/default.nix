@@ -39,7 +39,7 @@ let
   version = "8.1.2";
 
   src = fetchFromGitHub {
-    owner = "home-assistant-libs";
+    owner = "matter-js";
     repo = "python-matter-server";
     tag = version;
     hash = "sha256-vnI57h/aesnaDYorq1PzcMCLmV0z0ZBJvMg4Nzh1Dtc=";
@@ -155,10 +155,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${src.tag}";
+    changelog = "https://github.com/matter-js/python-matter-server/releases/tag/${src.tag}";
     description = "Python server to interact with Matter";
     mainProgram = "matter-server";
-    homepage = "https://github.com/home-assistant-libs/python-matter-server";
+    homepage = "https://github.com/matter-js/python-matter-server";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };

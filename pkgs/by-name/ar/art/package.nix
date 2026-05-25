@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.26.4";
 
   src = fetchFromGitHub {
-    owner = "artpixls";
+    owner = "artraweditor";
     repo = "ART";
     tag = finalAttrs.version;
     hash = "sha256-T7ri0fQz3OBLmr3BBQvYgSmAQaV/aMax6SOupAQDg5o=";

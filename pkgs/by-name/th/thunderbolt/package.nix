@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "thunderbolt";
   version = "0.9.3";
   src = fetchFromGitHub {
-    owner = "01org";
+    owner = "intel";
     repo = "thunderbolt-software-user-space";
     rev = "v${finalAttrs.version}";
     sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";

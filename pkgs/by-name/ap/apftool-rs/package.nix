@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "suyulin";
-    repo = "apftool-rs";
+    repo = "afptool-rs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-bcXZIY0CDyWE3vh04IU3kXRxi/uUm5TD8ifA0jq47rc=";
   };
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "About Tools for Rockchip image unpack tool";
     mainProgram = "apftool-rs";
-    homepage = "https://github.com/suyulin/apftool-rs";
+    homepage = "https://github.com/suyulin/afptool-rs";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ colemickens ];
     platforms = lib.platforms.linux;

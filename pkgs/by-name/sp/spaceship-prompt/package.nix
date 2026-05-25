@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "4.22.1";
 
   src = fetchFromGitHub {
-    owner = "denysdovhan";
+    owner = "spaceship-prompt";
     repo = "spaceship-prompt";
     rev = "v${version}";
     sha256 = "sha256-shZf1IfSkHnaHnQ4idiDrmaJYXtViwGntpfEOBUDyBk=";
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Zsh prompt for Astronauts";
-    homepage = "https://github.com/denysdovhan/spaceship-prompt/";
+    homepage = "https://github.com/spaceship-prompt/spaceship-prompt/";
     changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

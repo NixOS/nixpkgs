@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "axkibe";
+    owner = "lsyncd";
     repo = "lsyncd";
     rev = "release-${version}";
     hash = "sha256-QBmvS1HGF3VWS+5aLgDr9AmUfEsuSz+DTFIeql2XHH4=";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Special flags needed on Darwin:
-  # https://github.com/axkibe/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
+  # https://github.com/lsyncd/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DWITH_INOTIFY=OFF"
     "-DWITH_FSEVENTS=ON"
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "https://github.com/axkibe/lsyncd";
+    homepage = "https://github.com/lsyncd/lsyncd";
     description = "Utility that synchronizes local directories with remote targets";
     mainProgram = "lsyncd";
     license = lib.licenses.gpl2Plus;

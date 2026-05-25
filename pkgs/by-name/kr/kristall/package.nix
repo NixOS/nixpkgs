@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.3";
 
   src = fetchFromGitHub {
-    owner = "MasterQ32";
+    owner = "ikskuh";
     repo = "kristall";
     rev = "V${version}";
     sha256 = "07nf7w6ilzs5g6isnvsmhh4qa1zsprgjyf0zy7rhpx4ikkj8c8zq";

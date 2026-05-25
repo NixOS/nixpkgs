@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   version = "unstable-2020-12-09";
 
   src = fetchFromGitHub {
-    owner = "iannix";
+    owner = "buzzinglight";
     repo = "IanniX";
     rev = "287b51d9b90b3e16ae206c0c4292599619f7b159";
     sha256 = "AhoP+Ok78Vk8Aee/RP572hJeM8O7v2ZTvFalOZZqRy8=";

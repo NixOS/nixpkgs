@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "pwnwriter";
+    owner = "bytehunt";
     repo = "x4";
     rev = "v${finalAttrs.version}";
     hash = "sha256-IF+8lu56fzYM79p7MiNpVLFIs2GKPlzw5pNXD/hT6BM=";
@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Execute shell commands to server(s) via ssh protocol";
-    homepage = "https://github.com/pwnwriter/x4";
-    changelog = "https://github.com/pwnwriter/x4/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/bytehunt/x4";
+    changelog = "https://github.com/bytehunt/x4/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pwnwriter ];
     mainProgram = "x4";

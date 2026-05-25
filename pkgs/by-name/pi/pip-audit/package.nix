@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "trailofbits";
+    owner = "pypa";
     repo = "pip-audit";
     tag = "v${finalAttrs.version}";
     hash = "sha256-fnIwtXFswKcfz/8VssL4UVukwkq6CC63NCyqqbqziO8=";
@@ -63,7 +63,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Tool for scanning Python environments for known vulnerabilities";
-    homepage = "https://github.com/trailofbits/pip-audit";
+    homepage = "https://github.com/pypa/pip-audit";
     changelog = "https://github.com/pypa/pip-audit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];

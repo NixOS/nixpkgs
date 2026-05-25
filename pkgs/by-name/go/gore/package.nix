@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.6.1";
 
   src = fetchFromGitHub {
-    owner = "motemen";
+    owner = "x-motemen";
     repo = "gore";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-EPySMj+mQxTJbGheAtzKvQq23DLljPR6COrmytu1x/Q=";
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Yet another Go REPL that works nicely";
     mainProgram = "gore";
-    homepage = "https://github.com/motemen/gore";
+    homepage = "https://github.com/x-motemen/gore";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

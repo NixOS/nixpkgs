@@ -46,7 +46,7 @@ stdenv'.mkDerivation rec {
   ];
 
   src = fetchFromGitHub {
-    owner = "IntelRealSense";
+    owner = "realsenseai";
     repo = "librealsense";
     rev = "v${version}";
     sha256 = "sha256-d/FkvnUa7CqW25ZG8PY9+cd7uRL4zC1Md/JT8B/qAKU=";
@@ -184,7 +184,7 @@ stdenv'.mkDerivation rec {
 
   meta = {
     description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
-    homepage = "https://github.com/IntelRealSense/librealsense";
+    homepage = "https://github.com/realsenseai/librealsense";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       brian-dawn

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.4.1";
 
   src = fetchFromGitHub {
-    owner = "acrisci";
+    owner = "altdesktop";
     repo = "playerctl";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
-    homepage = "https://github.com/acrisci/playerctl";
+    homepage = "https://github.com/altdesktop/playerctl";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ puffnfresh ];

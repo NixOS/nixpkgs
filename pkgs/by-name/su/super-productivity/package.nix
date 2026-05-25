@@ -23,7 +23,7 @@ buildNpmPackage rec {
   inherit nodejs;
 
   src = fetchFromGitHub {
-    owner = "johannesjo";
+    owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${version}";
     hash = "sha256-LPLbHmUsFS0iw0iUfWrc4fXJ+/R33ne7aWcPKEtgtyc=";

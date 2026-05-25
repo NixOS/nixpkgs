@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   version = "unstable-2025-12-03";
 
   src = fetchFromGitHub {
-    owner = "jimevins";
+    owner = "j-evins";
     repo = "glabels-qt";
     tag = "3.99-master602";
     hash = "sha256-7MQufoU1GBvmZd8FRn331/PwmwQMuZeuFKQqViRI754=";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GLabels Label Designer (Qt/C++)";
-    homepage = "https://github.com/jimevins/glabels-qt";
+    homepage = "https://github.com/j-evins/glabels-qt";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.matthewcroughan ];
     platforms = lib.platforms.linux;

@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "Ivordir";
+    owner = "IanManske";
     repo = "Okolors";
     rev = "v${finalAttrs.version}";
     hash = "sha256-RSkZUkwCn9uvvT2dIqM2Q4+mRqjUegVuXCms5DBugbk=";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";
-    homepage = "https://github.com/Ivordir/Okolors";
+    homepage = "https://github.com/IanManske/Okolors";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "okolors";

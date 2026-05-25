@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "quark-engine";
+    owner = "ev-flow";
     repo = "quark-engine";
     tag = "v${finalAttrs.version}";
     hash = "sha256-DAD37fzswY3c0d+ubOCYImxs4qyD4fhC3m2l0iD977A=";
@@ -58,7 +58,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
-    changelog = "https://github.com/quark-engine/quark-engine/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/ev-flow/quark-engine/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
   };

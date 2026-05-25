@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "srsran";
-    repo = "srsran";
+    repo = "srsRAN_4G";
     rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-DwQ4u17m8D5RqX3OIYSyeE5+51sLah1qchRcwlX5i0A=";
   };

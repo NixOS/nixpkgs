@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner = "tetratelabs";
+    owner = "wazero";
     repo = "wazero";
     tag = "v${finalAttrs.version}";
     hash = "sha256-FYaWh1zfNcgtQ5S0flk0y6ehP4ZzCwIA+SZgLnha95U=";
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X=github.com/tetratelabs/wazero/internal/version.version=${finalAttrs.version}"
+    "-X=github.com/wazero/wazero/internal/version.version=${finalAttrs.version}"
   ];
 
   checkFlags = [
@@ -42,9 +42,9 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Zero dependency WebAssembly runtime for Go developers";
-    homepage = "https://github.com/tetratelabs/wazero";
+    homepage = "https://github.com/wazero/wazero";
     maintainers = with lib.maintainers; [ liberodark ];
-    changelog = "https://github.com/tetratelabs/wazero/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/wazero/wazero/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "wazero";
   };

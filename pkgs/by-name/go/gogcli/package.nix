@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "steipete";
+    owner = "openclaw";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
     hash = "sha256-hJU40ysjRx4p9SWGmbhhpToYCpk3DcMAWCnKqxHRmh0=";
@@ -23,9 +23,9 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/steipete/gogcli/internal/cmd.version=v${finalAttrs.version}"
-    "-X github.com/steipete/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
-    "-X github.com/steipete/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
+    "-X github.com/openclaw/gogcli/internal/cmd.version=v${finalAttrs.version}"
+    "-X github.com/openclaw/gogcli/internal/cmd.commit=${finalAttrs.src.rev}"
+    "-X github.com/openclaw/gogcli/internal/cmd.date=1970-01-01T00:00:00Z"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "CLI tool for interacting with Google APIs (Gmail, Calendar, Drive, and more)";
-    homepage = "https://github.com/steipete/gogcli";
+    homepage = "https://github.com/openclaw/gogcli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ macalinao ];
     mainProgram = "gog";

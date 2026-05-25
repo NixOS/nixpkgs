@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "HashPals";
+    owner = "bee-san";
     repo = "name-that-hash";
     rev = version;
     hash = "sha256-zOb4BS3zG1x8GLXAooqqvMOw0fNbw35JuRWOdGP26/8=";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     longDescription = "Don't know what type of hash it is? Name That Hash will name that hash type! Identify MD5, SHA256 and 300+ other hashes.";
     description = "Module and CLI for the identification of hashes";
-    homepage = "https://github.com/HashPals/Name-That-Hash";
+    homepage = "https://github.com/bee-san/Name-That-Hash";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ eyjhb ];
   };

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.11.1";
 
   src = fetchFromGitHub {
-    owner = "steipete";
+    owner = "openclaw";
     repo = "mcporter";
     tag = "v${finalAttrs.version}";
     hash = "sha256-fhIU5z0H6piHNNHSQ3UQW6IqCdpCTjTxngT7AwQm5S0=";
@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "TypeScript runtime and CLI for connecting to configured Model Context Protocol servers";
-    homepage = "https://github.com/steipete/mcporter";
-    changelog = "https://github.com/steipete/mcporter/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/openclaw/mcporter";
+    changelog = "https://github.com/openclaw/mcporter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "mcporter";

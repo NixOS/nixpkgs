@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "hanshuaikang";
-    repo = "Nping";
+    repo = "NBping";
     tag = "v${version}";
     hash = "sha256-rGWYvYJs6vkG+HQuT4NJGMUUG9QzIhyJThgDWTC6/JI=";
   };
@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Ping Tool in Rust with Real-Time Data and Visualizations";
-    homepage = "https://github.com/hanshuaikang/Nping";
-    changelog = "https://github.com/hanshuaikang/Nping/releases/";
+    homepage = "https://github.com/hanshuaikang/NBping";
+    changelog = "https://github.com/hanshuaikang/NBping/releases/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "nbping";

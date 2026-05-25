@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.5.6";
 
   src = fetchFromGitHub {
-    owner = "unsecretised";
+    owner = "RustCastLabs";
     repo = "rustcast";
     tag = "v${finalAttrs.version}";
     hash = "sha256-88vg+xdASskbYwLbEPGmHf8P1PL4PihJDXT1ua/cfCQ=";
@@ -25,9 +25,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/unsecretised/rustcast/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/RustCastLabs/rustcast/releases/tag/v${finalAttrs.version}";
     description = "Modern Spotlight Alternative made opensource";
-    homepage = "https://github.com/unsecretised/rustcast";
+    homepage = "https://github.com/RustCastLabs/rustcast";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ eveeifyeve ];

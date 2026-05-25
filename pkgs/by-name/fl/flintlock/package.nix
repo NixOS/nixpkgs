@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
   version = "0.8.1";
 
   src = fetchFromGitHub {
-    owner = "weaveworks";
+    owner = "liquidmetal-dev";
     repo = "flintlock";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-Kbk94sqj0aPsVonPsiu8kbjhIOURB1kX9Lt3NURL+jk=";
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/weaveworks/flintlock/internal/version.Version=v${finalAttrs.version}"
+    "-X github.com/liquidmetal-dev/flintlock/internal/version.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [

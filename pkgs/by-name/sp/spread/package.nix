@@ -15,7 +15,7 @@ buildGoModule {
   version = "0-unstable-2025-02-06";
 
   src = fetchFromGitHub {
-    owner = "snapcore";
+    owner = "canonical";
     repo = "spread";
     rev = "d6447c43754c8ca0741901e9db73d5fdb4d21c93";
     hash = "sha256-6d7FuEzO5Ond3xjKpf5iRIp9LEV/4O5g3j/tZQEDCZg=";
@@ -59,7 +59,7 @@ buildGoModule {
     mainProgram = "spread";
     license = lib.licenses.gpl3Only;
     description = "Convenient full-system test (task) distribution";
-    homepage = "https://github.com/snapcore/spread";
+    homepage = "https://github.com/canonical/spread";
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.unix;
   };

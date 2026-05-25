@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "danmar";
+    owner = "cppcheck-opensource";
     repo = "cppcheck";
     tag = finalAttrs.version;
     hash = "sha256-c32dNM1tNN+Nqv5GmKHnAhWx8r9RTcv3FQ/+ROGurkw=";

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fabaff";
+    owner = "affolter-engineering";
     repo = "snmpen";
     tag = finalAttrs.version;
     hash = "sha256-XJP+f5Ahizxgk80B0896sbE6JeNB0Bm7aafwJsFaHYY=";

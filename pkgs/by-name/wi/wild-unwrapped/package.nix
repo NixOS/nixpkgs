@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner = "davidlattimore";
+    owner = "wild-linker";
     repo = "wild";
     tag = finalAttrs.version;
     hash = "sha256-E5cmZuOtF+MNTPyalKjnguhin70zqtDDB0D71ZpeE48=";
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Very fast linker for Linux";
-    homepage = "https://github.com/davidlattimore/wild";
-    changelog = "https://github.com/davidlattimore/wild/blob/${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/wild-linker/wild";
+    changelog = "https://github.com/wild-linker/wild/blob/${finalAttrs.version}/CHANGELOG.md";
     license = [
       lib.licenses.asl20 # or
       lib.licenses.mit

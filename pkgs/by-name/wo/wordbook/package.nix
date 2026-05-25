@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
-    owner = "fushinari";
+    owner = "mufeedali";
     repo = "Wordbook";
     tag = finalAttrs.version;
     hash = "sha256-oiAXSDJJtlV6EIHzi+jFv+Ym1XHCMLx9DN1YRiXZNzc=";
@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Offline English-English dictionary application built for GNOME";
     mainProgram = "wordbook";
-    homepage = "https://github.com/fushinari/Wordbook";
+    homepage = "https://github.com/mufeedali/Wordbook";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];

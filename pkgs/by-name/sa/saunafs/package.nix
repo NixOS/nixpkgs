@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "leil-io";
-    repo = "saunafs";
+    repo = "leilfs";
     rev = "v${finalAttrs.version}";
     hash = "sha256-OMUW5JJziW3C9R5gsnFTGnxwmVoXRTtu4aIlXfnVdME=";
   };

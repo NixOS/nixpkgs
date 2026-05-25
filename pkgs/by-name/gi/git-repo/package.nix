@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.59";
 
   src = fetchFromGitHub {
-    owner = "android";
+    owner = "aosp-mirror";
     repo = "tools_repo";
     rev = "v${finalAttrs.version}";
     hash = "sha256-5ffk5B4ZA/Wy2bQNahFaXPFRSZdKz5t6TaGbN00mfxo=";

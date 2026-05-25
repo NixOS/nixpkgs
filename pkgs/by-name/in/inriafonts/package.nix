@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.200";
 
   src = fetchFromGitHub {
-    owner = "BlackFoundry";
+    owner = "BlackFoundryCom";
     repo = "InriaFonts";
     rev = "v${version}";
     hash = "sha256-CMKkwGuUEVYavnFi15FCk7Xloyk97w+LhAZ6mpIv5xg=";

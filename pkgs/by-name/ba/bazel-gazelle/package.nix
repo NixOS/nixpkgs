@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.47.0";
 
   src = fetchFromGitHub {
-    owner = "bazelbuild";
+    owner = "bazel-contrib";
     repo = "bazel-gazelle";
     rev = "v${finalAttrs.version}";
     hash = "sha256-rnJ8rht7ccAI8ceOv3B0mlcY0fQg9Nfy+hu+/pmQQqE=";
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
   subPackages = [ "cmd/gazelle" ];
 
   meta = {
-    homepage = "https://github.com/bazelbuild/bazel-gazelle";
+    homepage = "https://github.com/bazel-contrib/bazel-gazelle";
     description = ''
       Gazelle is a Bazel build file generator for Bazel projects. It natively
       supports Go and protobuf, and it may be extended to support new languages

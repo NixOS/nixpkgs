@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   version = "unstable-2019-09-30";
 
   src = fetchFromGitHub {
-    owner = "HomeOfVapourSynthEvolution";
+    owner = "HolyWu";
     repo = "VapourSynth-EEDI3";
     rev = "d11bdb37c7a7118cd095b53d9f8fbbac02a06ac0";
     hash = "sha256-MIUf6sOnJ2uqGw3ixEHy1ijzlLFkQauwtm1vfgmYmcg=";
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Filter for VapourSynth";
-    homepage = "https://github.com/HomeOfVapourSynthEvolution/VapourSynth-EEDI3";
+    homepage = "https://github.com/HolyWu/VapourSynth-EEDI3";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ snaki ];
     platforms = lib.platforms.x86_64;

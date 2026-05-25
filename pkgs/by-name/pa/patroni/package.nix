@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "zalando";
+    owner = "patroni";
     repo = "patroni";
     tag = "v${finalAttrs.version}";
     hash = "sha256-P64smYmLJyuqMpqYY2lRbZwupfYBsg03FrzUZ6CBGpI=";

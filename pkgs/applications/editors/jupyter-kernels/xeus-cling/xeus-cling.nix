@@ -56,7 +56,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   version = "0.15.3";
 
   src = fetchFromGitHub {
-    owner = "QuantStack";
+    owner = "jupyter-xeus";
     repo = "xeus-cling";
     rev = "${finalAttrs.version}";
     hash = "sha256-OfZU+z+p3/a36GntusBfwfFu3ssJW4Fu7SV3SMCoo1I=";

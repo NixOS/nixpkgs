@@ -11,7 +11,7 @@ buildNpmPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "hamster1963";
-    repo = "nezha-dash-v1";
+    repo = "nezha-dash-v2";
     tag = "v${finalAttrs.version}";
     hash = "sha256-3zaA3T4zW18caOQe5DBF8Zsms3cjks3Ywyfkyk6N2N0=";
   };
@@ -46,8 +46,8 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Nezha monitoring user frontend based on next.js";
-    changelog = "https://github.com/hamster1963/nezha-dash-v1/releases/tag/v${finalAttrs.version}";
-    homepage = "https://github.com/hamster1963/nezha-dash-v1";
+    changelog = "https://github.com/hamster1963/nezha-dash-v2/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/hamster1963/nezha-dash-v2";
     license = lib.licenses.apsl20;
     maintainers = with lib.maintainers; [ moraxyc ];
   };

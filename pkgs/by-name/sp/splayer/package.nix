@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0.0";
 
   src = fetchFromGitHub {
-    owner = "imsyy";
+    owner = "SPlayer-Dev";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
@@ -157,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple Netease Cloud Music player";
-    homepage = "https://github.com/imsyy/SPlayer";
-    changelog = "https://github.com/imsyy/SPlayer/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/SPlayer-Dev/SPlayer";
+    changelog = "https://github.com/SPlayer-Dev/SPlayer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "splayer";

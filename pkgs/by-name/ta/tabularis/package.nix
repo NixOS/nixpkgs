@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.9.12";
 
   src = fetchFromGitHub {
-    owner = "debba";
+    owner = "TabularisDB";
     repo = "tabularis";
     tag = "v${finalAttrs.version}";
     hash = "sha256-kObjJ+C+0d/wLNt902yUPe8Cvss8d0ILeuo98vIiYDU=";
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Lightweight, developer-focused database management tool, built with Tauri and React";
     homepage = "http://tabularis.dev";
-    changelog = "https://github.com/debba/tabularis/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/TabularisDB/tabularis/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     inherit (cargo-tauri.hook.meta) platforms;
     maintainers = with lib.maintainers; [ nartsiss ];

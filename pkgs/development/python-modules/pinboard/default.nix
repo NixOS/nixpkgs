@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "lionheart";
-    repo = "pinboard";
+    repo = "pinboard.py";
     rev = version;
     sha256 = "sha256-+JWr2QmdqASK/X10U0ZOZ95K2ctWceSW167raxZjIW4=";
   };
@@ -24,6 +24,6 @@ buildPythonPackage rec {
     mainProgram = "pinboard";
     maintainers = with lib.maintainers; [ djanatyn ];
     license = lib.licenses.asl20;
-    homepage = "https://github.com/lionheart/pinboard.py";
+    homepage = "https://github.com/lionheart/pinboard.py.py";
   };
 }

@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   version = "0.6.1";
 
   src = fetchFromGitHub {
-    owner = "etix";
+    owner = "videolabs";
     repo = "mirrorbits";
     tag = "v${finalAttrs.version}";
     hash = "sha256-PqPE/PgIyQylbYoABC/saxLF83XjgRAS0QimragJ8P8=";
@@ -46,7 +46,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Geographical download redirector for distributing files efficiently across a set of mirrors";
-    homepage = "https://github.com/etix/mirrorbits";
+    homepage = "https://github.com/videolabs/mirrorbits";
     longDescription = ''
       Mirrorbits is a geographical download redirector written in Go for
       distributing files efficiently across a set of mirrors. It offers

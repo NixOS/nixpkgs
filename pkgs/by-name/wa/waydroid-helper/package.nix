@@ -29,7 +29,7 @@ let
   version = "0.2.7";
 
   src = fetchFromGitHub {
-    owner = "ayasa520";
+    owner = "waydroid-helper";
     repo = "waydroid-helper";
     tag = "v${version}";
     hash = "sha256-I8DwaPQQz4eSyuTCwkbidhXACfpdOYcmGjP7d03DIU0=";
@@ -112,9 +112,9 @@ python3Packages.buildPythonApplication {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/ayasa520/waydroid-helper/releases/tag/${src.tag}";
+    changelog = "https://github.com/waydroid-helper/waydroid-helper/releases/tag/${src.tag}";
     description = "User-friendly way to configure Waydroid and install extensions, including Magisk and ARM translation";
-    homepage = "https://github.com/ayasa520/waydroid-helper";
+    homepage = "https://github.com/waydroid-helper/waydroid-helper";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "waydroid-helper";
     maintainers = [ ];

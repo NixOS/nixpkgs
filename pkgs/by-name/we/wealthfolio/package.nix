@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.4.0";
 
   src = fetchFromGitHub {
-    owner = "afadil";
+    owner = "wealthfolio";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
     hash = "sha256-SYI0LosdR82rUubxl0pNi1huEDcR6bxcaHbjCVT/T/0=";

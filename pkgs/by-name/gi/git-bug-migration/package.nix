@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.3.4";
 
   src = fetchFromGitHub {
-    owner = "MichaelMure";
+    owner = "git-bug";
     repo = "git-bug-migration";
     rev = "v${finalAttrs.version}";
     hash = "sha256-IOBgrU3C0ZHD2wx9LRVgKEJzDlUj6z2UXlHGU3tdTdQ=";
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool for upgrading repositories using git-bug to new versions";
-    homepage = "https://github.com/MichaelMure/git-bug-migration";
+    homepage = "https://github.com/git-bug/git-bug-migration";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       DeeUnderscore

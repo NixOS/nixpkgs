@@ -19,8 +19,8 @@ buildDotnetModule rec {
   version = "2024.6.0-1";
 
   src = fetchFromGitHub {
-    owner = "nlogozzo";
-    repo = "NickvisionTagger";
+    owner = "NickvisionApps";
+    repo = "Tagger";
     rev = version;
     hash = "sha256-4OfByQYhLXmeFWxzhqt8d7pLUyuMLhDM20E2YcA9Q3s=";
   };

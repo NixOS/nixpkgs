@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "Fizzadar";
+    owner = "pyinfra-dev";
     repo = "pyinfra";
     tag = "v${finalAttrs.version}";
     hash = "sha256-0DIG1Msttg7tqLbCZKi07uWTg3KYgH9rVlWPeJs4wwA=";
@@ -81,7 +81,7 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://pyinfra.com";
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
-    changelog = "https://github.com/Fizzadar/pyinfra/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pyinfra-dev/pyinfra/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ totoroot ];
     mainProgram = "pyinfra";

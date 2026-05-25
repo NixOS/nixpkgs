@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.2.18";
 
   src = fetchFromGitHub {
-    owner = "jonaski";
+    owner = "strawberrymusicplayer";
     repo = "strawberry";
     rev = finalAttrs.finalPackage.version;
     hash = "sha256-5h1psYJDKnFFgIGZY3ecCttgkR+zuUwa3b/A4keLk9o=";

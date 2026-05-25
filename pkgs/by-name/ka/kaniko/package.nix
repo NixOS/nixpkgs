@@ -4,8 +4,6 @@
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
-  testers,
-  kaniko,
   versionCheckHook,
 }:
 
@@ -14,7 +12,7 @@ buildGoModule (finalAttrs: {
   version = "1.25.15";
 
   src = fetchFromGitHub {
-    owner = "chainguard-dev";
+    owner = "chainguard-forks";
     repo = "kaniko";
     rev = "v${finalAttrs.version}";
     hash = "sha256-0d0QdNmR7FaybJJEq6bb9WshTg6dX3HtO9oESg1e4S4=";
@@ -52,7 +50,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool to build container images from a Dockerfile, inside a container or Kubernetes cluster";
-    homepage = "https://github.com/chainguard-dev/kaniko";
+    homepage = "https://github.com/chainguard-forks/kaniko";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

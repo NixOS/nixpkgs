@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "unstable-2021-04-28";
 
   src = fetchFromGitHub {
-    owner = "sickill";
+    owner = "ku1ik";
     repo = "stderred";
     rev = "b2238f7c72afb89ca9aaa2944d7f4db8141057ea";
     sha256 = "sha256-k/EA327AsRHgUYu7QqSF5yzOyO6h5XcE9Uv4l1VcIPI=";
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Colorize all stderr output that goes to terminal, making it distinguishable from stdout";
-    homepage = "https://github.com/sickill/stderred";
+    homepage = "https://github.com/ku1ik/stderred";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vojta001 ];
     platforms = lib.platforms.unix;

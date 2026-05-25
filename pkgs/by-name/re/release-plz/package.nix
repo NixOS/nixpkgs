@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.3.158";
 
   src = fetchFromGitHub {
-    owner = "MarcoIeni";
+    owner = "release-plz";
     repo = "release-plz";
     rev = "release-plz-v${finalAttrs.version}";
     hash = "sha256-AFqSj5utn5PGo7mC1LdZSdw71kDEGg1F+ELNolkBgV0=";
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
-    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/release-plz/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit

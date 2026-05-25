@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.5.2";
 
   src = fetchFromGitHub {
-    owner = "kshvmdn";
+    owner = "kashav";
     repo = "fsql";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-U6TPszqsZvoz+9GIB0wNYMRJqIDLOp/BZO3/k8FC0Gs=";
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Search through your filesystem with SQL-esque queries";
-    homepage = "https://github.com/kshvmdn/fsql";
+    homepage = "https://github.com/kashav/fsql";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "fsql";

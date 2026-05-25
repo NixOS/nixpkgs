@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "0.17.1";
 
   src = fetchFromGitHub {
-    owner = "AirenSoft";
+    owner = "OvenMediaLabs";
     repo = "OvenMediaEngine";
     rev = "v${version}";
     sha256 = "sha256-fYvP1mk32lrnYxWdpI1WqEUxAfHsQH3Ng0JLC/GbjrY=";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # ffmpeg 7.0 Update: Use new channel layout
-    # https://github.com/AirenSoft/OvenMediaEngine/pull/1626
+    # https://github.com/OvenMediaLabs/OvenMediaEngine/pull/1626
     ./support-ffmpeg-7.patch
   ];
 

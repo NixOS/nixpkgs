@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.10.1";
 
   src = fetchFromGitHub {
-    owner = "Decodetalkers";
+    owner = "neocmakelsp";
     repo = "neocmakelsp";
     rev = "v${finalAttrs.version}";
     hash = "sha256-Zhu3ka4suqvLLZMXC3/sRPW7EBg1YII5T+kVMf/zuH0=";
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "CMake lsp based on tower-lsp and treesitter";
-    homepage = "https://github.com/Decodetalkers/neocmakelsp";
+    homepage = "https://github.com/neocmakelsp/neocmakelsp";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

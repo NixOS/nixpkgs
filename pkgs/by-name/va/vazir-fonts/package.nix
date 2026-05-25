@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
-    repo = "vazir-font";
+    repo = "vazirmatn";
     rev = "v${version}";
     hash = "sha256-C1UtfrRFzz0uv/hj8e7huXe4sNd5h7ozVhirWEAyXGg=";
   };
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/rastikerdar/vazir-font";
+    homepage = "https://github.com/rastikerdar/vazirmatn";
     description = "Persian (Farsi) Font - قلم (فونت) فارسی وزیر";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

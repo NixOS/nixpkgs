@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   version = "0-unstable-2025-01-22";
 
   src = fetchFromGitHub {
-    owner = "bash-my-aws";
+    owner = "mbailey";
     repo = "bash-my-aws";
     rev = "d338b43cc215719c1853ec500c946db6b9caaa11";
     sha256 = "sha256-PR52T6XCrakQsBOJXf0PaYpYE5oMcIz5UDA4I9B7C38=";

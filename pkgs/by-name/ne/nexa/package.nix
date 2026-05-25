@@ -56,7 +56,7 @@ buildGo125Module (finalAttrs: {
   version = "0.2.73";
 
   src = fetchFromGitHub {
-    owner = "NexaAI";
+    owner = "qualcomm";
     repo = "nexa-sdk";
     tag = "v${finalAttrs.version}";
     hash = "sha256-JioUguVO2z37BYxkXBlDEswJIh80bpOONG6EVNlq5OA=";
@@ -199,8 +199,8 @@ buildGo125Module (finalAttrs: {
 
   meta = {
     description = "Nexa AI SDK CLI for model management, inference, and server operations";
-    homepage = "https://github.com/NexaAI/nexa-sdk";
-    changelog = "https://github.com/NexaAI/nexa-sdk/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/qualcomm/nexa-sdk";
+    changelog = "https://github.com/qualcomm/nexa-sdk/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "nexa";

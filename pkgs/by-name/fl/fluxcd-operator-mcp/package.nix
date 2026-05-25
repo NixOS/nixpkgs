@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "controlplaneio-fluxcd";
-    repo = "fluxcd-operator";
+    repo = "flux-operator";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Ggx38aF9o7dMFcQxYbx5hSXCE2oRRTgvUvXCAJJN6V8=";
   };
