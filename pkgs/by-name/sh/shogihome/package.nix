@@ -5,7 +5,6 @@
   fetchFromGitHub,
   makeWrapper,
   electron_40,
-  vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
@@ -67,16 +66,11 @@ buildNpmPackage (finalAttrs: {
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
-  ''
-  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
-  # See: https://github.com/electron-userland/electron-builder/pull/9007
-  + ''
+
     npm run electron:pack
+
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
 
     ./node_modules/.bin/electron-builder \
         --dir \
