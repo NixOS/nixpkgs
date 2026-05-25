@@ -1,0 +1,17 @@
+--- a/plugin/host/host_nodejs.go
++++ b/plugin/host/host_nodejs.go
+@@ -39,12 +39,9 @@
+ }
+ 
+ func (n *NodejsHost) Start(ctx context.Context) error {
+-	nodePath, nodeErr := n.resolveNodejsPath(ctx)
+-	if nodeErr != nil {
+-		return nodeErr
+-	}
++	_ = ctx
+ 
+-	return n.websocketHost.StartHost(ctx, nodePath, path.Join(util.GetLocation().GetHostDirectory(), "node-host.js"), nil)
++	return n.websocketHost.StartHost(ctx, "@nodejs@", path.Join(util.GetLocation().GetHostDirectory(), "node-host.js"), nil)
+ }
+ 
+ // FindNodejsPath finds the best available Node.js interpreter path

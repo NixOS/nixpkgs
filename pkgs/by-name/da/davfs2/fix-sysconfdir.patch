@@ -1,0 +1,30 @@
+diff --git a/etc/Makefile.am b/etc/Makefile.am
+index 5a01282..6a40921 100644
+--- a/etc/Makefile.am
++++ b/etc/Makefile.am
+@@ -24,17 +24,17 @@ pkgsysconfdir = $(sysconfdir)/@PACKAGE@
+ 
+ install-data-local: $(dist_pkgdata_DATA)
+ 	@$(NORMAL_INSTALL)
+-	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)
+-	$(INSTALL_DATA) -b $(srcdir)/davfs2.conf $(DESTDIR)$(pkgsysconfdir)/davfs2.conf
+-	$(INSTALL_DATA) -b -m 600 $(srcdir)/secrets $(DESTDIR)$(pkgsysconfdir)/secrets
+-	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)/certs
+-	$(mkinstalldirs) $(DESTDIR)$(pkgsysconfdir)/certs/private
+-	chmod 700 $(DESTDIR)$(pkgsysconfdir)/certs/private
++	$(mkinstalldirs) $(out)$(pkgsysconfdir)
++	$(INSTALL_DATA) -b $(srcdir)/davfs2.conf $(out)$(pkgsysconfdir)/davfs2.conf
++	$(INSTALL_DATA) -b -m 600 $(srcdir)/secrets $(out)$(pkgsysconfdir)/secrets
++	$(mkinstalldirs) $(out)$(pkgsysconfdir)/certs
++	$(mkinstalldirs) $(out)$(pkgsysconfdir)/certs/private
++	chmod 700 $(out)$(pkgsysconfdir)/certs/private
+ 
+ uninstall-local:
+ 	@$(NORMAL_UNINSTALL)
+ 	@list='$(dist_pkgdata_DATA)'; for p in $$list; do \
+ 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+-	  echo " rm -f $(DESTDIR)$(pkgsysconfdir)/$$f"; \
+-	  rm -f $(DESTDIR)$(pkgsysconfdir)/$$f; \
++	  echo " rm -f $(out)$(pkgsysconfdir)/$$f"; \
++	  rm -f $(out)$(pkgsysconfdir)/$$f; \
+ 	done

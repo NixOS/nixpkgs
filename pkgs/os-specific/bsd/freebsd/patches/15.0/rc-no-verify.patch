@@ -1,0 +1,17 @@
+--- a/libexec/rc/rc	2024-08-25 17:13:49.568517103 -0700
++++ b/libexec/rc/rc	2024-08-25 17:14:00.909389872 -0700
+@@ -62,14 +62,7 @@
+ 	sh /etc/rc.initdiskless
+ fi
+ 
+-# Run these after determining whether we are booting diskless in order
+-# to minimize the number of files that are needed on a diskless system,
+-# and to make the configuration file variables available to rc itself.
+-#
+-# -o verify has no effect if mac_veriexec is not active
+-set -o verify
+ . /etc/rc.subr
+-set +o verify
+ load_rc_config $rc_config_xtra
+ 
+ if have DebugOn; then

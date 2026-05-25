@@ -1,0 +1,13 @@
+diff --git a/src/twisted/web/client.py b/src/twisted/web/client.py
+index d3cd11fb84..5f18965759 100644
+--- a/src/twisted/web/client.py
++++ b/src/twisted/web/client.py
+@@ -220,7 +220,7 @@ def _urljoin(base, url):
+     """
+     base, baseFrag = urldefrag(base)
+     url, urlFrag = urldefrag(urljoin(base, url))
+-    return urljoin(url, b"#" + (urlFrag or baseFrag))
++    return urljoin(url, b"#" + (urlFrag or baseFrag)).strip(b"#")
+ 
+ 
+ def _makeGetterFactory(url, factoryFactory, contextFactory=None, *args, **kwargs):

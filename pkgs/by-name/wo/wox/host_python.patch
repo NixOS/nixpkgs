@@ -1,0 +1,25 @@
+--- a/plugin/host/host_python.go
++++ b/plugin/host/host_python.go
+@@ -6,7 +6,6 @@
+ 	"fmt"
+ 	"os"
+ 	"os/exec"
+-	"path"
+ 	"path/filepath"
+ 	"runtime"
+ 	"strings"
+@@ -39,12 +38,9 @@
+ }
+ 
+ func (n *PythonHost) Start(ctx context.Context) error {
+-	pythonPath, pythonErr := n.resolvePythonPath(ctx)
+-	if pythonErr != nil {
+-		return pythonErr
+-	}
++	_ = ctx
+ 
+-	return n.websocketHost.StartHost(ctx, pythonPath, path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz"), []string{"SHIV_ROOT=" + util.GetLocation().GetCacheDirectory()})
++	return n.websocketHost.StartHost(ctx, "@pluginHostPython@", "", nil)
+ }
+ 
+ // FindPythonPath finds the best available Python interpreter path

@@ -1,0 +1,61 @@
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
+  nix-update-script,
+  versionCheckHook,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "whosthere";
+  version = "0.7.1";
+
+  src = fetchFromGitHub {
+    owner = "ramonvermeulen";
+    repo = "whosthere";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+cG9iJhIkIQ3yakx/DYGKqd+pX/AaqnCgDdC/3Spvws=";
+  };
+
+  vendorHash = "sha256-sNx1Ej8vh/Lw4wpitWQdLZ2LM8K6JgM/snSZRw9RN94=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  ldflags = [
+    "-s"
+    "-X"
+    "main.versionStr=${finalAttrs.version}"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd whosthere \
+      --bash <("$out/bin/whosthere" completion bash) \
+      --fish <("$out/bin/whosthere" completion fish) \
+      --zsh <("$out/bin/whosthere" completion zsh)
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Local Area Network discovery tool";
+    longDescription = ''
+      Local Area Network discovery tool with a modern Terminal User Interface
+      (TUI) written in Go. Discover, explore, and understand your LAN in an
+      intuitive way. Knock Knock.. who's there?
+    '';
+    homepage = "https://github.com/ramonvermeulen/whosthere";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.unix;
+    mainProgram = "whosthere";
+  };
+})

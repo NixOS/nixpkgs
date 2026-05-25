@@ -1,0 +1,29 @@
+diff --git a/src/backend/plugins/config-gnome/config-gnome.c b/src/backend/plugins/config-gnome/config-gnome.c
+index 52e812e..a1edcab 100644
+--- a/src/backend/plugins/config-gnome/config-gnome.c
++++ b/src/backend/plugins/config-gnome/config-gnome.c
+@@ -57,7 +57,6 @@ enum {
+ static void
+ px_config_gnome_init (PxConfigGnome *self)
+ {
+-  GSettingsSchemaSource *source;
+   g_autoptr (GSettingsSchema) proxy_schema = NULL;
+   const char *desktops;
+ 
+@@ -71,15 +70,7 @@ px_config_gnome_init (PxConfigGnome *self)
+   if (strstr (desktops, "GNOME") == NULL)
+     return;
+ 
+-  source = g_settings_schema_source_get_default ();
+-  if (!source) {
+-    g_warning ("GNOME desktop detected but no schemes installed, aborting.");
+-    return;
+-  }
+-
+-  proxy_schema = g_settings_schema_source_lookup (source, "org.gnome.system.proxy", TRUE);
+-
+-  self->available = proxy_schema != NULL;
++  self->available = TRUE;
+   if (!self->available)
+     return;
+ 

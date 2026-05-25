@@ -1,0 +1,67 @@
+Based on https://gitweb.git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff_plain;h=c44fe03b72687c9e913727724c29bdb49c1f86e3
+
+Backported to 5c5298c4f47bf1912f6317a938df501e680f2bcb for use in packages with older gnulibs
+
+diff --git a/lib/string.in.h b/lib/string.in.h
+index e764221168..db574ca576 100644
+--- a/lib/string.in.h
++++ b/lib/string.in.h
+@@ -214,38 +214,58 @@ _GL_EXTERN_C void free (void *);
+ 
+ /* Declarations for ISO C N3322.  */
+ #if defined __GNUC__ && __GNUC__ >= 15 && !defined __clang__
++# ifndef memcpy
+ _GL_EXTERN_C void *memcpy (void *__dest, const void *__src, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (2, 3);
++# endif
++# ifndef memccpy
+ _GL_EXTERN_C void *memccpy (void *__dest, const void *__src, int __c, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 4)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (2, 4);
++# endif
++# ifndef memmove
+ _GL_EXTERN_C void *memmove (void *__dest, const void *__src, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (2, 3);
++# endif
++# ifndef strncpy
+ _GL_EXTERN_C char *strncpy (char *__dest, const char *__src, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (2, 3);
++# endif
++# ifndef strndup
+ _GL_EXTERN_C char *strndup (const char *__s, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 2);
++# endif
++# ifndef strncat
+ _GL_EXTERN_C char *strncat (char *__dest, const char *__src, size_t __n)
+   _GL_ARG_NONNULL ((1)) _GL_ATTRIBUTE_NONNULL_IF_NONZERO (2, 3);
++# endif
++# ifndef memcmp
+ _GL_EXTERN_C int memcmp (const void *__s1, const void *__s2, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (2, 3);
++# endif
++# ifndef strncmp
+ _GL_EXTERN_C int strncmp (const char *__s1, const char *__s2, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (2, 3);
+-# ifndef __cplusplus
++# endif
++# if !defined memchr && !defined __cplusplus
+ _GL_EXTERN_C void *memchr (const void *__s, int __c, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3);
+ _GL_EXTERN_C void *memrchr (const void *__s, int __c, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3);
+ # endif
++# ifndef memset
+ _GL_EXTERN_C void *memset (void *__s, int __c, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3);
++# endif
++# ifndef memset_explicit
+ _GL_EXTERN_C void *memset_explicit (void *__s, int __c, size_t __n)
+   _GL_ATTRIBUTE_NONNULL_IF_NONZERO (1, 3);
++# endif
+ #endif
+ 

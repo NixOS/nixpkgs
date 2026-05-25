@@ -1,0 +1,31 @@
+--- a/XS.xs	2025-09-06 08:34:51.376455632 -0300
++++ b/XS.xs	2025-09-06 08:35:30.725873619 -0300
+@@ -253,16 +253,16 @@
+   // if we recurse too deep, skip all remaining digits
+   // to avoid a stack overflow attack
+   if (expect_false (--maxdepth <= 0))
+-    while (((U8)*s - '0') < 10)
++    while ((U8)(*s - '0') < 10)
+       ++s;
+ 
+   for (;;)
+     {
+-      U8 dig = (U8)*s - '0';
++      U8 dig = *s - '0';
+ 
+       if (expect_false (dig >= 10))
+         {
+-          if (dig == (U8)((U8)'.' - (U8)'0'))
++          if (dig == (U8)('.' - '0'))
+             {
+               ++s;
+               json_atof_scan1 (s, accum, expo, 1, maxdepth);
+@@ -282,7 +282,7 @@
+               else if (*s == '+')
+                 ++s;
+ 
+-              while ((dig = (U8)*s - '0') < 10)
++              while ((dig = (U8)(*s - '0')) < 10)
+                 exp2 = exp2 * 10 + *s++ - '0';
+ 
+               *expo += neg ? -exp2 : exp2;

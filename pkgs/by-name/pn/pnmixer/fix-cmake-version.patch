@@ -1,0 +1,33 @@
+From 3a4a988f6c69abece44fe2c77eab5f0a9ae7bbd2 Mon Sep 17 00:00:00 2001
+From: Stefan Frijters <sfrijters@gmail.com>
+Date: Mon, 13 Oct 2025 10:53:14 +0200
+Subject: [PATCH] Update minimum CMake version
+
+And fix compatibility with https://cmake.org/cmake/help/v4.1/policy/CMP0065.html
+---
+ CMakeLists.txt     | 2 +-
+ src/CMakeLists.txt | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 10192bf..1bb3e0c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.10)
+ project(PNMixer)
+ 
+ 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index eb04c2b..8630a21 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -56,6 +56,7 @@ target_link_libraries(pnmixer "${PNMixer_DEPS_LDFLAGS}")
+ target_link_libraries(pnmixer m)
+ target_compile_options(pnmixer PUBLIC "${PNMixer_DEPS_CFLAGS}")
+ target_compile_definitions(pnmixer PUBLIC -DHAVE_CONFIG_H)
++set_property(TARGET pnmixer PROPERTY ENABLE_EXPORTS 1)
+ 
+ install(TARGETS pnmixer DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 

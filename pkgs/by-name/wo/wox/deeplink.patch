@@ -1,0 +1,17 @@
+--- a/util/deeplink.go
++++ b/util/deeplink.go
+@@ -41,12 +41,12 @@
+ 		return
+ 	}
+ 
+-	cmd := exec.Command("xdg-mime", "default", "wox-url-handler.desktop", "x-scheme-handler/wox")
++	cmd := exec.Command("@xdgUtils@", "default", "wox-url-handler.desktop", "x-scheme-handler/wox")
+ 	if err := cmd.Run(); err != nil {
+ 		GetLogger().Error(ctx, fmt.Sprintf("failed to register protocol handler: %s", err.Error()))
+ 	}
+ 
+-	cmd = exec.Command("update-desktop-database", filepath.Join(os.Getenv("HOME"), ".local/share/applications"))
++	cmd = exec.Command("@desktopFileUtils@", filepath.Join(os.Getenv("HOME"), ".local/share/applications"))
+ 	if err := cmd.Run(); err != nil {
+ 		GetLogger().Warn(ctx, fmt.Sprintf("failed to update desktop database: %s", err.Error()))
+ 	}

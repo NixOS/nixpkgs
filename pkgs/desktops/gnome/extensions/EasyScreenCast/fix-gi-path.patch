@@ -1,0 +1,36 @@
+diff --git a/extension.js b/extension.js
+index 32a7c7c..a7ed98e 100644
+--- a/extension.js
++++ b/extension.js
+@@ -720,7 +720,7 @@ const EasyScreenCastIndicator = GObject.registerClass({
+             Lib.TalkativeLog('-*-execute post command');
+ 
+             // launch cmd after registration
+-            const tmpCmd = `/usr/bin/sh -c "${this._settings.getOption('s', Settings.POST_CMD_SETTING_KEY)}"`;
++            const tmpCmd = `/bin/sh -c "${this._settings.getOption('s', Settings.POST_CMD_SETTING_KEY)}"`;
+ 
+             const mapObj = {
+                 _fpath: pathFile,
+diff --git a/prefs.js b/prefs.js
+index b58b160..2298d5a 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -709,7 +709,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
+                 Lib.TalkativeLog('-^-NOT SET xdg-user video');
+ 
+                 ctx.CtrlExe.Execute(
+-                    '/usr/bin/sh -c "echo $HOME"',
++                    '/bin/sh -c "echo $HOME"',
+                     true,
+                     (success, out) => {
+                         Lib.TalkativeLog(`-^-CALLBACK sync S: ${success} out: ${out}`);
+@@ -879,7 +879,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
+                 );
+ 
+                 ctx.CtrlExe.Execute(
+-                    'journalctl /usr/bin/gnome-shell --since "15 min ago" --output=cat --no-pager',
++                    'journalctl @gnomeShell@/bin/.gnome-shell-wrapped --since "15 min ago" --output=cat --no-pager',
+                     false,
+                     success => {
+                         Lib.TalkativeLog(`-^-CALLBACK async S= ${success}`);
+
