@@ -17392,12 +17392,6 @@
     githubId = 613740;
     name = "Martin Baillie";
   };
-  mbbx6spp = {
-    email = "me@susanpotter.net";
-    github = "mbbx6spp";
-    githubId = 564;
-    name = "Susan Potter";
-  };
   mbe = {
     email = "brandonedens@gmail.com";
     github = "brandonedens";
