@@ -91,7 +91,7 @@ let
       jq
     ];
 
-    ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+    env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
     postPatch = ''
       sed -i '/\/\/ Update test runner./,/^\s*$/{d}' utils/build/build.js
