@@ -7972,6 +7972,8 @@ self: super: with self; {
 
   jalali-core = callPackage ../development/python-modules/jalali-core { };
 
+  jambo = callPackage ../development/python-modules/jambo { };
+
   jamo = callPackage ../development/python-modules/jamo { };
 
   janus = callPackage ../development/python-modules/janus { };
