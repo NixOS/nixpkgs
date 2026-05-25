@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vilfo-api-client";
   version = "0.5.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ManneW";
     repo = "vilfo-api-client-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZlmriBd+M+54ux/UNYa355mkz808/NxSz7IzmWouA0c=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "get-mac" "getmac"
+      --replace-fail "get-mac" "getmac"
   '';
 
   dependencies = [
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
