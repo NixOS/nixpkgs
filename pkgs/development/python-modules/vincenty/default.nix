@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vincenty";
   version = "0.1.4";
   pyproject = true;
@@ -13,8 +13,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maurycyp";
     repo = "vincenty";
-    rev = version;
-    sha256 = "1li8gv0zb1pdbxdybgaykm38lqbkb5dr7rph6zs1k4k3sh15ldw3";
+    tag = finalAttrs.version;
+    hash = "sha256-gzdaAtRjkhn0N/Dmk1tZc2GKRp1eveVbX+2G9cF+KNI=";
   };
 
   build-system = [ setuptools ];
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
