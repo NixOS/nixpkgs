@@ -4498,6 +4498,8 @@ self: super: with self; {
 
   django-tinymce = callPackage ../development/python-modules/django-tinymce { };
 
+  django-tools = callPackage ../development/python-modules/django-tools { };
+
   django-tree-queries = callPackage ../development/python-modules/django-tree-queries { };
 
   django-treebeard = callPackage ../development/python-modules/django-treebeard { };
