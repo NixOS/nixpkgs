@@ -155,7 +155,8 @@ in
         CapabilityBoundingSet = [ "" ];
         DevicePolicy = "closed";
         LockPersonality = true;
-        MemoryDenyWriteExecute = !useYTMusic;
+        # breaks pyopenssl's cffi calls, used in remote access feature
+        MemoryDenyWriteExecute = false;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
