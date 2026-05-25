@@ -59,13 +59,13 @@ in
       wantPath,
       extraModules ? [ ],
     }:
-    {
-      name = "contracts_filesecrets_${name}";
-      nodes.machine =
+    lib.contract.mkBehaviorTest {
+      contractName = "fileSecrets";
+      testName = name;
+      inherit wantPath extraModules;
+      nodeModule =
         { config, ... }:
         {
-          imports = extraModules;
-
           options.test = {
             owner = mkOption {
               type = str;
@@ -89,9 +89,6 @@ in
           };
 
           config = lib.mkMerge [
-            (lib.setAttrByPath (
-              [ "contracts" "fileSecrets" "want" ] ++ wantPath ++ [ "request" ]
-            ) { inherit (config.test) owner group mode; })
             (lib.mkIf (config.test.owner != "root") {
               users.users.${config.test.owner}.isNormalUser = true;
             })
@@ -100,14 +97,11 @@ in
             })
           ];
         };
-
+      requestOf = config: { inherit (config.test) owner group mode; };
       testScript =
-        { nodes, ... }:
+        { result, nodes }:
         let
           cfg = nodes.machine;
-          result = lib.getAttrFromPath (
-            [ "contracts" "fileSecrets" "results" ] ++ wantPath
-          ) nodes.machine;
         in
         ''
           owner = machine.succeed("stat -c '%U' ${result.path}").strip()
