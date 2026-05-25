@@ -23,7 +23,7 @@
             package = pkgs.nerd-fonts.jetbrains-mono;
           }
         ];
-        term = "xterm-256color";
+        config.term = "xterm-256color";
         package = pkgs.kmscon;
       };
     };

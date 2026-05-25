@@ -19,10 +19,21 @@ let
 
   gettyCfg = config.services.getty;
 
+  mkKeyValue =
+    k: v:
+    if true == v then
+      k + "\n"
+    else if false == v then
+      "no-" + k + "\n"
+    else
+      lib.generators.mkKeyValueDefault { } "=" k v + "\n";
+
   configDir = pkgs.writeTextFile {
     name = "kmscon-config";
     destination = "/kmscon.conf";
-    text = cfg.extraConfig;
+    text = lib.concatStrings (
+      lib.mapAttrsToList mkKeyValue (lib.filterAttrsRecursive (_: v: v != null) cfg.config)
+    );
   };
 
   baseLoginOptions = "-p";
@@ -55,6 +66,10 @@ in
 
       Check `services.getty.autologinUser` instead.
     '')
+
+    (lib.mkRenamedOptionModule [ "services" "kmscon" "extraConfig" ] [ "services" "kmscon" "config" ])
+
+    (lib.mkRenamedOptionModule [ "services" "kmscon" "term" ] [ "services" "kmscon" "config" "term" ])
   ];
 
   options = {
@@ -95,18 +110,117 @@ in
 
       useXkbConfig = mkEnableOption "configure keymap from xserver keyboard settings.";
 
-      term = mkOption {
-        description = "Value for the TERM environment variable.";
-        type = types.nullOr types.str;
-        default = null;
-        example = "xterm-256color";
-      };
+      config = mkOption {
+        description = ''
+          Configuration for kmscon. See {manpage}`kmscon.conf(5)`
+          for available options.
+        '';
+        default = { };
+        type = types.submodule {
+          freeformType =
+            with types;
+            attrsOf (oneOf [
+              bool
+              int
+              str
+            ]);
 
-      extraConfig = mkOption {
-        description = "Extra contents of the kmscon.conf file.";
-        type = types.lines;
-        default = "";
-        example = "font-size=14";
+          options = {
+            font-name = mkOption {
+              type = types.nullOr types.str;
+              default = if cfg.fonts != null then lib.concatMapStringsSep ", " (f: f.name) cfg.fonts else null;
+              defaultText = lib.literalExpression ''
+                if config.services.kmscon.fonts != null then
+                  lib.concatMapStringsSep ", " (f: f.name) config.services.kmscon.fonts
+                else
+                  null
+              '';
+              description = "Font name to use.";
+            };
+
+            hwaccel = mkOption {
+              type = types.nullOr types.bool;
+              default = if cfg.hwRender then true else null;
+              defaultText = lib.literalExpression ''
+                if config.services.kmscon.hwRender then true else null
+              '';
+              description = "Use 3D hardware-acceleration if available.";
+            };
+
+            drm = mkOption {
+              type = types.nullOr types.bool;
+              default = if cfg.hwRender then true else null;
+              defaultText = lib.literalExpression ''
+                if config.services.kmscon.hwRender then true else null
+              '';
+              description = "Use DRM if available.";
+            };
+
+            xkb-layout = mkOption {
+              type = types.nullOr types.str;
+              default =
+                if cfg.useXkbConfig && config.services.xserver.xkb.layout != "" then
+                  config.services.xserver.xkb.layout
+                else
+                  null;
+              defaultText = lib.literalExpression ''
+                if config.services.kmscon.useXkbConfig && config.services.xserver.xkb.layout != "" then
+                  config.services.xserver.xkb.layout
+                else
+                  null
+              '';
+              description = "Set XkbLayout for input devices.";
+            };
+
+            xkb-model = mkOption {
+              type = types.nullOr types.str;
+              default =
+                if cfg.useXkbConfig && config.services.xserver.xkb.model != "" then
+                  config.services.xserver.xkb.model
+                else
+                  null;
+              defaultText = lib.literalExpression ''
+                if config.services.kmscon.useXkbConfig && config.services.xserver.xkb.model != "" then
+                  config.services.xserver.xkb.model
+                else
+                  null
+              '';
+              description = "Set XkbModel for input devices.";
+            };
+
+            xkb-options = mkOption {
+              type = types.nullOr types.str;
+              default =
+                if cfg.useXkbConfig && config.services.xserver.xkb.options != "" then
+                  config.services.xserver.xkb.options
+                else
+                  null;
+              defaultText = lib.literalExpression ''
+                if config.services.kmscon.useXkbConfig && config.services.xserver.xkb.options != "" then
+                  config.services.xserver.xkb.options
+                else
+                  null
+              '';
+              description = "Set XkbOptions for input devices.";
+            };
+
+            xkb-variant = mkOption {
+              type = types.nullOr types.str;
+              default =
+                if cfg.useXkbConfig && config.services.xserver.xkb.variant != "" then
+                  config.services.xserver.xkb.variant
+                else
+                  null;
+              defaultText = lib.literalExpression ''
+                if config.services.kmscon.useXkbConfig && config.services.xserver.xkb.variant != "" then
+                  config.services.xserver.xkb.variant
+                else
+                  null
+              '';
+              description = "Set XkbVariant for input devices.";
+            };
+          };
+        };
       };
 
       extraOptions = mkOption {
@@ -161,29 +275,6 @@ in
     ];
 
     systemd.suppressedSystemUnits = [ "getty@.service" ];
-
-    services.kmscon.extraConfig = lib.concatLines (
-      optionals cfg.useXkbConfig (
-        lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
-          lib.filterAttrs (
-            n: v:
-            builtins.elem n [
-              "layout"
-              "model"
-              "options"
-              "variant"
-            ]
-            && v != ""
-          ) config.services.xserver.xkb
-        )
-      )
-      ++ optionals cfg.hwRender [
-        "drm"
-        "hwaccel"
-      ]
-      ++ optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}"
-      ++ optional (cfg.term != null) "term=${cfg.term}"
-    );
 
     hardware.graphics.enable = mkIf cfg.hwRender true;
 
