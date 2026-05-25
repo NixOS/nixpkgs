@@ -660,46 +660,66 @@ in
         }
       );
 
-      systemd.services = toHardenedClientAttrs (
-        client:
-        nameValuePair client.service.name (
-          mkIf client.hardened {
-            serviceConfig = {
-              RuntimeDirectoryMode = "0750";
+      systemd.services = mkMerge [
+        # netbird services
+        (toHardenedClientAttrs (
+          client:
+          nameValuePair client.service.name (
+            mkIf client.hardened {
+              serviceConfig = {
+                RuntimeDirectoryMode = "0750";
 
-              User = client.user.name;
-              Group = client.user.group;
+                User = client.user.name;
+                Group = client.user.group;
 
-              # settings implied by DynamicUser=true, without actually using it,
-              # see https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#DynamicUser=
-              RemoveIPC = true;
-              PrivateTmp = true;
-              ProtectSystem = "strict";
-              ProtectHome = "yes";
+                # settings implied by DynamicUser=true, without actually using it,
+                # see https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#DynamicUser=
+                RemoveIPC = true;
+                PrivateTmp = true;
+                ProtectSystem = "strict";
+                ProtectHome = "yes";
 
-              AmbientCapabilities = [
-                # see https://man7.org/linux/man-pages/man7/capabilities.7.html
-                # see https://docs.netbird.io/how-to/installation#running-net-bird-in-docker
-                #
-                # seems to work fine without CAP_SYS_ADMIN and CAP_SYS_RESOURCE
-                # CAP_NET_BIND_SERVICE could be added to allow binding on low ports, but is not required,
-                #  see https://github.com/netbirdio/netbird/pull/1513
+                AmbientCapabilities = [
+                  # see https://man7.org/linux/man-pages/man7/capabilities.7.html
+                  # see https://docs.netbird.io/how-to/installation#running-net-bird-in-docker
+                  #
+                  # seems to work fine without CAP_SYS_ADMIN and CAP_SYS_RESOURCE
+                  # CAP_NET_BIND_SERVICE could be added to allow binding on low ports, but is not required,
+                  #  see https://github.com/netbirdio/netbird/pull/1513
 
-                # failed creating tunnel interface wt-priv: [operation not permitted
-                "CAP_NET_ADMIN"
-                # failed to pull up wgInterface [wt-priv]: failed to create ipv4 raw socket: socket: operation not permitted
-                "CAP_NET_RAW"
-              ]
-              # required for eBPF filter, used to be subset of CAP_SYS_ADMIN
-              ++ optional (versionAtLeast kernel.version "5.8") "CAP_BPF"
-              ++ optional (versionOlder kernel.version "5.8") "CAP_SYS_ADMIN"
-              ++ optional (
-                client.dns-resolver.address != null && client.dns-resolver.port < 1024
-              ) "CAP_NET_BIND_SERVICE";
-            };
-          }
-        )
-      );
+                  # failed creating tunnel interface wt-priv: [operation not permitted
+                  "CAP_NET_ADMIN"
+                  # failed to pull up wgInterface [wt-priv]: failed to create ipv4 raw socket: socket: operation not permitted
+                  "CAP_NET_RAW"
+                ]
+                # required for eBPF filter, used to be subset of CAP_SYS_ADMIN
+                ++ optional (versionAtLeast kernel.version "5.8") "CAP_BPF"
+                ++ optional (versionOlder kernel.version "5.8") "CAP_SYS_ADMIN"
+                ++ optional (
+                  client.dns-resolver.address != null && client.dns-resolver.port < 1024
+                ) "CAP_NET_BIND_SERVICE";
+              };
+            }
+          )
+        ))
+        # netbird-login services
+        (toHardenedClientAttrs (
+          client:
+          nameValuePair "${client.service.name}-login" (
+            mkIf client.hardened {
+              serviceConfig = {
+                User = client.user.name;
+                Group = client.user.group;
+
+                RemoveIPC = true;
+                PrivateTmp = "disconnected"; # "disconnected" puts /tmp on `tmpfs`
+                ProtectSystem = "strict";
+                ProtectHome = "yes";
+              };
+            }
+          )
+        ))
+      ];
 
       # see https://github.com/systemd/systemd/blob/17f3e91e8107b2b29fe25755651b230bbc81a514/src/resolve/org.freedesktop.resolve1.policy#L43-L43
       # see all actions used at https://github.com/netbirdio/netbird/blob/13e7198046a0d73a9cd91bf8e063fafb3d41885c/client/internal/dns/systemd_linux.go#L29-L32
@@ -736,47 +756,29 @@ in
               Type = "oneshot";
               RemainAfterExit = true;
 
-              User = client.user.name;
-              Group = client.user.group;
-
-              RemoveIPC = true;
-              PrivateTmp = "disconnected"; # "disconnected" puts /tmp on `tmpfs`
-              ProtectSystem = "strict";
-              ProtectHome = "yes";
-
               LoadCredential = [ "setup-key:${client.login.setupKeyFile}" ];
             };
 
             environment.NB_SETUP_KEY_FILE = "%d/setup-key";
-            /*
-              might want to do something similar to the docker entrypoint (watching log messages) instead
-              see https://github.com/netbirdio/netbird/blob/dc30dcacce4c322502975f1f491e6774efd7e1e9/client/netbird-entrypoint.sh
-            */
+
             script = ''
               set -x
-              # uses a file on a `tmpfs`, because variable updates get lost in the loop
-              status_file="/tmp/status.txt"
 
-              refresh_status() {
-                '${lib.getExe client.wrapper}' status &>"$status_file" || :
-              }
-
-              print_short_setup_key() {
-                cut -b1-8 <"$NB_SETUP_KEY_FILE"
+              get_status() {
+                '${lib.getExe client.wrapper}' status 2>&1 || :
               }
 
               main() {
-                refresh_status
-                <"$status_file" sed 's/^/STATUS:PRE-CONNECT : /g'
-
-                until refresh_status && <"$status_file" grep --quiet 'Connected\|NeedsLogin' ; do
+                # grep for `: Connected` as well, as `Connected` appears other
+                # places even when not connected, and before NeedsLogin
+                until get_status | grep --quiet ': Connected\|NeedsLogin' ; do
                   sleep 1
                 done
-                <"$status_file" sed 's/^/STATUS:POST-CONNECT: /g'
 
-                if <"$status_file" grep --quiet 'NeedsLogin' ; then
-                  echo "Using Setup Key File with key: $(print_short_setup_key)" >&2
-                  '${lib.getExe client.wrapper}' up --setup-key-file="$NB_SETUP_KEY_FILE"
+                if get_status | grep --quiet 'NeedsLogin' ; then
+                  # setup key is in $NB_SETUP_KEY_FILE, and is
+                  # automatically picked up by the cli
+                  '${lib.getExe client.wrapper}' up
                 fi
               }
 
