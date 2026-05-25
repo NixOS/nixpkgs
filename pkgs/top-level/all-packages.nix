@@ -9541,7 +9541,6 @@ with pkgs;
       { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
-  linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
 
   kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
