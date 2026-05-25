@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   ];
   makeFlags = [ "gtk3" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   installPhase = ''
     runHook preInstall
