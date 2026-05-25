@@ -11026,6 +11026,8 @@ self: super: with self; {
 
   nbmake = callPackage ../development/python-modules/nbmake { };
 
+  nbpreview = callPackage ../development/python-modules/nbpreview { };
+
   nbsmoke = callPackage ../development/python-modules/nbsmoke { };
 
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
