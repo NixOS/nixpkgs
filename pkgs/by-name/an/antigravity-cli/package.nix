@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 antigravity $out/bin/antigravity-cli
+    install -Dm755 antigravity $out/bin/agy
 
     runHook postInstall
   '';
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ u3kkasha ];
     platforms = lib.attrNames sources;
-    mainProgram = "antigravity-cli";
+    mainProgram = "agy";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
