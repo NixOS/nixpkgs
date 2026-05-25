@@ -303,6 +303,7 @@ mapAliases {
   lcov_cobertura = throw "'lcov_cobertura' has been renamed to/replaced by 'lcov-cobertura'"; # Converted to throw 2025-10-29
   ldap = throw "'ldap' has been renamed to/replaced by 'python-ldap'"; # Converted to throw 2025-10-29
   ledger_agent = throw "'ledger_agent' has been renamed to/replaced by 'ledger-agent'"; # Converted to throw 2025-10-29
+  libarcus = throw "'libarcus' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   libgpiod = gpiod; # added 2026-03-30
   libpyfoscam = throw "libpyfoscam was removed because Home Assistant switched to libpyfoscamcgi"; # added 2025-07-03
   line_profiler = throw "'line_profiler' has been renamed to/replaced by 'line-profiler'"; # Converted to throw 2025-10-29
@@ -618,6 +619,7 @@ mapAliases {
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
   unittest-data-provider = throw "'unittest-data-provider' has been removed as it was unused, unmaintained, and upstream suggests 'pytest parameterize' instead."; # Added 2026-05-22
   update_checker = throw "'update_checker' has been renamed to/replaced by 'update-checker'"; # Converted to throw 2025-10-29
+  uranium = throw "'uranium' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   vcver = throw "vcver has been removed, since it was an unused leaf package"; # added 2025-08-25
   vega_datasets = throw "'vega_datasets' has been renamed to/replaced by 'vega-datasets'"; # Converted to throw 2025-10-29
   ViennaRNA = throw "'ViennaRNA' has been renamed to/replaced by 'viennarna'"; # Converted to throw 2025-10-29
