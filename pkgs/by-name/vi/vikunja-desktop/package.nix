@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   pnpm_10_29_2,
   pnpmConfigHook,
   nodejs,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
     nodejs
     pnpm_10_29_2
@@ -59,6 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     sed -i "s/\$${version}/${version}/g" package.json
     sed -i "s/\"version\": \".*\"/\"version\": \"${version}\"/" package.json
+    substituteInPlace main.js \
+      --replace-fail "path.join(__dirname, 'build', 'icon.png')" \
+      "path.join(__dirname, 'frontend', 'images', 'icons', 'favicon-32x32.png')"
+    substituteInPlace main.js \
+      --replace-fail $'\t// Rebuild tray menu to reflect the new accelerator\n\tif (tray) {\n\t\tsetupTray()\n\t}' \
+      $'\t// Do not recreate the tray item on Linux; Electron can leave duplicate\n\t// StatusNotifier DBus exports behind, which breaks tray activation.'
     ln -s '${vikunja.passthru.frontend}' frontend
     pnpm run pack -c.electronDist="${electron.dist}" -c.electronVersion="${electron.version}"
 
@@ -96,18 +104,21 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   # The desktop item properties should be kept in sync with data from upstream:
-  desktopItem = makeDesktopItem {
-    name = "vikunja-desktop";
-    exec = executableName;
-    icon = "vikunja";
-    desktopName = "Vikunja Desktop";
-    genericName = "To-Do list app";
-    comment = finalAttrs.meta.description;
-    categories = [
-      "ProjectManagement"
-      "Office"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "vikunja-desktop";
+      exec = "${executableName} %u";
+      icon = executableName;
+      desktopName = "Vikunja Desktop";
+      genericName = "To-Do list app";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "ProjectManagement"
+        "Office"
+      ];
+      mimeTypes = [ "x-scheme-handler/vikunja-desktop" ];
+    })
+  ];
 
   meta = {
     description = "Desktop App of the Vikunja to-do list app";
