@@ -1,33 +1,27 @@
 {
   lib,
   rustPlatform,
-  fetchpatch,
-  fetchFromGitHub,
+  fetchFromCodeberg,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emplace";
-  version = "1.6.0";
+  version = "1.6.0-unstable-2025-03-09";
 
-  src = fetchFromGitHub {
-    owner = "tversteeg";
+  __strucutredAttrs = true;
+
+  src = fetchFromCodeberg {
+    owner = "fosk";
     repo = "emplace";
-    tag = "v${finalAttrs.version}";
-    sha256 = "sha256-FZ+lvf5HRSruUdmkm/Hqz0aRa95SjfIa43WQczRCGNg=";
+    rev = "e1b16ff1621d0a417562b31ef2227130bfa3a155";
+    hash = "sha256-v61mlhBH4Iqhdw39vvxYuRdSyaMT8EiaCn85+t2JyUc=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/tversteeg/emplace/pull/397/commits/fe32ab280234b1fb1a81a22f78bbc8af188b5fa7.patch";
-      hash = "sha256-9O0J9cJlXUGdQ9fqWeW8OIFA48qlYxGl+2yHHt3MaMU=";
-    })
-  ];
-
-  cargoHash = "sha256-nBpM8i4jlxtnaonOx71DWjbLS8tYznJkoR2JI/B25LM=";
+  cargoHash = "sha256-CBtbSMoae2mLCDYzDe4NhVJT7iwtgm8U7OflE5+IsJM=";
 
   meta = {
     description = "Mirror installed software on multiple machines";
-    homepage = "https://github.com/tversteeg/emplace";
+    homepage = "https://codeberg.org/fosk/emplace";
     license = lib.licenses.agpl3Plus;
     mainProgram = "emplace";
   };
