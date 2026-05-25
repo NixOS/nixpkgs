@@ -178,6 +178,8 @@ let
 
         calendar = callPackage ../development/ocaml-modules/calendar { };
 
+        calendars = callPackage ../development/ocaml-modules/calendars { };
+
         callipyge = callPackage ../development/ocaml-modules/callipyge { };
 
         camlgpc = callPackage ../development/ocaml-modules/camlgpc { };
