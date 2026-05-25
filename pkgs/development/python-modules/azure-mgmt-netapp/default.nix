@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-netapp";
-  version = "15.0.0";
+  version = "16.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_netapp";
     inherit version;
-    hash = "sha256-0wp5YQK1BFvnmIHaXPMxs0XiXQ9akjWXGYOh2uUc84k=";
+    hash = "sha256-/tcO1+pIMcB2e+T1f2ClHxLjSzqv0PherTPMgI12/BY=";
   };
 
   build-system = [ setuptools ];
