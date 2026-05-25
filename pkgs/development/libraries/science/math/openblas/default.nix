@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   # Most packages depending on openblas expect integer width to match
   # pointer width, but some expect to use 32-bit integers always
@@ -170,7 +169,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openblas";
-  version = "0.3.32";
+  version = "0.3.33";
 
   outputs = [
     "out"
@@ -181,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D0Wu5Ew72aTqSjj970yOfAwPg1T4Qm6zmpaGlQ/5Q1k=";
+    hash = "sha256-EArf0K2Gs+w8IRD5wkMOQv79e8yMoTgQfa9kzjXKn3Y=";
   };
 
   patches = [
@@ -190,18 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
     # INCLUDEDIR already fixed in upstream HEAD & significant refactor
     # to config gen so not PRing changes
     ./cmake-include-fixes.patch
-    # Fix build on LoongArch (error: '_Float16' is not supported on this target)
-    (fetchpatch {
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/7086a1b075ca317e12cfe79d40a32ad342a30496.patch";
-      hash = "sha256-pA3HK2f2MJr/+h/uale7edIYk/KH194EscYFcsujPXY=";
-    })
-    # This commit led to miscompilation of certain ASIMD extensions code paths.
-    # There was an attempted fix in upstream but this still leaves some scipy tests failing.
-    (fetchpatch {
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/3f6e928d34aca977bd5d4191e6d2c2338a342.patch";
-      revert = true;
-      hash = "sha256-EccgzxgyfAjVbV+HPemGHmzkRe0kpixu3eS3BZWr0g4=";
-    })
   ];
 
   inherit blas64;
