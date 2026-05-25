@@ -8,7 +8,7 @@
   requests-oauthlib,
   click,
   pytestCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -54,8 +54,14 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = {
-    rev-prefix = "google-auth-oauthlib-v";
+  # The ATOM feed loses this update most of the time due to a high update volume,
+  # so query github directly.
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "google-auth-oauthlib-v([0-9.]+)"
+      "--use-github-releases"
+    ];
   };
 
   meta = {
