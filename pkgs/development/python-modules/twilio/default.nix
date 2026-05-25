@@ -2,7 +2,6 @@
   lib,
   aiohttp-retry,
   aiohttp,
-  aiounittest,
   buildPythonPackage,
   cryptography,
   django,
@@ -29,6 +28,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-WLgx8kAHfLf7BHhu4A7b4gI3pB7WODb/CPV1qw7oNXM=";
   };
 
+  # https://github.com/twilio/twilio-python/pull/919
+  patches = [ ./remove-aiounittest.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -41,7 +43,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    aiounittest
     cryptography
     django
     mock
