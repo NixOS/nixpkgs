@@ -217,6 +217,8 @@ stdenv.mkDerivation (finalAttrs: {
     "trivialautovarinit"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
   ];
