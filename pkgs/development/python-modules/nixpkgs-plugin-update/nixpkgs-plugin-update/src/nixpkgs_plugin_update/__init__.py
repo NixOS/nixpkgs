@@ -40,7 +40,7 @@ AUTO_BRANCH = ""
 VERSION_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})$")
 VERSION_TAG_PATTERN = re.compile(r"^(.+?)-unstable-")
 NON_RELEASE_TAG_PREFIXES = ("pre-",)
-RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@-]*)$")
+RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@+-]*)$")
 
 LOG_LEVELS = {
     logging.getLevelName(level): level
