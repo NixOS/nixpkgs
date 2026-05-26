@@ -2745,8 +2745,6 @@ self: super: with self; {
 
   chromadb = callPackage ../development/python-modules/chromadb { zstd-c = pkgs.zstd; };
 
-  chromaprint = callPackage ../development/python-modules/chromaprint { };
-
   ci-info = callPackage ../development/python-modules/ci-info { };
 
   ci-py = callPackage ../development/python-modules/ci-py { };
