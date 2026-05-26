@@ -15,6 +15,7 @@
   flac,
   freetype,
   kdePackages,
+  lame,
   libjack2,
   libogg,
   libopus,
@@ -25,6 +26,8 @@
   mnxdom,
   portaudio,
   portmidi,
+  pugixml,
+  utf8cpp,
 
   # passthru tests
   nixosTests,
@@ -32,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.7.0";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AEYZWkcjqB2pW+oBow2oMX1HQn4kRaTBBxhyxIbG0a4=";
+    hash = "sha256-7oA+cC5/nOEM2zpFgM13zlBIoc3AB//Ovc+dU1c1r6M=";
   };
 
   cmakeFlags = [
@@ -59,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Implies also OPUS
     "OPUSENC"
     "FLAC"
+    "PUGIXML"
+    "LAME"
+    "UTF8CPP"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/musescore/MuseScore/issues/33467
@@ -108,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtnetworkauth
     kdePackages.qtscxml
     kdePackages.qtsvg
+    lame
     libjack2
     libogg
     libopus
@@ -118,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     mnxdom
     portaudio
     portmidi
+    pugixml
+    utf8cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
