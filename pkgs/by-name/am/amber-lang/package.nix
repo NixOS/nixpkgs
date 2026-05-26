@@ -7,6 +7,7 @@
   gnused,
   makeWrapper,
   installShellFiles,
+  versionCheckHook,
   stdenv,
   runCommand,
   amber-lang,
@@ -62,8 +63,13 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/amber completion)
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
     tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
       diff -U3 --color=auto <(amber eval 'echo "Hello, World"') <(echo 'Hello, World')
       touch $out
