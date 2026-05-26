@@ -20,6 +20,7 @@
   buildPackages,
   pkgsCross,
   makeBinaryWrapper,
+  lld,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
@@ -199,7 +200,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/tree-sitter \
-      --set-default TREE_SITTER_WASI_SDK_PATH ${pkgsCross.wasi32.stdenv.cc}
+      --set-default TREE_SITTER_WASI_SDK_PATH ${pkgsCross.wasi32.stdenv.cc} \
+      --prefix PATH : ${lib.makeBinPath [ lld ]}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
