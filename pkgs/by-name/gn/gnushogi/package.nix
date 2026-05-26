@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gnushogi";
     homepage = "https://www.gnu.org/software/gnushogi/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.ciil ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
