@@ -124,6 +124,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
+/nixos/lib/testing      @tfc
 
 # NixOS QEMU virtualisation
 /nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
