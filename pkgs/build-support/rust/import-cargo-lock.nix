@@ -120,9 +120,11 @@ let
       checksum =
         pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
     in
-    assert lib.assertMsg (checksum != null) ''
-      Package ${pkg.name} does not have a checksum.
-    '';
+    assert
+      checksum != null
+      || throw ''
+        Package ${pkg.name} does not have a checksum.
+      '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
       url = "${downloadUrl}/${pkg.name}/${pkg.version}/download";

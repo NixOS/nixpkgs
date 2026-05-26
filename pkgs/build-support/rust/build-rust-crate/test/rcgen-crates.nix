@@ -4669,7 +4669,7 @@ rec {
                   # Not rate-limited, CDN URL.
                   url = "https://static.crates.io/crates/${crateConfig.crateName}/${crateConfig.crateName}-${crateConfig.version}.crate";
                   sha256 =
-                    assert (lib.assertMsg (crateConfig ? sha256) "Missing sha256 for ${name}");
+                    assert crateConfig ? sha256 || throw "Missing sha256 for ${name}";
                     crateConfig.sha256;
                 });
               extraRustcOpts =
