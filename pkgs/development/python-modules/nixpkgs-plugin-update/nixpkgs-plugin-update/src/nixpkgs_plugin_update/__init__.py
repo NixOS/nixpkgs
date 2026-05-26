@@ -25,7 +25,7 @@ from multiprocessing.dummy import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any, Callable
-from urllib.parse import urljoin, urlparse, urlsplit
+from urllib.parse import unquote, urljoin, urlparse, urlsplit
 
 import git
 from packaging.version import InvalidVersion, parse as parse_version
@@ -141,6 +141,16 @@ def first_release_tag(tags: list[str]) -> str | None:
         return tag
 
     return None
+
+
+def tag_from_github_atom_href(href: str) -> str | None:
+    path = urlparse(href).path
+    marker = "/releases/tag/"
+    if marker in path:
+        return unquote(path.split(marker, 1)[1])
+
+    tag_name = Path(path).name
+    return unquote(tag_name) if tag_name else None
 
 
 class Repo:
@@ -359,7 +369,7 @@ class RepoGitHub(Repo):
             if not href:
                 continue
 
-            tag_name = Path(urlparse(href).path).name
+            tag_name = tag_from_github_atom_href(href)
             if tag_name:
                 tags.append(tag_name)
 
