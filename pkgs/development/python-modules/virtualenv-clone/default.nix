@@ -46,6 +46,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
     mainProgram = "virtualenv-clone";
+    changelog = "https://github.com/edwardgeorge/virtualenv-clone/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ skohtv ];
   };
