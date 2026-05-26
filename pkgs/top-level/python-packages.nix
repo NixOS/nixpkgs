@@ -5266,6 +5266,8 @@ self: super: with self; {
 
   executorch = callPackage ../development/python-modules/executorch { };
 
+  exfat-raw = callPackage ../development/python-modules/exfat-raw { };
+
   exif = callPackage ../development/python-modules/exif { };
 
   exifread = callPackage ../development/python-modules/exifread { };

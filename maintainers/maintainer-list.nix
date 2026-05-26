@@ -17393,6 +17393,12 @@
     githubId = 613740;
     name = "Martin Baillie";
   };
+  mbanucu = {
+    email = "michael.banucu@googlemail.com";
+    github = "MBanucu";
+    githubId = 23436598;
+    name = "Michael Banucu";
+  };
   mbe = {
     email = "brandonedens@gmail.com";
     github = "brandonedens";
