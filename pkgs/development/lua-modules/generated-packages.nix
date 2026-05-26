@@ -1816,17 +1816,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lrexlib-pcre2";
-      version = "2.9.2-1";
+      version = "2.9.3-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lrexlib-pcre2-2.9.2-1.rockspec";
-          sha256 = "181878m8gq9wl7c4h9rsq1iig70n9rmyfbj86swz1v4vi7s7ks9p";
+          url = "mirror://luarocks/lrexlib-pcre2-2.9.3-1.rockspec";
+          sha256 = "17y1zhjb5h1bdd4rdaycrnp3xwzm06y1179ga0wpcwvg0ybwmvfn";
         }).outPath;
       src = fetchFromGitHub {
         owner = "rrthomas";
         repo = "lrexlib";
-        rev = "rel-2-9-2";
-        hash = "sha256-DzNDve+xeKb+kAcW+o7GK/RsoDhaDAVAWAhgjISCyZc=";
+        tag = "rel-2-9-3";
+        hash = "sha256-7lybrMvNk2YhXish01PQlMpRVW+qlFj03RO33zmgGp4=";
       };
 
       disabled = luaOlder "5.1";
