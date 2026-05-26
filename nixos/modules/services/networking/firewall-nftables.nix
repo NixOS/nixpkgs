@@ -29,7 +29,9 @@ in
           Additional nftables rules to be appended to the input-allow
           chain.
 
+          ::: {.warning}
           This option only works with the nftables based firewall.
+          :::
         '';
       };
 
@@ -41,7 +43,9 @@ in
           Additional nftables rules to be appended to the forward-allow
           chain.
 
+          ::: {.warning}
           This option only works with the nftables based firewall.
+          :::
         '';
       };
 
@@ -53,7 +57,9 @@ in
           Additional nftables rules to be appended to the rpfilter-allow
           chain.
 
+          ::: {.warning}
           This option only works with the nftables based firewall.
+          :::
         '';
       };
 
@@ -68,7 +74,9 @@ in
         description = ''
           Additional definitions prepended to the `nixos-fw` inet table.
 
+          ::: {.warning}
           This option only works with the nftables based firewall.
+          :::
         '';
       };
     };
