@@ -4482,6 +4482,17 @@
       "knewstuff",
       "libkeduvocdocument"
     ],
+    "kwrite": [
+      "breeze-icons",
+      "extra-cmake-modules",
+      "kdoctools",
+      "ki18n",
+      "kiconthemes",
+      "knewstuff",
+      "ktexteditor",
+      "kuserfeedback",
+      "qtkeychain"
+    ],
     "kwrited": [
       "extra-cmake-modules",
       "kcoreaddons",
