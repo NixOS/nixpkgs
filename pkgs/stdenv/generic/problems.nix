@@ -121,14 +121,16 @@ rec {
           allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
           allowBrokenPredicate =
-            if config ? allowBrokenPredicate then
-              lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
-                "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
-                config.allowBrokenPredicate
-            else
-              x: false;
+            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
+              "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
+              config.allowBrokenPredicate;
         in
-        attrs: attrs.meta.broken or false && !allowBroken && !allowBrokenPredicate attrs;
+        if allowBroken then
+          attrs: false
+        else if config ? allowBrokenPredicate then
+          attrs: attrs.meta.broken or false && !allowBrokenPredicate attrs
+        else
+          attrs: attrs.meta.broken or false;
       value.message = "This package is broken.";
     }
   ];
