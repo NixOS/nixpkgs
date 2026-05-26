@@ -644,6 +644,29 @@ def make_unstable_version(date: datetime, last_tag: str | None) -> str:
     return f"{tag_part}-unstable-{date_str}"
 
 
+def newer_version_tag(first_tag: str | None, second_tag: str | None) -> str | None:
+    if first_tag is None:
+        return second_tag
+    if second_tag is None:
+        return first_tag
+
+    first_version = normalize_release_version(first_tag)
+    second_version = normalize_release_version(second_tag)
+    if first_version is None:
+        return second_tag
+    if second_version is None:
+        return first_tag
+
+    try:
+        return (
+            first_tag
+            if parse_version(first_version) >= parse_version(second_version)
+            else second_tag
+        )
+    except InvalidVersion:
+        return first_tag if first_version >= second_version else second_tag
+
+
 def get_commit_target(
     repo: Repo,
     branch: str,
@@ -683,6 +706,7 @@ def select_plugin_target(
             and current_plugin.tag is None
             and current_plugin.date.date() > release_date.date()
         ):
+            latest_tag = newer_version_tag(current_plugin.last_tag, latest_tag)
             return get_commit_target(plugin_desc.repo, "HEAD", latest_tag)
 
     return release_commit, release_date, release_version, latest_tag
