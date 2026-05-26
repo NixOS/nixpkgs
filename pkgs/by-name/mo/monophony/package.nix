@@ -74,7 +74,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.bsd0;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      quadradical
       aleksana
     ];
     mainProgram = "monophony";
