@@ -49,6 +49,12 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_install_local_wheel" ];
 
+  disabledTestPaths = [
+    # Typing tests fail like:
+    #   Revealed type is "builtins.tuple[builtins.int, ...]"
+    "tests/core/functional-utils/test_type_inference.py"
+  ];
+
   meta = {
     changelog = "https://github.com/ethereum/eth-utils/blob/${src.rev}/docs/release_notes.rst";
     description = "Common utility functions for codebases which interact with ethereum";
