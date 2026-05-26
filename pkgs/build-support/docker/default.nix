@@ -655,9 +655,12 @@ rec {
       checked =
         lib.warnIf (contents != null)
           "in docker image ${name}: The contents parameter is deprecated. Change to copyToRoot if the contents are designed to be copied to the root filesystem, such as when you use `buildEnv` or similar between contents and your packages. Use copyToRoot = buildEnv { ... }; or similar if you intend to add packages to /bin."
-          lib.throwIf
-          (contents != null && copyToRoot != null)
-          "in docker image ${name}: You can not specify both contents and copyToRoot.";
+          (
+            if (contents != null && copyToRoot != null) then
+              throw "in docker image ${name}: You can not specify both contents and copyToRoot."
+            else
+              x: x
+          );
 
       rootContents = if copyToRoot == null then contents else copyToRoot;
 
