@@ -18,6 +18,8 @@
   substitute,
   installShellFiles,
   buildPackages,
+  pkgsCross,
+  makeBinaryWrapper,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
@@ -133,6 +135,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     which
+    makeBinaryWrapper
   ]
   ++ lib.optionals webUISupport [
     emscripten
@@ -170,6 +173,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = lib.optionalString webUISupport ''
     mkdir -p .emscriptencache
     export EM_CACHE=$(pwd)/.emscriptencache
+    export TREE_SITTER_WASI_SDK_PATH=${pkgsCross.wasi32.stdenv.cc}
     cargo run --package xtask -- build-wasm --debug
   '';
 
@@ -191,6 +195,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash "${buildPackages.tree-sitter}"/share/bash-completion/completions/*.bash \
       --zsh "${buildPackages.tree-sitter}"/share/zsh/site-functions/* \
       --fish "${buildPackages.tree-sitter}"/share/fish/*/*
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/tree-sitter \
+      --set-default TREE_SITTER_WASI_SDK_PATH ${pkgsCross.wasi32.stdenv.cc}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
