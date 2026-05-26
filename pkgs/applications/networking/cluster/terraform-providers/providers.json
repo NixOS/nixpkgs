@@ -1292,11 +1292,11 @@
     "vendorHash": "sha256-HjrB7C0KaLJz9NVLfZdq5EZbNbF9lJPxSkQwnWUF978="
   },
   "tailscale_tailscale": {
-    "hash": "sha256-c1Hz8srHNaZJq1kJrSwm8ruoHcebM11yX2wQhWavoWE=",
+    "hash": "sha256-h+VKIhmx3wa+kImQaHeqXYM8oxeH3Ic75bG7FHBKJ1g=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.29.0",
+    "rev": "v0.29.1",
     "spdx": "MIT",
     "vendorHash": "sha256-hl9govsnEXMd4VbOPqoSGLgSnImDA55enYTaDz2wKH0="
   },
