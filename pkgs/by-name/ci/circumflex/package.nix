@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "circumflex";
-  version = "4.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "circumflex";
     tag = finalAttrs.version;
-    hash = "sha256-JJgLRRE0Fh/oaZLZo0hLCfwUHJXBvXXfTNdmQMNUM7A=";
+    hash = "sha256-2eCxk5FynwKt0T9cseesre+dumy5K5uZZAt++R+aTxw=";
   };
 
   vendorHash = "sha256-in6yPiT/SqRaw6hFF2gCmBwGcJ315Qej3HuM7TF5MaE=";
