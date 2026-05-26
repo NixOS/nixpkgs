@@ -1,40 +1,36 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
   bluez,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
+  buildPythonPackage,
   bumble,
   dbus-fast,
+  fetchFromGitHub,
   pyobjc-core,
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
-  typing-extensions,
-
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "2.1.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
     tag = "v${version}";
-    hash = "sha256-zplCwm0LxDTbNvjWK6VYEFe0Azd2ginkoPZpV7Tpv20=";
+    hash = "sha256-I+nN3/KKF0PC9TO8SULXX1oOGUokYa2tlPVfEJ/0mbY=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
     substituteInPlace pyproject.toml \
       --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
   ''
@@ -46,7 +42,7 @@ buildPythonPackage rec {
         '"${lib.getExe' bluez "bluetoothctl"}"'
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
   ]
@@ -57,9 +53,6 @@ buildPythonPackage rec {
     pyobjc-core
     pyobjc-framework-CoreBluetooth
     pyobjc-framework-libdispatch
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
