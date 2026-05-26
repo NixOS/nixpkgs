@@ -109,25 +109,13 @@ rec {
       # at least two files: the executable and the wrapper.
       inner =
         pkgs.runCommandLocal name
-          (
-            {
-              inherit makeWrapperArgs;
-              nativeBuildInputs = [ makeBinaryWrapper ];
-              meta.mainProgram = name;
-            }
-            // (
-              if (types.str.check content) then
-                {
-                  inherit content interpreter;
-                  passAsFile = [ "content" ];
-                }
-              else
-                {
-                  inherit interpreter;
-                  contentPath = content;
-                }
-            )
-          )
+          {
+            inherit makeWrapperArgs content interpreter;
+            nativeBuildInputs = [ makeBinaryWrapper ];
+            __structuredAttrs = true;
+            meta.mainProgram = name;
+          }
+
           ''
             # On darwin a script cannot be used as an interpreter in a shebang but
             # there doesn't seem to be a limit to the size of shebang and multiple
@@ -153,8 +141,17 @@ rec {
             fi
 
             echo "#! $interpreterLine" > $out
-            cat "$contentPath" >> $out
+            ${
+              if types.str.check content then ''printf "%s" "$content" >> $out'' else ''cat "$content" >> $out''
+            }
             ${optionalString (check != "") ''
+              # Set in case $check refers to deprecated $contentPath
+              ${
+                if types.str.check content then
+                  ''contentPath="$TMPDIR/content"; printf "%s" "$content" > "$contentPath"''
+                else
+                  ''contentPath="$content"''
+              }
               ${check} $out
             ''}
             chmod +x $out
@@ -162,9 +159,9 @@ rec {
             # Relocate executable
             # Wrap it if makeWrapperArgs are specified
             mv $out tmp
-              mkdir -p $out/$(dirname "${path}")
-              mv tmp $out/${path}
-            if [ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]; then
+            mkdir -p $out/$(dirname "${path}")
+            mv tmp $out/${path}
+            if [[ -v makeWrapperArgs ]]; then
                 wrapProgram $out/${path} ''${makeWrapperArgs[@]}
             fi
           '';
