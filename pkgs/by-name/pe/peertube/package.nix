@@ -56,6 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WbZFOOvX6WzKB9tszxJl6z+V6cDBH6Y2SjoxF17WvUo=";
   };
 
+  patches = [
+    # https://github.com/Chocobozzz/PeerTube/issues/7622
+    ./sql-injection-fix.patch
+  ];
+
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-T1stKz8+1ghQBJB8kujwcqmygMdoswjFBL/QWAHSis0=";
