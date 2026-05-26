@@ -19,13 +19,13 @@
   nodejs_20,
 }:
 let
-  version = "v1.0.0-beta33";
+  version = "v1.0.0-beta34";
 
   src = fetchFromGitHub {
     owner = "pelican-dev";
     repo = "panel";
     tag = version;
-    sha256 = "sha256-+nP6J+ZdtWtR4bo8DQkvnS5jVbjvxITnWvwkR+izOYY=";
+    sha256 = "sha256-apqExVgE3E+hL59oR5BWCfBPisyJ+5weCktGqmp2PRw=";
   };
 
   composerVendor = stdenv.mkDerivation {
@@ -34,7 +34,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-lGqvAHN5BWa7qv3XKoa/pLtal+Ki1jCemc1QkUwOvS0=";
+    outputHash = "sha256-hCpbdr35cXSKopGGPkZKg5YnPeM2KogC81NS1+J7OjE=";
 
     nativeBuildInputs = [
       php
@@ -59,7 +59,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-NRcl0OpWRg8U0ppIJDhyfqKBwjbai7K9hx2YWoEHAVM=";
+    outputHash = "sha256-rYy7/vUPyslD2ClcHX84DDBf6D2GyAwXCSgnLDsji70=";
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
