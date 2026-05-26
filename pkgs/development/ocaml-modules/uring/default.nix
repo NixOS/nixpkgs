@@ -1,11 +1,12 @@
 {
   lib,
   ocaml,
-  version ? if lib.versionAtLeast ocaml.version "5.1" then "2.7.0" else "0.9",
+  version ? if lib.versionAtLeast ocaml.version "5.1" then "2.14.0" else "0.9",
+  fetchurl,
   buildDunePackage,
   cstruct,
+  pkg-config,
   dune-configurator,
-  fetchurl,
   fmt,
   optint,
   mdx,
@@ -18,9 +19,9 @@ let
         minimalOCamlVersion = "4.12";
         hash = "sha256-eXWIxfL9UsKKf4sanBjKfr6Od4fPDctVnkU+wjIXW0M=";
       };
-      "2.7.0" = {
+      "2.14.0" = {
         minimalOCamlVersion = "5.1.0";
-        hash = "sha256-mePi6/TXtxgtLYLyHRAdnRcgeldCVgUaPY+MZXSzC6U=";
+        hash = "sha256-U6B3/ExryC7WLYj1iIUHoXZQluFE56Rf3dwOpux/qIE=";
       };
     }
     .${version};
@@ -35,14 +36,18 @@ buildDunePackage rec {
     inherit (param) hash;
   };
 
-  propagatedBuildInputs = [
-    cstruct
-    fmt
-    optint
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   buildInputs = [
     dune-configurator
+  ];
+
+  propagatedBuildInputs = [
+    cstruct
+    fmt
+    optint
   ];
 
   checkInputs = [
