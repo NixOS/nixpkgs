@@ -140,7 +140,7 @@
   # Debug interactively with:
   # - nix run .#nixosTests.pdfding.basic.driverInteractive -L
   # - start_all() / run_tests()
-  interactive.sshBackdoor.enable = true; # ssh -o User=root vsock%3
+  interactive.sshBackdoor.enable = true;
   interactive.nodes.machine =
     { config, ... }:
     let
