@@ -127,8 +127,18 @@ def select_latest_tag(
 
 def first_release_tag(tags: list[str]) -> str | None:
     for tag in tags:
-        if normalize_release_version(tag) is not None:
-            return tag
+        normalized_tag = normalize_release_version(tag)
+        if normalized_tag is None:
+            continue
+
+        try:
+            version = parse_version(normalized_tag)
+            if version.is_prerelease or version.is_devrelease:
+                continue
+        except InvalidVersion:
+            pass
+
+        return tag
 
     return None
 
