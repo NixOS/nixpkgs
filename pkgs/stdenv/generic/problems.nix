@@ -128,9 +128,9 @@ rec {
         if allowBroken then
           attrs: false
         else if config ? allowBrokenPredicate then
-          attrs: attrs.meta.broken or false && !allowBrokenPredicate attrs
+          attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
         else
-          attrs: attrs.meta.broken or false;
+          attrs: attrs ? meta.broken && attrs.meta.broken;
       value.message = "This package is broken.";
     }
   ];
