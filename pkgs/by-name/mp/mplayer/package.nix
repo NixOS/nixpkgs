@@ -10,7 +10,7 @@
   ffmpeg_7,
   aalibSupport ? true,
   aalib,
-  fontconfigSupport ? true,
+  fontconfigSupport ? config.mplayer.fontconfigSupport or true,
   fontconfig,
   freefont_ttf,
   fribidiSupport ? true,
@@ -33,7 +33,7 @@
   cddaSupport ? !stdenv.hostPlatform.isDarwin,
   cdparanoia,
   dvdnavSupport ? !stdenv.hostPlatform.isDarwin,
-  libdvdnav,
+  libdvdnav_4_2_1,
   dvdreadSupport ? true,
   libdvdread,
   bluraySupport ? true,
@@ -115,6 +115,8 @@ let
       null;
 
   crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
+
+  libdvdnav = libdvdnav_4_2_1;
 
 in
 
