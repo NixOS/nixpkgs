@@ -21,7 +21,6 @@ let
     isString
     substring
     sort
-    throwIf
     toDerivation
     toList
     types
@@ -660,10 +659,10 @@ rec {
       inStore ? null,
       absolute ? null,
     }:
-    throwIf (inStore != null && absolute != null && inStore && !absolute)
-      "In pathWith, inStore means the path must be absolute"
-      mkOptionType
-      {
+    if inStore != null && absolute != null && inStore && !absolute then
+      throw "In pathWith, inStore means the path must be absolute"
+    else
+      mkOptionType {
         name = "path";
         description = (
           (if absolute == null then "" else (if absolute then "absolute " else "relative "))
@@ -1079,8 +1078,8 @@ rec {
         builtins.addErrorContext
           "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}"
           (
-            throwIf (opt._type or null != "option")
-              "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
+            if opt._type or null != "option" then
+              throw "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
                 if opt ? _type then
                   if opt._type == "option-type" then
                     "was a bare type, not wrapped in mkOption."
@@ -1089,23 +1088,24 @@ rec {
                 else
                   "was not."
               }"
+            else
               opt
-            // {
-              declarations =
-                opt.declarations or (
-                  let
-                    pos = builtins.unsafeGetAttrPos n tags_;
-                  in
-                  if pos == null then [ ] else [ pos.file ]
-                );
-              declarationPositions =
-                opt.declarationPositions or (
-                  let
-                    pos = builtins.unsafeGetAttrPos n tags_;
-                  in
-                  if pos == null then [ ] else [ pos ]
-                );
-            }
+              // {
+                declarations =
+                  opt.declarations or (
+                    let
+                      pos = builtins.unsafeGetAttrPos n tags_;
+                    in
+                    if pos == null then [ ] else [ pos.file ]
+                  );
+                declarationPositions =
+                  opt.declarationPositions or (
+                    let
+                      pos = builtins.unsafeGetAttrPos n tags_;
+                    in
+                    if pos == null then [ ] else [ pos ]
+                  );
+              }
           )
       ) tags_;
       choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
