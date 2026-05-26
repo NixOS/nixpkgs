@@ -16,7 +16,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bleak";
   version = "3.0.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I+nN3/KKF0PC9TO8SULXX1oOGUokYa2tlPVfEJ/0mbY=";
   };
 
@@ -67,9 +67,9 @@ buildPythonPackage rec {
   meta = {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
-    changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/hbldh/bleak/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
-}
+})
