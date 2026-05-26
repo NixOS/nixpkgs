@@ -26,13 +26,13 @@ let
     }
     .${version};
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "uring";
   inherit version;
   inherit (param) minimalOCamlVersion;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/ocaml-uring/releases/download/v${version}/uring-${version}.tbz";
+    url = "https://github.com/ocaml-multicore/ocaml-uring/releases/download/v${finalAttrs.version}/uring-${version}.tbz";
     inherit (param) hash;
   };
 
@@ -66,7 +66,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocaml-multicore/ocaml-uring";
-    changelog = "https://raw.githubusercontent.com/ocaml-multicore/ocaml-uring/v${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/ocaml-multicore/ocaml-uring/v${finalAttrs.version}/CHANGES.md";
     description = "Bindings to io_uring for OCaml";
     license = with lib.licenses; [
       isc
@@ -75,4 +75,4 @@ buildDunePackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})
