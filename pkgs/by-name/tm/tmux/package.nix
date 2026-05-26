@@ -18,7 +18,10 @@
   libutempter,
   withSixel ? true,
   versionCheckHook,
-  nix-update-script,
+  common-updater-scripts,
+  writeShellScript,
+  curl,
+  jq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -99,7 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
         ''
     );
-    updateScript = nix-update-script { };
+    updateScript = writeShellScript "update-tmux" ''
+      latest=$(${lib.getExe curl} --silent ''${GITHUB_TOKEN:+--header "Authorization: Bearer $GITHUB_TOKEN"} https://api.github.com/repos/tmux/tmux/releases/latest | ${lib.getExe jq} -r .tag_name)
+      ${lib.getExe' common-updater-scripts "update-source-version"} tmux "$latest"
+    '';
   };
 
   meta = {
