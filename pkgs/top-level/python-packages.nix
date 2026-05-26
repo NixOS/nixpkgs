@@ -9518,8 +9518,6 @@ self: super: with self; {
 
   m2crypto = callPackage ../development/python-modules/m2crypto { };
 
-  m2r = callPackage ../development/python-modules/m2r { };
-
   m3u8 = callPackage ../development/python-modules/m3u8 { };
 
   mac-alias = callPackage ../development/python-modules/mac-alias { };

@@ -2640,8 +2640,6 @@ with pkgs;
 
   maubot = with python3Packages; toPythonApplication maubot;
 
-  m2r = with python3Packages; toPythonApplication m2r;
-
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
   mdcat = callPackage ../tools/text/mdcat {

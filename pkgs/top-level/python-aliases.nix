@@ -328,6 +328,7 @@ mapAliases {
   lsprotocol_2025 = lsprotocol; # added 2026-01-05
   lxml-stubs = throw "'lxml-stubs' has been removed as it was broken and unmaintained upstream. Consider using 'types-lxml' instead."; # Converted to throw 2025-11-07
   lzstring = throw "'lzstring' has been removed as it was unmaintained upstream"; # Added 2025-11-22
+  m2r = throw "'m2r' has been removed because it was marked broken for a long time."; # Added 2026-05-27
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
