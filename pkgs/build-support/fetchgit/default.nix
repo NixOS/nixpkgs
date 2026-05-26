@@ -177,7 +177,8 @@ lib.makeOverridable (
           sparseCheckoutText =
             # Changed to throw on 2023-06-04
             assert (
-              lib.assertMsg (lib.isList finalAttrs.sparseCheckout) "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
+              lib.isList finalAttrs.sparseCheckout
+              || throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
             );
             assert finalAttrs.nonConeMode -> (finalAttrs.sparseCheckout != [ ]);
             # git-sparse-checkout(1) says:
