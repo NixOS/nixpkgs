@@ -478,27 +478,25 @@ rec {
       ) automaticProblems;
     in
     attrs:
-    let
-      pname = getName attrs;
-    in
     if
       # Fast path for when there's no problem that needs to be handled
       all (
-        problem: problem.condition attrs -> problem.handler pname == "ignore"
+        problem: problem.condition attrs -> problem.handler (getName attrs) == "ignore"
       ) automaticProblemsConfigCache
       && (
         # No manual problems
         !attrs ? meta.problems
         # Or all manual problems are ignored
-        || all (name: handlerForProblem (attrs.meta.problems.${name}.kind or name) name pname == "ignore") (
-          attrNames attrs.meta.problems
-        )
+        || all (
+          name: handlerForProblem (attrs.meta.problems.${name}.kind or name) name (getName attrs) == "ignore"
+        ) (attrNames attrs.meta.problems)
       )
     then
       null
     else
       # Slow path, only here we actually figure out which problems we need to handle
       let
+        pname = getName attrs;
         problems = attrs.meta.problems or { } // genAutomaticProblems config attrs;
         problemsToHandle = filter (v: v.handler != "ignore") (
           mapAttrsToList (name: problem: rec {
