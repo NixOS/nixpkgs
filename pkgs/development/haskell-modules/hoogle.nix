@@ -54,8 +54,6 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
   # thus probably intend to substitute it.
   allowSubstitutes = true;
 
-  inherit docPackages;
-
   passAsFile = [ "buildCommand" ];
 
   buildCommand = ''
@@ -127,6 +125,8 @@ buildPackages.stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     isHaskellLibrary = false; # for the filter in ./with-packages-wrapper.nix
+
+    inherit docPackages;
 
     # The path to the Hoogle database.
     database = "${finalAttrs.finalPackage}/${databasePath}";
