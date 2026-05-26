@@ -21,7 +21,7 @@ defaults:
 jobs:
   backport:
     name: Backport Pull Request
-    if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
+    if: vars.NIXPKGS_CI_CLIENT_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
     runs-on: ubuntu-slim
     timeout-minutes: 3
     steps:
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
         with:
-          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          client-id: ${{ vars.NIXPKGS_CI_CLIENT_ID }}
           private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
