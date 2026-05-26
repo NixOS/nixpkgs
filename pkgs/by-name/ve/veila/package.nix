@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veila";
-  version = "0.4.0";
+  version = "0.4.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "naurissteins";
     repo = "Veila";
     tag = finalAttrs.version;
-    hash = "sha256-SrYG5rvywiPEfIjTbZfXOlXqnmdn0fZcOR16fxHJ0Ns=";
+    hash = "sha256-wcPYD+jIWegyyEei0C9VH1Ocbve68zLE5LxHDYpkOEY=";
   };
 
-  cargoHash = "sha256-jcZ33dJwvK94YqMFpXb9QXURjtOGrY4QdZh0I9LTwUU=";
+  cargoHash = "sha256-wkWAHntoD3/AyAiR0GgxAhnj4sYCbU9PRB4ppw/yGYk=";
 
   nativeBuildInputs = [
     makeWrapper
