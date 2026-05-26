@@ -1,23 +1,24 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  aiohttp,
   mashumaro,
-  requests,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "9.1.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
     tag = "v${version}";
-    hash = "sha256-xZHlI62QoKkR4sZf0GUEzUGMpG2urHooPs8GvVyqpIQ=";
+    hash = "sha256-LT6pTtXCUMhk6uV9Y2inlAuP8osWUwsWOH7/yOW2OXI=";
   };
 
   build-system = [ setuptools ];
@@ -25,10 +26,16 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     mashumaro
-    requests
   ];
 
-  doCheck = false; # no tests
+  pythonRelaxDeps = [
+    "mashumaro"
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "libopensonic"
