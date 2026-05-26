@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jrmoulton";
     repo = "tmux-sessionizer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tJ8aKajSWc62BZ8hb3u+OQtlu04z8Ala5nAK5H4Byp4=";
+    hash = "sha256-pRf381gxyf4leoEfSZKb5foVYYdVEsxuaTU27mbd46o=";
   };
 
   cargoHash = "sha256-AJqlzLr6MDFfPssSFMxslxFFuPVxoQGcuG7sZeu+8pg=";
