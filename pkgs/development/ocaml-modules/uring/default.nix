@@ -31,7 +31,7 @@ buildDunePackage rec {
   inherit (param) minimalOCamlVersion;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/ocaml-multicore/ocaml-uring/releases/download/v${version}/uring-${version}.tbz";
     inherit (param) hash;
   };
 
@@ -60,8 +60,8 @@ buildDunePackage rec {
   dontStrip = true;
 
   meta = {
-    homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";
-    changelog = "https://github.com/ocaml-multicore/ocaml-${pname}/raw/v${version}/CHANGES.md";
+    homepage = "https://github.com/ocaml-multicore/ocaml-uring";
+    changelog = "https://raw.githubusercontent.com/ocaml-multicore/ocaml-uring/v${version}/CHANGES.md";
     description = "Bindings to io_uring for OCaml";
     license = with lib.licenses; [
       isc
