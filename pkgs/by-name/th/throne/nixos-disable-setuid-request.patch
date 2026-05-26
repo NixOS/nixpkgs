@@ -1,42 +1,42 @@
 diff --git a/src/global/Configs.cpp b/src/global/Configs.cpp
-index e7bec9c..f0dfe53 100644
+index 37b69be..2d458f3 100644
 --- a/src/global/Configs.cpp
 +++ b/src/global/Configs.cpp
-@@ -404,6 +404,12 @@ namespace Configs {
-     // System Utils
+@@ -45,6 +45,12 @@ namespace Configs {
+     }
  
      QString FindCoreRealPath() {
 +        // find in PATH first
-+        QString path_for_nixos = QStandardPaths::findExecutable("throne-core");
++        QString path_for_nixos = QStandardPaths::findExecutable("ThroneCore");
 +        if (!path_for_nixos.isEmpty()) {
 +            return path_for_nixos;
 +        }
 +
-         auto fn = QApplication::applicationDirPath() + "/Core";
+         auto fn = QApplication::applicationDirPath() + "/ThroneCore";
  #ifdef Q_OS_WIN
          fn += ".exe";
 diff --git a/src/ui/mainwindow.cpp b/src/ui/mainwindow.cpp
-index d31c311..ce4c357 100644
+index 9acfee4..c0c313a 100644
 --- a/src/ui/mainwindow.cpp
 +++ b/src/ui/mainwindow.cpp
-@@ -151,8 +151,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
-     Configs::dataStore->core_port = MkPort();
-     if (Configs::dataStore->core_port <= 0) Configs::dataStore->core_port = 19810;
+@@ -163,8 +163,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
+     Configs::dataManager->settingsRepo->core_port = MkPort();
+     if (Configs::dataManager->settingsRepo->core_port <= 0) Configs::dataManager->settingsRepo->core_port = 19810;
  
 -    auto core_path = QApplication::applicationDirPath() + "/";
--    core_path += "Core";
+-    core_path += "ThroneCore";
 +    auto core_path = Configs::FindCoreRealPath();
  
      QStringList args;
      args.push_back("-port");
-@@ -1045,6 +1044,15 @@ bool MainWindow::get_elevated_permissions(int reason) {
+@@ -1296,6 +1295,15 @@ bool MainWindow::get_elevated_permissions(int reason) {
          return true;
      }
      if (Configs::IsAdmin()) return true;
 +    QMessageBox::critical(
 +        GetMessageBoxParent(),
 +        tr("Unable to elevate privileges when installed with Nix"),
-+        tr("Due to the read-only property of Nix store, we cannot set suid for throne-core. If you are using NixOS, please install Throne via `programs.throne.enable` and then set the `programs.throne.tunMode.enable` option to elevate privileges."),
++        tr("Due to the read-only property of the Nix store, we cannot set suid for ThroneCore. If you are using NixOS, please install Throne via `programs.throne.enable` and then set the `programs.throne.tunMode.enable` option to elevate privileges."),
 +        QMessageBox::Ok
 +    );
 +    return false;

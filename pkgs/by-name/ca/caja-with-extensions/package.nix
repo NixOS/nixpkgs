@@ -4,14 +4,22 @@
   glib,
   wrapGAppsHook3,
   lndir,
+  atril,
   caja,
   caja-extensions,
+  engrampa,
   extensions ? [ ],
   useDefaultExtensions ? true,
 }:
 
 let
-  selectedExtensions = extensions ++ (lib.optionals useDefaultExtensions [ caja-extensions ]);
+  selectedExtensions =
+    extensions
+    ++ (lib.optionals useDefaultExtensions [
+      atril
+      caja-extensions
+      engrampa
+    ]);
 in
 stdenv.mkDerivation {
   pname = "${caja.pname}-with-extensions";
