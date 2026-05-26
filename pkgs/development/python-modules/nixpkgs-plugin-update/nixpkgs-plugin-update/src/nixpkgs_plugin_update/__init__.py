@@ -237,7 +237,7 @@ class Repo:
         loaded = json.loads(data)
         return loaded
 
-    def prefetch(self, ref: str) -> str:
+    def prefetch(self, ref: str, has_submodules: bool | None = None) -> str:
         log.info("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
@@ -459,8 +459,11 @@ class RepoGitHub(Repo):
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self._branch)
             self.redirect = new_repo
 
-    def prefetch(self, commit: str) -> str:
-        if self.has_submodules():
+    def prefetch(self, commit: str, has_submodules: bool | None = None) -> str:
+        if has_submodules is None:
+            has_submodules = self.has_submodules()
+
+        if has_submodules:
             sha256 = super().prefetch(commit)
         else:
             sha256 = self.prefetch_github(commit)
@@ -1208,9 +1211,9 @@ def prefetch_plugin(
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
     sha256 = (
-        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}")
+        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}", has_submodules=has_submodules)
         if source_tag
-        else p.repo.prefetch(commit)
+        else p.repo.prefetch(commit, has_submodules=has_submodules)
     )
     license_spdx_id = (
         current_plugin.license
