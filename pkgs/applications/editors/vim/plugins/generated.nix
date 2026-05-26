@@ -5880,6 +5880,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  filemention-nvim = buildVimPlugin {
+    pname = "filemention.nvim";
+    version = "0-unstable-2026-05-21";
+    src = fetchFromGitHub {
+      owner = "not-manu";
+      repo = "filemention.nvim";
+      rev = "6085f2c226834081638e1e8af1ced32c78eaf8b3";
+      hash = "sha256-igcHSzEQPyek4wsNZg+iZluBSSrRIImUxl2+MGmiLKU=";
+    };
+    meta.homepage = "https://github.com/not-manu/filemention.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   fine-cmdline-nvim = buildVimPlugin {
     pname = "fine-cmdline.nvim";
     version = "0-unstable-2026-03-19";
