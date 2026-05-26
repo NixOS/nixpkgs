@@ -532,6 +532,21 @@ in
 
     extraMeta = {
       license = lib.licenses.asl20;
+      knownVulnerabilities = [
+        "CVE-2023-4807 - Low: POLY1305 MAC implementation corrupts XMM registers on Windows"
+        "CVE-2023-5363 - Moderate: Incorrect cipher key & IV length processing"
+        "CVE-2023-5678 - Low: Excessive time spent in DH check / generation with large Q parameter value"
+        "CVE-2023-6129 - Low: POLY1305 MAC implementation corrupts vector registers on PowerPC"
+        "CVE-2023-6237 - Low: Excessive time spent checking invalid RSA public keys"
+        "CVE-2024-0727 - Low: PKCS12 Decoding crashes"
+        "CVE-2024-2511 - Low: Unbounded memory growth with session handling in TLSv1.3"
+        "CVE-2024-4603 - Low: Excessive time spent checking DSA keys and parameters"
+        "CVE-2024-4741 - Low: Use After Free with SSL_free_buffers"
+        "CVE-2024-5535 - Low: SSL_select_next_proto buffer overread"
+        "CVE-2024-6119 - Moderate: Possible denial of service in X.509 name checks"
+        "CVE-2024-9143 - Low: Low-level invalid GF(2^m) parameters lead to OOB memory access"
+        "CVE-2024-13176 - Low: Timing side-channel in ECDSA signature computation"
+      ];
     };
   };
 
