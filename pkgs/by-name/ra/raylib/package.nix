@@ -63,17 +63,17 @@ lib.checkListOfEnum "raylib: platform"
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
       cmakeFlags = [
-        "-DCUSTOMIZE_BUILD=ON"
+        (lib.cmakeBool "CUSTOMIZE_BUILD" true)
         # The above also enables `SUPPORT_CUSTOM_FRAME_CONTROL` (otherwise off)
         # That skips `SwapScreenBuffer` and `PollInputEvents` from `EndDrawing`
         # In turn, normal `raylib-games` demos start but never present a window
         # Keep the default game loop behavior unless explicitly requested
         (lib.cmakeBool "SUPPORT_CUSTOM_FRAME_CONTROL" customFrameControlSupport)
-        "-DPLATFORM=${platform}"
+        (lib.cmakeFeature "PLATFORM" platform)
       ]
-      ++ optional (platform == "Desktop") "-DUSE_EXTERNAL_GLFW=ON"
-      ++ optional includeEverything "-DINCLUDE_EVERYTHING=ON"
-      ++ optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+      ++ optional (platform == "Desktop") (lib.cmakeFeature "USE_EXTERNAL_GLFW" "ON")
+      ++ optional includeEverything (lib.cmakeBool "INCLUDE_EVERYTHING" true)
+      ++ optional sharedLib (lib.cmakeBool "BUILD_SHARED_LIBS" true);
 
       appendRunpaths = optional stdenv.hostPlatform.isLinux (
         lib.makeLibraryPath (optional alsaSupport alsa-lib ++ optional pulseSupport libpulseaudio)
