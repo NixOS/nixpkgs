@@ -8,14 +8,14 @@
 
 let
   inherit (lib)
+    concatLists
     concatMapAttrs
+    mapAttrsToList
     mkOption
     types
-    concatLists
-    mapAttrsToList
     ;
 
-  portable-lib = import ../../../../../lib/services/lib.nix { inherit lib; };
+  portable-lib = import ../../../../../../lib/services/lib.nix { inherit lib; };
 
   dash =
     before: after:
@@ -63,7 +63,7 @@ let
   modularServiceConfiguration = portable-lib.configure {
     serviceManagerPkgs = pkgs;
     extraRootModules = [
-      ./service.nix
+      ../service.nix
       ./config-data-path.nix
     ];
     extraRootSpecialArgs = {
