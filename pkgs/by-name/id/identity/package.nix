@@ -8,6 +8,7 @@
   desktop-file-utils,
   fetchFromGitLab,
   glib,
+  glycin-loaders,
   gst_all_1,
   gtk4,
   lcms,
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dav1d
+    glycin-loaders
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
