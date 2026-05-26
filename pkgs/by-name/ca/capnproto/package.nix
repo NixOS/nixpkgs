@@ -1,5 +1,4 @@
 {
-  binutils,
   lib,
   libucontext,
   pkg-config,
@@ -21,7 +20,7 @@ let
     dontUnpack = true;
     installPhase = ''
       mkdir -p "$out"/lib
-      "${binutils}"/bin/ar r "$out"/lib/libgcc_eh.a
+      ${clangStdenv.cc.targetPrefix}ar r "$out"/lib/libgcc_eh.a
     '';
   };
 in
