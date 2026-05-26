@@ -765,7 +765,9 @@ let
     ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = with pkgs; [ zlib.dev ];
+    Rhdf5lib = with pkgs; [
+      cmake
+    ];
     Rhpc = with pkgs; [
       zlib
       bzip2.dev
@@ -1251,6 +1253,10 @@ let
     cartogramR = with pkgs; [
       fftw.dev
       pkg-config
+    ];
+    Rhdf5lib = with pkgs; [
+      curl
+      zlib.dev
     ];
     GRAB = [ pkgs.zlib.dev ];
     jqr = [ pkgs.jq.out ];
@@ -3109,7 +3115,13 @@ let
 
     Rhdf5lib =
       let
-        hdf5 = pkgs.hdf5_1_10;
+        hdf5 = pkgs.hdf5.overrideAttrs (attrs: {
+          cmakeFlags = attrs.cmakeFlags ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
+          buildInputs = attrs.buildInputs ++ [ pkgs.curl.dev ];
+          postInstall = attrs.postInstall or "" + ''
+            cp src/libhdf5.settings $dev/lib
+          '';
+        });
       in
       old.Rhdf5lib.overrideAttrs (attrs: {
         propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
