@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "greynoise";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GreyNoise-Intelligence";
     repo = "pygreynoise";
     tag = "v${version}";
-    hash = "sha256-CP+Fx3Gu6pQWnX/WjJ+qq7TK9onatVHp0ghu33WU7X4=";
+    hash = "sha256-ClNKDMfMKcOYOasUqmQoOtKFsAi5wZw/MLTkq5YzpJk=";
   };
 
   patches = lib.optionals (!withRepl) [
