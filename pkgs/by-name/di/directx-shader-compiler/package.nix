@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   python3,
@@ -26,6 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FzfXxfhAyJw7rouWJEyeVdikG5TBM81yC+9iRg5tK3c=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/microsoft/DirectXShaderCompiler/commit/bacbfaa6600f602df5cc33632c2b08d1404c0319.diff";
+      hash = "sha256-ayNmToqXifxoe/Yj4PlGe9RoKlXKn9zXELAkfP5HY/E=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
