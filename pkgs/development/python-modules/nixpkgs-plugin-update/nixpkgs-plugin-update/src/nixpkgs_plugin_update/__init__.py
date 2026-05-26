@@ -974,9 +974,7 @@ class Editor:
                 cache.store()
 
             print(f"{len(results)} of {len(current_plugins)} were checked")
-            # Do only partial update of out file
-            if len(results) != len(current_plugins):
-                results = self.merge_results(current_plugins, results)
+            results = self.merge_results(current_plugins, results)
             plugins, redirects = check_results(results)
 
             # Track version changes for commit message generation
@@ -1016,9 +1014,11 @@ class Editor:
             if isinstance(plugin, Plugin) and hasattr(plugin, "normalized_name"):
                 result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
             elif isinstance(plugin, Exception):
-                # For exceptions, we can't determine the normalized_name
-                # Just log the error and continue
-                log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
+                log.warning(
+                    "Keeping current plugin data after error fetching %s: %r",
+                    plugin_desc.name,
+                    plugin,
+                )
             else:
                 # For unexpected types, log the issue
                 log.error(
