@@ -34,12 +34,13 @@ buildNpmPackage (finalAttrs: {
   };
 
   postBuild = ''
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=electron-dist \
+      -c.electronDist="$electron_dist" \
       -c.electronVersion=${electron.version} \
       --config electron-builder.config.js
   '';
