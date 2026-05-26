@@ -9,17 +9,18 @@
   copyDesktopItems,
   dart-sass,
   makeWrapper,
-  nodejs-slim_20,
+  nodejs-slim_22,
   pkg-config,
   yarnConfigHook,
 
-  electron,
+  electron_39,
   libsecret,
   sqlite,
 }:
 
 let
-  nodejs = nodejs-slim_20;
+  nodejs = nodejs-slim_22;
+  electron = electron_39;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
