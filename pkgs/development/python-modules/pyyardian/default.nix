@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyyardian";
-  version = "1.2.0";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h3l1o5";
     repo = "pyyardian";
     tag = version;
-    hash = "sha256-JBb62pFDuVcXIGRc6UOp5/ciUtbGm4XnKZjt1icF/jQ=";
+    hash = "sha256-LOHE8vGrT25sgjhcNarMOi0hzpPpHjVIeVq7CezYicY=";
   };
 
   nativeBuildInputs = [
