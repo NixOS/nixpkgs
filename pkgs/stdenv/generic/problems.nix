@@ -437,20 +437,21 @@ rec {
           kind: name: pname:
           switch
         else
-          kind: name: pname:
+          kind:
           let
-            switch' = switch.kindSpecific.${kind} or switch.kindFallback;
+            kindSwitch = switch.kindSpecific.${kind} or switch.kindFallback;
           in
-          if isString switch' then
-            switch'
+          if isString kindSwitch then
+            name: pname: kindSwitch
           else
+            name:
             let
-              switch'' = switch'.nameSpecific.${name} or switch'.nameFallback;
+              nameSwitch = kindSwitch.nameSpecific.${name} or kindSwitch.nameFallback;
             in
-            if isString switch'' then
-              switch''
+            if isString nameSwitch then
+              pname: nameSwitch
             else
-              switch''.packageSpecific.${pname} or switch''.packageFallback;
+              pname: nameSwitch.packageSpecific.${pname} or nameSwitch.packageFallback;
     };
 
   genCheckProblems =
