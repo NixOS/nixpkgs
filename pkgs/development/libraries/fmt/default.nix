@@ -81,11 +81,6 @@ in
     ];
   };
 
-  fmt_10 = generic {
-    version = "10.2.1";
-    hash = "sha256-pEltGLAHLZ3xypD/Ur4dWPWJ9BGVXwqQyKcDWVmC3co=";
-  };
-
   fmt_11 = generic {
     version = "11.2.0";
     hash = "sha256-sAlU5L/olxQUYcv8euVYWTTB8TrVeQgXLHtXy8IMEnU=";

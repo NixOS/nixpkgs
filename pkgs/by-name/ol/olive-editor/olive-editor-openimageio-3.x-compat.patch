@@ -1,0 +1,42 @@
+Fix build with OpenImageIO 3.x and Qt 6.10.
+
+In OIIO 3.x, read_image() now requires explicit subimage, miplevel,
+chbegin, and chend parameters before the pixel format argument.
+
+In Qt 6.10, QString::arg() no longer accepts scoped enum values
+implicitly; an explicit cast to int is required.
+
+diff --git a/app/codec/oiio/oiiodecoder.cpp b/app/codec/oiio/oiiodecoder.cpp
+--- a/app/codec/oiio/oiiodecoder.cpp
++++ b/app/codec/oiio/oiiodecoder.cpp
+@@ -134,10 +134,14 @@ TexturePtr OIIODecoder::RetrieveVideoInternal(const RetrieveVideoParams &p)
+
+     if (p.divider == 1) {
+       // Just upload straight to the buffer
+-      image_->read_image(oiio_pix_fmt_, buffer_.data(), OIIO::AutoStride, buffer_.linesize_bytes());
++      image_->read_image(image_->current_subimage(), image_->current_miplevel(),
++                         0, image_->spec().nchannels, oiio_pix_fmt_,
++                         buffer_.data(), OIIO::AutoStride, buffer_.linesize_bytes(), OIIO::AutoStride);
+     } else {
+       OIIO::ImageBuf buf(image_->spec());
+-      image_->read_image(image_->spec().format, buf.localpixels(), buf.pixel_stride(), buf.scanline_stride(), buf.z_stride());
++      image_->read_image(image_->current_subimage(), image_->current_miplevel(),
++                         0, image_->spec().nchannels, image_->spec().format,
++                         buf.localpixels(), buf.pixel_stride(), buf.scanline_stride(), buf.z_stride());
+
+       // Roughly downsample image for divider (for some reason OIIO::ImageBufAlgo::resample failed here)
+       int px_sz = vp.GetBytesPerPixel();
+diff --git a/app/render/videoparams.cpp b/app/render/videoparams.cpp
+--- a/app/render/videoparams.cpp
++++ b/app/render/videoparams.cpp
+@@ -229,2 +229,2 @@
+-  return QCoreApplication::translate("VideoParams", "Unknown (0x%1)").arg(format, 0, 16);
++  return QCoreApplication::translate("VideoParams", "Unknown (0x%1)").arg(static_cast<int>(format), 0, 16);
+ }
+diff --git a/app/ui/humanstrings.cpp b/app/ui/humanstrings.cpp
+--- a/app/ui/humanstrings.cpp
++++ b/app/ui/humanstrings.cpp
+@@ -63,2 +63,2 @@
+-  return QCoreApplication::translate("AudioParams", "Unknown (0x%1)").arg(f, 1, 16);
++  return QCoreApplication::translate("AudioParams", "Unknown (0x%1)").arg(static_cast<int>(f), 1, 16);
+ }

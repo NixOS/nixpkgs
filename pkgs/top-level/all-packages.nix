@@ -6141,7 +6141,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/fmt { })
     fmt_9
-    fmt_10
     fmt_11
     fmt_12
     ;
