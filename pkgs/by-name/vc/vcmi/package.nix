@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-uzdnRKF0xb2B2r6kTzk6OEDGBdOwcu9eGYsvv4ALCF0=";
+    hash = "sha256-iV1twkoOJyUsUkq17mdTYk1YvfmUtLHdtR3H77BoNJk=";
   };
 
   nativeBuildInputs = [
