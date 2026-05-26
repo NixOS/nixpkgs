@@ -100,6 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r dist node_modules package.json renovate-schema.json $out/lib/node_modules/renovate
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/renovate" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          nodejs_24
+          pnpm_10
+        ]
+      } \
       --add-flags "$out/lib/node_modules/renovate/dist/renovate.js"
     makeWrapper "${lib.getExe nodejs}" "$out/bin/renovate-config-validator" \
       --add-flags "$out/lib/node_modules/renovate/dist/config-validator.js"
