@@ -5,26 +5,26 @@
 
   # nativeBuildInputs
   cmake,
-  wrapGAppsHook3,
-  pkg-config,
   ninja,
+  pkg-config,
+  wrapGAppsHook3,
 
   # buildInputs
   alsa-lib,
   alsa-plugins,
+  flac,
   freetype,
+  kdePackages,
   libjack2,
   libogg,
+  libopus,
+  libopusenc,
   libpulseaudio,
   libsndfile,
   libvorbis,
+  mnxdom,
   portaudio,
   portmidi,
-  flac,
-  libopusenc,
-  libopus,
-  mnxdom,
-  kdePackages,
 
   # passthru tests
   nixosTests,
@@ -87,11 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    kdePackages.wrapQtAppsHook
     cmake
     kdePackages.qttools
-    pkg-config
+    kdePackages.wrapQtAppsHook
     ninja
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
@@ -100,24 +100,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libjack2
+    flac
     freetype
+    kdePackages.qt5compat
+    kdePackages.qtbase
+    kdePackages.qtdeclarative
+    kdePackages.qtnetworkauth
+    kdePackages.qtscxml
+    kdePackages.qtsvg
+    libjack2
     libogg
+    libopus
+    libopusenc
     libpulseaudio
     libsndfile
     libvorbis
+    mnxdom
     portaudio
     portmidi
-    flac
-    libopusenc
-    libopus
-    mnxdom
-    kdePackages.qtbase
-    kdePackages.qtdeclarative
-    kdePackages.qt5compat
-    kdePackages.qtsvg
-    kdePackages.qtscxml
-    kdePackages.qtnetworkauth
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
