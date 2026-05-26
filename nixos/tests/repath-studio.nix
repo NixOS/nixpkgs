@@ -40,7 +40,6 @@
   # Debug interactively with:
   # - nix run .#nixosTests.repath-studio.driverInteractive -L
   # - start_all()/run_tests()
-  # ssh -o User=root vsock%3 (can also do vsock/3, but % works with scp etc.)
   interactive.sshBackdoor.enable = true;
 
   testScript = /* python */ ''
