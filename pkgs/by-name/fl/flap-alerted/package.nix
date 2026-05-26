@@ -4,6 +4,7 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 
   # modules (https://github.com/Kioubit/FlapAlerted#module-documentation)
   withHttpApi ? true,
@@ -49,7 +50,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) flap-alerted; };
+  };
 
   meta = {
     description = "BGP Update based flap detection & statistics";
