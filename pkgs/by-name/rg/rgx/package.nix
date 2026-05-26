@@ -40,7 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ Cameo007 ];
+    maintainers = with lib.maintainers; [
+      Cameo007
+      kybe236
+    ];
     mainProgram = "rgx";
   };
 })
