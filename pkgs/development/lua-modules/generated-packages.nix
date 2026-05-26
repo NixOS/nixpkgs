@@ -1807,6 +1807,43 @@ final: prev: {
     }
   ) { };
 
+  lrexlib-pcre2 = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "lrexlib-pcre2";
+      version = "2.9.2-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/lrexlib-pcre2-2.9.2-1.rockspec";
+          sha256 = "181878m8gq9wl7c4h9rsq1iig70n9rmyfbj86swz1v4vi7s7ks9p";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "rrthomas";
+        repo = "lrexlib";
+        rev = "rel-2-9-2";
+        hash = "sha256-DzNDve+xeKb+kAcW+o7GK/RsoDhaDAVAWAhgjISCyZc=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/rrthomas/lrexlib";
+        maintainers = with lib.maintainers; [ wishstudio ];
+        license.fullName = "MIT/X11";
+        description = "Regular expression library binding (PCRE2 flavour).";
+        longDescription = ''
+          Lrexlib is a regular expression library for Lua 5.1-5.4, which
+          provides bindings for several regular expression libraries.
+          This rock provides the PCRE2 bindings.'';
+      };
+    }
+  ) { };
+
   lrexlib-posix = callPackage (
     {
       buildLuarocksPackage,

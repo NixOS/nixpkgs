@@ -1078,8 +1078,6 @@ self: super: with self; {
 
   aspell-python = callPackage ../development/python-modules/aspell-python { };
 
-  aspy-refactor-imports = callPackage ../development/python-modules/aspy-refactor-imports { };
-
   aspy-yaml = callPackage ../development/python-modules/aspy-yaml { };
 
   assay = callPackage ../development/python-modules/assay { };
@@ -6083,8 +6081,6 @@ self: super: with self; {
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
   fvcore = callPackage ../development/python-modules/fvcore { };
-
-  fvs = callPackage ../development/python-modules/fvs { };
 
   fx2 = callPackage ../development/python-modules/fx2 { };
 
@@ -13613,6 +13609,8 @@ self: super: with self; {
 
   pybtex-docutils = callPackage ../development/python-modules/pybtex-docutils { };
 
+  pybuildkite = callPackage ../development/python-modules/pybuildkite { };
+
   pybullet = callPackage ../development/python-modules/pybullet { };
 
   pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs.buildPackages) meson; };
@@ -19026,6 +19024,8 @@ self: super: with self; {
   submitit = callPackage ../development/python-modules/submitit { };
 
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
+
+  subprocess4 = callPackage ../development/python-modules/subprocess4 { };
 
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;

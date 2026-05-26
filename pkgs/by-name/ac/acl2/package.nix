@@ -62,6 +62,13 @@ stdenv.mkDerivation rec {
       libssl = "${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
       libcrypto = "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # ACL2 8.6 assumes SBCL can enable floating-point traps. On
+    # aarch64-linux, SBCL can leave :TRAPS NIL after enabling them, so use
+    # ACL2's existing exceptional-float checking path instead. See:
+    # https://github.com/acl2-devel/acl2-devel/commit/0632b37adffb6b5fd71d8438d519133281f837ec
+    ./0002-sbcl-fp-trap-fallback.patch
   ];
 
   # We need the timestamps on the source tree to be stable for certification to
