@@ -14,6 +14,7 @@
   rustc,
   stdenv,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,8 @@ stdenv.mkDerivation rec {
     libadwaita
     pipewire
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK patchbay for pipewire";
