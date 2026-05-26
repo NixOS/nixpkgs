@@ -28,7 +28,7 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
-  llvmVersion = "21"; # This needs to be updated when the default LLVM version is changed.
+  llvmVersion = "22"; # This needs to be updated when the default LLVM version is changed.
   sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
 
   commonImpureHostDeps = [
