@@ -19,6 +19,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    python -m unittest discover -s tests -v
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Raw block-level read/write of exFAT filesystem timestamps (birth time, modification time)";
     homepage = "https://github.com/MBanucu/exfat-raw";
