@@ -408,7 +408,7 @@ rec {
       betweenDesc = lowest: highest: "${toString lowest} and ${toString highest} (both inclusive)";
       between =
         lowest: highest:
-        assert lib.assertMsg (lowest <= highest) "ints.between: lowest must be smaller than highest";
+        assert lowest <= highest || throw "ints.between: lowest must be smaller than highest";
         addCheck int (x: x >= lowest && x <= highest)
         // {
           name = "intBetween";
@@ -495,7 +495,7 @@ rec {
     {
       between =
         lowest: highest:
-        assert lib.assertMsg (lowest <= highest) "numbers.between: lowest must be smaller than highest";
+        assert lowest <= highest || throw "numbers.between: lowest must be smaller than highest";
         addCheck number (x: x >= lowest && x <= highest)
         // {
           name = "numberBetween";
@@ -1728,9 +1728,9 @@ rec {
   # converted to `finalType` using `coerceFunc`.
   coercedTo =
     coercedType: coerceFunc: finalType:
-    assert lib.assertMsg (
+    assert
       coercedType.getSubModules == null
-    ) "coercedTo: coercedType must not have submodules (it’s a ${coercedType.description})";
+      || throw "coercedTo: coercedType must not have submodules (it’s a ${coercedType.description})";
     mkOptionType rec {
       name = "coercedTo";
       description = "${optionDescriptionPhrase (class: class == "noun") finalType} or ${
