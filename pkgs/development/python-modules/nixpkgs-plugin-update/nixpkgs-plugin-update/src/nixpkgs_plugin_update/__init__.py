@@ -429,7 +429,7 @@ class RepoGitHub(Repo):
 
             recent_tags = [node["name"] for node in repo["refs"]["nodes"]]
             if not recent_tags:
-                return None
+                return self._get_latest_tag_from_fallbacks()
 
             latest_tag = first_release_tag(recent_tags)
             return latest_tag if latest_tag is not None else recent_tags[0]
