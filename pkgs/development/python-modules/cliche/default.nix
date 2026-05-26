@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "cliche";
-  version = "0.10.108";
+  version = "0.22.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
