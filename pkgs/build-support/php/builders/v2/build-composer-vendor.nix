@@ -25,9 +25,9 @@ let
       dontCheckForBrokenSymlinks ? true,
       ...
     }@args:
-    assert (lib.assertMsg (args ? pname) "mkComposerVendor expects pname argument.");
-    assert (lib.assertMsg (args ? version) "mkComposerVendor expects version argument.");
-    assert (lib.assertMsg (args ? src) "mkComposerVendor expects src argument.");
+    assert args ? pname || throw "mkComposerVendor expects pname argument.";
+    assert args ? version || throw "mkComposerVendor expects version argument.";
+    assert args ? src || throw "mkComposerVendor expects src argument.";
     {
       name = "${args.pname}-composer-vendor-${args.version}";
 
