@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20260313.1";
+  version = "20260520.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LfjeQV3aiCHwopHNZkWfuImyhFjuZQF3j2guVVMIR+k=";
+    hash = "sha256-oaAdKGVSMbfgiTyhPpySCEVJ93YQQuGunvcNNxRnN8Q=";
   };
 
   build-system = [ setuptools ];
