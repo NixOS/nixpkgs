@@ -1,0 +1,41 @@
+From 48da17d61e38657dfb10f2ac642fd3e6a45ee607 Mon Sep 17 00:00:00 2001
+From: "P. R. d. O" <d.ol.rod@tutanota.com>
+Date: Wed, 27 Apr 2022 14:29:53 -0600
+Subject: [PATCH] OpenSSL path fix
+
+---
+ proton/srp/_ctsrp.py | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/proton/srp/_ctsrp.py b/proton/srp/_ctsrp.py
+index e19f184..af359c5 100644
+--- a/proton/srp/_ctsrp.py
++++ b/proton/srp/_ctsrp.py
+@@ -24,22 +24,14 @@ from .util import PM_VERSION, SRP_LEN_BYTES, SALT_LEN_BYTES, hash_password
+ dlls = list()
+ 
+ platform = sys.platform
+-if platform == 'darwin':
+-    dlls.append(ctypes.cdll.LoadLibrary('libssl.dylib'))
+-elif 'win' in platform:
++if 'win' in platform:
+     for d in ('libeay32.dll', 'libssl32.dll', 'ssleay32.dll'):
+         try:
+             dlls.append(ctypes.cdll.LoadLibrary(d))
+         except Exception:
+             pass
+ else:
+-    try:
+-        dlls.append(ctypes.cdll.LoadLibrary('libssl.so.10'))
+-    except OSError:
+-        try:
+-            dlls.append(ctypes.cdll.LoadLibrary('libssl.so.1.0.0'))
+-        except OSError:
+-            dlls.append(ctypes.cdll.LoadLibrary('libssl.so'))
++    dlls.append(ctypes.cdll.LoadLibrary('@openssl@/lib/libssl@ext@'))
+ 
+ 
+ class BIGNUM_Struct(ctypes.Structure):
+-- 
+2.35.1
+

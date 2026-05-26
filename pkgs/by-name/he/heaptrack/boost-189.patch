@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b859fbd..4ed051c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,7 +25,7 @@ if (APPIMAGE_BUILD)
+ endif()
+
+ include(FeatureSummary)
+-find_package(Boost 1.60.0 ${REQUIRED_IN_APPIMAGE} COMPONENTS system filesystem iostreams container)
++find_package(Boost 1.60.0 ${REQUIRED_IN_APPIMAGE} COMPONENTS filesystem iostreams container)
+ set_package_properties(Boost PROPERTIES TYPE RECOMMENDED PURPOSE "Boost container libraries can greatly improve performance (via pmr allocators)")
+ find_package(Threads REQUIRED)
+ find_package(ZLIB REQUIRED)
+diff --git a/src/analyze/CMakeLists.txt b/src/analyze/CMakeLists.txt
+index 8e16ff2..340eb7f 100644
+--- a/src/analyze/CMakeLists.txt
++++ b/src/analyze/CMakeLists.txt
+@@ -2,7 +2,7 @@ if (ECM_FOUND)
+     include(ECMEnableSanitizers)
+ endif()
+
+-find_package(Boost 1.41.0 REQUIRED COMPONENTS iostreams program_options system filesystem)
++find_package(Boost 1.41.0 REQUIRED COMPONENTS iostreams program_options filesystem)
+
+ configure_file(analyze_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/analyze_config.h)
+

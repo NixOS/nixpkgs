@@ -1,0 +1,26 @@
+diff --git a/src/hello.c b/src/hello.c
+index 182303c..453962f 100644
+--- a/src/hello.c
++++ b/src/hello.c
+@@ -57,7 +57,7 @@ main (int argc, char *argv[])
+ #endif
+ 
+   /* Having initialized gettext, get the default message. */
+-  greeting_msg = _("Hello, world!");
++  greeting_msg = _("Hello, incremental world!");
+ 
+   /* Even exiting has subtleties.  On exit, if any writes failed, change
+      the exit status.  The /dev/full device on GNU/Linux can be used for
+diff --git a/tests/hello-1 b/tests/hello-1
+index 3b7a815..e15fa95 100755
+--- a/tests/hello-1
++++ b/tests/hello-1
+@@ -21,7 +21,7 @@ export LANGUAGE LC_ALL LC_MESSAGES LANG
+ 
+ tmpfiles="hello-test1.ok"
+ cat <<EOF > hello-test1.ok
+-Hello, world!
++Hello, incremental world!
+ EOF
+ 
+ tmpfiles="$tmpfiles hello-test1.out"

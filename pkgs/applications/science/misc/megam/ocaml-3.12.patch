@@ -1,0 +1,12 @@
+diff -ru megam_0.92/Makefile megam_0.92-b/Makefile
+--- megam_0.92/Makefile	2007-10-08 18:06:04.000000000 +0100
++++ megam_0.92-b/Makefile	2013-11-25 10:14:20.000000000 +0000
+@@ -59,7 +59,7 @@
+ 
+ WITHUNIX =unix.cma -cclib -lunix
+ 
+-WITHSTR =str.cma -cclib -lstr
++WITHSTR =str.cma -cclib -lcamlstr
+ 
+ WITHBIGARRAY =bigarray.cma -cclib -lbigarray
+ 

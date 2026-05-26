@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 1897c09..770e108 100644
+--- a/Makefile
++++ b/Makefile
+@@ -195,7 +195,7 @@ install-elisp:
+ 
+ uninstall-elisp:
+ 	rm -f $(ELISP)/noweb-mode.el
+-source: FAQ
++source:
+ 	for i in c shell lib xdoc icon awk tex; do (cd $$i && $(MAKE) CPIF=">" $@); done
+ 	sleep 1
+ 	for i in c shell lib xdoc icon awk tex; do (cd $$i && $(MAKE) touch); done
