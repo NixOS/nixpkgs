@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clashtui";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "JohanChane";
     repo = "clashtui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZYGGlTBox7ChdBwvMWTHqys/WQ0heBXpXa6XIrurp60=";
+    hash = "sha256-roP252d0lO7eN2KCHiuPPI5o8QqtPWJvmeex8sAmKww=";
   };
 
-  cargoHash = "sha256-C71OkwEJSYoBPqDP6QJBWvOZlVxOlg3yBDAq9FRmBmo=";
+  cargoHash = "sha256-7y31iZoSJ98XDiC+Akahgfp/lI5haaek6UpFtaCtGW8=";
 
   passthru.updateScript = nix-update-script { };
 
