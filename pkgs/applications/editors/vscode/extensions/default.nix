@@ -2855,8 +2855,8 @@ let
         mktplcRef = {
           publisher = "llvm-vs-code-extensions";
           name = "vscode-clangd";
-          version = "0.4.0";
-          hash = "sha256-A1+JaodEBWCQ5NqLkXfNqhOr8j2aFQzEofU+wseh/SY=";
+          version = "0.6.0";
+          hash = "sha256-hmoAPCp0BKB3z6z2Ai0w45RDE9v3BYupmu2A5y5OM50=";
         };
         meta = {
           description = "C/C++ completion, navigation, and insights";
