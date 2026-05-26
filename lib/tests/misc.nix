@@ -122,6 +122,8 @@ let
     xor
     ;
 
+  inherit (lib.strings) hasStorePathPrefix storeDir;
+
   testingThrow = expr: {
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
     expected = {
@@ -960,6 +962,48 @@ runTests {
       caAsPath = true;
       otherPath = false;
       otherVals = {
+        attrset = false;
+        list = false;
+        int = false;
+      };
+    };
+  };
+
+  testHasStorePathPrefix = {
+    expr = {
+      root = hasStorePathPrefix /.;
+      storeDir = hasStorePathPrefix storeDir;
+      nonAbsolute = hasStorePathPrefix "./foo";
+      absoluteNotInStore = hasStorePathPrefix /home/user;
+      derivationOutput = hasStorePathPrefix (storeDir + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo");
+      derivationOutputSubpath = hasStorePathPrefix (
+        storeDir + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz"
+      );
+      storeDerivation = hasStorePathPrefix (storeDir + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv");
+      links = hasStorePathPrefix (
+        storeDir + "/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq"
+      );
+      contentAddressedOutput = hasStorePathPrefix "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab";
+      contentAddressedOutputSubpath = hasStorePathPrefix "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab/foo/bar";
+
+      otherTypes = {
+        attrset = hasStorePathPrefix { };
+        list = hasStorePathPrefix [ ];
+        int = hasStorePathPrefix 1;
+      };
+    };
+    expected = {
+      root = false;
+      storeDir = false;
+      nonAbsolute = false;
+      absoluteNotInStore = false;
+      derivationOutput = true;
+      derivationOutputSubpath = true;
+      storeDerivation = true;
+      links = false;
+      contentAddressedOutput = true;
+      contentAddressedOutputSubpath = true;
+      otherTypes = {
         attrset = false;
         list = false;
         int = false;
