@@ -13,6 +13,8 @@
   nixosTests,
 
   latestVersionInfo ? null,
+  removeUserLimit ? false,
+  removeFreeBadge ? false,
   versionInfo ? {
     # ESR releases only. Note: if NixOS would release with an ESR that goes out
     # of support during the lifetime of the NixOS release, it is acceptable
@@ -135,6 +137,14 @@ buildMattermost rec {
       mv package-lock.fixed.json package-lock.json
     '';
   };
+
+  patches =
+    lib.optionals removeFreeBadge [
+      ./mattermost-remove-free-banner.patch
+    ]
+    ++ lib.optionals removeUserLimit [
+      ./mattermost-remove-user-limit.patch
+    ];
 
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
