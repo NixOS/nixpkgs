@@ -1,0 +1,27 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8d7b3454df..2ce7b5af1a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -50,8 +50,7 @@
+   "${CMAKE_CURRENT_SOURCE_DIR}/build/fbcode_builder/CMake"
+   ${CMAKE_MODULE_PATH})
+ 
+-find_package(Glog MODULE REQUIRED)
+-include_directories(${GLOG_INCLUDE_DIR})
++find_package(Glog CONFIG REQUIRED)
+ 
+ find_package(Gflags REQUIRED)
+ include_directories(${GFLAGS_INCLUDE_DIR})
+diff --git a/eden/common/testharness/CMakeLists.txt b/eden/common/testharness/CMakeLists.txt
+index bef7421906..f35067efa9 100644
+--- a/eden/common/testharness/CMakeLists.txt
++++ b/eden/common/testharness/CMakeLists.txt
+@@ -19,7 +19,7 @@
+     ${BOOST_LIBRARIES}
+     Folly::folly_test_util
+     ${LIBGMOCK_LIBRARIES}
+-    ${GLOG_LIBRARY}
++    glog::glog
+ )
+ 
+ target_include_directories(

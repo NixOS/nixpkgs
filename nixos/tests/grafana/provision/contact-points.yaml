@@ -1,0 +1,9 @@
+apiVersion: 1
+
+contactPoints:
+  - name: "Test Contact Point"
+    receivers:
+      - uid: "test_contact_point"
+        type: prometheus-alertmanager
+        settings:
+          url: http://localhost:9000

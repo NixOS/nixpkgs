@@ -1,0 +1,29 @@
+diff --git a/build.gradle b/build.gradle
+--- a/build.gradle
++++ b/build.gradle
+@@ -11,7 +11,6 @@ buildscript {
+         //FIXME the version of R8 coming with gradle plugin 4.0.0 causes serious problems
+         //noinspection GradleDependency
+         classpath 'com.android.tools.build:gradle:3.6.4'
+-        classpath "com.palantir.gradle.gitversion:gradle-git-version:0.12.3"
+     }
+ }
+ 
+@@ -19,16 +18,13 @@ buildscript {
+ 
+ allprojects {
+ 
+-    apply plugin: "com.palantir.git-version"
+-
+-    def details = versionDetails()
+ 
+     ext {
+         appName = 'Summoning Pixel Dungeon'
+         appPackageName = 'com.trashboxbobylev.summoningpixeldungeon'
+ 
+         appVersionCode = 432
+-        appVersionName = '@version@-' + details.gitHash.substring(0, 7)
++        appVersionName = '@version@'
+ 
+         appAndroidCompileSDK = 33
+         appAndroidMinSDK = 15

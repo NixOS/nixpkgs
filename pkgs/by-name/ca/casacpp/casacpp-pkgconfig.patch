@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4d3cae2326..7954107f8f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -195,6 +195,7 @@ foreach(_component IN LISTS casacpp_all_components)
+ endforeach()
+ 
+ # Install pkg-config support file
++set(pc_req_public "casacore cfitsio libxml-2.0 gsl protobuf grpc++ fftw3 libsakura")
+ CONFIGURE_FILE("casacpp.pc.in" "casacpp.pc" @ONLY)
+ set(CASACPP_PKGCONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+ INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/casacpp.pc" DESTINATION "${CASACPP_PKGCONFIG_INSTALL_PREFIX}")
+diff --git a/casacpp.pc.in b/casacpp.pc.in
+index 08a996b2c3..699cfb7319 100644
+--- a/casacpp.pc.in
++++ b/casacpp.pc.in
+@@ -9,4 +9,4 @@ Version: @PROJECT_VERSION@
+ Requires: @pc_req_public@
+ Requires.private: @pc_req_private@
+ Libs: -L${libdir} @PRIVATE_LIBS@
+-Cflags: -DWITHOUT_ACS -DWITHOUT_BOOST -I${includedir}/casacpp -I${includedir}/casacpp/protobuf_generated -I@CASACORE_INCLUDE_DIRS@ -I@CFITSIO_INCLUDE_DIRS@ -I@LibXML_INCLUDE_DIRS@ -I@GSL_INCLUDE_DIRS@
++Cflags: -DWITHOUT_ACS -DWITHOUT_BOOST -I${includedir}/casacpp -I${includedir}/casacpp/protobuf_generated
