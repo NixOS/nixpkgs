@@ -111,9 +111,9 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Self-hosted, lightweight server and website monitoring and O&M tool";
