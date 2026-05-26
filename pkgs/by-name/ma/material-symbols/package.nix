@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   unstableGitUpdater,
 }:
 stdenvNoCC.mkDerivation {
@@ -16,14 +17,12 @@ stdenvNoCC.mkDerivation {
     sparseCheckout = [ "variablefont" ];
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -Dm755 variablefont/*.ttf -t $out/share/fonts/TTF
-    install -Dm755 variablefont/*.woff2 -t $out/share/fonts/woff2
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = unstableGitUpdater { };
 

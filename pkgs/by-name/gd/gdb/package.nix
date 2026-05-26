@@ -5,7 +5,6 @@
 
   # Build time
   fetchurl,
-  fetchpatch,
   pkg-config,
   perl,
   texinfo,
@@ -13,6 +12,7 @@
   buildPackages,
 
   # Run time
+  bashNonInteractive,
   readline,
   expat,
   libipt,
@@ -47,6 +47,7 @@
     (lib.getLib targetPackages.stdenv.cc.cc)
   ],
   writeScript,
+  versionCheckHook,
 }:
 
 let
@@ -66,11 +67,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "17.1";
+  version = "17.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/gdb-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FJlvX3TJ9o9aVD/cRbyngAIH+R+SrupsLnkYIsfG2HY=";
+    hash = "sha256-HANsDXLks9H7XJTIhjKt1vnXb018TS6nk8EqnxmjIow=";
   };
 
   postPatch =
@@ -88,17 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./debug-info-from-env.patch
-
-    (fetchurl {
-      name = "musl.patch";
-      url = "https://inbox.sourceware.org/gdb-patches/20260324164527.1446549-2-sunilkumar.dora@windriver.com/raw";
-      hash = "sha256-FC4DDVS4wtE/HXtbUqvkxu9+e7nE3DYi1zIuQP9yQO8=";
-    })
-    (fetchpatch {
-      name = "musl-aarch64.patch";
-      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=1ccc3f6a2e28fa1f3357826374cba165b3ba3ff7";
-      hash = "sha256-Q2oTo2b+9yNN3PSsxqgxV4/9/05uFE/JMLe1CPs9Y7I=";
-    })
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     ./darwin-target-match.patch
@@ -109,9 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
     perl
     setupDebugInfoDirs
-  ];
+  ]
+  ++ optional pythonSupport python3;
 
   buildInputs = [
+    bashNonInteractive # for shebangs of gcore, gdb-add-index, gstack
     ncurses
     readline
     expat
@@ -126,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional withTui ncurses
   ++ optional withMpfr mpfr
   ++ optional withGmp gmp
-  ++ optional pythonSupport python3
   ++ optional withGuile guile
   ++ optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
   ++ optional stdenv.hostPlatform.isDarwin libiconv;
@@ -134,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -182,9 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     (withFeature true "system-readline")
     (withFeature true "system-zlib")
     (withFeature true "expat")
-    (withFeatureAs true "libexpat-prefix" "${expat.dev}")
-    (withFeatureAs withGmp "gmp" "${gmp.dev}")
-    (withFeatureAs withMpfr "mpfr" "${mpfr.dev}")
+    (withFeatureAs true "libexpat-prefix" expat.dev)
+    (withFeatureAs withGmp "gmp" gmp.dev)
+    (withFeatureAs withMpfr "mpfr" mpfr.dev)
     (withFeature pythonSupport "python")
     (withFeature withGuile "guile")
     (enableFeature enableSim "sim")
@@ -207,6 +200,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm -v $out/share/info/bfd.info
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru = {
     updateScript = writeScript "update-gdb" ''
       #!/usr/bin/env nix-shell
@@ -223,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GNU Project debugger";
-    mainProgram = "gdb";
+    mainProgram = "${targetPrefix}gdb";
     longDescription = ''
       GDB, the GNU Project debugger, allows you to see what is going
       on `inside' another program while it executes -- or what another

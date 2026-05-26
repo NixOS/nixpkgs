@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.13";
+  version = "15.0.14";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-v21pvipaEPj3WzDybQkDxHLefl14ZMCOJDQAvJatSSU=";
+      hash = "sha256-kxRtNraru8w/lAwwhAD2h6Q+CqFdS2DzV2FZHnNj9Q4=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-RPJUoRZlY1upYivnnDxSLJI2hoVII56PY7BeCN87lOc=";
+      hash = "sha256-GHLeAyMrnwD5lC4NnwM72nZQeRN7AjrlS/zlOqfmjtw=";
     };
   };
 

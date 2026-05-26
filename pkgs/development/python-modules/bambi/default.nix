@@ -15,6 +15,8 @@
   matplotlib,
   pandas,
   pymc,
+  pytensor,
+  seaborn,
   sparse,
 
   # tests
@@ -26,23 +28,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bambi";
-  version = "0.17.2";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
     tag = finalAttrs.version;
-    hash = "sha256-Vjv62cYDIuTLE7MxRt4Havy7DMOiMTyIixbs4LGFGGs=";
+    hash = "sha256-vxsjPYQkqvmB5oKKl29+xq1BPEzBTozz9/W5mICWI4A=";
   };
-
-  # TypeError: NDArray.record() missing 1 required keyword-only argument: 'in_warmup'
-  postPatch = ''
-    substituteInPlace bambi/backend/pymc.py \
-      --replace-fail \
-        "strace.record(point=dict(zip(varnames, value)))" \
-        "strace.record(point=dict(zip(varnames, value)), in_warmup=False)"
-  '';
 
   build-system = [
     setuptools
@@ -59,6 +53,8 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     pandas
     pymc
+    pytensor
+    seaborn
     sparse
   ];
 
@@ -136,8 +132,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # Tests require network access
-    "tests/test_interpret.py"
-    "tests/test_interpret_messages.py"
+    "tests/test_interpret_plots.py"
   ];
 
   pythonImportsCheck = [ "bambi" ];

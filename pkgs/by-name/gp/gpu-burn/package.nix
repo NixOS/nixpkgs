@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  inherit (lib.lists) last map optionals;
+  inherit (lib.lists) optionals;
   inherit (lib.trivial) boolToString;
   inherit (config) cudaSupport;
   inherit (cudaPackages)
@@ -17,7 +17,7 @@ let
     cuda_nvcc
     libcublas
     ;
-  inherit (cudaPackages.flags) cudaCapabilities dropDots isJetsonBuild;
+  inherit (cudaPackages.flags) gencodeString isJetsonBuild;
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
@@ -32,11 +32,14 @@ backendStdenv.mkDerivation {
     hash = "sha256-zaGzwpdvF9dw3RypBO+g6FhjOFN8/F9+yI1+lLxLjgs=";
   };
 
+  # TODO: drop once https://github.com/wilicc/gpu-burn/pull/148 lands.
+  patches = [ ./0001-Emit-compare.fatbin-and-make-arch-compute_X-conditio.patch ];
+
   postPatch = ''
     substituteInPlace gpu_burn-drv.cpp \
       --replace-fail \
-        '#define COMPARE_KERNEL "compare.ptx"' \
-        '#define COMPARE_KERNEL "${placeholder "out"}/share/compare.ptx"'
+        '#define COMPARE_KERNEL "compare.fatbin"' \
+        '#define COMPARE_KERNEL "${placeholder "out"}/share/compare.fatbin"'
     substituteInPlace Makefile \
       --replace-fail \
         '${"\${CUDAPATH}/bin/nvcc"}' \
@@ -58,15 +61,19 @@ backendStdenv.mkDerivation {
   makeFlags = [
     # NOTE: CUDAPATH assumes cuda_cudart is a single output containing all of lib, dev, and stubs.
     "CUDAPATH=${cuda_cudart}"
-    "COMPUTE=${last (map dropDots cudaCapabilities)}"
     "IS_JETSON=${boolToString isJetsonBuild}"
+    # Empty COMPUTE suppresses the Makefile's default -arch=compute_$(COMPUTE);
+    # gencodeString below is the single source of truth for architectures.
+    "COMPUTE="
   ];
+
+  env.NVCCFLAGS = gencodeString;
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share}
     install -Dm755 gpu_burn $out/bin/
-    install -Dm644 compare.ptx $out/share/
+    install -Dm644 compare.fatbin $out/share/
     runHook postInstall
   '';
 

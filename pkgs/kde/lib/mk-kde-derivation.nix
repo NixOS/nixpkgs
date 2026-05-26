@@ -77,7 +77,10 @@ let
       None = null;
     };
 
-  moveOutputsHook = makeSetupHook { name = "kf6-move-outputs-hook"; } ./move-outputs-hook.sh;
+  moveOutputsHook = makeSetupHook {
+    name = "kf6-move-outputs-hook";
+    meta.license = lib.licenses.mit;
+  } ./move-outputs-hook.sh;
 
   qmllintHook = makeSetupHook {
     name = "qmllint-validate-hook";
@@ -85,6 +88,7 @@ let
       qmllint = "${qt6.qtdeclarative}/bin/qmllint";
       jq = lib.getExe jq;
     };
+    meta.license = lib.licenses.mit;
   } ./qmllint-hook.sh;
 in
 {

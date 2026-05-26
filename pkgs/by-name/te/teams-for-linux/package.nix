@@ -10,22 +10,21 @@
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  vulkan-loader,
   which,
 }:
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-lJduUoD/bw4cAvk30fmYWsQznAFQOnUiVzIubuN7/Mk=";
+    hash = "sha256-/e/NpyfcrHsgMf8tJ8VgUyCOrdfAaRH0/+kUqItd1+s=";
   };
 
-  npmDepsHash = "sha256-CxAPb5MXc6auF219Rg0ocfijSY59j7R9lXeFhFglTPI=";
+  npmDepsHash = "sha256-RvIjGXhjNqxey3zhACGj7Zd0dnmLb1IqIg/PnfEdjz0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,21 +45,15 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_41.dist} electron-dist
-    chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
-  ''
-  + ''
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron_41.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
         --dir \
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
-        -c.electronDist=electron-dist \
+        -c.electronDist="$electron_dist" \
         -c.electronVersion=${electron_41.version} \
         -c.mac.identity=null
 

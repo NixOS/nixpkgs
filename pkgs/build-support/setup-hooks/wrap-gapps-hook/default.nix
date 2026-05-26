@@ -51,6 +51,7 @@ makeSetupHook {
       # D-Bus service enabled globally (e.g. through a NixOS module).
       dconf.lib
     ];
+  meta.license = lib.licenses.mit;
   passthru = {
     tests =
       let

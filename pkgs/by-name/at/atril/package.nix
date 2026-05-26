@@ -33,14 +33,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atril";
-  version = "1.28.3";
+  version = "1.28.5";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "atril";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-y+J/goOl5ol3j0ySLkyQSndS8zc+dOKhyrPv0FmVkZg=";
+    hash = "sha256-iG+FFvxxL2/6HqGchoaIDqx8Gfo1wxqM4GW66ScZlao=";
   };
 
   nativeBuildInputs = [

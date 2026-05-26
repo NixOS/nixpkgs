@@ -1,0 +1,26 @@
+--- a/math/m_sparse_factor.c
++++ b/math/m_sparse_factor.c
+@@ -1236,7 +1236,6 @@ int  I, NumberOfTies = 0;
+ ElementPtr  ChosenPivot, TiedElements[MAX_MARKOWITZ_TIES + 1];
+ RealNumber  Magnitude, LargestInCol, Ratio, MaxRatio;
+ RealNumber  LargestOffDiagonal;
+-RealNumber  FindBiggestInColExclude();
+ 
+ /* Begin `QuicklySearchDiagonal'. */
+     NumberOfTies = -1;
+@@ -1434,7 +1433,6 @@ register  ElementPtr  pDiag;
+ int  I;
+ ElementPtr  ChosenPivot, pOtherInRow, pOtherInCol;
+ RealNumber  Magnitude, LargestInCol, LargestOffDiagonal;
+-RealNumber  FindBiggestInColExclude();
+ 
+ /* Begin `QuicklySearchDiagonal'. */
+     ChosenPivot = NULL;
+@@ -1601,7 +1599,6 @@ register  ElementPtr  pDiag;
+ int  NumberOfTies = 0, Size = Matrix->Size;
+ ElementPtr  ChosenPivot;
+ RealNumber  Magnitude, Ratio, RatioOfAccepted = 0.0, LargestInCol;
+-RealNumber  FindBiggestInColExclude();
+ 
+ /* Begin `SearchDiagonal'. */
+     ChosenPivot = NULL;

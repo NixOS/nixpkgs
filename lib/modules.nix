@@ -1598,6 +1598,28 @@ let
     inherit priority content;
   };
 
+  /**
+    Applies a function to the value inside a definition,
+    preserving all surrounding properties (`mkForce`, `mkOrder`, `mkIf`, etc.).
+  */
+  mapDefinitionValue =
+    f: def:
+    if def ? _type then
+      if def._type == "merge" then
+        def // { contents = map (mapDefinitionValue f) def.contents; }
+      else if def._type == "if" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "override" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "order" then
+        def // { content = mapDefinitionValue f def.content; }
+      else if def._type == "definition" then
+        def // { value = mapDefinitionValue f def.value; }
+      else
+        f def
+    else
+      f def;
+
   mkBefore = mkOrder 500;
   defaultOrderPriority = 1000;
   mkAfter = mkOrder 1500;
@@ -2302,6 +2324,7 @@ private
     importApply
     importJSON
     importTOML
+    mapDefinitionValue
     mergeDefinitions
     mergeAttrDefinitionsWithPrio
     mergeOptionDecls # should be private?

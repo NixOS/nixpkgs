@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Macaulay2/memtailor";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.unix;
   };
 })

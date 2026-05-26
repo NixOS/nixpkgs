@@ -26,6 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-H416dgZQxyqsnhmlK5keW8cJWY6gea4mebVuP0IEVOU=";
   };
 
+  patches = [
+    ./tests-numpy-2.4.patch # https://github.com/dedupeio/pylbfgs/pull/52
+  ];
+
   build-system = [
     cython
     numpy

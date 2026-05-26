@@ -11,6 +11,11 @@
   lz4,
   zlib,
   zstd,
+  stdenv,
+  sse2Support ? stdenv.hostPlatform.avx2Support,
+  ssse3Support ? stdenv.hostPlatform.ssse3Support,
+  avx2Support ? stdenv.hostPlatform.avx2Support,
+  avx512Support ? stdenv.hostPlatform.avx512Support,
 }:
 
 buildPythonPackage rec {
@@ -64,10 +69,10 @@ buildPythonPackage rec {
   # on Linux/Darwin. Pin them to keep the output generic and machine-independent.
   # https://github.com/silx-kit/hdf5plugin/blob/v6.0.0/doc/install.rst#available-options
   env.HDF5PLUGIN_NATIVE = "False";
-  env.HDF5PLUGIN_SSE2 = "False";
-  env.HDF5PLUGIN_SSSE3 = "False";
-  env.HDF5PLUGIN_AVX2 = "False";
-  env.HDF5PLUGIN_AVX512 = "False";
+  env.HDF5PLUGIN_SSE2 = if sse2Support then "True" else "False";
+  env.HDF5PLUGIN_SSSE3 = if ssse3Support then "True" else "False";
+  env.HDF5PLUGIN_AVX2 = if avx2Support then "True" else "False";
+  env.HDF5PLUGIN_AVX512 = if avx512Support then "True" else "False";
 
   checkPhase = ''
     python test/test.py

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   imlib2,
   libxext,
@@ -22,6 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-N0Lfi0d4kjxirEbIjdeearYWvStkKMyV6lgeyNKXcVw=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-42046.patch";
+      url = "https://github.com/cacalabs/libcaca/commit/fb77acff9ba6bb01d53940da34fb10f20b156a23.patch";
+      hash = "sha256-AdpiE5Gw/CVET//7TTYZCb0glW5HY+T8xZkYs1XCBvY=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

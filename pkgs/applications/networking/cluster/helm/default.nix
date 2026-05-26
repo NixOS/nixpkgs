@@ -52,13 +52,27 @@ buildGoModule (finalAttrs: {
 
     # skipping version tests because they require dot git directory
     substituteInPlace cmd/helm/version_test.go \
-      --replace "TestVersion" "SkipVersion"
+      --replace-fail "TestVersion" "SkipVersion"
     # skipping plugin tests
     substituteInPlace cmd/helm/plugin_test.go \
-      --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
-      --replace "TestLoadPlugins" "SkipLoadPlugins"
+      --replace-fail "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
+      --replace-fail "TestLoadPlugins" "SkipLoadPlugins"
     substituteInPlace cmd/helm/helm_test.go \
-      --replace "TestPluginExitCode" "SkipPluginExitCode"
+      --replace-fail "TestPluginExitCode" "SkipPluginExitCode"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # skipping as test fails in sandbox
+    substituteInPlace cmd/helm/dependency_build_test.go \
+      --replace-fail "TestDependencyBuildCmd" "SkipDependencyBuildCmd"
+    substituteInPlace cmd/helm/dependency_update_test.go \
+      --replace-fail "TestDependencyUpdateCmd" "SkipDependencyUpdateCmd"
+    # skipping as test fails in sandbox
+    substituteInPlace cmd/helm/install_test.go \
+      --replace-fail "TestInstall" "SkipInstall"
+    # skipping as test fails in sandbox
+    substituteInPlace cmd/helm/pull_test.go \
+      --replace-fail "TestPullCmd" "SkipPullCmd" \
+      --replace-fail "TestPullWithCredentialsCmd" "SkipPullWithCredentialsCmd"
   '';
 
   nativeBuildInputs = [ installShellFiles ];

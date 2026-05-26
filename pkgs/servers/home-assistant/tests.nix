@@ -142,9 +142,25 @@ let
       # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.honeywell_string_lights.config.abort.no_compatible_transmitters"
       "test_no_compatible_transmitters"
     ];
+    lutron_caseta = [
+      # [2026.5.4] creates binary_sensor.basement_bedroom_left_shade_battery
+      #            expects binary_sensor.basement_bedroom_basement_bedroom_left_shade_battery
+      "test_battery_sensor_handles_bridge_response_error"
+    ];
     novy_cooker_hood = [
       # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.novy_cooker_hood.config.abort.no_compatible_transmitters
       "test_no_compatible_transmitters"
+    ];
+    tractive = [
+      # [2026.5.3] Entity does not get set up
+      "test_binary_sensor"
+      "test_sensor"
+      "test_switch"
+      "test_switch_on"
+      "test_switch_off"
+      "test_switch_on_with_exception"
+      "test_switch_off_with_exception"
+      "test_switch_unavailable"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox

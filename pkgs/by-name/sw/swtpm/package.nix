@@ -28,30 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swtpm";
-  version = "0.10.1-unstable-2026-05-06"; # fuse3 support, switch to openssl, but does not yet require libtpms >= 0.11
+  version = "0.10.1-unstable-2026-05-21"; # fuse3 support, switch to openssl
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
-    rev = "74f272e337da2c2aa209140df85ddd43a285a2d9";
-    hash = "sha256-cviADrmSTagba9KmlfiQFS6x4W/C8vI2/HuPRqZFh2U=";
+    rev = "89a67f3d4070887a1ab86ca641f8da13529c54b7";
+    hash = "sha256-ebVfzKloJGmiaguxtcPC/MUuOQYzxIZDdi/0oEGXJ64=";
   };
-
-  patches = [
-    (fetchpatch {
-      # some miscellaneous fixes
-      # - darwin support for socket open
-      # - fix a typoed format string
-      # - fix initializer lists to be compatible with clang
-      url = "https://github.com/stefanberger/swtpm/pull/1127.patch";
-      hash = "sha256-0DFf6LLdjv/wKcsjib1+AOJ3WWu83n5jA0Bx5/chlvc=";
-    })
-    (fetchpatch {
-      # better detection of `stat` util
-      url = "https://github.com/stefanberger/swtpm/pull/1128.patch";
-      hash = "sha256-Cgt8No15NA/eCBLuKsYLDwVWO89XohnTQ3znd4Ky6NM=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

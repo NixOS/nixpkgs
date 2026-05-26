@@ -34,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.10.1";
+  version = "3.11.1";
 
   outputs = [
     "out"
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-Wn8+eJ22ZxpVDtYoDtT2CmC+p3No2pK+aNx9jX4jAmU=";
+    hash = "sha256-z9RgIe4VFK1DXnFPeqHsenh8f1FqlPTHQ4iX7j1uyh4=";
   };
 
   strictDeps = true;

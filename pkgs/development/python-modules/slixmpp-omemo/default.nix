@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "slixmpp-omemo";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "slixmpp-omemo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UL7rIzuG33yIB+mvgcgC19cBrNobLi15bRaJjWrDNF4=";
+    hash = "sha256-jecnNQu2FNG+d1FzXjLwmbgPi2oDovAAS/MopfY5+Bo=";
   };
 
   build-system = [ setuptools ];

@@ -1,36 +1,46 @@
 {
-  lib,
-  stdenv,
   bzip2,
-  cmake,
   cli11,
-  yaml-cpp,
+  cmake,
+  lib,
+  libmamba,
+  makeWrapper,
+  msgpack-c,
   nlohmann_json,
-  zstd,
+  python3,
   reproc,
   spdlog,
+  stdenv,
   tl-expected,
-  libmamba,
-  python3,
   versionCheckHook,
+  yaml-cpp,
+  zstd,
+  # runtime options
+  defaultEnvPath ? "~/.mamba/envs",
+  defaultPkgPath ? "~/.mamba/pkgs",
+  defaultRootPath ? "~/.mamba",
 }:
 stdenv.mkDerivation {
   pname = "mamba-cpp";
   inherit (libmamba) version src;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
 
   buildInputs = [
+    bzip2
+    cli11
+    libmamba
+    msgpack-c
+    nlohmann_json
     python3
     reproc
     spdlog
-    nlohmann_json
     tl-expected
-    zstd
-    bzip2
-    cli11
     yaml-cpp
-    libmamba
+    zstd
   ];
 
   cmakeFlags = [
@@ -40,6 +50,16 @@ stdenv.mkDerivation {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  postInstall = ''
+    wrapProgram $out/bin/mamba \
+      --set-default CONDA_ENVS_PATH '${defaultEnvPath}' \
+      --set-default CONDA_PKGS_DIRS '${defaultPkgPath}' \
+      --set-default MAMBA_ROOT_PREFIX '${defaultRootPath}'
+  '';
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Reimplementation of the conda package manager";

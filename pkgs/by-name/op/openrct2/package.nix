@@ -64,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sGdtiEUmZux6FCXuxefRulfIEO8FY7wYfIBOhdSYtF8=";
+    hash = "sha256-5GPepF013XhymzlgfYjlB/XPE2/w18/kv3IDgJ4vPuY=";
   };
 
   nativeBuildInputs = [

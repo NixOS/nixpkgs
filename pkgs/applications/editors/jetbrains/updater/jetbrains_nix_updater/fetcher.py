@@ -65,7 +65,7 @@ class VersionFetcher:
                 new_build_number = build["@number"]
             else:
                 new_build_number = build["@fullNumber"]
-            if "EAP" not in channel["@name"]:
+            if "EAP" not in channel["@id"]:
                 version_or_build_number = new_version
             else:
                 version_or_build_number = new_build_number
@@ -111,7 +111,7 @@ class VersionFetcher:
         root = xmltodict.parse(updates_response.text)
         products = root["products"]["product"]
         return {
-            channel["@name"]: channel
+            channel["@id"]: channel
             for product in products
             if "channel" in product
             for channel in one_or_more(product["channel"])

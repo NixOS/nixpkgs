@@ -54,14 +54,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "smolagents";
-  version = "1.24.0";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I+I7XVnYGKuATP4MIN99vx6qvDhIwcn2x25GhDIg0u0=";
+    hash = "sha256-ywjhPqK9Qc0eDN4LvY70o0EhB3FeRwJ5taGURtXUvlY=";
   };
 
   build-system = [ setuptools ];

@@ -476,28 +476,93 @@ makeScopeWithSplicing' {
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt { };
     }
-    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
-      flang = callPackage ./flang { };
+    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") (
+      let
+        # Standalone flang still resolves driver/option definitions via the
+        # installed libclang package, so keep flang-specific driver backports
+        # in a private libclang variant instead of patching the flang source
+        # tree. The `-Xflang` diagnostic improvement applies to every
+        # supported standalone-flang version (20+); the other two backports
+        # are only needed up to LLVM 21 because upstream merged equivalent
+        # behaviour into LLVM 22.
+        flangDriverPatches =
+          lib.optionals (lib.versionAtLeast metadata.release_version "20") [
+            (metadata.getVersionFile "flang/use-xflang-in-diagnostics.patch")
+          ]
+          ++
+            lib.optionals
+              (lib.versionAtLeast metadata.release_version "20" && lib.versionOlder metadata.release_version "22")
+              [
+                (metadata.getVersionFile "flang/warn-on-fbuiltin-and-fno-builtin.patch")
+                (metadata.getVersionFile "flang/accept-and-ignore-some-gfortran-optimization-flags.patch")
+              ];
+        flangLibclang =
+          if flangDriverPatches == [ ] then
+            self.libclang
+          else
+            self.libclang.override {
+              extraPatches = flangDriverPatches;
+            };
+        flangUnwrapped = callPackage ./flang {
+          libclang = flangLibclang;
+        };
+        flangRt = callPackage ./flang-rt {
+          buildFlang = buildLlvmPackages.flang-unwrapped;
+        };
+      in
+      {
+        flang-unwrapped = flangUnwrapped;
+        flang-rt = flangRt;
+        flang =
+          let
+            wrapped = wrapCCWith rec {
+              cc = flangUnwrapped;
+              bintools = bintools';
+              extraPackages = [ targetLlvmPackages.flang-rt ];
+              extraBuildCommands = mkExtraBuildCommands0 cc + ''
+                # triplet however is not used in darwin
+                PLATFORM_DIR="${if stdenv.targetPlatform.isDarwin then "darwin" else stdenv.targetPlatform.config}"
+                RT_LIB_PATH="${targetLlvmPackages.flang-rt}/lib/clang/${clangVersion}/lib/$PLATFORM_DIR"
+                if [ -d "$RT_LIB_PATH" ]; then
+                  ln -s "$RT_LIB_PATH" "$rsrc"/lib
+                  echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+                else
+                  ln -s "${targetLlvmPackages.flang-rt}/lib" "$rsrc"/lib
+                  echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+                fi
+              '';
+            };
+            tests = callPackage ./flang/tests.nix {
+              flang = wrapped;
+            };
+          in
+          wrapped
+          // {
+            passthru = (wrapped.passthru or { }) // {
+              inherit tests;
+            };
+          };
 
-      libc-overlay = callPackage ./libc {
-        isFullBuild = false;
-        # Use clang due to "gnu::naked" not working on aarch64.
-        # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
-        stdenv = overrideCC stdenv buildLlvmPackages.clang;
-      };
+        libc-overlay = callPackage ./libc {
+          isFullBuild = false;
+          # Use clang due to "gnu::naked" not working on aarch64.
+          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+          stdenv = overrideCC stdenv buildLlvmPackages.clang;
+        };
 
-      libc-full = callPackage ./libc {
-        isFullBuild = true;
-        # Use clang due to "gnu::naked" not working on aarch64.
-        # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
-        stdenv = overrideCC stdenv buildLlvmPackages.clangNoLibcNoRt;
-        # FIXME: This should almost certainly be `stdenv.hostPlatform`.
-        cmake = if stdenv.targetPlatform.libc == "llvm" then cmakeMinimal else cmake;
-        python3 = if stdenv.targetPlatform.libc == "llvm" then python3Minimal else python3;
-      };
+        libc-full = callPackage ./libc {
+          isFullBuild = true;
+          # Use clang due to "gnu::naked" not working on aarch64.
+          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+          stdenv = overrideCC stdenv buildLlvmPackages.clangNoLibcNoRt;
+          # FIXME: This should almost certainly be `stdenv.hostPlatform`.
+          cmake = if stdenv.targetPlatform.libc == "llvm" then cmakeMinimal else cmake;
+          python3 = if stdenv.targetPlatform.libc == "llvm" then python3Minimal else python3;
+        };
 
-      libc =
-        # FIXME: This should almost certainly be `stdenv.hostPlatform`.
-        if stdenv.targetPlatform.libc == "llvm" then self.libc-full else self.libc-overlay;
-    };
+        libc =
+          # FIXME: This should almost certainly be `stdenv.hostPlatform`.
+          if stdenv.targetPlatform.libc == "llvm" then self.libc-full else self.libc-overlay;
+      }
+    );
 }

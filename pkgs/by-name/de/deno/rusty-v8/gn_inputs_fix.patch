@@ -1,0 +1,105 @@
+Submodule build contains modified content
+diff --git a/build/toolchain/gcc_toolchain.gni b/build/toolchain/gcc_toolchain.gni
+index b9b5b0d76..4004f306e 100644
+--- a/build/toolchain/gcc_toolchain.gni
++++ b/build/toolchain/gcc_toolchain.gni
+@@ -712,7 +712,6 @@ template("single_gcc_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $libname -- -Clinker=\"${invoker.cxx}\" {{source}} LDFLAGS RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_rlib") {
+@@ -745,7 +744,6 @@ template("single_gcc_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link,metadata=$rmetaname -o $rlibname -- -Clinker=\"${invoker.cxx}\" {{source}} LDFLAGS RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_bin") {
+@@ -767,7 +765,6 @@ template("single_gcc_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $exename -- -Clinker=\"${invoker.cxx}\" {{source}} LDFLAGS {{ldflags}} ${extra_ldflags} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_cdylib") {
+@@ -790,7 +787,6 @@ template("single_gcc_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $dllname -- -Clinker=\"${invoker.cxx}\" {{source}} LDFLAGS {{ldflags}} ${extra_ldflags} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_dylib") {
+@@ -815,7 +811,6 @@ template("single_gcc_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link,metadata=$rmetaname -o $dllname -- -Clinker=\"${invoker.cxx}\" {{source}} LDFLAGS {{ldflags}} ${extra_ldflags} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_macro") {
+@@ -838,7 +833,6 @@ template("single_gcc_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $dllname -- -Clinker=\"${invoker.cxx}\" {{source}} LDFLAGS {{ldflags}} ${extra_ldflags} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+     }
+ 
+diff --git a/build/toolchain/apple/toolchain.gni b/build/toolchain/apple/toolchain.gni
+index 0aa4e736f..e3f59728d 100644
+--- a/build/toolchain/apple/toolchain.gni
++++ b/build/toolchain/apple/toolchain.gni
+@@ -325,7 +325,6 @@ template("single_apple_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $libname -- -Clinker=\"$_cxx\" {{source}} LDFLAGS $bin_flag RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_rlib") {
+@@ -359,7 +358,6 @@ template("single_apple_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link,metadata=$rmetaname -o $rlibname -- -Clinker=\"$_cxx\" {{source}} LDFLAGS RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_bin") {
+@@ -392,7 +390,6 @@ template("single_apple_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$linker_driver_env $rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $exename -- -Clinker=\"$linker_driver\" {{source}} LDFLAGS $linker_driver_args $bin_flag {{ldflags}} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_cdylib") {
+@@ -427,7 +424,6 @@ template("single_apple_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$linker_driver_env $rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $dllname -- -Clinker=\"$linker_driver\" {{source}} LDFLAGS $linker_driver_args $bin_flag {{ldflags}} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_dylib") {
+@@ -464,7 +460,6 @@ template("single_apple_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$linker_driver_env $rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link,metadata=$rmetaname -o $dllname -- -Clinker=\"$linker_driver\" {{source}} LDFLAGS $linker_driver_args {{ldflags}} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+ 
+       tool("rust_macro") {
+@@ -499,7 +494,6 @@ template("single_apple_toolchain") {
+             "$rustc_common_args {{rustdeps}} {{externs}} SOURCES {{sources}}"
+         command = "$rustc_wrapper --depfile=$depfile --emit=dep-info=$depfile,link -o $dllname -- -Clinker=\"${_cxx}\" {{source}} LDFLAGS $bin_flag {{ldflags}} RUSTENV {{rustenv}}"
+         rust_sysroot = rust_sysroot_relative
+-        inputs = rustc_wrapper_inputs
+       }
+     }
+ 

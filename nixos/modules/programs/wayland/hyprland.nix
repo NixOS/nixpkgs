@@ -81,7 +81,12 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [ cfg.package ];
+        environment = {
+          systemPackages = [ cfg.package ];
+
+          # Allows lua stub file to be accessed from /run/current-system/sw/share/hypr
+          pathsToLink = [ "/share/hypr" ];
+        };
 
         # Hyprland needs permissions to give itself SCHED_RR on startup:
         # https://github.com/hyprwm/Hyprland/blob/main/src/init/initHelpers.cpp

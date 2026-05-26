@@ -675,8 +675,8 @@ let
         mktplcRef = {
           name = "markdown-mermaid";
           publisher = "bierner";
-          version = "1.32.0";
-          hash = "sha256-1LlRTkskBAlYV+fq3GVyOUGYXbILvKIByBu2uKwTUUc=";
+          version = "1.32.1";
+          hash = "sha256-bH8JBZOfj2Km5/tfaiSzrkOl2kOU+XwZcuWOpU9iVEM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-mermaid/changelog";
@@ -1096,8 +1096,8 @@ let
         mktplcRef = {
           name = "csharpier-vscode";
           publisher = "csharpier";
-          version = "10.0.2";
-          hash = "sha256-SIogJ+5toIwa840I6ETxiLIHbfHjuAuOdleb+cYJElc=";
+          version = "10.0.3";
+          hash = "sha256-YTDpBGLbyM6Nq5DlEtqFiSsSRRECLIEqSM4xgIIVWG0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/csharpier.csharpier-vscode/changelog";
@@ -1226,8 +1226,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.10.7";
-          hash = "sha256-ODAUmYiomllLMGbncU4T+8SfLZnhULggFB6Mfw7vn1o=";
+          version = "2.10.8";
+          hash = "sha256-pBfD6HwPP9CybROC2W27CAq2RSAgRJ3ZrxvUOBzRyC8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -2648,8 +2648,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.209.2";
-          hash = "sha256-uS0KYSqJJ1IXEcDy1Y3Fl0GHpEpq6eskgBCoBZqYuUo=";
+          version = "1.215.2";
+          hash = "sha256-/3ULGcywO6SHvABRxaLXJQpjcrVs/vZxUGpG+NaSx3s=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -4222,8 +4222,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.26";
-          hash = "sha256-OZMUHqc8l8BrpLONlOIeImnsJVa0TLN1R51ulQ5n8h4=";
+          version = "0.8.27";
+          hash = "sha256-v4CZul1uuNlMrIgfml9EjUy0I626GkBArNH7F+5Z/dA=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -4244,8 +4244,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.10.3";
-          hash = "sha256-PzK3cQYgLmSya4YPaOTBa3P1tOb4iO+Of4JsdbZFwxk=";
+          version = "0.10.4";
+          hash = "sha256-fonAbZ2nvC3Dz/9j4J23hiiJ/xgT8z/LI1HYYQh6u9w=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
@@ -4867,8 +4867,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.69";
-          hash = "sha256-wP2Mw4K0Fh4xKaffzl1OwrWnWu6npZ2PyVDaT5LUeeY=";
+          version = "0.0.70";
+          hash = "sha256-chp6chYUg3HzWm68NfSs3B8obSJxPSCjFHMwBK31ps4=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -5110,8 +5110,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.27.3";
-          hash = "sha256-8ZkdAZLplf9RI5sFGqsjVMlsletck/qXJ6D1Dxz9AuI=";
+          version = "0.27.4";
+          hash = "sha256-nEONTcT0chv+gpi43naszDCh3R0aKnwC91hZ8hqje7s=";
         };
         meta = {
           license = lib.licenses.mit;

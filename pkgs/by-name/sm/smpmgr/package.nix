@@ -27,11 +27,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "smpclient"
   ];
 
-  dependencies = with python3Packages; [
-    readchar
-    smpclient
-    typer
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      readchar
+      smpclient
+      typer
+    ]
+    ++ smpclient.optional-dependencies.all;
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook

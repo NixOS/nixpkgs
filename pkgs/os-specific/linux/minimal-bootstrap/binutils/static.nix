@@ -40,6 +40,7 @@ let
     "--host=${hostPlatform.config}"
 
     "--disable-dependency-tracking"
+    "--disable-nls"
 
     "--with-sysroot=/"
     "--enable-deterministic-archives"
@@ -55,6 +56,8 @@ let
     # libbfd and libopcodes into a default visibility. Drop default lib
     # path to force users to declare their use of these libraries.
     "--with-lib-path=:"
+    "--disable-gold"
+    "--disable-plugins"
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -100,4 +103,8 @@ bash.runCommand "${pname}-${version}"
     # Install
     # strip to remove build dependency store path references
     make -j $NIX_BUILD_CORES install-strip
+
+    # gprof/addr2line/elfedit + man pages are unused downstream.
+    rm -f $out/bin/gprof $out/bin/addr2line $out/bin/elfedit
+    rm -rf $out/share/info $out/share/man
   ''

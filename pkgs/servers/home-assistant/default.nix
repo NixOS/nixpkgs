@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   python314,
   replaceVars,
   ffmpeg-headless,
@@ -262,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.5.2";
+  hassVersion = "2026.5.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -283,13 +284,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-fKHYlXb1j5A6vQ3B/Pb2O7WD6t9ubsNQXc9f/gK79Pk=";
+    hash = "sha256-Z5FUkljaWRr9tfBb6RXJCC86ZbyNkw0PvUcOl+bZ2cc=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zt+I/gaIyVAAgL9MF3T0WxivqY3D28tdtJX+GLbSES0=";
+    hash = "sha256-o5S6rnOTqzPLZpMBxgmp9IpmLlEHLvHTH68ql2EkVbI=";
   };
 
   build-system = with python.pkgs; [
@@ -317,6 +318,19 @@ python.pkgs.buildPythonApplication rec {
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
+    })
+
+    (fetchpatch {
+      name = "2026.5.4-shelly-tests-fix.patch";
+      url = "https://github.com/home-assistant/core/commit/072e9b51a2321b0d4489bae6f1e04f7ed845222f.patch";
+      includes = [ "tests/components/shelly/test_coordinator.py" ];
+      hash = "sha256-0XQdw2MnwzrHKYY06TotfJJem0bqremmi7k8SyVQVGA=";
+    })
+
+    (fetchpatch {
+      name = "2026.5.4-homewizard-tests-fix.patch";
+      url = "https://github.com/home-assistant/core/commit/e796d9c46744097585bfada483108a55ae16344a.patch";
+      hash = "sha256-T0Nb6LcL/21WdUm8RmczhHaVX92n5O/rpMdpqDVQ2VU=";
     })
   ];
 

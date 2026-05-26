@@ -121,7 +121,6 @@ in
   # - nix-build -A nixosTests.goupile.driverInteractive
   # - ./result/bin/nixos-test-driver
   # - run_tests()
-  # ssh -o User=root vsock%3 (can also do vsock/3, but % works with scp etc.)
   interactive.sshBackdoor.enable = true;
 
   interactive.nodes.machine =

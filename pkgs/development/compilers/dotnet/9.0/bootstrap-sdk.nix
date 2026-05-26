@@ -5,14 +5,14 @@
   fetchNupkg,
 }:
 
-# v9.0 (active)
+# v9.0 (maintenance)
 
 let
   commonPackages = [
     (fetchNupkg {
       pname = "Microsoft.NET.ILLink.Tasks";
-      version = "9.0.14";
-      hash = "sha512-CCJBCE04eY1Vszgslg9Vnbs6ZS+YxTImTxx/0hNphQd3KUv9KqrTvtqXkjhfLIQK4aZ5yICCdvZhOGwbYAX07g==";
+      version = "9.0.15";
+      hash = "sha512-0ITcaDR4iWo44bInmEy0a3rUmyEaDfP50h3a8y3ZTWAy87IQo6PhOj543ekhxVRbIHZzfUaqWThy0n5jrZG76w==";
     })
   ];
 
@@ -20,89 +20,89 @@ let
     linux-arm64 = [
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Crossgen2.linux-arm64";
-        version = "9.0.14";
-        hash = "sha512-KfRzkAToFV4pgZuiLVXlyw4RbuGYsSAiAvZZQOno6Bv//zX1zTyJJiVcxlJ9fh92cDS8uJz+PaJ/ejhOHs5oWw==";
+        version = "9.0.15";
+        hash = "sha512-78j6OO1RyiRcFGaioklJQ9u/q0VBMIQDjrf1rkx6et8TYQDPLi6baokGktWzMNHh1sXLdO8Vsn1kfysNoobpVg==";
       })
       (fetchNupkg {
         pname = "runtime.linux-arm64.Microsoft.NETCore.ILAsm";
-        version = "9.0.14";
-        hash = "sha512-HwEHZLrgvrqc9GIQjcgg82bXj/m/czjG83IXMvg4y8qRsazVzJRwXn4f6pvR8Go4PTHADHN2odZ1RA7oR+o6QA==";
+        version = "9.0.15";
+        hash = "sha512-ylv3Bh0cSVqiNILeV25pcuONtSjqXS7bN/ijLkGg84ZStOWSwDpm0kVa63cOwBiDEnS7iUa8r3AguC2oRIA/Zg==";
       })
       (fetchNupkg {
         pname = "runtime.linux-arm64.Microsoft.NETCore.ILDAsm";
-        version = "9.0.14";
-        hash = "sha512-gOGZh9SXiPP30Hq3jNNy6XyRHGy+imGddd+vITJiP0OO4B43YgBIzcaPytEzM3YPNeB9DHHZxgKenouAybqogQ==";
+        version = "9.0.15";
+        hash = "sha512-2gsanuISAXH7MPYz8VrGolV87nA0dTZSXjBgpT7wVsxOOLNjqfmODvpw1VZru3bk+z380aOdRlijU4pClHTbJQ==";
       })
       (fetchNupkg {
         pname = "runtime.linux-arm64.Microsoft.DotNet.ILCompiler";
-        version = "9.0.14";
-        hash = "sha512-ZkmK4p9AZONSLNNWLuEiWYy8ynGD0r0Fv5m6biZ7oxF8GZNYfF3+YSf6+WQyRSxGlLtm2fEV96DqKJ3R7Jpzig==";
+        version = "9.0.15";
+        hash = "sha512-kuIy1bHzIdYe6pta/LPMpH5hni4btriPViGWeXG3oqr0hmpLNbjESbGW8h285W7XqXNFIxtt62fiAPonAN7QjA==";
       })
     ];
     linux-x64 = [
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Crossgen2.linux-x64";
-        version = "9.0.14";
-        hash = "sha512-hIhDoJ1Je7kTlBjVaQEa8Ea2v9YNzHFpjTgHTuuE+uXw85mMA30+FU04rHd6ItX7i5oEYR2qfBSe2IvLtvsrZw==";
+        version = "9.0.15";
+        hash = "sha512-UOydeXToh8qXtenjBkUVxMn7+4bnWLUrPfzMPpHdlinkzbKNEKw9XTdncr6o5KLTKnkRLvtrCND0JXdaSV4JJg==";
       })
       (fetchNupkg {
         pname = "runtime.linux-x64.Microsoft.NETCore.ILAsm";
-        version = "9.0.14";
-        hash = "sha512-gR+yvtmxVFmAlwoFJ4wCyg991R3yLBacoOyIH+XnZYJdXy/L7a413nVGoqNpre09YT9MDlj8AVhp06elEI4ifA==";
+        version = "9.0.15";
+        hash = "sha512-J0vUOuGhhTC01vFEIOeIZy1P/f1I+hU8ZS/JmwLAUiYDx5jNbAizhsT02Z3SAfM7PGn023glRfWml0J43EdYkQ==";
       })
       (fetchNupkg {
         pname = "runtime.linux-x64.Microsoft.NETCore.ILDAsm";
-        version = "9.0.14";
-        hash = "sha512-llH6vLel6SlPJuM7ujDqY9ZsPfkXglVlF1EozKPTdzVarxzfy3xbFnFxoUH0Ubl4KYIC7F22+SFA0gIX4lT7Qg==";
+        version = "9.0.15";
+        hash = "sha512-irnu6y4H+K/4HpoV95KjvD9fIJyAh0gPLcuzQ7V970459yG3CnVNKxk1R3Bjm+lT4xAqF4GZ2WzZLhszig9Gvw==";
       })
       (fetchNupkg {
         pname = "runtime.linux-x64.Microsoft.DotNet.ILCompiler";
-        version = "9.0.14";
-        hash = "sha512-cgIB1paNuwG20tY2h30OJrWH3f2XMGUTf3PH5qUEbM8Pnx/trvofuRhzCcmdiIMCw7uG0Z8fGusOslH2a2u++g==";
+        version = "9.0.15";
+        hash = "sha512-HGSeAhDQn5rMeJZB+lbacgE1qo0oYyt+nF2ND6PBcpiIK3RZs57VI30kbhLXN3HRlzqlWwmJquDRSKO/BbHbDQ==";
       })
     ];
     osx-arm64 = [
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Crossgen2.osx-arm64";
-        version = "9.0.14";
-        hash = "sha512-tl/iXIYlI4kpxftKdZkMzfS0iaXoFS3rZaLjf6n+nhOUPBR3iHfciHRCgClIFBIDkz03PMmSQYgJgfEmb1CIWw==";
+        version = "9.0.15";
+        hash = "sha512-HwNqX2qYcymE22qFpp/R+1EYMw94qbVVJl6WL19TcdLmWDzZs0acP/O+jGQX9+LSZ1vY+LEfYUFIu51W1xu/Bg==";
       })
       (fetchNupkg {
         pname = "runtime.osx-arm64.Microsoft.NETCore.ILAsm";
-        version = "9.0.14";
-        hash = "sha512-l9EKeutIuK8ZYHfRLO4JNTgsCv9zwD7bNU27rkfkG00PJWzoIVutTGMLYf1OiYCKVJtawXQcfSgC74cYDDrPnQ==";
+        version = "9.0.15";
+        hash = "sha512-swVccyR4m0ozLI+sSHw61/f/2YROkPnyII4ymHtDNsBxugmDQGOGOcd+y5vU6Y2Ocaovkc5aJiyfncECg/+YPQ==";
       })
       (fetchNupkg {
         pname = "runtime.osx-arm64.Microsoft.NETCore.ILDAsm";
-        version = "9.0.14";
-        hash = "sha512-lkKYv2JhU5a6Ywil9qz2JBBBj8Qt8svswGIe0NG7BVi86vInbJAJWJZHBiwvG+3YmonYhbkEIPQ+xFWdONh8GA==";
+        version = "9.0.15";
+        hash = "sha512-2jrawLdyco2r2wlym4lwkQ3QGja0PpZz3tjIf6o8wwEig1n4XKkLa0Th4RxX/X1/PDx8WlyrC9Mr8tcQInWAig==";
       })
       (fetchNupkg {
         pname = "runtime.osx-arm64.Microsoft.DotNet.ILCompiler";
-        version = "9.0.14";
-        hash = "sha512-y0pwq9aOFOTXDT50ilQ1wuv3HTq5kc2QcMRBR2ag7pcZ/A+3egH8X93QxXMIhFU//oY0TVLVp8WITEB+zr7v4A==";
+        version = "9.0.15";
+        hash = "sha512-ouERhZLL3tyv9PCSa1Ffi3CFRFusaXlikyBev7wv7mcYSA+xdlVaWk85n10reyRXN2tKJIFRS6k10aOKWUbnFA==";
       })
     ];
     osx-x64 = [
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Crossgen2.osx-x64";
-        version = "9.0.14";
-        hash = "sha512-BS0EiLj7JtUJ7i9r63LNSqMIQwVbgvCbVgNDkA3vvhy97/BP1zS0R1hcF3AVZTEiF6TRpk/MRJmsNoYwS7bdZw==";
+        version = "9.0.15";
+        hash = "sha512-3fBu+ZuxeT6gOiLKm2YJWzbuclGH2089ePrvKQxxb7hvqN8mMO+G3lfMGqA9v8aLE2GNWp+MDuEiyu+m5qdhOg==";
       })
       (fetchNupkg {
         pname = "runtime.osx-x64.Microsoft.NETCore.ILAsm";
-        version = "9.0.14";
-        hash = "sha512-BXoutYs8qFdBSjtaRqrauyJZqS2CLI1NVuxtchwdg9aQxX9xG4Hc4POIqvFrZaRoVrcpxtGCSEbg6vvDWCJBrA==";
+        version = "9.0.15";
+        hash = "sha512-rcikImxoHDbwjnHu23HIFa6BG9Awgj3qjRBSQgmicJBZudd9eJmoKflkWtTFCpYvQvP5fKYowWx2bshhjNJo1w==";
       })
       (fetchNupkg {
         pname = "runtime.osx-x64.Microsoft.NETCore.ILDAsm";
-        version = "9.0.14";
-        hash = "sha512-KVeVExPnYZITgzP6Au2IaxTOES6vhIvhPOPPa7Z6DwsSu6Zd6t03HxM6JyU5/D2nKofjBnvcPjKW+zS6gA5zCg==";
+        version = "9.0.15";
+        hash = "sha512-ecF6MKQBpR4cCw0GqQm2KSXRH/XO/Qn8HZ0ucRbRpI00hHMhBQEviC9nvi6P7dkWp7vgLtty+NE6NAbliZ7LDQ==";
       })
       (fetchNupkg {
         pname = "runtime.osx-x64.Microsoft.DotNet.ILCompiler";
-        version = "9.0.14";
-        hash = "sha512-ltQrtUR4/z8hmlSSkV2dU0rBHmAIWNmKmpetNqTJY233SeVjbgieza3EAS8tYMhJHXAGaqjk84Em8qPaemefDA==";
+        version = "9.0.15";
+        hash = "sha512-2JWrZHSBp/756CizUZrj9IZw0Uznh7JzUNnDfHYWp66dTmFcgILSW0IaT0qX9sR0cM3Zczsbxa2+vRlW21Ff/g==";
       })
     ];
   };
@@ -111,119 +111,119 @@ let
     linux-arm64 = [
       (fetchNupkg {
         pname = "Microsoft.AspNetCore.App.Runtime.linux-arm64";
-        version = "9.0.14";
-        hash = "sha512-vKjaQVMP39vBz3CkOpJILVyz+ActsFe0yEvmDOa1EXdR6aCUkpfq89icnlSFWr/oicz9hxGK/cOQgSnRXM2T8Q==";
+        version = "9.0.15";
+        hash = "sha512-fWtSGeIixxjpsLj1TheWKnGGVLC2VLRuHCFV2YRP1smNWAz+pjcJGkw0CnHG4Due7kEJGe8aDBrBbroNDLYsLg==";
       })
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Runtime.linux-arm64";
-        version = "9.0.14";
-        hash = "sha512-AmLrJ5tBEwPK1VMPdk4Vy3Z6++yGkaL5bpKwGpY9SUL8x6nwQjWfY87snOK99X8NEXltxJNovP0FkRLCi+Zr2g==";
+        version = "9.0.15";
+        hash = "sha512-vZiZin69Jx7+GwxDvxtsZBiqd3FVX/SCXiRsJzGwKdRoJBUw6XGNPq+EngCdZA9+5leoGvGuvXGkvMNG1l3RCQ==";
       })
     ];
     linux-x64 = [
       (fetchNupkg {
         pname = "Microsoft.AspNetCore.App.Runtime.linux-x64";
-        version = "9.0.14";
-        hash = "sha512-jYd+5KNUzdo36ytc1Lz4TlAeHhRNMXQr3cdBzYAqCx9wfsOUnqPM24nx7XNvNryawyjPicbdP2wiNBgdQlts7A==";
+        version = "9.0.15";
+        hash = "sha512-piCf0clvjiWZR5rnFT1w/Lt8GQNu45CL+mYCOvVjtryfKEK2CO2MzwT6bh34sJBVdnrT6SJgxjvBkE0gDPNxTw==";
       })
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Runtime.linux-x64";
-        version = "9.0.14";
-        hash = "sha512-f7N/o6P9rxLrfKJyyy7pp/7ytpe+CNa9LdyWPjYBSTiVi9bIPq1yXK6MM4PewCkLsoS0jOOEWmfYHrYb5Fw7VA==";
+        version = "9.0.15";
+        hash = "sha512-HFR98+ws9Ag7mNcoJY0k9EsczEKJMiykvIp2fFH3xR54tc2oe3KhU43+T/83R/o2XWUeN9UpXdKnrG+cn60FKQ==";
       })
     ];
     osx-arm64 = [
       (fetchNupkg {
         pname = "Microsoft.AspNetCore.App.Runtime.osx-arm64";
-        version = "9.0.14";
-        hash = "sha512-Nxre0GsAxbGLmlfymqMYsWps0rexVTEyKyCtv4SZs+OnRd16xd3YFoxuqwaqKOSGuDPRIX9yJF/POjWnanA0HQ==";
+        version = "9.0.15";
+        hash = "sha512-f1xq/KbX5Ba1ujCjkZe5EnkSCnRTgEJEKVQTDH4ZUkRL2A62SqsD/rF5u+JcLVUSgIAnZUPBYIeAFeIRJyCQ8g==";
       })
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Runtime.osx-arm64";
-        version = "9.0.14";
-        hash = "sha512-1j/Sem8h5XELOfV/8mnVdXuYcltI0JXAyvzNeC7uBJlH/ic1HZ00TQlWsv0/WIgnHgSTAgNaa1HxnAYL35NITQ==";
+        version = "9.0.15";
+        hash = "sha512-6g4QI9yu1Tb4bDiXY3bkIlIidNo6Mp69Of21zFSSUy0dRYDT2kuNSjDgkr87sAQ0exqFYWRwZf+oBfNMj3gkcg==";
       })
     ];
     osx-x64 = [
       (fetchNupkg {
         pname = "Microsoft.AspNetCore.App.Runtime.osx-x64";
-        version = "9.0.14";
-        hash = "sha512-DPYynWbPeB1oLDtUxOQLu5SzJQlqQzG01mxGoD1qTjDK1V1a1eVWfKMRZ56tKkIS40zywn8ku7Rpmrf4F4v1CA==";
+        version = "9.0.15";
+        hash = "sha512-iaLUHu7zxURFwxJY1QgJCtOJaRVQ3kE5iIP9e9+FEX6Eum9TQpz+FISQrKlLsgKZIloC/QLL+JeVOnqRAYelLA==";
       })
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Runtime.osx-x64";
-        version = "9.0.14";
-        hash = "sha512-2mjykmXgsvwZb6qItFVw5uTNlGE30SdjSbTaDzwElYIo0ZFJHKYMuQsBxJD1GUzets0n+g0Z/dZ+MjddeYI5Vg==";
+        version = "9.0.15";
+        hash = "sha512-by2spvXuAVK7hMzwRlrzDEQp6u/xsGk1pat1Bg/ZSFeNsGdOUDV2M4JDGp5r35YVVeaEkqwu45D5zeoQnjTP+A==";
       })
     ];
   };
 
 in
 rec {
-  release_9_0 = "9.0.14";
+  release_9_0 = "9.0.15";
 
   aspnetcore_9_0 = buildAspNetCore {
-    version = "9.0.14";
+    version = "9.0.15";
     srcs = {
       linux-arm64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.14/aspnetcore-runtime-9.0.14-linux-arm64.tar.gz";
-        hash = "sha512-xc0FlxycugwhHOtV4ibL+2LxctuDRfpdTkdqTMs6T2HW5R3CstF461XzZzrS1hz3KuZJ+4TM8sPbu9Ss27eBMg==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.15/aspnetcore-runtime-9.0.15-linux-arm64.tar.gz";
+        hash = "sha512-crn0sGSeWjuHRZfBtQ27skaDHpM0VbvjTDxT/90wFuyn1CCQxteFu52ueLnzTTd1ffK0MPYwnYEcCN9oOc4Azw==";
       };
       linux-x64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.14/aspnetcore-runtime-9.0.14-linux-x64.tar.gz";
-        hash = "sha512-bQlHOQ+ewxYpfyGp7AIlKKJyBaRDKPlBf7hnV4PtxWAi5eFeplZQxec8tzkXwJxSMF0+heTBKs1eEQdIcbsGeQ==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.15/aspnetcore-runtime-9.0.15-linux-x64.tar.gz";
+        hash = "sha512-hdR0swP7jxhnEl2aoew521r/8XmxZSh+Rf14t+xR1BTlk3hxvaWUi451Cv6cIgr+YTjrpxCAkL+6Hl2tk9OcTg==";
       };
       osx-arm64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.14/aspnetcore-runtime-9.0.14-osx-arm64.tar.gz";
-        hash = "sha512-VhV7qrlOtSivrPkhaX1mPrID4RS+mOCKAxUwPQm4+F9y8dGT7tpx5Mg/Tl38hRffUoq4ZJ0XVIt7YTaruvfr/w==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.15/aspnetcore-runtime-9.0.15-osx-arm64.tar.gz";
+        hash = "sha512-xEHHwAQpEHaMhyCXP6lGc7SAOqXABNp0W+QYBeT42PSYu7ddbGC+7QuFHaGJsRJBqUvd//NE5WsYMaI4an4hMg==";
       };
       osx-x64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.14/aspnetcore-runtime-9.0.14-osx-x64.tar.gz";
-        hash = "sha512-Ts72neYQT0t8dKvHeXCeSAVRF/3KZORdCUYaoRmCpEmOoXW+z6g/fSrZrbiWyYUXAhSOdAPr7ifrAfFTWcqv5A==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.15/aspnetcore-runtime-9.0.15-osx-x64.tar.gz";
+        hash = "sha512-I5uYew1gididOkB1mlFfnD3YAYklekxowKIiKFHcvDRC5o2w3yFneX2EUmk+UeqRBSmImLfQvIIGmxoyscyArw==";
       };
     };
   };
 
   runtime_9_0 = buildNetRuntime {
-    version = "9.0.14";
+    version = "9.0.15";
     srcs = {
       linux-arm64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.14/dotnet-runtime-9.0.14-linux-arm64.tar.gz";
-        hash = "sha512-D+DekyKzozyyMlbOZJ/lqUlNtUdsUO8lM4bXTp43Ipk87jh9aFAGETGti3fxRUj6E/dyyUhsMq6jzQjjE/dvcg==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.15/dotnet-runtime-9.0.15-linux-arm64.tar.gz";
+        hash = "sha512-hMDs9fd2WSjMhv6UeWNCdvFgk7nOsgHioX99/lVVXZCVgSBOY0d1lGjEl6zQs/uFd5fhRKLn8brFa7/qTVrIyQ==";
       };
       linux-x64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.14/dotnet-runtime-9.0.14-linux-x64.tar.gz";
-        hash = "sha512-2w2wuecJ/+Rj3q2U+053ubDHCGu6p4p4qmtTZr73e6PDOJmoHDwa7zwRAnoebN6/SnrTBTK9wZPw3sxxly5d2g==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.15/dotnet-runtime-9.0.15-linux-x64.tar.gz";
+        hash = "sha512-5lsJk1eeCvpwnNwo9vWuElJDfCy9L9zEtDboW7vOcAID/xVWPimF9SjxdZxDhlypQhcTnTbWpi4bUpa9mi5AUw==";
       };
       osx-arm64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.14/dotnet-runtime-9.0.14-osx-arm64.tar.gz";
-        hash = "sha512-I+bbmZG+jlrTsGD0/oKGAXa/Qx+zSR2f1lZyWTvQBLqshg1JuoOozYRHZqcUGwcMj6jQyKXQ+mi5uNFTsKk72g==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.15/dotnet-runtime-9.0.15-osx-arm64.tar.gz";
+        hash = "sha512-KLa2tkJvx2KvgSIv/pXQ82uQdQBwsN8b+yXlSKnQsEwGqpcuSF8nra8Bo0hXoy5zYCSUv8L0Hk1sIIld0lKrug==";
       };
       osx-x64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.14/dotnet-runtime-9.0.14-osx-x64.tar.gz";
-        hash = "sha512-fvOeVkit9BLU5WTwgIFh2X7nBzG7GSGyZiltM+1BgjGjGP87CRM/PaCloYkn+VE8g/dN5e2cMMfGb1jXfuh0jw==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.15/dotnet-runtime-9.0.15-osx-x64.tar.gz";
+        hash = "sha512-XYvUzNBpo+nLJ+0cRyrfaGsG0ekgFY8ovbLSjgM1PM37lzcEoa6Aege4DooM1yRUmpqtT3p4xqgGeoLPhwWhQg==";
       };
     };
   };
 
   sdk_9_0_1xx = buildNetSdk {
-    version = "9.0.115";
+    version = "9.0.116";
     srcs = {
       linux-arm64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.115/dotnet-sdk-9.0.115-linux-arm64.tar.gz";
-        hash = "sha512-zJhNLUXOnu0k3Xih2SG0GbgRMZJ66RC6UL0oCfZMxADGUlJAJwUyopA6VPWQjEWAmGTMNUZVqLpEUBcmN9z+cg==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.116/dotnet-sdk-9.0.116-linux-arm64.tar.gz";
+        hash = "sha512-BdA9L6RCnwtIO1+J1FVLjdWBd0lQBVJFWy26Cz+0ICeZrPZJa02tZtJxq9PRjD+MLw1yHCnGN042ou2zaEKZaA==";
       };
       linux-x64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.115/dotnet-sdk-9.0.115-linux-x64.tar.gz";
-        hash = "sha512-g38je4D8WM3Jf4AVTHz+UFpzKNyTxUFAZwdhBVq1bUHaEfhiDlAKpAVXhqfuCxOLW3Nga0vOThLIYBukJtOtgw==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.116/dotnet-sdk-9.0.116-linux-x64.tar.gz";
+        hash = "sha512-pBBcDHcZ8ymeqCKZlnyGauZVXgKWlp7dll7NyL3403dR0f5usw5FfOFxHmljuXhkOIHiN6W2/ZlQvCALO0892g==";
       };
       osx-arm64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.115/dotnet-sdk-9.0.115-osx-arm64.tar.gz";
-        hash = "sha512-eU+QDeVY8w8uI3WWXAjADdSZCq0p4xv9CTsIsdmlv1fHjMbz22jNhTB2+BaJKJjEPVCOeES0BguKkR3Om8x3Xg==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.116/dotnet-sdk-9.0.116-osx-arm64.tar.gz";
+        hash = "sha512-3itAGFEqEamTQmXwawAWOXpXBDTq6rPphZgCxn9SZi8bhohSS4X0S83uIhk1J/ECBb2XOlj1GgEuXEqEpOLm/Q==";
       };
       osx-x64 = {
-        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.115/dotnet-sdk-9.0.115-osx-x64.tar.gz";
-        hash = "sha512-J9XlO62e6j2yJSK/w89mE8GPuPHdW4INzZe5fb+NZfLz6sc8Bh3OkTB5mhWU0fKZW2+Jf8hS+3F/52s4ea9QFw==";
+        url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.116/dotnet-sdk-9.0.116-osx-x64.tar.gz";
+        hash = "sha512-6tfZS+xXXbYiGA2pMBdWerhYuWd+93sLvKSHhkeI+yu0XVNMNN63ChRHZDD5Pm4kAZeux0zUMQw6JQFUpgAMDg==";
       };
     };
     inherit commonPackages hostPackages targetPackages;

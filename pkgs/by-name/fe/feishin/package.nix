@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_39,
+  electron_40,
   dart-sass,
   mpv-unwrapped,
   fetchPnpmDeps,
@@ -25,7 +25,7 @@ let
     hash = "sha256-TSjgjNHhPSZ4k7zZTH5e3FCkl6d7B/2w2WCt0S5OW0g=";
   };
 
-  electron = electron_39;
+  electron = electron_40;
 in
 buildNpmPackage {
   inherit pname version;
@@ -74,20 +74,17 @@ buildNpmPackage {
     ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
   '';
 
-  postBuild =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
-      cp -r ${electron.dist}/Electron.app ./
-      find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
-    ''
-    + ''
-      npm exec electron-builder -- \
-        --dir \
-        -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
-        -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false \
-        ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
-    '';
+  postBuild = ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    npm exec electron-builder -- \
+      --dir \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
+  '';
 
   installPhase = ''
     runHook preInstall

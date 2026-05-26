@@ -30,6 +30,7 @@
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       testCross = pkgsCross.riscv64.tests.rust-hooks.cargoBuildHook;
     };
+    meta.license = lib.licenses.mit;
   } ./cargo-build-hook.sh;
 
   cargoCheckHook = makeSetupHook {
@@ -44,6 +45,7 @@
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       testCross = pkgsCross.riscv64.tests.rust-hooks.cargoCheckHook;
     };
+    meta.license = lib.licenses.mit;
   } ./cargo-check-hook.sh;
 
   cargoInstallHook = makeSetupHook {
@@ -57,6 +59,7 @@
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       testCross = pkgsCross.riscv64.tests.rust-hooks.cargoInstallHook;
     };
+    meta.license = lib.licenses.mit;
   } ./cargo-install-hook.sh;
 
   cargoNextestHook = makeSetupHook {
@@ -71,6 +74,7 @@
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       testCross = pkgsCross.riscv64.tests.rust-hooks.cargoNextestHook;
     };
+    meta.license = lib.licenses.mit;
   } ./cargo-nextest-hook.sh;
 
   cargoSetupHook = makeSetupHook {
@@ -110,6 +114,7 @@
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       testCross = pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
     };
+    meta.license = lib.licenses.mit;
   } ./cargo-setup-hook.sh;
 
   maturinBuildHook = makeSetupHook {
@@ -124,6 +129,7 @@
       inherit (rust.envVars) setEnv;
 
     };
+    meta.license = lib.licenses.mit;
   } ./maturin-build-hook.sh;
 
   bindgenHook = makeSetupHook {
@@ -132,5 +138,6 @@
       libclang = (lib.getLib clang.cc);
       inherit clang;
     };
+    meta.license = lib.licenses.mit;
   } ./rust-bindgen-hook.sh;
 }

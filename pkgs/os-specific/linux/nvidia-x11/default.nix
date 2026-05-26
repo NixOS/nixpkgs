@@ -127,12 +127,12 @@ rec {
   };
 
   dc_580 = generic rec {
-    version = "580.159.03";
+    version = "580.159.04";
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
-    sha256_64bit = "sha256-MshdmbD2QMlQH2GzndrSCP0CiNAVxPvF/QQ1wHeD+nc=";
-    persistencedSha256 = "sha256-cQ+qz4aSYeonKviufdQOHo0quun8yPBTSgOvRkdN6og=";
-    fabricmanagerSha256 = "sha256-L/HKInyd0Eqz7F5BhWfcABi83rr7mBxyIBtvRvApeVA=";
-    openSha256 = "sha256-HlGJyfcmXWqKJw1NRjp35clLucQtCIWAxjJvicgI4zM=";
+    sha256_64bit = "sha256-weZnYbCI0Xs632y2l53przi+JoTRArABoXbc+vq9yh4=";
+    persistencedSha256 = "sha256-vDawiy52GB8JABUKZDiQUc8uda8p/7jCFW7rTu6QMa4=";
+    fabricmanagerSha256 = "sha256-Jk6XVn/d6vqfxYGAACiD9UHelnjdC4+zOi4EEv8LuKE=";
+    openSha256 = "sha256-zsNmjZW0cyZWPp3vDT3mNeqAo0hS0M7e9Tbvwvij+F4=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;

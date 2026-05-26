@@ -29,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "001wcqk5z67qg0raw9zlwmv62drxiwqykvsbk10q2mrc6knjsd42";
   };
 
+  patches = [
+    ./fix-conflicting-types.patch
+  ];
+
   preConfigure = ''
     substituteInPlace configure.in \
       --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'

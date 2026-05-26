@@ -32,6 +32,9 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.8.8)" "cmake_minimum_required(VERSION 3.10)"
     substituteInPlace googletest/{googlemock,googletest}/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+
+    # https://gcc.gnu.org/gcc-15/porting_to.html#header-dep-changes
+    sed -e '1i #include <cstdint>' -i googletest/googletest/src/gtest-death-test.cc
   '';
 
   meta = {

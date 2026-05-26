@@ -18573,10 +18573,6 @@ with self;
         }
       done
     '';
-    passthru = {
-      tlType = "run";
-      pkgs = [ LaTeXML.tex ];
-    };
     meta = {
       description = "Transforms TeX and LaTeX into XML/HTML/MathML";
       homepage = "https://dlmf.nist.gov/LaTeXML/";
@@ -30638,6 +30634,13 @@ with self;
       (fetchpatch {
         url = "https://github.com/hoytech/Session-Token/commit/cd64e7b69986054bb715755290811308159b7959.patch";
         hash = "sha256-nMQmdvVQW8cQYO0+bLJcdVfSOLVIsongk+71fQ7fQdU=";
+      })
+      (fetchDebianPatch {
+        version = "1.503";
+        pname = "libsession-token-perl";
+        debianRevision = "3";
+        patch = "fix-gcc15-build.patch";
+        hash = "sha256-b6Yr5w++3lQcaI8JilthLykq4D4nEczz0h+r6LJ8hGI=";
       })
     ];
     meta = {

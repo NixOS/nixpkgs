@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   python3,
   spirv-headers,
@@ -9,18 +10,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-tools";
-  version = "1.4.341.0";
+  version = "1.4.350.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-8haVqfmTBvNuv5jEc/LaAO34pWjTZAJ04FIxuxfJNUc=";
+    hash = "sha256-tR3POZH/LXaAljMUS9aHBBvIvlr6o7d6+YUtJCRMS1w=";
   };
 
   patches = [
     # https://github.com/KhronosGroup/SPIRV-Tools/pull/6483
     ./0001-Fix-generated-pkg-config-modules-with-absolute-insta.patch
+
+    # backport to fix glslang tests
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://github.com/KhronosGroup/SPIRV-Tools/commit/2ec8457ab33d539b6f1fecc998360c0b8b05ed4f.diff";
+      hash = "sha256-YHbYBwXMm4rTKpmMW6I3LUafhA4RuNUdXqUBUAXwXpE=";
+    })
   ]
   # The cmake options are sufficient for turning on static building, but not
   # for disabling shared building, just trim the shared lib from the CMake

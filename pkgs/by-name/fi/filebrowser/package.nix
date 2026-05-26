@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "2.63.3";
+  version = "2.63.5";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-v3cC8opClvt91MqUIKNZdvCv0hPeCvWPi0IlOMHlWbQ=";
+    hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
   };
 
   frontend = buildNpmPackage rec {
@@ -41,7 +41,7 @@ let
         ;
       fetcherVersion = 3;
       pnpm = pnpm_10;
-      hash = "sha256-g8BWDEymQNOkLYBws0ii4iLnpjB7X4EQl0OzR3GXeq0=";
+      hash = "sha256-UwTA7Eogp2GrvmXDbdfGBTJS3DuOTJ42e6fHlQxSHoA=";
     };
 
     installPhase = ''

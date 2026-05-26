@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "esphome-dashboard";
-  version = "20260408.1";
+  version = "20260425.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "dashboard";
     tag = finalAttrs.version;
-    hash = "sha256-OY7s/b0rWmjI9QfmEwj3VxbTFrj99fyf9x1tPl24RbI=";
+    hash = "sha256-OhvRPIvytLmWkIvO45arikC3+7WCTdsEOwswuSAx0XA=";
   };
 
   npmDeps = fetchNpmDeps {

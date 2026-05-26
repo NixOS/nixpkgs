@@ -45,6 +45,7 @@
   openldap,
   openssl,
   pcre,
+  pcre2,
   pkg-config,
   readline,
   ripgrep,
@@ -303,13 +304,10 @@ in
         sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
       })
 
-      # https://github.com/lgi-devs/lgi/issues/346
-      # https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/issues/1
-      (fetchpatch {
-        name = "glib-2.86.0.patch";
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/raw/05a0c9df75883da235bacd4379b769e7d7713fb9/0001-Use-TypeClass.get-instead-of-.ref.patch";
-        hash = "sha256-Z1rNv0VzVrK41rV73KiPXq9yLaNxbTOFiSd6eLZyrbY=";
-      })
+      # https://github.com/lgi-devs/lgi/issues/362
+      # https://github.com/lgi-devs/lgi/pull/361
+      # https://github.com/NixOS/nixpkgs/issues/523345
+      ./lgi/glib-2.88.patch
     ];
 
     # https://github.com/lgi-devs/lgi/pull/300
@@ -434,6 +432,15 @@ in
       {
         name = "PCRE";
         dep = pcre;
+      }
+    ];
+  };
+
+  lrexlib-pcre2 = prev.lrexlib-pcre2.overrideAttrs {
+    externalDeps = [
+      {
+        name = "PCRE2";
+        dep = pcre2;
       }
     ];
   };

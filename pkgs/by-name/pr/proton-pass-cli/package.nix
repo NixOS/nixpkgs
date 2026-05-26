@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proton-pass-cli";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
@@ -46,19 +46,19 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-aarch64";
-        hash = "sha256-C/2ZxNgnDOLCkTyTqCPGIKiXXjwvHOJNI05BcGy1z0c=";
+        hash = "sha256-5FQSl6Xqipm6MWq2kza2FVXSajX4xCB4gqaAed40NoI=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-aarch64";
-        hash = "sha256-wSxTGtuCPU6uT25pBlxudnsQ7XEyihs/piWkiXrjs4w=";
+        hash = "sha256-4UgcR9yV/iQaQoQUFDRa+yzSCFIIk/SaPCOJdTgpMQI=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-x86_64";
-        hash = "sha256-qXXKavGRd6LSdLeoIiwlENhOE9JS/ZxQv432flS0KBg=";
+        hash = "sha256-iT53cCskSY8+AvLXWQGcqFklQJJBO1d7AFMEIYEDllo=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-x86_64";
-        hash = "sha256-/WClBB5kKnsRNe9oeMPXzjUjsIMhDqgQDu5cNwEBftk=";
+        hash = "sha256-WnddX4Ov+9jBvL8VF8ONGhV8FgEz5xNrANUxG6/oupM=";
       };
     };
     updateScript = writeShellScript "update-proton-pass-cli" ''

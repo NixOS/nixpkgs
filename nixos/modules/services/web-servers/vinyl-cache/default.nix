@@ -18,12 +18,9 @@ let
   cfg = config.services.vinyl-cache;
 
   # Vinyl Cache has very strong opinions and very complicated code around handling
-  # the stateDir. After a lot of back and forth, we decided that we a)
-  # do not want a configurable option here, as most of the handling depends
-  # on the version and the compile time options. Putting everything into
-  # /var/run (RAM backed) is absolutely recommended by Vinyl Cache anyways.
-  # We do need to pay attention to the version-dependend variations, though!
-  stateDir = "/var/run/vinyld";
+  # the stateDir. After a lot of back and forth, we decided to set the stateDir
+  # at compile time and let the package expose the particular path as passthru.
+  stateDir = cfg.package.stateDir;
 
   # from --help:
   #   -a [<name>=]address[:port][,proto] # HTTP listen address and port
@@ -183,13 +180,13 @@ in
         after = [ "network.target" ];
         serviceConfig = {
           Type = "simple";
-          ExecStart = "${cfg.package}/bin/vinyld ${commandLineAddresses} -n ${stateDir} -F ${cfg.extraCommandLine} ${commandLine}";
+          ExecStart = "${cfg.package}/bin/vinyld ${commandLineAddresses} -F ${cfg.extraCommandLine} ${commandLine}";
           Restart = "always";
           RestartSec = "5s";
           User = "vinyl-cache";
           Group = "vinyl-cache";
           DynamicUser = true;
-          RuntimeDirectory = lib.removePrefix "/var/run/" stateDir;
+          RuntimeDirectory = lib.removePrefix "/run/" stateDir;
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           NoNewPrivileges = true;
           LimitNOFILE = 131072;
@@ -220,6 +217,10 @@ in
           {
             assertion = cfg.package.pname == "vinyl-cache";
             message = "services.vinyl-cache only supports Vinyl Cache. Please use services.varnish.";
+          }
+          {
+            assertion = lib.strings.hasPrefix "/run/" stateDir;
+            message = "The vinyl-cache NixOS mosule only supports statedirs in /run/, but vinyl-cache package was compiled with ${stateDir}.";
           }
         ];
     })

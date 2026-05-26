@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "oxc";
     name = "oxc-vscode";
-    version = "1.55.0";
-    hash = "sha256-QAuN9Qe1AErcGIbbqsYYO6kikgaEiX0Y3ddnNhuOB6Q=";
+    version = "1.56.0";
+    hash = "sha256-wosNcp6CaS7WrH3NwXnsnEdABG2G9BZxRflh+lhr9+Q=";
   };
 
   nativeBuildInputs = [

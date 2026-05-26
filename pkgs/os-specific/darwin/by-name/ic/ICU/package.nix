@@ -3,7 +3,7 @@
   bootstrapStdenv,
   buildPackages,
   fetchpatch2,
-  icu76, # The ICU version should correspond to the same one used by Apple’s ICU package
+  icu78, # The ICU version should correspond to the same one used by Apple’s ICU package
   mkAppleDerivation,
   python3,
   stdenvNoCC,
@@ -40,8 +40,10 @@ let
 
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
-      ./patches/suppress-icu-check-crash.patch
+      ./patches/0001-suppress-icu-check-crash.patch
     ];
+
+    patchFlags = [ "-p4" ];
 
     preConfigure = ''
       sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
@@ -118,7 +120,7 @@ let
 
           # Add missing test data. It’s not included in the source release.
           chmod u+w "$NIX_BUILD_TOP/source/icu"
-          tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu76.src} icu/testdata
+          tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu78.src} icu/testdata
         ''
         + lib.optionalString stdenv.hostPlatform.isx86_64 ''
           # These tests fail under Rosetta 2 with a floating-point exception.

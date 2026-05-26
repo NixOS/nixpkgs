@@ -24,25 +24,24 @@
   libsecret,
   curl,
 
-  _experimental-update-script-combinators,
   nix-update-script,
 }:
 
 let
   inherit (stdenv.hostPlatform.node) arch platform;
-  cacheRootHash = "sha256-mR5geiPPAv+oK1efT3pMfnUT1keOxB8Ge1yiq4hLtj0=";
-  cacheAppHash = "sha256-Th3I9IPiHXEvj3FTCg3gefClnX1jDT8EPb/FzIVpjiY=";
+  cacheRootHash = "sha256-OJDxq1Yep3swLU87YyJz7WfpPzpxo5ISukB4pIwxJBA=";
+  cacheAppHash = "sha256-DYUlLNxWn4sn7PBir/miJUoDVAQ2/nbOVGWSGN+IPxw=";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.5.8";
+  version = "3.5.10";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-K3+YpdSheeXMRehkWy044OFO9jpzfBjWOK39uXAqrsE=";
+    hash = "sha256-AG5YiX8Jyi3ebgPSU4he2UamEdxgTjEYjezh2WkZjC8=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
@@ -182,16 +181,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) cacheRoot cacheApp;
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script {
-        extraArgs = [
-          "--version-regex"
-          ''^release-(\d\.\d\.\d)$''
-        ];
-      })
-      # TODO: in the future, use `nix-update --custom-dep`.
-      ./update-yarn-caches.sh
-    ];
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        ''^release-(\d+\.\d+\.\d+)$''
+        "--custom-dep"
+        "cacheRoot"
+        "--custom-dep"
+        "cacheApp"
+      ];
+    };
   };
 
   meta = {

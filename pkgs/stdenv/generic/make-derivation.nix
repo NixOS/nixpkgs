@@ -32,6 +32,7 @@ let
     isBool
     isDerivation
     isInt
+    isFunction
     isList
     isPath
     isString
@@ -41,12 +42,10 @@ let
     optional
     optionalString
     optionals
-    pipe
     remove
     seq
     splitString
     subtractLists
-    toExtension
     toFunction
     typeOf
     unique
@@ -55,6 +54,7 @@ let
     warn
     warnIf
     zipAttrsWith
+    any
     ;
 
   inherit (lib.generators) toPretty;
@@ -112,8 +112,21 @@ let
           final:
           let
             prev = rattrs final;
-            thisOverlay = toExtension f0 final prev;
-            pos = unsafeGetAttrPos "version" thisOverlay;
+            # inlined version of toExtension
+            thisOverlay =
+              if isFunction f0 then
+                let
+                  fPrev = f0 prev;
+                in
+                if isFunction fPrev then
+                  # f is (final: prev: { ... })
+                  f0 final prev
+                else
+                  # f is (prev: { ... })
+                  fPrev
+              else
+                # f is not a function; probably { ... }
+                f0;
           in
           warnIf
             (
@@ -126,26 +139,31 @@ let
               && !(thisOverlay ? src)
               && !(thisOverlay.__intentionallyOverridingVersion or false)
             )
-            ''
-              ${
-                args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
-              } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                toString pos.line or "<unknown line>"
-              }:${toString pos.column or "<unknown column>"}.
+            (
+              let
+                pos = unsafeGetAttrPos "version" thisOverlay;
+              in
+              ''
+                ${
+                  args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
+                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                  toString pos.line or "<unknown line>"
+                }:${toString pos.column or "<unknown column>"}.
 
-              This is most likely not what you want. In order to properly change the version of a package, override
-              both the `version` and `src` attributes:
+                This is most likely not what you want. In order to properly change the version of a package, override
+                both the `version` and `src` attributes:
 
-              hello.overrideAttrs (oldAttrs: rec {
-                version = "1.0.0";
-                src = pkgs.fetchurl {
-                  url = "mirror://gnu/hello/hello-''${version}.tar.gz";
-                  hash = "...";
-                };
-              })
+                hello.overrideAttrs (oldAttrs: rec {
+                  version = "1.0.0";
+                  src = pkgs.fetchurl {
+                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                    hash = "...";
+                  };
+                })
 
-              (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-            ''
+                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+              ''
+            )
             (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
         );
 
@@ -175,10 +193,6 @@ let
     "trivialautovarinit"
     "zerocallusedregs"
   ];
-
-  concretizeFlagImplications =
-    flag: impliesFlags: list:
-    if elem flag list then (list ++ impliesFlags) else list;
 
   removedOrReplacedAttrNames = [
     "checkInputs"
@@ -236,6 +250,10 @@ let
     ./source-stdenv.sh
     ./default-builder.sh
   ];
+
+  doCheckByDefault = config.doCheckByDefault or false;
+  structuredAttrsByDefault = config.structuredAttrsByDefault or false;
+  inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
 
   inherit (stdenv)
     hostPlatform
@@ -400,16 +418,16 @@ let
 
       # TODO(@Ericson2314): Make unconditional / resolve #33599
       # Check phase
-      doCheck ? config.doCheckByDefault or false,
+      doCheck ? doCheckByDefault,
 
       # TODO(@Ericson2314): Make unconditional / resolve #33599
       # InstallCheck phase
-      doInstallCheck ? config.doCheckByDefault or false,
+      doInstallCheck ? doCheckByDefault,
 
       # TODO(@Ericson2314): Make always true and remove / resolve #178468
       strictDeps ? defaultStrictDeps,
 
-      enableParallelBuilding ? config.enableParallelBuildingByDefault,
+      enableParallelBuilding ? enableParallelBuildingByDefault,
 
       separateDebugInfo ? false,
       outputs ? [ "out" ],
@@ -428,11 +446,11 @@ let
 
       __contentAddressed ?
         (!attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-        && config.contentAddressedByDefault,
+        && contentAddressedByDefault,
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
-      __structuredAttrs ? config.structuredAttrsByDefault or false,
+      __structuredAttrs ? structuredAttrsByDefault,
 
       ...
     }@attrs:
@@ -463,11 +481,6 @@ let
           actualValue;
       outputs' = if separateDebugInfo' then outputs ++ [ "debug" ] else outputs;
 
-      # hardeningDisable additionally supports "all".
-      erroneousHardeningFlags = subtractLists knownHardeningFlags (
-        hardeningEnable ++ remove "all" hardeningDisable
-      );
-
       checkDependencyList = checkDependencyList' [ ];
       checkDependencyList' =
         positions: name: deps:
@@ -494,9 +507,19 @@ let
                 concatMapStrings (ix: "element ${toString ix} of ") ([ index ] ++ positions)
               }${name} for ${attrs.name or attrs.pname}"
           ) 1 deps) deps;
+
+      isErroneous = flag: !elem flag knownHardeningFlags;
     in
-    if erroneousHardeningFlags != [ ] then
+    if
+      # Check if any hardening flag is erroneous
+      any isErroneous hardeningEnable || any (flag: flag != "all" && isErroneous flag) hardeningDisable
+    then
       abort (
+        let
+          erroneousHardeningFlags = subtractLists knownHardeningFlags (
+            hardeningEnable ++ remove "all" hardeningDisable
+          );
+        in
         "mkDerivation was called with unsupported hardening flags: "
         + toPretty { } {
           inherit
@@ -739,23 +762,21 @@ let
             else
               null
           } =
-            let
-              enabledHardeningOptions =
-                if elem "all" hardeningDisable then
-                  [ ]
-                else
-                  subtractLists (unique (
-                    pipe hardeningDisable [
-                      # disabling fortify implies fortify3 should also be disabled
-                      (concretizeFlagImplications "fortify" [ "fortify3" ])
-                      # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
-                      (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
-                      # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
-                      (concretizeFlagImplications "libcxxhardeningfast" [ "libcxxhardeningextensive" ])
-                    ]
-                  )) (defaultHardeningFlags ++ hardeningEnable);
-            in
-            concatStringsSep " " enabledHardeningOptions;
+            concatStringsSep " " (
+              if elem "all" hardeningDisable then
+                [ ]
+              else
+                filter (
+                  flag:
+                  !(elem flag hardeningDisable)
+                  # disabling fortify implies fortify3 should also be disabled
+                  && (flag == "fortify3" -> !elem "fortify" hardeningDisable)
+                  # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+                  && (flag == "strictflexarrays3" -> !elem "strictflexarrays1" hardeningDisable)
+                  # disabling libcxxhardeningfast implies libcxxhardeningextensive should also be disabled
+                  && (flag == "libcxxhardeningextensive" -> !elem "libcxxhardeningfast" hardeningDisable)
+                ) (defaultHardeningFlags ++ hardeningEnable)
+            );
 
           # TODO: remove platform condition
           # Enabling this check could be a breaking change as it requires to edit nix.conf
@@ -918,7 +939,7 @@ let
 
       # Experimental.  For simple packages mostly just works,
       # but for anything complex, be prepared to debug if enabling.
-      __structuredAttrs ? config.structuredAttrsByDefault or false,
+      __structuredAttrs ? structuredAttrsByDefault,
 
       env ? { },
 

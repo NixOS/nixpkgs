@@ -18,19 +18,19 @@
 }:
 let
   # We have to hardcode revision because upstream often create multiple releases for the same version number.
-  # This is the commit hash that maps to 1.5.0-beta.13 released on 2025-12-30
-  rev = "359de976eb23120d6e6a2d31104e15b37d1edfeb";
+  # This is the commit hash that maps to 1.5.0-beta.14 released on 2026-5-21
+  rev = "12052dec15d0e0948032c7ec11eff2da0d109106";
 in
 stdenv.mkDerivation {
   pname = "streamcontroller";
 
-  version = "1.5.0-beta.13";
+  version = "1.5.0-beta.14";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
     inherit rev;
-    hash = "sha256-b5tRhXEQGRhaJd1Q/hlmqUTO+0F+3+lziYSi8QpUa9c=";
+    hash = "sha256-JGJc7bj58oZwvtExSv+tv7Ug84RYdEkcMBI3ZmqpaKY=";
   };
 
   # The installation method documented upstream
@@ -200,7 +200,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Elegant Linux app for the Elgato Stream Deck with support for plugins";
-    homepage = "https://core447.com/";
+    homepage = "https://streamcontroller.core447.com/";
     license = lib.licenses.gpl3;
     mainProgram = "streamcontroller";
     maintainers = with lib.maintainers; [ sifmelcara ];

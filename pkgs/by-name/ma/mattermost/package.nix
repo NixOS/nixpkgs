@@ -13,6 +13,8 @@
   nixosTests,
 
   latestVersionInfo ? null,
+  removeUserLimit ? false,
+  removeFreeBadge ? false,
   versionInfo ? {
     # ESR releases only. Note: if NixOS would release with an ESR that goes out
     # of support during the lifetime of the NixOS release, it is acceptable
@@ -25,10 +27,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(11\\.7\\.[0-9]+)$";
-    version = "11.7.0";
-    srcHash = "sha256-oH9bLN2BPvRSWl5m3VNHBNMBXfdmkwaE9tzL7pcD1mg=";
-    vendorHash = "sha256-PmwwiXNaDarc1H7z1G4zstgs7tvmZ/d7V5eGqMh1VX4=";
-    npmDepsHash = "sha256-C3vfWW2hMOMnrPn1538kT+ma09T9VswrmADV/KPkrPc=";
+    version = "11.7.1";
+    srcHash = "sha256-9eI9tX6qHEEzm7aro7ky2JORfAmqbjmrmxABFVTZzW8=";
+    vendorHash = "sha256-xu399pAtIJUIns+GhKFlDR0crWV+8HiN9Wf38EMu5q8=";
+    npmDepsHash = "sha256-M+yoCLR4yT30n3rhqZu1z8zeWas+5VniP4aaIJPz6VU=";
   },
   ...
 }:
@@ -135,6 +137,14 @@ buildMattermost rec {
       mv package-lock.fixed.json package-lock.json
     '';
   };
+
+  patches =
+    lib.optionals removeFreeBadge [
+      ./mattermost-remove-free-banner.patch
+    ]
+    ++ lib.optionals removeUserLimit [
+      ./mattermost-remove-user-limit.patch
+    ];
 
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available

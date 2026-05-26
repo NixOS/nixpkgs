@@ -27,6 +27,8 @@ let
   # STACK_IN_NIX_EXTRA_ARGS.
   stackHook = makeSetupHook {
     name = "stack-hook";
+
+    meta.license = lib.licenses.mit;
   } ./stack-hook.sh;
 
 in

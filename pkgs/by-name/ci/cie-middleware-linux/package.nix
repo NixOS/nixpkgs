@@ -15,7 +15,7 @@
   libxml2,
   openssl,
   pcsclite,
-  podofo_0_10,
+  podofo0,
   ghostscript,
 }:
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   buildInputs = [
     cryptopp
     fontconfig
-    podofo_0_10
+    podofo0
     openssl
     pcsclite
     curl

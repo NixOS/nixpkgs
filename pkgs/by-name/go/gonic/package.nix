@@ -18,17 +18,17 @@
   mpv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gonic";
-  version = "0.20.1";
+  version = "0.21.0";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "gonic";
-    rev = "v${version}";
-    sha256 = "sha256-tW+GuNMMeiPf5XInR1BN2L7ommWh1SPClbRew8/2+cA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-+plbpqaWWr3gA3grfl5yawEyrQyw6h6rvATqGxEO09c=";
   };
 
-  vendorHash = "sha256-ynoIR4S02v3qec7447feuu/igFWR20VQVbL0GbTBpqM=";
+  vendorHash = "sha256-OynYgtqWNMyrUvysi9cNqL0nAfUXP8cOEx02lSP6E7E=";
 
   # TODO(Profpatsch): write a test for transcoding support,
   # since it is prone to break
@@ -68,4 +68,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ autrimpo ];
     mainProgram = "gonic";
   };
-}
+})

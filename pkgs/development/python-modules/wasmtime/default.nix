@@ -5,13 +5,17 @@
   python,
   pkgs,
   pycparser,
-  pytest-mypy,
   pytestCheckHook,
   setuptools-git-versioning,
   setuptools,
   writableTmpDirAsHomeHook,
+  stdenvNoCC,
 }:
-
+let
+  inherit (stdenvNoCC) targetPlatform;
+  systemDir = "${targetPlatform.parsed.kernel.name}-${targetPlatform.parsed.cpu.name}";
+  libExt = targetPlatform.extensions.sharedLibrary;
+in
 buildPythonPackage (finalAttrs: {
   pname = "wasmtime";
   version = "44.0.0";
@@ -32,12 +36,15 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace ci/cbindgen.py \
       --replace-fail "'-D__builtin_va_list=int'," "'-D__builtin_va_list=int', '-Dnullptr_t=void*',"
 
+    # Don't run mypy via pytest-mypy (type checking breaks easily)
+    substituteInPlace pytest.ini \
+      --replace-fail 'addopts = --doctest-modules --mypy' 'addopts = --doctest-modules'
+
     sed -i '/^backend-path = \[/,/^\]/d' pyproject.toml
 
     # Use nixpkgs' wasmtime instead of downloading prebuilt C API artifacts.
-    mkdir -p wasmtime/linux-x86_64 wasmtime/linux-aarch64
-    ln -s ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so wasmtime/linux-x86_64/_libwasmtime.so
-    ln -s ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so wasmtime/linux-aarch64/_libwasmtime.so
+    mkdir -p wasmtime/${systemDir}
+    ln -s ${lib.getLib pkgs.wasmtime}/lib/libwasmtime${libExt} wasmtime/${systemDir}/_libwasmtime${libExt}
   '';
 
   build-system = [
@@ -49,15 +56,12 @@ buildPythonPackage (finalAttrs: {
 
   postInstall = ''
     # Ensure the installed module can find the shared library at runtime
-    mkdir -p "$out/${python.sitePackages}/wasmtime/linux-x86_64"
-    mkdir -p "$out/${python.sitePackages}/wasmtime/linux-aarch64"
-    ln -sf ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so "$out/${python.sitePackages}/wasmtime/linux-x86_64/_libwasmtime.so"
-    ln -sf ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so "$out/${python.sitePackages}/wasmtime/linux-aarch64/_libwasmtime.so"
+    mkdir -p "$out/${python.sitePackages}/wasmtime/${systemDir}"
+    ln -sf ${lib.getLib pkgs.wasmtime}/lib/libwasmtime${libExt} "$out/${python.sitePackages}/wasmtime/${systemDir}/_libwasmtime${libExt}"
   '';
 
   nativeCheckInputs = [
     pycparser
-    pytest-mypy
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
@@ -76,8 +80,11 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python WebAssembly runtime powered by Wasmtime";
     homepage = "https://github.com/bytecodealliance/wasmtime-py";
-    changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/{${finalAttrs.src.tag}}";
-    license = lib.licenses.asl20;
+    changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/${finalAttrs.src.tag}";
+    license = [
+      lib.licenses.asl20
+      lib.licenses.llvm-exception
+    ];
     maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -55,14 +55,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "viser";
-  version = "1.0.27";
+  version = "1.0.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "viser-project";
     repo = "viser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qE9V6KjniKm3vBtf5ger6UHob4go0wTaJnmYtvYqvMc=";
+    hash = "sha256-OeI/aEhJ0k9U2BtDEvwIimNFj74NZLSh4ieKnugn/hk=";
   };
 
   postPatch = ''
@@ -105,15 +105,14 @@ buildPythonPackage (finalAttrs: {
     trimesh
     typing-extensions
     websockets
-    yourdfpy
     zstandard
   ];
 
   optional-dependencies = {
+    urdf = [ yourdfpy ];
     dev = [
       hypothesis
       nodeenv
-      opencv-python
       playwright
       pre-commit
       psutil
@@ -122,7 +121,8 @@ buildPythonPackage (finalAttrs: {
       pytest-playwright
       pytest-xdist
       ruff
-    ];
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.examples;
     examples = [
       gdown
       liblzfse
@@ -134,7 +134,8 @@ buildPythonPackage (finalAttrs: {
       robot-descriptions
       torch
       tyro
-    ];
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.urdf;
   };
 
   nativeCheckInputs = [
@@ -169,6 +170,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "viser"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/viser-project/viser/releases/tag/${finalAttrs.src.tag}";

@@ -16,8 +16,6 @@
   makeWrapper,
   replaceVars,
 
-  vulkan-loader,
-
   nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
@@ -72,19 +70,13 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # electronDist needs to be modifiable
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
-  ''
-  + ''
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
+
     npm run build
     npm exec electron-builder -- --dir \
-      -c.electronDist=electron-dist \
+      -c.electronDist="$electron_dist" \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -123,7 +115,7 @@ buildNpmPackage (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     runHook preCheck
-    export ELECTRON_OVERRIDE_DIST_PATH=electron-dist/
+    export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
     export PUPPETEER_EXECUTABLE_PATH=${chromium}/bin/chromium
     export CHROME_BIN=${chromium}/bin/chromium
     npm run test

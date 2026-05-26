@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -72,7 +71,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-xai/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with X AI";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/xai";
     license = lib.licenses.mit;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Backport of traceback to older supported Pythons";
-    homepage = "https://pypi.python.org/pypi/traceback2/";
+    homepage = "https://pypi.org/project/traceback2/";
     license = lib.licenses.psfl;
   };
 }

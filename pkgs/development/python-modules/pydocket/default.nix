@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
 
   # build-system
   hatch-vcs,
@@ -22,24 +21,19 @@
   typer,
   typing-extensions,
   uncalled-for,
-
-  docker,
-  pytest-asyncio,
-  pytest-cov,
-  pytest-timeout,
-  pytest-xdist,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.20.1";
+  version = "0.20.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
     tag = finalAttrs.version;
-    hash = "sha256-QCx1tpiMkyIveay3OwnjcTRb8pTJNcTjOyor59oYHqQ=";
+    hash = "sha256-KEKk9/tewl46GkZ7DV6MixAzz9ZKMIqjwzj5kZ38AFk=";
   };
 
   build-system = [
@@ -74,16 +68,6 @@ buildPythonPackage (finalAttrs: {
 
   # All tests require internet access
   doCheck = false;
-  nativeCheckInputs = [
-    pytestCheckHook
-
-    docker
-    opentelemetry-sdk
-    pytest-asyncio
-    pytest-cov
-    pytest-timeout
-    pytest-xdist
-  ];
 
   meta = {
     description = "Distributed background task system for Python";

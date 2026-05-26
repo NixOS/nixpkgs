@@ -43,27 +43,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.42";
+  version = "2.42.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NFKyYLuqd11udJrDuyIRF4UAP8H0RJcAJcjaJt+nWOk=";
+    hash = "sha256-gukVjrEqmwtWnYThaH/tndGP6JzNjvWsNCchinwNf38=";
   };
 
+  # Note: fetchpatch/fetchpatch2 cause infinite recursion with util-linuxMinimal.
+  # Prefer fetchurl for the below instead of vendoring patches; it will work.
   patches = [
     # Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
-
-    # Fix compile of 2.42+ on Darwin.
-    # https://lore.kernel.org/util-linux/CAEUYr6ZjVX1bd-xcBGtFN_ZYwQnXDYsw7d1-7sTpF2BbgfrR+g@mail.gmail.com/T/#u
-    ./include-correct-struct-statfs-header.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
-    # Musl does not define AT_HANDLE_FID, hard-code it.
-    # https://github.com/util-linux/util-linux/pull/4203
-    ./fix-musl-nsenter.patch
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -113,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   # root...
   configureFlags = [
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid"

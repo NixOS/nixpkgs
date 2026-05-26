@@ -8,8 +8,6 @@
   boost,
   cmark,
   docbook_xsl,
-  expat,
-  file,
   flac,
   fmt,
   gettext,
@@ -26,7 +24,6 @@
   pugixml,
   qt6,
   utf8cpp,
-  xdg-utils,
   zlib,
   nix-update-script,
   withGUI ? true,
@@ -67,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
@@ -81,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   # qtbase and qtmultimedia are needed without the GUI
   buildInputs = [
     boost
-    expat
-    file
     flac
     fmt
     gmp
@@ -96,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtmultimedia
     utf8cpp
-    xdg-utils
     zlib
   ]
   ++ optionals withGUI [ cmark ]

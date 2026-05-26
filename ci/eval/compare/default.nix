@@ -172,6 +172,7 @@ let
       rebuildCountByKernel = lib.mapAttrs (
         kernel: kernelRebuilds: lib.length kernelRebuilds
       ) rebuildsByKernel;
+      rebuildNames = extractPackageNames diffAttrs.rebuilds;
     in
     writeText "changed-paths.json" (
       builtins.toJSON {
@@ -188,7 +189,8 @@ let
             kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
           ) rebuildsByKernel
           // {
-            "10.rebuild-nixos-tests" = lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds);
+            "10.rebuild-nixos-tests" =
+              lib.elem "nixosTests.simple-container" rebuildNames || lib.elem "nixosTests.simple-vm" rebuildNames;
           };
       }
     );

@@ -39,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./gnu-install-dirs.patch
+    # MLIRConfig.cmake unconditionally overwrites MLIR_TABLEGEN_EXE, breaking standalone
+    # builds that provide their own pre-built mlir-tblgen (e.g. in Nix sandboxed builds).
+    # The patch adds guards to respect caller-set values and auto-creates an imported
+    # mlir-tblgen target for downstream consumers. This replaces the previous dummy target
+    # workaround in flang's CMakeLists.txt.
+
+    # Upstream issue: https://github.com/llvm/llvm-project/issues/150986
+    ./mlir-tablegen-imported-target.patch
   ]
   ++ lib.optional (lib.versionOlder release_version "20") [
     # Fix build with gcc15

@@ -48,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dOKBl5W2r/QxrqyYPWOpyJaO6roqLrp9+LpMe0Hnz9g=";
   };
 
+  patches = [
+    # This revert a upstream refactor in continuous rendering mode, but this
+    # causes a big performance regression for big manpages like
+    # `man 5 configuration.nix`.
+    ./0001-Revert-man-Fix-Savannah-65190.patch
+  ];
+
   outputs = [
     "out"
     "man"

@@ -14,16 +14,16 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prowlpy";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OMEGARAZER";
     repo = "prowlpy";
-    tag = "v${version}";
-    hash = "sha256-S+hhZndOb5O9okrrnXGt7D0N4VRIThbMN1LYVPGzFy8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-92r1E/dsXLRzaLXQdahXAPCmSG4T1Ihh/eDFDG3GlmY=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # Without this pyreqwest fails with
@@ -60,11 +60,11 @@ buildPythonPackage rec {
   pytestFlags = [ "-v" ];
 
   meta = {
-    changelog = "https://github.com/OMEGARAZER/prowlpy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/OMEGARAZER/prowlpy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Send push notifications to iPhones using the Prowl API";
     homepage = "https://github.com/OMEGARAZER/prowlpy";
     license = lib.licenses.gpl3Only;
     mainProgram = "prowlpy";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

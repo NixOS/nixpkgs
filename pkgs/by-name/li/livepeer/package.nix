@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
     gnutls
   ];
 
-  CGO_LDFLAGS = [
+  env.CGO_LDFLAGS = toString [
     "-lm"
   ];
 
