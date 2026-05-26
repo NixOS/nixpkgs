@@ -81,10 +81,20 @@ buildPythonPackage (finalAttrs: {
     "libcuda.so.1"
   ];
 
-  # This wheel ships the `cutlass` module via `nvidia_cutlass_dsl.pth`.
-  # Python only processes `.pth` files in dirs that `site.py` registers as site-packages, not in
-  # PYTHONPATH entries so pythonImportsCheck (which uses PYTHONPATH) can't see `cutlass`.
-  dontUsePythonImportsCheck = true;
+  # This wheel ships the `cutlass` module nested under `nvidia_cutlass_dsl/python_packages/`,
+  # exposed at the top level via `nvidia_cutlass_dsl.pth`.
+  # Python only processes `.pth` files in directories registered as site dirs by `site.py`, not in
+  # PYTHONPATH entries.
+  # In nixpkgs, `buildPythonPackage` propagates dependencies via PYTHONPATH
+  # (see python's setup-hook), so any downstream consumer (e.g. flash-attn) would not see the
+  # `cutlass` module.
+  # `withPackages` envs work fine because they merge everything into a real site dir.
+  # Symlinking `cutlass` to the site-packages root makes it importable in both modes.
+  postFixup = ''
+    ln -s nvidia_cutlass_dsl/python_packages/cutlass $out/${python.sitePackages}/cutlass
+  '';
+
+  pythonImportsCheck = [ "cutlass" ];
 
   # No tests in the Pypi archive
   doCheck = false;
