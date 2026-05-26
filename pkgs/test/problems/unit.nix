@@ -10,7 +10,7 @@ let
   genHandlerTest =
     let
       slowReference =
-        config: package: name: kind:
+        config: kind: name: package:
         # Try to find an explicit handler
         (config.problems.handlers.${package} or { }).${name}
           # Fall back, iterating through the matchers
@@ -36,7 +36,7 @@ let
             map
               (
                 name:
-                map (kind: f package name kind) [
+                map (kind: f kind name package) [
                   "k1"
                   "k2"
                   "k3"
