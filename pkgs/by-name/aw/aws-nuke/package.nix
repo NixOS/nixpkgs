@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "aws-nuke";
-  version = "3.64.2";
+  version = "3.64.4";
 
   src = fetchFromGitHub {
     owner = "ekristen";
     repo = "aws-nuke";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rg68lngQcF6Psg7aE0N/4Nvx7ctrs2DFtcOaqXGDUGA=";
+    hash = "sha256-oUziuU2lhp1X/RTOYn4FtimmNZ4ZEjbihdfokoeLrmw=";
   };
 
   vendorHash = "sha256-q1ASHG4KWlU8tLjHireMqmkW33Q2hy+ikOTWQPOYIXo=";
