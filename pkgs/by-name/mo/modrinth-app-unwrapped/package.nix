@@ -31,13 +31,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.13.17";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qn4IlqJagLoIcP9p9QdKzu2wdcBDLvfq/2sgVwIjbm4=";
+    hash = "sha256-deWdT7Z4/vZOki6E/ZM3tHpRDu80QthEx3Vxnmaz9sI=";
   };
 
   patches = [
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-iI1AjFApd9fzss3hSVJLofHLZ6SJqUccHJ7PHqtBk+k=";
+  cargoHash = "sha256-VKz06Z3bFuJrzNEeIF6O4N0Mju1RtuZVQfw2ONIBwmg=";
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
