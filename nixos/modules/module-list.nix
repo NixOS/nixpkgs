@@ -934,6 +934,7 @@
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
   ./services/misc/paperless.nix
+  ./services/misc/pelican-panel.nix
   ./services/misc/persistent-evdev.nix
   ./services/misc/pghero.nix
   ./services/misc/pinchflat.nix

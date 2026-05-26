@@ -23,6 +23,15 @@
   "module-hardware-facter-usage": [
     "index.html#module-hardware-facter-usage"
   ],
+  "module-pelican-panel": [
+    "index.html#module-pelican-panel"
+  ],
+  "module-pelican-panel-mysql": [
+    "index.html#module-pelican-panel-mysql"
+  ],
+  "module-pelican-panel-traefik": [
+    "index.html#module-pelican-panel-traefik"
+  ],
   "module-security-tpm2": [
     "index.html#module-security-tpm2"
   ],
