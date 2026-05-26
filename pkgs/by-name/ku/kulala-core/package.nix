@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kulala-core";
-  version = "0.6.0";
+  version = "0.7.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mistweaverco";
     repo = "kulala-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qEPJFd1/C9F8oyUTx3PMmRS9B8kdjQT9O0bfoalAJ/k=";
+    hash = "sha256-zY/Yg/1s/pyyuKxtUa2cIzLCraSNSzpPMBx9EbGIIGI=";
   };
 
   node_modules = stdenv.mkDerivation {

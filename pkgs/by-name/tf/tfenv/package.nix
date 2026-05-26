@@ -73,7 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage.tfenv;
+      package = finalAttrs.finalPackage;
     };
   };
 

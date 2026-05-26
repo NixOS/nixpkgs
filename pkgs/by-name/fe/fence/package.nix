@@ -27,6 +27,10 @@ buildGoModule (finalAttrs: {
 
   __structuredAttrs = true;
 
+  subPackages = [
+    "cmd/fence"
+  ];
+
   ldflags = [
     "-s"
     "-w"

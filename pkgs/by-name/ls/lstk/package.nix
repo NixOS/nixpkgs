@@ -3,10 +3,11 @@
   buildGoModule,
   lib,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "lstk";
-  version = "0.6.0";
+  version = "0.9.0";
 
   __structuredAttrs = true;
 
@@ -14,14 +15,16 @@ buildGoModule (finalAttrs: {
     owner = "localstack";
     repo = "lstk";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-sK3xtmbXxoqKGpFPscKxqy/8rr+G6tpcKXtRL9FLMK0=";
+    sha256 = "sha256-wfU7b70SZfv/4hvTRAqfE807dyUW32j2M1V/k3R2Z20=";
   };
 
-  vendorHash = "sha256-wXSFZpZUaeBNevirGIG1qsrroK3S5ccZZ31z8pRdmKM=";
+  vendorHash = "sha256-y1qzHSKJS2k98UicoUPmctsGQGiXweNbWKMsFpvYBMo=";
 
   excludedPackages = "test/integration";
 
   __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   passthru.updateScript = nix-update-script { };
 
