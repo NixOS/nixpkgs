@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "18.11.2";
+  version = "18.11.3";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TWpIu6LxFX5ssijlYQA/dmAiPrB0nrHtlS2MWEk6C30=";
+    hash = "sha256-/QMmBDZz6nWmc9hODS3yVe9iyNERbebGysZ1Z4B5Gw8=";
   };
 
   vendorHash = "sha256-xEvvYAVIwHwQDd38P2i6GcgFqf8FPnflWh5IEqmWQdE=";
@@ -123,6 +123,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "GitLab Runner the continuous integration executor of GitLab";
     homepage = "https://docs.gitlab.com/runner";
+    changelog = "https://gitlab.com/gitlab-org/gitlab-runner/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
     maintainers = with lib.maintainers; [ zimbatm ];
