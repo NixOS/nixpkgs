@@ -946,7 +946,6 @@ mapAliases {
   haxe_4_0 = throw "'haxe_4_0' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   haxe_4_1 = throw "'haxe_4_1' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   helix-gpt = throw "helix-gpt was deprecated in January 2026 and has been since removed"; # Added 2026-02-05
-  helvum = throw "'helvum' has been removed as it was unmaintained upstream and relied on a vulnerable dependency. Consider using 'crosspipe' instead."; # Added 2026-03-04
   HentaiAtHome = throw "'HentaiAtHome' has been renamed to/replaced by 'hentai-at-home'"; # Converted to throw 2025-10-27
   hiawatha = throw "hiawatha has been removed, since it is no longer actively supported upstream, nor well maintained in nixpkgs"; # Added 2025-09-10
   hibernate = throw "hibernate has been removed due to lack of maintenance"; # Added 2025-09-10
