@@ -1748,6 +1748,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  black-metal-theme-neovim = buildVimPlugin {
+    pname = "black-metal-theme-neovim";
+    version = "2.0";
+    src = fetchFromGitHub {
+      owner = "metalelf0";
+      repo = "black-metal-theme-neovim";
+      tag = "2.0";
+      hash = "sha256-z+qJfvCIV5WEAvKIkttDKpfBDt1xDBkTYLk2EoZbnj8=";
+    };
+    meta.homepage = "https://github.com/metalelf0/black-metal-theme-neovim/";
+    meta.license = getLicenseFromSpdxId "Apache-2.0";
+    meta.hydraPlatforms = [ ];
+  };
+
   blame-nvim = buildVimPlugin {
     pname = "blame.nvim";
     version = "0-unstable-2026-02-12";
