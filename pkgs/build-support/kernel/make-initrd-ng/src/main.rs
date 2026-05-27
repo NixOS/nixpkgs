@@ -3,6 +3,7 @@ use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::hash::Hash;
+use std::io::ErrorKind;
 use std::iter::FromIterator;
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
@@ -247,9 +248,22 @@ fn handle_path(
             Component::Normal(name) => {
                 target.push(name);
                 source.push(name);
-                let typ = fs::symlink_metadata(&source)
-                    .wrap_err_with(|| format!("failed to get symlink metadata for {:?}", source))?
-                    .file_type();
+                let typ = match fs::symlink_metadata(&source) {
+                    Ok(md) => md.file_type(),
+                    Err(e) => {
+                        // If `source` doesn't exist, this is not an error.
+                        // It just means whatever we were trying to copy is
+                        // not needed in this system configuration.  Abandon
+                        // processing of the rest of the path.
+                        if e.kind() == ErrorKind::NotFound {
+                            break;
+                        }
+                        return Err(e).wrap_err(
+                            format!("failed to get symlink metadata for {:?}", source)
+                        );
+                    }
+                };
+
                 if typ.is_file() && !target.exists() {
                     copy_file(&source, &target, &p.dlopen, queue)?;
 
