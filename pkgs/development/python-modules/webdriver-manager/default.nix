@@ -4,6 +4,7 @@
   fetchFromGitHub,
   packaging,
   pybrowsers,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dotenv,
   requests,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "webdriver-manager";
-  version = "4.0.2";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SergeyPirogov";
     repo = "webdriver_manager";
     tag = "v${version}";
-    hash = "sha256-ZmrQa/2vPwYgSvY3ZUvilg4RizVXpu5hvJJBQVXkK8E=";
+    hash = "sha256-MqLM1mSfoirBaJYKkikNuS2XPWPTM2MQNgEwhtp+2ek=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pybrowsers
+    pytest-cov-stub
     pytestCheckHook
     selenium
   ];
