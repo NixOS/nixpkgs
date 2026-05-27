@@ -742,6 +742,8 @@
         sei40kr
       ];
     };
+    # Non-schema `camelCase` and `external-scanner` fields
+    excludeBrokenTreeSitterJson = true;
   };
 
   gas = {
