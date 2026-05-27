@@ -26,15 +26,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whisper";
   version = "20250625";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "whisper";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Zn2HUCor1eCJBP7q0vpffqhw5SNguz8zCGoPgdt6P+c=";
   };
 
@@ -76,11 +77,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/openai/whisper/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
     mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MayNiklas ];
   };
-}
+})
