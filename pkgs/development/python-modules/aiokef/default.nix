@@ -5,13 +5,14 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
+  setuptools,
   tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "aiokef";
   version = "0.2.17";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basnijholt";
@@ -20,12 +21,14 @@ buildPythonPackage rec {
     sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
     substituteInPlace tox.ini \
       --replace "--mypy" ""
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     tenacity
   ];
