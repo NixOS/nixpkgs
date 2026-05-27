@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "pop-os";
     repo = "cosmic-idle";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-0tcrOfVT5b57ev3b5F2U78F2QPGFwp94bqFVNyKH0Yk=";
+    hash = "sha256-wAjFC6qAC3nllbnZf0KVaZTEztNYo6GTvwcp5FYmXLw=";
   };
 
   cargoHash = "sha256-2y+9Nl3bCBBH3hEgRbnPvWEwbtAscFz+yi+eaXaZY3c=";
