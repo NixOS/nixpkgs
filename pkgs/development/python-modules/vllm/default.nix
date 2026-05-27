@@ -604,5 +604,10 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       # find_isa
       "x86_64-darwin"
     ];
+    knownVulnerabilities = [
+      "CVE-2026-27893"
+      "CVE-2026-44222"
+      "CVE-2026-44223"
+    ];
   };
 })
