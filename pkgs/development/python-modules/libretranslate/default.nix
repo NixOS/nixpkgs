@@ -39,14 +39,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "libretranslate";
-  version = "1.9.5";
+  version = "1.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VcMo1GX+ituQOW8Dpt0ABJG5fsJbFuxAPmi59Byg5ww=";
+    hash = "sha256-AIjbwx2WoynN/ExGNQ2fhHxjEM/2LIvgydaA7ylU0D8=";
   };
 
   build-system = [
