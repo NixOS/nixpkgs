@@ -101,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ty";
     maintainers = with lib.maintainers; [
       bengsparks
+      ddogfoodd
       figsoda
       GaetanLepage
     ];
