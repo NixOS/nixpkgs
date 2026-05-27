@@ -27,9 +27,7 @@ buildPythonPackage (finalAttrs: {
     nvidia-cutlass-dsl-libs-base
   ];
 
-  # The `cutlass` module is provided by `nvidia-cutlass-dsl-libs-base` via a `.pth` file.
-  # pythonImportsCheck uses PYTHONPATH, which Python's site.py doesn't scan for `.pth` files.
-  dontUsePythonImportsCheck = true;
+  pythonImportsCheck = [ "cutlass" ];
 
   # No tests in the Pypi archive
   doCheck = false;

@@ -14,6 +14,7 @@
   qtsvg,
   xdg-utils,
   replaceVars,
+  nodejs_22,
   buildNpmPackage,
 }:
 
@@ -234,6 +235,7 @@ rec {
 
     src = "${sources}/aw-server-rust/aw-webui";
 
+    nodejs = nodejs_22;
     npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
 
     makeCacheWritable = true;
