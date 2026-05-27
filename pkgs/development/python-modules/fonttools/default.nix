@@ -25,7 +25,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fonttools";
   version = "4.63.0";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "fonttools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XTE18TKpIa4MpbJ5tcHwCyLk3Q6CV/ElzMtddG86HJA=";
   };
 
@@ -83,7 +83,7 @@ buildPythonPackage rec {
             "pathops" # broken
           ]
       ++ [ "repacker" ]
-    ) optional-dependencies
+    ) finalAttrs.passthru.optional-dependencies
   );
 
   pythonImportsCheck = [ "fontTools" ];
@@ -99,8 +99,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
-    changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/fonttools/fonttools/blob/${finalAttrs.src.tag}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})
