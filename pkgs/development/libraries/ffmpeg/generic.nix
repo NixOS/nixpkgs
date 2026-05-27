@@ -1063,6 +1063,7 @@ stdenv.mkDerivation (
         No matter if they were designed by some standards committee, the community or
         a corporation.
       '';
+      donationPage = "https://ffmpeg.org/donations.html";
       license =
         with lib.licenses;
         [ lgpl21Plus ]
