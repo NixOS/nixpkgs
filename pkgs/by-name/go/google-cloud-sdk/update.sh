@@ -6,7 +6,7 @@ BASE_URL="$CHANNEL_URL/downloads/google-cloud-sdk"
 
 PACKAGE_DIR=$(dirname -- "$0")
 
-VERSION=$(curl "https://storage.googleapis.com/storage/v1/b/cloud-sdk-release/o?delimiter=/&startOffset=google-cloud-sdk-${UPDATE_NIX_OLD_VERSION}&endOffset=google-cloud-sdk-9" | jq --raw-output '.items[-1].name | scan("\\d+\\.\\d+\\.\\d+")')
+VERSION=$(curl -s "$CHANNEL_URL/components-2.json" | jq -r '.version')
 
 function genMainSrc() {
     local url="${BASE_URL}-${VERSION}-${1}-${2}.tar.gz"
