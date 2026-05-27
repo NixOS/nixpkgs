@@ -76,9 +76,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   preInstall = ''
-    mkdir -p $out/lib/
-    find target/release/ -maxdepth 1 -type l -name '*.so*' -exec \
+    mkdir -p $out/lib/trace $out/bin
+    cp target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/zluda_precompile $out/bin
+    find target/release/ -maxdepth 1 -type l -name '*.so*' -or -name 'zluda_ld' -exec \
       cp --recursive --no-clobber --target-directory=$out/lib/ {} +
+    find target/release/trace -maxdepth 1 -type l -name '*.so*' -or -name 'zluda_ld' -exec \
+      cp --recursive --no-clobber --target-directory=$out/lib/trace {} +
   '';
 
   meta = {
