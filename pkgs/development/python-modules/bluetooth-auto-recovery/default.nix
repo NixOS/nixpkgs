@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "1.5.3";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-auto-recovery";
     tag = "v${version}";
-    hash = "sha256-xnEEq3NVScMbMjZWb4lI+kpy2zr6WlXx3XcBhzN1rZ4=";
+    hash = "sha256-fb83M2V4q4ncmIIMM6BhNDBg8DSjBmYNE+4Qj22wTEE=";
   };
 
   build-system = [ poetry-core ];
