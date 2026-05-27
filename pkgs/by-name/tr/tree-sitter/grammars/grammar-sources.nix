@@ -2538,6 +2538,8 @@
         aciceri
       ];
     };
+    # Empty `metadata.links.funding` fails URL parsing
+    excludeBrokenTreeSitterJson = true;
   };
 
   supercollider = {
