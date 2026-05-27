@@ -1,15 +1,38 @@
 {
   lib,
-  stdenvNoCC,
-  callPackage,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  php,
+  perl,
+  git,
+  pkg-config,
+  gtk3,
 }:
-let
-  p = if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix;
-in
-callPackage p {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "reaper-sws-extension";
   version = "2.14.0.7";
+
+  src = fetchFromGitHub {
+    owner = "reaper-oss";
+    repo = "sws";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J2igVacDClHgKGZ2WATcd5XW2FkarKtALxVLgqa90Cs=";
+    fetchSubmodules = true;
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    git
+    perl
+    php
+    pkg-config
+  ];
+
+  buildInputs = [ gtk3 ];
+
   meta = {
     description = "Reaper Plugin Extension";
     longDescription = ''
@@ -26,4 +49,4 @@ callPackage p {
       "aarch64-darwin"
     ];
   };
-}
+})
