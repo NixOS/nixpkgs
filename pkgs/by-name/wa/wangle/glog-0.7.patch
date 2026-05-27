@@ -1,0 +1,30 @@
+diff --git a/wangle/CMakeLists.txt b/wangle/CMakeLists.txt
+index 041e73c2b1..2804ad72cf 100644
+--- a/wangle/CMakeLists.txt
++++ b/wangle/CMakeLists.txt
+@@ -66,7 +66,7 @@
+ find_package(fizz CONFIG REQUIRED)
+ find_package(fmt CONFIG REQUIRED)
+ find_package(OpenSSL REQUIRED)
+-find_package(Glog REQUIRED)
++find_package(Glog CONFIG REQUIRED)
+ find_package(gflags CONFIG QUIET)
+ if (gflags_FOUND)
+   message(STATUS "Found gflags from package config")
+@@ -162,7 +162,6 @@
+     ${FOLLY_INCLUDE_DIR}
+     ${Boost_INCLUDE_DIRS}
+     ${OPENSSL_INCLUDE_DIR}
+-    ${GLOG_INCLUDE_DIRS}
+     ${GFLAGS_INCLUDE_DIRS}
+     ${LIBEVENT_INCLUDE_DIR}
+     ${DOUBLE_CONVERSION_INCLUDE_DIR}
+@@ -172,7 +171,7 @@
+   ${FIZZ_LIBRARIES}
+   ${Boost_LIBRARIES}
+   ${OPENSSL_LIBRARIES}
+-  ${GLOG_LIBRARIES}
++  glog::glog
+   ${GFLAGS_LIBRARIES}
+   ${LIBEVENT_LIB}
+   ${DOUBLE_CONVERSION_LIBRARY}

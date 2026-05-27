@@ -1,0 +1,19 @@
+diff --git a/tests/test_merge.py b/tests/test_merge.py
+index 06ee559..9d7b1af 100644
+--- a/tests/test_merge.py
++++ b/tests/test_merge.py
+@@ -1,3 +1,4 @@
++import io
+ import os
+ import sys
+ import unittest
+@@ -21,8 +22,7 @@ def file_names_from(file_paths):
+ 
+ class TestMerge(unittest.TestCase):
+     def setUp(self):
+-        if not hasattr(sys.stdout, "getvalue"):
+-            self.fail("need to run in buffered mode")
++        sys.stdout = io.StringIO()
+ 
+     def _validate_merged_three(self, merged):
+         self.assertEqual(len(merged.cells), 6)

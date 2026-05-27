@@ -1,0 +1,11 @@
+{
+  "release": "11.0.0-preview.4",
+  "channel": "11.0",
+  "tag": "v11.0.100-preview.4.26230.115",
+  "sdkVersion": "11.0.100-preview.4.26230.115",
+  "runtimeVersion": "11.0.0-preview.4.26230.115",
+  "aspNetCoreVersion": "11.0.0-preview.4.26230.115",
+  "sourceRepository": "https://github.com/dotnet/dotnet",
+  "sourceVersion": "4370ea16341331f045fa9b89cc46e03aed27195c",
+  "officialBuildId": "20260430.15"
+}

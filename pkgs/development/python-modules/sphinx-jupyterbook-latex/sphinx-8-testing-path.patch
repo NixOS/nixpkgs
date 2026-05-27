@@ -1,0 +1,23 @@
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -7,7 +7,6 @@ import pytest
+ from click.testing import CliRunner
+ import sphinx
+ import sphinx.config
+-from sphinx.testing.path import path
+ from sphinx.testing.util import SphinxTestApp
+ from sphinx import version_info as sphinx_version_info
+
+@@ -16,10 +15,10 @@ pytest_plugins = "sphinx.testing.fixtures"
+
+ @pytest.fixture
+ def rootdir(tmpdir):
+-    src = path(__file__).parent.abspath() / "roots"
++    src = Path(__file__).parent.resolve() / "roots"
+     dst = tmpdir.join("roots")
+     shutil.copytree(src, dst)
+-    roots = path(dst)
++    roots = Path(str(dst))
+     yield roots
+     shutil.rmtree(dst)
+

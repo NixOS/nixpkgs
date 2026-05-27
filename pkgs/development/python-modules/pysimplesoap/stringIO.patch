@@ -1,0 +1,31 @@
+diff --git i/pysimplesoap/c14n.py w/pysimplesoap/c14n.py
+index 5749e49..297592e 100644
+--- i/pysimplesoap/c14n.py
++++ w/pysimplesoap/c14n.py
+@@ -55,11 +55,8 @@ except:
+     class XMLNS:
+         BASE = "http://www.w3.org/2000/xmlns/"
+         XML = "http://www.w3.org/XML/1998/namespace"
+-try:
+-    import cStringIO
+-    StringIO = cStringIO
+-except ImportError:
+-    import StringIO
++
++from io import StringIO
+ 
+ _attrs = lambda E: (E.attributes and E.attributes.values()) or []
+ _children = lambda E: E.childNodes or []
+diff --git i/pysimplesoap/xmlsec.py w/pysimplesoap/xmlsec.py
+index 2f96df7..053149f 100644
+--- i/pysimplesoap/xmlsec.py
++++ w/pysimplesoap/xmlsec.py
+@@ -15,7 +15,7 @@ from __future__ import print_function
+ import base64
+ import hashlib
+ import os
+-from cStringIO import StringIO
++from io import StringIO
+ from M2Crypto import BIO, EVP, RSA, X509, m2
+ 
+ # if lxml is not installed, use c14n.py native implementation

@@ -1,0 +1,38 @@
+From 8b1db0c6724640ff995c24145a9777bd49da1ce4 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Fri, 21 Nov 2025 19:11:48 +0100
+Subject: [PATCH] Fix SDL_SOUND_CFLAGS usage
+
+The flags were quried but unused during compilation. Also, there was a
+typo in the else branch.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ src/sdl/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/sdl/Makefile b/src/sdl/Makefile
+index e21477e..84a2136 100644
+--- a/src/sdl/Makefile
++++ b/src/sdl/Makefile
+@@ -22,7 +22,7 @@ SDL_CFLAGS += $(shell $(PKGCONF) $(SDL_PKGS) --cflags)
+ SDL_SOUND_CFLAGS += $(shell $(PKGCONF) $(SDL_SOUND_PKGS) --cflags)
+ else
+ SDL_CFLAGS += $(SDL_CFLAGS_DEF)
+-SD_SOUND_CFLAGS += $(SDL_SOUND_CFLAGS_DEF)
++SDL_SOUND_CFLAGS += $(SDL_SOUND_CFLAGS_DEF)
+ endif
+ 
+ 
+@@ -32,7 +32,7 @@ $(TARGET): $(DEFINES) $(OBJECTS) | $(DEFINES)
+ 	@echo "** Done with SDL interface."
+ 
+ %.o: %.c
+-	$(CC) $(CFLAGS) $(SDL_CFLAGS) -fPIC -fpic -o $@ -c $<
++	$(CC) $(CFLAGS) $(SDL_CFLAGS) $(SDL_SOUND_CFLAGS) -fPIC -fpic -o $@ -c $<
+ 
+ $(DEFINES):
+ 	@echo "** Generating $@"
+-- 
+2.51.2
+
