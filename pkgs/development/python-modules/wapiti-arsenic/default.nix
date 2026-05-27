@@ -22,6 +22,8 @@ buildPythonPackage rec {
     hash = "sha256-snIKEdrBOIfPeHkVLv0X5lsBzDbOtDrbOj4m8UNCj60=";
   };
 
+  pythonRelaxDeps = [ "packaging" ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "poetry>=2.1.3" "poetry-core" \
