@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
-  version = "0.1.124";
+  version = "0.1.126";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gw1USrb0CfKxtfZ3ImJy0ejG03Py9FPuhwv8fl3U8bE=";
+    hash = "sha256-PwkPSyph/s98jcYKWAS7x3zv2Nd4ry3tBZ8ONnpSkw4=";
   };
 
   patches = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dprefix-dev=${placeholder "dev"}"
     # On Linux, this would be disabled by default but we have -Dauto_features=enabled.
     # Disable it on other platforms too, since I cannot test it there.
-    "-Drelocatable=disabled"
+    "-Drelocatable-bundle=no"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Docs are opt-out in native but opt-in in cross builds.

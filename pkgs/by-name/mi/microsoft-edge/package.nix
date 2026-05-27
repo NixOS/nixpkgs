@@ -292,7 +292,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ulrikstrid
       maeve-oake
       leleuvilela
-      bricklou
       jonhermansen
       iedame
     ];
