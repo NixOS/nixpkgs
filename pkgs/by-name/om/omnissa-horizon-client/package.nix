@@ -1,13 +1,24 @@
-{ stdenv, lib, buildFHSEnv, copyDesktopItems, fetchurl
-, gsettings-desktop-schemas, makeDesktopItem, makeWrapper, opensc, writeTextDir
-, configText ? "", }:
+{
+  stdenv,
+  lib,
+  buildFHSEnv,
+  copyDesktopItems,
+  fetchurl,
+  gsettings-desktop-schemas,
+  makeDesktopItem,
+  makeWrapper,
+  opensc,
+  writeTextDir,
+  configText ? "",
+}:
 let
   version = "2605";
 
-  sysArch = if stdenv.hostPlatform.system == "x86_64-linux" then
-    "x64"
-  else
-    throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  sysArch =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "x64"
+    else
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
   # The downloaded archive also contains ARM binaries, but these have not been tested.
 
   # For USB support, ensure that /var/run/omnissa/<YOUR-UID>
@@ -28,10 +39,8 @@ let
     pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
-      url =
-        "https://download3.omnissa.com/software/CART27FQ1_LIN_2603_TARBALL/Omnissa-Horizon-Client-Linux-2603-8.18.0-24120621798.tar.gz";
-      hash =
-        "sha256:acd30479cec91ee693bbd685880fa3834f3678f8dd336511bb9d732f134f71d7";
+      url = "https://download3.omnissa.com/software/CART27FQ1_LIN_2603_TARBALL/Omnissa-Horizon-Client-Linux-2603-8.18.0-24120621798.tar.gz";
+      hash = "sha256:acd30479cec91ee693bbd685880fa3834f3678f8dd336511bb9d732f134f71d7";
 
     };
     nativeBuildInputs = [ makeWrapper ];
@@ -60,14 +69,15 @@ let
     '';
   };
 
-  omnissaFHSUserEnv = pname:
+  omnissaFHSUserEnv =
+    pname:
     buildFHSEnv {
       inherit pname version;
 
       runScript = "${omnissaHorizonClientFiles}/bin/${pname}_wrapper";
 
-      targetPkgs = pkgs:
-        with pkgs; [
+      targetPkgs =
+        pkgs: with pkgs; [
           at-spi2-atk
           atk
           cairo
@@ -116,11 +126,14 @@ let
     desktopName = "Omnissa Horizon Client";
     icon = "${omnissaHorizonClientFiles}/share/icons/horizon-client.png";
     exec = "${omnissaFHSUserEnv mainProgram}/bin/${mainProgram} %u";
-    mimeTypes =
-      [ "x-scheme-handler/horizon-client" "x-scheme-handler/vmware-view" ];
+    mimeTypes = [
+      "x-scheme-handler/horizon-client"
+      "x-scheme-handler/vmware-view"
+    ];
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "omnissa-horizon-client";
   inherit version;
 
@@ -134,9 +147,7 @@ in stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     ln -s ${omnissaFHSUserEnv "horizon-client"}/bin/horizon-client $out/bin/
-    ln -s ${
-      omnissaFHSUserEnv "omnissa-usbarbitrator"
-    }/bin/omnissa-usbarbitrator $out/bin/
+    ln -s ${omnissaFHSUserEnv "omnissa-usbarbitrator"}/bin/omnissa-usbarbitrator $out/bin/
     runHook postInstall
   '';
 
@@ -146,8 +157,7 @@ in stdenv.mkDerivation {
 
   meta = {
     inherit mainProgram;
-    description =
-      "Allows you to connect to your Omnissa Horizon virtual desktop";
+    description = "Allows you to connect to your Omnissa Horizon virtual desktop";
     homepage = "https://www.omnissa.com/products/horizon-8/";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
