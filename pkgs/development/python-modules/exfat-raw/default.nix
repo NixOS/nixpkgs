@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "exfat-raw";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MBanucu";
     repo = "exfat-raw";
     rev = "v${version}";
-    hash = "sha256-v3OKqzh8eLF0hh1pPc73EIELur94Dw9Ipd7oaR7D0+I=";
+    hash = "sha256-KcmLSjVMQd7UdUzWp1iWe0Tvf89l5VvSiLWvg9CZVjA=";
   };
 
   nativeBuildInputs = [ setuptools ];
