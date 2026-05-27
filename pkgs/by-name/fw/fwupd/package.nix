@@ -166,9 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
     # NixOS module for fwupd will take take care of copying the files appropriately.
     ./0003-Add-option-for-installation-sysconfdir.patch
 
-    # EFI capsule is located in fwupd-efi now.
-    ./0004-Get-the-efi-app-from-fwupd-efi.patch
-
     # FIXME: remove patches that fix CI on aarch64 after next release
     (fetchpatch {
       url = "https://github.com/fwupd/fwupd/commit/b3d721360faa4de7dd6960d8f9f8f13aa310715f.patch";
@@ -194,6 +191,13 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     substituteInPlace plugins/redfish/meson.build \
       --replace-fail "get_option('tests')" "false"
+
+    # https://github.com/fwupd/fwupd/issues/10202
+    # This moves EFI app locations in `/run/fwupd-efi` required for lanzaboote
+    # (or any other solution) workflows to sign bootables.
+    # This cannot be implemented as a simple meson override.
+    substituteInPlace meson.build \
+      --replace-fail "efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')" "efi_app_location = '/run/fwupd-efi'"
   '';
 
   strictDeps = true;
@@ -261,6 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
+
     (lib.mesonOption "efi_os_dir" "nixos")
     (lib.mesonEnable "plugin_modem_manager" true)
     # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
