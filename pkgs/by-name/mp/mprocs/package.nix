@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mprocs";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "pvolok";
     repo = "mprocs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UZFFeaesT71UQHPjiG2w5O2Ulyt86OVuFw7i3A7b91I=";
+    hash = "sha256-ciYvdmSGNz256VnVGIu3DnW7IyKJmBTZVRLPAkbaICI=";
   };
 
-  cargoHash = "sha256-htgl0zh73oHXbc9E90xtb5jM8zhXvSJCE9DBhd1SH2E=";
+  cargoHash = "sha256-HO9C/Ch9E2kjcWbV/hMcx74/iCFimBxCYXPl04S+ZFo=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
