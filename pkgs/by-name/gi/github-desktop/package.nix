@@ -35,13 +35,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.5.10";
+  version = "3.5.11";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-AG5YiX8Jyi3ebgPSU4he2UamEdxgTjEYjezh2WkZjC8=";
+    hash = "sha256-nW+yq330lQRfo1RtxUtbkQ336WeE8BjC9jYAIibfdXo=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
