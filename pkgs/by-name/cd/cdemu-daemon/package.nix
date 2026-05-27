@@ -9,6 +9,7 @@
   coreutils,
   fetchurl,
   lib,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,6 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
       $out/share/dbus-1/services/net.sf.cdemu.CDEmuDaemon.service \
       --replace /bin/true ${coreutils}/bin/true
   '';
+
+  passthru = {
+    updateScript = writeScript "update-cdemu-daemon" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Fetch the latest version from the SourceForge RSS feed for cdemu-daemon
+      newVersion="$(curl -s "https://sourceforge.net/projects/cdemu/rss?path=/cdemu-daemon" | pcre2grep -o1 'cdemu-daemon-([0-9.]+)\.tar\.xz' | head -n 1)"
+
+      update-source-version cdemu-daemon "$newVersion"
+    '';
+  };
 
   meta = {
     description = "Suite of tools for emulating optical drives and discs";

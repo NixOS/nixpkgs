@@ -11,6 +11,7 @@
   libappindicator-gtk3,
   fetchurl,
   lib,
+  writeScript,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -47,6 +48,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = writeScript "update-gcdemu" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Fetch the latest version from the SourceForge RSS feed for gcdemu
+      newVersion="$(curl -s "https://sourceforge.net/projects/cdemu/rss?path=/gcdemu" | pcre2grep -o1 'gcdemu-([0-9.]+)\.tar\.xz' | head -n 1)"
+
+      update-source-version gcdemu "$newVersion"
+    '';
+  };
 
   meta = {
     description = "Suite of tools for emulating optical drives and discs";
