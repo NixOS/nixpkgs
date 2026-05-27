@@ -11,16 +11,18 @@
   packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wapiti-arsenic";
   version = "28.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "wapiti_arsenic";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-snIKEdrBOIfPeHkVLv0X5lsBzDbOtDrbOj4m8UNCj60=";
   };
+
+  pythonRelaxDeps = [ "packaging" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -43,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous WebDriver client";
     homepage = "https://github.com/wapiti-scanner/arsenic";
-    changelog = "https://github.com/wapiti-scanner/arsenic/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/wapiti-scanner/arsenic/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
