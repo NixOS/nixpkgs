@@ -2208,6 +2208,8 @@
         aciceri
       ];
     };
+    # Missing required `grammars[0].name` and `metadata`
+    excludeBrokenTreeSitterJson = true;
   };
 
   r = {
