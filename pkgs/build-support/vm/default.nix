@@ -1347,19 +1347,19 @@ let
         })
         (fetchurl {
           url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/main/binary-amd64/Packages.xz";
-          hash = "sha256-EVMoiLf7KqEfG+QtBKbCbQY+creamYm6EbndC+Ogqj4=";
+          hash = "sha256-xaUdPgtH3jCgTJXYUbksMHvzt6jj6YfdzSAb+91tQNw=";
         })
         (fetchurl {
           url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/universe/binary-amd64/Packages.xz";
-          hash = "sha256-Xw3Ao/IR6j2tTsAotuestXZBpBvPles4gKGCAILmhMw=";
+          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
         })
         (fetchurl {
           url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/main/binary-amd64/Packages.xz";
-          hash = "sha256-Qcrp4D/K+a/bWEQLWzI8bw50Y9IuDmZ/qW+0YOOgsmc=";
+          hash = "sha256-tzAvbwp+/6snpL8TtbtTx2kEL2f+XfGAwDCl/r6ka6Y=";
         })
         (fetchurl {
           url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/universe/binary-amd64/Packages.xz";
-          hash = "sha256-7COZT1+EDlfzJCiJ+rOPpCUo9WTkMHniUOTOvkrBOGg=";
+          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
         })
       ];
       urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z";
