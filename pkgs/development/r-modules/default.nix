@@ -968,6 +968,7 @@ let
       fontconfig.dev
       freetype.dev
     ];
+    rlas = [ pkgs.pkg-config ];
     TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
     tesseract = with pkgs; [
@@ -1548,7 +1549,13 @@ let
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     markets = [ pkgs.gsl ];
-    rlas = [ pkgs.boost ];
+    rlas = with pkgs; [
+      boost
+      gdal
+      proj
+      sqlite
+      geos
+    ];
     bgx = [ pkgs.boost ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     poisbinom = [ pkgs.fftw.dev ];
