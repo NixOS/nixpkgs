@@ -7209,6 +7209,7 @@ with pkgs;
     s6-portable-utils-man-pages
     s6-rc
     s6-rc-man-pages
+    sdnotify-wrapper
     skalibs
     skalibs_2_10
     tipidee
