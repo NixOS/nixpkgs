@@ -14,14 +14,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alienarena";
   version = "7.71.7";
 
   src = fetchFromGitHub {
     owner = "alienarena";
     repo = "alienarena";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ri0p/0onI5DU7kDxwdFxRyT1LQLVe89VNEYPXPgilOs=";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/alienarena/alienarena/releases/tag/${version}";
+    changelog = "https://github.com/alienarena/alienarena/releases/tag/${finalAttrs.version}";
     description = "Free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
   };
-}
+})
