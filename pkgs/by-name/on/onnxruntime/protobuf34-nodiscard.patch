@@ -73,28 +73,6 @@ index 055b255132..3925db8ac7 100644
      ofs.flush();
  
      ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
-diff --git a/onnxruntime/test/framework/inference_session_test.cc b/onnxruntime/test/framework/inference_session_test.cc
-index 1c4e7800b7..8ceb05f0f6 100644
---- a/onnxruntime/test/framework/inference_session_test.cc
-+++ b/onnxruntime/test/framework/inference_session_test.cc
-@@ -1045,7 +1045,7 @@ static void TestBindHelper(const std::string& log_str,
-   CreateMatMulModel(p_model, run_provider_type);
- 
-   std::string s1;
--  p_model->ToProto().SerializeToString(&s1);
-+  ASSERT_TRUE(p_model->ToProto().SerializeToString(&s1));
-   std::stringstream sstr(s1);
-   ASSERT_STATUS_OK(session_object.Load(sstr));
-   ASSERT_STATUS_OK(session_object.Initialize());
-@@ -1078,7 +1078,7 @@ TEST(InferenceSessionTests, TestIOBindingReuse) {
-   CreateMatMulModel(p_model, kCpuExecutionProvider);
- 
-   std::string s1;
--  p_model->ToProto().SerializeToString(&s1);
-+  ASSERT_TRUE(p_model->ToProto().SerializeToString(&s1));
-   std::stringstream sstr(s1);
-   ASSERT_TRUE(session_object.Load(sstr).IsOK());
-   ASSERT_STATUS_OK(session_object.Initialize());
 diff --git a/onnxruntime/test/ir/graph_test.cc b/onnxruntime/test/ir/graph_test.cc
 index 4d80cb7047..c69ac46c05 100644
 --- a/onnxruntime/test/ir/graph_test.cc
@@ -201,3 +179,16 @@ index 5caafa0f37..327463c615 100644
    std::shared_ptr<IExecutionProvider> ep_shared = ep ? std::move(ep) : nullptr;
  
    auto run_model = [&](TransformerLevel level, std::vector<OrtValue>& fetches,
+diff --git a/onnxruntime/test/optimizer/transpose_optimizer_test.cc b/onnxruntime/test/optimizer/transpose_optimizer_test.cc
+index 9e9e9e9e9e..8e8e8e8e8e 100644
+--- a/onnxruntime/test/optimizer/transpose_optimizer_test.cc
++++ b/onnxruntime/test/optimizer/transpose_optimizer_test.cc
+@@ -4532,7 +4532,7 @@ TEST(TransposeOptimizerTests, RegressionTest_Permute1DConstantEmptyPerm) {
+ 
+   // Serialize the model to a string.
+   std::string model_data;
+-  model.ToProto().SerializeToString(&model_data);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&model_data));
+ 
+   SessionOptions session_options;
+   session_options.graph_optimization_level = TransformerLevel::Level1;

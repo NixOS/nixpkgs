@@ -1,0 +1,16 @@
+diff --git a/server/channels/app/limits.go b/server/channels/app/limits.go
+index 4c88c1f049..3c1af8d02f 100644
+--- a/server/channels/app/limits.go
++++ b/server/channels/app/limits.go
+@@ -10,8 +10,8 @@ import (
+ )
+ 
+ const (
+-	maxUsersLimit     = 200
+-	maxUsersHardLimit = 250
++	maxUsersLimit     = 10000000
++	maxUsersHardLimit = 10000000
+ )
+ 
+ func (a *App) GetServerLimits() (*model.ServerLimits, *model.AppError) {
+    

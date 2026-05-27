@@ -7,18 +7,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "zlint";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e12GMbUsZFm0yPD4yh+kuK47YKvDC+VcSfth2radyUk=";
+    hash = "sha256-HgpNa1XCAaSGfzc6rMFE4NukL+WxRYxA7il2P/5DI8Q=";
   };
 
   modRoot = "v3";
 
-  vendorHash = "sha256-7g/97DjtXOsWFguWeYi7jLe7xeW1sfY0BrQxYbtIZyM=";
+  vendorHash = "sha256-NqqW5IHo15Dv1jmYSfbPtkApYIhNoDaJTxwBGwDPDjc=";
 
   excludedPackages = [
     "cmd/genTestCerts"

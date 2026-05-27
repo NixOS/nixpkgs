@@ -9,6 +9,7 @@
   makeWrapper,
   enableCmount ? true,
   fuse3,
+  macfuse-stubs,
   librclone,
   nix-update-script,
 }:
@@ -38,9 +39,14 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optional enableCmount fuse3;
+  buildInputs = lib.optional enableCmount (
+    # cgofuse uses the fuse2 header locations on darwin
+    if stdenv.hostPlatform.isDarwin then (macfuse-stubs.override { isFuse3 = false; }) else fuse3
+  );
 
-  tags = [ "fuse3" ] ++ lib.optionals enableCmount [ "cmount" ];
+  tags =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse3" ]
+    ++ lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [
     "-s"

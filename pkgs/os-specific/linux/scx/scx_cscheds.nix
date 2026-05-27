@@ -49,7 +49,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   __structuredAttrs = true;
-  env.EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
+  EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
 
   doInstallCheck = true;
   installCheckPhase = ''
