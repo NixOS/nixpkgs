@@ -5058,12 +5058,6 @@
     github = "cigrainger";
     githubId = 3984794;
   };
-  ciil = {
-    email = "simon@lackerbauer.com";
-    github = "ciil";
-    githubId = 3956062;
-    name = "Simon Lackerbauer";
-  };
   cilki = {
     github = "cilki";
     githubId = 10459406;
@@ -7359,12 +7353,6 @@
     name = "dsee";
     github = "DSeeLP";
     githubId = 46624152;
-  };
-  dsferruzza = {
-    email = "david.sferruzza@gmail.com";
-    github = "dsferruzza";
-    githubId = 1931963;
-    name = "David Sferruzza";
   };
   dsluijk = {
     name = "Dany Sluijk";
