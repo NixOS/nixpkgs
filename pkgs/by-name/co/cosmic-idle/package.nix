@@ -16,7 +16,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-idle";
-  version = "1.0.13";
+  version = "1.0.14";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-0tcrOfVT5b57ev3b5F2U78F2QPGFwp94bqFVNyKH0Yk=";
   };
 
-  cargoHash = "sha256-wAjFC6qAC3nllbnZf0KVaZTEztNYo6GTvwcp5FYmXLw=";
+  cargoHash = "sha256-2y+9Nl3bCBBH3hEgRbnPvWEwbtAscFz+yi+eaXaZY3c=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
