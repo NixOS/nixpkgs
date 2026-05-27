@@ -1,5 +1,6 @@
 {
   lib,
+  bcrypt,
   buildPythonPackage,
   cheroot,
   defusedxml,
@@ -7,6 +8,7 @@
   jinja2,
   json5,
   lxml,
+  passlib,
   pytestCheckHook,
   python-pam,
   pyyaml,
@@ -17,26 +19,30 @@
 
 buildPythonPackage rec {
   pname = "wsgidav";
-  version = "4.3.3";
+  version = "4.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mar10";
     repo = "wsgidav";
     tag = "v${version}";
-    hash = "sha256-vUqNC7ixpta0s7wRC5ROSKMa/MsgEBu5rr0XNu69FRw=";
+    hash = "sha256-2Pn5kMioMr4COpcIDEhlfolG0/5hpv8zMO0X7l6fSwY=";
   };
+
+  pythonRelaxDeps = [ "bcrypt" ];
 
   __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
   dependencies = [
+    bcrypt
     defusedxml
     jinja2
     json5
     cheroot
     lxml
+    passlib
     pyyaml
   ];
 
