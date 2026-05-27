@@ -31,7 +31,7 @@ buildPythonPackage {
 
   meta = {
     description = "Open-source observability for your GenAI or LLM application, based on OpenTelemetry";
-    homepage = "https://github.com/traceloop/openllmetry";
+    homepage = "https://github.com/traceloop/openllmetry/tree/main/packages/opentelemetry-semantic-conventions-ai";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lach ];
   };
