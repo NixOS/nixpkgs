@@ -17,12 +17,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ario";
   version = "1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ario-player/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/ario-player/ario-${finalAttrs.version}.tar.gz";
     sha256 = "16nhfb3h5pc7flagfdz7xy0iq6kvgy6h4bfpi523i57rxvlfshhl";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.garrison ];
     platforms = lib.platforms.all;
   };
-}
+})
