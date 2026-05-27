@@ -33,6 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtk3 ];
 
+  env = {
+    AR = "${stdenv.cc.bintools.targetPrefix}ar";
+    RANLIB = "${stdenv.cc.bintools.targetPrefix}ranlib";
+  };
+
   meta = {
     description = "Reaper Plugin Extension";
     longDescription = ''

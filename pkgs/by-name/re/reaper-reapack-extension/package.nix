@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Wno-dev" ];
 
+  env = {
+    AR = "${stdenv.cc.bintools.targetPrefix}ar";
+    RANLIB = "${stdenv.cc.bintools.targetPrefix}ranlib";
+  };
+
   meta = {
     description = "Package manager for REAPER";
     homepage = "https://reapack.com/";
