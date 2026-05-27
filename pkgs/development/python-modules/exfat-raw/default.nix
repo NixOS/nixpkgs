@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  udisks2,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +21,16 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   doCheck = true;
+  pythonImportsCheck = [ "exfat_raw" ];
+
+  # Integration tests require sudo (losetup + mount).
+  # In the Nix build sandbox sudo is not available, so tests are skipped.
   checkPhase = ''
     runHook preCheck
     if command -v sudo >/dev/null 2>&1; then
       python -m unittest discover -s tests -v
     else
-      echo "sudo not available (build sandbox) — skipping tests"
+      echo "sudo not available (sandbox) — skipping integration tests"
     fi
     runHook postCheck
   '';
