@@ -8,10 +8,10 @@
 
 buildDunePackage rec {
   pname = "tar";
-  version = "3.3.0";
+  version = "3.4.0";
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-tar/releases/download/v${version}/tar-${version}.tbz";
-    hash = "sha256-89aw1nf9QP0euAvMxgu2EyIDWL5Y9mxfqL8CV/Pl65Y=";
+    hash = "sha256-JW4QQ08cL0B85iDfDkYRii1Kq+iecsZNDclBl7LV8dQ=";
   };
 
   minimalOCamlVersion = "4.08";
