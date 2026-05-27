@@ -69,18 +69,6 @@ let
     };
 in
 {
-  fmt_9 = generic {
-    version = "9.1.0";
-    hash = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
-    patches = [
-      # Fixes the build with Clang ≥ 18.
-      (fetchpatch {
-        url = "https://github.com/fmtlib/fmt/commit/c4283ec471bd3efdb114bc1ab30c7c7c5e5e0ee0.patch";
-        hash = "sha256-YyB5GY/ZqJQIhhGy0ICMPzfP/OUuyLnciiyv8Nscsec=";
-      })
-    ];
-  };
-
   fmt_10 = generic {
     version = "10.2.1";
     hash = "sha256-pEltGLAHLZ3xypD/Ur4dWPWJ9BGVXwqQyKcDWVmC3co=";

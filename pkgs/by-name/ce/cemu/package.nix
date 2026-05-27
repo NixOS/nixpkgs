@@ -8,7 +8,7 @@
   curl,
   fetchFromGitHub,
   fetchpatch2,
-  fmt_9,
+  fmt,
   gamemode,
   glm,
   glslang,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     cubeb
     curl
-    fmt_9
+    fmt
     glm
     glslang
     gtk3
