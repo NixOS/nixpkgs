@@ -19,7 +19,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncua";
   version = "2.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mJ4ZUKx4zuprpH6FUrw7MLkekX0RDnzkJscQ4XC7tHE=";
     fetchSubmodules = true;
   };
@@ -101,8 +101,8 @@ buildPythonPackage rec {
   meta = {
     description = "OPC UA / IEC 62541 Client and Server for Python";
     homepage = "https://github.com/FreeOpcUa/opcua-asyncio";
-    changelog = "https://github.com/FreeOpcUa/opcua-asyncio/releases/tag/${src.tag}";
+    changelog = "https://github.com/FreeOpcUa/opcua-asyncio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ harvidsen ];
   };
-}
+})
