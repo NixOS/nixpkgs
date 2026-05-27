@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/hiasr/vim-zellij-navigator";
     changelog = "https://github.com/hiasr/vim-zellij-navigator/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 })

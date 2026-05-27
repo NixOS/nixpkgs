@@ -44,7 +44,12 @@ let
       };
 
       meta = pkg.meta // {
-        maintainers = pkg.meta.maintainers or [ ] ++ [ lib.maintainers.PerchunPak ];
+        maintainers =
+          pkg.meta.maintainers or [ ]
+          ++ (with lib.maintainers; [
+            PerchunPak
+            dtomvan
+          ]);
         platforms = pkg.meta.platforms or zellij.platforms;
       };
     });

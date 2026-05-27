@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nim65s/jbz";
     changelog = "https://github.com/nim65s/jbz/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 })

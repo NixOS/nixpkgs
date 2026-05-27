@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/dj95/zjstatus";
     changelog = "https://github.com/dj95/zjstatus/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 })
