@@ -329,6 +329,7 @@ let
         (listOf str)
         str
       ];
+      donationPage = str;
       downloadPage = str;
       changelog = union [
         (listOf str)
