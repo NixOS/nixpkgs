@@ -28,12 +28,12 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ats2";
   version = versionPkg;
 
   src = fetchurl {
-    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-gmp-${version}.tgz";
+    url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-gmp-${finalAttrs.version}.tgz";
     hash = "sha256-UWgDjFojPBYgykrCrJyYvVWY+Gc5d4aRGjTWjc528AM=";
   };
 
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
       bbarker
     ];
   };
-}
+})
