@@ -141,6 +141,8 @@ lib.makeScope newScope (self: {
 
   play = self.callPackage ./cores/play.nix { };
 
+  pokemini = self.callPackage ./cores/pokemini.nix { };
+
   ppsspp = self.callPackage ./cores/ppsspp.nix { };
 
   prboom = self.callPackage ./cores/prboom.nix { };
