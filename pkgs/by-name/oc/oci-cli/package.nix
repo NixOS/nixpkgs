@@ -62,6 +62,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     retrying
     six
     terminaltables
+    urllib3
   ];
 
   pythonRelaxDeps = [
