@@ -8,14 +8,14 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arp-scan";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "royhills";
     repo = "arp-scan";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-BS+ItZd6cSMX92M6XGYrIeAiCB2iBdvbMvKdLfwawLQ=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for binary in get-{oui,iab}; do
-      wrapProgram "$out/bin/$binary" --set PERL5LIB "${perlPackages.makeFullPerlPath perlModules}"
+      wrapProgram "$out/bin/$binary" --set PERL5LIB "${perlPackages.makeFullPerlPath finalAttrs.perlModules}"
     done;
   '';
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "arp-scan";
   };
-}
+})
