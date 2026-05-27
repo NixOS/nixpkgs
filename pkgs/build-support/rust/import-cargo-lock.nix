@@ -130,7 +130,10 @@ let
     };
 
   registries = {
-    "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
+    # Use static.crates.io (CDN) instead of crates.io/api to avoid the 1 req/sec
+    # rate limit on the API servers, which currently returns intermittent 403s.
+    # See https://github.com/rust-lang/crates.io/issues/13482
+    "https://github.com/rust-lang/crates.io-index" = "https://static.crates.io/crates";
   }
   // extraRegistries;
 
