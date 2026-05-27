@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "vuls";
-  version = "0.39.1";
+  version = "0.39.2";
 
   src = fetchFromGitHub {
     owner = "future-architect";
     repo = "vuls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SaQLxWhRgA/RDvfLp4r8r98CQEog5Uwh7WjnQC+Fj+k=";
+    hash = "sha256-S3YNBsrvtiTEpJ+jo5lOMMKhRH/eo626aeGr7bqSUh0=";
     fetchSubmodules = true;
   };
 

@@ -9272,6 +9272,8 @@ self: super: with self; {
 
   llama-stack-client = callPackage ../development/python-modules/llama-stack-client { };
 
+  llfuse = callPackage ../development/python-modules/llfuse { inherit (pkgs) fuse; };
+
   llguidance = callPackage ../development/python-modules/llguidance { };
 
   llm = callPackage ../development/python-modules/llm { };
