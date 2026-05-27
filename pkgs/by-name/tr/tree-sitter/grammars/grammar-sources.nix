@@ -2985,6 +2985,8 @@
         jeafleohj
       ];
     };
+    # Relative repository URL, empty funding and author URLs
+    excludeBrokenTreeSitterJson = true;
   };
 
   wast = {
