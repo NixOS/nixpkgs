@@ -12032,6 +12032,10 @@ self: super: with self; {
     openvino-native = pkgs.openvino.override { python3Packages = self; };
   };
 
+  openvino-genai = callPackage ../development/python-modules/openvino-genai {
+    openvino-genai-native = pkgs.openvino-genai.override { python3Packages = self; };
+  };
+
   openvino-tokenizers = callPackage ../development/python-modules/openvino-tokenizers {
     openvino-tokenizers-native = pkgs.openvino-tokenizers;
   };
