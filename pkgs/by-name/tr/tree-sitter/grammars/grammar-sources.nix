@@ -1026,6 +1026,8 @@
         aciceri
       ];
     };
+    # Slash in grammar name and non-schema top-level `tree-sitter` field
+    excludeBrokenTreeSitterJson = true;
   };
 
   groovy = {
