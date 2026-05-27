@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-gsconnect";
-  version = "71";
+  version = "72";
 
   outputs = [
     "out"
@@ -34,13 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OgASLH/mPmRmT8RcXOAZLzDhhidLnlZNcgpAQNbO30Q=";
+    hash = "sha256-w9MQVEUQUcO1lqftBi76w5xSTlryKuZJxE6Ogg1J+ho=";
   };
 
   patches = [
     # Make typelibs available in the extension
     (replaceVars ./fix-paths.patch {
       gapplication = "${glib.bin}/bin/gapplication";
+      gjs = "${gjs}/bin/gjs";
       # Replaced in postPatch
       typelibPath = null;
     })
