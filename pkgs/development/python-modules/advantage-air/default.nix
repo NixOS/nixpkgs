@@ -3,12 +3,13 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "advantage-air";
   version = "0.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "advantage_air";
@@ -16,7 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-4rRR9IxzH5EiYfWzWYeyCwoLB2LetBVyH7L3nkvp+gA=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # No tests
   doCheck = false;
