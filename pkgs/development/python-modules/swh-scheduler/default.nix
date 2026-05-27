@@ -31,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-scheduler";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -40,17 +40,12 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-scheduler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Kv5QH3sj/InKOSjxGtwVxtoAluHx5eIxO5GqcbOs0NY=";
+    hash = "sha256-VsgF5zmrMPuXrRsxb4YBx+hXkFltxgbgskAe0b3k9bw=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  pythonRelaxDeps = [
-    # we patched click 8.2.1
-    "click"
   ];
 
   dependencies = [
