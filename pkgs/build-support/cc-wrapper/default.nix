@@ -26,6 +26,7 @@
   nixSupport ? { },
   isGNU ? false,
   isClang ? cc.isClang or false,
+  isAlireGNAT ? false,
   isZig ? cc.isZig or false,
   isArocc ? cc.isArocc or false,
   isCcache ? cc.isCcache or false,
@@ -699,7 +700,7 @@ stdenvNoCC.mkDerivation {
         touch "$out/nix-support/libc-cflags"
         touch "$out/nix-support/libc-ldflags"
       ''
-      + optionalString (!isArocc) ''
+      + optionalString (!isArocc && !(isAlireGNAT && targetPlatform.isDarwin)) ''
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
       + ''
@@ -776,7 +777,11 @@ stdenvNoCC.mkDerivation {
     # ${cc_solib}/lib64 (even though it does actually search there...)..
     # This confuses libtool.  So add it to the compiler tool search
     # path explicitly.
-    + optionalString (!nativeTools && !isArocc) ''
+    # Injecting CFlags and LDFlags causes duplicate rpath at linking
+    # stage for Alire GNAT. Skip adding flags here.
+    + optionalString (!nativeTools && !isArocc && !isAlireGNAT) ''
+      ccLDFlags=()
+      ccCFlags=()
       if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
         ccLDFlags+=" -L${cc_solib}/lib64"
         ccCFlags+=" -B${cc_solib}/lib64"
@@ -789,7 +794,6 @@ stdenvNoCC.mkDerivation {
       touch "$out/nix-support/gnat-cflags"
       touch "$out/nix-support/gnat-ldflags"
       basePath=$(echo $cc/lib/*/*/*)
-      ccCFlags+=" -B$basePath -I$basePath/adainclude"
       gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
 
       echo "$gnatCFlags" >> $out/nix-support/gnat-cflags

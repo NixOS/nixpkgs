@@ -51,7 +51,8 @@
   nukeReferences,
   callPackage,
   majorMinorVersion,
-  apple-sdk,
+  apple-sdk_14,
+  apple-sdk_15,
   darwin,
 }:
 
@@ -81,6 +82,8 @@ let
   atLeast14 = versionAtLeast version "14";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
+
+  appleSdk = if langAda && !is13 then apple-sdk_15 else apple-sdk_14;
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
   # snapshots have a form like MAJOR.MINOR.MICRO.DATE, like 14.2.1.20250322
@@ -130,7 +133,8 @@ let
       ;
     # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc${majorVersion}.cc.override)" | jq '.[]' --raw-output'
     inherit
-      apple-sdk
+      apple-sdk_14
+      apple-sdk_15
       binutils
       buildPackages
       cargo
@@ -151,6 +155,7 @@ let
       gnat-bootstrap
       gnused
       isl
+      is13
       langAda
       langC
       langCC
@@ -378,6 +383,11 @@ pipe
         );
 
         NIX_LDFLAGS = optionalString hostPlatform.isSunOS "-lm";
+
+        # Override isysroot for GNAT on Darwin due to SDK version sensitivity; GNAT 14+ requires Apple SDK 15 or later.
+        NIX_CFLAGS_COMPILE = optionalString (
+          hostPlatform.isDarwin && langAda
+        ) "-isysroot ${appleSdk.sdkroot}";
 
         inherit (callFile ./common/extra-target-flags.nix { })
           EXTRA_FLAGS_FOR_TARGET

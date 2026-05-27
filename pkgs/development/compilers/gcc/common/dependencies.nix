@@ -2,6 +2,7 @@
   lib,
   stdenv,
   version,
+  is13,
   buildPackages,
   targetPackages,
   texinfo,
@@ -40,8 +41,8 @@ in
   nativeBuildInputs = [
     texinfo
     which
-    gettext
   ]
+  ++ optionals (!is13) [ gettext ]
   ++ optionals (perl != null) [ perl ]
   ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox || isSnapshot && flex != null) [ flex ]
   ++ optionals langAda [ gnat-bootstrap ]
