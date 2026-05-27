@@ -9,9 +9,12 @@
   libx11,
   spirv-headers,
   vulkan-headers,
-  vkbasalt32,
+  pkgsi686Linux,
 }:
 
+let
+  vkbasalt32 = pkgsi686Linux.vkbasalt;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkbasalt";
   version = "0.3.2.10";
