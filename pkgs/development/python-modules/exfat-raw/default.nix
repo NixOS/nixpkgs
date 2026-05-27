@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "MBanucu";
     repo = "exfat-raw";
     rev = "v${version}";
-    hash = "sha256-/blT0neRmfgApHk2mVknOrC2feolhU9u8pz232TIfdg=";
+    hash = "sha256-v3OKqzh8eLF0hh1pPc73EIELur94Dw9Ipd7oaR7D0+I=";
   };
 
   nativeBuildInputs = [ setuptools ];
