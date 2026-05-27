@@ -100,7 +100,7 @@ body:
     attributes:
       label: "Are you using nix-darwin?"
       description: |
-        [`nix-darwin`](https://github.com/LnL7/nix-darwin) is a set of NixOS-like modules for macOS systems. Depending on your issue, this information may be relevant.
+        [`nix-darwin`](https://github.com/nix-darwin/nix-darwin) is a set of NixOS-like modules for macOS systems. Depending on your issue, this information may be relevant.
       options:
         - "Yes, I am using nix-darwin."
         - "No, I am not using nix-darwin."
