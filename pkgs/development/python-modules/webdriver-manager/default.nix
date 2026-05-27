@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webdriver-manager";
   version = "4.1.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SergeyPirogov";
     repo = "webdriver_manager";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MqLM1mSfoirBaJYKkikNuS2XPWPTM2MQNgEwhtp+2ek=";
   };
 
@@ -64,9 +64,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module to manage the binary drivers for different browsers";
     homepage = "https://github.com/SergeyPirogov/webdriver_manager/";
-    changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };
-}
+})
