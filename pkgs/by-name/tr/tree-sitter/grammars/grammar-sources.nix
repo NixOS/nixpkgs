@@ -30,6 +30,8 @@
         aciceri
       ];
     };
+    # Non-schema `queries` nesting in grammar entry
+    excludeBrokenTreeSitterJson = true;
   };
 
   alloy = {
