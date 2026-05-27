@@ -158,5 +158,13 @@ with lib;
         Enable recommended uwsgi settings.
       '';
     };
+
+    prependConfig = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        These lines go to the beginning of the location verbatim.
+      '';
+    };
   };
 }

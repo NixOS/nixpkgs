@@ -511,6 +511,7 @@ let
     concatStringsSep "\n" (
       map (config: ''
         location ${config.location} {
+          ${optionalString (config.prependConfig != null) config.prependConfig}
           ${optionalString (
             config.proxyPass != null && !cfg.proxyResolveWhileRunning
           ) "proxy_pass ${config.proxyPass};"}
