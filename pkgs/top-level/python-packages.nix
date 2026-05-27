@@ -17861,6 +17861,8 @@ self: super: with self; {
 
   sgl-deep-gemm = callPackage ../development/python-modules/sgl-deep-gemm { };
 
+  sglang-kernel = callPackage ../development/python-modules/sglang-kernel { };
+
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
 
   sgp4 = callPackage ../development/python-modules/sgp4 { };
