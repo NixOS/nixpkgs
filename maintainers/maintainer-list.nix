@@ -30829,6 +30829,12 @@
       { fingerprint = "897B 6DF1 D6FC 152C 9347  486D 042F 1F94 C62D DB03"; }
     ];
   };
+  zexk = {
+    email = "zexkeientei@protonmail.com";
+    github = "zexk";
+    githubId = 22141326;
+    name = "zexk";
+  };
   zfnmxt = {
     name = "zfnmxt";
     email = "zfnmxt@zfnmxt.com";
