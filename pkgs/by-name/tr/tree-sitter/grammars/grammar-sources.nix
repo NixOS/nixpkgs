@@ -1830,6 +1830,8 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # Missing required `metadata.links`
+    excludeBrokenTreeSitterJson = true;
   };
 
   opencl = {
