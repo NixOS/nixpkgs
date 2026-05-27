@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "altermime";
   version = "0.3.11";
 
   src = fetchurl {
-    url = "https://pldaniels.com/altermime/altermime-${version}.tar.gz";
+    url = "https://pldaniels.com/altermime/altermime-${finalAttrs.version}.tar.gz";
     sha256 = "15zxg6spcmd35r6xbidq2fgcg2nzyv1sbbqds08lzll70mqx4pj7";
   };
 
@@ -36,4 +36,4 @@ gccStdenv.mkDerivation rec {
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";
   };
-}
+})
