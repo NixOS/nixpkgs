@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "advantage-air";
   version = "0.4.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "advantage_air";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-4rRR9IxzH5EiYfWzWYeyCwoLB2LetBVyH7L3nkvp+gA=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})
