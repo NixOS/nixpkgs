@@ -43,8 +43,8 @@ buildGo126Module (finalAttrs: {
         sourceRoot
         ;
       pnpm = pnpm_11;
-      fetcherVersion = 3;
-      hash = "sha256-OEr5uyMnwP1TkSxRFNaopB9AAx2OVE7lNEzGyQwF6kc=";
+      fetcherVersion = 4;
+      hash = "sha256-vTVZItC5SUocdw+fHbbGM/v+CHKaB45dc2mUh4Jy8K8=";
     };
 
     postBuild = ''
