@@ -16,11 +16,11 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gcdemu";
-  version = "3.2.6";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/gcdemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-w4vzKoSotL5Cjfr4Cu4YhNSWXJqS+n/vySrwvbhR1zA=";
+    hash = "sha256-C9d4Rv47kQhs2kbTCwAUcdm+dcljA8IVkwhLJHJpUS0=";
   };
 
   nativeBuildInputs = [
