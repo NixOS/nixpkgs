@@ -185,6 +185,8 @@ lib.makeScope newScope (self: {
 
   twenty-fortyeight = self.callPackage ./cores/twenty-fortyeight.nix { };
 
+  tyrquake = self.callPackage ./cores/tyrquake.nix { };
+
   vba-m = self.callPackage ./cores/vba-m.nix { };
 
   vba-next = self.callPackage ./cores/vba-next.nix { };
