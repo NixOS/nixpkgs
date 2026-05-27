@@ -7,13 +7,14 @@
   pytest-asyncio,
   pytest-raises,
   pytestCheckHook,
+  setuptools,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "aioemonitor";
   version = "1.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
@@ -22,7 +23,9 @@ buildPythonPackage rec {
     sha256 = "0h8zqqy8v8r1fl9bp3m8icr2sy44p0mbfl1hbb0zni17r9r50dhn";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     xmltodict
   ];
