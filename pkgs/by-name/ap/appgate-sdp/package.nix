@@ -97,12 +97,12 @@ let
     zlib
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appgate-sdp";
   version = "6.4.2";
 
   src = fetchurl {
-    url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
+    url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor finalAttrs.version}/client/appgate-sdp_${finalAttrs.version}_amd64.deb";
     sha256 = "sha256-xFpBC6X95C01wUfzJ3a0kMz898k6BItkpJLcUmfd7oY=";
   };
 
@@ -176,4 +176,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ymatsiuk ];
     mainProgram = "appgate";
   };
-}
+})
