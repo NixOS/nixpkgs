@@ -68,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Google's Go-based terminal user interface (TUI) agent client";
     homepage = "https://antigravity.google";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ u3kkasha ];
+    maintainers = with lib.maintainers; [
+      adrielvelazquez
+      u3kkasha
+    ];
     platforms = lib.attrNames sources;
     mainProgram = "agy";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
