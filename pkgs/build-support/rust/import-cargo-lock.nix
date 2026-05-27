@@ -130,7 +130,7 @@ let
     };
 
   registries = {
-    "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
+    "https://github.com/rust-lang/crates.io-index" = "https://static.crates.io/crates";
   }
   // extraRegistries;
 
