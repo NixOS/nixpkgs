@@ -1954,6 +1954,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    fixest = old.fixest.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
