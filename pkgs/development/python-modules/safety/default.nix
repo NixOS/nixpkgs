@@ -26,7 +26,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "safety";
   version = "3.8.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/iLxcVku8ogVZyhQI0/U+m1RyECDYWxLix+S83HHrS4=";
   };
 
@@ -85,11 +85,11 @@ buildPythonPackage rec {
     description = "Checks installed dependencies for known vulnerabilities";
     mainProgram = "safety";
     homepage = "https://github.com/pyupio/safety";
-    changelog = "https://github.com/pyupio/safety/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pyupio/safety/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thomasdesr
       dotlambda
     ];
   };
-}
+})
