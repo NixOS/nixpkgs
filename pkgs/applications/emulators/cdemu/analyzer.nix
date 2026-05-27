@@ -1,7 +1,6 @@
 {
   cmake,
   pkg-config,
-  callPackage,
   gobject-introspection,
   wrapGAppsHook3,
   python3Packages,
@@ -11,20 +10,17 @@
   gdk-pixbuf,
   intltool,
   libmirage,
+  fetchurl,
+  lib,
 }:
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "image-analyzer";
+  version = "3.2.6";
 
-  inherit
-    (callPackage ./common-drv-attrs.nix {
-      version = "3.2.6";
-      pname = "image-analyzer";
-      hash = "sha256-7I8RUgd+k3cEzskJGbziv1f0/eo5QQXn62wGh/Y5ozc=";
-    })
-    pname
-    version
-    src
-    meta
-    ;
+  src = fetchurl {
+    url = "mirror://sourceforge/cdemu/image-analyzer-${finalAttrs.version}.tar.xz";
+    hash = "sha256-7I8RUgd+k3cEzskJGbziv1f0/eo5QQXn62wGh/Y5ozc=";
+  };
 
   buildInputs = [
     libxml2
@@ -33,10 +29,12 @@ python3Packages.buildPythonApplication {
     adwaita-icon-theme
     gdk-pixbuf
   ];
+
   propagatedBuildInputs = with python3Packages; [
     pygobject3
     matplotlib
   ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -47,8 +45,27 @@ python3Packages.buildPythonApplication {
 
   pyproject = false;
   dontWrapGApps = true;
+
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-}
+  meta = {
+    description = "Suite of tools for emulating optical drives and discs";
+    longDescription = ''
+      CDEmu consists of:
+
+      - a kernel module implementing a virtual drive-controller
+      - libmirage which is a software library for interpreting optical disc images
+      - a daemon which emulates the functionality of an optical drive+disc
+      - textmode and GTK clients for controlling the emulator
+      - an image analyzer to view the structure of image files
+
+      Optical media emulated by CDemu can be mounted within Linux. Automounting is also allowed.
+    '';
+    homepage = "https://cdemu.sourceforge.io/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bendlas ];
+  };
+})
