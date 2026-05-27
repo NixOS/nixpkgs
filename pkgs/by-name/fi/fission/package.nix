@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "fission";
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "fission";
     repo = "fission";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5+TyOBHHDhHtAJUtrcWUCRbewGODsut/w3chrmL+dis=";
+    hash = "sha256-/EGhEqXmEB8nEVsfXmnCMc8oTl6AondhXupfNY43gvU=";
   };
 
-  vendorHash = "sha256-y5h1lMq99gWhB9T5e8b2t9USgKc2pv+FMgl9wva8t28=";
+  vendorHash = "sha256-B+cFjpFhZ5dkPXaNlmokP83wxSuA2CwkujnY8OL8qoI=";
 
   ldflags = [
     "-s"
