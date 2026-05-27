@@ -30,8 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
-    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build" \
       --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
   ''
   # bleak checks BlueZ's version with a call to `bluetoothctl --version`
