@@ -334,3 +334,30 @@ A readonly attribute that concatenates all CPE parts in one string.
 #### `meta.identifiers.possibleCPEs` {#var-meta-identifiers-possibleCPEs}
 
 A readonly attribute containing the list of guesses for what CPE for this package can look like. It includes all variants of version handling mentioned above. Each item is an attrset with attributes `cpeParts` and `cpe` for each guess.
+
+### Package URL {#sec-meta-identifiers-purl}
+
+[Package-URL](https://github.com/package-url/purl-spec) (PURL) is a specification to reliably identify and locate software packages.
+Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management.
+Package-URLs shall default to the `mkDerivation.src`, as the original consumed software package is the single source of truth.
+
+#### `meta.identifiers.purlParts` {#var-meta-identifiers-purlParts}
+
+This attribute contains an attribute set of all parts of the PURL for this package.
+
+* `type` mandatory [type](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/docs/standard/summary.md) which needs to be provided
+* `spec` specify the PURL in accordance with the [purl-spec](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/purl-specification.md)
+
+#### `meta.identifiers.purl` {#var-meta-identifiers-purl}
+
+An extendable attribute which is built based on `purlParts`.
+This is the main identifier of the software package.
+For handling edge cases, consider using the list interface [`meta.identifiers.purls`](#var-meta-identifiers-purls).
+
+#### `meta.identifiers.purls` {#var-meta-identifiers-purls}
+
+An extendable list attribute which defaults to a single element equal to [`meta.identifiers.purl`](#var-meta-identifiers-purl).
+It provides an interface for additional identifiers of `mkDerivation.src` or for identifiers of vendored dependencies inside `mkDerivation.src`, which maintainers may carefully consider to specify as well.
+
+Additional identifiers are generally not recommended, as they might cause maintenance overhead or diverge.
+For example, a source distribution `pkg:github` may be hard to keep correctly aligned with the corresponding binary distribution `pkg:pypi`.
