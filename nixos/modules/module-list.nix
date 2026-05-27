@@ -733,6 +733,10 @@
   ./services/home-automation/homebridge.nix
   ./services/home-automation/matter-server.nix
   ./services/home-automation/matterjs-server.nix
+  ./services/home-automation/openems/backend.nix
+  ./services/home-automation/openems/common.nix
+  ./services/home-automation/openems/edge.nix
+  ./services/home-automation/openems/ui.nix
   ./services/home-automation/openthread-border-router.nix
   ./services/home-automation/wyoming/faster-whisper.nix
   ./services/home-automation/wyoming/openwakeword.nix

@@ -65,6 +65,18 @@
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
+  "module-services-openems": [
+    "index.html#module-services-openems"
+  ],
+  "module-services-openems-basic-usage": [
+    "index.html#module-services-openems-basic-usage"
+  ],
+  "module-services-openems-config": [
+    "index.html#module-services-openems-config"
+  ],
+  "module-services-openems-ui": [
+    "index.html#module-services-openems-ui"
+  ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
