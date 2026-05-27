@@ -10,6 +10,9 @@
   lockedGrammars ? lib.importJSON ./grammars.json,
   grammarsOverlay ? (
     final: prev: {
+      tree-sitter-agda = prev.tree-sitter-agda.override {
+        excludeBrokenTreeSitterJson = false;
+      };
       tree-sitter-beancount = prev.tree-sitter-beancount.override {
         excludeBrokenTreeSitterJson = false;
       };
@@ -27,6 +30,15 @@
       };
       tree-sitter-sql = prev.tree-sitter-sql.override {
         generate = false;
+      };
+      tree-sitter-strace = prev.tree-sitter-strace.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tact = prev.tree-sitter-tact.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-vue = prev.tree-sitter-vue.override {
+        excludeBrokenTreeSitterJson = false;
       };
     }
   ),
