@@ -8460,6 +8460,7 @@ with pkgs;
   nushellPlugins = recurseIntoAttrs {
     gstat = callPackage ../by-name/nu/nushell-plugin-gstat/package.nix { };
     bson = callPackage ../by-name/nu/nushell-plugin-bson/package.nix { };
+    dns = callPackage ../by-name/nu/nushell-plugin-dns/package.nix { };
     formats = callPackage ../by-name/nu/nushell-plugin-formats/package.nix { };
     polars = callPackage ../by-name/nu/nushell-plugin-polars/package.nix { };
     query = callPackage ../by-name/nu/nushell-plugin-query/package.nix { };
