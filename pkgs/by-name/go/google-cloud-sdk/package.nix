@@ -13,7 +13,7 @@
   lib,
   fetchurl,
   makeWrapper,
-  python312,
+  python314,
   openssl,
   jq,
   callPackage,
@@ -25,7 +25,7 @@
 }:
 
 let
-  python3 = python312;
+  python3 = python314;
 
   pythonEnv = python3.withPackages (
     p:
