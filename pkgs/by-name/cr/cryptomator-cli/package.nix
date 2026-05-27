@@ -80,7 +80,6 @@ maven.buildMavenPackage rec {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

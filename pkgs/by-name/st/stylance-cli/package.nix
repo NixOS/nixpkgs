@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Library and cli tool for working with scoped CSS in rust";

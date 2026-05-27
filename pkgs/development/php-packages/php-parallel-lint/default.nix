@@ -21,7 +21,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";

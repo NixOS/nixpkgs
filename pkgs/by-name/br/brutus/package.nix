@@ -29,8 +29,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
-
   meta = {
     description = "Credential testing tool for multiple services";
     homepage = "https://github.com/praetorian-inc/brutus";

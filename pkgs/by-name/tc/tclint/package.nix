@@ -53,7 +53,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pythonPackages.pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     # Fails to find lsprotocol in the sandbox, even when added to nativeCheckInputs

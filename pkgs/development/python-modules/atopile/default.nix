@@ -147,7 +147,6 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # do not report worker logs to filee

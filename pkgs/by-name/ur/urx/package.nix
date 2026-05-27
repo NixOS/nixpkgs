@@ -36,8 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
-
   meta = {
     description = "Extracts URLs from OSINT Archives for Security Insights";
     homepage = "https://github.com/hahwul/urx";

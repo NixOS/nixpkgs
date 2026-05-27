@@ -22,7 +22,6 @@ php.buildComposerProject2 (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Opinionated PHP code formatter";

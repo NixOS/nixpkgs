@@ -42,8 +42,6 @@ buildGoLatestModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
-
   meta = {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
     downloadPage = "https://github.com/golang/vuln";

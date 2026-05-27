@@ -116,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/groestlcoin-cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

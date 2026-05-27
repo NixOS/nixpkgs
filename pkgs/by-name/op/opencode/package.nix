@@ -157,7 +157,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     "HOME"
     "OPENCODE_DISABLE_MODELS_FETCH"
   ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     jsonschema = {

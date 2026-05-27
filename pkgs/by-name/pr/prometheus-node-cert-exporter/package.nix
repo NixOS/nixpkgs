@@ -36,7 +36,6 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };

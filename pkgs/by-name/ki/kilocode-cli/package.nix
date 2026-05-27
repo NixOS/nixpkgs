@@ -117,7 +117,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^cli-v(.+)$" ]; };

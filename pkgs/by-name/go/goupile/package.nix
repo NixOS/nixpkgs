@@ -64,7 +64,6 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {

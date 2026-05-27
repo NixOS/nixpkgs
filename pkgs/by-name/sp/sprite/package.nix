@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = "HOME";
   doInstallCheck = true;
 

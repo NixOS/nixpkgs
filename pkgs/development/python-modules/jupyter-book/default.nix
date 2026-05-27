@@ -71,7 +71,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Build a book with Jupyter Notebooks and Sphinx";

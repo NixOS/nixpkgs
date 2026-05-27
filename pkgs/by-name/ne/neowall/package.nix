@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/1ay1/neowall/releases/tag/${finalAttrs.src.tag}";

@@ -80,8 +80,6 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   pythonImportsCheck = [
     "xclim"
     "xclim.ensembles"

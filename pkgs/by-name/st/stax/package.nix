@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   doCheck = false;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Stacked-branch workflow for Git with an interactive TUI, smart PRs, and safe undo";

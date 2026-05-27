@@ -69,7 +69,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/amp";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {

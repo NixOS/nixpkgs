@@ -170,7 +170,6 @@ buildPythonPackage (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Touches network

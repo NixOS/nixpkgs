@@ -22,7 +22,6 @@
     composerStrictValidation = false;
     doInstallCheck = true;
     nativeInstallCheckInputs = [ versionCheckHook ];
-    versionCheckProgramArg = "--version";
 
     meta = {
       description = "Static analyzer for PHP";
