@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.13.2";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "poezio";
     repo = "slixmpp";
     tag = "slix-${version}";
-    hash = "sha256-hjM1OIFYpHV5SSN32858pyuwOvaAA0tFZWCZI+5n9u4=";
+    hash = "sha256-1Jns7kqYGpUvwfwyMoZ9ygD2Sm148f/QdJ0atvfwGTo=";
   };
 
   patches = [
