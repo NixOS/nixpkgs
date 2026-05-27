@@ -870,6 +870,10 @@ let
       cargo
       rustc
     ];
+    tinyimg = with pkgs; [
+      cargo
+      rustc
+    ];
     caugi = with pkgs; [
       cargo
       rustc
