@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "twscrape";
-  version = "0.17.0";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vladkens";
     repo = "twscrape";
     tag = "v${version}";
-    hash = "sha256-0j6nE8V0CWTuIHMS+2p5Ncz7d+D6VagjtyfMbQuI8Eg=";
+    hash = "sha256-FQYBC/b2L+c6UtqMZcsuVom01n0sRpBvMTnE2zZh86U=";
   };
 
   build-system = [ hatchling ];
