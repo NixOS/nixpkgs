@@ -1,0 +1,55 @@
+diff -ru gfan0.6.2.orig/src/app_librarytest.cpp gfan0.6.2/src/app_librarytest.cpp
+--- gfan0.6.2.orig/src/app_librarytest.cpp	2020-10-19 08:41:27.981863500 +0900
++++ gfan0.6.2/src/app_librarytest.cpp	2020-10-19 08:42:44.551863500 +0900
+@@ -12,8 +12,8 @@
+ #include "setoper.h"
+ #include "cdd.h"
+ #else
+-#include "cdd/setoper.h"
+-#include "cdd/cdd.h"
++#include "cddlib/setoper.h"
++#include "cddlib/cdd.h"
+ #endif
+ #include <iostream>
+ #include <fstream>
+diff -ru gfan0.6.2.orig/src/gfanlib_zcone.cpp gfan0.6.2/src/gfanlib_zcone.cpp
+--- gfan0.6.2.orig/src/gfanlib_zcone.cpp	2020-10-19 08:41:27.981863500 +0900
++++ gfan0.6.2/src/gfanlib_zcone.cpp	2020-10-19 08:42:44.571863500 +0900
+@@ -16,8 +16,8 @@
+ #include "setoper.h"
+ #include "cdd.h"
+ #else
+-#include "cdd/setoper.h"
+-#include "cdd/cdd.h"
++#include "cddlib/setoper.h"
++#include "cddlib/cdd.h"
+ #endif
+ //}
+ 
+@@ -52,8 +52,8 @@
+ 				  "dd_free_global_constants()\n"
+ 				  "in your deinitialisation code (only available for cddlib version>=094d).\n"
+ 				  "This requires the header includes:\n"
+-				  "#include \"cdd/setoper.h\"\n"
+-				  "#include \"cdd/cdd.h\"\n"
++				  "#include \"cddlib/setoper.h\"\n"
++				  "#include \"cddlib/cdd.h\"\n"
+ 				  "\n"
+ 				  "Alternatively, you may call gfan:initializeCddlibIfRequired() and deinitializeCddlibIfRequired()\n"
+ 				  "if gfanlib is the only code using cddlib. If at some point cddlib is no longer required by gfanlib\n"
+diff -ru gfan0.6.2.orig/src/lp_cdd.cpp gfan0.6.2/src/lp_cdd.cpp
+--- gfan0.6.2.orig/src/lp_cdd.cpp	2020-10-19 08:41:27.991863500 +0900
++++ gfan0.6.2/src/lp_cdd.cpp	2020-10-19 08:42:44.571863500 +0900
+@@ -5,9 +5,9 @@
+ #include "cdd.h"
+ #include "cdd_f.h"
+ #else
+-#include "cdd/setoper.h"
+-#include "cdd/cdd.h"
+-#include "cdd/cdd_f.h"
++#include "cddlib/setoper.h"
++#include "cddlib/cdd.h"
++#include "cddlib/cdd_f.h"
+ #endif
+ //}
+ #include "termorder.h"

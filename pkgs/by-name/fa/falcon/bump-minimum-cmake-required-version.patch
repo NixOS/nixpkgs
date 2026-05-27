@@ -1,0 +1,250 @@
+From a1f4fa1607249b0356c2cd2c54134cb3dc2dc231 Mon Sep 17 00:00:00 2001
+From: Stanislas Marquis <stan@astrorigin.com>
+Date: Fri, 3 Mar 2023 12:44:09 +0100
+Subject: [PATCH] Update cmake minimum version >= 3.16.3 (ubuntu FF)
+
+---
+ CMakeLists.txt                         | 2 +-
+ apps/faldoc/CMakeLists.txt             | 2 +-
+ clt/falcon/editline/CMakeLists.txt     | 4 ++--
+ dist/nsis/CMakeLists.txt               | 2 +-
+ modules/native/MP/CMakeLists.txt       | 2 +-
+ modules/native/conio/CMakeLists.txt    | 2 +-
+ modules/native/curl/CMakeLists.txt     | 2 +-
+ modules/native/dbi/CMakeLists.txt      | 2 +-
+ modules/native/dbus/CMakeLists.txt     | 2 +-
+ modules/native/dynlib/CMakeLists.txt   | 2 +-
+ modules/native/feathers/CMakeLists.txt | 2 +-
+ modules/native/gd2/CMakeLists.txt      | 2 +-
+ modules/native/gtk/CMakeLists.txt      | 2 +-
+ modules/native/hpdf/CMakeLists.txt     | 2 +-
+ modules/native/sdl/CMakeLists.txt      | 2 +-
+ modules/native/wopi/CMakeLists.txt     | 2 +-
+ tests/native/dynlib/CMakeLists.txt     | 2 +-
+ 17 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 81c404677..de2125e3d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -34,7 +34,7 @@
+ # List of available modules: CURL DBI DBUS DYNLIB GD2 GTK PDF SDL
+ #
+ 
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.16.3)
+ project(Falcon)
+ 
+ 
+diff --git a/apps/faldoc/CMakeLists.txt b/apps/faldoc/CMakeLists.txt
+index 3e0867f63..7ef40d7b3 100644
+--- a/apps/faldoc/CMakeLists.txt
++++ b/apps/faldoc/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ # CMake configuration file for Feather modules
+ ####################################################################
+ 
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.16.3)
+ project(falcon-app-faldoc)
+ 
+ set(FALDOC_DIR "${FALCON_APP_DIR}/faldoc" )
+diff --git a/clt/falcon/editline/CMakeLists.txt b/clt/falcon/editline/CMakeLists.txt
+index 8b51862ad..933ef0a13 100644
+--- a/clt/falcon/editline/CMakeLists.txt
++++ b/clt/falcon/editline/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ project(Editline)
+ 
+ find_package(Curses REQUIRED)
+@@ -23,4 +23,4 @@ configure_file(
+   ${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake
+   ${CMAKE_CURRENT_BINARY_DIR}/config.h
+ )
+-              
+\ No newline at end of file
++              
+diff --git a/dist/nsis/CMakeLists.txt b/dist/nsis/CMakeLists.txt
+index c6e0110bb..996ce5436 100644
+--- a/dist/nsis/CMakeLists.txt
++++ b/dist/nsis/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ #
+ # Configurator for NSIS installer
+ #
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ 
+ #
+ # Files to be configured
+diff --git a/modules/native/MP/CMakeLists.txt b/modules/native/MP/CMakeLists.txt
+index 2b86107e0..f8eba5c40 100644
+--- a/modules/native/MP/CMakeLists.txt
++++ b/modules/native/MP/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ ####################################################################
+ 
+ PROJECT(MP)
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+ # Set here project-wide options
+ # OPTION( WITH_OPT  "An poption" OFF)
+diff --git a/modules/native/conio/CMakeLists.txt b/modules/native/conio/CMakeLists.txt
+index 104c9bcec..d828d7e09 100644
+--- a/modules/native/conio/CMakeLists.txt
++++ b/modules/native/conio/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ # CMake configuration file for @PROJECT_NAME@
+ ####################################################################
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ project(conio)
+ 
+ # find the falcon installation.  Set CMAKE_INSTALL_PREFIX to the falcon root 
+diff --git a/modules/native/curl/CMakeLists.txt b/modules/native/curl/CMakeLists.txt
+index 2f1e908e7..7d7a2377c 100644
+--- a/modules/native/curl/CMakeLists.txt
++++ b/modules/native/curl/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ # CMake configuration file for curl
+ ####################################################################
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ project(Falcon_curl)
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ 
+diff --git a/modules/native/dbi/CMakeLists.txt b/modules/native/dbi/CMakeLists.txt
+index 3a3f72c5f..20dbee902 100644
+--- a/modules/native/dbi/CMakeLists.txt
++++ b/modules/native/dbi/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ #
+ # CMake configuration file for DBI
+ ####################################################################
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.16.3)
+ project(Falcon_DBI)
+ 
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+diff --git a/modules/native/dbus/CMakeLists.txt b/modules/native/dbus/CMakeLists.txt
+index 4bd76ce38..09f575fa7 100644
+--- a/modules/native/dbus/CMakeLists.txt
++++ b/modules/native/dbus/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ ####################################################################
+ 
+ PROJECT(dbus)
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ 
+ INCLUDE( ${CMAKE_ROOT}/Modules/FindPkgConfig.cmake)
+ 
+diff --git a/modules/native/dynlib/CMakeLists.txt b/modules/native/dynlib/CMakeLists.txt
+index 92bc09e59..6e1f31ec9 100644
+--- a/modules/native/dynlib/CMakeLists.txt
++++ b/modules/native/dynlib/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ # CMake configuration file for dynlib
+ ####################################################################
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ project(Falcon_dynlib)
+ 
+ find_package(Falcon REQUIRED)
+diff --git a/modules/native/feathers/CMakeLists.txt b/modules/native/feathers/CMakeLists.txt
+index 7be6dca12..3591a4b9a 100644
+--- a/modules/native/feathers/CMakeLists.txt
++++ b/modules/native/feathers/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ #
+ # CMake configuration file for Feather modules
+ ####################################################################
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.16.3)
+ PROJECT(Falcon_Feathers)
+ 
+ # Find our Find*.cmake files 
+diff --git a/modules/native/gd2/CMakeLists.txt b/modules/native/gd2/CMakeLists.txt
+index 7d775d1e7..73692d4fd 100644
+--- a/modules/native/gd2/CMakeLists.txt
++++ b/modules/native/gd2/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ ####################################################################
+ 
+ PROJECT(gd2)
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ MESSAGE(STATUS "Building GD2 module" )
+ 
+ 
+diff --git a/modules/native/gtk/CMakeLists.txt b/modules/native/gtk/CMakeLists.txt
+index 0f08e4bb3..f1bc647e9 100644
+--- a/modules/native/gtk/CMakeLists.txt
++++ b/modules/native/gtk/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ #
+ project( gtk )
+ 
+-cmake_minimum_required( VERSION 2.6.3 )
++cmake_minimum_required( VERSION 3.16.3 )
+ 
+ list( APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
+ 
+diff --git a/modules/native/hpdf/CMakeLists.txt b/modules/native/hpdf/CMakeLists.txt
+index 679444146..cf86e9392 100644
+--- a/modules/native/hpdf/CMakeLists.txt
++++ b/modules/native/hpdf/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ # CMake configuration file for Feather modules
+ ####################################################################
+ 
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ project(falcon-module-hpdf)
+ 
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+diff --git a/modules/native/sdl/CMakeLists.txt b/modules/native/sdl/CMakeLists.txt
+index 32a07dfd5..7d46ae513 100644
+--- a/modules/native/sdl/CMakeLists.txt
++++ b/modules/native/sdl/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 OLD)
+ endif(COMMAND cmake_policy)
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ PROJECT(Falcon_SDL)
+ 
+ 
+diff --git a/modules/native/wopi/CMakeLists.txt b/modules/native/wopi/CMakeLists.txt
+index 3f711cd6d..56e6c539b 100644
+--- a/modules/native/wopi/CMakeLists.txt
++++ b/modules/native/wopi/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ # Falcon Web Oriented Programming Interface
+ #
+ 
+-cmake_minimum_required(VERSION 2.6.2)
++cmake_minimum_required(VERSION 3.16.3)
+ project( falcon_wopi ) 
+ 
+ ######################################################################
+diff --git a/tests/native/dynlib/CMakeLists.txt b/tests/native/dynlib/CMakeLists.txt
+index 1781380d9..ed3f1e99f 100644
+--- a/tests/native/dynlib/CMakeLists.txt
++++ b/tests/native/dynlib/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ #
+ # CMake configuration file for dynlib - TESTS
+ ####################################################################
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.16.3)
+ 
+ include_directories(
+   ${CMAKE_CURRENT_SOURCE_DIR}

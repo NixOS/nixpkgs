@@ -1,0 +1,15 @@
+diff --git a/electron/js/util.js b/electron/js/util.js
+index da18f41ad0..bb07ec9f21 100644
+--- a/electron/js/util.js
++++ b/electron/js/util.js
+@@ -314,7 +314,9 @@ class Util {
+ 		if (!is.linux) {
+ 			return;
+ 		};
+-
++		// NixOS: desktop entries are managed by the package, avoid 
++		// writing user-local anytype.desktop which goes stale on updates
++		return;
+ 		const { execFile } = require('child_process');
+ 		const home = process.env.HOME || '';
+ 		const dataHome = process.env.XDG_DATA_HOME || path.join(home, '.local', 'share');

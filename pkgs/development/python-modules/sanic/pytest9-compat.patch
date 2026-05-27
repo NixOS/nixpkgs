@@ -1,0 +1,21 @@
+diff --git a/tests/http3/test_http_receiver.py b/tests/http3/test_http_receiver.py
+index 9641791b..29cf3926 100644
+--- a/tests/http3/test_http_receiver.py
++++ b/tests/http3/test_http_receiver.py
+@@ -1,6 +1,7 @@
+ from unittest.mock import Mock
+ 
+ import pytest
++import pytest_asyncio
+ 
+ from aioquic.h3.connection import H3Connection
+ from aioquic.h3.events import DataReceived, HeadersReceived
+@@ -27,7 +28,7 @@ except ImportError:
+ pytestmark = pytest.mark.asyncio
+ 
+ 
+-@pytest.fixture(autouse=True)
++@pytest_asyncio.fixture(autouse=True)
+ async def setup(app: Sanic):
+     @app.get("/")
+     async def handler(*_):

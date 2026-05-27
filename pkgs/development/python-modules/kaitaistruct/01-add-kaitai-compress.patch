@@ -1,0 +1,11 @@
+diff --git a/setup.cfg b/setup.cfg
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -30,6 +30,7 @@ classifiers =
+ [options]
+ zip_safe = True
+ include_package_data = True
++packages = kaitai/compress
+ py_modules = kaitaistruct
+ python_requires = >=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*
+ install_requires =

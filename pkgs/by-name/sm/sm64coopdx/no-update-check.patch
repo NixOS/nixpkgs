@@ -1,0 +1,12 @@
+diff --git i/src/pc/update_checker.c w/src/pc/update_checker.c
+index e83414106..53909c075 100644
+--- i/src/pc/update_checker.c
++++ w/src/pc/update_checker.c
+@@ -127,6 +127,7 @@ void get_version_remote(void) {
+ }
+ 
+ void check_for_updates(void) {
++    return;
+     LOADING_SCREEN_MUTEX(loading_screen_set_segment_text("Checking For Updates"));
+ 
+     get_version_remote();

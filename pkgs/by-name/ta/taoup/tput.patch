@@ -1,0 +1,17 @@
+--- a/taoup	2021-09-05 12:43:48.334615538 +0800
++++ b/taoup	2021-09-05 12:55:07.631617799 +0800
+@@ -26,11 +26,9 @@
+  zero_colors = true
+  fortunify = true
+ else
+- if `which tput` then
+-  colors = `tput colors`
+-  if colors.chop == "-1" then
+-   zero_colors = true
+-  end
++ colors = `@ncurses@/bin/tput colors`
++ if colors.chop == "-1" then
++  zero_colors = true
+  end
+ end
+ if ARGV[0] == '--whitetrash' then

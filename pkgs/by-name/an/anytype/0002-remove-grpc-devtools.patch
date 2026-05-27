@@ -1,0 +1,12 @@
+diff --git a/electron.js b/electron.js
+index c5d6760882..17afc05e26 100644
+--- a/electron.js
++++ b/electron.js
+@@ -15,7 +15,6 @@ const store = new Store({ name: [ 'localStorage', suffix ].join('-') });
+ 
+ // gRPC DevTools extension ID
+ const GRPC_DEVTOOLS_ID = 'fohdnlaeecihjiendkfhifhlgldpeopm';
+-const { installExtension } = require('@tomjs/electron-devtools-installer');
+ 
+ // Fix notifications app name
+ if (is.windows) {
