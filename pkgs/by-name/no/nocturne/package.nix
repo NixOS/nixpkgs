@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-7B9wtuxfsF6brtLkIEeWII4IvXwdJHnZ1Wr3uLfoqHU=";
+    hash = "sha256-CfrPmpkjcmKMB66kdFL4HqVukaIWAkIzOkwtBqZ65k4=";
   };
 
   __structuredAttrs = true;
@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Adwaita Music Player and Library Manager";
     homepage = "https://jeffser.com/nocturne/";
+    changelog = "https://github.com/Jeffser/Nocturne/releases";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "nocturne";
