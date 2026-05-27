@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ripe-atlas-sagan";
-  version = "1.3.1";
+  version = "2.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-sagan";
     rev = "v${version}";
-    hash = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
+    hash = "sha256-wCfH4UNUvRmiXKf2a+2LAy+5KVMDL45i48DEp5L3yXw=";
   };
 
   propagatedBuildInputs = [
