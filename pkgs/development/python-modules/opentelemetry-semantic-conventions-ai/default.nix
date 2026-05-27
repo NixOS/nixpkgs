@@ -5,6 +5,7 @@
   hatchling,
   opentelemetry-sdk,
   opentelemetry-semantic-conventions,
+  pytestCheckHook,
 }:
 let
   version = "0.4.15";
@@ -25,6 +26,10 @@ buildPythonPackage {
   dependencies = [
     opentelemetry-sdk
     opentelemetry-semantic-conventions
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "opentelemetry.semconv_ai" ];
