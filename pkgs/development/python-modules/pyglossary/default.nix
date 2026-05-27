@@ -12,7 +12,7 @@
 
   # nativeBuildInputs for GUI
   gobject-introspection,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 
   # dependencies (required for most functionality)
   pyicu,
@@ -20,7 +20,7 @@
   enableGui ? false,
   # for GUI only
   pygobject3,
-  gtk3,
+  gtk4,
   enableCmd ? false,
   prompt-toolkit,
   tqdm,
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals enableGui [
     gobject-introspection
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   dependencies = [
@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals enableGui [
-    gtk3
+    gtk4
   ];
 
   # Many issues with the tests: They require `cd tests` in `preCheck`; Some of
