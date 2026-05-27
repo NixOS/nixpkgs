@@ -14,6 +14,8 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   withRaster ? false,
+  withVector ? false,
+  withGPU ? false,
   withCairo ? false,
   cairo,
   icu,
@@ -37,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "13.2.1";
+  version = "14.2.1";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ZpXaPrfhvgqjCS/k2BQzoztH9FGSWcdZ1ynjqaVcFCk=";
+    hash = "sha256-pUpdjpOApB+7dizjZ7y/dwR5Lfyg2T8bvKhsWleQLg4=";
   };
 
   # This test fails reliably when executed through mesonCheckPhase but passes with
@@ -71,7 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Cairo causes transitive (build) dependencies on various X11 or other
     # GUI-related libraries, so it shouldn't be re-added lightly.
     (lib.mesonEnable "cairo" withCairo)
+    # experimental libraries
     (lib.mesonEnable "raster" withRaster)
+    (lib.mesonEnable "vector" withVector)
+    (lib.mesonEnable "gpu" withGPU)
+    # hb-gpu has a dependency on glfw3, which would introduce a cyclic dependency on harfbuzz
+    # (glfw3 -> libdecor -> gtk3 -> harfbuzz)
+    (lib.mesonEnable "gpu_demo" false)
     # chafa is only used in a development utility, not in the library
     (lib.mesonEnable "chafa" false)
     (lib.mesonEnable "coretext" withCoreText)
