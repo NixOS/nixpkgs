@@ -58,11 +58,20 @@ import ../make-test-python.nix (
                   UserNoticesEnabled = false;
                 };
               };
+              package = pkgs.mattermost.override {
+                removeFreeBadge = true;
+                removeUserLimit = true;
+              };
             } mattermostConfig;
 
             # Upgrade to the latest Mattermost.
             specialisation.latest.configuration = {
-              services.mattermost.package = lib.mkForce pkgs.mattermostLatest;
+              services.mattermost.package = lib.mkForce (
+                pkgs.mattermostLatest.override {
+                  removeFreeBadge = true;
+                  removeUserLimit = true;
+                }
+              );
               system.stateVersion = lib.mkVMOverride (lib.versions.majorMinor lib.version);
             };
           }

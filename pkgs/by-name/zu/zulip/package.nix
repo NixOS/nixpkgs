@@ -13,6 +13,9 @@
   copyDesktopItems,
 }:
 
+let
+  electron = electron_39;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
   version = "5.12.3";
@@ -43,10 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    npm_config_nodedir=${electron_39.headers} \
+    npm_config_nodedir=${electron.headers} \
       node --run pack -- \
-      -c.electronDist=${electron_39}/libexec/electron \
-      -c.electronVersion=${electron_39.version}
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -59,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeBinaryWrapper '${lib.getExe electron_39}' "$out/bin/zulip" \
+    makeBinaryWrapper '${lib.getExe electron}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
       --inherit-argv0
 
