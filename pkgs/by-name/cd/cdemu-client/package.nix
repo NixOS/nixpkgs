@@ -7,6 +7,7 @@
   gobject-introspection,
   fetchurl,
   lib,
+  writeScript,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cdemu-client";
@@ -36,6 +37,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = writeScript "update-cdemu-client" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Fetch the latest version from the SourceForge RSS feed for cdemu-client
+      newVersion="$(curl -s "https://sourceforge.net/projects/cdemu/rss?path=/cdemu-client" | pcre2grep -o1 'cdemu-client-([0-9.]+)\.tar\.xz' | head -n 1)"
+
+      update-source-version cdemu-client "$newVersion"
+    '';
+  };
 
   meta = {
     description = "Suite of tools for emulating optical drives and discs";
