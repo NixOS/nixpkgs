@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
-  version = "3.68.0";
+  version = "3.68.1";
 
   src = fetchFromGitHub {
     owner = "mifi";
     repo = "lossless-cut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LNh9F2aKxVegZTAPuEAqo2f78ynGMgnpwnDXEP1u2+M=";
+    hash = "sha256-9eyfhJDQD3cYTZ3rdASS2fSloPa+/dvxSBmYQhKcPXo=";
   };
 
   patches = [
