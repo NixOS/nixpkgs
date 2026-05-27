@@ -2629,6 +2629,8 @@
         aciceri
       ];
     };
+    # Non-schema `metadata.links.homepage`
+    excludeBrokenTreeSitterJson = true;
   };
 
   talon = rec {
