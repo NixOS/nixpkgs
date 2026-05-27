@@ -823,7 +823,10 @@ let
     rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
-    RProtoBuf = [ pkgs.protobuf ];
+    RProtoBuf = with pkgs; [
+      protobuf
+      abseil-cpp.dev
+    ];
     rsamplr = with pkgs; [
       cargo
       rustc
@@ -2456,6 +2459,10 @@ let
             ".onLoad <- function(libname, pkgname) {
              Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
       '';
+    });
+
+    RProtoBuf = old.RProtoBuf.overrideAttrs (attrs: {
+      configureFlags = [ "ac_cv_prog_cxx_cxx11=" ];
     });
 
     JavaGD = old.JavaGD.overrideAttrs (attrs: {
