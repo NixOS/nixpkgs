@@ -809,6 +809,7 @@ in
             utillinux = pkgs.util-linux;
             btrfsprogs = pkgs.btrfs-progs;
             inherit (config.system.nixos) distroName;
+            inherit (config.boot.loader) timestampFormat;
             # targets of a replacement in code
             bootPath = null;
             bootRoot = null;

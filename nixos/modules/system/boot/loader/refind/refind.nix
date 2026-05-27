@@ -110,6 +110,7 @@ in
         replacements = {
           python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
           configPath = refindInstallConfig;
+          inherit (config.boot.loader) timestampFormat;
         };
       };
     };
