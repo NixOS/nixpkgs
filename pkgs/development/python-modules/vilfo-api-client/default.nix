@@ -28,11 +28,6 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "get-mac" "getmac"
-  '';
-
   dependencies = [
     getmac
     requests
