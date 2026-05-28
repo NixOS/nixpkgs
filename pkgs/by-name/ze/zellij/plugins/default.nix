@@ -38,9 +38,10 @@ let
 
       passthru = pkg.passthru or { } // {
         unwrapped = pkg;
-        updateScript = pkg.passthru.updateScript or nix-update-script {
-          attrPath = "zellijPlugins.${attrName}.unwrapped";
-        };
+        updateScript =
+          assert lib.assertMsg (!pkg.passthru or { } ? updateScript)
+            "zellijPlugins.${attrName}: Currently, custom per-plugin updater scripts are not implemented. Refer to `pkgs/by-name/ze/zellij/plugins/README.md`";
+          null;
       };
 
       meta = pkg.meta // {
@@ -50,4 +51,8 @@ let
     });
   rustPlugins = lib.mapAttrs wrapper (callPackage ./rust { });
 in
-rustPlugins // { inherit wrapper; }
+rustPlugins
+// {
+  inherit wrapper;
+  _updater = callPackage ./updater { };
+}

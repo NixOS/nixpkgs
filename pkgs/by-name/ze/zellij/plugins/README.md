@@ -74,10 +74,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nim65s/jbz";
     changelog = "https://github.com/nim65s/jbz/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 })
 ```
 
 If you are wondering why `pkgsBuildBuild` is named like that, refer to
 [the docs on cross-compilation](https://nixos.org/manual/nixpkgs/unstable/#possible-dependency-types).
+
+## Updater script
+
+All updates are done in the `updater` directory. It runs [nix-update] on all
+derivations in the `zellijPlugins` set. You can specify extra arguments for
+nix-update using `passthru.updateScriptArgs`:
+
+```nix
+buildRustPackage {
+  # ...
+  passthru = {
+    runtimeDeps = with pkgsBuildBuild; [ things ];
+    updateScriptArgs = "--version=branch";
+  };
+}
+```
+
+If you specify `passthru.updateScript`, it will throw an error, because the
+centralized updater will still be run on your package. Currently, custom
+per-plugin updaters are not implemented.
+
+[nix-update]: https://github.com/Mic92/nix-update
