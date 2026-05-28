@@ -2052,10 +2052,6 @@ with pkgs;
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
 
-  calyx-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
-    provider = "calyx";
-  };
-
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   clickhouse-lts = callPackage ../by-name/cl/clickhouse/lts.nix { };
@@ -3103,10 +3099,6 @@ with pkgs;
   pydeps = with python3Packages; toPythonApplication pydeps;
 
   remarshal = with python3Packages; toPythonApplication remarshal;
-
-  riseup-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
-    provider = "riseup";
-  };
 
   rtaudio = rtaudio_5;
 
