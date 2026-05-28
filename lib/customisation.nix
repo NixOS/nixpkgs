@@ -707,7 +707,7 @@ rec {
     {
       otherSplices,
       # Attrs from `self` which won't be spliced.
-      # Avoid using keep, it's only used for a python hook workaround, added in PR #104201.
+      # Avoid using keep, it was only used for a python hook workaround, added in PR #104201.
       # ex: `keep = (self: { inherit (self) aAttr; })`
       keep ? (_self: { }),
       # Additional attrs to add to the sets `callPackage`.

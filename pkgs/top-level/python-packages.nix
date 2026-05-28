@@ -8,6 +8,517 @@
 
 self: super: with self; {
 
+  makePythonHook =
+    let
+      defaultArgs = {
+        passthru.provides.setupHook = true;
+      };
+    in
+    args: pkgs.makeSetupHook (lib.recursiveUpdate defaultArgs args);
+
+  condaInstallHook = callPackage (
+    {
+      makePythonHook,
+      gnutar,
+      lbzip2,
+    }:
+    makePythonHook {
+      name = "conda-install-hook";
+      propagatedBuildInputs = [
+        gnutar
+        lbzip2
+      ];
+      substitutions = {
+        pythonSitePackages = python.sitePackages;
+      };
+
+    } ../development/interpreters/python/hooks/conda-install-hook.sh
+  ) { };
+
+  condaUnpackHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "conda-unpack-hook";
+    } ../development/interpreters/python/hooks/conda-unpack-hook.sh
+  ) { };
+
+  eggBuildHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "egg-build-hook.sh";
+    } ../development/interpreters/python/hooks/egg-build-hook.sh
+  ) { };
+
+  eggInstallHook = callPackage (
+    { makePythonHook, setuptools }:
+    makePythonHook {
+      name = "egg-install-hook.sh";
+      propagatedBuildInputs = [ setuptools ];
+      substitutions = {
+        pythonInterpreter = python.interpreter;
+      };
+    } ../development/interpreters/python/hooks/egg-install-hook.sh
+  ) { };
+
+  eggUnpackHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "egg-unpack-hook.sh";
+    } ../development/interpreters/python/hooks/egg-unpack-hook.sh
+  ) { };
+
+  pipBuildHook = callPackage (
+    {
+      makePythonHook,
+      pip,
+      wheel,
+    }:
+    makePythonHook {
+      name = "pip-build-hook.sh";
+      propagatedBuildInputs = [
+        pip
+        wheel
+      ];
+      substitutions = {
+        pythonInterpreter = python.interpreter;
+        pythonSitePackages = python.sitePackages;
+
+      };
+    } ../development/interpreters/python/hooks/pip-build-hook.sh
+  ) { };
+
+  pypaBuildHook =
+    callPackage
+      (
+        {
+          makePythonHook,
+          build,
+          wheel,
+        }:
+        makePythonHook {
+          name = "pypa-build-hook.sh";
+          propagatedBuildInputs = [ wheel ];
+          substitutions = {
+            inherit build;
+          };
+          # A test to ensure that this hook never propagates any of its dependencies
+          #   into the build environment.
+          # This prevents false positive alerts raised by catchConflictsHook.
+          # Such conflicts don't happen within the standard nixpkgs python package
+          #   set, but in downstream projects that build packages depending on other
+          #   versions of this hook's dependencies.
+          passthru.tests = callPackage ./pypa-build-hook-test.nix {
+            inherit (python) pythonOnBuildForHost;
+          };
+        } ../development/interpreters/python/hooks/pypa-build-hook.sh
+      )
+      {
+        inherit (python.pythonOnBuildForHost.pkgs) build;
+      };
+
+  pipInstallHook = callPackage (
+    { makePythonHook, pip }:
+    makePythonHook {
+      name = "pip-install-hook";
+      propagatedBuildInputs = [ pip ];
+      substitutions = {
+        pythonInterpreter = python.interpreter;
+        pythonSitePackages = python.sitePackages;
+
+      };
+    } ../development/interpreters/python/hooks/pip-install-hook.sh
+  ) { };
+
+  pypaInstallHook =
+    callPackage
+      (
+        { makePythonHook, installer }:
+        makePythonHook {
+          name = "pypa-install-hook";
+          propagatedBuildInputs = [ installer ];
+          substitutions = {
+            pythonInterpreter = python.interpreter;
+            pythonSitePackages = python.sitePackages;
+
+            python = python.interpreter;
+          };
+        } ../development/interpreters/python/hooks/pypa-install-hook.sh
+      )
+      {
+        inherit (python.pythonOnBuildForHost.pkgs) installer;
+      };
+
+  pytestCheckHook = callPackage (
+    {
+      makePythonHook,
+      pytest,
+      # For package tests
+      testers,
+      objprint,
+    }:
+    makePythonHook {
+      name = "pytest-check-hook";
+      propagatedBuildInputs = [ pytest ];
+      substitutions = {
+        pythonCheckInterpreter = python.interpreter;
+      };
+      passthru = {
+        tests = {
+          basic = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-basic-${previousPythonAttrs.pname}";
+          });
+          disabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTests-${previousPythonAttrs.pname}";
+            disabledTests = [
+              "test_print"
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          disabledTests-expression = objprint.overridePythonAttrs (previousPythonAttrs: {
+            __structuredAttrs = true;
+            pname = "test-pytestCheckHook-disabledTests-expression-${previousPythonAttrs.pname}";
+            disabledTests = [
+              "TestBasic and test_print"
+              "test_str"
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          disabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTestPaths-${previousPythonAttrs.pname}";
+            disabledTestPaths = [
+              "tests/test_basic.py"
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
+          });
+          disabledTestPaths-nonexistent = testers.testBuildFailure (
+            objprint.overridePythonAttrs (previousPythonAttrs: {
+              pname = "test-pytestCheckHook-disabledTestPaths-nonexistent-${previousPythonAttrs.pname}";
+              disabledTestPaths = [
+                "tests/test_foo.py"
+              ]
+              ++ previousPythonAttrs.disabledTestPaths or [ ];
+            })
+          );
+          disabledTestPaths-item = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTestPaths-item-${previousPythonAttrs.pname}";
+            disabledTestPaths = [
+              "tests/test_basic.py::TestBasic"
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
+          });
+          disabledTestPaths-glob = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-disabledTestPaths-glob-${previousPythonAttrs.pname}";
+            disabledTestPaths = [
+              "tests/test_obj*.py"
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
+          });
+          disabledTestPaths-glob-nonexistent = testers.testBuildFailure (
+            objprint.overridePythonAttrs (previousPythonAttrs: {
+              pname = "test-pytestCheckHook-disabledTestPaths-glob-nonexistent-${previousPythonAttrs.pname}";
+              disabledTestPaths = [
+                "tests/test_foo*.py"
+              ]
+              ++ previousPythonAttrs.disabledTestPaths or [ ];
+            })
+          );
+          enabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTests-${previousPythonAttrs.pname}";
+            enabledTests = [
+              "TestBasic"
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          enabledTests-expression = objprint.overridePythonAttrs (previousPythonAttrs: {
+            __structuredAttrs = true;
+            pname = "test-pytestCheckHook-enabledTests-expression-${previousPythonAttrs.pname}";
+            enabledTests = [
+              "TestBasic and test_print"
+              "test_str"
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          enabledTests-disabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTests-disabledTests-${previousPythonAttrs.pname}";
+            enabledTests = [
+              "TestBasic"
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
+            disabledTests = [
+              "test_print"
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
+          });
+          enabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTestPaths-${previousPythonAttrs.pname}";
+            enabledTestPaths = [
+              "tests/test_basic.py"
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
+          });
+          enabledTestPaths-nonexistent = testers.testBuildFailure (
+            objprint.overridePythonAttrs (previousPythonAttrs: {
+              pname = "test-pytestCheckHook-enabledTestPaths-nonexistent-${previousPythonAttrs.pname}";
+              enabledTestPaths = [
+                "tests/test_foo.py"
+              ]
+              ++ previousPythonAttrs.enabledTestPaths or [ ];
+            })
+          );
+          enabledTestPaths-dir = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTestPaths-dir-${previousPythonAttrs.pname}";
+            enabledTestPaths = [
+              "tests"
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
+          });
+          enabledTestPaths-dir-disabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTestPaths-dir-disabledTestPaths-${previousPythonAttrs.pname}";
+            enabledTestPaths = [
+              "tests"
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
+            disabledTestPaths = [
+              "tests/test_basic.py"
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
+          });
+          enabledTestPaths-glob = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTestPaths-glob-${previousPythonAttrs.pname}";
+            enabledTestPaths = [
+              "tests/test_obj*.py"
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
+          });
+          enabledTestPaths-glob-nonexistent = testers.testBuildFailure (
+            objprint.overridePythonAttrs (previousPythonAttrs: {
+              pname = "test-pytestCheckHook-enabledTestPaths-glob-nonexistent-${previousPythonAttrs.pname}";
+              enabledTestPaths = [
+                "tests/test_foo*.py"
+              ]
+              ++ previousPythonAttrs.enabledTestPaths or [ ];
+            })
+          );
+          enabledTestPaths-item = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-enabledTestPaths-item-${previousPythonAttrs.pname}";
+            enabledTestPaths = [
+              "tests/test_basic.py::TestBasic"
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
+          });
+        };
+      };
+    } ../development/interpreters/python/hooks/pytest-check-hook.sh
+  ) { };
+
+  pythonCatchConflictsHook = callPackage (
+    { makePythonHook, setuptools }:
+    makePythonHook {
+      name = "python-catch-conflicts-hook";
+      substitutions =
+        let
+          useLegacyHook = lib.versionOlder python.pythonVersion "3";
+        in
+        {
+          pythonInterpreter = python.interpreter;
+          pythonSitePackages = python.sitePackages;
+
+          catchConflicts =
+            if useLegacyHook then
+              ../development/interpreters/python/catch_conflicts/catch_conflicts_py2.py
+            else
+              ../development/interpreters/python/catch_conflicts/catch_conflicts.py;
+        }
+        // lib.optionalAttrs useLegacyHook {
+          inherit setuptools;
+        };
+      passthru.tests =
+        import ../development/interpreters/python/hooks/python-catch-conflicts-hook-tests.nix
+          {
+            inherit (python) pythonOnBuildForHost;
+            inherit runCommand;
+            inherit lib;
+            inherit (pkgs) coreutils gnugrep writeShellScript;
+          };
+    } ../development/interpreters/python/hooks/python-catch-conflicts-hook.sh
+  ) { };
+
+  pythonImportsCheckHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "python-imports-check-hook.sh";
+      substitutions = {
+        pythonCheckInterpreter = python.interpreter;
+        pythonSitePackages = python.sitePackages;
+
+      };
+    } ../development/interpreters/python/hooks/python-imports-check-hook.sh
+  ) { };
+
+  pythonNamespacesHook = callPackage (
+    { makePythonHook, buildPackages }:
+    makePythonHook {
+      name = "python-namespaces-hook.sh";
+      substitutions = {
+        pythonSitePackages = python.sitePackages;
+
+        inherit (buildPackages) findutils;
+      };
+    } ../development/interpreters/python/hooks/python-namespaces-hook.sh
+  ) { };
+
+  pythonOutputDistHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "python-output-dist-hook";
+    } ../development/interpreters/python/hooks/python-output-dist-hook.sh
+  ) { };
+
+  pythonRecompileBytecodeHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "python-recompile-bytecode-hook";
+      substitutions = {
+        pythonInterpreter = python.interpreter;
+        pythonSitePackages = python.sitePackages;
+
+        compileArgs = lib.concatStringsSep " " (
+          [
+            "-q"
+            "-f"
+            "-i -"
+          ]
+          ++ lib.optionals isPy3k [ "-j $NIX_BUILD_CORES" ]
+        );
+        bytecodeName = if isPy3k then "__pycache__" else "*.pyc";
+      };
+    } ../development/interpreters/python/hooks/python-recompile-bytecode-hook.sh
+  ) { };
+
+  pythonRelaxDepsHook = callPackage (
+    { makePythonHook, wheel }:
+    makePythonHook {
+      name = "python-relax-deps-hook";
+      substitutions = {
+        inherit wheel;
+        pythonInterpreter = python.interpreter;
+        pythonSitePackages = python.sitePackages;
+
+      };
+    } ../development/interpreters/python/hooks/python-relax-deps-hook.sh
+  ) { };
+
+  pythonRemoveBinBytecodeHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "python-remove-bin-bytecode-hook";
+    } ../development/interpreters/python/hooks/python-remove-bin-bytecode-hook.sh
+  ) { };
+
+  pythonRemoveTestsDirHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "python-remove-tests-dir-hook";
+      substitutions = {
+        pythonSitePackages = python.sitePackages;
+
+      };
+    } ../development/interpreters/python/hooks/python-remove-tests-dir-hook.sh
+  ) { };
+
+  pythonRuntimeDepsCheckHook = callPackage (
+    { makePythonHook, packaging }:
+    makePythonHook {
+      name = "python-runtime-deps-check-hook.sh";
+      propagatedBuildInputs = [ packaging ];
+      substitutions = {
+        pythonInterpreter = python.interpreter;
+        pythonSitePackages = python.sitePackages;
+
+        hook = ../development/interpreters/python/hooks/python-runtime-deps-check-hook.py;
+      };
+    } ../development/interpreters/python/hooks/python-runtime-deps-check-hook.sh
+  ) { };
+
+  setuptoolsBuildHook = callPackage (
+    {
+      makePythonHook,
+      setuptools,
+      wheel,
+    }:
+    makePythonHook {
+      name = "setuptools-build-hook";
+      propagatedBuildInputs = [
+        setuptools
+        wheel
+      ];
+      substitutions = {
+        pythonInterpreter = python.interpreter;
+        setuppy = ../development/interpreters/python/run_setup.py;
+        # python2.pkgs.setuptools does not support parallelism
+        setuptools_has_parallel = setuptools != null && lib.versionAtLeast setuptools.version "69";
+      };
+    } ../development/interpreters/python/hooks/setuptools-build-hook.sh
+  ) { };
+
+  stestrCheckHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "stestr-check-hook";
+      propagatedBuildInputs = [ stestr ];
+      substitutions = {
+        pythonCheckInterpreter = python.interpreter;
+      };
+    } ../development/interpreters/python/hooks/stestr-check-hook.sh
+  ) { };
+
+  unittestCheckHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "unittest-check-hook";
+      substitutions = {
+        pythonCheckInterpreter = python.interpreter;
+      };
+    } ../development/interpreters/python/hooks/unittest-check-hook.sh
+  ) { };
+
+  venvShellHook = disabledIf (!isPy3k) (
+    callPackage (
+      { makePythonHook, ensureNewerSourcesForZipFilesHook }:
+      makePythonHook {
+        name = "venv-shell-hook";
+        propagatedBuildInputs = [ ensureNewerSourcesForZipFilesHook ];
+        substitutions = {
+          pythonInterpreter = python.interpreter;
+        };
+      } ../development/interpreters/python/hooks/venv-shell-hook.sh
+    ) { }
+  );
+
+  wheelUnpackHook = callPackage (
+    { makePythonHook, wheel }:
+    makePythonHook {
+      name = "wheel-unpack-hook.sh";
+      propagatedBuildInputs = [ wheel ];
+    } ../development/interpreters/python/hooks/wheel-unpack-hook.sh
+  ) { };
+
+  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix { };
+
+  sphinxHook = callPackage (
+    { makePythonHook, installShellFiles }:
+    makePythonHook {
+      name = "python${python.pythonVersion}-sphinx-hook";
+      propagatedBuildInputs = [
+        python.pythonOnBuildForHost.pkgs.sphinx
+        installShellFiles
+      ];
+      substitutions = {
+        sphinxBuild = "${python.pythonOnBuildForHost.pkgs.sphinx}/bin/sphinx-build";
+      };
+    } ../development/interpreters/python/hooks/sphinx-hook.sh
+  ) { };
+
   bootstrap = lib.recurseIntoAttrs {
     flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
     installer = toPythonModule (
