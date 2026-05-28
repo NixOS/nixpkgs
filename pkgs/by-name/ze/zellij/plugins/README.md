@@ -5,11 +5,13 @@ develop plugins in many different languages. Currently, nixpkgs focuses only on
 Rust plugins (the majority of them).
 
 Most of the plugins were generated using `nix-init` on [awesome-zellij].
-Excluded plugins from that list (should be packaged later anyway):
+Excluded plugins from that list (should be packaged later anyway, contributions
+are welcome):
 
 - [bar-theme-config](https://github.com/allisonhere/zellij-bar-theme-config): not a plugin, but a separate application
 - [fzf-zellij](https://github.com/k-kuroguro/fzf-zellij): [closed source](https://github.com/k-kuroguro/fzf-zellij/issues/1)
 - [gitpod-zellij](https://github.com/ona-samples/gitpod.zellij): not a plugin, but a separate application?
+- [neolij.nvim](https://github.com/y2w8/neolij.nvim): written in Lua
 - [opencode-zellij-namer](https://github.com/24601/opencode-zellij-namer): written in TypeScript, not Rust
 - [theme-configurator](https://rosmur.github.io/zellij-theme-configurator/): not a plugin, but a separate application
 - [yazelix](https://github.com/luccahuguet/yazelix): written in Nushell
@@ -17,13 +19,15 @@ Excluded plugins from that list (should be packaged later anyway):
 - [zellij-load](https://github.com/Christian-Prather/zellij-load): has daemon, so that needs to be packaged too
 - [zellij-vscode-toolkit](https://github.com/atoolz/zellij-vscode-toolkit): not a plugin, but a VSCode plugin
 - [zellix](https://github.com/EmeraldPandaTurtle/zellix): written in Nushell
+- [zj-docker](https://github.com/dj95/zj-docker): plugin is broken, see https://github.com/dj95/zj-docker/issues/4
 - [zj-quit](https://github.com/cristiand391/zj-quit): archived
 - [zj-status-bar](https://github.com/cristiand391/zj-status-bar): archived
 - [zrw](https://github.com/ivoronin/zrw): written in Go
 
-Contributions are welcome!
+Other plugins were deleted because they had less than 50 stars and unless
+someone requests it, they won't be packaged.
 
-[awesome-zellij]: https://github.com/zellij-org/awesome-zellij/blob/95fce2c02a2dcca33e4972eed3eba64d516693c9/README.md
+[awesome-zellij]: https://github.com/zellij-org/awesome-zellij/blob/b066d3ed708963ea1c34ea2b1bf27b9cf04bd4c7/README.md
 
 ## Specifying runtime dependencies
 
