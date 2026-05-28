@@ -232,6 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
+    ./0000-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0003-add-rootprefix-to-lookup-dir-paths.patch
