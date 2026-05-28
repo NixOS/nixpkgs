@@ -9,6 +9,7 @@
   mlx,
   mlx-lm,
   setuptools,
+  sglang,
   smg-grpc-proto,
   vllm,
 }:
@@ -47,7 +48,7 @@ buildPythonPackage (finalAttrs: {
       smg-grpc-proto
     ];
     sglang = [
-      # sglang
+      sglang
     ];
     vllm = [
       vllm

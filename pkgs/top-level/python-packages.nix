@@ -17863,6 +17863,8 @@ self: super: with self; {
 
   sgl-deep-gemm = callPackage ../development/python-modules/sgl-deep-gemm { };
 
+  sglang = callPackage ../development/python-modules/sglang { };
+
   sglang-kernel = callPackage ../development/python-modules/sglang-kernel { };
 
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
