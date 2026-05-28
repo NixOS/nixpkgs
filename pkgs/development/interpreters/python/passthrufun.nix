@@ -75,14 +75,11 @@ let
               selfHostHost = pythonOnHostForHost.pkgs;
               selfTargetTarget = pythonOnTargetForTarget.pkgs or { }; # There is no Python TargetTarget.
             };
-            hooks = import ./hooks/default.nix;
-            keep = self: hooks self { };
             optionalExtensions = cond: as: lib.optionals cond as;
             pythonExtension = import ../../../top-level/python-packages.nix;
             python2Extension = import ../../misc/resholve/python2-packages.nix;
             extensions = lib.composeManyExtensions (
               [
-                hooks
                 pythonExtension
               ]
               ++ (optionalExtensions (!self.isPy3k) [
@@ -98,7 +95,7 @@ let
               lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
           in
           makeScopeWithSplicing' {
-            inherit otherSplices keep;
+            inherit otherSplices;
             f = lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun;
           }
         )
