@@ -4,7 +4,6 @@
   nix-update-script,
   nixosTests,
   python3,
-  fetchPypi,
 }:
 
 let
@@ -13,14 +12,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "otterwiki";
-  version = "2.17.3";
+  version = "2.20.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redimp";
     repo = "otterwiki";
     tag = "v${version}";
-    hash = "sha256-qvSA2SrU2TD2tEb4LS1d2piKC6k3QSBNvR0a7tLGMYA=";
+    hash = "sha256-Yov80c5LjofVMh45uz4gVUF7nTiy/tNB9wEyVM/ppro=";
   };
 
   build-system = with python.pkgs; [ setuptools ];
@@ -30,23 +29,14 @@ python.pkgs.buildPythonApplication rec {
     werkzeug
     flask-login
     flask-mail
+    flask-wtf
     sqlalchemy
     flask-sqlalchemy
     flask
     jinja2
     gitpython
     cython
-
-    # app depends on a version of mistune older than the one in nixpkgs
-    (mistune.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.5";
-      src = fetchPypi {
-        inherit (oldAttrs) pname;
-        inherit version;
-        hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
-      };
-    }))
-
+    mistune
     pygments
     pillow
     pyyaml
