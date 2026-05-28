@@ -1,27 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo126Module,
   installShellFiles,
   stdenv,
   testers,
   gh,
+  makeWrapper,
 }:
 
-buildGoModule rec {
+buildGo126Module rec {
   pname = "gh";
-  version = "2.83.2";
+  version = "2.93.0";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-YpbxdD+83pK326EmwLCzUh+wASdOjuCqSP2eXIJndxI=";
+    hash = "sha256-r/+JFdMOUIb32St+VkUw+Q7Lb2L6IiPczmONFE4hwDw=";
   };
 
-  vendorHash = "sha256-AkcbtVR1+uYy2AtRl1hvUBBF8vI3hH4NXznmgwmAzmw=";
+  vendorHash = "sha256-eMPcla1XKfq+zBb633Zz4cn820FWuEaRrXQJ1TQ8Lkg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   # N.B.: using the Makefile is intentional.
   # We pass "nixpkgs" for build.Date to avoid `gh --version` reporting a very old date.
@@ -34,6 +38,8 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/gh -t $out/bin
+    wrapProgram $out/bin/gh \
+      --set-default GH_TELEMETRY false
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installManPage share/man/*/*.[1-9]
@@ -63,6 +69,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       mdaniels5757
       zowoq
+      savtrip
     ];
   };
 }
