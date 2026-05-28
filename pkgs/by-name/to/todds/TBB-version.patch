@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d41a1e2..7990cdf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -60,7 +60,7 @@ if (TODDS_REGULAR_EXPRESSIONS)
+ endif ()
+ find_package(OpenCV 4.0 REQUIRED)
+ find_package(Threads REQUIRED)
+-find_package(TBB 2021.5.0 REQUIRED)
++find_package(TBB REQUIRED)
+ 
+ if (TODDS_TRACY)
+ 	find_package(Tracy REQUIRED)

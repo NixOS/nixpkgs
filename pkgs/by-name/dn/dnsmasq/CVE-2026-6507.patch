@@ -1,0 +1,28 @@
+From 9ad74926d4f7f34ff902e1db5235535aa813c33f Mon Sep 17 00:00:00 2001
+From: Simon Kelley <simon@thekelleys.org.uk>
+Date: Mon, 6 Apr 2026 22:22:43 +0100
+Subject: [PATCH] Fix 1-byte buffer overflow in relay_reply4()
+
+Potential SIGSEGV when using DHCPv4-relay.
+
+Thanks to Asim Viladi Oglu Manizada for finding this.
+---
+ src/rfc2131.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/rfc2131.c b/src/rfc2131.c
+index 7bdfefd..55aad03 100644
+--- a/src/rfc2131.c
++++ b/src/rfc2131.c
+@@ -3248,7 +3248,7 @@ unsigned int relay_reply4(struct dhcp_packet *mess, size_t sz, char *arrival_int
+ 
+ 	      /* delete agent info before return RFC 3046 para 2.1 */
+ 	      *opt = OPTION_END;
+-	      memset(opt + 1, 0, option_len(opt) + 2);
++	      memset(opt + 1, 0, option_len(opt) + 1);
+ 	    }
+ 	}
+       else if (mess->giaddr.s_addr == relay->local.addr4.s_addr)
+-- 
+2.20.1
+

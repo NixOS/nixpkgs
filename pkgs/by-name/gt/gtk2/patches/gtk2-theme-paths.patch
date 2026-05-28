@@ -1,0 +1,40 @@
+Subject: [PATCHv2] gtk: Patch GTK+ to look for themes in profiles.
+To: guix-devel@gnu.org
+Date: Sun, 13 Mar 2016 15:17:37 +1100
+Url: https://lists.gnu.org/archive/html/guix-devel/2016-03/msg00492.html
+
+diff -Naur gtk+-2.24.28.new/gtk/gtkrc.c gtk+-2.24.28/gtk/gtkrc.c
+--- gtk+-2.24.28.new/gtk/gtkrc.c	2016-03-13 10:31:14.413644362 +1100
++++ gtk+-2.24.28/gtk/gtkrc.c	2016-03-13 12:51:34.723398423 +1100
+@@ -808,6 +808,8 @@
+   gchar *path = NULL;
+   const gchar *home_dir;
+   gchar *subpath;
++  const gchar * const *xdg_data_dirs;
++  gint i;
+ 
+   if (type)
+     subpath = g_strconcat ("gtk-2.0-", type,
+@@ -830,6 +832,22 @@
+     }
+ 
+   if (!path)
++    {
++      xdg_data_dirs = g_get_system_data_dirs ();
++      for (i = 0; xdg_data_dirs[i]; i++)
++        {
++          path = g_build_filename (xdg_data_dirs[i], "themes", name, subpath, NULL);
++          if (g_file_test (path, G_FILE_TEST_EXISTS))
++            break;
++          else
++            {
++              g_free (path);
++              path = NULL;
++            }
++        }
++    }
++
++  if (!path)
+     {
+       gchar *theme_dir = gtk_rc_get_theme_dir ();
+       path = g_build_filename (theme_dir, name, subpath, NULL);

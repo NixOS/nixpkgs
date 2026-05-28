@@ -1,0 +1,14 @@
+diff --git a/src/sage_docbuild/sphinxbuild.py b/src/sage_docbuild/sphinxbuild.py
+index 62b2d3cb112..df4665982e8 100644
+--- a/src/sage_docbuild/sphinxbuild.py
++++ b/src/sage_docbuild/sphinxbuild.py
+@@ -107,7 +107,8 @@ class SageSphinxLogger():
+             re.compile('WARNING: Any IDs not assiend for figure node'),
+             re.compile('WARNING: .* is not referenced'),
+             re.compile('WARNING: Build finished'),
+-            re.compile('WARNING: rST localisation for language .* not found')
++            re.compile('WARNING: rST localisation for language .* not found'),
++            re.compile('WARNING: error while formatting arguments for .*')
+         )
+         # The warning "unknown config value 'multidoc_first_pass'..."
+         # should only appear when building the documentation for a

@@ -1,0 +1,40 @@
+From 898cfcc19af66f5a9273cd04b43cf76ae9ec6da9 Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Tue, 17 Feb 2026 21:17:33 -0500
+Subject: [PATCH] fix error with pytest 4.0
+
+https://docs.pytest.org/en/stable/deprecations.html#pytest-plugins-in-non-top-level-conftest-files
+---
+ test/conftest.py             | 1 +
+ test/integration/conftest.py | 3 ---
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/test/conftest.py b/test/conftest.py
+index 8f0629b..53f3e32 100644
+--- a/test/conftest.py
++++ b/test/conftest.py
+@@ -12,6 +12,7 @@ import sys
+ 
+ import pytest
+ 
++pytest_plugins = ['b2sdk.v3.testing']
+ 
+ @pytest.hookimpl
+ def pytest_configure(config):
+diff --git a/test/integration/conftest.py b/test/integration/conftest.py
+index 1a7226d..035a2be 100755
+--- a/test/integration/conftest.py
++++ b/test/integration/conftest.py
+@@ -47,9 +47,6 @@ ROOT_PATH = pathlib.Path(__file__).parent.parent.parent
+ GENERAL_BUCKET_NAME_PREFIX = 'clitst'
+ 
+ 
+-pytest_plugins = ['b2sdk.v3.testing']
+-
+-
+ @pytest.fixture(scope='session', autouse=True)
+ def summary_notes(request, worker_id):
+     capmanager = request.config.pluginmanager.getplugin('capturemanager')
+-- 
+2.51.2
+

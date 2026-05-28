@@ -1,0 +1,12 @@
+diff -ur a/absl/time/CMakeLists.txt b/absl/time/CMakeLists.txt
+--- a/absl/time/CMakeLists.txt	1969-12-31 19:00:01.000000000 -0500
++++ b/absl/time/CMakeLists.txt	2023-10-30 21:50:32.639061785 -0400
+@@ -55,7 +55,7 @@
+ )
+ 
+ if(APPLE)
+-  find_library(CoreFoundation CoreFoundation)
++  set(CoreFoundation "-framework CoreFoundation")
+ endif()
+ 
+ absl_cc_library(

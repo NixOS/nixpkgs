@@ -1,0 +1,39 @@
+From 4da8e2e3e91aa1a92db95c33a62e1e76525e40cc Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Fri, 15 Aug 2025 09:39:33 +0000
+Subject: [PATCH] Fix crash when no home directory is set
+
+---
+ Libraries/process/Sources/DefaultUser.cpp | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/Libraries/process/Sources/DefaultUser.cpp b/Libraries/process/Sources/DefaultUser.cpp
+index 54e464e0..466e63cd 100644
+--- a/Libraries/process/Sources/DefaultUser.cpp
++++ b/Libraries/process/Sources/DefaultUser.cpp
+@@ -269,11 +269,18 @@ userHomeDirectory() const
+     CloseHandle(process);
+     return WideStringToString(buffer);
+ #else
+-    char *home = ::getpwuid(::getuid())->pw_dir;
+-    if (home != nullptr) {
++    if (struct passwd const *pw = ::getpwuid(::getuid())) {
++        if (pw->pw_name != nullptr) {
++            return std::string(pw->pw_dir);
++        }
++    }
++
++    // Fallback to $HOME if no home is set
++    const char* home = std::getenv("HOME");
++    if (home && *home) {
+         return std::string(home);
+-    } else {
+-        return ext::nullopt;
+     }
++
++    return ext::nullopt;
+ #endif
+ }
+-- 
+2.50.1
+

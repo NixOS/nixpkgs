@@ -1,0 +1,85 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 43718f5..d0d8670 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -63,8 +63,7 @@ if(LLVM_CONFIG)
+         "--bindir"
+         "--libdir"
+         "--includedir"
+-        "--prefix"
+-        "--src-root")
++        "--prefix")
+     execute_process(COMMAND ${CONFIG_COMMAND}
+                     RESULT_VARIABLE HAD_ERROR
+                     OUTPUT_VARIABLE CONFIG_OUTPUT)
+diff --git a/src/xmagics/executable.cpp b/src/xmagics/executable.cpp
+index 391c8c9..aba5e03 100644
+--- a/src/xmagics/executable.cpp
++++ b/src/xmagics/executable.cpp
+@@ -12,6 +12,7 @@
+ #include <iterator>
+ #include <fstream>
+ #include <memory>
++#include <optional>
+ #include <string>
+ #include <vector>
+ 
+@@ -25,7 +26,7 @@
+ #include "clang/AST/ASTContext.h"
+ #include "clang/AST/DeclGroup.h"
+ #include "clang/AST/RecursiveASTVisitor.h"
+-#include "clang/Basic/DebugInfoOptions.h"
++#include "llvm/Frontend/Debug/Options.h"
+ #include "clang/Basic/Sanitizers.h"
+ #include "clang/Basic/TargetInfo.h"
+ #include "clang/CodeGen/BackendUtil.h"
+@@ -115,7 +116,7 @@ namespace xcpp
+             // Filter out functions added by Cling.
+             if (auto Identifier = D->getIdentifier())
+             {
+-                if (Identifier->getName().startswith("__cling"))
++                if (Identifier->getName().starts_with("__cling"))
+                 {
+                     return true;
+                 }
+@@ -153,12 +154,13 @@ namespace xcpp
+         if (EnableDebugInfo)
+         {
+             CodeGenOpts.setDebugInfo(
+-                clang::codegenoptions::DebugInfoKind::FullDebugInfo);
++                llvm::codegenoptions::DebugInfoKind::FullDebugInfo);
+         }
+ 
+         std::unique_ptr<clang::CodeGenerator> CG(clang::CreateLLVMCodeGen(
+-            CI->getDiagnostics(), "object", HeaderSearchOpts,
+-            CI->getPreprocessorOpts(), CodeGenOpts, *Context));
++            CI->getDiagnostics(), "object", 
++            llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem>(&CI->getVirtualFileSystem()),
++            HeaderSearchOpts, CI->getPreprocessorOpts(), CodeGenOpts, *Context));
+         CG->Initialize(AST);
+ 
+         FindTopLevelDecls Visitor(CG.get());
+@@ -186,7 +188,9 @@ namespace xcpp
+         EmitBackendOutput(CI->getDiagnostics(), HeaderSearchOpts,
+                           CodeGenOpts, CI->getTargetOpts(),
+                           CI->getLangOpts(), DataLayout, CG->GetModule(),
+-                          clang::Backend_EmitObj, std::move(OS));
++                          clang::Backend_EmitObj, 
++                          llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem>(&CI->getVirtualFileSystem()),
++                          std::move(OS));
+         return true;
+     }
+ 
+@@ -222,10 +226,10 @@ namespace xcpp
+ 
+         llvm::StringRef OutputFileStr(OutputFile);
+         llvm::StringRef ErrorFileStr(ErrorFile);
+-        llvm::SmallVector<llvm::Optional<llvm::StringRef>, 16> Redirects = {llvm::NoneType::None, OutputFileStr, ErrorFileStr};
++        llvm::SmallVector<std::optional<llvm::StringRef>, 16> Redirects = {std::nullopt, OutputFileStr, ErrorFileStr};
+ 
+         // Finally run the linker.
+-        int ret = llvm::sys::ExecuteAndWait(Compiler, Args, llvm::NoneType::None,
++        int ret = llvm::sys::ExecuteAndWait(Compiler, Args, std::nullopt,
+                                             Redirects);
+ 
+         // Read back output and error streams.
