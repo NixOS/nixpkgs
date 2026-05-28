@@ -38,6 +38,7 @@ self: super: {
   Cabal-syntax = doDistribute self.Cabal-syntax_3_16_1_0;
   containers = doDistribute self.containers_0_8;
   exceptions = doDistribute self.exceptions_0_10_12;
+  file-io = markBroken self.file-io_0_2_0;
   filepath = doDistribute self.filepath_1_5_5_0;
   ghc-bignum = null;
   ghc-boot = null;
@@ -49,6 +50,8 @@ self: super: {
   ghc-platform = null;
   ghc-prim = null;
   ghci = null;
+  haddock-api = markBroken self.haddock-api_2_29_1; # depends on ghc
+  haddock-library = markBroken self.haddock-library_1_11_0; # depends on ghc
   haskeline = doDistribute self.haskeline_0_8_4_1;
   hpc = markBroken self.hpc_0_7_0_2;
   integer-gmp = markBroken self.integer-gmp_1_1;
@@ -63,7 +66,7 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   terminfo = doDistribute self.terminfo_0_4_1_7;
-  time = doDistribute self.time_1_15;
+  time = doDistribute self.time_1_16;
   transformers = doDistribute self.transformers_0_6_3_0;
   unix = markBroken self.unix_2_8_8_0;
   xhtml = markBroken self.xhtml_3000_4_0_0;
