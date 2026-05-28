@@ -13270,6 +13270,8 @@ self: super: with self; {
 
   pure-eval = callPackage ../development/python-modules/pure-eval { };
 
+  pure-magic-rs = callPackage ../development/python-modules/pure-magic-rs { };
+
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
 
   pure-protobuf = callPackage ../development/python-modules/pure-protobuf { };
