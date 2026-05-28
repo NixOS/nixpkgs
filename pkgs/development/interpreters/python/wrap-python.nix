@@ -11,7 +11,10 @@ makePythonHook {
   substitutions.sitePackages = python.sitePackages;
   substitutions.executable = python.interpreter;
   substitutions.python = python.pythonOnBuildForHost;
-  substitutions.pythonHost = python.pythonOnHostForHost;
+  # TODO(@doronbehar) This should have been python.pythonOnHostForHost - the
+  # same way it works in ..//lua-5/wrap-lua.nix, but from some reason it
+  # doesn't work.
+  substitutions.pythonHost = python.pythonOnTargetForTarget;
   substitutions.magicalSedExpression =
     let
       # Looks weird? Of course, it's between single quoted shell strings.
