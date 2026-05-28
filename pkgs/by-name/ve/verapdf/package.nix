@@ -14,6 +14,7 @@
 maven.buildMavenPackage rec {
   pname = "verapdf" + lib.optionalString (withGui && !withCli) "-gui";
   version = "1.30.1";
+  __structuredAttrs = true;
 
   mvnParameters =
     "-pl '!installer' -Dverapdf.timestamp=1980-01-01T00:00:02Z -Dproject.build.outputTimestamp=1980-01-01T00:00:02Z "
@@ -37,6 +38,8 @@ maven.buildMavenPackage rec {
   patches = [ ./stable-maven-plugins.patch ];
 
   mvnHash = "sha256-hY+zPuSujMr3RntuLOZVEN8GN4n8201+S5OYvwB1+j4=";
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     makeWrapper
