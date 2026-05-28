@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchzip,
   fetchFromGitHub,
   autoPatchelfHook,
   autoAddDriverRunpath,
@@ -64,9 +65,9 @@ let
   inherit (stdenv.hostPlatform) isDarwin isLinux;
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
-  build-deps = fetchTarball {
+  build-deps = fetchzip {
     url = "https://github.com/LizardByte/build-deps/releases/download/v2026.516.30821/Linux-x86_64-ffmpeg.tar.gz";
-    sha256 = "VT+4qP2FaizCoIBBbBkzbYw4YOvGhuBUoZxWL0IYVZo=";
+    hash = "sha256-VT+4qP2FaizCoIBBbBkzbYw4YOvGhuBUoZxWL0IYVZo=";
   };
 in
 stdenv'.mkDerivation (finalAttrs: {
@@ -156,7 +157,6 @@ stdenv'.mkDerivation (finalAttrs: {
 
   buildInputs = [
     appstream-glib
-    pipewire
     vulkan-loader
     boost
     curl
@@ -177,6 +177,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libxi
     libdrm
     wayland
+    pipewire
     libffi
     libevdev
     libcap
