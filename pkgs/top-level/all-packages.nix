@@ -9459,8 +9459,6 @@ with pkgs;
     ;
   k3s = k3s_1_35;
 
-  klayout = qt6Packages.callPackage ../applications/misc/klayout { };
-
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
       { };
