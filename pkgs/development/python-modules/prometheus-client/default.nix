@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prometheus-client";
   version = "0.24.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4swqhoCVrD7GflFbQX+QH9yGVDjbfwXvd7trs30STQQ=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytest-benchmark
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [ "--benchmark-disable" ];
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
-    changelog = "https://github.com/prometheus/client_python/releases/tag/${src.tag}";
+    changelog = "https://github.com/prometheus/client_python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
