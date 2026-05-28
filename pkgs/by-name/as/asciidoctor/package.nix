@@ -2,9 +2,10 @@
   lib,
   bundlerApp,
   bundlerUpdateScript,
+  ruby_3_4,
 }:
 
-bundlerApp {
+(bundlerApp.override { ruby = ruby_3_4; }) {
   pname = "asciidoctor";
   gemdir = ./.;
 
