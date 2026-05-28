@@ -35,6 +35,7 @@ let
     replaceStrings
     stringToCharacters
     types
+    flip
     ;
 
   inherit (lib.strings) toJSON normalizePath escapeC;
@@ -103,21 +104,24 @@ let
     # The escaping algorithm operates as follows: given a string, any "/" character is replaced by "-", and all other characters which are not ASCII alphanumerics, ":", "_" or "." are replaced by C-style "\x2d" escapes. In addition, "." is replaced with such a C-style escape when it would appear as the first character in the escaped string.
     # When the input qualifies as absolute file system path, this algorithm is extended slightly: the path to the root directory "/" is encoded as single dash "-". In addition, any leading, trailing or duplicate "/" characters are removed from the string before transformation. Example: /foo//bar/baz/ becomes "foo-bar-baz".
     escapeSystemdPath =
+      let
+        specialChars = stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-";
+        escapeSpecialChars = escapeC specialChars;
+        replace' = replaceStrings [ "/" ] [ "-" ];
+        cDot = escapeC [ "." ] ".";
+      in
       s:
       let
-        replacePrefix =
-          p: r: s:
-          (if (hasPrefix p s) then r + (removePrefix p s) else s);
-        trim = s: removeSuffix "/" (removePrefix "/" s);
         normalizedPath = normalizePath s;
+        trimmed =
+          if normalizedPath == "/" then
+            normalizedPath
+          else
+            removeSuffix "/" (removePrefix "/" normalizedPath);
+        escaped = escapeSpecialChars trimmed;
+        dotEscaped = if hasPrefix "." escaped then cDot + removePrefix "." escaped else escaped;
       in
-      replaceStrings [ "/" ] [ "-" ] (
-        replacePrefix "." (escapeC [ "." ] ".") (
-          escapeC (stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-") (
-            if normalizedPath == "/" then normalizedPath else trim normalizedPath
-          )
-        )
-      );
+      replace' dotEscaped;
 
     # Quotes an argument for use in Exec* service lines.
     # systemd accepts "-quoted strings with escape sequences, toJSON produces
@@ -127,9 +131,12 @@ let
     # Every $ is escaped to $$, this makes it unnecessary to disable environment
     # substitution for the directive.
     escapeSystemdExecArg =
-      arg:
       let
-        s =
+        replace' = replaceStrings [ "%" "$" ] [ "%%" "$$" ];
+      in
+      arg:
+      replace' (
+        toJSON (
           if isPath arg then
             "${arg}"
           else if isString arg then
@@ -137,9 +144,9 @@ let
           else if isInt arg || isFloat arg || isDerivation arg then
             toString arg
           else
-            throw "escapeSystemdExecArg only allows strings, paths, numbers and derivations";
-      in
-      replaceStrings [ "%" "$" ] [ "%%" "$$" ] (toJSON s);
+            throw "escapeSystemdExecArg only allows strings, paths, numbers and derivations"
+        )
+      );
 
     # Quotes a list of arguments into a single string for use in a Exec*
     # line.
@@ -558,15 +565,25 @@ let
         The `order` option on the resulting rules will automatically be configured according to the
         (implied) ordering of the input rules.
       */
-      autoOrderRules = lib.flip lib.pipe [
-        (lib.imap1 (
-          index: rule:
-          assert lib.assertMsg (!rule ? order) "the 'order' option may not be set when using autoOrderRules";
-          rule // { order = lib.mkDefault (10000 + index * 100); }
-        ))
-        (map (rule: lib.nameValuePair rule.name (removeAttrs rule [ "name" ])))
-        lib.listToAttrs
-      ];
+      autoOrderRules =
+        let
+          removeName = flip removeAttrs [ "name" ];
+        in
+        rules:
+        listToAttrs (
+          map
+            (rule: {
+              inherit (rule) name;
+              value = removeName rule;
+            })
+            (
+              imap1 (
+                index: rule:
+                assert (!rule ? order) || throw "the 'order' option may not be set when using autoOrderRules";
+                rule // { order = lib.mkDefault (10000 + index * 100); }
+              ) rules
+            )
+        );
     };
   };
 in
