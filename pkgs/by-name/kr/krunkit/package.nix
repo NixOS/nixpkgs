@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  postInstall = ''
+    install -Dm444 edk2/KRUN_EFI.silent.fd $out/share/krunkit/KRUN_EFI.silent.fd
+  '';
+
   # This is necessary in order for the binary to keep its entitlements
   dontStrip = true;
 
