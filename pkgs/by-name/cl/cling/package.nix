@@ -20,8 +20,9 @@
   # build Cling against.
   clangStdenv,
 
-  # For runtime C++ standard library
-  gcc-unwrapped,
+  # For runtime C++ standard library.
+  # Cling's embedded clang 18 can't handle GCC 15+ headers, so pin to GCC 14.
+  gcc14,
 
   # Build with debug symbols
   debug ? false,
@@ -33,6 +34,7 @@
 
 let
   stdenv = clangStdenv;
+  gcc-unwrapped = gcc14.cc;
 
   version = "1.2";
 
