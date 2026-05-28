@@ -18,11 +18,11 @@
       "sources": {
         "x86_64": {
           "url": "https://downloads.1password.com/mac/1Password-8.12.21-x86_64.zip",
-          "hash": "sha256-tAWgIe7mcaGANCn8Kr0h6+zmvqufDJMjzAI3FrAGNk0="
+          "hash": "sha256-1dAmyaBMo4re1aQTk16AMEol7GjeSVhx9F4SuYBGoso="
         },
         "aarch64": {
           "url": "https://downloads.1password.com/mac/1Password-8.12.21-aarch64.zip",
-          "hash": "sha256-1c6YbzFYNyHKzY13OZ7z1Ad5hzgTIMs3aT0nluK9l0w="
+          "hash": "sha256-WrWbGzBK65tVNl9Dc3OnJURiPpfbNLOYUJcVT0ETaAs="
         }
       }
     }
