@@ -25,18 +25,14 @@ let
     recurseIntoAttrs
     ;
 
-  callSupportedTest =
-    test: if meta.availableOn pkgs.stdenv.hostPlatform test then callTest test else { };
+  callSupportedTest = test: if meta.availableOn pkgs.stdenv.hostPlatform test then callTest test else { };
 
   # TODO: remove when handleTest is gone (make sure nixosTests and nixos/release.nix#tests are unaffected)
   # TODO: when removing, also deprecate `test` attribute in ../lib/testing/run.nix
   discoverTests =
     val:
     if isAttrs val then
-      if (val ? test) then
-        callSupportedTest val
-      else
-        mapAttrs (n: s: if n == "passthru" then s else discoverTests s) val
+      if (val ? test) then callSupportedTest val else mapAttrs (n: s: if n == "passthru" then s else discoverTests s) val
     else if isFunction val then
       # Tests based on make-test-python.nix will return the second lambda
       # in that file, which are then forwarded to the test definition
@@ -207,9 +203,7 @@ in
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
         {
-          failed = pkgs.testers.testBuildFailure (
-            (runTest ./nixos-test-driver/timeout.nix).config.rawTestDerivation
-          );
+          failed = pkgs.testers.testBuildFailure ((runTest ./nixos-test-driver/timeout.nix).config.rawTestDerivation);
         }
         ''
           grep -F "timeout reached; test terminating" $failed/testBuildFailure.log
@@ -402,9 +396,7 @@ in
     _module.args.getPackage = pkgs: pkgs.cassandra;
   };
   centrifugo = runTest ./centrifugo.nix;
-  ceph-multi-node-bluestore = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
-    import ./ceph-multi-node-bluestore.nix { }
-  );
+  ceph-multi-node-bluestore = runTestOn [ "aarch64-linux" "x86_64-linux" ] (import ./ceph-multi-node-bluestore.nix { });
   ceph-multi-node-bluestore-cephfs = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
     import ./ceph-multi-node-bluestore.nix { withCephfs = true; }
   );
@@ -1282,12 +1274,10 @@ in
     imports = [ ./nixos-rebuild-target-host-interrupted.nix ];
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
-  nixpkgs-config-allow-unfree =
-    pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix
-      { inherit evalMinimalConfig; };
-  nixpkgs-config-allow-unfree-packages-and-predicate =
-    pkgs.callPackage ../../pkgs/stdenv/generic/check-meta-test.nix
-      { };
+  nixpkgs-config-allow-unfree = pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix {
+    inherit evalMinimalConfig;
+  };
+  nixpkgs-config-allow-unfree-packages-and-predicate = pkgs.callPackage ../../pkgs/stdenv/generic/check-meta-test.nix { };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   nmtrust = runTest ./nmtrust.nix;
   node-red = runTest ./node-red.nix;
@@ -1307,6 +1297,7 @@ in
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix { };
   ntpd = runTest ./ntpd.nix;
   ntpd-rs = runTest ./ntpd-rs.nix;
+  nuclear = runTest ./nuclear.nix;
   nullmailer = runTest ./nullmailer.nix;
   nushell = runTest ./nushell.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
@@ -1383,10 +1374,8 @@ in
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix { };
   opensnitch = runTest ./opensnitch.nix;
   openssh = runTest ./openssh.nix;
-  openstack-image-metadata =
-    (handleTestOn [ "x86_64-linux" ] ./openstack-image.nix { }).metadata or { };
-  openstack-image-userdata =
-    (handleTestOn [ "x86_64-linux" ] ./openstack-image.nix { }).userdata or { };
+  openstack-image-metadata = (handleTestOn [ "x86_64-linux" ] ./openstack-image.nix { }).metadata or { };
+  openstack-image-userdata = (handleTestOn [ "x86_64-linux" ] ./openstack-image.nix { }).userdata or { };
   opentabletdriver = runTest ./opentabletdriver.nix;
   opentelemetry-collector = runTest ./opentelemetry-collector.nix;
   opentelemetry-collector-validate = pkgs.callPackage ./opentelemetry-collector-validate.nix {
@@ -1498,9 +1487,7 @@ in
   portunus = runTest ./portunus.nix;
   porxie = runTest ./porxie.nix;
   postfix = handleTest ./postfix.nix { };
-  postfix-raise-smtpd-tls-security-level =
-    handleTest ./postfix-raise-smtpd-tls-security-level.nix
-      { };
+  postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix { };
   postfix-tlspol = runTest ./postfix-tlspol.nix;
   postgres-websockets = runTest ./postgres-websockets.nix;
   postgresql = import ./postgresql {
@@ -1833,9 +1820,7 @@ in
   systemd-networkd-bridge = runTest ./systemd-networkd-bridge.nix;
   systemd-networkd-dhcpserver = runTest ./systemd-networkd-dhcpserver.nix;
   systemd-networkd-dhcpserver-static-leases = runTest ./systemd-networkd-dhcpserver-static-leases.nix;
-  systemd-networkd-ipv6-prefix-delegation =
-    handleTest ./systemd-networkd-ipv6-prefix-delegation.nix
-      { };
+  systemd-networkd-ipv6-prefix-delegation = handleTest ./systemd-networkd-ipv6-prefix-delegation.nix { };
   systemd-networkd-vrf = runTest ./systemd-networkd-vrf.nix;
   systemd-no-tainted = runTest ./systemd-no-tainted.nix;
   systemd-nspawn = runTest ./systemd-nspawn.nix;
