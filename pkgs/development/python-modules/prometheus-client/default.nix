@@ -8,6 +8,7 @@
   twisted,
   pytest-benchmark,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -44,6 +45,8 @@ buildPythonPackage (finalAttrs: {
     # fails in darwin sandbox: Operation not permitted
     "test_instance_ip_grouping_key"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Prometheus instrumentation library for Python applications";
