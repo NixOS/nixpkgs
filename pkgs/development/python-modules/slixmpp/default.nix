@@ -20,7 +20,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slixmpp";
   version = "1.15.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "poezio";
     repo = "slixmpp";
-    tag = "slix-${version}";
+    tag = "slix-${finalAttrs.version}";
     hash = "sha256-1Jns7kqYGpUvwfwyMoZ9ygD2Sm148f/QdJ0atvfwGTo=";
   };
 
@@ -90,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
-    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${src.tag}";
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
