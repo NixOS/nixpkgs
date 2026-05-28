@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aladdin-connect";
   version = "0.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "shoejosh";
     repo = "aladdin-connect";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kLvMpSGa5WyDOH3ejAJyFGsB9IiMXp+nvVxM/ZkxyFw=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with Genie Aladdin Connect devices";
     homepage = "https://github.com/shoejosh/aladdin-connect";
-    changelog = "https://github.com/shoejosh/aladdin-connect/releases/tag/${version}";
+    changelog = "https://github.com/shoejosh/aladdin-connect/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
