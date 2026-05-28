@@ -5,26 +5,29 @@
 
   # nativeBuildInputs
   cmake,
-  wrapGAppsHook3,
-  pkg-config,
   ninja,
+  pkg-config,
+  wrapGAppsHook3,
 
   # buildInputs
   alsa-lib,
   alsa-plugins,
+  flac,
   freetype,
+  kdePackages,
+  lame,
   libjack2,
   libogg,
+  libopus,
+  libopusenc,
   libpulseaudio,
   libsndfile,
   libvorbis,
+  mnxdom,
   portaudio,
   portmidi,
-  flac,
-  libopusenc,
-  libopus,
-  mnxdom,
-  kdePackages,
+  pugixml,
+  utf8cpp,
 
   # passthru tests
   nixosTests,
@@ -32,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.7.0";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AEYZWkcjqB2pW+oBow2oMX1HQn4kRaTBBxhyxIbG0a4=";
+    hash = "sha256-7oA+cC5/nOEM2zpFgM13zlBIoc3AB//Ovc+dU1c1r6M=";
   };
 
   cmakeFlags = [
@@ -59,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Implies also OPUS
     "OPUSENC"
     "FLAC"
+    "PUGIXML"
+    "LAME"
+    "UTF8CPP"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/musescore/MuseScore/issues/33467
@@ -87,11 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    kdePackages.wrapQtAppsHook
     cmake
     kdePackages.qttools
-    pkg-config
+    kdePackages.wrapQtAppsHook
     ninja
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
@@ -100,24 +106,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libjack2
+    flac
     freetype
+    kdePackages.qt5compat
+    kdePackages.qtbase
+    kdePackages.qtdeclarative
+    kdePackages.qtnetworkauth
+    kdePackages.qtscxml
+    kdePackages.qtsvg
+    lame
+    libjack2
     libogg
+    libopus
+    libopusenc
     libpulseaudio
     libsndfile
     libvorbis
+    mnxdom
     portaudio
     portmidi
-    flac
-    libopusenc
-    libopus
-    mnxdom
-    kdePackages.qtbase
-    kdePackages.qtdeclarative
-    kdePackages.qt5compat
-    kdePackages.qtsvg
-    kdePackages.qtscxml
-    kdePackages.qtnetworkauth
+    pugixml
+    utf8cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
