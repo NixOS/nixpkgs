@@ -34,7 +34,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-i9P6Lh0Qw4ylUVwAE51UTE5rSDluZafpEmxuAtv0SYQ=";
   };
 
-  cargoHash = "sha256-LfLqScEqBJK9s+xRg2Ah1OnBEDQjXQ9LgJGusmxEDfk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "base62-2.2.3" = "sha256-K5ymIrMbMyHKYHs6p45akRI4Ec+k1gV9ZgqC0aJ9iSc=";
+      "raft-0.7.0" = "sha256-r/p+ebxczUDzLqMcxc8l/IAuvjmI058UOF1UHE57oVA=";
+      "rdkafka-0.38.0" = "sha256-JNGW57chwpcwnF8owcG1hP3MZ5Bunz6GDI3ro/2DUH0=";
+      "restate-web-ui-0.1.49" = "sha256-RNzt4gcwWhx5gP9n4UxqkmUL2097BG1ZTflYLiWJQTs=";
+      "rust-librocksdb-sys-0.41.0+10.9.1" = "sha256-WixwYhtj6SgrhRs+H/1RXQpzbaTbToRbAWmi26dA7g8=";
+      "sasl2-sys-0.1.22+2.1.28" = "sha256-rzqbNXiJp9h0gQZhbp+yfbaiFeotuz2tX00vHOO34jQ=";
+    };
+  };
+
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   env = {
     PROTOC = lib.getExe protobuf;
