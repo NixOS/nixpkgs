@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "vinz-ux";
     repo = "VinZ";
-    rev = "main";
+    rev = "aa48ba85903bc027072aa82d1cf13a4cd4bee83c";
     hash = "sha256-CKZvxWBlMx7Ubcs5XqoIJ3+4A3N++Q0UTXDjNHnAoNU=";
   };
 
