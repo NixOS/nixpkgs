@@ -16294,6 +16294,11 @@
     githubId = 26020062;
     name = "lumi";
   };
+  luminarleaf = {
+    github = "LuminarLeaf";
+    githubId = 80571430;
+    name = "Luminar Leaf";
+  };
   luna_1024 = {
     email = "contact@luna.computer";
     github = "luna-1024";
