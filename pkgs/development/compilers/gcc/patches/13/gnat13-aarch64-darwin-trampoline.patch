@@ -1,0 +1,202 @@
+From a41f0707bdcc9fb6dab39eb8ce7e392138d16dc0 Mon Sep 17 00:00:00 2001
+From: zinzilulo <214774502+zinzilulo@users.noreply.github.com>
+Date: Wed, 27 May 2026 18:25:14 +0100
+Subject: [PATCH] Allow GNAT 13 bootstrap on aarch64-darwin with nested
+ trampoline symbol mismatch
+
+This patch renames nested function trampoline helper symbols from the
+__gcc_* namespace to __builtin_* across GCC and libgcc in order to allow
+GNAT 13 to build on aarch64-darwin under bootstrap constraints where the
+prebuilt stage1 compiler does not provide the newer symbol set.
+
+The change updates builtin definitions, Darwin export lists,
+documentation,
+and libgcc implementations of the heap trampoline hooks used by
+-ftrampoline-impl=heap.
+
+This is a bootstrap compatibility workaround to bridge the ABI mismatch
+between the Alire/GNAT-FSF-build GNAT 13.2.0-2 compiler and the
+IainS/gcc-13-branch 13.4-darwin-r0 source tree.
+---
+ gcc/builtins.def                        | 4 ++--
+ gcc/config/darwin.h                     | 8 ++++----
+ gcc/doc/invoke.texi                     | 4 ++--
+ gcc/tree.cc                             | 8 ++++----
+ libgcc/config/aarch64/heap-trampoline.c | 8 ++++----
+ libgcc/config/i386/heap-trampoline.c    | 8 ++++----
+ libgcc/libgcc-std.ver.in                | 4 ++--
+ libgcc/libgcc2.h                        | 4 ++--
+ 8 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/gcc/builtins.def b/gcc/builtins.def
+index 448cf837ec8..5bf4769ae47 100644
+--- a/gcc/builtins.def
++++ b/gcc/builtins.def
+@@ -1067,8 +1067,8 @@ DEF_BUILTIN_STUB (BUILT_IN_ADJUST_TRAMPOLINE, "__builtin_adjust_trampoline")
+ DEF_BUILTIN_STUB (BUILT_IN_INIT_DESCRIPTOR, "__builtin_init_descriptor")
+ DEF_BUILTIN_STUB (BUILT_IN_ADJUST_DESCRIPTOR, "__builtin_adjust_descriptor")
+ DEF_BUILTIN_STUB (BUILT_IN_NONLOCAL_GOTO, "__builtin_nonlocal_goto")
+-DEF_EXT_LIB_BUILTIN (BUILT_IN_GCC_NESTED_PTR_CREATED, "__gcc_nested_func_ptr_created", BT_FN_VOID_PTR_PTR_PTR, ATTR_NOTHROW_LIST)
+-DEF_EXT_LIB_BUILTIN (BUILT_IN_GCC_NESTED_PTR_DELETED, "__gcc_nested_func_ptr_deleted", BT_FN_VOID, ATTR_NOTHROW_LIST)
++DEF_EXT_LIB_BUILTIN (BUILT_IN_GCC_NESTED_PTR_CREATED, "__builtin_nested_func_ptr_created", BT_FN_VOID_PTR_PTR_PTR, ATTR_NOTHROW_LIST)
++DEF_EXT_LIB_BUILTIN (BUILT_IN_GCC_NESTED_PTR_DELETED, "__builtin_nested_func_ptr_deleted", BT_FN_VOID, ATTR_NOTHROW_LIST)
+ 
+ /* Implementing __builtin_setjmp.  */
+ DEF_BUILTIN_STUB (BUILT_IN_SETJMP_SETUP, "__builtin_setjmp_setup")
+diff --git a/gcc/config/darwin.h b/gcc/config/darwin.h
+index 0cc6f021365..47bca6f1db1 100644
+--- a/gcc/config/darwin.h
++++ b/gcc/config/darwin.h
+@@ -433,10 +433,10 @@ extern GTY(()) int darwin_ms_struct;
+ 	   ___emutls_get_address -exported_symbol ___emutls_get_address \
+ 	  -U ___emutls_register_common \
+ 	  -exported_symbol ___emutls_register_common \
+-	  -U ___gcc_nested_func_ptr_created \
+-	  -exported_symbol ___gcc_nested_func_ptr_created \
+-	  -U ___gcc_nested_func_ptr_deleted \
+-	  -exported_symbol ___gcc_nested_func_ptr_deleted \
++	  -U ___builtin_nested_func_ptr_created \
++	  -exported_symbol ___builtin_nested_func_ptr_created \
++	  -U ___builtin_nested_func_ptr_deleted \
++	  -exported_symbol ___builtin_nested_func_ptr_deleted \
+       }} \
+     }}}\
+     %{!r:%{!nostdlib:%{!nostartfiles:%E}}} %{T*} %{F*} "\
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index 8f82ba0ecfa..4d5bba42fcd 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -18718,8 +18718,8 @@ for nested functions.
+ By default, trampolines are generated on stack.  However, certain platforms
+ (such as the Apple M1) do not permit an executable stack.  Compiling with
+ @option{-ftrampoline-impl=heap} generate calls to
+-@code{__gcc_nested_func_ptr_created} and
+-@code{__gcc_nested_func_ptr_deleted} in order to allocate and
++@code{__builtin_nested_func_ptr_created} and
++@code{__builtin_nested_func_ptr_deleted} in order to allocate and
+ deallocate trampoline space on the executable heap.  These functions are
+ implemented in libgcc, and will only be provided on specific targets:
+ x86_64 Darwin, x86_64 and aarch64 Linux.  @emph{PLEASE NOTE}: Heap
+diff --git a/gcc/tree.cc b/gcc/tree.cc
+index 032b87ee1c8..54abc791c88 100644
+--- a/gcc/tree.cc
++++ b/gcc/tree.cc
+@@ -9874,17 +9874,17 @@ build_common_builtin_nodes (void)
+ 					ptr_type_node, // void *func
+ 					ptr_ptr_type_node, // void **dst
+ 					NULL_TREE);
+-      local_define_builtin ("__builtin___gcc_nested_func_ptr_created", ftype,
++      local_define_builtin ("__builtin___builtin_nested_func_ptr_created", ftype,
+ 			    BUILT_IN_GCC_NESTED_PTR_CREATED,
+-			    "__gcc_nested_func_ptr_created", ECF_NOTHROW);
++			    "__builtin_nested_func_ptr_created", ECF_NOTHROW);
+     }
+ 
+   if (!builtin_decl_explicit_p (BUILT_IN_GCC_NESTED_PTR_DELETED))
+     {
+       ftype = build_function_type_list (void_type_node, NULL_TREE);
+-      local_define_builtin ("__builtin___gcc_nested_func_ptr_deleted", ftype,
++      local_define_builtin ("__builtin___builtin_nested_func_ptr_deleted", ftype,
+ 			    BUILT_IN_GCC_NESTED_PTR_DELETED,
+-			    "__gcc_nested_func_ptr_deleted", ECF_NOTHROW);
++			    "__builtin_nested_func_ptr_deleted", ECF_NOTHROW);
+     }
+ 
+   ftype = build_function_type_list (void_type_node,
+diff --git a/libgcc/config/aarch64/heap-trampoline.c b/libgcc/config/aarch64/heap-trampoline.c
+index b2c69aa5892..2e47cf56dc6 100644
+--- a/libgcc/config/aarch64/heap-trampoline.c
++++ b/libgcc/config/aarch64/heap-trampoline.c
+@@ -26,8 +26,8 @@ int get_trampolines_per_page (void);
+ struct tramp_ctrl_data *allocate_tramp_ctrl (struct tramp_ctrl_data *parent);
+ void *allocate_trampoline_page (void);
+ 
+-void __gcc_nested_func_ptr_created (void *chain, void *func, void **dst);
+-void __gcc_nested_func_ptr_deleted (void);
++void __builtin_nested_func_ptr_created (void *chain, void *func, void **dst);
++void __builtin_nested_func_ptr_deleted (void);
+ 
+ #if defined(__linux__)
+ static const unsigned char aarch64_trampoline_insns[6][4] = {
+@@ -115,7 +115,7 @@ allocate_tramp_ctrl (struct tramp_ctrl_data *parent)
+ 
+ HEAP_T_ATTR
+ void
+-__gcc_nested_func_ptr_created (void *chain, void *func, void **dst)
++__builtin_nested_func_ptr_created (void *chain, void *func, void **dst)
+ {
+   if (tramp_ctrl_curr == NULL)
+     {
+@@ -163,7 +163,7 @@ __gcc_nested_func_ptr_created (void *chain, void *func, void **dst)
+ 
+ HEAP_T_ATTR
+ void
+-__gcc_nested_func_ptr_deleted (void)
++__builtin_nested_func_ptr_deleted (void)
+ {
+   if (tramp_ctrl_curr == NULL)
+     abort ();
+diff --git a/libgcc/config/i386/heap-trampoline.c b/libgcc/config/i386/heap-trampoline.c
+index 2e8df1cfbd2..34aace2b5a6 100644
+--- a/libgcc/config/i386/heap-trampoline.c
++++ b/libgcc/config/i386/heap-trampoline.c
+@@ -26,8 +26,8 @@ int get_trampolines_per_page (void);
+ struct tramp_ctrl_data *allocate_tramp_ctrl (struct tramp_ctrl_data *parent);
+ void *allocate_trampoline_page (void);
+ 
+-void __gcc_nested_func_ptr_created (void *chain, void *func, void **dst);
+-void __gcc_nested_func_ptr_deleted (void);
++void __builtin_nested_func_ptr_created (void *chain, void *func, void **dst);
++void __builtin_nested_func_ptr_deleted (void);
+ 
+ #if __x86_64__
+ 
+@@ -179,7 +179,7 @@ allocate_tramp_ctrl (struct tramp_ctrl_data *parent)
+ 
+ HEAP_T_ATTR
+ void
+-__gcc_nested_func_ptr_created (void *chain, void *func, void **dst)
++__builtin_nested_func_ptr_created (void *chain, void *func, void **dst)
+ {
+   if (tramp_ctrl_curr == NULL)
+     {
+@@ -233,7 +233,7 @@ __gcc_nested_func_ptr_created (void *chain, void *func, void **dst)
+ 
+ HEAP_T_ATTR
+ void
+-__gcc_nested_func_ptr_deleted (void)
++__builtin_nested_func_ptr_deleted (void)
+ {
+   if (tramp_ctrl_curr == NULL)
+     abort ();
+diff --git a/libgcc/libgcc-std.ver.in b/libgcc/libgcc-std.ver.in
+index ad854bf0ded..acc4e6cfab8 100644
+--- a/libgcc/libgcc-std.ver.in
++++ b/libgcc/libgcc-std.ver.in
+@@ -1947,6 +1947,6 @@ GCC_7.0.0 {
+ 
+ %inherit GCC_14.0.0 GCC_7.0.0
+ GCC_14.0.0 {
+-  __gcc_nested_func_ptr_created
+-  __gcc_nested_func_ptr_deleted
++  __builtin_nested_func_ptr_created
++  __builtin_nested_func_ptr_deleted
+ }
+diff --git a/libgcc/libgcc2.h b/libgcc/libgcc2.h
+index a7a5dff0184..ac7eaab4f01 100644
+--- a/libgcc/libgcc2.h
++++ b/libgcc/libgcc2.h
+@@ -29,8 +29,8 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ #pragma GCC visibility push(default)
+ #endif
+ 
+-extern void __gcc_nested_func_ptr_created (void *, void *, void **);
+-extern void __gcc_nested_func_ptr_deleted (void);
++extern void __builtin_nested_func_ptr_created (void *, void *, void **);
++extern void __builtin_nested_func_ptr_deleted (void);
+ 
+ extern int __gcc_bcmp (const unsigned char *, const unsigned char *, size_t);
+ extern void __clear_cache (void *, void *);
+-- 
+2.50.1 (Apple Git-155)
+

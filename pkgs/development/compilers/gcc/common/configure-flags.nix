@@ -8,7 +8,9 @@
   threadsCross,
   version,
 
-  apple-sdk,
+  is13,
+  apple-sdk_14,
+  apple-sdk_15,
   binutils,
   gmp,
   mpfr,
@@ -52,6 +54,8 @@ let
     hostPlatform
     targetPlatform
     ;
+
+  appleSdk = if langAda && !is13 then apple-sdk_15 else apple-sdk_14;
 
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
@@ -159,12 +163,11 @@ let
       # gcc builds for cross-compilers (build != host) or cross-built
       # gcc (host != target) always apply the offset prefix to disentangle
       # target headers from build or host headers:
-      #     ${with_build_sysroot}${native_system_header_dir}
-      #  or ${test_exec_prefix}/${target_noncanonical}/sys-include
-      #  or ${with_sysroot}${native_system_header_dir}
+      #        ${with_sysroot}${native_system_header_dir}
+      #    and ${with_build_sysroot}${native_system_header_dir}
       # While native build (build == host == target) uses passed headers
       # path as is:
-      #    ${with_build_sysroot}${native_system_header_dir}
+      #    ${with_sysroot}${native_system_header_dir}
       #
       # Nixpkgs uses flat directory structure for both native and cross
       # cases. As a result libc headers don't get found for cross case
@@ -175,9 +178,13 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       # Darwin requires using the SDK as the sysroot for `SDKROOT` to work correctly.
-      "--with-build-sysroot=${if targetPlatform.isDarwin then apple-sdk.sdkroot else "/"}"
+      "--with-build-sysroot=${if targetPlatform.isDarwin then appleSdk.sdkroot else "/"}"
       # Same with the stdlibc++ headers embedded in the gcc output
       "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
+    ]
+    ++ lib.optionals (!withoutTargetLibc && targetPlatform.isDarwin && !crossDarwin) [
+      # Building on Darwin often requires --with-sysroot.
+      "--with-sysroot=${appleSdk.sdkroot}"
     ]
 
     # Basic configuration
