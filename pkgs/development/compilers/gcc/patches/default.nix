@@ -187,7 +187,9 @@ optionals noSysDirs (
   .${majorVersion} or [ ]
 )
 
-++ optional (langAda && is13) ./13/gnat13-aarch64-darwin-trampoline.patch
+++ optional (
+  langAda && is13 && canApplyIainsDarwinPatches
+) ./13/gnat13-aarch64-darwin-trampoline.patch
 
 ++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";
