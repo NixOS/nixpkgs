@@ -9690,8 +9690,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  p4v = qt6Packages.callPackage ../applications/version-management/p4v { };
-
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
   pijuice = with python3Packages; toPythonApplication pijuice;
@@ -10492,16 +10490,6 @@ with pkgs;
 
   alfis-nogui = alfis.override {
     withGui = false;
-  };
-
-  bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
-    withGui = true;
-    zeromq = zeromq.override {
-      enableCurve = false;
-      enableDrafts = false;
-      libsodium = null;
-    };
-    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind = bitcoin.override {
