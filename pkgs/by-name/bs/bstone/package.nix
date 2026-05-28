@@ -6,6 +6,7 @@
   makeWrapper,
   sdl2-compat,
   vulkan-loader,
+  openal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sdl2-compat
-    vulkan-loader
   ];
 
   postInstall = ''
@@ -35,7 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/*.txt $out/share/bibendovsky/bstone
 
     wrapProgram $out/bin/bstone \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          openal
+          vulkan-loader
+        ]
+      }
   '';
 
   meta = {
