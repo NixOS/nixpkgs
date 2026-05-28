@@ -7,7 +7,6 @@
   nixosTests,
   nodejs,
   npmHooks,
-  ruby_3_4,
   stdenv,
   tailwindcss_3,
   gemset ? import ./gemset.nix,
@@ -19,9 +18,6 @@
     inherit (sources) hash;
   },
 }:
-let
-  ruby = ruby_3_4;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dawarich";
   inherit (sources) version;
@@ -50,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dawarichGems = bundlerEnv {
     name = "${finalAttrs.pname}-gems-${finalAttrs.version}";
-    inherit gemset ruby;
+    inherit gemset;
     inherit (finalAttrs) version;
     gemdir = finalAttrs.src;
   };
