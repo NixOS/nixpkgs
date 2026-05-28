@@ -64,10 +64,6 @@ stdenv.mkDerivation {
     # checking for `swrast_dri.dylib`, which isn’t what will be created.
     substituteInPlace bin/install_megadrivers.py \
       --replace-fail "            while ext != '.' + args.libname_suffix" "            while ext != '.so'"
-
-    # Use `st_mtimespec` on Darwin instead of `st_mtim`.
-    substituteInPlace src/gallium/drivers/llvmpipe/lp_context.c \
-      --replace-fail 'st_mtim.' 'st_mtimespec.'
   '';
 
   outputs = [
