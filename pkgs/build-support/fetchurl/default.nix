@@ -327,23 +327,27 @@ lib.extendMkDerivation {
 
       outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-      curlOpts = lib.warnIf (lib.isList curlOpts) (
-        let
-          url = toString (builtins.head urls_);
-          curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
-          curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
-          curlOptsListElementsRepresentation =
-            lib.concatMapStringsSep " " lib.strings.escapeNixString
-              curlOpts;
-        in
-        ''
-          fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
-          - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
-            curlOpts = ${curlOptsAsStringRepresentation};
-          - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
-            curlOptsList = [ ${curlOptsListElementsRepresentation} ];
-        ''
-      ) curlOpts;
+      curlOpts =
+        if lib.isList curlOpts then
+          lib.warn (
+            let
+              url = toString (builtins.head urls_);
+              curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
+              curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
+              curlOptsListElementsRepresentation =
+                lib.concatMapStringsSep " " lib.strings.escapeNixString
+                  curlOpts;
+            in
+            ''
+              fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
+              - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+                curlOpts = ${curlOptsAsStringRepresentation};
+              - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+                curlOptsList = [ ${curlOptsListElementsRepresentation} ];
+            ''
+          ) curlOpts
+        else
+          curlOpts;
 
       inherit
         curlOptsList

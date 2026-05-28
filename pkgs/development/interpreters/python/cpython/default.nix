@@ -851,6 +851,7 @@ stdenv.mkDerivation (finalAttrs: {
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
       else
         "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
+    donationPage = "https://www.python.org/psf/donations/";
     description = "High-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that

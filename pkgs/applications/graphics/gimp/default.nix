@@ -367,6 +367,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
+    donationPage = "https://www.gimp.org/donating/";
     maintainers = with lib.maintainers; [ jtojnar ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

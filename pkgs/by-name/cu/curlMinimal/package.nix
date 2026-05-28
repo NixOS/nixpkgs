@@ -277,6 +277,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://curl.se/ch/${finalAttrs.version}.html";
     description = "Command line tool for transferring files with URL syntax";
     homepage = "https://curl.se/";
+    donationPage = "https://curl.se/donation.html";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex
