@@ -9459,8 +9459,6 @@ with pkgs;
     ;
   k3s = k3s_1_35;
 
-  okteta = kdePackages.callPackage ../applications/editors/okteta { };
-
   klayout = qt6Packages.callPackage ../applications/misc/klayout { };
 
   kotatogram-desktop =
