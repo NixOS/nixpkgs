@@ -3,13 +3,8 @@
   stdenv,
   lib,
   cmake,
-  extra-cmake-modules,
-  kdoctools,
-  wrapQtAppsHook,
-  kconfig,
-  kcrash,
-  kwidgetsaddons,
-  kxmlgui,
+  kdePackages,
+  qt6,
 }:
 
 stdenv.mkDerivation {
@@ -26,16 +21,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    kdoctools
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    kdePackages.kdoctools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    kconfig
-    kcrash
-    kwidgetsaddons
-    kxmlgui
+    kdePackages.kconfig
+    kdePackages.kcrash
+    kdePackages.kwidgetsaddons
+    kdePackages.kxmlgui
   ];
 
   meta = {
