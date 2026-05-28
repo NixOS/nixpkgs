@@ -20371,17 +20371,17 @@
     email = "nyu@nyuku.ru";
     githubId = 97425873;
   };
-  nyxonios = {
-    name = "nyxonios";
-    github = "Nyxonios";
-    email = "martin.n.seller@gmail.com";
-    githubId = 18164197;
-  };
   nyxar77 = {
     name = "nyxar77";
     github = "nyxar77";
     email = "nyxar49@gmail.com";
     githubId = 153492661;
+  };
+  nyxonios = {
+    name = "nyxonios";
+    github = "Nyxonios";
+    email = "martin.n.seller@gmail.com";
+    githubId = 18164197;
   };
   nzbr = {
     email = "nixos@nzbr.de";
