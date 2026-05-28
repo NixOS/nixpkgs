@@ -6,7 +6,7 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "material-design-icons";
   version = "7.4.47";
 
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7t3i3nPJZ/tRslLBfY+9kXH8TR145GC2hPFYJeMHRL8=";
     sparseCheckout = [ "fonts" ];
   };
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
       dixslyf
     ];
   };
-}
+})
