@@ -18,6 +18,7 @@
   jq,
   gnugrep,
   podman,
+  krunkit,
 }:
 
 let
@@ -124,7 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath [ podman ]}";
+      prefixPackages = lib.makeBinPath (
+        [ podman ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+      );
+      commonWrapperArgs = "--prefix PATH : ${prefixPackages}";
     in
     (
       ''
