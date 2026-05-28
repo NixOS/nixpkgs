@@ -10,9 +10,7 @@
   # optional buildInputs
   enableCutterPlugin ? true,
   cutter,
-  qt5compat,
-  qtbase,
-  qtsvg,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableCutterPlugin [
     cutter
-    qt5compat
-    qtbase
-    qtsvg
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtsvg
   ];
 
   dontWrapQtApps = true;
