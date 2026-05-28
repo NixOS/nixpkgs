@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bstone";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "bibendovsky";
     repo = "bstone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Svqm8gpZ2TgI2MdJc+gY9O7xCYYNo84/bbbqprBFpcc=";
+    hash = "sha256-8ifvHNf+vUtoffxghMwFXpGuarMEEBF+bkSbE4M9zf0=";
   };
 
   nativeBuildInputs = [
