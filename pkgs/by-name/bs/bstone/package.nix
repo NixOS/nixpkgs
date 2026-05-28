@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bstone";
   version = "1.3.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "bibendovsky";
     repo = "bstone";
