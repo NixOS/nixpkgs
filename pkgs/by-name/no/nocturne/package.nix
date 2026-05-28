@@ -2,95 +2,105 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  meson,
-  ninja,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  gettext,
-  desktop-file-utils,
-  appstream,
-  glib,
-  glib-networking,
-  pkg-config,
-  cmake,
-  gtk4,
+  fetchurl,
   python3,
   python3Packages,
   libadwaita,
-  gobject-introspection,
-  libsecret,
+  gtk4,
+  glib,
+  glib-networking,
   gst_all_1,
+  libsecret,
+  blueprint-compiler,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  desktop-file-utils,
+  appstream,
+  gobject-introspection,
+  wrapGAppsHook4,
   xdg-user-dirs,
-}:
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "nocturne";
-  version = "1.1.1";
-
-  src = fetchFromGitHub {
-    owner = "Jeffser";
-    repo = "Nocturne";
-    tag = finalAttrs.version;
-    hash = "sha256-7B9wtuxfsF6brtLkIEeWII4IvXwdJHnZ1Wr3uLfoqHU=";
+  cmake,
+}: let
+  mpris-server = python3.pkgs.buildPythonPackage {
+    pname = "mpris_server";
+    version = "0.9.1";
+    pyproject = true;
+    src = fetchurl {
+      url = "https://github.com/Jeffser/mpris_server/releases/download/v0.9.1/mpris_server-0.10.0.tar.gz";
+      hash = "sha256-0+nYgTzLLlIWNcW/iAaQtbsoMDF44BqZrq3+6ZGTjnY=";
+    };
+    build-system = with python3.pkgs; [hatchling];
+    propagatedBuildInputs = with python3.pkgs; [pydbus strenum unidecode emoji];
+    doCheck = false;
   };
+in
+  stdenv.mkDerivation (finalAttrs: {
+    pname = "nocturne";
+    version = "1.2.1";
+    src = fetchFromGitHub {
+      owner = "Jeffser";
+      repo = "Nocturne";
+      tag = finalAttrs.version;
+      hash = "sha256-CfrPmpkjcmKMB66kdFL4HqVukaIWAkIzOkwtBqZ65k4=";
+    };
+    __structuredAttrs = true;
+    dontUseCmakeConfigure = true;
+    strictDeps = true;
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+      gettext
+      desktop-file-utils
+      appstream
+      blueprint-compiler
+      gobject-introspection
+      wrapGAppsHook4
+      glib
+      cmake
+      gtk4
+      python3
+    ];
+    buildInputs = [
+      libadwaita
+      gtk4
+      glib
+      glib-networking
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gst-plugins-bad
+      libsecret
+    ];
+    pythonDependencies = [
+      python3Packages.pygobject3
+      python3Packages.tinytag
+      python3Packages.requests
+      python3Packages.pillow
+      python3Packages.syncedlyrics
+      python3Packages.colorthief
+      mpris-server
+    ];
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix PATH : ${lib.makeBinPath [xdg-user-dirs]}
+        --prefix PYTHONPATH : ${python3.pkgs.makePythonPath finalAttrs.pythonDependencies}
+      )
+    '';
+    postPatch = ''
+      sed -i '/if get_navidrome_path():/,/set_integration(self)/d' src/integrations/navidrome.py
+      sed -i "s/tag\.artist\.split(';')\[0\] or \"\"/\(tag.artist or ''\).split(';')[0]/" src/integrations/local.py
+    '';
 
-  __structuredAttrs = true;
+    meta = {
+      description = "Adwaita music player for OpenSubsonic servers like Navidrome";
+      homepage = "https://github.com/Jeffser/Nocturne";
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [nyxar77 pbsds];
+      mainProgram = "nocturne";
+      platforms = lib.platforms.linux;
+    };
+  })
 
-  dontUseCmakeConfigure = true;
-
-  strictDeps = true;
-  nativeBuildInputs = [
-    meson
-    ninja
-    blueprint-compiler
-    gobject-introspection
-    wrapGAppsHook4
-    gettext # for msgfmt
-    desktop-file-utils # for desktop-file-validate
-    appstream
-    glib
-    pkg-config
-    cmake
-    gtk4
-    python3
-  ];
-
-  buildInputs = [
-    gtk4
-    libadwaita
-    libsecret
-    python3
-    glib-networking
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-  ];
-
-  pythonDependencies = [
-    python3Packages.pygobject3
-    python3Packages.tinytag
-    python3Packages.requests
-    python3Packages.syncedlyrics
-    python3Packages.pycairo
-    python3Packages.colorthief
-    python3Packages.favicon
-    python3Packages.mpris-server
-    python3Packages.pillow
-  ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
-      --prefix PYTHONPATH : ${python3.pkgs.makePythonPath finalAttrs.pythonDependencies}
-    )
-  '';
-
-  meta = {
-    description = "Adwaita Music Player and Library Manager";
-    homepage = "https://jeffser.com/nocturne/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pbsds ];
-    mainProgram = "nocturne";
-    platforms = lib.platforms.linux;
-  };
-})

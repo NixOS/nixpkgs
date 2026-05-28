@@ -20377,6 +20377,12 @@
     email = "martin.n.seller@gmail.com";
     githubId = 18164197;
   };
+  nyxar77 = {
+    name = "nyxar77";
+    github = "nyxar77";
+    email = "nyxar49@gmail.com";
+    githubId = 153492661;
+  };
   nzbr = {
     email = "nixos@nzbr.de";
     github = "nzbr";
