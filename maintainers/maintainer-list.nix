@@ -18265,6 +18265,12 @@
     githubId = 16974598;
     name = "Mike Playle";
   };
+  mkannwischer = {
+    email = "matthias@kannwischer.eu";
+    github = "mkannwischer";
+    githubId = 3984960;
+    name = "Matthias Kannwischer";
+  };
   mkez = {
     email = "matias+nix@zwinger.fi";
     github = "mk3z";
