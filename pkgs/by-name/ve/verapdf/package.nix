@@ -8,9 +8,11 @@
   copyDesktopItems,
   jre,
   versionCheckHook,
+  withCli ? true,
+  withGui ? false,
 }:
 maven.buildMavenPackage rec {
-  pname = "verapdf";
+  pname = "verapdf" + lib.optionalString (withGui && !withCli) "-gui";
   version = "1.30.1";
 
   mvnParameters =
@@ -46,19 +48,22 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-
+  ''
+  + lib.optionalString withCli ''
     install -Dm644 cli/target/cli-${lib.versions.majorMinor version}.0.jar $out/share/verapdf.jar
-    install -Dm644 gui/target/gui-${lib.versions.majorMinor version}.0.jar $out/share/verapdf-gui.jar
-
-    makeWrapper ${lib.getExe jre} $out/bin/verapdf-gui --add-flags "-jar $out/share/verapdf-gui.jar"
     makeWrapper ${lib.getExe jre} $out/bin/verapdf --add-flags "-jar $out/share/verapdf.jar"
+  ''
+  + lib.optionalString withGui ''
+    install -Dm644 gui/target/gui-${lib.versions.majorMinor version}.0.jar $out/share/verapdf-gui.jar
+    makeWrapper ${lib.getExe jre} $out/bin/verapdf-gui --add-flags "-jar $out/share/verapdf-gui.jar"
 
     install -Dm644 gui/src/main/resources/org/verapdf/gui/images/icon.png $out/share/icons/hicolor/256x256/apps/verapdf.png
-
+  ''
+  + ''
     runHook postInstall
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals withGui [
     (makeDesktopItem {
       name = "veraPDF";
       comment = meta.description;
@@ -75,7 +80,8 @@ maven.buildMavenPackage rec {
     })
   ];
 
-  doInstallCheck = true;
+  # GUI has no --version flag
+  doInstallCheck = withCli;
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -96,10 +102,15 @@ maven.buildMavenPackage rec {
       # or
       lib.licenses.mpl20
     ];
-    mainProgram = "verapdf-gui";
     maintainers = [
       lib.maintainers.mohe2015
       lib.maintainers.kilianar
     ];
+  }
+  // lib.optionalAttrs (withCli && !withGui) {
+    mainProgram = "verapdf";
+  }
+  // lib.optionalAttrs (withGui && !withCli) {
+    mainProgram = "verapdf-gui";
   };
 }
