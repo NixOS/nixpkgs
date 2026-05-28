@@ -13,7 +13,7 @@ let
 in
 buildPythonPackage (finallAttrs: {
   pname = "paddle2onnx";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit (finallAttrs) pname version;
@@ -22,7 +22,7 @@ buildPythonPackage (finallAttrs: {
     python = pyShortVersion;
     abi = pyShortVersion;
     platform = "manylinux_2_24_x86_64.manylinux_2_28_x86_64";
-    hash = "sha256-RCD6iTvzhGrFjW02lasTwQoM+Xa68Q5b6Ito3KvqdHg=";
+    hash = "sha256-f+8D1sQLvl4uvG6JWyW4hgrNKIA2ARlYhOj/7F/6EQk=";
   };
 
   format = "wheel";
