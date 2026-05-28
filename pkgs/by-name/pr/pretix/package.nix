@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
   fetchPypi,
   libredirect,
   nodejs,
@@ -84,6 +85,10 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   patches = [
+    (fetchpatch {
+      url = "https://github.com/pretix/pretix/commit/d765a89139b2b28fa82145fb6f7e213ad46c086b.patch";
+      hash = "sha256-we1TKu3mxsM3CEP5aCsdb3XGlYXbfa0hGWgjrljylKU=";
+    })
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
