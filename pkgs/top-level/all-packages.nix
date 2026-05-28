@@ -8424,7 +8424,7 @@ with pkgs;
         inherit (stdenv.buildPlatform) system;
         inherit (config) rewriteURL;
       };
-      checkMeta = callPackage ../stdenv/generic/check-meta.nix { inherit (stdenv) hostPlatform; };
+      checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
     }
   );
   minimal-bootstrap-sources =

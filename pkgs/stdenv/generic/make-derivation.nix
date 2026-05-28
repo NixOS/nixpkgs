@@ -189,12 +189,20 @@ let
   structuredAttrsByDefault = config.structuredAttrsByDefault or false;
   inherit (config) enableParallelBuildingByDefault contentAddressedByDefault;
   userHook = config.stdenv.userHook or null;
+  checkMeta = import ./check-meta.nix {
+    inherit lib config;
+  };
 in
 stdenv:
 
 let
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
+
+  # Nix itself uses the `system` field of a derivation to decide where
+  # to build it. This is a bit confusing for cross compilation.
+  commonMeta = checkMeta.commonMeta hostPlatform;
+  assertValidity = checkMeta.assertValidity hostPlatform;
 
   /**
     This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
@@ -215,13 +223,6 @@ let
     :::
   */
   mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
-
-  checkMeta = import ./check-meta.nix {
-    inherit lib config;
-    # Nix itself uses the `system` field of a derivation to decide where
-    # to build it. This is a bit confusing for cross compilation.
-    inherit (stdenv) hostPlatform;
-  };
 
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible =
@@ -971,7 +972,7 @@ let
         }
       );
 
-      meta = checkMeta.commonMeta {
+      meta = commonMeta {
         inherit validity attrs pos;
         references =
           attrs.nativeBuildInputs or [ ]
@@ -979,7 +980,7 @@ let
           ++ attrs.propagatedNativeBuildInputs or [ ]
           ++ attrs.propagatedBuildInputs or [ ];
       };
-      validity = checkMeta.assertValidity { inherit meta attrs; };
+      validity = assertValidity { inherit meta attrs; };
 
       checkedEnv =
         let
