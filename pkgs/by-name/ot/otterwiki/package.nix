@@ -13,6 +13,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "otterwiki";
   version = "2.20.5";
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
