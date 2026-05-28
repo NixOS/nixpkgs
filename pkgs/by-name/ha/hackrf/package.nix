@@ -45,6 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://greatscottgadgets.com/hackrf/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ sjmackenzie ];
+    maintainers = [ ];
   };
 })
