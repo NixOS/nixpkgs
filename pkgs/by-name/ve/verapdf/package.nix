@@ -7,6 +7,7 @@
   makeDesktopItem,
   copyDesktopItems,
   jre,
+  versionCheckHook,
 }:
 maven.buildMavenPackage rec {
   pname = "verapdf";
@@ -73,6 +74,18 @@ maven.buildMavenPackage rec {
       mimeTypes = [ "application/pdf" ];
     })
   ];
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/verapdf";
+
+  preVersionCheck = ''
+    version=${lib.versions.majorMinor version}.0
+  '';
 
   meta = {
     changelog = "https://github.com/veraPDF/veraPDF-library/blob/${src.tag}/RELEASENOTES.md";
