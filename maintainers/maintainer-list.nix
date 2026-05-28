@@ -6143,6 +6143,13 @@
     github = "DarkOnion0";
     githubId = 68606322;
   };
+  Darks1de42 = {
+    name = "Darks1de42";
+    github = "Darks1de42";
+    githubId = 48830356;
+    email = "git@darks1de.de";
+    matrix = "@darks1de:matrix.darks1.de";
+  };
   darkyzhou = {
     name = "darkyzhou";
     email = "me@zqy.io";
