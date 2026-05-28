@@ -128,8 +128,8 @@ let
                 # f is not a function; probably { ... }
                 f0;
           in
-          warnIf
-            (
+          (
+            if
               prev ? src
               && thisOverlay ? version
               && prev ? version
@@ -138,32 +138,36 @@ let
               # && prev.version != thisOverlay.version
               && !(thisOverlay ? src)
               && !(thisOverlay.__intentionallyOverridingVersion or false)
-            )
-            (
-              let
-                pos = unsafeGetAttrPos "version" thisOverlay;
-              in
-              ''
-                ${
-                  args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
-                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                  toString pos.line or "<unknown line>"
-                }:${toString pos.column or "<unknown column>"}.
 
-                This is most likely not what you want. In order to properly change the version of a package, override
-                both the `version` and `src` attributes:
+            then
+              warn (
+                let
+                  pos = unsafeGetAttrPos "version" thisOverlay;
+                in
+                ''
+                  ${
+                    args.name or "${args.pname or "<unknown name>"}-${args.version or "<unknown version>"}"
+                  } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                    toString pos.line or "<unknown line>"
+                  }:${toString pos.column or "<unknown column>"}.
 
-                hello.overrideAttrs (oldAttrs: rec {
-                  version = "1.0.0";
-                  src = pkgs.fetchurl {
-                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
-                    hash = "...";
-                  };
-                })
+                  This is most likely not what you want. In order to properly change the version of a package, override
+                  both the `version` and `src` attributes:
 
-                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-              ''
-            )
+                  hello.overrideAttrs (oldAttrs: rec {
+                    version = "1.0.0";
+                    src = pkgs.fetchurl {
+                      url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                      hash = "...";
+                    };
+                  })
+
+                  (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+                ''
+              )
+            else
+              x: x
+          )
             (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
         );
 

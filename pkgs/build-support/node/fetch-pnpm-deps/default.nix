@@ -60,17 +60,17 @@ in
           pnpm-fixup-state-db;
     in
     # pnpmWorkspace was deprecated, so throw if it's used.
-    assert (lib.throwIf (args ? pnpmWorkspace)
-      "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`."
-    ) true;
+    assert
+      !args ? pnpmWorkspace
+      || throw "fetchPnpmDeps: `pnpmWorkspace` is no longer supported, please migrate to `pnpmWorkspaces`.";
 
-    assert (lib.throwIf (fetcherVersion == null)
-      "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert
+      fetcherVersion != null
+      || throw "fetchPnpmDeps: `fetcherVersion` is not set, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
-    assert (lib.throwIf (!(builtins.elem fetcherVersion supportedFetcherVersions))
-      "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
-    ) true;
+    assert
+      builtins.elem fetcherVersion supportedFetcherVersions
+      || throw "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
     lib.warnIf (fetcherVersion < 3)
       "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` is deprecated and scheduled for removal in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 3` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."

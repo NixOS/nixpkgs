@@ -25663,12 +25663,6 @@
     githubId = 216167;
     name = "Steve Jones";
   };
-  sjmackenzie = {
-    email = "setori88@gmail.com";
-    github = "sjmackenzie";
-    githubId = 158321;
-    name = "Stewart Mackenzie";
-  };
   skaphi = {
     name = "Oskar Philipsson";
     email = "oskar.philipsson@gmail.com";
