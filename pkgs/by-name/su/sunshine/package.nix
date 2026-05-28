@@ -63,13 +63,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
-  version = "2025.924.154138";
+  version = "2026.516.143833";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QrPfZqd9pgufohUjxlTpO6V0v7B41UrXHZaESsFjZ48=";
+    hash = "sha256-3yuhOyW1Rqz4ddZ40z2ZzpAReZQFva0SL595XrnFB60=";
     fetchSubmodules = true;
   };
 
@@ -77,7 +77,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ui = buildNpmPackage {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-miRw5JGZ8L+CKnoZkCuVW+ptzFV3Dg21zuS9lqNeHro=";
+    npmDepsHash = "sha256-YnNnuAdj/S5LGNytqIsmCApIec8DTWKF6VIJ7AXUctU=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -103,7 +103,7 @@ stdenv'.mkDerivation (finalAttrs: {
   # FETCH_CONTENT_BOOST_USED prevents Simple-Web-Server from re-finding boost
   + ''
     substituteInPlace cmake/dependencies/Boost_Sunshine.cmake \
-      --replace-fail 'set(BOOST_VERSION "1.87.0")' 'set(BOOST_VERSION "${boost.version}")'
+      --replace-fail 'set(BOOST_VERSION "1.89.0")' 'set(BOOST_VERSION "${boost.version}")'
     echo 'set(FETCH_CONTENT_BOOST_USED TRUE)' >> cmake/dependencies/Boost_Sunshine.cmake
   ''
   # remove upstream dependency on systemd and udev
