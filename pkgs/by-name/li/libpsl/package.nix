@@ -6,7 +6,6 @@
   autoreconfHook,
   docbook_xsl,
   docbook_xml_dtd_43,
-  gtk-doc,
   lzip,
   libidn2,
   libunistring,
@@ -44,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     docbook_xsl
     docbook_xml_dtd_43
-    gtk-doc
     lzip
     pkg-config
     libxslt
@@ -64,10 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
   # use the libpsl-with-scripts package if you need this
   postInstall = ''
     rm $out/bin/psl-make-dafsa $out/share/man/man1/psl-make-dafsa*
-  '';
-
-  preAutoreconf = ''
-    gtkdocize
   '';
 
   configureFlags = [
