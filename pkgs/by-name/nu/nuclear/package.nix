@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
       jq '.bundle.createUpdaterArtifacts = false' ${tauriConfJson} | sponge ${tauriConfJson}
     ''
-    # disable Tauri's built-in codesigning
+    # Disable Tauri's built-in codesigning
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       jq '.bundle.macOS.signingIdentity = null' ${tauriConfJson} | sponge ${tauriConfJson}
     '';
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Streaming music player that finds free music for you";
     homepage = "https://nuclear.js.org/";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.NotAShelf ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "nuclear-music-player";
   };

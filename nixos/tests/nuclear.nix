@@ -1,5 +1,7 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
+  meta.maintainers = [ ];
+
   name = "nuclear";
 
   nodes.machine =
@@ -18,8 +20,6 @@
       # Add fonts so text renders properly for OCR
       fonts.packages = with pkgs; [ dejavu_fonts.minimal ];
     };
-
-  meta.maintainers = with lib.maintainers; [ NotAShelf ];
 
   enableOCR = true;
 
