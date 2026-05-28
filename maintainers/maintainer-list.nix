@@ -17957,6 +17957,11 @@
     githubId = 323199;
     name = "Mihai Maruseac";
   };
+  mihakrumpestar = {
+    name = "Miha Krumpestar";
+    github = "mihakrumpestar";
+    githubId = 70652456;
+  };
   mihnea-s = {
     email = "mihn.stn@gmail.com";
     github = "mihnea-s";
