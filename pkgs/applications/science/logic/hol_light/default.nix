@@ -9,6 +9,7 @@
   zarith,
   camlp5,
   camlp-streams,
+  pcre2,
 }:
 
 let
@@ -18,6 +19,7 @@ let
       ''
         -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/zarith \
         -I ${zarith}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
+        -I ${pcre2}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
       ''
     else
       lib.optionalString (num != null) ''
@@ -61,6 +63,7 @@ stdenv.mkDerivation {
   ];
   propagatedBuildInputs = [
     camlp-streams
+    pcre2
     (if use_zarith then zarith else num)
   ];
 
