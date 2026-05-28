@@ -1792,6 +1792,7 @@
   ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/szurubooru.nix
   ./services/web-apps/tabbyapi.nix
+  ./services/web-apps/tranquil-pds.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/tuliprox.nix
