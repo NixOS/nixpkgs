@@ -130,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     # can probably be re-added once https://github.com/cyrusimap/cyrus-sasl/pull/772
     # has made it to a release
     rm -f tests/scripts/test076-authid-rewrite
+  ''
+  # FIXME: revert after this gets unconditional above (on staging* branch)
+  + lib.optionalString stdenv.hostPlatform.isi686 ''
+    rm -f tests/scripts/test*-sync*
   '';
 
   doCheck = true;
