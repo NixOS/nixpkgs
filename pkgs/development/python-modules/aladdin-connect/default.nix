@@ -3,12 +3,13 @@
   requests,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aladdin-connect";
   version = "0.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shoejosh";
@@ -17,7 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-kLvMpSGa5WyDOH3ejAJyFGsB9IiMXp+nvVxM/ZkxyFw=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Project has no tests
   doCheck = false;
