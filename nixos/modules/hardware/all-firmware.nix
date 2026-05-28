@@ -82,7 +82,7 @@ in
           sof-firmware
           libreelec-dvb-firmware
         ]
-        ++ lib.optional pkgs.stdenv.hostPlatform.isAarch raspberrypiWirelessFirmware;
+        ++ lib.optional pkgs.stdenv.hostPlatform.isAarch raspberrypi-wireless-firmware;
     })
     (lib.mkIf cfg.enableAllFirmware {
       hardware.firmware =
