@@ -13995,6 +13995,8 @@ self: super: with self; {
 
   pyfatfs = callPackage ../development/python-modules/pyfatfs { };
 
+  pyfaup-rs = callPackage ../development/python-modules/pyfaup-rs { };
+
   pyfcm = callPackage ../development/python-modules/pyfcm { };
 
   pyfdt = callPackage ../development/python-modules/pyfdt { };
