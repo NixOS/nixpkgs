@@ -5747,6 +5747,8 @@ self: super: with self; {
 
   flask-jwt-extended = callPackage ../development/python-modules/flask-jwt-extended { };
 
+  flask-ldap3-login = callPackage ../development/python-modules/flask-ldap3-login { };
+
   flask-limiter = callPackage ../development/python-modules/flask-limiter { };
 
   flask-login = callPackage ../development/python-modules/flask-login { };
