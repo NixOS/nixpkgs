@@ -1150,6 +1150,12 @@ lib.mapAttrs mkLicense (
       redistributable = true; # Only if used in Netdata products.
     };
 
+    netboxLimitedUse = {
+      fullName = "NetBox Limited Use License 1.0";
+      free = false;
+      url = "https://github.com/netboxlabs/netbox-branching/blob/8465b9aee69ded23930cfe1a522695bfb8955a5a/LICENSE.md";
+    };
+
     ngpl = {
       spdxId = "NGPL";
       fullName = "Nethack General Public License";
