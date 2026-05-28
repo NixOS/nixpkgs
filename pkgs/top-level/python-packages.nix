@@ -7234,6 +7234,8 @@ self: super: with self; {
 
   hexdump = callPackage ../development/python-modules/hexdump { };
 
+  hf-gradio = callPackage ../development/python-modules/hf-gradio { };
+
   hf-transfer = callPackage ../development/python-modules/hf-transfer { };
 
   hf-xet = callPackage ../development/python-modules/hf-xet { };
