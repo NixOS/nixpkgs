@@ -452,6 +452,7 @@ stdenv'.mkDerivation (finalAttrs: {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
     license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
+    donationPage = "https://fund.blender.org/";
 
     platforms = [
       "aarch64-linux"
