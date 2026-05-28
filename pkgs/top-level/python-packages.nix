@@ -17859,6 +17859,8 @@ self: super: with self; {
 
   sfrbox-api = callPackage ../development/python-modules/sfrbox-api { };
 
+  sgl-deep-gemm = callPackage ../development/python-modules/sgl-deep-gemm { };
+
   sgmllib3k = callPackage ../development/python-modules/sgmllib3k { };
 
   sgp4 = callPackage ../development/python-modules/sgp4 { };
