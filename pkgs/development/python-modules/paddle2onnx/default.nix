@@ -7,6 +7,7 @@
   python,
   onnx,
   paddlepaddle,
+  nix-update-script,
 }:
 let
   pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
@@ -33,6 +34,8 @@ buildPythonPackage (finallAttrs: {
     onnx
     paddlepaddle
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "ONNX Model Exporter for PaddlePaddle";
