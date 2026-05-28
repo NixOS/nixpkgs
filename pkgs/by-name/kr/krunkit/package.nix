@@ -1,4 +1,5 @@
 {
+  callPackage,
   cargo,
   darwin,
   pkg-config,
@@ -50,7 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
   # This is necessary in order for the binary to keep its entitlements
   dontStrip = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.boot = callPackage ./boot-test.nix {
+      krunkit = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Launch configurable virtual machines with libkrun";
