@@ -213,8 +213,8 @@ buildNpmPackage (finalAttrs: {
     # Skip some flaky/failing tests
     rm test/tests/retractionsTest.js
     for test in \
-      "should use BrowserDownload for 403 when enforcing file type" \
-      "should use BrowserDownload for a JS redirect page" \
+      "should use BrowserRequest for 403 when enforcing file type" \
+      "should use BrowserRequest for a JS redirect page" \
       "should throw error on broken symlink" \
       "should switch dialog from add note to add/edit citation" \
       "should vacuum the database with force option" \
