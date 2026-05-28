@@ -2571,20 +2571,41 @@ with haskellLib;
   # https://github.com/phadej/zinza/pull/28
   zinza = dontCheck super.zinza;
 
-  pdftotext = overrideCabal (drv: {
-    jailbreak = true;
-    postPatch = ''
+  pdftotext =
+    let
+      decodeSourceHutMboxPatch = lib.escapeShellArgs [
+        "${pkgs.perl}/bin/perl"
+        "-MMIME::QuotedPrint=decode_qp"
+        "-0777"
+        "-ne"
+        "print decode_qp($_)"
+      ];
+    in
+    appendPatches [
       # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
-      substituteInPlace pdftotext.cabal --replace-quiet c-sources cxx-sources
-
       # Fix cabal ignoring cxx because the cabal format version is too old
-      substituteInPlace pdftotext.cabal --replace-quiet ">=1.10" 2.2
-
       # Fix wrong license name that breaks recent cabal version
-      substituteInPlace pdftotext.cabal --replace-quiet BSD3 BSD-3-Clause
-    ''
-    + (drv.postPatch or "");
-  }) super.pdftotext;
+      (fetchpatch {
+        name = "pdftotext-use-cxx-sources-for-cxx-sources.patch";
+        url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69754/mbox";
+        decode = decodeSourceHutMboxPatch;
+        hash = "sha256-5DvNBFlbP0o5Hso+mzKweQAINUUTequPMoOJZfgeIzU=";
+      })
+      # Adapt the executable to range 1.0's Ranges API.
+      (fetchpatch {
+        name = "pdftotext-support-range-1.0-in-the-cli.patch";
+        url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69755/mbox";
+        decode = decodeSourceHutMboxPatch;
+        hash = "sha256-hZFMSI8Yyh5QIXMRs9VkBKPPP2IM+cbU2ILcqYc9oIw=";
+      })
+      # Relax stale dependency bounds, replacing jailbreak.
+      (fetchpatch {
+        name = "pdftotext-relax-dependency-bounds.patch";
+        url = "https://lists.sr.ht/~geyaeb/haskell-pdftotext/patches/69756/mbox";
+        decode = decodeSourceHutMboxPatch;
+        hash = "sha256-wYM0SsOk9eZXR+/g+VOkj7okhmy1sEONCLHcrHlV2EI=";
+      })
+    ] super.pdftotext;
 
   # Allow QuickCheck 2.16
   # https://github.com/google/proto-lens/issues/403
