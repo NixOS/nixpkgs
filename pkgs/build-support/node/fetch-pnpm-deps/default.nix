@@ -146,6 +146,10 @@ in
               # Run any additional pnpm configuration commands that users provide.
               ${prePnpmInstall}
 
+              echo "Final pnpm config:"
+              pnpm config list
+              echo
+
               # pnpm is going to warn us about using --force
               # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
               pnpm install \
