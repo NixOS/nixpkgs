@@ -25,6 +25,7 @@
   libdrm,
   wayland,
   wayland-scanner,
+  pipewire,
   libffi,
   libcap,
   libgbm,
@@ -46,6 +47,8 @@
   amf-headers,
   svt-av1,
   vulkan-loader,
+  shaderc,
+  appstream-glib,
   libappindicator,
   libnotify,
   miniupnpc,
@@ -60,6 +63,11 @@
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux;
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
+  build-deps = fetchTarball {
+    url = "https://github.com/LizardByte/build-deps/releases/download/v2026.516.30821/Linux-x86_64-ffmpeg.tar.gz";
+    sha256 = "VT+4qP2FaizCoIBBbBkzbYw4YOvGhuBUoZxWL0IYVZo=";
+  };
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
@@ -117,9 +125,9 @@ stdenv'.mkDerivation (finalAttrs: {
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
       --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
-      --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
+      --replace-fail '/usr/bin/env systemctl start --u app-@PROJECT_FQDN@' 'sunshine'
 
-    substituteInPlace packaging/linux/sunshine.service.in \
+    substituteInPlace packaging/linux/app-dev.lizardbyte.app.Sunshine.service.in \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
       --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
       --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
@@ -128,8 +136,12 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
+    (python3.withPackages (ps: [
+      ps.jinja2
+      ps.setuptools
+    ]))
     makeWrapper
+    shaderc
   ]
   ++ lib.optionals isLinux [
     wayland-scanner
@@ -143,6 +155,9 @@ stdenv'.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    appstream-glib
+    pipewire
+    vulkan-loader
     boost
     curl
     miniupnpc
@@ -208,6 +223,9 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
     (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
+    (lib.cmakeFeature "FFMPEG_PREPARED_BINARIES" "${build-deps}")
+    (lib.cmakeFeature "VULKAN_LIBRARY" "${vulkan-loader}/lib/libvulkan.so.1")
+    (lib.cmakeBool "GLAD_SKIP_PIP_INSTALL" true)
   ]
   # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
   ++ lib.optionals isLinux [
