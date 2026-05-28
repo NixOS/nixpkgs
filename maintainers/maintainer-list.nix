@@ -19394,6 +19394,11 @@
     githubId = 79978224;
     name = "winston";
   };
+  nelind = {
+    name = "Nel";
+    github = "nelind3";
+    githubId = 57587152;
+  };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
     github = "NelsonJeppesen";
