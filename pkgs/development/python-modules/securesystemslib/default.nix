@@ -30,19 +30,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "securesystemslib";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ERFRLNHD3OhbMEGBEnDLkRYGv4f+bYg9MStS5IarcPA=";
+    hash = "sha256-XOE690DKeAMP2KycW+fdYs/KGWqwZCZz/9PiAa6tJbw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"hatchling==1.27.0"' '"hatchling"'
+      --replace-fail '"hatchling==1.29.0"' '"hatchling"'
   '';
 
   build-system = [ hatchling ];

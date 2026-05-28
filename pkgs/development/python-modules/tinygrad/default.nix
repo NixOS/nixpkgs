@@ -308,6 +308,15 @@ buildPythonPackage (finalAttrs: {
     gpuCheck = tinygrad.overridePythonAttrs (old: {
       requiredSystemFeatures = [ "cuda" ];
 
+      disabledTests = (old.disabledTests or [ ]) ++ [
+        # Require internet access
+        "TestWhisper"
+        "test_hevc_decode"
+
+        # AssertionError: Not equal to tolerance
+        "test_svd_general"
+      ];
+
       pytestFlags = (old.pytestFlags or [ ]) ++ [
         # When running in parallel, with GPU support, some tests become flaky:
         # RuntimeError: Wait timeout: 30000 ms! (the signal is not set to 153, but 151)

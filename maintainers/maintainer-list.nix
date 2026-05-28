@@ -710,6 +710,12 @@
     githubId = 25004152;
     name = "Adrian Gunnar Lauterer";
   };
+  adrielvelazquez = {
+    email = "AdrielVelazquez@gmail.com";
+    github = "AdrielVelazquez";
+    githubId = 3443378;
+    name = "Adriel Velazquez";
+  };
   AdrienLemaire = {
     email = "lemaire.adrien@gmail.com";
     github = "AdrienLemaire";

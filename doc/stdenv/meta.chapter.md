@@ -61,6 +61,12 @@ Release branch. Used to specify that a package is not going to receive updates t
 
 The package’s homepage. Example: `https://www.gnu.org/software/hello/manual/`
 
+### `donationPage` {#var-meta-donationPage}
+
+The package or project's donation page, if it exists. Example: `https://neovim.io/sponsors/`
+
+Authoritative project URLs are preferred.
+
 ### `downloadPage` {#var-meta-downloadPage}
 
 The page where a link to the current version can be found. Example: `https://ftp.gnu.org/gnu/hello/`
@@ -150,6 +156,8 @@ The list of Nix platform types for which the [Hydra](https://github.com/nixos/hy
   meta.hydraPlatforms = [ ];
 }
 ```
+
+Note that this does not affect whether reverse dependencies of the package are built on Hydra.
 
 ### `broken` {#var-meta-broken}
 

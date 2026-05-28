@@ -21,7 +21,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayle";
-  version = "0.3.0";
+  version = "0.4.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "wayle-rs";
     repo = "wayle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4hnbv31BWu6KbdSHphHnpl80R0ByxS0RxsM5uqtNnCU=";
+    hash = "sha256-gTvjGvS9jWijB7xVMTZZkltGfqreKtXanZlt1ZgFiC4=";
   };
 
-  cargoHash = "sha256-sXoqNF7hzE97PkRMBnxVFNPa92CgD5gYeMd0RmzPJzY=";
+  cargoHash = "sha256-iMtX/MNPzjXJG9ebDDdyQrLeqmW9idoty1vjhGLjT/E=";
 
   nativeBuildInputs = [
     copyDesktopItems

@@ -6,6 +6,7 @@
   makeWrapper,
   chromium,
   withChromium ? (lib.meta.availableOn stdenv.hostPlatform chromium),
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -40,6 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrapProgram "$out/bin/html2pdf" --prefix PATH : '${lib.makeBinPath runtimeInputs}'
     ''
   );
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru.updateScript = nix-update-script { };
 

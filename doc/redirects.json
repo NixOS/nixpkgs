@@ -926,6 +926,9 @@
   "var-go-buildTestBinaries": [
     "index.html#var-go-buildTestBinaries"
   ],
+  "var-meta-donationPage": [
+    "index.html#var-meta-donationPage"
+  ],
   "var-meta-identifiers-cpe": [
     "index.html#var-meta-identifiers-cpe"
   ],

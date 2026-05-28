@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "http-sf";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mnot";
     repo = "http-sf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uA/LosjGuRd8h/xU663peP1eSrz46W79uPohrm75irc=";
+    hash = "sha256-sqLYD/JIRvKl6ciVDfSWNAUhhSHhdw7UFnDyHiV5sZg=";
   };
 
   build-system = [ setuptools ];

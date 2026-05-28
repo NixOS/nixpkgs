@@ -35,6 +35,18 @@ let
 
     env.EMACS_INCLUDE_DIR = "${emacs}/include";
 
+    dontSetZigDefaultFlags = true;
+
+    doCheck = true;
+
+    zigCheckFlags = [
+      "-Dcpu=baseline"
+      # See https://github.com/ghostty-org/ghostty/blob/main/PACKAGING.md#build-options
+      "-Doptimize=ReleaseFast"
+    ];
+
+    zigBuildFlags = finalAttrs.zigCheckFlags;
+
     postConfigure = ''
       cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
       chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"

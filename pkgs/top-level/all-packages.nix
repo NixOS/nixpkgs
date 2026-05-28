@@ -3467,6 +3467,8 @@ with pkgs;
     nvidiaSupport = true;
   };
 
+  zellijPlugins = recurseIntoAttrs (callPackage ../by-name/ze/zellij/plugins { });
+
   zstd = callPackage ../tools/compression/zstd {
     cmake = buildPackages.cmakeMinimal;
   };
@@ -7207,6 +7209,7 @@ with pkgs;
     s6-portable-utils-man-pages
     s6-rc
     s6-rc-man-pages
+    sdnotify-wrapper
     skalibs
     skalibs_2_10
     tipidee
@@ -8272,8 +8275,6 @@ with pkgs;
   };
 
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
-
-  drbd = callPackage ../os-specific/linux/drbd/utils.nix { };
 
   # unstable until the first 1.x release
   fwts = callPackage ../os-specific/linux/fwts { };
@@ -11893,8 +11894,6 @@ with pkgs;
   netbsd = callPackage ../os-specific/bsd/netbsd { };
 
   openbsd = callPackage ../os-specific/bsd/openbsd { };
-
-  xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
 
   radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
 

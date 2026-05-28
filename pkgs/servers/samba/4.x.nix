@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.23.5";
+  version = "4.23.8";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WTpD3dDVeQIjffp2iI97Ast/x3RxETacsx4SbbSDa58=";
+    hash = "sha256-l2EphHRW3Ft4wA+P+3ncYFxJ1qrKiyqncv0i27afrgE=";
   };
 
   outputs = [
@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./4.x-no-persistent-install.patch
     ./4.x-no-persistent-install-dynconfig.patch
-    ./4.x-fix-makeflags-parsing.patch
     ./4.x-fix-systemd-detection.patch
     (fetchpatch {
       # workaround for https://bugzilla.samba.org/show_bug.cgi?id=14164

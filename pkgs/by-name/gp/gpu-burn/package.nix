@@ -21,19 +21,16 @@ let
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
-  version = "0-unstable-2025-11-04";
+  version = "0-unstable-2026-05-27";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "wilicc";
     repo = "gpu-burn";
-    rev = "671f4be92477ce01cd9b536bc534a006dbee058f";
-    hash = "sha256-zaGzwpdvF9dw3RypBO+g6FhjOFN8/F9+yI1+lLxLjgs=";
+    rev = "dfc30426a45613a36b5da53ef901a1e29d3db374";
+    hash = "sha256-/gDD6t3gGtPEZVageQyVRIb87gTa0yeygE45zmOVli4=";
   };
-
-  # TODO: drop once https://github.com/wilicc/gpu-burn/pull/148 lands.
-  patches = [ ./0001-Emit-compare.fatbin-and-make-arch-compute_X-conditio.patch ];
 
   postPatch = ''
     substituteInPlace gpu_burn-drv.cpp \

@@ -8,26 +8,33 @@
 
 let
   # Version and platform-specific data retrieved from Google's manifests
-  version = "1.0.2";
+  version = "1.0.3";
 
-  sources = {
+  sourceData = {
     "x86_64-linux" = {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.2-6109799369277440/linux-x64/cli_linux_x64.tar.gz";
-      hash = "sha256-XAq2oHWaAe2AoAgDBb1/NvABfkodg3xYTDmTY5H9RD0=";
+      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.3-6459114696605696/linux-x64/cli_linux_x64.tar.gz";
+      hash = "sha256-UM/b3TuXROHHx0dKMU0KtENNREmY+VAYKmxRWewu/ic=";
     };
     "aarch64-linux" = {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.2-6109799369277440/linux-arm/cli_linux_arm64.tar.gz";
-      hash = "sha256-7pj7TMHg+Z7DyWVmXOMqoM9kQkw5FxXTF+P4hGYc2hE=";
+      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.3-6459114696605696/linux-arm/cli_linux_arm64.tar.gz";
+      hash = "sha256-Cp44KTj1wP85y6Z6oCOd1ylL2nTg1mDx7aJuv/Q7nBE=";
     };
     "aarch64-darwin" = {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.2-6109799369277440/darwin-arm/cli_mac_arm64.tar.gz";
-      hash = "sha256-stu8KZDa5id5wVImTgyedkIKJPdkBTagRCphoYLWUoI=";
+      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.3-6459114696605696/darwin-arm/cli_mac_arm64.tar.gz";
+      hash = "sha256-lbf6dCJ7QhDNomfpi10Dhk9VShxAxTC0zsFIFpGlbtA=";
     };
     "x86_64-darwin" = {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.2-6109799369277440/darwin-x64/cli_mac_x64.tar.gz";
-      hash = "sha256-KDOEEgFhvpO9bifljSuhRKpb+J6c+q4TWmnrNAAS3A0=";
+      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.0.3-6459114696605696/darwin-x64/cli_mac_x64.tar.gz";
+      hash = "sha256-B1zPkt4h3JN7ZWhin0iTQMCe+NhVvBGKWCLfKnBrZnw=";
     };
   };
+
+  sources = lib.mapAttrs (
+    _system: source:
+    fetchzip {
+      inherit (source) url hash;
+    }
+  ) sourceData;
 
   source =
     sources.${stdenv.hostPlatform.system}
@@ -37,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "antigravity-cli";
   inherit version;
 
-  src = fetchzip {
-    inherit (source) url hash;
-  };
+  src = source;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -61,15 +66,27 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = ./update.py;
+    inherit sources;
+    updateScript = [
+      ./update.sh
+      version
+    ]
+    ++ lib.concatMap (system: [
+      system
+      sourceData.${system}.url
+    ]) (lib.attrNames sourceData);
   };
 
   meta = {
     description = "Google's Go-based terminal user interface (TUI) agent client";
     homepage = "https://antigravity.google";
+    changelog = "https://antigravity.google/changelog";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ u3kkasha ];
-    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
+      adrielvelazquez
+      u3kkasha
+    ];
+    platforms = lib.attrNames sourceData;
     mainProgram = "agy";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
