@@ -1802,11 +1802,6 @@ let
     else
       config.users.motdFile;
 
-  makePAMService = name: service: {
-    name = "pam.d/${name}";
-    value.source = pkgs.writeText "${name}.pam" service.text;
-  };
-
   optionalSudoConfigForSSHAgentAuth =
     lib.optionalString (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable)
       ''
@@ -2594,7 +2589,26 @@ in
       };
     };
 
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
+    environment.etc =
+      let
+        # Write all pam config in a single derivation for performance
+        pamd =
+          pkgs.runCommand "pam.d"
+            {
+              __structuredAttrs = true;
+              services = lib.mapAttrs (_: svc: svc.text) enabledServices;
+            }
+            ''
+              mkdir $out
+              for i in "''${!services[@]}"; do
+                printf '%s' "''${services[$i]}" > "$out/$i"
+              done
+            '';
+      in
+      lib.mapAttrs' (name: service: {
+        name = "pam.d/${name}";
+        value.source = "${pamd}/${name}";
+      }) enabledServices;
 
     systemd =
       lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))
