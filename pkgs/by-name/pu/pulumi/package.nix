@@ -183,6 +183,10 @@ buildGoModule (finalAttrs: {
     updateScript = _experimental-update-script-combinators.sequence [
       (nix-update-script { })
       (nix-update-script {
+        attrPath = "pulumiPackages.pulumi-bun";
+        extraArgs = [ "--version=skip" ];
+      })
+      (nix-update-script {
         attrPath = "pulumiPackages.pulumi-go";
         extraArgs = [ "--version=skip" ];
       })
@@ -203,7 +207,12 @@ buildGoModule (finalAttrs: {
       };
 
       # Test building packages that reuse our version and src.
-      inherit (pulumiPackages) pulumi-go pulumi-nodejs pulumi-python;
+      inherit (pulumiPackages)
+        pulumi-bun
+        pulumi-go
+        pulumi-nodejs
+        pulumi-python
+        ;
       pythonPackage = python3Packages.pulumi;
       pythonPackageProtobuf5 =
         (python3Packages.overrideScope (
