@@ -29444,6 +29444,12 @@
     github = "wdavidw";
     githubId = 46896;
   };
+  wduo87391 = {
+    name = "wduo87391";
+    email = "wduo87391@gmail.com";
+    github = "wduo87391";
+    githubId = 197874825;
+  };
   weathercold = {
     name = "Weathercold";
     email = "weathercold.scr@proton.me";
