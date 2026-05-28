@@ -2065,6 +2065,7 @@ with pkgs;
     cudaPackages_13_0
     cudaPackages_13_1
     cudaPackages_13_2
+    cudaPackages_13_3
     ;
 
   cudaPackages_12 = cudaPackages_12_9;
