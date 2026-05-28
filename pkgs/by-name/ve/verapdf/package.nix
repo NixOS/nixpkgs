@@ -10,7 +10,7 @@
 }:
 maven.buildMavenPackage rec {
   pname = "verapdf";
-  version = "1.28.2";
+  version = "1.30.1";
 
   mvnParameters =
     "-pl '!installer' -Dverapdf.timestamp=1980-01-01T00:00:02Z -Dproject.build.outputTimestamp=1980-01-01T00:00:02Z "
@@ -27,13 +27,13 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "veraPDF";
     repo = "veraPDF-apps";
-    rev = "v${version}";
-    hash = "sha256-tv5iffIQkyjHyulnmagcJuSGbc4tXRYTwB3hSEGLQrc=";
+    tag = "v${version}";
+    hash = "sha256-IoQbAYEUJuK5FxGSxiLfcn5X1KOJca70hu4cMaYXfmw=";
   };
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  mvnHash = "sha256-CrpiomKsAyD7SyVzwbjVXy8BoVnkejQVcim+kwVP5Ng=";
+  mvnHash = "sha256-hY+zPuSujMr3RntuLOZVEN8GN4n8201+S5OYvwB1+j4=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -46,10 +46,11 @@ maven.buildMavenPackage rec {
 
     mkdir -p $out/bin $out/share
 
-    install -Dm644 greenfield-apps/target/greenfield-apps-${lib.versions.majorMinor version}.0.jar $out/share/verapdf.jar
+    install -Dm644 cli/target/cli-${lib.versions.majorMinor version}.0.jar $out/share/verapdf.jar
+    install -Dm644 gui/target/gui-${lib.versions.majorMinor version}.0.jar $out/share/verapdf-gui.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/verapdf-gui --add-flags "-jar $out/share/verapdf.jar"
-    makeWrapper ${jre}/bin/java $out/bin/verapdf --add-flags "-cp $out/share/verapdf.jar org.verapdf.apps.GreenfieldCliWrapper"
+    makeWrapper ${lib.getExe jre} $out/bin/verapdf-gui --add-flags "-jar $out/share/verapdf-gui.jar"
+    makeWrapper ${lib.getExe jre} $out/bin/verapdf --add-flags "-jar $out/share/verapdf.jar"
 
     install -Dm644 gui/src/main/resources/org/verapdf/gui/images/icon.png $out/share/icons/hicolor/256x256/apps/verapdf.png
 
@@ -74,6 +75,7 @@ maven.buildMavenPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/veraPDF/veraPDF-library/blob/${src.tag}/RELEASENOTES.md";
     description = "Command line and GUI industry supported PDF/A and PDF/UA Validation";
     homepage = "https://github.com/veraPDF/veraPDF-apps";
     license = [
