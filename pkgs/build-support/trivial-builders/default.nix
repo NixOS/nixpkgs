@@ -908,6 +908,7 @@ rec {
         url ? null,
         message ? null,
         hashMode ? "flat",
+        meta ? { },
       }@args:
       assert (message != null) || (url != null);
       assert (sha256 != null) || (sha1 != null) || (hash != null);
@@ -951,6 +952,10 @@ rec {
           printf '%s' ${lib.escapeShellArg msg}
           exit 1
         '';
+        meta = {
+          license = lib.licenses.unfree;
+        }
+        // meta;
       }
       // (lib.optionalAttrs (name == null) {
         # The case of providing `url`, but not `name`. This has

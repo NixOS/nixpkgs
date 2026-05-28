@@ -619,7 +619,7 @@ in
 
         hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
 
-        drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
+        drbd = callPackage ../by-name/dr/drbd/driver.nix { };
 
         nullfsvfs = callPackage ../os-specific/linux/nullfsvfs { };
 

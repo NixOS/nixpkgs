@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cine";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "diegopvlk";
     repo = "Cine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QYNtLTgpyQonmTsLnkwPRxQ14loirii09lJiPdooyOI=";
+    hash = "sha256-XB7DrFASIivCDvcNnuiVRI4xnkj0rOzHnD5z1AugGdQ=";
     fetchSubmodules = true;
   };
 
