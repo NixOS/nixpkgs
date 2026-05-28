@@ -123,6 +123,10 @@ fi
 init_remote(){
     local url=$1
     clean_git init --initial-branch=master
+    # Disable maintenance: it's not useful for a short-lived clone, and
+    # background maintenance causes non-deterministic builds.
+    # https://github.com/NixOS/nixpkgs/issues/524215
+    clean_git config maintenance.auto false
     clean_git remote add origin "$url"
     if [ -n "$sparseCheckout" ]; then
         git config remote.origin.partialclonefilter "blob:none"

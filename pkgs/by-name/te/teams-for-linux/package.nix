@@ -10,7 +10,6 @@
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  vulkan-loader,
   which,
 }:
 
@@ -46,21 +45,15 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_41.dist} electron-dist
-    chmod -R u+w electron-dist
-  ''
-  # Electron builder complains about symlink in electron-dist
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    rm electron-dist/libvulkan.so.1
-    cp ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 electron-dist
-  ''
-  + ''
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron_41.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
         --dir \
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
-        -c.electronDist=electron-dist \
+        -c.electronDist="$electron_dist" \
         -c.electronVersion=${electron_41.version} \
         -c.mac.identity=null
 
