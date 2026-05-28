@@ -7657,6 +7657,12 @@
     github = "eclairevoyant";
     name = "éclairevoyant";
   };
+  eConnah = {
+    email = "git@econnah.uk";
+    github = "eConnah";
+    githubId = 63052937;
+    name = "Connor Alecks";
+  };
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
