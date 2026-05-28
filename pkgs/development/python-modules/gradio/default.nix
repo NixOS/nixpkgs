@@ -21,14 +21,13 @@
   pnpmConfigHook,
 
   # dependencies
-  aiofiles,
   anyio,
   audioop-lts,
   brotli,
   fastapi,
-  ffmpy,
   gradio-client,
   groovy,
+  hf-gradio,
   httpx,
   huggingface-hub,
   jinja2,
@@ -82,18 +81,24 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.9.0";
+  version = "6.15.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-iGaUiJto/tquCSa6D/wbkNyVtK/2kZB/hz62STfwLOY=";
+    hash = "sha256-PKF23TEHdjeQ0gYLL1OQ5gZwm8RdiOknEaYR9H2ktHo=";
   };
 
   patches = [
     ./fix-transformers-pipelines-imports.patch
+
+    # Upstream's after_build.js runs `npm install --production` to vendor http-proxy into the server
+    # build output, which fails offline.
+    # Copy it (and its dependency closure) from the already-fetched pnpm workspace.
+    ./dont-npm-install-http-proxy.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -104,7 +109,11 @@ buildPythonPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-pZCYtWFNlrcRFomx6HbO0zySOyifO3n/ffzx59pS/A8=";
+    hash = "sha256-bJbzDjN3CoJYiRmF55a+skI1bwm2mh8YUifJ55UsjqI=";
+  };
+
+  env = {
+    CI = "true";
   };
 
   nativeBuildInputs = [
@@ -121,19 +130,13 @@ buildPythonPackage (finalAttrs: {
     hatch-fancy-pypi-readme
   ];
 
-  pythonRelaxDeps = [
-    "aiofiles"
-    "tomlkit"
-  ];
-
   dependencies = [
-    aiofiles
     anyio
     brotli
     fastapi
-    ffmpy
     gradio-client
     groovy
+    hf-gradio
     httpx
     huggingface-hub
     jinja2
@@ -398,16 +401,20 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "gradio" ];
 
   # Cyclic dependencies are fun!
-  # This is gradio without gradio-client and gradio-pdf
+  # This is gradio without gradio-client and hf-gradio
   passthru = {
     sans-reverse-dependencies =
       (gradio.override {
         gradio-client = null;
         gradio-pdf = null;
+        hf-gradio = null;
       }).overridePythonAttrs
         (old: {
           pname = old.pname + "-sans-reverse-dependencies";
-          pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+          pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [
+            "gradio-client"
+            "hf-gradio"
+          ];
           doInstallCheck = false;
           doCheck = false;
           postPatch = "";
