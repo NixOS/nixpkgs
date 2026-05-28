@@ -119,7 +119,19 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_REPO-MSCCLPP" "${mscclpp}")
     (lib.cmakeBool "MSCCLPP_BUILD_PYTHON_BINDINGS" false)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_REPO-FLASHMLA" "${flashmla}")
+
+    # (lib.cmakeFeature "SGL_KERNEL_COMPILE_THREADS" "32")
   ];
+
+  # pkgs/by-name/cm/cmake/setup-hook.sh
+  preBuild = ''
+    if ! [[ -v enableParallelBuilding ]]; then
+      enableParallelBuilding=1
+    fi
+    if [[ "$enableParallelBuilding" -ne 0 ]]; then
+      export CMAKE_BUILD_PARALLEL_LEVEL=$NIX_BUILD_CORES
+    fi
+  '';
 
   # cannot find -lcuda: No such file or directory
   env.NIX_LDFLAGS = "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs";
