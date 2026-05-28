@@ -9552,8 +9552,6 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  minitube = kdePackages.callPackage ../applications/video/minitube { };
-
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
