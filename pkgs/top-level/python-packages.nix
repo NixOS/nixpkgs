@@ -12040,7 +12040,9 @@ self: super: with self; {
 
   ormsgpack = callPackage ../development/python-modules/ormsgpack { };
 
-  ortools = (toPythonModule (pkgs.or-tools.override { python3 = self.python; })).python;
+  ortools = callPackage ../development/python-modules/ortools {
+    or-tools = pkgs.or-tools.override { python3 = self.python; };
+  };
 
   oru = callPackage ../development/python-modules/oru { };
 
@@ -18135,6 +18137,8 @@ self: super: with self; {
   slixmpp-omemo = callPackage ../development/python-modules/slixmpp-omemo { };
 
   slob = callPackage ../development/python-modules/slob { };
+
+  slothy = callPackage ../development/python-modules/slothy { };
 
   slovnet = callPackage ../development/python-modules/slovnet { };
 

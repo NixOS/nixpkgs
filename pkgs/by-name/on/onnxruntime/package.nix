@@ -148,6 +148,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       "return PathString{};" \
       "return PathString(\"$out/lib/\");"
   ''
+  + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/onnxruntime.cmake \
+      --replace-fail "INSTALL_NAME_DIR @rpath" "INSTALL_NAME_DIR $out/lib"
+  ''
   + lib.optionalString rocmSupport ''
     patchShebangs tools/ci_build/hipify-perl
   ''

@@ -8313,6 +8313,11 @@
     githubId = 5427394;
     name = "Ersin Akinci";
   };
+  es-sai-fi = {
+    name = "es-sai-fi";
+    github = "es-sai-fi";
+    githubId = 96452903;
+  };
   esau79p = {
     github = "EsAu79p";
     githubId = 21313906;
@@ -18259,6 +18264,12 @@
     github = "MikePlayle";
     githubId = 16974598;
     name = "Mike Playle";
+  };
+  mkannwischer = {
+    email = "matthias@kannwischer.eu";
+    github = "mkannwischer";
+    githubId = 3984960;
+    name = "Matthias Kannwischer";
   };
   mkez = {
     email = "matias+nix@zwinger.fi";
