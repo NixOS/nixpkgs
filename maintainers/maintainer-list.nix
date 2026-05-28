@@ -31074,5 +31074,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  gusahlg = {
+    name = "Gustav Ahlgren";
+    email = "gustav@ahlgren.nu";
+    github = "gusahlg";
+    githubId = 209215577;
+  };
   # keep-sorted end
 }
