@@ -1191,15 +1191,6 @@ with pkgs;
 
   github-cli = gh;
 
-  git-annex-remote-dbx = callPackage ../applications/version-management/git-annex-remote-dbx {
-    inherit (python3Packages)
-      buildPythonApplication
-      dropbox
-      annexremote
-      humanfriendly
-      ;
-  };
-
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
   git-credential-aol = callPackage ../by-name/gi/git-credential-email/git-credential-aol { };
