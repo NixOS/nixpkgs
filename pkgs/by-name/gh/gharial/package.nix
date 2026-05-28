@@ -1,9 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wayland
-,
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gharial";
@@ -35,4 +35,3 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-
