@@ -753,6 +753,7 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-initrd-luks-keyfile
             systemd-initrd-luks-empty-passphrase
             systemd-initrd-luks-password
+            systemd-initrd-luks-password-to-keyfile
             systemd-initrd-luks-tpm2
             systemd-initrd-modprobe
             systemd-initrd-shutdown

@@ -1608,6 +1608,7 @@ in
   systemd-initrd-luks-fido2 = runTest ./systemd-initrd-luks-fido2.nix;
   systemd-initrd-luks-keyfile = runTest ./systemd-initrd-luks-keyfile.nix;
   systemd-initrd-luks-password = runTest ./systemd-initrd-luks-password.nix;
+  systemd-initrd-luks-password-to-keyfile = runTest ./systemd-initrd-luks-password-to-keyfile.nix;
   systemd-initrd-luks-tpm2 = runTest ./systemd-initrd-luks-tpm2.nix;
   systemd-initrd-luks-unl0kr = runTest ./systemd-initrd-luks-unl0kr.nix;
   systemd-initrd-modprobe = runTest ./systemd-initrd-modprobe.nix;
