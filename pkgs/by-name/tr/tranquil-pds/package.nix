@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   protobuf,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,6 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # the tranquil test suite has shown itself virtually impossible to complete on most hardware thus stopping reviews.
   # disable the check phase for now
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) tranquil-pds; };
 
   meta = {
     description = "Tranquil ATProto Personal Data Server implementation written in Rust";
