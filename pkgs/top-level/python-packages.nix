@@ -618,6 +618,8 @@ self: super: with self; {
 
   airtouch5py = callPackage ../development/python-modules/airtouch5py { };
 
+  aistore = callPackage ../development/python-modules/aistore { };
+
   aistudio-sdk = callPackage ../development/python-modules/aistudio-sdk { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
