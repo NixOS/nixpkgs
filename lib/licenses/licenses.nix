@@ -575,6 +575,13 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    enpl = {
+      fullName = "Emmi AI Non-Production License";
+      url = "https://github.com/Emmi-AI/noether/blob/main/LICENSE.txt";
+      free = false;
+      redistributable = true;
+    };
+
     epl10 = {
       spdxId = "EPL-1.0";
       fullName = "Eclipse Public License 1.0";
