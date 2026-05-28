@@ -4682,8 +4682,8 @@ with pkgs;
     ruby_4_0
     ;
 
-  ruby = ruby_3_4;
-  rubyPackages = rubyPackages_3_4;
+  ruby = ruby_4_0;
+  rubyPackages = rubyPackages_4_0;
 
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
