@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prometheus-client";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4swqhoCVrD7GflFbQX+QH9yGVDjbfwXvd7trs30STQQ=";
+    hash = "sha256-vue/5ulOnKkYjiHYWgT6HZ5mhV2vqAstm44+zwm+po0=";
   };
 
   build-system = [ setuptools ];
