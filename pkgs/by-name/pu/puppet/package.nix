@@ -3,11 +3,10 @@
   bundlerUpdateScript,
   lib,
   puppet,
-  ruby_3_4,
   testers,
 }:
 
-(bundlerApp.override { ruby = ruby_3_4; }) {
+bundlerApp {
   pname = "puppet";
   gemdir = ./.;
   exes = [ "puppet" ];
