@@ -106,6 +106,8 @@ self: super: with self; {
 
   adlfs = callPackage ../development/python-modules/adlfs { };
 
+  adsbcot = callPackage ../development/python-modules/adsbcot { };
+
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
   advocate = callPackage ../development/python-modules/advocate { };
