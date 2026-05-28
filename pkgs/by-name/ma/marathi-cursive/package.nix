@@ -13,13 +13,8 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-C/z8ALV9bht0SaYqACO5ulSVCk1d6wBwvpVC4ZLgtek=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/marathi-cursive *.otf *.ttf
+  postInstall = ''
     install -m444 -Dt $out/share/doc/${pname}-${version} README *.txt
-
-    runHook postInstall
   '';
 
   meta = {
