@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   nodejs,
   python3,
   gettext,
@@ -78,6 +79,13 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    (fetchpatch {
+      name = "CVE-2026-9712.patch";
+      url = "https://github.com/pretix/pretix/commit/db520994041964f6ff26917bfc88dfacb2b1b5ea.patch";
+      excludes = [ "src/pretix/__init__.py" ];
+      hash = "sha256-NejLY78O+Ahx+dDED+GZ8nY04sxrKWCN5kBlwusyAjw=";
+    })
   ];
 
   pythonRelaxDeps = [
