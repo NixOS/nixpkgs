@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
+  setuptools,
   sqlitedict,
   websockets,
 }:
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "aiopylgtv";
   version = "0.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bendavid";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-NkWJGy5QUrhpbARoscrXy/ilCjAz01YxeVTH0I+IjNM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     sqlitedict
     websockets
