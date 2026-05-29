@@ -1,73 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   cryptography,
   defusedxml,
+  fetchFromGitHub,
   gql,
   graphql-core,
-  pydantic,
+  marshmallow,
   pydantic-extra-types,
-  python-box,
-  python-dateutil,
-  requests,
-  requests-toolbelt,
-  restfly,
-  semver,
-  typing-extensions,
-
-  # marshmallow build system
-  flit-core,
-
-  # tests
+  pydantic,
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
   pytestCheckHook,
+  python-box,
+  python-dateutil,
   requests-pkcs12,
+  requests-toolbelt,
+  requests,
   responses,
+  restfly,
+  semver,
+  setuptools,
+  typing-extensions,
 }:
-let
-  marshmallow' = buildPythonPackage {
-    pname = "marshmallow";
-    version = "3.26.2";
-    pyproject = true;
 
-    src = fetchFromGitHub {
-      owner = "marshmallow-code";
-      repo = "marshmallow";
-      tag = "3.26.2";
-      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
-    };
-
-    build-system = [ flit-core ];
-
-    doCheck = false;
-
-    pythonImportsCheck = [ "marshmallow" ];
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "1.9.1";
+  version = "26.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     tag = finalAttrs.version;
-    hash = "sha256-WAKZe1m6EaNE+y2B/1/k8qZsEftLfAVPVEvIkh2N/4g=";
+    hash = "sha256-o11Lq11btpIwzgZlPMcChHexNOZSFEFOsnaIv1n66uY=";
   };
-
-  pythonRelaxDeps = [
-    "cryptography"
-    "defusedxml"
-  ];
 
   build-system = [ setuptools ];
 
@@ -76,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     defusedxml
     gql
     graphql-core
-    marshmallow'
+    marshmallow
     pydantic
     pydantic-extra-types
     python-box
@@ -115,6 +83,7 @@ buildPythonPackage (finalAttrs: {
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
+    "test_session_ssl_error"
     # https://github.com/tenable/pyTenable/issues/953
     "test_construct_query_str"
     "test_construct_query_stored_file"
