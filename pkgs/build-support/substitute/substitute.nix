@@ -54,8 +54,9 @@ optionalDeprecationWarning stdenvNoCC.mkDerivation (
   // args
   // lib.optionalAttrs (args ? substitutions) {
     substitutions =
-      assert lib.assertMsg (lib.isList args.substitutions)
-        ''pkgs.substitute: For "${name}", `substitutions` is passed, which is expected to be a list, but it's a ${builtins.typeOf args.substitutions} instead.'';
+      assert
+        lib.isList args.substitutions
+        || throw ''pkgs.substitute: For "${name}", `substitutions` is passed, which is expected to be a list, but it's a ${builtins.typeOf args.substitutions} instead.'';
       lib.escapeShellArgs args.substitutions;
   }
 )

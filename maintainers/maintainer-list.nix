@@ -7657,6 +7657,12 @@
     github = "eclairevoyant";
     name = "éclairevoyant";
   };
+  eConnah = {
+    email = "git@econnah.uk";
+    github = "eConnah";
+    githubId = 63052937;
+    name = "Connor Alecks";
+  };
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
@@ -8312,6 +8318,11 @@
     github = "ersinakinci";
     githubId = 5427394;
     name = "Ersin Akinci";
+  };
+  es-sai-fi = {
+    name = "es-sai-fi";
+    github = "es-sai-fi";
+    githubId = 96452903;
   };
   esau79p = {
     github = "EsAu79p";
@@ -16283,6 +16294,11 @@
     githubId = 26020062;
     name = "lumi";
   };
+  luminarleaf = {
+    github = "LuminarLeaf";
+    githubId = 80571430;
+    name = "Luminar Leaf";
+  };
   luna_1024 = {
     email = "contact@luna.computer";
     github = "luna-1024";
@@ -18259,6 +18275,12 @@
     github = "MikePlayle";
     githubId = 16974598;
     name = "Mike Playle";
+  };
+  mkannwischer = {
+    email = "matthias@kannwischer.eu";
+    github = "mkannwischer";
+    githubId = 3984960;
+    name = "Matthias Kannwischer";
   };
   mkez = {
     email = "matias+nix@zwinger.fi";
@@ -25652,12 +25674,6 @@
     githubId = 216167;
     name = "Steve Jones";
   };
-  sjmackenzie = {
-    email = "setori88@gmail.com";
-    github = "sjmackenzie";
-    githubId = 158321;
-    name = "Stewart Mackenzie";
-  };
   skaphi = {
     name = "Oskar Philipsson";
     email = "oskar.philipsson@gmail.com";
@@ -29438,6 +29454,12 @@
     email = "david@adaltas.com";
     github = "wdavidw";
     githubId = 46896;
+  };
+  wduo87391 = {
+    name = "wduo87391";
+    email = "wduo87391@gmail.com";
+    github = "wduo87391";
+    githubId = 197874825;
   };
   weathercold = {
     name = "Weathercold";
