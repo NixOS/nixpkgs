@@ -83,9 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  # Test fails when built in a chroot store
   preCheck = ''
+    # Test fails when built in a chroot store
     rm testsuite/chgrp.test
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    # Fails with: [tester] exceeded --max-alloc=0 setting (file=syscall.c, line=1857)
+    rm testsuite/chmod-symlink-race.test
+    # Fails with: ERROR: dir/file failed verification -- update discarded.
+    rm testsuite/symlink-dirlink-basis.test
   '';
 
   doCheck = true;
