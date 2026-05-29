@@ -498,6 +498,19 @@ stdenv.mkDerivation (
           hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
         })
       ]
+      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
+        ./fix-fate-ffmpeg-spec-disposition-7.1.patch
+      ]
+      ++
+        optionals
+          (
+            lib.versionAtLeast version "8.1"
+            && lib.versionOlder version "8.1.1"
+            && stdenv.hostPlatform.isRiscV64
+          )
+          [
+            ./fix-fate-ffmpeg-filter-in-eof-8.1.patch
+          ]
       ++ optionals (lib.versionAtLeast version "7.1.1") [
         # Expose a private API for Chromium / Qt WebEngine.
         (fetchpatch2 {
