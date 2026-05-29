@@ -9,7 +9,7 @@
   bytesize,
   dasbus,
   pyudev,
-  dbus-python,
+  dasbus,
   util-linux,
   kmod,
   libndctl,
@@ -28,6 +28,7 @@
   multipath-tools,
   dracut,
   stratisd,
+  setuptools,
 }:
 
 let
@@ -36,7 +37,9 @@ in
 buildPythonPackage rec {
   pname = "blivet";
   version = "3.13.1";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "storaged-project";
@@ -64,7 +67,7 @@ buildPythonPackage rec {
     bytesize
     dasbus
     pyudev
-    dbus-python
+    dasbus
     util-linux
     kmod
     libndctl
