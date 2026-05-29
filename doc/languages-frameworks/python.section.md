@@ -1564,6 +1564,14 @@ For better overridability, `unittestCheckHook` supports the following variables:
   Each specified pattern is passed via the `-k` flag.
   The default value of the Nix attribute is `null`, which opts out the white-listing.
 
+`disabledTests` (list of strings)
+
+: Black-listed test name patterns.
+  It constructs a `-k` pattern that matches anything but the patterns listed on `disabledTests`.
+  ::: {.note}
+  `disabledTests` will be ignored if `enabledTests` is specified.
+  :::
+
 ```nix
 {
   nativeCheckInputs = [ unittestCheckHook ];
