@@ -1,0 +1,15 @@
+Remove -Werror from the build to avoid failures when the compiler
+introduces new warnings for code that was valid at release time.
+We are packaging a release tag, not debugging upstream code.
+
+--- a/scripts/make-config.sh
++++ b/scripts/make-config.sh
+@@ -525,7 +525,7 @@ fi
+ 
+ # Always use maximal or even paranoid warning mode.
+ # With clang, the option -Weverything turns everything on. There is no such option with GCC.
+-CXXFLAGS_WARNINGS="-Werror"
++CXXFLAGS_WARNINGS=
+ if [[ -n $USE_LLVM ]]; then
+     CXXFLAGS_WARNINGS="$CXXFLAGS_WARNINGS -Weverything"
+     CXXFLAGS_NO_WARNINGS="$CXXFLAGS_NO_WARNINGS -Wno-c++98-compat-pedantic"

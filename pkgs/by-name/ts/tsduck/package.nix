@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
   # build and doc tooling
   asciidoctor,
   doxygen,
@@ -22,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsduck";
-  version = "3.42-4421";
+  version = "3.44-4676";
 
   src = fetchFromGitHub {
     owner = "tsduck";
     repo = "tsduck";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-d37ugMBw9TeCMeQBQsfxUD20YurEDY3wOIjZAXqwPzE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Wiy59XEvyz9nDCZ+bCuBLVBH4ETFUnMArWi32jtmSKI=";
   };
 
   nativeBuildInputs = [
@@ -68,14 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     "SYSROOT=${placeholder "out"}"
   ];
 
-  # Prevent promoted compiler warnings from breaking the build,
-  # when the compiler introduces new warnings.
-  # We are packaging release tags, not building and debugging:
-  # if the maintainer has chosen to release it, our job is just to build it.
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
-
-  # remove tests which break the sandbox
-  patches = [ ./tests.patch ];
+  patches = [
+    # remove -Werror: we package release tags, not debug builds;
+    # new compiler warnings should not break a released version
+    ./no-werror.patch
+    # disable unit tests that cannot run in the nix sandbox (no network,
+    # no $HOME). Only the TSUNIT_DEFINE_TEST stanzas are removed; the
+    # matching TSUNIT_DECLARE_TEST lines remain as harmless declarations.
+    ./tests-sandbox.patch
+  ];
   checkTarget = "test";
   doCheck = true;
   doInstallCheck = true;
@@ -84,6 +87,19 @@ stdenv.mkDerivation (finalAttrs: {
     "install-tools"
     "install-devel"
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "tsversion";
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(.+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "MPEG Transport Stream Toolkit";
