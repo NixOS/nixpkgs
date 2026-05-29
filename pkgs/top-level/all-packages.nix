@@ -3140,8 +3140,6 @@ with pkgs;
     lua = lua5_4;
   };
 
-  rsibreak = kdePackages.callPackage ../applications/misc/rsibreak { };
-
   rubocop = rubyPackages.rubocop;
 
   ruby-lsp = rubyPackages.ruby-lsp;
