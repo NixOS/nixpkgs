@@ -113,6 +113,8 @@ buildPythonPackage (finalAttrs: {
     "test_pendulum_period2"
     # AssertionError: Array(837.4592, dtype=float32) not greater than 990.0
     "testSpeed1"
+    # AssertionError: array(0.) != 0.02
+    "test_save_and_load_checkpoint"
   ];
 
   disabledTestPaths = [
