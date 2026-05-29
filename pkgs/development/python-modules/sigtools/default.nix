@@ -33,10 +33,10 @@ buildPythonPackage (finalAttrs: {
     unittestCheckHook
   ];
 
-  unittestFlags = lib.optionals (pythonAtLeast "3.14") [
-    "-s sigtools/tests"
+  unittestStartDir = "sigtools/tests";
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
     # python314 only: NameError: name 'o' is not defined
-    "-k [!RoundTripTests.test_locals]"
+    "RoundTripTests.test_locals"
   ];
 
   pythonImportsCheck = [ "sigtools" ];
