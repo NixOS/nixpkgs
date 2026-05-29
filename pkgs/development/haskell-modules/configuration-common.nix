@@ -297,6 +297,14 @@ with haskellLib;
     })
   ] super.cabal-add;
 
+  stylish-haskell = appendPatches [
+    (pkgs.fetchpatch {
+      name = "bump-optparse-applicative.patch";
+      url = "https://github.com/haskell/stylish-haskell/commit/d1bc9bb91a0f9b122f2d4348022ce0fa1566124f.patch";
+      hash = "sha256-kRP4mABb1rlrx4GBPTozOS9fPudSzb36JcTKA8VMhgw=";
+    })
+  ] super.stylish-haskell;
+
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
