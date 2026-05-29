@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-D60JtD4p9ERh6sowvwBHtE9XWVm3D8saooagDvA6ZtQ=";
   };
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--with-openssl"
     "--with-xerces"
