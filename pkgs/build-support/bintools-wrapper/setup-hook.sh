@@ -60,7 +60,8 @@ do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
     then
-        export "${cmd^^}${role_post}=@targetPrefix@${cmd}";
+        upper_case="$(echo "$cmd" | tr "a-z" "A-Z")"
+        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
     fi
 done
 
