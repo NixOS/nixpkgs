@@ -537,6 +537,18 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      # haddock-{api,library} are core packages as of GHC >= 9.12
+      haddock-api = [
+        compilerNames.ghc94
+        compilerNames.ghc96
+        # No version compatible with 9.8 nor 9.10 released to Hackage
+      ];
+      haddock-library = [
+        compilerNames.ghc94
+        compilerNames.ghc96
+        compilerNames.ghc98
+        compilerNames.ghc910
+      ];
       haskell-debugger = [
         compilerNames.ghc9141
       ];
