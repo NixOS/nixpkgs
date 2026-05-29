@@ -9,12 +9,8 @@ let
     attrNames
     boolToString
     concatLines
-    concatLists
-    concatMapAttrs
     concatStringsSep
     filterAttrs
-    filterAttrsRecursive
-    flip
     forEach
     getExe
     isBool
@@ -26,16 +22,11 @@ let
     mkMerge
     mkOption
     mkPackageOption
-    optionalAttrs
-    optionalString
-    recursiveUpdate
     subtractLists
-    toUpper
     types
     ;
 
   cfg = config.services.firezone.server;
-  jsonFormat = pkgs.formats.json { };
   availableAuthAdapters = [
     "email"
     "openid_connect"
@@ -46,28 +37,6 @@ let
     "okta"
     "jumpcloud"
   ];
-
-  typePortRange =
-    types.coercedTo types.port
-      (x: {
-        from = x;
-        to = x;
-      })
-      (
-        types.submodule {
-          options = {
-            from = mkOption {
-              type = types.port;
-              description = "The start of the port range, inclusive.";
-            };
-
-            to = mkOption {
-              type = types.port;
-              description = "The end of the port range, inclusive.";
-            };
-          };
-        }
-      );
 
   # All non-secret environment variables or the given component
   collectEnvironment =
@@ -118,29 +87,6 @@ let
         })"
       )
     );
-
-  provisionStateJson =
-    let
-      # Convert clientSecretFile options into the real counterpart
-      augmentedAccounts = flip mapAttrs cfg.provision.accounts (
-        accountName: account:
-        account
-        // {
-          auth = flip mapAttrs account.auth (
-            authName: auth:
-            recursiveUpdate auth (
-              optionalAttrs (auth.adapter_config.clientSecretFile != null) {
-                adapter_config.client_secret = "{env:AUTH_CLIENT_SECRET_${toUpper accountName}_${toUpper authName}}";
-              }
-            )
-          );
-        }
-      );
-    in
-    jsonFormat.generate "provision-state.json" {
-      # Do not include any clientSecretFile attributes in the resulting json
-      accounts = filterAttrsRecursive (k: _: k != "clientSecretFile") augmentedAccounts;
-    };
 
   commonServiceConfig = {
     AmbientCapabilities = [ ];
@@ -222,6 +168,12 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "firezone" "server" "provision" ] ''
+      Firezone provisioning support has been removed due to outsized maintenance efforts. See https://github.com/NixOS/nixpkgs/pull/529428.
+    '')
+  ];
+
   options.services.firezone.server = {
     enable = mkEnableOption "all Firezone components";
     enableLocalDB = mkEnableOption "a local postgresql database for Firezone";
@@ -521,393 +473,9 @@ in
         description = "A list of trusted proxies";
       };
     };
-
-    provision = {
-      enable = mkEnableOption "provisioning of the Firezone domain server";
-      accounts = mkOption {
-        type = types.attrsOf (
-          types.submodule {
-            freeformType = jsonFormat.type;
-            options = {
-              name = mkOption {
-                type = types.str;
-                description = "The account name";
-                example = "My Organization";
-              };
-
-              features =
-                let
-                  mkFeatureOption =
-                    name: default:
-                    mkOption {
-                      type = types.bool;
-                      inherit default;
-                      description = "Whether to enable the `${name}` feature for this account.";
-                    };
-                in
-                {
-                  policy_conditions = mkFeatureOption "policy_conditions" true;
-                  multi_site_resources = mkFeatureOption "multi_site_resources" true;
-                  traffic_filters = mkFeatureOption "traffic_filters" true;
-                  self_hosted_relays = mkFeatureOption "self_hosted_relays" true;
-                  idp_sync = mkFeatureOption "idp_sync" true;
-                  rest_api = mkFeatureOption "rest_api" true;
-                  internet_resource = mkFeatureOption "internet_resource" true;
-                };
-
-              actors = mkOption {
-                type = types.attrsOf (
-                  types.submodule {
-                    options = {
-                      type = mkOption {
-                        type = types.enum [
-                          "account_admin_user"
-                          "account_user"
-                          "service_account"
-                          "api_client"
-                        ];
-                        description = "The account type";
-                      };
-
-                      name = mkOption {
-                        type = types.str;
-                        description = "The name of this actor";
-                      };
-
-                      email = mkOption {
-                        type = types.str;
-                        description = "The email address used to authenticate as this account";
-                      };
-                    };
-                  }
-                );
-                default = { };
-                example = {
-                  admin = {
-                    type = "account_admin_user";
-                    name = "Admin";
-                    email = "admin@myorg.example.com";
-                  };
-                };
-                description = ''
-                  All actors (users) to provision. The attribute name will only
-                  be used to track the actor and does not have any significance
-                  for Firezone.
-                '';
-              };
-
-              auth = mkOption {
-                type = types.attrsOf (
-                  types.submodule {
-                    freeformType = jsonFormat.type;
-                    options = {
-                      name = mkOption {
-                        type = types.str;
-                        description = "The name of this authentication provider";
-                      };
-
-                      adapter = mkOption {
-                        type = types.enum availableAuthAdapters;
-                        description = "The auth adapter type";
-                      };
-
-                      adapter_config.clientSecretFile = mkOption {
-                        type = types.nullOr types.path;
-                        default = null;
-                        description = ''
-                          A file containing a the client secret for an openid_connect adapter.
-                          You only need to set this if this is an openid_connect provider.
-                        '';
-                      };
-                    };
-                  }
-                );
-                default = { };
-                example = {
-                  myoidcprovider = {
-                    adapter = "openid_connect";
-                    adapter_config = {
-                      client_id = "clientid";
-                      clientSecretFile = "/run/secrets/oidc-client-secret";
-                      response_type = "code";
-                      scope = "openid email name";
-                      discovery_document_uri = "https://auth.example.com/.well-known/openid-configuration";
-                    };
-                  };
-                };
-                description = ''
-                  All authentication providers to provision. The attribute name
-                  will only be used to track the provider and does not have any
-                  significance for Firezone.
-                '';
-              };
-
-              resources = mkOption {
-                type = types.attrsOf (
-                  types.submodule {
-                    options = {
-                      type = mkOption {
-                        type = types.enum [
-                          "dns"
-                          "cidr"
-                          "ip"
-                        ];
-                        description = "The resource type";
-                      };
-
-                      name = mkOption {
-                        type = types.str;
-                        description = "The name of this resource";
-                      };
-
-                      address = mkOption {
-                        type = types.str;
-                        description = "The address of this resource. Depending on the resource type, this should be an ip, ip with cidr mask or a domain.";
-                      };
-
-                      addressDescription = mkOption {
-                        type = types.nullOr types.str;
-                        default = null;
-                        description = "An optional description for resource address, usually a full link to the resource including a schema.";
-                      };
-
-                      gatewayGroups = mkOption {
-                        type = types.nonEmptyListOf types.str;
-                        description = "A list of gateway groups (sites) which can reach the resource and may be used to connect to it.";
-                      };
-
-                      filters = mkOption {
-                        type = types.listOf (
-                          types.submodule {
-                            options = {
-                              protocol = mkOption {
-                                type = types.enum [
-                                  "icmp"
-                                  "tcp"
-                                  "udp"
-                                ];
-                                description = "The protocol to allow";
-                              };
-
-                              ports = mkOption {
-                                type = types.listOf typePortRange;
-                                example = [
-                                  443
-                                  {
-                                    from = 8080;
-                                    to = 8100;
-                                  }
-                                ];
-                                default = [ ];
-                                apply =
-                                  xs: map (x: if x.from == x.to then toString x.from else "${toString x.from} - ${toString x.to}") xs;
-                                description = "Either a single port or port range to allow. Both bounds are inclusive.";
-                              };
-                            };
-                          }
-                        );
-                        default = [ ];
-                        description = "A list of filter to restrict traffic. If no filters are given, all traffic is allowed.";
-                      };
-                    };
-                  }
-                );
-                default = { };
-                example = {
-                  vaultwarden = {
-                    type = "dns";
-                    name = "Vaultwarden";
-                    address = "vault.example.com";
-                    address_description = "https://vault.example.com";
-                    gatewayGroups = [ "my-site" ];
-                    filters = [
-                      { protocol = "icmp"; }
-                      {
-                        protocol = "tcp";
-                        ports = [
-                          80
-                          443
-                        ];
-                      }
-                    ];
-                  };
-                };
-                description = ''
-                  All resources to provision. The attribute name will only be used to
-                  track the resource and does not have any significance for Firezone.
-                '';
-              };
-
-              policies = mkOption {
-                type = types.attrsOf (
-                  types.submodule {
-                    options = {
-                      description = mkOption {
-                        type = types.nullOr types.str;
-                        description = "The description of this policy";
-                      };
-
-                      group = mkOption {
-                        type = types.str;
-                        description = "The group which should be allowed access to the given resource.";
-                      };
-
-                      resource = mkOption {
-                        type = types.str;
-                        description = "The resource to which access should be allowed.";
-                      };
-                    };
-                  }
-                );
-                default = { };
-                example = {
-                  access_vaultwarden = {
-                    name = "Allow anyone to access vaultwarden";
-                    group = "everyone";
-                    resource = "vaultwarden";
-                  };
-                };
-                description = ''
-                  All policies to provision. The attribute name will only be used to
-                  track the policy and does not have any significance for Firezone.
-                '';
-              };
-
-              groups = mkOption {
-                type = types.attrsOf (
-                  types.submodule {
-                    options = {
-                      name = mkOption {
-                        type = types.str;
-                        description = "The name of this group";
-                      };
-
-                      members = mkOption {
-                        type = types.listOf types.str;
-                        default = [ ];
-                        description = "The members of this group";
-                      };
-
-                      forceMembers = mkOption {
-                        type = types.bool;
-                        default = false;
-                        description = "Ensure that only the given members are part of this group at every server start.";
-                      };
-                    };
-                  }
-                );
-                default = { };
-                example = {
-                  users = {
-                    name = "Users";
-                  };
-                };
-                description = ''
-                  All groups to provision. The attribute name will only be used
-                  to track the group and does not have any significance for
-                  Firezone.
-
-                  A group named `everyone` will automatically be managed by Firezone.
-                '';
-              };
-
-              relayGroups = mkOption {
-                type = types.attrsOf (
-                  types.submodule {
-                    options = {
-                      name = mkOption {
-                        type = types.str;
-                        description = "The name of this relay group";
-                      };
-                    };
-                  }
-                );
-                default = { };
-                example = {
-                  my-relays = {
-                    name = "My Relays";
-                  };
-                };
-                description = ''
-                  All relay groups to provision. The attribute name
-                  will only be used to track the relay group and does not have any
-                  significance for Firezone.
-                '';
-              };
-
-              gatewayGroups = mkOption {
-                type = types.attrsOf (
-                  types.submodule {
-                    options = {
-                      name = mkOption {
-                        type = types.str;
-                        description = "The name of this gateway group";
-                      };
-                    };
-                  }
-                );
-                default = { };
-                example = {
-                  my-gateways = {
-                    name = "My Gateways";
-                  };
-                };
-                description = ''
-                  All gateway groups (sites) to provision. The attribute name
-                  will only be used to track the gateway group and does not have any
-                  significance for Firezone.
-                '';
-              };
-            };
-          }
-        );
-        default = { };
-        example = {
-          main = {
-            name = "My Account / Organization";
-            metadata.stripe.billing_email = "org@myorg.example.com";
-            features.rest_api = false;
-          };
-        };
-        description = ''
-          All accounts to provision. The attribute name specified here will
-          become the account slug. By using `"{file:/path/to/file}"` as a
-          string value anywhere in these settings, the provisioning script will
-          replace that value with the content of the given file at runtime.
-
-          Please refer to the [Firezone source code](https://github.com/firezone/firezone/blob/main/elixir/apps/domain/lib/domain/accounts/account.ex)
-          for all available properties.
-        '';
-      };
-    };
   };
 
   config = mkMerge [
-    {
-      assertions = [
-        {
-          assertion = cfg.provision.enable -> cfg.domain.enable;
-          message = "Provisioning must be done on a machine running the firezone domain server";
-        }
-      ]
-      ++ concatLists (
-        flip mapAttrsToList cfg.provision.accounts (
-          accountName: accountCfg:
-          [
-            {
-              assertion = (builtins.match "^[[:lower:]_-]+$" accountName) != null;
-              message = "An account name must contain only lowercase characters and underscores, as it will be used as the URL slug for this account.";
-            }
-          ]
-          ++ flip mapAttrsToList accountCfg.auth (
-            authName: _: {
-              assertion = (builtins.match "^[[:alnum:]_-]+$" authName) != null;
-              message = "The authentication provider attribute key must contain only letters, numbers, underscores or dashes.";
-            }
-          )
-        )
-      );
-    }
     # Enable all components if the main server is enabled
     (mkIf cfg.enable {
       services.firezone.server.domain.enable = true;
@@ -1015,7 +583,7 @@ in
           FEATURE_INTERNET_RESOURCE_ENABLED = mkDefault true;
           FEATURE_TRAFFIC_FILTERS_ENABLED = mkDefault true;
 
-          FEATURE_SIGN_UP_ENABLED = mkDefault (!cfg.provision.enable);
+          FEATURE_SIGN_UP_ENABLED = mkDefault true;
 
           WEB_EXTERNAL_URL = mkDefault cfg.web.externalUrl;
           API_EXTERNAL_URL = mkDefault cfg.api.externalUrl;
@@ -1065,19 +633,6 @@ in
       services.firezone.server.settingsSecret = {
         OUTBOUND_EMAIL_SMTP_PASSWORD = cfg.smtp.passwordFile;
       };
-    })
-    (mkIf cfg.provision.enable {
-      # Load client secrets from authentication providers
-      services.firezone.server.settingsSecret = flip concatMapAttrs cfg.provision.accounts (
-        accountName: accountCfg:
-        flip concatMapAttrs accountCfg.auth (
-          authName: authCfg:
-          optionalAttrs (authCfg.adapter_config.clientSecretFile != null) {
-            "AUTH_CLIENT_SECRET_${toUpper accountName}_${toUpper authName}" =
-              authCfg.adapter_config.clientSecretFile;
-          }
-        )
-      );
     })
     (mkIf (cfg.openClusterFirewall && cfg.domain.enable) {
       networking.firewall.allowedTCPPorts = [
@@ -1156,14 +711,6 @@ in
             fi
             count=$((count++))
           done
-        ''
-        + optionalString cfg.provision.enable ''
-          # Wait for server to fully come up. Not ideal to use sleep, but at least it works.
-          sleep 1
-
-          ${loadSecretEnvironment "domain"}
-          ln -sTf ${provisionStateJson} provision-state.json
-          ${getExe cfg.domain.package} rpc 'Code.eval_file("${./provision.exs}")'
         '';
 
         environment = collectEnvironment "domain";
