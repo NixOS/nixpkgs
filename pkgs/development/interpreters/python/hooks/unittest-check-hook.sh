@@ -21,15 +21,23 @@ unittestCheckPhase() {
         flagsArray+=(--top-level-directory="$unittestTopDir")
     fi
 
-    if [[ -n "${enabledTests[*]-}" ]]; then
-        local -a _patterns=()
-        concatTo _patterns enabledTests
-        local _pattern
-        for _pattern in "${_patterns[@]}"; do
-            flagsArray+=(-k"$_pattern")
-        done
-        unset _pattern _patterns
+    if [[ -n "${enabledTests[*]-}" ]] && [[ -n "${disabledTests[*]-}" ]]; then
+        echo "WARNING: unittestCheckHook: ignoring disabledTests as enabledTests is specified." >&2
+        echo "  disabledTests: $(concatStringsSep ", " disabledTests)" >&2
+        echo "  enabledTests: $(concatStringsSep ", " enabledTests)" >&2
     fi
+
+    local -a _patterns=()
+    if [[ -n "${enabledTests[*]-}" ]]; then
+        concatTo _patterns enabledTests
+    elif [[ -n "${disabledTests[*]-}" ]]; then
+        _patterns=("[!($(concatStringsSep "|" disabledTests))]")
+    fi
+    local _pattern
+    for _pattern in "${_patterns[@]}"; do
+        flagsArray+=(-k"$_pattern")
+    done
+    unset _pattern _patterns
 
     # Compatibility layer to the obsolete unittestFlagsArray
     eval "flagsArray+=(${unittestFlagsArray[*]-})"
