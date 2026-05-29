@@ -9721,10 +9721,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  pantalaimon-headless = pantalaimon.override {
-    enableDbusUi = false;
-  };
-
   parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
