@@ -55,10 +55,10 @@ mkCoqDerivation {
     patchShebangs plugin/plugin/clean_extraction.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://metarocq.github.io/";
     description = "Verified Extraction from Rocq to OCaml. Including a bootstrapped extraction plugin";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _4ever2
     ];
   };

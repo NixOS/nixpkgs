@@ -21,11 +21,11 @@ buildHomeAssistantComponent rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Custom component for HA that enables the creation of scheduler entities";
     homepage = "https://github.com/nielsfaber/scheduler-component";
     changelog = "https://github.com/nielsfaber/scheduler-component/releases/tag/v${version}";
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Plus;
   };
 }

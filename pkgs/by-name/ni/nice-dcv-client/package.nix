@@ -106,13 +106,13 @@ stdenv.mkDerivation {
       ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
     '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance remote display protocol";
     homepage = "https://aws.amazon.com/hpc/dcv/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rmcgibbo
       jhol
     ];

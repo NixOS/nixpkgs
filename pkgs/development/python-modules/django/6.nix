@@ -133,11 +133,11 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor finalAttrs.version}/releases/${finalAttrs.version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 })

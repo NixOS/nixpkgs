@@ -29,11 +29,11 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Monochrome skin that gives a simpler look to fcitx5";
     homepage = "https://github.com/fuzakebito/fcitx5-Black-Simplicity";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ alexandrutocar ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ alexandrutocar ];
+    platforms = lib.platforms.all;
   };
 }
