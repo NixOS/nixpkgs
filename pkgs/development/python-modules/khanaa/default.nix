@@ -28,9 +28,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlags = [
-    "--start-directory=tests"
-  ];
+  unittestStartDir = "tests";
 
   pythonImportsCheck = [ "khanaa" ];
 
