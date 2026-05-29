@@ -19427,6 +19427,12 @@
     name = "neo";
     email = "chojs990222@gmail.com";
   };
+  neonvoid = {
+    email = "me@neonvoid.dev";
+    github = "neonvoidx";
+    githubId = 25580051;
+    name = "neonvoid";
+  };
   neosimsim = {
     email = "me@abn.sh";
     github = "neosimsim";
