@@ -5,6 +5,7 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   perl,
+  bashNonInteractive,
   libiconv,
   zlib,
   popt,
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    bashNonInteractive
     libiconv
     zlib
     popt
@@ -81,6 +83,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
   doCheck = true;
+  strictDeps = true;
 
   __darwinAllowLocalNetworking = true;
 
