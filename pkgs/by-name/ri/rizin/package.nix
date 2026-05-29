@@ -129,7 +129,7 @@ let
         jsdec = pkgs.callPackage ./jsdec.nix {
           inherit rizin openssl;
         };
-        rz-ghidra = pkgs.qt6.callPackage ./rz-ghidra.nix {
+        rz-ghidra = pkgs.callPackage ./rz-ghidra.nix {
           inherit rizin openssl;
           enableCutterPlugin = false;
         };

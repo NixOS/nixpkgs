@@ -7657,6 +7657,12 @@
     github = "eclairevoyant";
     name = "éclairevoyant";
   };
+  eConnah = {
+    email = "git@econnah.uk";
+    github = "eConnah";
+    githubId = 63052937;
+    name = "Connor Alecks";
+  };
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
@@ -16287,6 +16293,11 @@
     github = "lumi-me-not";
     githubId = 26020062;
     name = "lumi";
+  };
+  luminarleaf = {
+    github = "LuminarLeaf";
+    githubId = 80571430;
+    name = "Luminar Leaf";
   };
   luna_1024 = {
     email = "contact@luna.computer";
@@ -29443,6 +29454,12 @@
     email = "david@adaltas.com";
     github = "wdavidw";
     githubId = 46896;
+  };
+  wduo87391 = {
+    name = "wduo87391";
+    email = "wduo87391@gmail.com";
+    github = "wduo87391";
+    githubId = 197874825;
   };
   weathercold = {
     name = "Weathercold";
