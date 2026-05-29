@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsduck";
-  version = "3.40-4165";
+  version = "3.42-4421";
 
   src = fetchFromGitHub {
     owner = "tsduck";
     repo = "tsduck";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bFnsGoElXeStIX5KwonJuF0x7DDzhzq+3oygkUOmZE0=";
+    sha256 = "sha256-d37ugMBw9TeCMeQBQsfxUD20YurEDY3wOIjZAXqwPzE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # see CONFIG.txt in the sources
   makeFlags = [
-    "CXXFLAGS_NO_WARNINGS=-Wno-deprecated-declarations"
     "NODEKTEC=1"
     "NOGITHUB=1"
     "NOHIDES=1"
@@ -68,6 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     "SYSPREFIX=/"
     "SYSROOT=${placeholder "out"}"
   ];
+
+  # Prevent promoted compiler warnings from breaking the build,
+  # when the compiler introduces new warnings.
+  # We are packaging release tags, not building and debugging:
+  # if the maintainer has chosen to release it, our job is just to build it.
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   # remove tests which break the sandbox
   patches = [ ./tests.patch ];
