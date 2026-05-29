@@ -84,11 +84,6 @@ buildGoModule (finalAttrs: {
       getGoDirs() {
         go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
       }
-    ''
-    # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      rm v1/server/server_test.go
-      rm v1/server/server_bench_test.go
     '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
