@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     # no $HOME). Only the TSUNIT_DEFINE_TEST stanzas are removed; the
     # matching TSUNIT_DECLARE_TEST lines remain as harmless declarations.
     ./tests-sandbox.patch
+    # fall back when Linux builders use scheduler policies rejected by pthreads
+    ./sched-policy-fallback.patch
   ];
   checkTarget = "test";
   doCheck = true;
