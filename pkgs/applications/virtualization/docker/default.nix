@@ -396,7 +396,7 @@ in
   # https://github.com/moby/moby/tree/${mobyRev}/Dockerfile
   docker_25 =
     let
-      version = "25.0.13";
+      version = "25.0.16";
     in
     callPackage dockerGen {
       inherit version;
@@ -405,7 +405,7 @@ in
       cliRev = "43987fca488a535d810c429f75743d8c7b63bf4f";
       cliHash = "sha256-OwufdfuUPbPtgqfPeiKrQVkOOacU2g4ommHb770gV40=";
       mobyRev = "v${version}";
-      mobyHash = "sha256-X+1QG/toJt+VNLktR5vun8sG3PRoTVBAcekFXxocJdU=";
+      mobyHash = "sha256-St5yLoxo8QUTu7PjNcblS/EzZm98T189RPl1y+pAyHA=";
       runcRev = "v1.2.5";
       runcHash = "sha256-J/QmOZxYnMPpzm87HhPTkYdt+fN+yeSUu2sv6aUeTY4=";
       containerdRev = "v1.7.27";
@@ -434,14 +434,14 @@ in
 
   docker_29 =
     let
-      version = "29.5.1";
+      version = "29.5.2";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-oobGr0UaeJL800hHx3K0tQs50HZbOn559WcLnSRiRhU=";
+      cliHash = "sha256-kHgDZVr6mAyCtZ6bSG9FWV0GhWDfXLXzHYFrmjFzO9w=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-ghYEOWr5RUDm0YLyupaDSpLd+8gFqxp3VjCt+3lztcA=";
+      mobyHash = "sha256-lux7tTyF6vm5wuIXs+z3Ygd2v4JjgHbRvOXNA4kjNtg=";
       runcRev = "v1.3.5";
       runcHash = "sha256-Swphxbu/OLkUrfRjLMZIVGwYb7AN0xHdyxm0ysAVam0=";
       containerdRev = "v2.2.3";
