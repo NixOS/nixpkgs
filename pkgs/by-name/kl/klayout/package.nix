@@ -14,13 +14,7 @@
   expat,
   curl,
   zlib,
-  wrapQtAppsHook,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qttools,
-  qt5compat,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RjMH6hrc0jyCLgG1D6cztBp5Fb3W5HgTxVTfI2bxgCs=";
   };
 
@@ -49,21 +43,21 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     ruby
     which
-    wrapQtAppsHook
-    qmake
-    qtbase
-    qtmultimedia
-    qtsvg
-    qttools
-    qt5compat
+    qt6.wrapQtAppsHook
+    qt6.qmake
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qt5compat
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
-    qtsvg
-    qttools
-    qt5compat
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qt5compat
     libgit2
     libpng
     expat

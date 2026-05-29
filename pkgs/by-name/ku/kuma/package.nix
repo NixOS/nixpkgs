@@ -5,7 +5,7 @@
   buildGoModule,
   coredns,
   installShellFiles,
-  isFull ? false,
+  isFull ? true,
   enableGateway ? false,
   pname ? "kuma",
   components ? lib.optionals isFull [
