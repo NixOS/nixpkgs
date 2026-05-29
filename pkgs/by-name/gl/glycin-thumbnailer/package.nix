@@ -6,6 +6,7 @@
   fontconfig,
   glib,
   glycin-loaders,
+  glycin-thumbnailer,
   libglycin,
   libseccomp,
   meson,
@@ -66,7 +67,20 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.tests.thumbnailer = callPackage ./tests.nix { };
+  passthru.tests = {
+    all-loaders = glycin-thumbnailer.override {
+      glycin-loaders = glycin-loaders.override {
+        enabledLoaders = [
+          "heif"
+          "image-rs"
+          "jxl"
+          "raw"
+          "svg"
+        ];
+      };
+    };
+    thumbnailer = callPackage ./tests.nix { };
+  };
 
   meta = {
     description = "Glycin thumbnailers for several formats";
