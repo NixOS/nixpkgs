@@ -1,11 +1,9 @@
 {
   lib,
   stdenv,
-  qtbase,
-  qmake,
+  qt5,
   inkscape,
   imagemagick,
-  wrapQtAppsHook,
   wpa_supplicant,
 }:
 
@@ -13,12 +11,15 @@ stdenv.mkDerivation {
   pname = "wpa_gui";
   inherit (wpa_supplicant) version src patches;
 
-  buildInputs = [ qtbase ];
+  buildInputs = [
+    qt5.qtbase
+  ];
+
   nativeBuildInputs = [
-    qmake
+    qt5.qmake
     inkscape
     imagemagick
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   postPatch = ''
