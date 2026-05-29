@@ -16,6 +16,7 @@ let
     ;
   inherit (lib.types)
     bool
+    externalPath
     path
     port
     str
@@ -72,6 +73,18 @@ in
         type = submodule {
           freeformType = configFormat.type;
           options = {
+            dataDir = mkOption {
+              type = externalPath;
+              default = stateDir;
+              description = ''
+                Directory where qui stores its SQLite database `qui.db` and other runtime data.
+
+                Must be an absolute path outside the Nix store, writable by the qui service user.
+                At the default location, the service provisions and owns this directory via systemd's `StateDirectory=`.
+                If set to a different location, the directory must already exist and be writable by `services.qui.user`.
+              '';
+            };
+
             host = mkOption {
               type = str;
               default = "127.0.0.1";
@@ -123,12 +136,9 @@ in
 
         LoadCredential = "sessionSecret:${cfg.secretFile}";
         Environment = [ "QUI__SESSION_SECRET_FILE=%d/sessionSecret" ];
-        StateDirectory = "qui";
+        StateDirectory = mkIf (cfg.settings.dataDir == stateDir) "%N";
 
-        ExecStartPre = ''
-          ${pkgs.coreutils}/bin/install -m 600 '${configFile}' '%S/qui/config.toml'
-        '';
-        ExecStart = "${getExe cfg.package} serve --config-dir %S/qui";
+        ExecStart = "${getExe cfg.package} serve --config-dir ${configFile}";
         Restart = "on-failure";
 
         # Based on qbittorrent and nemorosa hardening settings
