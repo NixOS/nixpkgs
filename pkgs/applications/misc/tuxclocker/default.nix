@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxclocker";
-  version = "1.5.1";
+  version = "1.5.1-unstable-2026-05-15";
 
   src = fetchFromGitHub {
     owner = "Lurkki14";
     repo = "tuxclocker";
     fetchSubmodules = true;
-    rev = finalAttrs.version;
-    hash = "sha256-QLKLqTCpVMWxlDINa8Bo1vgCDcjwovoaXUs/PdMnxv0=";
+    rev = "e244b4465a52d41932c7350779a0058a8a6fd4ae";
+    hash = "sha256-Fp+iVdAXwIR6Or9JGA/W4cAcePbmSqrB3iSOP41v3qw=";
   };
 
   nativeBuildInputs = [
