@@ -18190,6 +18190,8 @@ self: super: with self; {
 
   smg-grpc-proto = callPackage ../development/python-modules/smg-grpc-proto { };
 
+  smg-grpc-servicer = callPackage ../development/python-modules/smg-grpc-servicer { };
+
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
 
   smllib = callPackage ../development/python-modules/smllib { };
