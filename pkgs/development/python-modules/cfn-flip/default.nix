@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cfn-flip";
-  version = "1.3.0";
+  version = "dist/cfn_flip-1.3.0.tar.gz";
   format = "setuptools";
 
   src = fetchFromGitHub {
