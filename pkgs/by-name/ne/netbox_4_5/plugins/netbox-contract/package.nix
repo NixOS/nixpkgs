@@ -13,6 +13,7 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-contract";
   version = "2.4.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
 
