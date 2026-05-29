@@ -178,6 +178,8 @@ let
 
         calendar = callPackage ../development/ocaml-modules/calendar { };
 
+        calendars = callPackage ../development/ocaml-modules/calendars { };
+
         callipyge = callPackage ../development/ocaml-modules/callipyge { };
 
         camlgpc = callPackage ../development/ocaml-modules/camlgpc { };
@@ -2192,6 +2194,8 @@ let
         uecc = callPackage ../development/ocaml-modules/uecc { };
 
         ulex = callPackage ../development/ocaml-modules/ulex { };
+
+        unidecode = callPackage ../development/ocaml-modules/unidecode { };
 
         unionFind = callPackage ../development/ocaml-modules/unionFind { };
 

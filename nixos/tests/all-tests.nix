@@ -641,6 +641,7 @@ in
   };
   gatus = runTest ./gatus.nix;
   gemstash = import ./gemstash.nix { inherit pkgs runTest; };
+  geneweb = runTest ./geneweb.nix;
   geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
   gerrit = runTest ./gerrit.nix;
