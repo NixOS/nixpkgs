@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ajpy";
   version = "0.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "173wm207zyi86m2ms7vscakdi4mmjqfxqsdx1gn0j9nn0gsf241h";
   };
+
+  build-system = [ setuptools ];
 
   # ajpy doesn't have tests
   doCheck = false;
