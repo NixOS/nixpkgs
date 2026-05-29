@@ -25,6 +25,10 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-sEGLnYC4gMo5jPCZxBXra3pmRigaq4bDcVFd52ru7rQ=";
 
+  subPackages = [
+    "cmd/fence"
+  ];
+
   ldflags = [
     "-s"
     "-w"

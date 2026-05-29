@@ -18248,6 +18248,12 @@
     githubId = 16974598;
     name = "Mike Playle";
   };
+  mkannwischer = {
+    email = "matthias@kannwischer.eu";
+    github = "mkannwischer";
+    githubId = 3984960;
+    name = "Matthias Kannwischer";
+  };
   mkez = {
     email = "matias+nix@zwinger.fi";
     github = "mk3z";
@@ -19237,6 +19243,12 @@
     githubId = 8577904;
     name = "Naufal Fikri";
     keys = [ { fingerprint = "1575 D651 E31EC 6117A CF0AA C1A3B 8BBC A515 8835"; } ];
+  };
+  naurissteins = {
+    name = "Nauris Steins";
+    email = "me@naurissteins.com";
+    github = "naurissteins";
+    githubId = 5653746;
   };
   naxdy = {
     name = "Naxdy";
