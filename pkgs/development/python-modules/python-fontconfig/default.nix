@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  runCommand,
 
   # build-system
   cython,
@@ -9,7 +10,6 @@
 
   # dependencies
   fontconfig,
-  freefont_ttf,
   makeFontsConf,
 
   # testing
@@ -18,7 +18,11 @@
 }:
 
 let
-  fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
+  dejavuSerifRegular = runCommand "dejavu-serif-regular" { } ''
+    mkdir -p $out/share/fonts/truetype
+    cp ${dejavu_fonts}/share/fonts/truetype/DejaVuSerif.ttf $out/share/fonts/truetype/
+  '';
+  fontsConf = makeFontsConf { fontDirectories = [ dejavuSerifRegular ]; };
 in
 buildPythonPackage rec {
   pname = "python-fontconfig";
@@ -42,8 +46,6 @@ buildPythonPackage rec {
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext -i
   '';
-
-  nativeCheckInputs = [ dejavu_fonts ];
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontsConf};
