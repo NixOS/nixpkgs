@@ -6,10 +6,10 @@
 
 let
   pname = "fflogs";
-  version = "9.3.17";
+  version = "9.3.61";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-EYo65CerGE14kQadNIaVyANvyBig/yW1PfulAAE6dxo=";
+    hash = "sha256-QBiZR8wjhMsLguzBaM21mADlR1hKHdBuK66DcSzyVtQ=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in
