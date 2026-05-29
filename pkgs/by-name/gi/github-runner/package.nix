@@ -17,7 +17,7 @@
   runtimeShell,
   # List of Node.js runtimes the package should support
   nodeRuntimes ? [
-    "node20"
+    # Node.js 20.x has reached EOL and is marked as insecure in Nixpkgs, thus omitted here
     "node24"
   ],
   nodejs_20,
