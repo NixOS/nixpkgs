@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "proxmoxer";
     repo = "proxmoxer";
-    rev = "cf1bcde696537c74ef00d8e71fb86735fb4c2c79";
-    hash = "sha256-h5Sla7/4XiZSGwKstyiqs/T2Qgi13jI9YMVPqDcF3sA=";
+    rev = "99fe9814d6212c614a944ce7b3d907e05042c4fa";
+    hash = "sha256-v/QqNCzkcYk2pqr9tTeyvEEeXt4nzqooHAQEIiJitZ4=";
   };
 
   build-system = [ setuptools ];
