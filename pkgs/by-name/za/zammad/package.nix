@@ -8,7 +8,7 @@
   bundlerEnv,
   callPackage,
   procps,
-  ruby,
+  ruby_3_4,
   postgresql,
   jq,
   moreutils,
@@ -24,6 +24,7 @@
 let
   pname = "zammad";
   version = "7.1.0";
+  ruby = ruby_3_4;
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
