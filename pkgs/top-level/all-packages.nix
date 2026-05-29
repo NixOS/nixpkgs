@@ -1924,16 +1924,6 @@ with pkgs;
   ceph-client = ceph.client;
   ceph-dev = ceph;
 
-  clementine = libsForQt5.callPackage ../applications/audio/clementine {
-    gst_plugins = with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gst-libav
-    ];
-    protobuf = protobuf_21;
-  };
-
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_26_01_0
     citrix_workspace_25_08_10
@@ -8659,10 +8649,6 @@ with pkgs;
 
   cygwin = recurseIntoAttrs (callPackages ../os-specific/cygwin { });
 
-  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
-
-  wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
-
   inherit
     ({
       zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
@@ -11260,10 +11246,6 @@ with pkgs;
   };
 
   spyder = with python3.pkgs; toPythonApplication spyder;
-
-  tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
-    python3 = python312; # fails to build otherwise
-  };
 
   ### SCIENCE / PHYSICS
 
