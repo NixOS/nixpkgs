@@ -58,6 +58,10 @@ self: super: {
   # Becomes a core package in GHC >= 9.10
   os-string = doDistribute self.os-string_2_0_10;
 
+  # Become core packages in GHC >= 9.12
+  haddock-library = doDistribute (doJailbreak self.haddock-library_1_11_0);
+  haddock-api = doDistribute (doJailbreak self.haddock-api_2_27_0);
+
   # Becomes a core package in GHC >= 9.12, but needs unix >= 2.8
   file-io = null;
 
@@ -141,7 +145,6 @@ self: super: {
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
-  haddock-library = doJailbreak super.haddock-library;
   path = self.path_0_9_5;
 
   haskell-language-server =

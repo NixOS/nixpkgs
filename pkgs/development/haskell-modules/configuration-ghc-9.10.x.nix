@@ -67,7 +67,7 @@ in
 
   # Become core packages in GHC >= 9.12
   file-io = doDistribute self.file-io_0_2_0;
-  haddock-api = doDistribute self.haddock-api_2_29_1;
+  haddock-api = markBroken self.haddock-api_2_29_1; # no compatible release available
   haddock-library = doJailbreak (doDistribute self.haddock-library_1_11_0);
 
   ghc-exactprint = doDistribute self.ghc-exactprint_1_10_0_0;

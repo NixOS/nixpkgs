@@ -102,6 +102,7 @@ extra-packages:
   - ghc-lib-parser-ex == 9.8.*         # 2024-12-26: preserve for GHC 9.6, 9.8
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
+  - haddock-api == 2.27.*               # 2026-05-22: latest version compatible with GHC 9.4
   - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
   - hashable < 1.5                      # 2025-07-30: hashable >= 1.5 requires GHC >= 9.6
   - hasql < 1.7                         # 2025-01-19: Needed for building postgrest
