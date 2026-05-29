@@ -20,7 +20,19 @@
   shared-mime-info,
   rustc,
   rustPlatform,
+
+  # List of loaders to build.
+  # https://gitlab.gnome.org/GNOME/glycin/-/blob/2.1.1/meson_options.txt?ref_type=tags#L26-43
+  enabledLoaders ? [
+    "heif"
+    "image-rs"
+    "jxl"
+    "svg"
+  ],
 }:
+
+# Doesn't produce any output if no loaders are enabled
+assert enabledLoaders != [ ];
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
@@ -65,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibglycin-gtk4=false"
     "-Dvapi=false"
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonOption "loaders" (
+      lib.concatMapStringsSep "," (loader: "glycin-${loader}") enabledLoaders
+    ))
   ];
 
   strictDeps = true;
@@ -91,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
+    inherit enabledLoaders;
+
     tests = {
       withTests = finalAttrs.finalPackage.overrideAttrs {
         doCheck = true;
