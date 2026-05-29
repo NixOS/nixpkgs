@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   llvmPackages,
   cmake,
@@ -9,7 +8,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "clazy";
   version = "1.15";
 

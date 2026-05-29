@@ -3514,10 +3514,6 @@ with pkgs;
 
   clang-tools = llvmPackages.clang-tools;
 
-  clazy = callPackage ../development/tools/analysis/clazy {
-    stdenv = llvmPackages.stdenv;
-  };
-
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   libcxxStdenv = if stdenv.hostPlatform.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
