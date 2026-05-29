@@ -53,6 +53,12 @@ run_require_checks() {
     local deps="${dependencies[*]}"
     local nativeCheckInputs="${nativeBuildInputs[*]}"
     local checkInputs="${buildInputs[*]}"
+
+    local -a luaPathArgs=()
+    if [ -n "${nvimRequireCheckLuaPath:-}" ] || [ -n "${nvimRequireCheckLuaCPath:-}" ]; then
+        luaPathArgs=(--cmd "lua package.path='${nvimRequireCheckLuaPath:-}'..';'..package.path; package.cpath='${nvimRequireCheckLuaCPath:-}'..';'..package.cpath")
+    fi
+
     set +e
 
     if [ -v 'nvimSkipModule' ]; then
@@ -85,6 +91,7 @@ run_require_checks() {
                 --cmd "set rtp+=$out,${deps// /,}" \
                 --cmd "set rtp+=$out,${nativeCheckInputs// /,}" \
                 --cmd "set rtp+=$out,${checkInputs// /,}" \
+                "${luaPathArgs[@]}" \
                 --cmd "set packpath^=$packPathDir" \
                 --cmd "packadd testPlugin" \
                 --cmd "lua require('$name')"; then
