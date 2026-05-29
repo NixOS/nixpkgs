@@ -97,10 +97,22 @@ stdenv.mkDerivation (finalAttrs: {
      python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .)
   '';
 
-  postInstall = lib.optionalString pythonSupport ''
-    mkdir "$dist"
-    cp faiss/python/dist/*.whl "$dist/"
-  '';
+  postInstall =
+    lib.optionalString pythonSupport ''
+      mkdir "$dist"
+      cp faiss/python/dist/*.whl "$dist/"
+    ''
+    # The GPU targets in faiss-targets.cmake reference CUDA imported targets
+    # (CUDA::cudart, CUDA::cublas), but faiss-config.cmake never finds them.
+    # Declare the dependency so downstream find_package(faiss) resolves them.
+    + lib.optionalString cudaSupport ''
+      substituteInPlace "$out/share/faiss/faiss-config.cmake" \
+        --replace-fail \
+          'include("''${CMAKE_CURRENT_LIST_DIR}/faiss-targets.cmake")' \
+          'include(CMakeFindDependencyMacro)
+      find_dependency(CUDAToolkit)
+      include("''${CMAKE_CURRENT_LIST_DIR}/faiss-targets.cmake")'
+    '';
 
   passthru = {
     inherit cudaSupport cudaPackages pythonSupport;
