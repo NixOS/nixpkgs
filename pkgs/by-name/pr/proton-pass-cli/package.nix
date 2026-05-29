@@ -8,6 +8,7 @@
   jq,
   keyutils,
   libgcc,
+  makeBinaryWrapper,
   versionCheckHook,
   writeShellScript,
 }:
@@ -18,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -35,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 $src $out/bin/pass-cli
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/pass-cli --set PROTON_PASS_NO_UPDATE_CHECK 1
   '';
 
   doInstallCheck = true;
