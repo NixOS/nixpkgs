@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
   version = "1.15.12";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
@@ -147,7 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
            sysctl
          ]
        )
-     }
+     } \
+    --set OPENCODE_DISABLE_AUTOUPDATE true
 
     install -Dm644 config.json $out/share/opencode/config.json
     install -Dm644 tui.json $out/share/opencode/tui.json
