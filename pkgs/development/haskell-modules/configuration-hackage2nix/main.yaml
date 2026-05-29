@@ -119,6 +119,7 @@ extra-packages:
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
   - path == 0.9.5                       # 2025-09-21: Pin for hls on ghc 9.4
   - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
+  - semaphore-compat == 1.0.*           # 2026-05-27: Match GHC 9.2 / Stackage Nightly
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
   - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
