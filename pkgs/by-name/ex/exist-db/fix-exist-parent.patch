@@ -1,0 +1,13 @@
+diff --git a/exist-parent/pom.xml b/exist-parent/pom.xml
+index 870649fedc..881cde28c1 100644
+--- a/exist-parent/pom.xml
++++ b/exist-parent/pom.xml
+@@ -27,7 +27,7 @@
+ 
+     <groupId>org.exist-db</groupId>
+     <artifactId>exist-parent</artifactId>
+-    <version>6.3.0</version>
++    <version>6.3.0-SNAPSHOT</version>
+     <packaging>pom</packaging>
+ 
+     <name>eXist-db Parent</name>
