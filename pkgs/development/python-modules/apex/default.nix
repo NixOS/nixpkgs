@@ -49,6 +49,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Fix incompatibility with more recent versions of cudnn to de-vendor it:
     #   error: ‘throw_if’ is not a member of ‘cudnn_frontend’
     ./fix-cudnn-frontend-compat.patch
+
+    # By default apex's setup.py will taget all capabilities instead of using TORCH_CUDA_ARCH_LIST
+    # This result in the build failing on recent versions of CUDA.
+    # Instead, use TORCH_CUDA_ARCH_LIST as the source of truth for selecting capabilities
+    ./fix-cuda-capabilities-selection.patch
   ];
 
   # Don't use git submodules for cuda dependencies
