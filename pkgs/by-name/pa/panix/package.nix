@@ -8,6 +8,8 @@ buildGoModule rec {
   pname = "panix";
   version = "0.7.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mihakrumpestar";
     repo = "panix";
