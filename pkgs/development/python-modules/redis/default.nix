@@ -31,6 +31,12 @@
 
   # extras: xxhash
   xxhash,
+
+  # tests
+  numpy,
+  pytest-asyncio,
+  pytestCheckHook,
+  redisTestHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -78,8 +84,48 @@ buildPythonPackage (finalAttrs: {
     "redis.utils"
   ];
 
-  # Tests require a running redis
+  nativeCheckInputs = [
+    numpy
+    pytest-asyncio
+    pytestCheckHook
+    redisTestHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.circuit_breaker
+  ++ finalAttrs.passthru.optional-dependencies.otel;
+
+  enabledTestMarks = [
+    "onlynoncluster"
+  ];
+
+  disabledTestMarks = [
+    "onlycluster"
+    "redismod"
+  ];
+
+  disabledTestPaths = [
+    # requires Redis Sentinel
+    "tests/test_asyncio/test_sentinel.py"
+    "tests/test_sentinel.py"
+    # FIXME package redis-entraid
+    "tests/test_asyncio/test_credentials.py"
+    "tests/test_credentials.py"
+  ];
+
+  disabledTests = [
+    # requires a Redis cluster
+    "test_readonly_invalid_cluster_state"
+    # we run Valkey, not Redis
+    "test_lolwut"
+  ];
+
+  # circular dependency via pybreaker
   doCheck = false;
+
+  passthru.tests = {
+    pytest = finalAttrs.finalPackage.overrideAttrs {
+      doInstallCheck = true;
+    };
+  };
 
   meta = {
     description = "Python client for Redis key-value store";
