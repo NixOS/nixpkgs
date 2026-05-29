@@ -7,12 +7,13 @@
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiolookin";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ANMalko";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-G3/lUgV60CMLskUo83TlvLLIfJtu5DEz+94mdVI4OrI=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   doCheck = false; # all tests are async and no async plugin is configured
 
