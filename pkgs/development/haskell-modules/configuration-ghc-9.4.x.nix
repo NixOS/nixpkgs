@@ -58,6 +58,9 @@ self: super: {
   # Becomes a core package in GHC >= 9.10
   os-string = doDistribute self.os-string_2_0_10;
 
+  # Becomes a core package in GHC >= 9.12, but needs unix >= 2.8
+  file-io = null;
+
   # Become core packages in GHC >= 9.10, no release compatible with GHC < 9.10 is available
   ghc-experimental = null;
   ghc-internal = null;
