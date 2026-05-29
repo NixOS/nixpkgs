@@ -5,9 +5,9 @@
   fetchFromGitHub,
 
   # build-system
+  apache-tvm-ffi,
   cmake,
   ninja,
-  nanobind,
   scikit-build-core,
 
   # dependencies
@@ -25,27 +25,23 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xgrammar";
-  version = "0.1.33";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlc-ai";
     repo = "xgrammar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mliAmFBY3eLnUP+2HCRGX36KPUjaxn0Eb+2aKyDwdaM=";
+    hash = "sha256-h9ovM/HbbkrxHGlJNn8eEisD5fnfRGCwoSOwc6HgpVQ=";
   };
 
-  patches = [
-    ./0001-fix-find-nanobind-from-python-module.patch
-  ];
-
   build-system = [
+    apache-tvm-ffi
     cmake
     ninja
-    nanobind
     scikit-build-core
   ];
   dontUseCmakeConfigure = true;
@@ -99,7 +95,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires internet access
     "tests/python/test_structural_tag_converter.py"
-    "tests/python/test_structural_tag_for_model.py"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];
@@ -107,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient, Flexible and Portable Structured Generation";
     homepage = "https://xgrammar.mlc.ai";
-    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
   };
-}
+})
