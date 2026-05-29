@@ -14,3 +14,15 @@ def get_qualified_name(
         f"Non-internal module '{name}' called with 'get_qualified_name'"
     )
     return name
+
+
+def assert_raises(
+    func: Callable[..., Any],
+    exception: type[BaseException] = Exception,
+) -> None:
+    try:
+        func()
+        raise AssertionError("Expected exception was not raised")
+    except exception as e:
+        if isinstance(e, AssertionError):
+            raise

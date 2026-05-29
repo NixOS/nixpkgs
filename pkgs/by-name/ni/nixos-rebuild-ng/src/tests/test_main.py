@@ -88,7 +88,7 @@ def test_parse_args() -> None:
     assert r1.install_bootloader is True
     assert r1.install_grub is True
     assert r1.profile_name == "system"
-    assert r1.action == "switch"
+    assert r1.action == nr.models.Action.SWITCH
     assert nr.utils.dict_to_flags(g1.common_flags) == [
         "--option",
         "foo1",
@@ -142,7 +142,7 @@ def test_parse_args() -> None:
     assert nr.logger.level == logging.DEBUG
     assert r2.v == 3
     assert r2.flake is False
-    assert r2.action == "dry-build"
+    assert r2.action == nr.models.Action.DRY_BUILD
     assert r2.file == "foo"
     assert r2.attr == "bar"
     assert nr.utils.dict_to_flags(g2.common_flags) == [

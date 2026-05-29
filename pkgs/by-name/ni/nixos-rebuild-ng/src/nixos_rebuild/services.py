@@ -1,4 +1,3 @@
-import argparse
 import json
 import logging
 import os
@@ -14,6 +13,7 @@ from .models import (
     Flake,
     GroupedNixArgs,
     ImageVariants,
+    NixOSRebuildArgs,
     NixOSRebuildError,
     Profile,
 )
@@ -28,7 +28,7 @@ logger: Final = logging.getLogger(__name__)
 
 def reexec(
     argv: list[str],
-    args: argparse.Namespace,
+    args: NixOSRebuildArgs,
     grouped_nix_args: GroupedNixArgs,
 ) -> None:
     if os.environ.get(NIXOS_REBUILD_REEXEC_ENV):
@@ -84,17 +84,19 @@ def reexec(
                 os.execve(current, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
 
 
-def _validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
+def _validate_image_variant(image_variant: str | None, variants: ImageVariants) -> str:
     if image_variant not in variants:
         raise NixOSRebuildError(
             "please specify one of the following supported image variants via "
             "--image-variant:\n" + "\n".join(f"- {v}" for v in variants)
         )
 
+    return image_variant
+
 
 def _get_system_attr(
     action: Action,
-    args: argparse.Namespace,
+    args: NixOSRebuildArgs,
     flake: Flake | None,
     build_attr: BuildAttr,
     grouped_nix_args: GroupedNixArgs,
@@ -105,15 +107,15 @@ def _get_system_attr(
                 flake,
                 eval_flags=grouped_nix_args.flake_eval_flags,
             )
-            _validate_image_variant(args.image_variant, variants)
-            attr = f"config.system.build.images.{args.image_variant}"
+            variant = _validate_image_variant(args.image_variant, variants)
+            attr = f"config.system.build.images.{variant}"
         case Action.BUILD_IMAGE:
             variants = nix.get_build_image_variants(
                 build_attr,
                 instantiate_flags=grouped_nix_args.common_flags,
             )
-            _validate_image_variant(args.image_variant, variants)
-            attr = f"config.system.build.images.{args.image_variant}"
+            variant = _validate_image_variant(args.image_variant, variants)
+            attr = f"config.system.build.images.{variant}"
         case Action.BUILD_VM:
             attr = "config.system.build.vm"
         case Action.BUILD_VM_WITH_BOOTLOADER:
@@ -126,7 +128,7 @@ def _get_system_attr(
 
 def _rollback_system(
     action: Action,
-    args: argparse.Namespace,
+    args: NixOSRebuildArgs,
     target_host: Remote | None,
     profile: Profile,
 ) -> Path:
@@ -143,6 +145,8 @@ def _rollback_system(
                 path_to_config = maybe_path_to_config
             else:
                 raise NixOSRebuildError("could not find previous generation")
+        case _:
+            raise AssertionError("Unexpected action to rollback system", action)
 
     return path_to_config
 
@@ -213,7 +217,8 @@ def _build_system(
 def _activate_system(
     path_to_config: Path,
     action: Action,
-    args: argparse.Namespace,
+    args: NixOSRebuildArgs,
+    attr: str,
     target_host: Remote | None,
     profile: Profile,
     flake: Flake | None,
@@ -262,13 +267,13 @@ def _activate_system(
             if flake:
                 image_name = nix.get_build_image_name_flake(
                     flake,
-                    args.image_variant,
+                    attr,
                     eval_flags=grouped_nix_args.flake_eval_flags,
                 )
             else:
                 image_name = nix.get_build_image_name(
                     build_attr,
-                    args.image_variant,
+                    attr,
                     instantiate_flags=grouped_nix_args.common_flags,
                 )
             disk_path = path_to_config / image_name
@@ -277,7 +282,7 @@ def _activate_system(
 
 def build_and_activate_system(
     action: Action,
-    args: argparse.Namespace,
+    args: NixOSRebuildArgs,
     build_host: Remote | None,
     target_host: Remote | None,
     profile: Profile,
@@ -336,6 +341,7 @@ def build_and_activate_system(
         path_to_config=path_to_config,
         action=action,
         args=args,
+        attr=attr,
         target_host=target_host,
         profile=profile,
         flake=flake,
@@ -355,7 +361,7 @@ def edit(flake: Flake | None, grouped_nix_args: GroupedNixArgs) -> None:
 
 
 def list_generations(
-    args: argparse.Namespace,
+    args: NixOSRebuildArgs,
     profile: Profile,
 ) -> None:
     generations = nix.list_generations(profile)
