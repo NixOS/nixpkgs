@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      doronbehar
+    ];
     mainProgram = "pizauth";
   };
 })
