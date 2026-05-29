@@ -25,6 +25,7 @@
   nixosTests,
 
   isDesktopVariant ? false,
+  withAdditionalFeatures ? true,
   buildWithFrontend ? !isDesktopVariant,
 }:
 
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     PUPPETEER_SKIP_DOWNLOAD = "1";
-    DISABLE_ADDITIONAL_FEATURES = "true";
+    DISABLE_ADDITIONAL_FEATURES = if withAdditionalFeatures then "false" else "true";
   };
 
   gradleFlags = [
@@ -166,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
       "Powerful, open-source PDF editing platform "
       + (if isDesktopVariant then "runnable as a desktop app" else "hostable as a web app");
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
-    license = lib.licenses.mit;
+    license = lib.licenses.mit; # TODO: figure out what proper licensing should be
     mainProgram = if isDesktopVariant then "stirling-pdf" else "Stirling-PDF";
     maintainers = with lib.maintainers; [
       tomasajt
