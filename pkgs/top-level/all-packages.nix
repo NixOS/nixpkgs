@@ -11317,6 +11317,8 @@ with pkgs;
       }
     );
 
+  vmlinux-to-elf-gui = vmlinux-to-elf.override { withGui = true; };
+
   py-wacz = with python3Packages; toPythonApplication wacz;
 
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
