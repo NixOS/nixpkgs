@@ -2934,13 +2934,13 @@ with haskellLib;
     amazonkaSrc = pkgs.fetchFromGitHub {
       owner = "brendanhay";
       repo = "amazonka";
-      rev = "7645bd335f008912b9e5257486f622b674de7afa";
-      sha256 = "sha256-ObamDnJdcLA2BlX9iGIxkaknUeL3Po3madKO4JA/em0=";
+      rev = "c87e5cbb67d8116c8829c9f84db4f8da92734830";
+      sha256 = "sha256-mO9kbooiReW1cdnrG9t4yjAsm/qVQKhEN8CmCiEfJgY=";
     };
     setAmazonkaSourceRoot =
       dir: drv:
       (overrideSrc {
-        version = "2.0-unstable-2025-04-16";
+        version = "2.0-unstable-2026-05-20";
         src = amazonkaSrc + "/${dir}";
       })
         drv;
@@ -3311,9 +3311,14 @@ with haskellLib;
         self.microlens-pro
       ])
     ];
-    amazonka = warnAfterVersion "2.0" (
-      setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka)
-    );
+    amazonka = lib.pipe super.amazonka [
+      (setAmazonkaSourceRoot "lib/amazonka")
+      (addBuildDepends [
+        self.tasty
+        self.tasty-hunit
+      ])
+      (warnAfterVersion "2.0")
+    ];
     amazonka-test = warnAfterVersion "2.0" (
       setAmazonkaSourceRoot "lib/amazonka-test" (doJailbreak super.amazonka-test)
     );
