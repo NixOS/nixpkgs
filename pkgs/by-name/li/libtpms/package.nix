@@ -10,16 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtpms";
-  version = "0.10.2";
+  version = "0.10.2-unstable-2026-05-06";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "libtpms";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UhEpq5f/FT5DmtzQBe/Si414mOq+D4glikgRNK60GKQ=";
+    rev = "521c51073fe6f7c56023db78e56961fcaf7906e8";
+    hash = "sha256-wCipOOr3LnLq1NqDtxw6hq0VTyniDwp18vBxyET/WGM=";
   };
-
-  hardeningDisable = [ "strictflexarrays3" ];
 
   nativeBuildInputs = [
     autoreconfHook
