@@ -23,6 +23,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "AJP package crafting library";
     homepage = "https://github.com/hypn0s/AJPy/";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.bsd3;
   };
 })
