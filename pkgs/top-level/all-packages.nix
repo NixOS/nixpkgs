@@ -1446,24 +1446,6 @@ with pkgs;
 
   crystfel-headless = crystfel.override { withGui = false; };
 
-  amule-daemon = amule.override {
-    monolithic = false;
-    enableDaemon = true;
-    mainProgram = "amuled";
-  };
-
-  amule-gui = amule.override {
-    monolithic = false;
-    client = true;
-    mainProgram = "amulegui";
-  };
-
-  amule-web = amule.override {
-    monolithic = false;
-    httpServer = true;
-    mainProgram = "amuleweb";
-  };
-
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
@@ -2069,10 +2051,6 @@ with pkgs;
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
-
-  calyx-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
-    provider = "calyx";
-  };
 
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
@@ -3121,10 +3099,6 @@ with pkgs;
   pydeps = with python3Packages; toPythonApplication pydeps;
 
   remarshal = with python3Packages; toPythonApplication remarshal;
-
-  riseup-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
-    provider = "riseup";
-  };
 
   rtaudio = rtaudio_5;
 
@@ -5774,11 +5748,7 @@ with pkgs;
     // (config.radare or { })
   );
 
-  rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
-
   rizinPlugins = recurseIntoAttrs rizin.plugins;
-
-  cutter = qt6.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
   cutterPlugins = recurseIntoAttrs cutter.plugins;
 
@@ -5890,10 +5860,6 @@ with pkgs;
         wrap ${stdenv.cc.bintools.targetPrefix}ld ${ldWrapper} ${lib.getExe buildPackages.wild-unwrapped}
       '';
     };
-
-  whatstyle = callPackage ../development/tools/misc/whatstyle {
-    inherit (llvmPackages) clang-unwrapped;
-  };
 
   whisper-cpp-vulkan = whisper-cpp.override {
     vulkanSupport = true;
@@ -9459,14 +9425,6 @@ with pkgs;
     callPackages ../applications/graphics/inkscape/extensions.nix { }
   );
 
-  jabcode-writer = jabcode.override {
-    subproject = "writer";
-  };
-
-  jabcode-reader = jabcode.override {
-    subproject = "reader";
-  };
-
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
@@ -9476,10 +9434,6 @@ with pkgs;
     k3s_1_36
     ;
   k3s = k3s_1_35;
-
-  okteta = kdePackages.callPackage ../applications/editors/okteta { };
-
-  klayout = qt6Packages.callPackage ../applications/misc/klayout { };
 
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
@@ -9498,25 +9452,6 @@ with pkgs;
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
-
-  kuma = callPackage ../applications/networking/cluster/kuma { isFull = true; };
-  kuma-experimental = callPackage ../applications/networking/cluster/kuma {
-    isFull = true;
-    enableGateway = true;
-    pname = "kuma-experimental";
-  };
-  kumactl = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kumactl" ];
-    pname = "kumactl";
-  };
-  kuma-cp = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kuma-cp" ];
-    pname = "kuma-cp";
-  };
-  kuma-dp = callPackage ../applications/networking/cluster/kuma {
-    components = [ "kuma-dp" ];
-    pname = "kuma-dp";
-  };
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
@@ -9707,8 +9642,6 @@ with pkgs;
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
     protobuf = protobuf_21;
   };
-
-  p4v = qt6Packages.callPackage ../applications/version-management/p4v { };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
@@ -10510,16 +10443,6 @@ with pkgs;
 
   alfis-nogui = alfis.override {
     withGui = false;
-  };
-
-  bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
-    withGui = true;
-    zeromq = zeromq.override {
-      enableCurve = false;
-      enableDrafts = false;
-      libsodium = null;
-    };
-    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind = bitcoin.override {

@@ -3,19 +3,10 @@
   stdenv,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
   shared-mime-info,
   xz,
-  qttools,
-  karchive,
-  kcmutils,
-  kconfig,
-  kconfigwidgets,
-  kcrash,
-  knewstuff,
-  kparts,
-  qca,
+  kdePackages,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,24 +23,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     shared-mime-info
     xz
 
-    qttools
+    qt6.qttools
 
-    karchive
-    kcmutils
-    kconfig
-    kconfigwidgets
-    kcrash
-    knewstuff
-    kparts
-    qca
+    kdePackages.karchive
+    kdePackages.kcmutils
+    kdePackages.kconfig
+    kdePackages.kconfigwidgets
+    kdePackages.kcrash
+    kdePackages.knewstuff
+    kdePackages.kparts
+    kdePackages.qca
   ];
 
   outputs = [
