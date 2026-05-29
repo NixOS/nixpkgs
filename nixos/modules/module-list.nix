@@ -337,6 +337,7 @@
   ./programs/trippy.nix
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
+  ./programs/tuxbox.nix
   ./programs/udevil.nix
   ./programs/usbtop.nix
   ./programs/vim.nix
