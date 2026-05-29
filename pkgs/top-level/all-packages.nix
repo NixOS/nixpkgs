@@ -2556,8 +2556,6 @@ with pkgs;
   };
   kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
-  keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
-
   keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
@@ -10428,8 +10426,6 @@ with pkgs;
   groestlcoind = groestlcoin.override {
     withGui = false;
   };
-
-  ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
   napari = with python312Packages; toPythonApplication napari;
 
