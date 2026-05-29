@@ -1261,18 +1261,44 @@ rec {
         optionDescriptionPhrase (class: class == "noun" || class == "conjunction") elemType
       }";
       descriptionClass = "conjunction";
-      check = x: x == null || elemType.check x;
-      merge =
-        loc: defs:
-        let
-          nulls = filter (def: def.value == null) defs;
-        in
-        if nulls == [ ] then
-          elemType.merge loc defs
-        else if length nulls == length defs then
-          null
-        else
-          throw "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}.";
+      check = {
+        __functor = _self: x: x == null || elemType.check x;
+        isV2MergeCoherent = true;
+      };
+      merge = {
+        __functor =
+          self: loc: defs:
+          let
+            inherit (self.v2 { inherit loc defs; }) headError value;
+          in
+          if headError.causedByMixedNulls or false then throw headError.message else value;
+        v2 =
+          { loc, defs }:
+          if all (def: def.value != null) defs then
+            # There are no null values
+            if elemType.merge ? v2 then
+              checkV2MergeCoherence loc elemType (elemType.merge.v2 { inherit loc defs; })
+            else
+              {
+                value = elemType.merge loc defs;
+                headError = checkDefsForError elemType.check loc defs;
+                valueMeta = { };
+              }
+          else
+            # There are some null values
+            {
+              headError =
+                if length defs == 1 || all (def: def.value == null) defs then
+                  null
+                else
+                  {
+                    message = "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}.";
+                    causedByMixedNulls = true;
+                  };
+              value = null;
+              valueMeta = { };
+            };
+      };
       emptyValue = {
         value = null;
       };

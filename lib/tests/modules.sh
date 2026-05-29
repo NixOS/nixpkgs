@@ -227,7 +227,7 @@ checkConfigError 'In attrTag, each tag value must be an option, but tag int was 
 checkConfigOutput '"ok"' config.assertions ./types.nix
 
 # types.nullOr
-checkConfigError 'The option .nullableValue\.mixed. is defined both null and not null, in .* and .*\.' config.nullableValue.mixed ./types.nix
+checkConfigError 'A definition for option .nullableValue\.mixed. is not of type .*\. TypeError: The option .nullableValue\.mixed. is defined both null and not null, in .* and .*\.' config.nullableValue.mixed ./types.nix
 
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
