@@ -14,7 +14,7 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.12.8";
+  version = "5.12.9";
 
   src = fetchFromGitHub {
     owner = "Alinto";
