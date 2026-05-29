@@ -262,13 +262,13 @@ rec {
     { fetchFromGitHub }:
     stdenv.mkDerivation rec {
       pname = "vicious";
-      version = "2.6.0";
+      version = "2.7.1";
 
       src = fetchFromGitHub {
         owner = "vicious-widgets";
         repo = "vicious";
         rev = "v${version}";
-        sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
+        sha256 = "sha256-G4uXVV352IuD5/xDdJiLjWceUTEX18nv5nzVF9ga0i0=";
       };
 
       buildInputs = [ lua ];
