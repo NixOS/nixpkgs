@@ -33,7 +33,7 @@
   xxhash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "redis";
   version = "8.0.0";
   pyproject = true;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ze9Q8IfSWDAEH0sR+ql0tOu7ajeXF78AKYD6SHpZqRU=";
   };
 
@@ -84,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/redis/redis-py";
-    changelog = "https://github.com/redis/redis-py/releases/tag/${src.tag}";
+    changelog = "https://github.com/redis/redis-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})
