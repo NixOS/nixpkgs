@@ -63,6 +63,7 @@ let
   ]
   ++ optionals cfg.provision.enable provisionSecretFiles;
   enableServerBackup = cfg.server.enable && (cfg.server.settings.online_backup.versions != 0);
+  databaseDir = dirOf cfg.server.settings.db_path;
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -332,9 +333,8 @@ in
             type = types.nullOr types.str;
           };
           db_path = mkOption {
-            description = "Path to Kanidm database.";
+            description = "Path to Kanidm database. Must be in a directory dedicated to Kanidm.";
             default = "/var/lib/kanidm/kanidm.db";
-            readOnly = true;
             type = types.path;
           };
           tls_chain = mkOption {
@@ -933,13 +933,28 @@ in
 
     environment.systemPackages = mkIf cfg.client.enable [ cfg.package ];
 
-    systemd.tmpfiles.settings."10-kanidm" = mkIf enableServerBackup {
-      ${cfg.server.settings.online_backup.path}.d = {
-        mode = "0700";
-        user = "kanidm";
-        group = "kanidm";
-      };
-    };
+    systemd.tmpfiles.settings."10-kanidm" =
+      let
+        tmpFiles =
+          (
+            # StateDirectory is handled by systemd
+            lib.optionalAttrs (databaseDir != "/var/lib/kanidm") {
+              ${databaseDir}.d = {
+                mode = "0700";
+                user = "kanidm";
+                group = "kanidm";
+              };
+            }
+          )
+          // (lib.optionalAttrs enableServerBackup {
+            ${cfg.server.settings.online_backup.path}.d = {
+              mode = "0700";
+              user = "kanidm";
+              group = "kanidm";
+            };
+          });
+      in
+      mkIf (tmpFiles != { }) tmpFiles;
 
     systemd.services.kanidm = mkIf cfg.server.enable {
       description = "kanidm identity management daemon";
@@ -972,6 +987,8 @@ in
 
           BindPaths =
             [ ]
+            # Database directory, if not in StateDirectory
+            ++ optional (databaseDir != "/var/lib/kanidm") databaseDir
             # To store backups
             ++ optional enableServerBackup cfg.server.settings.online_backup.path
             ++ optional (
