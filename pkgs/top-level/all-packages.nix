@@ -9552,8 +9552,6 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  minitube = kdePackages.callPackage ../applications/video/minitube { };
-
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
@@ -10948,8 +10946,6 @@ with pkgs;
   ### SCIENCE/MATH
 
   blas-ilp64 = blas.override { isILP64 = true; };
-
-  labplot = kdePackages.callPackage ../applications/science/math/labplot { };
 
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
