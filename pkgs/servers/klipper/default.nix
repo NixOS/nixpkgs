@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
       p: with p; [
         numpy
         matplotlib
+        python-can
       ]
     )).interpreter;
 
@@ -126,6 +127,11 @@ stdenv.mkDerivation rec {
       --subst-var "out" \
       --subst-var-by "script" "calibrate_shaper.py"
     chmod 755 "$out/bin/klipper-calibrate-shaper"
+
+    substitute "$pythonScriptWrapper" "$out/bin/klipper-canbus-query" \
+      --subst-var "out" \
+      --subst-var-by "script" "canbus_query.py"
+    chmod 755 "$out/bin/klipper-canbus-query"
 
     runHook postInstall
   '';
