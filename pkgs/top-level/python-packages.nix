@@ -20474,6 +20474,8 @@ self: super: with self; {
 
   tlds = callPackage ../development/python-modules/tlds { };
 
+  tlparse = callPackage ../development/python-modules/tlparse { };
+
   tls-client = callPackage ../development/python-modules/tls-client { };
 
   tls-parser = callPackage ../development/python-modules/tls-parser { };
