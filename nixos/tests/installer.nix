@@ -1276,6 +1276,7 @@ in
   separateBootZfs = makeInstallerTest "separateBootZfs" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''
@@ -1348,6 +1349,7 @@ in
   zfsroot = makeInstallerTest "zfs-root" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
+      networking.hostId = "00000000";
     };
 
     extraConfig = ''
