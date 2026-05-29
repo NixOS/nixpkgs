@@ -20,7 +20,6 @@
   buildPackages,
   pkgsCross,
   makeBinaryWrapper,
-  lld,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
@@ -112,6 +111,16 @@ let
 
   allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
 
+  wasiSdk = pkgsCross.wasi32.stdenv.cc;
+
+  wasiLinker = linkFarm "tree-sitter-wasi-linker" [
+    {
+      # Clang's wasm target looks for this unprefixed linker name.
+      name = "bin/wasm-ld";
+      path = "${wasiSdk.bintools.bintools}/bin/wasm32-unknown-wasi-wasm-ld";
+    }
+  ];
+
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
@@ -174,7 +183,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = lib.optionalString webUISupport ''
     mkdir -p .emscriptencache
     export EM_CACHE=$(pwd)/.emscriptencache
-    export TREE_SITTER_WASI_SDK_PATH=${pkgsCross.wasi32.stdenv.cc}
+    export TREE_SITTER_WASI_SDK_PATH=${wasiSdk}
     cargo run --package xtask -- build-wasm --debug
   '';
 
@@ -200,8 +209,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/tree-sitter \
-      --set-default TREE_SITTER_WASI_SDK_PATH ${pkgsCross.wasi32.stdenv.cc} \
-      --prefix PATH : ${lib.makeBinPath [ lld ]}
+      --set-default TREE_SITTER_WASI_SDK_PATH ${wasiSdk} \
+      --prefix PATH : ${lib.makeBinPath [ wasiLinker ]}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
