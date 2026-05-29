@@ -378,6 +378,7 @@ in
     };
 
     users.groups.mautrix-discord = { };
+    # this group is only needed for installs before 26.05
     users.groups.mautrix-discord-registration = {
       members = lib.lists.optional config.services.matrix-synapse.enable "matrix-synapse";
     };
@@ -392,7 +393,10 @@ in
 
     systemd.services = {
       matrix-synapse = lib.mkIf cfg.registerToSynapse {
-        serviceConfig.SupplementaryGroups = [ "mautrix-discord-registration" ];
+        serviceConfig.SupplementaryGroups = [
+          "mautrix-discord"
+          "mautrix-discord-registration"
+        ];
         # Make synapse depend on the registration service when auto-registering
         wants = [ "mautrix-discord-registration.service" ];
         after = [ "mautrix-discord-registration.service" ];
@@ -472,14 +476,13 @@ in
           mv '${registrationFile}.tmp' '${registrationFile}'
 
           umask $old_umask
-          chown :mautrix-discord-registration '${registrationFile}'
           chmod 640 '${registrationFile}'
         '';
 
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          UMask = 27;
+          UMask = "027";
 
           User = "mautrix-discord";
           Group = "mautrix-discord";
@@ -535,6 +538,8 @@ in
           ProtectKernelLogs = true;
           ProtectHostname = true;
           ProtectClock = true;
+
+          UMask = "027";
 
           SystemCallArchitectures = "native";
           SystemCallErrorNumber = "EPERM";
