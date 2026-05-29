@@ -56,6 +56,16 @@ in
           This option only works with the nftables based firewall.
         '';
       };
+
+      flowtableOffload = lib.mkEnableOption ''
+        nf_flowtable offloading for forwarded connections. Established
+        connections traversing the forward chain are offloaded to the
+        kernel flowtable fast path, with opportunistic hardware offload
+        where the NIC driver supports it.
+
+        This option only works with the nftables based firewall and
+        requires {option}`networking.firewall.filterForward` to be enabled
+      '';
     };
   };
 
@@ -76,6 +86,10 @@ in
       {
         assertion = config.networking.nftables.rulesetFile == null;
         message = "networking.nftables.rulesetFile conflicts with the firewall";
+      }
+      {
+        assertion = !cfg.flowtableOffload || cfg.filterForward;
+        message = "networking.firewall.flowtableOffload requires networking.firewall.filterForward to be enabled";
       }
     ];
 
@@ -181,8 +195,19 @@ in
       }
 
       ${lib.optionalString cfg.filterForward ''
+        ${lib.optionalString cfg.flowtableOffload ''
+          flowtable f {
+            hook ingress priority filter
+            flags offload
+          }
+        ''}
+
         chain forward {
           type filter hook forward priority filter; policy drop;
+
+          ${lib.optionalString cfg.flowtableOffload ''
+            ct state established flow add @f
+          ''}
 
           ct state vmap {
             invalid : drop,
