@@ -1565,21 +1565,49 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
-`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
+`unittestCheckHook` is a hook which sets up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`.
+
+For better overridability, `unittestCheckHook` supports the following variables:
+
+`unittestStartDir` (String)
+
+: Directory to start test discovery.
+  The value will pass via `--start-directory` if specified, or `unittest` falls back to the current working directory (`.`).
+
+`unittestFilePattern` (String)
+
+: Glob pattern to match test files.
+  The value will pass via `--pattern` if specified, or `unittest` falls back to `test*.py`.
+
+`unittestTopDir` (String)
+
+: Top-level directory of the package to be tested.
+  The value will pass via `--top-level-directory` if specified.
+
+`enabledTests` (`null` or list of strings)
+
+: White-listed test name patterns (sub-strings or globs)
+  Each specified pattern is passed via the `-k` flag.
+  The default value of the Nix attribute is `null`, which opts out the white-listing.
 
 ```nix
 {
   nativeCheckInputs = [ unittestCheckHook ];
 
+  unittestStartDir = "tests";
   unittestFlags = [
-    "-s"
-    "tests"
     "-v"
   ];
 }
 ```
 
-`pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
+`pytest` is compatible with test cases defined by `unittest`, so in most cases you can use `pytestCheckHook` instead for more fine-grained control over which tests to include/exclude.
+On the other hand, `unittestCheckHook` has a smaller dependency closure as `unittests` is part of the Python Standard Library.
+
+::: {.note}
+There are subtle differences between `unittest` and `pytest`.
+For example, the default filename pattern for `unittest` is `test*.py`, while `pytest` defaults to `test_*.py` or `*_test.py`.
+:::
 
 #### Using sphinxHook {#using-sphinxhook}
 
