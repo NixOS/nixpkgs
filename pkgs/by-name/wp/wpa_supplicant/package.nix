@@ -17,14 +17,14 @@
   unprivileged ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.11";
 
   pname = "wpa_supplicant";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-kS6gb3TjCo42+7aAZNbN/yGNjVkdsPxddd7myBrH/Ao=";
+    url = "https://w1.fi/releases/wpa_supplicant-${finalAttrs.version}.tar.gz";
+    hash = "sha256-kS6gb3TjCo42+7aAZNbN/yGNjVkdsPxddd7myBrH/Ao=";
   };
 
   patches = [
@@ -178,6 +178,6 @@ stdenv.mkDerivation rec {
     maintainers = [
     ];
     platforms = lib.platforms.linux;
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "w1.fi" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "w1.fi" finalAttrs.version;
   };
-}
+})

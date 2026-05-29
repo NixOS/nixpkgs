@@ -127,8 +127,8 @@ in
       "sha256-gJM0o+V8YnmwVkgnRzR+Peaz45JuRpE8Hs6LRwfTeUQ=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.43.2"
-      "sha256-lNImOTgL0fRu5Kjv9w4j5eifxpv1qjhVRd1/4bIGfQY=";
+    buildMypyBoto3Package "appstream" "1.43.17"
+      "sha256-cs792cAqETR/V76EgDuwa8cnLJKfqBgCib6ah6c0Qfc=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.43.0"
@@ -363,8 +363,8 @@ in
       "sha256-pi0hMLpgYGrNU0/infONBg2WmES6NV0tfPgTjuRtWXk=";
 
   mypy-boto3-customer-profiles =
-    buildMypyBoto3Package "customer-profiles" "1.43.12"
-      "sha256-oOc34HWsr7PyUpweMBi3pjorIWKFbi5qNXDdPBF2VXA=";
+    buildMypyBoto3Package "customer-profiles" "1.43.17"
+      "sha256-+/r5ocaFv/4ZF0PpJMSoGeZtiE3nkqaMLzG+sECyNss=";
 
   mypy-boto3-databrew =
     buildMypyBoto3Package "databrew" "1.43.0"
@@ -630,12 +630,12 @@ in
       "sha256-F+4rmr2/nI1TQCFnMY0dPxAXlgN3IBSfiQaDGup5HSw=";
 
   mypy-boto3-iot =
-    buildMypyBoto3Package "iot" "1.43.2"
-      "sha256-4/pzyGy3MPDZiezsGyNskYyMZ7tR/Z8wvRWdH2GY8s8=";
+    buildMypyBoto3Package "iot" "1.43.17"
+      "sha256-/hR8GtbwvoVnseF0BQTcb8Jv8JIXcR0atxIcElZv1K4=";
 
   mypy-boto3-iot-data =
-    buildMypyBoto3Package "iot-data" "1.43.0"
-      "sha256-JqxgidIcq9qZ7CzFWIRYC+vWTpzbOs2n/0ZfYTPkfPg=";
+    buildMypyBoto3Package "iot-data" "1.43.17"
+      "sha256-ZFp6f51JV8wTk6CBNLdl4lNkEy4xA027zxfYQdCICa0=";
 
   mypy-boto3-iot-jobs-data =
     buildMypyBoto3Package "iot-jobs-data" "1.43.0"
@@ -970,8 +970,8 @@ in
       "sha256-vo4FbTnm7vHPgBKlvGl7qZ/H/tuRkzrdzwBI82ewchQ=";
 
   mypy-boto3-opensearchserverless =
-    buildMypyBoto3Package "opensearchserverless" "1.43.0"
-      "sha256-XrDuzW9pc2H2PS3h6rI781j9knG+ERTdEvOigumtZug=";
+    buildMypyBoto3Package "opensearchserverless" "1.43.17"
+      "sha256-NRfAfDljMbFnYHaUgTXModL5L9LLZDVMjBisQVHYC2Y=";
 
   mypy-boto3-opsworks =
     buildMypyBoto3Package "opsworks" "1.40.0"
@@ -1162,8 +1162,8 @@ in
       "sha256-c9VMHQmZxzxAPcmpo9pKlyJxWroRZZWvCMDUZ1+LxnA=";
 
   mypy-boto3-s3control =
-    buildMypyBoto3Package "s3control" "1.43.0"
-      "sha256-OBw9qPJPv+TrySrNFXo+GCJUjf5fqT10VJujnmjmCqo=";
+    buildMypyBoto3Package "s3control" "1.43.17"
+      "sha256-egiSBx7pwuiEVoqnIXFyFa8vZwNCirohoYTIwCF7L7c=";
 
   mypy-boto3-s3outposts =
     buildMypyBoto3Package "s3outposts" "1.43.0"

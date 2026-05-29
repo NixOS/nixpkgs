@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.83";
+  version = "0.84";
   pname = "putty";
 
   src = fetchurl {
@@ -20,14 +20,8 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-cYd3wT1j0N/5H+AxYrwqBbTfyLCCdjTNYLUc79/2McY=";
+    hash = "sha256-BgV4Yq4Zjx29IZ0MdJMIDVn2BhlLtQVsVJ40KqAbaf4=";
   };
-
-  patches = [
-    # Fix EdDSA signature verification accepting out-of-range s values
-    # https://git.tartarus.org/?p=simon/putty.git;a=commit;h=af996b5ec27ab79bae3882071b9d6acf16044549
-    ./eddsa-verify-check-out-of-range-s.patch
-  ];
 
   nativeBuildInputs = [
     cmake
