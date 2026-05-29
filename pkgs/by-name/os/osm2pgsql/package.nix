@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   expat,
-  fmt_11,
+  fmt,
   proj,
   bzip2,
   cli11,
@@ -34,6 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZKSyMNc+EHY4QBTLtUiWiTMEcmAAbrV1xqxmvNF96f8=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/osm2pgsql-dev/osm2pgsql/commit/6c96199194807283d4b3acbc214ea5d679791d1f.patch";
+      name = "fix-fmt-localtime.patch";
+      hash = "sha256-9GRyrMEHYMwU82TJ55zef2Dbz1yO51jT4oryOtyJd9A=";
+    })
+  ];
+
   postPatch = ''
     # Remove bundled libraries
     rm -r contrib
@@ -46,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cli11
     expat
-    fmt_11
+    fmt
     libosmium
     libpq
     nlohmann_json

@@ -7,7 +7,7 @@
   cmake,
   cmakerc,
   curl,
-  fmt_11,
+  fmt,
   git,
   gzip,
   meson,
@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2025-12-16";
+  version = "2026-04-08";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-EnKfeWRiqWVFbGc2QNT9YQHs+dlXvvri9FPVxpxpphM=";
+    hash = "sha256-+pS+VnT6WPHJi5L7qPkGczosIVdyiQsXmniEGdLuCFY=";
   };
 
   nativeBuildInputs = [
@@ -40,17 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmakerc
-    fmt_11
+    curl
+    fmt
   ];
 
   patches = [
-    ./change-lock-location.patch
     ./read-bundle-info-from-root.patch
   ];
 
   cmakeFlags = [
     "-DVCPKG_DEPENDENCY_EXTERNAL_FMT=ON"
     "-DVCPKG_DEPENDENCY_CMAKERC=ON"
+    "-DVCPKG_LIBCURL_DLSYM=OFF"
   ];
 
   vcpkgWrapper =

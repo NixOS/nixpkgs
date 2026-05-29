@@ -10,7 +10,7 @@
   openal,
   pkg-config,
   yaml-cpp,
-  fmt_11,
+  fmt,
   libx11,
 }:
 let
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     libzip
     openal
     yaml-cpp
-    fmt_11
+    fmt
     libx11
   ];
 

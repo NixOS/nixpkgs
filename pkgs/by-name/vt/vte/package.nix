@@ -23,7 +23,7 @@
   pango,
   pcre2,
   cairo,
-  fmt_11,
+  fmt,
   fribidi,
   lz4,
   icu,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    fmt_11
+    fmt
     fribidi
     gnutls
     pango # duplicated with propagatedBuildInputs to support gtkVersion == null

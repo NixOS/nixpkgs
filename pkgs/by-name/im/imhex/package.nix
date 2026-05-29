@@ -17,7 +17,7 @@
   python3,
   jansson,
   curl,
-  fmt_11,
+  fmt,
   nlohmann_json,
   yara,
   nix-update-script,
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     file
-    fmt_11
+    fmt
     glfw3
     gtk3
     jansson

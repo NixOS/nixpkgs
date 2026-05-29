@@ -7,7 +7,7 @@
   curl,
   dbus,
   ffmpeg,
-  fmt_11,
+  fmt,
   libwebp,
   mpv,
   SDL2,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     ffmpeg
-    fmt_11
+    fmt
     libwebp
     mpv
     SDL2

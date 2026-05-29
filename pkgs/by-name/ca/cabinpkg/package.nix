@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   onetbb,
   libgit2,
   curl,
-  fmt_11,
+  fmt,
   nlohmann_json,
+  spdlog,
   pkg-config,
 }:
 
@@ -14,20 +16,27 @@ let
   toml11 = fetchFromGitHub rec {
     owner = "ToruNiina";
     repo = "toml11";
-    version = "4.2.0";
+    version = "4.4.0";
     tag = "v${version}";
-    sha256 = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
+    sha256 = "sha256-sgWKYxNT22nw376ttGsTdg0AMzOwp8QH3E8mx0BZJTQ=";
+  };
+  mitama-cpp-result = fetchFromGitHub rec {
+    owner = "loliGothicK";
+    repo = "mitama-cpp-result";
+    version = "11.0.0";
+    tag = "v${version}";
+    sha256 = "sha256-YqC19AarJgz5CagNI1wyHGJ3xoUeeufDDbjFvQwDOjo=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "cabinpkg";
-  version = "0.11.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "cabinpkg";
     repo = "cabin";
     tag = version;
-    sha256 = "sha256-qMmfViu3ol8+Tpyy8hn0j5r+bql0SFeKPVVj/ox4AGQ=";
+    sha256 = "sha256-bCbxTVlb9IgiBrOfe2nkkupXMWcuFeNR6hJUjmqC8HA=";
   };
 
   strictDeps = true;
@@ -38,23 +47,34 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgit2
-    fmt_11
+    fmt
     onetbb
     nlohmann_json
     curl
+    spdlog
   ];
 
-  # Skip git cloning toml11
+  # Skip git cloning dependenicies
   preConfigure = ''
     substituteInPlace Makefile \
        --replace-fail "git clone https://github.com/ToruNiina/toml11.git \$@" ":" \
-       --replace-fail "git -C \$@ reset --hard v4.2.0" ":"
+       --replace-fail 'git -C $@ reset --hard $(TOML11_VER)' ":" \
+       --replace-fail 'git clone https://github.com/loliGothicK/mitama-cpp-result.git $@' ":" \
+       --replace-fail 'git -C $@ reset --hard $(RESULT_VER)' ":"
   '';
 
   preBuild = ''
     mkdir -p build/DEPS/
     cp -rf ${toml11} build/DEPS/toml11
+    cp -rf ${mitama-cpp-result} build/DEPS/mitama-cpp-result
   '';
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/cabinpkg/cabin/commit/94bffea6e57cee5bbb3c84d0bfd9d98548901158.patch";
+      name = "allow-fmt-12.patch";
+      hash = "sha256-aJ4ayPQfElcQ4TYjuGI9t9I1adHsRh1e/WnaSnOxEdw=";
+    })
+  ];
 
   makeFlags = [
     "RELEASE=1"

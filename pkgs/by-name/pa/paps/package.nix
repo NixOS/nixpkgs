@@ -6,7 +6,7 @@
   meson,
   ninja,
   pkg-config,
-  fmt_11,
+  fmt,
   glib,
   pango,
   versionCheckHook,
@@ -30,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
       name = "fix-g_utf8_next_char-cast";
       hash = "sha256-fedkyjd8cGFUuUQCbGii7wfMCmK6vye/1/vHWuJiJI4=";
     })
+    # remove when 0.8.1 is released
+    (fetchpatch {
+      url = "https://github.com/dov/paps/commit/a26a20d7ca3feb08476a8a19fd97c3ececcc1e2e.patch";
+      name = "fix-deprecated-fmt-localtime";
+      hash = "sha256-LSuu81paUo9jBEanRS3nUHt8eq11ALCiZXdPKias9Pc=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -38,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    fmt_11
+    fmt
     glib
     pango
   ];
