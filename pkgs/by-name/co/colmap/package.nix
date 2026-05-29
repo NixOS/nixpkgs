@@ -62,13 +62,11 @@ let
     onnxruntime
   ]
   ++ lib.optionals cudaSupport [
-    cudatoolkit
-    (lib.getOutput "static" cudaPackages.cuda_cudart)
+    cudaPackages.cuda_cudart # CUDA::cudart, used by COLMAP and faiss
+    cudaPackages.libcublas # CUDA::cublas, propagated by faiss' exported targets
+    cudaPackages.libcurand # CUDA::curand, used by COLMAP
   ]
   ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
-
-  # TODO: migrate to redist packages
-  inherit (cudaPackages) cudatoolkit;
 
   # COLMAP needs these model files to run the ONNX tests
   # Based on: https://github.com/colmap/colmap/blob/79efc74b2b614935a3c69b1f983f2bad23a836a1/src/colmap/feature/resources.h#L36
@@ -179,6 +177,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
 
   doCheck = enableTests;
