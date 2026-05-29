@@ -21085,6 +21085,8 @@ self: super: with self; {
 
   uhi = callPackage ../development/python-modules/uhi { };
 
+  uhid = callPackage ../development/python-modules/uhid { };
+
   uhooapi = callPackage ../development/python-modules/uhooapi { };
 
   uiprotect = callPackage ../development/python-modules/uiprotect { };
