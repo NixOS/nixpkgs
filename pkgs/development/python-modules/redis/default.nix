@@ -23,18 +23,26 @@
   cryptography,
   pyopenssl,
   requests,
+
+  # extras: otel
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-sdk,
+
+  # extras: xxhash
+  xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "7.4.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-py";
     tag = "v${version}";
-    hash = "sha256-alrfAYzjvoYsaA2NYVgI56f3R+5ed4CsA35ZmvXnk6k=";
+    hash = "sha256-ze9Q8IfSWDAEH0sR+ql0tOu7ajeXF78AKYD6SHpZqRU=";
   };
 
   build-system = [ hatchling ];
@@ -52,6 +60,12 @@ buildPythonPackage rec {
       pyopenssl
       requests
     ];
+    otel = [
+      opentelemetry-api
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-sdk
+    ];
+    xxhash = [ xxhash ];
   };
 
   pythonImportsCheck = [
