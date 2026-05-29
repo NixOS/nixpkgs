@@ -595,7 +595,7 @@ buildStdenv.mkDerivation {
 
   profilingPhase = lib.optionalString pgoSupport ''
     # Avoid compressing the instrumented build with high levels of compression
-    export MOZ_PKG_FORMAT=tar
+    export MOZ_PKG_FORMAT=TAR
 
     # Package up Firefox for profiling
     ./mach package
