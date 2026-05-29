@@ -15,10 +15,8 @@
   sqlite,
   gnome,
   clutter-gtk,
-  libsoup_2_4,
   libsoup_3,
   gobject-introspection, # , libmemphis
-  withLibsoup3 ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +49,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     sqlite
-    (if withLibsoup3 then libsoup_3 else libsoup_2_4)
+    libsoup_3
   ];
 
   propagatedBuildInputs = [
@@ -64,7 +62,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonBool "gtk_doc" (stdenv.buildPlatform == stdenv.hostPlatform))
     "-Dvapi=true"
-    (lib.mesonBool "libsoup3" withLibsoup3)
+    (lib.mesonBool "libsoup3" true)
   ];
 
   passthru = {
@@ -89,7 +87,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-    teams = lib.optionals withLibsoup3 [
+    teams = [
       lib.teams.gnome
       lib.teams.pantheon
     ];
