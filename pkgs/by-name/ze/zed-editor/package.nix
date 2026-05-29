@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_94,
   fetchFromGitHub,
   cmake,
   copyDesktopItems,
@@ -50,6 +50,7 @@
 assert withGLES -> stdenv.hostPlatform.isLinux;
 
 let
+  inherit (rustPackages_1_94) rustPlatform;
   channel = "stable";
   executableName = "zeditor";
   # Based on vscode.fhs
