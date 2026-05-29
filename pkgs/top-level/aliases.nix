@@ -347,6 +347,7 @@ mapAliases {
   autoreconfHook264 = throw "'autoreconfHook264' has been removed in favor of 'autoreconfHook'"; # Added 2025-07-21
   autoreconfHook271 = throw "'autoreconfHook271' has been removed in favor of 'autoreconfHook'"; # Added 2026-03-29
   av-98 = throw "'av-98' has been removed because it has been broken since at least November 2024."; # Added 2025-10-03
+  avocode = throw "'avocode' has been removed as it was sunset in October 2023"; # Added 2026-05-27
   avr-sim = throw "'avr-sim' has been removed as it was broken and unmaintained. Possible alternatives are 'simavr', SimulAVR and AVRStudio."; # Added 2025-05-31
   awesome-4-0 = throw "'awesome-4-0' has been renamed to/replaced by 'awesome'"; # Converted to throw 2025-10-27
   awf = throw "'awf' has been removed as the upstream project was archived in 2021"; # Added 2025-10-03
@@ -1093,6 +1094,7 @@ mapAliases {
   latte-dock = throw "'latte-dock' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   layan-kde = throw "'layan-kde' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   lazarus-qt = throw "'lazarus-qt' has been renamed to/replaced by 'lazarus-qt5'"; # Converted to throw 2025-10-27
+  leaf = throw "'leaf' has been removed as it is unmaintained. Consider using 'fastfetch' instead"; # Added 2026-04-24
   ledger_agent = throw "'ledger_agent' has been renamed to/replaced by 'ledger-agent'"; # Converted to throw 2025-10-27
   lesstif = throw "'lesstif' has been removed due to its being broken and unmaintained upstream. Consider using 'motif' instead."; # Added 2025-06-09
   lexical = throw "'lexical' has been removed because it was deprecated and archived upstream. Consider using 'beamPackages.expert' instead"; # Added 2026-02-24
