@@ -15482,6 +15482,12 @@
     githubId = 480920;
     name = "Luca Bruno";
   };
+  leuflatworm = {
+    email = "leu@mail.leuf.jp";
+    github = "leuflatworm";
+    githubId = 61083894;
+    name = "Leu";
+  };
   leungbk = {
     email = "leungbk@mailfence.com";
     github = "leungbk";
