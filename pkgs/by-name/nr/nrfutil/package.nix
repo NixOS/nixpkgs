@@ -156,10 +156,21 @@ symlinkJoin {
         --zsh $(realpath "$out"/share/nrfutil-completion/scripts/zsh/_nrfutil)
     '';
 
-  passthru = {
-    updateScript = ./update.sh;
-    withExtensions = extensions: nrfutil.override { inherit extensions; };
-  };
+  passthru =
+    let
+      availableExtensions = lib.attrNames (
+        lib.removeAttrs platformSources.packages [
+          "nrfutil"
+          "nrfutil-completion"
+        ]
+      );
+    in
+    {
+      updateScript = ./update.sh;
+      allExtensions = availableExtensions;
+      withExtensions = extensions: nrfutil.override { inherit extensions; };
+      withAllExtensions = nrfutil.override { extensions = availableExtensions; };
+    };
 
   meta = sharedMeta // {
     mainProgram = "nrfutil";
