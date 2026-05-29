@@ -75,7 +75,7 @@ let
     description = ''
       Base URL of your Forgejo instance.
 
-      Can also be specified in `settings.servier.connections`
+      Can also be specified in `settings.server.connections`
     '';
   };
 
@@ -220,10 +220,10 @@ in
             type = types.nullOr (types.either types.str types.path);
             default = null;
             description = ''
+              **DEPRECATED** Replaced by `settings.server.connections`
+
               Path to a file containing only the token that will be used to register
               on start with the the configured Forgejo instance.
-
-              **Deprecated** Replaced by `settings.server.connections`
 
               <https://forgejo.org/docs/latest/admin/actions/registration/>
             '';
@@ -267,7 +267,7 @@ in
                           Path to the Forgejo v15+ pre-registered runner token.
                           Supports a single placeholder: `$CREDENTIALS_DIRECTORY`
 
-                          Can be combined with `instances.<instance>.credentails`
+                          Can be combined with `instances.<instance>.credentials`
 
                           <https://forgejo.org/docs/latest/admin/actions/registration/>
                         '';
@@ -353,6 +353,10 @@ in
           {
             assertion = connection.url != null;
             message = "forgejo.runner.instances.${name_inst}.settings.server.connections.${name} requires `url` to be set.";
+          }
+          {
+            assertion = connection.labels != null;
+            message = "forgejo.runner.instances.${name_inst}.settings.server.connections.${name} requires `labels` to be set.";
           }
           {
             assertion = !(connection ? token);
