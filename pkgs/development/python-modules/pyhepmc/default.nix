@@ -5,6 +5,7 @@
   cmake,
   setuptools,
   setuptools-scm,
+  backports-zstd,
   numpy,
   pybind11,
   wheel,
@@ -34,7 +35,10 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    backports-zstd
+    numpy
+  ];
 
   dontUseCmakeConfigure = true;
 
