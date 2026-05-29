@@ -11,6 +11,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   # For tests
   testers,
   runCommand,
@@ -26,7 +27,7 @@
   numactl,
   writeText,
   # Processing, video codecs, containers
-  ffmpeg_7-full,
+  ffmpeg_8-full,
   nv-codec-headers,
   libogg,
   x264,
@@ -85,14 +86,13 @@
 }:
 
 let
-  version = "1.10.2";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
-    # uses version commit for logic in version.txt
-    rev = "dddf75f756e56d2b8dbb0609175bc12047a4841d";
-    hash = "sha256-CIMpJDJ0IIz95f3/zxeQqpCFpHWEmdgA+VaaUDY516A=";
+    tag = version;
+    hash = "sha256-oWXNiRK0wbmINnjM3GrOIawcSULTuy3yANfgW8li9F0=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -100,46 +100,43 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.1.1";
+  ffmpeg-version = "8.0.1";
   ffmpeg-hb =
-    (ffmpeg_7-full.override {
+    (ffmpeg_8-full.override {
       version = ffmpeg-version;
-      hash = "sha256-GyS8imOqfOUPxXrzCiQtzCQIIH6bvWmQAB0fKUcRsW4=";
+      hash = "sha256-eA5fP/uZqF5+jDDt4tHArGqyt7zbrLZ21v+Lchr8OS8=";
     }).overrideAttrs
       (old: {
         patches = (old.patches or [ ]) ++ [
+          (fetchpatch2 {
+            name = "unbreak-hardcoded-tables.patch";
+            url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/1d47ae65bf6df91246cbe25c997b25947f7a4d1d";
+            hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
+          })
           "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
           "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
           "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
           "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
           "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
-          "${src}/contrib/ffmpeg/A06-dvdsubdec-fix-processing-of-partial-packets.patch"
-          "${src}/contrib/ffmpeg/A07-dvdsubdec-return-number-of-bytes-used.patch"
-          "${src}/contrib/ffmpeg/A08-dvdsubdec-use-pts-of-initial-packet.patch"
-          "${src}/contrib/ffmpeg/A09-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
-          "${src}/contrib/ffmpeg/A10-ccaption_dec-fix-pts-in-real_time-mode.patch"
-          "${src}/contrib/ffmpeg/A11-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
-          "${src}/contrib/ffmpeg/A12-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
-
-          # patch to fix <https://github.com/HandBrake/HandBrake/issues/5011>
-          # commented out because it causes ffmpeg's filter-pixdesc-p010le test to fail.
-          # "${src}/contrib/ffmpeg/A13-libswscale-fix-yuv420p-to-p01xle-color-conversion-bu.patch"
-
-          "${src}/contrib/ffmpeg/A14-hevc_mp4toannexb.c-fix-qsv-decode-of-10bit-hdr.patch"
-          "${src}/contrib/ffmpeg/A15-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
-          "${src}/contrib/ffmpeg/A16-avcodec-amfenc-Add-support-for-on-demand-key-frames.patch"
-          "${src}/contrib/ffmpeg/A17-avcodec-amfenc-properly-set-primaries-transfer-and-m.patch"
-          "${src}/contrib/ffmpeg/A18-libavcodec-qsvenc-update-has_b_frames-value.patch"
-          "${src}/contrib/ffmpeg/A19-libavcodec-qsv-enable-av1-scc.patch"
-          "${src}/contrib/ffmpeg/A20-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
-          "${src}/contrib/ffmpeg/A21-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
-          "${src}/contrib/ffmpeg/A22-avformat-mov-read-and-write-additional-iTunes-style-.patch"
-          "${src}/contrib/ffmpeg/A23-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
-          "${src}/contrib/ffmpeg/A24-AV1-videotoolbox.patch"
-          "${src}/contrib/ffmpeg/A25-videotoolbox-speedup-decoding.patch"
-          "${src}/contrib/ffmpeg/A28-enable-av1_mf-encoder.patch"
-          "${src}/contrib/ffmpeg/A30-qsv-fixed-BT2020-BT709-conversion.patch"
-          "${src}/contrib/ffmpeg/A31-Parse-EAC3-Atmos-ComplexityIndex-for-MP4-remuxing.patch"
+          "${src}/contrib/ffmpeg/A06-avformat-mov-read-and-write-additional-iTunes-style-.patch"
+          "${src}/contrib/ffmpeg/A07-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
+          "${src}/contrib/ffmpeg/A08-dvdsubdec-fix-processing-of-partial-packets.patch"
+          "${src}/contrib/ffmpeg/A09-dvdsubdec-return-number-of-bytes-used.patch"
+          "${src}/contrib/ffmpeg/A10-dvdsubdec-use-pts-of-initial-packet.patch"
+          "${src}/contrib/ffmpeg/A11-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
+          "${src}/contrib/ffmpeg/A12-ccaption_dec-fix-pts-in-real_time-mode.patch"
+          "${src}/contrib/ffmpeg/A13-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
+          "${src}/contrib/ffmpeg/A14-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
+          "${src}/contrib/ffmpeg/A15-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
+          "${src}/contrib/ffmpeg/A16-libavcodec-qsvenc.c-update-has_b_frames-value-after-.patch"
+          "${src}/contrib/ffmpeg/A17-qsv-enable-av1-scc.patch"
+          "${src}/contrib/ffmpeg/A18-fixed-BT2020-BT709-conversion-via-VPP.patch"
+          "${src}/contrib/ffmpeg/A19-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
+          "${src}/contrib/ffmpeg/A20-videotoolbox-speedup-decoding.patch"
+          "${src}/contrib/ffmpeg/A21-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
+          "${src}/contrib/ffmpeg/A22-fix-d3d11-static-pool-size-error.patch"
+          "${src}/contrib/ffmpeg/A23-movenc-set-the-chapters-track-language-to-the-same-a.patch"
+          "${src}/contrib/ffmpeg/A24-movenc-use-version-2-audio-descriptor-for-2-channels.patch"
         ];
       });
 
@@ -346,6 +343,7 @@ let
 
     meta = {
       homepage = "https://handbrake.fr/";
+      changelog = "https://github.com/HandBrake/HandBrake/releases/tag/${src.tag}";
       description = "Tool for converting video files and ripping DVDs";
       longDescription = ''
         Tool for converting and remuxing video files
