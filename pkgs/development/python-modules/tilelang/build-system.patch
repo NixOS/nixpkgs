@@ -1,0 +1,15 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -76,10 +76,10 @@
+ requires = [
+     "cython>=3.1.0",
+     "scikit-build-core",
+-    "z3-solver>=4.13.0,<4.15.5",
++    # "z3-solver>=4.13.0,<4.15.5",
+     # Not for auditwheel, explicitly add patchelf for repairing libz3.so.
+     # See tvm's CMakeLists.txt for more information.
+-    "patchelf>=0.17.2; platform_system == 'Linux'",
++    # "patchelf>=0.17.2; platform_system == 'Linux'",
+     # Under PEP 517 build isolation on Windows, provide nvcc and CUDA headers so
+     # CMake's find_package(CUDAToolkit) succeeds without a host CUDA install.
+     "nvidia-cuda-nvcc>=13; platform_system == 'Windows'",
