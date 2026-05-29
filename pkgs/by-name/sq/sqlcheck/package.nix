@@ -37,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=character-conversion";
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
 
   meta = {
@@ -45,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sqlcheck";
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ h7x4 ];
   };
 })
