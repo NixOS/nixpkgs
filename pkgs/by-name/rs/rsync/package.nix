@@ -5,6 +5,7 @@
   fetchpatch,
 
   updateAutotoolsGnuConfigScriptsHook,
+  bashNonInteractive,
   perl,
   python3,
   libiconv,
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     libiconv
     zlib
     popt
@@ -109,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+  strictDeps = true;
 
   __darwinAllowLocalNetworking = true;
 
