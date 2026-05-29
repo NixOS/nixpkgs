@@ -9285,11 +9285,11 @@ with pkgs;
     wlroots = wlroots_0_20;
   };
 
-  tuxclocker = libsForQt5.callPackage ../applications/misc/tuxclocker {
+  tuxclocker = callPackage ../applications/misc/tuxclocker {
     tuxclocker-plugins = tuxclocker-plugins-with-unfree;
   };
 
-  tuxclocker-without-unfree = libsForQt5.callPackage ../applications/misc/tuxclocker { };
+  tuxclocker-without-unfree = callPackage ../applications/misc/tuxclocker { };
 
   linphonePackages = recurseIntoAttrs (
     callPackage ../applications/networking/instant-messengers/linphone { }
