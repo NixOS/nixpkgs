@@ -1535,10 +1535,6 @@ with haskellLib;
   fgl = doJailbreak super.fgl;
 
   # 2026-05-17: allow QuickCheck 2.16
-  # Sent Claude an email on 2026-05-18.
-  bitwise = doJailbreak super.bitwise;
-
-  # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell-hvr/lzma/issues/45
   lzma = doJailbreak super.lzma;
 
