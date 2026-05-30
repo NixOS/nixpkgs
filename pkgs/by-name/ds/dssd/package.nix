@@ -6,47 +6,42 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dssd";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "ylxdzsw";
     repo = "dssd";
-    rev = "v${version}";
-    hash = "sha256-ExVL7og7uWGAAYTwESzr/2iDWhemovDhJINPEQoHk7c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gAV4gwrfvYfc2f1tDY/cNOFMrQzrzHSmEFsKg7ke/6c=";
   };
 
-  # https://github.com/ylxdzsw/dssd/issues/7
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-yX2/2TW3FNbqwzR6+5yP26E2Eps0bTJgJJrDIQG2KQU=";
 
   postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-
     substituteInPlace dssd.service org.freedesktop.secrets.service \
       --replace-fail /usr/bin/dssd $out/bin/dssd
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    dbus
-  ];
+  buildInputs = [ dbus ];
 
   postInstall = ''
     install dssd.service -Dt $out/lib/systemd/user/
     install org.freedesktop.secrets.service -Dt $out/share/dbus-1/system-services/
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Dead Simple Secret Daemon";
-    homepage = "https://github.com/ylxdzsw/dssd/";
+    homepage = "https://github.com/ylxdzsw/dssd";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ atemu ];
     mainProgram = "dssd";
+    maintainers = with lib.maintainers; [ phanirithvij ];
+    platforms = lib.platforms.linux;
   };
-}
+})
