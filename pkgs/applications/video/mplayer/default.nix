@@ -178,93 +178,42 @@ stdenv.mkDerivation {
 
   configurePlatforms = [ ];
   configureFlags = [
-    "--enable-freetype"
-    (if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig")
-  ]
-  ++ (
-    if x11Support then
-      [
-        "--enable-x11"
-        "--enable-gl"
-      ]
-    else
-      [
-        "--disable-x11"
-        "--disable-gl"
-      ]
-  )
-  ++ [
-    (if xineramaSupport then "--enable-xinerama" else "--disable-xinerama")
-    (if xvSupport then "--enable-xv" else "--disable-xv")
-    (if alsaSupport then "--enable-alsa" else "--disable-alsa")
-    (if screenSaverSupport then "--enable-xss" else "--disable-xss")
-    (if vdpauSupport then "--enable-vdpau" else "--disable-vdpau")
-    (if cddaSupport then "--enable-cdparanoia" else "--disable-cdparanoia")
-    (if dvdnavSupport then "--enable-dvdnav" else "--disable-dvdnav")
-    (if bluraySupport then "--enable-bluray" else "--disable-bluray")
-    (if amrSupport then "--enable-libopencore_amrnb" else "--disable-libopencore_amrnb")
-    (if cacaSupport then "--enable-caca" else "--disable-caca")
-  ]
-  ++ (
-    if lameSupport then
-      [
-        "--enable-mp3lame"
-        "--disable-mp3lame-lavc"
-      ]
-    else
-      [
-        "--disable-mp3lame"
-        "--enable-mp3lame-lavc"
-      ]
-  )
-  ++ [
-    (if speexSupport then "--enable-speex" else "--disable-speex")
-    (if theoraSupport then "--enable-theora" else "--disable-theora")
-  ]
-  ++ (
-    if x264Support then
-      [
-        "--enable-x264"
-        "--disable-x264-lavc"
-      ]
-    else
-      [
-        "--disable-x264"
-        "--enable-x264-lavc"
-      ]
-  )
-  ++ [
-    (if jackaudioSupport then "" else "--disable-jack")
-    (if pulseSupport then "--enable-pulse" else "--disable-pulse")
-  ]
-  ++ (
-    if v4lSupport then
-      [
-        "--enable-v4l2"
-        "--enable-tv-v4l2"
-        "--enable-radio"
-        "--enable-radio-v4l2"
-        "--enable-radio-capture"
-      ]
-    else
-      [
-        "--disable-v4l2"
-        "--disable-tv-v4l2"
-        "--disable-radio"
-        "--disable-radio-v4l2"
-        "--disable-radio-capture"
-      ]
-  )
-  ++ [
-    "--disable-xanim"
-    "--disable-xvid"
-    "--disable-xvid-lavc"
-    "--disable-ossaudio"
-    "--disable-ffmpeg_a"
+    (lib.enableFeature true "freetype")
+    (lib.enableFeature fontconfigSupport "fontconfig")
+    (lib.enableFeature x11Support "x11")
+    (lib.enableFeature x11Support "gl")
+    (lib.enableFeature xineramaSupport "xinerama")
+    (lib.enableFeature xvSupport "xv")
+    (lib.enableFeature alsaSupport "alsa")
+    (lib.enableFeature screenSaverSupport "xss")
+    (lib.enableFeature vdpauSupport "vdpau")
+    (lib.enableFeature cddaSupport "cdparanoia")
+    (lib.enableFeature dvdnavSupport "dvdnav")
+    (lib.enableFeature bluraySupport "bluray")
+    (lib.enableFeature amrSupport "libopencore_amrnb")
+    (lib.enableFeature cacaSupport "caca")
+    (lib.enableFeature lameSupport "mp3lame")
+    (lib.enableFeature (!lameSupport) "mp3lame-lavc")
+    (lib.enableFeature speexSupport "speex")
+    (lib.enableFeature theoraSupport "theora")
+    (lib.enableFeature x264Support "x264")
+    (lib.enableFeature (!x264Support) "x264-lavc")
+    (lib.enableFeature pulseSupport "pulse")
+    (lib.enableFeature v4lSupport "v4l2")
+    (lib.enableFeature v4lSupport "tv-v4l2")
+    (lib.enableFeature v4lSupport "radio")
+    (lib.enableFeature v4lSupport "radio-v4l2")
+    (lib.enableFeature v4lSupport "radio-capture")
+    (lib.enableFeature false "xanim")
+    (lib.enableFeature false "xvid")
+    (lib.enableFeature false "xvid-lavc")
+    (lib.enableFeature false "ossaudio")
+    (lib.enableFeature false "ffmpeg_a")
     "--yasm=${buildPackages.yasm}/bin/yasm"
     # Note, the `target` vs `host` confusion is intentional.
     "--target=${stdenv.hostPlatform.config}"
   ]
+  ++ lib.optional (!jackaudioSupport) "--disable-jack"
   ++ lib.optional (useUnfreeCodecs && codecs != null && !crossBuild) "--codecsdir=${codecs}"
   ++ lib.optional (stdenv.hostPlatform.isx86 && !crossBuild) "--enable-runtime-cpudetection"
   ++ lib.optional fribidiSupport "--enable-fribidi"
