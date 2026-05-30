@@ -3,10 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  isPyPy,
 
   # build-system
-  poetry-core,
   rustPlatform,
 
   # native dependencies
@@ -14,54 +12,49 @@
 
   # dependencies
   python-dateutil,
-  time-machine,
   tzdata,
 
   # tests
   pytestCheckHook,
-  pytz,
+  time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pendulum";
-  version = "3.1.0-unstable-2025-10-28";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sdispater";
     repo = "pendulum";
-    rev = "2982f25feaad2e58ad1530d3b53cc30fc1c82bd6";
-    hash = "sha256-1ULvlWLZx3z5eGmWJfrN46x0ohJ+mAxipm6l6rykGPY=";
+    tag = finalAttrs.version;
+    hash = "sha256-zpBymeYhCy+yu6RPhOuN5xOVk6928hd3+oRsfiBPPuY=";
   };
 
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    sourceRoot = "${src.name}/rust";
-    hash = "sha256-Ozg+TW/woJsqmbmyDsgdMua3Lmnn+KBvBhd9kVik3XY=";
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/rust";
+    hash = "sha256-tC65lxI561ygOhBFujWzGk32XiQH6QB42nqboWSfQrg=";
   };
 
   nativeBuildInputs = [
-    poetry-core
     rustPlatform.maturinBuildHook
     rustPlatform.cargoSetupHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     tzdata
-  ]
-  ++ lib.optionals (!isPyPy) [
-    time-machine
   ];
 
   pythonImportsCheck = [ "pendulum" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytz
+    time-machine
   ];
 
   disabledTestPaths = [
@@ -75,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python datetimes made easy";
     homepage = "https://github.com/sdispater/pendulum";
-    changelog = "https://github.com/sdispater/pendulum/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/sdispater/pendulum/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

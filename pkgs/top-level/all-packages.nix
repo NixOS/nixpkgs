@@ -4899,11 +4899,11 @@ with pkgs;
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
-  python3 = python313;
+  python3 = python314;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python313Packages;
+  python3Packages = dontRecurseIntoAttrs python314Packages;
 
   pypy = pypy2;
   pypy2 = pypy27;

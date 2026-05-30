@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mcp";
-  version = "1.26.0";
+  version = "1.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TGkAyuBcIstL2BCZYBWoi7PhnhoBvap67sLWGe0QUoU=";
+    hash = "sha256-LhoLcFC5+7xOCfud23sbHyTMxKYmdeZh0c+UtGdvzCs=";
   };
 
   # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst

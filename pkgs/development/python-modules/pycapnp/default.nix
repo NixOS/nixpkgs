@@ -3,6 +3,7 @@
   buildPythonPackage,
   replaceVars,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   wheel,
   capnproto,
@@ -35,6 +36,12 @@ buildPythonPackage rec {
     # other than the builtin schemas (based on quick GitHub code search), so I don't
     # think it's worthwhile.
     (replaceVars ./include-paths.patch { inherit capnproto; })
+
+    (fetchpatch {
+      url = "https://github.com/capnproto/pycapnp/commit/aa90ab6844df4718f02e2ca4974858d5ab0b079c.patch";
+      name = "python314-compat.patch";
+      hash = "sha256-pscOdgPotLZsW0XWyRTJigIDl3uWOizA1W0gQGZHSyg=";
+    })
   ];
 
   build-system = [
