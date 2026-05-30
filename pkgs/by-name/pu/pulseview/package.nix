@@ -13,7 +13,7 @@
   libftdi1,
   hidapi,
   glibmm,
-  pcre,
+  pcre2,
   python3,
   bluez,
   libsForQt5,
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     libftdi1
     hidapi
     glibmm
-    pcre
+    pcre2
     python3
     libsForQt5.qtsvg
   ]
