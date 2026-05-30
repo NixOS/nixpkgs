@@ -1579,6 +1579,7 @@ in
   strichliste = runTest ./web-apps/strichliste.nix;
   strongswan-swanctl = runTest ./strongswan-swanctl.nix;
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix { };
+  stump = runTest ./web-apps/stump.nix;
   stunnel = import ./stunnel.nix { inherit runTest; };
   sudo = runTest ./sudo.nix;
   sudo-rs = runTest ./sudo-rs.nix;
