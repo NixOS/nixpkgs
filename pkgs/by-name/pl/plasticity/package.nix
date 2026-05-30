@@ -133,7 +133,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ imadnyc ];
+    maintainers = with lib.maintainers; [
+      imadnyc
+      bearfm
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

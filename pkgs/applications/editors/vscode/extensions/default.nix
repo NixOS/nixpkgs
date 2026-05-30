@@ -1375,8 +1375,8 @@ let
         mktplcRef = {
           name = "competitive-programming-helper";
           publisher = "DivyanshuAgrawal";
-          version = "2026.5.1777808848";
-          hash = "sha256-HzevH4HO9QVkSwARx5EF5ylKE3bjOgWt7eSPP5rHEUw=";
+          version = "2026.5.1779885478";
+          hash = "sha256-8RU6JWHeYOAxof2TXpeXlXSVD9+0e0E46X85A11l4Pk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
@@ -3213,8 +3213,8 @@ let
         mktplcRef = {
           name = "vscode-kubernetes-tools";
           publisher = "ms-kubernetes-tools";
-          version = "1.3.29";
-          hash = "sha256-FzNVg925O76GTmc/14W/IjC5VLkKoRIlK1p/b+xRsiw=";
+          version = "1.4.0";
+          hash = "sha256-t64OF+rxTphnWr1BNUYxG0/W+gAP8dziARpQK8FIzU4=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4361,8 +4361,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "5.2.3";
-          hash = "sha256-HSQjoYIQa8CVw6Fjb3H+et6U3urptNjrIT8HLgHirxA=";
+          version = "5.3.0";
+          hash = "sha256-ic1/RhQdkY0WbHkLiw618Rg2jblkYKjprS8w98I7Pgc=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -5200,8 +5200,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.2.9";
-          hash = "sha256-LkoytGAAZwjm3Mm3EixCHjnh1dkxB0lKMv5KJVYSwGY=";
+          version = "3.3.2";
+          hash = "sha256-aGjhpgBhXVl/0dpWtfn7Eps5r7PJr99Dyu4FlPYtCw0=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
