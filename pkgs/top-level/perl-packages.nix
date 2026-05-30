@@ -5847,21 +5847,21 @@ with self;
 
   CompressRawZlib = buildPerlPackage {
     pname = "Compress-Raw-Zlib";
-    version = "2.206";
+    version = "2.222";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.206.tar.gz";
-      hash = "sha256-Rnhaajg6HIQ4lbf58l1ddZ58MFFZ+dHgSjYE63THc3Q=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.222.tar.gz";
+      hash = "sha256-Hf19URplVifIGBXTDTurwo+luIRV/wP4sECZ3LUShrg=";
     };
 
     preConfigure = ''
       cat > config.in <<EOF
-        BUILD_ZLIB   = False
-        INCLUDE      = ${pkgs.zlib.dev}/include
-        LIB          = ${pkgs.zlib.out}/lib
-        OLD_ZLIB     = False
-        GZIP_OS_CODE = AUTO_DETECT
-        USE_ZLIB_NG  = False
+        BUILD_ZLIB    = False
+        ZLIB_INCLUDE  = ${pkgs.zlib.dev}/include
+        ZLIB_LIB      = ${pkgs.zlib.out}/lib
+        OLD_ZLIB      = False
+        GZIP_OS_CODE  = AUTO_DETECT
+        USE_ZLIB_NG   = False
       EOF
     '';
 
