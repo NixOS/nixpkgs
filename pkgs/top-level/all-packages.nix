@@ -2742,10 +2742,6 @@ with pkgs;
   libportal-qt5 = libportal.override { variant = "qt5"; };
   libportal-qt6 = libportal.override { variant = "qt6"; };
 
-  librest = callPackage ../development/libraries/librest { };
-
-  librest_1_0 = callPackage ../development/libraries/librest/1.0.nix { };
-
   licensee = callPackage ../tools/package-management/licensee { };
 
   linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
