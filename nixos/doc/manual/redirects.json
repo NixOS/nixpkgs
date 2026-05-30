@@ -226,26 +226,17 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
-  "modular-service-composition": [
-    "index.html#modular-service-composition"
-  ],
-  "modular-service-migration": [
-    "index.html#modular-service-migration"
-  ],
-  "modular-service-options-portable": [
-    "index.html#modular-service-options-portable"
-  ],
   "modular-service-options-systemd": [
     "index.html#modular-service-options-systemd"
   ],
-  "modular-service-portability": [
-    "index.html#modular-service-portability"
-  ],
-  "modular-service-review": [
-    "index.html#modular-service-review"
-  ],
-  "modular-services": [
-    "index.html#modular-services"
+  "modular-services-nixos": [
+    "index.html#modular-services-nixos",
+    "index.html#modular-services",
+    "index.html#modular-service-portability",
+    "index.html#modular-service-composition",
+    "index.html#modular-service-migration",
+    "index.html#modular-service-review",
+    "index.html#modular-service-options-portable"
   ],
   "module-services-amule": [
     "index.html#module-services-amule"

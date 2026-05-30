@@ -11464,7 +11464,12 @@ with pkgs;
     else
       haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
 
-  nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
+  nixpkgs-manual =
+    let
+      bundledModularServiceNames = import ./modular-services-bundled.nix;
+      bundledModularServiceModules = lib.genAttrs bundledModularServiceNames (name: pkgs.${name}.services);
+    in
+    callPackage ../../doc/doc-support/package.nix { inherit bundledModularServiceModules; };
 
   nixos-artwork = recurseIntoAttrs (callPackage ../data/misc/nixos-artwork { });
 
