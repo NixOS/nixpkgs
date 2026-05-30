@@ -49,6 +49,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     homepage = "https://pyudev.readthedocs.org/";
     description = "Pure Python libudev binding";
+    changelog = "https://github.com/pyudev/pyudev/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ frogamic ];
   };
