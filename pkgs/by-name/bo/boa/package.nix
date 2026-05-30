@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       unlicense
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iamanaws ];
   };
 })
