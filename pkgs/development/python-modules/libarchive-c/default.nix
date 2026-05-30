@@ -11,16 +11,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libarchive-c";
   version = "5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Changaco";
-    repo = "python-${pname}";
-    tag = version;
-    sha256 = "sha256-JqXTV1aD3k88OlW+8rT3xsDuW34+1xErG7hkupvL7Uo=";
+    repo = "python-libarchive-c";
+    tag = finalAttrs.version;
+    hash = "sha256-JqXTV1aD3k88OlW+8rT3xsDuW34+1xErG7hkupvL7Uo=";
   };
 
   patches = [
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     description = "Python interface to libarchive";
     license = lib.licenses.cc0;
   };
-}
+})
