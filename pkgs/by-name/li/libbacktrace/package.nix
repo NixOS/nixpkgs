@@ -33,6 +33,15 @@ stdenv.mkDerivation {
     ./0004-libbacktrace-Support-NIX_DEBUG_INFO_DIRS-environment.patch
   ];
 
+  # https://github.com/ianlancetaylor/libbacktrace/issues/163
+  postPatch =
+    lib.optionalString
+      (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian && stdenv.hostPlatform.isAbiElfv1)
+      ''
+        substituteInPlace Makefile.am \
+          --replace-fail 'MAKETESTS += mtest_minidebug' '# MAKETESTS += mtest_minidebug'
+      '';
+
   nativeBuildInputs = [
     autoreconfHook
   ];
