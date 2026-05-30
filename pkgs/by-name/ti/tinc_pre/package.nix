@@ -12,14 +12,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinc";
   version = "1.1pre18";
 
   src = fetchFromGitHub {
     owner = "gsliepen";
     repo = "tinc";
-    rev = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-1anjTUlVLx57FlUqGwBd590lfkZ2MmrM1qRcMl4P7Sg=";
   };
 
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
 
   # needed so the build doesn't need to run git to find out the version.
   prePatch = ''
-    substituteInPlace configure.ac --replace UNKNOWN ${version}
-    echo "${version}" > configure-version
-    echo "https://tinc-vpn.org/git/browse?p=tinc;a=log;h=refs/tags/release-${version}" > ChangeLog
-    sed -i '/AC_INIT/s/m4_esyscmd_s.*/${version})/' configure.ac
+    substituteInPlace configure.ac --replace UNKNOWN ${finalAttrs.version}
+    echo "${finalAttrs.version}" > configure-version
+    echo "https://tinc-vpn.org/git/browse?p=tinc;a=log;h=refs/tags/release-${finalAttrs.version}" > ChangeLog
+    sed -i '/AC_INIT/s/m4_esyscmd_s.*/${finalAttrs.version})/' configure.ac
   '';
 
   configureFlags = [
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
       mic92
     ];
   };
-}
+})
