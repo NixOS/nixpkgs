@@ -130,6 +130,10 @@ builtins.intersectAttrs super {
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
 
+  # The test suite depends on an impure cabal-install installation in
+  # $HOME, which we don't have in our build sandbox.
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
+
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
