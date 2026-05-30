@@ -32,6 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
   '';
 
+  doInstallCheck = true;
+  # We can't do a version check because there is no version command
+  # but we do want to check that python3 is available
+  installCheckPhase = ''
+    $out/bin/nginxfmt --help
+  '';
+
   meta = {
     description = "Nginx config file formatter";
     maintainers = with lib.maintainers; [ Baughn ];
