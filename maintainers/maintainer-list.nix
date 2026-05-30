@@ -22145,7 +22145,7 @@
     name = "Ian Mitchell";
     email = "mitchell.ian.2001@gmail.com";
     github = "pretentiousUsername";
-    githubId = "94192644";
+    githubId = 94192644;
   };
   priegger = {
     email = "philipp@riegger.name";
