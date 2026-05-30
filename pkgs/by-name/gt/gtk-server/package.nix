@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-server";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "https://www.gtk-server.org/stable/gtk-server-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-sFL3y068oXDKgkEUcNnGVsNSPBdI1NzpsqdYJfmOQoA=";
+    hash = "sha256-YRvnE4fH5jWITSiMUbtlaOJFKAW0/Alzo1YVDlm8CO8=";
   };
 
   preConfigure = ''
@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.gtk-server.org/";
     description = "Gtk-server for interpreted GUI programming";
+    changelog = "http://www.gtk-server.org/notes.txt";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
