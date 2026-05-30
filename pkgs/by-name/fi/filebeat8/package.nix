@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  systemd,
   versionCheckHook,
   nix-update-script,
 }:
@@ -9,6 +10,8 @@
 buildGoModule (finalAttrs: {
   pname = "filebeat";
   version = "8.19.16";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
@@ -22,6 +25,13 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-aCoXzWnNsctxJmsfeUyVSLkUY59adtIn2JxxGKPBob8=";
 
   subPackages = [ "filebeat" ];
+
+  buildInputs = [ systemd ];
+  tags = [ "withjournald" ];
+
+  postFixup = ''
+    patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -41,5 +51,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ srhb ];
     mainProgram = "filebeat";
+    platforms = lib.platforms.linux;
   };
 })
