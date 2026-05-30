@@ -104,6 +104,16 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
     ''
 
+    # Hardcode the CC path so Triton's runtime JIT compilation doesn't break
+    # in environments without a compiler in PATH.
+    + ''
+      substituteInPlace python/triton/runtime/build.py \
+        --replace-fail 'cc = os.environ.get("CC")' \
+          'cc = os.environ.get("CC", "${
+            lib.getExe' (if cudaSupport then cudaPackages.backendStdenv.cc else stdenv.cc) "cc"
+          }")'
+    ''
+
     # triton will try dlopening libcublas.so at runtime
     + lib.optionalString cudaSupport ''
       substituteInPlace third_party/nvidia/include/cublas_instance.h \
