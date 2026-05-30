@@ -1,0 +1,73 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  apache-tvm-ffi,
+  einops,
+  nvidia-cutlass-dsl,
+  # nvidia-matmul-heuristics,
+  jax,
+  # jax-tvm-ffi,
+  pandas,
+  setuptools,
+  torch,
+  torch-c-dlpack-ext,
+}:
+buildPythonPackage (finalAttrs: {
+  pname = "quack-kernels";
+  version = "0.5.0";
+  pyproject = true;
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "Dao-AILab";
+    repo = "quack";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y56jJUTn/HopOe0yNxxxwMf+abXSdzTa8+YoiHd/rFE=";
+  };
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    apache-tvm-ffi
+    einops
+    nvidia-cutlass-dsl
+    torch
+    torch-c-dlpack-ext
+  ];
+
+  optional-dependencies = {
+    heuristics = [
+      # nvidia-matmul-heuristics
+    ];
+    jax = [
+      jax
+      # jax-tvm-ffi
+    ];
+    bench = [
+      pandas
+    ];
+  };
+
+  pythonImportsCheck = [
+    "quack"
+  ];
+
+  # Fatal Python error: Aborted
+  doCheck = false;
+
+  meta = {
+    description = "Quirky Assortment of CuTe Kernels";
+    homepage = "https://github.com/Dao-AILab/quack";
+    downloadPage = "https://github.com/Dao-AILab/quack/releases";
+    changelog = "https://github.com/Dao-AILab/quack/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      prince213
+    ];
+  };
+})
