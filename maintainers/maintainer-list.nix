@@ -23375,12 +23375,6 @@
     githubId = 6047658;
     name = "Ryan Horiguchi";
   };
-  rht = {
-    email = "rhtbot@protonmail.com";
-    github = "rht";
-    githubId = 395821;
-    name = "rht";
-  };
   rhydianjenkins = {
     name = "Rhydian Jenkins";
     github = "RhydianJenkins";
