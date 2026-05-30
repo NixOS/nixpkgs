@@ -25,6 +25,8 @@ self: super: with self; {
     );
   };
 
+  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix { };
+
   setuptools = callPackage ../development/python-modules/setuptools { };
 
   # by_regex ensures inherit statements are sorted after the (first) attribute name that is inherited.

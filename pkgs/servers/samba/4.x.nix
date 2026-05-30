@@ -35,7 +35,6 @@
   rpcsvc-proto,
   bash,
   python3Packages,
-  pkgsHostTarget,
   nixosTests,
   libiconv,
   testers,
@@ -119,10 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3Packages.python
-    # Not `python3Packages.wrapPython` to workaround
-    # `python3Packages.wrapPython.__spliced.buildHost` having the wrong
-    # `pythonHost`. See https://github.com/NixOS/nixpkgs/issues/434307
-    pkgsHostTarget.python3Packages.wrapPython
+    python3Packages.wrapPython
     wafHook
     pkg-config
     bison

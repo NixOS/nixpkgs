@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  pkgsHostTarget,
 }:
 
 stdenv.mkDerivation {
@@ -19,9 +18,7 @@ stdenv.mkDerivation {
 
   pythonPath = with python3Packages; [ pyyaml ];
   nativeBuildInputs = [
-    # Not `python3Packages.wrapPython` to workaround `python3Packages.wrapPython.__spliced.buildHost` having the wrong `pythonHost`
-    # See https://github.com/NixOS/nixpkgs/issues/434307
-    pkgsHostTarget.python3Packages.wrapPython
+    python3Packages.wrapPython
   ];
 
   installPhase = ''
