@@ -17,14 +17,29 @@ in
     package = lib.mkPackageOption pkgs "cloudflare-ddns" { };
 
     credentialsFile = lib.mkOption {
-      type = lib.types.path;
+      type = lib.types.nullOr lib.types.path;
       description = ''
         Path to a file containing the Cloudflare API authentication token.
         The file content should be in the format `CLOUDFLARE_API_TOKEN=YOUR_SECRET_TOKEN`.
-        The service user needs read access to this file.
-        Ensure permissions are secure (e.g., `0400` or `0440`) and ownership is appropriate
-        Using `CLOUDFLARE_API_TOKEN` is preferred over the deprecated `CF_API_TOKEN`.
+        The file does not need to be readable by the service user.
+        Ensure permissions are secure (e.g., `0400` or `0440`) and ownership is appropriate (e.g., owned by root).
+
+        Either this option or [](#opt-services.cloudflare-ddns.apiTokenFile) must be set.
       '';
+      default = null;
+      example = "/run/secrets/cloudflare-ddns-token";
+    };
+    apiTokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      description = ''
+        Path to a file containing the Cloudflare API authentication token.
+        The file must only contain the token: `YOUR_SECRET_TOKEN`.
+        The file does not need to be readable by the service user.
+        Ensure permissions are secure (e.g., `0400` or `0440`) and ownership is appropriate (e.g., owned by root).
+
+        Either this option or [](#opt-services.cloudflare-ddns.credentialsFile) must be set.
+      '';
+      default = null;
       example = "/run/secrets/cloudflare-ddns-token";
     };
 
@@ -197,15 +212,21 @@ in
     };
 
     user = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflare-ddns";
-      description = "User account under which the service runs.";
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        User account under which the service runs.
+        If null (the default), the service will use a dynamic user.
+      '';
     };
 
     group = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflare-ddns";
-      description = "Group under which the service runs.";
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Group under which the service runs.
+        If null (the default), the service will use a dynamic group.
+      '';
     };
   };
 
@@ -228,24 +249,11 @@ in
         assertion = cfg.provider.ipv4 != "none" || cfg.provider.ipv6 != "none";
         message = "services.cloudflare-ddns requires at least one provider (ipv4 or ipv6) to be enabled (not 'none')";
       }
+      {
+        assertion = cfg.credentialsFile != null || cfg.apiTokenFile != null;
+        message = "services.cloudflare-ddns requires either credentialsFile or apiTokenFile to be set";
+      }
     ];
-
-    users.users.${cfg.user} = {
-      description = "Cloudflare DDNS service user";
-      isSystemUser = true;
-      group = cfg.group;
-      home = "/var/lib/${cfg.user}";
-    };
-
-    users.groups.${cfg.group} = { };
-
-    systemd.tmpfiles.settings."cloudflare-ddns" = {
-      "/var/lib/${cfg.user}".d = {
-        mode = "0750";
-        user = cfg.user;
-        group = cfg.group;
-      };
-    };
 
     systemd.services.cloudflare-ddns = {
       description = "Cloudflare Dynamic DNS Client Service (favonia)";
@@ -253,74 +261,87 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
+      environment = lib.filterAttrs (_: value: value != "") {
+        CLOUDFLARE_API_TOKEN_FILE = lib.mkIf (cfg.apiTokenFile != null) "%d/apiTokenFile";
+
+        DOMAINS = formatList cfg.domains;
+        IP4_DOMAINS = lib.optionalString (cfg.ip4Domains != null) (formatList cfg.ip4Domains);
+        IP6_DOMAINS = lib.optionalString (cfg.ip6Domains != null) (formatList cfg.ip6Domains);
+
+        IP4_PROVIDER = cfg.provider.ipv4;
+        IP6_PROVIDER = cfg.provider.ipv6;
+
+        WAF_LISTS = formatList cfg.wafLists;
+        WAF_LIST_DESCRIPTION = cfg.wafListDescription;
+
+        UPDATE_CRON = cfg.updateCron;
+        UPDATE_ON_START = boolToString cfg.updateOnStart;
+        DELETE_ON_STOP = boolToString cfg.deleteOnStop;
+        CACHE_EXPIRATION = cfg.cacheExpiration;
+
+        TTL = toString cfg.ttl;
+        PROXIED = cfg.proxied;
+        RECORD_COMMENT = cfg.recordComment;
+
+        DETECTION_TIMEOUT = cfg.detectionTimeout;
+        UPDATE_TIMEOUT = cfg.updateTimeout;
+
+        HEALTHCHECKS = cfg.healthchecks;
+        UPTIMEKUMA = cfg.healthchecks;
+        SHOUTRRR = lib.optionalString (cfg.shoutrrr != null) (lib.concatStringsSep "\n" cfg.shoutrrr);
+      };
+
       serviceConfig = {
+        DynamicUser = true;
         User = cfg.user;
         Group = cfg.group;
 
-        WorkingDirectory = "/var/lib/${cfg.user}";
-
-        EnvironmentFile = cfg.credentialsFile;
-
-        Environment =
-          let
-            toEnv = name: value: "${name}=\"${toString value}\"";
-            toEnvList = name: value: "${name}=\"${formatList value}\"";
-            toEnvBool = name: value: "${name}=\"${boolToString value}\"";
-            toEnvMaybe =
-              pred: name: value:
-              lib.optionalString pred (toEnv name value);
-            toEnvMaybeList =
-              pred: name: value:
-              lib.optionalString pred (toEnvList name value);
-          in
-          lib.filter (envVar: envVar != "") [
-            (toEnvList "DOMAINS" cfg.domains)
-            (toEnvMaybeList (cfg.ip4Domains != null) "IP4_DOMAINS" cfg.ip4Domains)
-            (toEnvMaybeList (cfg.ip6Domains != null) "IP6_DOMAINS" cfg.ip6Domains)
-
-            (toEnv "IP4_PROVIDER" cfg.provider.ipv4)
-            (toEnv "IP6_PROVIDER" cfg.provider.ipv6)
-
-            (toEnvMaybeList (cfg.wafLists != [ ]) "WAF_LISTS" cfg.wafLists)
-            (toEnvMaybe (cfg.wafListDescription != "") "WAF_LIST_DESCRIPTION" cfg.wafListDescription)
-
-            (toEnv "UPDATE_CRON" cfg.updateCron)
-            (toEnvBool "UPDATE_ON_START" cfg.updateOnStart)
-            (toEnvBool "DELETE_ON_STOP" cfg.deleteOnStop)
-            (toEnv "CACHE_EXPIRATION" cfg.cacheExpiration)
-
-            (toEnv "TTL" cfg.ttl)
-            (toEnv "PROXIED" cfg.proxied)
-            (toEnvMaybe (cfg.recordComment != "") "RECORD_COMMENT" cfg.recordComment)
-
-            (toEnv "DETECTION_TIMEOUT" cfg.detectionTimeout)
-            (toEnv "UPDATE_TIMEOUT" cfg.updateTimeout)
-
-            (toEnvMaybe (cfg.healthchecks != null) "HEALTHCHECKS" cfg.healthchecks)
-            (toEnvMaybe (cfg.uptimeKuma != null) "UPTIMEKUMA" cfg.uptimeKuma)
-            (toEnvMaybeList (cfg.shoutrrr != null) "SHOUTRRR" (lib.concatStringsSep "\n" cfg.shoutrrr))
-          ];
+        EnvironmentFile = lib.optional (cfg.credentialsFile != null) cfg.credentialsFile;
+        LoadCredential = lib.optional (cfg.apiTokenFile != null) "apiTokenFile:${cfg.apiTokenFile}";
 
         ExecStart = lib.getExe cfg.package;
 
         Restart = "on-failure";
         RestartSec = "30s";
 
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
+        ReadOnlyPaths = [ "/" ];
+
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
         ];
+        CapabilityBoundingSet = [ "" ];
+        AmbientCapabilities = [ "" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "077";
       };
     };
   };
+
   meta.maintainers = with lib.maintainers; [
     shokerplz
   ];
