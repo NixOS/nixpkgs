@@ -10369,6 +10369,12 @@
     github = "Gurjaka";
     githubId = 143032436;
   };
+  gusahlg = {
+    name = "Gustav Ahlgren";
+    email = "gustav@ahlgren.nu";
+    github = "gusahlg";
+    githubId = 209215577;
+  };
   guserav = {
     github = "guserav";
     githubId = 28863828;
