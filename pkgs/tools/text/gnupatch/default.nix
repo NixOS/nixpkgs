@@ -15,8 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
   };
 
-  # This test is filesystem-dependent - observed failing on ZFS
-  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+  # This test is filesystem-dependent - observed failing on ZFS.
+  # It is also just plain flaky: it has been observed failing about 10%
+  # of the time on btrfs and ext4 too.
+  postPatch = ''
     sed -E -i -e '/bad-filenames/d' tests/Makefile.am
   '';
 
