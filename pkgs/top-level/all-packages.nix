@@ -9938,7 +9938,6 @@ with pkgs;
     ;
   rke2 = rke2_stable;
 
-  rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
   rofi-pass-wayland = rofi-pass.override {
     backend = "wayland";
   };
