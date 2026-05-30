@@ -14380,12 +14380,6 @@
     githubId = 451835;
     name = "Kirill Elagin";
   };
-  kirikaza = {
-    email = "k@kirikaza.ru";
-    github = "kirikaza";
-    githubId = 804677;
-    name = "Kirill Kazakov";
-  };
   kirillrdy = {
     email = "kirillrdy@gmail.com";
     github = "kirillrdy";
