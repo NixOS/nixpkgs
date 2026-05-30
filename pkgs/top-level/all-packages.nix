@@ -3224,8 +3224,6 @@ with pkgs;
     extraFonts = true;
   };
 
-  tinc = callPackage ../tools/networking/tinc { };
-
   tldr-hs = haskellPackages.tldr;
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
