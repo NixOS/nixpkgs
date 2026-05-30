@@ -54,10 +54,23 @@ in
               action = "allow";
               duration = "always";
               operator = {
-                type = "simple";
-                sensitive = false;
-                operand = "process.path";
-                data = "${pkgs.curl}/bin/curl";
+                type = "list";
+                operand = "list";
+                list = [
+                  {
+                    type = "simple";
+                    sensitive = false;
+                    operand = "process.path";
+                    data = "${pkgs.curl}/bin/curl";
+                  }
+                  # Check that network aliases like "LAN" are properly resolved.
+                  {
+                    type = "network";
+                    sensitive = false;
+                    operand = "dest.network";
+                    data = "LAN";
+                  }
+                ];
               };
             };
           };
