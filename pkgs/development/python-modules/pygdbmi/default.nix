@@ -39,6 +39,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Parse gdb machine interface output with Python";
     homepage = "https://github.com/cs01/pygdbmi";
+    changelog = "https://github.com/cs01/pygdbmi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mic92 ];
   };
