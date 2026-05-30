@@ -10,10 +10,11 @@
   xz,
   zstd,
   openssl,
+  enableCompat ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "minizip-ng";
+  pname = "minizip-ng" + lib.optionalString enableCompat "-compat";
   version = "4.2.1";
 
   src = fetchFromGitHub {
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MZ_LIBCOMP" false) # builds only on Darwin by default where it fails due to mising headers
     (lib.cmakeBool "MZ_BUILD_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "MZ_BUILD_UNIT_TESTS" finalAttrs.doCheck)
-    (lib.cmakeFeature "MZ_LIB_SUFFIX" "-ng")
+    (lib.cmakeBool "MZ_COMPAT" enableCompat)
   ]
   ++ lib.optionals stdenv.hostPlatform.isi686 [
     # tests fail
@@ -51,18 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-register";
-
-  postInstall = ''
-    # make lib findable as libminizip-ng even if compat is enabled
-    for ext in so dylib a ; do
-      if [ -e $out/lib/libminizip.$ext ] && [ ! -e $out/lib/libminizip-ng.$ext ]; then
-        ln -s $out/lib/libminizip.$ext $out/lib/libminizip-ng.$ext
-      fi
-    done
-    if [ ! -e $out/include/minizip-ng ]; then
-      ln -s $out/include $out/include/minizip-ng
-    fi
-  '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkInputs = [ gtest ];
