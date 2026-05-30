@@ -6270,8 +6270,6 @@ with pkgs;
 
   gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer { });
 
-  grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
-
   glirc = haskell.lib.compose.justStaticExecutables haskellPackages.glirc;
 
   # Not moved to aliases while we decide if we should split the package again.

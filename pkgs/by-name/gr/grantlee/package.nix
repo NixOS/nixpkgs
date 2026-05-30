@@ -1,13 +1,12 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
-  qtbase,
-  qtscript,
+  qt5,
   cmake,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "grantlee";
   version = "5.3.1";
   grantleePluginPrefix = "lib/grantlee/${lib.versions.majorMinor version}";
@@ -20,10 +19,13 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase
-    qtscript
+    qt5.qtbase
+    qt5.qtscript
   ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    qt5.wrapQtAppsHook
+  ];
 
   patches = [
     ./grantlee-nix-profiles.patch
@@ -63,6 +65,6 @@ mkDerivation rec {
     homepage = "https://github.com/steveire/grantlee";
     maintainers = [ lib.maintainers.ttuegel ];
     license = lib.licenses.lgpl21;
-    inherit (qtbase.meta) platforms;
+    inherit (qt5.qtbase.meta) platforms;
   };
 }
