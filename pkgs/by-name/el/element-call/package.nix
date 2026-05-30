@@ -113,6 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/element-hq/element-call";
     description = "Group calls powered by Matrix";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ kilimnik ];
+    maintainers = with lib.maintainers; [
+      bartoostveen
+      kilimnik
+    ];
   };
 })
