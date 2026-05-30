@@ -29193,17 +29193,17 @@
     name = "Volker Diels-Grabsch";
     keys = [ { fingerprint = "A7E6 9C4F 69DC 5D6C FC84  EE34 A29F BD51 5F89 90AF"; } ];
   };
-  voidless = {
-    email = "julius.schmitt@yahoo.de";
-    github = "bratorange";
-    githubId = 45292658;
-    name = "Julius Schmitt";
-  };
   voidhartt = {
     email = "voidhartt@gmail.com";
     github = "voidhartt";
     githubId = 235449536;
     name = "voidhartt";
+  };
+  voidless = {
+    email = "julius.schmitt@yahoo.de";
+    github = "bratorange";
+    githubId = 45292658;
+    name = "Julius Schmitt";
   };
   voidnoi = {
     email = "voidnoi@proton.me";
