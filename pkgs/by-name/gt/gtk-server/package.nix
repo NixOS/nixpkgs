@@ -3,10 +3,10 @@
   stdenv,
   fetchurl,
   glib,
-  gtk3,
+  gtk4,
   libffcall,
   pkg-config,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,12 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
   buildInputs = [
     libffcall
     glib
-    gtk3
+    gtk4
   ];
 
   meta = {
