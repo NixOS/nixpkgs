@@ -107,5 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "makehuman";
     maintainers = with lib.maintainers; [ elisesouche ];
     platforms = lib.platforms.all;
+    broken = true; # Added 2026-05-12
   };
 })
