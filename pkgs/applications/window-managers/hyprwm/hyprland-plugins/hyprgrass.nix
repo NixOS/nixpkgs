@@ -12,27 +12,35 @@
 
 mkHyprlandPlugin {
   pluginName = "hyprgrass";
-  version = "0.8.2-unstable-2025-10-08";
+  version = "0.8.2-unstable-2026-05-18";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "horriblename";
     repo = "hyprgrass";
-    rev = "fdfa60d464a18ae20b7a7bc63c0d2336f37c164b";
-    hash = "sha256-2Y2D2wuNqSldprawq8BSca90gSYSR5ZKL5ZW2YAV2F8=";
+    rev = "c9968ba79b3537eff127d6ab6df767d76f17544a";
+    hash = "sha256-rVLdIs67in1fhaatayWrLu+kCOJ0cveKze/BRjYtxRw=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doctest
     meson
     ninja
   ];
 
-  buildInputs = [ wf-touch ];
+  buildInputs = [
+    doctest
+    wf-touch
+  ];
 
   dontUseCmakeConfigure = true;
 
   doCheck = true;
+
+  enableParallelBuilding = true;
 
   passthru.updateScript = nix-update-script { };
 
