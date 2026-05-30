@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   nix-update-script,
   versionCheckHook,
@@ -10,8 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu-lint";
   version = "1.1.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "wvhulle";
     repo = "nu-lint";
     tag = "v${finalAttrs.version}";
