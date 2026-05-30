@@ -9939,6 +9939,12 @@
     githubId = 104317939;
     name = "gilice";
   };
+  gimura = {
+    email = "gimura0001@gmail.com";
+    github = "gimura2022";
+    githubId = 109300813;
+    name = "gimura";
+  };
   gin66 = {
     email = "jochen@kiemes.de";
     github = "gin66";
