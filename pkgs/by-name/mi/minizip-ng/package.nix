@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
       ris
+      kuflierl
     ];
     platforms = lib.platforms.unix;
   };
