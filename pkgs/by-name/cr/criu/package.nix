@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   protobuf,
   protobufc,
   asciidoc,
@@ -37,6 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-SfpJskXX7r3jbAwgZl2qpa7j1M4i8/sV6rlAWiUEoQs=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "conflicting-redefinition-of-rseq-enums.patch";
+      url = "https://github.com/checkpoint-restore/criu/commit/3f3acc3200a23140abaa32a2017ae159d3c2d02c.patch?full_index=1";
+      hash = "sha256-J8n4TjqjzJLLULnpJdR/6YWa/8moFQMn+wNo4a0otgE=";
+    })
+  ];
 
   enableParallelBuilding = true;
   depsBuildBuild = [
