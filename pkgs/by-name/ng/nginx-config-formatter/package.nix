@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HB1knL/q1G2z6RyVCsOyIKpp4O6x68/93ccvox1FKGQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HB1knL/q1G2z6RyVCsOyIKpp4O6x68/93ccvox1FKGQ=";
   };
 
   buildInputs = [ python3 ];
