@@ -14,7 +14,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librest";
   version = "0.10.2";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/librest/${lib.versions.majorMinor version}/librest-${version}.tar.xz";
+    url = "mirror://gnome/sources/librest/${lib.versions.majorMinor finalAttrs.version}/librest-${finalAttrs.version}.tar.xz";
     sha256 = "e2y5Ers6Is+n3PAFkl3LYogwJNsMCQmUhufWhRGFybg=";
   };
 
@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "librest";
-      attrPath = "librest_1_0";
       versionPolicy = "odd-unstable";
     };
   };
@@ -76,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
   };
-}
+})

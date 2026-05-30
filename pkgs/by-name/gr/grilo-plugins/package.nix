@@ -14,7 +14,7 @@
   libarchive,
   libdmapsharing,
   libsoup_3,
-  librest_1_0,
+  librest,
   gnome,
   libxml2,
   lua5_4,
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libarchive
     libdmapsharing
     libsoup_3
-    librest_1_0
+    librest
     gmime
     gom
     json-glib
