@@ -3,11 +3,7 @@
   lib,
   fetchgit,
   qt5,
-  qtbase,
-  qtx11extras,
-  qttools,
   zlib,
-  gnumake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qttools
+    qt5.qtbase
+    qt5.qtx11extras
+    qt5.qttools
     zlib
   ];
 
@@ -42,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "SHELL=/bin/bash" "SHELL=$SHELL" \
       --replace-fail "MAKEOVERRIDES" "NOMAKEOVERRIDES " \
       --replace-fail ".MAKEFLAGS" ".NOFLAGS " \
-      --replace-fail "qmake" "${qtbase.dev}/bin/qmake" \
+      --replace-fail "qmake" "${qt5.qtbase.dev}/bin/qmake" \
       --replace-fail "-o root -g root" ""
     substituteInPlace \
       VERSION.x2gokdriveclient \

@@ -10340,8 +10340,6 @@ with pkgs;
 
   wrapThunderbird = callPackage ../applications/networking/mailreaders/thunderbird/wrapper.nix { };
 
-  x2gokdriveclient = libsForQt5.callPackage ../applications/networking/remote/x2gokdriveclient { };
-
   x32edit = callPackage ../applications/audio/midas/x32edit.nix { };
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
