@@ -114,7 +114,9 @@ extra-packages:
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
   - hpack == 0.39.1                     # 2026-03-15: to match upstream stack-3.9.3
+  - insert-ordered-containers < 0.3     # 2026-05-25: Needed for building postgrest
   - language-javascript == 0.7.0.0      # required by purescript
+  - lawful-conversions < 0.2            # 2026-05-25: Needed for building postgrest
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
@@ -127,6 +129,7 @@ extra-packages:
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
   - stylish-haskell == 0.14.6.0         # 2025-09-21: needed for hls with ghc-lib 9.8
   - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
+  - swagger2 < 2.9                      # 2026-05-25: Needed for building postgrest
   - tar == 0.6.3.0                      # 2025-08-17: last version to not require file-io and directory-ospath-streaming (for GHC < 9.6)
   - text-builder < 1                    # 2025-08-27: Needed for building postgrest
   - text-builder-dev < 0.4              # 2025-08-27: Needed for building postgrest

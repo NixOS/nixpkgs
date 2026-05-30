@@ -2435,6 +2435,9 @@ with haskellLib;
           hasql-notifications = unmarkBroken (dontCheck super.hasql-notifications_0_2_2_2);
           hasql-pool = dontCheck super.hasql-pool_1_0_1;
           hasql-transaction = dontCheck super.hasql-transaction_1_1_0_1;
+          insert-ordered-containers = super.insert-ordered-containers_0_2_7;
+          lawful-conversions = super.lawful-conversions_0_1_7;
+          swagger2 = doJailbreak super.swagger2_2_8_10; # jailbreak for QuickCheck 2.16
           text-builder = super.text-builder_0_6_10;
           text-builder-dev = super.text-builder-dev_0_3_10;
         }
