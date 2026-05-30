@@ -24,6 +24,9 @@
   libsoup_3,
   openssl,
   webkitgtk_4_1,
+
+  lib,
+  stdenv,
 }:
 rustPlatform.buildRustPackage {
   inherit version src meta;
@@ -58,7 +61,7 @@ rustPlatform.buildRustPackage {
     substituteInPlace src-tauri/src/utils/dirs.rs \
       --replace-fail 'once("/tmp")' 'once(&std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string())))' \
       --replace-fail 'join("verge")' 'join("clash-verge-rev")'
-
+'' + lib.optionalString stdenv.isLinux ''
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
@@ -66,7 +69,7 @@ rustPlatform.buildRustPackage {
       --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
       --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
       --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
-
+'' + ''
     # this file tries to override the linker used when compiling for certain platforms
     rm .cargo/config.toml
 
@@ -91,15 +94,16 @@ rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [
     libayatana-appindicator
     libsoup_3
-    openssl
     webkitgtk_4_1
   ];
 
   # make sure the .desktop file name does not contain whitespace,
   # so that the service can register it as an auto-start item
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     mv $out/share/applications/Clash\ Verge.desktop $out/share/applications/clash-verge.desktop
   '';
 }

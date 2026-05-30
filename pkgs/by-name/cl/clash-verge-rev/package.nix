@@ -54,8 +54,9 @@ let
     mainProgram = "clash-verge";
     maintainers = with lib.maintainers; [
       hhr2020
+      hadal84
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in
 stdenv.mkDerivation {
@@ -73,19 +74,29 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share,lib/Clash\ Verge/resources}
-    cp -r ${unwrapped}/share/* $out/share
-    cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
-    # This can't be symbol linked. It will find mihomo in its runtime path
+    mkdir -p $out/bin
     cp ${service}/bin/clash-verge-service $out/bin/clash-verge-service
     ln -s ${mihomo}/bin/mihomo $out/bin/verge-mihomo
+
+    '' + lib.optionalString stdenv.isLinux ''
+
+    mkdir -p $out/{share,lib/Clash\ Verge/resources}
+    cp -r ${unwrapped}/share/* $out/share
+    cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
     # people who want to use alpha build show override mihomo themselves. The alpha core entry was removed in clash-verge.
     ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
     ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
     ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
 
+    '' + lib.optionalString stdenv.isDarwin ''
+
+    mkdir -p $out/Applications
+    cp -r ${unwrapped}/Applications/* $out/Applications/
+
+    '' + ''
     runHook postInstall
-  '';
+    '';
+
   # For testing convenience
   passthru = { inherit unwrapped service; };
 }

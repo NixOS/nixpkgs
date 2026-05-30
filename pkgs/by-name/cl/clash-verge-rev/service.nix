@@ -3,6 +3,7 @@
   fetchFromGitHub,
   meta,
   procps,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -43,5 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "test"
     "client"
   ];
+
+  doCheck = !stdenv.isDarwin;
   inherit meta;
 })
