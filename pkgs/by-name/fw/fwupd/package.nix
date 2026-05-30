@@ -53,7 +53,6 @@
   tpm2-tss,
   valgrind,
   xz, # for liblzma
-  flashrom,
 
   # mesonFlags
   hwdata,
@@ -74,15 +73,11 @@
   nixosTests,
   nix-update-script,
 
-  enableFlashrom ? false,
   enablePassim ? false,
 }:
 
 let
   isx86 = stdenv.hostPlatform.isx86;
-
-  # Experimental
-  haveFlashrom = isx86 && enableFlashrom;
 
   runPythonCommand =
     name: buildCommandPython:
@@ -127,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.1.3";
+  version = "2.1.4";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -145,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-AZ8DwhAoRLROExrGqEzzXppUI2285JoRZ4o748pyAaA=";
+    hash = "sha256-bKBEZR7Wzi9nZYH+KAzh1q+sh2t2Gl3puQmeogNdIsE=";
   };
 
   patches = [
@@ -193,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     ensureNewerSourcesForZipFilesHook # required for firmware zipping
     gettext
     gi-docgen
+    gnutls.bin
     gobject-introspection
     libjcat.bin
     libxml2
@@ -233,9 +229,6 @@ stdenv.mkDerivation (finalAttrs: {
     tpm2-tss
     valgrind
     xz # for liblzma
-  ]
-  ++ lib.optionals haveFlashrom [
-    flashrom
   ];
 
   mesonFlags = [
@@ -260,9 +253,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!enablePassim) [
     (lib.mesonEnable "passim" false)
-  ]
-  ++ lib.optionals (!haveFlashrom) [
-    (lib.mesonEnable "plugin_flashrom" false)
   ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
@@ -340,6 +330,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/fwupd.conf"
+      "fwupd/remotes.d/lvfs-embargo.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
