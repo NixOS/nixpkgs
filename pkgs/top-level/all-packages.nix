@@ -9468,9 +9468,7 @@ with pkgs;
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
 
-  mendeley = libsForQt5.callPackage ../applications/office/mendeley {
-    gconf = gnome2.GConf;
-  };
+  mendeley = callPackage ../applications/office/mendeley { };
 
   mercurialFull = mercurial.override { fullBuild = true; };
 

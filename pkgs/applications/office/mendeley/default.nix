@@ -2,7 +2,6 @@
   lib,
   fetchurl,
   appimageTools,
-  gconf,
   imagemagick,
 }:
 
