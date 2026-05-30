@@ -1,46 +1,45 @@
 {
-  lib,
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   icalendar,
   icalendar-searcher,
+  lib,
   lxml,
   manuel,
-  pytestCheckHook,
-  python,
-  radicale,
-  recurring-ical-events,
   niquests,
-  hatchling,
-  hatch-vcs,
   proxy-py,
   pyfakefs,
   pytest-asyncio,
+  pytestCheckHook,
+  python,
   python-dateutil,
   pyyaml,
+  radicale,
+  recurring-ical-events,
   toPythonModule,
   tzlocal,
   vobject,
-  xandikos,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "3.2.1";
+  version = "2.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-SCqc0MVxKaHpES+NkDcaItHlkk0kCFj6kFqH8k08vdA=";
+    hash = "sha256-xtxWDlYESIwkow/YdjaUAkJ/x2jdUyhqfSRycJVLncY=";
   };
 
   build-system = [
-    hatchling
     hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -54,31 +53,33 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  pythonImportsCheck = [ "caldav" ];
+
   nativeCheckInputs = [
     manuel
     proxy-py
     pyfakefs
-    pytest-asyncio
     pytestCheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
     vobject
     writableTmpDirAsHomeHook
-    (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+  ];
+
+  disabledTests = [
+    # test contacts CalDAV servers on the internet
+    "test_rfc8764_test_conf"
+    # succeeds with Xandikos but fails with Radicale
+    "testConfigfile"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "caldav" ];
-
   meta = {
+    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      marenz
-      dotlambda
-    ];
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }

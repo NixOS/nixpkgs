@@ -86,6 +86,8 @@ let
         ];
       });
 
+      caldav = self.caldav_2;
+
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
