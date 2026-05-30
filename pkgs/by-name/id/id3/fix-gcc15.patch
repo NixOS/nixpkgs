@@ -1,0 +1,12 @@
+diff --git a/fileops.c b/fileops.c
+index 1e70af1..9017bd0 100644
+--- a/fileops.c
++++ b/fileops.c
+@@ -68,7 +68,6 @@ FILE *ftemp(char *templ, const char *mode)
+ #else
+     int fd = mkstemp(templ);
+     if(fd >= 0) {
+-        FILE* fdopen();                         /* in case -ansi is used */
+         if(f = fdopen(fd, mode)) return f;
+         close(fd);
+ #endif

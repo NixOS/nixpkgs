@@ -1,0 +1,122 @@
+diff -urN pipelight.old/bin/pipelight-plugin.in pipelight.new/bin/pipelight-plugin.in
+--- pipelight.old/bin/pipelight-plugin.in	2014-07-19 22:53:02.000000000 +0200
++++ pipelight.new/bin/pipelight-plugin.in	2014-07-27 00:02:39.275834030 +0200
+@@ -92,7 +92,7 @@
+	PLUGIN_PATH=$(realpath "$PLUGIN_PATH")
+
+	# Global installation
+-	if [ $(/usr/bin/id -u) -eq 0 ]; then
++	if [ $(id -u) -eq 0 ]; then
+		INSTALLDIR="$PLUGIN_PATH"
+
+	# Use environment variable (only if it doesn't point to the global directory)
+@@ -594,7 +594,7 @@
+	fi
+
+	# Ensure the signature is valid, extract the content
+-	if ! @@GPG@@ --batch --no-default-keyring --keyring "$PIPELIGHT_SHARE_PATH/sig-install-dependency.gpg" --decrypt "$tmpfile" > "$decfile"; then
++	if ! @@GPG@@ --homedir /tmp --batch --no-default-keyring --keyring "$PIPELIGHT_SHARE_PATH/sig-install-dependency.gpg" --decrypt "$tmpfile" > "$decfile"; then
+		rm "$tmpfile"
+		rm "$decfile"
+		echo ""
+@@ -630,24 +630,10 @@
+	return 0
+ }
+
+-# Use fetch on FreeBSD if wget is not available
+-if command -v wget >/dev/null 2>&1; then
+-	download_file()
+-	{
+-		wget -O "$1" "$2"
+-	}
+-elif command -v fetch >/dev/null 2>&1; then
+-	download_file()
+-	{
+-		fetch -o "$1" "$2"
+-	}
+-else
+-	download_file()
+-	{
+-		echo "ERROR: Could neither find wget nor fetch. Unable to download file!" >&2
+-		return 1
+-	}
+-fi
++download_file()
++{
++	curl --cacert /etc/ssl/certs/ca-certificates.crt -o "$1" "$2"
++}
+
+ # Use shasum instead of sha256sum on MacOS / *BSD
+ if ! command -v sha256sum >/dev/null 2>&1 && command -v shasum >/dev/null 2>&1; then
+diff -urN pipelight.old/configure pipelight.new/configure
+--- pipelight.old/configure	2014-07-19 22:53:02.000000000 +0200
++++ pipelight.new/configure	2014-07-26 23:52:13.690881447 +0200
+@@ -66,12 +66,8 @@
+ datadir=""
+ libdir=""
+ mandir=""
+-bash_interp="$(which bash)"
+-if which gpg &> /dev/null; then
+-	gpg_exec="$(which gpg)"
+-else
+-	gpg_exec="/usr/bin/gpg"
+-fi
++bash_interp=bash
++gpg_exec=gpg
+ moz_plugin_path=""
+ gcc_runtime_dlls=""
+ so_mode="0644"
+diff -urN pipelight.old/share/install-dependency pipelight.new/share/install-dependency
+--- pipelight.old/share/install-dependency	2014-07-19 22:53:02.000000000 +0200
++++ pipelight.new/share/install-dependency	2014-07-26 23:26:18.431938546 +0200
+@@ -734,42 +734,14 @@
+	return 0
+ }
+
+-# Use fetch on FreeBSD if wget is not available
+-if command -v wget >/dev/null 2>&1; then
+-	download_file()
+-	{
+-		wget -O "$1" "$2"
+-	}
+-	get_download_size()
+-	{
+-		local filesize="$(wget -O- "$1" --spider --server-response 2>&1 | sed -ne '/Content-Length/{s/.*: //;p}')"
+-		local re='^[0-9]+$'
+-		if [[ "$filesize" -ne "0" ]] && [[ "$filesize" =~ $re ]]; then
+-			echo "$(($filesize/(1024*1024)))"
+-		else
+-			echo "N/A"
+-		fi
+-	}
+-elif command -v fetch >/dev/null 2>&1; then
+-	download_file()
+-	{
+-		fetch -o "$1" "$2"
+-	}
+-	get_download_size()
+-	{
+-		echo "N/A"
+-	}
+-else
+-	download_file()
+-	{
+-		echo "ERROR: Could neither find wget nor fetch. Unable to download file!" >&2
+-		return 1
+-	}
+-	get_download_size()
+-	{
+-		echo "N/A"
+-	}
+-fi
++download_file()
++{
++	curl --cacert /etc/ssl/certs/ca-certificates.crt -o "$1" "$2"
++}
++get_download_size()
++{
++	echo "N/A"
++}
+
+ # Use shasum instead of sha256sum on MacOS / *BSD
+ if ! command -v sha256sum >/dev/null 2>&1 && command -v shasum >/dev/null 2>&1; then

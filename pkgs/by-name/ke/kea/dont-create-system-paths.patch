@@ -1,0 +1,15 @@
+diff --git a/meson.build b/meson.build
+index 24ab9b5bd7..8f44076cf7 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1118,10 +1118,6 @@ top_docs = [
+ ]
+ install_data(top_docs, install_dir: DATADIR / 'doc/kea')
+ 
+-install_emptydir(LOGDIR)
+-install_emptydir(RUNSTATEDIR)
+-install_emptydir(SHAREDSTATEDIR)
+-
+ # Meson is annoying with its opinionated alteration of certain paths based on whether prefix is default or not.
+ # So we revert what it does..
+ # In case prefix is default, install to hardcoded path.

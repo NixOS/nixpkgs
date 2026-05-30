@@ -1,0 +1,15 @@
+diff --git a/lib/zip_dirent.c b/lib/zip_dirent.c
+index 7476ac0..b825609 100644
+--- a/lib/zip_dirent.c
++++ b/lib/zip_dirent.c
+@@ -1241,7 +1241,9 @@ bool _zip_dirent_apply_attributes(zip_dirent_t *de, zip_file_attributes_t *attri
+     }
+ 
+     if (attributes->valid & ZIP_FILE_ATTRIBUTES_VERSION_NEEDED) {
+-        version_needed = ZIP_MAX(version_needed, attributes->version_needed);
++	if (attributes->version_needed > de->version_needed) {
++	    de->version_needed = attributes->version_needed;
++	}
+     }
+ 
+     if (de->version_needed != version_needed) {

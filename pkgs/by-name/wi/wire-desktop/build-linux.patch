@@ -1,0 +1,10 @@
+--- a/bin/build-tools/lib/build-linux.ts	2026-03-14 16:55:05.607020706 +0300
++++ b/bin/build-tools/lib/build-linux.ts	2026-03-14 16:56:36.314018156 +0300
+@@ -115,6 +115,7 @@
+       ...platformSpecificConfig,
+       depends: rpmDepends,
+     },
++    electronDist: "node_modules/electron-dist",
+   };
+ 
+   return {builderConfig, linuxConfig};

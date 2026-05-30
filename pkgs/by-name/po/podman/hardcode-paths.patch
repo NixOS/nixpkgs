@@ -1,0 +1,120 @@
+diff --git a/vendor/go.podman.io/common/pkg/config/default.go b/vendor/go.podman.io/common/pkg/config/default.go
+index 3bf0bc1..05496ae 100644
+--- a/vendor/go.podman.io/common/pkg/config/default.go
++++ b/vendor/go.podman.io/common/pkg/config/default.go
+@@ -389,75 +389,34 @@ func defaultEngineConfig() (*EngineConfig, error) {
+ 	c.Retry = 3
+ 	c.OCIRuntimes = map[string][]string{
+ 		"crun": {
+-			"/usr/bin/crun",
+-			"/usr/sbin/crun",
+-			"/usr/local/bin/crun",
+-			"/usr/local/sbin/crun",
+-			"/sbin/crun",
+-			"/bin/crun",
+-			"/run/current-system/sw/bin/crun",
++			"@bin_path@/bin/crun",
+ 		},
+ 		"crun-vm": {
+-			"/usr/bin/crun-vm",
+-			"/usr/local/bin/crun-vm",
+-			"/usr/local/sbin/crun-vm",
+-			"/sbin/crun-vm",
+-			"/bin/crun-vm",
+-			"/run/current-system/sw/bin/crun-vm",
++			"@bin_path@/bin/crun-vm",
+ 		},
+ 		"crun-wasm": {
+-			"/usr/bin/crun-wasm",
+-			"/usr/sbin/crun-wasm",
+-			"/usr/local/bin/crun-wasm",
+-			"/usr/local/sbin/crun-wasm",
+-			"/sbin/crun-wasm",
+-			"/bin/crun-wasm",
+-			"/run/current-system/sw/bin/crun-wasm",
++			"@bin_path@/bin/crun-wasm",
+ 		},
+ 		"runc": {
+-			"/usr/bin/runc",
+-			"/usr/sbin/runc",
+-			"/usr/local/bin/runc",
+-			"/usr/local/sbin/runc",
+-			"/sbin/runc",
+-			"/bin/runc",
+-			"/usr/lib/cri-o-runc/sbin/runc",
+-			"/run/current-system/sw/bin/runc",
++			"@bin_path@/bin/runc",
+ 		},
+ 		"runj": {
+-			"/usr/local/bin/runj",
++			"@bin_path@/bin/runj",
+ 		},
+ 		"kata": {
+-			"/usr/bin/kata-runtime",
+-			"/usr/sbin/kata-runtime",
+-			"/usr/local/bin/kata-runtime",
+-			"/usr/local/sbin/kata-runtime",
+-			"/sbin/kata-runtime",
+-			"/bin/kata-runtime",
+-			"/usr/bin/kata-qemu",
+-			"/usr/bin/kata-fc",
++			"@bin_path@/bin/kata-runtime",
+ 		},
+ 		"runsc": {
+-			"/usr/bin/runsc",
+-			"/usr/sbin/runsc",
+-			"/usr/local/bin/runsc",
+-			"/usr/local/sbin/runsc",
+-			"/bin/runsc",
+-			"/sbin/runsc",
+-			"/run/current-system/sw/bin/runsc",
++			"@bin_path@/bin/runsc",
+ 		},
+ 		"youki": {
+-			"/usr/local/bin/youki",
+-			"/usr/bin/youki",
+-			"/bin/youki",
+-			"/run/current-system/sw/bin/youki",
++			"@bin_path@/bin/youki",
+ 		},
+ 		"krun": {
+-			"/usr/bin/krun",
+-			"/usr/local/bin/krun",
++			"@bin_path@/bin/krun",
+ 		},
+ 		"ocijail": {
+-			"/usr/local/bin/ocijail",
++			"@bin_path@/bin/ocijail",
+ 		},
+ 	}
+ 	c.OCIRuntimesFlags = map[string][]string{}
+@@ -469,26 +428,12 @@ func defaultEngineConfig() (*EngineConfig, error) {
+ 	// Needs to be called after populating c.OCIRuntimes.
+ 	c.OCIRuntime = c.findRuntime()
+
+-	c.ConmonEnvVars.Set([]string{"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"})
++	c.ConmonEnvVars.Set([]string{})
+ 	c.ConmonPath.Set([]string{
+-		"/usr/libexec/podman/conmon",
+-		"/usr/local/libexec/podman/conmon",
+-		"/usr/local/lib/podman/conmon",
+-		"/usr/bin/conmon",
+-		"/usr/sbin/conmon",
+-		"/usr/local/bin/conmon",
+-		"/usr/local/sbin/conmon",
+-		"/run/current-system/sw/bin/conmon",
++		"@bin_path@/bin/conmon",
+ 	})
+ 	c.ConmonRsPath.Set([]string{
+-		"/usr/libexec/podman/conmonrs",
+-		"/usr/local/libexec/podman/conmonrs",
+-		"/usr/local/lib/podman/conmonrs",
+-		"/usr/bin/conmonrs",
+-		"/usr/sbin/conmonrs",
+-		"/usr/local/bin/conmonrs",
+-		"/usr/local/sbin/conmonrs",
+-		"/run/current-system/sw/bin/conmonrs",
++		"@bin_path@/bin/conmonrs",
+ 	})
+ 	c.PullPolicy = DefaultPullPolicy
+ 	c.RuntimeSupportsJSON.Set([]string{

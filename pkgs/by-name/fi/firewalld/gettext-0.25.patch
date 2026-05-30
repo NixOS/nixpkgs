@@ -1,0 +1,14 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -152,8 +152,10 @@
+ AC_SUBST([GETTEXT_PACKAGE], '[PKG_NAME]')
+ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],)
+ 
++AM_GNU_GETTEXT_VERSION([0.22.5])
++AM_GNU_GETTEXT([external])
++
+ IT_PROG_INTLTOOL([0.35.0], [no-xml])
+-AM_PO_SUBDIRS
+ 
+ AC_CONFIG_COMMANDS([xsl-cleanup],,[rm -f doc/xml/transform-*.xsl])
+ 
