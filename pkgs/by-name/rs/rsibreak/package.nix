@@ -3,15 +3,8 @@
   lib,
   stdenv,
   cmake,
-  extra-cmake-modules,
-  kdoctools,
-  wrapQtAppsHook,
-  knotifyconfig,
-  kidletime,
-  kwindowsystem,
-  kstatusnotifieritem,
-  ktextwidgets,
-  kcrash,
+  kdePackages,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,17 +18,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    kdoctools
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    kdePackages.kdoctools
+    qt6.wrapQtAppsHook
   ];
   propagatedBuildInputs = [
-    knotifyconfig
-    kidletime
-    kwindowsystem
-    kstatusnotifieritem
-    ktextwidgets
-    kcrash
+    kdePackages.knotifyconfig
+    kdePackages.kidletime
+    kdePackages.kwindowsystem
+    kdePackages.kstatusnotifieritem
+    kdePackages.ktextwidgets
+    kdePackages.kcrash
   ];
 
   meta = {
