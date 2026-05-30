@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Automattic";
     repo = "harper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8FTmeavSPH5OAkLbAaP69j98X5U3V4Trn7BMOw0BS8o=";
+    hash = "sha256-cTJ6qehT2XuEBTiRESSAmJWXEvTnimqiFEhV9q4DyTc=";
   };
 
-  cargoHash = "sha256-cHtUPev09kRxu1X52fFWo/eBuc6t+uQDkwa21wVUrBc=";
+  cargoHash = "sha256-NPtDUt5IaAw4ZWQQUAdLTLEFJ4MMbe4yPE04Ui0aN3k=";
 
   cargoBuildFlags = [
     "--package=harper-cli"

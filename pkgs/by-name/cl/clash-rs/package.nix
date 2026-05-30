@@ -33,8 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
+    # requires nightly features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
+    # if_let_guard is stable since Rust 1.95.0, but some deps still carry
+    # the stale #![feature(if_let_guard)] attribute.
+    RUSTFLAGS = "-A stable-features";
   };
 
   buildFeatures = [ "plus" ];
