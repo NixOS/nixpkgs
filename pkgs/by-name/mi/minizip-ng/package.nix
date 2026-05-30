@@ -65,8 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  nativeCheckInputs = [ gtest ];
+  checkInputs = [ gtest ];
   enableParallelChecking = false;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Fork of the popular zip manipulation library found in the zlib distribution";
