@@ -1383,9 +1383,6 @@ with pkgs;
 
   arduino = arduino-core.override { withGui = true; };
 
-  arduino-core = callPackage ../development/embedded/arduino/arduino-core/chrootenv.nix { };
-  arduino-core-unwrapped = callPackage ../development/embedded/arduino/arduino-core { };
-
   arpack-mpi = arpack.override { useMpi = true; };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
