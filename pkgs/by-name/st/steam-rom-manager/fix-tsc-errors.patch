@@ -1,0 +1,35 @@
+diff --git c/src/lib/helpers/json/read.ts w/src/lib/helpers/json/read.ts
+index edd6e45..bdf5fee 100644
+--- c/src/lib/helpers/json/read.ts
++++ w/src/lib/helpers/json/read.ts
+@@ -4,7 +4,7 @@ export function read<T>(file: string, fallback?: T) {
+   return Promise.resolve().then(() =>
+     fs
+       .readJson(file, { throws: true })
+-      .catch((error: NodeJS.ErrnoException) => {
++      .catch((error: NodeJS.ErrnoException): void => {
+         if (error.code === "ENOENT") {
+           return undefined;
+         } else {
+diff --git c/src/lib/parsers/manual.parser.ts w/src/lib/parsers/manual.parser.ts
+index 2f42114..bbef775 100644
+--- c/src/lib/parsers/manual.parser.ts
++++ w/src/lib/parsers/manual.parser.ts
+@@ -29,7 +29,7 @@ export class ManualParser implements GenericParser {
+     directories: string[],
+     inputs: { [key: string]: any },
+     cache?: { [key: string]: any },
+-  ) {
++  ): Promise<ParsedData> {
+     let directory = directories[0];
+     let parsedData: ParsedData = { success: [], failed: [] };
+     return Promise.resolve()
+@@ -58,7 +58,7 @@ export class ManualParser implements GenericParser {
+         }
+         return parsedData;
+       })
+-      .catch((err) => {
++      .catch((err): ParsedData => {
+         return undefined;
+       });
+   }
