@@ -9416,10 +9416,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/helm/plugins { }
   );
 
-  lemonbar = callPackage ../applications/window-managers/lemonbar { };
-
-  lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
-
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
 
   libreoffice = hiPrio libreoffice-still;
