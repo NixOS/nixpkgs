@@ -15,6 +15,7 @@
   iproute2,
   makeWrapper,
   lib,
+  nixosTests,
 }:
 
 let
@@ -91,6 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "DESTDIR=$(out)"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) netplan;
+  };
 
   meta = {
     description = "Backend-agnostic network configuration in YAML";

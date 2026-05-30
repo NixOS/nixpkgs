@@ -9,6 +9,8 @@ with lib;
 
 let
   cfg = config.networking.netplan;
+  networkdEnabled = (config.networking.useNetworkd || config.systemd.network.enable);
+  networkmanagerEnabled = config.networking.networkmanager.enable;
 in
 {
   options = {
@@ -37,6 +39,9 @@ in
   };
 
   config = mkIf cfg.install {
+    warnings = lib.optionals (cfg.enable && !(networkdEnabled || networkmanagerEnabled)) [
+      "You enabled the netplan-configure service, but you haven't enabled a backend for it. It's likely you want to enable either networkd or NetworkManager."
+    ];
     environment = {
       systemPackages = [ cfg.package ];
       etc = builtins.listToAttrs (
@@ -51,7 +56,14 @@ in
         }) (pkgs.lib.attrNames cfg.configFiles)
       );
     };
-    systemd.packages = [ cfg.package ];
-    systemd.services.netplan-configure.wantedBy = mkIf cfg.enable [ "sysinit.target" ];
+    systemd = {
+      packages = [ cfg.package ];
+      services.netplan-configure.wantedBy = mkIf cfg.enable [ "sysinit.target" ];
+      tmpfiles.settings."netplan"."/run/netplan".d = {
+        user = "root";
+        group = "root";
+        mode = "0700";
+      };
+    };
   };
 }
