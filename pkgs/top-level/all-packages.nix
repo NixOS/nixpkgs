@@ -10271,8 +10271,6 @@ with pkgs;
     gbmSupport = true;
   };
 
-  xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
-
   xdg-desktop-portal-hyprland =
     callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
       {
