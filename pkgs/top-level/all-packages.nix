@@ -1325,10 +1325,6 @@ with pkgs;
     inherit lib udisks python3;
   };
 
-  johnny-reborn-engine = callPackage ../applications/misc/johnny-reborn { };
-
-  johnny-reborn = callPackage ../applications/misc/johnny-reborn/with-data.nix { };
-
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   mlterm-wayland = mlterm.override {
