@@ -1320,10 +1320,6 @@ with haskellLib;
     '';
   }) (addExtraLibrary self.QuickCheck super.Chart-tests);
 
-  # 2026-05-18: too strict bounds on QuickCheck < 2.16
-  # https://github.com/hasufell/lzma-static/issues/16
-  xz = doJailbreak super.xz;
-
   ghcup =
     lib.throwIf pkgs.config.allowAliases
       "ghcup cannot be used to install the haskell tool chain on NixOS because there is no compatible bindist. Please install ghc etc. via Nix. On non-NixOS systems you can use the ghcup shell installer"
