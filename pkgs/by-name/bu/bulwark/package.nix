@@ -5,6 +5,7 @@
   google-fonts,
   nodejs,
   nix-update-script,
+  nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "bulwark";
@@ -68,7 +69,12 @@ buildNpmPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) bulwark;
+    };
+  };
 
   meta = {
     description = "Modern, self-hosted webmail client for Stalwart Mail Server";
