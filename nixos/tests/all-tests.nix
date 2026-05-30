@@ -765,6 +765,7 @@ in
   ifm = runTest ./ifm.nix;
   ifstate = import ./ifstate { inherit runTest; };
   iftop = runTest ./iftop.nix;
+  iggy = runTest ./iggy.nix;
   image-contents = handleTest ./image-contents.nix { };
   immich = runTest ./web-apps/immich.nix;
   immich-kiosk = runTest ./web-apps/immich-kiosk.nix;
