@@ -107,13 +107,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Keeper Password Manager Desktop App";
     homepage = "https://keepersecurity.com";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "keeperpasswordmanager";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ mylesbolton ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with lib.maintainers; [ mylesbolton ];
   };
 }
