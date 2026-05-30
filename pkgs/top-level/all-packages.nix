@@ -1466,10 +1466,6 @@ with pkgs;
 
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
-  esbuild = callPackage ../development/tools/esbuild { };
-
-  esbuild_netlify = callPackage ../development/tools/esbuild/netlify.nix { };
-
   libfx2 = with python3Packages; toPythonApplication fx2;
 
   foxdot = with python3Packages; toPythonApplication foxdot;
