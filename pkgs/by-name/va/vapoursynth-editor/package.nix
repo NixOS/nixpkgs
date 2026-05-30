@@ -6,10 +6,7 @@
   runCommand,
   python3,
   vapoursynth,
-  qmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtwebsockets,
+  qt5,
 }:
 
 let
@@ -30,14 +27,14 @@ let
     '';
 
     nativeBuildInputs = [
-      qmake
-      wrapQtAppsHook
+      qt5.qmake
+      qt5.wrapQtAppsHook
     ];
 
     buildInputs = [
-      qtbase
+      qt5.qtbase
       vapoursynth
-      qtwebsockets
+      qt5.qtwebsockets
     ];
 
     dontWrapQtApps = true;
