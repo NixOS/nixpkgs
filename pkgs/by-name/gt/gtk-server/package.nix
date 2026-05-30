@@ -32,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
   ];
 
-  configureOptions = [ "--with-gtk3" ];
-
   meta = {
     homepage = "http://www.gtk-server.org/";
     description = "Gtk-server for interpreted GUI programming";
