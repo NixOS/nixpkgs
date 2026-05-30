@@ -1,0 +1,60 @@
+diff --git a/packages/main/src/index.ts b/packages/main/src/index.ts
+index b427156..8aa5f2a 100644
+--- a/packages/main/src/index.ts
++++ b/packages/main/src/index.ts
+@@ -80,7 +80,7 @@ app.once('before-quit', event => {
+     });
+ });
+ 
+-let tray: Tray;
++let tray: Tray | undefined;
+ 
+ // Handle the open-url event (macOS/Linux). For Windows, it needs to be handle in the second-instance event
+ app.on('will-finish-launching', () => {
+@@ -95,8 +95,13 @@ app.whenReady().then(
+   async () => {
+     // Setup the default tray icon + menu items
+     animatedTray = new AnimatedTray();
+-    tray = new Tray(animatedTray.getDefaultImage());
+-    animatedTray.setTray(tray);
++    // On macOS, creating the menu-bar status item can deadlock the main thread
++    // against WindowServer (NSSceneStatusItem _requestScene). The application is
++    // fully usable from the Dock, so skip creating the tray entirely on macOS.
++    if (!isMac()) {
++      tray = new Tray(animatedTray.getDefaultImage());
++      animatedTray.setTray(tray);
++    }
+     const trayMenu = new TrayMenu(tray, animatedTray);
+ 
+     const _onDidCreatedConfigurationRegistry = new Emitter<ConfigurationRegistry>();
+diff --git a/packages/main/src/tray-menu.ts b/packages/main/src/tray-menu.ts
+index bd558a4..e7765ab 100644
+--- a/packages/main/src/tray-menu.ts
++++ b/packages/main/src/tray-menu.ts
+@@ -55,7 +55,7 @@ export class TrayMenu {
+   private menuContainerProviderConnectionItems = new Map<string, ProviderContainerConnectionInfoMenuItem>();
+ 
+   constructor(
+-    private readonly tray: Tray,
++    private readonly tray: Tray | undefined,
+     private readonly animatedTray: AnimatedTray,
+   ) {
+     ipcMain.on(
+@@ -140,7 +140,7 @@ export class TrayMenu {
+     });
+ 
+     if (isWindows()) {
+-      tray.on('click', this.showMainWindow.bind(this));
++      tray?.on('click', this.showMainWindow.bind(this));
+     }
+ 
+     // create menu first time
+@@ -277,7 +277,7 @@ export class TrayMenu {
+     generatedMenuTemplate.push(...this.endMenuTemplate);
+ 
+     const contextMenu = Menu.buildFromTemplate(generatedMenuTemplate);
+-    this.tray.setContextMenu(contextMenu);
++    this.tray?.setContextMenu(contextMenu);
+ 
+     // update animated tray status
+     this.updateGlobalStatus();

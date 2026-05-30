@@ -82,6 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     # podman should be installed with nix; disable auto-installation
     ./extension-no-download-podman.patch
     ./system-defaults-dir.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Creating the macOS menu-bar status item can deadlock the main thread
+    # against WindowServer (NSSceneStatusItem _requestScene), leaving the app
+    # permanently unresponsive.
+    ./disable-tray-darwin.patch
   ];
 
   env = {
