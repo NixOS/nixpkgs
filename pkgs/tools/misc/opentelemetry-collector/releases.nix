@@ -107,6 +107,18 @@ let
           "-w"
         ];
 
+        # Catch stale sourceHash: verify every direct dependency listed in
+        # the releases manifest appears at the expected version in the
+        # generated go.mod. If sourceHash is stale, the cached source will
+        # have old dep versions and this check will fail.
+        preBuild = ''
+          grep '^ *- gomod:' ${src}/distributions/${name}/manifest.yaml \
+            | sed 's/.*gomod: //' \
+            | while read -r expected; do
+                grep -q "$expected" go.mod || { echo "ERROR: ${name}: missing '$expected' in go.mod; sourceHash is likely stale. Set sourceHash = \"\" and rebuild."; exit 1; }
+              done
+        '';
+
         postInstall = ''
           # Fix binary name
           mv $out/bin/* $out/bin/$pname
