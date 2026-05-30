@@ -1341,11 +1341,6 @@ with pkgs;
   x16-rom = x16.rom;
   x16-run = x16.run;
 
-  yabause = libsForQt5.callPackage ../applications/emulators/yabause {
-    libglut = null;
-    openal = null;
-  };
-
   ### APPLICATIONS/FILE-MANAGERS
 
   vifm-full = vifm.override {
