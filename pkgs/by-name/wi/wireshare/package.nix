@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, jdk21
-, gradle
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk21,
+  gradle,
 }:
 
 let
@@ -55,9 +56,11 @@ let
     data = ./deps.json;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wireshare";
   version = "7.0";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://github.com/nmatavka/hermes-wireshare/releases/download/release/7.0/WireShare-7.0-source.tar.gz";
