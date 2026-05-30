@@ -2220,10 +2220,6 @@ with pkgs;
     buildProduct = "daemon";
   };
 
-  iprange = callPackage ../applications/networking/firehol/iprange.nix { };
-
-  firehol = callPackage ../applications/networking/firehol { };
-
   fluentd = callPackage ../tools/misc/fluentd { };
 
   fpm = callPackage ../tools/package-management/fpm { };
