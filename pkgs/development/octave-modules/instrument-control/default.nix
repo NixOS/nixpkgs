@@ -7,13 +7,13 @@
 
 buildOctavePackage rec {
   pname = "instrument-control";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "instrument-control";
     tag = "release-${version}";
-    sha256 = "sha256-eXlH7BFRh4Vq/2LiBsmTvZNhXm4IbeCHK+OsKMQI0tY=";
+    sha256 = "sha256-oasZryYK/KgrIMZWU6j8g24MJMr5R6LwPvuqojAXbm4=";
   };
 
   passthru.updateScript = nix-update-script {
