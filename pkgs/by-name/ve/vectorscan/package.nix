@@ -9,7 +9,6 @@
   python3,
   boost,
   sqlite,
-  pcre,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
@@ -47,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     sqlite
-    pcre
   ];
 
   # FAT_RUNTIME bundles optimized implementations for different CPU extensions and uses CPUID to
