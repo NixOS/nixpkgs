@@ -6,6 +6,7 @@
   fetchFromGitLab,
   applyPatches,
   autoAddDriverRunpath,
+  android-tools,
   avahi,
   boost,
   cli11,
@@ -108,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    android-tools
     eigen
     freetype
     glm
@@ -187,7 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }
     wrapQtApp "$out/bin/wivrn-dashboard" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]} \
+      --prefix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
   desktopItems = lib.optionals (!clientLibOnly) [
