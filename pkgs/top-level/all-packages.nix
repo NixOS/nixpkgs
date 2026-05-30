@@ -5894,8 +5894,6 @@ with pkgs;
   # Not moved to aliases while we decide if we should split the package again.
   at-spi2-atk = at-spi2-core;
 
-  aqbanking = callPackage ../development/libraries/aqbanking { };
-
   aws-spend-summary = haskellPackages.aws-spend-summary.bin;
 
   inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
@@ -6291,8 +6289,6 @@ with pkgs;
 
   gtksourceview5 = callPackage ../development/libraries/gtksourceview/5.x.nix { };
 
-  gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
-
   hamlib = hamlib_3;
 
   harfbuzzFull = harfbuzz.override {
@@ -6418,8 +6414,6 @@ with pkgs;
       pkgs.libcanberra-gtk2;
 
   libchamplain_libsoup3 = libchamplain.override { withLibsoup3 = true; };
-
-  libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
 
   libdbi-drivers-base = libdbi-drivers.override {
     withMysql = false;
