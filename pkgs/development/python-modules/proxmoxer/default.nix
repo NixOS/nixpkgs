@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proxmoxer";
   version = "2.3.0";
   pyproject = true;
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for Proxmox API v2";
     homepage = "https://github.com/proxmoxer/proxmoxer";
-    changelog = "https://github.com/proxmoxer/proxmoxer/releases/tag/${version}";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/proxmoxer/proxmoxer/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
