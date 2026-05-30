@@ -20,7 +20,6 @@
   libpulseaudio,
   gvfs,
   libcdio,
-  pcre,
   projectm_3,
   protobuf,
   pkg-config,
@@ -83,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     gvfs
     libsForQt5.liblastfm
     libpulseaudio
-    pcre
     projectm_3
     protobuf
     libsForQt5.qca-qt5
