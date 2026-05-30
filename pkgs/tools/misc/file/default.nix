@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   buildPackages,
+  autoconf,
+  automake,
   zlib,
   libgnurx,
   updateAutotoolsGnuConfigScriptsHook,
@@ -41,15 +43,36 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-PR-745-streamout-Don-t-flush-when-trying-to-set-nega.patch
     # Fixes breakage of python3Packages.python-magic and xdg-utils
     ./0002-PR-725-inliniac-Revert-previous-and-always-set-offse.patch
+
+    # Splits byteswapping functions into a separate file & reuses them across the codebase
+    # (needed for GUID parsing fix below)
+    # https://github.com/file/file/commit/797a275514c80303accbd821df9692b04f6020e6
+    # https://github.com/file/file/commit/2866af2e51beb40afe35d2ff5e765991ac459237
+    ./0003-Add-LE-BE-GUID.patch
+
+    # Fixes GUID parsing on big-endian
+    # https://github.com/file/file/commit/7a2b2a4b6e0f9de8682e6098c514155f2198cc8e
+    ./0004-Handle-parsing-guids-in-big-endian-machines.patch
   ];
 
   strictDeps = true;
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
+    # 0003-Add-LE-BE-GUID.patch touches automake file, need to regenerate files
+    # autoreconfHook would cause inf rec (hook -> libtool -> file -> hook), adding the individual components we need
+    autoconf
+    automake
+
     updateAutotoolsGnuConfigScriptsHook
   ];
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW libgnurx;
+
+  # 0003-Add-LE-BE-GUID.patch touches automake file, need to regenerate files
+  # autoreconfHook would cause inf rec (hook -> libtool -> file -> hook), manually calling autoreconf
+  preConfigure = ''
+    autoreconf
+  '';
 
   # https://bugs.astron.com/view.php?id=382
   doCheck = !stdenv.buildPlatform.isMusl;
