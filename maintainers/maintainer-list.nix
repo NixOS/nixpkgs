@@ -10433,6 +10433,12 @@
     github = "h3cth0r";
     githubId = 43997408;
   };
+  hadal84 = {
+    name = "Çınar Emir";
+    email = "hadal84@proton.me";
+    github = "hadal84";
+    githubId = 143954694;
+  };
   h7x4 = {
     name = "h7x4";
     email = "h7x4@nani.wtf";
