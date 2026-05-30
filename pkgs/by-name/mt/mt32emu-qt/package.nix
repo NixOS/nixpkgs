@@ -14,18 +14,18 @@
   portaudio,
   withJack ? stdenv.hostPlatform.isUnix,
   libjack2,
-  libsForQt5,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-qt";
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     tag = "mt32emu_qt_${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-PqYPYnKPlnU3PByxksBscl4GqDRllQdmD6RWpy/Ura0=";
+    hash = "sha256-O9x+uL1QnixXNl/rTCnGwbutoCs6bI8vCmkhAWJW4Do=";
   };
 
   postPatch =
@@ -35,26 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace CMakeLists.txt \
         --replace-fail 'add_subdirectory(mt32emu)' "" \
         --replace-fail 'add_dependencies(mt32emu-qt mt32emu)' ""
-    ''
-    # Bump CMake minimum to something our CMake supports
-    # Fixed treewide in https://github.com/munt/munt/commit/e6af0c7e5d63680716ab350467207c938054a0df
-    # Remove when version > 1.11.1
-    + ''
-      substituteInPlace CMakeLists.txt mt32emu_qt/CMakeLists.txt \
-        --replace-fail 'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 2.8.12...3.27)'
     '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     libmt32emu
     portaudio
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
+    qt6Packages.qtbase
+    qt6Packages.qtmultimedia
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -63,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withJack libjack2;
 
   cmakeFlags = [
+    (lib.cmakeFeature "mt32emu-qt_WITH_QT_VERSION" "6")
     (lib.cmakeBool "mt32emu-qt_USE_PULSEAUDIO_DYNAMIC_LOADING" false)
     (lib.cmakeBool "munt_WITH_MT32EMU_QT" true)
     (lib.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" false)
