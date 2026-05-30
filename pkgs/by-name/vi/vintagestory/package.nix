@@ -137,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       artturin
       gigglesquid
       dtomvan
+      bubylou
     ];
     mainProgram = "vintagestory";
   };

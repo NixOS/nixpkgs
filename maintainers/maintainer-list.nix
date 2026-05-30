@@ -4149,6 +4149,13 @@
     githubId = 30717258;
     name = "bubblepipe";
   };
+  bubylou = {
+    email = "bubylou@pm.me";
+    matrix = "@bubylou:matrix.org";
+    github = "bubylou";
+    githubId = 3878640;
+    name = "Nicholas Malcolm";
+  };
   buckley310 = {
     email = "sean.bck@gmail.com";
     matrix = "@buckley310:matrix.org";
