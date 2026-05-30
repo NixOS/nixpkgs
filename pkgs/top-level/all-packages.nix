@@ -9634,10 +9634,6 @@ with pkgs;
     enableGL = false;
   };
 
-  mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
-
-  mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
-
   ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
