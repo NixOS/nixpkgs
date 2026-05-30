@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-
 buildGoModule {
   pname = "nixpeek";
   version = "0.1.0";
@@ -19,7 +18,7 @@ buildGoModule {
 
   __structuredAttrs = true;
 
-  subPackages = [ "cmd/nixpeek" ];
+  subPackages = ["cmd/nixpeek"];
 
   ldflags = [
     "-s"
@@ -32,6 +31,6 @@ buildGoModule {
     license = lib.licenses.mit;
     mainProgram = "nixpeek";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ voidhartt ];
+    maintainers = with lib.maintainers; [voidhartt];
   };
 }
