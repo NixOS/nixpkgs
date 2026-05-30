@@ -1956,10 +1956,6 @@ with pkgs;
     enableWispr = false;
   };
 
-  collectd = callPackage ../tools/system/collectd { };
-
-  collectd-data = callPackage ../tools/system/collectd/data.nix { };
-
   unify = with python3Packages; toPythonApplication unify;
 
   inherit (import ../development/libraries/libsbsms pkgs)
