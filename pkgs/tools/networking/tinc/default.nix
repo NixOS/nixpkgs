@@ -7,13 +7,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.0.36";
   pname = "tinc";
 
   src = fetchurl {
-    url = "https://www.tinc-vpn.org/packages/tinc-${version}.tar.gz";
-    sha256 = "021i2sl2mjscbm8g59d7vs74iw3gf0m48wg7w3zhwj6czarkpxs0";
+    url = "https://www.tinc-vpn.org/packages/tinc-${finalAttrs.version}.tar.gz";
+    hash = "sha256-QPc7s/rMSA7/4OdxRCpwb/BIjt6npfJQXUzLKqgWMQg=";
   };
 
   buildInputs = [
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tincd";
     platforms = lib.platforms.unix;
   };
-}
+})
