@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "nixpeek";
   version = "0.1.0";
 
@@ -15,6 +16,8 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-ecodI5ImNp1bkpNcUDKnKK/uUzJwOQ+u2lTz6eq7kM4=";
+
+  __structuredAttrs = true;
 
   subPackages = [ "cmd/nixpeek" ];
 
