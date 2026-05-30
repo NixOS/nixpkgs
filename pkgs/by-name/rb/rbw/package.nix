@@ -6,7 +6,9 @@
   openssl,
   pkg-config,
   installShellFiles,
+  makeBinaryWrapper,
   bash,
+  pinentry-curses,
   # rbw-fzf
   withFzf ? false,
   fzf,
@@ -32,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    makeBinaryWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -68,6 +71,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm755 -t $out/bin bin/pass-import
     substituteInPlace $out/bin/pass-import \
       --replace pass ${pass}/bin/pass
+  ''
+  + ''
+    for bin in rbw rbw-agent; do
+      wrapProgram $out/bin/$bin \
+        --suffix PATH : ${lib.makeBinPath [ pinentry-curses ]}
+    done
   '';
 
   meta = {
