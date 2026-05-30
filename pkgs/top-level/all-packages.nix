@@ -10814,8 +10814,6 @@ with pkgs;
     scalapack = scalapack-ilp64;
   };
 
-  autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
-
   pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
