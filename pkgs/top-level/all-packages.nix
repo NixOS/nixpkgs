@@ -9050,9 +9050,6 @@ with pkgs;
 
   gauche = callPackage ../development/interpreters/gauche { };
 
-  geany = callPackage ../applications/editors/geany { };
-  geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
-
   gimagereader-qt = qt6Packages.callPackage ../by-name/gi/gimagereader/package.nix {
     withQt6 = true;
   };
