@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "proxmoxer";
     repo = "proxmoxer";
-    rev = "99fe9814d6212c614a944ce7b3d907e05042c4fa";
+    tag = finalAttrs.version;
     hash = "sha256-v/QqNCzkcYk2pqr9tTeyvEEeXt4nzqooHAQEIiJitZ4=";
   };
 
