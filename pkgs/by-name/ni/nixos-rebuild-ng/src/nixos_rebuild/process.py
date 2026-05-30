@@ -1,17 +1,23 @@
 import atexit
-import getpass
 import logging
 import os
 import re
 import shlex
 import subprocess
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from dataclasses import dataclass
-from enum import Enum
 from ipaddress import AddressValueError, IPv6Address
-from typing import Final, Literal, Self, TextIO, TypedDict, Unpack, override
+from typing import Final, Self, TextIO, TypedDict, Unpack
 
 from . import tmpdir
+from .elevate import (
+    NO_ELEVATOR,
+    PRESERVE_ENV,
+    Arg,
+    Args,
+    Elevator,
+    EnvValue,
+)
 
 logger: Final = logging.getLogger(__name__)
 
@@ -25,34 +31,16 @@ SSH_DEFAULT_OPTS: Final = [
 ]
 
 
-class _Env(Enum):
-    PRESERVE_ENV = "PRESERVE"
-
-    @override
-    def __repr__(self) -> str:
-        return self.value
-
-
-PRESERVE_ENV: Final = _Env.PRESERVE_ENV
-
-
-type Arg = str | bytes | os.PathLike[str] | os.PathLike[bytes]
-type Args = Sequence[Arg]
-type EnvValue = str | Literal[_Env.PRESERVE_ENV]
-
-
 @dataclass(frozen=True)
 class Remote:
     host: str
     opts: list[str]
-    sudo_password: str | None
     store_type: str
 
     @classmethod
     def from_arg(
         cls,
         host: str | None,
-        ask_sudo_password: bool | None,
         validate_opts: bool = True,
     ) -> Self | None:
         if not host:
@@ -65,25 +53,21 @@ class Remote:
 
         opts = shlex.split(os.getenv("NIX_SSHOPTS", ""))
         if validate_opts:
-            cls._validate_opts(opts, ask_sudo_password)
-        sudo_password = None
-        if ask_sudo_password:
-            sudo_password = getpass.getpass(f"[sudo] password for {host}: ")
-        return cls(host, opts, sudo_password, store_type)
+            cls._validate_opts(opts)
+        return cls(host, opts, store_type)
 
     @staticmethod
-    def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
+    def _validate_opts(opts: list[str]) -> None:
         for o in opts:
             if o in ["-t", "-tt", "RequestTTY=yes", "RequestTTY=force"]:
                 logger.warning(
                     f"detected option '{o}' in NIX_SSHOPTS. SSH's TTY may "
                     "cause issues, it is recommended to remove this option"
                 )
-                if not ask_sudo_password:
-                    logger.warning(
-                        "if you want to prompt for sudo password use "
-                        "'--ask-sudo-password' option instead"
-                    )
+                logger.warning(
+                    "if you want to prompt for a password for remote "
+                    "elevation use '--ask-elevate-password' instead"
+                )
 
     def ssh_host(self) -> str:
         """Fix up host string for SSH.
@@ -130,7 +114,7 @@ def run_wrapper(
     env: Mapping[str, EnvValue] | None = None,
     append_local_env: Mapping[str, str] | None = None,
     remote: Remote | None = None,
-    sudo: bool = False,
+    elevate: Elevator = NO_ELEVATOR,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
@@ -142,27 +126,9 @@ def run_wrapper(
     resolved_env = _resolve_env_local(normalized_env)
 
     if remote:
-        remote_run_args: list[Arg] = [
-            "/bin/sh",
-            "-c",
-            _remote_shell_script(normalized_env),
-            "sh",
-            *run_args,
-        ]
-
-        if sudo:
-            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
-            if remote.sudo_password:
-                remote_run_args = [
-                    "sudo",
-                    "--prompt=",
-                    "--stdin",
-                    *sudo_args,
-                    *remote_run_args,
-                ]
-                process_input = remote.sudo_password + "\n"
-            else:
-                remote_run_args = ["sudo", *sudo_args, *remote_run_args]
+        rwrapped = elevate.wrap_remote(normalized_env, run_args)
+        process_input = rwrapped.stdin
+        remote_run_args: list[Arg] = rwrapped.argv
 
         ssh_args: list[Arg] = [
             "ssh",
@@ -176,22 +142,19 @@ def run_wrapper(
         popen_env = None  # keep ssh's environment normal
 
     else:
-        if sudo:
-            # subprocess.run(env=...) would affect sudo, but sudo may drop env
-            # for the target command.
-            # So we inject env via `sudo env ... cmd`.
+        wrapped = elevate.wrap_local()
+        process_input = wrapped.stdin
+        if elevate.elevates:
+            # subprocess.run(env=...) would affect the elevator process,
+            # which may then drop env for the target command. Inject env
+            # via `env -i ... cmd` instead so it survives.
             if env is not None and resolved_env:
                 run_args = _prefix_env_cmd(run_args, resolved_env)
-
-            sudo_args = shlex.split(os.getenv("NIX_SUDOOPTS", ""))
-            final_args = ["sudo", *sudo_args, *run_args]
-
-            # No need to pass env to subprocess.run; keep sudo's own env
-            # default.
+            final_args = [*wrapped.prefix, *run_args]
             popen_env = None
         else:
-            # Non-sudo local: we can fully control the environment with
-            # subprocess.run(env=...)
+            # Unprivileged local: we can fully control the environment
+            # with subprocess.run(env=...)
             final_args = run_args
             popen_env = None if env is None else resolved_env
 
@@ -225,16 +188,14 @@ def run_wrapper(
 
         return r
     except KeyboardInterrupt:
-        # sudo commands are activation only and unlikely to be long running
-        if remote and not sudo:
+        # elevated commands are activation only and unlikely to be long
+        # running
+        if remote and not elevate.elevates:
             _kill_long_running_ssh_process(args, remote)
         raise
     except subprocess.CalledProcessError:
-        if sudo and remote and remote.sudo_password is None:
-            logger.error(
-                "while running command with remote sudo, did you forget to use "
-                "--ask-sudo-password?"
-            )
+        if remote and (hint := elevate.on_remote_failure()):
+            logger.error(hint)
         raise
 
 
@@ -268,7 +229,7 @@ def _resolve_env_local(env: dict[str, EnvValue]) -> dict[str, str]:
     return result
 
 
-def _prefix_env_cmd(cmd: Sequence[Arg], resolved_env: dict[str, str]) -> list[Arg]:
+def _prefix_env_cmd(cmd: Args, resolved_env: dict[str, str]) -> list[Arg]:
     """
     Prefix a command with `env -i K=V ... -- <cmd...>` to set vars for the
     command.
@@ -278,24 +239,6 @@ def _prefix_env_cmd(cmd: Sequence[Arg], resolved_env: dict[str, str]) -> list[Ar
 
     assigns = [f"{k}={v}" for k, v in resolved_env.items()]
     return ["env", "-i", *assigns, *cmd]
-
-
-def _remote_shell_script(env: Mapping[str, EnvValue]) -> str:
-    """
-    Build the POSIX shell wrapper used for remote execution over SSH.
-
-    SSH sends the remote command as a shell-interpreted command line, so we
-    need a wrapper to establish a clean environment before `exec`-ing the real
-    command. This wrapper is always run under `/bin/sh -c` so preserved
-    variables like `${PATH-}` do not depend on the remote user's login shell.
-    """
-    shell_assigns: list[str] = []
-    for k, v in env.items():
-        if v is PRESERVE_ENV:
-            shell_assigns.append(f'{k}="${{{k}-}}"')
-        else:
-            shell_assigns.append(f"{k}={shlex.quote(v)}")
-    return f'exec env -i {" ".join(shell_assigns)} "$@"'
 
 
 def _quote_remote_arg(arg: Arg) -> str:
